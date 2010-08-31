@@ -49,7 +49,8 @@ extern int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
 extern uint8_t FDCommand;
 
-void SetButtonState(PtWidget_t *widget, short active) {
+void SetButtonState(PtWidget_t *widget, short active)
+{
 	// Przydzielenie pamieci.
 
 	// Aktywacja przycisku.
@@ -68,7 +69,8 @@ void SetButtonState(PtWidget_t *widget, short active) {
 }
 ;
 
-int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnStart\n");
 #endif
@@ -93,7 +95,8 @@ int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 }
 
-int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnPause\n");
 #endif
@@ -116,7 +119,8 @@ int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 }
 
-int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnStop\n");
 #endif
@@ -143,7 +147,8 @@ int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 }
 
-int TRbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("btnExit\n");
 #endif
@@ -162,8 +167,8 @@ int TRbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 }
 
-int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	char tmp_buffer[20];
 #ifdef TRDEBUG
 	printf("TRbtnPositionZero\n");
@@ -180,8 +185,7 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo,
 		// Zerowy numer makrokroku.
 		current_macrostep_number = 0;
 		sprintf(tmp_buffer, "%i", current_macrostep_number);
-		PtSetResource(ABW_TRedtMacrostepNumber, Pt_ARG_TEXT_STRING, tmp_buffer,
-				0);
+		PtSetResource(ABW_TRedtMacrostepNumber, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 		// Zerowanie polozenia robota.
 		PtSetResource(ABW_TRedtArm0, Pt_ARG_TEXT_STRING, " ", 0);
 		PtSetResource(ABW_TRedtArm1, Pt_ARG_TEXT_STRING, " ", 0);
@@ -219,8 +223,8 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 ;
 
-int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnLoadTrajectory\n");
 #endif
@@ -232,7 +236,8 @@ int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 ;
 
-int TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnSaveAll\n");
 #endif
@@ -244,14 +249,15 @@ int TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 }
 ;
 
-int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRConnect: Create connection.\n");
 #endif
 	// Nazwa polacznia.
-	std::string tmp_name = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point",
-			ECP_IRP6OT_M_SECTION);
+	std::string
+			tmp_name =
+					ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", lib::irp6ot_m::ECP_SECTION);
 
 #ifdef TRDEBUG
 	printf("TRConnect: %s\n", tmp_name.c_str());
@@ -264,8 +270,8 @@ int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 } // end: TRConnect
 
-int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRRefreshWindow\n");
 #endif
@@ -273,66 +279,48 @@ int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo,
 	char tmp_buffer[20];
 	// Wypisanie pozycji robota w oknie.
 	// Zerowa os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[0]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[0]);
 	PtSetResource(ABW_TRedtArm0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Pierwsza os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[1]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[1]);
 	PtSetResource(ABW_TRedtArm1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Druga os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[2]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[2]);
 	PtSetResource(ABW_TRedtArm2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Trzecia os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[3]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[3]);
 	PtSetResource(ABW_TRedtArm3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Czwarta os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[4]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[4]);
 	PtSetResource(ABW_TRedtArm4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Piata os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[5]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[5]);
 	PtSetResource(ABW_TRedtArm5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wypisanie odczytow czujnika zlozonego z linialow w oknie.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[0]);
 	PtSetResource(ABW_TRedtScaleReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[1]);
 	PtSetResource(ABW_TRedtScaleReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[2]);
 	PtSetResource(ABW_TRedtScaleReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[3]);
 	PtSetResource(ABW_TRedtScaleReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[4]);
 	PtSetResource(ABW_TRedtScaleReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[5]);
 	PtSetResource(ABW_TRedtScaleReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wypisanie odczytow czujnika sily w oknie.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
 	PtSetResource(ABW_TRedtForceReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
 	PtSetResource(ABW_TRedtForceReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
 	PtSetResource(ABW_TRedtForceReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
 	PtSetResource(ABW_TRedtForceReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
 	PtSetResource(ABW_TRedtForceReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
 	PtSetResource(ABW_TRedtForceReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wykonano nastepny makrokrok.
 	current_macrostep_number++;
@@ -343,8 +331,8 @@ int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 ;// end: TRRefreshWindow
 
-int TRbtnDSSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRbtnDSSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnDSSCalibrate\n");
 #endif
@@ -361,8 +349,8 @@ int TRbtnDSSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo,
 ;// end: TRbtnDSSCalibrate
 
 
-int TRbtnFSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRbtnFSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnFSCalibrate\n");
 #endif
@@ -379,8 +367,8 @@ int TRbtnFSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo,
 ;// end: TRbtnFSCalibrate
 
 
-int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRbtnTryAgain\n");
 #endif
@@ -403,31 +391,25 @@ int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo,
 ; // end: TRbtnTryAgain
 
 
-int TRDangerousForceDetected(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int TRDangerousForceDetected(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef TRDEBUG
 	printf("TRDangerousForceDetected\n");
 #endif
 	// Bufor uzywany do przetwarzania polozanie/odczytow do stringow.
 	char tmp_buffer[20];
 	// Wypisanie odczytow czujnika sily w oknie.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
 	PtSetResource(ABW_TRedtForceReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
 	PtSetResource(ABW_TRedtForceReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
 	PtSetResource(ABW_TRedtForceReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
 	PtSetResource(ABW_TRedtForceReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
 	PtSetResource(ABW_TRedtForceReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
 	PtSetResource(ABW_TRedtForceReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Ustawienie stanu przyciskow.
 	SetButtonState(ABW_TRbtnPause, false);

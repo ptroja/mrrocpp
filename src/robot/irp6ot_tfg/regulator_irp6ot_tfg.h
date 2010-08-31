@@ -21,8 +21,8 @@ class effector;
 
 #define IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT	1000
 
-#define IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_COARSE -0.5
-#define IRP6_ON_TRACK_AXIS_7_SYNCHRO_STEP_FINE   -0.2
+#define AXIS_7_SYNCHRO_STEP_COARSE -0.5
+#define AXIS_7_SYNCHRO_STEP_FINE   -0.2
 
 // stale dla automatu w regulatorze chwytka
 #define GRIPPER_BLOCKED_TIME_PERIOD 200

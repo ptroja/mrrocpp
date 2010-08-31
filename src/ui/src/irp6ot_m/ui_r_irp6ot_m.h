@@ -24,12 +24,13 @@
 class Ui;
 class ui_irp6_common_robot;
 
-class UiRobotIrp6ot_m: public UiRobot {
+class UiRobotIrp6ot_m : public UiRobot
+{
 private:
 
 public:
-	double irp6ot_current_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja biezaca
-	double irp6ot_desired_pos[IRP6OT_M_NUM_OF_SERVOS]; // pozycja zadana
+	double irp6ot_current_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double irp6ot_desired_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja zadana
 
 
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
@@ -48,10 +49,8 @@ public:
 	UiRobotIrp6ot_m(Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
-	int process_control_window_irp6ot_section_init(
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	int
+			process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	int close_all_windows();
 	int delete_ui_ecp_robot();
 };

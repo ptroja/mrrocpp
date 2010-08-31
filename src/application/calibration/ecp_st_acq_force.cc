@@ -22,7 +22,7 @@ namespace task {
 acq_force::acq_force(task &_ecp_t) :
 	acquisition(_ecp_t)
 {
-	if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
 		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
 	} else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6P_M_SECTION) {
