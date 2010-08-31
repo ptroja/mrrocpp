@@ -10,8 +10,6 @@
 #ifndef __MIS_FUN_H
 #define __MIS_FUN_H
 
-#include "base/lib/condition_synchroniser.h"
-
 namespace mrrocpp {
 namespace lib {
 

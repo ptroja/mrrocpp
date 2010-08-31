@@ -1,5 +1,5 @@
 /*!
- * @file mus_fun.cc
+ * @file mis_fun.cc
  * @brief Thread utility functions.
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
@@ -7,10 +7,10 @@
  * @ingroup LIB
  */
 
-#include "base/lib/mis_fun.h"
-
 #include <pthread.h>
 #include <cstdio>
+
+#include "base/lib/mis_fun.h"
 
 #if defined(linux)
 #include <sys/prctl.h>
