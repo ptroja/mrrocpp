@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
 
-const robot_name_t ROBOT_BIRD_HAND = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
+const robot_name_t ROBOT_NAME = "ROBOT_BIRD_HAND"; // three finger Krzysztof Mianowski gripper 2010
 
 struct cbuffer
 {
@@ -25,11 +25,11 @@ struct cbuffer
 	{
 		int motion_steps;
 		int ecp_query_step;
-		single_joint_command finger[BIRD_HAND_NUM_OF_SERVOS];
+		single_joint_command finger[NUM_OF_SERVOS];
 	} command_structure;
 	struct
 	{
-		single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
+		single_joint_configuration finger[NUM_OF_SERVOS];
 	} configuration_command_structure;
 };
 
@@ -37,16 +37,16 @@ struct rbuffer
 {
 	struct
 	{
-		single_joint_status finger[BIRD_HAND_NUM_OF_SERVOS];
+		single_joint_status finger[NUM_OF_SERVOS];
 	} status_reply_structure;
 	struct
 	{
-		single_joint_configuration finger[BIRD_HAND_NUM_OF_SERVOS];
+		single_joint_configuration finger[NUM_OF_SERVOS];
 	} configuration_reply_structure;
 }__attribute__((__packed__));
 
-#define EDP_BIRD_HAND_SECTION "[edp_bird_hand]"
-#define ECP_BIRD_HAND_SECTION "[ecp_bird_hand]"
+const std::string EDP_SECTION = "[edp_bird_hand]";
+const std::string ECP_SECTION = "[ecp_bird_hand]";
 
 } // namespace bird_hand
 } // namespace lib

@@ -14,7 +14,7 @@ namespace lib {
 namespace bird_hand {
 
 // ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
-#define BIRD_HAND_STEP_TIME_IN_NS ((uint64_t) 2000000)
+const uint64_t STEP_TIME_IN_NS = 2000000;
 
 const std::string COMMAND_DATA_PORT = "bird_hand_command_data_port";
 const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port";
@@ -22,16 +22,14 @@ const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port
 const std::string CONFIGURATION_DATA_PORT = "bird_hand_configuration_data_port";
 const std::string CONFIGURATION_DATA_REQUEST_PORT = "bird_hand_configuration_data_request_port";
 
-#define BIRD_HAND_NUM_OF_SERVOS	8
-#define BIRD_HAND_THUMB_F_NUM_OF_SERVOS	2
-#define BIRD_HAND_INDEX_F_NUM_OF_SERVOS	3
-#define BIRD_HAND_RING_F_NUM_OF_SERVOS	3
+const int NUM_OF_SERVOS = 8;
+const int THUMB_F_NUM_OF_SERVOS = 2;
+const int INDEX_F_NUM_OF_SERVOS = 3;
+const int RING_F_NUM_OF_SERVOS = 3;
 
 enum MOTION_VARIANT
 {
-	SIGLE_STEP_POSTION_INCREMENT = 0,
-	MACROSTEP_POSITION_INCREMENT = 1,
-	MACROSTEP_ABSOLUTE_POSITION = 2
+	SIGLE_STEP_POSTION_INCREMENT = 0, MACROSTEP_POSITION_INCREMENT = 1, MACROSTEP_ABSOLUTE_POSITION = 2
 };
 
 struct single_joint_command
@@ -75,23 +73,23 @@ struct command
 {
 	int motion_steps;
 	int ecp_query_step;
-	single_joint_command thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	single_joint_command index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	single_joint_command ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_command thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_command index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_command ring_f[RING_F_NUM_OF_SERVOS];
 };
 
 struct status
 {
-	single_joint_status thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	single_joint_status index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	single_joint_status ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_status thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_status index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_status ring_f[RING_F_NUM_OF_SERVOS];
 };
 
 struct configuration
 {
-	single_joint_configuration thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	single_joint_configuration index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	single_joint_configuration ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_configuration thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_configuration index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_configuration ring_f[RING_F_NUM_OF_SERVOS];
 };
 
 } // namespace bird_hand

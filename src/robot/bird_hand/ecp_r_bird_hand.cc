@@ -15,7 +15,7 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			robot::ecp_robot(lib::bird_hand::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _config, _sr_ecp),
+			robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
@@ -29,7 +29,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-			robot::ecp_robot(lib::bird_hand::ROBOT_BIRD_HAND, BIRD_HAND_NUM_OF_SERVOS, EDP_BIRD_HAND_SECTION, _ecp_object),
+			robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _ecp_object),
 			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
@@ -83,19 +83,19 @@ void robot::create_command()
 			== mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type |= ROBOT_MODEL_DEFINITION;
 
-		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
 			ecp_edp_cbuffer.configuration_command_structure.finger[i]
 					= bird_hand_configuration_command_structure.thumb_f[i];
 		}
 
-		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
-			ecp_edp_cbuffer.configuration_command_structure.finger[i + BIRD_HAND_THUMB_F_NUM_OF_SERVOS]
+		for (int i = 0; i < lib::bird_hand::INDEX_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.configuration_command_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS]
 					= bird_hand_configuration_command_structure.index_f[i];
 		}
 
-		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
-			ecp_edp_cbuffer.configuration_command_structure.finger[i + BIRD_HAND_THUMB_F_NUM_OF_SERVOS
-					+ BIRD_HAND_RING_F_NUM_OF_SERVOS] = bird_hand_configuration_command_structure.ring_f[i];
+		for (int i = 0; i < lib::bird_hand::RING_F_NUM_OF_SERVOS; i++) {
+			ecp_edp_cbuffer.configuration_command_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS
+					+ lib::bird_hand::RING_F_NUM_OF_SERVOS] = bird_hand_configuration_command_structure.ring_f[i];
 		}
 
 		is_new_data = true;
@@ -141,21 +141,21 @@ void robot::get_reply()
 
 	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
 
-		for (int i = 0; i < BIRD_HAND_THUMB_F_NUM_OF_SERVOS; i++) {
+		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
 			bird_hand_configuration_reply_structure.thumb_f[i]
 					= edp_ecp_rbuffer.configuration_reply_structure.finger[i];
 		}
 
-		for (int i = 0; i < BIRD_HAND_INDEX_F_NUM_OF_SERVOS; i++) {
+		for (int i = 0; i < lib::bird_hand::INDEX_F_NUM_OF_SERVOS; i++) {
 
 			bird_hand_configuration_reply_structure.index_f[i] = edp_ecp_rbuffer.configuration_reply_structure.finger[i
-					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
+					+ lib::bird_hand::THUMB_F_NUM_OF_SERVOS];
 
 		}
 
-		for (int i = 0; i < BIRD_HAND_RING_F_NUM_OF_SERVOS; i++) {
+		for (int i = 0; i < lib::bird_hand::RING_F_NUM_OF_SERVOS; i++) {
 			bird_hand_configuration_reply_structure.ring_f[i] = edp_ecp_rbuffer.configuration_reply_structure.finger[i
-					+ BIRD_HAND_THUMB_F_NUM_OF_SERVOS + BIRD_HAND_RING_F_NUM_OF_SERVOS];
+					+ lib::bird_hand::THUMB_F_NUM_OF_SERVOS + lib::bird_hand::RING_F_NUM_OF_SERVOS];
 
 		}
 
