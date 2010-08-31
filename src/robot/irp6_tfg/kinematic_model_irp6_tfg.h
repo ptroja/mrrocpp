@@ -1,12 +1,12 @@
 /*!
- * @file kinematic_model_irp6_tfg.h
+ * @file
  * @brief File containing base kinematic model for two fingered grippers.
  *
  * @author yoyek
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS
+ * @ingroup KINEMATICS irp6ot_tfg irp6p_tfg
  */
 
 
@@ -21,7 +21,7 @@ namespace common {
 
 
 /*!
- * @class kinematic_model_irp6_tfg
+ *
  * @brief Base kinematic model for two fingered grippers.
  *
  * @author tkornuta

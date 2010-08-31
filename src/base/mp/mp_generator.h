@@ -1,7 +1,15 @@
 #ifndef MP_GENERATOR_H_
 #define MP_GENERATOR_H_
 
-#include "base/mp/mp_robots_t_typedefs.h"
+/*!
+ * @file
+ * @brief File contains mp base generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
+#include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_generator.h"
 
 namespace mrrocpp {

@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains ecp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include <cstring>
 #include <unistd.h>
 #include <cerrno>

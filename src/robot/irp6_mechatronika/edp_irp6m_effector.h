@@ -14,7 +14,7 @@
 #define __EDP_IRP6_MECHATRONIKA_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/irp6_mechatronika/sg_irp6m.h"
+
 #include "base/edp/edp_e_manip.h"
 #include "robot/irp6_mechatronika/irp6m_const.h"
 
@@ -26,32 +26,27 @@ namespace irp6m {
 class effector : public common::manip_effector
 {
 protected:
-    // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-    virtual void create_kinematic_models_for_given_robot(void);
-
-
-
-
+	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
+	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-    void set_robot_model(const lib::c_buffer &instruction);                    // zmiana narzedzia
-    void create_threads();
+	void set_robot_model(const lib::c_buffer &instruction); // zmiana narzedzia
+	void create_threads();
 
-    // Konstruktor.
-    effector(lib::configurator &_config);
+	// Konstruktor.
+	effector(lib::configurator &_config);
 
-    void move_arm (const lib::c_buffer &instruction);            // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
-    void get_arm_position (bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
 
-    common::servo_buffer *return_created_servo_buffer ();
-    void master_order(common::MT_ORDER nm_task, int nm_tryb);
+	common::servo_buffer *return_created_servo_buffer();
+	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 };
 
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-
 
 
 #endif

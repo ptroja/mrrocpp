@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_with_local_corrector.h
+ * @file
  * @brief File containing the declaration of kinematic_model_with_local_corrector class.
  *
  * @author tkornuta
@@ -18,7 +18,7 @@ namespace kinematics {
 namespace common {
 
 /*!
- * @class kinematic_model_with_local_corrector
+ *
  * @brief Abstract class with methods for local end-effector position correction with the use of local correction matrices.
  *
  * @author tkornuta

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model.h
+ * @file
  * @brief File containing the declaration of the kinematic_model class.
  *
  * @author tkornuta
@@ -24,7 +24,7 @@ namespace kinematics {
 namespace common {
 
 /*!
- * @class kinematic_model
+ *
  * @brief Base and simplest class of all kinematic models.
  *
  * Class simplicity is related to the fact, that it offers only

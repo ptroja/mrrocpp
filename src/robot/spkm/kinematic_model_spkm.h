@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_spkm.h
+ * @file
  * @brief File containing declaration of the kinematic_model_spkm class.
  *
  * @author tkornuta
  * @date Jan 05, 2010
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS spkm
  */
 
 #ifndef KINEMATIC_MODEL_SPKM_H_
@@ -19,7 +19,7 @@ namespace kinematics {
 namespace spkm {
 
 /*!
- * @class kinematic_model_spkm
+ *
  * @brief Class solving the problem of inverse kinematics for Exechon parallel kinematc machine with spherical wrist attached to its upper platform.
  *
  * @author tkornuta

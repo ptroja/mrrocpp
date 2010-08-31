@@ -4,7 +4,7 @@
 
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */

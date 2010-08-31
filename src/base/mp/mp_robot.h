@@ -1,6 +1,14 @@
 #ifndef MP_ROBOT_H_
 #define MP_ROBOT_H_
 
+/*!
+ * @file
+ * @brief File contains mp base robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 // niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 #include "base/lib/srlib.h"

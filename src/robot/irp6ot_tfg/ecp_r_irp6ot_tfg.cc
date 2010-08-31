@@ -1,13 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_on_track
-//
-// -------------------------------------------------------------------------
-
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for IRp6 on track two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_tfg
+ */
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 

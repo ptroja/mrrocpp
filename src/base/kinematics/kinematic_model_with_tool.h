@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_with_tool.h
+ * @file
  * @brief File containing the declaration of the kinematic_model_with_tool class.
  *
  * @author tkornuta
@@ -19,7 +19,7 @@ namespace kinematics {
 namespace common {
 
 /*!
- * @class kinematic_model_with_tool
+ *
  * @brief Abstract class with methods for robots with tools attached to their end-effectors.
  * Class contains also methods for computations of robot base transformation to global reference frame.
  *

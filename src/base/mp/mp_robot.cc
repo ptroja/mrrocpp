@@ -1,8 +1,10 @@
-// -------------------------------------------------------------------------
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains mp base robot definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstring>
 #include <unistd.h>
@@ -10,12 +12,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 #include "base/lib/datastr.h"
-
-#include "base/lib/srlib.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"

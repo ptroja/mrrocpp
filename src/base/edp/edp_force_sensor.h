@@ -21,6 +21,12 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 class manip_effector;
+
+enum FORCE_ORDER
+{
+	FORCE_SET_TOOL, FORCE_CONFIGURE
+};
+
 }
 namespace sensor {
 

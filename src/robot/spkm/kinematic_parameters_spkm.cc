@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_parameters_spkm.cc
+ * @file
  * @brief File containing definitions of kinematic_parameters class methods.
  *
  * @author tkornuta
  * @date Jan 5, 2010
  *
- * @ingroup SIF_KINEMATICS
+ * @ingroup SIF_KINEMATICS spkm
  */
 
 #include "kinematic_parameters_spkm.h"

@@ -5,6 +5,7 @@
 #include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
+#include "base/edp/edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -24,6 +24,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
+#include "robot/irp6_mechatronika/sg_irp6m.h"
+
 // Klasa edp_irp6m_effector.
 #include "robot/irp6_mechatronika/edp_irp6m_effector.h"
 // Klasa hardware_interface.

@@ -1,0 +1,17 @@
+/** 
+
+@namespace mrrocpp::ecp::irp6ot_tfg
+@brief Namespace for ECP IRp6 on track two finger gripper classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+
+@namespace mrrocpp::kinematics::irp6ot_tfg
+@brief Contains classes related to the two fingered gripper kinematics of the IRp-6 on track manipulator.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS IRP6OT_KINEMATICS
+
+   @defgroup irp6ot_tfg IRp6 on track two finger gripper
+   @ingroup grippers
+
+*/

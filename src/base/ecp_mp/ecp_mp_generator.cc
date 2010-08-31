@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains ecp_mp base generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include "base/ecp_mp/ecp_mp_generator.h"
 
 namespace mrrocpp {

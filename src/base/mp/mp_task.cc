@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                              mp_task.cc
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
+/*!
+ * @file
+ * @brief File contains mp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstdio>
 #include <sys/types.h>
@@ -19,11 +19,6 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
 #include "base/lib/datastr.h"
 
 #include "base/mp/MP_main_error.h"

@@ -1,13 +1,12 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - conveyor
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for Conveyor
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup conveyor
+ */
 
 #include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 #include "robot/conveyor/ecp_r_conv.h"
 

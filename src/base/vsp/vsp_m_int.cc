@@ -1,5 +1,5 @@
 /*!
- * @file vsp_m_int.cc
+ * @file
  * @brief File containing the \b interactive VSP shell.
  *
  * The \b interactive VSP shell collects new measurements only when an explicit reading initiation request arrives.

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6ot_with_wrist.h
+ * @file
  * @brief File containing the declaration of the model_with_wrist class.
  *
  * The model_with_wrist kinematic model utilizes six out of seven IRP-6ot DOFs - the track is treated as a passive one.
@@ -7,7 +7,7 @@
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 #if !defined(_IRP6OT_KIN_MODEL_WITH_WRIST)
@@ -20,7 +20,7 @@ namespace kinematics {
 namespace irp6ot {
 
 /*!
- * @class model_with_wrist
+ *
  * @brief The kinematic model utilizes six out of seven IRP-6ot DOFs - the track is treated as a passive one.
  *
  * @author tkornuta

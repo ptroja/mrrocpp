@@ -1,7 +1,15 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
-#include "base/mp/mp_robots_t_typedefs.h"
+/*!
+ * @file
+ * @brief File contains mp base task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
+#include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
 #if !defined(USE_MESSIP_SRR)

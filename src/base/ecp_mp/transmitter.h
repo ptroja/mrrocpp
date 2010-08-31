@@ -1,6 +1,14 @@
 #if !defined(_TRANSMITTER_H)
 #define _TRANSMITTER_H
 
+/*!
+ * @file
+ * @brief File contains ecp_mp transmitter base class declaration
+ * @author ptroja, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include "base/lib/srlib.h"
 
 namespace mrrocpp {
@@ -33,21 +41,18 @@ public:
 	virtual ~transmitter_base()
 	{
 	}
-	;
 
 	// odczyt z zawieszaniem lub bez
 	virtual bool t_read(bool wait)
 	{
 		return true;
 	}
-	;
 
 	// zapis
 	virtual bool t_write(void)
 	{
 		return true;
 	}
-	;
 
 	class transmitter_error
 	{ // Klasa obslugi bledow czujnikow
@@ -58,7 +63,7 @@ public:
 			error_class(err_cl)
 		{
 		}
-		;
+
 	}; // end: class transmitter_error
 };
 

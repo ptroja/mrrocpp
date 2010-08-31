@@ -1,5 +1,5 @@
 /**
- * @file generator/ecp_g_force.cc
+ * @file
  * @brief ECP force generators
  * - class declaration
  * @author yoyek

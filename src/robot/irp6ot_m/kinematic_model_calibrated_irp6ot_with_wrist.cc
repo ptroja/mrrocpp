@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_calibrated_irp6ot_with_wrist.cc
+ * @file
  * @brief File containing the methods of the kinematic_model_calibrated_irp6ot_with_wrist class.
  *
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"

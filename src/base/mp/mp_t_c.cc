@@ -1,11 +1,15 @@
+/*!
+ * @file
+ * @brief File contains mp common task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include <cstdio>
 #include <unistd.h>
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_robot.h"
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_t_c.h"

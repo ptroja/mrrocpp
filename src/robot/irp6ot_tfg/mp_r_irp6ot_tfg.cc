@@ -1,5 +1,13 @@
+/*!
+ * @file
+ * @brief File contains mp robot class definition for IRp6 on track two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_tfg
+ */
+
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
-#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace mp {

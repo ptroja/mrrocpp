@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp delay_ms_condition generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_g_delay_ms_condition.h"
 

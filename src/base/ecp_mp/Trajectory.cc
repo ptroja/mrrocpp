@@ -1,9 +1,17 @@
+/*!
+ * @file
+ * @brief File contains Trajectory class definition
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
+
 #include <cstdio>
 #include <cstring>
 
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <boost/lexical_cast.hpp>
 
 #include <libxml/xmlmemory.h>

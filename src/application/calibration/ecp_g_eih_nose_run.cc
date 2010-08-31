@@ -1,5 +1,5 @@
 /**
- * @file generator/ecp_g_force.cc
+ * @file
  * @brief ECP force generators
  * - class declaration
  * @author yoyek
@@ -40,7 +40,8 @@ namespace common {
 namespace generator {
 
 eih_nose_run::eih_nose_run(common::task::task& _ecp_task, int step) :
-	tff_nose_run(_ecp_task, step) {
+	tff_nose_run(_ecp_task, step)
+{
 	count = 0;
 }
 
@@ -48,7 +49,8 @@ eih_nose_run::eih_nose_run(common::task::task& _ecp_task, int step) :
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool eih_nose_run::next_step() {
+bool eih_nose_run::next_step()
+{
 	++count;
 
 	if (count > 25) {// co jakis czas generator sie zatrzymuje
@@ -69,12 +71,10 @@ bool eih_nose_run::next_step() {
 	// wyrzucanie odczytu sil
 
 	if (force_meassure) {
-		lib::Homog_matrix current_frame_wo_offset(
-				the_robot->reply_package.arm.pf_def.arm_frame);
+		lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 		current_frame_wo_offset.remove_translation();
 
-		lib::Ft_v_vector force_torque(
-				the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
+		lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 		std::cout << "force: " << force_torque << std::endl;
 	}

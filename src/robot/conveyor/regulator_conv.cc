@@ -16,8 +16,10 @@
 #include "base/lib/com_buf.h"
 #include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
-#include "robot/conveyor/conveyor_const.h"
+#include "robot/conveyor/const_conveyor.h"
 #include "robot/conveyor/regulator_conv.h"
+
+#include "base/edp/edp_e_motor_driven.h"
 
 #include "base/lib/mrmath/mrmath.h"
 

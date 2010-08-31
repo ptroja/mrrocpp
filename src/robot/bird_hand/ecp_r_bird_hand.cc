@@ -1,13 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
-
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
@@ -38,8 +35,6 @@ robot::robot(common::task::task& _ecp_object) :
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
-
-
 
 void robot::create_command()
 {
