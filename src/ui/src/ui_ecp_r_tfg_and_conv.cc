@@ -44,7 +44,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::irp6p_tfg::ROBOT_IRP6P_TFG) {
+	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
 		ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]

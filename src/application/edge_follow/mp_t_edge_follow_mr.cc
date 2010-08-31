@@ -71,7 +71,7 @@ void edge_follow_mr::main_task_algorithm(void)
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
-			gripper_name = lib::irp6p_tfg::ROBOT_IRP6P_TFG;
+			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
