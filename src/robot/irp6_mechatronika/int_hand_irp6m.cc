@@ -158,7 +158,7 @@ int_handler (void *arg, int int_id)
 			md.is_power_on = false;
 		}
 
-		if ( md.hardware_error & common::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & hi_rydz::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 			for ( i = 0; i < IRP6_MECHATRONIKA_NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM

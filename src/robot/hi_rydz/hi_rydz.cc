@@ -34,7 +34,7 @@
 #include "base/edp/edp_e_motor_driven.h"
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace hi_rydz {
 
 void HI_rydz::init()
 {
@@ -110,7 +110,7 @@ void HI_rydz::init()
 		}
 #endif
 
-		irq_data.md.interrupt_mode = INT_EMPTY;
+		irq_data.md.interrupt_mode = common::INT_EMPTY;
 
 		// konieczne dla skasowania przyczyny przerwania
 		out8((ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
@@ -127,7 +127,7 @@ void HI_rydz::init()
 	}
 
 	// oczekiwanie na przerwanie
-	if (hi_int_wait(INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
+	if (hi_int_wait(common::INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
 		if (master.robot_test_mode == 0) {
@@ -162,11 +162,11 @@ void HI_rydz::init()
 			irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
 			irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
 			irq_data.md.value = RESET_MANUAL_MODE;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
+			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 			irq_data.md.value = PROHIBIT_MANUAL_MODE;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
+			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 			irq_data.md.value = max_current[i];
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
+			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 
 		}
 		// Zerowanie licznikow polozenia wszystkich osi
@@ -176,7 +176,7 @@ void HI_rydz::init()
 }
 
 // Konstruktor
-HI_rydz::HI_rydz(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
+HI_rydz::HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
 	HardwareInterface(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
 			hi_intr_timeout_high(_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr),
 			hi_isa_card_offset(_hi_isa_card_offset), hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
@@ -224,7 +224,7 @@ HI_rydz::~HI_rydz(void) // destruktor
 			irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
 			irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
 			irq_data.md.value = ALLOW_MANUAL_MODE;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
+			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		}
 
 		// TODO: InterruptDetach(), munmap_device_io()
@@ -251,7 +251,7 @@ uint64_t HI_rydz::read_write_hardware(void)
 	}
 
 	// oczekiwanie na przerwanie
-	hi_int_wait(INT_SERVOING, 0);
+	hi_int_wait(common::INT_SERVOING, 0);
 
 	if (master.robot_test_mode) {
 		// Tylko dla testow
@@ -272,7 +272,7 @@ uint64_t HI_rydz::read_write_hardware(void)
 
 	if (!trace_resolver_zero) {
 		//	printf("read_write_hardware: w mask resolver_zero\n");
-		irq_data.md.hardware_error &= common::MASK_RESOLVER_ZERO;
+		irq_data.md.hardware_error &= MASK_RESOLVER_ZERO;
 	}
 
 	return irq_data.md.hardware_error;
@@ -289,17 +289,17 @@ void HI_rydz::reset_counters(void)
 		irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
 		irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
 		irq_data.md.value = MICROCONTROLLER_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		irq_data.md.value = STOP_MOTORS;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		irq_data.md.value = RESET_MANUAL_MODE;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		irq_data.md.value = RESET_ALARM;
-		hi_int_wait(INT_SINGLE_COMMAND, 2);
+		hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 
 		if (!irq_data.md.is_synchronised) {
 			irq_data.md.value = RESET_POSITION_COUNTER;
-			hi_int_wait(INT_SINGLE_COMMAND, 2);
+			hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 		}
 
 		current_absolute_position[i] = 0;
@@ -336,7 +336,7 @@ bool HI_rydz::is_hardware_error(void)
 	bool h_error = false;
 
 	// oczekiwanie na przerwanie
-	hi_int_wait(INT_SINGLE_COMMAND, 0);
+	hi_int_wait(common::INT_SINGLE_COMMAND, 0);
 
 	for (int i = 0; i < master.number_of_servos; i++) {
 		uint16_t MASK = 0x7E00;
@@ -351,7 +351,7 @@ bool HI_rydz::is_hardware_error(void)
 // ------------------------------------------------------------------------
 
 
-int HI_rydz::hi_int_wait(interrupt_mode_t _interrupt_mode, int lag)
+int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 {
 	if (!master.robot_test_mode) {
 #ifdef __QNXNTO__
@@ -413,7 +413,7 @@ void HI_rydz::start_synchro(int drive_number)
 	irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) drive_number;
 	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
 	irq_data.md.value = START_SYNCHRO;
-	hi_int_wait(INT_SINGLE_COMMAND, 2);
+	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: start_synchro()
 
 void HI_rydz::finish_synchro(int drive_number)
@@ -424,11 +424,11 @@ void HI_rydz::finish_synchro(int drive_number)
 	irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) drive_number;
 	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + hi_isa_card_offset);
 	irq_data.md.value = FINISH_SYNCHRO;
-	hi_int_wait(INT_SINGLE_COMMAND, 2);
+	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	irq_data.md.value = MICROCONTROLLER_MODE;
-	hi_int_wait(INT_SINGLE_COMMAND, 2);
+	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: finish_synchro()
 
 
@@ -449,7 +449,7 @@ void HI_rydz::reset_position(int i)
 	current_position_inc[i] = 0.0;
 }
 
-} // namespace common
+} // namespace hi_rydz
 } // namespace edp
 } // namespace mrrocpp
 

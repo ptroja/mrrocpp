@@ -125,7 +125,7 @@ int_handler (void *arg, int int_id)
 			md.is_robot_blocked = true;
 		}
 
-		if ( md.hardware_error & common::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
+		if ( md.hardware_error & hi_rydz::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
 
 			// Zapis wartosci zadanej wypelnienia PWM

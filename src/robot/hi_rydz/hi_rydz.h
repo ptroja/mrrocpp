@@ -15,8 +15,9 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
-
 class motor_driven_effector;
+}
+namespace hi_rydz {
 
 const uint64_t HARDWARE_ERROR_MASK = 0xE739CCE739CE739CULL;
 const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
@@ -50,12 +51,12 @@ const uint64_t MASK_RESOLVER_ZERO = 0x3F7BDEF7BDEF7BDEULL;
 #define SERVO_REPLY_POS_HIGH_ADR  (0x206)
 #define SERVO_REPLY_REG_1_ADR     (0x208)
 
-class HI_rydz : public HardwareInterface
+class HI_rydz : public common::HardwareInterface
 {
 public:
 
 	int max_current[MAX_SERVOS_NR];
-			HI_rydz(motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
+			HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
 
 	virtual ~HI_rydz(void); // Destruktor
 
@@ -102,9 +103,9 @@ private:
 protected:
 
 	// oczekiwanie na przerwanie - tryb obslugi i delay(lag) po odebraniu przerwania
-	int hi_int_wait(interrupt_mode_t _interrupt_mode, int lag);
+	int hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag);
 
-	irq_data_t irq_data;
+	common::irq_data_t irq_data;
 
 	int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
 	long int current_absolute_position[MAX_SERVOS_NR]; // aktualne polozenia osi
@@ -113,8 +114,8 @@ protected:
 
 	bool trace_resolver_zero;
 
-	control_a_dof robot_control[MAX_SERVOS_NR];
-	status_of_a_dof robot_status[MAX_SERVOS_NR];
+	common::control_a_dof robot_control[MAX_SERVOS_NR];
+	common::status_of_a_dof robot_status[MAX_SERVOS_NR];
 };
 
 #ifdef __cplusplus
@@ -125,7 +126,7 @@ const struct sigevent * int_handler(void *arg, int id);
 }
 #endif
 
-} // namespace common
+} // namespace hi_rydz
 } // namespace edp
 } // namespace mrrocpp
 
