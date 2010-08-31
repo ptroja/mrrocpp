@@ -35,7 +35,7 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current[lib::conveyor::NUM_OF_SERVOS] = { CONVEYOR_AXIS_1_MAX_CURRENT };
+	int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
 	hi
 			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
