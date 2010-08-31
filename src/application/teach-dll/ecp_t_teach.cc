@@ -93,7 +93,7 @@ void teach::main_task_algorithm(void)
     case lib::irp6ot_m::ROBOT_IRP6OT_M:
         sr_ecp_msg->message("ecp teach irp6ot");
         break;
-    case lib::irp6p_m::ROBOT_IRP6P_M:
+    case lib::irp6p_m::ROBOT_NAME:
         sr_ecp_msg->message("ecp teach irp6p");
         break;
     default:

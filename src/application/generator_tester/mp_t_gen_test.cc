@@ -57,7 +57,7 @@ void gen_test::main_task_algorithm(void)
 		}
 		// ROBOT IRP6_POSTUMENT_MANIPULATOR
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		manipulator_name = lib::irp6p_m::ROBOT_IRP6P_M;
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
 			gripper_name = lib::irp6p_tfg::ROBOT_IRP6P_TFG;
 		} else {

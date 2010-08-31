@@ -13,7 +13,7 @@
 
 #ifdef ROBOT_P
 #include "robot/irp6p_m/const_irp6p_m.h"
-#define ROBOT_NAME_MB lib::irp6p_m::ROBOT_IRP6P_M
+#define ROBOT_NAME_MB lib::irp6p_m::ROBOT_NAME
 #endif
 
 #ifdef ROBOT_OT

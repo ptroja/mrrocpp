@@ -2432,7 +2432,7 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 							ui.process_creation_mtx);
 
 					ui.irp6p_m->ui_ecp_robot = new ui_irp6_common_robot(
-							*ui.config, *ui.all_ecp_msg, lib::irp6p_m::ROBOT_IRP6P_M);
+							*ui.config, *ui.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
 				}
 
 				ui.irp6p_m->state.edp.pid

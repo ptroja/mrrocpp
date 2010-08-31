@@ -48,7 +48,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
 		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
 
-	} else if (_robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
+	} else if (_robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp = new ecp::irp6p_m::robot(_config, _sr_ecp_msg);
 
 		MOTOR_GRIPPER_STEP = DBL_MAX;
