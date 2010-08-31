@@ -6,7 +6,7 @@ namespace mp {
 namespace robot {
 
 polycrank::polycrank(task::task &mp_object_l) :
-	motor_driven(lib::ROBOT_POLYCRANK, ECP_POLYCRANK_SECTION, mp_object_l, POLYCRANK_NUM_OF_SERVOS)
+	motor_driven(lib::polycrank::ROBOT_POLYCRANK, ECP_POLYCRANK_SECTION, mp_object_l, POLYCRANK_NUM_OF_SERVOS)
 {
 }
 
