@@ -41,7 +41,7 @@ ecp_st_smooth_move::~ecp_st_smooth_move() {
  * Method called by parent task to start execution of subtask
  */
 void ecp_st_smooth_move::conditional_execution(){
-	std::cout << "CONDITIONAL EXECUTION" << std::endl;
+//	std::cout << "CONDITIONAL EXECUTION" << std::endl;
 
 	std::vector<double>vec;
 	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);

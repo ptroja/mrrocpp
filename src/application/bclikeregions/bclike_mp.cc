@@ -137,7 +137,7 @@ void bclike_mp::main_task_algorithm(void){
 		vec[0] = (*it).first.x;
 		vec[1] = (*it).first.y;
 
-		std::cout << "x = " << vec[0] << " y = " << vec[1] << " z = " << vec[2] << std::endl;
+//		std::cout << "x = " << vec[0] << " y = " << vec[1] << " z = " << vec[2] << std::endl;
 
 		//Move to code position
 		tmp = msg.robotPositionToString(vec);

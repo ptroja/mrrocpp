@@ -88,10 +88,10 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
 //		vec.assign(left, left + VEC_SIZE);
 		vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-		std::cout << "ODCZYTANE " << vec.size() << std::endl;
-		for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
-			std::cout << *it << " ";
-		std::cout << std::endl;
+//		std::cout << "ODCZYTANE " << vec.size() << std::endl;
+//		for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
+//			std::cout << *it << " ";
+//		std::cout << std::endl;
 
 		#ifdef JOINT
 			bc_smooth->load_absolute_joint_trajectory_pose(vec);
@@ -99,11 +99,11 @@ void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 		#endif//JOINT
 
 		#ifdef EULER
-			std::cout << "load trajectory" << std::endl;
+//			std::cout << "load trajectory" << std::endl;
 			bc_smooth->load_absolute_euler_zyz_trajectory_pose(vec);
 		#endif//EULER
 
-		std::cout << "Interpolate" << std::endl;
+//		std::cout << "Interpolate" << std::endl;
 		if(bc_smooth->calculate_interpolate()){
 			sr_ecp_msg->message("Move before");
 			bc_smooth->Move();

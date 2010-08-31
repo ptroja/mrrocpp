@@ -30,12 +30,17 @@ const double y_param = 184/100; //y translation from camera to robot position (p
 //							   { 0.8940,   -0.4481,         0},
 //							   {      0,         0,    1.0000}};
 //Rotation -90 deg z
-const double rotation[3][3] = {{-0.4481,   -0.8940,         0},
-							   {-0.8940,   -0.4481,         0},
-							   {      0,         0,    1.0000}};
+//const double rotation[3][3] = {{-0.4481,   -0.8940,         0},
+//							   {-0.8940,   -0.4481,         0},
+//							   {      0,         0,    1.0000}};
+//Rotation 180 deg x
+const double rotation[3][3] = {{1.0000,         0,         0},
+							   {	 0,   -0.5985,    0.8012},
+							   {	 0,   -0.8012,   -0.5985}};
+
 
 //Camera translation matrix
-const double translation[3] = {0, -0.1, 0};
+const double translation[3] = {-0.1, 0, 0};
 
 
 #ifdef IRP6_OT
@@ -124,7 +129,7 @@ bclike_smooth::~bclike_smooth() {
  */
 bool bclike_smooth::first_step(){
 
-	std::cout << "FIRST STEP" << std::endl;
+//	std::cout << "FIRST STEP" << std::endl;
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
