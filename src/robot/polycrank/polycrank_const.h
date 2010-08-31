@@ -9,8 +9,8 @@ namespace polycrank {
 
 const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
 
-#define EDP_POLYCRANK_SECTION "[edp_polycrank]"
-#define ECP_POLYCRANK_SECTION "[ecp_polycrank]"
+const std::string EDP_POLYCRANK_SECTION = "[edp_polycrank]";
+const std::string ECP_POLYCRANK_SECTION = "[ecp_polycrank]";
 
 #define POLYCRANK_NUM_OF_SERVOS	8
 

@@ -12,7 +12,6 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-
 //
 //
 // KLASA UiRobotIrp6p_m
@@ -21,219 +20,171 @@
 
 
 UiRobotIrp6p_m::UiRobotIrp6p_m(Ui& _ui) :
-	UiRobot(_ui, EDP_IRP6P_M_SECTION, ECP_IRP6P_M_SECTION),
-			is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false),
-			is_wind_irp6p_xyz_euler_zyz_open(false),
-			is_wind_irp6p_xyz_angle_axis_open(false),
-			is_wind_irp6p_xyz_aa_relative_open(false),
-			is_wind_irp6p_xyz_angle_axis_ts_open(false),
-			is_wind_irp6p_xyz_euler_zyz_ts_open(false),
-			is_wind_irp6p_kinematic_open(false),
-			is_wind_irp6p_servo_algorithm_open(false), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::irp6p_m::EDP_IRP6P_M_SECTION, lib::irp6p_m::ECP_IRP6P_M_SECTION), is_wind_irp6p_int_open(false),
+			is_wind_irp6p_inc_open(false), is_wind_irp6p_xyz_euler_zyz_open(false),
+			is_wind_irp6p_xyz_angle_axis_open(false), is_wind_irp6p_xyz_aa_relative_open(false),
+			is_wind_irp6p_xyz_angle_axis_ts_open(false), is_wind_irp6p_xyz_euler_zyz_ts_open(false),
+			is_wind_irp6p_kinematic_open(false), is_wind_irp6p_servo_algorithm_open(false), ui_ecp_robot(NULL)
+{
 
 }
 
-int UiRobotIrp6p_m::reload_configuration() {
+int UiRobotIrp6p_m::reload_configuration()
+{
 
 	// jesli IRP6 postument ma byc aktywne
-	if ((state.is_active = ui.config->value<int> ("is_irp6p_m_active")) == 1) {
+	if ((state.is_active = ui.config->value <int> ("is_irp6p_m_active")) == 1) {
 		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_IRP6P_M_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (ui.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(
-							lib::configurator::CONFIG_SERVER,
-							"trigger_attach_point", state.ecp.section_name);
+					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
 		}
 
-		switch (state.edp.state) {
-		case -1:
-		case 0:
-			// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_IRP6P_M_SECTION);
+		switch (state.edp.state)
+		{
+			case -1:
+			case 0:
+				// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_IRP6P_M_SECTION);
 
-			state.edp.pid = -1;
-			state.edp.reader_fd = -1;
+				state.edp.pid = -1;
+				state.edp.reader_fd = -1;
 
-			state.edp.state = 0;
+				state.edp.state = 0;
 
-			for (int i = 0; i < 4; i++) {
-				char tmp_string[50];
-				if (i < 3) {
-					sprintf(tmp_string, "preset_position_%d", i);
-				} else {
-					sprintf(tmp_string, "front_position", i);
-				}
+				for (int i = 0; i < 4; i++) {
+					char tmp_string[50];
+					if (i < 3) {
+						sprintf(tmp_string, "preset_position_%d", i);
+					} else {
+						sprintf(tmp_string, "front_position", i);
+					}
 
-				if (ui.config->exists(tmp_string, state.edp.section_name)) {
-					char* tmp, *tmp1;
+					if (ui.config->exists(tmp_string, state.edp.section_name)) {
+						char* tmp, *tmp1;
 
-					tmp1 = tmp = strdup(ui.config->value<std::string> (
-							tmp_string, state.edp.section_name).c_str());
-					char* toDel = tmp;
-					for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
-						if (i < 3) {
-							state.edp.preset_position[i][j] = strtod(tmp1,
-									&tmp1);
-						} else {
-							state.edp.front_position[j] = strtod(tmp1, &tmp1);
+						tmp1 = tmp
+								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						char* toDel = tmp;
+						for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
+							if (i < 3) {
+								state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
+							} else {
+								state.edp.front_position[j] = strtod(tmp1, &tmp1);
+							}
+						}
+						free(toDel);
+					} else {
+						for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
+							if (i < 3) {
+								state.edp.preset_position[i][j] = 0.0;
+							} else {
+								state.edp.front_position[j] = 0.0;
+								printf("nie zdefiniowano irp6p front_postion w common.ini\n");
+							}
 						}
 					}
-					free(toDel);
-				} else {
-					for (int j = 0; j < IRP6P_M_NUM_OF_SERVOS; j++) {
-						if (i < 3) {
-							state.edp.preset_position[i][j] = 0.0;
-						} else {
-							state.edp.front_position[j] = 0.0;
-							printf(
-									"nie zdefiniowano irp6p front_postion w common.ini\n");
-						}
-					}
 				}
-			}
 
-			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
-						state.edp.section_name);
-			else
-				state.edp.test_mode = 0;
+				if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = ui.config->value <int> (ROBOT_TEST_MODE, state.edp.section_name);
+				else
+					state.edp.test_mode = 0;
 
-			state.edp.hardware_busy_attach_point
-					= ui.config->value<std::string> (
-							"hardware_busy_attach_point",
-							state.edp.section_name);
+				state.edp.hardware_busy_attach_point
+						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
-			state.edp.network_resourceman_attach_point
-					= ui.config->return_attach_point_name(
-							lib::configurator::CONFIG_SERVER,
-							"resourceman_attach_point", state.edp.section_name);
+				state.edp.network_resourceman_attach_point
+						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
 
-			state.edp.network_reader_attach_point
-					= ui.config->return_attach_point_name(
-							lib::configurator::CONFIG_SERVER,
-							"reader_attach_point", state.edp.section_name);
+				state.edp.network_reader_attach_point
+						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-			state.edp.node_name = ui.config->value<std::string> ("node_name",
-					state.edp.section_name);
-			break;
-		case 1:
-		case 2:
-			// nie robi nic bo EDP pracuje
-			break;
-		default:
-			break;
+				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name);
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
 		}
 
 	} else // jesli  irp6 postument ma byc nieaktywne
 	{
-		switch (state.edp.state) {
-		case -1:
-		case 0:
-			state.edp.state = -1;
-			break;
-		case 1:
-		case 2:
-			// nie robi nic bo EDP pracuje
-			break;
-		default:
-			break;
+		switch (state.edp.state)
+		{
+			case -1:
+			case 0:
+				state.edp.state = -1;
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
 		}
 	} // end irp6_postument
 
 	return 1;
 }
 
-int UiRobotIrp6p_m::manage_interface() {
+int UiRobotIrp6p_m::manage_interface()
+{
 
-	switch (state.edp.state) {
+	switch (state.edp.state)
+	{
 
-	case -1:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument, NULL);
-		break;
-	case 0:
-		ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-				ABN_mm_irp6_postument_edp_unload,
-				ABN_mm_irp6_postument_pre_synchro_moves,
-				ABN_mm_irp6_postument_absolute_moves,
-				ABN_mm_irp6_postument_relative_moves,
-				ABN_mm_irp6_postument_tool_specification,
-				ABN_mm_irp6_postument_preset_positions,
-				ABN_mm_irp6_postument_kinematic,
-				ABN_mm_irp6_postument_servo_algorithm, NULL);
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument,
-				ABN_mm_irp6_postument_edp_load, NULL);
+		case -1:
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument, NULL);
+			break;
+		case 0:
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_pre_synchro_moves, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, ABN_mm_irp6_postument_edp_load, NULL);
 
-		break;
-	case 1:
-	case 2:
-		ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument,
-				NULL);
-		//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-		// jesli robot jest zsynchronizowany
-		if (state.edp.is_synchronised) {
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_postument_pre_synchro_moves, NULL);
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_preset_positions, NULL);
+			break;
+		case 1:
+		case 2:
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, NULL);
+			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+			// jesli robot jest zsynchronizowany
+			if (state.edp.is_synchronised) {
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
+				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-			switch (ui.mp.state) {
-			case UI_MP_NOT_PERMITED_TO_RUN:
-			case UI_MP_PERMITED_TO_RUN:
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_postument_edp_unload,
-						ABN_mm_irp6_postument_absolute_moves,
-						ABN_mm_irp6_postument_relative_moves,
-						ABN_mm_irp6_postument_tool_specification,
-						ABN_mm_irp6_postument_preset_positions,
-						ABN_mm_irp6_postument_kinematic,
-						ABN_mm_irp6_postument_servo_algorithm, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_postument_edp_load, NULL);
-				break;
-			case UI_MP_WAITING_FOR_START_PULSE:
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-						ABN_mm_irp6_postument_absolute_moves,
-						ABN_mm_irp6_postument_relative_moves,
-						ABN_mm_irp6_postument_preset_positions,
-						ABN_mm_irp6_postument_tool_specification,
-						ABN_mm_irp6_postument_kinematic,
-						ABN_mm_irp6_postument_servo_algorithm, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-						ABN_mm_irp6_postument_edp_load,
-						ABN_mm_irp6_postument_edp_unload, NULL);
-				break;
-			case UI_MP_TASK_RUNNING:
-			case UI_MP_TASK_PAUSED:
-				ApModifyItemState(
-						&robot_menu,
-						AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6_postument_absolute_moves,
-						ABN_mm_irp6_postument_relative_moves,
-						ABN_mm_irp6_postument_preset_positions,
-						ABN_mm_irp6_postument_tool_specification,
-						ABN_mm_irp6_postument_kinematic,
-						ABN_mm_irp6_postument_servo_algorithm, NULL);
-				break;
-			default:
-				break;
+				switch (ui.mp.state)
+				{
+					case UI_MP_NOT_PERMITED_TO_RUN:
+					case UI_MP_PERMITED_TO_RUN:
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
+						break;
+					case UI_MP_WAITING_FOR_START_PULSE:
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, ABN_mm_irp6_postument_edp_unload, NULL);
+						break;
+					case UI_MP_TASK_RUNNING:
+					case UI_MP_TASK_PAUSED:
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
+						break;
+					default:
+						break;
+				}
+
+			} else // jesli robot jest niezsynchronizowany
+			{
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
+				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 			}
-
-		} else // jesli robot jest niezsynchronizowany
-		{
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-					ABN_mm_irp6_postument_edp_unload,
-					ABN_mm_irp6_postument_pre_synchro_moves, NULL);
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM,
-					ABN_mm_irp6_postument_edp_load, NULL);
-			ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL,
-					ABN_mm_all_robots_synchronisation, NULL);
-		}
-		break;
-	default:
-		break;
+			break;
+		default:
+			break;
 
 	}
 
@@ -242,10 +193,8 @@ int UiRobotIrp6p_m::manage_interface() {
 }
 
 // aktualizacja ustawien przyciskow
-int UiRobotIrp6p_m::process_control_window_irp6p_section_init(
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-		bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
+int UiRobotIrp6p_m::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+{
 
 	if (state.edp.state <= 0) {// edp wylaczone
 		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
@@ -254,18 +203,15 @@ int UiRobotIrp6p_m::process_control_window_irp6p_section_init(
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			ui.unblock_widget(
-					ABW_PtButton_wnd_processes_control_irp6p_reader_start);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
 			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_stop);
-			ui.block_widget(
-					ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
+			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
 			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_stop);
-			ui.unblock_widget(
-					ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
+			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
 		}
 	}
 
@@ -275,7 +221,8 @@ int UiRobotIrp6p_m::process_control_window_irp6p_section_init(
 
 }
 
-int UiRobotIrp6p_m::close_all_windows() {
+int UiRobotIrp6p_m::close_all_windows()
+{
 
 	int pt_res = PtEnter(0);
 
@@ -296,7 +243,8 @@ int UiRobotIrp6p_m::close_all_windows() {
 
 }
 
-int UiRobotIrp6p_m::delete_ui_ecp_robot() {
+int UiRobotIrp6p_m::delete_ui_ecp_robot()
+{
 	delete ui_ecp_robot;
 	return 1;
 }

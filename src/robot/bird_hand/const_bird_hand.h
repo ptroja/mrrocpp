@@ -48,6 +48,7 @@ struct rbuffer
 const std::string EDP_SECTION = "[edp_bird_hand]";
 const std::string ECP_SECTION = "[ecp_bird_hand]";
 
+
 } // namespace bird_hand
 } // namespace lib
 } // namespace mrrocpp

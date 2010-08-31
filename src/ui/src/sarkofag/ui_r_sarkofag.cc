@@ -20,8 +20,8 @@
 
 
 UiRobotSarkofag::UiRobotSarkofag(Ui& _ui) :
-	UiRobot(_ui, EDP_SARKOFAG_SECTION, ECP_SARKOFAG_SECTION),
-	is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
+	UiRobot(_ui, lib::sarkofag::EDP_SARKOFAG_SECTION, lib::sarkofag::ECP_SARKOFAG_SECTION),
+			is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }

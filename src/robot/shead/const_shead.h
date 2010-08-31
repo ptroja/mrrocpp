@@ -39,8 +39,8 @@ struct rbuffer
 	reply shead_reply;
 };
 
-#define EDP_SHEAD_SECTION "[edp_shead]"
-#define ECP_SHEAD_SECTION "[ecp_shead]"
+const std::string EDP_SHEAD_SECTION ="[edp_shead]";
+const std::string ECP_SHEAD_SECTION ="[ecp_shead]";
 
 #define SHEAD_NUM_OF_SERVOS	1
 

@@ -9,8 +9,8 @@ namespace speaker {
 
 const robot_name_t ROBOT_SPEAKER = "ROBOT_SPEAKER";
 
-#define EDP_SPEAKER_SECTION "[edp_speaker]"
-#define ECP_SPEAKER_SECTION "[ecp_speaker]"
+const std::string EDP_SPEAKER_SECTION ="[edp_speaker]";
+const std::string ECP_SPEAKER_SECTION ="[ecp_speaker]";
 
 }
 } // namespace lib

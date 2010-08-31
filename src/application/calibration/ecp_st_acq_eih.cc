@@ -21,7 +21,7 @@ acq_eih::acq_eih(task &_ecp_t) :
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
 		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
 		robot = TRACK;
-	} else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6P_M_SECTION) {
+	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_IRP6P_M_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
 		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
 		robot = POSTUMENT;

@@ -45,8 +45,8 @@ struct rbuffer
 	epos::single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
 };
 
-#define EDP_SMB_SECTION "[edp_smb]"
-#define ECP_SMB_SECTION "[ecp_smb]"
+const std::string EDP_SMB_SECTION ="[edp_smb]";
+const std::string ECP_SMB_SECTION ="[ecp_smb]";
 
 } // namespace smb
 } // namespace lib

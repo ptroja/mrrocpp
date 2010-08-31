@@ -20,7 +20,7 @@
 
 
 UiRobotPolycrank::UiRobotPolycrank(Ui& _ui) :
-	UiRobot(_ui, EDP_POLYCRANK_SECTION, ECP_POLYCRANK_SECTION), ui_ecp_robot(NULL),
+	UiRobot(_ui, lib::polycrank::EDP_POLYCRANK_SECTION, ECP_POLYCRANK_SECTION), ui_ecp_robot(NULL),
 			is_wind_polycrank_int_open(false),
 			is_wind_polycrank_inc_open(false) {
 
