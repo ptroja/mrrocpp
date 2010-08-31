@@ -29,10 +29,10 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < master.number_of_servos; j++) {
-		synchro_axis_order[j] = ((j + IRP6M_SYN_INIT_AXE) % (master.number_of_servos));
+		synchro_axis_order[j] = ((j + SYN_INIT_AXE) % (master.number_of_servos));
 		axe_inc_per_revolution[j] = AXIS_0_TO_5_INC_PER_REVOLUTION;
-		synchro_step_coarse[j] = IRP6_MECHATRONIKA_SYNCHRO_STEP_COARSE;
-		synchro_step_fine[j] = IRP6_MECHATRONIKA_SYNCHRO_STEP_FINE;
+		synchro_step_coarse[j] = SYNCHRO_STEP_COARSE;
+		synchro_step_fine[j] = SYNCHRO_STEP_FINE;
 	}
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));

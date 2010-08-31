@@ -264,10 +264,10 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE8_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE8_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old < -AXE8_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE8_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

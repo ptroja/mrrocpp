@@ -19,7 +19,7 @@ namespace irp6ot_tfg {
 class effector;
 
 
-#define IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT	1000
+#define AXE8_MAX_PWM_INCREMENT	1000
 
 #define AXIS_7_SYNCHRO_STEP_COARSE -0.5
 #define AXIS_7_SYNCHRO_STEP_FINE   -0.2
