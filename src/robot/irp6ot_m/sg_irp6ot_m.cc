@@ -30,6 +30,7 @@ servo_buffer::servo_buffer(effector &_master) :
 		{
 			case GRIPPER_TURN_AXE:
 				axe_inc_per_revolution[j] = AXIS_6_INC_PER_REVOLUTION;
+
 				synchro_step_coarse[j] = AXIS_6_SYNCHRO_STEP_COARSE;
 				synchro_step_fine[j] = AXIS_6_SYNCHRO_STEP_FINE;
 				break;
@@ -37,6 +38,7 @@ servo_buffer::servo_buffer(effector &_master) :
 				axe_inc_per_revolution[j] = AXIS_0_TO_5_INC_PER_REVOLUTION;
 				synchro_step_coarse[j] = AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
 				synchro_step_fine[j] = AXIS_0_TO_5_SYNCHRO_STEP_FINE;
+
 				break;
 		}
 	}
@@ -50,6 +52,7 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych d;a poszczegolnych osi
 	int
 			max_current[lib::irp6ot_m::NUM_OF_SERVOS] =
+
 					{ AXIS_1_MAX_CURRENT, AXIS_2_MAX_CURRENT, AXIS_3_MAX_CURRENT, AXIS_4_MAX_CURRENT, AXIS_5_MAX_CURRENT, AXIS_6_MAX_CURRENT, AXIS_7_MAX_CURRENT };
 
 	hi
