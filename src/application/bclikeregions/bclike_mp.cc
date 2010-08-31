@@ -116,24 +116,28 @@ void bclike_mp::main_task_algorithm(void){
 	sr_ecp_msg->message("MOVE right");
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
-
 #ifdef SINGLE_MOVE
 
-	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC") != 0){
 
 		msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
+
+//		std::cout << "ODCZYT: " << regions.size() << std::endl;
 
 		set_next_ecps_state (ecp_mp::task::ECP_ST_SMOOTH_MOVE, (int)mrrocpp::ecp::common::task::START, tab, 300, 1, actual_robot.c_str());
 		sr_ecp_msg->message("MOVE right");
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
 	}
-
+	sr_ecp_msg->message("KONIEC RUCHU");
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
 
+	std::cout << "WYWOLANIA KODOW: " << regions.size() << std::endl;
 	for(it = regions.begin(); it != regions.end(); ++it){
 		//Create vector with code position
 		vec[0] = (*it).first.x;
 		vec[1] = (*it).first.y;
+
+		std::cout << "x = " << vec[0] << " y = " << vec[1] << " z = " << vec[2] << std::endl;
 
 		//Move to code position
 		tmp = msg.robotPositionToString(vec);
@@ -144,17 +148,17 @@ void bclike_mp::main_task_algorithm(void){
 		//TODO: wywolac subtaks Marcina
 	}
 
-
 #else
 
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
 
-	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC")){
+	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC") != 0){
 
 		pos = msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
 
 		for(it = regions.begin(); it!= regions.end(); ++it){
 			if(!(*it).second){
+				std::cout << "WYKONANIE ODCZYTU" << std::endl;
 				//TODO: Przelaczyc Task we FraDIA
 				//TODO: Wywolac subtask Marcina
 				(*it).second = true;

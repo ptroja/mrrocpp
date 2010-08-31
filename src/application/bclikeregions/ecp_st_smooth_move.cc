@@ -29,7 +29,7 @@ ecp_st_smooth_move::ecp_st_smooth_move(task & _ecp_t):
 
 	//Creating new smart pointer to generator object
 	bcl_smooth = shared_ptr<generator::bclike_smooth>(new generator::bclike_smooth((bcl_t_switcher &)ecp_t, bcl_ecp.get_vsp_fradia()));
-	bcl_smooth->set_absolute();
+//	bcl_smooth->set_absolute();
 
 }
 
@@ -47,6 +47,8 @@ void ecp_st_smooth_move::conditional_execution(){
 	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 //	bcl_smooth->set_debug(true);
 
+	bcl_smooth->reset();
+	bcl_smooth->set_absolute();
 	//Loading move destination point
 #ifdef JOINT
 	bcl_smooth->load_absolute_joint_trajectory_pose(vec);

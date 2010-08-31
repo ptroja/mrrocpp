@@ -64,7 +64,6 @@ typedef struct {
 	double y;
 	double w;
 	double h;
-	double a;
 
 } mrrocpp_regions;
 

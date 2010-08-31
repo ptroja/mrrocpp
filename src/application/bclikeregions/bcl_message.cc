@@ -200,20 +200,25 @@ std::vector<double> bcl_message::stringToECPOrder(char* str, std::vector<std::pa
 
 	double *tab = reinterpret_cast<double *>(str);
 
-	int size = (int)tab[0] + 1;
+	int size = (int)tab[0] + 1 ;
 
-	ret.assign(tab + 1, tab + size);
+	ret.assign(tab + 1, tab + 1 + (int)tab[0]);
 
 
-	for(int i = size; i < (int)tab[size]; ++i){
-		tmp.x = tab[size + 5 * i + 1];
-		tmp.y = tab[size + 5 * i + 2];
-		tmp.w = tab[size + 5 * i + 3];
-		tmp.h = tab[size + 5 * i + 4];
-		tmp.a = tab[size + 5 * i + 5];
+//	std::cout << "VECTOR:" << tab[0] << "KODOW DO ODCZYTANIA: " << tab[size] << std::endl;
+
+	for(int i = 0; i < (int)tab[size]; ++i){
+		tmp.x = tab[size + 4 * i + 1];
+		tmp.y = tab[size + 4 * i + 2];
+		tmp.w = tab[size + 4 * i + 3];
+		tmp.h = tab[size + 4 * i + 4];
 
 		vec.push_back(std::pair<ecp::common::task::mrrocpp_regions, bool>(tmp, false));
+		std::cout << "Znaleziono kod: x = " << tmp.x << " y = " << tmp.y;
+		std::cout << "\a" << std::endl;
 	}
+
+//	std::cout << "JUZ ODCZYTANO: " << vec.size() << std::endl;
 
 	return ret;
 }

@@ -10,6 +10,7 @@
 
 #include "../../generator/ecp/ecp_g_newsmooth.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
+#include "generator/ecp/ecp_g_constant_velocity.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "bcl_types.h"
 #include "bcl_message.h"
@@ -29,7 +30,8 @@ class bcl_t_switcher;
 
 namespace generator {
 
-class bclike_smooth: public mrrocpp::ecp::common::generator::newsmooth {
+//class bclike_smooth: public mrrocpp::ecp::common::generator::newsmooth {
+class bclike_smooth: public mrrocpp::ecp::common::generator::constant_velocity {
 public:
 	bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task);
 	bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task);

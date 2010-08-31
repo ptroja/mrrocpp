@@ -19,8 +19,27 @@ namespace common {
 namespace generator {
 
 
+//Kamera jest obrocona wzgledem chwytaka o 90 stopni wzdloz osi z
+// x = -y
+// y =  x
+const double x_param = 373/200; //x translation from camera to robot position (px/mm)
+const double y_param = 184/100; //y translation from camera to robot position (px/mm)
+
+//Rotation 90 deg z
+//const double rotation[3][3] = {{-0.4481,   -0.8940,         0},
+//							   { 0.8940,   -0.4481,         0},
+//							   {      0,         0,    1.0000}};
+//Rotation -90 deg z
+const double rotation[3][3] = {{-0.4481,   -0.8940,         0},
+							   {-0.8940,   -0.4481,         0},
+							   {      0,         0,    1.0000}};
+
+//Camera translation matrix
+const double translation[3] = {0, -0.1, 0};
+
+
 #ifdef IRP6_OT
-const int joint_num = 7;
+const int joint_num = 6;//7;
 #endif//IRP6_OT
 
 #ifdef IRP6_P
@@ -43,7 +62,8 @@ const lib::POSE_SPECIFICATION return_pos_type = lib::FRAME;
  * @param ecp_task parent task
  */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
-		common::generator::newsmooth(ecp_task, move_type, joint_num),
+//		common::generator::newsmooth(ecp_task, move_type, joint_num),
+		common::generator::constant_velocity(ecp_task, move_type, joint_num),
 		bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
 
 	vsp_fradia = NULL;
@@ -56,7 +76,8 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::task & ecp_task) :
  * @param task parent task
  */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
-				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
+//				common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
+				common::generator::constant_velocity((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
 				bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
 
 	std::cout << "FRADIA VERSION" << std::endl;
@@ -80,7 +101,8 @@ bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task):
  * @param fr pointer to FraDIA sensor structure
  */
 bclike_smooth::bclike_smooth(mrrocpp::ecp::common::task::bcl_t_switcher & task, task::bcl_fradia_sensor* fr):
-						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
+						common::generator::constant_velocity((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
+//						common::generator::newsmooth((mrrocpp::ecp::common::task::task &)task, move_type, joint_num),
 						bcl_ecp((task::bcl_t_switcher &)ecp_t),
 						vsp_fradia(fr), num_send(0){
 
@@ -113,7 +135,8 @@ bool bclike_smooth::first_step(){
 		return false;
 	}
 
-	return newsmooth::first_step();
+//	return newsmooth::first_step();
+	return constant_velocity::first_step();
 }
 
 bool bclike_smooth::next_step(){
@@ -129,21 +152,26 @@ bool bclike_smooth::next_step(){
 	//If there are new bar code like areas translate their positions and check existance in vector
 	if(reading.code_found){
 		double t[3];
-		std::cout <<"BEFORE: x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
-		translateToRobotPosition(reading);
-		std::cout << "AFTER: x = " <<  reading.x_k0 << " y = " << reading.y_k0 << std::endl;
 		actual_pos.get_translation_vector(t);
-		std::cout << "ROBOT: x = " <<  t[0] << " y = " << t[1] << std::endl;
+		translateToRobotPosition(reading);
 		addCodesToVector(reading);
+//		std::cout << "KODOW DO WYSANIA: " << readings.size() << std::endl;
 	}
 
 	//If there is something to send, do it
-	if(sendNextPart())
+	if(sendNextPart()){
+//		newsmooth::reset();
 		return false;
+	}
 
 	//If there is nothing to send and robot is still moving, go on
-	if(newsmooth::next_step())
+//	if(newsmooth::next_step()){
+//		return true;
+//	}
+
+	if(constant_velocity::next_step()){
 		return true;
+	}
 
 	//End everything, when there is nothing to send and robot stops
 	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
@@ -174,7 +202,7 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 	lib::Xyz_Euler_Zyz_vector new_pos;
 
-	std::cout << "REGS_FOUND = " << regs.num_found << std::endl;
+//	std::cout << "REGS_FOUND = " << regs.num_found << std::endl;
 	for(int i = 0; i < regs.num_found; ++i){
 
 		e.setZero();
@@ -184,17 +212,21 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 		camera_to_object_translation.setZero();
 
 		switch(i){
-			case 1:
+			case 0:
 				e(0, 0) = regs.x_k0;
 				e(1, 0) = regs.y_k0;
 				break;
-			case 2:
+			case 1:
 				e(0, 0) = regs.x_k1;
 				e(1, 0) = regs.y_k1;
 				break;
-			case 3:
+			case 2:
 				e(0, 0) = regs.x_k2;
 				e(1, 0) = regs.y_k2;
+				break;
+			case 3:
+				e(0, 0) = regs.x_k3;
+				e(1, 0) = regs.y_k3;
 				break;
 
 		}
@@ -221,9 +253,9 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 		e_T_c_position.remove_translation();
 		e_T_c_position.remove_rotation();
-		Kp(0,0) = 1;
-		Kp(1,1) = 1;
-		Kp(2,2) = 1;
+
+		e_T_c_position.set_rotation_matrix(rotation);
+		e_T_c_position.set_translation_vector(translation);
 
 		u_translation = e_T_c_position * camera_to_object_translation;
 
@@ -237,21 +269,25 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 		tmp_pos.get_xyz_euler_zyz(new_pos);
 
 		switch(i){
+			case 0:
+				regs.x_k0 = new_pos(0,0);
+				regs.y_k0 = new_pos(1,0);
+				regs.w_k0 = regs.w_k0 * 0.2 / 373;
+				break;
 			case 1:
-				regs.x_k0 = new_pos(1,0);
-				regs.y_k0 = new_pos(2,0);
+				regs.x_k1 = new_pos(0,0);
+				regs.y_k1 = new_pos(1,0);
+				regs.w_k1 = regs.w_k1 * 0.2 / 373;
 				break;
 			case 2:
-				regs.x_k1 = new_pos(1,0);
-				regs.y_k1 = new_pos(2,0);
+				regs.x_k2 = new_pos(0,0);
+				regs.y_k2 = new_pos(1,0);
+				regs.w_k2 = regs.w_k2 * 0.2 / 373;
 				break;
 			case 3:
-				regs.x_k2 = new_pos(1,0);
-				regs.y_k2 = new_pos(2,0);
-				break;
-			case 4:
-				regs.x_k3 = new_pos(1,0);
-				regs.y_k3 = new_pos(2,0);
+				regs.x_k3 = new_pos(0,0);
+				regs.y_k3 = new_pos(1,0);
+				regs.w_k3 = regs.w_k3 * 0.2 / 373;
 				break;
 		}
 	}
@@ -266,6 +302,9 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 
 	task::mrrocpp_regions tmp;
+
+
+//	std::cout << "REGS TO ADD: " << reading.num_found << std::endl;
 
 	switch(reading.num_found){
 		case 4:
@@ -300,6 +339,8 @@ void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 		case 0:
 			break;
 	}
+
+//	std::cout << "AKTUALNIE KODOW: " << readings.size() << std::endl;
 }
 
 /**
@@ -313,10 +354,10 @@ bool bclike_smooth::checkIfCodeBeenRead(task::mrrocpp_regions& code){
 
 	for(it = readings.begin(); it != readings.end(); ++ it){
 		if(codesIntersect(code, (*it).first))
-			return false;
+			return true;
 	}
 
-	return true;
+	return false;
 }
 /**
  * Check if two given code areas intersects
@@ -326,8 +367,9 @@ bool bclike_smooth::checkIfCodeBeenRead(task::mrrocpp_regions& code){
  */
 bool bclike_smooth::codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions& c2){
 
-	if(((c1.x > c2.x) && (c1.x + c1.w < c2.x + c2.w) && (c1.y > c2.y) && (c1.y + c1.h < c2.y + c2.h)) ||
-	   ((c2.x > c1.x) && (c2.x + c2.w < c1.x + c1.w) && (c2.y > c1.y) && (c2.y + c2.h < c1.y + c1.h))){
+//	if(((c1.x > c2.x) && (c1.x + c1.w < c2.x + c2.w) && (c1.y > c2.y) && (c1.y + c1.h < c2.y + c2.h)) ||
+//	   ((c2.x > c1.x) && (c2.x + c2.w < c1.x + c1.w) && (c2.y > c1.y) && (c2.y + c2.h < c1.y + c1.h))){
+	if(sqrt((c1.x - c2.x)*(c1.x - c2.x) + (c1.y - c2.y)*(c1.y - c2.y)) < (c1.w + c2.w)){
 		return true;
 	}
 	return false;
@@ -359,20 +401,23 @@ bool bclike_smooth::sendNextPart(){
 
 	tab[i] = 0;
 
-	for(it = readings.begin(); it != readings.end() && ((5 * tab[i] + 1) * sizeof(double) < MP_2_ECP_STRING_SIZE); ++it){
+	for(it = readings.begin(); it != readings.end() && ((i + 5 * tab[i] + 1) * sizeof(double) < MP_2_ECP_STRING_SIZE); ++it){
+//		std::cout << "ADING TO SEND: " << (*it).second << std::endl;
 		if(!(*it).second){
-			tab[i + 5 * (int)tab[i] + 1] = (*it).first.x;
-			tab[i + 5 * (int)tab[i] + 2] = (*it).first.y;
-			tab[i + 5 * (int)tab[i] + 3] = (*it).first.w;
-			tab[i + 5 * (int)tab[i] + 4] = (*it).first.h;
-			tab[i + 5 * (int)tab[i] + 5] = (*it).first.a;
+			tab[i + 4 * (int)tab[i] + 1] = (*it).first.x;
+			tab[i + 4 * (int)tab[i] + 2] = (*it).first.y;
+			tab[i + 4 * (int)tab[i] + 3] = (*it).first.w;
+			tab[i + 4 * (int)tab[i] + 4] = (*it).first.h;
 			tab[i]++;
 			(*it).second = true;
 		}
 	}
 
-	if((int)tab[i]){
-		strcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret);
+
+	if(tab[i] > 0){
+//		std::cout << "SENDING DATA " << tab[i] << std::endl;
+		//strcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret);
+		memcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret, sizeof(char) * MP_2_ECP_STRING_SIZE);
 		delete(ret);
 		return true;
 	}else{
