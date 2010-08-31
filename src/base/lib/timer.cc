@@ -1,3 +1,12 @@
+/*!
+ * @file timer.h
+ * @brief Utility timer class	.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include <cstdio>
 #include <ctime>
 
@@ -6,22 +15,19 @@
 namespace mrrocpp {
 namespace lib {
 
-timer::timer(void)
+timer::timer() :
+	initialized(true), stopped(false), started(false), last_status(TIMER_INITIALIZED)
 {
-	timer_initialized = true;
-	timer_stopped = false;
-	timer_started = false;
-	last_status = TIMER_INITIALIZED;
 }
 
-timer::timer_status_t timer::timer_start(void)
+timer::timer_status_t timer::start()
 {
-	if (timer_initialized) {
+	if (initialized) {
 		if (clock_gettime(CLOCK_REALTIME, &t1) == -1) {
 			perror("clock_gettime()");
 		}
-		timer_started = true;
-		timer_stopped = false;
+		started = true;
+		stopped = false;
 		last_status = TIMER_STARTED;
 		return TIMER_STARTED;
 	} else {
@@ -30,15 +36,15 @@ timer::timer_status_t timer::timer_start(void)
 	}
 }
 
-timer::timer_status_t timer::timer_stop(void)
+timer::timer_status_t timer::stop()
 {
-	if (timer_initialized) {
-		if (timer_started) {
+	if (initialized) {
+		if (started) {
 			if (clock_gettime(CLOCK_REALTIME, &t2) == -1) {
 				perror("clock_gettime()");
 			}
 			// timer_started = false; // by Y
-			timer_stopped = true;
+			stopped = true;
 			// timer_initialized = false; // by Y
 			last_status = TIMER_STOPPED;
 			return TIMER_STOPPED;
@@ -52,12 +58,10 @@ timer::timer_status_t timer::timer_stop(void)
 	}
 }
 
-timer::timer_status_t timer::get_time(float *sec)
+timer::timer_status_t timer::get_time(float & sec)
 {
-	if (timer_stopped) {
-		float t = (t2.tv_sec + t2.tv_nsec / 1e9) - (t1.tv_sec + t1.tv_nsec / 1e9);
-		if (sec)
-			*sec = t;
+	if (stopped) {
+		sec = (t2.tv_sec + t2.tv_nsec / 1e9) - (t1.tv_sec + t1.tv_nsec / 1e9);
 		last_status = TIME_RETRIVED;
 		return TIME_RETRIVED;
 	} else {
@@ -66,7 +70,7 @@ timer::timer_status_t timer::get_time(float *sec)
 	}
 }
 
-void timer::print_last_status(void)
+void timer::print_last_status() const
 {
 	switch (last_status)
 	{
@@ -96,6 +100,9 @@ void timer::print_last_status(void)
 			break;
 		case TIMER_RUNNING_OR_NOT_STARTED:
 			printf("TIMER_RUNNING_OR_NOT_STARTED\n");
+			break;
+		default:
+			printf("TIMER_UNKNOWN_STATUS\n");
 			break;
 	}
 }
