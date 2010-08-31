@@ -16,18 +16,21 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace spkm {
+
 const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
-enum SPKM_CBUFFER_VARIANT
+
+enum CBUFFER_VARIANT
 {
-	SPKM_CBUFFER_EPOS_CUBIC_COMMAND,
-	SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
-	SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND,
-	SPKM_CBUFFER_EPOS_BRAKE_COMMAND
+	CBUFFER_EPOS_CUBIC_COMMAND,
+	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
+	CBUFFER_EPOS_OPERATIONAL_COMMAND,
+	CBUFFER_EPOS_BRAKE_COMMAND
 };
 
-struct spkm_cbuffer
+struct cbuffer
 {
-	SPKM_CBUFFER_VARIANT variant;
+	CBUFFER_VARIANT variant;
 	union
 	{
 		epos::epos_cubic_command epos_cubic_command_structure;
@@ -37,7 +40,7 @@ struct spkm_cbuffer
 
 };
 
-struct spkm_rbuffer
+struct rbuffer
 {
 	epos::single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
 	bool contact;
@@ -46,6 +49,7 @@ struct spkm_rbuffer
 #define EDP_SPKM_SECTION "[edp_spkm]"
 #define ECP_SPKM_SECTION "[ecp_spkm]"
 
+} // namespace spkm
 } // namespace lib
 } // namespace mrrocpp
 

@@ -136,19 +136,19 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 	PtGetResource(ABW_thumb_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_thumb_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_thumb_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -258,7 +258,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_0_command()
 
 	get_variant_thumb_f_0_command();
 
-	if (bhcs.thumb_f[0].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.thumb_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_thumb_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -287,19 +287,19 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 	PtGetResource(ABW_thumb_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_thumb_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_thumb_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -409,7 +409,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_1_command()
 
 	get_variant_thumb_f_1_command();
 
-	if (bhcs.thumb_f[1].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.thumb_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_thumb_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -438,19 +438,19 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 	PtGetResource(ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -560,7 +560,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_0_command()
 
 	get_variant_index_f_0_command();
 
-	if (bhcs.index_f[0].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -589,19 +589,19 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 	PtGetResource(ABW_index_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -711,7 +711,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_1_command()
 
 	get_variant_index_f_1_command();
 
-	if (bhcs.index_f[1].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -740,19 +740,19 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 	PtGetResource(ABW_index_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[2].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_2_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[2].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_2_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[2].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -862,7 +862,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_2_command()
 
 	get_variant_index_f_2_command();
 
-	if (bhcs.index_f[2].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[2].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -891,19 +891,19 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 	PtGetResource(ABW_ring_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -1013,7 +1013,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_0_command()
 
 	get_variant_ring_f_0_command();
 
-	if (bhcs.ring_f[0].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -1042,19 +1042,19 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 	PtGetResource(ABW_ring_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -1164,7 +1164,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_1_command()
 
 	get_variant_ring_f_1_command();
 
-	if (bhcs.ring_f[1].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -1193,19 +1193,19 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 	PtGetResource(ABW_ring_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_2_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::bird_hand::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_2_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::bird_hand::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -1315,7 +1315,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_2_command()
 
 	get_variant_ring_f_2_command();
 
-	if (bhcs.ring_f[2].profile_type == lib::bird_hand::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[2].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 

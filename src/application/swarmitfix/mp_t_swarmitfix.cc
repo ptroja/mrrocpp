@@ -47,7 +47,7 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::spkm::ROBOT_SPKM.c_str());
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::smb::ROBOT_SMB.c_str());
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::shead::ROBOT_SHEAD.c_str());
 
@@ -76,14 +76,14 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message(ss.str().c_str());
 
-	send_end_motion_to_ecps(1, lib::ROBOT_SPKM.c_str());
+	send_end_motion_to_ecps(1, lib::spkm::ROBOT_SPKM.c_str());
 	/*
 	 sr_ecp_msg->message("2");
 	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_SLEEP, (int) 5, "",  0,1,
-	 lib::ROBOT_SPKM);
+	 lib::spkm::ROBOT_SPKM);
 	 sr_ecp_msg->message("3");
 	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
-	 1, 1, lib::ROBOT_SPKM, lib::ROBOT_SPKM);
+	 1, 1, lib::spkm::ROBOT_SPKM, lib::spkm::ROBOT_SPKM);
 	 */
 	sr_ecp_msg->message("4");
 
@@ -95,9 +95,9 @@ void swarmitfix::main_task_algorithm(void)
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::ROBOT_SPKM.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_SPKM.c_str());
 	sr_ecp_msg->message("5");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_SPKM.c_str(), lib::ROBOT_SPKM.c_str());
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::spkm::ROBOT_SPKM.c_str(), lib::spkm::ROBOT_SPKM.c_str());
 
 	sr_ecp_msg->message("END");
 

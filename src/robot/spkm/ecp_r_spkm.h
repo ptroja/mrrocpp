@@ -45,8 +45,8 @@ protected:
 	lib::epos::epos_reply epos_reply_structure;
 
 	// bufory do edp
-	lib::spkm_cbuffer ecp_edp_cbuffer;
-	lib::spkm_rbuffer edp_ecp_rbuffer;
+	lib::spkm::cbuffer ecp_edp_cbuffer;
+	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
 

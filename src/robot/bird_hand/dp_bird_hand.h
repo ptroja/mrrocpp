@@ -16,27 +16,27 @@ namespace bird_hand {
 // ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
 #define BIRD_HAND_STEP_TIME_IN_NS ((uint64_t) 2000000)
 
-#define BIRD_HAND_COMMAND_DATA_PORT "bird_hand_command_data_port"
-#define BIRD_HAND_STATUS_DATA_REQUEST_PORT "bird_hand_status_data_request_port"
+const std::string COMMAND_DATA_PORT = "bird_hand_command_data_port";
+const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port";
 
-#define BIRD_HAND_CONFIGURATION_DATA_PORT "bird_hand_configuration_data_port"
-#define BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT "bird_hand_configuration_data_request_port"
+const std::string CONFIGURATION_DATA_PORT = "bird_hand_configuration_data_port";
+const std::string CONFIGURATION_DATA_REQUEST_PORT = "bird_hand_configuration_data_request_port";
 
 #define BIRD_HAND_NUM_OF_SERVOS	8
 #define BIRD_HAND_THUMB_F_NUM_OF_SERVOS	2
 #define BIRD_HAND_INDEX_F_NUM_OF_SERVOS	3
 #define BIRD_HAND_RING_F_NUM_OF_SERVOS	3
 
-enum BIRD_HAND_MOTION_VARIANT
+enum MOTION_VARIANT
 {
-	BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT = 0,
-	BIRD_HAND_MACROSTEP_POSITION_INCREMENT = 1,
-	BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION = 2
+	SIGLE_STEP_POSTION_INCREMENT = 0,
+	MACROSTEP_POSITION_INCREMENT = 1,
+	MACROSTEP_ABSOLUTE_POSITION = 2
 };
 
 struct single_joint_command
 {
-	BIRD_HAND_MOTION_VARIANT profile_type;
+	MOTION_VARIANT profile_type;
 	double reciprocal_of_damping;
 	double desired_torque;
 	double desired_position;
