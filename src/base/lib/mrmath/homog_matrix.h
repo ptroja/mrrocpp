@@ -12,6 +12,7 @@
 #include <ostream>
 #include <cstring>
 #include <cassert>
+#include <cmath>
 
 #include "base/lib/impconst.h"	// frame_tab
 
@@ -41,6 +42,9 @@ class Homog_matrix
 private:
 	//! Matrix placeholder
 	frame_tab matrix_m;
+
+	//! Eps for alpha representation
+	const static double ALPHA_SENSITIVITY;
 
 public:
 	/**

@@ -73,9 +73,12 @@ int main(int argc, char *argv[])
 		}
 
 #ifdef __QNXNTO__
+
+#define TIME_SLICE 500000 // by Y
+
 		// zmniejszenie stalej czasowej ticksize dla szeregowania
 		_clockperiod new_cp;
-		new_cp.nsec = TIME_SLICE; // impconst.h
+		new_cp.nsec = TIME_SLICE;
 		new_cp.fract = 0;
 		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
 #endif /* __QNXNTO__ */

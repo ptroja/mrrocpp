@@ -175,7 +175,7 @@ bool y_edge_follow_force::next_step()
 		 */
 
 		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx), lround(wy), lround(v), atan2(s_alfa, c_alfa)
-				* DEGREES_TO_RADIANS);
+				* (180.0/M_PI));
 	}
 
 	return true;
