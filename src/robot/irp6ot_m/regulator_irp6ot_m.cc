@@ -1264,7 +1264,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	constraint_detector(common::SG_REG_7_MAX_ACC, common::SG_REG_7_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
-	// step_new_pulse = step_new*IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
+	// step_new_pulse = step_new*AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 

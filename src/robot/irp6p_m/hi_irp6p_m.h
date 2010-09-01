@@ -18,21 +18,21 @@ namespace irp6p_m {
 const int IRQ_REAL = 10; // Numer przerwania sprzetowego
 const unsigned short int INT_FREC_DIVIDER = 8; // mnoznik czestotliwosci przerwan (odpowiada 2ms)
 
-#define HI_RYDZ_INTR_TIMEOUT_HIGH 10000000 // by Y - timeout przerwania z szafy badz zegara
-#define FIRST_SERVO_PTR           0xC1
-#define INTERRUPT_GENERATOR_SERVO_PTR	 0xC0
+const long HI_RYDZ_INTR_TIMEOUT_HIGH = 10000000; // by Y - timeout przerwania z szafy badz zegara
+const int FIRST_SERVO_PTR = 0xC1;
+const int INTERRUPT_GENERATOR_SERVO_PTR = 0xC0;
 
-#define ISA_CARD_OFFSET 0x20 // w zaleznosci od ustawienia na karcie isa
-#define IRP6_POSTUMENT_AXIS_1_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_2_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_3_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_4_MAX_CURRENT           0x34FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_5_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-#define IRP6_POSTUMENT_AXIS_6_MAX_CURRENT           0x24FF // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int ISA_CARD_OFFSET = 0x20; // w zaleznosci od ustawienia na karcie isa
+const int AXIS_1_MAX_CURRENT = 0x24FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_2_MAX_CURRENT = 0x34FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_3_MAX_CURRENT = 0x34FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_4_MAX_CURRENT = 0x34FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_5_MAX_CURRENT = 0x24FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_6_MAX_CURRENT = 0x24FF; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
 
-#define IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+const double AXIS_0_TO_5_INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
+const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na obrot walu - musi byc float
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
