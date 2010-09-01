@@ -240,6 +240,31 @@ void visual_servo_manager::add_termination_condition(boost::shared_ptr <terminat
 	termination_conditions.push_back(term_cond);
 }
 
+double visual_servo_manager::get_linear_speed() const
+{
+	return velocity.norm();
+}
+
+double visual_servo_manager::get_angular_speed() const
+{
+	return angular_velocity.norm();
+}
+
+double visual_servo_manager::get_linear_acceleration() const
+{
+	return acceleration.norm();
+}
+
+double visual_servo_manager::get_angular_acceleration() const
+{
+	return angular_acceleration.norm();
+}
+
+const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& visual_servo_manager::get_servos() const
+{
+	return servos;
+}
+
 } // namespace generator
 
 } // namespace common

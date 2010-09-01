@@ -59,7 +59,7 @@ rcsc::rcsc(lib::configurator &_config) :
 
 		reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
 		vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
-		term_cond = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(0.005, 0.005, 50));
+		term_cond = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(_config, fradia_config_section_name));
 		sm
 				= shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, fradia_config_section_name, vs));
 		//sm->add_position_constraint(cube);

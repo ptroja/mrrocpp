@@ -24,14 +24,13 @@ namespace mrrocpp {
 
 namespace ecp {
 
-namespace servovision{
+namespace servovision {
 class termination_condition;
 }
 
 namespace common {
 
 namespace generator {
-
 
 /** @defgroup servovision Visual servoing
  * @ingroup application
@@ -74,6 +73,33 @@ public:
 	 * @param term_cond
 	 */
 	void add_termination_condition(boost::shared_ptr <mrrocpp::ecp::servovision::termination_condition> term_cond);
+
+	/**
+	 * Get linear end effector's speed.
+	 * @return
+	 */
+	double get_linear_speed() const;
+	/**
+	 * Get angular end effector's speed.
+	 * @return
+	 */
+	double get_angular_speed() const;
+	/**
+	 * Get linear end effector's acceleration.
+	 * @return
+	 */
+	double get_linear_acceleration() const;
+	/**
+	 * Get angular end effector's acceleration.
+	 * @return
+	 */
+	double get_angular_acceleration() const;
+
+	/**
+	 * Get all visual servos.
+	 * @return
+	 */
+	const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& get_servos() const;
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**

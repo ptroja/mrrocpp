@@ -42,6 +42,7 @@ lib::Homog_matrix pb_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	lib::Xyz_Angle_Axis_vector aa_vector;
 	error_matrix.get_xyz_angle_axis(aa_vector);
+	error = aa_vector;
 	aa_vector = regulator->compute_control(aa_vector, dt);
 
 	lib::Homog_matrix delta_position;

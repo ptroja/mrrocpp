@@ -51,7 +51,7 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 2\n");
 	vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, config_section_name, config));
 
-	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
+	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, config_section_name));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 	log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");

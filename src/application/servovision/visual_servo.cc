@@ -59,6 +59,11 @@ bool visual_servo::is_object_visible()
 	return object_visible;
 }
 
+const Eigen::Matrix <double, 6, 1> & visual_servo::get_error()
+{
+	return error;
+}
+
 } // namespace servovision
 } // namespace ecp
 } // namespace mrrocpp
