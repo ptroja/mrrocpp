@@ -32,7 +32,6 @@
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
-#include "base/lib/mis_fun.h"
 #include "base/lib/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"

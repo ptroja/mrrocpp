@@ -9,7 +9,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 #include "base/mp/mp_task.h"
 
@@ -34,8 +34,8 @@ void neuron::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Neuron task initialization");
 
-	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::ROBOT_IRP6OT_M.c_str(), lib::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str());
+	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str(), lib::irp6ot_m::ROBOT_IRP6OT_M.c_str());
 
 	sr_ecp_msg->message("END");
 }

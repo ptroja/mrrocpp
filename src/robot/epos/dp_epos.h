@@ -1,9 +1,13 @@
-/*
- **  EPOS.H
- */
-
 #if !defined(__EPOS_DATA_PORT_H)
 #define __EPOS_DATA_PORT_H
+
+/*!
+ * @file
+ * @brief File contains data port communication structures for processes cooperating with Epos2 Maxon controllers
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup epos
+ */
 
 #include <string>
 
@@ -11,6 +15,7 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace epos {
 
 enum EPOS_GEN_PROFILE
 {
@@ -67,7 +72,8 @@ struct epos_reply
 	bool contact;
 };
 
-}
-}
+} // namespace epos
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

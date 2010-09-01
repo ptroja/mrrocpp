@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_5dof.cc
+ * @file
  * @brief File containing methods of the IRp-6p 5DOFs kinematic model class.
  *
  * @author tkornuta

@@ -1,10 +1,9 @@
-/**
- * \file single_thread_port.h
+/*!
+ * @file
+ * @brief File contains template class definition for a single thread communication ports
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * \date 2010
- * \author yoyek
- *
- * \brief Template class for single robot communication port
+ * @ingroup lib
  */
 
 #include <boost/foreach.hpp>

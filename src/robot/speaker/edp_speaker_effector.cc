@@ -45,7 +45,7 @@
 // Klasa edp_speaker_effector.
 #include "robot/speaker/edp_speaker_effector.h"
 #include "robot/speaker/speak_t.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
@@ -55,7 +55,7 @@ namespace edp {
 namespace speaker {
 
 effector::effector(lib::configurator &_config) :
-	common::effector(_config, lib::ROBOT_SPEAKER)
+	common::effector(_config, lib::speaker::ROBOT_NAME)
 {
 
 	real_reply_type = lib::ACKNOWLEDGE;

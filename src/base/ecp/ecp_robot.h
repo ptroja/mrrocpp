@@ -1,6 +1,14 @@
 #if !defined(_ECP_ROBOT_H)
 #define _ECP_ROBOT_H
 
+/*!
+ * @file
+ * @brief File contains ecp base robot declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
 #include "base/lib/configurator.h"
@@ -26,6 +34,14 @@ namespace task {
 class task;
 } // namespace task
 
+namespace robot {
+
+/*!
+ * @brief Base class of all ecp robots
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class ecp_robot : public ecp_mp::robot
 {
 	friend class ui_common_robot;
@@ -105,26 +121,28 @@ public:
 
 	bool is_synchronised(void) const; // Czy robot zsynchronizowany?
 
-	class ECP_error
-	{ // Klasa obslugi bledow robota
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-		lib::edp_error error;
-
-		ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
-	};
-
-	class ECP_main_error
-	{ // Klasa obslugi bledow ECP
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
-
-		ECP_main_error(lib::error_class_t err_cl, uint64_t err_no);
-	};
 };
 
+class ECP_error
+{ // Klasa obslugi bledow robota
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+	lib::edp_error error;
+
+	ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0 = 0, uint64_t err1 = 0);
+};
+
+class ECP_main_error
+{ // Klasa obslugi bledow ECP
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+
+	ECP_main_error(lib::error_class_t err_cl, uint64_t err_no);
+};
+
+} // namespace robot
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

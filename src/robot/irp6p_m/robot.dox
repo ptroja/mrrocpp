@@ -1,6 +1,10 @@
 /** 
 
 
+@namespace mrrocpp::ecp::irp6p_m
+@brief Namespace for ECP IRp6 postument manipulator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::kinematics::irp6ot
 @brief Contains classes related to the kinematics of the IRp-6 on track manipulator.
 @date Nov 26, 2009
@@ -24,7 +28,7 @@ The other one contains kinematics of its grippers:
 @}
 
    @defgroup irp6p_m IRp6 postument manipulator
-   @ingroup robots
+   @ingroup manipulators
 
 
 */

@@ -16,10 +16,10 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace common {
+namespace hi_moxa {
 
-HI_moxa::HI_moxa(motor_driven_effector &_master) :
-	HardwareInterface(_master)
+HI_moxa::HI_moxa(common::motor_driven_effector &_master) :
+	common::HardwareInterface(_master)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;

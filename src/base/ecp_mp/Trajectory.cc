@@ -1,3 +1,12 @@
+/*!
+ * @file
+ * @brief File contains Trajectory class definition
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
+
 #include <cstdio>
 #include <cstring>
 

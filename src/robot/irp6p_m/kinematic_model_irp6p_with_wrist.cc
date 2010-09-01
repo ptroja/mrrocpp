@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_with_wrist.cc
+ * @file
  * @brief File containing methods of the model_with_wrist class.
  *
  * The model_with_wrist kinematic model utilizes six (with an additional one in the wrist) IRP-6p DOFs.

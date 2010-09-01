@@ -25,7 +25,6 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
-#include "base/lib/mis_fun.h"
 #include "base/edp/edp_effector.h"
 
 namespace mrrocpp {

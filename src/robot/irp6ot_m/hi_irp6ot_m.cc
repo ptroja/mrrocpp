@@ -18,7 +18,7 @@ namespace irp6ot_m {
 
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
-			common::HI_rydz(_master, _hi_irq_real, _hi_intr_freq_divider, _hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr, _hi_isa_card_offset, _max_current)
+			hi_rydz::HI_rydz(_master, _hi_irq_real, _hi_intr_freq_divider, _hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr, _hi_isa_card_offset, _max_current)
 {
 }
 // ------------------------------------------------------------------------
@@ -63,7 +63,7 @@ uint64_t hardware_interface::read_write_hardware(void)
 
 	if (!trace_resolver_zero) {
 		//	printf("read_write_hardware: w mask resolver_zero\n");
-		irq_data.md.hardware_error &= common::MASK_RESOLVER_ZERO;
+		irq_data.md.hardware_error &= hi_rydz::MASK_RESOLVER_ZERO;
 	}
 
 	return irq_data.md.hardware_error;
@@ -77,13 +77,13 @@ void hardware_interface::finish_synchro(int drive_number)
 
 	// Zakonczyc sledzenie zera rezolwera i przejdz do trybu normalnej pracy
 	irq_data.md.card_adress = FIRST_SERVO_PTR + (uint8_t) drive_number;
-	irq_data.md.register_adress = (SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
-	irq_data.md.value = FINISH_SYNCHRO;
+	irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET);
+	irq_data.md.value = hi_rydz::FINISH_SYNCHRO;
 	hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 
 	// by Y - UWAGA NIE WIEDZIEC CZEMU BEZ TEGO NIE ZAWSZE DZIALAJA RUCHY NA OSI PO SYNCHRONIZACJi
 	if (drive_number > 5) {
-		irq_data.md.value = MICROCONTROLLER_MODE;
+		irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 		hi_int_wait(edp::common::INT_SINGLE_COMMAND, 2);
 	}
 

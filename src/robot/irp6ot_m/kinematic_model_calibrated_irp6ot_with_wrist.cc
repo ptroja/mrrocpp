@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_calibrated_irp6ot_with_wrist.cc
+ * @file
  * @brief File containing the methods of the kinematic_model_calibrated_irp6ot_with_wrist class.
  *
  * @author tkornuta

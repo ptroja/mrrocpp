@@ -16,7 +16,7 @@
 #include "base/lib/com_buf.h"
 #include "base/edp/edp_typedefs.h"
 #include "base/edp/reader.h"
-#include "robot/conveyor/conveyor_const.h"
+#include "robot/conveyor/const_conveyor.h"
 #include "robot/conveyor/regulator_conv.h"
 
 #include "base/edp/edp_e_motor_driven.h"
@@ -80,7 +80,7 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * CONVEYOR_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * lib::conveyor::INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	/*
@@ -241,10 +241,10 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > CONVEYOR_AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + CONVEYOR_AXE1_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -CONVEYOR_AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - CONVEYOR_AXE1_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE1_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE1_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old < -AXE1_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE1_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;

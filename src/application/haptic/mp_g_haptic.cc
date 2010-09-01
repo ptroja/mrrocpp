@@ -19,8 +19,8 @@
 #include "application/haptic/mp_g_haptic.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/mp/mp_g_common.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -48,8 +48,8 @@ bool haptic::first_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
-	irp6p = robot_m[lib::ROBOT_IRP6P_M];
+	irp6ot = robot_m[lib::irp6ot_m::ROBOT_IRP6OT_M];
+	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
 	irp6ot->communicate = true;
 	irp6p->communicate = true;

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_parameters_bird_hand.h
+ * @file
  * @brief File containing the declaration of kinematic_parameters class.
  *
  * @author kczajkowski

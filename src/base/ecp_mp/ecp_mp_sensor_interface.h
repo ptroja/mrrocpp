@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_sensor_interface.h
+ * @file
  * @brief File contains sensor interface for all MP and ECP  sensors.
  * 
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology

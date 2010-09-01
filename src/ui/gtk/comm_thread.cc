@@ -37,7 +37,7 @@ void *comm_thread(void* arg)
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
 			// channel open/close message

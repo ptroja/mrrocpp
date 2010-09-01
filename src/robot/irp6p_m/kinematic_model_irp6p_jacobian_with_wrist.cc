@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6p_jacobian_with_wrist.cc
+ * @file
  * @brief File containing methods of the IRp-6p with wrist (6DOF) jacobian based kinematic model class.
  *
  * @author Anna Maria Sibilska

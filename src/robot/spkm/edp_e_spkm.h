@@ -11,7 +11,7 @@
 #define __EDP_E_SPKM_H
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/spkm/spkm_const.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -23,11 +23,12 @@ namespace spkm {
  *
  * It is the base of the head mounted on the mobile base.
  */
-class effector: public common::manip_effector {
+class effector : public common::manip_effector
+{
 protected:
 
-	lib::spkm_cbuffer ecp_edp_cbuffer;
-	lib::spkm_rbuffer edp_ecp_rbuffer;
+	lib::spkm::cbuffer ecp_edp_cbuffer;
+	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for spkm effector.

@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_shead.cc
+ * @file
  * @brief File containing methods of the kinematic model for the SwarmItFix agent's head class.
  *
  * @author tkornuta

@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains ecp_taught_in_pose definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include <cstring>
 
 #include "base/ecp/ecp_taught_in_pose.h"

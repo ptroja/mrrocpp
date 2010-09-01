@@ -14,7 +14,6 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-# This tag specifies the encoding used for all characters in the config file 
 # that follow. The default is UTF-8 which is also the encoding used for all 
 # text before the first occurrence of this tag. Doxygen uses libiconv (or the 
 # iconv built into libc) for the transcoding. See 
@@ -589,6 +588,7 @@ INPUT                  = src/base/kinematics \
                          src/base/ecp_mp \
                          src/base/ecp \
                          src/base/mp \
+                         src/base/base.dox \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
@@ -597,7 +597,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/conveyor/ecp_r_conv.h \
                          src/robot/conveyor/ecp_r_conv.cc \ 
                          src/robot/conveyor/robot.dox \ 
-                         src/robot/conveyor/conveyor_const.h \ 
+                         src/robot/conveyor/const_conveyor.h \ 
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
                          src/robot/irp6_tfg/dp_tfg.h \ 
@@ -610,7 +610,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/bird_hand/ecp_r_bird_hand.h \
                          src/robot/bird_hand/ecp_r_bird_hand.cc \ 
                          src/robot/bird_hand/robot.dox \ 
-                         src/robot/bird_hand/bird_hand_const.h \ 
+                         src/robot/bird_hand/const_bird_hand.h \ 
                          src/robot/bird_hand/dp_bird_hand.h \ 
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h \
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.cc \
@@ -619,7 +619,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h \
                          src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.cc \ 
                          src/robot/irp6ot_tfg/robot.dox \ 
-                         src/robot/irp6ot_tfg/irp6ot_tfg_const.h \ 
+                         src/robot/irp6ot_tfg/const_irp6ot_tfg.h \ 
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.cc \
                          src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
@@ -631,7 +631,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6ot_m/ecp_r_irp6ot_m.h \
                          src/robot/irp6ot_m/ecp_r_irp6ot_m.cc \ 
                          src/robot/irp6ot_m/robot.dox \ 
-                         src/robot/irp6ot_m/irp6ot_m_const.h \ 
+                         src/robot/irp6ot_m/const_irp6ot_m.h \ 
                          src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
                          src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
                          src/robot/irp6p_tfg/mp_r_irp6p_tfg.h \
@@ -639,7 +639,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6p_tfg/ecp_r_irp6p_tfg.h \
                          src/robot/irp6p_tfg/ecp_r_irp6p_tfg.cc \ 
                          src/robot/irp6p_tfg/robot.dox \ 
-                         src/robot/irp6p_tfg/irp6p_tfg_const.h \ 
+                         src/robot/irp6p_tfg/const_irp6p_tfg.h \ 
                          src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.h \
                          src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.cc \
                          src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h \
@@ -653,7 +653,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/irp6p_m/ecp_r_irp6p_m.h \
                          src/robot/irp6p_m/ecp_r_irp6p_m.cc \ 
                          src/robot/irp6p_m/robot.dox \ 
-                         src/robot/irp6p_m/irp6p_m_const.h \ 
+                         src/robot/irp6p_m/const_irp6p_m.h \ 
                          src/robot/shead/kinematic_model_shead.h \
                          src/robot/shead/kinematic_model_shead.cc \
                          src/robot/shead/mp_r_shead.h \
@@ -661,7 +661,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/shead/ecp_r_shead.h \
                          src/robot/shead/ecp_r_shead.cc \ 
                          src/robot/shead/robot.dox \ 
-                         src/robot/shead/shead_const.h \ 
+                         src/robot/shead/const_shead.h \ 
                          src/robot/shead/dp_shead.h \ 
                          src/robot/smb/kinematic_model_smb.h \
                          src/robot/smb/kinematic_model_smb.cc \
@@ -670,7 +670,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/smb/ecp_r_smb.h \
                          src/robot/smb/ecp_r_smb.cc \ 
                          src/robot/smb/robot.dox \ 
-                         src/robot/smb/smb_const.h \ 
+                         src/robot/smb/const_smb.h \ 
                          src/robot/smb/dp_smb.h \ 
                          src/robot/spkm/kinematic_parameters_spkm.h \
                          src/robot/spkm/kinematic_parameters_spkm.cc \
@@ -681,7 +681,7 @@ INPUT                  = src/base/kinematics \
                          src/robot/spkm/ecp_r_spkm.h \
                          src/robot/spkm/ecp_r_spkm.cc \ 
                          src/robot/spkm/robot.dox \ 
-                         src/robot/spkm/spkm_const.h \ 
+                         src/robot/spkm/const_spkm.h \ 
                          src/robot/spkm/dp_spkm.h \ 
                          src/robot/sarkofag/kinematic_model_sarkofag.h \
                          src/robot/sarkofag/kinematic_model_sarkofag.cc \
@@ -690,8 +690,9 @@ INPUT                  = src/base/kinematics \
                          src/robot/sarkofag/ecp_r_sarkofag.h \
                          src/robot/sarkofag/ecp_r_sarkofag.cc \ 
                          src/robot/sarkofag/robot.dox \ 
-                         src/robot/sarkofag/sarkofag_const.h \ 
+                         src/robot/sarkofag/const_sarkofag.h \ 
                          src/robot/epos/dp_epos.h \ 
+                         src/robot/epos/robot.dox \ 
 						 src/base/lib/lib.dox \
                          src/base/lib/sensor_error.h \
                          src/base/lib/sensor_interface.h \

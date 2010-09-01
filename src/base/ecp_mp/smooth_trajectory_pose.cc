@@ -1,8 +1,10 @@
-/**
- * \file smooth_trajectory_pose.cc
- * \brief smooth_trajectory_pose class and its methods
- *
+/*!
+ * @file
+ * @brief smooth_trajectory_pose class and its methods definition
  * Contains bodies of the methods of smooth_trajectory_pose class.
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
  */
 
 #include <cstring>

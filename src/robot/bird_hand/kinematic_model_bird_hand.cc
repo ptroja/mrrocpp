@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_bird_hand.cc
+ * @file
  * @brief File containing definition of kinematic_model_bird_hand class methods.
  *
  * @author kczajkowski

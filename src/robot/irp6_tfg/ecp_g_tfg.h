@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace generator {
 
 /** @addtogroup edge_following
@@ -30,7 +30,7 @@ class tfg : public common::generator::generator
 protected:
 
 	const int step_no;
-	lib::tfg_command mp_ecp_tfg_command;
+	lib::irp6_tfg::command mp_ecp_command;
 
 public:
 	void create_ecp_mp_reply();
@@ -50,7 +50,7 @@ public:
 
 
 } // namespace generator
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp
 

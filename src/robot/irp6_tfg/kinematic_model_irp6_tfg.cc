@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6_tfg.cc
+ * @file
  * @brief File containing methods of the base kinematic model for two fingered grippers.
  *
  * @author yoyek
@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace common {
+namespace irp6_tfg {
 
 kinematic_model_irp6_tfg::kinematic_model_irp6_tfg(void)
 {
@@ -68,7 +68,7 @@ void kinematic_model_irp6_tfg::i2mp_transform(lib::MotorArray & local_desired_mo
 } //: i2mp_transform
 
 
-} // namespace irp6ot
+} // namespace irp6_tfg
 } // namespace kinematic
 } // namespace mrrocpp
 

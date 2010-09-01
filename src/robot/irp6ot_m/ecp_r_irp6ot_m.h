@@ -1,15 +1,16 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_on_track
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_IRP6OT_M_H)
 #define _ECP_R_IRP6OT_M_H
 
+/*!
+ * @file
+ * @brief File contains ecp robot class declaration for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
+
 #include "base/ecp/ecp_robot.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
@@ -20,7 +21,7 @@ namespace ecp {
 namespace irp6ot_m {
 
 // ---------------------------------------------------------------
-class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 	// Klasa dla robota irp6_on_track
 protected:

@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            mp.h
-// Definicje struktur danych i metod dla procesow MP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #if !defined(__MP_TYPEDEFS_H)
 #define __MP_TYPEDEFS_H
+
+/*!
+ * @file
+ * @brief File contains structures used in mp classes
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <map>
 

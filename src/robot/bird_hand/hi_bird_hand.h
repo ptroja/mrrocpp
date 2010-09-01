@@ -10,6 +10,11 @@
 
 #include <string>
 
+
+namespace mrrocpp {
+namespace edp {
+namespace bird_hand {
+
 /*!
  * \brief class of EDP bird hand gripper hardware interface.
  *
@@ -113,3 +118,7 @@ private:
 	char buf[30];
 
 };
+
+} // namespace bird_hand
+} // namespace edp
+} // namespace mrrocpp

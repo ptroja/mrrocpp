@@ -27,7 +27,7 @@
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -95,7 +95,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 					ui.shead->ui_ecp_robot = new ui_tfg_and_conv_robot(
-							*ui.config, *ui.all_ecp_msg, lib::ROBOT_SHEAD);
+							*ui.config, *ui.all_ecp_msg, lib::shead::ROBOT_NAME);
 				}
 				ui.shead->state.edp.pid
 						= ui.shead->ui_ecp_robot->ecp->get_EDP_pid();

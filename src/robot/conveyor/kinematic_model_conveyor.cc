@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_conveyor.cc
+ * @file
  * @brief File containing the methods of the conveyor kinematic model.
  *
  * @author tkornuta

@@ -1,15 +1,16 @@
-// -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
-// Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_postument
-//
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_R_IRP6P_M_H)
 #define _ECP_R_IRP6P_M_H
 
+/*!
+ * @file
+ * @brief File contains ecp robot class declaration for IRp6 postument manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6p_m
+ */
+
 #include "base/ecp/ecp_robot.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"
@@ -22,7 +23,7 @@ namespace ecp {
 namespace irp6p_m {
 
 // ---------------------------------------------------------------
-class robot : public common::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 protected:

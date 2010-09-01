@@ -1,43 +1,45 @@
-/*
- **  BIRD_HAND.H
- */
-
 #if !defined(__BIRD_HAND_DATA_PORT_H)
 #define __BIRD_HAND_DATA_PORT_H
 
+/*!
+ * @file
+ * @brief File contains data port communication structures for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
+
 namespace mrrocpp {
 namespace lib {
+namespace bird_hand {
 
-// ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
-#define BIRD_HAND_STEP_TIME_IN_NS ((uint64_t) 2000000)
 
-#define BIRD_HAND_COMMAND_DATA_PORT "bird_hand_command_data_port"
-#define BIRD_HAND_STATUS_DATA_REQUEST_PORT "bird_hand_status_data_request_port"
 
-#define BIRD_HAND_CONFIGURATION_DATA_PORT "bird_hand_configuration_data_port"
-#define BIRD_HAND_CONFIGURATION_DATA_REQUEST_PORT "bird_hand_configuration_data_request_port"
+const std::string COMMAND_DATA_PORT = "bird_hand_command_data_port";
+const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port";
 
-#define BIRD_HAND_NUM_OF_SERVOS	8
-#define BIRD_HAND_THUMB_F_NUM_OF_SERVOS	2
-#define BIRD_HAND_INDEX_F_NUM_OF_SERVOS	3
-#define BIRD_HAND_RING_F_NUM_OF_SERVOS	3
+const std::string CONFIGURATION_DATA_PORT = "bird_hand_configuration_data_port";
+const std::string CONFIGURATION_DATA_REQUEST_PORT = "bird_hand_configuration_data_request_port";
 
-enum BIRD_HAND_MOTION_VARIANT
+const int NUM_OF_SERVOS = 8;
+const int THUMB_F_NUM_OF_SERVOS = 2;
+const int INDEX_F_NUM_OF_SERVOS = 3;
+const int RING_F_NUM_OF_SERVOS = 3;
+
+enum MOTION_VARIANT
 {
-	BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT = 0,
-	BIRD_HAND_MACROSTEP_POSITION_INCREMENT = 1,
-	BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION = 2
+	SIGLE_STEP_POSTION_INCREMENT = 0, MACROSTEP_POSITION_INCREMENT = 1, MACROSTEP_ABSOLUTE_POSITION = 2
 };
 
-struct bird_hand_single_joint_command
+struct single_joint_command
 {
-	BIRD_HAND_MOTION_VARIANT profile_type;
+	MOTION_VARIANT profile_type;
 	double reciprocal_of_damping;
 	double desired_torque;
 	double desired_position;
 };
 
-struct bird_hand_single_joint_status
+struct single_joint_status
 {
 	double meassured_position;
 	double meassured_torque;
@@ -52,7 +54,7 @@ struct bird_hand_single_joint_status
 	bool upper_limit_of_meassured_current;
 };
 
-struct bird_hand_single_joint_configuration
+struct single_joint_configuration
 {
 	int p_factor;
 	int i_factor;
@@ -66,30 +68,31 @@ struct bird_hand_single_joint_configuration
 	int value_of_upper_limit_of_position_increment;
 };
 
-struct bird_hand_command
+struct command
 {
 	int motion_steps;
 	int ecp_query_step;
-	bird_hand_single_joint_command thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_command index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_command ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_command thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_command index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_command ring_f[RING_F_NUM_OF_SERVOS];
 };
 
-struct bird_hand_status
+struct status
 {
-	bird_hand_single_joint_status thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_status index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_status ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_status thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_status index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_status ring_f[RING_F_NUM_OF_SERVOS];
 };
 
-struct bird_hand_configuration
+struct configuration
 {
-	bird_hand_single_joint_configuration thumb_f[BIRD_HAND_THUMB_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_configuration index_f[BIRD_HAND_INDEX_F_NUM_OF_SERVOS];
-	bird_hand_single_joint_configuration ring_f[BIRD_HAND_RING_F_NUM_OF_SERVOS];
+	single_joint_configuration thumb_f[THUMB_F_NUM_OF_SERVOS];
+	single_joint_configuration index_f[INDEX_F_NUM_OF_SERVOS];
+	single_joint_configuration ring_f[RING_F_NUM_OF_SERVOS];
 };
 
-}
-}
+} // namespace bird_hand
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

@@ -1,5 +1,13 @@
 /** 
 
+@namespace mrrocpp::lib::conveyor
+@brief Namespace for Conveyor libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::conveyor
+@brief Namespace for ECP Conveyor classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::kinematics::conveyor
 @brief Contains classes related to the kinematics of the conveyor.
 @date Nov 26, 2009

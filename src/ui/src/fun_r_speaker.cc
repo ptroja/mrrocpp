@@ -24,7 +24,7 @@
 // #include "ui/src/ui.h"
 // Konfigurator.
 // #include "base/lib/configurator.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
 /* Local headers */

@@ -15,6 +15,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
 #include "base/edp/edp_typedefs.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"
@@ -846,7 +847,7 @@ void servo_buffer::synchronise(void)
 				return;
 		}; // end: switch
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
-	}; // end: for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS)
+	}; // end: for
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {

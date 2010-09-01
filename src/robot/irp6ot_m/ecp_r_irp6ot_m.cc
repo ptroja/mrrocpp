@@ -1,13 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_on_track
-//
-// -------------------------------------------------------------------------
-
-
-#include "base/lib/mis_fun.h"
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for IRp6 on track manipulator
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_m
+ */
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
@@ -16,7 +13,7 @@ namespace ecp {
 namespace irp6ot_m {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6OT_M, IRP6OT_M_NUM_OF_SERVOS, EDP_IRP6OT_M_SECTION, _config, _sr_ecp),
+			robot::ecp_robot(lib::irp6ot_m::ROBOT_IRP6OT_M, lib::irp6ot_m::NUM_OF_SERVOS, lib::irp6ot_m::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -24,7 +21,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6OT_M, IRP6OT_M_NUM_OF_SERVOS, EDP_IRP6OT_M_SECTION, _ecp_object), kinematics_manager()
+			robot::ecp_robot(lib::irp6ot_m::ROBOT_IRP6OT_M, lib::irp6ot_m::NUM_OF_SERVOS, lib::irp6ot_m::EDP_SECTION, _ecp_object),
+			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
