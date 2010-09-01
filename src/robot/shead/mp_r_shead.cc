@@ -14,7 +14,7 @@ namespace mp {
 namespace robot {
 
 shead::shead(task::task &mp_object_l) :
-	motor_driven(lib::shead::ROBOT_SHEAD, ECP_SHEAD_SECTION, mp_object_l, SHEAD_NUM_OF_SERVOS)
+	motor_driven(lib::shead::ROBOT_NAME, lib::shead::ECP_SECTION, mp_object_l, lib::shead::NUM_OF_SERVOS)
 {
 }
 

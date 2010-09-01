@@ -22,6 +22,8 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6ot_tfg {
 
+const double AXIS_7_INC_PER_REVOLUTION = 128.0; // Liczba impulsow enkodera na obrot walu - musi byc float
+
 // Klasa reprezentujaca tasmociag.
 class effector : public common::motor_driven_effector
 {

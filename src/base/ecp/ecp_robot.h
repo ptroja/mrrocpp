@@ -44,41 +44,59 @@ namespace robot {
  */
 class ecp_robot : public ecp_mp::robot
 {
+	// friend classes
 	friend class ui_common_robot;
 	friend class ecp::common::generator::transparent;
 
-	// Klasa bazowa dla robotow (klasa abstrakcyjna)
-	// Kazdy robot konkretny (wyprowadzony z klasy bazowej)
-	// musi zawierac pola danych (skladowe) dotyczace
-	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
 private:
-	// Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
+	/**
+	 * @brief method to directly copy mp command to edp buffer
+	 * used e.g. in transparent generator in strict coordination
+	 * @param[in] mp_buffer buffer including mp command
+	 */
 	void copy_mp_to_edp_buffer(const lib::c_buffer& mp_buffer);
 
-	// by Y - o dziwo tego nie bylo !!!
-	// Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
+	/**
+	 * @brief method to directly copy edp reply to mp reply
+	 * used e.g. in transparent generator in strict coordination
+	 * @param[out] mp_buffer buffer including mp reply
+	 */
 	void copy_edp_to_mp_buffer(lib::r_buffer& mp_buffer);
 
-	// zainicjowanie komunikacji
+	/**
+	 * @brief method to spawn and connect to EDP
+	 * when called from Ui it first spawns then connects to EDP,
+	 * when called from ECP it only connects to existing EDP
+	 * @param config configurator of communcation channels, edp binary file name etc.
+	 */
 	void connect_to_edp(lib::configurator &config);
 
+	/**
+	 * @brief pid of EDP process
+	 */
 	pid_t EDP_MASTER_Pid; // Identyfikator procesu driver'a edp_m
 
+	/**
+	 * @brief  the EDP spawn and kill flag
+	 * if the flag is set the EDP is spawned with robot object creation then killed with destruction;
+	 * it is set when UI calls robot constructor
+	 */
 	const bool spawn_and_kill;
 
 protected:
 
-	// strukture ecp_command.instruction, ktora jest
-	// nastepnie wyslana przez funkcje execute_motion() do EDP.
-	// Struktura reply_package zawierajaca
-	// odpowiedz EDP na wyslany rozkaz, ktora moze byc wykorzystana
-	// przez generator.next_step()
-	// Funkcja generator.next_step() przygotowuje rozkazy dla EDP wypelniajac
-
 public:
 	// to exchange data with generators
 	lib::single_thread_port_manager port_manager;
+
+	/**
+	 * @brief the communication with EDP flag
+	 * if the flag is set (default) the ECP communicates with EDP in Move method of generator
+	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP
+	 * in the following iterations of Move
+	 */
 	bool communicate_with_edp;
+
 	virtual void create_command();
 	virtual void get_reply();
 

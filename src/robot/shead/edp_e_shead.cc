@@ -39,10 +39,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::shead::ROBOT_SHEAD)
+	motor_driven_effector(_config, lib::shead::ROBOT_NAME)
 {
 
-	number_of_servos = SHEAD_NUM_OF_SERVOS;
+	number_of_servos = lib::shead::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

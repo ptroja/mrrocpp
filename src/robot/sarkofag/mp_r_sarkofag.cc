@@ -14,7 +14,7 @@ namespace mp {
 namespace robot {
 
 sarkofag::sarkofag(task::task &mp_object_l) :
-	motor_driven(lib::sarkofag::ROBOT_SARKOFAG, ECP_SARKOFAG_SECTION, mp_object_l, SARKOFAG_NUM_OF_SERVOS)
+	motor_driven(lib::sarkofag::ROBOT_NAME, lib::sarkofag::ECP_SECTION, mp_object_l, lib::sarkofag::NUM_OF_SERVOS)
 {
 }
 

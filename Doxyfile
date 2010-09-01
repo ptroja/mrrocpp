@@ -600,7 +600,8 @@ INPUT                  = src/base/kinematics \
                          src/robot/conveyor/const_conveyor.h \ 
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
-                         src/robot/irp6_tfg/dp_tfg.h \ 
+                         src/robot/irp6_tfg/dp_tfg.h \
+                         src/robot/irp6_tfg/robot.dox \ 
                          src/robot/bird_hand/kinematic_parameters_bird_hand.h \
                          src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
                          src/robot/bird_hand/kinematic_model_bird_hand.h \

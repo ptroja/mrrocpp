@@ -12,13 +12,14 @@
 #include "robot/epos/dp_epos.h"
 
 #include "base/lib/impconst.h"
-#define SPKM_NUM_OF_SERVOS	7
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
 
-const robot_name_t ROBOT_SPKM = "ROBOT_SPKM";
+const int NUM_OF_SERVOS = 7;
+
+const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 
 enum CBUFFER_VARIANT
 {
@@ -42,12 +43,12 @@ struct cbuffer
 
 struct rbuffer
 {
-	epos::single_controller_epos_reply epos_controller[SPKM_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 }__attribute__((__packed__));
 
-#define EDP_SPKM_SECTION "[edp_spkm]"
-#define ECP_SPKM_SECTION "[ecp_spkm]"
+const std::string EDP_SECTION = "[edp_spkm]";
+const std::string ECP_SECTION = "[ecp_spkm]";
 
 } // namespace spkm
 } // namespace lib

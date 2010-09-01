@@ -43,7 +43,7 @@ cvfradia::cvfradia(lib::configurator &_config) : task(_config)
         ecp_m_robot = new irp6ot_m::robot (*this);
         sr_ecp_msg->message("IRp6ot loaded");
     }
-    else if (config.section_name == ECP_IRP6P_M_SECTION)
+    else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
         ecp_m_robot = new irp6p_m::robot (*this);
         sr_ecp_msg->message("IRp6p loaded");

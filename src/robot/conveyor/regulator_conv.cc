@@ -241,10 +241,10 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > CONVEYOR_AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + CONVEYOR_AXE1_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -CONVEYOR_AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - CONVEYOR_AXE1_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE1_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE1_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old < -AXE1_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE1_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;

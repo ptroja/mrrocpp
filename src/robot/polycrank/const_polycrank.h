@@ -7,12 +7,12 @@ namespace mrrocpp {
 namespace lib {
 namespace polycrank {
 
-const robot_name_t ROBOT_POLYCRANK = "ROBOT_POLYCRANK";
+const robot_name_t ROBOT_NAME = "ROBOT_POLYCRANK";
 
-#define EDP_POLYCRANK_SECTION "[edp_polycrank]"
-#define ECP_POLYCRANK_SECTION "[ecp_polycrank]"
+const std::string EDP_SECTION = "[edp_polycrank]";
+const std::string ECP_SECTION = "[ecp_polycrank]";
 
-#define POLYCRANK_NUM_OF_SERVOS	8
+const int NUM_OF_SERVOS = 8;
 
 }
 } // namespace lib

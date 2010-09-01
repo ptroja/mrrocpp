@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace lib {
 namespace shead {
 
-const robot_name_t ROBOT_SHEAD = "ROBOT_SHEAD";
+const robot_name_t ROBOT_NAME = "ROBOT_SHEAD";
 
 enum CBUFFER_VARIANT
 {
@@ -39,10 +39,10 @@ struct rbuffer
 	reply shead_reply;
 };
 
-#define EDP_SHEAD_SECTION "[edp_shead]"
-#define ECP_SHEAD_SECTION "[ecp_shead]"
+const std::string EDP_SECTION ="[edp_shead]";
+const std::string ECP_SECTION ="[ecp_shead]";
 
-#define SHEAD_NUM_OF_SERVOS	1
+const int NUM_OF_SERVOS = 1;
 
 } // namespace shead
 } // namespace lib

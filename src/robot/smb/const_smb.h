@@ -17,7 +17,7 @@ namespace mrrocpp {
 namespace lib {
 namespace smb {
 
-const robot_name_t ROBOT_SMB = "ROBOT_SMB";
+const robot_name_t ROBOT_NAME = "ROBOT_SMB";
 
 enum CBUFFER_VARIANT
 {
@@ -37,16 +37,16 @@ struct cbuffer
 	};
 };
 
-#define SMB_NUM_OF_SERVOS	4
+const int NUM_OF_SERVOS = 4;
 
 struct rbuffer
 {
 	multi_leg_reply_td multi_leg_reply;
-	epos::single_controller_epos_reply epos_controller[SMB_NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
 };
 
-#define EDP_SMB_SECTION "[edp_smb]"
-#define ECP_SMB_SECTION "[ecp_smb]"
+const std::string EDP_SECTION = "[edp_smb]";
+const std::string ECP_SECTION = "[ecp_smb]";
 
 } // namespace smb
 } // namespace lib

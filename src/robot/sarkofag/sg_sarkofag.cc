@@ -33,7 +33,7 @@ servo_buffer::servo_buffer(effector &_master) :
 
 	synchro_axis_order[0] = 0;
 
-	axe_inc_per_revolution[0] = SARKOFAG_INC_PER_REVOLUTION;
+	axe_inc_per_revolution[0] = INC_PER_REVOLUTION;
 	synchro_step_coarse[0] = SARKOFAG_SYNCHRO_STEP_COARSE;
 	synchro_step_fine[0] = SARKOFAG_SYNCHRO_STEP_FINE;
 
@@ -45,7 +45,7 @@ void servo_buffer::load_hardware_interface(void)
 {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	//	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
+	//	int max_current[NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
 	hi = new hi_moxa::HI_moxa(master);
 	hi->init();

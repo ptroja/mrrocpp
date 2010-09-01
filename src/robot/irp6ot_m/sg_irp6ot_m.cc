@@ -25,7 +25,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < master.number_of_servos; j++) {
-		synchro_axis_order[j] = ((j + IRP6OT_SYN_INIT_AXE) % (master.number_of_servos));
+		synchro_axis_order[j] = ((j + SYN_INIT_AXE) % (master.number_of_servos));
 		switch (j)
 		{
 			case GRIPPER_TURN_AXE:

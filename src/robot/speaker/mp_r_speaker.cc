@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 speaker::speaker(task::task &mp_object_l) :
-	robot(lib::speaker::ROBOT_SPEAKER, ECP_SPEAKER_SECTION, mp_object_l)
+	robot(lib::speaker::ROBOT_NAME, lib::speaker::ECP_SECTION, mp_object_l)
 {
 }
 

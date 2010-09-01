@@ -9,7 +9,7 @@
 
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 
 // Klasa edp_irp6ot_effector.
 //#include "base/edp/irp6_on_track/edp_irp6ot_effector.h"
@@ -30,7 +30,7 @@ NL_regulator_8_irp6ot::NL_regulator_8_irp6ot(uint8_t reg_no, uint8_t reg_par_no,
 
 	reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
 	sum_of_currents = current_index = 0;
-	for (int i = 0; i < IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++) {
+	for (int i = 0; i < GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++) {
 		currents[i] = 0;
 	}
 
@@ -264,10 +264,10 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_ON_TRACK_AXE8_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE8_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE8_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old < -AXE8_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE8_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{
@@ -296,7 +296,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
 
 	// wyznaczenie pradu na zalozonych horyzoncie wstecz
-	if (master.step_counter > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
+	if (master.step_counter > GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
 		sum_of_currents -= currents[current_index];
 	}
 
@@ -304,7 +304,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	currents[current_index] = meassured_current;
 
-	current_index = ((++current_index) % IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
+	current_index = ((++current_index) % GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
 
 	reg_state = next_reg_state;
 
@@ -315,7 +315,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	{
 		case lib::GRIPPER_START_STATE:
 
-			if (sum_of_currents > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE) {
+			if (sum_of_currents > GRIPPER_SUM_OF_CURRENTS_MAX_VALUE) {
 				next_reg_state = lib::GRIPPER_BLOCKED_STATE;
 				gripper_blocked_start_time = master.step_counter;
 				//		printf("gripper GRIPPER_BLOCKED_STATE state\n");
@@ -325,7 +325,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 		case lib::GRIPPER_BLOCKED_STATE:
 			//	fprintf(stdout,"GRIPPER_BLOCKED_STATE %d\n", meassured_current);
 			if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
-					&& (!(sum_of_currents > IRP6_ON_TRACK_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE))) {
+					&& (!(sum_of_currents > GRIPPER_SUM_OF_CURRENTS_MAX_VALUE))) {
 				//			printf("gripper GRIPPER_START_STATE state\n");
 				next_reg_state = lib::GRIPPER_START_STATE;
 			} else {

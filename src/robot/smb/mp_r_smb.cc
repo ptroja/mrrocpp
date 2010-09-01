@@ -14,7 +14,7 @@ namespace mp {
 namespace robot {
 
 smb::smb(task::task &mp_object_l) :
-	motor_driven(lib::smb::ROBOT_SMB, ECP_SMB_SECTION, mp_object_l, SMB_NUM_OF_SERVOS)
+	motor_driven(lib::smb::ROBOT_NAME, lib::smb::ECP_SECTION, mp_object_l, lib::smb::NUM_OF_SERVOS)
 {
 }
 
