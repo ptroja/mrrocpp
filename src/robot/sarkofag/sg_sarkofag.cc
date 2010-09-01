@@ -33,7 +33,7 @@ servo_buffer::servo_buffer(effector &_master) :
 
 	synchro_axis_order[0] = 0;
 
-	axe_inc_per_revolution[0] = SARKOFAG_INC_PER_REVOLUTION;
+	axe_inc_per_revolution[0] = INC_PER_REVOLUTION;
 	synchro_step_coarse[0] = SARKOFAG_SYNCHRO_STEP_COARSE;
 	synchro_step_fine[0] = SARKOFAG_SYNCHRO_STEP_FINE;
 
