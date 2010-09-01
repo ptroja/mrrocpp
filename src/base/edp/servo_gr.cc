@@ -455,7 +455,7 @@ void servo_buffer::Move(void)
 		send_after_last_step = false;
 
 	/*
-	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION) /
+	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/AXIS_0_TO_5_INC_PER_REVOLUTION) /
 	 command.parameters.move.number_of_steps));
 	 */
 
