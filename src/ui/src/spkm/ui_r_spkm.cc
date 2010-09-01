@@ -20,7 +20,7 @@
 
 
 UiRobotSpkm::UiRobotSpkm(Ui& _ui) :
-	UiRobot(_ui, EDP_SPKM_SECTION, ECP_SPKM_SECTION), ui_ecp_robot(NULL)
+	UiRobot(_ui, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION), ui_ecp_robot(NULL)
 {
 
 }

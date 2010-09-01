@@ -6,7 +6,6 @@
  * @ingroup irp6p_m
  */
 
-#include "base/lib/mis_fun.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 namespace mrrocpp {
@@ -14,14 +13,16 @@ namespace ecp {
 namespace irp6p_m {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6P_M, IRP6P_M_NUM_OF_SERVOS, EDP_IRP6P_M_SECTION, _config, _sr_ecp), kinematics_manager()
+			robot::ecp_robot(lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS, lib::irp6p_m::EDP_SECTION, _config, _sr_ecp),
+			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6P_M, IRP6P_M_NUM_OF_SERVOS, EDP_IRP6P_M_SECTION, _ecp_object), kinematics_manager()
+	robot::ecp_robot(lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS, lib::irp6p_m::EDP_SECTION, _ecp_object),
+			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

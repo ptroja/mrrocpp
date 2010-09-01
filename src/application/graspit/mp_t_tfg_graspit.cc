@@ -77,16 +77,16 @@ void graspit::main_task_algorithm(void)
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6OT_M;
+		manipulator_name = lib::irp6ot_m::ROBOT_IRP6OT_M;
 		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_IRP6OT_TFG;
+			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6P_M;
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_IRP6P_TFG;
+			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
@@ -101,16 +101,16 @@ void graspit::main_task_algorithm(void)
 	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	lib::tfg_command mp_ecp_tfg_command;
+	lib::irp6_tfg::command mp_ecp_command;
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
-	mp_ecp_tfg_command.desired_position = 0.08;
+	mp_ecp_command.desired_position = 0.08;
 
-	memcpy(tmp_string1, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
+	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
@@ -120,16 +120,16 @@ void graspit::main_task_algorithm(void)
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];
-	mp_ecp_tfg_command.desired_position = trgraspit->from_va.grasp_joint[12];
+	mp_ecp_command.desired_position = trgraspit->from_va.grasp_joint[12];
 
-	memcpy(tmp_string1, &mp_ecp_tfg_command, sizeof(mp_ecp_tfg_command));
+	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_tfg_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
 

@@ -22,7 +22,7 @@
 
 
 UiRobotIrp6p_tfg::UiRobotIrp6p_tfg(Ui& _ui) :
-	UiRobot(_ui, EDP_IRP6P_TFG_SECTION, ECP_IRP6P_TFG_SECTION),
+	UiRobot(_ui, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION),
 			is_wind_irp6p_tfg_moves_open(false),
 			is_wind_irp6p_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL) {
 
@@ -61,14 +61,14 @@ int UiRobotIrp6p_tfg::reload_configuration() {
 					tmp1 = tmp = strdup(ui.config->value<std::string> (
 							tmp_string, state.edp.section_name).c_str());
 					char* toDel = tmp;
-					for (int j = 0; j < IRP6P_TFG_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < lib::irp6p_tfg::NUM_OF_SERVOS; j++) {
 
 						state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 
 					}
 					free(toDel);
 				} else {
-					for (int j = 0; j < IRP6P_TFG_NUM_OF_SERVOS; j++) {
+					for (int j = 0; j < lib::irp6p_tfg::NUM_OF_SERVOS; j++) {
 
 						state.edp.preset_position[i][j] = 0.074;
 

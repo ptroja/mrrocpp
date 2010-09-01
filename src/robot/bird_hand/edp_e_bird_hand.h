@@ -1,14 +1,14 @@
+#ifndef __EDP_E_BIRD_HAND_H
+#define __EDP_E_BIRD_HAND_H
+
 /*!
- * \file edp_e_bird_hand.h
+ * \file
  * \brief File containing the declaration of edp::bird_hand::effector class.
  *
  * \author yoyek
  * \date 2009
  *
  */
-
-#ifndef __EDP_E_BIRD_HAND_H
-#define __EDP_E_BIRD_HAND_H
 
 #include "base/edp/edp_e_manip.h"
 #include "robot/bird_hand/const_bird_hand.h"
@@ -21,6 +21,9 @@ namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
 
+// ponizej konieczne zdefiniowanie typu 64bitowego bo inaczej przepalnia sie typ 32bitowy przy mnozeniu
+const uint64_t STEP_TIME_IN_NS = 2000000;
+
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 /*!
  * \brief class of EDP SwarmItFix parallel kinematic manipulator
@@ -30,8 +33,8 @@ namespace bird_hand {
 class effector : public common::manip_effector
 {
 protected:
-	lib::bird_hand_cbuffer ecp_edp_cbuffer;
-	lib::bird_hand_rbuffer edp_ecp_rbuffer;
+	lib::bird_hand::cbuffer ecp_edp_cbuffer;
+	lib::bird_hand::rbuffer edp_ecp_rbuffer;
 
 	uint64_t macrostep_end_time;
 	uint64_t query_time;

@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS irp6ot_tfg irp6p_tfg
+ * @ingroup KINEMATICS irp6_tfg
  */
 
 #include "base/lib/com_buf.h"
@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace common {
+namespace irp6_tfg {
 
 kinematic_model_irp6_tfg::kinematic_model_irp6_tfg(void)
 {
@@ -68,7 +68,7 @@ void kinematic_model_irp6_tfg::i2mp_transform(lib::MotorArray & local_desired_mo
 } //: i2mp_transform
 
 
-} // namespace irp6ot
+} // namespace irp6_tfg
 } // namespace kinematic
 } // namespace mrrocpp
 

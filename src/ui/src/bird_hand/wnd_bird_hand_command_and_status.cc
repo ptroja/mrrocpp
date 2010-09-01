@@ -31,7 +31,7 @@ int WndBirdHandCommandAndStatus::get_command()
 
 	try {
 
-		mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+		mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 		// odczyt ilosci krokow i ecp_query step
 
@@ -80,7 +80,7 @@ int WndBirdHandCommandAndStatus::set_status()
 
 	try {
 
-		mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+		mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 		bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
 		bird_hand.ui_ecp_robot->execute_motion();
@@ -131,24 +131,24 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_thumb_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_thumb_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_thumb_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[0].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.thumb_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -158,7 +158,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -183,7 +183,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
 int WndBirdHandCommandAndStatus::set_thumb_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_thumb_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_position, 0);
 	PtSetResource(ABW_thumb_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_torque, 0);
@@ -254,11 +254,11 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_thumb_f_0_command();
 
-	if (bhcs.thumb_f[0].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.thumb_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_thumb_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -282,24 +282,24 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_thumb_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_thumb_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_thumb_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.thumb_f[1].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.thumb_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -309,7 +309,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -334,7 +334,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
 int WndBirdHandCommandAndStatus::set_thumb_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_thumb_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_position, 0);
 	PtSetResource(ABW_thumb_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_torque, 0);
@@ -405,11 +405,11 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_thumb_f_1_command();
 
-	if (bhcs.thumb_f[1].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.thumb_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_thumb_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -433,24 +433,24 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[0].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -460,7 +460,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 int WndBirdHandCommandAndStatus::get_index_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -485,7 +485,7 @@ int WndBirdHandCommandAndStatus::get_index_f_0_command()
 int WndBirdHandCommandAndStatus::set_index_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_index_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_position, 0);
 	PtSetResource(ABW_index_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_torque, 0);
@@ -556,11 +556,11 @@ int WndBirdHandCommandAndStatus::copy_index_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_index_f_0_command();
 
-	if (bhcs.index_f[0].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -584,24 +584,24 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_index_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[1].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -611,7 +611,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 int WndBirdHandCommandAndStatus::get_index_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -636,7 +636,7 @@ int WndBirdHandCommandAndStatus::get_index_f_1_command()
 int WndBirdHandCommandAndStatus::set_index_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_index_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[1].meassured_position, 0);
 	PtSetResource(ABW_index_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[1].meassured_torque, 0);
@@ -707,11 +707,11 @@ int WndBirdHandCommandAndStatus::copy_index_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_index_f_1_command();
 
-	if (bhcs.index_f[1].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -735,24 +735,24 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_index_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.index_f[2].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_index_f_2_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.index_f[2].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_index_f_2_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.index_f[2].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.index_f[2].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -762,7 +762,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 int WndBirdHandCommandAndStatus::get_index_f_2_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -787,7 +787,7 @@ int WndBirdHandCommandAndStatus::get_index_f_2_command()
 int WndBirdHandCommandAndStatus::set_index_f_2_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_index_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[2].meassured_position, 0);
 	PtSetResource(ABW_index_f_2_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[2].meassured_torque, 0);
@@ -858,11 +858,11 @@ int WndBirdHandCommandAndStatus::copy_index_f_2_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_index_f_2_command();
 
-	if (bhcs.index_f[2].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.index_f[2].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_index_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -886,24 +886,24 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_ring_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_0_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_0_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[0].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[0].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -913,7 +913,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 int WndBirdHandCommandAndStatus::get_ring_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -938,7 +938,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_0_command()
 int WndBirdHandCommandAndStatus::set_ring_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_ring_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[0].meassured_position, 0);
 	PtSetResource(ABW_ring_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[0].meassured_torque, 0);
@@ -1009,11 +1009,11 @@ int WndBirdHandCommandAndStatus::copy_ring_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_ring_f_0_command();
 
-	if (bhcs.ring_f[0].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[0].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -1037,24 +1037,24 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_ring_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_1_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_1_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[1].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[1].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -1064,7 +1064,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 int WndBirdHandCommandAndStatus::get_ring_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -1089,7 +1089,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_1_command()
 int WndBirdHandCommandAndStatus::set_ring_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_ring_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[1].meassured_position, 0);
 	PtSetResource(ABW_ring_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[1].meassured_torque, 0);
@@ -1160,11 +1160,11 @@ int WndBirdHandCommandAndStatus::copy_ring_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_ring_f_1_command();
 
-	if (bhcs.ring_f[1].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[1].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 
@@ -1188,24 +1188,24 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	PtGetResource(ABW_ring_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
 	}
 
 	PtGetResource(ABW_ring_f_2_relative_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::BIRD_HAND_MACROSTEP_POSITION_INCREMENT;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 	}
 
 	PtGetResource(ABW_ring_f_2_velocity_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
 	if (*flags & Pt_SET) {
-		bhcs.ring_f[2].profile_type = lib::BIRD_HAND_SIGLE_STEP_POSTION_INCREMENT;
+		bhcs.ring_f[2].profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
 	}
 
 	return 1;
@@ -1215,7 +1215,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 int WndBirdHandCommandAndStatus::get_ring_f_2_command()
 {
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	double* tmp_double;
 
@@ -1240,7 +1240,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_2_command()
 int WndBirdHandCommandAndStatus::set_ring_f_2_status()
 {
 
-	mrrocpp::lib::bird_hand_status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
 
 	PtSetResource(ABW_ring_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[2].meassured_position, 0);
 	PtSetResource(ABW_ring_f_2_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[2].meassured_torque, 0);
@@ -1311,11 +1311,11 @@ int WndBirdHandCommandAndStatus::copy_ring_f_2_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand_command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
 
 	get_variant_ring_f_2_command();
 
-	if (bhcs.ring_f[2].profile_type == lib::BIRD_HAND_MACROSTEP_ABSOLUTE_POSITION) {
+	if (bhcs.ring_f[2].profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
 
 		PtGetResource(ABW_ring_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
 

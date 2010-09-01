@@ -27,7 +27,7 @@ namespace irp6p_tfg {
  *
  * @ingroup KINEMATICS IRP6P_KINEMATICS
  */
-class model : public common::kinematic_model_irp6_tfg
+class model : public irp6_tfg::kinematic_model_irp6_tfg
 {
 protected:
 

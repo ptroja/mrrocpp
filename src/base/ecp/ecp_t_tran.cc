@@ -31,21 +31,21 @@ tran::tran(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6OT_TFG_SECTION) {
+	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
-	} else if (config.section_name == ECP_IRP6P_TFG_SECTION) {
+	} else if (config.section_name == lib::irp6p_tfg::ECP_SECTION) {
 		ecp_m_robot = new irp6p_tfg::robot(*this);
-	} else if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	} else if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
-	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
+	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
-	} else if (config.section_name == ECP_CONVEYOR_SECTION) {
+	} else if (config.section_name == lib::conveyor::ECP_SECTION) {
 		ecp_m_robot = new conveyor::robot(*this);
-	} else if (config.section_name == ECP_SPEAKER_SECTION) {
+	} else if (config.section_name == lib::speaker::ECP_SECTION) {
 		ecp_m_robot = new speaker::robot(*this);
-	} else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION) {
+	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
 		ecp_m_robot = new irp6m::robot(*this);
-	} else if (config.section_name == ECP_POLYCRANK_SECTION) {
+	} else if (config.section_name == lib::polycrank::ECP_SECTION) {
 		ecp_m_robot = new polycrank::robot(*this);
 	}
 

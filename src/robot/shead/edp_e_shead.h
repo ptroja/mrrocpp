@@ -28,8 +28,8 @@ namespace shead {
 class effector: public common::motor_driven_effector {
 protected:
 
-	lib::shead_cbuffer ecp_edp_cbuffer;
-	lib::shead_rbuffer edp_ecp_rbuffer;
+	lib::shead::cbuffer ecp_edp_cbuffer;
+	lib::shead::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!

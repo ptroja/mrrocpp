@@ -6,9 +6,8 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS irp6ot_tfg irp6p_tfg
+ * @ingroup KINEMATICS irp6_tfg
  */
-
 
 #if !defined(_IRP6_TFG_KIN_MODEL)
 #define _IRP6_TFG_KIN_MODEL
@@ -17,8 +16,7 @@
 
 namespace mrrocpp {
 namespace kinematics {
-namespace common {
-
+namespace irp6_tfg {
 
 /*!
  *
@@ -29,7 +27,7 @@ namespace common {
  *
  * @ingroup KINEMATICS
  */
-class kinematic_model_irp6_tfg: public kinematic_model
+class kinematic_model_irp6_tfg : public common::kinematic_model
 {
 protected:
 
@@ -104,7 +102,7 @@ public:
 
 };
 
-} // namespace common
+} // namespace irp6_tfg
 } // namespace kinematic
 } // namespace mrrocpp
 

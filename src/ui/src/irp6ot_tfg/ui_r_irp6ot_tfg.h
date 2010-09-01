@@ -24,13 +24,14 @@
 class Ui;
 class ui_tfg_and_conv_robot;
 
-class UiRobotIrp6ot_tfg: public UiRobot {
+class UiRobotIrp6ot_tfg : public UiRobot
+{
 private:
 
 public:
 
-	double irp6ot_tfg_current_pos[IRP6OT_TFG_NUM_OF_SERVOS];// pozycja biezaca
-	double irp6ot_tfg_desired_pos[IRP6OT_TFG_NUM_OF_SERVOS]; // pozycja zadana
+	double irp6ot_tfg_current_pos[lib::irp6ot_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double irp6ot_tfg_desired_pos[lib::irp6ot_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6ot_tfg_moves_open; // informacja czy okno ruchow
 	bool is_wind_irp6ot_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte

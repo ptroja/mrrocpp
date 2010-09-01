@@ -15,7 +15,9 @@
 
 namespace mrrocpp {
 namespace lib {
+namespace spkm {
 
+}
 struct spkm_mp_to_ecp_parameters
 {
 	EPOS_GEN_PROFILE motion_type;
@@ -26,7 +28,8 @@ struct spkm_mp_to_ecp_parameters
 	bool guarded_move_manipulator;
 };
 
-}
-}
+} // namespace spkm
+} // namespace lib
+} // namespace mrrocpp
 
 #endif

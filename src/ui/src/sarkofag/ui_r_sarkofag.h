@@ -30,8 +30,8 @@ private:
 
 public:
 
-	double sarkofag_current_pos[SARKOFAG_NUM_OF_SERVOS];// pozycja biezaca
-	double sarkofag_desired_pos[SARKOFAG_NUM_OF_SERVOS]; // pozycja zadana
+	double sarkofag_current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
+	double sarkofag_desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 
 	bool is_wind_sarkofag_moves_open; // informacja czy okno ruchow

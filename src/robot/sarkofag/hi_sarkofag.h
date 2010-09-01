@@ -22,7 +22,7 @@ namespace sarkofag {
 // ------------------------------------------------------------------------
 
 
-class hardware_interface : public common::HI_moxa
+class hardware_interface : public hi_moxa::HI_moxa
 {
 public:
 	hardware_interface(common::motor_driven_effector &_master); // Konstruktor

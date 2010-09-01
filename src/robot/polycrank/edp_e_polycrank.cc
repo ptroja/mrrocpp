@@ -15,7 +15,6 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
@@ -35,10 +34,10 @@ namespace polycrank {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_POLYCRANK)
+	manip_effector(_config, lib::polycrank::ROBOT_NAME)
 {
 
-	number_of_servos = POLYCRANK_NUM_OF_SERVOS;
+	number_of_servos = lib::polycrank::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

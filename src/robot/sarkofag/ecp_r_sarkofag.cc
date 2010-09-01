@@ -6,8 +6,6 @@
  * @ingroup sarkofag
  */
 
-#include "base/lib/mis_fun.h"
-
 #include "robot/sarkofag/ecp_r_sarkofag.h"
 
 namespace mrrocpp {
@@ -15,7 +13,7 @@ namespace ecp {
 namespace sarkofag {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _config, _sr_ecp),
+	robot::ecp_robot(lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, lib::sarkofag::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -23,7 +21,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SARKOFAG, SARKOFAG_NUM_OF_SERVOS, EDP_SARKOFAG_SECTION, _ecp_object), kinematics_manager()
+	robot::ecp_robot(lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, lib::sarkofag::EDP_SECTION, _ecp_object),
+			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

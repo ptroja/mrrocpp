@@ -1,7 +1,6 @@
 #if !defined(_ECP_TASK_H)
 #define _ECP_TASK_H
 
-
 /*!
  * @file
  * @brief File contains ecp base task declaration
@@ -15,9 +14,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-
+namespace robot {
 class ecp_robot;
-
+}
 namespace task {
 
 class ecp_sub_task;
@@ -61,7 +60,7 @@ public:
 	// Polecenie od MP dla TASKa
 	lib::MP_COMMAND_PACKAGE mp_command;
 
-	ecp_robot* ecp_m_robot;
+	robot::ecp_robot* ecp_m_robot;
 
 	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 	bool continuous_coordination;

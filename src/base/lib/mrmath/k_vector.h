@@ -1,3 +1,13 @@
+/**
+ * \file k_vector.h
+ *
+ * \brief (X,Y,Z) column vector declaration
+ *
+ * \bug Rename from the polish 'K' prefix
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ */
+
 #ifndef __K_VECTOR_H
 #define __K_VECTOR_H
 
@@ -6,27 +16,51 @@
 namespace mrrocpp {
 namespace lib {
 
-// klasa reprezentujaca wektor w kartezjaskim ukladzie odniesienia
+/**
+ * (X,Y,Z) vector representation
+ */
 class K_vector : public Eigen::Matrix<double, 3, 1>
 {
+	//! Base matrix datatype
 	typedef Eigen::Matrix<double, 3, 1> BaseClass;
 
 public:
-	// Copy constructor from any Eigen matrix type
+	/**
+	 * Copy constructor from any Eigen-inherited matrix type
+	 *
+	 * @param[in] other initialization matrix
+	 */
 	template<typename OtherDerived>
 	K_vector(const Eigen::MatrixBase<OtherDerived>& other)
 		: BaseClass(other)
-	{}
+	{
+	}
 
-	// Reuse assignment operators from base class
+	//! Reuse assignment operators from base class
 	using BaseClass::operator=;
 
-	K_vector ();												// konstruktor domniemany: [0, 0, 0]
-	K_vector (const double t[3]);								// utworzenie wektora na podstawie tablicy
-	K_vector (double x, double y, double z);			// utworzenie wektora na podstawie tablicy
+	/**
+	 * Constructor for zero vector
+	 */
+	K_vector ();
 
-	void to_table(double tablica[3]) const;			// przepisanie zawartosci do tablicy
-};// end class vector
+	/**
+	 * Constructor from C-style array
+	 */
+	K_vector (const double t[3]);
+
+	/**
+	 * Constructor from given values
+	 *
+	 * @param[in] x,y,z initilization values
+	 */
+	K_vector (double x, double y, double z);
+
+	/**
+	 * Export values to C-style array
+	 */
+	void to_table(double tablica[3]) const;
+};
 
 } // namespace lib
 } // namespace mrrocpp

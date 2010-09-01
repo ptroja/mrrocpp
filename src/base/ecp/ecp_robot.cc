@@ -34,6 +34,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace robot {
 
 // konstruktor wywolywany z UI
 ecp_robot::ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
@@ -82,7 +83,7 @@ pid_t ecp_robot::get_EDP_pid(void) const
 	return EDP_MASTER_Pid;
 }
 
-ecp_robot::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
+ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
 	error_class(err_cl), error_no(err_no)
 {
 	error.error0 = err0;
@@ -101,7 +102,7 @@ ecp_robot::ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint
 #endif /* __gnu_linux__ */
 }
 
-ecp_robot::ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
+ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
 	error_class(err_cl), error_no(err_no)
 {
 }
@@ -151,7 +152,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 			int e = errno; // kod bledu systemowego
 			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), strerror(errno));
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
-			throw ecp_robot::ECP_main_error(lib::SYSTEM_ERROR, 0);
+			throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 		}
 	}
 	printf(".done\n");
@@ -173,7 +174,7 @@ void ecp_robot::send()
 	// minimal check for command correctness
 	if (ecp_command.instruction.instruction_type == lib::INVALID) {
 		sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	}
 
 #if !defined(USE_MESSIP_SRR)
@@ -185,7 +186,7 @@ void ecp_robot::send()
 		int e = errno; // kod bledu systemowego
 		perror("ecp: Send to EDP_MASTER error");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send to EDP_MASTER error");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// TODO: this is called much too often (?!)
@@ -223,6 +224,7 @@ void ecp_robot::execute_motion(void)
 	}
 }
 
+}
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

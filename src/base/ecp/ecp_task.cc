@@ -13,7 +13,6 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 
-#include "base/lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
@@ -292,7 +291,7 @@ if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 	uint64_t e = errno; // kod bledu systemowego
 	perror("ecp: Reply to MP failed");
 	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-	throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
+	throw common::generator::ECP_error(lib::SYSTEM_ERROR, 0);
 }
 
 // ew. odebranie pulsu z MP
@@ -302,8 +301,8 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (!ecp_stop) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 }
 
@@ -363,11 +362,11 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (ecp_stop)
-throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
 sr_ecp_msg->message("ecp user program is running");
@@ -430,11 +429,11 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (ecp_stop)
-throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
 mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
@@ -533,7 +532,7 @@ if (mp_ecp_randevouz) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// ew. odebranie pulsu z MP
@@ -543,11 +542,11 @@ if (mp_ecp_randevouz) {
 	}
 
 	if (ecp_stop)
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
 
@@ -580,7 +579,7 @@ while (1) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Receive from MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 #if !defined(USE_MESSIP_SRR)
 	if (caller == 0) {/* Pulse received */

@@ -15,7 +15,6 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
@@ -72,9 +71,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_SPKM)
+	manip_effector(_config, lib::spkm::ROBOT_NAME)
 {
-	number_of_servos = SPKM_NUM_OF_SERVOS;
+	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -92,7 +91,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	switch (ecp_edp_cbuffer.variant)
 	{
 		/*
-		 case lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS: {
+		 case lib::spkm::CBUFFER_EPOS_GEN_PARAMETERS: {
 		 // epos parameters computation basing on trajectory parameters
 		 lib::epos_gen_parameters epos_gen_parameters_structure;
 		 lib::epos_low_level_command epos_low_level_command_structure;
@@ -112,25 +111,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		 }
 		 break;*/
-		case lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos_cubic_command epos_cubic_command_structure;
+		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
+			lib::epos::epos_cubic_command epos_cubic_command_structure;
 			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
-			lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
+			lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND: {
-			lib::epos_operational_command epos_operational_command_structure;
+		case lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND: {
+			lib::epos::epos_operational_command epos_operational_command_structure;
 			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND: {
+		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
 
 		}
 			break;

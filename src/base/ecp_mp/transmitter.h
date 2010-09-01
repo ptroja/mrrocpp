@@ -9,6 +9,7 @@
  * @ingroup ecp_mp
  */
 
+#include "base/lib/impconst.h"
 #include "base/lib/srlib.h"
 
 namespace mrrocpp {
@@ -36,7 +37,7 @@ protected:
 	lib::sr_ecp &sr_ecp_msg;
 
 public:
-			transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
+	transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 
 	virtual ~transmitter_base()
 	{
@@ -54,18 +55,16 @@ public:
 		return true;
 	}
 
-	class transmitter_error
-	{ // Klasa obslugi bledow czujnikow
-	public:
-		const lib::error_class_t error_class;
-
-		transmitter_error(lib::error_class_t err_cl) :
-			error_class(err_cl)
-		{
-		}
-
-	}; // end: class transmitter_error
 };
+
+class transmitter_error
+{ // Klasa obslugi bledow czujnikow
+public:
+	const lib::error_class_t error_class;
+
+	transmitter_error(lib::error_class_t err_cl);
+
+}; // end: class transmitter_error
 
 template <typename TO_VA, typename FROM_VA>
 class transmitter : public transmitter_base
@@ -88,6 +87,5 @@ public:
 
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif /* _TRANSMITTER_H */
