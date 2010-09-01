@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::lib::shead
+@brief Namespace for SwarmItFIX agent's head libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp::shead
 @brief Namespace for ECP SwarmItFIX agent's head classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology

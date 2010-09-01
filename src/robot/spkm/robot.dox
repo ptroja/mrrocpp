@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::lib::spkm
+@brief Namespace for SwarmItFIX agent's parallel manipulator libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp::spkm
 @brief Namespace for ECP SwarmItFIX agent's parallel manipulator classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology

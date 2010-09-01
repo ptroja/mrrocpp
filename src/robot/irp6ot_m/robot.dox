@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::lib::irp6ot_m
+@brief Namespace for IRp6 on track manipulator libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp::irp6ot_m
 @brief Namespace for ECP IRp6 on track manipulator classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology

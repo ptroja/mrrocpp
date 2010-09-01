@@ -1,5 +1,9 @@
 /** 
 
+@namespace mrrocpp::lib::irp6p_tfg
+@brief Namespace for IRp6 postument two finger gripper libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp::irp6p_tfg
 @brief Namespace for ECP IRp6 postument two finger gripper classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
