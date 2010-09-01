@@ -3,9 +3,9 @@
 @namespace mrrocpp::lib::irp6_tfg
 @brief Common namespace for two finger grippers
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6_tfg
 
-   @defgroup epos EPOS2 Hardware Interface
-   @ingroup swarm_robots hardware_interfaces
-
+   @defgroup irp6_tfg Common two finger grippers
+   @ingroup grippers
 
 */

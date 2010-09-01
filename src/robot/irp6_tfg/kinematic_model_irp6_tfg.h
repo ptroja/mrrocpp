@@ -6,7 +6,7 @@
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS irp6ot_tfg irp6p_tfg
+ * @ingroup KINEMATICS irp6_tfg
  */
 
 #if !defined(_IRP6_TFG_KIN_MODEL)

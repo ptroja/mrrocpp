@@ -6,7 +6,7 @@
  * @brief File contains data port communication structures for Irp6 two finger grippers
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup irp6ot_tfg irp6p_tfg
+ * @ingroup irp6_tfg
  */
 
 namespace mrrocpp {
