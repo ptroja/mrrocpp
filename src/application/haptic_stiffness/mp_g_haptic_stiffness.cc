@@ -51,7 +51,7 @@ bool haptic_stiffness::first_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[lib::irp6ot_m::ROBOT_IRP6OT_M];
+	irp6ot = robot_m[lib::irp6ot_m::ROBOT_NAME];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
 	irp6ot->communicate_with_ecp = true;

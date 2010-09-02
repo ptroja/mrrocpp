@@ -7,9 +7,9 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6m {
 
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6_MECHATRONIKA";
-const std::string EDP_SECTION = "[edp_irp6_mechatronika]";
-const std::string ECP_SECTION = "[ecp_irp6_mechatronika]";
+const robot_name_t ROBOT_NAME = "ROBOT_IRP6M";
+const std::string EDP_SECTION = "[edp_irp6m]";
+const std::string ECP_SECTION = "[ecp_irp6m]";
 
 const int NUM_OF_SERVOS = 5;
 

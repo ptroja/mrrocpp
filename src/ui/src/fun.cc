@@ -27,7 +27,7 @@
 // #include "ui/src/ui.h"
 // Konfigurator (dla PROCESS_SPAWN_RSH)
 #include "base/lib/configurator.h"
-#include "robot/irp6_mechatronika/const_irp6m.h"
+#include "robot/irp6m/const_irp6m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -442,7 +442,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 	{
 		case lib::C_XYZ_ANGLE_AXIS:
 
-			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 
@@ -453,7 +453,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 			break;
 		case lib::C_XYZ_EULER_ZYZ:
 
-			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
@@ -463,7 +463,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 			break;
 		case lib::C_JOINT:
-			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
@@ -473,7 +473,7 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 			break;
 		case lib::C_MOTOR:
-			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
 			} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
@@ -1223,7 +1223,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	PtGetResource(ABW_PtNumericFloat_move_time, Pt_ARG_NUMERIC_VALUE, &motion_time, 0);
 
-	if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
 			ui.ui_ecp_obj->ui_rep.coordinates[i] = ui.irp6ot_m->irp6ot_current_pos[i];
 	} else if (ui.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {

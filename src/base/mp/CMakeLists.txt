@@ -13,7 +13,7 @@ add_library(mprobots
 	../../robot/irp6ot_m/mp_r_irp6ot_m.cc
 	../../robot/irp6p_m/mp_r_irp6p_m.cc
 	../../robot/speaker/mp_r_speaker.cc
-	../../robot/irp6_mechatronika/mp_r_irp6_mechatronika.cc
+	../../robot/irp6m/mp_r_irp6m.cc
 	../../robot/polycrank/mp_r_polycrank.cc
 	../../robot/bird_hand/mp_r_bird_hand.cc
 	../../robot/spkm/mp_r_spkm.cc

@@ -77,7 +77,7 @@ void graspit::main_task_algorithm(void)
 
 	// ROBOT IRP6_ON_TRACK
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
-		manipulator_name = lib::irp6ot_m::ROBOT_IRP6OT_M;
+		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
 		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {

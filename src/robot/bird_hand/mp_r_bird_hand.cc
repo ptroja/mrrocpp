@@ -7,7 +7,7 @@
  */
 
 #include "mp_r_bird_hand.h"
-#include "const_bird_hand.h"
+
 
 namespace mrrocpp {
 namespace mp {

@@ -40,7 +40,7 @@ haptic::haptic(lib::configurator &_config) :
 void haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str());
+		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	}
 
 	if (configure_postument) {
@@ -48,11 +48,11 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
 	}
 
 	if ((configure_track) && (!configure_postument)) {
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str(), lib::irp6ot_m::ROBOT_IRP6OT_M.c_str());
+		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 	} else if ((!configure_track) && (configure_postument)) {
 		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	} else if ((configure_track) && (configure_postument)) {
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_IRP6OT_M.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	}
 }
 
@@ -67,7 +67,7 @@ void haptic::main_task_algorithm(void)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	// mp_h_gen.sensor_m = sensor_m;
@@ -75,7 +75,7 @@ void haptic::main_task_algorithm(void)
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_h_gen.Move();
 
-	send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_IRP6OT_M.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 }
 
 } // namespace task
