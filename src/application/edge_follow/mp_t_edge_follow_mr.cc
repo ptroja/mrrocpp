@@ -81,7 +81,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	// sekwencja generator na wybranym chwytaku
 
-	char tmp_string[MP_2_ECP_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
 
 	lib::irp6_tfg::command mp_ecp_command;
 

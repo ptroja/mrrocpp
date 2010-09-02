@@ -21,8 +21,17 @@ namespace lib {
 extern "C" {
 #endif
 
+// Rozmiary buforow
+const int MP_2_ECP_NEXT_STATE_STRING_SIZE = 100;
+const int MP_2_ECP_STRING_SIZE = 300;
+const int ECP_2_MP_STRING_SIZE = 300;
 const int MAX_TEXT = 100; // MAC7
 const int MAX_PROSODY = 20; // MAC7
+
+
+// Stale do komunikacji
+
+
 const int CONNECT_RETRY = 200;
 const int CONNECT_DELAY = 50;
 
@@ -87,9 +96,6 @@ const int QNX_MAX_PRIORITY = 50;
 #define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
 #define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
 
-#define MP_2_ECP_NEXT_STATE_STRING_SIZE	100
-#define MP_2_ECP_STRING_SIZE	300
-#define ECP_2_MP_STRING_SIZE	300
 
 #ifdef __cplusplus
 }
