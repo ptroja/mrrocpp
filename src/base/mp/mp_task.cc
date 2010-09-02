@@ -547,10 +547,10 @@ int task::wait_for_name_open(void)
 					}
 
 					BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-						if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+						if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
 							robot_node.second->new_pulse = true;
-							robot_node.second->pulse_code = msg.code;
-							//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
+							robot_node.second->ecp_pulse_code = msg.code;
+							//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->ecp_pulse_code);
 						}
 					}
 
@@ -597,9 +597,9 @@ int task::wait_for_name_open(void)
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->pulse_code = type;
+					robot_node.second->ecp_pulse_code = type;
 				}
 			}
 		} else if (rcvid == MESSIP_MSG_CONNECTING) {
@@ -698,10 +698,10 @@ while(!exit_from_while) {
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->pulse_code = msg.code;
-					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->pulse_receive_time)) == -1) {
+					robot_node.second->ecp_pulse_code = msg.code;
+					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time)) == -1) {
 						perror("clock_gettime()");
 					}
 
@@ -760,9 +760,9 @@ while(!exit_from_while) {
 		}
 
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-			if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+			if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
 				robot_node.second->new_pulse = true;
-				robot_node.second->pulse_code = type;
+				robot_node.second->ecp_pulse_code = type;
 				if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 					if (!(robot_node.second->new_pulse_checked)) {
 						desired_pulse_found = true;
@@ -970,7 +970,7 @@ while (1) {
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 		if (robot_node.second->new_pulse ) {
-			if (robot_node.second->pulse_code == ECP_WAIT_FOR_START) {
+			if (robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_START) {
 				robot_node.second->new_pulse = false;
 				robot_node.second->new_pulse_checked = false;
 				robot_node.second->start_ecp();
@@ -993,7 +993,7 @@ while (1) {
 //	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 //		fprintf(stderr, "task::start_all check: robot %s new_pulse %d new_pulse_checked %d pulse_code %d\n",
 //				lib::toString(robot_node.second->robot_name).c_str(),
-//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->pulse_code);
+//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->ecp_pulse_code);
 //	}
 }
 // ------------------------------------------------------------------------
@@ -1009,7 +1009,7 @@ common::robots_t robots_m_tmp;
 
 // przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-	if (robot_node.second->communicate) {
+	if (robot_node.second->communicate_with_ecp) {
 		if ((robot_node.second->mp_command.command == lib::STOP) || (robot_node.second->mp_command.command == lib::END_MOTION) ||
 				(robot_node.second->mp_command.command == lib::NEXT_STATE) || (robot_node.second->continuous_coordination) || (robot_node.second->new_pulse))
 		{
@@ -1026,8 +1026,8 @@ while (1) {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 		// komunikujemy sie tylko z aktywnymi robotami
 		if (robot_node.second->new_pulse) {
-			if ((robot_node.second->pulse_code == ECP_WAIT_FOR_COMMAND) ||
-					(robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
+			if ((robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_COMMAND) ||
+					(robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
 				robot_node.second->new_pulse = false;
 				robot_node.second->new_pulse_checked = false;
 				robot_node.second->execute_motion();

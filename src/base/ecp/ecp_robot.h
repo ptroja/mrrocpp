@@ -178,7 +178,7 @@ public:
 #endif
 
 	/**
-	 * @brief executed the communication sequence to EDP: set and query with error handling
+	 * @brief executed the communication sequence with EDP: set and query with error handling
 	 *
 	 * it can be reimplemented to maintain new error handling e.g.: in nose_run force generator
 	 */
