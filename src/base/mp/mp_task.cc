@@ -108,12 +108,7 @@ void task::create_robots()
 	 * a consistent state
 	 */
 
-#define ACTIVATE_MP_ROBOT(__robot_name) \
-		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
-			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::__robot_name(*this);\
-		}\
-		})
+
 
 	ACTIVATE_MP_ROBOT(conveyor);
 	ACTIVATE_MP_ROBOT(speaker);
@@ -129,20 +124,13 @@ void task::create_robots()
 	ACTIVATE_MP_ROBOT(irp6p_m);
 	ACTIVATE_MP_ROBOT(sarkofag);
 
-#undef ACTIVATE_MP_ROBOT
 
-#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
-			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
-		}\
-		})
 
 	ACTIVATE_MP_DEFAULT_ROBOT(electron);
 	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
 	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
-#undef ACTIVATE_MP_DEFAULT_ROBOT
+
 
 }
 

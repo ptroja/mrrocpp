@@ -29,6 +29,22 @@ class generator;
 
 namespace task {
 
+// Two usefull mp robot addition macros
+
+#define ACTIVATE_MP_ROBOT(__robot_name) \
+		({ \
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::__robot_name(*this);\
+		}\
+		})
+
+#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
+		({ \
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
+		}\
+		})
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
