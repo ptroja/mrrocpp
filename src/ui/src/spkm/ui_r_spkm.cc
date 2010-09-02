@@ -4,7 +4,7 @@
 
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/spkm/spkm_const.h"
+#include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -20,7 +20,7 @@
 
 
 UiRobotSpkm::UiRobotSpkm(Ui& _ui) :
-	UiRobot(_ui, EDP_SPKM_SECTION, ECP_SPKM_SECTION), ui_ecp_robot(NULL)
+	UiRobot(_ui, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION), ui_ecp_robot(NULL)
 {
 
 }

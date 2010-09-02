@@ -16,7 +16,7 @@
 // Klasa edp_irp6s_robot.
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -1,5 +1,5 @@
 /**
- * @file generator/ecp_g_force.cc
+ * @file
  * @brief ECP force generators
  * - class declaration
  * @author yoyek
@@ -364,7 +364,7 @@ void tff_nose_run::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -390,7 +390,7 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 				break;
 			default:
-				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				break;
 
 		} /* end: switch */

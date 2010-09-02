@@ -1,0 +1,22 @@
+/** 
+
+@defgroup FRADIA_SENSOR Sensors: FraDIA - Framework for Digital Images Analysis.   
+@{
+Most of the historical MRROC++ vision-based applications were written each time from the scratch, thus there was a gap
+for a specialized tool for development of vision subsystems. 
+
+The gap was filled by FraDIA (Framework for Digital Image Analysis), an object-oriented framework written mostly in C++. 
+One of the goals was to develop patterns and mechanisms which will simplify the process of vision task creation and impose 
+general implementation method of image processing and analysis algorithms, offering a clear method of their separation. 
+Besides, it also offers components responsible for image acquisition and methods for communication with rest of the MRROCPP
+processes.
+
+FraDIA also facilitates the way that user interface is extended with panels related to exchangeable components, which might be 
+required for algorithms management and testing. User interface also enables switching between components during the application work.
+
+FraDIA, working under the Linux control, from the MRROC++ point of view plays a role of a specialized VSP - responsible for 
+visual information aggregation. First version of the FraDIA was developed by T.Kornuta.
+@}
+
+*/
+

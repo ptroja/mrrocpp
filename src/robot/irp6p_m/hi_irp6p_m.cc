@@ -25,7 +25,7 @@ hardware_interface::hardware_interface (common::motor_driven_effector &_master,
 		unsigned int _hi_intr_generator_servo_ptr,
 		unsigned int _hi_isa_card_offset,
 		const int _max_current[])
-		: common::HI_rydz(_master, _hi_irq_real, _hi_intr_freq_divider,
+		: hi_rydz::HI_rydz(_master, _hi_irq_real, _hi_intr_freq_divider,
 		_hi_intr_timeout_high, _hi_first_servo_ptr, _hi_intr_generator_servo_ptr, _hi_isa_card_offset, _max_current)
 {
 }

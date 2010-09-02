@@ -1,6 +1,14 @@
 #ifndef MP_GENERATOR_H_
 #define MP_GENERATOR_H_
 
+/*!
+ * @file
+ * @brief File contains mp base generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_generator.h"
 
@@ -42,18 +50,16 @@ public:
 	//! Konstruktor
 	generator(task::task& _mp_task);
 
-	//! Klasa obslugi bledow generatora na poziomie MP
-	class MP_error
-	{
-	public:
-		const lib::error_class_t error_class;
-		const uint64_t error_no;
+};
 
-		MP_error(lib::error_class_t err0, uint64_t err1) :
-			error_class(err0), error_no(err1)
-		{
-		}
-	};
+//! Klasa obslugi bledow generatora na poziomie MP
+class MP_error
+{
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+
+	MP_error(lib::error_class_t err0, uint64_t err1);
 };
 
 } // namespace common

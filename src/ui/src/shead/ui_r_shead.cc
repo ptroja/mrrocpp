@@ -4,7 +4,7 @@
 
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -20,7 +20,7 @@
 
 
 UiRobotShead::UiRobotShead(Ui& _ui) :
-	UiRobot(_ui, EDP_SHEAD_SECTION, ECP_SHEAD_SECTION), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION), ui_ecp_robot(NULL) {
 
 }
 

@@ -122,7 +122,7 @@ uint8_t NL_regulator_2_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -276,10 +276,10 @@ uint8_t NL_regulator_2_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXE2_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXE2_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE2_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE2_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -AXE2_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE2_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -332,7 +332,7 @@ uint8_t NL_regulator_3_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -483,10 +483,10 @@ uint8_t NL_regulator_3_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXE3_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXE3_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE3_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE3_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -AXE3_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE3_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -539,7 +539,7 @@ uint8_t NL_regulator_4_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -687,10 +687,10 @@ uint8_t NL_regulator_4_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXE4_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXE4_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE4_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE4_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -AXE4_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE4_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -743,7 +743,7 @@ uint8_t NL_regulator_5_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 	/*
     if (!eee)
@@ -890,10 +890,10 @@ uint8_t NL_regulator_5_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXE5_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXE5_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE5_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE5_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -AXE5_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE5_MAX_PWM_INCREMENT;
 
 	// if (fabs(set_value_new) > 200.0 && first) {
 	// cprintf("PIN=%lf PIO=%lf DIN=%lf DIO=%lf SO=%lf SVVO=%lf SV0=%lf\n", position_increment_new,
@@ -954,7 +954,7 @@ uint8_t NL_regulator_6_irp6m::compute_set_value (void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_MECHATRONIKA_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new*IRP6_MECHATRONIKA_AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
+	step_new_pulse = step_new*AXIS_0_TO_5_INC_PER_REVOLUTION/(2*M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_MECHATRONIKA_TO_TRACK_RATIO;
 
 	/*
@@ -1090,10 +1090,10 @@ uint8_t NL_regulator_6_irp6m::compute_set_value (void)
 
 	// ograniczenie przyrostu PWM
 	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_MECHATRONIKA_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_MECHATRONIKA_AXE6_MAX_PWM_INCREMENT;
-	if (set_value_new- set_value_old < -IRP6_MECHATRONIKA_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_MECHATRONIKA_AXE6_MAX_PWM_INCREMENT;
+	if (set_value_new - set_value_old > AXE6_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old + AXE6_MAX_PWM_INCREMENT;
+	if (set_value_new- set_value_old < -AXE6_MAX_PWM_INCREMENT)
+		set_value_new = set_value_old - AXE6_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

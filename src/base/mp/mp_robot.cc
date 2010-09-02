@@ -1,8 +1,10 @@
-// -------------------------------------------------------------------------
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains mp base robot definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstring>
 #include <unistd.h>
@@ -25,11 +27,6 @@
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-
-robot::MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
-	error_class(err0), error_no(err1)
-{
-}
 
 // -------------------------------------------------------------------
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
@@ -208,6 +205,11 @@ void robot::terminate_ecp(void)
 }
 // ---------------------------------------------------------------
 
+
+MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
+	error_class(err0), error_no(err1)
+{
+}
 
 } // namespace robot
 } // namespace mp

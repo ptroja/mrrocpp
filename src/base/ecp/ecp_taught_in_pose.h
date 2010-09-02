@@ -1,6 +1,14 @@
 #if !defined(_ECP_TAUGHT_IN_POSE_H)
 #define  _ECP_TAUGHT_IN_POSE_H
 
+/*!
+ * @file
+ * @brief File contains ecp_taught_in_pose declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include "base/lib/com_buf.h"		// lib::POSE_SPECIFICATION
 #include "base/lib/impconst.h"	// MAX_SERVOS_NR
 namespace mrrocpp {

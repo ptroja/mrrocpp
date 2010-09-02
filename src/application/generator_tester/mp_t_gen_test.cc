@@ -3,11 +3,11 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/lib/data_port_headers/tfg.h"
-#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
-#include "robot/irp6p_tfg/irp6p_tfg_const.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6_tfg/dp_tfg.h"
+#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -49,17 +49,17 @@ void gen_test::main_task_algorithm(void)
 
 	// ROBOT IRP6_ON_TRACK_MANIPULATOR
 	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6OT_M;
+		manipulator_name = lib::irp6ot_m::ROBOT_IRP6OT_M;
 		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_IRP6OT_TFG;
+			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
 		// ROBOT IRP6_POSTUMENT_MANIPULATOR
 	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		manipulator_name = lib::ROBOT_IRP6P_M;
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
 		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
-			gripper_name = lib::ROBOT_IRP6P_TFG;
+			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}

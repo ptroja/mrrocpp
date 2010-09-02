@@ -1,3 +1,11 @@
+/**
+ * \file xdr_iarchive.hpp
+ *
+ * \brief XDR real-time input boost::archive
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ */
+
 #ifndef XDR_IARCHIVE_HPP
 #define XDR_IARCHIVE_HPP
 

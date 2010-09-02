@@ -79,7 +79,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * SARKOFAG_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,

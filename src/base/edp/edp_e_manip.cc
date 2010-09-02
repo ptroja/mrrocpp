@@ -21,7 +21,6 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
@@ -30,11 +29,11 @@
 #include "base/edp/edp_force_sensor.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
 
-using std::cout;
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
 
 bool manip_effector::compute_servo_joints_and_frame(void)
 {
@@ -774,7 +773,6 @@ void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 		default:
 			break;
 	}
-
 }
 /*--------------------------------------------------------------------------*/
 

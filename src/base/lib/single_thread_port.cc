@@ -1,14 +1,11 @@
-/**
- * \file single_thread_port.h
+/*!
+ * @file
+ * @brief File contains template class definition for a single thread communication ports
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * \date 2010
- * \author yoyek
- *
- * \brief Template class for single robot communication port
+ * @ingroup lib
  */
 
-#include <string>
-#include <map>
 #include <boost/foreach.hpp>
 
 #include "single_thread_port.h"
@@ -40,7 +37,7 @@ void single_thread_port_manager::clear_data_ports()
 	single_thread_port_interface_t single_thread_port_map_tmp;
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map_tmp)
+BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map_tmp)
 {	port_node.second->clear_all_flags();
 }
 

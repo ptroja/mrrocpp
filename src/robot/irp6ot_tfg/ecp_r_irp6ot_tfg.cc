@@ -1,11 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_on_track
-//
-// -------------------------------------------------------------------------
-
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for IRp6 on track two finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup irp6ot_tfg
+ */
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 
@@ -14,7 +13,7 @@ namespace ecp {
 namespace irp6ot_tfg {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_IRP6OT_TFG, IRP6OT_TFG_NUM_OF_SERVOS, EDP_IRP6OT_TFG_SECTION, _config, _sr_ecp),
+			robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -22,7 +21,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_IRP6OT_TFG, IRP6OT_TFG_NUM_OF_SERVOS, EDP_IRP6OT_TFG_SECTION, _ecp_object),
+	robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _ecp_object),
 			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.

@@ -1,12 +1,12 @@
 /*!
- * @file kinematic_model_irp6p_jacobian_with_wrist.h
+ * @file
  * @brief File containing the IRp-6p with wrist (6DOFs) jacobian based kinematic model class.
  *
  * @author Anna Maria Sibilska
  * @author tkornuta
  * @date 18.07.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 #if !defined(_IRP6P_KIN_MODEL_WITH_WRIST_JACOBIAN)
@@ -19,7 +19,7 @@ namespace kinematics {
 namespace irp6p {
 
 /*!
- * @class model_jacobian_with_wrist
+ *
  * @brief The IRp-6p with wrist (6DOFs) jacobian based kinematic model class.
  *
  * @author Anna Maria Sibilska

@@ -1,5 +1,5 @@
 /**
- * @file ecp_mp_s_pcbird.h
+ * @file
  * @brief Virtual sensor on the ECP/MP side used for communication with PcBird - declaration of the pcbird class.
  *
   * @author B.Bielawski
@@ -27,7 +27,7 @@ namespace sensor {
 const lib::sensor::SENSOR_t SENSOR_PCBIRD = "SENSOR_PCBIRD";
 
 /*!
- * @class pcbird
+ *
  * @brief Sensor responsible for communication with the PCBird.
  * @author tkornuta
  *

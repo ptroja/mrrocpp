@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                              mp_task.cc
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
+/*!
+ * @file
+ * @brief File contains mp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstdio>
 #include <sys/types.h>

@@ -1,11 +1,21 @@
+/**
+ * \file homog_matrix.h
+ *
+ * \brief Homogenous transformation matrix
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ */
+
 #ifndef __HOMOG_MATRIX_H
 #define __HOMOG_MATRIX_H
 
 #include <ostream>
 #include <cstring>
 #include <cassert>
+#include <cmath>
 
 #include "base/lib/impconst.h"	// frame_tab
+
 namespace mrrocpp {
 namespace lib {
 
@@ -15,8 +25,8 @@ class Xyz_Angle_Axis_vector;
 class Xyz_Euler_Zyz_vector;
 class Xyz_Rpy_vector;
 
-//! turn on or off frames bounds checking. If turned on, assert() can still
-//! be turned off with -DNDEBUG.
+//! Turn on or off frames bounds checking.
+//! If turned on, assert() can still be turned off with -DNDEBUG.
 
 #define INDEX_CHECK	1
 
@@ -26,52 +36,141 @@ class Xyz_Rpy_vector;
 #define HOMOG_MATRIX_CHECKI(a)
 #endif
 
-//! Klasa reprezentujaca macierz transformacji.
+//! Class for a transformation matrix
 class Homog_matrix
 {
 private:
-	//! Zmienna przechowujaca parametry macierzy jednorodnej.
+	//! Matrix placeholder
 	frame_tab matrix_m;
 
+	//! Eps for alpha representation
+	const static double ALPHA_SENSITIVITY;
+
 public:
-	//! Konstruktor domniemany - tworzy macierz jednostkowa.
+	/**
+	 * Constructor
+	 *
+	 * @brief creates an identity matrix
+	 */
 	Homog_matrix();
-	//! Stworzenie macierzy na podstawie zawartosci tablicy.
+
+	/**
+	 * Constructor
+	 *
+	 * @param[in] frame_tab data for initialization
+	 */
 	Homog_matrix(const frame_tab &);
-	// Konstruktor kopiujacy.
+
+	/**
+	 * Copy constructor
+	 */
 	Homog_matrix(const Homog_matrix &);
-	//! Utworzenie macierzy przesuniecia o [x, y, z], R - jednostkowa.
+
+	/**
+	 * Constructor for translation matrix
+	 *
+	 * @param[in] x,y,z translation parameters
+	 */
 	Homog_matrix(double x, double y, double z);
-	//! Utworzenie macierzy obrotu o male katy wzgledem 3 osi.
+
+	/**
+	 * Constructor for a small-rotation around 3 axes
+	 *
+	 * @param[in] versor_x, versor_y, versor_z versors of X,Y,Z axes
+	 * @param[in] angles rotation around 3 axes
+	 */
 	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
-	//! Utworzenie macierzy obrotu o male katy
+
+	/**
+	 * Constructor for a small-rotation around 3 axes
+	 *
+	 * @param[in] angles rotation around 3 axes
+	 */
 	Homog_matrix(const K_vector & angles);
 
+	/**
+	 * Constructor
+	 *
+	 * @param[in] l_vector
+	 */
 	Homog_matrix(const Xyz_Euler_Zyz_vector & l_vector);
+
+	/**
+	 * Constructor
+	 *
+	 * @param[in] l_vector
+	 */
 	Homog_matrix(const Xyz_Rpy_vector & l_vector);
+
+	/**
+	 * Constructor
+	 *
+	 * @param[in] l_vector
+	 */
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
-	//! Utworzenie z Eigen::Matrix<double, 3, 4>
-	Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix);
+	/**
+	 * Constructor from Eigen matrix
+	 *
+	 * @param[in] eigen_matrix matrix for initialization
+	 */
+	Homog_matrix(const Eigen::Matrix <double, 3, 4> & eigen_matrix);
 
-	//! Utworzenie macierzy jednorodnej na podstawie podanej macierzy obrotu r i wektora przesuniecia t.
+	/**
+	 * Constructor from rotation and translation C-style arrays
+	 *
+	 * @param[in] r rotation matrix
+	 * @param[in] t translation matrix
+	 */
 	Homog_matrix(const double r[3][3], const double t[3]);
 
-	//! Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
-			Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
+	/**
+	 * Constructor from values given in notation from Craig handbook
+	 *
+	 * @param[in] r??,t? rotation and translation matrix elements
+	 */
+	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
 
+	/**
+	 * Get the matrix with removed translation
+	 *
+	 * @return Output matrix
+	 */
 	Homog_matrix return_with_with_removed_translation() const;
+
+	/**
+	 * Get the matrix with removed rotation
+	 *
+	 * @return Output matrix
+	 */
 	Homog_matrix return_with_with_removed_rotation() const;
 
-	//! Zwrocenie tablicy zawierajacej dane macierzy jednorodnej.
+	/**
+	 * Get data to frame_tab array
+	 *
+	 * @param[out] frame output array
+	 */
 	void get_frame_tab(frame_tab frame) const;
 
-	//! Ustawienie tablicy zawierajacej dane macierzy jednorodnej.
+	/**
+	 * Set data from frame_tab array
+	 *
+	 * @param[in] frame output array
+	 */
 	void set_from_frame_tab(const frame_tab & frame);
 
-	//! Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
+	/**
+	 * Get the XYZ_EULER_ZYZ representation
+	 *
+	 * @param[out] l_vector requested representation
+	 */
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
 
+	/**
+	 * Set from the XYZ_EULER_ZYZ representation
+	 *
+	 * @param[in] l_vector requested representation
+	 */
 	void set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector);
 
 	//! Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
@@ -156,7 +255,7 @@ private:
 	{
 		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
 	}
-};// end class Homog_matrix
+};
 
 
 } // namespace lib

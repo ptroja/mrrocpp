@@ -1,10 +1,10 @@
-// ------------------------------------------------------------------------
-//   ecp_m.cc - szablon dla procesow ECP
-//
-//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
-//
-// Ostatnia modyfikacja: 2007
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main ecp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include <cstdio>
 #include <csignal>
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)
 			exit( EXIT_FAILURE);
-	} catch (ecp::common::ecp_robot::ECP_main_error & e) {
+	} catch (ecp::common::robot::ECP_main_error & e) {
 		switch (e.error_class)
 		{
 			case lib::SYSTEM_ERROR:
@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
 			default:
 				break;
 		}
-	} catch (ecp::common::generator::generator::ECP_error & e) {
+	} catch (ecp::common::generator::ECP_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	} catch (lib::sensor::sensor_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
-	} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+	} catch (ecp_mp::transmitter::transmitter_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 				exit( EXIT_FAILURE);
 		}
 
-		catch (ecp::common::ecp_robot::ECP_error & er) {
+		catch (ecp::common::robot::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
 				perror("ecp aborted due to lib::SYSTEM_ERRORn");
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 			} /* end: switch */
 		} /*end: catch*/
 
-		catch (ecp::common::generator::generator::ECP_error & er) {
+		catch (ecp::common::generator::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez generatory*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
 				perror("ecp aborted due to lib::SYSTEM_ERROR");
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 		catch (lib::sensor::sensor_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+		} catch (ecp_mp::transmitter::transmitter_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}

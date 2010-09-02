@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp common task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include <cstdio>
 #include <unistd.h>
 #include "base/mp/mp_task.h"

@@ -10,7 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 //
 //
@@ -29,8 +29,8 @@ private:
 
 public:
 
-	double irp6p_current_pos[IRP6P_M_NUM_OF_SERVOS]; // pozycja biezaca
-	double irp6p_desired_pos[IRP6P_M_NUM_OF_SERVOS]; // pozycja zadana
+	double irp6p_current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double irp6p_desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte

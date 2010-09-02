@@ -1,6 +1,14 @@
 #if !defined (_TRAJECTORY_H_)
 #define _TRAJECTORY_H_
 
+/*!
+ * @file
+ * @brief File contains Trajectory class declaration
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include <list>
 #include <string>
 

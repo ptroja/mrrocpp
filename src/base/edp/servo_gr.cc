@@ -15,6 +15,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
 #include "base/edp/edp_typedefs.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/servo_gr.h"
@@ -454,7 +455,7 @@ void servo_buffer::Move(void)
 		send_after_last_step = false;
 
 	/*
-	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION) /
+	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/AXIS_0_TO_5_INC_PER_REVOLUTION) /
 	 command.parameters.move.number_of_steps));
 	 */
 
@@ -846,7 +847,7 @@ void servo_buffer::synchronise(void)
 				return;
 		}; // end: switch
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
-	}; // end: for (int j = 0; j < IRP6_POSTUMENT_NUM_OF_SERVOS)
+	}; // end: for
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {

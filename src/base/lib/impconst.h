@@ -1,25 +1,18 @@
-// -------------------------------------------------------------------------
-//                            impconst.h
-// Typy i stale wykorzystywane w MRROC++
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/*!
+ * @file impconst.h
+ * @brief Fundamental types and constants used.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #if !defined(_IMPCONST_H)
 #define _IMPCONST_H
 
 #include <string>
 #include <stdint.h>
-
-
-
-
-#define delta_m (M_PI - 3.14154)
-#define DEGREES_TO_RADIANS 57.295780
-
-#define zero_eps 1.0E-4
-
-#define ALFA_SENSITIVITY 0.00001
 
 namespace mrrocpp {
 
@@ -42,25 +35,19 @@ extern "C" {
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
 
-#ifndef ABS
-#define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x'
-#endif
-
 #define MP_SECTION "[mp]"
 #define UI_SECTION "[ui]"
 
 typedef std::string robot_name_t;
 typedef std::string TRANSMITTER_t;
 
-const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
+static const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
-const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
-const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
-const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
-const robot_name_t ROBOT_HAND = "ROBOT_HAND";
+static const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
+static const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
+static const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
 
-// the other robots in dedicated robot consts files
-
+// Other robots in dedicated robot consts files
 
 enum FORCE_SENSOR_ENUM
 {
@@ -69,9 +56,6 @@ enum FORCE_SENSOR_ENUM
 
 #define MAX_SERVOS_NR 8
 
-#define HAND_NUM_OF_SERVOS		2
-
-#define TIME_SLICE 500000 // by Y
 #define STEP              0.002  // Krok sterowania w [s]
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
@@ -86,11 +70,7 @@ enum FORCE_SENSOR_ENUM
 #define TORQUE_RECIPROCAL_DAMPING 0.1
 
 #define ROBOT_TEST_MODE "robot_test_mode"
-#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
 
-// Stale czasowe
-#define ONE_MSEC  1000000L // 1 milisek w nanosekundach
-#define TEN_MSEC 10000000L // 10 milisek w nanosekundach
 #define MAX_PRIORITY    50
 
 // STALE PULSOW MP, ECP, READER

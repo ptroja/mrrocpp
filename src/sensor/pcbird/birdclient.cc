@@ -1,5 +1,5 @@
 /**
- * @file birdclient.cc
+ * @file
  * @brief File containing definitions of low-level (hardware access) functions.
  *
  * @author B.Bielawski

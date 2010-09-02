@@ -1014,8 +1014,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 						reply.reply_type = lib::SYNCHRO_OK;
 						reply_to_instruction();
 						next_state = GET_INSTRUCTION;
-						if (msg->message("Robot is synchronised"))
-							printf(" Nie znaleziono SR\n");
+						msg->message("Robot is synchronised");
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_4(QUERY_EXPECTED);
 					}

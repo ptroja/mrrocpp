@@ -7,13 +7,11 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace task {
 
-
-
-
-class tfg: public common::task::task {
+class tfg : public common::task::task
+{
 protected:
 	//generatory
 	generator::tfg* tfgg;
@@ -28,7 +26,7 @@ public:
 };
 
 }
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp
 

@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp base generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_generator.h"
 #include "base/mp/mp_robot.h"
 #include "base/mp/mp_task.h"
@@ -60,6 +68,12 @@ void generator::Move()
 	} while (next_step());
 }
 // ------------------------------------------------------------------------
+
+
+MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
+	error_class(err0), error_no(err1)
+{
+}
 
 } // namespace generator
 } // namespace mp

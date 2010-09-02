@@ -1,12 +1,14 @@
-/**
- * \file smooth_trajectory_pose.h
- * \brief Header file for smooth_trajectory_pose
- *
- * Contains declaration of smooth_trajectory_pose class and its methods.
- */
-
 #if !defined(_ECP_smooth_TRAJECTORY_POSE_H)
 #define  _ECP_smooth_TRAJECTORY_POSE_H
+
+/*!
+ * @file
+ * @brief Header file for smooth_trajectory_pose
+ * Contains declaration of smooth_trajectory_pose class and its methods.
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
 
 #include "base/lib/com_buf.h"		// contains lib::POSE_SPECIFICATION
 #include "base/lib/impconst.h"	// contains MAX_SERVOS_NR

@@ -1,9 +1,10 @@
-// -------------------------------------------------------------------------
-//                            mp.h
-// Definicje struktur danych i metod dla procesow MP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains structures used in ecp_mp classes
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
 
 #if !defined(__ECP_MP_TYPEDEF_H)
 #define __ECP_MP_TYPEDEF_H

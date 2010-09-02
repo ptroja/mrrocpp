@@ -1,6 +1,14 @@
 #ifndef ECP_MP_GENERATOR_H_
 #define ECP_MP_GENERATOR_H_
 
+/*!
+ * @file
+ * @brief File contains ecp_mp base generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include "base/lib/srlib.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 

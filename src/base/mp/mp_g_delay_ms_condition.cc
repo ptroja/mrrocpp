@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains mp delay_ms_condition generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_g_delay_ms_condition.h"
 
@@ -22,19 +30,19 @@ void delay_ms_condition::configure(int _ms_delay)
 
 bool delay_ms_condition::first_step()
 {
-	local_timer.timer_start();
+	local_timer.start();
 	return true;
 }
 
 bool delay_ms_condition::next_step()
 {
-	local_timer.timer_stop();
-	local_timer.get_time(&sec);
+	local_timer.stop();
+	local_timer.get_time(sec);
 	if (1000 * sec > (float) ms_delay)
 		return false;
 	delay (20);
-	local_timer.timer_stop();
-	local_timer.get_time(&sec);
+	local_timer.stop();
+	local_timer.get_time(sec);
 	if (1000 * sec > (float) ms_delay)
 		return false;
 	return true;

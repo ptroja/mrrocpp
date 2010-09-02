@@ -1,8 +1,6 @@
-#include <cmath>
 #include <cstdio>
 #include <ostream>
 
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
@@ -11,6 +9,8 @@ namespace lib {
 // ******************************************************************************************
 //                                     definicje skladowych klasy Homog_matrix
 // ******************************************************************************************
+
+const double Homog_matrix::ALPHA_SENSITIVITY = 0.00001;
 
 Homog_matrix::Homog_matrix()
 {
@@ -131,7 +131,6 @@ Homog_matrix::Homog_matrix(double x, double y, double z)
 	matrix_m[2][3] = z;
 }
 
-// Utworzenie macierzy jednorodnej na podstawie jej 12 elementow (notacja z Craiga)
 Homog_matrix::Homog_matrix (double r11, double r12, double r13, double t1, double r21, double r22, double r23,double t2, double r31, double r32,
  double r33, double t3)
 {
@@ -149,13 +148,11 @@ Homog_matrix::Homog_matrix(const Eigen::Matrix<double, 3, 4>& eigen_matrix)
 	}
 }
 
-// Zwrocenie obecnej tablicy, zawierajacej dane macierzy jednorodnej.
 void Homog_matrix::get_frame_tab(frame_tab frame) const
 {
 	copy_frame_tab(frame, matrix_m);
 }
 
-// Ustawienie tablicy, ktora zawiera dane macierzy jednorodnej.
 void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
 {
 	copy_frame_tab(matrix_m, frame);
@@ -380,7 +377,7 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 
 	double kx, ky, kz;
 
-	if (alfa > ALFA_SENSITIVITY)
+	if (alfa > ALPHA_SENSITIVITY)
 	{
 		kx = l_vector[3] / alfa;
 		ky = l_vector[4] / alfa;
@@ -426,8 +423,8 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
-	const double EPS = zero_eps;
-	const double delta = delta_m;
+	static const double EPS = 1.0E-4;
+	static const double delta = (M_PI - 3.14154);
 
 	double Kd[3];	// Kd - K z "daszkiem" - wersor kierunkowy
 
@@ -487,7 +484,7 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		}
 
 	}// end kat obrotu 180 stopni
-	else if ((alfa < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))									// kat obrotu 0 stopni
+	else if ((alfa < ALPHA_SENSITIVITY) && (alfa > -ALPHA_SENSITIVITY))									// kat obrotu 0 stopni
 	{
 
 		for(int i=0; i<3; i++)

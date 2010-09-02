@@ -1,0 +1,30 @@
+/** 
+
+@namespace mrrocpp::mp
+@brief Main, base namespace for MP classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::mp::common
+@brief Main, base namespace for MP classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::mp::generator
+@brief Main, base namespace for MP generator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::mp::task
+@brief Main, base namespace for MP task classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::mp::task
+@brief Main, base namespace for MP task classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::mp::robot
+@brief Main, base namespace for MP robot classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+ @defgroup mp MP
+ @ingroup base
+   
+*/

@@ -25,7 +25,7 @@
 #include "base/edp/servo_gr.h"
 // Model kinematyczny tasmociagu.
 #include "robot/conveyor/kinematic_model_conveyor.h"
-#include "robot/conveyor/conveyor_const.h"
+#include "robot/conveyor/const_conveyor.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -51,10 +51,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_CONVEYOR)
+	motor_driven_effector(_config, lib::conveyor::ROBOT_NAME)
 {
 	//  Stworzenie listy dostepnych kinematyk.
-	number_of_servos = CONVEYOR_NUM_OF_SERVOS;
+	number_of_servos = lib::conveyor::NUM_OF_SERVOS;
 
 	create_kinematic_models_for_given_robot();
 

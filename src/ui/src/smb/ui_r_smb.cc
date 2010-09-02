@@ -4,7 +4,7 @@
 
 #include "ui/src/smb/ui_r_smb.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -21,7 +21,7 @@
 
 
 UiRobotSmb::UiRobotSmb(Ui& _ui) :
-	UiRobot(_ui, EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL) {
 
 }
 

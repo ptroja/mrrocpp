@@ -37,7 +37,6 @@
 #include "base/lib/srlib.h"
 #include "ui/src/ui_const.h"
 #include "base/lib/configurator.h"
-#include "base/lib/mis_fun.h"
 
 #include "base/lib/srlib.h"
 
@@ -75,7 +74,7 @@ void ui_sr_buffer::operator()() {
 			}
 
 			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		}
 
