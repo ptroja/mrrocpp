@@ -19,6 +19,7 @@ add_subdirectory (irp6p_m)
 add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
 
+
 add_library(mprobots
 	conveyor/mp_r_conveyor.cc
 	irp6ot_m/mp_r_irp6ot_m.cc
@@ -34,3 +35,17 @@ add_library(mprobots
 	irp6p_tfg/mp_r_irp6p_tfg.cc
 	sarkofag/mp_r_sarkofag.cc
 )
+
+add_library(ecprobots
+	../base/ecp/ecp_robot.cc
+)
+
+# enable conditional inclusion to ecprobots
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_m)
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_tfg)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_m)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_tfg)
+target_link_library_if(ROBOT_IRP6_MECHATRONICS ecprobots ecp_r_irp6m)
+target_link_library_if(ROBOT_POLYCRANK ecprobots ecp_r_polycrank)
+target_link_library_if(ROBOT_CONVEYOR ecprobots ecp_r_conv)
+target_link_library_if(ROBOT_SPEAKER ecprobots ecp_r_speaker)
