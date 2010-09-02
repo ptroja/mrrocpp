@@ -57,7 +57,7 @@ const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 const int MAX_SERVOS_NR = 8;
 
 #define TIME_SLICE 500000 // by Y
-#define STEP              0.002  // Krok sterowania w [s]
+const double EDP_STEP = 0.002; // Krok sterowania w [s]
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
 //#define TORQUE_INERTIA 0.98

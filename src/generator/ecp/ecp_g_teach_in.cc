@@ -424,7 +424,7 @@ bool teach_in::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
 			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
 			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
@@ -436,7 +436,7 @@ bool teach_in::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
 			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
 			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
