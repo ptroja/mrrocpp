@@ -11,19 +11,9 @@
 #include <string>
 #include <stdint.h>
 
-#define delta_m (M_PI - 3.14154)
-#define DEGREES_TO_RADIANS 57.295780
-
-#define zero_eps 1.0E-4
-
-#define ALFA_SENSITIVITY 0.00001
-
 namespace mrrocpp {
-
 }
-
 using namespace mrrocpp;
-
 namespace mrrocpp {
 namespace lib {
 
@@ -56,7 +46,6 @@ const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
 const int MAX_SERVOS_NR = 8;
 
-#define TIME_SLICE 500000 // by Y
 const double EDP_STEP = 0.002; // Krok sterowania w [s]
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
@@ -74,9 +63,8 @@ const std::string ROBOT_TEST_MODE = "robot_test_mode";
 const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
-#define ONE_MSEC  1000000L // 1 milisek w nanosekundach
-#define TEN_MSEC 10000000L // 10 milisek w nanosekundach
-#define MAX_PRIORITY    50
+
+const int QNX_MAX_PRIORITY = 50;
 
 // STALE PULSOW MP, ECP, READER
 

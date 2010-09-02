@@ -124,7 +124,7 @@ void Ui::init()
 	signal(SIGCHLD, &catch_signal);
 #endif /* PROCESS_SPAWN_RSH */
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego

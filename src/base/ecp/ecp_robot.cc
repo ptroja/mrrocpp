@@ -190,7 +190,7 @@ void ecp_robot::send()
 	}
 
 	// TODO: this is called much too often (?!)
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 }
 
 void ecp_robot::create_command()

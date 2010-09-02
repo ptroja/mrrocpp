@@ -44,7 +44,7 @@ ui_ecp_buffer::~ui_ecp_buffer() {
 
 void ui_ecp_buffer::operator()() {
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 5);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 

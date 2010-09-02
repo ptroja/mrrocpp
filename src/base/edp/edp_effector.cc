@@ -103,7 +103,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 
 	server_attach =
 #if !defined(USE_MESSIP_SRR)

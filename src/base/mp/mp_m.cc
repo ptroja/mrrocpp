@@ -104,7 +104,7 @@ int main(int argc, char *argv[], char **arge)
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
-			lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 4);
+			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));

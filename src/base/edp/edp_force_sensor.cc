@@ -14,7 +14,7 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()(void)
 {
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
 	connect_to_hardware();
 
