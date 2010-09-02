@@ -30,7 +30,7 @@ add_library(kinematicsirp6p_m
 
 target_link_libraries(kinematicsirp6p_m kinematics)
 	
-add_library(ecp_r_irp6p_m ecp_r_irp6p_m)
+add_library(ecp_r_irp6p_m ecp_r_irp6p_m.cc)
 	
 target_link_libraries(ecp_r_irp6p_m kinematicsirp6p_m)
 

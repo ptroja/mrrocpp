@@ -17,10 +17,6 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Rozmiary buforow
 const int MP_2_ECP_NEXT_STATE_STRING_SIZE = 100;
 const int MP_2_ECP_STRING_SIZE = 300;
@@ -95,11 +91,6 @@ const int QNX_MAX_PRIORITY = 50;
 #define ECP_WAIT_FOR_STOP (_PULSE_CODE_MINAVAIL + 3)
 #define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
 #define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
-
-
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace lib
 } // namespace mrrocpp
