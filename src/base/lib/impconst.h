@@ -61,8 +61,6 @@ enum FORCE_SENSOR_ENUM
 
 #define MAX_SERVOS_NR 8
 
-const int HAND_NUM_OF_SERVOS = 2;
-
 #define TIME_SLICE 500000 // by Y
 #define STEP              0.002  // Krok sterowania w [s]
 // dla starej wersji sterowania
