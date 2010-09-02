@@ -33,6 +33,11 @@ class robot : public ecp_mp::robot
 {
 
 private:
+	/**
+	 * @brief nummber of servos (joints)
+	 */
+	const int servos_number;
+
 #if !defined(PROCESS_SPAWN_RSH)
 
 	/**
@@ -150,8 +155,9 @@ public:
 	 * @param l_robot_name robot label
 	 * @param _section_name ECP configuration file section
 	 * @param mp_object_l mp task object reference
+	 * @param _number_of_servos number of robot servos (joints)
 	 */
-	robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l);
+			robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
 
 	/**
 	 * @brief destructor

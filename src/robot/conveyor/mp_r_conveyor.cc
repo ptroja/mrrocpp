@@ -15,7 +15,7 @@ namespace mp {
 namespace robot {
 
 conveyor::conveyor(task::task &mp_object_l) :
-	motor_driven(lib::conveyor::ROBOT_NAME, lib::conveyor::ECP_SECTION, mp_object_l, lib::conveyor::NUM_OF_SERVOS)
+	robot(lib::conveyor::ROBOT_NAME, lib::conveyor::ECP_SECTION, mp_object_l, lib::conveyor::NUM_OF_SERVOS)
 {
 }
 
