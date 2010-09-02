@@ -51,9 +51,6 @@ class task : public ecp_mp::task::task
 private:
 	void initialize_communication(void);
 
-	/// utworzenie robotow
-	virtual void create_robots(void);
-
 public:
 #if !defined(USE_MESSIP_SRR)
 	static name_attach_t *mp_pulse_attach;
@@ -63,6 +60,9 @@ public:
 	/// KONSTRUKTORY
 	task(lib::configurator &_config);
 	virtual ~task(void);
+
+	/// utworzenie robotow
+	virtual void create_robots(void) =0;
 
 	void stop_and_terminate(void);
 

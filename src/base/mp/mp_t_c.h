@@ -19,7 +19,8 @@ class cxx : public task
 public:
 
 	cxx(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods fo mp template to redefine in concete class
 	void main_task_algorithm(void);
 

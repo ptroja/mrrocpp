@@ -8,7 +8,6 @@
 #ifndef MP_T_VISUALSERVO_TESTER_H_
 #define MP_T_VISUALSERVO_TESTER_H_
 
-
 #include "base/mp/MP_main_error.h"
 
 #include <string>
@@ -22,7 +21,10 @@ namespace task {
 class visualservo_tester : public mrrocpp::mp::task::task
 {
 public:
+	/// utworzenie robotow
+	void create_robots(void);
 	visualservo_tester(lib::configurator &config);
+
 	virtual ~visualservo_tester();
 	void main_task_algorithm(void);
 private:

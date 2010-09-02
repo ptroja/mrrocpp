@@ -20,7 +20,8 @@ protected:
 public:
 
 	edge_follow_mr(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods for mp template
 	void main_task_algorithm(void);
 
