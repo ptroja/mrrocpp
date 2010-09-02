@@ -35,7 +35,7 @@ int UiRobotIrp6m_m::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_irp6_mechatronika_active")) == 1) {
+	if ((state.is_active = ui.config->value <int> ("is_irp6m_active")) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);

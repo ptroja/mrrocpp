@@ -54,11 +54,6 @@ const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 // the other robots in dedicated robot consts files
 
 
-enum FORCE_SENSOR_ENUM
-{
-	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
-};
-
 const int MAX_SERVOS_NR = 8;
 
 #define TIME_SLICE 500000 // by Y
