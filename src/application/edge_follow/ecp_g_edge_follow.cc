@@ -43,7 +43,7 @@ bool y_edge_follow_force::first_step()
 	//	int a = boost::any_cast <int>(ecp_t.cc_m["swarm 1"]);
 
 	ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "] = (std::string) "sdsadsa";
-	std::cout << "dupa" << boost::any_cast <int>(ecp_t.cc_m["swarm 1"])
+	std::cout << "pupa" << boost::any_cast <int>(ecp_t.cc_m["swarm 1"])
 			<< boost::any_cast <std::string>(ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "]) << std::endl;
 	create_pose_list_head(emptyps, 0.0, delta, 2);
 
