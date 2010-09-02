@@ -19,7 +19,7 @@ add_library(kinematicsconveyor
 
 target_link_libraries(kinematicsconveyor kinematics)
 	
-add_library(ecp_r_conv ecp_r_conv)	
+add_library(ecp_r_conv ecp_r_conv.cc)	
 	
 target_link_libraries(ecp_r_conv kinematicsconveyor)
 
