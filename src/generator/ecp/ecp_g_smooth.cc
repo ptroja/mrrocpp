@@ -612,7 +612,7 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
  switch ( td.arm_type ) {
  case lib::MOTOR:
 
- if(the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+ if(the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
  gripp=7;
  } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
  gripp=6;
@@ -636,7 +636,7 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
  break;
  case lib::JOINT:
 
- if(the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+ if(the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
  gripp=7;
  } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
  gripp=6;
@@ -987,7 +987,7 @@ void smooth::send_coordinates()
 						= coordinate_list_iterator->coordinate[i];
 			}
 
-			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				gripp = 7;
 			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 				gripp = 6;
@@ -1002,7 +1002,7 @@ void smooth::send_coordinates()
 						= coordinate_list_iterator->coordinate[i];
 			}
 
-			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				gripp = 7;
 			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 				gripp = 6;
@@ -1344,7 +1344,7 @@ void smooth::calculate(void)
 					break;
 
 				case lib::ECP_JOINT:
-					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
 					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
@@ -1403,7 +1403,7 @@ void smooth::calculate(void)
 					break;
 
 				case lib::ECP_MOTOR:
-					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
 					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
@@ -1546,7 +1546,7 @@ void smooth::calculate(void)
 
 				case lib::ECP_JOINT:
 
-					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
 					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
@@ -1592,7 +1592,7 @@ void smooth::calculate(void)
 
 				case lib::ECP_MOTOR:
 
-					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
 					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;

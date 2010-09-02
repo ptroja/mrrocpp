@@ -7,7 +7,7 @@
  */
 
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
-#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
+
 
 namespace mrrocpp {
 namespace mp {

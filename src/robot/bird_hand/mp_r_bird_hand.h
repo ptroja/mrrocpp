@@ -10,6 +10,7 @@
  */
 
 #include "base/mp/mp_robot.h"
+#include "const_bird_hand.h"
 
 namespace mrrocpp {
 namespace mp {

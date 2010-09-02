@@ -10,6 +10,7 @@
  */
 
 #include "base/mp/mp_robot.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 namespace mrrocpp {
 namespace mp {

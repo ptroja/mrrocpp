@@ -2,6 +2,7 @@
 #define MP_R_POLYCRANK_H_
 
 #include "base/mp/mp_robot.h"
+#include "robot/polycrank/const_polycrank.h"
 
 namespace mrrocpp {
 namespace mp {

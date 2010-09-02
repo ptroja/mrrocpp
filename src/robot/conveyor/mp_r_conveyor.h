@@ -9,8 +9,8 @@
  * @ingroup conveyor
  */
 
-
 #include "base/mp/mp_robot.h"
+#include "robot/conveyor/const_conveyor.h"
 
 namespace mrrocpp {
 namespace mp {
