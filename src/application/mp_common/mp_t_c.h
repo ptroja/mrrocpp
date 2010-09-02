@@ -6,7 +6,7 @@
  * @brief File contains mp common task declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup mp
+ * @ingroup
  */
 
 namespace mrrocpp {

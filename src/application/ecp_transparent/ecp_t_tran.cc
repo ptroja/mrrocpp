@@ -3,7 +3,7 @@
  * @brief File contains ecp transparent task definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup ecp
+ * @ingroup
  */
 
 #include <cstdio>

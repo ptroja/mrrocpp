@@ -3,7 +3,7 @@
  * @brief File contains mp common task definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup mp
+ * @ingroup
  */
 
 #include <cstdio>
