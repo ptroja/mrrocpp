@@ -9,13 +9,12 @@
  * @ingroup bird_hand
  */
 
-
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class bird_hand : public motor_driven
+class bird_hand : public robot
 {
 
 public:

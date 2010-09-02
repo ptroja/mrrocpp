@@ -6,7 +6,7 @@ namespace mp {
 namespace robot {
 
 irp6_mechatronika::irp6_mechatronika(task::task &mp_object_l) :
-	motor_driven(lib::irp6m::ROBOT_NAME, lib::irp6m::ECP_SECTION, mp_object_l, lib::irp6m::NUM_OF_SERVOS)
+	robot(lib::irp6m::ROBOT_NAME, lib::irp6m::ECP_SECTION, mp_object_l, lib::irp6m::NUM_OF_SERVOS)
 {
 }
 

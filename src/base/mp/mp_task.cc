@@ -187,19 +187,19 @@ void task::create_robots()
 
 	// ROBOT_ELECTRON
 	if (config.value <int> ("is_electron_robot_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
+		created_robot = new robot::robot(lib::ROBOT_ELECTRON, "[ecp_electron]", *this, 0);
 		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT_SPEECHRECOGNITION
 	if (config.value <int> ("is_speechrecognition_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
+		created_robot = new robot::robot(lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this, 0);
 		robot_m[created_robot->robot_name] = created_robot;
 	}
 
 	// ROBOT_FESTIVAL
 	if (config.value <int> ("is_festival_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
+		created_robot = new robot::robot(lib::ROBOT_FESTIVAL, "[ecp_festival]", *this, 0);
 		robot_m[created_robot->robot_name] = created_robot;
 	}
 

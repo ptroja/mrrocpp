@@ -1,13 +1,13 @@
 #if !defined(MP_R_POLYCRANK_H_)
 #define MP_R_POLYCRANK_H_
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class polycrank : public motor_driven
+class polycrank : public robot
 {
 public:
 	polycrank(task::task &mp_object_l);
