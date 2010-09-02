@@ -68,7 +68,7 @@ bool playerjoy::next_step ( )
           );
     */
 
-    for (int i = 0; i < MAX_SERVOS_NR; i++)
+    for (int i = 0; i < lib::MAX_SERVOS_NR; i++)
     {
         if (node_counter <= 2)
         {

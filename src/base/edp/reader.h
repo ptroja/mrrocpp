@@ -34,18 +34,18 @@ struct reader_config
 
 	bool measure_time; // czas wykonania pomiaru (w ms)
 
-	bool desired_inc[MAX_SERVOS_NR]; // wejscie dla osi 0,2,3,4
-	bool current_inc[MAX_SERVOS_NR]; // wyjscie
+	bool desired_inc[lib::MAX_SERVOS_NR]; // wejscie dla osi 0,2,3,4
+	bool current_inc[lib::MAX_SERVOS_NR]; // wyjscie
 
-	bool pwm[MAX_SERVOS_NR]; // wypelnienie PWM
-	bool uchyb[MAX_SERVOS_NR]; // wypelnienie PWM
-	bool abs_pos[MAX_SERVOS_NR];
+	bool pwm[lib::MAX_SERVOS_NR]; // wypelnienie PWM
+	bool uchyb[lib::MAX_SERVOS_NR]; // wypelnienie PWM
+	bool abs_pos[lib::MAX_SERVOS_NR];
 
 	bool force[6]; // pierwsze 3 z 6
 	bool desired_force[6]; // pierwsze 3 z 6
 	bool filtered_force[6]; // sila po przefiltrowaniu
 
-	bool current_joints[MAX_SERVOS_NR];
+	bool current_joints[lib::MAX_SERVOS_NR];
 
 	bool desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
 	bool real_cartesian_position[6]; // polozenie rzeczywiste
@@ -59,19 +59,19 @@ struct reader_data
 	unsigned long step; // numer kroku
 	struct timespec measure_time; // czas wykonania pomiaru (w ms)
 
-	float desired_inc[MAX_SERVOS_NR]; // wejscie dla osi 0,2,3,4
-	short int current_inc[MAX_SERVOS_NR]; // wyjscie
+	float desired_inc[lib::MAX_SERVOS_NR]; // wejscie dla osi 0,2,3,4
+	short int current_inc[lib::MAX_SERVOS_NR]; // wyjscie
 	// float current_position[6];
-	float pwm[MAX_SERVOS_NR]; // wypelnienie PWM
-	float uchyb[MAX_SERVOS_NR]; // wypelnienie PWM
-	double abs_pos[MAX_SERVOS_NR];
+	float pwm[lib::MAX_SERVOS_NR]; // wypelnienie PWM
+	float uchyb[lib::MAX_SERVOS_NR]; // wypelnienie PWM
+	double abs_pos[lib::MAX_SERVOS_NR];
 
 	double force[3]; // pierwsze 3 z 6
 	double desired_force[3]; // pierwsze 3 z 6
 	double filtered_force[6]; // sila po przefiltrowaniu
 
 	double desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
-	double current_joints[MAX_SERVOS_NR]; // spolozenie w joints
+	double current_joints[lib::MAX_SERVOS_NR]; // spolozenie w joints
 
 	double real_cartesian_position[6]; // polozenie rzeczywiste
 	double real_cartesian_vel[6]; // predkosc rzeczywista

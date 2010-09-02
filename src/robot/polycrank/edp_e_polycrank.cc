@@ -62,7 +62,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
 		//	motor_driven_effector::get_arm_position_read_hardware_sb();

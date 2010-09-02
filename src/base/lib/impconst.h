@@ -59,7 +59,7 @@ enum FORCE_SENSOR_ENUM
 	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
 };
 
-#define MAX_SERVOS_NR 8
+const int MAX_SERVOS_NR = 8;
 
 #define TIME_SLICE 500000 // by Y
 #define STEP              0.002  // Krok sterowania w [s]
@@ -75,8 +75,8 @@ enum FORCE_SENSOR_ENUM
 #define FORCE_RECIPROCAL_DAMPING 0.005
 #define TORQUE_RECIPROCAL_DAMPING 0.1
 
-#define ROBOT_TEST_MODE "robot_test_mode"
-#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
+const std::string ROBOT_TEST_MODE = "robot_test_mode";
+const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
 #define ONE_MSEC  1000000L // 1 milisek w nanosekundach

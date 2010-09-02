@@ -44,7 +44,7 @@ namespace common {
 reader_config::reader_config() :
 	step(false), measure_time(false), servo_mode(false)
 {
-	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
 		current_inc[i] = false;
 		pwm[i] = false;

@@ -45,8 +45,8 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	sh_msg
 			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), false);
 
-	if (config.exists(ROBOT_TEST_MODE)) {
-		robot_test_mode = config.value <int> (ROBOT_TEST_MODE);
+	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
+		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
 	}
 
 	if (robot_test_mode) {

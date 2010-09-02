@@ -76,8 +76,8 @@ int UiRobotIrp6p_tfg::reload_configuration() {
 				}
 			}
 
-			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
+			if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (lib::ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

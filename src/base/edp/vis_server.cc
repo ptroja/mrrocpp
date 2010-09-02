@@ -95,7 +95,7 @@ void vis_server::operator()(void)
 		struct
 		{
 			int synchronised;
-			float joints[MAX_SERVOS_NR];
+			float joints[lib::MAX_SERVOS_NR];
 		} reply;
 
 		reply.synchronised = (master.is_synchronised()) ? 1 : 0;

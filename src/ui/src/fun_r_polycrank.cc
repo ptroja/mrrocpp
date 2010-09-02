@@ -2545,10 +2545,10 @@ int reload_polycrank_configuration() {
 				}
 			}
 
-			if (ui.config->exists(ROBOT_TEST_MODE,
+			if (ui.config->exists(lib::ROBOT_TEST_MODE,
 					ui.irp6m_m->state.edp.section_name))
 				ui.irp6m_m->state.edp.test_mode = ui.config->value<int> (
-						ROBOT_TEST_MODE, ui.irp6m_m->state.edp.section_name);
+						lib::ROBOT_TEST_MODE, ui.irp6m_m->state.edp.section_name);
 			else
 				ui.irp6m_m->state.edp.test_mode = 0;
 

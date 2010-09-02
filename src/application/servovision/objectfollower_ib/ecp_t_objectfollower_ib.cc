@@ -34,7 +34,7 @@ namespace common {
 namespace task {
 
 const double
-		ecp_t_objectfollower_ib::initial_position_joints[MAX_SERVOS_NR] = { 0.0, 0.0, -1.428, 0.0, 0.0, 4.720, 0.0, 0.075 };
+		ecp_t_objectfollower_ib::initial_position_joints[lib::MAX_SERVOS_NR] = { 0.0, 0.0, -1.428, 0.0, 0.0, 4.720, 0.0, 0.075 };
 
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)

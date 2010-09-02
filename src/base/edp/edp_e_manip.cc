@@ -107,8 +107,8 @@ manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_r
 	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true)
 {
 
-	if (config.exists(FORCE_SENSOR_TEST_MODE)) {
-		force_sensor_test_mode = config.value <int> (FORCE_SENSOR_TEST_MODE);
+	if (config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
+		force_sensor_test_mode = config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
 	}
 
 	if (force_sensor_test_mode) {
