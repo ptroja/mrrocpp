@@ -34,17 +34,35 @@ const double y_param = 184/100; //y translation from camera to robot position (p
 //							   {-0.8940,   -0.4481,         0},
 //							   {      0,         0,    1.0000}};
 //Rotation 180 deg x
-const double rotation[3][3] = {{1.0000,         0,         0},
-							   {	 0,   -0.5985,    0.8012},
-							   {	 0,   -0.8012,   -0.5985}};
+//const double rotation[3][3] = {{1.0000,         0,         0},
+//							   {	 0,   -0.5985,    0.8012},
+//							   {	 0,   -0.8012,   -0.5985}};
+//No rotation
+//const double rotation[3][3] = {{1.0000,         0,         0},
+//							   {	 0,    	  1.0,    	   0},
+//							   {	 0,     	0,   	   1}};
 
+//Rotation 180 x, 90 z
+//const double rotation[3][3] = {{-0.4481,    0.5350,   -0.7162},
+//							   { 0.8940,    0.2682,   -0.3590},
+//							   { 	  0,   -0.8012,   -0.5985}};
+
+//Rotation 180 x, 90 z
+//const double rotation[3][3] = {{-0.4481,    -0.5350,   0.7162},
+//							   { -0.8940,    0.2682,   -0.3590},
+//							   { 	  0,   -0.8012,   -0.5985}};
+
+//Rotation 180 x, 90 z
+const double rotation[3][3] = {{-1,    0,   0},
+							   { 0,   -1,   0},
+							   { 0,    0,   1}};
 
 //Camera translation matrix
-const double translation[3] = {-0.1, 0, 0};
+const double translation[3] = {0, 0, 0};
 
 
 #ifdef IRP6_OT
-const int joint_num = 6;//7;
+const int joint_num = 6;
 #endif//IRP6_OT
 
 #ifdef IRP6_P
@@ -156,6 +174,7 @@ bool bclike_smooth::next_step(){
 
 	//If there are new bar code like areas translate their positions and check existance in vector
 	if(reading.code_found){
+		reading.code_found = false;
 		double t[3];
 		actual_pos.get_translation_vector(t);
 		translateToRobotPosition(reading);
@@ -180,6 +199,7 @@ bool bclike_smooth::next_step(){
 
 	//End everything, when there is nothing to send and robot stops
 	strcpy(ecp_t.ecp_reply.ecp_2_mp_string, "KONIEC");
+	readings.clear();
 	return false;
 
 
@@ -208,6 +228,19 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 	lib::Xyz_Euler_Zyz_vector new_pos;
 
 //	std::cout << "REGS_FOUND = " << regs.num_found << std::endl;
+//	if(regs.num_found > 1){
+//		switch(regs.num_found){
+//			case 4:
+//				std::cout << "KOD 4: x = " << regs.x_k3 << " y = " << regs.y_k3  <<  " promien = " << regs.w_k3 << std::endl;
+//			case 3:
+//				std::cout << "KOD 3: x = " << regs.x_k2 << " y = " << regs.y_k2  <<  " promien = " << regs.w_k2 << std::endl;
+//			case 2:
+//				std::cout << "KOD 2: x = " << regs.x_k1 << " y = " << regs.y_k1  <<  " promien = " << regs.w_k1 << std::endl;
+//			case 1:
+//				std::cout << "KOD 1: x = " << regs.x_k0 << " y = " << regs.y_k0  <<  " promien = " << regs.w_k0 << std::endl;
+//		}
+//	}
+
 	for(int i = 0; i < regs.num_found; ++i){
 
 		e.setZero();
@@ -245,8 +278,8 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 	//		[0.00004 0 0 0 0 0; 0 0.00004 0 0 0 0; 0 0 0.001 0 0 0; 0 0 0 0.1 0 0; 0 0 0 0 0 0; 0 0 0 0 0 0]
 
-		Kp(0,0) = 0.00004;
-		Kp(1,1) = 0.00004;
+		Kp(0,0) = 0.000476;
+		Kp(1,1) = 0.000476;
 		Kp(2,2) = 0.001;
 		Kp(3,3) = 0.1;
 
@@ -275,27 +308,48 @@ void bclike_smooth::translateToRobotPosition(task::fradia_regions& regs){
 
 		switch(i){
 			case 0:
-				regs.x_k0 = new_pos(0,0);
-				regs.y_k0 = new_pos(1,0);
-				regs.w_k0 = regs.w_k0 * 0.2 / 373;
+				regs.x_k0 = new_pos(0,0);//- regs.y_k0 * 0.2/470 - 0.04;
+				regs.y_k0 = new_pos(1,0);// + regs.x_k0 * 0.2/470;
+				regs.r_k0 = regs.r_k0 * 0.1 / 210;//373;
+//				regs.w_k0 = regs.w_k0 * 0.1 / 210;//373;
+//				regs.h_k0 = regs.h_k0 * 0.1 / 210;//373;
 				break;
 			case 1:
-				regs.x_k1 = new_pos(0,0);
-				regs.y_k1 = new_pos(1,0);
-				regs.w_k1 = regs.w_k1 * 0.2 / 373;
+				regs.x_k1 = new_pos(0,0);// - regs.y_k1 * 0.2/470 - 0.04;
+				regs.y_k1 = new_pos(1,0);// + regs.x_k1 * 0.2/470;
+				regs.r_k1 = regs.r_k1 * 0.1 / 210;//373;
+//				regs.w_k1 = regs.w_k1 * 0.1 / 210;//373;
+//				regs.h_k1 = regs.h_k1 * 0.1 / 210;//373;
 				break;
 			case 2:
-				regs.x_k2 = new_pos(0,0);
-				regs.y_k2 = new_pos(1,0);
-				regs.w_k2 = regs.w_k2 * 0.2 / 373;
+				regs.x_k2 = new_pos(0,0);// - regs.y_k2 * 0.2/470 - 0.04;
+				regs.y_k2 = new_pos(1,0);//+ regs.x_k2 * 0.2/470;
+				regs.r_k2 = regs.r_k2 * 0.1 / 210;//373;
+//				regs.w_k2 = regs.w_k2 * 0.1 / 210;//373;
+//				regs.h_k2 = regs.h_k2 * 0.1 / 210;//373;
 				break;
 			case 3:
-				regs.x_k3 = new_pos(0,0);
-				regs.y_k3 = new_pos(1,0);
-				regs.w_k3 = regs.w_k3 * 0.2 / 373;
+				regs.x_k3 = new_pos(0,0);// - regs.y_k3 * 0.2/470 - 0.04;
+				regs.y_k3 = new_pos(1,0);//regs.x_k3 * 0.2/470;
+				regs.r_k3 = regs.r_k3 * 0.1 / 210;//373;
+//				regs.w_k3 = regs.w_k3 * 0.1 / 210;//373;
+//				regs.h_k3 = regs.h_k3 * 0.1 / 210;//373;
 				break;
 		}
 	}
+
+//	if(regs.num_found > 1){
+//		switch(regs.num_found){
+//			case 4:
+//				std::cout << "KOD 4: x = " << regs.x_k3 << " y = " << regs.y_k3  <<  " promien = " << regs.w_k3 << std::endl;
+//			case 3:
+//				std::cout << "KOD 3: x = " << regs.x_k2 << " y = " << regs.y_k2  <<  " promien = " << regs.w_k2 << std::endl;
+//			case 2:
+//				std::cout << "KOD 2: x = " << regs.x_k1 << " y = " << regs.y_k1  <<  " promien = " << regs.w_k1 << std::endl;
+//			case 1:
+//				std::cout << "KOD 1: x = " << regs.x_k0 << " y = " << regs.y_k0  <<  " promien = " << regs.w_k0 << std::endl;
+//		}
+//	}
 
 }
 
@@ -315,29 +369,33 @@ void bclike_smooth::addCodesToVector(task::fradia_regions reading){
 		case 4:
 			tmp.x = reading.x_k3;
 			tmp.y = reading.y_k3;
-			tmp.h = reading.h_k3;
-			tmp.w = reading.w_k3;
+			tmp.r = reading.r_k3;
+//			tmp.h = reading.h_k3;
+//			tmp.w = reading.w_k3;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 3:
 			tmp.x = reading.x_k2;
 			tmp.y = reading.y_k2;
-			tmp.h = reading.h_k2;
-			tmp.w = reading.w_k2;
+			tmp.r = reading.r_k2;
+//			tmp.h = reading.h_k2;
+//			tmp.w = reading.w_k2;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 2:
 			tmp.x = reading.x_k1;
 			tmp.y = reading.y_k1;
-			tmp.h = reading.h_k1;
-			tmp.w = reading.w_k1;
+			tmp.r = reading.r_k1;
+//			tmp.h = reading.h_k1;
+//			tmp.w = reading.w_k1;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 		case 1:
 			tmp.x = reading.x_k0;
 			tmp.y = reading.y_k0;
-			tmp.h = reading.h_k0;
-			tmp.w = reading.w_k0;
+			tmp.r = reading.r_k0;
+//			tmp.h = reading.h_k0;
+//			tmp.w = reading.w_k0;
 			if(!checkIfCodeBeenRead(tmp))
 				readings.push_back(std::pair<task::mrrocpp_regions, bool>(tmp, false));
 			break;
@@ -358,8 +416,15 @@ bool bclike_smooth::checkIfCodeBeenRead(task::mrrocpp_regions& code){
 	std::vector<std::pair<task::mrrocpp_regions, bool> >::iterator it;
 
 	for(it = readings.begin(); it != readings.end(); ++ it){
-		if(codesIntersect(code, (*it).first))
+		if(codesIntersect(code, (*it).first)){
+			(*it).first.x = ((*it).first.x + code.x)/2;
+			(*it).first.y = ((*it).first.y + code.y)/2;
+			(*it).first.r = sqrt(((*it).first.x - code.x)*((*it).first.x - code.x) + ((*it).first.y - code.y)*((*it).first.y - code.y))/2 + ((*it).first.r + code.r)/2;
+
+//			std::cout << "x = " << (*it).first.x << " y = " << (*it).first.y << " w = " <<(*it).first.w << " h = " << (*it).first.h << std::endl;
+
 			return true;
+		}
 	}
 
 	return false;
@@ -372,9 +437,7 @@ bool bclike_smooth::checkIfCodeBeenRead(task::mrrocpp_regions& code){
  */
 bool bclike_smooth::codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions& c2){
 
-//	if(((c1.x > c2.x) && (c1.x + c1.w < c2.x + c2.w) && (c1.y > c2.y) && (c1.y + c1.h < c2.y + c2.h)) ||
-//	   ((c2.x > c1.x) && (c2.x + c2.w < c1.x + c1.w) && (c2.y > c1.y) && (c2.y + c2.h < c1.y + c1.h))){
-	if(sqrt((c1.x - c2.x)*(c1.x - c2.x) + (c1.y - c2.y)*(c1.y - c2.y)) < (c1.w + c2.w)){
+	if(sqrt((c1.x - c2.x)*(c1.x - c2.x) + (c1.y - c2.y)*(c1.y - c2.y)) < (c1.r + c2.r)){
 		return true;
 	}
 	return false;
@@ -409,10 +472,11 @@ bool bclike_smooth::sendNextPart(){
 	for(it = readings.begin(); it != readings.end() && ((i + 5 * tab[i] + 1) * sizeof(double) < MP_2_ECP_STRING_SIZE); ++it){
 //		std::cout << "ADING TO SEND: " << (*it).second << std::endl;
 		if(!(*it).second){
-			tab[i + 4 * (int)tab[i] + 1] = (*it).first.x;
-			tab[i + 4 * (int)tab[i] + 2] = (*it).first.y;
-			tab[i + 4 * (int)tab[i] + 3] = (*it).first.w;
-			tab[i + 4 * (int)tab[i] + 4] = (*it).first.h;
+			tab[i + 3 * (int)tab[i] + 1] = (*it).first.x;
+			tab[i + 3 * (int)tab[i] + 2] = (*it).first.y;
+			tab[i + 3 * (int)tab[i] + 3] = (*it).first.r;
+//			tab[i + 4 * (int)tab[i] + 3] = (*it).first.w;
+//			tab[i + 4 * (int)tab[i] + 4] = (*it).first.h;
 			tab[i]++;
 			(*it).second = true;
 		}
@@ -421,7 +485,6 @@ bool bclike_smooth::sendNextPart(){
 
 	if(tab[i] > 0){
 //		std::cout << "SENDING DATA " << tab[i] << std::endl;
-		//strcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret);
 		memcpy(ecp_t.ecp_reply.ecp_2_mp_string, ret, sizeof(char) * MP_2_ECP_STRING_SIZE);
 		delete(ret);
 		return true;

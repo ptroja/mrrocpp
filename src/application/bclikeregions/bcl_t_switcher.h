@@ -42,9 +42,9 @@ namespace task {
 
 #ifdef EULER
 #define VEC_SIZE 6
-	const double left[] = { 0.83, 0.5, 0.200, -0.59, 3.035, -1.055};
-	const double right[] = {0.83, -0.5, 0.200, -0.59, 3.035, -1.055};
-	const double start[] = {0.83, -0.02, 0.200, -0.59, 3.035, -1.055};
+	const double left[] = { 0.83, 0.5, 0.250, -0.014, 3.100, -0.019};
+	const double right[] = {0.83, -0.5, 0.250, 0.007, 3.100, 0.002};
+	const double start[] = {0.83, 0.0, 0.250, 0.017, 3.100, 0.012};
 #endif //EULER
 
 #endif//IRP6_OT
@@ -58,9 +58,9 @@ namespace task {
 #endif //JOINT
 
 #ifdef EULER
-	const double left[] = { 0.83, 2.45, 0.200, -0.59, 3.035, -1.055};
-	const double right[] = {0.83, 1.45, 0.200, -0.59, 3.035, -1.055};
-	const double start[] = {0.83, 1.95, 0.200, -0.59, 3.035, -1.055};
+	const double left[] = { 0.83, 2.45, 0.250, 0.0, 3.100, 0.0};
+	const double right[] = {0.83, 1.45, 0.250, 0.0, 3.100, 0.0};
+	const double start[] = {0.83, 1.95, 0.250, 0.0, 3.100, 0.0};
 #endif //EULER
 
 #endif//IRP6_P

@@ -12,8 +12,6 @@
 
 #include "../servovision/visual_servo_types.h"
 
-#define SINGLE_MOVE
-//#define TEST_MODE
 
 #define IRP6_OT
 //#define IRP6_P
@@ -39,20 +37,24 @@ typedef struct {
 	int num_found;
 	double x_k0;//Code center X
 	double y_k0;//Code center Y
-	double w_k0;//Code width
-	double h_k0;//Code height
+	double r_k0;//Code radius
+//		double w_k0;//Code width
+//		double h_k0;//Code height
 	double x_k1;
 	double y_k1;
-	double w_k1;
-	double h_k1;
+	double r_k1;
+//		double w_k1;
+//		double h_k1;
 	double x_k2;
 	double y_k2;
-	double w_k2;
-	double h_k2;
+	double r_k2;
+//		double w_k2;
+//		double h_k2;
 	double x_k3;
 	double y_k3;
-	double w_k3;
-	double h_k3;
+	double r_k3;
+//		double w_k3;
+//		double h_k3;
 } fradia_regions;
 
 
@@ -62,8 +64,9 @@ typedef struct {
 typedef struct {
 	double x;
 	double y;
-	double w;
-	double h;
+	double r;
+//	double w;
+//	double h;
 
 } mrrocpp_regions;
 

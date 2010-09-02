@@ -101,25 +101,29 @@ char* bcl_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<do
 
 	switch(reg.num_found){
 		case 4:
-			tab[13] = reg.x_k3;
-			tab[14] = reg.y_k3;
-			tab[15] = reg.w_k3;
-			tab[16] = reg.h_k3;
+			tab[10] = reg.x_k3;
+			tab[11] = reg.y_k3;
+			tab[12] = reg.r_k3;
+//			tab[15] = reg.w_k3;
+//			tab[16] = reg.h_k3;
 		case 3:
-			tab[9] = reg.x_k2;
-			tab[10] = reg.y_k2;
-			tab[11] = reg.w_k2;
-			tab[12] = reg.h_k2;
+			tab[7] = reg.x_k2;
+			tab[8] = reg.y_k2;
+			tab[9] = reg.r_k2;
+//			tab[11] = reg.w_k2;
+//			tab[12] = reg.h_k2;
 		case 2:
-			tab[5] = reg.x_k1;
-			tab[6] = reg.y_k1;
-			tab[7] = reg.w_k1;
-			tab[8] = reg.h_k1;
+			tab[4] = reg.x_k1;
+			tab[5] = reg.y_k1;
+			tab[6] = reg.r_k1;
+//			tab[7] = reg.w_k1;
+//			tab[8] = reg.h_k1;
 		case 1:
 			tab[1] = reg.x_k0;
 			tab[2] = reg.y_k0;
-			tab[3] = reg.w_k0;
-			tab[4] = reg.h_k0;
+			tab[3] = reg.r_k0;
+//			tab[3] = reg.w_k0;
+//			tab[4] = reg.h_k0;
 		case 0:
 			tab[0] = reg.num_found;
 			break;
@@ -151,25 +155,29 @@ std::vector<double> bcl_message::stringToFradiaOrder(char* str, task::fradia_reg
 
 	switch((int)tab[0]){
 		case 4:
-			reg.x_k3 = tab[13];
-			reg.y_k3 = tab[14];
-			reg.w_k3 = tab[15];
-			reg.h_k3 = tab[16];
+			reg.x_k3 = tab[10];
+			reg.y_k3 = tab[11];
+			reg.r_k3 = tab[12];
+//			reg.w_k3 = tab[15];
+//			reg.h_k3 = tab[16];
 		case 3:
-			reg.x_k2 = tab[9];
-			reg.y_k2 = tab[10];
-			reg.w_k2 = tab[11];
-			reg.h_k2 = tab[12];
+			reg.x_k2 = tab[7];
+			reg.y_k2 = tab[8];
+			reg.r_k2 = tab[9];
+//			reg.w_k2 = tab[11];
+//			reg.h_k2 = tab[12];
 		case 2:
-			reg.x_k1 = tab[5];
-			reg.y_k1 = tab[6];
-			reg.w_k1 = tab[7];
-			reg.h_k1 = tab[8];
+			reg.x_k1 = tab[4];
+			reg.y_k1 = tab[5];
+			reg.r_k1 = tab[6];
+//			reg.w_k1 = tab[7];
+//			reg.h_k1 = tab[8];
 		case 1:
 			reg.x_k0 = tab[1];
 			reg.y_k0 = tab[2];
-			reg.w_k0 = tab[3];
-			reg.h_k0 = tab[4];
+			reg.r_k0 = tab[3];
+//			reg.w_k0 = tab[3];
+//			reg.h_k0 = tab[4];
 			reg.code_found = true;
 			reg.num_found = tab[0];
 			ret.assign(tab + VEC_POS, tab + (int)tab[VEC_POS - 1]);
@@ -208,13 +216,14 @@ std::vector<double> bcl_message::stringToECPOrder(char* str, std::vector<std::pa
 //	std::cout << "VECTOR:" << tab[0] << "KODOW DO ODCZYTANIA: " << tab[size] << std::endl;
 
 	for(int i = 0; i < (int)tab[size]; ++i){
-		tmp.x = tab[size + 4 * i + 1];
-		tmp.y = tab[size + 4 * i + 2];
-		tmp.w = tab[size + 4 * i + 3];
-		tmp.h = tab[size + 4 * i + 4];
+		tmp.x = tab[size + 3 * i + 1];
+		tmp.y = tab[size + 3 * i + 2];
+		tmp.r = tab[size + 3 * i + 3];
+//		tmp.w = tab[size + 4 * i + 3];
+//		tmp.h = tab[size + 4 * i + 4];
 
 		vec.push_back(std::pair<ecp::common::task::mrrocpp_regions, bool>(tmp, false));
-		std::cout << "Znaleziono kod: x = " << tmp.x << " y = " << tmp.y;
+		std::cout << "Znaleziono kod: x = " << tmp.x << " y = " << tmp.y << " r = " << tmp.r;
 		std::cout << "\a" << std::endl;
 	}
 

@@ -40,6 +40,8 @@ private:
 	//Second FraDIA task definition
 	std::string second_task;
 
+	int movement_type;
+
 
 };
 
