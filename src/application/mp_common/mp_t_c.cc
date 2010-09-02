@@ -12,7 +12,7 @@
 #include "base/mp/mp_robot.h"
 
 #include "base/mp/MP_main_error.h"
-#include "base/mp/mp_t_c.h"
+#include "mp_t_c.h"
 #include "base/mp/mp_g_common.h"
 
 #include <boost/foreach.hpp>
