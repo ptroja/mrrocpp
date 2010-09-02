@@ -54,8 +54,8 @@ bool haptic_stiffness::first_step()
 	irp6ot = robot_m[lib::irp6ot_m::ROBOT_IRP6OT_M];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
-	irp6ot->communicate = true;
-	irp6p->communicate = true;
+	irp6ot->communicate_with_ecp = true;
+	irp6p->communicate_with_ecp = true;
 
 	irp6ot->continuous_coordination = true;
 	irp6p->continuous_coordination = true;
@@ -216,8 +216,8 @@ bool haptic_stiffness::next_step()
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
 
-	float time_interval = (irp6ot->pulse_receive_time.tv_sec + irp6ot->pulse_receive_time.tv_nsec / 1e9)
-			- (irp6p->pulse_receive_time.tv_sec + irp6p->pulse_receive_time.tv_nsec / 1e9);
+	float time_interval = (irp6ot->ecp_pulse_receive_time.tv_sec + irp6ot->ecp_pulse_receive_time.tv_nsec / 1e9)
+			- (irp6p->ecp_pulse_receive_time.tv_sec + irp6p->ecp_pulse_receive_time.tv_nsec / 1e9);
 
 	if (time_interval > 0.002) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;

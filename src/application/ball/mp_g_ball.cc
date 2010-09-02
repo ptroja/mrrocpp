@@ -88,8 +88,8 @@ bool ball::first_step()
 	irp6ot = robot_m[lib::irp6ot_m::ROBOT_IRP6OT_M];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
-	irp6ot->communicate = true;
-	irp6p->communicate = true;
+	irp6ot->communicate_with_ecp = true;
+	irp6p->communicate_with_ecp = true;
 
 	irp6ot->continuous_coordination = true;
 	irp6p->continuous_coordination = true;

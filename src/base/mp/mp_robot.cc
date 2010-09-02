@@ -30,8 +30,9 @@ namespace robot {
 
 // -------------------------------------------------------------------
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l) :
-	ecp_mp::robot(l_robot_name), mp_object(mp_object_l), continuous_coordination(false), communicate(true),
-			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), opened(false), new_pulse(false), new_pulse_checked(false)
+	ecp_mp::robot(l_robot_name), mp_object(mp_object_l), continuous_coordination(false), communicate_with_ecp(true),
+			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), ecp_scoid(0), ecp_opened(false), ecp_pulse_code(0),
+			new_pulse(false), new_pulse_checked(false)
 {
 	mp_command.pulse_to_ecp_sent = false;
 
@@ -54,8 +55,8 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	}
 
 	// handle ECP's name_open() call
-	scoid = mp_object.wait_for_name_open();
-	opened = true;
+	ecp_scoid = mp_object.wait_for_name_open();
+	ecp_opened = true;
 
 	// nawiazanie komunikacji z ECP
 	short tmp = 0;
