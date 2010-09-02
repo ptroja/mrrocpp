@@ -1,4 +1,3 @@
-#include <cmath>
 #include <cstdio>
 #include <ostream>
 
@@ -10,6 +9,8 @@ namespace lib {
 // ******************************************************************************************
 //                                     definicje skladowych klasy Homog_matrix
 // ******************************************************************************************
+
+const double Homog_matrix::ALPHA_SENSITIVITY = 0.00001;
 
 Homog_matrix::Homog_matrix()
 {
@@ -376,7 +377,7 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 
 	double kx, ky, kz;
 
-	if (alfa > ALFA_SENSITIVITY)
+	if (alfa > ALPHA_SENSITIVITY)
 	{
 		kx = l_vector[3] / alfa;
 		ky = l_vector[4] / alfa;
@@ -422,8 +423,8 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
-	const double EPS = zero_eps;
-	const double delta = delta_m;
+	static const double EPS = 1.0E-4;
+	static const double delta = (M_PI - 3.14154);
 
 	double Kd[3];	// Kd - K z "daszkiem" - wersor kierunkowy
 
@@ -483,7 +484,7 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		}
 
 	}// end kat obrotu 180 stopni
-	else if ((alfa < ALFA_SENSITIVITY) && (alfa > -ALFA_SENSITIVITY))									// kat obrotu 0 stopni
+	else if ((alfa < ALPHA_SENSITIVITY) && (alfa > -ALPHA_SENSITIVITY))									// kat obrotu 0 stopni
 	{
 
 		for(int i=0; i<3; i++)

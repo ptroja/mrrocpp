@@ -1,5 +1,5 @@
 /*!
- * @file
+ * @file sensor_interface.h
  * @brief File contains sensor interface - a base class for MP, ECP, VSP (and future EDP ) sensors.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
