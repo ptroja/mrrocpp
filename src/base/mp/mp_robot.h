@@ -36,7 +36,7 @@ private:
 	/**
 	 * @brief nummber of servos (joints)
 	 */
-	const int servos_number;
+	const int number_of_servos;
 
 #if !defined(PROCESS_SPAWN_RSH)
 

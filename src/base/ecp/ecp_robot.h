@@ -156,7 +156,7 @@ public:
 	/**
 	 * @brief nummber of servos (joints)
 	 */
-	int number_of_servos;
+	const int number_of_servos;
 
 	/**
 	 * @brief the configuration file section name of associated EDP process

@@ -30,7 +30,7 @@ namespace robot {
 
 // -------------------------------------------------------------------
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos) :
-	ecp_mp::robot(l_robot_name), servos_number(_number_of_servos), mp_object(mp_object_l),
+	ecp_mp::robot(l_robot_name), number_of_servos(_number_of_servos), mp_object(mp_object_l),
 			continuous_coordination(false), communicate_with_ecp(true), sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 			ecp_scoid(0), ecp_opened(false), ecp_pulse_code(0), new_pulse(false), new_pulse_checked(false)
 {
