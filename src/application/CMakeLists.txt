@@ -25,4 +25,4 @@ add_subdirectory (wii_teach)
 add_subdirectory (wii_velocity)
 add_subdirectory (neuron)
 add_subdirectory (generator_tester)
-
+add_subdirectory (ecp_transparent)

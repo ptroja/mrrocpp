@@ -20,13 +20,5 @@ add_library(ecp
 target_link_libraries(ecp ecp_generators ecp_subtasks ecprobots ecp_mp)
 
 
-add_executable(ecp_tran
-	ecp_t_tran.cc
-)
 
-
-# this are dependency libraries
-target_link_libraries(ecp_tran ecp)
-
-install(TARGETS ecp_tran DESTINATION bin)
 
