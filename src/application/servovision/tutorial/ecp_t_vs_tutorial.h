@@ -46,12 +46,17 @@ public:
 	void main_task_algorithm(void);
 
 protected:
+
+	void move_visual_servo();
+
 	//shared_ptr<smooth> smooth_gen;
 	shared_ptr<single_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
 	shared_ptr<visual_servo_regulator> reg;
 	shared_ptr<termination_condition> object_reached_term_cond;
 	shared_ptr<termination_condition> timeout_term_cond;
+
+	std::string vs_config_section_name;
 };
 
 /** @} */
