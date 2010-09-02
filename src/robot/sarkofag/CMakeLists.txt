@@ -1,4 +1,4 @@
-
+if(ROBOT_SARKOFAG)
 
 add_executable(edp_sarkofag
 	edp_e_sarkofag.cc
@@ -23,4 +23,4 @@ add_library(ecp_r_sarkofag ecp_r_sarkofag.cc)
 target_link_libraries(ecp_r_sarkofag kinematicssarkofag)
 
 install(TARGETS edp_sarkofag DESTINATION bin)
-
+endif(ROBOT_SARKOFAG)
