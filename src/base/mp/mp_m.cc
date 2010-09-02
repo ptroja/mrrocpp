@@ -98,7 +98,7 @@ int main(int argc, char *argv[], char **arge)
 
 		try {
 			// TODO: new/delete fixup
-			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], MP_SECTION, argv[5]);
+			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], lib::MP_SECTION, argv[5]);
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
 

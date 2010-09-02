@@ -110,7 +110,7 @@ void task::create_robots()
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
 		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", UI_SECTION)) {\
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
 			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::__robot_name(*this);\
 		}\
 		})
@@ -133,7 +133,7 @@ void task::create_robots()
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
 		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", UI_SECTION)) {\
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
 			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
 		}\
 		})
@@ -826,7 +826,7 @@ while (!(ui_exit_from_while && ecp_exit_from_while)) {
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 const std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 // Obiekt do komuniacji z SR

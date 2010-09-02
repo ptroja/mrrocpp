@@ -123,7 +123,7 @@ bool y_edge_follow_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0.0;
 	}
 

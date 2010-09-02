@@ -184,15 +184,15 @@ struct ECP_message
 		//------------------------------------------------------
 		struct
 		{
-			double robot_position[MAX_SERVOS_NR];
-			double sensor_reading[MAX_SERVOS_NR];
+			double robot_position[lib::MAX_SERVOS_NR];
+			double sensor_reading[lib::MAX_SERVOS_NR];
 		}
 		/*! Robot positions + Sensor readings. */
 		RS;
 		//------------------------------------------------------
 		struct
 		{
-			double robot_position[MAX_SERVOS_NR];
+			double robot_position[lib::MAX_SERVOS_NR];
 			double digital_scales_sensor_reading[6];
 			double force_sensor_reading[6];
 		}
@@ -201,7 +201,7 @@ struct ECP_message
 		//------------------------------------------------------
 		struct
 		{
-			double robot_position[MAX_SERVOS_NR];
+			double robot_position[lib::MAX_SERVOS_NR];
 			double sensor_reading[6];
 			int measure_number;
 		}
@@ -222,7 +222,7 @@ struct UI_reply
 	UI_TO_ECP_COMMAND reply;
 	int integer_number;
 	double double_number;
-	double coordinates[MAX_SERVOS_NR];
+	double coordinates[lib::MAX_SERVOS_NR];
 	char path[80];
 	char filename[20];
 };
@@ -272,7 +272,7 @@ struct trajectory_description
 	/*! Step in which the read position is returned. */
 	int value_in_step_no;
 	/*! Coordinates increment table. */
-	double coordinate_delta[MAX_SERVOS_NR];
+	double coordinate_delta[lib::MAX_SERVOS_NR];
 };
 
 //------------------------------------------------------------------------------
@@ -568,17 +568,17 @@ struct edp_master_command
 			 */
 			uint16_t return_value_in_step_no;
 			/*! Length of a macrostep (given value of a macrostep - increase). */
-			double macro_step[MAX_SERVOS_NR];
+			double macro_step[lib::MAX_SERVOS_NR];
 			/*! Given absolute position at the end of a macrostep. */
-			double abs_position[MAX_SERVOS_NR];
+			double abs_position[lib::MAX_SERVOS_NR];
 		} move;
 		//------------------------------------------------------
 		struct
 		{
 			/*! Servo algorithm numbers. */
-			uint8_t servo_algorithm_no[MAX_SERVOS_NR];
+			uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
 			/*! Numbers fo servo algorithm parameters set. */
-			uint8_t servo_parameters_no[MAX_SERVOS_NR];
+			uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
 		} servo_alg_par;
 
 	} parameters;
@@ -591,16 +591,16 @@ struct servo_group_reply
 	/*! Error code. */
 	edp_error error;
 	/*! Position increment of the motor shaft reached since the last reading. */
-	double position[MAX_SERVOS_NR];
+	double position[lib::MAX_SERVOS_NR];
 	/*! Absolute position of the joints (in radians). */
-	double abs_position[MAX_SERVOS_NR];
+	double abs_position[lib::MAX_SERVOS_NR];
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-	int16_t PWM_value[MAX_SERVOS_NR];
+	int16_t PWM_value[lib::MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
-	int16_t current[MAX_SERVOS_NR];
+	int16_t current[lib::MAX_SERVOS_NR];
 	/*! Numbers for the regulation algorithms in use. */
-	uint8_t algorithm_no[MAX_SERVOS_NR];
-	uint8_t algorithm_parameters_no[MAX_SERVOS_NR];
+	uint8_t algorithm_no[lib::MAX_SERVOS_NR];
+	uint8_t algorithm_parameters_no[lib::MAX_SERVOS_NR];
 	/*! Gripper regulator state. */
 	short gripper_reg_state;
 };
@@ -630,9 +630,9 @@ typedef union c_buffer_robot_model
 	struct
 	{
 		/*! Numbers for the servo-regulation algorithms. */
-		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
+		uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
 		/*! Parameter set numbers for the servo-regulation algorithms. */
-		uint8_t servo_parameters_no[MAX_SERVOS_NR];
+		uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
 	} servo_algorithm;
 	//----------------------------------------------------------
 	struct
@@ -653,9 +653,9 @@ typedef union c_buffer_arm
 		/*!  End's trihedron ralative to the base system. */
 		frame_tab arm_frame;
 		/*! XYZ + end's orientation relative to the base system. */
-		double arm_coordinates[MAX_SERVOS_NR];
+		double arm_coordinates[lib::MAX_SERVOS_NR];
 		/*! Given torque. */
-		double desired_torque[MAX_SERVOS_NR];
+		double desired_torque[lib::MAX_SERVOS_NR];
 		double inertia[6], reciprocal_damping[6];
 		double force_xyz_torque_xyz[6];
 		BEHAVIOUR_SPECIFICATION behaviour[6];
@@ -822,12 +822,12 @@ typedef union r_buffer_robot_model
 		 *  Numery algorytmow serworegulacji.
 		 *  @todo Translate to English.
 		 */
-		uint8_t servo_algorithm_no[MAX_SERVOS_NR];
+		uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
 		/*!
 		 *  Numery zestawu parametrow algorytmow serworegulacji.
 		 *  @todo Translate to English.
 		 */
-		uint8_t servo_parameters_no[MAX_SERVOS_NR];
+		uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
 	} servo_algorithm;
 	//----------------------------------------------------------
 	struct
@@ -868,9 +868,9 @@ typedef union r_buffer_arm
 	struct
 	{
 		/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-		int16_t PWM_value[MAX_SERVOS_NR];
+		int16_t PWM_value[lib::MAX_SERVOS_NR];
 		/*! Control current - (usualy unnecessary). */
-		int16_t current[MAX_SERVOS_NR];
+		int16_t current[lib::MAX_SERVOS_NR];
 		/*!
 		 *  Macierz reprezentujaca koncowke wzgledem bazy manipulatora.
 		 *  @todo Translate to English.
@@ -880,7 +880,7 @@ typedef union r_buffer_arm
 		 *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
 		 *  @todo Translate to English.
 		 */
-		double arm_coordinates[MAX_SERVOS_NR];
+		double arm_coordinates[lib::MAX_SERVOS_NR];
 		double force_xyz_torque_xyz[6];
 		/*!
 		 *  Stan w ktorym znajduje sie regulator chwytaka.
@@ -930,9 +930,9 @@ struct r_buffer
 	/*! Number of the servo step. */
 	unsigned long servo_step;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-	int16_t PWM_value[MAX_SERVOS_NR];
+	int16_t PWM_value[lib::MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
-	int16_t current[MAX_SERVOS_NR];
+	int16_t current[lib::MAX_SERVOS_NR];
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
 

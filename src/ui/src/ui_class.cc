@@ -415,8 +415,8 @@ int Ui::reload_whole_configuration()
 
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
-					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", MP_SECTION);
+					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
+			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
 			mp.pid = -1;
 		}
 
@@ -811,10 +811,10 @@ int Ui::initiate_configuration()
 		if (config) {
 			delete config;
 		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, UI_SECTION, session_name);
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, lib::UI_SECTION, session_name);
 
 		std::string attach_point =
-				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -839,10 +839,10 @@ int Ui::initiate_configuration()
 
 	}
 
-	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
+	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 	network_sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	clear_all_configuration_lists();
 

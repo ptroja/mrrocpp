@@ -43,27 +43,18 @@ typedef double frame_tab[3][4];
 #define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x'
 #endif
 
-#define MP_SECTION "[mp]"
-#define UI_SECTION "[ui]"
+const std::string MP_SECTION = "[mp]";
+const std::string UI_SECTION = "[ui]";
 
 typedef std::string robot_name_t;
 typedef std::string TRANSMITTER_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
-const robot_name_t ROBOT_HAND = "ROBOT_HAND";
-
 // the other robots in dedicated robot consts files
 
 
-enum FORCE_SENSOR_ENUM
-{
-	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
-};
-
-#define MAX_SERVOS_NR 8
-
-const int HAND_NUM_OF_SERVOS = 2;
+const int MAX_SERVOS_NR = 8;
 
 #define TIME_SLICE 500000 // by Y
 #define STEP              0.002  // Krok sterowania w [s]
@@ -79,8 +70,8 @@ const int HAND_NUM_OF_SERVOS = 2;
 #define FORCE_RECIPROCAL_DAMPING 0.005
 #define TORQUE_RECIPROCAL_DAMPING 0.1
 
-#define ROBOT_TEST_MODE "robot_test_mode"
-#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
+const std::string ROBOT_TEST_MODE = "robot_test_mode";
+const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
 #define ONE_MSEC  1000000L // 1 milisek w nanosekundach

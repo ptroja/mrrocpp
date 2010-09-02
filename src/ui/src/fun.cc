@@ -1356,7 +1356,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			ui.ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
 		} else if (ui.check_node_existence(ui.mp.node_name, std::string("mp"))) {
-			ui.mp.pid = ui.config->process_spawn(MP_SECTION);
+			ui.mp.pid = ui.config->process_spawn(lib::MP_SECTION);
 
 			if (ui.mp.pid > 0) {
 

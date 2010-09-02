@@ -44,7 +44,7 @@ namespace common {
 reader_config::reader_config() :
 	step(false), measure_time(false), servo_mode(false)
 {
-	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
 		current_inc[i] = false;
 		pwm[i] = false;
@@ -96,7 +96,7 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", lib::UI_SECTION);
 	} else {
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}

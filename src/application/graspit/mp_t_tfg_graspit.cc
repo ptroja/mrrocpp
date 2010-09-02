@@ -76,16 +76,16 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[12] /= 1000;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
+	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
+		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
+	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
+		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
