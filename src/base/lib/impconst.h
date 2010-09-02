@@ -51,9 +51,6 @@ typedef std::string TRANSMITTER_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
-const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
-const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
-const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
 const robot_name_t ROBOT_HAND = "ROBOT_HAND";
 
 // the other robots in dedicated robot consts files

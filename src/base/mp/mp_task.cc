@@ -39,6 +39,8 @@
 #include "robot/spkm/mp_r_spkm.h"
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
+#include "robot/festival/const_festival.h"
+#include "robot/player/const_player.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -108,7 +110,7 @@ void task::create_robots()
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
 		({ \
-		if (config.value <int> ("is_" #__robot_name "_activate")) {\
+		if (config.value <int> ("is_" #__robot_name "_active", UI_SECTION)) {\
 			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::__robot_name(*this);\
 		}\
 		})
@@ -129,21 +131,18 @@ void task::create_robots()
 
 #undef ACTIVATE_MP_ROBOT
 
-	// ROBOT_ELECTRON
-	if (config.value <int> ("is_electron_robot_active", UI_SECTION)) {
-		robot_m[lib::ROBOT_ELECTRON] = new robot::robot(lib::ROBOT_ELECTRON, "[ecp_electron]", *this, 0);
-	}
+#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
+		({ \
+		if (config.value <int> ("is_" #__robot_name "_active", UI_SECTION)) {\
+			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
+		}\
+		})
 
-	// ROBOT_SPEECHRECOGNITION
-	if (config.value <int> ("is_speechrecognition_active", UI_SECTION)) {
-		robot_m[lib::ROBOT_SPEECHRECOGNITION]
-				= new robot::robot(lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this, 0);
-	}
+	ACTIVATE_MP_DEFAULT_ROBOT(electron);
+	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
+	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
-	// ROBOT_FESTIVAL
-	if (config.value <int> ("is_festival_active", UI_SECTION)) {
-		robot_m[lib::ROBOT_FESTIVAL] = new robot::robot(lib::ROBOT_FESTIVAL, "[ecp_festival]", *this, 0);
-	}
+#undef ACTIVATE_MP_DEFAULT_ROBOT
 
 }
 
