@@ -21,15 +21,6 @@ position_constraint::~position_constraint()
 {
 }
 
-void position_constraint::set_new_position(const lib::Homog_matrix& new_position)
-{
-	this->new_position = new_position;
-}
-const lib::Homog_matrix& position_constraint::get_constrained_position()
-{
-	return new_position;
-}
-
 double position_constraint::normalize_angle(double angle)
 {
 	while (angle >= M_PI)

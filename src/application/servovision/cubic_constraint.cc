@@ -22,14 +22,11 @@ namespace servovision {
 
 cubic_constraint::cubic_constraint(const lib::configurator& config, const std::string &section_name)
 {
-	translation_min = config.value <3, 1> ("translation_min", section_name);
-	translation_max = config.value <3, 1> ("translation_max", section_name);
+	cube_position = config.value <3, 4> ("cube_position", section_name);
+	cube_size = config.value <3, 1> ("cube_size", section_name);
 
-	//Eigen::Matrix <double, 3, 3> cone_rotation_e = config.value <3, 1> ("cone_rotation", section_name);
-	//	cone_axis = cone_axis / cone_axis.norm();
-
-	cone_rotation = config.value <3, 4> ("cone_rotation", section_name);
-	cone_rotation(0, 3) = cone_rotation(1, 3) = cone_rotation(2, 3) = 0;
+	spherical_cone_rotation = config.value <3, 4> ("cone_rotation", section_name);
+	spherical_cone_rotation(0, 3) = spherical_cone_rotation(1, 3) = spherical_cone_rotation(2, 3) = 0;
 
 	min_inclination = config.value <double> ("min_inclination", section_name);
 
@@ -45,73 +42,29 @@ cubic_constraint::~cubic_constraint()
 {
 }
 
-bool cubic_constraint::is_translation_ok()
+lib::Homog_matrix cubic_constraint::apply_constraint(const lib::Homog_matrix& current_position)
 {
-	double t[3];
-	new_position.get_translation_vector(t);
-	for (int i = 0; i < 3; ++i) {
-		if (t[i] < translation_min(i, 0) || translation_max(i, 0) < t[i]) {
-			return false;
-		}
-	}
-	return true;
-}
+	lib::Homog_matrix constrained_position;
 
-bool cubic_constraint::is_rotation_ok()
-{
-//	log("cubic_constraint::is_rotation_ok()\n");
+	constrained_position = (!cube_position) * current_position;
 
-	lib::Homog_matrix rot = (!cone_rotation) * new_position;
-
-	lib::Xyz_Angle_Axis_vector position_aa;
-	rot.get_xyz_angle_axis(position_aa);
-
-	Eigen::Matrix <double, 3, 1> axis = position_aa.block(3, 0, 3, 1);
-	double wrist_rotation = axis.norm();
-	axis = axis / wrist_rotation;
-
-	if (axis(2, 0) < 0) {
-		axis(0, 0) = -axis(0, 0);
-		axis(1, 0) = -axis(1, 0);
-		axis(2, 0) = -axis(2, 0);
-		wrist_rotation = -wrist_rotation;
-	}
-
-	Eigen::Matrix <double, 2, 1> projected_axis = axis.block(0, 0, 2, 1);
-	double inclination = atan2(axis(2, 0), projected_axis.norm());
-//	cout << "axis = " << axis << endl;
-//	cout << "projected_axis = " << projected_axis << endl;
-//	cout << "inclination = " << inclination << endl;
-//	cout.flush();
-
-	if (inclination < min_inclination) {
-//		log("inclination < min_inclination\n");
-		return false;
-	}
-
-	if (!is_angle_between(wrist_rotation, wrist_rotation_min, wrist_rotation_max)) {
-//		log("!is_angle_between\n");
-		return false;
-	}
-//	log("rotation_ok()\n");
-	return true;
-}
-
-double cubic_constraint::get_distance_from_allowed_area()
-{
-	return 1.0;
-}
-
-void cubic_constraint::apply_constraint()
-{
 	// constrain translation
 	for (int i = 0; i < 3; ++i) {
-		new_position(i, 3) = min(translation_max(i, 0), new_position(i, 3));
-		new_position(i, 3) = max(translation_min(i, 0), new_position(i, 3));
+		constrained_position(i, 3) = min(cube_size(i, 0) / 2, constrained_position(i, 3));
+		constrained_position(i, 3) = max(-cube_size(i, 0) / 2, constrained_position(i, 3));
 	}
 
+	constrained_position = cube_position * constrained_position;
+
+	constrained_position = constrain_rotation(constrained_position);
+
+	return constrained_position;
+}
+
+lib::Homog_matrix cubic_constraint::constrain_rotation(const lib::Homog_matrix& current_position)
+{
 	// calculate difference between actual rotation and allowed rotation
-	lib::Homog_matrix rot = (!cone_rotation) * new_position;
+	lib::Homog_matrix rot = (!spherical_cone_rotation) * current_position;
 
 	lib::Xyz_Angle_Axis_vector position_aa;
 	rot.get_xyz_angle_axis(position_aa);
@@ -145,7 +98,8 @@ void cubic_constraint::apply_constraint()
 	position_aa.block(3, 0, 3, 1) = axis * wrist_rotation;
 	rot.set_from_xyz_angle_axis(position_aa);
 	// get back to rotation relative to robot's base
-	new_position.set_rotation_matrix(cone_rotation * rot);
+	lib::Homog_matrix position_with_constrained_rotation(spherical_cone_rotation * rot);
+	return position_with_constrained_rotation;
 }
 
 } // namespace generator

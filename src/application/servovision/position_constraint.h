@@ -33,42 +33,12 @@ public:
 	virtual ~position_constraint();
 
 	/**
-	 * Update end effector's position.
-	 * @param new_position
-	 */
-	void set_new_position(const lib::Homog_matrix& new_position);
-
-	/**
-	 * Check if end effector is in allowed area.
-	 * @return
-	 */
-	virtual bool is_translation_ok() = 0;
-
-	/**
-	 * Check if end effector has orientation within limits. This only makes sense, when end effector is in allowed area.
-	 * @return
-	 */
-	virtual bool is_rotation_ok() = 0;
-
-	/**
-	 * Get distance from nearest edge of allowed area.
-	 * @return
-	 */
-	virtual double get_distance_from_allowed_area() = 0;
-
-	/**
 	 * Constraints end effector position.
-	 */
-	virtual void apply_constraint() = 0;
-
-	/**
-	 * Get end effector's position after constraints are applied.
+	 * @param current_position
 	 * @return
 	 */
-	const lib::Homog_matrix& get_constrained_position();
+	virtual lib::Homog_matrix apply_constraint(const lib::Homog_matrix& current_position) = 0;
 protected:
-	lib::Homog_matrix new_position;
-
 	/**
 	 * Makes angle to keep within [-M_PI; M_PI)
 	 * @param angle any angle
