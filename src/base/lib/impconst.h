@@ -31,10 +31,10 @@ namespace lib {
 extern "C" {
 #endif
 
-#define MAX_TEXT 100 // MAC7
-#define MAX_PROSODY 20 // MAC7
-#define CONNECT_RETRY	200
-#define CONNECT_DELAY	50
+const int MAX_TEXT = 100; // MAC7
+const int MAX_PROSODY = 20; // MAC7
+const int CONNECT_RETRY = 200;
+const int CONNECT_DELAY = 50;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
@@ -65,10 +65,10 @@ const double EDP_STEP = 0.002; // Krok sterowania w [s]
 //#define TORQUE_RECIPROCAL_DAMPING -0.005
 
 // wartosci podstawowe dla sterowania silowego
-#define FORCE_INERTIA 20
-#define TORQUE_INERTIA 0.5
-#define FORCE_RECIPROCAL_DAMPING 0.005
-#define TORQUE_RECIPROCAL_DAMPING 0.1
+const double FORCE_INERTIA = 20;
+const double TORQUE_INERTIA = 0.5;
+const double FORCE_RECIPROCAL_DAMPING = 0.005;
+const double TORQUE_RECIPROCAL_DAMPING = 0.1;
 
 const std::string ROBOT_TEST_MODE = "robot_test_mode";
 const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";

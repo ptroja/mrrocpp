@@ -412,8 +412,8 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	while((fd = name_open(child_arg[1], 0))<0)
-	if((tmp++)<CONNECT_RETRY)
-	delay(CONNECT_DELAY);
+	if((tmp++)<lib::CONNECT_RETRY)
+	delay(lib::CONNECT_DELAY);
 	else {
 		fprintf( stderr, "Cannot open y_spawn_process.\n");
 		return -1;

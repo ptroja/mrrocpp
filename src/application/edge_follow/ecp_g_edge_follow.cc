@@ -67,8 +67,8 @@ bool y_edge_follow_force::first_step()
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	for (int i = 0; i < 6; i++) {
@@ -78,7 +78,7 @@ bool y_edge_follow_force::first_step()
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = lib::FORCE_RECIPROCAL_DAMPING;
 	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
 	// Sila dosciku do rawedzi
 	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 4;

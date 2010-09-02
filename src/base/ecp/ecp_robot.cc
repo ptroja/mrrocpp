@@ -144,8 +144,8 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL )
 #endif
 	{
-		if ((tmp++) < CONNECT_RETRY) {
-			usleep(1000 * CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			usleep(1000 * lib::CONNECT_DELAY);
 			printf(".");
 			fflush(stdout);
 		} else {

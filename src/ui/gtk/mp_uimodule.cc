@@ -244,9 +244,9 @@ MpPanel::MpPanel(ui_config_entry &entry)
 		short tmp = 0;
 		// try to open channel
 		while( (pulse_fd = messip::port_connect(network_pulse_attach_point)) == NULL)
-			if((tmp++)<CONNECT_RETRY) {
+			if((tmp++)<lib::CONNECT_RETRY) {
 //				fprintf(stderr, "."); fflush(stderr);
-				delay(CONNECT_DELAY);
+				delay(lib::CONNECT_DELAY);
 			} else {
 				fprintf(stderr, "blad odwolania do: %s,\n", network_pulse_attach_point.c_str());
 				break;

@@ -46,8 +46,8 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
-		if ((tmp++) < CONNECT_RETRY) {
-			delay(CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			delay(lib::CONNECT_DELAY);
 		} else {
 			// TODO: throw
 			perror("SR cannot be located ");

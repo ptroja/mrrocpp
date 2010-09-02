@@ -264,8 +264,8 @@ bool vis_sac_lx::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = force_inertia_; // FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = force_inertia_; // lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = torque_inertia_; //lib::TORQUE_INERTIA;
 
 		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i]
 				= force_reciprocal_damping_;

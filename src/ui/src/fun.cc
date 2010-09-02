@@ -1364,8 +1364,8 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 				// kilka sekund  (~1) na otworzenie urzadzenia
 				while ((ui.mp.pulse_fd = name_open(ui.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 						< 0)
-					if ((tmp++) < CONNECT_RETRY)
-						delay(CONNECT_DELAY);
+					if ((tmp++) < lib::CONNECT_RETRY)
+						delay(lib::CONNECT_DELAY);
 					else {
 						fprintf(stderr, "name_open() for %s failed: %s\n", ui.mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;
