@@ -48,17 +48,17 @@ void gen_test::main_task_algorithm(void)
 	lib::robot_name_t gripper_name;
 
 	// ROBOT IRP6_ON_TRACK_MANIPULATOR
-	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
+	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
+		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
 		// ROBOT IRP6_POSTUMENT_MANIPULATOR
-	} else if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
+	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
+		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw

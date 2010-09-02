@@ -96,7 +96,7 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", lib::UI_SECTION);
 	} else {
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}

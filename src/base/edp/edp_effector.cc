@@ -40,10 +40,10 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), true);
 
 	sh_msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), false);
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), false);
 
 	if (config.exists(ROBOT_TEST_MODE)) {
 		robot_test_mode = config.value <int> (ROBOT_TEST_MODE);

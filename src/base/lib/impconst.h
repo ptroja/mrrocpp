@@ -43,15 +43,13 @@ typedef double frame_tab[3][4];
 #define ABS(x) (((x)<0)?-(x):(x))   // wartosc bezwzgledna 'x'
 #endif
 
-#define MP_SECTION "[mp]"
-#define UI_SECTION "[ui]"
+const std::string MP_SECTION = "[mp]";
+const std::string UI_SECTION = "[ui]";
 
 typedef std::string robot_name_t;
 typedef std::string TRANSMITTER_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
-
-const robot_name_t ROBOT_HAND = "ROBOT_HAND";
 
 // the other robots in dedicated robot consts files
 
