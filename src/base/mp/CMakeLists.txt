@@ -8,28 +8,6 @@ add_library(mp
 	mp_g_common.cc
 )
 
-add_library(mprobots
-	../../robot/conveyor/mp_r_conveyor.cc
-	../../robot/irp6ot_m/mp_r_irp6ot_m.cc
-	../../robot/irp6p_m/mp_r_irp6p_m.cc
-	../../robot/speaker/mp_r_speaker.cc
-	../../robot/irp6m/mp_r_irp6m.cc
-	../../robot/polycrank/mp_r_polycrank.cc
-	../../robot/bird_hand/mp_r_bird_hand.cc
-	../../robot/spkm/mp_r_spkm.cc
-	../../robot/smb/mp_r_smb.cc
-	../../robot/shead/mp_r_shead.cc
-	../../robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc
-	../../robot/irp6p_tfg/mp_r_irp6p_tfg.cc
-	../../robot/sarkofag/mp_r_sarkofag.cc
-)
-
-add_executable(mp_c
-	mp_t_c.cc
-)
-
-target_link_libraries(mp_c mp)
-
 target_link_libraries(mp mprobots ecp_mp)
 
-install(TARGETS mp_c DESTINATION bin)
+

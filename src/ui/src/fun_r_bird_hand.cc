@@ -109,8 +109,8 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 					while ((ui.bird_hand->state.edp.reader_fd
 							= name_open(ui.bird_hand->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

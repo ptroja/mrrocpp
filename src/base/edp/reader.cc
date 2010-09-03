@@ -159,7 +159,7 @@ void reader_buffer::operator()()
 	}
 
 	// ustawienie priorytetu watku
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
@@ -190,10 +190,10 @@ void reader_buffer::operator()()
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -253,7 +253,7 @@ void reader_buffer::operator()()
 
 		master.msg->message("measures started");
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 1);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 1);
 
 		// dopoki nie przyjdzie puls stopu
 		do {

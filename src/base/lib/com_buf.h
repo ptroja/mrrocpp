@@ -664,9 +664,9 @@ typedef union c_buffer_arm
 	struct
 	{
 		/*! text to speak */
-		char text[MAX_TEXT];
+		char text[lib::MAX_TEXT];
 		/*! prosody of the text to speak */
-		char prosody[MAX_PROSODY];
+		char prosody[lib::MAX_PROSODY];
 	} text_def;
 	//----------------------------------------------------------
 	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];

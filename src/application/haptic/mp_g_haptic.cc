@@ -77,20 +77,20 @@ bool haptic::first_step()
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
+		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 40;
+		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::CONTACT;
 		/*
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
-		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		irp6ot->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 
 		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = 0;
 		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
@@ -120,21 +120,21 @@ bool haptic::first_step()
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
-		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
+		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING/40;
+		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = lib::FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::GUARDED_MOTION;
 		/*
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
 
-		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		irp6p->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 
 		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = 0;
 		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;

@@ -25,6 +25,13 @@
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
 
+#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
+#include "robot/irp6p_m/mp_r_irp6p_m.h"
+
+#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
+#
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -37,6 +44,16 @@ task* return_created_mp_task(lib::configurator &_config)
 edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	task(_config)
 {
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void edge_follow_mr::create_robots()
+{
+	ACTIVATE_MP_ROBOT(irp6ot_tfg);
+	ACTIVATE_MP_ROBOT(irp6ot_m);
+	ACTIVATE_MP_ROBOT(irp6p_tfg);
+	ACTIVATE_MP_ROBOT(irp6p_m);
+
 }
 
 void edge_follow_mr::main_task_algorithm(void)
@@ -81,7 +98,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	// sekwencja generator na wybranym chwytaku
 
-	char tmp_string[MP_2_ECP_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
 
 	lib::irp6_tfg::command mp_ecp_command;
 

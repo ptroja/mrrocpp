@@ -706,7 +706,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 
 	double next_position;
 
-	double tk = 10 * STEP;
+	double tk = 10 * lib::EDP_STEP;
 
 	//printf("przysp: %f\t jedn: %f\n", przysp, jedn);
 
@@ -949,7 +949,7 @@ void smooth::send_coordinates()
 {
 	//lib::Xyz_Euler_Zyz_vector tmp_euler_vector;
 	double gripper_position;
-	double tk = 10 * STEP;
+	double tk = 10 * lib::EDP_STEP;
 	int i; //licznik petli
 	int gripp; //os grippera
 
@@ -1197,7 +1197,7 @@ void smooth::calculate(void)
 
 	double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
 	int i;
-	double tk = 10 * STEP; //czas jednego makrokroku
+	double tk = 10 * lib::EDP_STEP; //czas jednego makrokroku
 	int gripp = 0; //os grippera
 
 	trajectory_calculated = false;

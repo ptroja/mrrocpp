@@ -3,7 +3,7 @@
  * @brief File contains ecp transparent task definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup ecp
+ * @ingroup
  */
 
 #include <cstdio>
@@ -18,7 +18,7 @@
 #include "robot/speaker/ecp_r_speaker.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 
-#include "base/ecp/ecp_t_tran.h"
+#include "ecp_t_tran.h"
 #include "base/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {

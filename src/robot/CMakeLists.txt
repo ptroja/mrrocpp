@@ -18,3 +18,39 @@ add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
 add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
+
+
+add_library(mprobots
+	conveyor/mp_r_conveyor.cc
+	irp6ot_m/mp_r_irp6ot_m.cc
+	irp6p_m/mp_r_irp6p_m.cc
+	speaker/mp_r_speaker.cc
+	irp6m/mp_r_irp6m.cc
+	polycrank/mp_r_polycrank.cc
+	bird_hand/mp_r_bird_hand.cc
+	spkm/mp_r_spkm.cc
+	smb/mp_r_smb.cc
+	shead/mp_r_shead.cc
+	irp6ot_tfg/mp_r_irp6ot_tfg.cc
+	irp6p_tfg/mp_r_irp6p_tfg.cc
+	sarkofag/mp_r_sarkofag.cc
+)
+
+add_library(ecprobots
+	../base/ecp/ecp_robot.cc
+)
+
+# enable conditional inclusion to ecprobots
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_m)
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_tfg)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_m)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_tfg)
+target_link_library_if(ROBOT_IRP6_MECHATRONICS ecprobots ecp_r_irp6m)
+target_link_library_if(ROBOT_POLYCRANK ecprobots ecp_r_polycrank)
+target_link_library_if(ROBOT_CONVEYOR ecprobots ecp_r_conv)
+target_link_library_if(ROBOT_SPEAKER ecprobots ecp_r_speaker)
+target_link_library_if(ROBOT_BIRD_HAND ecprobots ecp_r_bird_hand)
+target_link_library_if(ROBOT_SARKOFAG ecprobots ecp_r_sarkofag)
+target_link_library_if(ROBOT_SHEAD ecprobots ecp_r_shead)
+target_link_library_if(ROBOT_SMB ecprobots ecp_r_smb)
+target_link_library_if(ROBOT_SPKM ecprobots ecp_r_spkm)

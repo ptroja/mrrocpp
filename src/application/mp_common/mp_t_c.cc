@@ -1,20 +1,21 @@
-/*
- * mp_t_neuron.cpp
+/*!
+ * @file
+ * @brief File contains mp common task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- *  Created on: Jun 25, 2010
- *      Author: tbem
+ * @ingroup
  */
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-
+#include <cstdio>
+#include <unistd.h>
 #include "base/mp/mp_task.h"
+#include "base/mp/mp_robot.h"
 
-#include "mp_t_neuron.h"
-#include "ecp_mp_t_neuron.h"
+#include "base/mp/MP_main_error.h"
+#include "mp_t_c.h"
+#include "base/mp/mp_g_common.h"
+
+#include <boost/foreach.hpp>
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -38,16 +39,16 @@ namespace task {
 
 task* return_created_mp_task(lib::configurator &_config)
 {
-	return new neuron(_config);
+	return new cxx(_config);
 }
 
-neuron::neuron(lib::configurator &_config) :
+cxx::cxx(lib::configurator &_config) :
 	task(_config)
 {
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void neuron::create_robots()
+void cxx::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 	ACTIVATE_MP_ROBOT(speaker);
@@ -69,21 +70,24 @@ void neuron::create_robots()
 
 }
 
-void neuron::main_task_algorithm(void)
+void cxx::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("Neuron task initialization");
 
-	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		robot_node.second->ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
 
-	sr_ecp_msg->message("END");
+	}
+
+	generator::extended_empty empty_gen(*this); // "Pusty" generator
+	empty_gen.robot_m = robot_m;
+
+	// Zlecenie wykonania kolejnego makrokroku
+	empty_gen.Move();
 }
 
-neuron::~neuron()
-{
-	// TODO Auto-generated destructor stub
-}
+} // namespace task
+} // namespace mp
+} // namespace mrrocpp
 
-} //task
-} //mp
-} //mrrocpp
+

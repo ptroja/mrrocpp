@@ -2000,8 +2000,8 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					while ((ui.irp6ot_m->state.edp.reader_fd
 							= name_open(ui.irp6ot_m->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;
@@ -2110,8 +2110,8 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 					< 0) {
 				if (errno == EINTR)
 					break;
-				if ((tmp++) < CONNECT_RETRY) {
-					delay(CONNECT_DELAY);
+				if ((tmp++) < lib::CONNECT_RETRY) {
+					delay(lib::CONNECT_DELAY);
 				} else {
 					perror("blad odwolania do ECP_TRIGGER");
 				}

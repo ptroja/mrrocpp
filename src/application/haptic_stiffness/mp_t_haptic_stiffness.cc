@@ -17,10 +17,11 @@
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "application/haptic_stiffness/mp_t_haptic_stiffness.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
+
+#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
+#include "robot/irp6p_m/mp_r_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -34,6 +35,15 @@ task* return_created_mp_task(lib::configurator &_config)
 haptic_stiffness::haptic_stiffness(lib::configurator &_config) :
 	task(_config)
 {
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void haptic_stiffness::create_robots()
+{
+
+	ACTIVATE_MP_ROBOT(irp6ot_m);
+	ACTIVATE_MP_ROBOT(irp6p_m);
+
 }
 
 void haptic_stiffness::configure_edp_force_sensor(bool configure_track, bool configure_postument)

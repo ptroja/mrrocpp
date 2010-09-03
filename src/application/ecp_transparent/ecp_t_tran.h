@@ -6,7 +6,7 @@
  * @brief File contains ecp transparent task declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup ecp
+ * @ingroup
  */
 
 #include "base/ecp/ecp_task.h"

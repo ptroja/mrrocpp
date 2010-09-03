@@ -25,22 +25,7 @@
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_g_common.h"
 #include "base/mp/mp_g_delay_ms_condition.h"
-
-#include "robot/conveyor/mp_r_conveyor.h"
-#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
-#include "robot/irp6p_m/mp_r_irp6p_m.h"
-#include "robot/irp6m/mp_r_irp6m.h"
-#include "robot/speaker/mp_r_speaker.h"
-#include "robot/polycrank/mp_r_polycrank.h"
-#include "robot/bird_hand/mp_r_bird_hand.h"
-#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#include "robot/shead/mp_r_shead.h"
-#include "robot/spkm/mp_r_spkm.h"
-#include "robot/smb/mp_r_smb.h"
-#include "robot/sarkofag/mp_r_sarkofag.h"
-#include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
+#include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -65,8 +50,6 @@ task::task(lib::configurator &_config) :
 	// initialize communication with other processes
 	initialize_communication();
 
-	// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
-	create_robots();
 }
 
 task::~task()
@@ -96,54 +79,6 @@ void task::stop_and_terminate()
 		exit( EXIT_FAILURE);
 	}
 	terminate_all(robot_m);
-}
-
-// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void task::create_robots()
-{
-	/*
-	 * this is necessary to first create robot and then assign it to robot_m
-	 * reason: mp_robot() constructor uses this map (by calling
-	 * mp_task::mp_wait_for_name_open() so needs the map to be in
-	 * a consistent state
-	 */
-
-#define ACTIVATE_MP_ROBOT(__robot_name) \
-		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
-			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::__robot_name(*this);\
-		}\
-		})
-
-	ACTIVATE_MP_ROBOT(conveyor);
-	ACTIVATE_MP_ROBOT(speaker);
-	ACTIVATE_MP_ROBOT(irp6m);
-	ACTIVATE_MP_ROBOT(polycrank);
-	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
-	ACTIVATE_MP_ROBOT(irp6ot_tfg);
-	ACTIVATE_MP_ROBOT(irp6ot_m);
-	ACTIVATE_MP_ROBOT(irp6p_tfg);
-	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-#undef ACTIVATE_MP_ROBOT
-
-#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-		({ \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
-			robot_m[lib::__robot_name::ROBOT_NAME] = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
-		}\
-		})
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
-
-#undef ACTIVATE_MP_DEFAULT_ROBOT
-
 }
 
 // metody do obslugi najczesniej uzywanych generatorow

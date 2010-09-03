@@ -64,12 +64,12 @@ void ball::setup_command(robot::robot & robot)
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		robot.mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		robot.mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 		robot.mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
-		robot.mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		robot.mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		robot.mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		robot.mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	// define virtual tool position
