@@ -13,17 +13,47 @@ namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
 
-
-
+/*!
+ * @brief Bird Hand motion command data port
+ * @ingroup bird_hand
+ */
 const std::string COMMAND_DATA_PORT = "bird_hand_command_data_port";
+/*!
+ * @brief Bird Hand motion status data request port
+ * @ingroup bird_hand
+ */
 const std::string STATUS_DATA_REQUEST_PORT = "bird_hand_status_data_request_port";
 
+/*!
+ * @brief Bird Hand configuration command data port
+ * @ingroup bird_hand
+ */
 const std::string CONFIGURATION_DATA_PORT = "bird_hand_configuration_data_port";
+/*!
+ * @brief Bird Hand configuration status data request port
+ * @ingroup bird_hand
+ */
 const std::string CONFIGURATION_DATA_REQUEST_PORT = "bird_hand_configuration_data_request_port";
 
+/*!
+ * @brief Bird Hand total number of servos
+ * @ingroup bird_hand
+ */
 const int NUM_OF_SERVOS = 8;
+/*!
+ * @brief Bird Hand thumb finger number of servos
+ * @ingroup bird_hand
+ */
 const int THUMB_F_NUM_OF_SERVOS = 2;
+/*!
+ * @brief Bird Hand index finger number of servos
+ * @ingroup bird_hand
+ */
 const int INDEX_F_NUM_OF_SERVOS = 3;
+/*!
+ * @brief Bird Hand ring finger number of servos
+ * @ingroup bird_hand
+ */
 const int RING_F_NUM_OF_SERVOS = 3;
 
 enum MOTION_VARIANT
