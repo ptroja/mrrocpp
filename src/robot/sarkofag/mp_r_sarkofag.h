@@ -9,13 +9,14 @@
  * @ingroup sarkofag
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/sarkofag/const_sarkofag.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class sarkofag : public motor_driven
+class sarkofag : public robot
 {
 public:
 	sarkofag(task::task &mp_object_l);

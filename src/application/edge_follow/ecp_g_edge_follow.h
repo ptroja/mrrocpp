@@ -20,6 +20,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+const double DEGREES_TO_RADIANS = 57.295780;
+
 class y_edge_follow_force : public teach_in
 {
 protected:

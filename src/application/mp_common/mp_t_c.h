@@ -6,7 +6,7 @@
  * @brief File contains mp common task declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup mp
+ * @ingroup
  */
 
 namespace mrrocpp {
@@ -19,7 +19,8 @@ class cxx : public task
 public:
 
 	cxx(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods fo mp template to redefine in concete class
 	void main_task_algorithm(void);
 

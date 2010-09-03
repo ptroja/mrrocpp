@@ -55,7 +55,7 @@ void generator::Move()
 		// zadanie przygotowania danych od czujnikow
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
-		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate')
+		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate_with_ecp')
 		mp_t.execute_all(robot_m);
 
 		// odczytanie danych z wszystkich czujnikow

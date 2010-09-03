@@ -9,12 +9,13 @@
  * @ingroup spkm
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class spkm : public motor_driven
+class spkm : public robot
 {
 public:
 	spkm(task::task &mp_object_l);

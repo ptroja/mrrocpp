@@ -33,8 +33,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-#define FORCE_SENSOR_TEST_MODE "force_sensor_test_mode"
-
 bool manip_effector::compute_servo_joints_and_frame(void)
 {
 	static int catch_nr = 0;
@@ -107,8 +105,8 @@ manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_r
 	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true)
 {
 
-	if (config.exists(FORCE_SENSOR_TEST_MODE)) {
-		force_sensor_test_mode = config.value <int> (FORCE_SENSOR_TEST_MODE);
+	if (config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
+		force_sensor_test_mode = config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
 	}
 
 	if (force_sensor_test_mode) {
@@ -302,7 +300,7 @@ void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray &
 			goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
 			for (int i = 0; i < 6; i++) {
 				base_pos_xyz_rot_xyz_vector[i] = goal_xyz_angle_axis_increment_in_end_effector[i] * (double) (1
-						/ (((double) STEP) * ((double) ECP_motion_steps)));
+						/ (((double) lib::EDP_STEP) * ((double) ECP_motion_steps)));
 			}
 			break;
 		case lib::PF_VELOCITY:
@@ -447,8 +445,8 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 			// PRAWO STEROWANIA
 			move_rot_vector[i] = ((reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i])
-					+ pos_xyz_rot_xyz_vector[i]) * STEP * STEP + reciprocal_damping[i] * inertia[i]
-					* previous_move_rot_vector[i]) / (STEP + reciprocal_damping[i] * inertia[i]);
+					+ pos_xyz_rot_xyz_vector[i]) * lib::EDP_STEP * lib::EDP_STEP + reciprocal_damping[i] * inertia[i]
+					* previous_move_rot_vector[i]) / (lib::EDP_STEP + reciprocal_damping[i] * inertia[i]);
 		}
 
 		previous_move_rot_vector = v_tr_current_frame_matrix * v_tr_tool_matrix * move_rot_vector;

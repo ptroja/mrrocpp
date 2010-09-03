@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6ot_m {
 
-const robot_name_t ROBOT_IRP6OT_M = "ROBOT_IRP6OT_M";
+const robot_name_t ROBOT_NAME = "ROBOT_IRP6OT_M";
 
 const std::string EDP_SECTION = "[edp_irp6ot_m]";
 const std::string ECP_SECTION = "[ecp_irp6ot_m]";

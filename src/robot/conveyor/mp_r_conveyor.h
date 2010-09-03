@@ -9,14 +9,14 @@
  * @ingroup conveyor
  */
 
-
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/conveyor/const_conveyor.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class conveyor : public motor_driven
+class conveyor : public robot
 {
 public:
 	conveyor(task::task &mp_object_l);

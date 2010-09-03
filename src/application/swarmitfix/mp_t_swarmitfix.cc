@@ -21,11 +21,12 @@
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/epos/dp_epos.h"
-#include "robot/smb/const_smb.h"
-#include "robot/spkm/const_spkm.h"
-#include "robot/shead/const_shead.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_epos.h"
+
+#include "robot/shead/mp_r_shead.h"
+#include "robot/spkm/mp_r_spkm.h"
+#include "robot/smb/mp_r_smb.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -34,6 +35,16 @@ namespace task {
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new swarmitfix(_config);
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void swarmitfix::create_robots()
+{
+
+	ACTIVATE_MP_ROBOT(spkm);
+	ACTIVATE_MP_ROBOT(smb);
+	ACTIVATE_MP_ROBOT(shead);
+
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
@@ -87,7 +98,7 @@ void swarmitfix::main_task_algorithm(void)
 	 */
 	sr_ecp_msg->message("4");
 
-	char tmp_string[MP_2_ECP_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
 
 	lib::epos::epos_cubic_command epos_params;
 

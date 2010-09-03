@@ -34,7 +34,7 @@ speak_t::speak_t(effector& _master):
 
 void speak_t::operator()()
 {
-    lib::set_thread_priority(pthread_self() , MAX_PRIORITY-10);
+    lib::set_thread_priority(pthread_self() , lib::QNX_MAX_PRIORITY-10);
 
     if( master.init() == -1)
     {

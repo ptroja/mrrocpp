@@ -23,78 +23,192 @@ class task;
 
 namespace robot {
 
+/*!
+ * @brief Base class of all mp robots
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class robot : public ecp_mp::robot
 {
-	// Klasa bazowa dla robotow (klasa abstrakcyjna)
-	// Kazdy robot konkretny (wyprowadzony z klasy bazowej)
-	// musi zawierac pola danych (skladowe) dotyczace
-	// ostatnio zrealizowanej pozycji oraz pozycji zadanej
+
 private:
+	/**
+	 * @brief nummber of servos (joints)
+	 */
+	const int number_of_servos;
+
 #if !defined(PROCESS_SPAWN_RSH)
-	//! deskryptor wezla na ktorym jest powolane ECP oraz jego PID
+
+	/**
+	 * @brief node descriptor of spawned ECP process
+	 */
 	uint32_t nd;
 #endif
 
+	/**
+	 * @brief pid of spawned ECP process
+	 */
 	pid_t ECP_pid;
 
 #if !defined(USE_MESSIP_SRR)
-	//! main ECP request channel
+
+	/**
+	 * @brief main ECP communication channel descriptor
+	 */
 	int ECP_fd;
 #else
-	//! main ECP request channel
+
+	/**
+	 * @brief main ECP communication channel descriptor
+	 */
 	messip_channel_t* ECP_fd;
 #endif
 
 protected:
+
+	/**
+	 * @brief mp taks object reference
+	 */
 	task::task &mp_object;
 
 public:
-	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+	/**
+	 * @brief continuous coordination flag
+	 *
+	 * if it set it causes every macrostep communication with ECP
+	 */
 	bool continuous_coordination;
 
-	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
+	/**
+	 * @brief sends pulse to ecp
+	 *
+	 * sends communication request etc.
+	 * @param[in] pulse_code pulse code
+	 * @param[in] pulse_value pusle value - default = -1
+	 */
 	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
 
-	lib::MP_COMMAND_PACKAGE mp_command; // Bufor z rozkazem dla ECP
-	lib::ECP_REPLY_PACKAGE ecp_reply_package; // Bufor z odpowiedzia z ECP
+	/**
+	 * @brief command buffer for ecp
+	 *
+	 * it is send during communication with ECP
+	 */
+	lib::MP_COMMAND_PACKAGE mp_command;
 
-	struct timespec pulse_receive_time;
+	/**
+	 * @brief reply buffer from ecp
+	 *
+	 * it is received during communication with ECP
+	 */
+	lib::ECP_REPLY_PACKAGE ecp_reply_package;
 
-	bool communicate; // okresla czy robot ma byc obslugiwany w Move
+	/**
+	 * @brief ECP pulse receive time
+	 *
+	 * it is used to diversify macrostep length in multi continous coordination
+	 * taking into account differences in communication readiness pulse receive time from different ECP's
+	 */
+	struct timespec ecp_pulse_receive_time;
 
+	/**
+	 * @brief the communication with EDP flag
+	 *
+	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
+	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP\n
+	 * in the following iterations of Move
+	 */
+	bool communicate_with_ecp;
+
+	/**
+	 * @brief reference to sr_ecp object for sending messages to UI_SR console
+	 */
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
-	//! A server connection ID identifying UI
-	int scoid;
+	/**
+	 * @brief A server connection ID identifying ECP
+	 */
+	int ecp_scoid;
 
-	//! flag indicating opened pulse connection from UI
-	bool opened;
+	/**
+	 * @brief flag indicating opened pulse connection from ECP
+	 */
+	bool ecp_opened;
 
-	char pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-	bool new_pulse; // okresla czy jest nowy puls
-	bool new_pulse_checked; // okresla czy czy nowy puls zostal juz uwzgledniony w generatorze
+	/**
+	 * @brief pulse code from ECP
+	 */
+	char ecp_pulse_code;
 
-	robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l);
+	/**
+	 * @brief new pulse from ecp flag
+	 */
+	bool new_pulse;
+
+	/**
+	 * @brief new pulse from ecp checked flag
+	 */
+	bool new_pulse_checked;
+
+	/**
+	 * @brief constructor
+	 * @param l_robot_name robot label
+	 * @param _section_name ECP configuration file section
+	 * @param mp_object_l mp task object reference
+	 * @param _number_of_servos number of robot servos (joints)
+	 */
+			robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
+
+	/**
+	 * @brief destructor
+	 *
+	 * it closes communication channels and kills ECP process
+	 */
 	virtual ~robot();
 
-	// Zlecenie wykonania ruchu przez robota
-	// (realizowane przez klase konkretna):
-	// na poziomie MP jest to polecenie dla ECP.
+	/**
+	 * @brief executes the communication sequence with ECP with error handling
+	 *
+	 * called from move_method
+	 */
 	void execute_motion(void);
 
-	// Zlecenie zakonczenia ruchu przez robota
-	// (realizowane przez klase konkretna):
-	// na poziomie MP jest to polecenie dla ECP.
+	/**
+	 * @brief sends a message to terminate ECP task with error handling
+	 */
 	void terminate_ecp(void);
 
+	/**
+	 * @brief sends a message to start ECP task with error handling
+	 */
 	void start_ecp(void);
 };
 
+/*!
+ * @brief MP robot error handling class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class MP_error
-{ // Klasa obslugi bledow robotow
+{
 public:
+
+	/**
+	 * @brief error class (type)
+	 */
 	const lib::error_class_t error_class;
+
+	/**
+	 * @brief error number
+	 */
 	const uint64_t error_no;
+
+	/**
+	 * @brief constructor
+	 * @param err0 error class
+	 * @param err1 error number
+	 */
 	MP_error(lib::error_class_t err0, uint64_t err1);
 };
 

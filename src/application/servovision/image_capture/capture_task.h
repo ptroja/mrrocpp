@@ -47,8 +47,8 @@ protected:
 	void nextPosition(double deltaX, double deltaY, double deltaZ);
 	void captureImage();
 
-	double v[MAX_SERVOS_NR];
-	double a[MAX_SERVOS_NR];
+	double v[lib::MAX_SERVOS_NR];
+	double a[lib::MAX_SERVOS_NR];
 
 	int xPoints, yPoints, zPoints;
 

@@ -377,7 +377,9 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading()
 		if (result == 0) {
 			break;
 		}
+//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 1\n");
 		reading_message = receive_from_fradia <READING_T> ();
+//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 2\n");
 		report = lib::sensor::VSP_REPLY_OK;
 	}
 }

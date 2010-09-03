@@ -134,9 +134,9 @@ void acq_eih::main_task_algorithm(void)
 	ecp_sub_task::ecp_t.sr_ecp_msg->message("Data collection\n");
 
 	// maximum velocity and acceleration of smooth generator
-	double vv[MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
-	double aa[MAX_SERVOS_NR] = { acc, acc, acc, acc, acc, acc, acc, acc };
-	//double coordinates[MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
+	double vv[lib::MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
+	double aa[lib::MAX_SERVOS_NR] = { acc, acc, acc, acc, acc, acc, acc, acc };
+	//double coordinates[lib::MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smoothgen->set_relative();
 
 	//	std::cout<<sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->from_vsp.comm_image.sensor_union.chessboard.found<<std::endl;

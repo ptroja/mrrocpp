@@ -46,9 +46,9 @@ void object_reached_termination_condition::update(const mrrocpp::ecp::common::ge
 		Eigen::Matrix <double, 3, 1> linear_error = e.block(0, 0, 3, 1);
 		Eigen::Matrix <double, 3, 1> angular_error = e.block(3, 0, 3, 1);
 
-		log_dbg("object_reached_termination_condition: vsm->get_servos()[i]->is_object_visible() = %d\n", (int) vsm->get_servos()[i]->is_object_visible());
-		log_dbg("object_reached_termination_condition: linear_error.norm() = %g\n", linear_error.norm());
-		log_dbg("object_reached_termination_condition: angular_error.norm() = %g\n", angular_error.norm());
+//		log_dbg("object_reached_termination_condition: vsm->get_servos()[i]->is_object_visible() = %d\n", (int) vsm->get_servos()[i]->is_object_visible());
+//		log_dbg("object_reached_termination_condition: linear_error.norm() = %g\n", linear_error.norm());
+//		log_dbg("object_reached_termination_condition: angular_error.norm() = %g\n", angular_error.norm());
 
 		if (vsm->get_servos()[i]->is_object_visible() && linear_error.norm() <= max_linear_error
 				&& angular_error.norm() <= max_angular_error) {
@@ -56,11 +56,11 @@ void object_reached_termination_condition::update(const mrrocpp::ecp::common::ge
 		}
 	}
 
-	log_dbg("object_reached_termination_condition: object_visible_and_error_small = %d\n", (int) object_visible_and_error_small);
-	log_dbg("object_reached_termination_condition: vsm->get_linear_speed() = %g\n", vsm->get_linear_speed());
-	log_dbg("object_reached_termination_condition: vsm->get_angular_speed() = %g\n", vsm->get_angular_speed());
-	log_dbg("object_reached_termination_condition: vsm->get_linear_acceleration() = %g\n", vsm->get_linear_acceleration());
-	log_dbg("object_reached_termination_condition: vsm->get_angular_acceleration() = %g\n", vsm->get_angular_acceleration());
+//	log_dbg("object_reached_termination_condition: object_visible_and_error_small = %d\n", (int) object_visible_and_error_small);
+//	log_dbg("object_reached_termination_condition: vsm->get_linear_speed() = %g\n", vsm->get_linear_speed());
+//	log_dbg("object_reached_termination_condition: vsm->get_angular_speed() = %g\n", vsm->get_angular_speed());
+//	log_dbg("object_reached_termination_condition: vsm->get_linear_acceleration() = %g\n", vsm->get_linear_acceleration());
+//	log_dbg("object_reached_termination_condition: vsm->get_angular_acceleration() = %g\n", vsm->get_angular_acceleration());
 
 	if (object_visible_and_error_small && vsm->get_linear_speed() <= max_linear_speed && vsm->get_angular_speed()
 			<= max_angular_speed && vsm->get_linear_acceleration() <= max_linear_accel

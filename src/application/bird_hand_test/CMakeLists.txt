@@ -10,7 +10,7 @@ add_executable(ecp_bird_hand_test
 )
 
 target_link_libraries(ecp_bird_hand_test
-	ecp_r_bird_hand ecp
+	 ecp
 )
 
 install(TARGETS ecp_bird_hand_test mp_bird_hand_test DESTINATION bin)

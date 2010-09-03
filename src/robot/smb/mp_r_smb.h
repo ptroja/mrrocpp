@@ -9,12 +9,13 @@
  * @ingroup smb
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/smb/const_smb.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class smb : public motor_driven
+class smb : public robot
 {
 public:
 	smb(task::task &mp_object_l);

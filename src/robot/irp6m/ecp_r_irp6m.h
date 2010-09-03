@@ -9,7 +9,7 @@
 #define _ECP_R_IRP6_MECHATRONIKA_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/irp6_mechatronika/const_irp6m.h"
+#include "robot/irp6m/const_irp6m.h"
 
 namespace mrrocpp {
 namespace ecp {

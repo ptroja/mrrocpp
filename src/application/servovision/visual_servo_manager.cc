@@ -109,7 +109,7 @@ bool visual_servo_manager::next_step()
 	lib::Homog_matrix next_position = current_position * position_change;
 
 	// apply weak position constraints
-	constrain_position(next_position);
+	//constrain_position(next_position);
 
 	// position change is now different, because position constraints were applied
 	position_change = (!current_position) * next_position;

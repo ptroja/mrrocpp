@@ -14,7 +14,7 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()(void)
 {
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 1);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
 	connect_to_hardware();
 
@@ -124,7 +124,7 @@ force::force(common::manip_effector &_master) :
 {
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg
-			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION), true);
+			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true);
 
 	if (master.config.exists("is_right_turn_frame")) {
 		is_right_turn_frame = master.config.value <bool> ("is_right_turn_frame");

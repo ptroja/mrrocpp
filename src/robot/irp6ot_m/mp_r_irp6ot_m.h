@@ -9,13 +9,14 @@
  * @ingroup irp6ot_m
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class irp6ot_m : public motor_driven
+class irp6ot_m : public robot
 {
 public:
 	irp6ot_m(task::task &mp_object_l);
