@@ -43,21 +43,8 @@ struct pwm_St {
 	int16_t pwm;
 }__attribute__((__packed__));
 
-struct servo_St {
-	char buf[30];
-	uint8_t command_params;
-	struct status_St drive_status;
-	//	int32_t position_offset;
-	int32_t current_absolute_position;
-	int32_t previous_absolute_position;
-	double current_position_inc;
-	bool first_hardware_read;
-	bool trace_resolver_zero;
-}__attribute__((__packed__));
-
 } // namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif // __HI_MOXA_COMBUF_H
