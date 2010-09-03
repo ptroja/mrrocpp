@@ -20,7 +20,7 @@
 #include <boost/bind.hpp>
 
 #include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
