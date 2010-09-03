@@ -25,8 +25,7 @@ const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
 const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
 const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
-struct status_St
-{
+struct status_St {
 	uint8_t startByte;
 	uint8_t sw1 :1;
 	uint8_t sw2 :1;
@@ -40,9 +39,20 @@ struct status_St
 	int32_t position;
 }__attribute__((__packed__));
 
-struct pwm_St
-{
+struct pwm_St {
 	int16_t pwm;
+}__attribute__((__packed__));
+
+struct servo_St{
+	char buf[30];
+	uint8_t command_params;
+	struct status_St drive_status;
+//	int32_t position_offset;
+	int32_t current_absolute_position;
+	int32_t previous_absolute_position;
+	double current_position_inc;
+	bool first_hardware_read;
+	bool trace_resolver_zero;
 }__attribute__((__packed__));
 
 } // namespace hi_moxa
