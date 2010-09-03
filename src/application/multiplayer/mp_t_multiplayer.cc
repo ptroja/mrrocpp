@@ -59,13 +59,6 @@ void multiplayer::move_electron_robot(const lib::playerpos_goal_t &goal)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void multiplayer::create_robots()
 {
-	/*
-	 * this is necessary to first create robot and then assign it to robot_m
-	 * reason: mp_robot() constructor uses this map (by calling
-	 * mp_task::mp_wait_for_name_open() so needs the map to be in
-	 * a consistent state
-	 */
-
 	ACTIVATE_MP_ROBOT(conveyor);
 	ACTIVATE_MP_ROBOT(speaker);
 	ACTIVATE_MP_ROBOT(irp6m);

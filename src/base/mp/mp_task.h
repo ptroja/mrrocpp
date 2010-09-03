@@ -29,7 +29,10 @@ class generator;
 
 namespace task {
 
-// Two usefull mp robot addition macros
+/*
+ * Two usefull mp robot addition macros
+ * this is necessary to first create robot and then assign it to robot_m
+ */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
 		({ \

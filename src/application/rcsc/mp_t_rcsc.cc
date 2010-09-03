@@ -939,12 +939,6 @@ for(;;)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void rubik_cube_solver::create_robots()
 {
-/*
- * this is necessary to first create robot and then assign it to robot_m
- * reason: mp_robot() constructor uses this map (by calling
- * mp_task::mp_wait_for_name_open() so needs the map to be in
- * a consistent state
- */
 
 ACTIVATE_MP_ROBOT(conveyor);
 ACTIVATE_MP_ROBOT(speaker);
