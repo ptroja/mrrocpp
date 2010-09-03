@@ -79,8 +79,8 @@ void model_with_track::inverse_kinematics_transform(lib::JointArray & local_desi
 	bool p = false;
 	// We wszystkich przypadkach przyjmuje sie ,,stare'' d0==theta[0]
 	// 1a) Kisc zwrocona do pionowo gory, theta4=-pi/2
-	if (local_desired_end_effector_frame(2, 2) > 0 && ABS(local_desired_end_effector_frame(2,0)) <= EPS
-			&& ABS(local_desired_end_effector_frame(2,1)) <= EPS) {
+	if (local_desired_end_effector_frame(2, 2) > 0 && fabs(local_desired_end_effector_frame(2,0)) <= EPS
+			&& fabs(local_desired_end_effector_frame(2,1)) <= EPS) {
 		std::cout << " Osobliwosc! (theta4=-pi/2)" << std::endl;
 		p = true;
 		local_desired_joints[1]
@@ -93,8 +93,8 @@ void model_with_track::inverse_kinematics_transform(lib::JointArray & local_desi
 	}
 
 	// 1b) Kisc zwrocona do pionowo do dolu, theta4= pi/2
-	if (local_desired_end_effector_frame(2, 2) < 0 && ABS(local_desired_end_effector_frame(2,0)) <= EPS
-			&& ABS(local_desired_end_effector_frame(2,1)) <= EPS) {
+	if (local_desired_end_effector_frame(2, 2) < 0 && fabs(local_desired_end_effector_frame(2,0)) <= EPS
+			&& fabs(local_desired_end_effector_frame(2,1)) <= EPS) {
 		std::cout << " Osobliwosc! (theta4=pi/2)" << std::endl;
 		p = true;
 		local_desired_joints[1]
@@ -106,7 +106,7 @@ void model_with_track::inverse_kinematics_transform(lib::JointArray & local_desi
 	}
 
 	// 2a) Ramie robota w osi toru -- theta[1]=pi/2
-	if (!p && ABS(local_desired_end_effector_frame(0,3)) <= EPS && local_desired_end_effector_frame(1, 2) > 0) {
+	if (!p && fabs(local_desired_end_effector_frame(0,3)) <= EPS && local_desired_end_effector_frame(1, 2) > 0) {
 		std::cout << " Osobliwosc! (theta1=pi/2)" << std::endl;
 		local_desired_joints[5] = atan2(local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1));
 		local_desired_joints[4]
@@ -116,7 +116,7 @@ void model_with_track::inverse_kinematics_transform(lib::JointArray & local_desi
 	}
 
 	// 2b) Ramie robota w osi toru --  theta[1]=-pi/2
-	if (!p && ABS(local_desired_end_effector_frame(0,3)) <= EPS && local_desired_end_effector_frame(1, 2) < 0) {
+	if (!p && fabs(local_desired_end_effector_frame(0,3)) <= EPS && local_desired_end_effector_frame(1, 2) < 0) {
 		std::cout << " Osobliwosc! (theta1=-pi/2)" << std::endl;
 		local_desired_joints[5]
 				= atan2(-local_desired_end_effector_frame(0, 0), -local_desired_end_effector_frame(0, 1));

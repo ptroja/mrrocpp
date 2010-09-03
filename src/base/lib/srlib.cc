@@ -1,7 +1,11 @@
-// -------------------------------------------------------------------------
-// Plik:			srlib.cc
-// Opis:		metody klas SR
-// -------------------------------------------------------------------------
+/*!
+ * @file srlib.cc
+ * @brief System reporting.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #include <cstdio>
 #include <cstring>
@@ -74,9 +78,8 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	if (multi_thread) {
 		thread_id = new boost::thread(boost::bind(&sr::operator(), this));
 	}
-} // end:  sr::sr()
+}
 
-// Destruktor
 sr::~sr(void)
 {
 	if (multi_thread) {
@@ -85,14 +88,14 @@ sr::~sr(void)
 	name_close(fd);
 }
 
-int sr::send_package_to_sr(const sr_package_t & sr_mess)
+void sr::send_package_to_sr(const sr_package_t & package)
 {
 	int16_t status;
 
-	return MsgSend(fd, &sr_mess, sizeof(sr_mess), &status, sizeof(status));
+	// TODO: error check and throw an exception
+	MsgSend(fd, &package, sizeof(package), &status, sizeof(status));
 }
 #else /* USE_MESSIP_SRR */
-// Konstruktor
 sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
 multi_thread(_multi_thread), cb(SR_BUFFER_LENGHT)
 {
@@ -143,27 +146,26 @@ sr::~sr(void) {
 	}
 }
 
-int sr::send_package_to_sr(const sr_package_t & sr_mess)
+void sr::send_package_to_sr(const sr_package_t & sr_mess)
 {
-	return messip::port_send_sync(ch, 0, 0, sr_mess);
+	// TODO: error check and throw an exception
+	messip::port_send_sync(ch, 0, 0, sr_mess);
 }
 #endif /* !USE_MESSIP_SRR */
 
-int sr::send_package(void)
+void sr::send_package(void)
 {
 	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
 	if (!multi_thread) {
-		return send_package_to_sr(sr_message);
+		send_package_to_sr(sr_message);
 	} else {
 		put_one_msg(sr_message);
-
-		return 1;
 	}
 }
 
 void sr::put_one_msg(const lib::sr_package_t& new_msg)
 {
-	boost::unique_lock < boost::mutex > lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 	cb.push_back(new_msg);
 
 	has_command = true;
@@ -175,33 +177,29 @@ void sr::put_one_msg(const lib::sr_package_t& new_msg)
 
 void sr::get_one_msg(lib::sr_package_t& new_msg)
 {
-	boost::unique_lock < boost::mutex > lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 	new_msg = cb.front();
 	cb.pop_front();
 	has_command = false;
 	return;
 }
 
-bool sr::buffer_empty() // sprawdza czy bufor jest pusty
+bool sr::buffer_empty() const
 {
-	boost::unique_lock < boost::mutex > lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 	return cb.empty();
 }
 
-void sr::wait_for_new_msg() // oczekiwanie na semafor
+void sr::wait_for_new_msg()
 {
-	boost::unique_lock < boost::mutex > lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 
 	while (!has_command) {
 		cond.wait(lock);
 	}
 }
 
-/* -------------------------------------------------------------------- */
-/* Wysylka wiadomosci do procesu SR                                     */
-/* -------------------------------------------------------------------- */
-
-int sr::message(const std::string & text)
+void sr::message(const std::string & text)
 {
 	boost::mutex::scoped_lock lock(srMutex);
 
@@ -213,10 +211,9 @@ int sr::message(const std::string & text)
 		sr_message.description[0] = '\0';
 	}
 	return send_package();
-} // end: sr::message()
+}
 
-
-int sr::message(error_class_t message_type, const std::string & text)
+void sr::message(error_class_t message_type, const std::string & text)
 {
 	boost::mutex::scoped_lock lock(srMutex);
 
@@ -228,10 +225,9 @@ int sr::message(error_class_t message_type, const std::string & text)
 		sr_message.description[0] = '\0';
 	}
 	return send_package();
-} // end: sr::message()
+}
 
-
-int sr::message(error_class_t message_type, uint64_t error_code, const std::string & text)
+void sr::message(error_class_t message_type, uint64_t error_code, const std::string & text)
 {
 	boost::mutex::scoped_lock lock(srMutex);
 
@@ -240,19 +236,19 @@ int sr::message(error_class_t message_type, uint64_t error_code, const std::stri
 	interpret();
 	strcat(sr_message.description, text.c_str());
 	return send_package();
-} // end: sr::message()
+}
 
-int sr::message(error_class_t message_type, uint64_t error_code)
+void sr::message(error_class_t message_type, uint64_t error_code)
 {
 	boost::mutex::scoped_lock lock(srMutex);
 
 	sr_message.message_type = message_type;
 	error_tab[0] = error_code;
 	interpret();
-	return send_package();
-} // end: sr::message()
+	send_package();
+}
 
-int sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1)
+void sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1)
 {
 	boost::mutex::scoped_lock lock(srMutex);
 
@@ -260,19 +256,15 @@ int sr::message(error_class_t message_type, uint64_t error_code0, uint64_t error
 	error_tab[0] = error_code0;
 	error_tab[1] = error_code1;
 	interpret();
-	return send_package();
-} // end: sr::message()
-// --------------------------------------------------------------------
-
-// --------------------------------------------------------------------
-// interpretacja bledu dla EDP robota irp6_on_track
+	send_package();
+}
 
 sr_edp::sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
 	sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 
-void sr_edp::interpret(void)
+void sr_edp::interpret()
 {
 	uint64_t s_error; // zmienna pomocnicza
 	char tbuf[1 + 1]; // bufor tymczasowy na liczby
@@ -579,16 +571,13 @@ void sr_edp::interpret(void)
 		default:
 			strcat(sr_message.description, "edp UNIDENTIFIED ERROR");
 	}
-} // end: sr_edp::interpret()
-// ---------------------------------------------------------------------
+}
 
 sr_ecp::sr_ecp(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
 	sr(process_type, process_name, sr_name, _multi_thread)
 {
 }
 
-// ---------------------------------------------------------------------
-// Interpretacja bledow generowanych w ECP i MP
 void sr_ecp::interpret(void)
 {
 
@@ -698,7 +687,7 @@ void sr_ecp::interpret(void)
 		default:
 			sprintf(sr_message.description, "UNIDENTIFIED ECP or MP ERROR");
 	} // end: switch (sr_message.message_type)
-} // end: sr_ecp::interpret()
+}
 
 // ---------------------------------------------------------------------
 sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
@@ -774,25 +763,19 @@ void sr_vsp::interpret(void)
 }
 
 void sr::operator()()
-
 {
-	sr_package_t local_message;
-	while (1) {
-
+	while (true) {
 		wait_for_new_msg();
 
 		while (!buffer_empty()) {
-
-			{
-				get_one_msg(local_message);
-			}
+			sr_package_t local_message;
+			get_one_msg(local_message);
 			try {
 				send_package_to_sr(local_message);
 			} catch (...) {
 				printf("send_package_to_sr error multi_thread variant\n");
 			}
 		}
-
 	}
 }
 
