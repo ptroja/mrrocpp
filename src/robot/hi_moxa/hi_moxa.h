@@ -1,9 +1,10 @@
-// -------------------------------------------------------------------------
-//                            hi_rydz.h
-// Definicje struktur danych i metod dla interfejsu sprzetowego
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/* TODO:
+ *
+ * inicjalizacja struktur servo_data w konstruktorze hi_moxa
+ * przekazanie do konstruktora hi_moxa danych o ilosci i numerach portow
+*/
+
+
 
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
@@ -69,7 +70,7 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int fd[8];
+	int fd[8], fd_max;
 	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;
