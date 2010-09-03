@@ -48,8 +48,8 @@ lib::Homog_matrix cubic_constraint::apply_constraint(const lib::Homog_matrix& cu
 
 	constrained_position = (!cube_position) * current_position;
 
-	cout<<"constrained_position 1:\n"<<constrained_position<<"\n";
-	cout.flush();
+//	cout<<"constrained_position 1:\n"<<constrained_position<<"\n";
+//	cout.flush();
 
 	// constrain translation
 	for (int i = 0; i < 3; ++i) {
@@ -59,7 +59,7 @@ lib::Homog_matrix cubic_constraint::apply_constraint(const lib::Homog_matrix& cu
 
 	constrained_position = cube_position * constrained_position;
 
-	//constrained_position = constrain_rotation(constrained_position);
+	constrained_position = constrain_rotation(constrained_position);
 
 	return constrained_position;
 }
