@@ -10,6 +10,8 @@
 #include "ecp_mp_st_smooth_move.h"
 
 #include "base/mp/mp_robot.h"
+#include "robot/irp6p_m/mp_r_irp6p_m.h"
+#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 
 namespace mrrocpp {
 
@@ -41,6 +43,12 @@ bclike_mp::bclike_mp(lib::configurator &_config) :
 
 	//TODO: Wczytywanie z konfiga informacji o drugim zadaniu
 
+}
+
+void bclike_mp::create_robots()
+{
+	ACTIVATE_MP_ROBOT(irp6ot_m);
+	ACTIVATE_MP_ROBOT(irp6p_m);
 }
 
 bclike_mp::~bclike_mp() {

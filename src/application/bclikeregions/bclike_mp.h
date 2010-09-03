@@ -29,6 +29,7 @@ public:
 	virtual ~bclike_mp();
 
 	void main_task_algorithm(void);
+	virtual void create_robots(void);
 
 private:
 	ecp::common::bcl_message msg;
