@@ -1,12 +1,20 @@
+/*!
+ * @file
+ * @brief File contains mp robot class definition for Sarkofag
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sarkofag
+ */
+
 #include "robot/sarkofag/mp_r_sarkofag.h"
-#include "robot/sarkofag/sarkofag_const.h"
+
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 sarkofag::sarkofag(task::task &mp_object_l) :
-	motor_driven(lib::ROBOT_SARKOFAG, ECP_SARKOFAG_SECTION, mp_object_l, SARKOFAG_NUM_OF_SERVOS)
+	robot(lib::sarkofag::ROBOT_NAME, lib::sarkofag::ECP_SECTION, mp_object_l, lib::sarkofag::NUM_OF_SERVOS)
 {
 }
 

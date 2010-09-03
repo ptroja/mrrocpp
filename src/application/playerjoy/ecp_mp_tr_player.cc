@@ -1,12 +1,12 @@
 #include <unistd.h>
 #include <pthread.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"				// numery bledow
-#include "lib/srlib.h"					// klasy bledow
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"				// numery bledow
+#include "base/lib/srlib.h"					// klasy bledow
 #include "application/playerjoy/ecp_mp_tr_player.h"
 #include "player/playerc.h"
 
@@ -15,7 +15,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 player::player  (
-    TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
+    TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
     const char *host, unsigned int port,
     const char *devname, int devindex, int access
 )  :

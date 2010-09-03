@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_sensor.h
+ * @file
  * @brief File contains sensor class - a template base class for MP and ECP  sensors.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
@@ -10,19 +10,16 @@
 #if !defined(_ECP_MP_SENSOR_H)
 #define _ECP_MP_SENSOR_H
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
+#include "base/lib/srlib.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
-
-#include <map>
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -107,7 +104,7 @@ public:
 	 * @param _sr_ecp_msg communication object.
 	 * @param config Configuration object.
 	 */
-	sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
+			sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/** @brief Virtual destructor. Sends TERMINATE command to VSP. */
 	virtual ~sensor();
@@ -158,8 +155,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
 	while ((sd = open(VSP_NAME.c_str(), O_RDWR)) == -1) {
 		// 		cout<<tmp<<endl;
-		if ((tmp++) < CONNECT_RETRY)
-			usleep(1000 * CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY)
+			usleep(1000 * lib::CONNECT_DELAY);
 		else
 			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
@@ -187,8 +184,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	while( (sd = messip::port_connect(VSP_NAME)) == NULL)
 	{
 		// 		cout<<tmp<<endl;
-		if((tmp++)<CONNECT_RETRY)
-		usleep(1000*CONNECT_DELAY);
+		if((tmp++)<lib::CONNECT_RETRY)
+		usleep(1000*lib::CONNECT_DELAY);
 		else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
 			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
@@ -206,7 +203,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::~sensor()
 	if (write(sd, &to_vsp, sizeof(to_vsp)) == -1)
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
-		close( sd);
+		close(sd);
 #else /* USE_MESSIP_SRR */
 	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 	sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
@@ -249,7 +246,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::initiate_reading(void)
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
 void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(void)
 {
-	get_reading( image);
+	get_reading(image);
 }
 
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
@@ -273,22 +270,6 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(SENSOR_IMAGE & sensor_im
 }
 
 } // namespace sensor
-
-
-/**
- * @brief Container type for storing sensors.
- *
- * @ingroup SENSORS
- */
-typedef std::map <lib::sensor::SENSOR_t, ecp_mp::sensor::sensor_interface *> sensors_t;
-
-
-/**
- * @brief Type for Items from sensor container.
- *
- * @ingroup SENSORS
- */
-typedef sensors_t::value_type sensor_item_t;
 
 
 } // namespace ecp_mp

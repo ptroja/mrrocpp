@@ -48,10 +48,10 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <math.h>
-#include <limits.h>
-#include <stdio.h>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cstdio>
 
 // Constructor
 PlannerProxy::PlannerProxy( PlayerClient *pc, unsigned short index,

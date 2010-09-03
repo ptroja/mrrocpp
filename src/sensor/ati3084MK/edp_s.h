@@ -11,17 +11,21 @@
 #if !defined(_EDP_S_ATI3084MK_H)
 #define _EDP_S_ATI3084MK_H
 
-#include "base/edp/edp_e_manip.h"
+#include "base/edp/edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {
+namespace common {
+class manip_effector;
+}
 namespace sensor {
 
 #define SPEED B115200
 #define PORT "/dev/ser1"
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force: public force {
+class ATI3084_force : public force
+{
 
 public:
 	void connect_to_hardware(void);
@@ -34,7 +38,8 @@ public:
 	void get_reading(void); // odebranie odczytu od VSP		// zwraca blad
 
 private:
-	typedef struct _forceReadings {
+	typedef struct _forceReadings
+	{
 		int16_t ft[6];
 	} forceReadings_t;
 

@@ -1,5 +1,5 @@
 /*!
- * @file vsp_error.h
+ * @file
  * @brief File containing class that represents errors (exceptions) passed in VSPs.
  * @date 30.11.2006
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
@@ -15,9 +15,8 @@ namespace mrrocpp {
 namespace vsp {
 namespace common {
 
-
 /*!
- * @class vsp_error
+ *
  * @brief Class representing the exceptions thrown and handled in VSP.
  * @author tkornuta
  */

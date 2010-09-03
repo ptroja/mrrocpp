@@ -8,12 +8,10 @@
 #ifndef _ECP_GEN_GET_POSITION_H_
 #define _ECP_GEN_GET_POSITION_H_
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_generator.h"
 
 #include <vector>
-
-using namespace std;
 
 namespace mrrocpp {
 namespace ecp {
@@ -47,13 +45,13 @@ class get_position : public generator {
 		 * Returns actual position.
 		 * @return array containing actual robot position expressed in representation specified by pose_spec variable
 		 */
-		vector<double> get_position_vector();
+		std::vector<double> get_position_vector();
 
 	private:
 		/**
 		 * Vector filled with coordinates read from the robot.
 		 */
-		vector<double> position;
+		std::vector<double> position;
 		/**
 		 * Number of axes for a given robot in used representation.
 		 */

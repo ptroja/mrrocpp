@@ -1,5 +1,5 @@
 /*!
- * @file vsp_m_int.cc
+ * @file
  * @brief File containing the \b interactive VSP shell.
  *
  * The \b interactive VSP shell collects new measurements only when an explicit reading initiation request arrives.
@@ -11,28 +11,29 @@
  * @ingroup VSP
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <memory>
-#include <errno.h>
-#include <stddef.h>
+#include <cerrno>
+#include <cstddef>
 #include <unistd.h>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <devctl.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
 #include <fstream>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/configurator.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
@@ -312,7 +313,7 @@ int main(int argc, char *argv[])
 	static iofunc_attr_t attr;
 
 	// Set priority.
-	setprio(getpid(), MAX_PRIORITY - 3);
+	setprio(getpid(), lib::QNX_MAX_PRIORITY - 3);
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_shell::catch_signal);

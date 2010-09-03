@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_with_tool.cc
+ * @file
  * @brief File containing the definition of kinematic_model_with_tool class methods.
  *
  * @author tkornuta
@@ -26,25 +26,25 @@ kinematic_model_with_tool::~kinematic_model_with_tool(void)
 {
 }
 
-void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& homog_matrix)
+inline void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix *= tool;
 }
 
 
-void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix)
+inline void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix *= (!tool);
 }
 
 
-void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& homog_matrix)
+inline void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix = (global_base * homog_matrix);
 }
 
 
-void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& homog_matrix)
+inline void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix = ((!global_base) * homog_matrix);
 }

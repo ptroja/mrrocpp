@@ -10,7 +10,7 @@ add_executable(ecp_spkm
 )
 
 target_link_libraries(ecp_spkm
-	ecp_r_spkm ecp
+	ecp
 )
 
 add_executable(ecp_smb
@@ -20,7 +20,7 @@ add_executable(ecp_smb
 )
 
 target_link_libraries(ecp_smb
-	ecp_r_smb ecp
+	ecp
 )
 
 add_executable(ecp_shead
@@ -29,7 +29,7 @@ add_executable(ecp_shead
 )
 
 target_link_libraries(ecp_shead
-	ecp_r_shead ecp
+	ecp
 )
 
 install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)

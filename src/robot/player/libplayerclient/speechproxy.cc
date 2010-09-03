@@ -48,7 +48,7 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
     
 // send a speech command
 //

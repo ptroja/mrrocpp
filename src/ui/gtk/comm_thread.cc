@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "ui_model.h"
 
@@ -18,7 +18,7 @@ void *comm_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	// TODO:ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION)
+	// TODO:ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION)
 	if ((ch = messip::port_create("ui")) == NULL) {
 		return NULL;
 	}
@@ -37,7 +37,7 @@ void *comm_thread(void* arg)
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			break;
 		} else if (rcvid < -1) {
 			// channel open/close message

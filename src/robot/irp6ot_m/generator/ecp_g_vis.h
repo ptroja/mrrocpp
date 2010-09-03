@@ -7,8 +7,8 @@
 #if !defined(_ECP_GEN_FORCE_H)
 #define _ECP_GEN_FORCE_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "base/ecp/ecp_generator.h"
 

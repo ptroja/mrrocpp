@@ -15,36 +15,29 @@
 
 #define USLEEP_US 500000
 
-#include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
 
 //#include "edp_e_sarkofag.h"
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-
-#include <string>
-
-#define PORT "/dev/ser"
-#define BAUD 921600
-#define START_BYTE '#'
-#define WRITE_BYTES 10
-#define READ_BYTES 8
-
-#define COMMCYCLE_TIME_NS	2000000
+#include <ctime>
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+class motor_driven_effector;
+}
+namespace hi_moxa {
+
+const std::string PORT = "/dev/ser";
+const int BAUD = 921600;
+const int WRITE_BYTES = 10;
+const int READ_BYTES = 8;
+
+const long COMMCYCLE_TIME_NS = 2000000;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
@@ -56,7 +49,7 @@ class HI_moxa : public common::HardwareInterface
 
 public:
 
-	HI_moxa(motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -86,7 +79,7 @@ private:
 
 }; // koniec: class hardware_interface
 
-} // namespace common
+} // namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
 

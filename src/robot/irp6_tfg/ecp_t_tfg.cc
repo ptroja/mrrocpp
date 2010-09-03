@@ -1,11 +1,10 @@
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-
+#include "base/lib/srlib.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
@@ -15,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace task {
 
 // KONSTRUKTORY
@@ -23,9 +22,9 @@ tfg::tfg(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6OT_TFG_SECTION) {
+	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_tfg::robot(*this);
-	} else if (config.section_name == ECP_IRP6P_TFG_SECTION) {
+	} else if (config.section_name == lib::irp6p_tfg::ECP_SECTION) {
 		ecp_m_robot = new irp6p_tfg::robot(*this);
 	} else {
 		// TODO: throw
@@ -54,10 +53,10 @@ namespace task {
 
 task* return_created_ecp_task(lib::configurator &_config)
 {
-	return new common::task::tfg(_config);
+	return new irp6_tfg::task::tfg(_config);
 }
 
 }
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp

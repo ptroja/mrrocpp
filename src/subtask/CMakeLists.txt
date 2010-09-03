@@ -3,5 +3,5 @@ add_library(ecp_subtasks
 	ecp_st_tff_nose_run.cc
 )
 
-target_link_libraries(ecp_subtasks ecp)
+#target_link_libraries(ecp_subtasks ecp)
 

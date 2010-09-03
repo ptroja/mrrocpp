@@ -42,7 +42,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		int numberOfTrajectories=neuronSensor->getNumberOfTrajectories();
 		printf("Number of trajecotries %d\n",numberOfTrajectories);
 
-		vector<double> coordinates1(6);
+		std::vector<double> coordinates1(6);
 		//smoothGenerator->set_debug(true);
 		ecp_mp::sensor::Coordinates coordinates;
 		for(int i=0;i<numberOfTrajectories;++i){

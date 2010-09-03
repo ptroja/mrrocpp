@@ -1,9 +1,15 @@
 #ifndef MP_GEN_COMMON_H_
 #define MP_GEN_COMMON_H_
 
+/*!
+ * @file
+ * @brief File contains mp common generators declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_generator.h"
-#include "base/mp/mp_task.h"
-#include "base/mp/mp.h"
 
 // generator for setting the next ecps state
 

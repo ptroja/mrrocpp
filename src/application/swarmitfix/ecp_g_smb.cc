@@ -4,6 +4,8 @@
  *Author: yoyek
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_smb.h"
 
 namespace mrrocpp {
@@ -17,9 +19,9 @@ pin_lock::pin_lock(common::task::task& _ecp_task) :
 {
 
 	smb_multi_pin_locking_data_port
-			= the_robot->port_manager.get_port <lib::smb_multi_pin_locking> (lib::SMB_MULTI_PIN_LOCKING_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::smb::multi_pin_locking_td> (lib::smb::MULTI_PIN_LOCKING_DATA_PORT);
 	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb_multi_leg_reply> (lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -71,9 +73,9 @@ pin_unlock::pin_unlock(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
 	smb_multi_pin_locking_data_port
-			= the_robot->port_manager.get_port <lib::smb_multi_pin_locking> (lib::SMB_MULTI_PIN_LOCKING_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::smb::multi_pin_locking_td> (lib::smb::MULTI_PIN_LOCKING_DATA_PORT);
 	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb_multi_leg_reply> (lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
 }
 
 bool pin_unlock::first_step()
@@ -123,9 +125,9 @@ pin_rise::pin_rise(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
 	smb_multi_pin_insertion_data_port
-			= the_robot->port_manager.get_port <lib::smb_multi_pin_insertion> (lib::SMB_MULTI_PIN_INSERTION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);
 	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb_multi_leg_reply> (lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -178,9 +180,9 @@ pin_lower::pin_lower(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
 	smb_multi_pin_insertion_data_port
-			= the_robot->port_manager.get_port <lib::smb_multi_pin_insertion> (lib::SMB_MULTI_PIN_INSERTION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);
 	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb_multi_leg_reply> (lib::SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
 
 }
 

@@ -1,21 +1,17 @@
-// -------------------------------------------------------------------------
-//                              mp.cc
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
+/*!
+ * @file
+ * @brief File contains mp common generators definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
-#include <string.h>
+#include <cstring>
 
 #include <boost/foreach.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/srlib.h"
-#include "base/mp/mp.h"
+#include "base/mp/MP_main_error.h"
+#include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
 #include "base/mp/mp_g_common.h"
@@ -57,12 +53,12 @@ void set_next_ecps_state::configure(const lib::playerpos_goal_t &_goal)
 bool set_next_ecps_state::first_step()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{	robot_node.second->mp_command.command = lib::NEXT_STATE;
-	robot_node.second->mp_command.ecp_next_state = ecp_next_state;
-	robot_node.second->communicate = true;
-}
+	{	robot_node.second->mp_command.command = lib::NEXT_STATE;
+		robot_node.second->mp_command.ecp_next_state = ecp_next_state;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -71,11 +67,11 @@ return true;
 
 bool set_next_ecps_state::next_step()
 {
-return false;
+	return false;
 }
 
 send_end_motion_to_ecps::send_end_motion_to_ecps(task::task& _mp_task) :
-generator(_mp_task)
+	generator(_mp_task)
 {
 }
 
@@ -83,92 +79,91 @@ generator(_mp_task)
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool send_end_motion_to_ecps::first_step ()
+bool send_end_motion_to_ecps::first_step()
 {
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-	robot_node.second->mp_command.command = lib::END_MOTION;
-	robot_node.second->communicate = true;
-}
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+		robot_node.second->mp_command.command = lib::END_MOTION;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool send_end_motion_to_ecps::next_step ()
+bool send_end_motion_to_ecps::next_step()
 {
-return false;
+	return false;
 }
 
 // ###############################################################
 // Rozszerzony generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-extended_empty::extended_empty(task::task& _mp_task):
-generator (_mp_task)
+extended_empty::extended_empty(task::task& _mp_task) :
+	generator(_mp_task)
 {
-activate_trigger = true;
+	activate_trigger = true;
 }
 
-void extended_empty::configure (bool l_activate_trigger)
+void extended_empty::configure(bool l_activate_trigger)
 {
-activate_trigger = l_activate_trigger;
+	activate_trigger = l_activate_trigger;
 }
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool extended_empty::first_step ()
+bool extended_empty::first_step()
 {
-wait_for_ECP_pulse = true;
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	robot_node.second->mp_command.command = lib::NEXT_POSE;
-	robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-	robot_node.second->communicate = false;
-}
+	wait_for_ECP_pulse = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
+		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
+		robot_node.second->communicate_with_ecp = false;
+	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool extended_empty::next_step ()
+bool extended_empty::next_step()
 {
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
-// skonczono zadanie uzytkownika
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
+	// skonczono zadanie uzytkownika
 
-// 	if (trigger) printf("Yh\n"); else printf("N\n");
-// printf("mp next step\n");
-// UWAGA: dzialamy na jednoelementowej liscie robotow
+	// 	if (trigger) printf("Yh\n"); else printf("N\n");
+	// printf("mp next step\n");
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-if (check_and_null_trigger() && activate_trigger)
-{
-	return false;
-}
-
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	robot_node.second->communicate = (robot_node.second->new_pulse);
-}
-
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
-	{
-		//  sr_ecp_msg.message("w mp task terminated");
+	if (check_and_null_trigger() && activate_trigger) {
 		return false;
 	}
-}
 
-return true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		robot_node.second->communicate_with_ecp = (robot_node.second->new_pulse);
+	}
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
+		{
+			//  sr_ecp_msg.message("w mp task terminated");
+			return false;
+		}
+	}
+
+	return true;
 }
 
 // ###############################################################
@@ -176,7 +171,7 @@ return true;
 // ###############################################################
 
 empty::empty(task::task& _mp_task) :
-generator(_mp_task)
+	generator(_mp_task)
 {
 }
 
@@ -186,18 +181,18 @@ generator(_mp_task)
 
 bool empty::first_step()
 {
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// Inicjacja generatora trajektorii
-// printf("mp first step\n");
-// wait_for_ECP_pulse = true;
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-	robot_node.second->mp_command.command = lib::NEXT_POSE;
-	robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-	robot_node.second->communicate = true;
-}
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// Inicjacja generatora trajektorii
+	// printf("mp first step\n");
+	// wait_for_ECP_pulse = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
+		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -206,31 +201,31 @@ return true;
 
 bool empty::next_step()
 {
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
-// skonczono zadanie uzytkownika
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
+	// skonczono zadanie uzytkownika
 
-// obrazu danych wykorzystywanych przez generator
+	// obrazu danych wykorzystywanych przez generator
 
-// 	if (trigger) printf("Yh\n"); else printf("N\n");
-// printf("mp next step\n");
-// UWAGA: dzialamy na jednoelementowej liscie robotow
+	// 	if (trigger) printf("Yh\n"); else printf("N\n");
+	// printf("mp next step\n");
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{
-		sr_ecp_msg.message("w mp task terminated");
-		return false;
+		if ( robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED )
+		{
+			sr_ecp_msg.message("w mp task terminated");
+			return false;
+		}
 	}
-}
 
-return true;
+	return true;
 }
 
 delta::delta(task::task& _mp_task) :
-generator(_mp_task)
+	generator(_mp_task)
 {
 }
 
@@ -238,111 +233,109 @@ generator(_mp_task)
 // Generator prostoliniowy o zadany przyrost polozenia/orientacji
 // ####################################################################################################
 
-tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des,
-	lib::trajectory_description irp6p_tr_des): delta (_mp_task)
+tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des, lib::trajectory_description irp6p_tr_des) :
+	delta(_mp_task)
 {
-irp6ot_td = irp6ot_tr_des;
-irp6p_td = irp6p_tr_des;
+	irp6ot_td = irp6ot_tr_des;
+	irp6p_td = irp6p_tr_des;
 }
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool tight_coop::first_step ()
+bool tight_coop::first_step()
 {
 
-// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 
-idle_step_counter = 2;
+	idle_step_counter = 2;
 
-BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-{
-	robot_node.second->mp_command.command = lib::NEXT_POSE;
-	robot_node.second->mp_command.instruction.instruction_type = lib::GET;
-	robot_node.second->mp_command.instruction.get_type = ARM_DEFINITION;
-	robot_node.second->mp_command.instruction.set_type = ARM_DEFINITION;
-	//robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-	//robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-	robot_node.second->mp_command.instruction.motion_type = lib::ABSOLUTE;
-	robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
-	robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
-	robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
-	robot_node.second->communicate = true;
-}
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
+		robot_node.second->mp_command.instruction.instruction_type = lib::GET;
+		robot_node.second->mp_command.instruction.get_type = ARM_DEFINITION;
+		robot_node.second->mp_command.instruction.set_type = ARM_DEFINITION;
+		//robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+		//robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+		robot_node.second->mp_command.instruction.motion_type = lib::ABSOLUTE;
+		robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
+		robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
+		robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
-return true;
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool tight_coop::next_step ()
+bool tight_coop::next_step()
 {
-// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
-// Funkcja zwraca false gdy koniec generacji trajektorii
-// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-// UWAGA: dzialamy na jednoelementowej liscie robotow
+	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
+	// Funkcja zwraca false gdy koniec generacji trajektorii
+	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
+	// UWAGA: dzialamy na jednoelementowej liscie robotow
 
-if ( idle_step_counter )
-{ // Oczekiwanie na odczyt aktualnego polozenia koncowki
-	idle_step_counter--;
-	return true;
-}
+	if (idle_step_counter) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
+		idle_step_counter--;
+		return true;
+	}
 
-if (node_counter-1 == irp6ot_td.interpolation_node_no)
-return false;
+	if (node_counter - 1 == irp6ot_td.interpolation_node_no)
+		return false;
 
-common::robots_t::iterator robot_m_iterator = robot_m.begin();
+	common::robots_t::iterator robot_m_iterator = robot_m.begin();
 
-// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
-robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DEFINITION;
-robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-
-// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
-// (okreslenie kolejnego wezla interpolacji)
-// i: licznik kolejnych wspolrzednych wektora [0..6]
-for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
-+ node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
-// printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
-// printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
-// printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
-
-
-// by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
-// ale dzialalo to zle z generatorami transparentnymi ECP
-/*
- if (node_counter == td.interpolation_node_no) {
- // Zakonczenie generacji trajektorii
- robot_list->E_ptr->mp_command.command = lib::END_MOTION;
- }
- */
-
-if ((++robot_m_iterator) != robot_m.end())
-{
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 	robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 	robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DEFINITION;
 	robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
 	// i: licznik kolejnych wspolrzednych wektora [0..6]
 	for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-	robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-	robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
-	+ node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
+		robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i]
+				= robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+						+ node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
+	// printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
+	// printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
+	// printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
 
-}
 
-// skopiowac przygotowany rozkaz dla ECP do bufora wysylkowego
+	// by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
+	// ale dzialalo to zle z generatorami transparentnymi ECP
+	/*
+	 if (node_counter == td.interpolation_node_no) {
+	 // Zakonczenie generacji trajektorii
+	 robot_list->E_ptr->mp_command.command = lib::END_MOTION;
+	 }
+	 */
 
-return true;
+	if ((++robot_m_iterator) != robot_m.end()) {
+		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
+		robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
+		robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DEFINITION;
+		robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+		// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
+		// (okreslenie kolejnego wezla interpolacji)
+		// i: licznik kolejnych wspolrzednych wektora [0..6]
+		for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
+			robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i]
+					= robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+							+ node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
+
+	}
+
+	// skopiowac przygotowany rozkaz dla ECP do bufora wysylkowego
+
+	return true;
 }
 
 } // namespace generator

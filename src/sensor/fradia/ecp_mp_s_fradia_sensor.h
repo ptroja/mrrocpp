@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_s_fradia_sensor.h
+ * @file
  * @brief Virtual sensor on the ECP/MP side used for communication with the FraDIA framework.
  *
  *
@@ -7,7 +7,7 @@
  * @author mboryn
  * @date 15.03.2008
  *
- * @ingroup SENSORS,FRADIA_SENSOR
+ * @ingroup SENSORS FRADIA_SENSOR
  */
 
 #ifndef ECP_MP_S_FRADIA_SENSOR_H
@@ -26,9 +26,8 @@
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
-#include "lib/logger.h"
-#include "lib/configurator.h"
-#include "lib/sensor_interface.h"
+#include "base/lib/logger.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -129,7 +128,7 @@ private:
 	 * Throws exception on error.
 	 *
 	 * @tparam MESSAGE_T Type of sent message.
-	 * @param Sent message.
+	 * @param message Sent message.
 	 */
 	template <typename MESSAGE_T>
 	void send_to_fradia(const MESSAGE_T& message);
@@ -150,7 +149,7 @@ public:
 	/**
 	 * @brief FraDIA sensor constructor. Creates socket and connects to FraDIA, but doesn't send any data.
 	 *
-	 * @param configurator Configuration object.
+	 * @param _configurator Configuration object.
 	 * @param section_name Name of the section in ini file. Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
 	 * @param configure_message Message that will be send by configure_sensor().
 	 */

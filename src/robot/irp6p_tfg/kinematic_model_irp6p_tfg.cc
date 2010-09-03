@@ -1,15 +1,15 @@
 /*!
- * @file kinematic_model_irp6ot_tfg.cc
+ * @file
  * @brief File containing methods of the IRp-6p two fingered gripper kinematic model.
  *
  * @author yoyek
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS,IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6ot_tfg
  */
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
 
 namespace mrrocpp {

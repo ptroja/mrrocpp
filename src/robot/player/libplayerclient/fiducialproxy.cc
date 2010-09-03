@@ -47,11 +47,11 @@
  */
 
 #include <playerclient.h>
-#include <math.h>
+#include <cmath>
 #include <assert.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include "playerpacket.h"
 
 void FiducialProxy::FillData(player_msghdr_t hdr, const char* buffer)

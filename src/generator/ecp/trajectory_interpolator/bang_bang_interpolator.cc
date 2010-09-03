@@ -13,6 +13,8 @@ namespace common {
 namespace generator {
 namespace trajectory_interpolator {
 
+using namespace std;
+
 bang_bang_interpolator::bang_bang_interpolator() {
 	// TODO Auto-generated constructor stub
 
@@ -39,14 +41,13 @@ bool bang_bang_interpolator::interpolate_relative_pose(vector<ecp_mp::common::tr
 	return true;
 }
 
-bool bang_bang_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc) {
-
-	int i,j;
-
-	vector<double> coordinates (it->axes_num);
-	for (i = 0; i < it->interpolation_node_no; i++) {
-		for (j = 0; j < it->axes_num; j++) {
-			coordinates[j] = generate_next_coords(i+1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::ABSOLUTE);
+bool bang_bang_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double & mc)
+{
+	vector <double> coordinates(it->axes_num);
+	for (int i = 0; i < it->interpolation_node_no; i++) {
+		for (int j = 0; j < it->axes_num; j++) {
+			coordinates[j]
+					= generate_next_coords(i + 1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::ABSOLUTE);
 		}
 		cv.push_back(coordinates);
 	}
@@ -56,12 +57,11 @@ bool bang_bang_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::tr
 
 double bang_bang_interpolator::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type)
 {
-
 	//funkcja obliczajaca polozenie w danym makrokroku
 
 	double next_position = 0;
 
-	double tk = 10 * 0.002;
+	const double tk = 10 * 0.002;
 
 	//printf("przysp: %f\t jedn: %f\n", przysp, jedn);
 

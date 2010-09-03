@@ -10,26 +10,22 @@
 #if !defined(_ECP_GEN_SMOOTH_H)
 # define _ECP_GEN_SMOOTH_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <list>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xinclude.h>
 
-#include <fstream>
-#include <string.h>
-#include <list>
-
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/datastr.h"
-#include "lib/srlib.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/datastr.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp_mp/smooth_trajectory_pose.h"
 
@@ -55,13 +51,13 @@ class smooth : public delta {
 				/**
 				 *
 				 */
-				coordinates(double coordinate[MAX_SERVOS_NR]) {
-					memcpy(this->coordinate, coordinate, MAX_SERVOS_NR*sizeof(double));
+				coordinates(double coordinate[lib::MAX_SERVOS_NR]) {
+					memcpy(this->coordinate, coordinate, lib::MAX_SERVOS_NR*sizeof(double));
 				};
 				/**
 				 *
 				 */
-				double coordinate[MAX_SERVOS_NR];
+				double coordinate[lib::MAX_SERVOS_NR];
 		};
 		/**
 		 *
@@ -207,11 +203,11 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		void create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR]);
 		/**
 		 *
 		 */
-		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR]);
+		void insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR]);
 		/**
 		 *
 		 */
@@ -261,11 +257,11 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
-		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
@@ -273,15 +269,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		void load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		/**
 		 *
 		 */
-		void load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_xyz_angle_axis(double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
-		void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_xyz_angle_axis(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
@@ -289,15 +285,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		void load_xyz_angle_axis(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		/**
 		 *
 		 */
-		void load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_xyz_euler_zyz(double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
-		void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_xyz_euler_zyz(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
@@ -305,15 +301,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		void load_xyz_euler_zyz(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		/**
 		 *
 		 */
-		void load_joint(double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_joint(double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
-		void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_joint(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
@@ -321,15 +317,15 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		void load_joint(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		/**
 		 *
 		 */
-		void load_motor(double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_motor(double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
-		void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset);
+		void load_motor(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset);
 		/**
 		 *
 		 */
@@ -337,7 +333,7 @@ class smooth : public delta {
 		/**
 		 *
 		 */
-		void load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
+		void load_motor(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset);
 		/**
 		 *
 		 */

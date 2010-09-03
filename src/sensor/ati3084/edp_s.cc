@@ -8,21 +8,21 @@
 // Autor: Yoyek (Tomek Winiarski)
 // na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
 // -------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/sched.h>
-#include <string.h>
+#include <cstring>
 #include <fstream>
 #include <iomanip>
-#include <ctype.h>
-#include <errno.h>
+#include <cctype>
+#include <cerrno>
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
 #include <iostream>
@@ -31,22 +31,25 @@
 #include <sys/dispatch.h>
 #include <hw/pci.h>
 #include <hw/pci_devices.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sys/mman.h>
 #include <termios.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
+
+#include "base/edp/edp_e_manip.h"
+
 #include "sensor/ati3084/edp_s.h"
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -276,7 +279,7 @@ void ATI3084_force::configure_sensor(void)
 		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation
-				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
+				= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 	} else {
 		gravity_transformation->synchro(frame);
 	}

@@ -8,8 +8,9 @@
 #ifndef __EDP_REGULATOR_H
 #define __EDP_REGULATOR_H
 
-#include "base/edp/edp.h"
-#include "base/edp/HardwareInterface.h"
+#include "base/lib/com_buf.h"
+#include "base/edp/edp_typedefs.h"
+
 
 namespace mrrocpp {
 namespace edp {

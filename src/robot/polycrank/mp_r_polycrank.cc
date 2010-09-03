@@ -1,12 +1,12 @@
 #include "robot/polycrank/mp_r_polycrank.h"
-#include "robot/polycrank/polycrank_const.h"
+
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 polycrank::polycrank(task::task &mp_object_l) :
-	motor_driven(lib::ROBOT_POLYCRANK, ECP_POLYCRANK_SECTION, mp_object_l, POLYCRANK_NUM_OF_SERVOS)
+			robot(lib::polycrank::ROBOT_NAME, lib::polycrank::ECP_SECTION, mp_object_l, lib::polycrank::NUM_OF_SERVOS)
 {
 }
 

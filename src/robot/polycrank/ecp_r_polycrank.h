@@ -9,14 +9,14 @@
 #define _ECP_R_POLYCRANK_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/polycrank/polycrank_const.h"
+#include "robot/polycrank/const_polycrank.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace polycrank {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class robot: public common::robot::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 

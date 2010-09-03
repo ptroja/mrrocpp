@@ -9,15 +9,11 @@
 #ifndef __SPEAK_T_H
 #define __SPEAK_T_H
 
-#include <stdint.h>
-#include <pthread.h>
-
 #include "base/edp/trans_t.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace speaker {
-
 
 /**************************** trans_t *****************************/
 
@@ -34,7 +30,6 @@ public:
     speak_t(effector& _master);
 };
 /**************************** trans_t *****************************/
-
 
 } // namespace speaker
 } // namespace edp

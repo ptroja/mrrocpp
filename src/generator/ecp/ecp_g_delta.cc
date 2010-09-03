@@ -9,25 +9,25 @@
 // autor: tkornuta
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <cerrno>
 #include <unistd.h>
 #include <fstream>
 #if defined(__QNXNTO__)
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
 #endif
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "generator/ecp/ecp_g_delta.h"
 
 namespace mrrocpp {

@@ -1,5 +1,5 @@
 /*!
- * @file kinematics_manager.cc
+ * @file
  * @brief File containing the definition of kinematics_manager methods.
  *
  * @author tkornuta
@@ -8,10 +8,10 @@
  * @ingroup KINEMATICS
  */
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "base/kinematics/kinematics_manager.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {

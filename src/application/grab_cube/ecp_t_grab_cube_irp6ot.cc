@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <iostream>
 
@@ -48,8 +48,8 @@ void grab_cube::main_task_algorithm(void)
 
 	tracker->Move();
 
-	/*double v[MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
-	 double a[MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
+	/*double v[lib::MAX_SERVOS_NR]={0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.20};
+	 double a[lib::MAX_SERVOS_NR]={0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.15};
 
 	 smoothgen2->set_relative();
 	 smoothgen2->load_coordinates(lib::ECP_JOINT,0,0,0,0,0,0,0,-0.017,true);

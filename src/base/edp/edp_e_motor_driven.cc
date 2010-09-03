@@ -9,18 +9,18 @@
 // Data:		14.01.2007
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
@@ -30,16 +30,16 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/reader.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 //#include "base/kinematics/kinematic_model.h"
 #include "base/edp/in_out.h"
@@ -204,10 +204,10 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 
 /*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(MAX_SERVOS_NR),
-			servo_current_joints(MAX_SERVOS_NR), desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
-			desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
-			current_motor_pos(MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
+	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
+			desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR),
+			current_motor_pos(lib::MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
 {
 
 	controller_state_edp_buf.is_synchronised = false;

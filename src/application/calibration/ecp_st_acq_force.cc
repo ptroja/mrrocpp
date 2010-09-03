@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <cstdlib>
 
@@ -22,10 +22,10 @@ namespace task {
 acq_force::acq_force(task &_ecp_t) :
 	acquisition(_ecp_t)
 {
-	if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
 		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
-	} else if (ecp_sub_task::ecp_t.config.section_name == ECP_IRP6P_M_SECTION) {
+	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
 		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
 	}
@@ -47,7 +47,7 @@ void acq_force::conditional_execution()
 
 }
 
-void acq_force::write_data(std::string _K_fp, std::string _kk_fp, std::string _M_fp, std::string _mm_fp, int _number_of_measures)
+void acq_force::write_data(const std::string & _K_fp, const std::string & _kk_fp, const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures)
 {
 	K_fp = _K_fp;
 	kk_fp = _kk_fp;

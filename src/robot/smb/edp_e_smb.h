@@ -11,7 +11,7 @@
 #define __EDP_E_SMB_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -22,11 +22,12 @@ namespace smb {
  *
  * This mobile platform is the base of the SPKM manipulator
  */
-class effector: public common::motor_driven_effector {
+class effector : public common::motor_driven_effector
+{
 protected:
 
-	lib::smb_cbuffer ecp_edp_cbuffer;
-	lib::smb_rbuffer edp_ecp_rbuffer;
+	lib::smb::cbuffer ecp_edp_cbuffer;
+	lib::smb::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 

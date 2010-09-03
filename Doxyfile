@@ -14,7 +14,6 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-# This tag specifies the encoding used for all characters in the config file 
 # that follow. The default is UTF-8 which is also the encoding used for all 
 # text before the first occurrence of this tag. Doxygen uses libiconv (or the 
 # iconv built into libc) for the transcoding. See 
@@ -585,35 +584,126 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = src/base/kinematics \
+						 src/base/vsp \
+                         src/base/ecp_mp \
+                         src/base/ecp \
+                         src/base/mp \
+                         src/base/base.dox \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
+                         src/robot/conveyor/mp_r_conveyor.h \
+                         src/robot/conveyor/mp_r_conveyor.cc \
+                         src/robot/conveyor/ecp_r_conv.h \
+                         src/robot/conveyor/ecp_r_conv.cc \ 
+                         src/robot/conveyor/robot.dox \ 
+                         src/robot/conveyor/const_conveyor.h \ 
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
+                         src/robot/irp6_tfg/dp_tfg.h \
+                         src/robot/irp6_tfg/robot.dox \ 
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.h \
+                         src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
+                         src/robot/bird_hand/kinematic_model_bird_hand.h \
+                         src/robot/bird_hand/kinematic_model_bird_hand.cc \
+                         src/robot/bird_hand/mp_r_bird_hand.h \
+                         src/robot/bird_hand/mp_r_bird_hand.cc \
+                         src/robot/bird_hand/ecp_r_bird_hand.h \
+                         src/robot/bird_hand/ecp_r_bird_hand.cc \ 
+                         src/robot/bird_hand/robot.dox \ 
+                         src/robot/bird_hand/const_bird_hand.h \ 
+                         src/robot/bird_hand/dp_bird_hand.h \ 
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h \
                          src/robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.cc \
+                         src/robot/irp6ot_tfg/mp_r_irp6ot_tfg.h \
+                         src/robot/irp6ot_tfg/mp_r_irp6ot_tfg.cc \
+                         src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h \
+                         src/robot/irp6ot_tfg/ecp_r_irp6ot_tfg.cc \ 
+                         src/robot/irp6ot_tfg/robot.dox \ 
+                         src/robot/irp6ot_tfg/const_irp6ot_tfg.h \ 
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h \
                          src/robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.cc \
-#                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
-#                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
-#                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
-#                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
-#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
-#                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
-#                         src/robot/irp6p_m \
-#                         src/robot/shead \
-#                         src/robot/smb \
-#                        src/robot/spkm \
-#                         src/robot/epos \
-#						 src/base/vsp \
-#                         src/base/ecp_mp/ecp_mp_sensor_interface.h \
-#                         src/base/ecp_mp/ecp_mp_sensor.h \
-#                         src/lib/lib.dox \
-#                         src/lib/sensor_error.h \
-#                         src/lib/sensor_interface.h \
-#                         src/sensor/sensors.dox \
-#                         src/sensor/fradia \
-#                         src/sensor/pcbird \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h \
+                         src/robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.cc \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.h \
+                         src/robot/irp6ot_m/kinematic_model_irp6ot_with_track.cc \
+                         src/robot/irp6ot_m/mp_r_irp6ot_m.h \
+                         src/robot/irp6ot_m/mp_r_irp6ot_m.cc \
+                         src/robot/irp6ot_m/ecp_r_irp6ot_m.h \
+                         src/robot/irp6ot_m/ecp_r_irp6ot_m.cc \ 
+                         src/robot/irp6ot_m/robot.dox \ 
+                         src/robot/irp6ot_m/const_irp6ot_m.h \ 
+                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/kinematic_model_irp6p_tfg.cc \
+                         src/robot/irp6p_tfg/mp_r_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/mp_r_irp6p_tfg.cc \
+                         src/robot/irp6p_tfg/ecp_r_irp6p_tfg.h \
+                         src/robot/irp6p_tfg/ecp_r_irp6p_tfg.cc \ 
+                         src/robot/irp6p_tfg/robot.dox \ 
+                         src/robot/irp6p_tfg/const_irp6p_tfg.h \ 
+                         src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_calibrated_irp6p_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_with_wrist.cc \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h \
+                         src/robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.cc \
+                         src/robot/irp6p_m/mp_r_irp6p_m.h \
+                         src/robot/irp6p_m/mp_r_irp6p_m.cc \
+                         src/robot/irp6p_m/ecp_r_irp6p_m.h \
+                         src/robot/irp6p_m/ecp_r_irp6p_m.cc \ 
+                         src/robot/irp6p_m/robot.dox \ 
+                         src/robot/irp6p_m/const_irp6p_m.h \ 
+                         src/robot/shead/kinematic_model_shead.h \
+                         src/robot/shead/kinematic_model_shead.cc \
+                         src/robot/shead/mp_r_shead.h \
+                         src/robot/shead/mp_r_shead.cc \
+                         src/robot/shead/ecp_r_shead.h \
+                         src/robot/shead/ecp_r_shead.cc \ 
+                         src/robot/shead/robot.dox \ 
+                         src/robot/shead/const_shead.h \ 
+                         src/robot/shead/dp_shead.h \ 
+                         src/robot/smb/kinematic_model_smb.h \
+                         src/robot/smb/kinematic_model_smb.cc \
+                         src/robot/smb/mp_r_smb.h \
+                         src/robot/smb/mp_r_smb.cc \
+                         src/robot/smb/ecp_r_smb.h \
+                         src/robot/smb/ecp_r_smb.cc \ 
+                         src/robot/smb/robot.dox \ 
+                         src/robot/smb/const_smb.h \ 
+                         src/robot/smb/dp_smb.h \ 
+                         src/robot/spkm/kinematic_parameters_spkm.h \
+                         src/robot/spkm/kinematic_parameters_spkm.cc \
+                         src/robot/spkm/kinematic_model_spkm.h \
+                         src/robot/spkm/kinematic_model_spkm.cc \
+                         src/robot/spkm/mp_r_spkm.h \
+                         src/robot/spkm/mp_r_spkm.cc \
+                         src/robot/spkm/ecp_r_spkm.h \
+                         src/robot/spkm/ecp_r_spkm.cc \ 
+                         src/robot/spkm/robot.dox \ 
+                         src/robot/spkm/const_spkm.h \ 
+                         src/robot/spkm/dp_spkm.h \ 
+                         src/robot/sarkofag/kinematic_model_sarkofag.h \
+                         src/robot/sarkofag/kinematic_model_sarkofag.cc \
+                         src/robot/sarkofag/mp_r_sarkofag.h \
+                         src/robot/sarkofag/mp_r_sarkofag.cc \
+                         src/robot/sarkofag/ecp_r_sarkofag.h \
+                         src/robot/sarkofag/ecp_r_sarkofag.cc \ 
+                         src/robot/sarkofag/robot.dox \ 
+                         src/robot/sarkofag/const_sarkofag.h \ 
+                         src/robot/epos/dp_epos.h \ 
+                         src/robot/epos/robot.dox \ 
+						 src/base/lib/lib.dox \
+                         src/base/lib/sensor_error.h \
+                         src/base/lib/sensor_interface.h \
+                         src/base/lib/single_thread_port.h \
+                         src/base/lib/single_thread_port.cc \
+                         src/sensor/sensors.dox \
+                         src/sensor/fradia \
+                         src/sensor/pcbird \
+                         src/application/applications.dox \
+                         src/application/edge_follow \
                      
 
 # This tag can be used to specify the character encoding of the source files 
@@ -1479,7 +1569,7 @@ COLLABORATION_GRAPH    = NO
 # If the GROUP_GRAPHS and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for groups, showing the direct groups dependencies
 
-GROUP_GRAPHS           = NO
+GROUP_GRAPHS           = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and 
 # collaboration diagrams in a style similar to the OMG's Unified Modeling 
@@ -1497,14 +1587,14 @@ TEMPLATE_RELATIONS     = NO
 # file showing the direct and indirect include dependencies of the file with 
 # other documented files.
 
-INCLUDE_GRAPH          = NO
+INCLUDE_GRAPH          = YES
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDED_BY_GRAPH, and 
 # HAVE_DOT tags are set to YES then doxygen will generate a graph for each 
 # documented header file showing the documented files that directly or 
 # indirectly include this file.
 
-INCLUDED_BY_GRAPH      = NO
+INCLUDED_BY_GRAPH      = YES
 
 # If the CALL_GRAPH and HAVE_DOT options are set to YES then 
 # doxygen will generate a call dependency graph for every global function 
@@ -1512,7 +1602,7 @@ INCLUDED_BY_GRAPH      = NO
 # the time of a run. So in most cases it will be better to enable call graphs 
 # for selected functions only using the \callgraph command.
 
-CALL_GRAPH             = NO
+CALL_GRAPH             = YES
 
 # If the CALLER_GRAPH and HAVE_DOT tags are set to YES then 
 # doxygen will generate a caller dependency graph for every global function 

@@ -1,14 +1,22 @@
 #if !defined(_ECP_TASK_H)
 #define _ECP_TASK_H
 
-
+/*!
+ * @file
+ * @brief File contains ecp base task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+namespace robot {
+class ecp_robot;
+}
 namespace task {
 
 class ecp_sub_task;
@@ -52,7 +60,7 @@ public:
 	// Polecenie od MP dla TASKa
 	lib::MP_COMMAND_PACKAGE mp_command;
 
-	ecp_robot* ecp_m_robot;
+	robot::ecp_robot* ecp_m_robot;
 
 	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
 	bool continuous_coordination;

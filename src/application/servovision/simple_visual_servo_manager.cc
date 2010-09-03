@@ -7,7 +7,7 @@
 
 #include "simple_visual_servo_manager.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 

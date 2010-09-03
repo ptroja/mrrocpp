@@ -9,10 +9,10 @@
 #define __SERVO_GR_H
 
 #include <boost/utility.hpp>
-
-#include "base/edp/edp.h"
-#include "base/edp/HardwareInterface.h"
-#include "base/edp/regulator.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/condition_synchroniser.h"
+#include "base/edp/edp_typedefs.h"
 
 #define ERROR_DETECTED     1
 #define NO_ERROR_DETECTED  0
@@ -20,6 +20,10 @@
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class regulator;
+class HardwareInterface;
+class motor_driven_effector;
 
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
 const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
@@ -46,7 +50,7 @@ protected:
 
 	// regulator_group
 
-	regulator* regulator_ptr[MAX_SERVOS_NR];
+	regulator* regulator_ptr[lib::MAX_SERVOS_NR];
 	// tablica wskaznikow na regulatory bazowe,
 	// ktore zostana zastapione regulatorami konkretnymi
 
@@ -94,10 +98,10 @@ public:
 	lib::condition_synchroniser thread_started;
 
 	lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
-	double axe_inc_per_revolution[MAX_SERVOS_NR];
-	double synchro_step_coarse[MAX_SERVOS_NR];
-	double synchro_step_fine[MAX_SERVOS_NR];
-	int synchro_axis_order[MAX_SERVOS_NR];
+	double axe_inc_per_revolution[lib::MAX_SERVOS_NR];
+	double synchro_step_coarse[lib::MAX_SERVOS_NR];
+	double synchro_step_fine[lib::MAX_SERVOS_NR];
+	int synchro_axis_order[lib::MAX_SERVOS_NR];
 
 	lib::edp_master_command servo_command; // polecenie z EDP_MASTER dla SERVO_GROUP
 	lib::servo_group_reply sg_reply; // bufor na informacje odbierane z SERVO_GROUP

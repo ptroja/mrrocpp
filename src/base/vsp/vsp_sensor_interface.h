@@ -1,5 +1,5 @@
 /*!
- * @file vsp_sensor_interface.h
+ * @file
  * @brief File containing declaration of the base sensor_interface class.
  *
  * @date 04.09.2010
@@ -12,8 +12,8 @@
 #if !defined(_VSP_SENSOR_INTERFACE_H)
 #define _VSP_SENSOR_INTERFACE_H
 
-#include "lib/sensor_interface.h"
-#include "lib/configurator.h"
+#include "base/lib/sensor_interface.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace vsp {
@@ -90,9 +90,9 @@ public:
 
 	/**
 	 * @brief Abstract method for setting the results of the sensor data aggregation.
-	 * @param  Result that is to be set.
+	 * @param _report Result that is to be set.
 	 */
-	virtual void set_vsp_report(lib::sensor::VSP_REPORT_t) = 0;
+	virtual void set_vsp_report(lib::sensor::VSP_REPORT_t _report) = 0;
 
 	/**
 	 * @brief Abstract method returning command sent to VSP.

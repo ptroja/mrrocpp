@@ -8,7 +8,7 @@
 
 #ifndef __REGULATOR_SARKOFAG_H
 #define __REGULATOR_SARKOFAG_H
-#include "base/edp/edp.h"
+#include "base/edp/edp_typedefs.h"
 #include "base/edp/regulator.h"
 
 namespace mrrocpp {
@@ -18,7 +18,7 @@ namespace sarkofag {
 #define SARKOFAG_SYNCHRO_STEP_COARSE -0.05
 #define SARKOFAG_SYNCHRO_STEP_FINE   -0.02
 
-#define SARKOFAG_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
+#define INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
 #define SARKOFAG_MAX_PWM_INCREMENT	1000
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_sarkofag: public common::NL_regulator {

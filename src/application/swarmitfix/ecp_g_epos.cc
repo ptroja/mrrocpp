@@ -4,6 +4,8 @@
  *Author: yoyek
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "ecp_g_epos.h"
 
 namespace mrrocpp {
@@ -28,9 +30,9 @@ epos_cubic::epos_cubic(common::task::task& _ecp_task) :
 
 
 	epos_cubic_command_data_port
-			= the_robot->port_manager.get_port <lib::epos_cubic_command> (lib::EPOS_CUBIC_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);
 	epos_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::epos_reply> (lib::EPOS_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -107,9 +109,9 @@ epos_trapezoidal::epos_trapezoidal(common::task::task& _ecp_task) :
 
 
 	epos_trapezoidal_command_data_port
-			= the_robot->port_manager.get_port <lib::epos_trapezoidal_command> (lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::epos::epos_trapezoidal_command> (lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT);
 	epos_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::epos_reply> (lib::EPOS_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -186,9 +188,9 @@ epos_operational::epos_operational(common::task::task& _ecp_task) :
 
 
 	epos_operational_command_data_port
-			= the_robot->port_manager.get_port <lib::epos_operational_command> (lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::epos::epos_operational_command> (lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT);
 	epos_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::epos_reply> (lib::EPOS_REPLY_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -264,7 +266,7 @@ epos_brake::epos_brake(common::task::task& _ecp_task) :
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
 
-	epos_brake_command_data_port = the_robot->port_manager.get_port <bool> (lib::EPOS_BRAKE_COMMAND_DATA_PORT);
+	epos_brake_command_data_port = the_robot->port_manager.get_port <bool> (lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT);
 
 }
 

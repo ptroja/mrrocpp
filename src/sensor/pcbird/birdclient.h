@@ -1,5 +1,5 @@
 /**
- * @file birdclient.h
+ * @file
  * @brief File containing declarations of structure for storing data retrieved from the PcBird sensor and low-level (hardware access) functions.
  *
  * @author B.Bielawski
@@ -14,7 +14,7 @@
 #ifndef __BIRDCLIENT_H
 #define __BIRDCLIENT_H
 
-#include <inttypes.h>
+#include <stdint.h>
 
 namespace mrrocpp {
 namespace ecp_mp {

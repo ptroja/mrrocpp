@@ -8,7 +8,7 @@
 #ifndef VISUAL_SERVO_H_
 #define VISUAL_SERVO_H_
 
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 #include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"

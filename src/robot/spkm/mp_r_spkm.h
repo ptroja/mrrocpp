@@ -1,12 +1,21 @@
 #if !defined(MP_R_SPKM_H_)
 #define MP_R_SPKM_H_
 
-#include "base/mp/mp_r_motor_driven.h"
+/*!
+ * @file
+ * @brief File contains mp robot class declaration for SwarmItFix Parallel Kinematic Machine
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup spkm
+ */
+
+#include "base/mp/mp_robot.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class spkm : public motor_driven
+class spkm : public robot
 {
 public:
 	spkm(task::task &mp_object_l);

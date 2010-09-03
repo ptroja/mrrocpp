@@ -6,9 +6,8 @@
 //
 // -------------------------------------------------------------------------
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "robot/polycrank/ecp_r_polycrank.h"
 
@@ -17,12 +16,12 @@ namespace ecp {
 namespace polycrank {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_POLYCRANK, POLYCRANK_NUM_OF_SERVOS, EDP_POLYCRANK_SECTION, _config, _sr_ecp)
+			robot::ecp_robot(lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, lib::polycrank::EDP_SECTION, _config, _sr_ecp)
 {
 }
 ;
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_POLYCRANK, POLYCRANK_NUM_OF_SERVOS, EDP_POLYCRANK_SECTION, _ecp_object)
+			robot::ecp_robot(lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, lib::polycrank::EDP_SECTION, _ecp_object)
 {
 }
 ;

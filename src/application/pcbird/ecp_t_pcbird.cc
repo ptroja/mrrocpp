@@ -6,15 +6,15 @@
  * \date 17.03.2008
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
@@ -40,12 +40,12 @@ pcbird_pos::pcbird_pos(lib::configurator &_config) : task(_config)
 	sensor_m[lib::SENSOR_PCBIRD]->configure_sensor();
 
 	// Create an adequate robot. - depending on the ini section name.
-	if (config.section_name == ECP_IRP6OT_M_SECTION)
+	if (config.section_name == ECP_SECTION)
 	{
 		ecp_m_robot = new irp6ot_m::robot (*this);
 		sr_ecp_msg->message("IRp6ot loaded");
 	}
-	else if (config.section_name == ECP_IRP6P_M_SECTION)
+	else if (config.section_name == lib::irp6p_m::ECP_SECTION)
 	{
 		ecp_m_robot = new irp6p_m::robot (*this);
 		sr_ecp_msg->message("IRp6p loaded");

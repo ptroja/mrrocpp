@@ -1,6 +1,8 @@
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "math.h"
+
+#include "base/ecp/ecp_robot.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"
 #include "ecp_g_wii.h"
 
@@ -148,7 +150,7 @@ void wii::execute_motion(void)
     if (the_robot->reply_package.reply_type == lib::ERROR)
     {
 	the_robot->query();
-    	throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+    	throw common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
     }
     the_robot->query();
 
@@ -189,7 +191,7 @@ void wii::execute_motion(void)
                 rumble = true;
                 break;
             default:
-		throw common::ecp_robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
 		break;
 
 	} /* end: switch */

@@ -5,9 +5,9 @@
 
 #include <unistd.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 // Klasa edp_irp6p_effector.
 #include "robot/irp6p_m/edp_irp6p_m_effector.h"
@@ -34,16 +34,16 @@ servo_buffer::servo_buffer(effector &_master) :
 		switch (j) {
 		case IRP6P_GRIPPER_TURN_AXE:
 			axe_inc_per_revolution[j]
-					= IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION;
-			synchro_step_coarse[j] = IRP6_POSTUMENT_AXIS_6_SYNCHRO_STEP_COARSE;
-			synchro_step_fine[j] = IRP6_POSTUMENT_AXIS_6_SYNCHRO_STEP_FINE;
+					= AXIS_6_INC_PER_REVOLUTION;
+			synchro_step_coarse[j] = AXIS_6_SYNCHRO_STEP_COARSE;
+			synchro_step_fine[j] = AXIS_6_SYNCHRO_STEP_FINE;
 			break;
 		default:
 			axe_inc_per_revolution[j]
-					= IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+					= AXIS_0_TO_5_INC_PER_REVOLUTION;
 			synchro_step_coarse[j]
-					= IRP6_POSTUMENT_AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
-			synchro_step_fine[j] = IRP6_POSTUMENT_AXIS_0_TO_5_SYNCHRO_STEP_FINE;
+					= AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
+			synchro_step_fine[j] = AXIS_0_TO_5_SYNCHRO_STEP_FINE;
 			break;
 		}
 	}
@@ -55,6 +55,7 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void) {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
+<<<<<<< HEAD
 //	int max_current[IRP6P_M_NUM_OF_SERVOS] = {
 //			IRP6_POSTUMENT_AXIS_1_MAX_CURRENT,
 //			IRP6_POSTUMENT_AXIS_2_MAX_CURRENT,
@@ -69,6 +70,19 @@ void servo_buffer::load_hardware_interface(void) {
 
 	hi = new common::HI_moxa(master);
 
+=======
+	int max_current[lib::irp6p_m::NUM_OF_SERVOS] = {
+			AXIS_1_MAX_CURRENT,
+			AXIS_2_MAX_CURRENT,
+			AXIS_3_MAX_CURRENT,
+			AXIS_4_MAX_CURRENT,
+			AXIS_5_MAX_CURRENT,
+			AXIS_6_MAX_CURRENT };
+
+	hi = new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER,
+			HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
+			INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
+>>>>>>> 581a2233ffe3f95d54612c4774f1a7a91e37d4f0
 	hi->init();
 
 	// utworzenie tablicy regulatorow

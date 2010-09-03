@@ -1,22 +1,24 @@
 #include <termios.h>
 #include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 #include <termios.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
 
-#include "lib/srlib.h"
+#include "base/edp/edp_e_manip.h"
+
 #include "sensor/ati3084MK/edp_s.h"
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -91,7 +93,7 @@ void ATI3084_force::configure_sensor(void) {// by Y
 		// double point[3] = { master.config.value<double>("x_axis_arm"),
 		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
-		gravity_transformation = new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084,
+		gravity_transformation = new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084,
 				frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 
 	} else {

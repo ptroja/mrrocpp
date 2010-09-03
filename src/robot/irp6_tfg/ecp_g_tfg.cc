@@ -1,5 +1,5 @@
 /**
- * @file generator/ecp_g_force.cc
+ * @file
  * @brief ECP force generators
  * - class declaration
  * @author yoyek
@@ -19,23 +19,25 @@
 // Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
-#include <math.h>
+#include <cmath>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace generator {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
@@ -84,7 +86,7 @@ bool tfg::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = mp_ecp_tfg_command.desired_position;
+	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = mp_ecp_command.desired_position;
 	the_robot->ecp_command.instruction.motion_steps = 1000;
 	the_robot->ecp_command.instruction.value_in_step_no = 998;
 
@@ -111,11 +113,11 @@ void tfg::create_ecp_mp_reply()
 
 void tfg::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_tfg_command, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_tfg_command));
+	memcpy(&mp_ecp_command, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_command));
 
 }
 
 } // namespace generator
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp

@@ -12,7 +12,7 @@
 #if !defined(_ECP_GEN_DELTA_H)
 #define _ECP_GEN_DELTA_H
 
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 #include "base/ecp/ecp_generator.h"
 
@@ -35,14 +35,14 @@ class delta : public common::generator::generator
 {
 protected:
 
-  double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_zyz[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_zyz[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:
 	delta(common::task::task& _ecp_task);

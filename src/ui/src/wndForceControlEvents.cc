@@ -11,24 +11,24 @@
 /********************************* INCLUDES *********************************/
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 
 /* MRROC++ headers */
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "ui/src/ui.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 // #include "common/y_config.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -93,7 +93,7 @@ int FCCreateConnection(void) {
 	// Stworzenie nazwy.
 	std::string tmp_name = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point",
-			ECP_IRP6OT_M_SECTION);
+			lib::irp6ot_m::ECP_SECTION);
 
 #ifdef FCDEBUG
 	printf("FCCreateConnection: %s\n",tmp_name.c_str());

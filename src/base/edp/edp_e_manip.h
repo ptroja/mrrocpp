@@ -10,24 +10,20 @@
 #ifndef __EDP_E_MANIP_H
 #define __EDP_E_MANIP_H
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 
-#include "base/kinematics/kinematics_manager.h"
 #include "base/edp/edp_e_motor_driven.h"
-#include "base/edp/edp_force_sensor.h"
 
 // Konfigurator
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace edp {
+namespace sensor {
+class force;
+}
 namespace common {
 
 //

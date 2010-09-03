@@ -10,13 +10,12 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/shead/edp_e_shead.h"
@@ -26,7 +25,7 @@
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -40,10 +39,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_SHEAD)
+	motor_driven_effector(_config, lib::shead::ROBOT_NAME)
 {
 
-	number_of_servos = SHEAD_NUM_OF_SERVOS;
+	number_of_servos = lib::shead::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
@@ -92,8 +91,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::SHEAD_CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::SHEAD_HEAD_SOLIDIFICATION head_solidification;
+		case lib::shead::CBUFFER_HEAD_SOLIDIFICATION: {
+			lib::shead::HEAD_SOLIDIFICATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
 
@@ -106,8 +105,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		}
 			break;
-		case lib::SHEAD_CBUFFER_VACUUM_ACTIVATION: {
-			lib::SHEAD_VACUUM_ACTIVATION vacuum_activation;
+		case lib::shead::CBUFFER_VACUUM_ACTIVATION: {
+			lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
 		}
@@ -123,7 +122,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznikaaa = (-11);

@@ -44,7 +44,7 @@
  *  added to 1.3 by reed
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <playerclient.h>
     
 int MComProxy::Push(int type, char * channelQ,char* dat){

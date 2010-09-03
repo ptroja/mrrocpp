@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6ot_with_wrist.cc
+ * @file
  * @brief File containing the methods of the model_with_wrist class.
  *
  * The model_with_wrist kinematic model utilizes six out of seven IRP-6ot DOF - the track is treated as a passive one.
@@ -7,14 +7,14 @@
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS,IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
@@ -24,7 +24,6 @@ namespace irp6ot {
 model_with_wrist::model_with_wrist(int _number_of_servos) :
 	number_of_servos(_number_of_servos)
 {
-
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to  kinematic model with active wrist");
 
@@ -33,7 +32,6 @@ model_with_wrist::model_with_wrist(int _number_of_servos) :
 
 	// Wykonywac przeliczenia zwiazane z narzedziami.
 	attached_tool_computations = true;
-
 }
 
 void model_with_wrist::set_kinematic_parameters(void)

@@ -8,11 +8,11 @@
 #if !defined(_ECP_GEN_FORCE_H)
 #define _ECP_GEN_FORCE_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/mrmath/mrmath.h"
 
 
 
@@ -80,7 +80,7 @@ protected:
 	struct generator_edp_data_type
 	{
 		double next_inertia[6], next_reciprocal_damping[6];
-		double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
+		double next_velocity[lib::MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
 		lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	} generator_edp_data;
 
