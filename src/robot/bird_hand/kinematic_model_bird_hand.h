@@ -1,12 +1,12 @@
 /**
- * @file kinematic_model_bird_hand.h
+ * @file
  * @brief File containing declaration of the kinematic_model_bird_hand class.
  *
  * @author tkornuta
  * @author kczajkowski
  * @date May 28, 2010
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS bird_hand
  */
 
 #ifndef KINEMATIC_MODEL_BIRD_HAND_H_
@@ -20,7 +20,7 @@ namespace kinematics {
 namespace bird_hand {
 
 /*!
- * @class kinematic_model_bird_hand
+ *
  * @brief Class solving the problem of inverse kinematics for Exechon parallel kinematc machine with spherical wrist attached to its upper platform.
  *
  * @author kczajkowski

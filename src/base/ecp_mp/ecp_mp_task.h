@@ -1,14 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_mp_task.h dla QNX6
-// Definicje wspolnych struktur danych i metod dla procesow ECP i MP
-// w szczegolnosci zwiazanych z obsluga czujnikow wirtualnych
-//
-// Ostatnia modyfikacja: 03.11.2005
-// autor modyfikacji: tkornuta
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_MP_TASK_H)
 #define _ECP_MP_TASK_H
+
+/*!
+ * @file
+ * @brief File contains ecp_mp base task declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
 
 #include <boost/any.hpp>
 

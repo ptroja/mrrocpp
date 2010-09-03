@@ -11,14 +11,12 @@
 #include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
 #include "base/lib/logger.h"
-#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "../simple_visual_servo_manager.h"
 #include "../ib_eih_visual_servo.h"
 #include "../visual_servo_regulator_p.h"
 #include "../cubic_constraint.h"
 #include "../object_reached_termination_condition.h"
 
-//using mrrocpp::ecp::common::generator::smooth;
 using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;
 using namespace mrrocpp::ecp::servovision;
@@ -53,7 +51,7 @@ protected:
 	/** Moves (using smooth generator) to initial position. */
 //	void moveToInitialPosition();
 
-	static const double initial_position_joints[MAX_SERVOS_NR];
+	static const double initial_position_joints[lib::MAX_SERVOS_NR];
 };
 
 /** @} */

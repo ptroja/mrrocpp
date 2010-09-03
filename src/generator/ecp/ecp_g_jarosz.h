@@ -68,10 +68,10 @@ class linear_parabolic : public delta
 protected:
   /** Flaga, mowiaca czy jest to pierwszy przedzial interpolacji. */
   int first_interval;
-	double ta[MAX_SERVOS_NR];
-	double tb[MAX_SERVOS_NR];
-	double prev_s[MAX_SERVOS_NR];
-	double prev_vel_avg[MAX_SERVOS_NR];
+	double ta[lib::MAX_SERVOS_NR];
+	double tb[lib::MAX_SERVOS_NR];
+	double prev_s[lib::MAX_SERVOS_NR];
+	double prev_vel_avg[lib::MAX_SERVOS_NR];
 
   /**
    *  Metoda sluzy do obliczenia przyrostu drogi.
@@ -138,12 +138,12 @@ class cubic : public polynomial
 {
 protected:
 
-   double A0[MAX_SERVOS_NR];                   // parametry wielomianu
-   double A1[MAX_SERVOS_NR];
-   double A2[MAX_SERVOS_NR];
-   double A3[MAX_SERVOS_NR];
-   double vp[MAX_SERVOS_NR];
-   double vk[MAX_SERVOS_NR];
+   double A0[lib::MAX_SERVOS_NR];                   // parametry wielomianu
+   double A1[lib::MAX_SERVOS_NR];
+   double A2[lib::MAX_SERVOS_NR];
+   double A3[lib::MAX_SERVOS_NR];
+   double vp[lib::MAX_SERVOS_NR];
+   double vk[lib::MAX_SERVOS_NR];
 
 public:
 
@@ -163,16 +163,16 @@ public:
 class quintic : public polynomial
 {
 protected:
-   double A0[MAX_SERVOS_NR];		// parametry wielomianu
-   double A1[MAX_SERVOS_NR];
-   double A2[MAX_SERVOS_NR];
-   double A3[MAX_SERVOS_NR];
-   double A4[MAX_SERVOS_NR];
-   double A5[MAX_SERVOS_NR];
-   double vp[MAX_SERVOS_NR];		// predkosci
-   double vk[MAX_SERVOS_NR];
-   double ap[MAX_SERVOS_NR];		// przyspieszenia
-   double ak[MAX_SERVOS_NR];
+   double A0[lib::MAX_SERVOS_NR];		// parametry wielomianu
+   double A1[lib::MAX_SERVOS_NR];
+   double A2[lib::MAX_SERVOS_NR];
+   double A3[lib::MAX_SERVOS_NR];
+   double A4[lib::MAX_SERVOS_NR];
+   double A5[lib::MAX_SERVOS_NR];
+   double vp[lib::MAX_SERVOS_NR];		// predkosci
+   double vk[lib::MAX_SERVOS_NR];
+   double ap[lib::MAX_SERVOS_NR];		// przyspieszenia
+   double ak[lib::MAX_SERVOS_NR];
 
 public:
 
@@ -201,14 +201,14 @@ protected:
 									// false	- w przeciwnym przypadku
   unsigned int number_of_intervals;      // Liczba przedzialow interpolacji - wynika z calkowitego czasu ruchu
   double INTERVAL;				// Dlugosc okresu interpolacji w [sek]
-  double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_zyz[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_zyz[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_zyz[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
   virtual bool first_step ()=0;
   virtual bool next_step ()=0;
@@ -228,7 +228,7 @@ class parabolic_teach_in : public spline
 protected:
 
   unsigned int half_number_of_intervals;								// Polowa liczby przedzialow interpolacji
-  double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen
+  double a[lib::MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen
 																	// dla kolejnych osi/wspolrzednych
 public:
 	  parabolic_teach_in (common::task::task& _ecp_task, double interval);
@@ -247,7 +247,7 @@ class calibration : public spline
 protected:
 
   unsigned int half_number_of_intervals;								// Polowa liczby przedzialow interpolacji
-  double a[MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen
+  double a[lib::MAX_SERVOS_NR];													// tablica faktycznie realizowanych przyspieszen
 
 public:
   calibration (common::task::task& _ecp_task, double interval);
@@ -268,9 +268,9 @@ class cubic_spline : public spline
 {
 protected:
 
-   double A0[MAX_SERVOS_NR];                   // Parametry wielomianu
-   double A2[MAX_SERVOS_NR];                   // A1[i] = 0
-   double A3[MAX_SERVOS_NR];
+   double A0[lib::MAX_SERVOS_NR];                   // Parametry wielomianu
+   double A2[lib::MAX_SERVOS_NR];                   // A1[i] = 0
+   double A3[lib::MAX_SERVOS_NR];
 
 public:
 
@@ -294,8 +294,8 @@ protected:
 
    int j;							// Licznik pozycji
    bool build_coeff;				// Flaga oznaczajaca pierwsze uzycie generatora
-   double vp[MAX_SERVOS_NR];					// Tablica predkosci poczatkowych
-   double vk[MAX_SERVOS_NR]; 					// Tablica predkosci koncowych
+   double vp[lib::MAX_SERVOS_NR];					// Tablica predkosci poczatkowych
+   double vk[lib::MAX_SERVOS_NR]; 					// Tablica predkosci koncowych
 
    Eigen::MatrixXd y, t, a;					// Macierze: czasow, polozen i przyspieszen - w punktach wezlowych
 
@@ -318,10 +318,10 @@ class quintic_spline : public spline
 {
 protected:
 
-   double A0[MAX_SERVOS_NR];                 // Parametry wielomianu
-   double A3[MAX_SERVOS_NR];                 // A1[i] = 0 , A2[i]=0
-   double A4[MAX_SERVOS_NR];
-   double A5[MAX_SERVOS_NR];
+   double A0[lib::MAX_SERVOS_NR];                 // Parametry wielomianu
+   double A3[lib::MAX_SERVOS_NR];                 // A1[i] = 0 , A2[i]=0
+   double A4[lib::MAX_SERVOS_NR];
+   double A5[lib::MAX_SERVOS_NR];
 
 public:
 	  quintic_spline (common::task::task& _ecp_task, double interval);
@@ -341,7 +341,7 @@ public:
 // Jedna probka pomiarowa (punkt)
   struct one_sample {     // Pojedynczy pomiar
     double ctime;         // czas
-    double coordinates[MAX_SERVOS_NR]; // wspolrzedne
+    double coordinates[lib::MAX_SERVOS_NR]; // wspolrzedne
   };
 
 
@@ -365,18 +365,18 @@ protected:
   unsigned int number_of_intervals;		// Liczba przedzialow interpolacji - wynika z calkowitego czasu ruchu
   unsigned int half_number_of_intervals;	// Polowa liczby przedzialow interpolacji
 
-  double next_pose[MAX_SERVOS_NR];			// Nastepna pozycja liscie - punkt koncowy trajktorii parabolicznej
-  double a[MAX_SERVOS_NR];					// tablica faktycznie realizowanych przyspieszen dla kolejnych osi/wspolrzednych
+  double next_pose[lib::MAX_SERVOS_NR];			// Nastepna pozycja liscie - punkt koncowy trajktorii parabolicznej
+  double a[lib::MAX_SERVOS_NR];					// tablica faktycznie realizowanych przyspieszen dla kolejnych osi/wspolrzednych
 
   double INTERVAL;				// Dlugosc okresu interpolacji w [sek]
-  double a_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_motor[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_joint[MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_zyz[MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_zyz[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
-  double a_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
-  double v_max_aa[MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_motor[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_joint[lib::MAX_SERVOS_NR];		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_zyz[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_zyz[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
+  double a_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
+  double v_max_aa[lib::MAX_SERVOS_NR];			// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 
 public:
 	  elipsoid (common::task::task& _ecp_task);

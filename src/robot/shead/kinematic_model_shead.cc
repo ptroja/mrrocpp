@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_shead.cc
+ * @file
  * @brief File containing methods of the kinematic model for the SwarmItFix agent's head class.
  *
- * @author yoyek
+ * @author tkornuta
  * @date 2010.02.01
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS shead
  */
 
 #include "base/lib/com_buf.h"

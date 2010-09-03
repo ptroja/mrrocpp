@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_smb.h
+ * @file
  * @brief File containing the declaration of the kinematic model for the SwarmItFix agent's mobile base class.
  *
- * @author yoyek
+ * @author tkornuta
  * @date 2010.02.01
  *
- * @ingroup KINEMATICS SIF_KINEMATICS
+ * @ingroup KINEMATICS SIF_KINEMATICS smb
  */
 
 #if !defined(_SMB_KIN_model)
@@ -18,7 +18,7 @@ namespace kinematics {
 namespace smb {
 
 /*!
- * @class model
+ *
  * @brief Kinematic model for the SwarmItFix agent's mobile base class.
  *
  * @author yoyek

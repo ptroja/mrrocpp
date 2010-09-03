@@ -1,5 +1,5 @@
 /**
- * @file generator/ecp_g_force.cc
+ * @file
  * @brief ECP force generators
  * - class declaration
  * @author yoyek
@@ -204,8 +204,8 @@ tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 	configure_pulse_check(false);
 	configure_velocity(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	configure_force(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-	configure_reciprocal_damping(FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, FORCE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING, TORQUE_RECIPROCAL_DAMPING);
-	configure_inertia(FORCE_INERTIA, FORCE_INERTIA, FORCE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA, TORQUE_INERTIA);
+	configure_reciprocal_damping(lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING);
+	configure_inertia(lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA);
 
 	set_force_meassure(false);
 }
@@ -364,7 +364,7 @@ void tff_nose_run::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -390,7 +390,7 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 				break;
 			default:
-				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				break;
 
 		} /* end: switch */
@@ -447,17 +447,17 @@ bool tff_rubik_grab::first_step()
 	}
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	if (both_axes_running)
 		for (int i = 0; i < 2; i++) {
-			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		}
 	else {
-		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[1] = FORCE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[1] = lib::FORCE_RECIPROCAL_DAMPING;
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[1] = lib::CONTACT;
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
 	}
@@ -554,11 +554,11 @@ bool tff_rubik_face_rotate::first_step()
 	}
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING / 4;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = lib::TORQUE_RECIPROCAL_DAMPING / 4;
 	the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::CONTACT;
 
 	if (-0.1 < turn_angle && turn_angle < 0.1) {
@@ -566,13 +566,13 @@ bool tff_rubik_face_rotate::first_step()
 			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	} else {
 		for (int i = 0; i < 3; i++) {
-			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+			the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		}
 		for (int i = 3; i < 5; i++)
 			the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 
-		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = TORQUE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[5] = lib::TORQUE_RECIPROCAL_DAMPING;
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[5] = lib::CONTACT;
 		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[5] = copysign(5.0, turn_angle);
 	}
@@ -686,7 +686,7 @@ bool tff_gripper_approach::first_step()
 		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = 0;
 	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.inertia[2] = FORCE_INERTIA / 4;
+	the_robot->ecp_command.instruction.arm.pf_def.inertia[2] = lib::FORCE_INERTIA / 4;
 	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = speed;
 
 	for (int i = 0; i < 6; i++) {
@@ -695,7 +695,7 @@ bool tff_gripper_approach::first_step()
 	}
 
 	the_robot->ecp_command.instruction.arm.pf_def.behaviour[2] = lib::GUARDED_MOTION;
-	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[2] = FORCE_RECIPROCAL_DAMPING / 2;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING / 2;
 
 	return true;
 }

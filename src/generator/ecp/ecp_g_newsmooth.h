@@ -1,5 +1,5 @@
 /**
-* @file	ecp_g_newsmooth.h
+* @file
 * @brief Smooth class and its methods.
 * @author rtulwin
 * @date	2010

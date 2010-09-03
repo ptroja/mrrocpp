@@ -1,5 +1,5 @@
 /*!
- * @file vsp_sensor_interface.h
+ * @file
  * @brief File containing declaration of the base sensor_interface class.
  *
  * @date 04.09.2010

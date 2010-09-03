@@ -1,10 +1,10 @@
 /*!
- * @file sensor_interface.h
+ * @file
  * @brief File contains sensor interface - a base class for MP, ECP, VSP (and future EDP ) sensors.
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup SENSORS
+ * @ingroup SENSORS lib
  */
 
 #if !defined(_SENSOR_H)
@@ -40,7 +40,6 @@ typedef enum _VSP_REPORT
 {
 	VSP_REPLY_OK, VSP_SENSOR_NOT_CONFIGURED, VSP_READING_NOT_READY, INVALID_VSP_COMMAND
 } VSP_REPORT_t;
-
 
 /**
  * @brief Sensor names type.

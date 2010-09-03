@@ -1,15 +1,17 @@
-/**
- * \file smooth_trajectory_pose.h
- * \brief Header file for smooth_trajectory_pose
- *
- * Contains declaration of smooth_trajectory_pose class and its methods.
- */
-
 #if !defined(_ECP_smooth_TRAJECTORY_POSE_H)
 #define  _ECP_smooth_TRAJECTORY_POSE_H
 
+/*!
+ * @file
+ * @brief Header file for smooth_trajectory_pose
+ * Contains declaration of smooth_trajectory_pose class and its methods.
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
 #include "base/lib/com_buf.h"		// contains lib::POSE_SPECIFICATION
-#include "base/lib/impconst.h"	// contains MAX_SERVOS_NR
+#include "base/lib/impconst.h"	// contains lib::MAX_SERVOS_NR
 namespace mrrocpp {
 namespace ecp_mp {
 namespace common {
@@ -27,55 +29,55 @@ public:
 	/**
 	 * Initial velocity for the pose, for each axis.
 	 */
-	double v_p[MAX_SERVOS_NR];
+	double v_p[lib::MAX_SERVOS_NR];
 	/**
 	 * Final velocity for the pose, for each axis.
 	 */
-	double v_k[MAX_SERVOS_NR];
+	double v_k[lib::MAX_SERVOS_NR];
 	/**
 	 * Maximal velocity for the movement, for each axis.
 	 */
-	double v[MAX_SERVOS_NR];
+	double v[lib::MAX_SERVOS_NR];
 	/**
 	 * Maximal acceleration for the movement, for each axis.
 	 */
-	double a[MAX_SERVOS_NR];
+	double a[lib::MAX_SERVOS_NR];
 	/**
 	 * Desired position
 	 */
-	double coordinates[MAX_SERVOS_NR];
+	double coordinates[lib::MAX_SERVOS_NR];
 	/**
 	 * Number of the macrostep in which the first part of the movement ends (first out of three).
 	 */
-	double przysp[MAX_SERVOS_NR];
+	double przysp[lib::MAX_SERVOS_NR];
 	/**
 	 * Number of the macrostep in which the seconde part of the movement ends.
 	 */
-	double jedn[MAX_SERVOS_NR];
+	double jedn[lib::MAX_SERVOS_NR];
 	/**
 	 * Distance covered in the second part of the movement.
 	 */
-	double s_jedn[MAX_SERVOS_NR];
+	double s_jedn[lib::MAX_SERVOS_NR];
 	/**
 	 * Distance covered in the first part of the movement.
 	 */
-	double s_przysp[MAX_SERVOS_NR];
+	double s_przysp[lib::MAX_SERVOS_NR];
 	/**
 	 * Initial position for the pose.
 	 */
-	double start_position[MAX_SERVOS_NR];
+	double start_position[lib::MAX_SERVOS_NR];
 	/**
 	 * Direction of the movement. Either equal to 1 or -1.
 	 */
-	double k[MAX_SERVOS_NR];
+	double k[lib::MAX_SERVOS_NR];
 	/**
 	 * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a).
 	 */
-	double a_r[MAX_SERVOS_NR];
+	double a_r[lib::MAX_SERVOS_NR];
 	/**
 	 * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v).
 	 */
-	double v_r[MAX_SERVOS_NR];
+	double v_r[lib::MAX_SERVOS_NR];
 	/**
 	 * Number of macrosteps in pose.
 	 */
@@ -91,7 +93,7 @@ public:
 	/**
 	 * Motion kinematic_model_with_tool.
 	 */
-	int model[MAX_SERVOS_NR];
+	int model[lib::MAX_SERVOS_NR];
 	/**
 	 * Number of the given position in whole trajectory chain.
 	 */

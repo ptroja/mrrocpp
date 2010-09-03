@@ -28,7 +28,7 @@ protected:
 
 	long run_counter;
 	bool second_step;
-    double start_joint_arm_coordinates[MAX_SERVOS_NR];
+    double start_joint_arm_coordinates[lib::MAX_SERVOS_NR];
 	
 public:
 	lib::trajectory_description td;

@@ -1,6 +1,14 @@
 #ifndef MP_DELAY_MS_CONDITION_H_
 #define MP_DELAY_MS_CONDITION_H_
 
+/*!
+ * @file
+ * @brief File contains mp delay_ms_condition generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
+
 #include "base/mp/mp_generator.h"
 #include "base/lib/timer.h"
 

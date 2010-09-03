@@ -1,0 +1,22 @@
+/** 
+
+@namespace mrrocpp::lib::bird_hand
+@brief Namespace for bird_hand gripper libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup bird_hand
+
+@namespace mrrocpp::ecp::bird_hand
+@brief Namespace for ECP bird_hand gripper classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup bird_hand
+
+@namespace mrrocpp::kinematics::bird_hand
+@brief Contains classes related to the kinematics of the bird-hand gripper mounted on the IRp-6 on track manipulator.
+@date Jan 05, 2010
+@author tkornuta
+@ingroup KINEMATICS IRP6OT_KINEMATICS bird_hand
+
+   @defgroup bird_hand Bird Hand gripper
+   @ingroup grippers
+
+*/

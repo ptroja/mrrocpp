@@ -1,0 +1,12 @@
+/** 
+
+@namespace mrrocpp::lib::epos
+@brief Namespace for Maxon EPOS libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup epos
+
+   @defgroup epos EPOS2 Hardware Interface
+   @ingroup swarm_robots hardware_interfaces
+
+
+*/

@@ -2,7 +2,6 @@
 #include <cstring>
 #include <ostream>
 
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {

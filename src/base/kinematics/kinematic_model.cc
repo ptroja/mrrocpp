@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model.cc
+ * @file
  * @brief File containing definitions of kinematic_model class methods.
  *
  * @author tkornuta

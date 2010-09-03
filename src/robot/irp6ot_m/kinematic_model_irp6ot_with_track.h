@@ -1,5 +1,5 @@
 /*!
- * @file kinematic_model_irp6ot_with_track.h
+ * @file
  * @brief File containing the kinematic_model_irp6ot_with_track class.
  *
  * The kinematic_model_irp6ot_with_track kinematic model utilizes six out of seven IRP-6ot DOF - the newly added one is passive.
@@ -7,7 +7,7 @@
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
  */
 
 #if !defined(_IRP6OT_KIN_MODEL_WITH_TRACK)
@@ -20,7 +20,7 @@ namespace kinematics {
 namespace irp6ot {
 
 /*!
- * @class model_with_track
+ *
  * @brief The kinematic model utilizes six out of seven IRP-6ot DOF - the newly added one is passive.
  *
  * @author tkornuta

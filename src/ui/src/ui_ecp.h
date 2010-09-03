@@ -8,10 +8,7 @@
 #ifndef __UI_ECP_H
 #define __UI_ECP_H
 
-#include <boost/function.hpp>
-#include <boost/thread/condition_variable.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/circular_buffer.hpp>
+#include <boost/thread/thread.hpp>
 #include <stdexcept>
 #include <iostream>
 #include <string>
@@ -19,7 +16,7 @@
 
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
-#include "base/lib/mis_fun.h"
+#include "base/lib/condition_synchroniser.h"
 
 #include "ui/src/ui.h"
 

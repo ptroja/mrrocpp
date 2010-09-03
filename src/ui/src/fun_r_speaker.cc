@@ -24,7 +24,7 @@
 // #include "ui/src/ui.h"
 // Konfigurator.
 // #include "base/lib/configurator.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
 /* Local headers */
@@ -157,8 +157,8 @@ int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	char local_text[MAX_TEXT];
-	char local_prosody[MAX_PROSODY];
+	char local_text[lib::MAX_TEXT];
+	char local_prosody[lib::MAX_PROSODY];
 	char* ref_local_text;
 	char* ref_local_prosody;
 
@@ -398,8 +398,8 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 				if (errno == EINTR)
 					break;
-				if ((tmp++) < CONNECT_RETRY)
-					delay(CONNECT_DELAY);
+				if ((tmp++) < lib::CONNECT_RETRY)
+					delay(lib::CONNECT_DELAY);
 				else {
 					perror("blad odwolania do ECP_TRIGGER");
 				};

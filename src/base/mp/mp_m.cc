@@ -1,8 +1,10 @@
-// ------------------------------------------------------------------------
-//
-//                      MASTER PROCESS (MP) - main()
-//
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main mp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstdio>
 #include <cstdlib>
@@ -10,16 +12,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
-#include "base/lib/configurator.h"
-
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
-#include "base/lib/mis_fun.h"
-
 #include "base/ecp_mp/transmitter.h"
+
+#include "base/lib/mis_fun.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_generator.h"
@@ -103,13 +98,15 @@ int main(int argc, char *argv[], char **arge)
 
 		try {
 			// TODO: new/delete fixup
-			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], MP_SECTION, argv[5]);
+			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], lib::MP_SECTION, argv[5]);
 
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
+			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
+			mp::common::mp_t->create_robots();
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
-			lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 4);
+			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 			//signal(SIGINT,  &(catch_signal_in_mp));
@@ -150,12 +147,12 @@ int main(int argc, char *argv[], char **arge)
 			mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (mp::generator::generator::MP_error & e) {
+		catch (mp::generator::MP_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		} /* end: catch sensor_error  */
-		catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+		catch (ecp_mp::transmitter::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
@@ -224,7 +221,7 @@ int main(int argc, char *argv[], char **arge)
 				}/*end:switch*/
 
 			} /*end: catch */
-			catch (mp::robot::robot::MP_error & e) {
+			catch (mp::robot::MP_error & e) {
 				if (e.error_class == lib::SYSTEM_ERROR) {
 					exit( EXIT_FAILURE);
 				}
@@ -246,7 +243,7 @@ int main(int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (mp::generator::generator::MP_error & e) {
+			catch (mp::generator::MP_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
 					exit( EXIT_FAILURE);
@@ -277,7 +274,7 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 			} /* end: catch sensor_error  */
-			catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+			catch (ecp_mp::transmitter::transmitter_error & e) {
 				/* Wyswietlenie komunikatu. */
 				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
 				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);

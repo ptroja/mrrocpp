@@ -1,13 +1,12 @@
 /*!
- * @file kinematic_model_conveyor.cc
+ * @file
  * @brief File containing the methods of the conveyor kinematic model.
  *
  * @author tkornuta
  * @date 24.02.2007
  *
- * @ingroup KINEMATICS CONVEYOR_KINEMATICS
+ * @ingroup KINEMATICS CONVEYOR_KINEMATICS conveyor
  */
-
 
 #include "robot/conveyor/kinematic_model_conveyor.h"
 

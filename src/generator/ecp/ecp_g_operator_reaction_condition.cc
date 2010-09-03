@@ -42,24 +42,24 @@ void operator_reaction_condition::get_supplementary(ecp_taught_in_pose& tip)
 {
 	tip.arm_type = pose_list_iterator->arm_type;
 	tip.motion_time = pose_list_iterator->motion_time;
-	memcpy(tip.coordinates, pose_list_iterator->coordinates, MAX_SERVOS_NR * sizeof(double));
+	memcpy(tip.coordinates, pose_list_iterator->coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 
-void operator_reaction_condition::set_supplementary(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::set_supplementary(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	pose_list_iterator->extra_info = extra_info;
-	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR * sizeof(double));
+	memcpy(pose_list_iterator->coordinates, coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 
-void operator_reaction_condition::create_supplementary_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::create_supplementary_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void operator_reaction_condition::insert_supplementary_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void operator_reaction_condition::insert_supplementary_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator++;

@@ -1,5 +1,5 @@
 /*!
- * @file kinematics_manager.h
+ * @file
  * @brief File containing the declaration of kinematics_manager class.
  *
  * @author tkornuta
@@ -19,7 +19,7 @@ namespace kinematics {
 namespace common {
 
 /*!
- * @class kinematics_manager
+ *
  * @brief Class responsible for management of multiple kinematic models. Base class of all embodied-robot effectors.
  *
  * @author tkornuta

@@ -1,12 +1,21 @@
 #if !defined(MP_R_BIRD_HAND_H_)
 #define MP_R_BIRD_HAND_H_
 
-#include "base/mp/mp_r_motor_driven.h"
+/*!
+ * @file
+ * @brief File contains mp robot class declaration for Bird Hand three finger gripper
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup bird_hand
+ */
+
+#include "base/mp/mp_robot.h"
+#include "const_bird_hand.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class bird_hand : public motor_driven
+class bird_hand : public robot
 {
 
 public:

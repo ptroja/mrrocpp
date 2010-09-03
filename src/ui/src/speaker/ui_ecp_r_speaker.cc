@@ -36,7 +36,7 @@ void ui_speaker_robot::execute_motion(void) {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 	set_ui_state_notification(UI_N_COMMUNICATION);
 
-	ecp_robot::execute_motion();
+	robot::ecp_robot::execute_motion();
 }
 
 bool ui_speaker_robot::send_command(const char* local_text,
@@ -44,9 +44,9 @@ bool ui_speaker_robot::send_command(const char* local_text,
 	ecp_command.instruction.instruction_type = lib::SET;
 
 	if ((local_text) && (local_prosody)) {
-		strncpy(ecp_command.instruction.arm.text_def.text, local_text, MAX_TEXT);
+		strncpy(ecp_command.instruction.arm.text_def.text, local_text, lib::MAX_TEXT);
 		strncpy(ecp_command.instruction.arm.text_def.prosody, local_prosody,
-				MAX_PROSODY );
+				lib::MAX_PROSODY );
 	}
 
 	execute_motion();

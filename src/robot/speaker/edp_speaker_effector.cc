@@ -45,7 +45,7 @@
 // Klasa edp_speaker_effector.
 #include "robot/speaker/edp_speaker_effector.h"
 #include "robot/speaker/speak_t.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
@@ -55,7 +55,7 @@ namespace edp {
 namespace speaker {
 
 effector::effector(lib::configurator &_config) :
-	common::effector(_config, lib::ROBOT_SPEAKER)
+	common::effector(_config, lib::speaker::ROBOT_NAME)
 {
 
 	real_reply_type = lib::ACKNOWLEDGE;
@@ -66,7 +66,7 @@ effector::effector(lib::configurator &_config) :
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 }
 
 int effector::init()
@@ -259,7 +259,7 @@ int effector::speak(lib::c_buffer *instruction)
 		lib::set_thread_priority(pthread_self(), 2);
 		uicSamplesNo = SayIt(text2speak, prosody, piBuffSpeechOut);
 		//clock_gettime( CLOCK_REALTIME , &e_time);
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 		mSamples = uicSamplesNo * 2; // 42830; // MAC7 sprawdzic, czy dla roznych textow nie bedzie sie roznic // FindTag (file2, "data"); // 441000;
 
 		if (snd_pcm_plugin_prepare(pcm_handle, SND_PCM_CHANNEL_PLAYBACK) < 0) {

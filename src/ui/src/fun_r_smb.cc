@@ -27,7 +27,7 @@
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -86,7 +86,7 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 				{
 					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 
-					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::ROBOT_SMB);
+					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::smb::ROBOT_NAME);
 				}
 				ui.smb->state.edp.pid = ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
 
@@ -105,8 +105,8 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 					while ((ui.smb->state.edp.reader_fd
 							= name_open(ui.smb->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

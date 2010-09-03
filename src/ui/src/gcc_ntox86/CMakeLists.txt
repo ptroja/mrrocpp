@@ -54,19 +54,7 @@ find_library(AP_LIBRARY Ap $ENV{QNX_TARGET}/x86/usr/lib)
 find_library(PH_LIBRARY ph $ENV{QNX_TARGET}/x86/usr/lib)
 set(PHOTON_LIBRARIES ${PHEX_LIBRARY} ${AP_LIBRARY} ${PH_LIBRARY})
 
-set(ROBOT_LIBRARIES
-	ecp_r_irp6ot_m ecp_r_irp6p_m
-	ecp_r_irp6ot_tfg ecp_r_irp6p_tfg
-	ecp_r_sarkofag
-	ecp_r_irp6m ecp_r_conv
-	ecp_r_polycrank
-	ecp_r_speaker
-	ecp_r_smb ecp_r_spkm ecp_r_shead
-	ecp_r_bird_hand
-)
-
 target_link_libraries(ui
-	${ROBOT_LIBRARIES}
 	ecp
 	${PHOTON_LIBRARIES}
 	${COMMON_LIBRARIES}

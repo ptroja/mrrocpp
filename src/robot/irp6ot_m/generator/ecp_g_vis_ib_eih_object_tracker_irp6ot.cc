@@ -21,7 +21,7 @@ ecp_vis_ib_eih_object_tracker_irp6ot::ecp_vis_ib_eih_object_tracker_irp6ot(commo
 	common::generator::ecp_visual_servo(_ecp_task)
 {
 
-	t = MOTION_STEPS * STEP; //ustawianie czasu makrokroku (50 milisekund)
+	t = MOTION_STEPS * lib::EDP_STEP; //ustawianie czasu makrokroku (50 milisekund)
 }
 
 bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step()

@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                              mp_task.cc
-//
-// MP Master Process - methods
-//
-// -------------------------------------------------------------------------
-// Funkcje do konstruowania procesow MP
+/*!
+ * @file
+ * @brief File contains mp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <cstdio>
 #include <sys/types.h>
@@ -19,31 +19,13 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/lib/srlib.h"
 #include "base/lib/datastr.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_g_common.h"
 #include "base/mp/mp_g_delay_ms_condition.h"
-
-#include "robot/conveyor/mp_r_conveyor.h"
-#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
-#include "robot/irp6p_m/mp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/mp_r_irp6_mechatronika.h"
-#include "robot/speaker/mp_r_speaker.h"
-#include "robot/polycrank/mp_r_polycrank.h"
-#include "robot/bird_hand/mp_r_bird_hand.h"
-#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#include "robot/shead/mp_r_shead.h"
-#include "robot/spkm/mp_r_spkm.h"
-#include "robot/smb/mp_r_smb.h"
-#include "robot/sarkofag/mp_r_sarkofag.h"
+#include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
@@ -68,8 +50,6 @@ task::task(lib::configurator &_config) :
 	// initialize communication with other processes
 	initialize_communication();
 
-	// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
-	create_robots();
 }
 
 task::~task()
@@ -99,115 +79,6 @@ void task::stop_and_terminate()
 		exit( EXIT_FAILURE);
 	}
 	terminate_all(robot_m);
-}
-
-// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void task::create_robots()
-{
-	/*
-	 * this is necessary to first create robot and then assign it to robot_m
-	 * reason: mp_robot() constructor uses this map (by calling
-	 * mp_task::mp_wait_for_name_open() so needs the map to be in
-	 * a consistent state
-	 */
-	robot::robot* created_robot;
-
-	// ROBOT CONVEYOR
-	if (config.value <int> ("is_conveyor_active", UI_SECTION)) {
-		created_robot = new robot::conveyor(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT SPEAKER
-	if (config.value <int> ("is_speaker_active", UI_SECTION)) {
-		created_robot = new robot::speaker(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT IRP6_MECHATRONIKA
-	if (config.value <int> ("is_irp6_mechatronika_active", UI_SECTION)) {
-		created_robot = new robot::irp6_mechatronika(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT POLYCRANK
-	if (config.value <int> ("is_polycrank_active", UI_SECTION)) {
-		created_robot = new robot::polycrank(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT BIRD_HAND
-	if (config.value <int> ("is_bird_hand_active", UI_SECTION)) {
-		created_robot = new robot::bird_hand(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT SPKM
-	if (config.value <int> ("is_spkm_active", UI_SECTION)) {
-		created_robot = new robot::spkm(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT SMB
-	if (config.value <int> ("is_smb_active", UI_SECTION)) {
-		created_robot = new robot::smb(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT SHEAD
-	if (config.value <int> ("is_shead_active", UI_SECTION)) {
-		created_robot = new robot::shead(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT IRP6OT_TFG
-	if (config.value <int> ("is_irp6ot_tfg_active", UI_SECTION)) {
-		created_robot = new robot::irp6ot_tfg(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT SARKOFAG
-	if (config.value <int> ("is_sarkofag_active", UI_SECTION)) {
-		created_robot = new robot::sarkofag(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT IRP6P_TFG
-	if (config.value <int> ("is_irp6p_tfg_active", UI_SECTION)) {
-		created_robot = new robot::irp6p_tfg(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT IRP6OT_M
-	if (config.value <int> ("is_irp6ot_m_active", UI_SECTION)) {
-		created_robot = new robot::irp6ot_m(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT IRP6P_M
-	if (config.value <int> ("is_irp6p_m_active", UI_SECTION)) {
-		created_robot = new robot::irp6p_m(*this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT_ELECTRON
-	if (config.value <int> ("is_electron_robot_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_ELECTRON, "[ecp_electron]", *this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT_SPEECHRECOGNITION
-	if (config.value <int> ("is_speechrecognition_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_SPEECHRECOGNITION, "[ecp_speechrecognition]", *this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
-	// ROBOT_FESTIVAL
-	if (config.value <int> ("is_festival_active", UI_SECTION)) {
-		created_robot = new robot::robot(lib::ROBOT_FESTIVAL, "[ecp_festival]", *this);
-		robot_m[created_robot->robot_name] = created_robot;
-	}
-
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
@@ -552,10 +423,10 @@ int task::wait_for_name_open(void)
 					}
 
 					BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-						if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+						if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
 							robot_node.second->new_pulse = true;
-							robot_node.second->pulse_code = msg.code;
-							//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->pulse_code);
+							robot_node.second->ecp_pulse_code = msg.code;
+							//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->ecp_pulse_code);
 						}
 					}
 
@@ -602,9 +473,9 @@ int task::wait_for_name_open(void)
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->pulse_code = type;
+					robot_node.second->ecp_pulse_code = type;
 				}
 			}
 		} else if (rcvid == MESSIP_MSG_CONNECTING) {
@@ -703,10 +574,10 @@ while(!exit_from_while) {
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->opened && robot_node.second->scoid == msg.scoid) {
+				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->pulse_code = msg.code;
-					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->pulse_receive_time)) == -1) {
+					robot_node.second->ecp_pulse_code = msg.code;
+					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time)) == -1) {
 						perror("clock_gettime()");
 					}
 
@@ -765,9 +636,9 @@ while(!exit_from_while) {
 		}
 
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-			if (robot_node.second->opened && robot_node.second->scoid == mp_pulse_attach->lastmsg_sockfd) {
+			if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
 				robot_node.second->new_pulse = true;
-				robot_node.second->pulse_code = type;
+				robot_node.second->ecp_pulse_code = type;
 				if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 					if (!(robot_node.second->new_pulse_checked)) {
 						desired_pulse_found = true;
@@ -890,7 +761,7 @@ while (!(ui_exit_from_while && ecp_exit_from_while)) {
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+const std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 const std::string mp_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 // Obiekt do komuniacji z SR
@@ -975,7 +846,7 @@ while (1) {
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 		if (robot_node.second->new_pulse ) {
-			if (robot_node.second->pulse_code == ECP_WAIT_FOR_START) {
+			if (robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_START) {
 				robot_node.second->new_pulse = false;
 				robot_node.second->new_pulse_checked = false;
 				robot_node.second->start_ecp();
@@ -998,7 +869,7 @@ while (1) {
 //	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
 //		fprintf(stderr, "task::start_all check: robot %s new_pulse %d new_pulse_checked %d pulse_code %d\n",
 //				lib::toString(robot_node.second->robot_name).c_str(),
-//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->pulse_code);
+//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->ecp_pulse_code);
 //	}
 }
 // ------------------------------------------------------------------------
@@ -1014,7 +885,7 @@ common::robots_t robots_m_tmp;
 
 // przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-	if (robot_node.second->communicate) {
+	if (robot_node.second->communicate_with_ecp) {
 		if ((robot_node.second->mp_command.command == lib::STOP) || (robot_node.second->mp_command.command == lib::END_MOTION) ||
 				(robot_node.second->mp_command.command == lib::NEXT_STATE) || (robot_node.second->continuous_coordination) || (robot_node.second->new_pulse))
 		{
@@ -1031,8 +902,8 @@ while (1) {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp) {
 		// komunikujemy sie tylko z aktywnymi robotami
 		if (robot_node.second->new_pulse) {
-			if ((robot_node.second->pulse_code == ECP_WAIT_FOR_COMMAND) ||
-					(robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
+			if ((robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_COMMAND) ||
+					(robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
 				robot_node.second->new_pulse = false;
 				robot_node.second->new_pulse_checked = false;
 				robot_node.second->execute_motion();

@@ -1,14 +1,13 @@
 /*!
- * @file kinematic_model_irp6ot_tfg.cc
+ * @file
  * @brief File containing methods of the IRp-6ot two fingered gripper kinematic model.
  *
  * @author yoyek
  * @author tkornuta
  * @date Jun 21, 2010
  *
- * @ingroup KINEMATICS IRP6OT_KINEMATICS
+ * @ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_tfg
  */
-
 
 #include "base/lib/com_buf.h"
 #include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
@@ -27,7 +26,6 @@ model::model(void)
 
 }
 
-
 void model::set_kinematic_parameters(void)
 {
 
@@ -38,8 +36,8 @@ void model::set_kinematic_parameters(void)
 	inv_b_7 = 0.2622172716e19;
 	inv_c_7 = -0.2831300000e20;
 	inv_d_7 = -2564.034320;
-//	gear = 0.0;
-//	theta = 0.000000e+00;
+	//	gear = 0.0;
+	//	theta = 0.000000e+00;
 
 	synchro_motor_position = 4830; // chwytak [-]
 

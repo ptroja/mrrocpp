@@ -19,9 +19,8 @@
 
 #include "base/lib/com_buf.h"
 #include "base/lib/srlib.h"
-#include "base/lib/mis_fun.h"
 
-#define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error & e) { \
+#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
 		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
@@ -29,7 +28,7 @@
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
-catch (ecp::common::ecp_robot::ECP_error & er) { \
+catch (ecp::common::robot::ECP_error & er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
 	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
 		perror("ecp lib::SYSTEM_ERROR in UI"); \
@@ -125,8 +124,8 @@ typedef struct {
 	std::string preset_sound_1;
 	std::string preset_sound_2;
 
-	double preset_position[3][MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
-	double front_position[MAX_SERVOS_NR];
+	double preset_position[3][lib::MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
+	double front_position[lib::MAX_SERVOS_NR];
 } edp_state_def;
 
 typedef struct {

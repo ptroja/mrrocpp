@@ -1,6 +1,14 @@
 #if !defined(_ECP_GENERATOR_T_H)
 #define  _ECP_GENERATOR_T_H
 
+/*!
+ * @file
+ * @brief File contains ecp transparent generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
@@ -9,17 +17,18 @@ namespace common {
 namespace generator {
 
 // Generator przezroczysty
-class transparent : public common::generator::generator {
+class transparent : public common::generator::generator
+{
 
 public:
 	transparent(common::task::task& _ecp_task);
 
 	bool throw_kinematics_exceptions;
 
-	bool first_step ();
-	bool next_step ();
+	bool first_step();
+	bool next_step();
 
-	void execute_motion (void);
+	void execute_motion(void);
 };
 
 } // namespace generator

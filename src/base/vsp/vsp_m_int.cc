@@ -1,5 +1,5 @@
 /*!
- * @file vsp_m_int.cc
+ * @file
  * @brief File containing the \b interactive VSP shell.
  *
  * The \b interactive VSP shell collects new measurements only when an explicit reading initiation request arrives.
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
 	static iofunc_attr_t attr;
 
 	// Set priority.
-	setprio(getpid(), MAX_PRIORITY - 3);
+	setprio(getpid(), lib::QNX_MAX_PRIORITY - 3);
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_shell::catch_signal);

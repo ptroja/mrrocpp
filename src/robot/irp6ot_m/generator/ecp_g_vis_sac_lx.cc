@@ -204,7 +204,7 @@ bool vis_sac_lx::first_step()
 	//  		for (int j=0; j<5; j++)
 	//			measure[i][j]=0;
 
-	//	the_robot = robot_m[lib::ROBOT_IRP6OT_M];
+	//	the_robot = robot_m[lib::irp6ot_m::ROBOT_NAME];
 
 	vsp_vis_sac = sensor_m[lib::SENSOR_CAMERA_SA];
 
@@ -264,8 +264,8 @@ bool vis_sac_lx::first_step()
 
 	for (int i=0; i<3; i++)
 	{
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = force_inertia_; // FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = torque_inertia_; //TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = force_inertia_; // lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i+3] = torque_inertia_; //lib::TORQUE_INERTIA;
 
 		the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[i]
 				= force_reciprocal_damping_;

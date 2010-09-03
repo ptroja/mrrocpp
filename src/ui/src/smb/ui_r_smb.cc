@@ -4,7 +4,7 @@
 
 #include "ui/src/smb/ui_r_smb.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/smb/smb_const.h"
+#include "robot/smb/const_smb.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -21,7 +21,7 @@
 
 
 UiRobotSmb::UiRobotSmb(Ui& _ui) :
-	UiRobot(_ui, EDP_SMB_SECTION, ECP_SMB_SECTION), ui_ecp_robot(NULL) {
+	UiRobot(_ui, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL) {
 
 }
 
@@ -50,8 +50,8 @@ int UiRobotSmb::reload_configuration() {
 			state.edp.reader_fd = -1;
 			state.edp.state = 0;
 
-			if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-				state.edp.test_mode = ui.config->value<int> (ROBOT_TEST_MODE,
+			if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+				state.edp.test_mode = ui.config->value<int> (lib::ROBOT_TEST_MODE,
 						state.edp.section_name);
 			else
 				state.edp.test_mode = 0;

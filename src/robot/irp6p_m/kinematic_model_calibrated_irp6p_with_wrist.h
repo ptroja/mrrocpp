@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_calibrated_irp6p_with_wrist.h
+ * @file
  * @brief File containing the IRp-6p with wrist (6DOFs) calibrated kinematic model class.
  *
  * @author tkornuta
  * @date 14.02.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 #if !defined(_IRP6P_KIN_MODEL_WITH_WRIST_CALIBRATED)
@@ -18,7 +18,7 @@ namespace kinematics {
 namespace irp6p {
 
 /*!
- * @class model_calibrated_with_wrist
+ *
  * @brief The kinematic model utilizes six IRP-6p DOFs.
  *
  * The model_with_wrist kinematic model utilizes six (with an additional one in the wrist) IRP-6p DOFs.

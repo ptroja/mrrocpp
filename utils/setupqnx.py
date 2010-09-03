@@ -153,8 +153,12 @@ packages = \
     "boost-headers-1.42.0", \
     "vim-share-7.2.411", \
     "vim-7.2.411", \
+    "subversion-base-1.6.9nb1", \
+    "scmgit-base-1.6.6.2", \
     "gsl-1.14", \
-    "ncurses-5.7nb3"
+    "ncurses-5.7nb3" \
+    "bash-4.1" \
+    "bash-completion-1.0nb1"
 
 for package in packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_url_prefix + "All/" + package + ".tgz")

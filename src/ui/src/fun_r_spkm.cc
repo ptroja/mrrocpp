@@ -28,7 +28,7 @@
 #include "base/lib/configurator.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
-#include "robot/spkm/spkm_const.h"
+#include "robot/spkm/const_spkm.h"
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
@@ -92,7 +92,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 					ui.spkm->ui_ecp_robot = new ui_tfg_and_conv_robot(
-							*ui.config, *ui.all_ecp_msg, lib::ROBOT_SPKM);
+							*ui.config, *ui.all_ecp_msg, lib::spkm::ROBOT_NAME);
 
 				}
 
@@ -115,8 +115,8 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 							= name_open(
 									ui.spkm->state.edp.network_reader_attach_point.c_str(),
 									NAME_FLAG_ATTACH_GLOBAL)) < 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

@@ -234,17 +234,17 @@ void ATI6284_force::configure_sensor(void)
 				Samples_Acquired = 0;
 				invalid_value = 0;
 
-				local_timer.timer_start();
+				local_timer.start();
 
 				do {
 					//!< odczekaj
 					InterruptWait(0, NULL);
-					local_timer.timer_stop();
-					local_timer.get_time(&sec);
+					local_timer.stop();
+					local_timer.get_time(sec);
 				} while (sec < START_TO_READ_TIME_INTERVAL);
 #if	 WITHOUT_INTERRUPT
 
-				local_timer.timer_start();
+				local_timer.start();
 				do {
 					//!< this is the ISR
 					uStatus = theSTC->AI_Status_1.readRegister();
@@ -252,8 +252,8 @@ void ATI6284_force::configure_sensor(void)
 						//!< If the FIFO is not empty, call the ISR.
 						Interrupt_Service_Routine();
 					}
-					local_timer.timer_stop();
-					local_timer.get_time(&sec);
+					local_timer.stop();
+					local_timer.get_time(sec);
 				} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
 
 				if (sec >= START_TO_READ_FAILURE) {
@@ -274,12 +274,12 @@ void ATI6284_force::configure_sensor(void)
 
 #if	 INTERRUPT
 
-			local_timer.timer_start();
+			local_timer.start();
 			do
 			{
 				//!< odczekaj
-				local_timer.timer_stop();
-				local_timer.get_time(&sec);
+				local_timer.stop();
+				local_timer.get_time(sec);
 			}
 			while(sec<INTERRUPT_INTERVAL);
 #if DEBUG
@@ -376,7 +376,7 @@ void ATI6284_force::configure_sensor(void)
 		// 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation
-				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
+				= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 	} else {
 		gravity_transformation->synchro(frame);
 	}
@@ -411,14 +411,14 @@ void ATI6284_force::wait_for_event()
 		Samples_Acquired = 0;
 		invalid_value = 0;
 
-		local_timer.timer_start();
+		local_timer.start();
 
 		do {
 			//!< odczekaj
 			InterruptWait(0, NULL);
 
-			local_timer.timer_stop();
-			local_timer.get_time(&sec);
+			local_timer.stop();
+			local_timer.get_time(sec);
 		} while (sec < START_TO_READ_TIME_INTERVAL);
 	} else {
 		usleep(1000);
@@ -447,7 +447,7 @@ void ATI6284_force::initiate_reading(void)
 		lib::timer local_timer;
 		float sec;
 
-		local_timer.timer_start();
+		local_timer.start();
 
 		do {
 			//!< this is the ISR
@@ -458,8 +458,8 @@ void ATI6284_force::initiate_reading(void)
 				Interrupt_Service_Routine();
 			}
 
-			local_timer.timer_stop();
-			local_timer.get_time(&sec);
+			local_timer.stop();
+			local_timer.get_time(sec);
 		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
 		if (sec >= START_TO_READ_FAILURE) {
 			no_result = 1;
@@ -472,12 +472,12 @@ void ATI6284_force::initiate_reading(void)
 #endif
 
 #if	 INTERRUPT
-		local_timer.timer_start();
+		local_timer.start();
 		do
 		{
 			//!< odczekaj
-			local_timer.timer_stop();
-			local_timer.get_time(&sec);
+			local_timer.stop();
+			local_timer.get_time(sec);
 		}
 		while(sec<INTERRUPT_INTERVAL);
 #if DEBUG

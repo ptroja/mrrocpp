@@ -1,14 +1,12 @@
-// -------------------------------------------------------------------------
-//                            ecp.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-// robot - irp6_mechatronika
-//
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp robot class definition for SwarmItFix Parallel Kinematic Machine
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup spkm
+ */
 
 #include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 
 #include "robot/spkm/ecp_r_spkm.h"
 
@@ -17,12 +15,12 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _config, _sr_ecp), kinematics_manager(),
-			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
-			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+	robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _config, _sr_ecp),
+			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 
@@ -32,12 +30,12 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	ecp_robot(lib::ROBOT_SPKM, SPKM_NUM_OF_SERVOS, EDP_SPKM_SECTION, _ecp_object), kinematics_manager(),
-			epos_cubic_command_data_port(lib::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
-			epos_brake_command_data_port(lib::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+	robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
+			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
+			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
+			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 
@@ -61,12 +59,12 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND;
 
 		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -77,12 +75,12 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
 
 		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -93,12 +91,12 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND;
 
 		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_structure;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -108,10 +106,10 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND;
 
 		if (is_new_data) {
-			throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		} else {
 			is_new_data = true;
 		}
@@ -122,12 +120,12 @@ void robot::create_command()
 	 // generator command interpretation
 	 // narazie proste przepisanie
 
-	 ecp_edp_cbuffer.variant = lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS;
+	 ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_GEN_PARAMETERS;
 
 	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
 
 	 if (is_new_data) {
-	 throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	 throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 	 } else {
 	 is_new_data = true;
 	 }

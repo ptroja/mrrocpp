@@ -1,5 +1,5 @@
 /*!
- * @file vsp_sensor.h
+ * @file
  * @brief File containing declaration of the vsp sensor base template class.
  *
  * @date 09.11.2005

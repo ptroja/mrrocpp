@@ -1,0 +1,23 @@
+/** 
+
+@namespace mrrocpp::lib::irp6p_tfg
+@brief Namespace for IRp6 postument two finger gripper libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6p_tfg
+
+@namespace mrrocpp::ecp::irp6p_tfg
+@brief Namespace for ECP IRp6 postument two finger gripper classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6p_tfg
+
+@namespace mrrocpp::kinematics::irp6p_tfg
+@brief Contains classes related to the kinematics of the IRp-6 on track manipulator two fingered gripper.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS IRP6P_KINEMATICS irp6p_tfg
+
+   @defgroup irp6p_tfg IRp6 postument two finger gripper
+   @ingroup irp6_tfg
+
+
+*/

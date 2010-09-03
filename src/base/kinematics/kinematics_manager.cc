@@ -1,5 +1,5 @@
 /*!
- * @file kinematics_manager.cc
+ * @file
  * @brief File containing the definition of kinematics_manager methods.
  *
  * @author tkornuta

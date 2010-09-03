@@ -15,7 +15,6 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/mis_fun.h"
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
@@ -35,10 +34,10 @@ namespace polycrank {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_POLYCRANK)
+	manip_effector(_config, lib::polycrank::ROBOT_NAME)
 {
 
-	number_of_servos = POLYCRANK_NUM_OF_SERVOS;
+	number_of_servos = lib::polycrank::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -63,7 +62,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
 		//	motor_driven_effector::get_arm_position_read_hardware_sb();

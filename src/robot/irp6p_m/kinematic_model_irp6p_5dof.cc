@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_model_irp6p_5dof.cc
+ * @file
  * @brief File containing methods of the IRp-6p 5DOFs kinematic model class.
  *
  * @author tkornuta
  * @date 31.01.2007
  *
- * @ingroup KINEMATICS IRP6P_KINEMATICS
+ * @ingroup KINEMATICS IRP6P_KINEMATICS irp6p_m
  */
 
 

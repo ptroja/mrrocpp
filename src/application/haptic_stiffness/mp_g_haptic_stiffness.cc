@@ -19,8 +19,8 @@
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/mp/mp_g_common.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -51,11 +51,11 @@ bool haptic_stiffness::first_step()
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
-	irp6ot = robot_m[lib::ROBOT_IRP6OT_M];
-	irp6p = robot_m[lib::ROBOT_IRP6P_M];
+	irp6ot = robot_m[lib::irp6ot_m::ROBOT_NAME];
+	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
-	irp6ot->communicate = true;
-	irp6p->communicate = true;
+	irp6ot->communicate_with_ecp = true;
+	irp6p->communicate_with_ecp = true;
 
 	irp6ot->continuous_coordination = true;
 	irp6p->continuous_coordination = true;
@@ -80,20 +80,20 @@ bool haptic_stiffness::first_step()
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 40;
-		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING / 40;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
+		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 40;
+		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING / 40;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i] = lib::CONTACT;
 		irp6ot->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
 		/*
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		 if(irp6ot_con) irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		 else irp6ot->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
-		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		irp6ot->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 
 		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = 0;
 		//		irp6ot->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
@@ -123,21 +123,21 @@ bool haptic_stiffness::first_step()
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / 2;
-		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING / 2;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING/40;
-		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = FORCE_RECIPROCAL_DAMPING/40;
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
+		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING/40;
+		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i+3] = lib::FORCE_RECIPROCAL_DAMPING/40;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i] = lib::GUARDED_MOTION;
 		irp6p->mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
 		/*
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
+		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i] = 0.0;
-		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = TORQUE_RECIPROCAL_DAMPING;
+		 if(irp6p_con) irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		 else irp6p->ecp_td.MPtoECP_reciprocal_damping[i+3] = 0.0;
 		 */
 
-		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		irp6p->mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 
 		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = 0;
 		//		irp6p->mp_command.instruction.arm.pf_def.inertia[i+3] = 0;
@@ -216,8 +216,8 @@ bool haptic_stiffness::next_step()
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
 
-	float time_interval = (irp6ot->pulse_receive_time.tv_sec + irp6ot->pulse_receive_time.tv_nsec / 1e9)
-			- (irp6p->pulse_receive_time.tv_sec + irp6p->pulse_receive_time.tv_nsec / 1e9);
+	float time_interval = (irp6ot->ecp_pulse_receive_time.tv_sec + irp6ot->ecp_pulse_receive_time.tv_nsec / 1e9)
+			- (irp6p->ecp_pulse_receive_time.tv_sec + irp6p->ecp_pulse_receive_time.tv_nsec / 1e9);
 
 	if (time_interval > 0.002) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;
@@ -336,11 +336,11 @@ bool haptic_stiffness::next_step()
 	}
 
 	for (int i = 0; i < 3; i++) {
-		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / divisor;
-		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA / divisor;
+		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / divisor;
+		irp6p->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA / divisor;
 
-		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING / divisor;
-		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA / divisor;
+		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / divisor;
+		irp6ot->mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA / divisor;
 	}
 	// wypiski
 

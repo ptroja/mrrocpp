@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            mp.h
-// Definicje struktur danych i metod dla procesow MP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #if !defined(_MP_MAIN_ERROR_H)
 #define _MP_MAIN_ERROR_H
+
+/*!
+ * @file
+ * @brief File contains MP_main_error class declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup mp
+ */
 
 #include <map>
 

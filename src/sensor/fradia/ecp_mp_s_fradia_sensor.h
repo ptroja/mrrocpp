@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_s_fradia_sensor.h
+ * @file
  * @brief Virtual sensor on the ECP/MP side used for communication with the FraDIA framework.
  *
  *

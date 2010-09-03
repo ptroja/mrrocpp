@@ -1,12 +1,12 @@
 /*!
- * @file kinematic_parameters_bird_hand.h
+ * @file
  * @brief File containing the declaration of kinematic_parameters class.
  *
  * @author kczajkowski
  * @author tkornuta
  * @date May 28, 2010
  *
- * @ingroup IRP6OT_KINEMATICS
+ * @ingroup IRP6OT_KINEMATICS bird_hand
  */
 
 #ifndef KINEMATIC_PARAMETERS_BIRD_HAND_H_

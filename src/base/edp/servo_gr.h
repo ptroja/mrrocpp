@@ -50,7 +50,7 @@ protected:
 
 	// regulator_group
 
-	regulator* regulator_ptr[MAX_SERVOS_NR];
+	regulator* regulator_ptr[lib::MAX_SERVOS_NR];
 	// tablica wskaznikow na regulatory bazowe,
 	// ktore zostana zastapione regulatorami konkretnymi
 
@@ -98,10 +98,10 @@ public:
 	lib::condition_synchroniser thread_started;
 
 	lib::edp_master_command command; // polecenie z EDP_MASTER dla SERVO
-	double axe_inc_per_revolution[MAX_SERVOS_NR];
-	double synchro_step_coarse[MAX_SERVOS_NR];
-	double synchro_step_fine[MAX_SERVOS_NR];
-	int synchro_axis_order[MAX_SERVOS_NR];
+	double axe_inc_per_revolution[lib::MAX_SERVOS_NR];
+	double synchro_step_coarse[lib::MAX_SERVOS_NR];
+	double synchro_step_fine[lib::MAX_SERVOS_NR];
+	int synchro_axis_order[lib::MAX_SERVOS_NR];
 
 	lib::edp_master_command servo_command; // polecenie z EDP_MASTER dla SERVO_GROUP
 	lib::servo_group_reply sg_reply; // bufor na informacje odbierane z SERVO_GROUP

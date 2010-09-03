@@ -1,11 +1,11 @@
 /*!
- * @file kinematic_parameters_bird_hand.cc
+ * @file
  * @brief File containing definitions of kinematic_parameters class methods.
  *
  * @author kczajkowski
  * @date May 28, 2010
  *
- * @ingroup IRP6OT_KINEMATICS
+ * @ingroup IRP6OT_KINEMATICS bird_hand
  */
 
 #include <cmath>

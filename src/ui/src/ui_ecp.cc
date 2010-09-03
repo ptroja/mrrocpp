@@ -11,13 +11,13 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <boost/circular_buffer.hpp>
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_const.h"
 #include "base/lib/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 #include "ui/src/ui_ecp.h"
@@ -44,7 +44,7 @@ ui_ecp_buffer::~ui_ecp_buffer() {
 
 void ui_ecp_buffer::operator()() {
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 5);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 
@@ -71,7 +71,7 @@ void ui_ecp_buffer::operator()() {
 		communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
-			// 	  throw generator::ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 			continue;
 		}
 

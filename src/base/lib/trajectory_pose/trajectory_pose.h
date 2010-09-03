@@ -1,5 +1,5 @@
 /**
- * @file trajectory_pose.h
+ * @file
  * @rief Header file for trajectory_pose
  *
  * Contains declaration of trajectory_pose class and its methods.

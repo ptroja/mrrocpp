@@ -1,13 +1,22 @@
 #if !defined(MP_R_SHEAD_H_)
 #define MP_R_SHEAD_H_
 
-#include "base/mp/mp_r_motor_driven.h"
+/*!
+ * @file
+ * @brief File contains mp robot class declaration for SwarmItFix Head
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup shead
+ */
+
+#include "base/mp/mp_robot.h"
+#include "robot/shead/const_shead.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class shead : public motor_driven
+class shead : public robot
 {
 public:
 	shead(task::task &mp_object_l);

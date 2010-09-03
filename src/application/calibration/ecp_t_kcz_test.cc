@@ -16,11 +16,11 @@ namespace task {
 //Constructors
 kcz_test::kcz_test(lib::configurator &_config): task(_config)
 {
-    if (config.section_name == ECP_IRP6OT_M_SECTION)
+    if (config.section_name == lib::irp6ot_m::ECP_SECTION)
     {
         ecp_m_robot = new irp6ot_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6P_M_SECTION)
+    else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
         ecp_m_robot = new irp6p_m::robot (*this);
     }
@@ -57,8 +57,8 @@ void kcz_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_relative();
 
-	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
-	double aa[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+	double vv[lib::MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+	double aa[lib::MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
 	float lastx = bird->image.x;
 	float lasty = bird->image.y;

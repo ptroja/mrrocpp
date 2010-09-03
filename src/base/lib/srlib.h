@@ -26,11 +26,6 @@
 namespace mrrocpp {
 namespace lib {
 
-#define SR_MSG_SERVED 0x11	// kod ustawiany po wyswietleniu komunikatu
-// poniewaz przychodza komunikaty o zdarzeniach
-// zwiazanych z oknem i powodowalyby powtorzenie
-// ostatniego komunikatu
-
 #define ERROR_TAB_SIZE   2   // Rozmiar tablicy zawierajacej kody bledow
 #define NAME_LENGTH     30   // Dlugosc nazwy
 const unsigned int TEXT_LENGTH = 256; // Dlugosc tekstu z wiadomoscia do SR

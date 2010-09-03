@@ -1,7 +1,8 @@
-
+if(ROBOT_SARKOFAG)
 
 add_executable(edp_sarkofag
 	edp_e_sarkofag.cc
+	hi_sarkofag.cc
 	int_hand_sarkofag.cc
 	sg_sarkofag.cc
 	 regulator_sarkofag.cc
@@ -17,9 +18,9 @@ add_library(kinematicssarkofag
 
 target_link_libraries(kinematicssarkofag kinematics)
 	
-add_library(ecp_r_sarkofag ecp_r_sarkofag)	
+add_library(ecp_r_sarkofag ecp_r_sarkofag.cc)	
 	
 target_link_libraries(ecp_r_sarkofag kinematicssarkofag)
 
 install(TARGETS edp_sarkofag DESTINATION bin)
-
+endif(ROBOT_SARKOFAG)

@@ -8,6 +8,10 @@
 
 #define BAUD 921600
 
+namespace mrrocpp {
+namespace edp {
+namespace bird_hand {
+
 void Bird_hand::write_read(int fd, char* b, unsigned int w_len, unsigned int r_len)
 {
 	unsigned int dlen = 0;
@@ -48,10 +52,9 @@ Bird_hand::~Bird_hand()
 void Bird_hand::connect(std::string port)
 {
 
-	for (unsigned int i = 0; i < 8; i++)
-	{
-		std::cout << "[info] opening port : " << (port+(char)(i+50)).c_str() << std::endl;
-		fd[i] = open((port+(char)(i+50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+	for (unsigned int i = 0; i < 8; i++) {
+		std::cout << "[info] opening port : " << (port + (char) (i + 50)).c_str() << std::endl;
+		fd[i] = open((port + (char) (i + 50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			throw(std::runtime_error("unable to open device device !!!"));
 		}
@@ -247,3 +250,7 @@ void Bird_hand::synchronize(uint8_t id, uint16_t step)
 		write_read(fd[i], buf, 21, 0);
 
 }
+
+} // namespace bird_hand
+} // namespace edp
+} // namespace mrrocpp
