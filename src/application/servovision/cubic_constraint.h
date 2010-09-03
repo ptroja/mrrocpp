@@ -33,9 +33,9 @@ public:
 	 * Generate constraint.
 	 * Make sure that translation and rotation vectors are between min(i, 0) and  max(i, 0) for i=0..2
 	 * In config file in specified section there must be:
-	 *    Eigen::Matrix <double, 3, 1> translation_min;
-	 *    Eigen::Matrix <double, 3, 1> translation_max;
-	 *    Eigen::Matrix <double, 3, 1> cone_axis;
+	 *    lib::Homog_matrix cube_position;
+	 *    Eigen::Matrix <double, 3, 1> cube_size;
+	 *    lib::Homog_matrix spherical_cone_rotation;
 	 *    double min_inclination;
 	 *    double min_wrist_rotation;
 	 *    double max_wrist_rotation

@@ -25,7 +25,7 @@ cubic_constraint::cubic_constraint(const lib::configurator& config, const std::s
 	cube_position = config.value <3, 4> ("cube_position", section_name);
 	cube_size = config.value <3, 1> ("cube_size", section_name);
 
-	spherical_cone_rotation = config.value <3, 4> ("cone_rotation", section_name);
+	spherical_cone_rotation = config.value <3, 4> ("spherical_cone_rotation", section_name);
 	spherical_cone_rotation(0, 3) = spherical_cone_rotation(1, 3) = spherical_cone_rotation(2, 3) = 0;
 
 	min_inclination = config.value <double> ("min_inclination", section_name);
