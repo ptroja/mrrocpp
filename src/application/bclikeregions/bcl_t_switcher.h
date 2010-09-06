@@ -9,16 +9,9 @@
 #define BCL_T_SWITCHER_H_
 
 #include "base/ecp/ecp_task.h"
-#include "bclike_smooth.h"
 #include <boost/shared_ptr.hpp>
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_mp_bclike.h"
-#include "ecp_st_smooth_move.h"
-#include "bcl_message.h"
-#include "../../generator/ecp/ecp_g_constant_velocity.h"
-
-#include "ecp_mp_st_smooth_move.h"
+#include "ecp_mp_message.h"
 
 #include "bcl_types.h"
 
@@ -81,13 +74,7 @@ public:
 	bcl_fradia_sensor* vsp_fradia;
 
 private:
-	shared_ptr<generator::newsmooth> bc_smooth;
-
-	std::vector<double> vec;
-
-	std::vector<mrrocpp_regions> reading;
-
-	bcl_message msg;
+	ecp_mp_message msg;
 };
 }
 

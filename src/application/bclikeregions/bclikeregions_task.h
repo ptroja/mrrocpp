@@ -11,7 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
 #include "bclikeregions_gen.h"
-#include "bclike_smooth.h"
+#include "bclike_gen.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "bcl_types.h"
 
@@ -37,7 +37,7 @@ public:
 
 private:
 //	shared_ptr<generator::bclikeregions_gen> gen;
-	shared_ptr<generator::bclike_smooth> bc_smooth;
+	shared_ptr<generator::bclike_gen> bc_smooth;
 	shared_ptr<bcl_fradia_sensor> vsp_fradia;
 
 };

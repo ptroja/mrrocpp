@@ -21,7 +21,7 @@ bclikeregions_task::bclikeregions_task(mrrocpp::lib::configurator& configurator)
 
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 	//gen = shared_ptr<generator::bclikeregions_gen> (new generator::bclikeregions_gen(*this));
-	bc_smooth = shared_ptr<generator::bclike_smooth> (new generator::bclike_smooth(*this));
+	bc_smooth = shared_ptr<generator::bclike_gen> (new generator::bclike_gen(*this));
 
 //	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA] = new bcl_fradia_sensor(this->config, "[vsp_fradia_sensor]");
 //	sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]->configure_sensor();

@@ -6,6 +6,13 @@
  */
 
 #include "bcl_t_switcher.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "ecp_st_scan_move.h"
+#include "ecp_st_position_move.h"
+
+#include "ecp_mp_st_scan_move.h"
+#include "ecp_mp_st_position_move.h"
 
 namespace mrrocpp {
 
@@ -32,36 +39,21 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 #ifdef IRP6_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-
-#ifdef JOINT
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 7));
-#endif//JOINT
-
-#ifdef EULER
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 6));
-#endif//EULER
-
 #endif//IRP6_OT
 
 #ifdef IRP6_P
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
-
-#ifdef JOINT
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_JOINT, 6));
-#endif//JOINT
-
-#ifdef EULER
-	bc_smooth = shared_ptr<generator::newsmooth> (new generator::newsmooth(*this, lib::ECP_XYZ_EULER_ZYZ, 6));
-#endif//EULER
-
 #endif//IRP6_P
 
-	bc_smooth->set_absolute();
+//	bc_smooth->set_absolute();
 
 	//Adding additional subtasks
 	ecp_sub_task* ecpst;
-	ecpst = new ecp_st_smooth_move(*this);
-	subtask_m[ecp_mp::task::ECP_ST_SMOOTH_MOVE] = ecpst;
+	ecpst = new ecp_st_scan_move(*this);
+	subtask_m[ecp_mp::task::ECP_ST_SCAN_MOVE] = ecpst;
+
+	ecpst = new ecp_st_position_move(*this);
+	subtask_m[ecp_mp::task::ECP_ST_POSITION_MOVE] = ecpst;
 
 }
 
@@ -78,41 +70,41 @@ bcl_t_switcher::~bcl_t_switcher() {
  */
 void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
 
-	sr_ecp_msg->message("SWITCHER begin");
-
-
-	std::cout << "SWITCHER begin" << std::endl;
-
-	//TODO: Jakos to przemielic bo i tak wykorzystywane jest tylko START
-	if (mp_2_ecp_next_state_string == ecp_mp::task::BCL_MOTION_DIR_STR){
-
-//		vec.assign(left, left + VEC_SIZE);
-		vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-//		std::cout << "ODCZYTANE " << vec.size() << std::endl;
-//		for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
-//			std::cout << *it << " ";
-//		std::cout << std::endl;
-
-		#ifdef JOINT
-			bc_smooth->load_absolute_joint_trajectory_pose(vec);
-//			bc_smooth->set_debug(true);
-		#endif//JOINT
-
-		#ifdef EULER
-//			std::cout << "load trajectory" << std::endl;
-			bc_smooth->load_absolute_euler_zyz_trajectory_pose(vec);
-		#endif//EULER
-
-//		std::cout << "Interpolate" << std::endl;
-		if(bc_smooth->calculate_interpolate()){
-			sr_ecp_msg->message("Move before");
-			bc_smooth->Move();
-			sr_ecp_msg->message("Move after");
-		}
-		bc_smooth->reset();
-	}
-
-	sr_ecp_msg->message("SWITCHER end");
+//	sr_ecp_msg->message("SWITCHER begin");
+//
+//
+//	std::cout << "SWITCHER begin" << std::endl;
+//
+//	//TODO: Jakos to przemielic bo i tak wykorzystywane jest tylko START
+//	if (mp_2_ecp_next_state_string == ecp_mp::task::BCL_MOTION_DIR_STR){
+//
+////		vec.assign(left, left + VEC_SIZE);
+//		vec = msg.stringToRobotPosition(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+////		std::cout << "ODCZYTANE " << vec.size() << std::endl;
+////		for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
+////			std::cout << *it << " ";
+////		std::cout << std::endl;
+//
+//		#ifdef JOINT
+//			bc_smooth->load_absolute_joint_trajectory_pose(vec);
+////			bc_smooth->set_debug(true);
+//		#endif//JOINT
+//
+//		#ifdef EULER
+////			std::cout << "load trajectory" << std::endl;
+//			bc_smooth->load_absolute_euler_zyz_trajectory_pose(vec);
+//		#endif//EULER
+//
+////		std::cout << "Interpolate" << std::endl;
+//		if(bc_smooth->calculate_interpolate()){
+//			sr_ecp_msg->message("Move before");
+//			bc_smooth->Move();
+//			sr_ecp_msg->message("Move after");
+//		}
+//		bc_smooth->reset();
+//	}
+//
+//	sr_ecp_msg->message("SWITCHER end");
 
 }
 
