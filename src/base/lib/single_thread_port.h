@@ -52,9 +52,9 @@ class single_thread_port : public single_thread_port_interface
 {
 protected:
 	bool no_data;
-	T data;
 
 public:
+	T data;
 
 	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
 		single_thread_port_interface(_name, _port_manager), no_data(true)
@@ -62,23 +62,20 @@ public:
 	{
 	}
 
-	virtual void set(const T& _data)
+	virtual void set()
 	{
-		data = _data;
 		no_data = false;
 		new_data = true;
 	}
 
-	virtual FlowStatus get(T& _data)
+	virtual FlowStatus get()
 	{
 		if (no_data) {
 			return NoData;
 		} else if (new_data) {
-			_data = data;
 			new_data = false;
 			return NewData;
 		} else {
-			_data = data;
 			return OldData;
 		}
 	}
@@ -119,10 +116,10 @@ public:
 		new_request = true;
 	}
 
-	void set(const T& _data)
+	void set()
 	{
 		new_request = false;
-		single_thread_port <T>::set(_data);
+		single_thread_port <T>::set();
 	}
 
 	void clear_all_flags()

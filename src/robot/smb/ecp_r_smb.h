@@ -28,10 +28,8 @@ protected:
 	//bufory wejsciowe z generatora
 	//epos.h
 	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
-	lib::epos::epos_cubic_command epos_cubic_command_structure;
 
 	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
-	lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 
 	/*
 	 lib::single_thread_port<lib::epos_gen_parameters>
@@ -40,20 +38,15 @@ protected:
 	 */
 	//smb.h
 	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
-	lib::smb::multi_pin_insertion_td smb_multi_pin_insertion_structure;
 
 	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
-	lib::smb::multi_pin_locking_td smb_multi_pin_locking_structure;
 
 	// bufory wyjsciowe do generatora
 	// epos.h
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;
-	lib::epos::epos_reply epos_reply_structure;
 
 	//smb.h
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
-
-	lib::smb::multi_leg_reply_td smb_multi_leg_reply_structure;
 
 	// bufory do edp
 	lib::smb::cbuffer ecp_edp_cbuffer;
