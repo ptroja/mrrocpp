@@ -1,8 +1,6 @@
 #if !defined(__MP_T_GEN_TEST_H)
 #define __MP_T_GEN_TEST_H
 
-
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -23,7 +21,8 @@ public:
 	 * Constructor.
 	 */
 	gen_test(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	void main_task_algorithm(void);
 
 };

@@ -80,7 +80,7 @@ protected:
 	struct generator_edp_data_type
 	{
 		double next_inertia[6], next_reciprocal_damping[6];
-		double next_velocity[MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
+		double next_velocity[lib::MAX_SERVOS_NR], next_force_xyz_torque_xyz[6];
 		lib::BEHAVIOUR_SPECIFICATION next_behaviour[6];
 	} generator_edp_data;
 

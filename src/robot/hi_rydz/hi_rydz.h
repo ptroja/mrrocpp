@@ -55,7 +55,7 @@ class HI_rydz : public common::HardwareInterface
 {
 public:
 
-	int max_current[MAX_SERVOS_NR];
+	int max_current[lib::MAX_SERVOS_NR];
 			HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
 
 	virtual ~HI_rydz(void); // Destruktor
@@ -107,15 +107,15 @@ protected:
 
 	common::irq_data_t irq_data;
 
-	int meassured_current[MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
-	long int current_absolute_position[MAX_SERVOS_NR]; // aktualne polozenia osi
-	long int previous_absolute_position[MAX_SERVOS_NR]; // poprzednie polozenia osi
-	double current_position_inc[MAX_SERVOS_NR]; // aktualny przyrost polozenia
+	int meassured_current[lib::MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
+	long int current_absolute_position[lib::MAX_SERVOS_NR]; // aktualne polozenia osi
+	long int previous_absolute_position[lib::MAX_SERVOS_NR]; // poprzednie polozenia osi
+	double current_position_inc[lib::MAX_SERVOS_NR]; // aktualny przyrost polozenia
 
 	bool trace_resolver_zero;
 
-	common::control_a_dof robot_control[MAX_SERVOS_NR];
-	common::status_of_a_dof robot_status[MAX_SERVOS_NR];
+	common::control_a_dof robot_control[lib::MAX_SERVOS_NR];
+	common::status_of_a_dof robot_status[lib::MAX_SERVOS_NR];
 };
 
 #ifdef __cplusplus

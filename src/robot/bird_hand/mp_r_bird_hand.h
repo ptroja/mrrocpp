@@ -9,16 +9,27 @@
  * @ingroup bird_hand
  */
 
-
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "const_bird_hand.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class bird_hand : public motor_driven
+
+/*!
+ * @brief Bird Hand gripper mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup bird_hand
+ */
+class bird_hand : public robot
 {
 
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	bird_hand(task::task &mp_object_l);
 };
 } // namespace robot

@@ -21,7 +21,7 @@
 #include <boost/bind.hpp>
 
 #include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
@@ -114,8 +114,8 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 							= name_open(
 									ui.shead->state.edp.network_reader_attach_point.c_str(),
 									NAME_FLAG_ATTACH_GLOBAL)) < 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

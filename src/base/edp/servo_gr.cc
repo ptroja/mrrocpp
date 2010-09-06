@@ -174,7 +174,7 @@ void servo_buffer::operator()()
 
 	load_hardware_interface();
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 2);
 
 	// signal master thread to continue executing
 	thread_started.command();

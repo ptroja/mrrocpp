@@ -44,9 +44,9 @@ bool ui_speaker_robot::send_command(const char* local_text,
 	ecp_command.instruction.instruction_type = lib::SET;
 
 	if ((local_text) && (local_prosody)) {
-		strncpy(ecp_command.instruction.arm.text_def.text, local_text, MAX_TEXT);
+		strncpy(ecp_command.instruction.arm.text_def.text, local_text, lib::MAX_TEXT);
 		strncpy(ecp_command.instruction.arm.text_def.prosody, local_prosody,
-				MAX_PROSODY );
+				lib::MAX_PROSODY );
 	}
 
 	execute_motion();

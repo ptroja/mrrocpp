@@ -27,7 +27,8 @@ protected:
 public:
 
 	haptic(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods for mp template
 	void main_task_algorithm(void);
 

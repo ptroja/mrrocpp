@@ -9,15 +9,26 @@
  * @ingroup irp6p_tfg
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class irp6p_tfg : public motor_driven
+/*!
+ * @brief Irp6 postument two finger gripper mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup irp6p_tfg
+ */
+class irp6p_tfg : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	irp6p_tfg(task::task &mp_object_l);
 };
 

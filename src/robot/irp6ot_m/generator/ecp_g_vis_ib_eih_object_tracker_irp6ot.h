@@ -38,7 +38,7 @@ public:
 	/**
 	 *
 	 */
-	double next_position[MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
+	double next_position[lib::MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
 	/**
 	 *
 	 */

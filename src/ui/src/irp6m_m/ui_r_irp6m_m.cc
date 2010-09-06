@@ -4,7 +4,7 @@
 
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
 #include "ui/src/ui_ecp_r_irp6_common.h"
-#include "robot/irp6_mechatronika/const_irp6m.h"
+#include "robot/irp6m/const_irp6m.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -35,7 +35,7 @@ int UiRobotIrp6m_m::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_irp6_mechatronika_active")) == 1) {
+	if ((state.is_active = ui.config->value <int> ("is_irp6m_active")) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
@@ -77,8 +77,8 @@ int UiRobotIrp6m_m::reload_configuration()
 					}
 				}
 
-				if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (ROBOT_TEST_MODE, state.edp.section_name);
+				if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = ui.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 

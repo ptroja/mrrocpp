@@ -11,11 +11,11 @@
 
 #include <string>
 
-#define EPOS_DATA_PORT_SERVOS_NUMBER 7
-
 namespace mrrocpp {
 namespace lib {
 namespace epos {
+
+static const int EPOS_DATA_PORT_SERVOS_NUMBER = 7;
 
 enum EPOS_GEN_PROFILE
 {

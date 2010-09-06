@@ -32,8 +32,8 @@ class ui_common_robot
 	double END_EFFECTOR_ANGULAR_STEP; // Przyrost wspolrzednej orientacji koncowki [rad]
 	double END_EFFECTOR_GRIPPER_STEP; // Przyrost wspolrzednej orientacji koncowki [rad]
 
-	double desired_position[MAX_SERVOS_NR]; // polozenie zadane
-	double current_position[MAX_SERVOS_NR]; // polozenie aktualne
+	double desired_position[lib::MAX_SERVOS_NR]; // polozenie zadane
+	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
 	ecp::common::robot::ecp_robot *ecp;
@@ -49,23 +49,23 @@ public:
 	// virtual void synchronise ( void ); // Zlecenie synchronizacji robota
 	// virtual bool is_synchronised( void ) { return synchronised;};
 
-	virtual void set_desired_position(const double des_position[MAX_SERVOS_NR]);
+	virtual void set_desired_position(const double des_position[lib::MAX_SERVOS_NR]);
 	// Przepisanie polozen zadanych
 	// do tablicy desired_position[]
-	virtual void get_current_position(double c_position[MAX_SERVOS_NR]); // Pobranie aktualnych polozen
+	virtual void get_current_position(double c_position[lib::MAX_SERVOS_NR]); // Pobranie aktualnych polozen
 
 	// by Y - do odczytu stanu poczatkowego robota
 	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	// Zlecenie ruchu
 	void set_kinematic(uint8_t kinematic_model_no);
-	void set_servo_algorithm(uint8_t algorithm_no[MAX_SERVOS_NR], uint8_t parameters_no[MAX_SERVOS_NR]);
+	void set_servo_algorithm(uint8_t algorithm_no[lib::MAX_SERVOS_NR], uint8_t parameters_no[lib::MAX_SERVOS_NR]);
 
 	// Odczyt polozenia
-	void read_motors(double current_position[MAX_SERVOS_NR]);
-	void read_joints(double current_position[MAX_SERVOS_NR]);
+	void read_motors(double current_position[lib::MAX_SERVOS_NR]);
+	void read_joints(double current_position[lib::MAX_SERVOS_NR]);
 	void get_kinematic(uint8_t* kinematic_model_no);
-	void get_servo_algorithm(uint8_t algorithm_no[MAX_SERVOS_NR], uint8_t parameters_no[MAX_SERVOS_NR]);
+	void get_servo_algorithm(uint8_t algorithm_no[lib::MAX_SERVOS_NR], uint8_t parameters_no[lib::MAX_SERVOS_NR]);
 
 };
 #endif

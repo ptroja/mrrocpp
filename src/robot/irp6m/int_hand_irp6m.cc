@@ -24,27 +24,25 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "robot/irp6p_m/sg_irp6p_m.h"
-// Klasa edp_irp6p_effector.
-#include "robot/irp6p_m/edp_irp6p_m_effector.h"
+#include "robot/irp6m/sg_irp6m.h"
+
+// Klasa edp_irp6m_effector.
+#include "robot/irp6m/edp_irp6m_effector.h"
 // Klasa hardware_interface.
-#include "robot/irp6p_m/hi_irp6p_m.h"
+#include "robot/irp6m/hi_irp6m.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-extern irp6p_m::effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
+extern irp6m::effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 }
 
-namespace irp6p_m {
+namespace irp6m {
 
 // ------------------------------------------------------------------------
-
 // Obsluga przerwania sprzetowego
-
-// UWAGA - zmienna ilosc serwomechanizmow w zaleznosci od tego czy gripper jest dolaczony czy nie
 #ifdef __QNXNTO__
 const struct sigevent *
 int_handler (void *arg, int int_id)
@@ -53,15 +51,16 @@ int_handler (void *arg, int int_id)
 	common::motor_data & md = irq_data->md;
 	struct sigevent & event = irq_data->event;
 
-	common::status_of_a_dof robot_status[lib::irp6p_m::NUM_OF_SERVOS];
-	short int low_word, high_word;
-
 	md.hardware_error = (uint64_t) common::ALL_RIGHT; // Nie ma bledow sprzetowych
 
 	if(common::master->robot_test_mode)
 	{
 		return (&event); // by Y&W
 	}
+
+	common::status_of_a_dof robot_status[lib::irp6m::NUM_OF_SERVOS];
+	short int low_word, high_word;
+	int i;
 
 	// INT_EMPTY obluga pusta
 	// z zalozenia to pierwszy tryb w ktorym jest uruchomiona fukcja obslugi przewania  ze wzgledu na synchronizacje
@@ -73,7 +72,7 @@ int_handler (void *arg, int int_id)
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		md.is_synchronised = true;
-		for (int i = 0; i < common::master->number_of_servos; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -98,7 +97,7 @@ int_handler (void *arg, int int_id)
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		for (int i = 0; i < common::master->number_of_servos; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			// Odczyty stanu osi, polozenia oraz pradu wirnikow
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
@@ -130,15 +129,8 @@ int_handler (void *arg, int int_id)
 			if ( robot_status[i].adr_offset_plus_0 & 0x0100 )
 			md.hardware_error |= (uint64_t) (common::SYNCHRO_ZERO << (5*i)); // Impuls zera rezolwera
 
-			if (i>=5) //  sterowniki osi z mechatroniki z przekaznikami
-			{
-				if ( ~(robot_status[i].adr_offset_plus_0) & 0x4000 )
-				md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
-			} else
-			{
-				if ( robot_status[i].adr_offset_plus_0 & 0x4000 )
-				md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
-			}
+			if ( robot_status[i].adr_offset_plus_0 & 0x4000 )
+			md.hardware_error |= (uint64_t) (common::SYNCHRO_SWITCH_ON << (5*i)); // Zadzialal wylacznik synchronizacji
 
 			// wylaczniki krancowe
 			if ( ~(robot_status[i].adr_offset_plus_0) & 0x1000 ) {
@@ -168,15 +160,15 @@ int_handler (void *arg, int int_id)
 
 		if ( md.hardware_error & hi_rydz::HARDWARE_ERROR_MASK ) // wyciecie SYNCHRO_ZERO i SYNCHRO_SWITCH_ON
 		{
-			for (int i = 0; i < common::master->number_of_servos; i++ ) {
+			for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ ) {
 				// Zapis wartosci zadanej wypelnienia PWM
 				out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 				out16((hi_rydz::SERVO_COMMAND1_ADR + ISA_CARD_OFFSET), hi_rydz::STOP_MOTORS);
 			}
-			return (&event); // Yoyek & 7
+			return (&event);
 		}
 
-		for (int i = 0; i < common::master->number_of_servos; i++ ) {
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ ) {
 			// Zapis wartosci zadanej wypelnienia PWM
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			if (md.is_robot_blocked) md.robot_control[i].adr_offset_plus_0 &= 0xff00;
@@ -196,9 +188,9 @@ int_handler (void *arg, int int_id)
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
 		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), md.card_adress);
-		out16(md .register_adress, md.value);
+		out16(md.register_adress, md.value);
 
-		for (int i = 0; i < common::master->number_of_servos; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -218,7 +210,7 @@ int_handler (void *arg, int int_id)
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + ISA_CARD_OFFSET));
 
-		for (int i = 0; i < common::master->number_of_servos; i++ )
+		for ( i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++ )
 		{
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
 			md.robot_status[i].adr_offset_plus_0 = robot_status[i].adr_offset_plus_0 = in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow

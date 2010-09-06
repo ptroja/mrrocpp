@@ -21,7 +21,7 @@ vs_logger::vs_logger(lib::configurator &config) :
 	fp(NULL), config(config), counter(0)
 {
 	if (config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = config.value <string> ("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = config.value <string> ("reader_meassures_dir", lib::UI_SECTION);
 	} else {
 		reader_meassures_dir = config.return_default_reader_measures_path();
 	}

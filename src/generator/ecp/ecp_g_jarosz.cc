@@ -56,7 +56,7 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 
 	td = tr_des;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -177,7 +177,7 @@ bool linear::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter
 								* td.coordinate_delta[i] / td.interpolation_node_no;
@@ -185,7 +185,7 @@ bool linear::next_step()
 			break;
 
 		case lib::JOINT:
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + node_counter
 								* td.coordinate_delta[i] / td.interpolation_node_no;
@@ -244,19 +244,19 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 {
 	td = tr_des;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		ta[i] = time_a[i];
 		if ((ta[i] = time_a[i]) <= 0 || ta[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		tb[i] = time_b[i];
 		if ((tb[i] = time_b[i]) <= 0 || tb[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -400,13 +400,13 @@ bool linear_parabolic::next_step()
 		switch (td.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
@@ -446,9 +446,9 @@ bool linear_parabolic::next_step()
 	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-	double acc[MAX_SERVOS_NR];
-	double vel[MAX_SERVOS_NR];
-	double vel_avg[MAX_SERVOS_NR];
+	double acc[lib::MAX_SERVOS_NR];
+	double vel[lib::MAX_SERVOS_NR];
+	double vel_avg[lib::MAX_SERVOS_NR];
 
 	switch (td.arm_type)
 	{
@@ -458,7 +458,7 @@ bool linear_parabolic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
@@ -466,13 +466,13 @@ bool linear_parabolic::next_step()
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
 
-				/* if ( fabs(acc[i]*(1/STEP*STEP) ) > a_max_motor[i] )
+				/* if ( fabs(acc[i]*(1/lib::EDP_STEP*lib::EDP_STEP) ) > a_max_motor[i] )
 				 { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg,"Acceleration in axis %d is %f, max. acc = %f",i, fabs(acc[i]), a_max_motor[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				 } // end : if
-				 if ( fabs(vel[i] * (1/STEP) ) > v_max_motor[i] )
+				 if ( fabs(vel[i] * (1/lib::EDP_STEP) ) > v_max_motor[i] )
 				 { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg,"Velocity in axis %d is %f, max. vel = %f",i, fabs(vel[i]) , v_max_motor[i]);
 				 sr_ecp_msg.message(messg);
@@ -490,7 +490,7 @@ bool linear_parabolic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
@@ -498,12 +498,12 @@ bool linear_parabolic::next_step()
 				acc[i] = vel_avg[i] - prev_vel_avg[i];
 				vel[i] = acc[i] * node_counter;
 
-				if (fabs(acc[i] * (1 / STEP * STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				if (fabs(acc[i] * (1 / lib::EDP_STEP * lib::EDP_STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				} // end : if
-				if (fabs(vel[i] * (1 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				if (fabs(vel[i] * (1 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -534,12 +534,12 @@ bool linear_parabolic::next_step()
 			 acc[i] = vel_avg[i] - prev_vel_avg[i];
 			 vel[i] = acc[i] * node_counter;
 
-			 if (fabs(acc[i]*(1/STEP*STEP)) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i]*(1/lib::EDP_STEP*lib::EDP_STEP)) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 			 } // end : if
-			 if (fabs(vel[i] * (1/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -577,12 +577,12 @@ bool linear_parabolic::next_step()
 			 acc[i] = vel_avg[i] - prev_vel_avg[i];
 			 vel[i] = acc[i] * node_counter;
 
-			 if (fabs(acc[i]*(1/STEP*STEP)) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i]*(1/lib::EDP_STEP*lib::EDP_STEP)) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 			 } // end : if
-			 if (fabs(vel[i] * (1/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -699,13 +699,13 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 	td = tr_des;
 	int tf = td.interpolation_node_no;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		A1[i] = vp[i];
 		A2[i] = ((3.0 * td.coordinate_delta[i]) / (tf * tf)) - (2.0 * vp[i]) / tf - (vk[i] / tf);
 		A3[i] = (((-2.0) * td.coordinate_delta[i]) / (tf * tf * tf)) + ((vk[i] + vp[i]) / (tf * tf));
 	} // end:for
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -742,7 +742,7 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 
 bool cubic::next_step()
 {
-	int i; // licznik kolejnych wsp�lrzednych wektora [0..MAX_SERVOS_NR]
+	int i; // licznik kolejnych wsp�lrzednych wektora [0..lib::MAX_SERVOS_NR]
 
 	char messg[128]; // komunikat do SR
 
@@ -756,13 +756,13 @@ bool cubic::next_step()
 		switch (td.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
@@ -802,8 +802,8 @@ bool cubic::next_step()
 	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-	double acc[MAX_SERVOS_NR];
-	double vel[MAX_SERVOS_NR];
+	double acc[lib::MAX_SERVOS_NR];
+	double vel[lib::MAX_SERVOS_NR];
 
 	switch (td.arm_type)
 	{
@@ -813,9 +813,9 @@ bool cubic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
-				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (STEP
-						* the_robot->ecp_command.instruction.motion_steps * STEP
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (lib::EDP_STEP
+						* the_robot->ecp_command.instruction.motion_steps * lib::EDP_STEP
 						* the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(acc[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -825,7 +825,7 @@ bool cubic::next_step()
 				} // end : if
 
 				vel[i] = (A1[i] + 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter)) * (1.0
-						/ (STEP * the_robot->ecp_command.instruction.motion_steps));
+						/ (lib::EDP_STEP * the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(vel[i]) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
@@ -844,9 +844,9 @@ bool cubic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
-				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (STEP
-						* (the_robot->ecp_command.instruction.motion_steps) * STEP
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (lib::EDP_STEP
+						* (the_robot->ecp_command.instruction.motion_steps) * lib::EDP_STEP
 						* (the_robot->ecp_command.instruction.motion_steps)));
 
 				if (fabs(acc[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -856,7 +856,7 @@ bool cubic::next_step()
 				} // end : if
 
 				vel[i] = (A1[i] + 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter)) * (1.0
-						/ (STEP * the_robot->ecp_command.instruction.motion_steps));
+						/ (lib::EDP_STEP * the_robot->ecp_command.instruction.motion_steps));
 
 				if (fabs(vel[i]) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
@@ -877,13 +877,13 @@ bool cubic::next_step()
 			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			 for (i=0; i<7; i++) {
 			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 			 } // end : if
 			 vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-			 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -907,13 +907,13 @@ bool cubic::next_step()
 			 the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
 			 for (i=0; i<6; i++) {
 			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 			 } // end : if
 			 vel[i] = A1[i] + 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-			 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -954,7 +954,7 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 	td = tr_des;
 	int tf = td.interpolation_node_no;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		A1[i] = vp[i];
 		A2[i] = (ap[i]) / 2.0;
 		A3[i] = ((20.0 * td.coordinate_delta[i]) - (((8.0 * vk[i]) + (12.0 * vp[i])) * tf) - ((3.0 * ap[i]) - (ak[i])
@@ -966,7 +966,7 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 						* tf)) / (2.0 * (tf * tf * tf * tf * tf));
 	} // end:for
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1017,13 +1017,13 @@ bool quintic::next_step()
 		switch (td.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
@@ -1062,8 +1062,8 @@ bool quintic::next_step()
 	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
 	the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
 
-	double acc[MAX_SERVOS_NR];
-	double vel[MAX_SERVOS_NR];
+	double acc[lib::MAX_SERVOS_NR];
+	double vel[lib::MAX_SERVOS_NR];
 
 	switch (td.arm_type)
 	{
@@ -1073,10 +1073,10 @@ bool quintic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i = 0; i < MAX_SERVOS_NR; i++) {
+			for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter)
 						+ 20.0 * A5[i] * (node_counter * node_counter * node_counter);
-				if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -1084,7 +1084,7 @@ bool quintic::next_step()
 				vel[i] = A1[i] + 2 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i]
 						* (node_counter * node_counter * node_counter) + 5.0 * A5[i] * (node_counter * node_counter
 						* node_counter * node_counter);
-				if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -1102,10 +1102,10 @@ bool quintic::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			for (int i = 0; i < MAX_SERVOS_NR; i++) {
+			for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter)
 						+ 20.0 * A5[i] * (node_counter * node_counter * node_counter);
-				if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -1113,7 +1113,7 @@ bool quintic::next_step()
 				vel[i] = A1[i] + 2 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i]
 						* (node_counter * node_counter * node_counter) + 5.0 * A5[i] * (node_counter * node_counter
 						* node_counter * node_counter);
-				if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -1134,7 +1134,7 @@ bool quintic::next_step()
 			 for (int i=0; i<6; i++) {
 			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 			 *(node_counter*node_counter*node_counter);
-			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -1142,7 +1142,7 @@ bool quintic::next_step()
 			 vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
 			 *(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
 			 *node_counter);
-			 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -1171,7 +1171,7 @@ bool quintic::next_step()
 			 for (int i=0; i<6; i++) {
 			 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 			 *(node_counter*node_counter*node_counter);
-			 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+			 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 			 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -1179,7 +1179,7 @@ bool quintic::next_step()
 			 vel[i] = A1[i] + 2*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]
 			 *(node_counter*node_counter*node_counter) + 5.0*A5[i]*(node_counter*node_counter*node_counter
 			 *node_counter);
-			 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+			 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 			 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 			 sr_ecp_msg.message(messg);
 			 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -1235,7 +1235,7 @@ parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double int
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
 
-	for (i = 0; i < MAX_SERVOS_NR; i++) {
+	for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1347,7 +1347,7 @@ bool parabolic_teach_in::next_step()
 		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1364,7 +1364,7 @@ bool parabolic_teach_in::next_step()
 				break;
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1441,7 +1441,7 @@ bool parabolic_teach_in::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
@@ -1455,7 +1455,7 @@ bool parabolic_teach_in::next_step()
 		{
 			case lib::MOTOR:
 
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
@@ -1467,7 +1467,7 @@ bool parabolic_teach_in::next_step()
 				}
 				break;
 			case lib::JOINT:
-				for (i = 0; i < MAX_SERVOS_NR; i++)
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
@@ -1555,7 +1555,7 @@ calibration::calibration(common::task::task& _ecp_task, double interval) :
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i; // Licznik
 
-	for (i = 0; i < MAX_SERVOS_NR; i++) {
+	for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 200.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -1641,11 +1641,11 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 		for (i = 0; i < number_of_poses; i++) {
 			to_file << i << ' ';
 			get_pose(tip);
-			for (j = 0; j < MAX_SERVOS_NR; j++)
+			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			to_file << "    ";
 			the_condition.get_supplementary(etip);
-			for (j = 0; j < MAX_SERVOS_NR; j++)
+			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << etip.coordinates[j] << ' ';
 			to_file << '\n';
 			next_pose_list_ptr();
@@ -1741,7 +1741,7 @@ bool calibration::next_step()
 		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1758,7 +1758,7 @@ bool calibration::next_step()
 				break;
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					a[i] = 4.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i])
 							/ (number_of_intervals * INTERVAL * number_of_intervals * INTERVAL);
 					if (fabs(a[i]) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
@@ -1830,7 +1830,7 @@ bool calibration::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
@@ -1843,7 +1843,7 @@ bool calibration::next_step()
 		switch (tip.arm_type)
 		{
 			case lib::MOTOR:
-				for (i = 0; i < MAX_SERVOS_NR; i++) {
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
@@ -1857,7 +1857,7 @@ bool calibration::next_step()
 				}
 				break;
 			case lib::JOINT:
-				for (i = 0; i < MAX_SERVOS_NR; i++)
+				for (i = 0; i < lib::MAX_SERVOS_NR; i++)
 					if (node_counter < half_number_of_intervals)
 						the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 								= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + 0.5 * a[i] * node_counter
@@ -1926,19 +1926,19 @@ bool calibration::next_step()
 		switch (tip.arm_type)
 		{
 			case lib::MOTOR:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 						* sizeof(double));
 				break;
 			case lib::JOINT:
-				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+				memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 						* sizeof(double));
 				break;
 				/*
 				 case lib::XYZ_EULER_ZYZ:
-				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR*sizeof (double));
 				 break;
 				 case lib::XYZ_ANGLE_AXIS:
-				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR*sizeof (double));
+				 memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR*sizeof (double));
 				 break;
 				 */
 			default:
@@ -1975,7 +1975,7 @@ cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
 
-	for (i = 0; i < MAX_SERVOS_NR; i++) {
+	for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2080,7 +2080,7 @@ bool cubic_spline::next_step()
 		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					A2[i] = (3.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
 							/ (number_of_intervals * number_of_intervals);
@@ -2091,7 +2091,7 @@ bool cubic_spline::next_step()
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					A2[i] = (3.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
 							/ (number_of_intervals * number_of_intervals);
@@ -2140,7 +2140,7 @@ bool cubic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -2155,22 +2155,22 @@ bool cubic_spline::next_step()
 
 	if (node_counter <= number_of_intervals) {
 		// Tablice do przechowywania punktowych wartosci przyspieszen i predkosci
-		double acc[MAX_SERVOS_NR];
-		double vel[MAX_SERVOS_NR];
+		double acc[lib::MAX_SERVOS_NR];
+		double vel[lib::MAX_SERVOS_NR];
 
 		// Obliczenie polozenia na podstawie danych interpolacyjnych (zgodnie z uplywem czasu)
 		switch (tip.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 					vel[i] = 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2181,15 +2181,15 @@ bool cubic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					acc[i] = 2.0 * A2[i] + 6.0 * A3[i] * (node_counter);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 					vel[i] = 2.0 * A2[i] * (node_counter) + 3.0 * A3[i] * (node_counter * node_counter);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2203,13 +2203,13 @@ bool cubic_spline::next_step()
 				 case lib::XYZ_EULER_ZYZ:
 				 for (int i = 0; i < 7; i++) {
 				 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				 } // end : if
 				 vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2227,13 +2227,13 @@ bool cubic_spline::next_step()
 				 case lib::XYZ_ANGLE_AXIS:
 				 for (int i = 0; i < 7; i++) {
 				 acc[i] = 2.0*A2[i] + 6.0*A3[i]*(node_counter);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				 } // end : if
 				 vel[i] = 2.0*A2[i]*(node_counter) + 3.0*A3[i]*(node_counter*node_counter);
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2298,7 +2298,7 @@ smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *
 	t.resize(pose_list_length() + 1, 6);
 	a.resize(pose_list_length() + 1, 6);
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2431,7 +2431,7 @@ bool smooth_cubic_spline::next_step()
 		{
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
@@ -2439,7 +2439,7 @@ bool smooth_cubic_spline::next_step()
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					y(0, i) = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					t(0, i) = (double) 0;
 				} // end:for
@@ -2482,7 +2482,7 @@ bool smooth_cubic_spline::next_step()
 			{
 				case lib::MOTOR:
 					the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-					for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 
 						y(j, i) = tip.coordinates[i];
 						t(j, i) = (double) (t(j - 1, i) + (tip.motion_time / INTERVAL));
@@ -2491,7 +2491,7 @@ bool smooth_cubic_spline::next_step()
 
 				case lib::JOINT:
 					the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-					for (int i = 0; i < MAX_SERVOS_NR; i++) {
+					for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						y(j, i) = tip.coordinates[i];
 						t(j, i) = (double) (t(j - 1, i) + (tip.motion_time / INTERVAL));
 					} // end:for
@@ -2528,7 +2528,7 @@ bool smooth_cubic_spline::next_step()
 		// ALGORYTM OBLICZANIA WSPOLCZYNNIKOW WIELOMIANU
 		// // // // // // // // // // // // // // // // // // // // // // // // // // // // /
 
-		for (int i = 0; i < MAX_SERVOS_NR; i++) { // DLA KAZDEJ WSPOLRZEDNEJ BUDUJEMY WSPOLCZYNNIKI METODA BUILD_COEFF
+		for (int i = 0; i < lib::MAX_SERVOS_NR; i++) { // DLA KAZDEJ WSPOLRZEDNEJ BUDUJEMY WSPOLCZYNNIKI METODA BUILD_COEFF
 
 			double t_temp[pose_list_length() + 1];
 			double y_temp[pose_list_length() + 1];
@@ -2598,7 +2598,7 @@ bool smooth_cubic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -2614,8 +2614,8 @@ bool smooth_cubic_spline::next_step()
 		double C;
 		double D;
 		// Tablice do przechowywania punktowych wartosci przyspieszen i predkosci
-		double acc[MAX_SERVOS_NR];
-		double vel[MAX_SERVOS_NR];
+		double acc[lib::MAX_SERVOS_NR];
+		double vel[lib::MAX_SERVOS_NR];
 
 		switch (tip.arm_type)
 		{
@@ -2623,14 +2623,14 @@ bool smooth_cubic_spline::next_step()
 			case lib::MOTOR:
 				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A = (t(j + 1, i) - node_counter) / (t(j + 1, i) - t(j, i));
 					B = 1 - A;
 					C = (1.0 / 6.0) * (A * A * A - A) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 					D = (1.0 / 6.0) * (B * B * B - B) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 
 					acc[i] = A * a(j, i) + B * a(j + 1, i);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -2639,7 +2639,7 @@ bool smooth_cubic_spline::next_step()
 					vel[i] = ((y(j + 1, i) - y(j, i)) / (t(j + 1, i) - t(j, i))) - ((3.0 * A * A - 1.0) / 6.0) * (t(j
 							+ 1, i) - t(j, i)) * a(j, i) + ((3.0 * B * B - 1.0) / 6.0) * (t(j + 1, i) - t(j, i)) * a(j
 							+ 1, i);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2654,14 +2654,14 @@ bool smooth_cubic_spline::next_step()
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A = (t(j + 1, i) - node_counter) / (t(j + 1, i) - t(j, i));
 					B = 1 - A;
 					C = (1.0 / 6.0) * (A * A * A - A) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 					D = (1.0 / 6.0) * (B * B * B - B) * (t(j + 1, i) - t(j, i)) * (t(j + 1, i) - t(j, i));
 
 					acc[i] = A * a(j, i) + B * a(j + 1, i);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -2670,7 +2670,7 @@ bool smooth_cubic_spline::next_step()
 					vel[i] = ((y(j + 1, i) - y(j, i)) / (t(j + 1, i) - t(j, i))) - ((3.0 * A * A - 1.0) / 6.0) * (t(j
 							+ 1, i) - t(j, i)) * a(j, i) + ((3.0 * B * B - 1.0) / 6.0) * (t(j + 1, i) - t(j, i)) * a(j
 							+ 1, i);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2693,7 +2693,7 @@ bool smooth_cubic_spline::next_step()
 				 D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
 				 acc[i] = A*a(j, i) + B*a(j+1, i);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -2701,7 +2701,7 @@ bool smooth_cubic_spline::next_step()
 
 				 vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
 				 - t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2725,7 +2725,7 @@ bool smooth_cubic_spline::next_step()
 				 D = (1.0/6.0)*(B*B*B-B)*(t(j+1, i)-t(j, i))*(t(j+1, i)-t(j, i) );
 
 				 acc[i] = A*a(j, i) + B*a(j+1, i);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
@@ -2733,7 +2733,7 @@ bool smooth_cubic_spline::next_step()
 
 				 vel[i] = ( (y(j+1, i) - y(j, i)) / (t(j+1, i) - t(j, i)) ) - ((3.0*A*A - 1.0)/6.0 ) * (t(j+1, i)
 				 - t(j, i)) * a(j, i) + ((3.0*B*B - 1.0)/6.0 ) * (t(j+1, i) - t(j, i)) * a(j+1, i) ;
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -2790,7 +2790,7 @@ quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -2900,7 +2900,7 @@ bool quintic_spline::next_step()
 		switch (tip.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					A3[i] = (10.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
@@ -2915,7 +2915,7 @@ bool quintic_spline::next_step()
 
 			case lib::JOINT:
 				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 					A3[i] = (10.0 * (tip.coordinates[i] - the_robot->reply_package.arm.pf_def.arm_coordinates[i]))
 							/ (number_of_intervals * number_of_intervals * number_of_intervals);
@@ -2979,7 +2979,7 @@ bool quintic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -2994,24 +2994,24 @@ bool quintic_spline::next_step()
 
 	if (node_counter <= number_of_intervals) {
 		// Tablice do przechowywania punktowych wartosci przyspieszen i predkosci
-		double acc[MAX_SERVOS_NR];
-		double vel[MAX_SERVOS_NR];
+		double acc[lib::MAX_SERVOS_NR];
+		double vel[lib::MAX_SERVOS_NR];
 
 		switch (tip.arm_type)
 		{
 			// ---------------------------------------------------------------------------------------------------------
 			case lib::MOTOR:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					acc[i] = 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter) + 20.0 * A5[i]
 							* (node_counter * node_counter * node_counter);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 					vel[i] = 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i] * (node_counter * node_counter
 							* node_counter) + 5.0 * A5[i] * (node_counter * node_counter * node_counter * node_counter);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -3024,17 +3024,17 @@ bool quintic_spline::next_step()
 				break;
 				// ---------------------------------------------------------------------------------------------------------
 			case lib::JOINT:
-				for (int i = 0; i < MAX_SERVOS_NR; i++) {
+				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					acc[i] = 6.0 * A3[i] * (node_counter) + 12.0 * A4[i] * (node_counter * node_counter) + 20.0 * A5[i]
 							* (node_counter * node_counter * node_counter);
-					if (fabs(acc[i] * (1.0 / (STEP * STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+					if (fabs(acc[i] * (1.0 / (lib::EDP_STEP * lib::EDP_STEP))) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 						sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 					} // end : if
 					vel[i] = 3.0 * A3[i] * (node_counter * node_counter) + 4.0 * A4[i] * (node_counter * node_counter
 							* node_counter) + 5.0 * A5[i] * (node_counter * node_counter * node_counter * node_counter);
-					if (fabs(vel[i] * (1.0 / STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+					if (fabs(vel[i] * (1.0 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 						sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
 						sr_ecp_msg.message(messg);
 						throw ECP_error(lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -3052,14 +3052,14 @@ bool quintic_spline::next_step()
 				 for (int i = 0; i < 7; i++) {
 				 acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 				 *(node_counter*node_counter*node_counter);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				 } // end : if
 				 vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
 				 + 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_zyz[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_zyz[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -3082,14 +3082,14 @@ bool quintic_spline::next_step()
 				 for (int i = 0; i < 7; i++) {
 				 acc[i] = 6.0*A3[i]*(node_counter) + 12.0*A4[i]*(node_counter*node_counter) + 20.0*A5[i]
 				 *(node_counter*node_counter*node_counter);
-				 if (fabs(acc[i] * (1.0/(STEP*STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
+				 if (fabs(acc[i] * (1.0/(lib::EDP_STEP*lib::EDP_STEP))) > a_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
 				 sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_ACCELERATION_EXCEEDED);
 				 } // end : if
 				 vel[i] = 3.0*A3[i]*(node_counter*node_counter) + 4.0*A4[i]*(node_counter*node_counter*node_counter)
 				 + 5.0*A5[i]*(node_counter*node_counter*node_counter*node_counter);
-				 if (fabs(vel[i] * (1.0/STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
+				 if (fabs(vel[i] * (1.0/lib::EDP_STEP)) > v_max_aa[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
 				 sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]) , v_max_aa[i]);
 				 sr_ecp_msg.message(messg);
 				 throw ECP_error (lib::NON_FATAL_ERROR, MAX_VELOCITY_EXCEEDED);
@@ -3151,7 +3151,7 @@ elipsoid::elipsoid(common::task::task& _ecp_task) :
 {
 	INTERVAL = 0.006; // Dlugosc okresu interpolacji w [sek]
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -3230,7 +3230,7 @@ void elipsoid::ecp_save_trajectory()
 		for (i = 0; i < number_of_poses; i++) {
 			get_sample(cp, i);
 			to_file << cp.ctime << ' ';
-			for (j = 0; j < MAX_SERVOS_NR; j++)
+			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << cp.coordinates[j] << ' ';
 			to_file << '\n';
 		}
@@ -3244,7 +3244,7 @@ void elipsoid::ecp_save_trajectory()
 void elipsoid::get_sample(one_sample& cp, int sn)
 {
 	cp.ctime = trj_ptr[sn].ctime;
-	memcpy(cp.coordinates, trj_ptr[sn].coordinates, MAX_SERVOS_NR * sizeof(double));
+	memcpy(cp.coordinates, trj_ptr[sn].coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 
 void elipsoid::clear_buffer(void)
@@ -3349,13 +3349,13 @@ bool elipsoid::next_step()
 		the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
 	}
 	trj_ptr[node_counter - 1].ctime = (node_counter - 1) * INTERVAL;
-	memcpy(trj_ptr[node_counter - 1].coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, MAX_SERVOS_NR
+	memcpy(trj_ptr[node_counter - 1].coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates, lib::MAX_SERVOS_NR
 			* sizeof(double));
 
 	// (ten, do ktorego zmierza ramie)

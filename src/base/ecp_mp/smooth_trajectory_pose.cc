@@ -22,9 +22,9 @@ smooth_trajectory_pose::smooth_trajectory_pose(void)
 smooth_trajectory_pose::smooth_trajectory_pose(lib::ECP_POSE_SPECIFICATION at, const double* c, const double* vv, const double* aa)
 {
 	arm_type = at;
-	memcpy(v, vv, MAX_SERVOS_NR * sizeof(double));
-	memcpy(a, aa, MAX_SERVOS_NR * sizeof(double));
-	memcpy(coordinates, c, MAX_SERVOS_NR * sizeof(double));
+	memcpy(v, vv, lib::MAX_SERVOS_NR * sizeof(double));
+	memcpy(a, aa, lib::MAX_SERVOS_NR * sizeof(double));
+	memcpy(coordinates, c, lib::MAX_SERVOS_NR * sizeof(double));
 }
 
 } // namespace common

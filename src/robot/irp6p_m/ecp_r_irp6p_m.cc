@@ -28,7 +28,6 @@ robot::robot(common::task::task& _ecp_object) :
 	create_kinematic_models_for_given_robot();
 }
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void robot::create_kinematic_models_for_given_robot(void)
 {
 	// Stworzenie wszystkich modeli kinematyki.

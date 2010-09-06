@@ -23,7 +23,7 @@
 
 #include "ui/src/ui.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 // Konfigurator.

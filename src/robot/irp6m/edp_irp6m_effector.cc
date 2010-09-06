@@ -18,12 +18,12 @@
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "robot/irp6_mechatronika/sg_irp6m.h"
-#include "robot/irp6_mechatronika/edp_irp6m_effector.h"
+#include "robot/irp6m/sg_irp6m.h"
+#include "robot/irp6m/edp_irp6m_effector.h"
 #include "base/edp/reader.h"
 // Kinematyki.
-#include "robot/irp6_mechatronika/kinematic_model_irp6m_with_wrist.h"
-#include "robot/irp6_mechatronika/kinematic_model_irp6m_5dof.h"
+#include "robot/irp6m/kinematic_model_irp6m_with_wrist.h"
+#include "robot/irp6m/kinematic_model_irp6m_5dof.h"
 #include "base/edp/servo_gr.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
@@ -83,7 +83,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//   printf(" GET ARM\n");
 
 	if (read_hardware) {

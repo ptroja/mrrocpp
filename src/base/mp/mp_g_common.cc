@@ -55,7 +55,7 @@ bool set_next_ecps_state::first_step()
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{	robot_node.second->mp_command.command = lib::NEXT_STATE;
 		robot_node.second->mp_command.ecp_next_state = ecp_next_state;
-		robot_node.second->communicate = true;
+		robot_node.second->communicate_with_ecp = true;
 	}
 
 	return true;
@@ -83,7 +83,7 @@ bool send_end_motion_to_ecps::first_step()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 		robot_node.second->mp_command.command = lib::END_MOTION;
-		robot_node.second->communicate = true;
+		robot_node.second->communicate_with_ecp = true;
 	}
 
 	return true;
@@ -124,7 +124,7 @@ bool extended_empty::first_step()
 	{
 		robot_node.second->mp_command.command = lib::NEXT_POSE;
 		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-		robot_node.second->communicate = false;
+		robot_node.second->communicate_with_ecp = false;
 	}
 
 	return true;
@@ -151,7 +151,7 @@ bool extended_empty::next_step()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{
-		robot_node.second->communicate = (robot_node.second->new_pulse);
+		robot_node.second->communicate_with_ecp = (robot_node.second->new_pulse);
 	}
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
@@ -189,7 +189,7 @@ bool empty::first_step()
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
 		robot_node.second->mp_command.command = lib::NEXT_POSE;
 		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-		robot_node.second->communicate = true;
+		robot_node.second->communicate_with_ecp = true;
 	}
 
 	return true;
@@ -265,7 +265,7 @@ bool tight_coop::first_step()
 		robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
 		robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
 		robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
-		robot_node.second->communicate = true;
+		robot_node.second->communicate_with_ecp = true;
 	}
 
 	return true;
