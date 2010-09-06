@@ -201,7 +201,6 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-
 			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
 
 	/**

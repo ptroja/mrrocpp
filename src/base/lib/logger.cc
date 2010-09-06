@@ -1,7 +1,15 @@
-#include "logger.h"
+/**
+ * \file logger.cc
+ * \brief Logging utilities.
+ * \bug Not multi-thread safe
+ *
+ * \author Mateusz Boryń <mateusz.boryn@gmail.com>
+ */
 
 #include <cstdio>
 #include <cstdarg>
+
+#include "logger.h"
 
 using namespace std;
 

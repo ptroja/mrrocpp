@@ -30,7 +30,6 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 
 	sr_ecp_msg->message("ecp IRP6 loaded");
 }
-;
 
 void irp6_grasp::main_task_algorithm(void)
 {
