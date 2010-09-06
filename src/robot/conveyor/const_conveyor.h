@@ -18,7 +18,7 @@ namespace conveyor {
 const double INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
 const robot_name_t ROBOT_NAME = "ROBOT_CONVEYOR";
 
-const std::string EDP_SECTION = "[edp_conveyor]";
+static const std::string EDP_SECTION = "[edp_conveyor]";
 const std::string ECP_SECTION = "[ecp_conveyor]";
 
 const int NUM_OF_SERVOS = 1;

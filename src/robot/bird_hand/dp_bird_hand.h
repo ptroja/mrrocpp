@@ -56,11 +56,19 @@ const int INDEX_F_NUM_OF_SERVOS = 3;
  */
 const int RING_F_NUM_OF_SERVOS = 3;
 
+/*!
+ * @brief Bird Hand three commanded motion variants enumeration
+ * @ingroup bird_hand
+ */
 enum MOTION_VARIANT
 {
 	SIGLE_STEP_POSTION_INCREMENT = 0, MACROSTEP_POSITION_INCREMENT = 1, MACROSTEP_ABSOLUTE_POSITION = 2
 };
 
+/*!
+ * @brief Bird Hand poition/torque command for single joint
+ * @ingroup bird_hand
+ */
 struct single_joint_command
 {
 	MOTION_VARIANT profile_type;
@@ -69,6 +77,10 @@ struct single_joint_command
 	double desired_position;
 };
 
+/*!
+ * @brief Bird Hand single joint reply status
+ * @ingroup bird_hand
+ */
 struct single_joint_status
 {
 	double meassured_position;
@@ -84,6 +96,10 @@ struct single_joint_status
 	bool upper_limit_of_meassured_current;
 };
 
+/*!
+ * @brief Bird Hand configuration command for single joint
+ * @ingroup bird_hand
+ */
 struct single_joint_configuration
 {
 	int p_factor;
@@ -98,6 +114,10 @@ struct single_joint_configuration
 	int value_of_upper_limit_of_position_increment;
 };
 
+/*!
+ * @brief multi joint position/torque command for whole gripper
+ * @ingroup bird_hand
+ */
 struct command
 {
 	int motion_steps;
@@ -107,6 +127,10 @@ struct command
 	single_joint_command ring_f[RING_F_NUM_OF_SERVOS];
 };
 
+/*!
+ * @brief multi joint reply status for whole gripper
+ * @ingroup bird_hand
+ */
 struct status
 {
 	single_joint_status thumb_f[THUMB_F_NUM_OF_SERVOS];
@@ -114,6 +138,10 @@ struct status
 	single_joint_status ring_f[RING_F_NUM_OF_SERVOS];
 };
 
+/*!
+ * @brief multi joint configuration command for whole gripper
+ * @ingroup bird_hand
+ */
 struct configuration
 {
 	single_joint_configuration thumb_f[THUMB_F_NUM_OF_SERVOS];

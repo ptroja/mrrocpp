@@ -48,22 +48,14 @@ bool bird_hand::first_step()
 
 	//bird_hand_configuration_command_data_port->set(bird_hand_configuration_command_structure);
 
-	bird_hand_command_structure.thumb_f[0].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.thumb_f[1].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[0].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[1].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.index_f[2].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[0].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[1].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-	bird_hand_command_structure.ring_f[2].profile_type
-			= mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.thumb_f[0].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.thumb_f[1].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[0].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[1].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.index_f[2].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[0].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[1].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	bird_hand_command_structure.ring_f[2].profile_type = mrrocpp::lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 
 	bird_hand_command_structure.thumb_f[0].desired_torque = 0;
 	bird_hand_command_structure.thumb_f[1].desired_torque = 0;
