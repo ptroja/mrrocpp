@@ -1,9 +1,11 @@
-// ------------------------------------------------------------------------
-//                                  transformer_error.cc
-//
-//
-// Ostatnia modyfikacja: styczen 2009
-// -------------------------------------------------------------------------
+/*!
+ * @file exception.h
+ * @brief Exception declarations.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #include <stdint.h>
 

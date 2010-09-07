@@ -27,15 +27,12 @@ protected:
 	//bufory wejsciowe z generatora
 	//shead.h
 	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> shead_head_soldification_data_port;
-	lib::shead::HEAD_SOLIDIFICATION shead_head_soldification_structure;
 
 	lib::single_thread_port <lib::shead::VACUUM_ACTIVATION> shead_vacuum_activation_data_port;
-	lib::shead::VACUUM_ACTIVATION shead_vacuum_activation_structure;
 
 	// bufory wyjsciowe do generatora
 	// shead.h
 	lib::single_thread_request_port <lib::shead::reply> shead_reply_data_request_port;
-	lib::shead::reply shead_reply_structure;
 
 	// bufory do edp
 	lib::shead::cbuffer ecp_edp_cbuffer;

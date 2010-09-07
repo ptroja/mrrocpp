@@ -77,13 +77,12 @@ void swarmitfix::main_task_algorithm(void)
 
 	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
 
-	int int_port_data_input = 16;
-	int int_port_data_output;
+	int_port_from_manager->data = 16;
 
-	int_port_from_manager->set(int_port_data_input);
-	int_port_from_manager->get(int_port_data_output);
+	int_port_from_manager->set();
+	int_port_from_manager->get();
 
-	ss << " " << int_port_data_output;
+	ss << " " << int_port_from_manager->data;
 
 	sr_ecp_msg->message(ss.str().c_str());
 
@@ -98,7 +97,7 @@ void swarmitfix::main_task_algorithm(void)
 	 */
 	sr_ecp_msg->message("4");
 
-	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_STRING_SIZE];
 
 	lib::epos::epos_cubic_command epos_params;
 

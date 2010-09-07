@@ -15,10 +15,6 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "robot/irp6_tfg/dp_tfg.h"
-#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/const_irp6p_tfg.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "application/edge_follow/ecp_mp_st_edge_follow.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
@@ -27,10 +23,8 @@
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#
 
 namespace mrrocpp {
 namespace mp {

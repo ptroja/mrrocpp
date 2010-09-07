@@ -21,7 +21,7 @@
 #include <boost/bind.hpp>
 
 #include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
 #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"

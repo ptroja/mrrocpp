@@ -18,39 +18,73 @@ namespace mrrocpp {
 namespace ecp {
 namespace bird_hand {
 
+/*!
+ * @brief Bird Hand gripper ecp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup bird_hand
+ */
 // ---------------------------------------------------------------
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 protected:
 
-	// zadawanie rozkazu
+	/**
+	 * @brief motion command data port
+	 */
 	lib::single_thread_port <lib::bird_hand::command> bird_hand_command_data_port;
-	lib::bird_hand::command bird_hand_command_structure;
 
-	// zadawanie parametrow konfiguracji
+	/**
+	 * @brief configuration command data port
+	 */
 	lib::single_thread_port <lib::bird_hand::configuration> bird_hand_configuration_command_data_port;
-	lib::bird_hand::configuration bird_hand_configuration_command_structure;
 
-	// odbieranie statusu robota
+	/**
+	 * @brief Joints state reply data request port
+	 */
 	lib::single_thread_request_port <lib::bird_hand::status> bird_hand_status_reply_data_request_port;
-	lib::bird_hand::status bird_hand_status_reply_structure;
 
-	// odczytanie parametrow konfiguracji
-	lib::single_thread_request_port <lib::bird_hand::configuration>
-			bird_hand_configuration_reply_data_request_port;
-	lib::bird_hand::configuration bird_hand_configuration_reply_structure;
+	/**
+	 * @brief configuration reply data request port
+	 */
+	lib::single_thread_request_port <lib::bird_hand::configuration> bird_hand_configuration_reply_data_request_port;
 
-	// bufory do edp
+	/**
+	 * @brief EDP command buffer
+	 */
 	lib::bird_hand::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
 	lib::bird_hand::rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
 
 public:
+	/**
+	 * @brief constructor called from UI
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _ecp_object ecp tak object reference
+	 */
 	robot(common::task::task& _ecp_object);
 
+	/**
+	 * @brief set the edp command buffer
+	 * basing on data_ports
+	 */
 	void create_command();
+
+	/**
+	 * @brief set the data_request_ports
+	 * basing on edp reply buffer
+	 */
 	void get_reply();
 
 };

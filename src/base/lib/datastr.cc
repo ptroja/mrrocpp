@@ -1,9 +1,9 @@
 /**
  * \file datastr.cc
  *
- * \date Oct 21, 2009
- * \author ptrojane
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
  *
+ * \brief Methods for MRROC++ data types/string conversion.
  */
 
 #include <sstream>
@@ -25,7 +25,6 @@ std::string toString(const double valArr[], int length)
 			stm << "\t" << valArr[i];
 	}
 
-	//	std::cout<<stm.str()<<std::endl;
 	return stm.str();
 }
 
@@ -34,10 +33,8 @@ std::string toString(int numberOfPoses)
 	return boost::lexical_cast <std::string>(numberOfPoses);
 }
 
-std::string toString(lib::robot_name_t robot)
+std::string toString(const lib::robot_name_t & robot)
 {
-	using namespace lib;
-
 	return robot;
 }
 
@@ -58,12 +55,9 @@ std::string toString(lib::ECP_POSE_SPECIFICATION ps)
 	}
 }
 
-//-----------------------------------------------------------------------------------------------------------
-
 lib::robot_name_t returnProperRobot(const std::string & robotName)
 {
-
-	lib::robot_name_t returned_robot = robotName;
+	const lib::robot_name_t returned_robot(robotName);
 	return returned_robot;
 }
 
@@ -71,20 +65,17 @@ lib::ECP_POSE_SPECIFICATION returnProperPS(const std::string & poseSpecification
 {
 	if (poseSpecification == "ecp_XYZ_ANGLE_AXIS") {
 		return lib::ECP_XYZ_ANGLE_AXIS;
-	}
-	if (poseSpecification == "ecp_XYZ_EULER_ZYZ") {
+	} else if (poseSpecification == "ecp_XYZ_EULER_ZYZ") {
 		return lib::ECP_XYZ_EULER_ZYZ;
-	}
-	if (poseSpecification == "MOTOR") {
+	} else if (poseSpecification == "MOTOR") {
 		return lib::ECP_MOTOR;
-	}
-	if (poseSpecification == "JOINT") {
+	} else if (poseSpecification == "JOINT") {
 		return lib::ECP_JOINT;
 	} else
 		return lib::ECP_INVALID_END_EFFECTOR;
 }
 
-int setValuesInArray(double arrayToFill[], const std::string & dataString)
+unsigned int setValuesInArray(double arrayToFill[], const std::string & dataString)
 {
 	int index = 0;
 	typedef boost::tokenizer <boost::char_separator <char> > tokenizer;
