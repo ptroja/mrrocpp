@@ -15,10 +15,10 @@ namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-#define SARKOFAG_SYNCHRO_STEP_COARSE -0.05
-#define SARKOFAG_SYNCHRO_STEP_FINE   -0.02
+const double SYNCHRO_STEP_COARSE = -0.05;
+const double SYNCHRO_STEP_FINE = -0.02;
 
-#define SARKOFAG_MAX_PWM_INCREMENT	1000
+const int SARKOFAG_MAX_PWM_INCREMENT = 1000;
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_sarkofag : public common::NL_regulator
 {

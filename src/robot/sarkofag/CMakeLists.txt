@@ -3,7 +3,6 @@ if(ROBOT_SARKOFAG)
 add_executable(edp_sarkofag
 	edp_e_sarkofag.cc
 	hi_sarkofag.cc
-	../../base/edp/int_hand_suplement.cc
 	sg_sarkofag.cc
 	 regulator_sarkofag.cc
 )
