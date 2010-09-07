@@ -24,7 +24,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
-		axe_inc_per_revolution[j] = lib::conveyor::INC_PER_REVOLUTION;
+		axe_inc_per_revolution[j] = INC_PER_REVOLUTION;
 	}
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));

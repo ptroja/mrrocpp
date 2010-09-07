@@ -18,11 +18,15 @@
 #include "base/edp/edp_e_manip.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
-const int IRP6P_GRIPPER_TURN_AXE = 5;
-
 namespace mrrocpp {
 namespace edp {
 namespace irp6p_m {
+
+const int IRP6P_GRIPPER_TURN_AXE = 5;
+
+const double AXIS_0_TO_5_INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
+const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na obrot walu - musi byc float
+
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class effector : public common::manip_effector

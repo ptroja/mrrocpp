@@ -11,7 +11,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"
 
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "base/lib/typedefs.h"
@@ -89,7 +89,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_tfg::AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
 

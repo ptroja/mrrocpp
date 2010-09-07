@@ -29,21 +29,22 @@ namespace irp6p_m {
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
-	common::servo_buffer(_master), master(_master) {
+	common::servo_buffer(_master), master(_master)
+{
 	for (int j = 0; j < master.number_of_servos; j++) {
-		synchro_axis_order[j] = ((j + IRP6P_SYN_INIT_AXE)
-				% (master.number_of_servos));
-		switch (j) {
-		case IRP6P_GRIPPER_TURN_AXE:
-			axe_inc_per_revolution[j] = mrrocpp::lib::irp6p_m::AXIS_6_INC_PER_REVOLUTION;
-			synchro_step_coarse[j] = AXIS_6_SYNCHRO_STEP_COARSE;
-			synchro_step_fine[j] = AXIS_6_SYNCHRO_STEP_FINE;
-			break;
-		default:
-			axe_inc_per_revolution[j] = mrrocpp::lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION;
-			synchro_step_coarse[j] = AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
-			synchro_step_fine[j] = AXIS_0_TO_5_SYNCHRO_STEP_FINE;
-			break;
+		synchro_axis_order[j] = ((j + IRP6P_SYN_INIT_AXE) % (master.number_of_servos));
+		switch (j)
+		{
+			case IRP6P_GRIPPER_TURN_AXE:
+				axe_inc_per_revolution[j] = AXIS_6_INC_PER_REVOLUTION;
+				synchro_step_coarse[j] = AXIS_6_SYNCHRO_STEP_COARSE;
+				synchro_step_fine[j] = AXIS_6_SYNCHRO_STEP_FINE;
+				break;
+			default:
+				axe_inc_per_revolution[j] = AXIS_0_TO_5_INC_PER_REVOLUTION;
+				synchro_step_coarse[j] = AXIS_0_TO_5_SYNCHRO_STEP_COARSE;
+				synchro_step_fine[j] = AXIS_0_TO_5_SYNCHRO_STEP_FINE;
+				break;
 		}
 	}
 
@@ -51,7 +52,8 @@ servo_buffer::servo_buffer(effector &_master) :
 }
 /*-----------------------------------------------------------------------*/
 
-void servo_buffer::load_hardware_interface(void) {
+void servo_buffer::load_hardware_interface(void)
+{
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//int max_current[lib::irp6p_m::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT,
@@ -87,7 +89,8 @@ void servo_buffer::load_hardware_interface(void) {
 } // namespace irp6p
 namespace common {
 
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master) {
+servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
+{
 	return new irp6p_m::servo_buffer((irp6p_m::effector &) (_master));
 }
 

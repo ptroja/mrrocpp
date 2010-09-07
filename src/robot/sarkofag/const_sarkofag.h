@@ -15,12 +15,28 @@ namespace mrrocpp {
 namespace lib {
 namespace sarkofag {
 
+/*!
+ * @brief Sarkofag robot label
+ * @ingroup sarkofag
+ */
 const robot_name_t ROBOT_NAME = "ROBOT_SARKOFAG";
 
-const double INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
+/*!
+ * @brief configuration file EDP Sarkofag section string
+ * @ingroup sarkofag
+ */
 const std::string EDP_SECTION = "[edp_sarkofag]";
+
+/*!
+ * @brief configuration file ECP Sarkofag section string
+ * @ingroup sarkofag
+ */
 const std::string ECP_SECTION = "[ecp_sarkofag]";
 
+/*!
+ * @brief Sarkofag total number of servos
+ * @ingroup sarkofag
+ */
 const int NUM_OF_SERVOS = 1;
 
 }
