@@ -24,7 +24,6 @@ namespace bird_hand {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup bird_hand
  */
-// ---------------------------------------------------------------
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 protected:
@@ -88,7 +87,6 @@ public:
 	void get_reply();
 
 };
-// ---------------------------------------------------------------
 
 } // namespace bird_hand
 } // namespace ecp

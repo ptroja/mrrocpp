@@ -48,20 +48,43 @@ protected:
 	//smb.h
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
-	// bufory do edp
+	/**
+	 * @brief EDP command buffer
+	 */
 	lib::smb::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
 	lib::smb::rbuffer edp_ecp_rbuffer;
 
 public:
+	/**
+	 * @brief constructor called from UI
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _ecp_object ecp tak object reference
+	 */
 	robot(common::task::task& _ecp_object);
 
+	/**
+	 * @brief set the edp command buffer
+	 * basing on data_ports
+	 */
 	void create_command();
+
+	/**
+	 * @brief set the data_request_ports
+	 * basing on edp reply buffer
+	 */
 	void get_reply();
 
-}; // end: class ecp_irp6_mechatronika_robot
-// ---------------------------------------------------------------
-
+};
 
 } // namespace smb
 } // namespace ecp
