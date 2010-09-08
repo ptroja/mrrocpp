@@ -1,6 +1,6 @@
 #include "CubeState.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 namespace mrrocpp {
 namespace mp {

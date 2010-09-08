@@ -1,3 +1,13 @@
+/*!
+ * @file
+ * @brief File contains ecp transparent generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
@@ -17,8 +27,9 @@ transparent::transparent(common::task::task& _ecp_task) :
 
 bool transparent::first_step()
 {
-	if (the_robot) the_robot->communicate_with_edp = false;
-	ecp_t.continuous_coordination=true;
+	if (the_robot)
+		the_robot->communicate_with_edp = false;
+	ecp_t.continuous_coordination = true;
 	return true;
 }
 
@@ -31,8 +42,8 @@ bool transparent::next_step()
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
 	// the_robot->get_reply();
-	if (the_robot) the_robot->communicate_with_edp = true;
-
+	if (the_robot)
+		the_robot->communicate_with_edp = true;
 
 	// by Y - Przepisanie przyslanej z EDP pozycji do MP
 	the_robot->copy_edp_to_mp_buffer(ecp_t.ecp_reply.reply_package);
@@ -50,7 +61,7 @@ void transparent::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 
 	}
 	the_robot->query();
@@ -76,11 +87,11 @@ void transparent::execute_motion(void)
 			case BEYOND_LOWER_THETA6_LIMIT:
 			case BEYOND_LOWER_THETA7_LIMIT:
 				if (throw_kinematics_exceptions) {
-					throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+					throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				}
 				break;
 			default:
-				throw ecp_robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
 				break;
 
 		} /* end: switch */

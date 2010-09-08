@@ -1,5 +1,5 @@
 /*!
- * @file ecp_mp_sensor_interface.h
+ * @file
  * @brief File contains sensor interface for all MP and ECP  sensors.
  * 
  * @author ptrojane <piotr.trojanek@gmail.com>, Warsaw University of Technology
@@ -13,7 +13,7 @@
 #ifndef ECP_MP_SENSOR_INTERFACE_H_
 #define ECP_MP_SENSOR_INTERFACE_H_
 
-#include "lib/sensor_interface.h"
+#include "base/lib/sensor_interface.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

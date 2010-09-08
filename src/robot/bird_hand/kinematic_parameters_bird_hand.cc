@@ -1,12 +1,14 @@
 /*!
- * \file kinematic_parameters_bird_hand.cc
- * \brief File containing definitions of kinematic_parameters class methods.
+ * @file
+ * @brief File containing definitions of kinematic_parameters class methods.
  *
- * \author kczajkowski
- * \date May 28, 2010
+ * @author kczajkowski
+ * @date May 28, 2010
+ *
+ * @ingroup IRP6OT_KINEMATICS bird_hand
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "kinematic_parameters_bird_hand.h"
 
@@ -15,14 +17,17 @@ namespace kinematics {
 namespace bird_hand {
 
 kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
-	gear[0] = 	//index_f[2]
-	gear[1] = 	//index_f[1]
-	gear[2] = 	//thumb_f[0]
-	gear[3] = 	//thumb_f[1]
-	gear[4] = 													//ring_f[1]
-	gear[5] = 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;//ring_f[2]
-	gear[6] = 						  							//index_f[0] (rotation)
-	gear[7] = 1024.0 * 275.0 * 2.1585 /2.0/M_PI; 				//index_f[0] (rotation);
+
+	// Gears related to the bend of fingers - all six DOF have the same gear parameters.
+	gear[0] =
+	gear[1] =
+	gear[2] =
+	gear[3] =
+	gear[4] =
+	gear[5] = 1024.0 * 275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI;
+	// Gears related to the twist of two fingers - both have the same gear parameters.
+	gear[6] =
+	gear[7] = 1024.0 * 275.0 * 2.1585 /2.0/M_PI;
 
 	lower_limit_joint[0] = 0.0 * M_PI / 180.0;
 	lower_limit_joint[1] = 0.0 * M_PI / 180.0;
@@ -50,15 +55,6 @@ kinematic_parameters_bird_hand::kinematic_parameters_bird_hand() {
 	synchro_joint_position[5] = -1.6360;
 	synchro_joint_position[6] = -1.6360;
 	synchro_joint_position[7] = -1.6360;
-
-//	synchro_joint_position[0] = 0.0;
-//	synchro_joint_position[1] = 0.0;
-//	synchro_joint_position[2] = 0.0;
-//	synchro_joint_position[3] = 0.0;
-//	synchro_joint_position[4] = 0.0;
-//	synchro_joint_position[5] = 0.0;
-//	synchro_joint_position[6] = 0.0;
-//	synchro_joint_position[7] = 0.0;
 }
 
 } // namespace bird_hand

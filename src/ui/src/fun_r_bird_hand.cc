@@ -3,33 +3,33 @@
 /*                                         Version 2.03  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <strings.h>
 #include <iostream>
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
-#include <signal.h>
+#include <csignal>
 #include <sys/netmgr.h>
-#include <errno.h>
+#include <cerrno>
 #include <process.h>
-#include <math.h>
+#include <cmath>
 
 #include <boost/bind.hpp>
 
-#include "lib/srlib.h"
-#include "ui/src/ui_const.h"
+#include "base/lib/srlib.h"
+
 #include "ui/src/ui_class.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
 #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
-#include "robot/bird_hand/bird_hand_const.h"
+#include "robot/bird_hand/const_bird_hand.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -109,8 +109,8 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 					while ((ui.bird_hand->state.edp.reader_fd
 							= name_open(ui.bird_hand->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

@@ -3,16 +3,16 @@
 // Date: maj 2006
 //
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <iostream>
 #include <fstream>
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -24,16 +24,16 @@
 #else
 #include "messip_dataport.h"
 #endif
-#include <errno.h>
+#include <cerrno>
 #include <pthread.h>
-#include <time.h>
+#include <ctime>
 
 #include <boost/scoped_array.hpp>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/reader.h"
 
@@ -44,7 +44,7 @@ namespace common {
 reader_config::reader_config() :
 	step(false), measure_time(false), servo_mode(false)
 {
-	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
 		current_inc[i] = false;
 		pwm[i] = false;
@@ -96,7 +96,7 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", lib::UI_SECTION);
 	} else {
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
@@ -159,7 +159,7 @@ void reader_buffer::operator()()
 	}
 
 	// ustawienie priorytetu watku
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
@@ -190,10 +190,10 @@ void reader_buffer::operator()()
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -253,7 +253,7 @@ void reader_buffer::operator()()
 
 		master.msg->message("measures started");
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 1);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 1);
 
 		// dopoki nie przyjdzie puls stopu
 		do {

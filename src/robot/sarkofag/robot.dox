@@ -1,0 +1,16 @@
+/** 
+
+@namespace mrrocpp::lib::sarkofag
+@brief Namespace for Sarkofag libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup sarkofag
+
+@namespace mrrocpp::ecp::sarkofag
+@brief Namespace for ECP Sarkofag classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup sarkofag
+
+   @defgroup sarkofag Sarkofag
+   @ingroup robots
+
+*/

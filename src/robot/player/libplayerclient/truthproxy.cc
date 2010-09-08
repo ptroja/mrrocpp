@@ -48,9 +48,9 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
 
 // angles must be transmitted as integers on [0..359]
 #define RAD_TO_POS_DEG(x) (((((int) (x * 180 / M_PI)) % 360) + 360) % 360)

@@ -5,19 +5,19 @@
 // Ostatnia modyfikacja: 2006
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <dlfcn.h>
 
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6m/ecp_r_irp6m.h"
 
 #include "application/teach-dll/ecp_t_teach.h"
 #include "application/teach-dll/ecp_g_teach.h"
@@ -36,21 +36,21 @@ using std::cerr;
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) : task(_config)
 {
-    if (config.section_name == ECP_IRP6OT_M_SECTION)
+    if (config.section_name == ECP_SECTION)
     {
         ecp_m_robot = new irp6ot_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6P_M_SECTION)
+    else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
         ecp_m_robot = new irp6p_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6_MECHATRONIKA_SECTION)
+    else if (config.section_name == ECP_SECTION)
     {
         ecp_m_robot = new irp6m::robot (*this);
     }
     else {
     	fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-    	throw(ecp_robot::ECP_main_error(lib::FATAL_ERROR, 0));
+    	throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));
     }
 
     cout << "C++ dlopen demo\n\n";
@@ -90,10 +90,10 @@ void teach::main_task_algorithm(void)
 
     switch (ecp_m_robot->robot_name)
     {
-    case lib::ROBOT_IRP6OT_M:
+    case lib::irp6ot_m::ROBOT_NAME:
         sr_ecp_msg->message("ecp teach irp6ot");
         break;
-    case lib::ROBOT_IRP6P_M:
+    case lib::irp6p_m::ROBOT_NAME:
         sr_ecp_msg->message("ecp teach irp6p");
         break;
     default:

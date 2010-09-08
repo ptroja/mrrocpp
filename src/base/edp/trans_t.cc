@@ -3,15 +3,10 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-
-#include "lib/mis_fun.h"
 #include "base/edp/trans_t.h"
 
 /********************************* GLOBALS **********************************/
@@ -23,12 +18,10 @@ namespace common {
 trans_t::trans_t(effector& _master) :
 	master(_master), master_to_trans_synchroniser(), trans_t_to_master_synchroniser()
 {
-
 }
 
 trans_t::~trans_t()
 {
-
 }
 
 void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction)

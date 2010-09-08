@@ -7,11 +7,11 @@
 // Ostatnia modyfikacja: styczen 2005
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <sys/wait.h>
 #include <sys/types.h>
 #if !defined(USE_MESSIP_SRR)
@@ -24,9 +24,9 @@
 #include "messip_dataport.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/edp_effector.h"
 
 namespace mrrocpp {
@@ -40,13 +40,13 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), true);
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), true);
 
 	sh_msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION).c_str(), false);
+			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), false);
 
-	if (config.exists(ROBOT_TEST_MODE)) {
-		robot_test_mode = config.value <int> (ROBOT_TEST_MODE);
+	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
+		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
 	}
 
 	if (robot_test_mode) {
@@ -103,7 +103,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 
 	server_attach =
 #if !defined(USE_MESSIP_SRR)

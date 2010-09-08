@@ -3,15 +3,15 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/manip_trans_t.h"
 
@@ -35,7 +35,7 @@ manip_trans_t::~manip_trans_t()
 
 void manip_trans_t::operator()()
 {
-    lib::set_thread_priority(pthread_self(), MAX_PRIORITY);
+    lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY);
 
     while(1)
     {

@@ -11,7 +11,7 @@
 #define __EDP_E_SHEAD_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/shead/shead_const.h"
+#include "robot/shead/const_shead.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -28,8 +28,8 @@ namespace shead {
 class effector: public common::motor_driven_effector {
 protected:
 
-	lib::shead_cbuffer ecp_edp_cbuffer;
-	lib::shead_rbuffer edp_ecp_rbuffer;
+	lib::shead::cbuffer ecp_edp_cbuffer;
+	lib::shead::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!

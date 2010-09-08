@@ -3,9 +3,9 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 // Klasa edp_conveyor_effector.
 #include "robot/conveyor/edp_conveyor_effector.h"
@@ -23,8 +23,8 @@ namespace conveyor {
 servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
-		axe_inc_per_revolution[j] = IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION;
+	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
+		axe_inc_per_revolution[j] = lib::conveyor::INC_PER_REVOLUTION;
 	}
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
@@ -35,7 +35,7 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current[CONVEYOR_NUM_OF_SERVOS] = { CONVEYOR_AXIS_1_MAX_CURRENT };
+	int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
 	hi
 			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
@@ -66,14 +66,14 @@ void servo_buffer::synchronise(void)
 	}
 
 	// zerowanie regulatorow
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
 		crp = regulator_ptr[j];
 		crp->clear_regulator();
 		hi->reset_position(j);
 	}
 
 	// zatrzymanie na chwile robota
-	for (int j = 0; j < CONVEYOR_NUM_OF_SERVOS; j++) {
+	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
 		synchro_step = 0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
@@ -91,7 +91,6 @@ void servo_buffer::synchronise(void)
 }
 
 /*-----------------------------------------------------------------------*/
-
 
 } // namespace conveyor
 

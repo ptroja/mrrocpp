@@ -8,8 +8,6 @@
 #if !defined(__MP_T_HAPTIC_H)
 #define __MP_T_HAPTIC_H
 
-#include "base/mp/mp.h"
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -29,7 +27,8 @@ protected:
 public:
 
 	haptic(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods for mp template
 	void main_task_algorithm(void);
 

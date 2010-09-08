@@ -4,7 +4,7 @@
 
 #include "ui/src/sarkofag/ui_r_sarkofag.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "robot/sarkofag/sarkofag_const.h"
+#include "robot/sarkofag/const_sarkofag.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -20,8 +20,8 @@
 
 
 UiRobotSarkofag::UiRobotSarkofag(Ui& _ui) :
-	UiRobot(_ui, EDP_SARKOFAG_SECTION, ECP_SARKOFAG_SECTION),
-	is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
+	UiRobot(_ui, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION),
+			is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }
@@ -59,14 +59,14 @@ int UiRobotSarkofag::reload_configuration()
 						tmp1 = tmp
 								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
-						for (int j = 0; j < SARKOFAG_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::sarkofag::NUM_OF_SERVOS; j++) {
 
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 
 						}
 						free(toDel);
 					} else {
-						for (int j = 0; j < SARKOFAG_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::sarkofag::NUM_OF_SERVOS; j++) {
 
 							state.edp.preset_position[i][j] = 0.074;
 
@@ -74,8 +74,8 @@ int UiRobotSarkofag::reload_configuration()
 					}
 				}
 
-				if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (ROBOT_TEST_MODE, state.edp.section_name);
+				if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = ui.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 

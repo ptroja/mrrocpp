@@ -8,9 +8,6 @@
 #if !defined(__MP_T_SWARMITFIX_H)
 #define __MP_T_SWARMITFIX_H
 
-#include "base/mp/mp.h"
-
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -25,17 +22,18 @@ class swarmitfix : public task
 {
 protected:
 
-
 public:
 
 	swarmitfix(lib::configurator &_config);
 
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods for mp template
 	void main_task_algorithm(void);
 
 };
 
-/** @} */ // end of edge_following
+/** @} */// end of edge_following
 
 } // namespace task
 } // namespace mp

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 #include <unistd.h>
 #include <iostream>
@@ -19,57 +19,57 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 	task(_config)
 {
 
-	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
-	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
+	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
 	}
 
-	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 7);
+	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 6);
 	cvgenjoint->set_debug(true);
 
 	sr_ecp_msg->message("ecp IRP6 loaded");
 }
-;
 
 void irp6_grasp::main_task_algorithm(void)
 {
 
 	sr_ecp_msg->message("ecp IRP6 ready");
 
-	struct _irp6{
+	struct _irp6
+	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	vector<double> coordinates1(7);
+	std::vector <double> coordinates1(7);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	for (;;) {
-			sr_ecp_msg->message("Waiting for MP order");
+		sr_ecp_msg->message("Waiting for MP order");
 
-			get_next_state();
+		get_next_state();
 
-			sr_ecp_msg->message("Order received");
-			flushall();
+		sr_ecp_msg->message("Order received");
+		flushall();
 
-			if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6)  {
+		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_IRP6) {
 
-				sr_ecp_msg->message("ECP_GEN_IRP6");
+			sr_ecp_msg->message("ECP_GEN_IRP6");
 
-				memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
-				//ignore first DOF of IRp6_on_track, not used in GraspIt
-				coordinates1[0] = 0.0;
-				for (int i=0; i<6; ++i)
-					coordinates1[i+1] = mp_ecp_irp6_command.joint[i];
+			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+			//ignore first DOF of IRp6_on_track, not used in GraspIt
+			coordinates1[0] = 0.0;
+			for (int i = 0; i < 6; ++i)
+				coordinates1[i+1] = mp_ecp_irp6_command.joint[i];
 
-				cvgenjoint->reset();
-				cvgenjoint->set_absolute();
-				cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-				if (cvgenjoint->calculate_interpolate())
-					cvgenjoint->Move();
-			}
+			cvgenjoint->reset();
+			cvgenjoint->set_absolute();
+			cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
+			if (cvgenjoint->calculate_interpolate())
+				cvgenjoint->Move();
+		}
 
-			ecp_termination_notice();
+		ecp_termination_notice();
 	}
 
 	ecp_termination_notice();
@@ -91,5 +91,4 @@ task* return_created_ecp_task(lib::configurator &_config)
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 

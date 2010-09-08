@@ -10,13 +10,12 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/spkm/edp_e_spkm.h"
@@ -25,7 +24,7 @@
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
-#include "lib/epos_gen.h"
+#include "robot/epos/epos_gen.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -72,9 +71,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_SPKM)
+	manip_effector(_config, lib::spkm::ROBOT_NAME)
 {
-	number_of_servos = SPKM_NUM_OF_SERVOS;
+	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -92,7 +91,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	switch (ecp_edp_cbuffer.variant)
 	{
 		/*
-		 case lib::SPKM_CBUFFER_EPOS_GEN_PARAMETERS: {
+		 case lib::spkm::CBUFFER_EPOS_GEN_PARAMETERS: {
 		 // epos parameters computation basing on trajectory parameters
 		 lib::epos_gen_parameters epos_gen_parameters_structure;
 		 lib::epos_low_level_command epos_low_level_command_structure;
@@ -112,25 +111,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		 }
 		 break;*/
-		case lib::SPKM_CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos_cubic_command epos_cubic_command_structure;
+		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
+			lib::epos::epos_cubic_command epos_cubic_command_structure;
 			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
-			lib::epos_trapezoidal_command epos_trapezoidal_command_structure;
+		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
+			lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_OPERATIONAL_COMMAND: {
-			lib::epos_operational_command epos_operational_command_structure;
+		case lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND: {
+			lib::epos::epos_operational_command epos_operational_command_structure;
 			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
 
 		}
 			break;
-		case lib::SPKM_CBUFFER_EPOS_BRAKE_COMMAND: {
+		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
 
 		}
 			break;
@@ -145,7 +144,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznikaaa = (-11);

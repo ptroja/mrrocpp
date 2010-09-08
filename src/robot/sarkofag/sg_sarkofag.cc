@@ -3,13 +3,15 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+
+#include "robot/sarkofag/sg_sarkofag.h"
 
 // Klasa edp_sarkofag_effector.
 #include "robot/sarkofag/edp_e_sarkofag.h"
@@ -17,7 +19,7 @@
 // Klasa hardware_interface.
 #include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
-#include "robot/sarkofag/sg_sarkofag.h"
+
 #include "robot/sarkofag/regulator_sarkofag.h"
 
 namespace mrrocpp {
@@ -31,7 +33,7 @@ servo_buffer::servo_buffer(effector &_master) :
 
 	synchro_axis_order[0] = 0;
 
-	axe_inc_per_revolution[0] = SARKOFAG_INC_PER_REVOLUTION;
+	axe_inc_per_revolution[0] = INC_PER_REVOLUTION;
 	synchro_step_coarse[0] = SARKOFAG_SYNCHRO_STEP_COARSE;
 	synchro_step_fine[0] = SARKOFAG_SYNCHRO_STEP_FINE;
 
@@ -43,9 +45,9 @@ void servo_buffer::load_hardware_interface(void)
 {
 
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	//	int max_current[SARKOFAG_NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
+	//	int max_current[NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
-	hi = new common::HI_moxa(master);
+	hi = new hi_moxa::HI_moxa(master);
 	hi->init();
 
 	// utworzenie tablicy regulatorow

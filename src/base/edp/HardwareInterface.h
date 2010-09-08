@@ -8,13 +8,15 @@
 #ifndef HARDWAREINTERFACE_H_
 #define HARDWAREINTERFACE_H_
 
-#include "base/edp/edp_e_motor_driven.h"
+#include <stdint.h>
 
-#include <inttypes.h>
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+class motor_driven_effector;
 
 // tryby obslugi przerwania
 typedef enum INTERRUPT_MODE
@@ -51,9 +53,9 @@ struct motor_data
 	uint16_t register_adress; // adres rejestru dla trybu INT_SINGLE_COMMAND
 	uint16_t value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
 
-	long int current_absolute_position[MAX_SERVOS_NR];
-	control_a_dof robot_control[MAX_SERVOS_NR];
-	status_of_a_dof robot_status[MAX_SERVOS_NR];
+	long int current_absolute_position[lib::MAX_SERVOS_NR];
+	control_a_dof robot_control[lib::MAX_SERVOS_NR];
+	status_of_a_dof robot_status[lib::MAX_SERVOS_NR];
 
 	uint64_t hardware_error;
 };

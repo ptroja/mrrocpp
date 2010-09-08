@@ -14,13 +14,15 @@
 #define __EDP_IRP6OT_TFG_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
+
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/irp6ot_tfg/irp6ot_tfg_const.h"
+#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot_tfg {
+
+const double AXIS_7_INC_PER_REVOLUTION = 128.0; // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // Klasa reprezentujaca tasmociag.
 class effector : public common::motor_driven_effector

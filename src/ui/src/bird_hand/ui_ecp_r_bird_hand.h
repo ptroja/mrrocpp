@@ -10,8 +10,8 @@
 
 #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
@@ -22,20 +22,16 @@ class ui_bird_hand_robot
 public:
 
 	// zadawanie nastaw regulatorow
-	mrrocpp::lib::single_thread_port <mrrocpp::lib::bird_hand_command> *bird_hand_command_data_port;
-	mrrocpp::lib::bird_hand_command bird_hand_command_structure;
+	mrrocpp::lib::single_thread_port <mrrocpp::lib::bird_hand::command> *bird_hand_command_data_port;
 
 	// zadawanie parametrow konfiguracji
-	lib::single_thread_port <lib::bird_hand_configuration> *bird_hand_configuration_command_data_port;
-	lib::bird_hand_configuration bird_hand_configuration_command_structure;
+	lib::single_thread_port <lib::bird_hand::configuration> *bird_hand_configuration_command_data_port;
 
 	// odbieranie statusu robota
-	lib::single_thread_request_port <lib::bird_hand_status> *bird_hand_status_reply_data_request_port;
-	lib::bird_hand_status bird_hand_status_reply_structure;
+	lib::single_thread_request_port <lib::bird_hand::status> *bird_hand_status_reply_data_request_port;
 
 	// odczytanie parametrow konfiguracji
-	lib::single_thread_request_port <lib::bird_hand_configuration> *bird_hand_configuration_reply_data_request_port;
-	lib::bird_hand_configuration bird_hand_configuration_reply_structure;
+	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
 
 	ecp::bird_hand::robot *the_robot;
 

@@ -11,24 +11,24 @@
 /********************************* INCLUDES *********************************/
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 #include "ui/src/ui.h"
 
 /* MRROC++ headers */
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 
 // Konfigurator.
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -201,7 +201,7 @@ int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
 	std::string attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "attach_point",
 			"[ecp_ui_channel]");
-	//    tmp_name =ui.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", UI_SECTION);
+	//    tmp_name =ui.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", lib::UI_SECTION);
 
 #ifdef MAMDEBUG
 	printf("MAM_tmr_connect: %s\n", tmp_name);

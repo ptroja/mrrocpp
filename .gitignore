@@ -1,4 +1,6 @@
 bin
+html
+latex
 build*
 logs
 msr

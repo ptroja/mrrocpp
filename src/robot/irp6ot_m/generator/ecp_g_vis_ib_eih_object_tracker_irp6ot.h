@@ -9,12 +9,8 @@
 #ifndef ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 #define ECP_VIS_IB_EIH_OBJECT_TRACKER_IRP6OT_H_
 
-#include <iostream>
-#include <string.h>
-#include <math.h>
-
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_visual_servo.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
@@ -42,7 +38,7 @@ public:
 	/**
 	 *
 	 */
-	double next_position[MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
+	double next_position[lib::MAX_SERVOS_NR]; 	//pozycja w nastepnym kroku.
 	/**
 	 *
 	 */

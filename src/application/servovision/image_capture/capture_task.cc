@@ -7,7 +7,7 @@
 
 #include "capture_task.h"
 
-#include "lib/logger.h"
+#include "base/lib/logger.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 using namespace logger;
@@ -51,18 +51,18 @@ CaptureTask::~CaptureTask()
 }
 
 void CaptureTask::main_task_algorithm(void) {
-	/*double v[MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.01 };
-	 double a[MAX_SERVOS_NR] = { 0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.001 };
+	/*double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.20, 0.01 };
+	 double a[lib::MAX_SERVOS_NR] = { 0.15, 0.15, 0.5, 0.15, 0.15, 0.15, 0.15, 0.001 };
 
-	 double initialPositionJoints[MAX_SERVOS_NR] = { 0, -0.010, -1.391, 0.222, 0.0, 4.719, 0.0, 0.075 };
+	 double initialPositionJoints[lib::MAX_SERVOS_NR] = { 0, -0.010, -1.391, 0.222, 0.0, 4.719, 0.0, 0.075 };
 
 	 smoothGen->reset();
 	 smoothGen->set_absolute();
 	 smoothGen->load_coordinates(lib::ECP_JOINT, v, a, initialPositionJoints, true);
 	 smoothGen->Move();*/
 
-	//	double v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-	//	double a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//	double v[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//	double a[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
 	//
 	//	smoothGen->reset();
 	//	smoothGen->set_absolute();
@@ -113,9 +113,9 @@ void CaptureTask::main_task_algorithm(void) {
 
 void CaptureTask::nextPosition(double deltaX, double deltaY, double deltaZ) {
 	double
-			v[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+			v[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
 	double
-			a[MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+			a[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
 
 	et.x += deltaX;
 	et.y += deltaY;

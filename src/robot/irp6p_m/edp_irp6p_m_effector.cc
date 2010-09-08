@@ -10,14 +10,16 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
+
+#include "robot/irp6p_m/sg_irp6p_m.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6p_m/edp_irp6p_m_effector.h"
-
+#include "base/edp/edp_force_sensor.h"
 // Kinematyki.
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_5dof.h"
@@ -73,10 +75,10 @@ void effector::create_threads()
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_IRP6P_M)
+	manip_effector(_config, lib::irp6p_m::ROBOT_NAME)
 {
 
-	number_of_servos = IRP6P_M_NUM_OF_SERVOS;
+	number_of_servos = lib::irp6p_m::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

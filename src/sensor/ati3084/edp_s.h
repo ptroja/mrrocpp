@@ -10,10 +10,13 @@
 #if !defined(_EDP_S_ATI3084_H)
 #define _EDP_S_ATI3084_H
 
-#include "base/edp/edp_e_manip.h"
+#include "base/edp/edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {
+namespace common {
+class manip_effector;
+}
 namespace sensor {
 
 // server answers
@@ -69,11 +72,13 @@ namespace sensor {
 #define MDS_DATA_RANGE 20
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI3084_force: public force {
+class ATI3084_force : public force
+{
 
 public:
 	//! Measurement data type shared with interrupt handler
-	typedef struct mds_data {
+	typedef struct mds_data
+	{
 		int intr_mode;
 		int byte_counter;
 		bool is_received;

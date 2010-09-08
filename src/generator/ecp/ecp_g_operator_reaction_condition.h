@@ -40,11 +40,11 @@ public:
 
   void get_supplementary (ecp_taught_in_pose& tip);
 
-  void set_supplementary (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void set_supplementary (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
 
-  void create_supplementary_list_head (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void create_supplementary_list_head (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
 
-  void insert_supplementary_list_element (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void insert_supplementary_list_element (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
 
   bool is_supplementary_list_element ( void );
 

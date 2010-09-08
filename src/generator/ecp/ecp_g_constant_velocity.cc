@@ -12,6 +12,8 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+using namespace std;
+
 constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
 		multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
 		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,
@@ -62,11 +64,10 @@ void constant_velocity::print_pose_vector() {
 bool constant_velocity::calculate() {
 
 	sr_ecp_msg.message("Calculating...");
-	int i;//loop counter
 
 	pose_vector_iterator = pose_vector.begin();
 
-	for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
+	for (int i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
 
 		if(motion_type == lib::ABSOLUTE) {//absolute type of motion
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {

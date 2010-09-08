@@ -1,21 +1,20 @@
-// ------------------------------------------------------------------------
-//   ecp_m.cc - szablon dla procesow ECP
-//
-//                     EFFECTOR CONTROL PROCESS (lib::ECP) - main()
-//
-// Ostatnia modyfikacja: 2007
-// ------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains main ecp loop definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
 
-#include <stdio.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <csignal>
+#include <cstdlib>
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/ecp_mp/transmitter.h"
 
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 
@@ -34,7 +33,7 @@ void catch_signal_in_ecp(int sig)
 		case SIGTERM:
 			ecp_t->sh_msg->message("ecp terminated");
 			delete ecp_t;
-			exit(EXIT_SUCCESS);
+			exit( EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in ECP process %s\n", ecp_t->config.section_name.c_str());
@@ -63,7 +62,7 @@ int main(int argc, char *argv[])
 
 		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 3);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 3);
 
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
@@ -73,25 +72,25 @@ int main(int argc, char *argv[])
 #endif
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)
-			exit(EXIT_FAILURE);
-	} catch (ecp::common::ecp_robot::ECP_main_error & e) {
+			exit( EXIT_FAILURE);
+	} catch (ecp::common::robot::ECP_main_error & e) {
 		switch (e.error_class)
 		{
 			case lib::SYSTEM_ERROR:
 			case lib::FATAL_ERROR:
 				ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 				break;
 			default:
 				break;
 		}
-	} catch (ecp::common::generator::generator::ECP_error & e) {
+	} catch (ecp::common::generator::ECP_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	} catch (lib::sensor::sensor_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
-	} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+	} catch (ecp_mp::transmitter::transmitter_error & e) {
 		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 	}
@@ -107,7 +106,7 @@ int main(int argc, char *argv[])
 		/* Wylapywanie niezdefiniowanych bledow*/
 		/*Komunikat o bledzie wysylamy do SR*/
 		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
-		exit(EXIT_FAILURE);
+		exit( EXIT_FAILURE);
 	} /*end: catch */
 
 	for (;;) { // Zewnetrzna petla nieskonczona
@@ -124,17 +123,17 @@ int main(int argc, char *argv[])
 
 		catch (ecp_mp::task::ECP_MP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 		} catch (ecp::common::ECP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 		}
 
-		catch (ecp::common::ecp_robot::ECP_error & er) {
+		catch (ecp::common::robot::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
 				perror("ecp aborted due to lib::SYSTEM_ERRORn");
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 			}
 
 			switch (er.error_no)
@@ -151,15 +150,15 @@ int main(int argc, char *argv[])
 				default:
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
 					perror("Unidentified exception");
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 			} /* end: switch */
 		} /*end: catch*/
 
-		catch (ecp::common::generator::generator::ECP_error & er) {
+		catch (ecp::common::generator::ECP_error & er) {
 			/* Wylapywanie bledow generowanych przez generatory*/
 			if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
 				perror("ecp aborted due to lib::SYSTEM_ERROR");
-				exit(EXIT_FAILURE);
+				exit( EXIT_FAILURE);
 			}
 			switch (er.error_no)
 			{
@@ -184,14 +183,14 @@ int main(int argc, char *argv[])
 				default:
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
 					perror("Unidentified exception");
-					exit(EXIT_FAILURE);
+					exit( EXIT_FAILURE);
 			} /* end: switch*/
 		} /*end: catch */
 
 		catch (lib::sensor::sensor_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		} catch (ecp_mp::transmitter::transmitter_base::transmitter_error & e) {
+		} catch (ecp_mp::transmitter::transmitter_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
@@ -207,7 +206,7 @@ int main(int argc, char *argv[])
 			/* Wylapywanie niezdefiniowanych bledow*/
 			/*Komunikat o bledzie wysylamy do SR*/
 			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
-			exit(EXIT_FAILURE);
+			exit( EXIT_FAILURE);
 		} /*end: catch */
 
 		ecp::common::ecp_t->sr_ecp_msg->message("ecp user program is finished");

@@ -1,15 +1,17 @@
 /*!
- * \file kinematics_manager.cc
- * \brief File containing the definition of kinematics_manager methods.
+ * @file
+ * @brief File containing the definition of kinematics_manager methods.
  *
- * \author tkornuta
- * \date Nov 26, 2009
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
-#include "lib/com_buf.h"
+#include "base/lib/com_buf.h"
 #include "base/kinematics/kinematics_manager.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -38,7 +40,7 @@ void kinematics_manager::set_kinematic_model(unsigned int _desired_kinematic_mod
 
 void kinematics_manager::add_kinematic_model(kinematic_model* _model)
 {
-	// Dodanie nowego modelu na koniec listy.
+	// Add new model to the end of the list.
 	kinematic_models_list[kinematic_models_list.size()] = _model;
 }
 

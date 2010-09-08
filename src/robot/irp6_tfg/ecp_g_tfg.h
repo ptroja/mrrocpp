@@ -8,16 +8,16 @@
 #if !defined(_ECP_GEN_TFG_H)
 #define _ECP_GEN_TFG_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
-#include "lib/mrmath/mrmath.h"
-#include "lib/data_port_headers/tfg.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "robot/irp6_tfg/dp_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace common {
+namespace irp6_tfg {
 namespace generator {
 
 /** @addtogroup edge_following
@@ -25,11 +25,12 @@ namespace generator {
  *  @{
  */
 
-class tfg: public common::generator::generator {
+class tfg : public common::generator::generator
+{
 protected:
 
 	const int step_no;
-	lib::tfg_command mp_ecp_tfg_command;
+	lib::irp6_tfg::command mp_ecp_command;
 
 public:
 	void create_ecp_mp_reply();
@@ -49,7 +50,7 @@ public:
 
 
 } // namespace generator
-} // namespace common
+} // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp
 

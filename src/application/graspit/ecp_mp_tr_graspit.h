@@ -2,7 +2,7 @@
 #ifndef ECP_MP_TR_GRASPIT_H_
 #define ECP_MP_TR_GRASPIT_H_
 
-//#include "lib/sensor_image.h"
+//#include "base/lib/sensor_image.h"
 #include "base/ecp_mp/transmitter.h" // klasa bazowa transmitter
 
 namespace mrrocpp {
@@ -37,7 +37,7 @@ class TRGraspit: public GraspitTransmitter_t {
 		int socketDescriptor;
 
 	public:
-		TRGraspit(TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
+		TRGraspit(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object);
 		~TRGraspit(); 	// destruktor czujnika wirtualnego
 		void TRconnect(const char *host,unsigned short int serverPort);
 		void TRdisconnect();

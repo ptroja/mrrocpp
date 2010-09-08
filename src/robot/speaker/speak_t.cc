@@ -4,22 +4,22 @@
 // ------------------------------------------------------------------------
 
 /********************************* INCLUDES *********************************/
-#include <stdio.h>
-#include <string.h>
-#include <signal.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <csignal>
+#include <cstdlib>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
+#include "base/lib/mis_fun.h"
 
 // Klasa edp_speaker_effector.
 #include "robot/speaker/edp_speaker_effector.h"
 #include "robot/speaker/speak_t.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -34,7 +34,7 @@ speak_t::speak_t(effector& _master):
 
 void speak_t::operator()()
 {
-    lib::set_thread_priority(pthread_self() , MAX_PRIORITY-10);
+    lib::set_thread_priority(pthread_self() , lib::QNX_MAX_PRIORITY-10);
 
     if( master.init() == -1)
     {

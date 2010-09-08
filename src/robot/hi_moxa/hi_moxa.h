@@ -1,9 +1,10 @@
-// -------------------------------------------------------------------------
-//                            hi_rydz.h
-// Definicje struktur danych i metod dla interfejsu sprzetowego
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/* TODO:
+ *
+ * inicjalizacja struktur servo_data w konstruktorze hi_moxa
+ * przekazanie do konstruktora hi_moxa danych o ilosci i numerach portow
+*/
+
+
 
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
@@ -15,48 +16,40 @@
 
 #define USLEEP_US 500000
 
-#include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
 
 //#include "edp_e_sarkofag.h"
 
-#include <inttypes.h>
+#include <stdint.h>
 #include <termios.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/select.h>
-
-#include <string>
-
-#define PORT "/dev/ser"
-#define BAUD 921600
-#define START_BYTE '#'
-#define WRITE_BYTES 10
-#define READ_BYTES 8
-
-#define COMMCYCLE_TIME_NS	2000000
+#include <ctime>
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
+class motor_driven_effector;
+}
+namespace hi_moxa {
+
+const std::string PORT = "/dev/ser";
+const int BAUD = 921600;
+const int WRITE_BYTES = 10;
+const int READ_BYTES = 8;
+
+const long COMMCYCLE_TIME_NS = 2000000;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
 
-class HI_moxa : public common::HardwareInterface
-{
+class HI_moxa: public common::HardwareInterface {
 
 public:
 
-	HI_moxa(motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -77,23 +70,16 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int fd[8];
+	int fd[8], fd_max;
+	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;
 
-	char buf[30];
-	uint8_t command_params[8];
-	struct status_St drive_status[8];
-	int32_t position_offset[8];
-	int32_t current_absolute_position[8];
-	int32_t previous_absolute_position[8];
-	double current_position_inc[8];
-	bool first_hardware_read[8];
-	bool trace_resolver_zero[8];
+	
 
 }; // koniec: class hardware_interface
 
-} // namespace common
+} // namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
 

@@ -5,15 +5,15 @@
 // ------------------------------------------------------------------------
 
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <map>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/srlib.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_g_time.h"
@@ -30,9 +30,9 @@ namespace task {
 time::time(lib::configurator &_config) : task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6OT_M_SECTION)
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION)
 		{ ecp_m_robot = new irp6ot_m::robot (*this); }
-	else if (config.section_name == ECP_IRP6P_M_SECTION)
+	else if (config.section_name == lib::irp6p_m::ECP_SECTION)
 		{ ecp_m_robot = new irp6p_m::robot (*this); }
 	else
 		assert(0);

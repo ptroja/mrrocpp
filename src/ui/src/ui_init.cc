@@ -12,19 +12,19 @@
 /*                                         Version 2.01  */
 
 /* Standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <strings.h>
 
-#include <string.h>
-#include <signal.h>
+#include <cstring>
+#include <csignal>
 #include <dirent.h>
 
 #include <sys/dispatch.h>
 
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 #include <process.h>
 #include <sys/neutrino.h>
 #include <sys/iofunc.h>
@@ -35,17 +35,15 @@
 #include <fstream>
 
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "ui/src/ui_class.h"
 
-#include "lib/mis_fun.h"
-#include "lib/srlib.h"
-#include "ui/src/ui_const.h"
-#include "lib/mis_fun.h"
+#include "base/lib/srlib.h"
+
 
 #if defined(USE_MESSIP_SRR)
-#include <messip.h>
+#include "messip.h"
 #endif
 
 /* Local headers */

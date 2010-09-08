@@ -1,5 +1,5 @@
 /*!
- * @file vsp_sensor.h
+ * @file
  * @brief File containing declaration of the vsp sensor base template class.
  *
  * @date 09.11.2005
@@ -12,7 +12,6 @@
 #if !defined(_VSP_SENSOR_H)
 #define _VSP_SENSOR_H
 
-#include "lib/configurator.h"
 #include "base/vsp/vsp_sensor_interface.h"
 
 namespace mrrocpp {

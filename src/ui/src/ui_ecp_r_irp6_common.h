@@ -11,8 +11,8 @@
 
 #include "ui/src/ui.h"
 // Konfigurator.
-#include "lib/configurator.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
 #include "ui/src/ui_ecp_r_common.h"
 
 #include "base/ecp/ecp_robot.h"
@@ -26,8 +26,8 @@ public:
 
 
 	// Zlecenie ruchu
-	void move_motors(const double final_position[MAX_SERVOS_NR]);
-	void move_joints(const double final_position[MAX_SERVOS_NR]);
+	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
+	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_xyz_euler_zyz(const double final_position[7]);
 	void move_xyz_angle_axis(const double final_position[7]);
 	void move_xyz_angle_axis_relative(const double position_increment[7]);

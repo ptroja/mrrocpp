@@ -9,22 +9,20 @@
 #define _ECP_R_SPEAKER_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace speaker {
 
 // ---------------------------------------------------------------
-class robot: public common::ecp_robot
+class robot : public common::robot::ecp_robot
 {
 	// Klasa dla robota speaker
 
-	public:
-	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	robot (common::task::task& _ecp_object);
-
-
+public:
+	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	robot(common::task::task& _ecp_object);
 
 }; // end: class ecp_speaker_robot
 // ---------------------------------------------------------------

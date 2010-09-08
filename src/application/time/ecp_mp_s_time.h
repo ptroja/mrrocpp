@@ -10,7 +10,7 @@
 #ifndef __ECP_MP_S_FORCE_H
 #define __ECP_MP_S_FORCE_H
 
-#include <time.h>
+#include <ctime>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"				// klasa bazowa ecp_mp_task
 

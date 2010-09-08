@@ -17,11 +17,18 @@
 #include <string>
 #include <list>
 
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
 
-#define CATCH_SECTION_UI catch (ecp::common::ecp_robot::ECP_main_error & e) { \
+#define INITIAL_STATE          90 // zaladowano tylko SR
+#define MANUAL_OPERATIONS     100 // zaladowano EDP1
+#define MP_LOADED_MANUAL      110 // zaladowano MP
+#define ECP_TEACHING          120 // uczenie robota
+#define MP_RUNNING            130 // dziala MP
+#define MP_PAUSED             140 // MP wstrzymany przez proxy
+#define MP_PAUSED_H           150 // MP wstrzymany sygnalem
+
+#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
 		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
@@ -29,7 +36,7 @@
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
-catch (ecp::common::ecp_robot::ECP_error & er) { \
+catch (ecp::common::robot::ECP_error & er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
 	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
 		perror("ecp lib::SYSTEM_ERROR in UI"); \
@@ -64,28 +71,26 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-enum TEACHING_STATE_ENUM {
+enum TEACHING_STATE_ENUM
+{
 	FSTRAJECTORY, FSCONFIG
 };
 
-enum UI_NOTIFICATION_STATE_ENUM {
-	UI_N_STARTING,
-	UI_N_READY,
-	UI_N_BUSY,
-	UI_N_EXITING,
-	UI_N_COMMUNICATION,
-	UI_N_PROCESS_CREATION,
-	UI_N_SYNCHRONISATION
+enum UI_NOTIFICATION_STATE_ENUM
+{
+	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
 };
 
 // FIXME: moved from proto.h for linux compatibility
 int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
-enum UI_ECP_COMMUNICATION_STATE {
+enum UI_ECP_COMMUNICATION_STATE
+{
 	UI_ECP_AFTER_RECEIVE, UI_ECP_REPLY_READY, UI_ECP_AFTER_REPLY
 };
 
-enum UI_MP_STATE {
+enum UI_MP_STATE
+{
 	UI_MP_NOT_PERMITED_TO_RUN,
 	UI_MP_PERMITED_TO_RUN,
 	UI_MP_WAITING_FOR_START_PULSE,
@@ -93,7 +98,8 @@ enum UI_MP_STATE {
 	UI_MP_TASK_PAUSED
 };
 
-enum UI_ALL_EDPS_STATE {
+enum UI_ALL_EDPS_STATE
+{
 	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
 	UI_ALL_EDPS_NONE_EDP_LOADED,
 	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
@@ -108,7 +114,8 @@ enum UI_ALL_EDPS_STATE {
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
 #define SIGALRM_TIMEOUT 1000000
 
-typedef struct {
+typedef struct
+{
 	pid_t pid;
 	int test_mode;
 	std::string node_name;
@@ -125,11 +132,12 @@ typedef struct {
 	std::string preset_sound_1;
 	std::string preset_sound_2;
 
-	double preset_position[3][MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
-	double front_position[MAX_SERVOS_NR];
+	double preset_position[3][lib::MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
+	double front_position[lib::MAX_SERVOS_NR];
 } edp_state_def;
 
-typedef struct {
+typedef struct
+{
 	pid_t pid;
 	std::string node_name;
 	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
@@ -140,13 +148,15 @@ typedef struct {
 	int last_state;
 } ecp_state_def;
 
-typedef struct {
+typedef struct
+{
 	bool is_active;
 	edp_state_def edp;
 	ecp_state_def ecp;
 } ecp_edp_ui_robot_def;
 
-typedef struct {
+typedef struct
+{
 	pid_t pid;
 	std::string node_name;
 	std::string network_pulse_attach_point;
@@ -156,14 +166,16 @@ typedef struct {
 	UI_MP_STATE last_state;
 } mp_state_def;
 
-typedef struct {
+typedef struct
+{
 	std::string program_name;
 	std::string node_name;
 } program_node_def;
 
-class function_execution_buffer {
+class function_execution_buffer
+{
 public:
-	typedef boost::function<int()> command_function_t;
+	typedef boost::function <int()> command_function_t;
 
 	int wait_and_execute();
 	void command(command_function_t _com_fun);
@@ -177,7 +189,8 @@ private:
 	command_function_t com_fun; //! command functor
 };
 
-class feb_thread: public boost::noncopyable {
+class feb_thread : public boost::noncopyable
+{
 private:
 	function_execution_buffer & feb;
 	boost::thread *thread_id;
@@ -193,7 +206,8 @@ public:
 // forward declaration
 class busy_flag;
 
-class busy_flagger {
+class busy_flagger
+{
 private:
 	//! flag object to decrement in destructor
 	busy_flag & flag;
@@ -206,7 +220,8 @@ public:
 	~busy_flagger();
 };
 
-class busy_flag {
+class busy_flag
+{
 	friend class busy_flagger;
 
 private:

@@ -14,9 +14,9 @@
 #define __EDP_IRP6P_TFG_H
 
 // Klasa edp_irp6s_robot.
-#include "robot/irp6p_tfg/sg_irp6p_tfg.h"
+
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/irp6p_tfg/irp6p_tfg_const.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
 namespace mrrocpp {
 namespace edp {

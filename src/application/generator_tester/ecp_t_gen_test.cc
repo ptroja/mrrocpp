@@ -5,6 +5,7 @@
 //#include "subtask/ecp_st_tff_nose_run.h"
 //#include "generator/ecp/ecp_g_force.h"
 
+#include "base/ecp/ecp_task.h"
 #include "ecp_t_gen_test.h"
 
 namespace mrrocpp {
@@ -17,9 +18,9 @@ gen_test::gen_test(lib::configurator &_config) :
 	task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6OT_M_SECTION) {
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
-	} else if (config.section_name == ECP_IRP6P_M_SECTION) {
+	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw

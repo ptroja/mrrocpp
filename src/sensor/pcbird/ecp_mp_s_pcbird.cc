@@ -1,12 +1,15 @@
 /**
- * @file ecp_mp_s_pcbird.cc
- * @brief Virtual sensor on the ECP/MP side used for communication with PcBird.
+ * @file
+ * @brief Virtual sensor on the ECP/MP side used for communication with PcBird - definition of the pcbird class methods.
  *
+ * @author B.Bielawski
  * @author tkornuta
- * @date 15.03.2008
+ * @date 16.06.2008
  *
- * @ingroup SENSORS
+ * @ingroup SENSORS PCBIRD_SENSOR
  */
+
+
 
 #include <sys/types.h>
 #include <sys/socket.h>

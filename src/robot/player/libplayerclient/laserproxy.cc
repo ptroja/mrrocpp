@@ -48,10 +48,10 @@
 
 #include <playerclient.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <limits.h>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <climits>
 
 int LaserProxy::Configure(double tmp_min_angle, 
                           double tmp_max_angle, 

@@ -10,13 +10,12 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mis_fun.h"
-#include "lib/mrmath/mrmath.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/polycrank/edp_e_polycrank.h"
@@ -26,7 +25,7 @@
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
-#include "lib/exception.h"
+#include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -35,10 +34,10 @@ namespace polycrank {
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::ROBOT_POLYCRANK)
+	manip_effector(_config, lib::polycrank::ROBOT_NAME)
 {
 
-	number_of_servos = POLYCRANK_NUM_OF_SERVOS;
+	number_of_servos = lib::polycrank::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -63,7 +62,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
 	//   printf(" GET ARM\n");
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
 		//	motor_driven_effector::get_arm_position_read_hardware_sb();

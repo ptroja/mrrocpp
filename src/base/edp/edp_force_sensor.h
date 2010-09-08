@@ -12,17 +12,28 @@
 #include <boost/thread/mutex.hpp>
 #include <Eigen/Core>
 
-#include "lib/mrmath/ForceTrans.h"
-#include "lib/sensor_interface.h"				// klasa bazowa sensor
-#include "base/edp/edp.h"				// klasa bazowa sensor
-#include "lib/mis_fun.h"
+#include "base/lib/mrmath/ForceTrans.h"
+#include "base/lib/sensor_interface.h"				// klasa bazowa sensor
+#include "base/edp/edp_typedefs.h"				// klasa bazowa sensor
+#include "base/lib/condition_synchroniser.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 class manip_effector;
+
+enum FORCE_ORDER
+{
+	FORCE_SET_TOOL, FORCE_CONFIGURE
+};
+
 }
 namespace sensor {
+
+enum FORCE_SENSOR_ENUM
+{
+	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
+};
 
 typedef enum _force_readring_status
 {

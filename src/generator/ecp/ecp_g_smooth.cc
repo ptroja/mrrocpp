@@ -10,9 +10,12 @@
 // Ostatnia modyfikacja: 2009
 // -------------------------------------------------------------------------
 
+#include <fstream>
+#include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
-#include "robot/irp6ot_m/irp6ot_m_const.h"
-#include "robot/irp6p_m/irp6p_m_const.h"
+#include "base/ecp/ecp_robot.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,7 +41,6 @@ bool smooth::eq(double a, double b)
 
 void smooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory)
 {
-	bool first_time = true;
 	int numOfPoses = trajectory.getNumberOfPoses();
 	trajectory.showTime();
 
@@ -52,9 +54,9 @@ void smooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
-	double v[MAX_SERVOS_NR];
-	double a[MAX_SERVOS_NR]; // Wczytane wspolrzedne
-	double coordinates[MAX_SERVOS_NR]; // Wczytane wspolrzedne
+	double v[lib::MAX_SERVOS_NR];
+	double a[lib::MAX_SERVOS_NR]; // Wczytane wspolrzedne
+	double coordinates[lib::MAX_SERVOS_NR]; // Wczytane wspolrzedne
 
 	xmlNode *cchild_node, *ccchild_node;
 	xmlChar *coordinateType, *numOfPoses;
@@ -111,13 +113,13 @@ void smooth::load_trajectory_from_xml(const char* fileName, const char* nodeName
 	xmlDocPtr doc = xmlParseFile(fileName);
 	xmlXIncludeProcess(doc);
 	if (doc == NULL) {
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	xmlNodePtr root = xmlDocGetRootElement(doc);
 	if (!root || !root->name) {
 		xmlFreeDoc(doc);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
@@ -173,18 +175,18 @@ void smooth::load_file_with_path(const char* file_name)
 	uint64_t i, j; // Liczniki petli
 	bool first_time = true; // Znacznik
 	int extra_info;
-	double v[MAX_SERVOS_NR];
-	double a[MAX_SERVOS_NR]; // Wczytane wspolrzedne
-	double coordinates[MAX_SERVOS_NR]; // Wczytane wspolrzedne
+	double v[lib::MAX_SERVOS_NR];
+	double a[lib::MAX_SERVOS_NR]; // Wczytane wspolrzedne
+	double coordinates[lib::MAX_SERVOS_NR]; // Wczytane wspolrzedne
 
 	std::ifstream from_file(file_name); // otworz plik do odczytu
 	if (!from_file.good()) {
 		perror(file_name);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if (!(from_file >> coordinate_type)) {
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	// Usuwanie spacji i tabulacji
@@ -211,12 +213,12 @@ void smooth::load_file_with_path(const char* file_name)
 	}
 
 	else {
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 	}
 
 	// printf("po coord type %d\n", ps);
 	if (!(from_file >> number_of_poses)) {
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	// printf("po number of poses %d\n", number_of_poses);
@@ -228,23 +230,23 @@ void smooth::load_file_with_path(const char* file_name)
 		//printf("w petli\n");
 		// printf("po vk\n");
 
-		for (j = 0; j < MAX_SERVOS_NR; j++) {
+		for (j = 0; j < lib::MAX_SERVOS_NR; j++) {
 			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
 		// printf("po v\n");
-		for (j = 0; j < MAX_SERVOS_NR; j++) {
+		for (j = 0; j < lib::MAX_SERVOS_NR; j++) {
 			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
 		// printf("po a\n");
-		for (j = 0; j < MAX_SERVOS_NR; j++) {
+		for (j = 0; j < lib::MAX_SERVOS_NR; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
 		}
 
@@ -261,11 +263,11 @@ void smooth::load_file_with_path(const char* file_name)
 } // end: load_file_with_path()
 
 //jesli w ponizszych metodach podamy reset jako true lista pozycji zostanie wyczyszczona, jesli jako false pozycja zostanie dodana do listy bez jej czyszczenia
-void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 
-	double v[MAX_SERVOS_NR] = { 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5 };
-	double a[MAX_SERVOS_NR] = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5 };
+	double v[lib::MAX_SERVOS_NR] = { 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5 };
+	double a[lib::MAX_SERVOS_NR] = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5 };
 
 	if (reset == true) {
 		flush_pose_list();
@@ -278,7 +280,7 @@ void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double coordinates
 	}
 }
 
-void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 
 	if (reset == true) {
@@ -295,9 +297,9 @@ void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVO
 void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 
-	double v[MAX_SERVOS_NR] = { 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 };
-	double a[MAX_SERVOS_NR] = { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 };
-	double coordinates[MAX_SERVOS_NR];
+	double v[lib::MAX_SERVOS_NR] = { 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 };
+	double a[lib::MAX_SERVOS_NR] = { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05 };
+	double coordinates[lib::MAX_SERVOS_NR];
 
 	if (reset == true) {
 		flush_pose_list();
@@ -319,10 +321,10 @@ void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double cor0, doubl
 	}
 }
 
-void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
+void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 
-	double coordinates[MAX_SERVOS_NR];
+	double coordinates[lib::MAX_SERVOS_NR];
 
 	if (reset == true) {
 		flush_pose_list();
@@ -344,11 +346,11 @@ void smooth::load_coordinates(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVO
 	}
 }
 
-void smooth::load_xyz_angle_axis(double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_xyz_angle_axis(double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, coordinates, reset);
 }
-void smooth::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_xyz_angle_axis(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, coordinates, reset);
 }
@@ -356,16 +358,16 @@ void smooth::load_xyz_angle_axis(double cor0, double cor1, double cor2, double c
 {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth::load_xyz_angle_axis(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
+void smooth::load_xyz_angle_axis(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth::load_xyz_euler_zyz(double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_xyz_euler_zyz(double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, coordinates, reset);
 }
-void smooth::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_xyz_euler_zyz(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, coordinates, reset);
 }
@@ -373,16 +375,16 @@ void smooth::load_xyz_euler_zyz(double cor0, double cor1, double cor2, double co
 {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth::load_xyz_euler_zyz(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
+void smooth::load_xyz_euler_zyz(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 	load_coordinates(lib::ECP_XYZ_EULER_ZYZ, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth::load_joint(double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_joint(double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_JOINT, coordinates, reset);
 }
-void smooth::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_joint(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_JOINT, v, a, coordinates, reset);
 }
@@ -390,16 +392,16 @@ void smooth::load_joint(double cor0, double cor1, double cor2, double cor3, doub
 {
 	load_coordinates(lib::ECP_JOINT, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth::load_joint(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
+void smooth::load_joint(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 	load_coordinates(lib::ECP_JOINT, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
 
-void smooth::load_motor(double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_motor(double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_MOTOR, coordinates, reset);
 }
-void smooth::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR], bool reset)
+void smooth::load_motor(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR], bool reset)
 {
 	load_coordinates(lib::ECP_MOTOR, v, a, coordinates, reset);
 }
@@ -407,7 +409,7 @@ void smooth::load_motor(double cor0, double cor1, double cor2, double cor3, doub
 {
 	load_coordinates(lib::ECP_MOTOR, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
-void smooth::load_motor(double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
+void smooth::load_motor(double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double cor0, double cor1, double cor2, double cor3, double cor4, double cor5, double cor6, double cor7, bool reset)
 {
 	load_coordinates(lib::ECP_MOTOR, v, a, cor0, cor1, cor2, cor3, cor4, cor5, cor6, cor7, reset);
 }
@@ -464,13 +466,13 @@ bool smooth::is_last_list_element(void)
 	return false;
 }
 
-void smooth::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
+void smooth::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
 	pose_list_iterator = pose_list.begin();
 }
 
-void smooth::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double v[MAX_SERVOS_NR], double a[MAX_SERVOS_NR], double coordinates[MAX_SERVOS_NR])
+void smooth::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double v[lib::MAX_SERVOS_NR], double a[lib::MAX_SERVOS_NR], double coordinates[lib::MAX_SERVOS_NR])
 {
 	pose_list.push_back(ecp_mp::common::smooth_trajectory_pose(ps, coordinates, v, a));
 	pose_list_iterator++;
@@ -497,23 +499,23 @@ void smooth::load_a_v_min(const char* file_name)
 
 	if (!from_file.good()) {
 		perror(file_name);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
 	if (!(from_file >> v_grip_min_zyz)) { // Zabezpieczenie przed danymi nienumerycznymi
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	if (!(from_file >> v_grip_min_aa)) { // Zabezpieczenie przed danymi nienumerycznymi
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	if (!(from_file >> v_grip_min_joint)) { // Zabezpieczenie przed danymi nienumerycznymi
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 
 	if (!(from_file >> v_grip_min_motor)) { // Zabezpieczenie przed danymi nienumerycznymi
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	}
 } // end: bool load_a_v_min()
 
@@ -523,50 +525,50 @@ void smooth::load_a_v_max(const char* file_name)
 
 	if (!from_file.good()) {
 		perror(file_name);
-		throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> v_max_motor[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> a_max_motor[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
 
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> v_max_joint[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> a_max_joint[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
 
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> v_max_zyz[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> a_max_zyz[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
 
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> v_max_aa[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
-	for (int j = 0; j < MAX_SERVOS_NR; j++) {
+	for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 		if (!(from_file >> a_max_aa[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-			throw generator::ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
 	}
 } // end: bool load_a_v_max()
@@ -600,7 +602,7 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
  return;
  }
 
- double actual_coordinates[MAX_SERVOS_NR];
+ double actual_coordinates[lib::MAX_SERVOS_NR];
  bool first_coordinate = true;
  int gripp;
 
@@ -610,9 +612,9 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
  switch ( td.arm_type ) {
  case lib::MOTOR:
 
- if(the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+ if(the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
  gripp=7;
- } else if(the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+ } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
  gripp=6;
  }
 
@@ -634,9 +636,9 @@ smooth::smooth(common::task::task& _ecp_task, bool _is_synchronised) :
  break;
  case lib::JOINT:
 
- if(the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+ if(the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
  gripp=7;
- } else if(the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+ } else if(the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
  gripp=6;
  }
 
@@ -704,7 +706,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 
 	double next_position;
 
-	double tk = 10 * STEP;
+	double tk = 10 * lib::EDP_STEP;
 
 	//printf("przysp: %f\t jedn: %f\n", przysp, jedn);
 
@@ -901,7 +903,7 @@ double smooth::generate_next_coords(int node_counter, int interpolation_node_no,
 void smooth::generate_coords()
 {
 
-	double coordinate[MAX_SERVOS_NR];
+	double coordinate[lib::MAX_SERVOS_NR];
 	int private_node_counter = 1;
 	initiate_pose_list();
 	flush_coordinate_list();
@@ -910,7 +912,7 @@ void smooth::generate_coords()
 		//printf("start pos w generate_cords: %f\t w osi: %d\n",pose_list_iterator->start_position[0], 0);
 
 		for (int z = 0; z < pose_list_iterator->interpolation_node_no; z++) {
-			for (int i = 0; i < MAX_SERVOS_NR; i++) {
+			for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				if (type == lib::ABSOLUTE && fabs(pose_list_iterator->start_position[i]
 						- pose_list_iterator->coordinates[i]) < distance_eps) {
 					coordinate[i] = pose_list_iterator->start_position[i]; //dla drogi 0
@@ -947,7 +949,7 @@ void smooth::send_coordinates()
 {
 	//lib::Xyz_Euler_Zyz_vector tmp_euler_vector;
 	double gripper_position;
-	double tk = 10 * STEP;
+	double tk = 10 * lib::EDP_STEP;
 	int i; //licznik petli
 	int gripp; //os grippera
 
@@ -980,14 +982,14 @@ void smooth::send_coordinates()
 
 		case lib::ECP_JOINT:
 
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= coordinate_list_iterator->coordinate[i];
 			}
 
-			if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				gripp = 7;
-			} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 				gripp = 6;
 			}
 
@@ -995,14 +997,14 @@ void smooth::send_coordinates()
 
 		case lib::ECP_MOTOR:
 
-			for (i = 0; i < MAX_SERVOS_NR; i++) {
+			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 						= coordinate_list_iterator->coordinate[i];
 			}
 
-			if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+			if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				gripp = 7;
-			} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+			} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 				gripp = 6;
 			}
 
@@ -1186,22 +1188,22 @@ bool smooth::next_step()
 void smooth::calculate(void)
 { //zeby wrocic do starego trybu relative nalezy stad usunac wszystkie warunki na type i zostawic opcje dla type = 1
 
-	double s[MAX_SERVOS_NR];//droga w danych stopniach swobody w jednym ruchu
-	double s_temp1[MAX_SERVOS_NR], s_temp2[MAX_SERVOS_NR];
+	double s[lib::MAX_SERVOS_NR];//droga w danych stopniach swobody w jednym ruchu
+	double s_temp1[lib::MAX_SERVOS_NR], s_temp2[lib::MAX_SERVOS_NR];
 	double t_temp1, t_temp2;
-	double t[MAX_SERVOS_NR];
+	double t[lib::MAX_SERVOS_NR];
 	lib::Xyz_Euler_Zyz_vector tmp_euler_vector;
 	lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
 
 	double t_max; //nadluzszy czas ruchu w jednej osi w jednym ruchu
 	int i;
-	double tk = 10 * STEP; //czas jednego makrokroku
-	int gripp=0; //os grippera
+	double tk = 10 * lib::EDP_STEP; //czas jednego makrokroku
+	int gripp = 0; //os grippera
 
 	trajectory_calculated = false;
 	//TODO dorobic zabezpieczenia dla 0 predkosci w osmej wspolrzednej postumenta i w angle axes
 	printf("CALCULATE\n");
-	double v_r_next[MAX_SERVOS_NR];//predkosc kolejnego ruchu
+	double v_r_next[lib::MAX_SERVOS_NR];//predkosc kolejnego ruchu
 
 	double temp;//generalny temp do wszystkiego
 
@@ -1254,7 +1256,7 @@ void smooth::calculate(void)
 					}
 					pose_list_iterator->start_position[gripp + 1] = 0.0;
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 
 						if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
@@ -1311,7 +1313,7 @@ void smooth::calculate(void)
 					}
 					pose_list_iterator->start_position[gripp + 1] = 0.0;
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 
 						if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
@@ -1342,9 +1344,9 @@ void smooth::calculate(void)
 					break;
 
 				case lib::ECP_JOINT:
-					if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
 					}
 
@@ -1365,12 +1367,12 @@ void smooth::calculate(void)
 						pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 						prev_pose_list_ptr(); //pozycje startowa nowego ruchu
 					}
-					if (gripp < (MAX_SERVOS_NR - 1)) {
+					if (gripp < (lib::MAX_SERVOS_NR - 1)) {
 						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
-						if (!(the_robot->robot_name == lib::ROBOT_IRP6P_M && i == (MAX_SERVOS_NR - 1))) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+						if (!(the_robot->robot_name == lib::irp6p_m::ROBOT_NAME && i == (lib::MAX_SERVOS_NR - 1))) {
 							if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0
 									|| pose_list_iterator->a[i] == 0) {
 								sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1401,9 +1403,9 @@ void smooth::calculate(void)
 					break;
 
 				case lib::ECP_MOTOR:
-					if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
 					}
 
@@ -1424,11 +1426,11 @@ void smooth::calculate(void)
 						pose_list_iterator->start_position[gripp] = temp;//przypisanie pozycji koncowej poprzedniego ruchu jako
 						prev_pose_list_ptr(); //pozycje startowa nowego ruchu
 					}
-					if (gripp < (MAX_SERVOS_NR - 1)) {
+					if (gripp < (lib::MAX_SERVOS_NR - 1)) {
 						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1473,7 +1475,7 @@ void smooth::calculate(void)
 				case lib::ECP_XYZ_EULER_ZYZ:
 					gripp = 6;
 					//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->v_k[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1485,7 +1487,7 @@ void smooth::calculate(void)
 					next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
 					pose_list_iterator->pos_num = j;
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->coordinates[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1494,7 +1496,7 @@ void smooth::calculate(void)
 						}
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						if (v_max_zyz[i] == 0 || a_max_zyz[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1509,7 +1511,7 @@ void smooth::calculate(void)
 				case lib::ECP_XYZ_ANGLE_AXIS:
 					gripp = 6;
 					//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->v_k[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1521,7 +1523,7 @@ void smooth::calculate(void)
 					next_pose_list_ptr(); //GLOWNA INKREMENTACJA iteratora listy pose_list (bez powrotu)
 
 					pose_list_iterator->pos_num = j;
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->coordinates[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1530,7 +1532,7 @@ void smooth::calculate(void)
 						}
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						if (v_max_aa[i] == 0 || a_max_aa[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1544,14 +1546,14 @@ void smooth::calculate(void)
 
 				case lib::ECP_JOINT:
 
-					if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
 					}
 
 					//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->v_k[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1572,11 +1574,11 @@ void smooth::calculate(void)
 						}
 					}
 
-					if (gripp < (MAX_SERVOS_NR - 1)) {//jesli postument
+					if (gripp < (lib::MAX_SERVOS_NR - 1)) {//jesli postument
 						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						if (v_max_joint[i] == 0 || a_max_joint[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1590,14 +1592,14 @@ void smooth::calculate(void)
 
 				case lib::ECP_MOTOR:
 
-					if (the_robot->robot_name == lib::ROBOT_IRP6OT_M) {
+					if (the_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 						gripp = 7;
-					} else if (the_robot->robot_name == lib::ROBOT_IRP6P_M) {
+					} else if (the_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 						gripp = 6;
 					}
 
 					//zapisanie v_p, musi byc tutaj bo wczesniej nie ma v_k poprzedniego ruchu
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						temp = pose_list_iterator->v_k[i];
 						if (!is_last_list_element()) {
 							next_pose_list_ptr();
@@ -1618,11 +1620,11 @@ void smooth::calculate(void)
 						}
 					}
 
-					if (gripp < (MAX_SERVOS_NR - 1)) {//jesli postument
+					if (gripp < (lib::MAX_SERVOS_NR - 1)) {//jesli postument
 						pose_list_iterator->start_position[gripp + 1] = 0.0;//TODO sprawdzic
 					}
 
-					for (i = 0; i < MAX_SERVOS_NR; i++) {
+					for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 						if (v_max_motor[i] == 0 || a_max_motor[i] == 0 || pose_list_iterator->v[i] == 0
 								|| pose_list_iterator->a[i] == 0) {
 							sr_ecp_msg.message("One or more of 'v' or 'a' values is 0");
@@ -1639,7 +1641,7 @@ void smooth::calculate(void)
 			}
 		} //end else (first interval)
 
-		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie coordinate_delta
+		for (i = 0; i < lib::MAX_SERVOS_NR; i++) {//zapisanie coordinate_delta
 			if (type == lib::ABSOLUTE) {
 				td.coordinate_delta[i] = pose_list_iterator->coordinates[i] - pose_list_iterator->start_position[i];
 			} else if (type == lib::RELATIVE) {
@@ -1647,7 +1649,7 @@ void smooth::calculate(void)
 			}
 		}
 
-		for (i = 0; i < MAX_SERVOS_NR; i++) {//zapisanie v_r_next dla aktualnego ruchu i k dla nastepnego ruchu
+		for (i = 0; i < lib::MAX_SERVOS_NR; i++) {//zapisanie v_r_next dla aktualnego ruchu i k dla nastepnego ruchu
 			if (is_last_list_element()) {
 				v_r_next[i] = 0.0;
 			} else {
@@ -1716,7 +1718,7 @@ void smooth::calculate(void)
 		t_max = 0;
 
 		//obliczenie drogi dla kazdej osi
-		for (i = 0; i < MAX_SERVOS_NR; i++) {
+		for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
 			if (type == lib::ABSOLUTE) {
 				s[i] = fabs(pose_list_iterator->coordinates[i] - pose_list_iterator->start_position[i]);
 			} else if (type == lib::RELATIVE) {
@@ -1726,7 +1728,7 @@ void smooth::calculate(void)
 		//sprawdzanie czy droga w etapach przyspieszenia i hamowania nie jest wieksza niz droga calego ruchu
 
 		//warunki na modele ruchu dla wszystkich osi
-		for (i = 0; i < MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
+		for (i = 0; i < lib::MAX_SERVOS_NR; i++) { //petla w ktorej obliczany jest czas dla kazdej osi i sprawdzane jest czy da sie wykonac ruch w zalozonych etapach
 			printf("=============================================\n");
 			printf("v_p: %f\t v_r: %f\t v_r_next: %f\t a_r: %f\t v_k: %f\n", pose_list_iterator->v_p[i], pose_list_iterator->v_r[i], v_r_next[i], pose_list_iterator->a_r[i], pose_list_iterator->v_k[i]);
 			flushall();
@@ -1915,7 +1917,7 @@ void smooth::calculate(void)
 		pose_list_iterator->interpolation_node_no = lround(t_max / tk);
 		//printf("liczba makrokrokow w ruchu %d\n", pose_list_iterator->interpolation_node_no);
 
-		for (i = 0; i < MAX_SERVOS_NR; i++) {//obliczanie przysp i jedn a takze ewentualna redukcja predkosci z powodu zbyt krotkiego czasu
+		for (i = 0; i < lib::MAX_SERVOS_NR; i++) {//obliczanie przysp i jedn a takze ewentualna redukcja predkosci z powodu zbyt krotkiego czasu
 
 			//printf("czas ruchu w osi %d = %f\n", i, t[i]);
 
@@ -2005,7 +2007,7 @@ void smooth::calculate(void)
 		}
 
 		//if (debug) {
-		for (int os = 0; os < MAX_SERVOS_NR; os++) {
+		for (int os = 0; os < lib::MAX_SERVOS_NR; os++) {
 			printf("\n=============== pozycja trajektorii nr %d pos: %d ============== os: %d ====\n", j, pose_list_iterator->pos_num, os);
 			printf("czas ruchu %f\t model: %d\n", pose_list_iterator->t, pose_list_iterator->model[i]);
 			printf("coordinates: %f\n", pose_list_iterator->coordinates[os]);

@@ -7,24 +7,27 @@
 // Ostatnia modyfikacja:
 // -------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <errno.h>
+#include <cstring>
+#include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/srlib.h"
-#include "lib/mis_fun.h"
+// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/configurator.h"
+
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+#include "base/lib/srlib.h"
 #include "base/edp/edp_effector.h"
 
+#define TIME_SLICE 500000 // by Y
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -45,7 +48,7 @@ void catch_signal(int sig)
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
 			master->sh_msg->message("edp terminated");
-			_exit(EXIT_SUCCESS);
+			_exit( EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
@@ -67,13 +70,16 @@ int main(int argc, char *argv[])
 		// allow for empty session name for easier valgrind/tcheck_cl launching
 		if (argc < 5) {
 			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
-			exit(EXIT_FAILURE);
+			exit( EXIT_FAILURE);
 		}
 
 #ifdef __QNXNTO__
+
+#define TIME_SLICE 500000 // by Y
+
 		// zmniejszenie stalej czasowej ticksize dla szeregowania
 		_clockperiod new_cp;
-		new_cp.nsec = TIME_SLICE; // impconst.h
+		new_cp.nsec = TIME_SLICE;
 		new_cp.fract = 0;
 		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
 #endif /* __QNXNTO__ */
@@ -91,7 +97,7 @@ int main(int argc, char *argv[])
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
 		// block test-mode timer signal for all the threads
-		if (_config.value <int> (ROBOT_TEST_MODE)) {
+		if (_config.value <int> (lib::ROBOT_TEST_MODE)) {
 			/* Block timer signal from test mode timer for all threads */
 			//		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 			sigset_t mask;

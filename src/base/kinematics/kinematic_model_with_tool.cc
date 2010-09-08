@@ -1,9 +1,11 @@
 /*!
- * \file kinematic_model_with_tool.cc
- * \brief File containing the definition of kinematic_model_with_tool class methods.
+ * @file
+ * @brief File containing the definition of kinematic_model_with_tool class methods.
  *
- * \author tkornuta
- * \date Jan 04, 2010
+ * @author tkornuta
+ * @date Nov 26, 2009
+ *
+ * @ingroup KINEMATICS
  */
 
 #include "base/kinematics/kinematic_model_with_tool.h"
@@ -24,27 +26,27 @@ kinematic_model_with_tool::~kinematic_model_with_tool(void)
 {
 }
 
-void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& current_end_effector_matrix)
+inline void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& homog_matrix)
 {
-    current_end_effector_matrix *= tool;
+	homog_matrix *= tool;
 }
 
 
-void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
+inline void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
-    desired_end_effector_matrix *= (!tool);
+	homog_matrix *= (!tool);
 }
 
 
-void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& current_end_effector_matrix)
+inline void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& homog_matrix)
 {
-    current_end_effector_matrix = (global_base * current_end_effector_matrix);
+	homog_matrix = (global_base * homog_matrix);
 }
 
 
-void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& desired_end_effector_matrix)
+inline void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
-    desired_end_effector_matrix = ((!global_base) * desired_end_effector_matrix);
+	homog_matrix = ((!global_base) * homog_matrix);
 }
 
 
@@ -86,7 +88,7 @@ void kinematic_model_with_tool::i2e_wo_tool_transform(const lib::JointArray & lo
 
 }
 
-void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -105,7 +107,7 @@ void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_jo
 
 }
 
-void kinematic_model_with_tool::e2i_wo_tool_transform(lib::JointArray & local_desired_joints, lib::JointArray & local_current_joints, lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_with_tool::e2i_wo_tool_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Copy end effector frame.
 	lib::Homog_matrix local_desired_end_effector_matrix(local_desired_end_effector_frame);
@@ -115,10 +117,10 @@ void kinematic_model_with_tool::e2i_wo_tool_transform(lib::JointArray & local_de
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
 	// Retrieve computations result.
-	local_desired_end_effector_frame = local_desired_end_effector_matrix;
+	//local_desired_end_effector_frame = local_desired_end_effector_matrix;
 
 	// Compute inverse kinematics transformation.
-	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_frame);
+	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_matrix);
 }
 
 

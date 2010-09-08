@@ -1,12 +1,20 @@
-#include <string.h>
+/*!
+ * @file
+ * @brief File contains ecp base task definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup ecp
+ */
+
+#include <cstring>
 #include <unistd.h>
-#include <errno.h>
-#include <ctype.h>
-#include <stdio.h>
+#include <cerrno>
+#include <cctype>
+#include <cstdio>
 #include <boost/foreach.hpp>
 
-#include "lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 
@@ -139,12 +147,12 @@ bool task::pulse_check()
 void task::initialize_communication()
 {
 	std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
 
 	std::string ecp_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 	std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point, true);
@@ -234,7 +242,7 @@ void task::subtasks_conditional_execution()
 
 	subtasks_t subtasks_m_tmp = subtask_m;
 
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
+BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
 {	if (mp_2_ecp_next_state_string == subtask_node.first) {
 
 		subtask_node.second->conditional_execution();
@@ -283,7 +291,7 @@ if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 	uint64_t e = errno; // kod bledu systemowego
 	perror("ecp: Reply to MP failed");
 	sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-	throw common::generator::generator::ECP_error(lib::SYSTEM_ERROR, 0);
+	throw common::generator::ECP_error(lib::SYSTEM_ERROR, 0);
 }
 
 // ew. odebranie pulsu z MP
@@ -293,8 +301,8 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (!ecp_stop) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 }
 
@@ -354,11 +362,11 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (ecp_stop)
-throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
 sr_ecp_msg->message("ecp user program is running");
@@ -421,11 +429,11 @@ if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
 }
 
 if (ecp_stop)
-throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-	fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+	fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d, mp_command_type() = %d\n", __FILE__, __LINE__, mp_command_type());
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 }
 
 mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
@@ -524,7 +532,7 @@ if (mp_ecp_randevouz) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
 	// ew. odebranie pulsu z MP
@@ -534,11 +542,11 @@ if (mp_ecp_randevouz) {
 	}
 
 	if (ecp_stop)
-	throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+	throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
 	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-		throw common::generator::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+		fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 }
 
@@ -571,7 +579,7 @@ while (1) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Receive from MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
-		throw ecp_robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 #if !defined(USE_MESSIP_SRR)
 	if (caller == 0) {/* Pulse received */

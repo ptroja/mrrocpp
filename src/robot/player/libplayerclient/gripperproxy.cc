@@ -47,9 +47,9 @@
  */
 
 #include <playerclient.h>
-#include <stdio.h>
+#include <cstdio>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
     
 // send a gripper command
 //

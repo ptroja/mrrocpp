@@ -17,8 +17,8 @@
 #include "position_constraint.h"
 #include "termination_condition.h"
 
-#include <signal.h>
-#include <time.h>
+#include <csignal>
+#include <ctime>
 
 namespace mrrocpp {
 

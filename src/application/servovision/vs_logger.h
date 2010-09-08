@@ -9,16 +9,17 @@
 #define VS_LOGGER_H_
 
 #include <cstdio>
-#include <time.h>
+#include <ctime>
 #include <string>
+
 #include <boost/thread/thread.hpp>
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
-#include "lib/mrmath/mrmath.h"
-#include "lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 

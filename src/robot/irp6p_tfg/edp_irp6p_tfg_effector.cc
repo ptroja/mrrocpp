@@ -10,10 +10,8 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
-#include "lib/mrmath/mrmath.h"
+
+#include "robot/irp6p_tfg/sg_irp6p_tfg.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"
@@ -38,10 +36,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::ROBOT_IRP6P_TFG)
+	motor_driven_effector(_config, lib::irp6p_tfg::ROBOT_NAME)
 {
 
-	number_of_servos = IRP6P_TFG_NUM_OF_SERVOS;
+	number_of_servos = lib::irp6p_tfg::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

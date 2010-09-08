@@ -1,15 +1,23 @@
-#include <stdio.h>
-#include <string.h>
+/*!
+ * @file
+ * @brief File contains Trajectory class definition
+ * @author lorenzo, Warsaw University of Technology
+ *
+ * @ingroup ecp_mp
+ */
+
+
+#include <cstdio>
+#include <cstring>
 
 #include <iostream>
 #include <sstream>
-#include <string>
 #include <boost/lexical_cast.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 #include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
@@ -59,9 +67,9 @@ void Trajectory::writeTrajectoryToXmlFile(const std::string & fileName, lib::POS
 	std::list <ecp_mp::common::smooth_trajectory_pose>::const_iterator it;
 	for (it = poses.begin(); it != poses.end(); ++it) {
 		//		xmlNodePtr tree = xmlNewChild(doc->children, NULL, (const xmlChar *) "Pose", NULL);
-		//xmlNodePtr subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, MAX_SERVOS_NR).c_str());
-		//subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)lib::toString((*it).a, MAX_SERVOS_NR).c_str());
-		//subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)lib::toString((*it).coordinates, MAX_SERVOS_NR).c_str());
+		//xmlNodePtr subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Velocity", (const xmlChar *)lib::toString((*it).v, lib::MAX_SERVOS_NR).c_str());
+		//subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Accelerations", (const xmlChar *)lib::toString((*it).a, lib::MAX_SERVOS_NR).c_str());
+		//subtree = xmlNewChild(tree, NULL, (const xmlChar *)"Coordinates", (const xmlChar *)lib::toString((*it).coordinates, lib::MAX_SERVOS_NR).c_str());
 	}
 	std::string file(fileName);
 	file += ".xml";
