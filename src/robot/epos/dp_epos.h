@@ -29,7 +29,7 @@ const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
 
 const std::string EPOS_REPLY_DATA_REQUEST_PORT = "EPOS_REPLY_DATA_REQUEST_PORT";
 
-struct smb_mp_to_ecp_cubic_trapezoidal_parameters
+struct mp_to_ecp_cubic_trapezoidal_parameters
 {
 	double dm;
 	double aa;

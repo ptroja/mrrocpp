@@ -99,6 +99,10 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	std::cout << "[func] HI_moxa::insert_set_value(" << drive_number << ", " << set_value << ")" << std::endl;
 #endif
 
+//	if(drive_number == 0){
+//		std::cout << "[func] HI_moxa::insert_set_value(" << drive_number << ", " << set_value << ")" << std::endl;
+//	}
+
 	servo_data[drive_number].buf[0] = 0x00;
 	servo_data[drive_number].buf[1] = 0x00;
 	servo_data[drive_number].buf[2] = 0x00;
@@ -106,7 +110,10 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	servo_data[drive_number].buf[4] = START_BYTE;
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
-	temp->pwm = set_value / 0.500;
+	//temp->pwm = set_value / 0.500;
+	temp->pwm = set_value / 1.000;
+	//temp->pwm = set_value * (1000.0/ 190.0);
+
 
 #ifdef T_INFO_CALC
 	std::cout << "[calc] pwm: (" << temp->pwm << ")" << std::endl;
@@ -130,7 +137,8 @@ double HI_moxa::get_increment(int drive_number) {
 	ret = servo_data[drive_number].current_position_inc;
 
 #ifdef T_INFO_FUNC
-	std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << ret << std::endl;
+	if(drive_number == 4)
+		std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << ret << std::endl;
 #endif
 	return ret;
 }
@@ -155,8 +163,13 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
-	
 
+	std::cout << "[info] pos:";
+	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
+		std::cout << " " << servo_data[drive_number].current_absolute_position;
+	}
+	std::cout << std::endl;
+	
 //	std::cout << "[info] przed write: " << std::endl;
 
 	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++)
@@ -170,10 +183,13 @@ uint64_t HI_moxa::read_write_hardware(void) {
 
 	receive_attempts++;
 	for (int i = 0; i < (TOTAL_DRIVES*READ_BYTES); i++)
+	//while(1)
 	{
 		FD_ZERO(&rfds);
 		for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
-			FD_SET(fd[drive_number], &rfds);
+			if(bytes_received[drive_number] < READ_BYTES){
+				FD_SET(fd[drive_number], &rfds);
+			}
 		}
 
 		// timeout
@@ -217,6 +233,13 @@ uint64_t HI_moxa::read_write_hardware(void) {
 			if(all_hardware_read) {
 				break;
 			}
+			/*else{
+				for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
+					if(bytes_received[drive_number] < READ_BYTES){
+						std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
+					}
+				}
+			}*/
 //			std::cout << std::endl;	//############################
 		}
 	}
@@ -227,7 +250,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	// ########### TODO:
 	drive_number=0;
 
-	//for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
+	for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
 
 		// Wypelnienie pol odebranymi danymi
 		if(bytes_received[drive_number] >= READ_BYTES) {
@@ -242,7 +265,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		}
 
 		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position - servo_data[drive_number].previous_absolute_position);
-	//}
+	}
 
 	// ########### TODO:
 	drive_number=0;
