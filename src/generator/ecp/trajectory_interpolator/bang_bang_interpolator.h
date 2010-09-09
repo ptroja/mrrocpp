@@ -51,17 +51,24 @@ public:
 	 * @return true if the interpolation was successful
 	 */
 	bool interpolate_absolute_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
-	/**
-	 * Method is used to interpolate the Angle Axis absolute pose, which was previously transformed into relative pose using the velocity_profile::calculate_relative_angle_axis_vector method (coordinates vector is now a relative vector).
-	 * @param it iterator to the list of positions
-	 * @param cv list of coordinates
-	 * @param mc time of a single macrostep
-	 * @return true if the interpolation was successful
-	 */
-	bool interpolate_angle_axis_absolute_pose_transformed_into_relative(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
 
 private:
-	double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);
+	/**
+	 * Method generates a single relative type coordinate.
+	 * @param node_counter number of current node (macrostep)
+	 * @param it iterator to the list of positions
+	 * @param axis_num number of current axis for which the calculations are performed
+	 * @param mc time of a single macrostep
+	 * @return single, generated coordinate
+	 */
+	double generate_relative_coordinate(int node_counter, std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int axis_num, const double mc);
+	/**
+	 * Method generates single coordinate, relative or absolute type.
+	 * @param node_counter number of current node (macrostep), here it is usually necessary to pass node_counter+1
+	 * @param interpolation_node_no number of macrosteps in pose
+	 * @param mc time of a single macrostep
+	 */
+	double generate_next_coordinate(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double acc, double uni, double s_acc, double s_uni, lib::MOTION_TYPE motion_type, const double mc);
 };
 
 } // namespace trajectory_interpolator

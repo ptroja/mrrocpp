@@ -50,7 +50,7 @@ bool constant_velocity_interpolator::interpolate_absolute_pose(vector<ecp_mp::co
 	return true;
 }
 
-bool constant_velocity_interpolator::interpolate_angle_axis_absolute_pose_transformed_into_relative(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double mc) {
+/*bool constant_velocity_interpolator::interpolate_angle_axis_absolute_pose_transformed_into_relative(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double mc) {
 
 	vector<double> coordinates (it->axes_num);
 	//vector<double> general_temp (it->axes_num);
@@ -101,6 +101,10 @@ bool constant_velocity_interpolator::interpolate_angle_axis_absolute_pose_transf
 	}
 
 	return true;
+}*/
+
+double constant_velocity_interpolator::generate_relative_coordinate(int node_counter, std::vector <ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int axis_num, const double mc) {
+	return it->k[axis_num] * mc * it->v_r[axis_num];
 }
 
 } // namespace trajectory_interpolator
