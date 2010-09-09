@@ -204,10 +204,10 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 
 /*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(MAX_SERVOS_NR),
-			servo_current_joints(MAX_SERVOS_NR), desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
-			desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
-			current_motor_pos(MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
+	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
+			desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR),
+			current_motor_pos(lib::MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
 {
 
 	controller_state_edp_buf.is_synchronised = false;
@@ -1014,8 +1014,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 						reply.reply_type = lib::SYNCHRO_OK;
 						reply_to_instruction();
 						next_state = GET_INSTRUCTION;
-						if (msg->message("Robot is synchronised"))
-							printf(" Nie znaleziono SR\n");
+						msg->message("Robot is synchronised");
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_4(QUERY_EXPECTED);
 					}

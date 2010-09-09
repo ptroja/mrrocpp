@@ -25,7 +25,8 @@ protected:
 public:
 
 	bird_hand_test(lib::configurator &_config);
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// methods for mp template
 	void main_task_algorithm(void);
 

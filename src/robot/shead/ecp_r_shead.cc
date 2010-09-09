@@ -58,7 +58,7 @@ void robot::create_command()
 
 	is_new_data = false;
 
-	if (shead_head_soldification_data_port.get(shead_head_soldification_structure) == mrrocpp::lib::NewData) {
+	if (shead_head_soldification_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
@@ -66,7 +66,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::shead::CBUFFER_HEAD_SOLIDIFICATION;
 
-		ecp_edp_cbuffer.head_solidification = shead_head_soldification_structure;
+		ecp_edp_cbuffer.head_solidification = shead_head_soldification_data_port.data;
 
 		if (is_new_data) {
 			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
@@ -75,7 +75,7 @@ void robot::create_command()
 		}
 	}
 
-	if (shead_vacuum_activation_data_port.get(shead_vacuum_activation_structure) == mrrocpp::lib::NewData) {
+	if (shead_vacuum_activation_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
@@ -83,7 +83,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::shead::CBUFFER_VACUUM_ACTIVATION;
 
-		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_structure;
+		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_data_port.data;
 
 		if (is_new_data) {
 			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
@@ -125,11 +125,10 @@ void robot::get_reply()
 
 	// generator reply generation
 
-
-	shead_reply_structure = edp_ecp_rbuffer.shead_reply;
-
 	if (shead_reply_data_request_port.is_new_request()) {
-		shead_reply_data_request_port.set(shead_reply_structure);
+		shead_reply_data_request_port.data = edp_ecp_rbuffer.shead_reply;
+
+		shead_reply_data_request_port.set();
 	}
 
 }

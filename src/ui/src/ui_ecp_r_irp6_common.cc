@@ -30,7 +30,7 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6m/ecp_r_irp6m.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/spkm/ecp_r_spkm.h"
@@ -40,7 +40,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name)
 {
 
-	if (_robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (_robot_name == lib::irp6ot_m::ROBOT_NAME) {
 
 		ecp = new ecp::irp6ot_m::robot(_config, _sr_ecp_msg);
 
@@ -248,7 +248,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
-		if (ecp->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M && j == 0) // tor
+		if (ecp->robot_name == lib::irp6ot_m::ROBOT_NAME && j == 0) // tor
 			max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
 		else if (j == ecp->number_of_servos - 1) // gripper
 			max_inc_grip = (max_inc_grip > temp) ? max_inc_grip : temp;
@@ -260,7 +260,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 	nr_lin = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
 	nr_grip = (int) ceil(max_inc_grip / JOINT_GRIPPER_STEP);
 	nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
-	if (ecp->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (ecp->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
 	}
 	nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;

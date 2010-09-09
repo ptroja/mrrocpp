@@ -57,8 +57,8 @@ void kcz_test::main_task_algorithm(void ) {
 
 	smoothgen2->set_relative();
 
-	double vv[MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
-	double aa[MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+	double vv[lib::MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+	double aa[lib::MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
 	float lastx = bird->image.x;
 	float lasty = bird->image.y;

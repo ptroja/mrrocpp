@@ -29,14 +29,34 @@ class generator;
 
 namespace task {
 
+/*
+ * Two usefull mp robot addition macros
+ * this is necessary to first create robot and then assign it to robot_m
+ * the robot constructor can not be directly called with them associated robot_m field creation\n
+ * because it uses robot_m
+ */
+
+#define ACTIVATE_MP_ROBOT(__robot_name) \
+		({ \
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+			robot::robot* created_robot = new robot::__robot_name(*this);\
+			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+		}\
+		})
+
+#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
+		({ \
+		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
+			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+		}\
+		})
+
 // klasa globalna dla calego procesu MP
 class task : public ecp_mp::task::task
 {
 private:
 	void initialize_communication(void);
-
-	/// utworzenie robotow
-	virtual void create_robots(void);
 
 public:
 #if !defined(USE_MESSIP_SRR)
@@ -47,6 +67,9 @@ public:
 	/// KONSTRUKTORY
 	task(lib::configurator &_config);
 	virtual ~task(void);
+
+	/// utworzenie robotow
+	virtual void create_robots(void) =0;
 
 	void stop_and_terminate(void);
 

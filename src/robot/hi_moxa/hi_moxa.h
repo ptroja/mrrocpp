@@ -1,9 +1,10 @@
-// -------------------------------------------------------------------------
-//                            hi_rydz.h
-// Definicje struktur danych i metod dla interfejsu sprzetowego
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/* TODO:
+ *
+ * inicjalizacja struktur servo_data w konstruktorze hi_moxa
+ * przekazanie do konstruktora hi_moxa danych o ilosci i numerach portow
+*/
+
+
 
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
@@ -44,8 +45,7 @@ const long COMMCYCLE_TIME_NS = 2000000;
 // ------------------------------------------------------------------------
 
 
-class HI_moxa : public common::HardwareInterface
-{
+class HI_moxa: public common::HardwareInterface {
 
 public:
 
@@ -70,19 +70,12 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int fd[8];
+	int fd[8], fd_max;
+	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;
 
-	char buf[30];
-	uint8_t command_params[8];
-	struct status_St drive_status[8];
-	int32_t position_offset[8];
-	int32_t current_absolute_position[8];
-	int32_t previous_absolute_position[8];
-	double current_position_inc[8];
-	bool first_hardware_read[8];
-	bool trace_resolver_zero[8];
+	
 
 }; // koniec: class hardware_interface
 

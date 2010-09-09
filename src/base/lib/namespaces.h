@@ -3,6 +3,7 @@
 
 /*! \file namespaces.h
  *	\brief The brief description of all MRROC++ namespace's
+ *	\author Tomasz Winiarski <tomrobotics@gmail.com>
  */
 
 

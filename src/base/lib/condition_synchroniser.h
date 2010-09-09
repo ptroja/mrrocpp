@@ -1,3 +1,12 @@
+/*!
+ * @file condition_synchroniser.h
+ * @brief Multi-thread synchronization on a condition.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 
@@ -7,20 +16,33 @@
 namespace mrrocpp {
 namespace lib {
 
-class condition_synchroniser {
+/**
+ * Synchronize multiple threads on a boolean condition
+ */
+class condition_synchroniser
+{
 public:
-	// wait for condition and new_command;
+	//! Wait for condition
 	void wait();
-	// set new_command;
+
+	//! Signal the condition
 	void command();
-	// set has_command=0;
+
+	//! Null the condition
 	void null_command();
+
+	//! Constructor
 	condition_synchroniser();
 
 private:
-	boost::condition_variable cond; //! active command condition
-	boost::mutex mtx; //! mutex related to condition variable
-	bool has_command; //! flag indicating active command to execute
+	//! Active command condition
+	boost::condition_variable cond;
+
+	//! Mutex related to condition variable
+	boost::mutex mtx;
+
+	//! Flag indicating active command to execute
+	bool has_command;
 };
 
 } // namespace lib

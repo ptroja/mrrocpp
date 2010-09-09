@@ -21,7 +21,7 @@
 #include <boost/bind.hpp>
 
 #include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
@@ -134,8 +134,8 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 					while ((ui.irp6ot_tfg->state.edp.reader_fd
 							= name_open(ui.irp6ot_tfg->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;

@@ -288,7 +288,7 @@ bool dung::next_step()
 		the_robot->ecp_command.instruction.arm.pf_def.desired_torque[i] = t[i];
 	} // end:for
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 				= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	} // end:for

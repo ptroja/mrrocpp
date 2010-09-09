@@ -139,7 +139,7 @@ void catch_signal(int sig)
 void* cyclic_read(void* arg)
 {
 	// Set thread priority.
-	setprio(0, MAX_PRIORITY - 5);
+	setprio(0, lib::QNX_MAX_PRIORITY - 5);
 
 	// Wait for command,.
 	vsp_synchroniser.wait();
@@ -367,7 +367,7 @@ int main(int argc, char *argv[])
 	static iofunc_attr_t attr;
 
 	// Set thread priority.
-	setprio(0, MAX_PRIORITY - 1);
+	setprio(0, lib::QNX_MAX_PRIORITY - 1);
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::nint_shell::catch_signal);

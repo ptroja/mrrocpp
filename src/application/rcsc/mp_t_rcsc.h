@@ -37,7 +37,8 @@ protected:
 	void configure_edp_force_sensor(bool configure_track, bool configure_postument);
 
 public:
-
+	/// utworzenie robotow
+	void create_robots(void);
 	// stl'owa lista manipulacji
 	std::list <common::SingleManipulation> manipulation_list;
 

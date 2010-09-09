@@ -293,7 +293,7 @@ public:
 		angle_axis_absolute_transformed_into_relative = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
-		mc = nmc * STEP;
+		mc = nmc * lib::EDP_STEP;
 
 	}
 	/**

@@ -22,7 +22,7 @@
 #include "display.h"
 #include "ftconfig.h"
 
-#include "robot/irp6p_m/hi_irp6p_m.h"
+#include "robot/hi_moxa/hi_moxa.h"
 
 short int invalid_value;
 Calibration *cal; //!< struct containing calibration information
@@ -169,7 +169,10 @@ void ATI6284_force::connect_to_hardware(void)
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-		irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+
+		//Wacek: karta ISA zniknela!
+
+		irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
 		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
 			//!< Obsluga bledu
@@ -376,7 +379,7 @@ void ATI6284_force::configure_sensor(void)
 		// 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
 		lib::K_vector pointofgravity(point);
 		gravity_transformation
-				= new lib::ForceTrans(lib::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
+				= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
 	} else {
 		gravity_transformation->synchro(frame);
 	}

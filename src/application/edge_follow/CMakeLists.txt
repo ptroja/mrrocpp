@@ -4,10 +4,7 @@ add_executable(ecp_edge_follow_mr
 	ecp_st_edge_follow.cc
 )
 
-target_link_libraries(ecp_edge_follow_mr
-	ecp_r_irp6p_m ecp_r_irp6ot_m
-	ecp
-)
+target_link_libraries(ecp_edge_follow_mr ecp)
 
 
 add_executable(mp_edge_follow_mr
