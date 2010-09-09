@@ -36,29 +36,32 @@ public:
 	 */
 	virtual ~bang_bang_interpolator();
 	/**
-	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
+	 * Method interpolates the relative type trajectory basing on the list of poses stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
 	 */
-	bool
-			interpolate_relative_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <
-					std::vector <double> > & cv, const double & mc);
+	bool interpolate_relative_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
 	/**
-	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
+	 * Method interpolates the absolute type trajectory basing on the list of poses stored in objects of types derived from %trajectory_pose.
 	 * @param it iterator to the list of positions
 	 * @param cv list of coordinates
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
 	 */
-	bool
-			interpolate_absolute_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <
-					std::vector <double> > & cv, const double & mc);
+	bool interpolate_absolute_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
+	/**
+	 * Method is used to interpolate the Angle Axis absolute pose, which was previously transformed into relative pose using the velocity_profile::calculate_relative_angle_axis_vector method (coordinates vector is now a relative vector).
+	 * @param it iterator to the list of positions
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
+	 * @return true if the interpolation was successful
+	 */
+	bool interpolate_angle_axis_absolute_pose_transformed_into_relative(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
 
 private:
-	double
-			generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);
+	double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);
 };
 
 } // namespace trajectory_interpolator

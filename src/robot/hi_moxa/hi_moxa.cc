@@ -164,11 +164,11 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	std::cout << "[info] pos:";
+	/*std::cout << "[info] pos:";
 	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
 		std::cout << " " << servo_data[drive_number].current_absolute_position;
 	}
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 	
 //	std::cout << "[info] przed write: " << std::endl;
 
@@ -205,15 +205,15 @@ uint64_t HI_moxa::read_write_hardware(void) {
 
 		if (select_retval == 0) {
 			//throw(std::runtime_error("communication timeout !!!"));
-			std::cout << "[error] communication timeout ("
+			/*std::cout << "[error] communication timeout ("
 					<< ++receive_timeouts << "/" << receive_attempts << "="
 					<< ((float) receive_timeouts / receive_attempts) << ")";
-//					<< std::endl;
+//					<< std::endl;*/
 			for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
-				if(bytes_received[drive_number] < READ_BYTES)
-					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
+				//if(bytes_received[drive_number] < READ_BYTES)
+					//std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
 			}
-			std::cout << std::endl;
+			//std::cout << std::endl;
 
 
 			hardware_read_ok = false;
