@@ -51,6 +51,14 @@ public:
 	 * @return true if the interpolation was successful
 	 */
 	bool interpolate_absolute_pose(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
+	/**
+	 * Method is used to interpolate the Angle Axis absolute pose, which was previously transformed into relative pose using the velocity_profile::calculate_relative_angle_axis_vector method (coordinates vector is now a relative vector).
+	 * @param it iterator to the list of positions
+	 * @param cv list of coordinates
+	 * @param mc time of a single macrostep
+	 * @return true if the interpolation was successful
+	 */
+	bool interpolate_angle_axis_absolute_pose_transformed_into_relative(std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector <std::vector <double> > & cv, const double mc);
 
 private:
 	double generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type);

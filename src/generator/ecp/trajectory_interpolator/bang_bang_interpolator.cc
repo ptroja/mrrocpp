@@ -29,7 +29,7 @@ bool bang_bang_interpolator::interpolate_relative_pose(vector<ecp_mp::common::tr
 	vector<double> coordinates (it->axes_num);
 	for (int i = 0; i < it->interpolation_node_no; i++) {
 		for (int j = 0; j < it->axes_num; j++) {
-			if (it->s[j] == 0.0) {
+			if (fabs(it->s[j]) < 0.0000001) {
 				coordinates[j] = 0;
 			} else {
 				coordinates[j] = generate_next_coords(i+1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::RELATIVE);
@@ -57,6 +57,72 @@ bool bang_bang_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::tr
 
 	return true;
 }
+
+bool bang_bang_interpolator::interpolate_angle_axis_absolute_pose_transformed_into_relative(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double mc) {
+
+	vector<double> coordinates (it->axes_num);
+	vector<double> general_temp (it->axes_num);
+	double prev_coordinate[6];
+	double coordinate_backup[6];
+	lib::Homog_matrix goal_frame;
+	int g;
+	int h;
+	int f;
+
+	for (h = 0; h < 6; h++) {
+		prev_coordinate[h] = it->start_position[h];
+	}
+
+	lib::Homog_matrix begining_frame;
+	begining_frame.set_from_xyz_angle_axis(prev_coordinate);
+	//cout << begining_frame << endl;
+
+	goal_frame.set_from_xyz_angle_axis(prev_coordinate);
+
+	for (int i = 0; i < it->interpolation_node_no; i++) {
+		for (int j = 0; j < it->axes_num; j++) {
+			printf("s: %f\t", it->s[j]);
+			if (fabs(it->s[j]) < 0.0000001) {
+				printf("zero\t");
+				coordinates[j] = 0;
+			} else {
+				coordinates[j] = generate_next_coords(i+1, it->interpolation_node_no, it->start_position[j], it->v_p[j], it->v_r[j], it->v_k[j], it->a_r[j], it->k[j], it->acc[j], it->uni[j], it->s_acc[j], it->s_uni[j], lib::RELATIVE);
+			}
+			//TODO add checking the correctness of the returned values
+		}
+		printf("\n");
+		for (h = 0; h < 6; h++) {
+			coordinate_backup[h] = coordinates[h];
+		}
+
+		lib::Homog_matrix begining_frame_with_current_translation = begining_frame;
+		begining_frame_with_current_translation.set_translation_vector(goal_frame);
+
+		lib::Xyz_Angle_Axis_vector step_of_total_increment_vector =
+					lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
+							* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinate_backup);
+
+		goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
+
+		lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
+		goal_frame.get_xyz_angle_axis(tmp_angle_axis_vector);
+		tmp_angle_axis_vector.to_vector(general_temp);
+
+		cv.push_back(general_temp);
+
+		for(g = 0; g < 6; g++) {
+			printf("%f\t", general_temp[g]);
+		}
+		for(g = 0; g < 3; g++) {
+			printf("%f\t", coordinates[g]);
+		}
+		printf("\n");
+		flushall();
+	}
+
+	return true;
+}
+
 //TODO divide into smaller functions and comment code
 double bang_bang_interpolator::generate_next_coords(int node_counter, int interpolation_node_no, double start_position, double v_p, double v_r, double v_k, double a_r, double k, double przysp, double jedn, double s_przysp, double s_jedn, lib::MOTION_TYPE type)
 {

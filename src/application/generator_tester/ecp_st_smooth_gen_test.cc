@@ -33,7 +33,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 	// POSTUMENT
 
-
+/*
 	// JOINT ABSOLUTE
 	ecp_t.sr_ecp_msg->message("Joint absolute");
 	sgenjoint->reset();
@@ -224,24 +224,24 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgeneuler->Move();
 	}
 	// EULER RELATIVE END
-
+*/
 	// ANGLE AXIS ABSOLUTE
 	ecp_t.sr_ecp_msg->message("Angle axis absolute");
 	sgenangle->reset();
 	sgenangle->set_absolute();
 	coordinates1[0] = 0.529987;
-	coordinates1[1] = 1.606317;
-	coordinates1[2] = 0.178306;
-	coordinates1[3] = 1.267713;
-	coordinates1[4] = -1.219889;
-	coordinates1[5] = 0.114191;
-	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
-	coordinates1[0] = 0.509987;
 	coordinates1[1] = 1.806317;
-	coordinates1[2] = 0.148306;
-	coordinates1[3] = 1.367713;
+	coordinates1[2] = 0.178306;
+	coordinates1[3] = 1.307713;
 	coordinates1[4] = -1.119889;
-	coordinates1[5] = 0.114191;
+	coordinates1[5] = 0.104191;
+	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.529987;
+	coordinates1[1] = 1.706317;
+	coordinates1[2] = 0.178306;
+	coordinates1[3] = 1.207713;
+	coordinates1[4] = -1.119889;
+	coordinates1[5] = 0.004191;
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.529987;
 	coordinates1[1] = 1.806317;
@@ -255,7 +255,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS ABSOLUTE END
-
+/*
 	// ANGLE AXIS RELATIVE
 	ecp_t.sr_ecp_msg->message("Angle axis relative");
 	sgenangle->reset();
@@ -286,7 +286,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END
-
+*/
 	// POSTUMENT END
 
 }

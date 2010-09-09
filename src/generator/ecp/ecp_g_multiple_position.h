@@ -91,6 +91,10 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
+	/**
+	 * Set to true if trajectory was specified in angle axis absolute coordinates and the interpolation is performed on poses transformed into relative vectors.
+	 */
+	bool angle_axis_absolute_transformed_into_relative;
 
 	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
@@ -228,6 +232,14 @@ protected:
 				}
 				pose_vector_iterator++;
 			}
+		} else if (motion_type == lib::RELATIVE && angle_axis_absolute_transformed_into_relative == true) {
+			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+				if (inter.interpolate_angle_axis_absolute_pose_transformed_into_relative(pose_vector_iterator, coordinate_vector, mc) == false) {
+					trueFlag = false;
+				}
+				pose_vector_iterator++;
+			}
+			set_absolute();
 		} else if (motion_type == lib::RELATIVE) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
@@ -278,6 +290,7 @@ public:
 		generator(_ecp_task)
 	{
 		debug = false;
+		angle_axis_absolute_transformed_into_relative = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
 		mc = nmc * STEP;

@@ -181,8 +181,12 @@ class velocity_profile {
 			double start_position[6];
 			double coordinates[6];
 
-			memcpy( start_position, &it->start_position[0], sizeof(int) * it->start_position.size() );
-			memcpy( coordinates, &it->coordinates[0], sizeof(int) * it->coordinates.size() );
+			if (it->start_position.size() != 6) {
+				return false;
+			}
+
+			memcpy( start_position, &it->start_position[0], sizeof(double) * it->start_position.size() ); //it->start_position.size() should always be equal to 6
+			memcpy( coordinates, &it->coordinates[0], sizeof(double) * it->coordinates.size() );
 
 			start_position_matrix.set_from_xyz_angle_axis(start_position);
 			desired_position_matrix.set_from_xyz_angle_axis(coordinates);

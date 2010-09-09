@@ -50,6 +50,10 @@ bool constant_velocity_interpolator::interpolate_absolute_pose(vector<ecp_mp::co
 	return true;
 }
 
+bool constant_velocity_interpolator::interpolate_angle_axis_absolute_pose_transformed_into_relative(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double mc) {
+
+}
+
 } // namespace trajectory_interpolator
 } // namespace generator
 } // namespace common

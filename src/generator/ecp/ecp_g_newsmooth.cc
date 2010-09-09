@@ -53,6 +53,7 @@ bool newsmooth::calculate() {
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS && motion_type == lib::ABSOLUTE) {
 
 		set_relative();
+		angle_axis_absolute_transformed_into_relative = true;
 
 		for (i = 0; i < pose_vector.size(); i++) {
 			if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
@@ -63,10 +64,7 @@ bool newsmooth::calculate() {
 			}
 			pose_vector_iterator++;
 		}
-
 	}
-
-
 	//------------ testowo end ---------
 
 	pose_vector_iterator = pose_vector.begin();
@@ -177,6 +175,11 @@ void newsmooth::print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_tra
 	printf("coords:\t");
 	for (z = 0; z < pose_vector_iterator->coordinates.size(); z++) {
 		printf("%f\t", pose_vector_iterator->coordinates[z]);
+	}
+	printf("\n");
+	printf("start:\t");
+	for (z = 0; z < pose_vector_iterator->start_position.size(); z++) {
+		printf("%f\t", pose_vector_iterator->start_position[z]);
 	}
 	printf("\n");
 	printf("s:\t");
