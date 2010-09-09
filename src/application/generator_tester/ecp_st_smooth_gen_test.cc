@@ -237,7 +237,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	coordinates1[4] = -1.119889;
 	coordinates1[5] = 0.104191;
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
-	coordinates1[0] = 0.529987;
+	coordinates1[0] = 0.329987;
 	coordinates1[1] = 1.706317;
 	coordinates1[2] = 0.178306;
 	coordinates1[3] = 1.207713;
