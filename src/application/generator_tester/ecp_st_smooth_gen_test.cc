@@ -33,7 +33,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 	// POSTUMENT
 
-/*
+
 	// JOINT ABSOLUTE
 	ecp_t.sr_ecp_msg->message("Joint absolute");
 	sgenjoint->reset();
@@ -224,7 +224,8 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgeneuler->Move();
 	}
 	// EULER RELATIVE END
-*/
+
+
 	// ANGLE AXIS ABSOLUTE
 	ecp_t.sr_ecp_msg->message("Angle axis absolute");
 	sgenangle->reset();
@@ -255,7 +256,8 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS ABSOLUTE END
-/*
+
+
 	// ANGLE AXIS RELATIVE
 	ecp_t.sr_ecp_msg->message("Angle axis relative");
 	sgenangle->reset();
@@ -286,7 +288,8 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END
-*/
+
+
 	// POSTUMENT END
 
 }

@@ -1,6 +1,6 @@
 /**
- * \file ecp_g_newsmooth.cc
- * \brief newsmooth class and its methods
+ * @file ecp_g_newsmooth.cc
+ * @brief newsmooth class and its methods
  *
  * Contains bodies of the methods of newsmooth class.
  */
@@ -37,7 +37,7 @@ bool newsmooth::calculate() {
 
 	pose_vector_iterator = pose_vector.begin();
 
-	for (i = 0; i < pose_vector.size(); i++) {
+	for (i = 0; i < pose_vector.size(); i++) { //this has to be done here (not in the load_trajectory_pose method) because of the potential recursive call of calculate method
 		if (!vpc.calculate_v_r_a_r_pose(pose_vector_iterator)) {
 			if (debug) {
 				printf("calculate_v_r_a_r_pose returned false\n");
@@ -47,8 +47,6 @@ bool newsmooth::calculate() {
 		pose_vector_iterator++;
 	}
 
-
-	//------------- testowo ----------
 	pose_vector_iterator = pose_vector.begin();
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS && motion_type == lib::ABSOLUTE) {
 
@@ -65,7 +63,6 @@ bool newsmooth::calculate() {
 			pose_vector_iterator++;
 		}
 	}
-	//------------ testowo end ---------
 
 	pose_vector_iterator = pose_vector.begin();
 

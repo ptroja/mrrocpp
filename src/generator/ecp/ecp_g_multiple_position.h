@@ -573,6 +573,7 @@ public:
 		calculated = false;
 		interpolated = false;
 		sr_ecp_msg.message("Generator reset");
+		angle_axis_absolute_transformed_into_relative = false;
 	}
 };
 
