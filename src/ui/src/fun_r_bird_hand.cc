@@ -20,7 +20,7 @@
 
 #include <boost/bind.hpp>
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_class.h"
 #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"

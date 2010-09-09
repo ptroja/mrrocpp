@@ -19,7 +19,7 @@
 #include <process.h>
 #include <cassert>
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 

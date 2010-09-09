@@ -3,6 +3,9 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
 #include <unistd.h>
 
 #include "base/lib/typedefs.h"
@@ -28,7 +31,6 @@ namespace irp6p_tfg {
 servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
-
 	synchro_axis_order[0] = 0;
 
 	axe_inc_per_revolution[0] = AXIS_7_INC_PER_REVOLUTION;

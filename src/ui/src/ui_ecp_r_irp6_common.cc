@@ -24,7 +24,7 @@
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 

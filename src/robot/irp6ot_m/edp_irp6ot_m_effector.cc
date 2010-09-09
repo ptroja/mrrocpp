@@ -10,6 +10,8 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
 
 #include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
 #include "robot/irp6ot_m/sg_irp6ot_m.h"

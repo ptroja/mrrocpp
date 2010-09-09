@@ -2,6 +2,10 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
 #include "ui/src/ui.h"
 
 busy_flagger::busy_flagger(busy_flag & _flag) :

@@ -12,7 +12,7 @@
 #include <boost/any.hpp>
 
 #include "base/lib/configurator.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 #include <libxml/tree.h>

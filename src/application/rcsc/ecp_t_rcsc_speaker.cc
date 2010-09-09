@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"

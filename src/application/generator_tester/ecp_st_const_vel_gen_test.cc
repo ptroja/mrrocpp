@@ -4,7 +4,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "application/generator_tester/ecp_st_const_vel_gen_test.h"
 #include "generator/ecp/ecp_g_constant_velocity.h"
 

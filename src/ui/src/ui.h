@@ -18,7 +18,7 @@
 #include <list>
 
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #define INITIAL_STATE          90 // zaladowano tylko SR
 #define MANUAL_OPERATIONS     100 // zaladowano EDP1

@@ -16,6 +16,7 @@
 #include "base/lib/sensor_interface.h"				// klasa bazowa sensor
 #include "base/edp/edp_typedefs.h"				// klasa bazowa sensor
 #include "base/lib/condition_synchroniser.h"
+#include "base/lib/sr/sr_vsp.h"
 
 namespace mrrocpp {
 namespace edp {

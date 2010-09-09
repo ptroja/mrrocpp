@@ -15,7 +15,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ecp_mp_t_gen_test.h"
 #include "application/generator_tester/ecp_mp_st_const_vel_gen_test.h"

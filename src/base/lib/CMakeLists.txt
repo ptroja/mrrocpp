@@ -8,6 +8,7 @@ if(USE_MESSIP)
 endif(USE_MESSIP)
 
 add_subdirectory (agent)
+add_subdirectory (sr)
 
 # Create a library called "mrrocpp" which includes the source file "hello.cxx".
 # The extension is already found. Any number of sources could be listed here. 
@@ -25,7 +26,6 @@ add_library(mrrocpp
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
 	timer.cc
-	srlib.cc
 	exception.cc
 	playerpos_goal.cc
 	datastr.cc
@@ -36,3 +36,5 @@ add_library(mrrocpp
 	trajectory_pose/trajectory_pose.cc
 	trajectory_pose/constant_velocity_trajectory_pose.cc
 )
+
+target_link_libraries (mrrocpp sr)

@@ -9,7 +9,7 @@
  * @ingroup ecp_mp
  */
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 namespace mrrocpp {

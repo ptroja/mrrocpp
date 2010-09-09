@@ -32,7 +32,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_force.h"
 
