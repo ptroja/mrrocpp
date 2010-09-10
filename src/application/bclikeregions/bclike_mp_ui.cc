@@ -1,8 +1,8 @@
-/*
- * bclike_mp.cc
- *
- *  Created on: 06-07-2010
- *      Author: kszkudla
+/**
+ * \file bclike_mp_ui.cc
+ * \brief MP process class methods definition: UNINTERRUPTED_MOE
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #include "bclike_mp_ui.h"
@@ -29,15 +29,9 @@ namespace task {
 #endif
 
 
-/**
- * Main Process class constructor
- * @param _config reference to configuration file parser object
- */
+
 bclike_mp_ui::bclike_mp_ui(lib::configurator &_config) :
 	task(_config) {
-
-	second_task = config.value<std::string>("fradia_task", "[vsp_second_task]");
-	std::cout << "DRUGI TASK: " << second_task << std::endl;
 
 }
 
@@ -55,10 +49,7 @@ void bclike_mp_ui::create_robots()
 bclike_mp_ui::~bclike_mp_ui() {
 }
 
-/**
- * Class main method responsible for switching between subtask
- * depending on received data
- */
+
 void bclike_mp_ui::main_task_algorithm(void){
 
 	sr_ecp_msg->message("MP start");

@@ -1,9 +1,10 @@
-/*
- * bclike_mp.h
- *
- *  Created on: 06-07-2010
- *      Author: kszkudla
+/**
+ * \file bclike_mp_i.h
+ * \brief MP process class: INTERRUPTED_MOVE
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
+
 
 #ifndef BCLIKE_MP_I_H_
 #define BCLIKE_MP_I_H_
@@ -23,10 +24,24 @@ namespace task {
 
 class bclike_mp_i: public task {
 public:
+	/**
+	 * Main Process class constructor
+	 * @param _config reference to configuration file parser object
+	 */
 	bclike_mp_i(lib::configurator &_config);
+	/**
+	 * Class destructor
+	 */
 	virtual ~bclike_mp_i();
 
+	/**
+	 * Class main method responsible for switching between subtask
+	 * depending on received data
+	 */
 	void main_task_algorithm(void);
+	/**
+	 * Create objects of robots used in task
+	 */
 	virtual void create_robots(void);
 
 private:
@@ -35,11 +50,6 @@ private:
 	std::vector<double> pos;
 
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> > regions;
-
-	//Second FraDIA task definition
-	std::string second_task;
-
-	int movement_type;
 
 
 };

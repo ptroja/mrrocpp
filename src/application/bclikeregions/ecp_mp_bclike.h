@@ -1,8 +1,8 @@
-/*
- * ecp_mp_bclike.h
- *
- *  Created on: 07-07-2010
- *      Author: kszkudla
+/**
+ * \file ecp_mp_bclike.h
+ * \brief Movement types name definitions
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef ECP_MP_BCLIKE_H_

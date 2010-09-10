@@ -1,8 +1,8 @@
-/*
- * ecp_st_smooth_move.h
- *
- *  Created on: 20-07-2010
- *      Author: kszkudla
+/**
+ * \file ecp_st_scan_move.h
+ * \brief Scanning move subtask class
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef ECP_ST_SCAN_MOVE_H_
@@ -29,9 +29,19 @@ class bcl_t_switcher;
 
 class ecp_st_scan_move : public ecp_sub_task {
 public:
+	/**
+	 * Subtask constructor
+	 * @param _ecp_t reference to parent task
+	 */
 	ecp_st_scan_move(task & _ecp_t);
+	/**
+	 * Class destructor
+	 */
 	virtual ~ecp_st_scan_move();
 
+	/**
+	 * Method called by parent task to start execution of subtask
+	 */
 	void conditional_execution();
 
 private:

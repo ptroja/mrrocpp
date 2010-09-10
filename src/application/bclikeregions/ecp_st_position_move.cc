@@ -1,8 +1,8 @@
-/*
- * ecp_st_smooth_move.cpp
- *
- *  Created on: 20-07-2010
- *      Author: kszkudla
+/**
+ * \file ecp_st_position_move.cc
+ * \brief Position move subtask method definition
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #include "ecp_st_position_move.h"
@@ -17,10 +17,7 @@ namespace common {
 
 namespace task {
 
-/**
- * Subtask constructor
- * @param _ecp_t reference to parent task
- */
+
 ecp_st_position_move::ecp_st_position_move(task & _ecp_t):
 	ecp_sub_task(_ecp_t),
 	bcl_ecp((bcl_t_switcher &)ecp_t){
@@ -59,11 +56,8 @@ ecp_st_position_move::~ecp_st_position_move() {
 
 }
 
-/**
- * Method called by parent task to start execution of subtask
- */
+
 void ecp_st_position_move::conditional_execution(){
-//	std::cout << "CONDITIONAL EXECUTION" << std::endl;
 
 	std::vector<double>vec;
 	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);

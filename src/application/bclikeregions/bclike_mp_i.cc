@@ -1,9 +1,10 @@
-/*
- * bclike_mp.cc
- *
- *  Created on: 06-07-2010
- *      Author: kszkudla
+/**
+ * \file bclike_mp_i.cc
+ * \brief MP process class methods definition: INTERRUPTED_MOVE
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
+
 
 #include "bclike_mp_i.h"
 #include "bcl_t_switcher.h"
@@ -29,15 +30,9 @@ namespace task {
 #endif
 
 
-/**
- * Main Process class constructor
- * @param _config reference to configuration file parser object
- */
+
 bclike_mp_i::bclike_mp_i(lib::configurator &_config) :
 	task(_config) {
-
-	second_task = config.value<std::string>("fradia_task", "[vsp_second_task]");
-	std::cout << "DRUGI TASK: " << second_task << std::endl;
 
 }
 
@@ -55,10 +50,7 @@ void bclike_mp_i::create_robots()
 bclike_mp_i::~bclike_mp_i() {
 }
 
-/**
- * Class main method responsible for switching between subtask
- * depending on received data
- */
+
 void bclike_mp_i::main_task_algorithm(void){
 
 	sr_ecp_msg->message("MP start");

@@ -1,8 +1,8 @@
-/*
- * ecp_mp_st_smooth_move.h
- *
- *  Created on: 21-07-2010
- *      Author: kszkudla
+/**
+ * \file ecp_mp_st_scan_move.h
+ * \brief Movementa type name definition
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef ECP_MP_ST_SCAN_MOVE_H_

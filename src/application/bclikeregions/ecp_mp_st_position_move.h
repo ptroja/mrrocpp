@@ -1,8 +1,8 @@
-/*
- * ecp_mp_st_smooth_move.h
- *
- *  Created on: 21-07-2010
- *      Author: kszkudla
+/**
+ * \file ecp_mp_st_position_move.h
+ * \brief Movement type name declaration
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef ECP_MP_ST_POSITION_MOVE_H_
