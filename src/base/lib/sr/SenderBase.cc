@@ -11,10 +11,6 @@
 #include <cerrno>
 #include <string>
 
-#include "base/lib/sr/SenderBase.h"
-#include "base/lib/sr/srlib.h"
-#include "base/lib/impconst.h"
-
 #if defined(USE_MESSIP_SRR)
 #include "messip_dataport.h"
 #else
@@ -23,6 +19,10 @@
 #include <sys/dispatch.h>
 #include <sys/neutrino.h>
 #endif
+
+#include "base/lib/sr/SenderBase.h"
+#include "base/lib/sr/srlib.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -37,7 +37,7 @@ SenderBase::SenderBase(const std::string & sr_name)
 			delay(lib::CONNECT_DELAY);
 		} else {
 			// TODO: throw
-			perror("SR cannot be located ");
+			std::perror("SR cannot be located ");
 			throw;
 		}
 	}
