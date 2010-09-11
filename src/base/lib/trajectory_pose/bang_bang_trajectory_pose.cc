@@ -1,6 +1,6 @@
 /**
- * \file bang_bang_trajectory_pose.cc
- * \brief bang_bang_trajectory_pose class and its methods
+ * @file bang_bang_trajectory_pose.cc
+ * @brief bang_bang_trajectory_pose class and its methods
  *
  * Contains bodies of the methods of bang_bang_trajectory_pose class.
  */
