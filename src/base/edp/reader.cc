@@ -67,7 +67,7 @@ reader_config::reader_config() :
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	new_data(false), master(_master), write_csv(true)
 {
-	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer()

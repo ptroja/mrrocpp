@@ -70,7 +70,7 @@ protected:
 	} from_vsp;
 
 public:
-	void operator()(void);
+	void operator()();
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 

@@ -54,7 +54,7 @@ void effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 
-	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));
