@@ -5,7 +5,7 @@
 #include "base/lib/com_buf.h"
 #include <fstream>
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 #include "base/ecp/ecp_task.h"

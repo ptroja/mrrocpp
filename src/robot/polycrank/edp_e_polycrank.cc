@@ -36,7 +36,6 @@ namespace polycrank {
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::polycrank::ROBOT_NAME)
 {
-
 	number_of_servos = lib::polycrank::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
@@ -88,8 +87,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = new common::reader_buffer(*this);
-	vis_obj = new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
 }
 
 }

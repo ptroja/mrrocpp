@@ -20,7 +20,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/mrmath/mrmath.h"
 
 #include "ui/src/speaker/ui_ecp_r_speaker.h"

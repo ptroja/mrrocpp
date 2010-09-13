@@ -1,7 +1,7 @@
 /**
  * \file logger.cc
  * \brief Logging utilities.
- * \bug Not multi-thread safe
+ * \bug Not multi-thread safe use of log_*_enabled flags
  *
  * \author Mateusz Boryń <mateusz.boryn@gmail.com>
  */

@@ -25,7 +25,7 @@
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 // Konfigurator.
 #include "base/lib/configurator.h"

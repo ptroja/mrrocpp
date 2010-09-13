@@ -35,7 +35,7 @@ HI_moxa::~HI_moxa() {
 	for (unsigned int i = 0; i < TOTAL_DRIVES; i++) {
 		if (fd[i] > 0) {
 			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
-			close( fd[i]);
+			close(fd[i]);
 		}
 	}
 }
@@ -66,7 +66,7 @@ void HI_moxa::init() {
 					<< std::endl;
 		} else {
 			std::cout << "...OK (" << (int) fd[i] << ")" << std::endl;
-			if(fd[i] > fd_max)
+			if (fd[i] > fd_max)
 				fd_max = fd[i];
 		}
 		tcgetattr(fd[i], &oldtio[i]);
@@ -80,7 +80,7 @@ void HI_moxa::init() {
 		newtio.c_lflag = 0;
 		if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
 			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
-			close( fd[i]);
+			close(fd[i]);
 			fd[i] = -1;
 			throw(std::runtime_error("unable to set baudrate !!!"));
 			return;
@@ -99,21 +99,21 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	std::cout << "[func] HI_moxa::insert_set_value(" << drive_number << ", " << set_value << ")" << std::endl;
 #endif
 
-//	if(drive_number == 0){
-//		std::cout << "[func] HI_moxa::insert_set_value(" << drive_number << ", " << set_value << ")" << std::endl;
-//	}
+	//	if(drive_number == 0){
+	//		std::cout << "[func] HI_moxa::insert_set_value(" << drive_number << ", " << set_value << ")" << std::endl;
+	//	}
 
 	servo_data[drive_number].buf[0] = 0x00;
 	servo_data[drive_number].buf[1] = 0x00;
 	servo_data[drive_number].buf[2] = 0x00;
 	servo_data[drive_number].buf[3] = 0x00;
 	servo_data[drive_number].buf[4] = START_BYTE;
-	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
+	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM
+			| servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
 	//temp->pwm = set_value / 0.500;
 	//temp->pwm = set_value / 1.000;
-	temp->pwm = set_value * (300.0/ 255.0);
-
+	temp->pwm = set_value * (300.0 / 255.0);
 
 #ifdef T_INFO_CALC
 	std::cout << "[calc] pwm: (" << temp->pwm << ")" << std::endl;
@@ -138,7 +138,7 @@ double HI_moxa::get_increment(int drive_number) {
 
 #ifdef T_INFO_FUNC
 	if(drive_number == 4)
-		std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << ret << std::endl;
+	std::cout << "[func] HI_moxa::get_increment(" << drive_number << ") = " << ret << std::endl;
 #endif
 	return ret;
 }
@@ -164,30 +164,28 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	std::cout << "[info] pos:";
-	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
-		std::cout << " " << servo_data[drive_number].current_absolute_position;
-	}
-	std::cout << std::endl;
-	
+	/*std::cout << "[info] pos:";
+	 for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
+	 std::cout << " " << servo_data[drive_number].current_absolute_position;
+	 }
+	 std::cout << std::endl;*/
+
 	std::cout << "[info] przed write: " << std::endl;
 
-	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++)
-	{
+	for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
 		bytes_received[drive_number] = 0;
 	}
 
-//	std::cout << "[info] po write: " << std::endl;
+	//	std::cout << "[info] po write: " << std::endl;
 
 
 	receive_attempts++;
 	//for (int i = 0; i < 7; i++)
-	while(1)
-	{
+	while (1) {
 		FD_ZERO(&rfds);
-		for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
-			if(bytes_received[drive_number] < READ_BYTES){
+		for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
+			if (bytes_received[drive_number] < READ_BYTES) {
 				FD_SET(fd[drive_number], &rfds);
 			}
 		}
@@ -198,43 +196,52 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		timeout.tv_usec = 500;
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
 		if (select_retval == 0) {
+
 			std::cout << "[error] communication timeout ("
 					<< ++receive_timeouts << "/" << receive_attempts << "="
 					<< ((float) receive_timeouts / receive_attempts) << ")";
-					//<< std::endl;
-			for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
-				if(bytes_received[drive_number] < READ_BYTES)
-					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
+			//<< std::endl;
+
+			//throw(std::runtime_error("communication timeout !!!"));
+			/*std::cout << "[error] communication timeout ("
+			 << ++receive_timeouts << "/" << receive_attempts << "="
+			 << ((float) receive_timeouts / receive_attempts) << ")";
+			 //					<< std::endl;*/
+
+			for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
+				//if(bytes_received[drive_number] < READ_BYTES)
+				//std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
 			}
-			std::cout << std::endl;
+			//std::cout << std::endl;
 
 
 			hardware_read_ok = false;
 			break;
 		} else {
 			all_hardware_read = true;
-			for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
-				if(FD_ISSET(fd[drive_number], &rfds)) {
+			for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
+				if (FD_ISSET(fd[drive_number], &rfds)) {
 					bytes_received[drive_number] += read(fd[drive_number],
-							(char*) (&(servo_data[drive_number].drive_status)) + bytes_received[drive_number],
-							READ_BYTES - bytes_received[drive_number]);
+							(char*) (&(servo_data[drive_number].drive_status))
+									+ bytes_received[drive_number], READ_BYTES
+									- bytes_received[drive_number]);
 				}
-				if(bytes_received[drive_number] < READ_BYTES){
+				if (bytes_received[drive_number] < READ_BYTES) {
 					all_hardware_read = false;
 				}
 			}
-	//		std::cout << all_hardware_read << std::endl;	//############################
-			if(all_hardware_read) {
+			//		std::cout << all_hardware_read << std::endl;	//############################
+			if (all_hardware_read) {
 				break;
 			}
 			/*else{
-				for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
-					if(bytes_received[drive_number] < READ_BYTES){
-						std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
-					}
-				}
-			}*/
-//			std::cout << std::endl;	//############################
+			 for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
+			 if(bytes_received[drive_number] < READ_BYTES){
+			 std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
+			 }
+			 }
+			 }*/
+			//			std::cout << std::endl;	//############################
 		}
 	}
 
@@ -242,33 +249,41 @@ uint64_t HI_moxa::read_write_hardware(void) {
 
 
 	// ########### TODO:
-	drive_number=0;
+	drive_number = 0;
 
-	for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
+	for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
 
 		// Wypelnienie pol odebranymi danymi
-		if(bytes_received[drive_number] >= READ_BYTES) {
-			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
-			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
+		if (bytes_received[drive_number] >= READ_BYTES) {
+			servo_data[drive_number].previous_absolute_position
+					= servo_data[drive_number].current_absolute_position;
+			servo_data[drive_number].current_absolute_position
+					= servo_data[drive_number].drive_status.position;
 		}
 
 		// W pierwszym odczycie danych z napedu przyrost pozycji musi byc 0.
 		if (servo_data[drive_number].first_hardware_read && hardware_read_ok) {
-			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
+			servo_data[drive_number].previous_absolute_position
+					= servo_data[drive_number].current_absolute_position;
 			servo_data[drive_number].first_hardware_read = false;
 		}
 
-		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position - servo_data[drive_number].previous_absolute_position);
+		servo_data[drive_number].current_position_inc
+				= (double) (servo_data[drive_number].current_absolute_position
+						- servo_data[drive_number].previous_absolute_position);
 	}
 
 	// ########### TODO:
-	drive_number=0;
+	drive_number = 0;
 
-	master.controller_state_edp_buf.is_robot_blocked = (servo_data[drive_number].drive_status.powerStageFault != 0) ? true : false;
+	master.controller_state_edp_buf.is_robot_blocked
+			= (servo_data[drive_number].drive_status.powerStageFault != 0) ? true
+					: false;
 	if (servo_data[drive_number].drive_status.powerStageFault != 0) {
 
 		if (error_power_stage == 0) {
-			master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+			master.msg->message(lib::NON_FATAL_ERROR,
+					"Wylaczono moc - robot zablokowany");
 			error_power_stage++;
 		}
 
@@ -276,7 +291,9 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		error_power_stage = 0;
 	}
 
-	master.controller_state_edp_buf.is_synchronised = (servo_data[drive_number].drive_status.isSynchronized != 0) ? true : false;
+	master.controller_state_edp_buf.is_synchronised
+			= (servo_data[drive_number].drive_status.isSynchronized != 0) ? true
+					: false;
 
 	if (servo_data[drive_number].drive_status.sw1 != 0)
 		ret |= UPPER_LIMIT_SWITCH;
@@ -337,7 +354,8 @@ void HI_moxa::reset_position(int drive_number) {
 	servo_data[drive_number].current_position_inc = 0.0;
 	servo_data[drive_number].first_hardware_read = true;
 	//#ifdef T_INFO_FUNC
-	std::cout << "[func] HI_moxa::reset_position(" << drive_number << ")" << std::endl;
+	std::cout << "[func] HI_moxa::reset_position(" << drive_number << ")"
+			<< std::endl;
 	//#endif
 }
 

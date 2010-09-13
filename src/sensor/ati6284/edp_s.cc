@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "sensor/ati6284/edp_s.h"
 #include "base/edp/edp_e_manip.h"
 

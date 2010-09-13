@@ -4,6 +4,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "ecp_g_pcbird_nose_run.h"
+#include "generator/ecp/ecp_g_force.h"
 #include "ecp_st_acquisition.h"
 
 namespace mrrocpp {
@@ -24,6 +25,7 @@ class acq_force: public acquisition {
 
   public:
 	  common::generator::pcbird_nose_run* nose_run;
+	  common::generator::bias_edp_force* bias_run;
 	  acq_force(task &_ecp_t);
 	  void write_data(const std::string & _K_fp, const std::string & _kk_fp, const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures);
 	  void conditional_execution();

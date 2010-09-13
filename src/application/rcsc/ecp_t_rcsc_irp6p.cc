@@ -4,7 +4,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"

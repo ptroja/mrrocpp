@@ -16,34 +16,41 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+/*!
+ * \class bird_hand
+ * \brief Constant velocity generator for Bird Hand, position control
+ *
+ * \author kczajkow
+ * \date Jan 05, 2010
+ */
 class bird_hand : public common::generator::generator
 {
 private:
-	// zadawanie nastaw regulatorow
+	//! zadawanie nastaw regulatorow
 	lib::single_thread_port <lib::bird_hand::command> *bird_hand_command_data_port;
 
-	// zadawanie parametrow konfiguracji
+	//! zadawanie parametrow konfiguracji
 	lib::single_thread_port <lib::bird_hand::configuration> *bird_hand_configuration_command_data_port;
 
-	// odbieranie statusu robota
+	//! odbieranie statusu robota
 	lib::single_thread_request_port <lib::bird_hand::status> *bird_hand_status_reply_data_request_port;
 
-	// odczytanie parametrow konfiguracji
+	//! odczytanie parametrow konfiguracji
 	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
 
-	// docelowe pozycje palcow
+	//! docelowe pozycje palcow
 	double des_thumb_f[2];
 	double des_index_f[3];
 	double des_ring_f[3];
 
-	// liczba makrokrokow
+	//! liczba makrokrokow
 	int macro_no;
-	// dlugosc ostatniego makrokroku
+	//! dlugosc ostatniego makrokroku
 	int last_step;
 
-	// maksymalna predkosc [rad/ms]
+	//! maksymalna predkosc [rad/ms]
 	const double MAX_V;
-	// czas trwania makrokroku, 1 step = 1ms
+	//! czas trwania makrokroku, 1 step = 1ms
 	const int STEP_NO;
 
 public:

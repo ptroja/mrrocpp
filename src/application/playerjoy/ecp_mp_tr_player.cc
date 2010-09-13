@@ -6,7 +6,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"				// numery bledow
-#include "base/lib/srlib.h"					// klasy bledow
+#include "base/lib/sr/srlib.h"					// klasy bledow
 #include "application/playerjoy/ecp_mp_tr_player.h"
 #include "player/playerc.h"
 

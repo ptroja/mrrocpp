@@ -162,7 +162,7 @@ void robot::get_reply()
 
 	if (epos_reply_data_request_port.is_new_request()) {
 		// generator reply generation
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_reply_data_request_port.data.epos_controller[i].position = edp_ecp_rbuffer.epos_controller[i].position;
 			epos_reply_data_request_port.data.epos_controller[i].motion_in_progress
 					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;

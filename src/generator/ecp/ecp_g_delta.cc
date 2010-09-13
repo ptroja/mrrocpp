@@ -27,7 +27,7 @@
 #include "messip_dataport.h"
 #endif
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_delta.h"
 
 namespace mrrocpp {

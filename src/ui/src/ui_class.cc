@@ -342,7 +342,7 @@ int Ui::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
-		config->change_ini_file(config_file.c_str());
+		config->change_config_file(config_file.c_str());
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -540,7 +540,7 @@ int Ui::check_gns()
 
 		// poszukiwanie serwerow gns
 		for (std::list <Ui::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
-				!= all_node_list.end(); node_list_iterator++) {
+				!= all_node_list.end(); ++node_list_iterator) {
 			std::string opendir_path("/net/");
 
 			opendir_path += *node_list_iterator;
@@ -582,6 +582,7 @@ int Ui::check_gns()
 				system_command += " gns -c ";
 				system_command += gns_server_node;
 
+				std::cerr << "SYSTEM(" << system_command << ")" << std::endl;
 				system(system_command.c_str());
 			}
 
@@ -599,7 +600,6 @@ int Ui::check_gns()
 	}
 
 	return (Pt_CONTINUE);
-
 }
 
 // ustala stan wszytkich EDP

@@ -13,7 +13,7 @@
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 // niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 

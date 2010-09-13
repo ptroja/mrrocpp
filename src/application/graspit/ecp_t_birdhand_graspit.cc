@@ -4,8 +4,9 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_graspit.h"
+#include "ecp_mp_g_birdhand.h"
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 #include "ecp_g_birdhand_graspit.h"
@@ -34,6 +35,8 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_BIRD_HAND) {
 
 		sr_ecp_msg->message("ECP_GEN_BIRD_HAND");
+
+		g_bird_hand->Move();
 
 	} // end switch
 

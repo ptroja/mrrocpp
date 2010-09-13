@@ -12,7 +12,7 @@ namespace edp {
 namespace sensor {
 
 //!< watek do komunikacji ze sprzetem
-void force::operator()(void)
+void force::operator()()
 {
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
@@ -86,9 +86,13 @@ void force::operator()(void)
 
 				// scope-locked reader data update
 				{
-					boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+					if(master.rb_obj) {
+						boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-					current_force_torque.to_table(master.rb_obj->step_data.force);
+						current_force_torque.to_table(master.rb_obj->step_data.force);
+					} else {
+						std::cerr << "Error reader object not ready (force::operator()())" << std::endl;
+					}
 				}
 			}
 			edp_vsp_synchroniser.command();

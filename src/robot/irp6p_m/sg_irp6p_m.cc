@@ -5,6 +5,9 @@
 
 #include <unistd.h>
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"

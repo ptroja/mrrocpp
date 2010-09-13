@@ -10,6 +10,8 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
 
 #include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
 #include "robot/irp6ot_m/sg_irp6ot_m.h"
@@ -52,7 +54,7 @@ void effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 
-	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));

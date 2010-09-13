@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 
