@@ -145,6 +145,9 @@ public:
 	//! synchronizacja
 	virtual void synchronise(void);
 
+	//! synchronizacja pojedynczej osi
+	void synchronise_single_axis();
+
 	//! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t compute_all_set_values(void);
 

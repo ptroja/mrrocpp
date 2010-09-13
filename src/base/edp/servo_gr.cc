@@ -633,11 +633,6 @@ uint64_t servo_buffer::compute_all_set_values(void)
 void servo_buffer::synchronise(void)
 {
 
-	const int NS = 10; // liczba krokow rozpedzania/hamowania
-	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
-
-	double synchro_step = 0.0; // zadany przyrost polozenia
-
 	if (master.robot_test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
@@ -653,6 +648,33 @@ void servo_buffer::synchronise(void)
 
 
 	// szeregowa synchronizacja serwomechanizmow
+
+	synchronise_single_axis();
+
+	// zatrzymanie na chwile robota
+	for (int k = 0; k < (master.number_of_servos); k++) {
+		int j = synchro_axis_order[k];
+		regulator_ptr[j]->insert_new_step(0.0);
+	};
+	for (int i = 0; i < 25; i++) {
+		Move_1_step();
+	}
+
+	// kk = 0;
+
+	// printf("koniec synchro\n");
+	reply_to_EDP_MASTER();
+	return;
+
+}
+
+void servo_buffer::synchronise_single_axis()
+{
+
+	const int NS = 10; // liczba krokow rozpedzania/hamowania
+	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
+	double synchro_step = 0.0; // zadany przyrost polozenia
+
 	for (int k = 0; k < (master.number_of_servos); k++) {
 		int j = synchro_axis_order[k];
 
@@ -848,24 +870,6 @@ void servo_buffer::synchronise(void)
 		} // end: switch
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
 	} // end: for
-
-	// zatrzymanie na chwile robota
-	for (int k = 0; k < (master.number_of_servos); k++) {
-		int j = synchro_axis_order[k];
-		synchro_step = 0.0;
-		crp = regulator_ptr[j];
-		crp->insert_new_step(synchro_step);
-	};
-	for (int i = 0; i < 25; i++) {
-		Move_1_step();
-	}
-
-	// kk = 0;
-
-	// printf("koniec synchro\n");
-	reply_to_EDP_MASTER();
-	return;
-
 }
 
 /*-----------------------------------------------------------------------*/
