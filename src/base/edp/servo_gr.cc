@@ -669,7 +669,7 @@ void servo_buffer::synchronise(void)
 			} else {
 				regulator_ptr[i]->insert_new_step(0.0);
 			}
-		}; // end: for
+		} // end: for
 
 		clear_reply_status();
 		clear_reply_status_tmp();
@@ -711,9 +711,9 @@ void servo_buffer::synchronise(void)
 					clear_reply_status_tmp();
 					reply_to_EDP_MASTER();
 					return;
-			}; // end: switch
+			} // end: switch
 			break;
-		}; // end: for (;;)
+		} // end: for (;;)
 
 		//	printf("przed clear_reply_status \n");
 
@@ -741,8 +741,8 @@ void servo_buffer::synchronise(void)
 					clear_reply_status_tmp();
 					reply_to_EDP_MASTER();
 					return;
-			}; // end: switch
-		}; // end: for (i...)
+			} // end: switch
+		} // end: for (i...)
 		// cprintf("C=%lx\n", reply_status_tmp.error0);
 
 		clear_reply_status();
@@ -781,9 +781,9 @@ void servo_buffer::synchronise(void)
 				default:
 					//   	printf("baabb: default\n");
 					break;
-			}; // end: switch
+			} // end: switch
 			break;
-		}; // end: while
+		} // end: while
 		//	 printf("D\n ");
 
 		// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
@@ -815,7 +815,7 @@ void servo_buffer::synchronise(void)
 						break;
 					}
 				}
-				; // end: for (;;)
+				// end: for (;;)
 				//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
 				// by Y - wyciecie SYNCHRO_SWITCH_ON
 				if (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001DULL) != SYNCHRO_ZERO) {
@@ -834,7 +834,7 @@ void servo_buffer::synchronise(void)
 					delay(1);
 					continue;
 				}
-				; // end: else
+				// end: else
 			default:
 				//    	printf(" default error\n");
 				// awaria w trakcie synchronizacji
@@ -845,9 +845,9 @@ void servo_buffer::synchronise(void)
 				// Wypelnic servo_data
 				reply_to_EDP_MASTER();
 				return;
-		}; // end: switch
+		} // end: switch
 		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
-	}; // end: for
+	} // end: for
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
@@ -856,8 +856,9 @@ void servo_buffer::synchronise(void)
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
 	};
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < 25; i++) {
 		Move_1_step();
+	}
 
 	// kk = 0;
 
