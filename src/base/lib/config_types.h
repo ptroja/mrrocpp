@@ -1,3 +1,12 @@
+/*!
+ * @file configsrv.h
+ * @brief Data structures for communication with configuration server
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #if !defined(_CONFIG_TYPES_H)
 #define _CONFIG_TYPES_H
 

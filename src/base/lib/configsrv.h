@@ -1,12 +1,11 @@
-// -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
-// Plik:			configsrv.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera klase configsrv - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
-
+/*!
+ * @file configsrv.h
+ * @brief Class for configuration server - declarations
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #if !defined(_CONFIGSRV_H)
 #define _CONFIGSRV_H
@@ -56,11 +55,7 @@ public:
 		try {
 			return file_pt.get<Type>(pt_path);
 		} catch (boost::property_tree::ptree_error & e) {
-			try {
-				return common_file_pt.get<Type>(pt_path);
-			} catch (boost::property_tree::ptree_error & e) {
-				throw;
-			}
+			return common_file_pt.get<Type>(pt_path);
 		}
 	}
 

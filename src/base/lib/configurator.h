@@ -1,11 +1,11 @@
-// -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
-// Plik:			configurator.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera klase lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
+/**
+ * \file configurator.h
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ * \author Tomasz Winiarski <tomrobotics@gmail.com>
+ *
+ * \brief Declarations of configurator.
+ */
 
 #if !defined(__CONFIGURATOR_H)
 #define __CONFIGURATOR_H

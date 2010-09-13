@@ -1,10 +1,11 @@
-// -------------------------------------------------------------------------
-// Plik:			configsrv.cc
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera definicje matod klasy configsrv - obsluga konfiguracji z pliku INI.
-// Autor:		ptrojane
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
+/*!
+ * @file configsrv.cc
+ * @brief Class for configuration server - definitions
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #include <iostream>
 

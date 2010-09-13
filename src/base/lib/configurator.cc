@@ -1,10 +1,11 @@
-// -------------------------------------------------------------------------
-// Plik:			configurator.cc
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera definicje matod klasy lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
+/**
+ * \file configurator.cc
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ * \author Tomasz Winiarski <tomrobotics@gmail.com>
+ *
+ * \brief Definitions of configurator.
+ */
 
 #include <cstdio>
 #include <cstdlib>
