@@ -111,8 +111,8 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
 	//temp->pwm = set_value / 0.500;
-	temp->pwm = set_value / 1.000;
-	//temp->pwm = set_value * (1000.0/ 190.0);
+	//temp->pwm = set_value / 1.000;
+	temp->pwm = set_value * (300.0/ 255.0);
 
 
 #ifdef T_INFO_CALC
@@ -170,7 +170,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	}
 	std::cout << std::endl;
 	
-//	std::cout << "[info] przed write: " << std::endl;
+	std::cout << "[info] przed write: " << std::endl;
 
 	for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++)
 	{
@@ -182,8 +182,8 @@ uint64_t HI_moxa::read_write_hardware(void) {
 
 
 	receive_attempts++;
-	for (int i = 0; i < (TOTAL_DRIVES*READ_BYTES); i++)
-	//while(1)
+	//for (int i = 0; i < 7; i++)
+	while(1)
 	{
 		FD_ZERO(&rfds);
 		for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
@@ -196,19 +196,12 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		struct timeval timeout;
 		timeout.tv_sec = (time_t) 0;
 		timeout.tv_usec = 500;
-
-//		std::cout << "[info] przed select: " << std::endl;
-
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
-
-//		std::cout << "[info] po select, select_retval: " << select_retval << std::endl;
-
 		if (select_retval == 0) {
-			//throw(std::runtime_error("communication timeout !!!"));
 			std::cout << "[error] communication timeout ("
 					<< ++receive_timeouts << "/" << receive_attempts << "="
 					<< ((float) receive_timeouts / receive_attempts) << ")";
-//					<< std::endl;
+					//<< std::endl;
 			for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
 				if(bytes_received[drive_number] < READ_BYTES)
 					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
@@ -230,6 +223,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 					all_hardware_read = false;
 				}
 			}
+	//		std::cout << all_hardware_read << std::endl;	//############################
 			if(all_hardware_read) {
 				break;
 			}
