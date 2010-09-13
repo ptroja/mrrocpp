@@ -111,9 +111,8 @@ void HI_moxa::insert_set_value(int drive_number, double set_value) {
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM
 			| servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
-	//temp->pwm = set_value / 0.500;
-	//temp->pwm = set_value / 1.000;
 	temp->pwm = set_value * (300.0 / 255.0);
+	//temp->pwm = set_value * (700.0 / 255.0);
 
 #ifdef T_INFO_CALC
 	std::cout << "[calc] pwm: (" << temp->pwm << ")" << std::endl;
@@ -164,20 +163,20 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	/*std::cout << "[info] pos:";
+	std::cout << "[info] pos:";													// ############# Pozycja
 	 for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
 	 std::cout << " " << servo_data[drive_number].current_absolute_position;
 	 }
-	 std::cout << std::endl;*/
+	 std::cout << std::endl;
 
-	std::cout << "[info] przed write: " << std::endl;
+//	std::cout << "[info] przed write: " << std::endl;
 
 	for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
 		bytes_received[drive_number] = 0;
 	}
 
-	//	std::cout << "[info] po write: " << std::endl;
+//	std::cout << "[info] po write: " << std::endl;
 
 
 	receive_attempts++;
@@ -196,10 +195,10 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		timeout.tv_usec = 500;
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
 		if (select_retval == 0) {
-
+			receive_timeouts++;
 			std::cout << "[error] communication timeout ("
-					<< ++receive_timeouts << "/" << receive_attempts << "="
-					<< ((float) receive_timeouts / receive_attempts) << ")";
+					<< receive_timeouts << "/" << receive_attempts << "="
+					<< (((float) receive_timeouts) / receive_attempts) << ")";
 			//<< std::endl;
 
 			//throw(std::runtime_error("communication timeout !!!"));
@@ -209,10 +208,10 @@ uint64_t HI_moxa::read_write_hardware(void) {
 			 //					<< std::endl;*/
 
 			for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
-				//if(bytes_received[drive_number] < READ_BYTES)
-				//std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
+				if(bytes_received[drive_number] < READ_BYTES)
+				std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")" ;
 			}
-			//std::cout << std::endl;
+			std::cout << std::endl;
 
 
 			hardware_read_ok = false;
@@ -234,14 +233,14 @@ uint64_t HI_moxa::read_write_hardware(void) {
 			if (all_hardware_read) {
 				break;
 			}
-			/*else{
-			 for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
-			 if(bytes_received[drive_number] < READ_BYTES){
-			 std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
-			 }
-			 }
-			 }*/
-			//			std::cout << std::endl;	//############################
+//			else{
+//			 for(drive_number=0; drive_number<TOTAL_DRIVES; drive_number++) {
+//			 if(bytes_received[drive_number] < READ_BYTES){
+//			 std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
+//			 }
+//			 }
+//			 }
+//			std::cout << std::endl;	//############################
 		}
 	}
 
@@ -294,17 +293,18 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	master.controller_state_edp_buf.is_synchronised
 			= (servo_data[drive_number].drive_status.isSynchronized != 0) ? true
 					: false;
-
-	if (servo_data[drive_number].drive_status.sw1 != 0)
-		ret |= UPPER_LIMIT_SWITCH;
-	if (servo_data[drive_number].drive_status.sw2 != 0)
-		ret |= LOWER_LIMIT_SWITCH;
-	if (servo_data[drive_number].drive_status.swSynchr != 0)
-		ret |= SYNCHRO_SWITCH_ON;
-	if (servo_data[drive_number].drive_status.synchroZero != 0)
-		ret |= SYNCHRO_ZERO;
-	if (servo_data[drive_number].drive_status.overcurrent != 0)
-		ret |= OVER_CURRENT;
+	for (drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++) {
+		if (servo_data[drive_number].drive_status.sw1 != 0)
+			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*drive_number)); // Zadzialal wylacznik "gorny" krancowy
+		if (servo_data[drive_number].drive_status.sw2 != 0)
+			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5*drive_number)); // Zadzialal wylacznik "dolny" krancowy
+		if (servo_data[drive_number].drive_status.swSynchr != 0)
+			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5*drive_number)); // Zadzialal wylacznik synchronizacji
+		if (servo_data[drive_number].drive_status.synchroZero != 0)
+			ret |= (uint64_t) (SYNCHRO_ZERO << (5*drive_number)); // Impuls zera rezolwera
+		if (servo_data[drive_number].drive_status.overcurrent != 0)
+			ret |= (uint64_t) (OVER_CURRENT << (5*drive_number)); // Przekroczenie dopuszczalnego pradu
+	}
 
 	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
 		wake_time.tv_sec += 1;
