@@ -35,6 +35,7 @@ const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
 const int SYNCHRO_NS = 10; // liczba krokow rozpedzania/hamowania
 const int SYNCHRO_STOP_STEP_NUMBER = 250; // liczba krokow zatrzymania podczas synchronziacji
+const int SYNCHRO_FINAL_STOP_STEP_NUMBER = 25; // liczba krokow zatrzymania podczas synchronziacji
 
 /*-----------------------------------------------------------------------*/
 class servo_buffer : public boost::noncopyable

@@ -676,10 +676,9 @@ void servo_buffer::synchronise(void)
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
-		int j = synchro_axis_order[k];
-		regulator_ptr[j]->insert_new_step(0.0);
+		regulator_ptr[k]->insert_new_step(0.0);
 	};
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < SYNCHRO_FINAL_STOP_STEP_NUMBER; i++) {
 		Move_1_step();
 	}
 
@@ -697,14 +696,13 @@ void servo_buffer::synchro_choose_axis_to_move(common::regulator* &crp, int j)
 	double synchro_step = 0.0; // zadany przyrost polozenia
 	// printf("os synchronizowana: %d \n",j);
 	for (int l = 0; l < (master.number_of_servos); l++) {
-		int i = synchro_axis_order[l];
 		// zerowy przyrost polozenia dla wszystkich napedow procz j-tego
-		if (i == j) {
-			synchro_step = synchro_step_coarse[i] / SYNCHRO_NS;
+		if (l == j) {
+			synchro_step = synchro_step_coarse[l] / SYNCHRO_NS;
 		} else {
 			synchro_step = 0.0;
 		}
-		regulator_ptr[i]->insert_new_step(synchro_step);
+		regulator_ptr[l]->insert_new_step(synchro_step);
 	} // end: for
 
 	clear_reply_status();
