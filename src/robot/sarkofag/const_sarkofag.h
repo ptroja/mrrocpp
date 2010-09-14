@@ -39,6 +39,18 @@ const std::string ECP_SECTION = "[ecp_sarkofag]";
  */
 const int NUM_OF_SERVOS = 1;
 
+/*!
+ * @brief IRp6 postument first Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int FIRST_MOXA_PORT_NUM = 0;
+
+/*!
+ * @brief IRp6 postument last Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int LAST_MOXA_PORT_NUM = 0;
+
 }
 } // namespace lib
 } // namespace mrrocpp
