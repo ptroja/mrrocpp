@@ -37,7 +37,7 @@ const std::string ECP_SECTION = "[ecp_irp6p_m]";
  * @brief IRp6 postument manipulator total number of servos
  * @ingroup irp6p_m
  */
-const int NUM_OF_SERVOS = 6;
+const int NUM_OF_SERVOS = 2;
 
 /*!
  * @brief IRp6 postument first Moxa port number [0..7]
@@ -49,7 +49,7 @@ const int FIRST_MOXA_PORT_NUM = 0;
  * @brief IRp6 postument last Moxa port number [0..7]
  * @ingroup irp6p_m
  */
-const int LAST_MOXA_PORT_NUM = 4;
+const int LAST_MOXA_PORT_NUM = 1;
 
 } // namespace irp6p_m
 } // namespace lib
