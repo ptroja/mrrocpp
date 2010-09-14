@@ -150,7 +150,9 @@ long int HI_moxa::get_position(int drive_offset) {
 
 uint64_t HI_moxa::read_write_hardware(void) {
 	static int64_t receive_attempts = 0, receive_timeouts = 0;
-	static uint8_t error_power_stage = 0;
+	static int error_msg_power_stage = 0;
+	bool robot_synchronized;
+	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
 	unsigned int bytes_received[TOTAL_DRIVES];
@@ -159,7 +161,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	uint8_t drive_number;
 
 	std::cout << "[info] pos:";													// ############# Pozycja
-	 for(drive_number = 0; drive_number < TOTAL_DRIVES; drive_number++){
+	 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++){
 	 std::cout << " " << servo_data[drive_number].current_absolute_position;
 	 }
 	 std::cout << std::endl;
@@ -262,40 +264,42 @@ uint64_t HI_moxa::read_write_hardware(void) {
 						- servo_data[drive_number].previous_absolute_position);
 	}
 
-	// ########### TODO:
-	drive_number = 0;
 
-	master.controller_state_edp_buf.is_robot_blocked
-			= (servo_data[drive_number].drive_status.powerStageFault != 0) ? true
-					: false;
-	if (servo_data[drive_number].drive_status.powerStageFault != 0) {
+	robot_synchronized = false;
+	power_fault = false;
+	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+		if(servo_data[drive_number].drive_status.powerStageFault != 0){
+			power_fault = true;
+		}
+		if(servo_data[drive_number].drive_status.isSynchronized != 0){
+			robot_synchronized = true;
+		}
+	}
 
-		if (error_power_stage == 0) {
+	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
+	master.controller_state_edp_buf.is_robot_blocked = power_fault;
+	if (power_fault) {
+		if (error_msg_power_stage == 0) {
 			master.msg->message(lib::NON_FATAL_ERROR,
 					"Wylaczono moc - robot zablokowany");
-			error_power_stage++;
+			error_msg_power_stage++;
 		}
 
 	} else {
-		error_power_stage = 0;
+		error_msg_power_stage = 0;
 	}
-
-	master.controller_state_edp_buf.is_synchronised
-			= (servo_data[drive_number].drive_status.isSynchronized != 0) ? true
-					: false;
-
 
 	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 		if (servo_data[drive_number].drive_status.sw1 != 0)
-			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*drive_number)); // Zadzialal wylacznik "gorny" krancowy
+			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5*(drive_number - first_drive_number))); // Zadzialal wylacznik "gorny" krancowy
 		if (servo_data[drive_number].drive_status.sw2 != 0)
-			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5*drive_number)); // Zadzialal wylacznik "dolny" krancowy
+			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5*(drive_number - first_drive_number))); // Zadzialal wylacznik "dolny" krancowy
 		if (servo_data[drive_number].drive_status.swSynchr != 0)
-			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5*drive_number)); // Zadzialal wylacznik synchronizacji
+			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5*(drive_number - first_drive_number))); // Zadzialal wylacznik synchronizacji
 		if (servo_data[drive_number].drive_status.synchroZero != 0)
-			ret |= (uint64_t) (SYNCHRO_ZERO << (5*drive_number)); // Impuls zera rezolwera
+			ret |= (uint64_t) (SYNCHRO_ZERO << (5*(drive_number - first_drive_number))); // Impuls zera rezolwera
 		if (servo_data[drive_number].drive_status.overcurrent != 0)
-			ret |= (uint64_t) (OVER_CURRENT << (5*drive_number)); // Przekroczenie dopuszczalnego pradu
+			ret |= (uint64_t) (OVER_CURRENT << (5*(drive_number - first_drive_number))); // Przekroczenie dopuszczalnego pradu
 	}
 
 	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
