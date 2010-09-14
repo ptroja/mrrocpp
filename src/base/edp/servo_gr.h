@@ -33,6 +33,9 @@ const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
 const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
 const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
+const int SYNCHRO_NS = 10; // liczba krokow rozpedzania/hamowania
+const int SYNCHRO_STOP_STEP_NUMBER = 250; // liczba krokow zatrzymania podczas synchronziacji
+
 /*-----------------------------------------------------------------------*/
 class servo_buffer : public boost::noncopyable
 {
@@ -145,8 +148,20 @@ public:
 	//! synchronizacja
 	virtual void synchronise(void);
 
-	//! synchronizacja pojedynczej osi
-	void synchronise_single_axis();
+	//! wybor osi
+	void synchro_choose_axis_to_move(common::regulator* &crp, int j);
+
+	//! ruch w kierunku obszaru synchronizacji az do wykrycia wylacznika synchronizacji
+	int move_to_synchro_area(common::regulator* &crp, int j);
+
+	//! wybor osi
+	int synchro_stop_for_a_while(common::regulator* &crp, int j);
+
+	//! zjazd z obszaru synchronizacji az do wykrycia wylacznika synchronizacji
+	void move_from_synchro_area(common::regulator* &crp, int j);
+
+	//! przejazd do zera enkdoera po zjezdzie z wylacznika synchronizacji
+	int synchro_move_to_encoder_zero(common::regulator* &crp, int j);
 
 	//! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t compute_all_set_values(void);
