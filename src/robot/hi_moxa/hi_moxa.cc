@@ -13,7 +13,6 @@
 #include <cstring>
 #include <iostream>
 
-#define TOTAL_DRIVES 5
 
 #include "base/edp/edp_e_motor_driven.h"
 
@@ -155,7 +154,7 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
-	unsigned int bytes_received[TOTAL_DRIVES];
+	unsigned int bytes_received[8];
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
