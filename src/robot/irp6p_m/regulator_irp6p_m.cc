@@ -138,7 +138,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -167,7 +167,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	// }
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -214,7 +214,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -241,7 +241,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -254,7 +254,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -368,7 +368,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -400,7 +400,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -443,7 +443,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -470,7 +470,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -483,7 +483,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -589,7 +589,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	uint8_t alg_par_status; // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	//
 	double current_error;
@@ -628,7 +628,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -671,7 +671,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -698,7 +698,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -710,7 +710,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -823,7 +823,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 	//
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -851,7 +851,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -894,7 +894,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -921,7 +921,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -933,7 +933,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -1054,7 +1054,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	double root_position_increment_new = position_increment_new;
 
@@ -1083,7 +1083,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -1126,7 +1126,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1153,7 +1153,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1165,7 +1165,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -1281,7 +1281,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -1312,7 +1312,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -1355,7 +1355,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1382,7 +1382,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -1395,7 +1395,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}

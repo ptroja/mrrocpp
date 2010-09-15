@@ -11,19 +11,18 @@
 #include "base/lib/com_buf.h"
 #include "base/edp/edp_typedefs.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-#define MAX_INC 80
+static const double MAX_INC = 80;
 // #define MAX_INCR 469
 // #define MAX_INCR2 234
 // #define MAX_INCR3 30 // 15
 
-#define ALGORITHM_AND_PARAMETERS_OK           0
-#define UNIDENTIFIED_ALGORITHM_NO             1
-#define UNIDENTIFIED_ALGORITHM_PARAMETERS_NO  2
+static const uint8_t ALGORITHM_AND_PARAMETERS_OK = 0;
+static const uint8_t UNIDENTIFIED_ALGORITHM_NO = 1;
+static const uint8_t UNIDENTIFIED_ALGORITHM_PARAMETERS_NO = 2;
 
 // stale ograniczen na predkosc i przyspieszenie w regulatorach
 

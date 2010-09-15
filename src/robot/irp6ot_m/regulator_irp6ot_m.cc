@@ -124,7 +124,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 
 	//   struct timespec step_time;
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_1_MAX_ACC, common::SG_REG_1_MAX_SPEED);
@@ -147,7 +147,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	// kumulacja przyrostu polozenia w tym makrokroku
@@ -193,7 +193,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -220,7 +220,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -228,7 +228,7 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -327,7 +327,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 	// i zestawu jego parametrow
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED, false);
@@ -351,7 +351,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	// kumulacja przyrostu polozenia w tym makrokroku
@@ -389,7 +389,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -416,7 +416,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -424,7 +424,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -513,7 +513,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 	// i zestawu jego parametrow
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
@@ -536,7 +536,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	// kumulacja przyrostu polozenia w tym makrokroku
@@ -574,7 +574,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -601,7 +601,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -609,7 +609,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -696,7 +696,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	// i zestawu jego parametrow
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
@@ -720,7 +720,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	servo_pos_increment_new_sum += position_increment_new;// by Y
@@ -758,7 +758,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -785,7 +785,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -794,7 +794,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -881,7 +881,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	uint8_t alg_par_status; // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
@@ -904,7 +904,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	// }
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	// kumulacja przyrostu polozenia w tym makrokroku
@@ -942,7 +942,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -969,7 +969,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -977,7 +977,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -1069,7 +1069,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	uint8_t alg_par_status; // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
 	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
@@ -1094,7 +1094,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 
 	// by Y - bez sensu
 	// Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	if (fabs(position_increment_new) > MAX_INC)
+	if (fabs(position_increment_new) > common::MAX_INC)
 		position_increment_new = position_increment_old;
 
 	// kumulacja przyrostu polozenia w tym makrokroku
@@ -1132,7 +1132,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1159,7 +1159,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1167,7 +1167,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -1256,7 +1256,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	uint8_t alg_par_status; // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -1288,7 +1288,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	// Jesli przyrost jest wiekszy od dopuszczalnego
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -1331,7 +1331,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1358,7 +1358,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1366,7 +1366,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
