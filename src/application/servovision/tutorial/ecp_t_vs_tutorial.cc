@@ -69,8 +69,8 @@ void ecp_t_vs_tutorial::move_visual_servo()
 
 	sm->add_position_constraint(cube);
 
-	sm->add_termination_condition(object_reached_term_cond);
-	sm->add_termination_condition(timeout_term_cond);
+	//sm->add_termination_condition(object_reached_term_cond);
+	//sm->add_termination_condition(timeout_term_cond);
 
 	sm->configure();
 

@@ -33,9 +33,9 @@ public:
 	 * Generate constraint.
 	 * Make sure that translation and rotation vectors are between min(i, 0) and  max(i, 0) for i=0..2
 	 * In config file in specified section there must be:
-	 *    Eigen::Matrix <double, 3, 1> translation_min;
-	 *    Eigen::Matrix <double, 3, 1> translation_max;
-	 *    Eigen::Matrix <double, 3, 1> cone_axis;
+	 *    lib::Homog_matrix cube_position;
+	 *    Eigen::Matrix <double, 3, 1> cube_size;
+	 *    lib::Homog_matrix spherical_cone_rotation;
 	 *    double min_inclination;
 	 *    double min_wrist_rotation;
 	 *    double max_wrist_rotation
@@ -47,21 +47,34 @@ public:
 
 	virtual ~cubic_constraint();
 
-	virtual bool is_translation_ok();
-
-	virtual bool is_rotation_ok();
-
-	virtual double get_distance_from_allowed_area();
-
-	virtual void apply_constraint();
+	/**
+	 * Constraints end effector position.
+	 * @param current_position
+	 * @return
+	 */
+	virtual lib::Homog_matrix apply_constraint(const lib::Homog_matrix& current_position);
+protected:
+	/**
+	 * Make rotation vector fit into spherical_cone specified in config.
+	 * @param current_position
+	 * @return
+	 */
+	lib::Homog_matrix constrain_rotation(const lib::Homog_matrix& current_position);
 
 private:
-	Eigen::Matrix <double, 3, 1> translation_min;
-	Eigen::Matrix <double, 3, 1> translation_max;
-	//Eigen::Matrix <double, 3, 3> cone_rotation;
-	lib::Homog_matrix cone_rotation;
+	/** Cube's position with respect to robot's base */
+	lib::Homog_matrix cube_position;
+
+	/** Cube's size along X, Y, Z axes */
+	Eigen::Matrix <double, 3, 1> cube_size;
+
+	/** For rotation constraint. */
+	lib::Homog_matrix spherical_cone_rotation;
+	/** For rotation constraint. */
 	double min_inclination;
+	/** For rotation constraint. */
 	double wrist_rotation_min;
+	/** For rotation constraint. */
 	double wrist_rotation_max;
 };
 
