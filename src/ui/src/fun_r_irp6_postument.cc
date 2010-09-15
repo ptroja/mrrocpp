@@ -2431,7 +2431,7 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					boost::unique_lock<boost::mutex> lock(
 							ui.process_creation_mtx);
 
-					ui.irp6p_m->ui_ecp_robot = new ui_irp6_common_robot(
+					ui.irp6p_m->ui_ecp_robot = new uin::common::ui_irp6_common_robot(
 							*ui.config, *ui.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
 				}
 

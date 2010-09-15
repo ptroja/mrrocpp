@@ -254,7 +254,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 				ui.speaker->state.edp.node_nr = ui.config->return_node_number(
 						ui.speaker->state.edp.node_name);
 
-				ui.speaker->ui_ecp_robot = new ui_speaker_robot(
+				ui.speaker->ui_ecp_robot = new uin::common::ui_speaker_robot(
 						&ui.speaker->state.edp, *ui.config, *ui.all_ecp_msg);
 				ui.speaker->state.edp.pid
 						= ui.speaker->ui_ecp_robot->get_EDP_pid();

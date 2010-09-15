@@ -26,7 +26,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-busy_flag communication_flag;
+uin::common::busy_flag communication_flag;
 
 extern uin::common::Ui ui;
 

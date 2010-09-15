@@ -86,7 +86,8 @@ int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 				{
 					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 
-					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::smb::ROBOT_NAME);
+					ui.smb->ui_ecp_robot
+							= new uin::common::ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::smb::ROBOT_NAME);
 				}
 				ui.smb->state.edp.pid = ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
 

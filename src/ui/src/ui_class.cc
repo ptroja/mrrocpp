@@ -119,7 +119,7 @@ void Ui::init()
 	// printf ("Remember to create gns server\n");
 
 
-	set_ui_state_notification(UI_N_STARTING);
+	uin::common::set_ui_state_notification(UI_N_STARTING);
 
 	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);

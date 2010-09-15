@@ -113,10 +113,10 @@ int EDP_sarkofag_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 				ui.sarkofag->state.edp.node_nr = ui.config->return_node_number(ui.sarkofag->state.edp.node_name);
 
 				{
-					boost::unique_lock < boost::mutex > lock(ui.process_creation_mtx);
+					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 
 					ui.sarkofag->ui_ecp_robot
-							= new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::sarkofag::ROBOT_NAME);
+							= new uin::common::ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::sarkofag::ROBOT_NAME);
 				}
 
 				ui.sarkofag->state.edp.pid = ui.sarkofag->ui_ecp_robot->ecp->get_EDP_pid();
