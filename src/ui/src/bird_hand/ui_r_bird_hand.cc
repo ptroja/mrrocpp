@@ -24,15 +24,15 @@ namespace mrrocpp {
 namespace uin {
 namespace bird_hand {
 
-UiRobotBirdHand::UiRobotBirdHand(common::Ui& _ui) :
-	UiRobot(_ui, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
 {
-	wnd_command_and_status = new WndBirdHandCommandAndStatus(ui, *this);
-	wnd_configuration = new WndBirdHandConfiguration(ui, *this);
+	wnd_command_and_status = new WndCommandAndStatus(ui, *this);
+	wnd_configuration = new WndConfiguration(ui, *this);
 
 }
 
-int UiRobotBirdHand::reload_configuration()
+int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
 	if ((state.is_active = ui.config->value <int> ("is_bird_hand_active")) == 1) {
@@ -100,7 +100,7 @@ int UiRobotBirdHand::reload_configuration()
 	return 1;
 }
 
-int UiRobotBirdHand::manage_interface()
+int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
 	{
@@ -154,7 +154,7 @@ int UiRobotBirdHand::manage_interface()
 	return 1;
 }
 
-int UiRobotBirdHand::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -169,7 +169,7 @@ int UiRobotBirdHand::close_all_windows()
 
 }
 
-int UiRobotBirdHand::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;

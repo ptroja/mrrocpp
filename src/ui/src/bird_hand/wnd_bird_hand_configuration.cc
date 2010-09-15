@@ -24,25 +24,25 @@ namespace bird_hand {
 //
 
 
-WndBirdHandConfiguration::WndBirdHandConfiguration(common::Ui& _ui, UiRobotBirdHand& _bird_hand) :
+WndConfiguration::WndConfiguration(common::Ui& _ui, UiRobot& _bird_hand) :
 	ui(_ui), bird_hand(_bird_hand), is_open(false)
 {
 
 }
 
-int WndBirdHandConfiguration::get_configuration()
+int WndConfiguration::get_configuration()
 {
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::set_configuration()
+int WndConfiguration::set_configuration()
 {
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::copy_command()
+int WndConfiguration::copy_command()
 {
 
 	return 1;

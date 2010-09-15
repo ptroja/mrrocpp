@@ -29,18 +29,18 @@ namespace bird_hand {
 // super klasa agregujaca porozrzucane struktury
 
 
-class UiRobotBirdHand;
+class UiRobot;
 
-class WndBirdHandConfiguration
+class WndConfiguration
 {
 private:
 	common::Ui& ui;
-	UiRobotBirdHand& bird_hand;
+	UiRobot& bird_hand;
 
 public:
 	bool is_open;
 
-	WndBirdHandConfiguration(common::Ui& _ui, UiRobotBirdHand& _bird_hand);
+	WndConfiguration(common::Ui& _ui, UiRobot& _bird_hand);
 
 	int get_configuration();
 	int set_configuration();
