@@ -633,11 +633,8 @@ uint64_t servo_buffer::compute_all_set_values(void)
 void servo_buffer::synchronise(void)
 {
 
-	const int NS = 10; // liczba krokow rozpedzania/hamowania
-	common::regulator* crp = NULL; // wskaznik aktualnie synchronizowanego napedu
-
-	double synchro_step = 0.0; // zadany przyrost polozenia
-
+	//	master.msg->message("synchro start");
+	//printf("synchro \n");
 	if (master.robot_test_mode) {
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
@@ -651,219 +648,268 @@ void servo_buffer::synchronise(void)
 		command.parameters.move.abs_position[j] = 0.0;
 	}; // end: for
 
-
 	// szeregowa synchronizacja serwomechanizmow
 	for (int k = 0; k < (master.number_of_servos); k++) {
 		int j = synchro_axis_order[k];
+		// wskaznik aktualnie synchronizowanego napedu
 
-		// printf("os synchronizopwana: %d \n",j);
-		for (int l = 0; l < (master.number_of_servos); l++) {
-			int i = synchro_axis_order[l];
-			// zerowy przyrost polozenia dla wszystkich napedow procz j-tego
-			if (i == j) {
-				crp = regulator_ptr[i];
+		common::regulator* crp = regulator_ptr[j];
 
-				synchro_step = synchro_step_coarse[i] / NS;
+		synchro_choose_axis_to_move(crp, j);
+		if (!move_to_synchro_area(crp, j))
+			return;
+		if (!synchro_stop_for_a_while(crp, j))
+			return;
 
-				crp->insert_new_step(synchro_step);
-			} else {
-				regulator_ptr[i]->insert_new_step(0.0);
-			}
-		}; // end: for
-
-		clear_reply_status();
-		clear_reply_status_tmp();
-
-		synchro_step = 0.0;
-
-		// ruch do wykrycia wylacznika synchronizacji
-		for (;;) {
-			do {
-
-				if (synchro_step > synchro_step_coarse[j]) {
-					synchro_step += synchro_step_coarse[j] / NS;
-					crp->insert_new_step(synchro_step);
-				}
-
-				//		printf("aaa: %d, %x\n", j, reply_status_tmp.error0);
-			} while (Move_1_step() == NO_ERROR_DETECTED); // end: while
-			//		printf("aaa: %d, %x\n", j, reply_status_tmp.error0);
-			// analiza przyslanego bledu (czy wjechano na wylacznik synchronizacji?)
-			// jezeli nie, to blad
-			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
-			{
-				case SYNCHRO_SWITCH_ON:
-					//  printf("aaa: SYNCHRO_SWITCH_ON\n");
-				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
-					// cprintf("B=%lx\n", reply_status_tmp.error0);
-					//		printf("aaa: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
-					break;
-				case ALL_RIGHT:
-				case SYNCHRO_ZERO:
-					//     printf("aaa: SYNCHRO_ZERO\n");
-					continue;
-				default:
-					//    printf("aaa: default\n");
-					// awaria w trakcie synchronizacji
-					convert_error();
-					reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_SWITCH_EXPECTED;
-					reply_status.error1 = reply_status_tmp.error1;
-					clear_reply_status_tmp();
-					reply_to_EDP_MASTER();
-					return;
-			}; // end: switch
-			break;
-		}; // end: for (;;)
-
-		//	printf("przed clear_reply_status \n");
-
-		clear_reply_status();
-		clear_reply_status_tmp();
-
-		// zatrzymanie na chwile robota
-		synchro_step = 0.0;
-		crp->insert_new_step(synchro_step);
-		for (int i = 0; i < 250; i++) {
-			Move_1_step();
-			//  printf("aabb: %d, %x\n", j, reply_status_tmp.error0);
-			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
-			{
-				case SYNCHRO_SWITCH_ON:
-				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
-				case ALL_RIGHT:
-				case SYNCHRO_ZERO:
-					continue;
-				default:
-					// awaria w trakcie stania
-					convert_error();
-					reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_DELAY_ERROR;
-					reply_status.error1 = reply_status_tmp.error1;
-					clear_reply_status_tmp();
-					reply_to_EDP_MASTER();
-					return;
-			}; // end: switch
-		}; // end: for (i...)
-		// cprintf("C=%lx\n", reply_status_tmp.error0);
-
-		clear_reply_status();
-		clear_reply_status_tmp();
-
-		// zjazd z wylacznika synchronizacji
-		// W.S.  crp->insert_new_step(lib::SYNCHRO_STEP_FINE);
-		synchro_step = -synchro_step_fine[j] / NS;
-
-		crp->insert_new_step(synchro_step);
-
-		// wlaczenie sledzenia zera rezolwera (synchronizacja osi)
-		hi->start_synchro(j);
-		delay(1);
-		Move_1_step();
-		while (1) {
-			//  		printf("babb: %d\n", j);
-			Move_1_step();
-			// W.S. -----------------------------------------------------
-			//	printf("ccc: %d\n", j);
-
-			if (synchro_step < -synchro_step_fine[j]) {
-				synchro_step -= synchro_step_fine[j] / NS;
-				crp->insert_new_step(synchro_step);
-			}
-
-			// W.S. -----------------------------------------------------
-			//    	   printf("bbbb if: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
-			switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
-			{
-				case SYNCHRO_SWITCH_ON:
-					//    	printf("bcbb:�SYNCHRO_SWITCH_ON\n");
-				case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
-					//     	printf("bfbb: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
-					continue;
-				default:
-					//   	printf("baabb: default\n");
-					break;
-			}; // end: switch
-			break;
-		}; // end: while
-		//	 printf("D\n ");
-
-		// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
-		// jezeli nie, to blad
-		switch (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL))
+		move_from_synchro_area(crp, j);
+		switch (synchro_move_to_encoder_zero(crp, j))
 		{
-			case SYNCHRO_ZERO: // zjechano z wylacznika synchronizacji i SYNCHRO_ZERO jest od razu
-				//     printf("SYNCHRO_ZERO\n");
-				hi->finish_synchro(j);
-
-				//	 printf("SYNCHRO_ZERO\n");
-				hi->reset_position(j);
-				crp->clear_regulator();
-				delay(1);
-				continue;
-			case OK:
-				// ruch do wykrycia zera rezolwera
-				//    printf("OK\n");
-				for (;;) {
-					Move_1_step();
-					//        printf("OK Move_1_step\n");
-					//      if ( ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL) != OK)
-					// by Y - wyciecie SYNCHRO_SWITCH_ON - ze wzgledu na wystepujace drgania
-					if (((reply_status_tmp.error0 >> (5 * j)) & 0xCE739CE739CE739DULL) != OK) {
-						//   printf("OK os: %d, if: %llx, %llx\n", j, reply_status_tmp.error0, ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL));
-						// Usuniecie bitow SYNCHRO_ZERO i SYNCHRO_SWITCH_ON z wszystkich osi
-						// oprocz synchronizowanej
-						// osie zsynchronizowane nie sa analizowane
-						break;
-					}
-				}
-				; // end: for (;;)
-				//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
-				// by Y - wyciecie SYNCHRO_SWITCH_ON
-				if (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001DULL) != SYNCHRO_ZERO) {
-					// 	  printf("OK convert_error: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
-					convert_error();
-					reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;
-					reply_status.error1 = reply_status_tmp.error1;
-					clear_reply_status_tmp();
-					// Wypelnic servo_data
-					reply_to_EDP_MASTER();
-					return;
-				} else {
-					hi->finish_synchro(j);
-					hi->reset_position(j);
-					crp->clear_regulator();
-					delay(1);
-					continue;
-				}
-				; // end: else
-			default:
-				//    	printf(" default error\n");
-				// awaria w trakcie synchronizacji
-				convert_error();
-				reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;
-				reply_status.error1 = reply_status_tmp.error1;
-				clear_reply_status_tmp();
-				// Wypelnic servo_data
-				reply_to_EDP_MASTER();
+			case 0:
 				return;
-		}; // end: switch
-		// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
-	}; // end: for
+			case 1:
+				continue;
+			default:
+				break;
+		}
+
+	} // end: for
 
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
-		int j = synchro_axis_order[k];
-		synchro_step = 0.0;
-		crp = regulator_ptr[j];
-		crp->insert_new_step(synchro_step);
+		regulator_ptr[k]->insert_new_step(0.0);
 	};
-	for (int i = 0; i < 25; i++)
+	for (int i = 0; i < SYNCHRO_FINAL_STOP_STEP_NUMBER; i++) {
 		Move_1_step();
+	}
 
 	// kk = 0;
 
 	// printf("koniec synchro\n");
 	reply_to_EDP_MASTER();
 	return;
+
+}
+
+void servo_buffer::synchro_choose_axis_to_move(common::regulator* &crp, int j)
+{
+
+	double synchro_step = 0.0; // zadany przyrost polozenia
+	// printf("os synchronizowana: %d \n",j);
+	for (int l = 0; l < (master.number_of_servos); l++) {
+		// zerowy przyrost polozenia dla wszystkich napedow procz j-tego
+		if (l == j) {
+			synchro_step = synchro_step_coarse[l] / SYNCHRO_NS;
+		} else {
+			synchro_step = 0.0;
+		}
+		regulator_ptr[l]->insert_new_step(synchro_step);
+	} // end: for
+
+	clear_reply_status();
+	clear_reply_status_tmp();
+
+}
+
+int servo_buffer::move_to_synchro_area(common::regulator* &crp, int j)
+{
+
+	double synchro_step = 0.0; // zadany przyrost polozenia
+
+
+	// ruch do wykrycia wylacznika synchronizacji
+	for (;;) {
+		do {
+
+			if (synchro_step > synchro_step_coarse[j]) {
+				synchro_step += synchro_step_coarse[j] / SYNCHRO_NS;
+				crp->insert_new_step(synchro_step);
+			}
+
+			//		printf("aaa: %d, %x\n", j, reply_status_tmp.error0);
+		} while (Move_1_step() == NO_ERROR_DETECTED); // end: while
+		//		printf("aaa: %d, %x\n", j, reply_status_tmp.error0);
+		// analiza przyslanego bledu (czy wjechano na wylacznik synchronizacji?)
+		// jezeli nie, to blad
+		switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
+		{
+			case SYNCHRO_SWITCH_ON:
+				//  printf("aaa: SYNCHRO_SWITCH_ON\n");
+			case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+				// cprintf("B=%lx\n", reply_status_tmp.error0);
+				//		printf("aaa: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
+				break;
+			case ALL_RIGHT:
+			case SYNCHRO_ZERO:
+				//	master.msg->message("SYNCHRO_ZERO");
+				//	printf("aaa: SYNCHRO_ZERO\n");
+				continue;
+			default:
+				//	master.msg->message("default");
+				//	printf("aaa: default\n");
+				// awaria w trakcie synchronizacji
+				convert_error();
+				reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_SWITCH_EXPECTED;
+				reply_status.error1 = reply_status_tmp.error1;
+				clear_reply_status_tmp();
+				reply_to_EDP_MASTER();
+				return 0;
+		} // end: switch
+		break;
+	} // end: for (;;)
+
+	//	printf("przed clear_reply_status \n");
+
+	clear_reply_status();
+	clear_reply_status_tmp();
+	return 1;
+}
+
+int servo_buffer::synchro_stop_for_a_while(common::regulator* &crp, int j)
+{
+
+	double synchro_step = 0.0; // zadany przyrost polozenia
+	// zatrzymanie na chwile robota
+
+	crp->insert_new_step(synchro_step);
+	for (int i = 0; i < SYNCHRO_STOP_STEP_NUMBER; i++) {
+		Move_1_step();
+		//  printf("aabb: %d, %x\n", j, reply_status_tmp.error0);
+		switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
+		{
+			case SYNCHRO_SWITCH_ON:
+			case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+			case ALL_RIGHT:
+			case SYNCHRO_ZERO:
+				continue;
+			default:
+				// awaria w trakcie stania
+				convert_error();
+				reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_DELAY_ERROR;
+				reply_status.error1 = reply_status_tmp.error1;
+				clear_reply_status_tmp();
+				reply_to_EDP_MASTER();
+				return 0;
+		} // end: switch
+	} // end: for (i...)
+	// cprintf("C=%lx\n", reply_status_tmp.error0);
+
+	clear_reply_status();
+	clear_reply_status_tmp();
+
+	return 1;
+
+}
+
+void servo_buffer::move_from_synchro_area(common::regulator* &crp, int j)
+{
+
+	// zjazd z wylacznika synchronizacji
+	// W.S.  crp->insert_new_step(lib::SYNCHRO_STEP_FINE);
+	double synchro_step = -synchro_step_fine[j] / SYNCHRO_NS;
+
+	crp->insert_new_step(synchro_step);
+
+	// wlaczenie sledzenia zera rezolwera (synchronizacja osi)
+	hi->start_synchro(j);
+	delay(1);
+	Move_1_step();
+	while (1) {
+		//  		printf("babb: %d\n", j);
+		Move_1_step();
+		// W.S. -----------------------------------------------------
+		//	printf("ccc: %d\n", j);
+
+		if (synchro_step < -synchro_step_fine[j]) {
+			synchro_step -= synchro_step_fine[j] / SYNCHRO_NS;
+			crp->insert_new_step(synchro_step);
+		}
+
+		// W.S. -----------------------------------------------------
+		//    	   printf("bbbb if: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
+		switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
+		{
+			case SYNCHRO_SWITCH_ON:
+				//    	printf("bcbb:�SYNCHRO_SWITCH_ON\n");
+			case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
+				//     	printf("bfbb: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
+				continue;
+			default:
+				//   	printf("baabb: default\n");
+				break;
+		} // end: switch
+		break;
+	} // end: while
+	//	 printf("D\n ");
+}
+
+int servo_buffer::synchro_move_to_encoder_zero(common::regulator* &crp, int j)
+{
+
+	// analiza powstalej sytuacji (czy zjechano z wylacznika synchronizacji)
+	// jezeli nie, to blad
+	switch (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL))
+	{
+		case SYNCHRO_ZERO: // zjechano z wylacznika synchronizacji i SYNCHRO_ZERO jest od razu
+			//     printf("SYNCHRO_ZERO\n");
+			hi->finish_synchro(j);
+
+			//	 printf("SYNCHRO_ZERO\n");
+			hi->reset_position(j);
+			crp->clear_regulator();
+			delay(1);
+			return 1;
+		case OK:
+			// ruch do wykrycia zera rezolwera
+			//    printf("OK\n");
+			for (;;) {
+				Move_1_step();
+				//        printf("OK Move_1_step\n");
+				//      if ( ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL) != OK)
+				// by Y - wyciecie SYNCHRO_SWITCH_ON - ze wzgledu na wystepujace drgania
+				if (((reply_status_tmp.error0 >> (5 * j)) & 0xCE739CE739CE739DULL) != OK) {
+					//   printf("OK os: %d, if: %llx, %llx\n", j, reply_status_tmp.error0, ((reply_status_tmp.error0 >> (5*j)) & 0xCE739CE739CE739FULL));
+					// Usuniecie bitow SYNCHRO_ZERO i SYNCHRO_SWITCH_ON z wszystkich osi
+					// oprocz synchronizowanej
+					// osie zsynchronizowane nie sa analizowane
+					break;
+				}
+			}
+			// end: for (;;)
+			//     if ( ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL) != lib::SYNCHRO_ZERO) {
+			// by Y - wyciecie SYNCHRO_SWITCH_ON
+			if (((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001DULL) != SYNCHRO_ZERO) {
+				// 	  printf("OK convert_error: %llx\n", ((reply_status_tmp.error0 >> (5*j)) & 0x000000000000001FULL));
+				convert_error();
+				reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;
+				reply_status.error1 = reply_status_tmp.error1;
+				clear_reply_status_tmp();
+				// Wypelnic servo_data
+				reply_to_EDP_MASTER();
+				return 0;
+			} else {
+				hi->finish_synchro(j);
+				hi->reset_position(j);
+				crp->clear_regulator();
+				delay(1);
+				return 1;
+			}
+			// end: else
+		default:
+			//    	printf(" default error\n");
+			// awaria w trakcie synchronizacji
+			convert_error();
+			reply_status.error0 = reply_status_tmp.error0 | SYNCHRO_ERROR;
+			reply_status.error1 = reply_status_tmp.error1;
+			clear_reply_status_tmp();
+			// Wypelnic servo_data
+			reply_to_EDP_MASTER();
+			return 0;
+	} // end: switch
+
+	return 2;
+
+	// zakonczenie synchronizacji danej osi i przejscie do trybu normalnego
+
 
 }
 

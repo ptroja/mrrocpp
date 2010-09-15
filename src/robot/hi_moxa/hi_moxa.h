@@ -49,21 +49,21 @@ class HI_moxa: public common::HardwareInterface {
 
 public:
 
-	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int first_drive_n, int last_drive_n); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
-	virtual void insert_set_value(int drive_number, double set_value);
-	virtual int get_current(int drive_number);
-	virtual double get_increment(int drive_number);
-	virtual long int get_position(int drive_number);
+	virtual void insert_set_value(int drive_offset, double set_value);
+	virtual int get_current(int drive_offset);
+	virtual double get_increment(int drive_offset);
+	virtual long int get_position(int drive_offset);
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
-	virtual void start_synchro(int drive_number);
-	virtual void finish_synchro(int drive_number);
+	virtual void start_synchro(int drive_offset);
+	virtual void finish_synchro(int drive_offset);
 
-	virtual bool is_impulse_zero(int drive_number);
-	virtual void reset_position(int i);
+	virtual bool is_impulse_zero(int drive_offset);
+	virtual void reset_position(int drive_offset);
 
 protected:
 private:
@@ -71,6 +71,7 @@ private:
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
 	int fd[8], fd_max;
+	int first_drive_number, last_drive_number;
 	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;

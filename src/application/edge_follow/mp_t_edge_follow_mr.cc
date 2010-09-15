@@ -94,7 +94,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
 
-	lib::irp6_tfg::command mp_ecp_command;
+	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
 	mp_ecp_command.desired_position = 0.078;
 

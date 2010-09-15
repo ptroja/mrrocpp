@@ -145,7 +145,7 @@ void graspit::main_task_algorithm(void)
 	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	lib::irp6_tfg::command mp_ecp_command;
+	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];

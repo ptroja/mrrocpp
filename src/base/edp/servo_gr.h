@@ -14,9 +14,6 @@
 #include "base/lib/condition_synchroniser.h"
 #include "base/edp/edp_typedefs.h"
 
-#define ERROR_DETECTED     1
-#define NO_ERROR_DETECTED  0
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -25,6 +22,9 @@ class regulator;
 class HardwareInterface;
 class motor_driven_effector;
 
+const uint8_t ERROR_DETECTED = 1;
+const uint8_t NO_ERROR_DETECTED = 0;
+
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
 const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
 const uint64_t SYNCHRO_SWITCH_ON = 0x0000000000000002ULL;
@@ -32,6 +32,10 @@ const uint64_t SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO = 0x0000000000000003ULL;
 const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
 const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
 const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
+
+const int SYNCHRO_NS = 10; // liczba krokow rozpedzania/hamowania
+const int SYNCHRO_STOP_STEP_NUMBER = 250; // liczba krokow zatrzymania podczas synchronziacji
+const int SYNCHRO_FINAL_STOP_STEP_NUMBER = 25; // liczba krokow zatrzymania podczas synchronziacji
 
 /*-----------------------------------------------------------------------*/
 class servo_buffer : public boost::noncopyable
@@ -144,6 +148,21 @@ public:
 
 	//! synchronizacja
 	virtual void synchronise(void);
+
+	//! wybor osi
+	void synchro_choose_axis_to_move(common::regulator* &crp, int j);
+
+	//! ruch w kierunku obszaru synchronizacji az do wykrycia wylacznika synchronizacji
+	int move_to_synchro_area(common::regulator* &crp, int j);
+
+	//! wybor osi
+	int synchro_stop_for_a_while(common::regulator* &crp, int j);
+
+	//! zjazd z obszaru synchronizacji az do wykrycia wylacznika synchronizacji
+	void move_from_synchro_area(common::regulator* &crp, int j);
+
+	//! przejazd do zera enkdoera po zjezdzie z wylacznika synchronizacji
+	int synchro_move_to_encoder_zero(common::regulator* &crp, int j);
 
 	//! obliczenie nastepnej wartosci zadanej dla wszystkich napedow
 	uint64_t compute_all_set_values(void);
