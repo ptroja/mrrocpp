@@ -107,8 +107,8 @@ void HI_moxa::insert_set_value(int drive_offset, double set_value) {
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM
 			| servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
-	temp->pwm = set_value * (300.0 / 255.0);
-	//temp->pwm = set_value * (700.0 / 255.0);
+	//temp->pwm = set_value * (300.0 / 255.0);
+	temp->pwm = set_value * (550.0 / 255.0);
 
 
 #ifdef T_INFO_FUNC
@@ -160,11 +160,11 @@ uint64_t HI_moxa::read_write_hardware(void) {
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	std::cout << "[info] pos:";													// ############# Pozycja
-	 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++){
-	 std::cout << " " << servo_data[drive_number].current_absolute_position;
-	 }
-	 std::cout << std::endl;
+//	std::cout << "[info] pos:";													// ############# Pozycja
+//	 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++){
+//	 std::cout << " " << servo_data[drive_number].current_absolute_position;
+//	 }
+//	 std::cout << std::endl;
 
 //	std::cout << "[info] przed write: " << std::endl;
 
