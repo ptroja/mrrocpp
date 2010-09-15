@@ -64,7 +64,7 @@ public:
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
-	int teachingstate; // dawne systemState do nauki
+	TEACHING_STATE teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 

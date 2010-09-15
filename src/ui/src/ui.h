@@ -20,13 +20,10 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-#define INITIAL_STATE          90 // zaladowano tylko SR
-#define MANUAL_OPERATIONS     100 // zaladowano EDP1
-#define MP_LOADED_MANUAL      110 // zaladowano MP
-#define ECP_TEACHING          120 // uczenie robota
-#define MP_RUNNING            130 // dziala MP
-#define MP_PAUSED             140 // MP wstrzymany przez proxy
-#define MP_PAUSED_H           150 // MP wstrzymany sygnalem
+enum TEACHING_STATE
+{
+	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
+};
 
 #define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \

@@ -16,9 +16,6 @@ namespace edp {
 namespace common {
 
 static const double MAX_INC = 80;
-// #define MAX_INCR 469
-// #define MAX_INCR2 234
-// #define MAX_INCR3 30 // 15
 
 static const uint8_t ALGORITHM_AND_PARAMETERS_OK = 0;
 static const uint8_t UNIDENTIFIED_ALGORITHM_NO = 1;
