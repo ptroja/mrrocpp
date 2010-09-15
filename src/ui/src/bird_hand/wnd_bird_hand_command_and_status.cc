@@ -13,10 +13,9 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace bird_hand {
 
 //
 //
@@ -25,7 +24,7 @@ namespace common {
 //
 
 
-WndBirdHandCommandAndStatus::WndBirdHandCommandAndStatus(Ui& _ui, UiRobotBirdHand& _bird_hand) :
+WndBirdHandCommandAndStatus::WndBirdHandCommandAndStatus(common::Ui& _ui, UiRobotBirdHand& _bird_hand) :
 	ui(_ui), bird_hand(_bird_hand), is_open(false)
 {
 

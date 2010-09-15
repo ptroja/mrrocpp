@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace bird_hand {
 
 
 // ---------------------------------------------------------------

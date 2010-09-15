@@ -110,7 +110,7 @@ public:
 
 
 	// The Ui robots
-	UiRobotBirdHand *bird_hand;
+	bird_hand::UiRobotBirdHand *bird_hand;
 	UiRobotIrp6ot_m *irp6ot_m;
 	UiRobotIrp6ot_tfg *irp6ot_tfg;
 	UiRobotIrp6p_m *irp6p_m;

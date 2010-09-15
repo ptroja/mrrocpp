@@ -22,9 +22,9 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace bird_hand {
 
-UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
+UiRobotBirdHand::UiRobotBirdHand(common::Ui& _ui) :
 	UiRobot(_ui, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
 {
 	wnd_command_and_status = new WndBirdHandCommandAndStatus(ui, *this);
@@ -123,17 +123,17 @@ int UiRobotBirdHand::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						break;

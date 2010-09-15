@@ -27,7 +27,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace bird_hand {
 
 // ---------------------------------------------------------------
 ui_bird_hand_robot::ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :

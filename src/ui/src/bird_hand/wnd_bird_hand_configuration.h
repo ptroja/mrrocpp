@@ -14,6 +14,10 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
+class Ui;
+}
+
+namespace bird_hand {
 
 //
 //
@@ -24,19 +28,19 @@ namespace common {
 
 // super klasa agregujaca porozrzucane struktury
 
-class Ui;
+
 class UiRobotBirdHand;
 
 class WndBirdHandConfiguration
 {
 private:
-	Ui& ui;
+	common::Ui& ui;
 	UiRobotBirdHand& bird_hand;
 
 public:
 	bool is_open;
 
-	WndBirdHandConfiguration(Ui& _ui, UiRobotBirdHand& _bird_hand);
+	WndBirdHandConfiguration(common::Ui& _ui, UiRobotBirdHand& _bird_hand);
 
 	int get_configuration();
 	int set_configuration();

@@ -78,7 +78,7 @@ void Ui::init()
 		perror("Blad cwd w UI");
 	}
 
-	bird_hand = new UiRobotBirdHand(*this);
+	bird_hand = new bird_hand::UiRobotBirdHand(*this);
 	irp6ot_m = new UiRobotIrp6ot_m(*this);
 	irp6ot_tfg = new UiRobotIrp6ot_tfg(*this);
 	irp6p_m = new UiRobotIrp6p_m(*this);

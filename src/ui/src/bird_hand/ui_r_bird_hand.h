@@ -14,8 +14,10 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
 class Ui;
+}
+
+namespace bird_hand {
 
 //
 //
@@ -30,7 +32,8 @@ class ui_bird_hand_robot;
 class WndBirdHandCommandAndStatus;
 class WndBirdHandConfiguration;
 
-class UiRobotBirdHand: public UiRobot {
+class UiRobotBirdHand : public common::UiRobot
+{
 private:
 
 public:
@@ -38,7 +41,7 @@ public:
 	WndBirdHandCommandAndStatus *wnd_command_and_status;
 	WndBirdHandConfiguration *wnd_configuration;
 
-	UiRobotBirdHand(Ui& _ui);
+	UiRobotBirdHand(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();

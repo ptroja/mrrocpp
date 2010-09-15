@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace bird_hand {
 
 //
 //
@@ -24,23 +24,26 @@ namespace common {
 //
 
 
-WndBirdHandConfiguration::WndBirdHandConfiguration(Ui& _ui,
-		UiRobotBirdHand& _bird_hand) :
-	ui(_ui), bird_hand(_bird_hand), is_open(false) {
+WndBirdHandConfiguration::WndBirdHandConfiguration(common::Ui& _ui, UiRobotBirdHand& _bird_hand) :
+	ui(_ui), bird_hand(_bird_hand), is_open(false)
+{
 
 }
 
-int WndBirdHandConfiguration::get_configuration() {
+int WndBirdHandConfiguration::get_configuration()
+{
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::set_configuration() {
+int WndBirdHandConfiguration::set_configuration()
+{
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::copy_command() {
+int WndBirdHandConfiguration::copy_command()
+{
 
 	return 1;
 }
