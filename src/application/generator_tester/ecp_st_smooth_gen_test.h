@@ -23,6 +23,9 @@ private:
 	generator::newsmooth * sgeneuler;
 	generator::newsmooth * sgenangle;
 
+	bool track;
+	bool postument;
+
 public:
 	ecp_sub_task_smooth_gen_test(task & _ecp_t);
 	~ecp_sub_task_smooth_gen_test();
