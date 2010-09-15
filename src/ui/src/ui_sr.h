@@ -26,16 +26,15 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
-#define UI_SR_BUFFER_LENGHT 50
+static const int UI_SR_BUFFER_LENGHT = 50;
 
-
-
-class ui_sr_buffer: public boost::noncopyable {
+class ui_sr_buffer : public boost::noncopyable
+{
 private:
 
 	Ui& ui;
 	boost::thread *thread_id;
-	boost::circular_buffer<lib::sr_package_t> cb;
+	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
 
 

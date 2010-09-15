@@ -19,9 +19,8 @@ namespace mrrocpp {
 namespace uin {
 namespace bird_hand {
 
-
 // ---------------------------------------------------------------
-class ui_bird_hand_robot
+class EcpRobot
 {
 
 public:
@@ -45,9 +44,9 @@ public:
 	virtual void execute_motion(void);
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
-	virtual ~ui_bird_hand_robot();
+	virtual ~EcpRobot();
 
 };
 

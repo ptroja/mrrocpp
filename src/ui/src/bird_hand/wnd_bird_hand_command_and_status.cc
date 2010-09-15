@@ -24,13 +24,13 @@ namespace bird_hand {
 //
 
 
-WndBirdHandCommandAndStatus::WndBirdHandCommandAndStatus(common::Ui& _ui, UiRobotBirdHand& _bird_hand) :
+WndCommandAndStatus::WndCommandAndStatus(common::Ui& _ui, UiRobot& _bird_hand) :
 	ui(_ui), bird_hand(_bird_hand), is_open(false)
 {
 
 }
 
-int WndBirdHandCommandAndStatus::get_command()
+int WndCommandAndStatus::get_command()
 {
 
 	try {
@@ -79,7 +79,7 @@ int WndBirdHandCommandAndStatus::get_command()
 	return 1;
 }
 
-int WndBirdHandCommandAndStatus::set_status()
+int WndCommandAndStatus::set_status()
 {
 
 	try {
@@ -107,7 +107,7 @@ int WndBirdHandCommandAndStatus::set_status()
 	return 1;
 }
 
-int WndBirdHandCommandAndStatus::copy_command()
+int WndCommandAndStatus::copy_command()
 {
 
 	copy_thumb_f_0_command();
@@ -130,7 +130,7 @@ int WndBirdHandCommandAndStatus::copy_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
+int WndCommandAndStatus::get_variant_thumb_f_0_command()
 {
 
 	unsigned long *flags;
@@ -159,7 +159,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
+int WndCommandAndStatus::get_thumb_f_0_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -184,7 +184,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_thumb_f_0_status()
+int WndCommandAndStatus::set_thumb_f_0_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -253,7 +253,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_0_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_thumb_f_0_command()
+int WndCommandAndStatus::copy_thumb_f_0_command()
 {
 
 	double* tmp_double;
@@ -281,7 +281,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_0_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
+int WndCommandAndStatus::get_variant_thumb_f_1_command()
 {
 
 	unsigned long *flags;
@@ -310,7 +310,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
+int WndCommandAndStatus::get_thumb_f_1_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -335,7 +335,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_thumb_f_1_status()
+int WndCommandAndStatus::set_thumb_f_1_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -404,7 +404,7 @@ int WndBirdHandCommandAndStatus::set_thumb_f_1_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_thumb_f_1_command()
+int WndCommandAndStatus::copy_thumb_f_1_command()
 {
 
 	double* tmp_double;
@@ -432,7 +432,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_1_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
+int WndCommandAndStatus::get_variant_index_f_0_command()
 {
 
 	unsigned long *flags;
@@ -461,7 +461,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_index_f_0_command()
+int WndCommandAndStatus::get_index_f_0_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -486,7 +486,7 @@ int WndBirdHandCommandAndStatus::get_index_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_index_f_0_status()
+int WndCommandAndStatus::set_index_f_0_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -555,7 +555,7 @@ int WndBirdHandCommandAndStatus::set_index_f_0_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_index_f_0_command()
+int WndCommandAndStatus::copy_index_f_0_command()
 {
 
 	double* tmp_double;
@@ -583,7 +583,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_0_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
+int WndCommandAndStatus::get_variant_index_f_1_command()
 {
 
 	unsigned long *flags;
@@ -612,7 +612,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_index_f_1_command()
+int WndCommandAndStatus::get_index_f_1_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -637,7 +637,7 @@ int WndBirdHandCommandAndStatus::get_index_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_index_f_1_status()
+int WndCommandAndStatus::set_index_f_1_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -706,7 +706,7 @@ int WndBirdHandCommandAndStatus::set_index_f_1_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_index_f_1_command()
+int WndCommandAndStatus::copy_index_f_1_command()
 {
 
 	double* tmp_double;
@@ -734,7 +734,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_1_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
+int WndCommandAndStatus::get_variant_index_f_2_command()
 {
 
 	unsigned long *flags;
@@ -763,7 +763,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_index_f_2_command()
+int WndCommandAndStatus::get_index_f_2_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -788,7 +788,7 @@ int WndBirdHandCommandAndStatus::get_index_f_2_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_index_f_2_status()
+int WndCommandAndStatus::set_index_f_2_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -857,7 +857,7 @@ int WndBirdHandCommandAndStatus::set_index_f_2_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_index_f_2_command()
+int WndCommandAndStatus::copy_index_f_2_command()
 {
 
 	double* tmp_double;
@@ -885,7 +885,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_2_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
+int WndCommandAndStatus::get_variant_ring_f_0_command()
 {
 
 	unsigned long *flags;
@@ -914,7 +914,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_ring_f_0_command()
+int WndCommandAndStatus::get_ring_f_0_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -939,7 +939,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_0_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_ring_f_0_status()
+int WndCommandAndStatus::set_ring_f_0_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -1008,7 +1008,7 @@ int WndBirdHandCommandAndStatus::set_ring_f_0_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_ring_f_0_command()
+int WndCommandAndStatus::copy_ring_f_0_command()
 {
 
 	double* tmp_double;
@@ -1036,7 +1036,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_0_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
+int WndCommandAndStatus::get_variant_ring_f_1_command()
 {
 
 	unsigned long *flags;
@@ -1065,7 +1065,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_ring_f_1_command()
+int WndCommandAndStatus::get_ring_f_1_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -1090,7 +1090,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_1_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_ring_f_1_status()
+int WndCommandAndStatus::set_ring_f_1_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -1159,7 +1159,7 @@ int WndBirdHandCommandAndStatus::set_ring_f_1_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_ring_f_1_command()
+int WndCommandAndStatus::copy_ring_f_1_command()
 {
 
 	double* tmp_double;
@@ -1187,7 +1187,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_1_command()
 //
 
 
-int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
+int WndCommandAndStatus::get_variant_ring_f_2_command()
 {
 
 	unsigned long *flags;
@@ -1216,7 +1216,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 
 }
 
-int WndBirdHandCommandAndStatus::get_ring_f_2_command()
+int WndCommandAndStatus::get_ring_f_2_command()
 {
 
 	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
@@ -1241,7 +1241,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_2_command()
 
 }
 
-int WndBirdHandCommandAndStatus::set_ring_f_2_status()
+int WndCommandAndStatus::set_ring_f_2_status()
 {
 
 	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
@@ -1310,7 +1310,7 @@ int WndBirdHandCommandAndStatus::set_ring_f_2_status()
 
 }
 
-int WndBirdHandCommandAndStatus::copy_ring_f_2_command()
+int WndCommandAndStatus::copy_ring_f_2_command()
 {
 
 	double* tmp_double;

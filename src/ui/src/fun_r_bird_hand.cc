@@ -88,7 +88,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 				ui.bird_hand->state.edp.node_nr = ui.config->return_node_number(ui.bird_hand->state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
-					ui.bird_hand->ui_ecp_robot = new uin::bird_hand::ui_bird_hand_robot(*ui.config, *ui.all_ecp_msg);
+					ui.bird_hand->ui_ecp_robot = new uin::bird_hand::EcpRobot(*ui.config, *ui.all_ecp_msg);
 
 				}
 
