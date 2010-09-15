@@ -248,6 +248,9 @@ fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::fradia_sensor(mrrocpp::lib::
 
 	report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
 	logger::log("FraDIA sensor created.\n");
+	logger::log_dbg("fradia_sensor: sizeof(CONFIGURE_T) = %d\n", sizeof(CONFIGURE_T));
+	logger::log_dbg("fradia_sensor: sizeof(READING_T) = %d\n", sizeof(READING_T));
+	logger::log_dbg("fradia_sensor: sizeof(INITIATE_T) = %d\n", sizeof(INITIATE_T));
 }
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>

@@ -35,8 +35,6 @@ protected:
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
 
 	lib::Homog_matrix E_T_C;
-
-	vs_logger vs_log;
 };
 
 /** @} */
