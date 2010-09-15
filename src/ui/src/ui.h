@@ -25,6 +25,9 @@ enum UI_NOTIFICATION_STATE_ENUM
 	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
 };
 
+// FIXME: moved from proto.h for linux compatibility
+int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
+
 namespace mrrocpp {
 namespace uin {
 namespace common {
@@ -81,9 +84,6 @@ enum TEACHING_STATE_ENUM
 {
 	FSTRAJECTORY, FSCONFIG
 };
-
-// FIXME: moved from proto.h for linux compatibility
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
 enum UI_ECP_COMMUNICATION_STATE
 {
