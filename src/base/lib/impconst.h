@@ -15,48 +15,42 @@
 #include <stdint.h>
 
 namespace mrrocpp {
-
 }
-
 using namespace mrrocpp;
-
 namespace mrrocpp {
 namespace lib {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// Rozmiary buforow
+const int MP_2_ECP_NEXT_STATE_STRING_SIZE = 100;
+const int MP_2_ECP_STRING_SIZE = 300;
+const int ECP_2_MP_STRING_SIZE = 300;
+const int MAX_TEXT = 100; // MAC7
+const int MAX_PROSODY = 20; // MAC7
 
-#define MAX_TEXT 100 // MAC7
-#define MAX_PROSODY 20 // MAC7
-#define CONNECT_RETRY	200
-#define CONNECT_DELAY	50
+
+// Stale do komunikacji
+
+
+const int CONNECT_RETRY = 200;
+const int CONNECT_DELAY = 50;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
 
-#define MP_SECTION "[mp]"
-#define UI_SECTION "[ui]"
+const std::string MP_SECTION = "[mp]";
+const std::string UI_SECTION = "[ui]";
 
 typedef std::string robot_name_t;
 typedef std::string TRANSMITTER_t;
 
-static const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
-
-static const robot_name_t ROBOT_ELECTRON = "ROBOT_ELECTRON";
-static const robot_name_t ROBOT_FESTIVAL = "ROBOT_FESTIVAL";
-static const robot_name_t ROBOT_SPEECHRECOGNITION = "ROBOT_SPEECHRECOGNITION";
+const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
 // Other robots in dedicated robot consts files
 
-enum FORCE_SENSOR_ENUM
-{
-	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
-};
+const int MAX_SERVOS_NR = 8;
 
-#define MAX_SERVOS_NR 8
+const double EDP_STEP = 0.002; // Krok sterowania w [s]
 
-#define STEP              0.002  // Krok sterowania w [s]
 // dla starej wersji sterowania
 //#define FORCE_INERTIA 0.96
 //#define TORQUE_INERTIA 0.98
@@ -64,14 +58,17 @@ enum FORCE_SENSOR_ENUM
 //#define TORQUE_RECIPROCAL_DAMPING -0.005
 
 // wartosci podstawowe dla sterowania silowego
-#define FORCE_INERTIA 20
-#define TORQUE_INERTIA 0.5
-#define FORCE_RECIPROCAL_DAMPING 0.005
-#define TORQUE_RECIPROCAL_DAMPING 0.1
+const double FORCE_INERTIA = 20;
+const double TORQUE_INERTIA = 0.5;
+const double FORCE_RECIPROCAL_DAMPING = 0.005;
+const double TORQUE_RECIPROCAL_DAMPING = 0.1;
 
-#define ROBOT_TEST_MODE "robot_test_mode"
+const std::string ROBOT_TEST_MODE = "robot_test_mode";
+const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
-#define MAX_PRIORITY    50
+// Stale czasowe
+
+const int QNX_MAX_PRIORITY = 50;
 
 // STALE PULSOW MP, ECP, READER
 
@@ -93,14 +90,6 @@ enum FORCE_SENSOR_ENUM
 #define ECP_WAIT_FOR_STOP (_PULSE_CODE_MINAVAIL + 3)
 #define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
 #define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
-
-#define MP_2_ECP_NEXT_STATE_STRING_SIZE	100
-#define MP_2_ECP_STRING_SIZE	300
-#define ECP_2_MP_STRING_SIZE	300
-
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace lib
 } // namespace mrrocpp

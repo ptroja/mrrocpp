@@ -122,7 +122,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznikaaa = (-11);
@@ -149,8 +149,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = new common::reader_buffer(*this);
-	vis_obj = new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()

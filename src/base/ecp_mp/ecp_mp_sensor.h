@@ -13,7 +13,7 @@
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 // niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 
@@ -155,8 +155,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
 	while ((sd = open(VSP_NAME.c_str(), O_RDWR)) == -1) {
 		// 		cout<<tmp<<endl;
-		if ((tmp++) < CONNECT_RETRY)
-			usleep(1000 * CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY)
+			usleep(1000 * lib::CONNECT_DELAY);
 		else
 			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
@@ -184,8 +184,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	while( (sd = messip::port_connect(VSP_NAME)) == NULL)
 	{
 		// 		cout<<tmp<<endl;
-		if((tmp++)<CONNECT_RETRY)
-		usleep(1000*CONNECT_DELAY);
+		if((tmp++)<lib::CONNECT_RETRY)
+		usleep(1000*lib::CONNECT_DELAY);
 		else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
 			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);

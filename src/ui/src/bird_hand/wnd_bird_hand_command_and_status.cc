@@ -31,7 +31,7 @@ int WndBirdHandCommandAndStatus::get_command()
 
 	try {
 
-		mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+		mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 		// odczyt ilosci krokow i ecp_query step
 
@@ -66,7 +66,7 @@ int WndBirdHandCommandAndStatus::get_command()
 
 		 ui.ui_msg->message(ss.str().c_str());
 		 */
-		bird_hand.ui_ecp_robot->bird_hand_command_data_port->set(bhcs);
+		bird_hand.ui_ecp_robot->bird_hand_command_data_port->set();
 		bird_hand.ui_ecp_robot->execute_motion();
 
 	} // end try
@@ -80,11 +80,11 @@ int WndBirdHandCommandAndStatus::set_status()
 
 	try {
 
-		mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+		//	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 		bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
 		bird_hand.ui_ecp_robot->execute_motion();
-		bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get(bhsrs);
+		bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->get();
 
 		set_thumb_f_0_status();
 		set_thumb_f_1_status();
@@ -131,7 +131,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_thumb_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -158,7 +158,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_0_command()
 int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -183,7 +183,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_0_command()
 int WndBirdHandCommandAndStatus::set_thumb_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_thumb_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_position, 0);
 	PtSetResource(ABW_thumb_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[0].meassured_torque, 0);
@@ -254,7 +254,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_thumb_f_0_command();
 
@@ -282,7 +282,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_thumb_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -309,7 +309,7 @@ int WndBirdHandCommandAndStatus::get_variant_thumb_f_1_command()
 int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -334,7 +334,7 @@ int WndBirdHandCommandAndStatus::get_thumb_f_1_command()
 int WndBirdHandCommandAndStatus::set_thumb_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_thumb_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_position, 0);
 	PtSetResource(ABW_thumb_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.thumb_f[1].meassured_torque, 0);
@@ -405,7 +405,7 @@ int WndBirdHandCommandAndStatus::copy_thumb_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_thumb_f_1_command();
 
@@ -433,7 +433,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_index_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -460,7 +460,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_0_command()
 int WndBirdHandCommandAndStatus::get_index_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -485,7 +485,7 @@ int WndBirdHandCommandAndStatus::get_index_f_0_command()
 int WndBirdHandCommandAndStatus::set_index_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_index_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_position, 0);
 	PtSetResource(ABW_index_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[0].meassured_torque, 0);
@@ -556,7 +556,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_index_f_0_command();
 
@@ -584,7 +584,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_index_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -611,7 +611,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_1_command()
 int WndBirdHandCommandAndStatus::get_index_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -636,7 +636,7 @@ int WndBirdHandCommandAndStatus::get_index_f_1_command()
 int WndBirdHandCommandAndStatus::set_index_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_index_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[1].meassured_position, 0);
 	PtSetResource(ABW_index_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[1].meassured_torque, 0);
@@ -707,7 +707,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_index_f_1_command();
 
@@ -735,7 +735,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_index_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -762,7 +762,7 @@ int WndBirdHandCommandAndStatus::get_variant_index_f_2_command()
 int WndBirdHandCommandAndStatus::get_index_f_2_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -787,7 +787,7 @@ int WndBirdHandCommandAndStatus::get_index_f_2_command()
 int WndBirdHandCommandAndStatus::set_index_f_2_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_index_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[2].meassured_position, 0);
 	PtSetResource(ABW_index_f_2_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.index_f[2].meassured_torque, 0);
@@ -858,7 +858,7 @@ int WndBirdHandCommandAndStatus::copy_index_f_2_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_index_f_2_command();
 
@@ -886,7 +886,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_ring_f_0_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -913,7 +913,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_0_command()
 int WndBirdHandCommandAndStatus::get_ring_f_0_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -938,7 +938,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_0_command()
 int WndBirdHandCommandAndStatus::set_ring_f_0_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_ring_f_0_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[0].meassured_position, 0);
 	PtSetResource(ABW_ring_f_0_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[0].meassured_torque, 0);
@@ -1009,7 +1009,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_0_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_ring_f_0_command();
 
@@ -1037,7 +1037,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_ring_f_1_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -1064,7 +1064,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_1_command()
 int WndBirdHandCommandAndStatus::get_ring_f_1_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -1089,7 +1089,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_1_command()
 int WndBirdHandCommandAndStatus::set_ring_f_1_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_ring_f_1_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[1].meassured_position, 0);
 	PtSetResource(ABW_ring_f_1_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[1].meassured_torque, 0);
@@ -1160,7 +1160,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_1_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_ring_f_1_command();
 
@@ -1188,7 +1188,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 
 	unsigned long *flags;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	PtGetResource(ABW_ring_f_2_absolute_variant_wnd_bird_hand_command_and_status, Pt_ARG_FLAGS, &flags, 0);
 
@@ -1215,7 +1215,7 @@ int WndBirdHandCommandAndStatus::get_variant_ring_f_2_command()
 int WndBirdHandCommandAndStatus::get_ring_f_2_command()
 {
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	double* tmp_double;
 
@@ -1240,7 +1240,7 @@ int WndBirdHandCommandAndStatus::get_ring_f_2_command()
 int WndBirdHandCommandAndStatus::set_ring_f_2_status()
 {
 
-	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_structure;
+	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	PtSetResource(ABW_ring_f_2_current_position_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[2].meassured_position, 0);
 	PtSetResource(ABW_ring_f_2_current_torque_wnd_bird_hand_command_and_status, Pt_ARG_NUMERIC_VALUE, &bhsrs.ring_f[2].meassured_torque, 0);
@@ -1311,7 +1311,7 @@ int WndBirdHandCommandAndStatus::copy_ring_f_2_command()
 
 	double* tmp_double;
 
-	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_structure;
+	mrrocpp::lib::bird_hand::command &bhcs = bird_hand.ui_ecp_robot->bird_hand_command_data_port->data;
 
 	get_variant_ring_f_2_command();
 

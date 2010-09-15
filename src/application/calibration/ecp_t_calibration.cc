@@ -13,7 +13,7 @@ calibration::calibration(lib::configurator &_config) : task(_config)
 void calibration::main_task_algorithm(void)
 {
 	int i;
-	char buffer[20]; //for sprintf
+	char buffer[100]; //for sprintf
 
 	fdf.params = (void*)&ofp;
 
@@ -46,21 +46,21 @@ void calibration::main_task_algorithm(void)
 		++count;
 		status = gsl_multimin_fdfminimizer_iterate (s2);
 
-		if (status) { //check if solver is stuck
-			sr_ecp_msg->message("Solver is stuck");
+		if (status) { //check for errors
+			sprintf (buffer, "Solver error: %s", gsl_strerror (status));
+			sr_ecp_msg->message(buffer);
+			sprintf (buffer, "Iteration number: %d", count);
+			sr_ecp_msg->message(buffer);
 			break;
 		}
 
-		status = gsl_multimin_test_gradient (s2->gradient, 1e-5);
+		status = gsl_multimin_test_gradient (s2->gradient, 1e-6);
 
-		if (status == GSL_SUCCESS)
-			sr_ecp_msg->message("Converged to minimum at");
-
-//		sprintf(buffer, "%i", count);
-//		sr_ecp_msg->message(buffer);
-//		for (i = 0; i < dimension; ++i){
-//			cout<<gsl_vector_get(s2->x,i)<<" ";
-//		}
+		if (status == GSL_SUCCESS) {
+			sr_ecp_msg->message("Converged to minimum");
+			sprintf (buffer, "Iteration number: %d", count);
+			sr_ecp_msg->message(buffer);
+		}
 	}
 	while (status == GSL_CONTINUE && count < 1000);
 
@@ -68,35 +68,34 @@ void calibration::main_task_algorithm(void)
 //	sr_ecp_msg->message(buffer);
 
 	for (i = 0; i < dimension; ++i){
-		sprintf(buffer, "%f6.3", gsl_vector_get(s2->x,i));
+		sprintf(buffer, "%f", gsl_vector_get(s2->x,i));
 		sr_ecp_msg->message(buffer);
 		if(i < 3){
 			gsl_vector_set(temp, i, gsl_vector_get(s2->x, i));
 		}
-//		if (i % 3 == 2)
-//			sr_ecp_msg->message("\t");
+		if (i % 3 == 2)
+			sr_ecp_msg->message("");
 	}
 	angles_to_rotation_matrix(temp, X);
 
-	printf("X = [");
-	fflush(stdout);
-	for (i = 0; i < 3; ++i){
-		for (int j = 0; j < 3; ++j){
-			printf("%0.15lg ", gsl_matrix_get(X, i, j));
-			fflush(stdout);
-		}
-		if(i == 2){
-			printf("%0.15lg]", gsl_vector_get(temp, i));
-			fflush(stdout);
-		}else{
-			printf("%0.15lg; ", gsl_vector_get(temp, i));
-			fflush(stdout);
-		}
-	}
+//	printf("X = [");
+//	fflush(stdout);
+//	for (i = 0; i < 3; ++i){
+//		for (int j = 0; j < 3; ++j){
+//			printf("%0.15lg ", gsl_matrix_get(X, i, j));
+//			fflush(stdout);
+//		}
+//		if(i == 2){
+//			printf("%0.15lg]", gsl_vector_get(temp, i));
+//			fflush(stdout);
+//		}else{
+//			printf("%0.15lg; ", gsl_vector_get(temp, i));
+//			fflush(stdout);
+//		}
+//	}
 
-//	sr_ecp_msg->message("Function value=");
-//	sprintf(buffer, "%f6.3", s2->f);
-//	sr_ecp_msg->message(buffer);
+	sprintf(buffer, "Function value = %f", s2->f);
+	sr_ecp_msg->message(buffer);
 
 	gsl_multimin_fdfminimizer_free (s2);
 }

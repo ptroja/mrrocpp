@@ -5,7 +5,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "application/playerjoy/ecp_g_pjg.h"
 #include "application/playerjoy/ecp_mp_tr_player.h"
 
@@ -68,7 +68,7 @@ bool playerjoy::next_step ( )
           );
     */
 
-    for (int i = 0; i < MAX_SERVOS_NR; i++)
+    for (int i = 0; i < lib::MAX_SERVOS_NR; i++)
     {
         if (node_counter <= 2)
         {

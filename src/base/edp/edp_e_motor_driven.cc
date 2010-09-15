@@ -204,12 +204,11 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 
 /*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(MAX_SERVOS_NR),
-			servo_current_joints(MAX_SERVOS_NR), desired_joints(MAX_SERVOS_NR), current_joints(MAX_SERVOS_NR),
-			desired_motor_pos_old(MAX_SERVOS_NR), desired_motor_pos_new(MAX_SERVOS_NR),
-			current_motor_pos(MAX_SERVOS_NR), vs(NULL), step_counter(0), number_of_servos(-1)
+	effector(_config, l_robot_name), kinematics_manager(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
+			desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR),
+			current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
 {
-
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
 	controller_state_edp_buf.is_wardrobe_on = true;
@@ -248,11 +247,11 @@ void motor_driven_effector::master_joints_read(double output[])
 /*--------------------------------------------------------------------------*/
 void motor_driven_effector::hi_create_threads()
 {
-	rb_obj = new reader_buffer(*this);
-	mt_tt_obj = new manip_trans_t(*this);
-	in_out_obj = new in_out_buffer();
-	vis_obj = new vis_server(*this);
-	sb = return_created_servo_buffer();
+	rb_obj = (boost::shared_ptr<reader_buffer>) new reader_buffer(*this);
+	mt_tt_obj = (boost::shared_ptr<manip_trans_t>) new manip_trans_t(*this);
+	in_out_obj = (boost::shared_ptr<in_out_buffer>) new in_out_buffer();
+	vis_obj = (boost::shared_ptr<vis_server>) new vis_server(*this);
+	sb = (boost::shared_ptr<servo_buffer>) return_created_servo_buffer();
 
 	// wait for initialization of servo thread
 	sb->thread_started.wait();

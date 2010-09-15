@@ -20,8 +20,8 @@
 
 #include <boost/bind.hpp>
 
-#include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+#include "base/lib/sr/srlib.h"
+
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
@@ -1980,7 +1980,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					boost::unique_lock < boost::mutex > lock(ui.process_creation_mtx);
 
 					ui.irp6ot_m->ui_ecp_robot
-							= new ui_irp6_common_robot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_m::ROBOT_IRP6OT_M);
+							= new ui_irp6_common_robot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_m::ROBOT_NAME);
 				}
 
 				ui.irp6ot_m->state.edp.pid = ui.irp6ot_m->ui_ecp_robot->ecp->get_EDP_pid();
@@ -2000,8 +2000,8 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					while ((ui.irp6ot_m->state.edp.reader_fd
 							= name_open(ui.irp6ot_m->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 							< 0)
-						if ((tmp++) < CONNECT_RETRY) {
-							delay(CONNECT_DELAY);
+						if ((tmp++) < lib::CONNECT_RETRY) {
+							delay(lib::CONNECT_DELAY);
 						} else {
 							perror("blad odwolania do READER_OT");
 							break;
@@ -2110,8 +2110,8 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 					< 0) {
 				if (errno == EINTR)
 					break;
-				if ((tmp++) < CONNECT_RETRY) {
-					delay(CONNECT_DELAY);
+				if ((tmp++) < lib::CONNECT_RETRY) {
+					delay(lib::CONNECT_DELAY);
 				} else {
 					perror("blad odwolania do ECP_TRIGGER");
 				}

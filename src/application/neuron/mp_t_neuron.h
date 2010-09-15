@@ -17,6 +17,8 @@ class neuron : public task
 public:
 	neuron(lib::configurator &_config);
 	void main_task_algorithm(void);
+	/// utworzenie robotow
+	void create_robots(void);
 	virtual ~neuron();
 };
 

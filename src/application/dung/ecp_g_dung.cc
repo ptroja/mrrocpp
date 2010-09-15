@@ -13,7 +13,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_g_dung.h"
 
@@ -288,7 +288,7 @@ bool dung::next_step()
 		the_robot->ecp_command.instruction.arm.pf_def.desired_torque[i] = t[i];
 	} // end:for
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
 				= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	} // end:for

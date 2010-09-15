@@ -14,6 +14,7 @@
 
 #include "base/lib/sensor_interface.h"
 #include "base/lib/configurator.h"
+#include "base/lib/sr/sr_vsp.h"
 
 namespace mrrocpp {
 namespace vsp {

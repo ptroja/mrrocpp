@@ -33,7 +33,7 @@
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
 	static iofunc_attr_t attr;
 
 	// Set priority.
-	setprio(getpid(), MAX_PRIORITY - 3);
+	setprio(getpid(), lib::QNX_MAX_PRIORITY - 3);
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_shell::catch_signal);

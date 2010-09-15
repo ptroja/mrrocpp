@@ -1,3 +1,12 @@
+/*!
+ * @file configsrv.h
+ * @brief Configuration server
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include <cstdio>
 #include <stdint.h>
 #include <cassert>

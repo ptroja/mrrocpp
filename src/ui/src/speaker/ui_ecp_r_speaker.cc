@@ -20,7 +20,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/mrmath/mrmath.h"
 
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
@@ -44,9 +44,9 @@ bool ui_speaker_robot::send_command(const char* local_text,
 	ecp_command.instruction.instruction_type = lib::SET;
 
 	if ((local_text) && (local_prosody)) {
-		strncpy(ecp_command.instruction.arm.text_def.text, local_text, MAX_TEXT);
+		strncpy(ecp_command.instruction.arm.text_def.text, local_text, lib::MAX_TEXT);
 		strncpy(ecp_command.instruction.arm.text_def.prosody, local_prosody,
-				MAX_PROSODY );
+				lib::MAX_PROSODY );
 	}
 
 	execute_motion();

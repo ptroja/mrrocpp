@@ -13,8 +13,8 @@
 #include <fstream>
 
 #include "ui/src/ui.h"
-#include "ui/src/ui_const.h"
-#include "base/lib/srlib.h"
+
+#include "base/lib/sr/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/mis_fun.h"
@@ -44,7 +44,7 @@ ui_ecp_buffer::~ui_ecp_buffer() {
 
 void ui_ecp_buffer::operator()() {
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 5);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 

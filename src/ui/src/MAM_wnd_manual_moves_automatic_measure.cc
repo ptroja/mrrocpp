@@ -25,7 +25,7 @@
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 // Konfigurator.
 #include "base/lib/configurator.h"
@@ -201,7 +201,7 @@ int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
 	std::string attach_point = ui.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "attach_point",
 			"[ecp_ui_channel]");
-	//    tmp_name =ui.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", UI_SECTION);
+	//    tmp_name =ui.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", lib::UI_SECTION);
 
 #ifdef MAMDEBUG
 	printf("MAM_tmr_connect: %s\n", tmp_name);

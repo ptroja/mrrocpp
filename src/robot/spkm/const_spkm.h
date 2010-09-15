@@ -9,7 +9,7 @@
  * @ingroup spkm
  */
 
-#include "robot/epos/dp_epos.h"
+#include "robot/spkm/dp_spkm.h"
 
 #include "base/lib/impconst.h"
 
@@ -17,10 +17,16 @@ namespace mrrocpp {
 namespace lib {
 namespace spkm {
 
-const int NUM_OF_SERVOS = 7;
-
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine robot label
+ * @ingroup spkm
+ */
 const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
+ * @ingroup spkm
+ */
 enum CBUFFER_VARIANT
 {
 	CBUFFER_EPOS_CUBIC_COMMAND,
@@ -29,6 +35,10 @@ enum CBUFFER_VARIANT
 	CBUFFER_EPOS_BRAKE_COMMAND
 };
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer
+ * @ingroup spkm
+ */
 struct cbuffer
 {
 	CBUFFER_VARIANT variant;
@@ -41,13 +51,26 @@ struct cbuffer
 
 };
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
+ * @ingroup spkm
+ */
 struct rbuffer
 {
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
-}__attribute__((__packed__));
+};
 
+/*!
+ * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string
+ * @ingroup spkm
+ */
 const std::string EDP_SECTION = "[edp_spkm]";
+
+/*!
+ * @brief configuration file ECP SwarmItFix Parallel Kinematic Machine section string
+ * @ingroup spkm
+ */
 const std::string ECP_SECTION = "[ecp_spkm]";
 
 } // namespace spkm

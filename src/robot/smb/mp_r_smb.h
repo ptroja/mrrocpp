@@ -9,14 +9,26 @@
  * @ingroup smb
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/smb/const_smb.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
-class smb : public motor_driven
+
+/*!
+ * @brief SwarmItFix mobile base mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup smb
+ */
+class smb : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	smb(task::task &mp_object_l);
 };
 

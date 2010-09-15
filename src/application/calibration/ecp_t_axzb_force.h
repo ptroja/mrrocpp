@@ -3,7 +3,7 @@
 
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_calib_axzb.h"

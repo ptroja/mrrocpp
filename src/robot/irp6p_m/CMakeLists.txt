@@ -1,8 +1,6 @@
 if(ROBOT_IRP6_POSTUMENT_M)
 add_executable(edp_irp6p_m
 	edp_irp6p_m_effector.cc
-	hi_irp6p_m.cc
-	int_hand_irp6p_m.cc
 	sg_irp6p_m.cc
 	 regulator_irp6p_m.cc 
 )
@@ -10,7 +8,7 @@ add_executable(edp_irp6p_m
 target_link_libraries(
 	edp_irp6p_m
 	kinematicsirp6p_m
-	edp hi_rydz ${COMMON_LIBRARIES}
+	edp hi_moxa ${COMMON_LIBRARIES}
 )
 
 if(QNXNTO)
@@ -30,7 +28,7 @@ add_library(kinematicsirp6p_m
 
 target_link_libraries(kinematicsirp6p_m kinematics)
 	
-add_library(ecp_r_irp6p_m ecp_r_irp6p_m)
+add_library(ecp_r_irp6p_m ecp_r_irp6p_m.cc)
 	
 target_link_libraries(ecp_r_irp6p_m kinematicsirp6p_m)
 

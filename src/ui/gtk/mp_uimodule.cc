@@ -234,19 +234,19 @@ MpPanel::MpPanel(ui_config_entry &entry)
 	}
 
 	//! spawn MP
-	mp_pid = ui_model::instance().getConfigurator().process_spawn(MP_SECTION);
+	mp_pid = ui_model::instance().getConfigurator().process_spawn(lib::MP_SECTION);
 
 	if (mp_pid > 0) {
 
 		const std::string network_pulse_attach_point = ui_model::instance().getConfigurator()
-			.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
+			.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
 
 		short tmp = 0;
 		// try to open channel
 		while( (pulse_fd = messip::port_connect(network_pulse_attach_point)) == NULL)
-			if((tmp++)<CONNECT_RETRY) {
+			if((tmp++)<lib::CONNECT_RETRY) {
 //				fprintf(stderr, "."); fflush(stderr);
-				delay(CONNECT_DELAY);
+				delay(lib::CONNECT_DELAY);
 			} else {
 				fprintf(stderr, "blad odwolania do: %s,\n", network_pulse_attach_point.c_str());
 				break;

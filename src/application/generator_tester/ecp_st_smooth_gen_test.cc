@@ -2,7 +2,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "application/generator_tester/ecp_st_smooth_gen_test.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
@@ -231,18 +231,18 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	sgenangle->reset();
 	sgenangle->set_absolute();
 	coordinates1[0] = 0.529987;
-	coordinates1[1] = 1.606317;
-	coordinates1[2] = 0.178306;
-	coordinates1[3] = 1.267713;
-	coordinates1[4] = -1.219889;
-	coordinates1[5] = 0.114191;
-	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
-	coordinates1[0] = 0.509987;
 	coordinates1[1] = 1.806317;
-	coordinates1[2] = 0.148306;
-	coordinates1[3] = 1.367713;
+	coordinates1[2] = 0.178306;
+	coordinates1[3] = 1.307713;
 	coordinates1[4] = -1.119889;
-	coordinates1[5] = 0.114191;
+	coordinates1[5] = 0.104191;
+	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
+	coordinates1[0] = 0.329987;
+	coordinates1[1] = 1.706317;
+	coordinates1[2] = 0.178306;
+	coordinates1[3] = 1.207713;
+	coordinates1[4] = -1.119889;
+	coordinates1[5] = 0.004191;
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 	coordinates1[0] = 0.529987;
 	coordinates1[1] = 1.806317;

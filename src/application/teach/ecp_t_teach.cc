@@ -11,10 +11,10 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6m/ecp_r_irp6m.h"
 
 #include "application/teach/ecp_t_teach.h"
 #include "generator/ecp/ecp_g_teach_in.h"
@@ -49,7 +49,7 @@ teach::teach(lib::configurator &_config) :
 void teach::main_task_algorithm(void)
 {
 
-	if (ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		sr_ecp_msg->message("ecp teach irp6ot_m");
 	} else if (ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sr_ecp_msg->message("ecp teach irp6p_m");

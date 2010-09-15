@@ -9,7 +9,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
@@ -22,6 +22,8 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_bird_hand_test.h"
 
+#include "robot/bird_hand/mp_r_bird_hand.h"
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -33,6 +35,13 @@ namespace task {
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new bird_hand_test(_config);
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void bird_hand_test::create_robots()
+{
+	ACTIVATE_MP_ROBOT(bird_hand);
+
 }
 
 bird_hand_test::bird_hand_test(lib::configurator &_config) :

@@ -12,7 +12,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
@@ -64,12 +64,12 @@ void ball::setup_command(robot::robot & robot)
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		robot.mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
 		robot.mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i] = FORCE_RECIPROCAL_DAMPING;
-		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = TORQUE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
+		robot.mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING;
 		robot.mp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 		robot.mp_command.instruction.arm.pf_def.behaviour[i + 3] = lib::UNGUARDED_MOTION;
-		robot.mp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		robot.mp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		robot.mp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		robot.mp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	// define virtual tool position
@@ -85,11 +85,11 @@ bool ball::first_step()
 {
 	std::cout << "first_step" << std::endl;
 
-	irp6ot = robot_m[lib::irp6ot_m::ROBOT_IRP6OT_M];
+	irp6ot = robot_m[lib::irp6ot_m::ROBOT_NAME];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
-	irp6ot->communicate = true;
-	irp6p->communicate = true;
+	irp6ot->communicate_with_ecp = true;
+	irp6p->communicate_with_ecp = true;
 
 	irp6ot->continuous_coordination = true;
 	irp6p->continuous_coordination = true;

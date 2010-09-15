@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
 		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 3);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 3);
 
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));

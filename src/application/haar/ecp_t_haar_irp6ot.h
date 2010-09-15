@@ -6,7 +6,7 @@
 #include "base/lib/com_buf.h"
 #include "base/ecp/ecp_task.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_planar_irp6ot.h"

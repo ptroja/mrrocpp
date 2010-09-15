@@ -21,10 +21,8 @@ private:
 	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-	lib::smb::multi_pin_locking_td ecp_edp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-	lib::smb::multi_leg_reply_td edp_ecp_smb_multi_leg_reply_structure;
 
 public:
 	pin_lock(common::task::task& _ecp_task); //constructor
@@ -42,10 +40,8 @@ private:
 	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-	lib::smb::multi_pin_locking_td ecp_edp_smb_multi_pin_locking_structure;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-	lib::smb::multi_leg_reply_td edp_ecp_smb_multi_leg_reply_structure;
 
 public:
 	pin_unlock(common::task::task& _ecp_task); //constructor
@@ -63,10 +59,8 @@ private:
 	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_multi_pin_insertion_data_port;
-	lib::smb::multi_pin_insertion_td ecp_edp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-	lib::smb::multi_leg_reply_td edp_ecp_smb_multi_leg_reply_structure;
 
 public:
 	pin_rise(common::task::task& _ecp_task); //constructor
@@ -84,10 +78,9 @@ private:
 	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_multi_pin_insertion_data_port;
-	lib::smb::multi_pin_insertion_td ecp_edp_smb_multi_pin_insertion_structure;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-	lib::smb::multi_leg_reply_td edp_ecp_smb_multi_leg_reply_structure;
+
 public:
 	pin_lower(common::task::task& _ecp_task); //constructor
 	bool first_step(); //first step generation

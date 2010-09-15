@@ -102,7 +102,7 @@ ui_model::ui_model() : tabs_visible(0),
 	this->config = new lib::configurator(
 			g_get_host_name(),
 			cwd,
-			"rcsc.ini", UI_SECTION, "");
+			"rcsc.ini", lib::UI_SECTION, "");
 }
 
 void ui_model::init_sr(void) {

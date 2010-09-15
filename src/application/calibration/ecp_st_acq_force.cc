@@ -34,6 +34,8 @@ acq_force::acq_force(task &_ecp_t) :
 			= new ecp_mp::sensor::pcbird("[vsp_pcbird]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
 	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
+	bias_run = new common::generator::bias_edp_force(_ecp_t);
+
 	nose_run = new common::generator::pcbird_nose_run(_ecp_t, 8);
 	nose_run->configure_pulse_check(true);
 	nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
@@ -73,6 +75,8 @@ void acq_force::main_task_algorithm(void)
 	gsl_matrix *K = gsl_matrix_alloc(3, 3);
 	gsl_vector *m = gsl_vector_alloc(3);
 	gsl_vector *k = gsl_vector_alloc(3);
+
+	bias_run->Move();
 
 	for (i = 0; i < number_of_measures; i++) {
 		//move the robot + get the data

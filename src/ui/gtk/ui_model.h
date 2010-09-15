@@ -9,7 +9,7 @@
 #include "ui_config_entry.h"
 
 #include "base/lib/configurator.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ui/src/ui.h"
 
 class ui_model

@@ -124,7 +124,7 @@ void Ui::init()
 	signal(SIGCHLD, &catch_signal);
 #endif /* PROCESS_SPAWN_RSH */
 
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 6);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
@@ -342,7 +342,7 @@ int Ui::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
-		config->change_ini_file(config_file.c_str());
+		config->change_config_file(config_file.c_str());
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -415,8 +415,8 @@ int Ui::reload_whole_configuration()
 
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
-					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", MP_SECTION);
+					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
+			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
 			mp.pid = -1;
 		}
 
@@ -540,7 +540,7 @@ int Ui::check_gns()
 
 		// poszukiwanie serwerow gns
 		for (std::list <Ui::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
-				!= all_node_list.end(); node_list_iterator++) {
+				!= all_node_list.end(); ++node_list_iterator) {
 			std::string opendir_path("/net/");
 
 			opendir_path += *node_list_iterator;
@@ -582,6 +582,7 @@ int Ui::check_gns()
 				system_command += " gns -c ";
 				system_command += gns_server_node;
 
+				std::cerr << "SYSTEM(" << system_command << ")" << std::endl;
 				system(system_command.c_str());
 			}
 
@@ -599,7 +600,6 @@ int Ui::check_gns()
 	}
 
 	return (Pt_CONTINUE);
-
 }
 
 // ustala stan wszytkich EDP
@@ -811,10 +811,10 @@ int Ui::initiate_configuration()
 		if (config) {
 			delete config;
 		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, UI_SECTION, session_name);
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, lib::UI_SECTION, session_name);
 
 		std::string attach_point =
-				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -839,10 +839,10 @@ int Ui::initiate_configuration()
 
 	}
 
-	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
-	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
+	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 	network_sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	clear_all_configuration_lists();
 

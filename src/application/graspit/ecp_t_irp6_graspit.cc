@@ -30,7 +30,6 @@ irp6_grasp::irp6_grasp(lib::configurator &_config) :
 
 	sr_ecp_msg->message("ecp IRP6 loaded");
 }
-;
 
 void irp6_grasp::main_task_algorithm(void)
 {
@@ -41,7 +40,7 @@ void irp6_grasp::main_task_algorithm(void)
 	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	std::vector <double> coordinates1(6);
+	std::vector <double> coordinates1(7);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -58,8 +57,10 @@ void irp6_grasp::main_task_algorithm(void)
 			sr_ecp_msg->message("ECP_GEN_IRP6");
 
 			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+			//ignore first DOF of IRp6_on_track, not used in GraspIt
+			coordinates1[0] = 0.0;
 			for (int i = 0; i < 6; ++i)
-				coordinates1[i] = mp_ecp_irp6_command.joint[i];
+				coordinates1[i+1] = mp_ecp_irp6_command.joint[i];
 
 			cvgenjoint->reset();
 			cvgenjoint->set_absolute();
@@ -90,5 +91,4 @@ task* return_created_ecp_task(lib::configurator &_config)
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 

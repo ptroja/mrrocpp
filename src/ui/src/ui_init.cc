@@ -39,8 +39,8 @@
 
 #include "ui/src/ui_class.h"
 
-#include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+#include "base/lib/sr/srlib.h"
+
 
 #if defined(USE_MESSIP_SRR)
 #include "messip.h"

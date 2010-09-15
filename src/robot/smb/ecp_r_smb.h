@@ -18,57 +18,85 @@ namespace mrrocpp {
 namespace ecp {
 namespace smb {
 
-// ---------------------------------------------------------------
+/*!
+ * @brief SwarmItFix Mobile Base gripper ecp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup smb
+ */
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 
-	// Klasa dla robota irp6_postument (sztywnego)
 protected:
 	void create_kinematic_models_for_given_robot(void);
-	//bufory wejsciowe z generatora
-	//epos.h
-	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
-	lib::epos::epos_cubic_command epos_cubic_command_structure;
 
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
-	lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
-
-	/*
-	 lib::single_thread_port<lib::epos_gen_parameters>
-	 epos_gen_parameters_data_port;
-	 lib::epos_gen_parameters epos_gen_parameters_structure;
+	/**
+	 * @brief epos cubic motion command data port
 	 */
-	//smb.h
+	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
+
+	/**
+	 * @brief epos trapezoidal motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+
+	/**
+	 * @brief pin insertion command data port
+	 */
 	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
-	lib::smb::multi_pin_insertion_td smb_multi_pin_insertion_structure;
 
+	/**
+	 * @brief pin locking command data port
+	 */
 	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
-	lib::smb::multi_pin_locking_td smb_multi_pin_locking_structure;
 
-	// bufory wyjsciowe do generatora
-	// epos.h
+	/**
+	 * @brief epos motion status reply data request port
+	 */
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;
-	lib::epos::epos_reply epos_reply_structure;
 
-	//smb.h
+	/**
+	 * @brief leg status reply data request port
+	 */
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
-	lib::smb::multi_leg_reply_td smb_multi_leg_reply_structure;
-
-	// bufory do edp
+	/**
+	 * @brief EDP command buffer
+	 */
 	lib::smb::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
 	lib::smb::rbuffer edp_ecp_rbuffer;
 
 public:
+	/**
+	 * @brief constructor called from UI
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
 	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _ecp_object ecp tak object reference
+	 */
 	robot(common::task::task& _ecp_object);
 
+	/**
+	 * @brief set the edp command buffer
+	 * basing on data_ports
+	 */
 	void create_command();
+
+	/**
+	 * @brief set the data_request_ports
+	 * basing on edp reply buffer
+	 */
 	void get_reply();
 
-}; // end: class ecp_irp6_mechatronika_robot
-// ---------------------------------------------------------------
-
+};
 
 } // namespace smb
 } // namespace ecp

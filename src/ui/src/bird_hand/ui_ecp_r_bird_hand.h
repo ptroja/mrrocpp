@@ -23,19 +23,15 @@ public:
 
 	// zadawanie nastaw regulatorow
 	mrrocpp::lib::single_thread_port <mrrocpp::lib::bird_hand::command> *bird_hand_command_data_port;
-	mrrocpp::lib::bird_hand::command bird_hand_command_structure;
 
 	// zadawanie parametrow konfiguracji
 	lib::single_thread_port <lib::bird_hand::configuration> *bird_hand_configuration_command_data_port;
-	lib::bird_hand::configuration bird_hand_configuration_command_structure;
 
 	// odbieranie statusu robota
 	lib::single_thread_request_port <lib::bird_hand::status> *bird_hand_status_reply_data_request_port;
-	lib::bird_hand::status bird_hand_status_reply_structure;
 
 	// odczytanie parametrow konfiguracji
 	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
-	lib::bird_hand::configuration bird_hand_configuration_reply_structure;
 
 	ecp::bird_hand::robot *the_robot;
 

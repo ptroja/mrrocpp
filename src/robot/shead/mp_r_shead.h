@@ -9,15 +9,26 @@
  * @ingroup shead
  */
 
-#include "base/mp/mp_r_motor_driven.h"
+#include "base/mp/mp_robot.h"
+#include "robot/shead/const_shead.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-class shead : public motor_driven
+/*!
+ * @brief SwarmItFix Head mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup shead
+ */
+class shead : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	shead(task::task &mp_object_l);
 };
 

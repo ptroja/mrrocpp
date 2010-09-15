@@ -9,6 +9,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
+/*!
+ * \class irp6_grasp
+ * \brief Class for getting commands from MP and moving IRp6
+ *
+ * \author kczajkow
+ * \date Jan 05, 2010
+ */
 class irp6_grasp: public common::task::task {
 
   private:

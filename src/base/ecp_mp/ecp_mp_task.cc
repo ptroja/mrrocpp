@@ -47,13 +47,13 @@ lib::sr_ecp* task::sh_msg = NULL;
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
-	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", UI_SECTION);
+	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	//	// Obiekt do komuniacji z SR
 	//	sr_ecp_msg = new lib::sr_ecp(process_type, process_name, sr_net_attach_point);
 
 	const std::string ui_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", UI_SECTION);
+			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
 
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	short tmp = 0;
@@ -62,8 +62,8 @@ task::task(lib::configurator &_config) :
 #else
 		while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
 #endif
-		if ((tmp++) < CONNECT_RETRY)
-			usleep(1000 * CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY)
+			usleep(1000 * lib::CONNECT_DELAY);
 		else {
 			int e = errno;
 			perror("Connect to UI failed");
