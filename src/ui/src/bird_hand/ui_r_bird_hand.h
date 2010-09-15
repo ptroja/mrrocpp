@@ -11,6 +11,10 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 class Ui;
 
 //
@@ -40,6 +44,10 @@ public:
 	int close_all_windows();
 	int delete_ui_ecp_robot();
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

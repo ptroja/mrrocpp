@@ -11,6 +11,11 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 //
 //
 // KLASA UiRobotSpeaker
@@ -39,6 +44,10 @@ public:
 	int delete_ui_ecp_robot();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

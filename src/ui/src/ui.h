@@ -20,6 +20,15 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
+enum UI_NOTIFICATION_STATE_ENUM
+{
+	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
+};
+
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 enum TEACHING_STATE
 {
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
@@ -71,11 +80,6 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 enum TEACHING_STATE_ENUM
 {
 	FSTRAJECTORY, FSCONFIG
-};
-
-enum UI_NOTIFICATION_STATE_ENUM
-{
-	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
 };
 
 // FIXME: moved from proto.h for linux compatibility
@@ -241,8 +245,12 @@ public:
 	busy_flag();
 };
 
+}
+}
+}
+
 // TODO: reimplement this as a singleton
-extern busy_flag communication_flag;
+extern uin::common::busy_flag communication_flag;
 
 #endif
 

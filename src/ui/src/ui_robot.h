@@ -10,6 +10,10 @@
 
 #include "ui/src/ui.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 class Ui;
 
 //
@@ -48,5 +52,8 @@ public:
 
 };
 
+}
+}
+}
 #endif
 

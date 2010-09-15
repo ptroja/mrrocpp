@@ -45,7 +45,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern uin::common::Ui ui;
 
 // odblokowanie widgetu
 int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -251,7 +251,7 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 		ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
 	}
 
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_yes_no_window);
 
@@ -287,7 +287,7 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui.ui_ecp_obj->ui_rep.integer_number = 0;
 	}
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_integer);
 
@@ -323,7 +323,7 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		ui.ui_ecp_obj->ui_rep.double_number = 0.0;
 	}
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_double);
 
@@ -370,7 +370,7 @@ int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	{
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_choose_option);
 
@@ -386,7 +386,8 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui.file_window_mode == FSTRAJECTORY) && (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY)) {
+	if ((ui.file_window_mode == FSTRAJECTORY)
+			&& (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY)) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -405,7 +406,7 @@ int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+	if (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -501,7 +502,7 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	ui.teachingstate = MP_RUNNING;
 	ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 	PtDestroyWidget(ABW_teaching_window);
 
 	return (Pt_CONTINUE);
@@ -540,7 +541,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
 			ui.teach_filesel_fullpath = ui.ui_ecp_obj->ui_rep.path;
 			// opuszczenie semaforu dla watku UI_COMM
-			ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+			ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 			// dla pliku konfiguracyjnego
 		} else if (ui.file_window_mode == FSCONFIG) {
@@ -1140,7 +1141,7 @@ int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+	if (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -1155,7 +1156,7 @@ int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+	if (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -1170,7 +1171,7 @@ int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+	if (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -1185,7 +1186,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.ui_ecp_obj->communication_state != UI_ECP_REPLY_READY) {
+	if (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -1235,7 +1236,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	ui.ui_ecp_obj->ui_rep.double_number = *motion_time;
 	ui.ui_ecp_obj->ui_rep.reply = lib::NEXT;
-	ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 	ui.ui_ecp_obj->synchroniser.command();
 
 	return (Pt_CONTINUE);

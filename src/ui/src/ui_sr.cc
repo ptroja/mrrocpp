@@ -48,6 +48,10 @@
 #include <Pt.h>
 #include <Ph.h>
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 void ui_sr_buffer::operator()() {
 	lib::set_thread_name("sr");
 
@@ -154,3 +158,7 @@ bool ui_sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 	boost::mutex::scoped_lock lock(mtx);
 	return cb.empty();
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp

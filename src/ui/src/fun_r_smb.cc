@@ -34,7 +34,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern uin::common::Ui ui;
 
 int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 

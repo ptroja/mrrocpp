@@ -33,6 +33,10 @@
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/shead/ecp_r_shead.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 // ---------------------------------------------------------------
 ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
@@ -207,5 +211,9 @@ void ui_tfg_and_conv_robot::move_joints(const double final_position[]) {
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 }
 // ---------------------------------------------------------------
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 

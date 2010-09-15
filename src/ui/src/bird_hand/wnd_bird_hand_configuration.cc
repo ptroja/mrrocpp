@@ -13,6 +13,10 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -40,3 +44,7 @@ int WndBirdHandConfiguration::copy_command() {
 
 	return 1;
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp

@@ -12,6 +12,11 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobotIrp6ot_m

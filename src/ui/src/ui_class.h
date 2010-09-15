@@ -8,6 +8,9 @@
 #ifndef __UI_CLASS_H
 #define __UI_CLASS_H
 
+/* Local headers */
+#include "../ablibs.h"
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
@@ -25,14 +28,16 @@
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
 
-/* Local headers */
-#include "../ablibs.h"
-
 //
 //
 // KLASA ui
 //
 //
+
+
+namespace mrrocpp {
+namespace uin {
+namespace common {
 
 class ui_sr_buffer;
 class ui_ecp_buffer;
@@ -149,5 +154,8 @@ public:
 
 };
 
+}
+} //namespace uin
+} //namespace mrrocpp
 #endif
 

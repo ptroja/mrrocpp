@@ -20,6 +20,9 @@
 //
 //
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
 
 UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
 	UiRobot(_ui, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
@@ -172,3 +175,6 @@ int UiRobotBirdHand::delete_ui_ecp_robot()
 	return 1;
 }
 
+}
+} //namespace uin
+} //namespace mrrocpp

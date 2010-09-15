@@ -12,6 +12,10 @@
 #include "ui/src/ui_robot.h"
 #include "robot/sarkofag/const_sarkofag.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobotSarkofag
@@ -45,6 +49,10 @@ public:
 	int close_all_windows();
 	int delete_ui_ecp_robot();
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

@@ -25,6 +25,10 @@
 
 #include "ui/src/ui_ecp_r_common.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 // ---------------------------------------------------------------
 ui_common_robot::ui_common_robot(lib::configurator &_config,
 		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
@@ -210,4 +214,7 @@ void ui_common_robot::read_joints(double current_position[]) {
 }
 // ---------------------------------------------------------------
 
+}
+} //namespace uin
+} //namespace mrrocpp
 

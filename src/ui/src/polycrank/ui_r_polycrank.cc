@@ -11,6 +11,9 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
 
 //
 //
@@ -36,3 +39,7 @@ int UiRobotPolycrank::delete_ui_ecp_robot() {
 	delete ui_ecp_robot;
 }
 
+
+}
+} //namespace uin
+} //namespace mrrocpp

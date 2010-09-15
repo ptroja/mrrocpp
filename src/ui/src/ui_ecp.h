@@ -20,6 +20,11 @@
 
 #include "ui/src/ui.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 /**************************** ui_ecp_buffer *****************************/
 
 class ui_ecp_buffer  : public boost::noncopyable{
@@ -41,6 +46,10 @@ public:
 	~ui_ecp_buffer();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

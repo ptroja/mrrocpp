@@ -8,6 +8,10 @@
 
 #include "ui/src/ui.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 busy_flagger::busy_flagger(busy_flag & _flag) :
 	flag(_flag) {
 	flag.increment();
@@ -100,3 +104,7 @@ feb_thread::~feb_thread() {
 	thread_id->join(); // join it
 	delete thread_id;
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp

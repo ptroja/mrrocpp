@@ -34,7 +34,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern uin::common::Ui ui;
 
 // zamykanie okien ruchow recznych dla robota irp6_postument
 

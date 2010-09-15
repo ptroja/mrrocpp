@@ -35,6 +35,10 @@
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/spkm/ecp_r_spkm.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	ui_common_robot(_config, _sr_ecp_msg, _robot_name)
@@ -511,3 +515,7 @@ void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[])
 	tmp_vector.to_table(current_position);
 
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp

@@ -12,6 +12,11 @@
 #include "ui/src/ui_robot.h"
 #include "robot/conveyor/const_conveyor.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 class Ui;
 
 //
@@ -48,6 +53,10 @@ public:
 	int delete_ui_ecp_robot();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

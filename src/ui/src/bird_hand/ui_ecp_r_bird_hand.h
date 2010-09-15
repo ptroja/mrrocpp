@@ -15,6 +15,11 @@
 #include "base/ecp/ecp_robot.h"
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 // ---------------------------------------------------------------
 class ui_bird_hand_robot
 {
@@ -45,4 +50,10 @@ public:
 	virtual ~ui_bird_hand_robot();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
+
 #endif
+

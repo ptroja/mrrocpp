@@ -12,6 +12,11 @@
 #include "ui/src/ui_robot.h"
 #include "robot/irp6m/const_irp6m.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 //
 //
 // KLASA UiRobotIrp6m_m
@@ -53,6 +58,10 @@ public:
 	int delete_ui_ecp_robot();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

@@ -11,6 +11,10 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -23,7 +27,8 @@
 class Ui;
 class UiRobotBirdHand;
 
-class WndBirdHandConfiguration {
+class WndBirdHandConfiguration
+{
 private:
 	Ui& ui;
 	UiRobotBirdHand& bird_hand;
@@ -38,6 +43,11 @@ public:
 	int copy_command();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
+
 
 #endif
 

@@ -15,6 +15,10 @@
 
 #include "base/ecp/ecp_robot.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 // ---------------------------------------------------------------
 class ui_common_robot
 {
@@ -68,4 +72,8 @@ public:
 	void get_servo_algorithm(uint8_t algorithm_no[lib::MAX_SERVOS_NR], uint8_t parameters_no[lib::MAX_SERVOS_NR]);
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 #endif

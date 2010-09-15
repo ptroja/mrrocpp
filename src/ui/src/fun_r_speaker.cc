@@ -32,7 +32,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern uin::common::Ui ui;
 
 // zamykanie okna odtwarzania dzwiekow dla robota speaker
 

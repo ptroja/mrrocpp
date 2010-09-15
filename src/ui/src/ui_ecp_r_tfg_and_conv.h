@@ -15,6 +15,10 @@
 #include "base/ecp/ecp_robot.h"
 #include "ui/src/ui_ecp_r_common.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 // ---------------------------------------------------------------
 class ui_tfg_and_conv_robot: public ui_common_robot {
 
@@ -28,4 +32,8 @@ public:
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 #endif

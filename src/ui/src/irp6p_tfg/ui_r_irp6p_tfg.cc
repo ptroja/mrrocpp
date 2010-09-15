@@ -12,7 +12,9 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
-
+namespace mrrocpp {
+namespace uin {
+namespace common {
 
 //
 //
@@ -223,3 +225,7 @@ int UiRobotIrp6p_tfg::delete_ui_ecp_robot() {
 	return 1;
 
 }
+}
+} //namespace uin
+} //namespace mrrocpp
+

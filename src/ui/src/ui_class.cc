@@ -39,6 +39,10 @@
 //
 
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 Ui::Ui() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
 {
@@ -135,7 +139,7 @@ void Ui::init()
 		check_gns();
 	} else {
 		printf("Blad manage_default_configuration_file\n");
-		PtExit( EXIT_SUCCESS);
+		PtExit(EXIT_SUCCESS);
 	}
 
 	create_threads();
@@ -150,7 +154,7 @@ void Ui::init()
 
 	} else {
 		printf("Blad manage_default_configuration_file\n");
-		PtExit( EXIT_SUCCESS);
+		PtExit(EXIT_SUCCESS);
 	}
 
 	// inicjacja pliku z logami sr
@@ -485,7 +489,7 @@ int Ui::check_gns()
 {
 	if (access("/etc/system/config/useqnet", R_OK)) {
 		printf("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
-		PtExit( EXIT_SUCCESS);
+		PtExit(EXIT_SUCCESS);
 	}
 
 	unsigned short number_of_gns_servers = 0;
@@ -523,7 +527,7 @@ int Ui::check_gns()
 				printf("There is gns server on %s node\n", (*node_list_iterator).c_str());
 			}
 		}
-		PtExit( EXIT_SUCCESS);
+		PtExit(EXIT_SUCCESS);
 	}
 	// gns server was not found in the QNX network
 	else if (!number_of_gns_servers) {
@@ -839,8 +843,10 @@ int Ui::initiate_configuration()
 
 	}
 
-	ui_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
-	sr_attach_point = config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+	ui_attach_point
+			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
+	sr_attach_point
+			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 	network_sr_attach_point
 			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
@@ -864,7 +870,7 @@ int Ui::fill_section_list(const char* file_name_and_path)
 	FILE * file = fopen(file_name_and_path, "r");
 	if (file == NULL) {
 		printf("UI fill_section_list Wrong file_name: %s\n", file_name_and_path);
-		PtExit( EXIT_SUCCESS);
+		PtExit(EXIT_SUCCESS);
 	}
 
 	// sczytaj nazwy wszytkich sekcji na liste dynamiczna
@@ -1037,3 +1043,7 @@ void Ui::create_threads()
 #endif
 
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp

@@ -4,6 +4,10 @@
 #include "ui/src/ui_robot.h"
 #include "ui/src/ui_class.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobot
@@ -103,3 +107,6 @@ int UiRobot::EDP_slay_int()
 
 }
 
+}
+} //namespace uin
+} //namespace mrrocpp

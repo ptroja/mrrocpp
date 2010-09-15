@@ -33,7 +33,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern uin::common::Ui ui;
 
 int close_wind_sarkofag_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 

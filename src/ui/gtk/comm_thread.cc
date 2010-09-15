@@ -26,7 +26,7 @@ void *comm_thread(void* arg)
 	ui_ecp_buffer ui_ecp_obj;
 
 	while (1) {
-		// ui.ui_ecp_obj->communication_state = UI_ECP_REPLY_READY;
+		// ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 		//		ui.ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
 		//		rcvid = MsgReceive(attach->chid, &ui.ui_ecp_obj->ecp_to_ui_msg, sizeof(ui.ui_ecp_obj->ecp_to_ui_msg), info);
 

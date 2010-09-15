@@ -25,6 +25,10 @@
 
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 ui_speaker_robot::ui_speaker_robot(edp_state_def* _edp_state,
 		lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	robot(_config, sr_ecp_msg) {
@@ -64,6 +68,10 @@ void ui_speaker_robot::read_state(bool* local_state) {
 	}
 	// printf("UI SPEAKING: %d\n", reply_package.arm.text_def.speaking);
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 
 

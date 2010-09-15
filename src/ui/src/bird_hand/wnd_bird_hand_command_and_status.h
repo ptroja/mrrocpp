@@ -11,6 +11,11 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -126,6 +131,10 @@ public:
 	int copy_ring_f_2_command();
 
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

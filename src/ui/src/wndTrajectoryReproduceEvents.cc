@@ -36,7 +36,7 @@
 
 // Tryb debugowania.
 // #define TRDEBUG
-extern Ui ui;
+extern uin::common::Ui ui;
 // Wiadomosc wysylana do ECP.
 extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.

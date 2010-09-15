@@ -14,6 +14,9 @@
 // Konfigurator.
 #include "base/lib/configurator.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
 
 // ---------------------------------------------------------------
 class ui_speaker_robot: public ecp::speaker::robot {
@@ -35,6 +38,8 @@ class ui_speaker_robot: public ecp::speaker::robot {
 
 }; // end: class ui_speaker_robot
 
-
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif

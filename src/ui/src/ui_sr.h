@@ -22,7 +22,13 @@
 
 #include "ui/src/ui.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 #define UI_SR_BUFFER_LENGHT 50
+
+
 
 class ui_sr_buffer: public boost::noncopyable {
 private:
@@ -46,5 +52,8 @@ public:
 	bool buffer_empty(); // czy bufor cykliczny jest pusty
 };
 
+}
+} //namespace uin
+} //namespace mrrocpp
 #endif
 

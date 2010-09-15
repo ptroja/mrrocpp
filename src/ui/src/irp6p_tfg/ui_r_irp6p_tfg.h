@@ -12,6 +12,10 @@
 #include "ui/src/ui_robot.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 //
 //
 // KLASA UiRobotIrp6p_tfg
@@ -44,6 +48,10 @@ public:
 	int close_all_windows();
 	int delete_ui_ecp_robot();
 };
+
+}
+} //namespace uin
+} //namespace mrrocpp
 
 #endif
 

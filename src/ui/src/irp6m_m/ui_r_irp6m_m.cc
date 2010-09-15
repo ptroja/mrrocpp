@@ -12,6 +12,11 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
+
 // extern ui_state_def ui_state;
 
 //
@@ -235,4 +240,8 @@ int UiRobotIrp6m_m::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 	return 1;
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp
 

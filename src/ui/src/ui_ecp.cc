@@ -29,6 +29,10 @@
 
 extern busy_flag communication_flag;
 
+namespace mrrocpp {
+namespace uin {
+namespace common {
+
 ui_ecp_buffer::ui_ecp_buffer(Ui& _ui) :
 	ui(_ui), communication_state(UI_ECP_AFTER_REPLY), synchroniser() {
 	thread_id
@@ -60,7 +64,7 @@ void ui_ecp_buffer::operator()() {
 	}
 
 	while (1) {
-		// communication_state = UI_ECP_REPLY_READY;
+		// communication_state = uin::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
 		_msg_info info;
@@ -351,3 +355,7 @@ void ui_ecp_buffer::operator()() {
 	}// end while
 
 }
+
+}
+} //namespace uin
+} //namespace mrrocpp
