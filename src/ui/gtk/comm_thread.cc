@@ -110,7 +110,7 @@ void *comm_thread(void* arg)
 			case lib::C_MOTOR:
 				//  printf("C_MOTOR\n");
 				ui.ui_ecp_obj->synchroniser.null_command();
-				if (ui.teachingstate == MP_RUNNING) {
+				if (ui.teachingstate == uin::common::MP_RUNNING) {
 					ui.teachingstate = ECP_TEACHING;
 				}
 				PtEnter(0);
@@ -181,13 +181,13 @@ void *comm_thread(void* arg)
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::LOAD_FILE\n");
-				if (ui.teachingstate == MP_RUNNING) {
+				if (ui.teachingstate == uin::common::MP_RUNNING) {
 					ui.ui_ecp_obj->synchroniser.null_command();
 					bool wyjscie = false;
 					while (!wyjscie) {
 						if (!ui.is_file_selection_window_open) {
 							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = FSTRAJECTORY; // wybor pliku z trajektoria
+							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -209,13 +209,13 @@ void *comm_thread(void* arg)
 				break;
 			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::SAVE_FILE\n");
-				if (ui.teachingstate == MP_RUNNING) {
+				if (ui.teachingstate == uin::common::MP_RUNNING) {
 					ui.ui_ecp_obj->synchroniser.null_command();
 					bool wyjscie = false;
 					while (!wyjscie) {
 						if (!ui.is_file_selection_window_open) {
 							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = FSTRAJECTORY; // wybor pliku z trajektoria
+							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);

@@ -386,8 +386,8 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui.file_window_mode == FSTRAJECTORY)
-			&& (ui.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY)) {
+	if ((ui.file_window_mode == uin::common::FSTRAJECTORY) && (ui.ui_ecp_obj->communication_state
+			!= uin::common::UI_ECP_REPLY_READY)) {
 		ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	ui.ui_ecp_obj->synchroniser.command();
@@ -499,7 +499,7 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.teachingstate = MP_RUNNING;
+	ui.teachingstate = uin::common::MP_RUNNING;
 	ui.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
 	ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
@@ -521,7 +521,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 	// dla pliku trajektorii
 	if (item != NULL) {
-		if (ui.file_window_mode == FSTRAJECTORY) {
+		if (ui.file_window_mode == uin::common::FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
 				strncpy(ui.ui_ecp_obj->ui_rep.filename, rindex(item->fullpath, '/') + 1, strlen(rindex(item->fullpath, '/'))
 						- 1);
@@ -544,7 +544,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 			ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
 
 			// dla pliku konfiguracyjnego
-		} else if (ui.file_window_mode == FSCONFIG) {
+		} else if (ui.file_window_mode == uin::common::FSCONFIG) {
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
@@ -594,7 +594,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 	switch (ui.file_window_mode)
 	{
-		case FSCONFIG:
+		case uin::common::FSCONFIG:
 			// 	printf("aaa:\n");
 			// ustawienie katalogu root
 			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, ui.config_file_fullpath.c_str(), 0);
@@ -606,7 +606,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			item = *item_list;
 			PtFSSelect(ABW_PtFileSel_sl, item);
 			break;
-		case FSTRAJECTORY:
+		case uin::common::FSTRAJECTORY:
 			// printf("bbb:\n");
 			// ustawienie katalogu root
 			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, "/net", 0);
@@ -757,7 +757,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 			switch (ui.mp.state)
 			{
-				case UI_MP_PERMITED_TO_RUN:
+				case uin::common::UI_MP_PERMITED_TO_RUN:
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -766,7 +766,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case UI_MP_WAITING_FOR_START_PULSE:
+				case uin::common::UI_MP_WAITING_FOR_START_PULSE:
 					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -775,7 +775,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case UI_MP_TASK_RUNNING:
+				case uin::common::UI_MP_TASK_RUNNING:
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -784,7 +784,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case UI_MP_TASK_PAUSED:
+				case uin::common::UI_MP_TASK_PAUSED:
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					ui.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					ui.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -920,9 +920,9 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	if (!ui.is_file_selection_window_open) {
 		ui.is_file_selection_window_open = 1;
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_browse_config_file) {
-			ui.file_window_mode = FSCONFIG; // wybor pliku konfiguracyjnego
+			ui.file_window_mode = uin::common::FSCONFIG; // wybor pliku konfiguracyjnego
 		} else {
-			ui.file_window_mode = FSTRAJECTORY; // wybor pliku z trajektoria
+			ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 		}
 		ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
 	} else {
@@ -986,7 +986,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// brutal overkilling
 
-	for (std::list <program_node_def>::iterator program_node_list_iterator = ui.program_node_list.begin(); program_node_list_iterator
+	for (std::list <uin::common::program_node_def>::iterator program_node_list_iterator = ui.program_node_list.begin(); program_node_list_iterator
 			!= ui.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
@@ -1250,8 +1250,8 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((ui.mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state == UI_MP_PERMITED_TO_RUN) || (ui.mp.state
-			== UI_MP_WAITING_FOR_START_PULSE)) {
+	if ((ui.mp.state == uin::common::UI_MP_NOT_PERMITED_TO_RUN) || (ui.mp.state == uin::common::UI_MP_PERMITED_TO_RUN)
+			|| (ui.mp.state == uin::common::UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (ui.check_synchronised_and_loaded(ui.irp6ot_m->state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
@@ -1371,9 +1371,9 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 						break;
 					}
 
-				ui.teachingstate = MP_RUNNING;
+				ui.teachingstate = uin::common::MP_RUNNING;
 
-				ui.mp.state = UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+				ui.mp.state = uin::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 				pt_res = PtEnter(0);
 				start_process_control_window(widget, apinfo, cbinfo);
 				if (pt_res >= 0)
@@ -1397,7 +1397,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (ui.mp.pid != -1) {
 
-		if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state == UI_MP_TASK_PAUSED)) {
+		if ((ui.mp.state == uin::common::UI_MP_TASK_RUNNING) || (ui.mp.state == uin::common::UI_MP_TASK_PAUSED)) {
 
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
@@ -1407,7 +1407,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
 		SignalKill(ui.mp.node_nr, ui.mp.pid, 0, SIGTERM, 0, 0);
-		ui.mp.state = UI_MP_PERMITED_TO_RUN; // mp wylaczone
+		ui.mp.state = uin::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
 	// delay(1000);
@@ -1436,9 +1436,9 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.mp.state == UI_MP_WAITING_FOR_START_PULSE) {
+	if (ui.mp.state == uin::common::UI_MP_WAITING_FOR_START_PULSE) {
 
-		ui.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
+		ui.mp.state = uin::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
@@ -1470,9 +1470,9 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((ui.mp.state == UI_MP_TASK_RUNNING) || (ui.mp.state == UI_MP_TASK_PAUSED)) {
+	if ((ui.mp.state == uin::common::UI_MP_TASK_RUNNING) || (ui.mp.state == uin::common::UI_MP_TASK_PAUSED)) {
 
-		ui.mp.state = UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
+		ui.mp.state = uin::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		ui.execute_mp_pulse(MP_STOP);
 
@@ -1492,9 +1492,9 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.mp.state == UI_MP_TASK_RUNNING) {
+	if (ui.mp.state == uin::common::UI_MP_TASK_RUNNING) {
 
-		ui.mp.state = UI_MP_TASK_PAUSED;// czekanie na stop
+		ui.mp.state = uin::common::UI_MP_TASK_PAUSED;// czekanie na stop
 
 		ui.execute_mp_pulse(MP_PAUSE);
 
@@ -1514,9 +1514,9 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.mp.state == UI_MP_TASK_PAUSED) {
+	if (ui.mp.state == uin::common::UI_MP_TASK_PAUSED) {
 
-		ui.mp.state = UI_MP_TASK_RUNNING;// czekanie na stop
+		ui.mp.state = uin::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		ui.execute_mp_pulse(MP_RESUME);
 
@@ -1536,7 +1536,7 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.mp.state == UI_MP_TASK_RUNNING) {
+	if (ui.mp.state == uin::common::UI_MP_TASK_RUNNING) {
 
 		ui.execute_mp_pulse(MP_TRIGGER);
 
@@ -1578,7 +1578,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wnd_processes_control_signal_resume) {
 		// Odwieszenie procesow EDP, ECP i MP sygnalem
 		signo=SIGCONT;
-		ui.teachingstate = MP_RUNNING;
+		ui.teachingstate = uin::common::MP_RUNNING;
 	}
 
 	/*int SignalKill( uint32_t nd,
