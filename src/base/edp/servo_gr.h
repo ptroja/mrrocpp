@@ -14,9 +14,6 @@
 #include "base/lib/condition_synchroniser.h"
 #include "base/edp/edp_typedefs.h"
 
-#define ERROR_DETECTED     1
-#define NO_ERROR_DETECTED  0
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -24,6 +21,9 @@ namespace common {
 class regulator;
 class HardwareInterface;
 class motor_driven_effector;
+
+const uint8_t ERROR_DETECTED = 1;
+const uint8_t NO_ERROR_DETECTED = 0;
 
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
 const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
