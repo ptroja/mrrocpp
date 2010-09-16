@@ -583,7 +583,7 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
 			while ((ui.conveyor->state.ecp.trigger_fd
 					= name_open(ui.conveyor->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

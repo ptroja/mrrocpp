@@ -370,7 +370,7 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
 			while ((ui.speaker->state.ecp.trigger_fd
 					= name_open(ui.speaker->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

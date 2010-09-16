@@ -2104,7 +2104,7 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
 			while ((ui.irp6ot_m->state.ecp.trigger_fd
 					= name_open(ui.irp6ot_m->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

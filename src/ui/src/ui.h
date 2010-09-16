@@ -113,7 +113,7 @@ enum UI_ALL_EDPS_STATE
 
 
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
-#define SIGALRM_TIMEOUT 1000000
+static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
 typedef struct
 {
