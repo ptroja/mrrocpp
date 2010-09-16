@@ -118,7 +118,7 @@ public:
 	sarkofag::UiRobot *sarkofag;
 	irp6m::UiRobot *irp6m_m;
 	conveyor::UiRobot *conveyor;
-	UiRobotSpeaker *speaker;
+	speaker::UiRobot *speaker;
 	spkm::UiRobot *spkm;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;

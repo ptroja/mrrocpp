@@ -14,29 +14,30 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
-
-//
-//
-// KLASA UiRobotSpeaker
-//
-//
-
-
-// super klasa agregujaca porozrzucane struktury
-
 class Ui;
-class ui_speaker_robot;
+}
 
-class UiRobotSpeaker: public UiRobot {
+namespace speaker {
+
+//
+//
+// KLASA UiRobot
+//
+//
+
+
+class EcpRobot;
+
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
 
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
-	ui_speaker_robot *ui_ecp_robot;
+	EcpRobot *ui_ecp_robot;
 
-	UiRobotSpeaker(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 

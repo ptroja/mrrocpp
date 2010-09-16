@@ -14,8 +14,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
-
+namespace speaker {
 
 //
 //
@@ -24,14 +23,14 @@ namespace common {
 //
 
 
-UiRobotSpeaker::UiRobotSpeaker(Ui& _ui) :
-	UiRobot(_ui, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION),
-			is_wind_speaker_play_open(false), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION), is_wind_speaker_play_open(false),
+			ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotSpeaker::reload_configuration()
+int UiRobot::reload_configuration()
 {
 
 	// jesli speaker ma byc aktywny
@@ -106,7 +105,7 @@ int UiRobotSpeaker::reload_configuration()
 
 }
 
-int UiRobotSpeaker::manage_interface()
+int UiRobot::manage_interface()
 {
 
 	switch (state.edp.state)
@@ -162,7 +161,7 @@ int UiRobotSpeaker::manage_interface()
 
 }
 
-int UiRobotSpeaker::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -176,7 +175,7 @@ int UiRobotSpeaker::close_all_windows()
 
 }
 
-int UiRobotSpeaker::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;

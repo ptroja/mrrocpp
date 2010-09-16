@@ -36,8 +36,7 @@ extern uin::common::Ui ui;
 
 // zamykanie okna odtwarzania dzwiekow dla robota speaker
 
-int close_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int close_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -51,8 +50,7 @@ int close_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int start_wind_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int start_wind_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -71,8 +69,7 @@ int start_wind_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int clear_wind_speaker_play_flag(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int clear_wind_speaker_play_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -86,8 +83,8 @@ int clear_wind_speaker_play_flag(PtWidget_t *widget, ApInfo_t *apinfo,
 
 // inicjacja okna do odtwarzania dzwiekow dla robota speaker
 
-int init_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int init_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -98,8 +95,7 @@ int init_wnd_speaker_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -119,18 +115,15 @@ int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 		if (ui.speaker->state.edp.pid != -1) {
 
-			if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_0)
-					|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-							== 0x30))) {
+			if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_0) || ((cbinfo->event->type == Ph_EV_KEY)
+					&& (my_data->key_cap == 0x30))) {
 				text = ui.speaker->state.edp.preset_sound_0;
 				prosody = "neutral";
-			} else if ((ApName(ApWidget(cbinfo))
-					== ABN_mm_speaker_preset_sound_1) || ((cbinfo->event->type
+			} else if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_1) || ((cbinfo->event->type
 					== Ph_EV_KEY) && (my_data->key_cap == 0x31))) {
 				text = ui.speaker->state.edp.preset_sound_1;
 				prosody = "neutral";
-			} else if ((ApName(ApWidget(cbinfo))
-					== ABN_mm_speaker_preset_sound_2) || ((cbinfo->event->type
+			} else if ((ApName(ApWidget(cbinfo)) == ABN_mm_speaker_preset_sound_2) || ((cbinfo->event->type
 					== Ph_EV_KEY) && (my_data->key_cap == 0x32))) {
 				text = ui.speaker->state.edp.preset_sound_2;
 				prosody = "neutral";
@@ -149,8 +142,7 @@ int speaker_preset_sound_play(PtWidget_t *widget, ApInfo_t *apinfo,
 
 // funkcja wysylajaca rozkaz odtworzenia dzwieku do robota speaker
 
-int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -184,8 +176,7 @@ int speaker_play_exec(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int speaker_check_state(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int speaker_check_state(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -195,8 +186,7 @@ int speaker_check_state(PtWidget_t *widget, ApInfo_t *apinfo,
 	// wychwytania ew. bledow ECP::robot
 	try {
 		if (ui.speaker->state.edp.pid != -1) {
-			ui.speaker->ui_ecp_robot->read_state(
-					&(ui.speaker->ui_ecp_robot->speaking_state));
+			ui.speaker->ui_ecp_robot->read_state(&(ui.speaker->ui_ecp_robot->speaking_state));
 
 			if (ui.speaker->ui_ecp_robot->speaking_state) { // odtwarzanie w toku
 				PtSetResource(ABW_PtLabel_wnd_speaker_play_status,
@@ -215,8 +205,7 @@ int speaker_check_state(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -239,25 +228,20 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 			tmp_string += ui.speaker->state.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
-			tmp2_string
-					+= ui.speaker->state.edp.network_resourceman_attach_point;
+			tmp2_string += ui.speaker->state.edp.network_resourceman_attach_point;
 
 			// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.speaker->state.edp.test_mode)) && (access(
-					tmp_string.c_str(), R_OK) == 0)) || (access(
-					tmp2_string.c_str(), R_OK) == 0)) {
+			if (((!(ui.speaker->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				ui.ui_msg->message("edp_speaker already exists");
 
-			} else if (ui.check_node_existence(ui.speaker->state.edp.node_name,
-					std::string("edp_speaker"))) {
+			} else if (ui.check_node_existence(ui.speaker->state.edp.node_name, std::string("edp_speaker"))) {
 
-				ui.speaker->state.edp.node_nr = ui.config->return_node_number(
-						ui.speaker->state.edp.node_name);
+				ui.speaker->state.edp.node_nr = ui.config->return_node_number(ui.speaker->state.edp.node_name);
 
-				ui.speaker->ui_ecp_robot = new uin::common::ui_speaker_robot(
-						&ui.speaker->state.edp, *ui.config, *ui.all_ecp_msg);
-				ui.speaker->state.edp.pid
-						= ui.speaker->ui_ecp_robot->get_EDP_pid();
+				ui.speaker->ui_ecp_robot
+						= new uin::speaker::EcpRobot(&ui.speaker->state.edp, *ui.config, *ui.all_ecp_msg);
+				ui.speaker->state.edp.pid = ui.speaker->ui_ecp_robot->get_EDP_pid();
 
 				if (ui.speaker->state.edp.pid < 0) {
 					ui.speaker->state.edp.state = 0;
@@ -295,8 +279,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -307,8 +290,7 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	if (ui.speaker->state.edp.state > 0) { // jesli istnieje EDP
 		if (ui.speaker->state.edp.reader_fd >= 0) {
 			if (name_close(ui.speaker->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_speaker, %s:%d, name_close(): %s\n",
-						__FILE__, __LINE__, strerror(errno));
+				fprintf(stderr, "UI: EDP_speaker, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
 			}
 		}
 
@@ -330,8 +312,7 @@ int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -345,8 +326,7 @@ int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -360,8 +340,7 @@ int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -375,8 +354,7 @@ int pulse_reader_speaker_trigger(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo)
+int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
 
@@ -392,10 +370,10 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm((useconds_t) (SIGALRM_TIMEOUT), 0);
-			while ((ui.speaker->state.ecp.trigger_fd = name_open(
-					ui.speaker->state.ecp.network_trigger_attach_point.c_str(),
-					NAME_FLAG_ATTACH_GLOBAL)) < 0) {
+			ualarm((useconds_t)(SIGALRM_TIMEOUT), 0);
+			while ((ui.speaker->state.ecp.trigger_fd
+					= name_open(ui.speaker->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+					< 0) {
 				if (errno == EINTR)
 					break;
 				if ((tmp++) < lib::CONNECT_RETRY)
@@ -405,16 +383,14 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo,
 				};
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t) (0), 0);
+			ualarm((useconds_t)(0), 0);
 		}
 
 		if (ui.speaker->state.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(ui.speaker->state.ecp.trigger_fd,
-					sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
+			if (MsgSendPulse(ui.speaker->state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
 					== -1) {
 
-				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n",
-						strerror(errno));
+				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
 				delay(1000);
 			}
 		} else {

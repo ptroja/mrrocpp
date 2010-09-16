@@ -86,7 +86,7 @@ void Ui::init()
 	sarkofag = new sarkofag::UiRobot(*this);
 	irp6m_m = new irp6m::UiRobot(*this);
 	conveyor = new conveyor::UiRobot(*this);
-	speaker = new UiRobotSpeaker(*this);
+	speaker = new speaker::UiRobot(*this);
 	spkm = new spkm::UiRobot(*this);
 	smb = new smb::UiRobot(*this);
 	shead = new shead::UiRobot(*this);
