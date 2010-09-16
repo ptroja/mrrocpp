@@ -14,24 +14,23 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
-
+namespace sarkofag {
 
 //
 //
-// KLASA UiRobotSarkofag
+// KLASA UiRobot
 //
 //
 
 
-UiRobotSarkofag::UiRobotSarkofag(Ui& _ui) :
-	UiRobot(_ui, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION),
-			is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION), is_wind_sarkofag_moves_open(false),
+			is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotSarkofag::reload_configuration()
+int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
 	if ((state.is_active = ui.config->value <int> ("is_sarkofag_active")) == 1) {
@@ -123,7 +122,7 @@ int UiRobotSarkofag::reload_configuration()
 	return 1;
 }
 
-int UiRobotSarkofag::manage_interface()
+int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
 	{
@@ -146,17 +145,17 @@ int UiRobotSarkofag::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, ABN_mm_sarkofag_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						break;
@@ -177,7 +176,7 @@ int UiRobotSarkofag::manage_interface()
 	return 1;
 }
 
-int UiRobotSarkofag::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -192,7 +191,7 @@ int UiRobotSarkofag::close_all_windows()
 
 }
 
-int UiRobotSarkofag::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;

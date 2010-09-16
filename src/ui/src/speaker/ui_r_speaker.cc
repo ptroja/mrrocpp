@@ -129,17 +129,17 @@ int UiRobotSpeaker::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_speaker_edp_unload, ABN_mm_speaker_play, ABN_mm_speaker_preset_sounds, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_speaker_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_speaker_play, ABN_mm_speaker_preset_sounds, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_speaker_edp_unload, ABN_mm_speaker_edp_load, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_speaker_play, ABN_mm_speaker_preset_sounds, NULL);
 						break;

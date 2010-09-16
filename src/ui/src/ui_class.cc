@@ -83,13 +83,13 @@ void Ui::init()
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	irp6p_m = new irp6p_m::UiRobot(*this);
 	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	sarkofag = new UiRobotSarkofag(*this);
+	sarkofag = new sarkofag::UiRobot(*this);
 	irp6m_m = new irp6m::UiRobot(*this);
 	conveyor = new conveyor::UiRobot(*this);
 	speaker = new UiRobotSpeaker(*this);
 	spkm = new UiRobotSpkm(*this);
 	smb = new UiRobotSmb(*this);
-	shead = new UiRobotShead(*this);
+	shead = new shead::UiRobot(*this);
 
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
@@ -279,17 +279,17 @@ int Ui::manage_interface(void)
 			// w zaleznosci od stanu MP
 			switch (mp.state)
 			{
-				case UI_MP_NOT_PERMITED_TO_RUN:
+				case common::UI_MP_NOT_PERMITED_TO_RUN:
 					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 					break;
-				case UI_MP_PERMITED_TO_RUN:
+				case common::UI_MP_PERMITED_TO_RUN:
 					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_preset_positions, NULL);
 					break;
-				case UI_MP_WAITING_FOR_START_PULSE:
+				case common::UI_MP_WAITING_FOR_START_PULSE:
 					ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 					break;
-				case UI_MP_TASK_RUNNING:
-				case UI_MP_TASK_PAUSED:
+				case common::UI_MP_TASK_RUNNING:
+				case common::UI_MP_TASK_PAUSED:
 					ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, NULL);
 					break;
 				default:
@@ -304,23 +304,23 @@ int Ui::manage_interface(void)
 	switch (mp.state)
 	{
 
-		case UI_MP_NOT_PERMITED_TO_RUN:
+		case common::UI_MP_NOT_PERMITED_TO_RUN:
 			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
 			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 			break;
-		case UI_MP_PERMITED_TO_RUN:
+		case common::UI_MP_PERMITED_TO_RUN:
 			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
 			ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
 			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 			break;
-		case UI_MP_WAITING_FOR_START_PULSE:
+		case common::UI_MP_WAITING_FOR_START_PULSE:
 			ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
 			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
 			//	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
 			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
 			break;
-		case UI_MP_TASK_RUNNING:
-		case UI_MP_TASK_PAUSED:
+		case common::UI_MP_TASK_RUNNING:
+		case common::UI_MP_TASK_PAUSED:
 			ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
 			PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
 			break;

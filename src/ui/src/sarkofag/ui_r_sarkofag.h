@@ -15,6 +15,10 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
+class Ui;
+class ui_tfg_and_conv_robot;
+}
+namespace sarkofag {
 
 //
 //
@@ -25,10 +29,8 @@ namespace common {
 
 // super klasa agregujaca porozrzucane struktury
 
-class Ui;
-class ui_tfg_and_conv_robot;
 
-class UiRobotSarkofag : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
@@ -41,9 +43,9 @@ public:
 	bool is_wind_sarkofag_moves_open; // informacja czy okno ruchow
 	bool is_wind_sarkofag_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	common::ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotSarkofag(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();

@@ -115,13 +115,13 @@ public:
 	irp6ot_tfg::UiRobot *irp6ot_tfg;
 	irp6p_m::UiRobot *irp6p_m;
 	irp6p_tfg::UiRobot *irp6p_tfg;
-	UiRobotSarkofag *sarkofag;
+	sarkofag::UiRobot *sarkofag;
 	irp6m::UiRobot *irp6m_m;
 	conveyor::UiRobot *conveyor;
 	UiRobotSpeaker *speaker;
 	UiRobotSpkm *spkm;
 	UiRobotSmb *smb;
-	UiRobotShead *shead;
+	shead::UiRobot *shead;
 
 	Ui();
 	void UI_close(void);
