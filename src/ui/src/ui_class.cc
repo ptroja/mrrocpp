@@ -79,7 +79,7 @@ void Ui::init()
 	}
 
 	bird_hand = new bird_hand::UiRobot(*this);
-	irp6ot_m = new UiRobotIrp6ot_m(*this);
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	irp6ot_tfg = new UiRobotIrp6ot_tfg(*this);
 	irp6p_m = new UiRobotIrp6p_m(*this);
 	irp6p_tfg = new UiRobotIrp6p_tfg(*this);

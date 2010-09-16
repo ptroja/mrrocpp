@@ -15,7 +15,10 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
+class Ui;
+class ui_irp6_common_robot;
+}
+namespace irp6ot_m {
 
 //
 //
@@ -24,12 +27,7 @@ namespace common {
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_irp6_common_robot;
-
-class UiRobotIrp6ot_m : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
@@ -49,9 +47,9 @@ public:
 	bool is_wind_irp6ot_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 
-	ui_irp6_common_robot *ui_ecp_robot;
+	common::ui_irp6_common_robot *ui_ecp_robot;
 
-	UiRobotIrp6ot_m(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int
