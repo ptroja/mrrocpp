@@ -20,9 +20,9 @@ namespace uin {
 namespace common {
 
 // ---------------------------------------------------------------
-class ui_common_robot
+class EcpRobot
 {
-	protected:
+protected:
 	// Klasa do obslugi robotow irp6 z poziomu UI
 
 	// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach
@@ -43,9 +43,9 @@ public:
 	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
+	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
 
-	virtual ~ui_common_robot();
+	virtual ~EcpRobot();
 
 	virtual void execute_motion(void);
 	// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};

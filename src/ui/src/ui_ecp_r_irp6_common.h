@@ -22,7 +22,7 @@ namespace uin {
 namespace common {
 
 // ---------------------------------------------------------------
-class ui_irp6_common_robot : public ui_common_robot
+class ui_irp6_common_robot : public EcpRobot
 {
 public:
 	// ecp_buffer ui_edp_package; // by Y

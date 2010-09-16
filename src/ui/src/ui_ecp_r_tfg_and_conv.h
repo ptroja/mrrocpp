@@ -20,7 +20,7 @@ namespace uin {
 namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::ui_common_robot
+class EcpRobot : public common::EcpRobot
 {
 
 public:
