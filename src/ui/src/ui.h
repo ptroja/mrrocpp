@@ -115,6 +115,8 @@ enum UI_ALL_EDPS_STATE
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
 static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
+static const int CHECK_SPEAKER_STATE_ITER = 10; // co ile iteracji ma byc sprawdzony stan speakera
+
 typedef struct
 {
 	pid_t pid;
