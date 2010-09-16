@@ -16,6 +16,9 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 class Ui;
+}
+
+namespace irp6 {
 class ui_irp6_common_robot;
 }
 namespace irp6ot_m {
@@ -47,7 +50,7 @@ public:
 	bool is_wind_irp6ot_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 
-	common::ui_irp6_common_robot *ui_ecp_robot;
+	irp6::ui_irp6_common_robot *ui_ecp_robot;
 
 	UiRobot(common::Ui& _ui);
 	int reload_configuration();

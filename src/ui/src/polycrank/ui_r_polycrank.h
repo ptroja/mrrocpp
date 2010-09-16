@@ -15,6 +15,9 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 class Ui;
+}
+
+namespace irp6 {
 class ui_irp6_common_robot;
 }
 namespace polycrank {
@@ -36,7 +39,7 @@ public:
 	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
 
-	common::ui_irp6_common_robot *ui_ecp_robot;
+	irp6::ui_irp6_common_robot *ui_ecp_robot;
 
 	UiRobot(common::Ui& _ui);
 	int reload_configuration();

@@ -1,4 +1,3 @@
-
 // -------------------------------------------------------------------------
 //                            robot.h
 // Definicje struktur danych i metod do komunikacji UI z EDP
@@ -19,10 +18,10 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace irp6 {
 
 // ---------------------------------------------------------------
-class ui_irp6_common_robot : public EcpRobot
+class ui_irp6_common_robot : public common::EcpRobot
 {
 public:
 	// ecp_buffer ui_edp_package; // by Y
@@ -38,13 +37,11 @@ public:
 	void set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector);
 	void set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector);
 
-
 	// Odczyt polozenia
 	void read_xyz_euler_zyz(double current_position[7]);
 	void read_xyz_angle_axis(double current_position[7]);
 	void read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector);
 	void read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector);
-
 
 };
 

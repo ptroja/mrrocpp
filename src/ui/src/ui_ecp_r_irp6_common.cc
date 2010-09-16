@@ -37,11 +37,11 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace irp6 {
 
 // ---------------------------------------------------------------
 ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	EcpRobot(_config, _sr_ecp_msg, _robot_name)
+	common::EcpRobot(_config, _sr_ecp_msg, _robot_name)
 {
 
 	if (_robot_name == lib::irp6ot_m::ROBOT_NAME) {
@@ -175,7 +175,7 @@ void ui_irp6_common_robot::move_motors(const double final_position[])
 	if (ecp->is_synchronised()) { // Robot zsynchronizowany
 		// Odczyt aktualnego polozenia
 		//   	printf("is synchronised przed read motors\n");
-		read_motors(current_position);
+		read_motors( current_position);
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			temp = fabs(final_position[j] - current_position[j]);
@@ -248,7 +248,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 	max_inc_ang = max_inc_lin = 0.0;
 
 	// Odczyt aktualnego polozenia
-	read_joints(current_position);
+	read_joints( current_position);
 
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
@@ -307,7 +307,7 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
 
 	max_inc_ang = max_inc_lin = 0.0;
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz(current_position);
+	read_xyz_euler_zyz( current_position);
 
 	for (int j = 0; j < 3; j++) {
 		temp_lin = fabs(final_position[j] - current_position[j]);
@@ -376,7 +376,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
 	A.get_xyz_euler_zyz(aa_eul); // zadane polecenie w formie XYZ_EULER_ZYZ
 
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz(current_position);
+	read_xyz_euler_zyz( current_position);
 
 	// Wyznaczenie liczby krokow
 
