@@ -14,20 +14,19 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
-
+namespace irp6m {
 
 // extern ui_state_def ui_state;
 
 //
 //
-// KLASA UiRobotIrp6m_m
+// KLASA UiRobot
 //
 //
 
 
-UiRobotIrp6m_m::UiRobotIrp6m_m(Ui& _ui) :
-	UiRobot(_ui, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
 			is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
@@ -36,7 +35,7 @@ UiRobotIrp6m_m::UiRobotIrp6m_m(Ui& _ui) :
 
 }
 
-int UiRobotIrp6m_m::reload_configuration()
+int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
@@ -127,7 +126,7 @@ int UiRobotIrp6m_m::reload_configuration()
 	return 1;
 }
 
-int UiRobotIrp6m_m::manage_interface()
+int UiRobot::manage_interface()
 {
 
 	switch (state.edp.state)
@@ -153,17 +152,17 @@ int UiRobotIrp6m_m::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_mechatronika_edp_unload, ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, ABN_mm_irp6_mechatronika_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						break;
@@ -187,7 +186,7 @@ int UiRobotIrp6m_m::manage_interface()
 }
 
 // aktualizacja ustawien przyciskow
-int UiRobotIrp6m_m::process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+int UiRobot::process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
@@ -215,7 +214,7 @@ int UiRobotIrp6m_m::process_control_window_irp6m_section_init(bool &wlacz_PtButt
 
 }
 
-int UiRobotIrp6m_m::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -235,7 +234,7 @@ int UiRobotIrp6m_m::close_all_windows()
 	return 1;
 
 }
-int UiRobotIrp6m_m::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;
