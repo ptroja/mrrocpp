@@ -15,7 +15,7 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-class Ui;
+class Interface;
 }
 
 namespace irp6 {
@@ -52,7 +52,7 @@ public:
 
 	irp6::EcpRobot *ui_ecp_robot;
 
-	UiRobot(common::Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 	int

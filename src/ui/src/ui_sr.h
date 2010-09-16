@@ -32,7 +32,7 @@ class sr_buffer : public boost::noncopyable
 {
 private:
 
-	Ui& ui;
+	Interface& interface;
 	boost::thread *thread_id;
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
@@ -40,7 +40,7 @@ private:
 
 public:
 
-	sr_buffer(Ui& _ui);
+	sr_buffer(Interface& _interface);
 	~sr_buffer();
 
 	//! main thread loop

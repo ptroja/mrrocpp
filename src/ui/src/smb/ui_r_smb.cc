@@ -23,8 +23,8 @@ namespace smb {
 //
 
 
-UiRobot::UiRobot(common::Ui& _ui) :
-	common::UiRobot(_ui, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL)
 {
 
 }
@@ -33,12 +33,12 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_smb_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_smb_active")) == 1) {
 		// ini_con->create_ecp_smb (ini_con->ui->ecp_smb_section);
 		//ui_state.is_any_edp_active = true;
-		if (ui.is_mp_and_ecps_active) {
+		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -54,21 +54,21 @@ int UiRobot::reload_configuration()
 				state.edp.reader_fd = -1;
 				state.edp.state = 0;
 
-				if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point
-						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
 
 				state.edp.network_reader_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name);
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
 				break;
 			case 1:
 			case 2:
@@ -122,7 +122,7 @@ int UiRobot::manage_interface()
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui.mp.state)
+				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:

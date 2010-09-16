@@ -25,8 +25,8 @@ namespace irp6m {
 //
 
 
-UiRobot::UiRobot(common::Ui& _ui) :
-	common::UiRobot(_ui, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
 			is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
@@ -39,13 +39,13 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_irp6m_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_irp6m_active")) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
-		if (ui.is_mp_and_ecps_active) {
+		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -65,10 +65,10 @@ int UiRobot::reload_configuration()
 					char tmp_string[50];
 					sprintf(tmp_string, "preset_position_%d", i);
 
-					if (ui.config->exists(tmp_string, state.edp.section_name)) {
+					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
 						tmp1 = tmp
-								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < 8; j++) {
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
@@ -81,21 +81,21 @@ int UiRobot::reload_configuration()
 					}
 				}
 
-				if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point
-						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name.c_str());
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name.c_str());
 
 				state.edp.network_reader_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
 
-				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name.c_str());
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
 
 				break;
 			case 1:
@@ -150,7 +150,7 @@ int UiRobot::manage_interface()
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_pre_synchro_moves, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui.mp.state)
+				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
@@ -190,21 +190,21 @@ int UiRobot::process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		}
 	}
 

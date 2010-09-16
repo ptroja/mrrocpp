@@ -33,8 +33,8 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
-ecp_buffer::ecp_buffer(Ui& _ui) :
-	ui(_ui), communication_state(UI_ECP_AFTER_REPLY), synchroniser()
+ecp_buffer::ecp_buffer(Interface& _interface) :
+	interface(_interface), communication_state(UI_ECP_AFTER_REPLY), synchroniser()
 {
 	thread_id = new boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
@@ -58,7 +58,7 @@ void ecp_buffer::operator()()
 
 	bool wyjscie;
 
-	if ((attach = name_attach(NULL, ui.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// TODO: throw
 		// return EXIT_FAILURE;
 		// printf("NIE MA ATTACHA");
@@ -102,9 +102,9 @@ void ecp_buffer::operator()()
 		}
 
 		//! FIXME:
-		if (ui.irp6ot_m->state.ecp.pid <= 0) {
+		if (interface.irp6ot_m->state.ecp.pid <= 0) {
 
-			ui.irp6ot_m->state.ecp.pid = info.pid;
+			interface.irp6ot_m->state.ecp.pid = info.pid;
 
 		}
 
@@ -116,13 +116,13 @@ void ecp_buffer::operator()()
 			case lib::C_MOTOR:
 				//  printf("C_MOTOR\n");
 				synchroniser.null_command();
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
-					ui.teachingstate = ECP_TEACHING;
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
+					interface.teachingstate = ECP_TEACHING;
 				}
 				PtEnter(0);
-				if (!ui.is_teaching_window_open) {
+				if (!interface.is_teaching_window_open) {
 					ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-					ui.is_teaching_window_open = true;
+					interface.is_teaching_window_open = true;
 				} else {
 					PtWindowToFront(ABW_teaching_window);
 				}
@@ -196,14 +196,14 @@ void ecp_buffer::operator()()
 				// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
 
 				if (ecp_to_ui_msg.nr_of_options == 2) {
-					ui.block_widget(ABW_PtButton_wind_choose_option_3);
-					ui.block_widget(ABW_PtButton_wind_choose_option_4);
+					interface.block_widget(ABW_PtButton_wind_choose_option_3);
+					interface.block_widget(ABW_PtButton_wind_choose_option_4);
 				} else if (ecp_to_ui_msg.nr_of_options == 3) {
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					ui.block_widget(ABW_PtButton_wind_choose_option_4);
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					interface.block_widget(ABW_PtButton_wind_choose_option_4);
 				} else if (ecp_to_ui_msg.nr_of_options == 4) {
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_4);
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
 				}
 
 				PtLeave(0);
@@ -216,13 +216,13 @@ void ecp_buffer::operator()()
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::LOAD_FILE\n");
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
 					synchroniser.null_command();
 					wyjscie = false;
 					while (!wyjscie) {
-						if (!ui.is_file_selection_window_open) {
-							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						if (!interface.is_file_selection_window_open) {
+							interface.is_file_selection_window_open = 1;
+							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -244,13 +244,13 @@ void ecp_buffer::operator()()
 				break;
 			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::SAVE_FILE\n");
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
 					synchroniser.null_command();
 					wyjscie = false;
 					while (!wyjscie) {
-						if (!ui.is_file_selection_window_open) {
-							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						if (!interface.is_file_selection_window_open) {
+							interface.is_file_selection_window_open = 1;
+							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);

@@ -14,7 +14,7 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-class Ui;
+class Interface;
 }
 
 namespace bird_hand {
@@ -34,13 +34,13 @@ class UiRobot;
 class WndCommandAndStatus
 {
 private:
-	common::Ui& ui;
+	common::Interface& interface;
 	UiRobot& bird_hand;
 
 public:
 	bool is_open;
 
-	WndCommandAndStatus(common::Ui& _ui, UiRobot& _bird_hand);
+	WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand);
 
 	int get_command();
 	int set_status();

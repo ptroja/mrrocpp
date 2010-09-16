@@ -52,7 +52,7 @@
 #include <Pt.h>
 #include <Ph.h>
 
-uin::common::Ui ui;
+uin::common::Interface interface;
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
@@ -66,7 +66,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGINT:
-			ui.UI_close();
+			interface.UI_close();
 			break;
 		case SIGALRM:
 			break;
@@ -116,7 +116,7 @@ int init(PtWidget_t *link_instance, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	link_instance = link_instance, apinfo = apinfo, cbinfo = cbinfo;
 
 	// some variables initialization
-	ui.init();
+	interface.init();
 
 	return (Pt_CONTINUE);
 

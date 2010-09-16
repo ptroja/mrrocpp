@@ -45,7 +45,7 @@ class ecp_buffer;
 // super klasa agregujaca porozrzucane struktury
 
 
-class Ui
+class Interface
 {
 private:
 
@@ -123,7 +123,7 @@ public:
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
 
-	Ui();
+	Interface();
 	void UI_close(void);
 	void init();
 	int manage_interface(void);

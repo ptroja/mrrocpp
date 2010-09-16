@@ -39,7 +39,7 @@
 
 // Wiadomosc wysylana do ECP.
 lib::UI_ECP_message ui_ecp_msg;
-extern uin::common::Ui ui;
+extern uin::common::Interface interface;
 
 uint64_t e; // kod bledu systemowego
 
@@ -91,7 +91,7 @@ int FCCreateConnection(void) {
 	// 	lib::ECP_message from_ecp;
 
 	// Stworzenie nazwy.
-	std::string tmp_name = ui.config->return_attach_point_name(
+	std::string tmp_name = interface.config->return_attach_point_name(
 			lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point",
 			lib::irp6ot_m::ECP_SECTION);
 
@@ -311,7 +311,7 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_STOP; // stop
 	else
 		pulse_code = READER_START;// start
-	if (MsgSendPulse(ui.irp6ot_m->state.edp.reader_fd, sched_get_priority_min(
+	if (MsgSendPulse(interface.irp6ot_m->state.edp.reader_fd, sched_get_priority_min(
 			SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("FCbtnOnOffReader: Send pulse to Reader failed");
 	} else {

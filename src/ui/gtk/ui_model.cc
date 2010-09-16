@@ -63,9 +63,9 @@ ui_model::ui_model() : tabs_visible(0),
 	builder = gtk_builder_new();
 
 	GError *error = NULL;
-	if (gtk_builder_add_from_file(builder, "ui.xml", &error) == 0) {
+	if (gtk_builder_add_from_file(builder, "interface.xml", &error) == 0) {
 		if (error) {
-			fprintf (stderr, "Unable to read file ui.xml: %s\n", error->message);
+			fprintf (stderr, "Unable to read file interface.xml: %s\n", error->message);
 			g_error_free(error);
 			exit(-1);
 		} else {

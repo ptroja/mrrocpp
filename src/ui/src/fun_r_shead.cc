@@ -34,7 +34,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Ui ui;
+extern uin::common::Interface interface;
 
 int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
 		PtCallbackInfo_t *cbinfo)
@@ -44,10 +44,10 @@ int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (ui.shead->state.edp.state == 0) {
-		ui.shead->create_thread();
+	if (interface.shead->state.edp.state == 0) {
+		interface.shead->create_thread();
 
-		ui.shead->eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
+		interface.shead->eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
 				cbinfo));
 	}
 	return (Pt_CONTINUE);
@@ -68,51 +68,51 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 	try { // dla bledow robot :: ECP_error
 
 		// dla robota shead
-		if (ui.shead->state.edp.state == 0) {
+		if (interface.shead->state.edp.state == 0) {
 
-			ui.shead->state.edp.state = 0;
-			ui.shead->state.edp.is_synchronised = false;
+			interface.shead->state.edp.state = 0;
+			interface.shead->state.edp.is_synchronised = false;
 
 			std::string tmp_string("/dev/name/global/");
-			tmp_string += ui.shead->state.edp.hardware_busy_attach_point;
+			tmp_string += interface.shead->state.edp.hardware_busy_attach_point;
 
 			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += ui.shead->state.edp.network_resourceman_attach_point;
+			tmp2_string += interface.shead->state.edp.network_resourceman_attach_point;
 
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.shead->state.edp.test_mode)) && (access(
+			if (((!(interface.shead->state.edp.test_mode)) && (access(
 					tmp_string.c_str(), R_OK) == 0)) || (access(
 					tmp2_string.c_str(), R_OK) == 0)) {
-				ui.ui_msg->message(lib::NON_FATAL_ERROR,
+				interface.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_shead already exists");
-			} else if (ui.check_node_existence(ui.shead->state.edp.node_name,
+			} else if (interface.check_node_existence(interface.shead->state.edp.node_name,
 					std::string("edp_shead"))) {
 
-				ui.shead->state.edp.node_nr = ui.config->return_node_number(
-						ui.shead->state.edp.node_name);
+				interface.shead->state.edp.node_nr = interface.config->return_node_number(
+						interface.shead->state.edp.node_name);
 
 				{
 					boost::unique_lock<boost::mutex> lock(
-							ui.process_creation_mtx);
-					ui.shead->ui_ecp_robot = new uin::tfg_and_conv::EcpRobot(
-							*ui.config, *ui.all_ecp_msg, lib::shead::ROBOT_NAME);
+							interface.process_creation_mtx);
+					interface.shead->ui_ecp_robot = new uin::tfg_and_conv::EcpRobot(
+							*interface.config, *interface.all_ecp_msg, lib::shead::ROBOT_NAME);
 				}
-				ui.shead->state.edp.pid
-						= ui.shead->ui_ecp_robot->ecp->get_EDP_pid();
+				interface.shead->state.edp.pid
+						= interface.shead->ui_ecp_robot->ecp->get_EDP_pid();
 
-				if (ui.shead->state.edp.pid < 0) {
+				if (interface.shead->state.edp.pid < 0) {
 
-					ui.shead->state.edp.state = 0;
+					interface.shead->state.edp.state = 0;
 					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete ui.shead->ui_ecp_robot;
+					delete interface.shead->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
-					ui.shead->state.edp.state = 1;
+					interface.shead->state.edp.state = 1;
 					short tmp = 0;
 					// kilka sekund  (~1) na otworzenie urzadzenia
 
-					while ((ui.shead->state.edp.reader_fd
+					while ((interface.shead->state.edp.reader_fd
 							= name_open(
-									ui.shead->state.edp.network_reader_attach_point.c_str(),
+									interface.shead->state.edp.network_reader_attach_point.c_str(),
 									NAME_FLAG_ATTACH_GLOBAL)) < 0)
 						if ((tmp++) < lib::CONNECT_RETRY) {
 							delay(lib::CONNECT_DELAY);
@@ -124,12 +124,12 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui.shead->ui_ecp_robot->get_controller_state(
+					interface.shead->ui_ecp_robot->get_controller_state(
 							robot_controller_initial_state_tmp);
 
-					//ui.shead->state.edp.state = 1; // edp wlaczone reader czeka na start
+					//interface.shead->state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					ui.shead->state.edp.is_synchronised
+					interface.shead->state.edp.is_synchronised
 							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
@@ -139,7 +139,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 
 	CATCH_SECTION_UI
 
-	ui.manage_interface();
+	interface.manage_interface();
 
 	return 1;
 }
@@ -152,7 +152,7 @@ int EDP_shead_slay(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.shead->EDP_slay_int();
+	interface.shead->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 

@@ -41,7 +41,7 @@ enum TEACHING_STATE
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
 		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
-		ui.ui_state=2; \
+		interface.ui_state=2; \
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
@@ -57,10 +57,10 @@ catch (ecp::common::robot::ECP_error & er) { \
 		case EDP_ERROR: \
 		case INVALID_ROBOT_MODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
-			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
+			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \
 		default: \
-			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
+			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
 			perror("Unidentified exception"); \
 		} /* end: switch */ \
 	} \
@@ -69,7 +69,7 @@ catch (ecp::common::robot::ECP_error & er) { \
 catch(const std::exception & e){\
 	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
-	ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
+	interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
    std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
 }\
 \

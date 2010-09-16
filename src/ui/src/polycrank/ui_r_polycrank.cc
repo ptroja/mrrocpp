@@ -22,8 +22,8 @@ namespace polycrank {
 //
 
 
-UiRobot::UiRobot(common::Ui& _ui) :
-	common::UiRobot(_ui, lib::polycrank::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::polycrank::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
 			is_wind_polycrank_int_open(false), is_wind_polycrank_inc_open(false)
 {
 

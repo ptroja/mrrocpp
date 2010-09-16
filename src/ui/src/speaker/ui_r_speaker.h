@@ -14,7 +14,7 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-class Ui;
+class Interface;
 }
 
 namespace speaker {
@@ -37,7 +37,7 @@ public:
 	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
 	EcpRobot *ui_ecp_robot;
 
-	UiRobot(common::Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 

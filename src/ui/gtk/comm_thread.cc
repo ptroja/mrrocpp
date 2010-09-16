@@ -18,7 +18,7 @@ void *comm_thread(void* arg)
 {
 	messip_channel_t *ch;
 
-	// TODO:ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION)
+	// TODO:interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION)
 	if ((ch = messip::port_create("ui")) == NULL) {
 		return NULL;
 	}
@@ -26,14 +26,14 @@ void *comm_thread(void* arg)
 	ecp_buffer ui_ecp_obj;
 
 	while (1) {
-		// ui.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
-		//		ui.ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
-		//		rcvid = MsgReceive(attach->chid, &ui.ui_ecp_obj->ecp_to_ui_msg, sizeof(ui.ui_ecp_obj->ecp_to_ui_msg), info);
+		// interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+		//		interface.ui_ecp_obj->communication_state = UI_ECP_AFTER_REPLY;
+		//		rcvid = MsgReceive(attach->chid, &interface.ui_ecp_obj->ecp_to_ui_msg, sizeof(interface.ui_ecp_obj->ecp_to_ui_msg), info);
 
 		int32_t type, subtype;
 
 		int rcvid = messip::port_receive(ch, type, subtype, ui_ecp_obj.ecp_to_ui_msg);
-		//		ui.ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
+		//		interface.ui_ecp_obj->communication_state = UI_ECP_AFTER_RECEIVE;
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("UI: Receive failed");
@@ -109,33 +109,33 @@ void *comm_thread(void* arg)
 			case lib::C_JOINT:
 			case lib::C_MOTOR:
 				//  printf("C_MOTOR\n");
-				ui.ui_ecp_obj->synchroniser.null_command();
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
-					ui.teachingstate = ECP_TEACHING;
+				interface.ui_ecp_obj->synchroniser.null_command();
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
+					interface.teachingstate = ECP_TEACHING;
 				}
 				PtEnter(0);
-				if (!ui.is_teaching_window_open) {
+				if (!interface.is_teaching_window_open) {
 					ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-					ui.is_teaching_window_open = true;
+					interface.is_teaching_window_open = true;
 				} else {
 					PtWindowToFront(ABW_teaching_window);
 				}
 				PtLeave(0);
-				ui.ui_ecp_obj->synchroniser.wait();
+				interface.ui_ecp_obj->synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 				break;
 			case lib::YES_NO:
-				ui.ui_ecp_obj->synchroniser.null_command();
+				interface.ui_ecp_obj->synchroniser.null_command();
 				PtEnter(0);
 				ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-				PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
+				PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, interface.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 				PtLeave(0);
-				ui.ui_ecp_obj->synchroniser.wait();
+				interface.ui_ecp_obj->synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 
@@ -143,51 +143,51 @@ void *comm_thread(void* arg)
 			case MESSAGE:
 				PtEnter(0);
 				ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-				PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
+				PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, interface.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 				PtLeave(0);
 
-				ui.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
+				interface.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 
-				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 				break;
 			case lib::CHOOSE_OPTION:
-				ui.ui_ecp_obj->synchroniser.null_command();
+				interface.ui_ecp_obj->synchroniser.null_command();
 				PtEnter(0);
 				ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-				PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ui.ui_ecp_obj->ecp_to_ui_msg.string, 0);
+				PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, interface.ui_ecp_obj->ecp_to_ui_msg.string, 0);
 
-				// wybor ilosci dostepnych opcji w zaleznosci od wartosci ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options
+				// wybor ilosci dostepnych opcji w zaleznosci od wartosci interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options
 
-				if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 2) {
-					ui.block_widget(ABW_PtButton_wind_choose_option_3);
-					ui.block_widget(ABW_PtButton_wind_choose_option_4);
-				} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 3) {
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					ui.block_widget(ABW_PtButton_wind_choose_option_4);
-				} else if (ui.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 4) {
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					ui.unblock_widget(ABW_PtButton_wind_choose_option_4);
+				if (interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 2) {
+					interface.block_widget(ABW_PtButton_wind_choose_option_3);
+					interface.block_widget(ABW_PtButton_wind_choose_option_4);
+				} else if (interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 3) {
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					interface.block_widget(ABW_PtButton_wind_choose_option_4);
+				} else if (interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options == 4) {
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+					interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
 				}
 
 				PtLeave(0);
-				ui.ui_ecp_obj->synchroniser.wait();
+				interface.ui_ecp_obj->synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+				if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
 
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::LOAD_FILE\n");
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
-					ui.ui_ecp_obj->synchroniser.null_command();
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
+					interface.ui_ecp_obj->synchroniser.null_command();
 					bool wyjscie = false;
 					while (!wyjscie) {
-						if (!ui.is_file_selection_window_open) {
-							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						if (!interface.is_file_selection_window_open) {
+							interface.is_file_selection_window_open = 1;
+							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -198,10 +198,10 @@ void *comm_thread(void* arg)
 						}
 					}
 
-					ui.ui_ecp_obj->ui_rep.reply = FILE_LOADED;
-					ui.ui_ecp_obj->synchroniser.wait();
+					interface.ui_ecp_obj->ui_rep.reply = FILE_LOADED;
+					interface.ui_ecp_obj->synchroniser.wait();
 
-					if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+					if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 						printf("Blad w UI reply\n");
 					}
 
@@ -209,13 +209,13 @@ void *comm_thread(void* arg)
 				break;
 			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::SAVE_FILE\n");
-				if (ui.teachingstate == uin::common::MP_RUNNING) {
-					ui.ui_ecp_obj->synchroniser.null_command();
+				if (interface.teachingstate == uin::common::MP_RUNNING) {
+					interface.ui_ecp_obj->synchroniser.null_command();
 					bool wyjscie = false;
 					while (!wyjscie) {
-						if (!ui.is_file_selection_window_open) {
-							ui.is_file_selection_window_open = 1;
-							ui.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						if (!interface.is_file_selection_window_open) {
+							interface.is_file_selection_window_open = 1;
+							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -225,10 +225,10 @@ void *comm_thread(void* arg)
 						}
 					}
 
-					ui.ui_ecp_obj->ui_rep.reply = FILE_SAVED;
-					ui.ui_ecp_obj->synchroniser.wait();
+					interface.ui_ecp_obj->ui_rep.reply = FILE_SAVED;
+					interface.ui_ecp_obj->synchroniser.wait();
 
-					if (MsgReply(rcvid, EOK, &ui.ui_ecp_obj->ui_rep, sizeof(ui.ui_ecp_obj->ui_rep)) < 0) {
+					if (MsgReply(rcvid, EOK, &interface.ui_ecp_obj->ui_rep, sizeof(interface.ui_ecp_obj->ui_rep)) < 0) {
 						printf("Blad w UI reply\n");
 					}
 				}

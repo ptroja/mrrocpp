@@ -30,7 +30,7 @@ class ecp_buffer : public boost::noncopyable
 {
 private:
 
-	Ui& ui;
+	Interface& interface;
 	boost::thread *thread_id;
 
 public:
@@ -42,7 +42,7 @@ public:
 	void operator()();
 
 	lib::condition_synchroniser synchroniser;
-	ecp_buffer(Ui& _ui);
+	ecp_buffer(Interface& _interface);
 	~ecp_buffer();
 
 };

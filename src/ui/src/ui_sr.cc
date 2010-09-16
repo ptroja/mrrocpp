@@ -57,14 +57,14 @@ void sr_buffer::operator()() {
 
 	name_attach_t *attach;
 
-	if ((attach = name_attach(NULL, ui.sr_attach_point.c_str(),
+	if ((attach = name_attach(NULL, interface.sr_attach_point.c_str(),
 			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		perror(
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
 
-	ui.is_sr_thread_loaded = true;
+	interface.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
 		//	printf("przed MsgReceive: \n");
@@ -124,8 +124,8 @@ void sr_buffer::operator()() {
 
 #endif /* USE_MESSIP_SRR */
 
-sr_buffer::sr_buffer(Ui& _ui) :
-	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
+sr_buffer::sr_buffer(Interface& _interface) :
+	interface(_interface), cb(UI_SR_BUFFER_LENGHT) {
 	thread_id = new boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
 

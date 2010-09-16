@@ -24,8 +24,8 @@ namespace bird_hand {
 //
 
 
-WndConfiguration::WndConfiguration(common::Ui& _ui, UiRobot& _bird_hand) :
-	ui(_ui), bird_hand(_bird_hand), is_open(false)
+WndConfiguration::WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand) :
+	interface(_interface), bird_hand(_bird_hand), is_open(false)
 {
 
 }

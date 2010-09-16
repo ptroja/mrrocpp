@@ -14,7 +14,7 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-class Ui;
+class Interface;
 }
 namespace tfg_and_conv {
 class EcpRobot;
@@ -37,7 +37,7 @@ public:
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
-	UiRobot(common::Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 	int delete_ui_ecp_robot();

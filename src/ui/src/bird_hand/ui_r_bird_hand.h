@@ -14,7 +14,7 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-class Ui;
+class Interface;
 }
 
 namespace bird_hand {
@@ -41,7 +41,7 @@ public:
 	WndCommandAndStatus *wnd_command_and_status;
 	WndConfiguration *wnd_configuration;
 
-	UiRobot(common::Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();
