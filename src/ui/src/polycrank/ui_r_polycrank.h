@@ -14,6 +14,10 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
+class Ui;
+class ui_irp6_common_robot;
+}
+namespace polycrank {
 
 //
 //
@@ -22,12 +26,8 @@ namespace common {
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_irp6_common_robot;
-
-class UiRobotPolycrank: public UiRobot {
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
@@ -36,9 +36,9 @@ public:
 	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
 
-	ui_irp6_common_robot *ui_ecp_robot;
+	common::ui_irp6_common_robot *ui_ecp_robot;
 
-	UiRobotPolycrank(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int delete_ui_ecp_robot();

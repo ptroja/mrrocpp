@@ -13,32 +13,34 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace polycrank {
 
 //
 //
-// KLASA UiRobotIrp6ot_m
+// KLASA UiRobot
 //
 //
 
 
-UiRobotPolycrank::UiRobotPolycrank(Ui& _ui) :
-	UiRobot(_ui, lib::polycrank::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
-			is_wind_polycrank_int_open(false),
-			is_wind_polycrank_inc_open(false) {
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::polycrank::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
+			is_wind_polycrank_int_open(false), is_wind_polycrank_inc_open(false)
+{
 
 }
 
-int UiRobotPolycrank::reload_configuration() {
+int UiRobot::reload_configuration()
+{
 }
 
-int UiRobotPolycrank::manage_interface() {
+int UiRobot::manage_interface()
+{
 }
 
-int UiRobotPolycrank::delete_ui_ecp_robot() {
+int UiRobot::delete_ui_ecp_robot()
+{
 	delete ui_ecp_robot;
 }
-
 
 }
 } //namespace uin
