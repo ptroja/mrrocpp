@@ -167,7 +167,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				ui.irp6m_m->state.edp.node_nr = ui.config->return_node_number(
 						ui.irp6m_m->state.edp.node_name);
 
-				ui.irp6m_m->ui_ecp_robot = new ui_irp6_common_robot(*ui.config,
+				ui.irp6m_m->ui_ecp_robot = new EcpRobot(*ui.config,
 						*ui.all_ecp_msg, lib::irp6m::ROBOT_NAME);
 
 				ui.irp6m_m->state.edp.pid

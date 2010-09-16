@@ -40,7 +40,7 @@ namespace uin {
 namespace irp6 {
 
 // ---------------------------------------------------------------
-ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
 	common::EcpRobot(_config, _sr_ecp_msg, _robot_name)
 {
 
@@ -89,7 +89,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
+void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
@@ -107,7 +107,7 @@ void ui_irp6_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vec
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
+void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
@@ -125,7 +125,7 @@ void ui_irp6_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vecto
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector)
+void EcpRobot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -143,7 +143,7 @@ void ui_irp6_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector &
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
+void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -160,7 +160,7 @@ void ui_irp6_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &to
 
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_motors(const double final_position[])
+void EcpRobot::move_motors(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps, nr_ang, nr_grip; // Liczba krokow
@@ -238,7 +238,7 @@ void ui_irp6_common_robot::move_motors(const double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_joints(const double final_position[])
+void EcpRobot::move_joints(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
 	int nr_of_steps; // Liczba krokow
@@ -296,7 +296,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
+void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego we wspolrzednych
 	// zewnetrznych: xyz i katy Euler'a Z-Y-Z
@@ -354,7 +354,7 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
 // ---------------------------------------------------------------
 
 
-void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
+void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 {
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
@@ -429,7 +429,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
 
 }
 
-void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_increment[7])
+void EcpRobot::move_xyz_angle_axis_relative(const double position_increment[7])
 {
 	int nr_of_steps; // Liczba krokow
 	int nr_ang, nr_lin, nr_grip;
@@ -476,7 +476,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_in
 }
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[])
+void EcpRobot::read_xyz_euler_zyz(double current_position[])
 {
 	// Zlecenie odczytu polozenia
 
@@ -498,7 +498,7 @@ void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[])
 // ---------------------------------------------------------------
 
 
-void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[])
+void EcpRobot::read_xyz_angle_axis(double current_position[])
 {
 	// Pobranie aktualnego polozenia ramienia robota
 

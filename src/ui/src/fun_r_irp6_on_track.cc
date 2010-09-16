@@ -1980,7 +1980,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					boost::unique_lock < boost::mutex > lock(ui.process_creation_mtx);
 
 					ui.irp6ot_m->ui_ecp_robot
-							= new uin::irp6::ui_irp6_common_robot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_m::ROBOT_NAME);
+							= new uin::irp6::EcpRobot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_m::ROBOT_NAME);
 				}
 
 				ui.irp6ot_m->state.edp.pid = ui.irp6ot_m->ui_ecp_robot->ecp->get_EDP_pid();
