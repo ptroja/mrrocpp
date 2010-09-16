@@ -90,12 +90,32 @@ public:
 	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
 };
 
-// ---------------------------------------------------------------
+/*!
+ * @brief ECP_MP main task error handling class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class ECP_MP_main_error
-{ // Klasa obslugi bledow poziomie MP
+{
 public:
+	/**
+	 * @brief error number
+	 */
 	const lib::error_class_t error_class;
+
+	/**
+	 * @brief error number
+	 */
 	const uint64_t mp_error;
+
+	/**
+	 * @brief constructor
+	 * @param err0 error class
+	 * @param err1 error number
+	 * @param file file_name
+	 * @param line line number
+	 */
 	ECP_MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
 		error_class(err0), mp_error(err1)
 	{
@@ -103,8 +123,6 @@ public:
 	}
 #define ECP_MP_main_error(e0,e1)	ECP_MP_main_error((e0),(e1), __FILE__, __LINE__)
 };
-
-// ---------------------------------------------------------------
 
 } // namespace task
 } // namespace ecp_mp
