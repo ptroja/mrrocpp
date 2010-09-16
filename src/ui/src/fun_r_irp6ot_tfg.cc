@@ -114,7 +114,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 				{
 					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 					ui.irp6ot_tfg->ui_ecp_robot
-							= new uin::common::ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_tfg::ROBOT_NAME);
+							= new uin::tfg_and_conv::EcpRobot(*ui.config, *ui.all_ecp_msg, lib::irp6ot_tfg::ROBOT_NAME);
 				}
 
 				ui.irp6ot_tfg->state.edp.pid = ui.irp6ot_tfg->ui_ecp_robot->ecp->get_EDP_pid();

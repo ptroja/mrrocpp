@@ -469,7 +469,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 				{
 					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
 					ui.conveyor->ui_ecp_robot
-							= new uin::common::ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::conveyor::ROBOT_NAME);
+							= new uin::tfg_and_conv::EcpRobot(*ui.config, *ui.all_ecp_msg, lib::conveyor::ROBOT_NAME);
 
 				}
 				ui.conveyor->state.edp.pid = ui.conveyor->ui_ecp_robot->ecp->get_EDP_pid();

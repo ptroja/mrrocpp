@@ -15,7 +15,10 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 class Ui;
-class ui_tfg_and_conv_robot;
+}
+
+namespace tfg_and_conv {
+class EcpRobot;
 }
 namespace smb {
 
@@ -32,7 +35,7 @@ private:
 
 public:
 
-	common::ui_tfg_and_conv_robot *ui_ecp_robot;
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Ui& _ui);
 	int reload_configuration();

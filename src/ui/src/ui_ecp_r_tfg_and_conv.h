@@ -17,16 +17,16 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
-class ui_tfg_and_conv_robot: public ui_common_robot {
+class EcpRobot : public common::ui_common_robot
+{
 
 public:
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_tfg_and_conv_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg,
-			lib::robot_name_t _robot_name); // Konstruktor
+	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
 
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
