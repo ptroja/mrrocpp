@@ -33,21 +33,21 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
-ui_ecp_buffer::ui_ecp_buffer(Ui& _ui) :
+ecp_buffer::ecp_buffer(Ui& _ui) :
 	ui(_ui), communication_state(UI_ECP_AFTER_REPLY), synchroniser()
 {
-	thread_id = new boost::thread(boost::bind(&ui_ecp_buffer::operator(), this));
+	thread_id = new boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
 
-ui_ecp_buffer::~ui_ecp_buffer()
+ecp_buffer::~ecp_buffer()
 {
-	//	printf("ui_ecp_buffer\n");
+	//	printf("ecp_buffer\n");
 	//	thread_id->interrupt();
 	//	thread_id->join(); // join it
 	//	delete thread_id;
 }
 
-void ui_ecp_buffer::operator()()
+void ecp_buffer::operator()()
 {
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);

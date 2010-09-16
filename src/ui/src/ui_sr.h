@@ -28,7 +28,7 @@ namespace common {
 
 static const int UI_SR_BUFFER_LENGHT = 50;
 
-class ui_sr_buffer : public boost::noncopyable
+class sr_buffer : public boost::noncopyable
 {
 private:
 
@@ -40,8 +40,8 @@ private:
 
 public:
 
-	ui_sr_buffer(Ui& _ui);
-	~ui_sr_buffer();
+	sr_buffer(Ui& _ui);
+	~sr_buffer();
 
 	//! main thread loop
 	void operator()();

@@ -24,10 +24,10 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
+/**************************** ecp_buffer *****************************/
 
-/**************************** ui_ecp_buffer *****************************/
-
-class ui_ecp_buffer  : public boost::noncopyable{
+class ecp_buffer : public boost::noncopyable
+{
 private:
 
 	Ui& ui;
@@ -42,8 +42,8 @@ public:
 	void operator()();
 
 	lib::condition_synchroniser synchroniser;
-	ui_ecp_buffer(Ui& _ui);
-	~ui_ecp_buffer();
+	ecp_buffer(Ui& _ui);
+	~ecp_buffer();
 
 };
 

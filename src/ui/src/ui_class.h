@@ -39,8 +39,8 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
-class ui_sr_buffer;
-class ui_ecp_buffer;
+class sr_buffer;
+class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
@@ -51,8 +51,8 @@ private:
 
 public:
 
-	ui_sr_buffer* ui_sr_obj;
-	ui_ecp_buffer* ui_ecp_obj;
+	sr_buffer* ui_sr_obj;
+	ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 

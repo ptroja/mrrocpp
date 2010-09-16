@@ -52,7 +52,7 @@ namespace mrrocpp {
 namespace uin {
 namespace common {
 
-void ui_sr_buffer::operator()() {
+void sr_buffer::operator()() {
 	lib::set_thread_name("sr");
 
 	name_attach_t *attach;
@@ -124,19 +124,19 @@ void ui_sr_buffer::operator()() {
 
 #endif /* USE_MESSIP_SRR */
 
-ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
+sr_buffer::sr_buffer(Ui& _ui) :
 	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
-	thread_id = new boost::thread(boost::bind(&ui_sr_buffer::operator(), this));
+	thread_id = new boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
 
-ui_sr_buffer::~ui_sr_buffer() {
-	//	printf("ui_sr_buffer\n");
+sr_buffer::~sr_buffer() {
+	//	printf("sr_buffer\n");
 	//	thread_id->interrupt();
 	//	thread_id->join(); // join it
 	//	delete thread_id;
 }
 
-void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
+void sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
 
 	boost::mutex::scoped_lock lock(mtx);
 	cb.push_back(new_msg);
@@ -144,7 +144,7 @@ void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
 	return;
 }
 
-void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
+void sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
 {
 	boost::mutex::scoped_lock lock(mtx);
 	new_msg = cb.front();
@@ -153,7 +153,7 @@ void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
 	return;
 }
 
-bool ui_sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
+bool sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 {
 	boost::mutex::scoped_lock lock(mtx);
 	return cb.empty();

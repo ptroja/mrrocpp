@@ -1034,9 +1034,9 @@ void Ui::create_threads()
 
 {
 	meb_tid = new feb_thread(main_eb);
-	ui_ecp_obj = new ui_ecp_buffer(*this);
+	ui_ecp_obj = new ecp_buffer(*this);
 	delay(1);
-	ui_sr_obj = new ui_sr_buffer(*this);
+	ui_sr_obj = new sr_buffer(*this);
 
 #if defined(__QNXNTO__)
 
