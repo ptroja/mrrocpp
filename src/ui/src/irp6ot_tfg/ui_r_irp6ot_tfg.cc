@@ -14,23 +14,24 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+
+namespace irp6ot_tfg {
 
 //
 //
-// KLASA UiRobotIrp6ot_tfg
+// KLASA UiRobot
 //
 //
 
 
-UiRobotIrp6ot_tfg::UiRobotIrp6ot_tfg(Ui& _ui) :
-	UiRobot(_ui, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION), is_wind_irp6ot_tfg_moves_open(false),
-			is_wind_irp6ot_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION),
+			is_wind_irp6ot_tfg_moves_open(false), is_wind_irp6ot_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotIrp6ot_tfg::reload_configuration()
+int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 on_track ma byc aktywne
@@ -123,7 +124,7 @@ int UiRobotIrp6ot_tfg::reload_configuration()
 	return 1;
 }
 
-int UiRobotIrp6ot_tfg::manage_interface()
+int UiRobot::manage_interface()
 {
 
 	switch (state.edp.state)
@@ -147,17 +148,17 @@ int UiRobotIrp6ot_tfg::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_edp_unload, ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6ot_tfg_edp_load, ABN_mm_irp6ot_tfg_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_irp6ot_tfg_move, ABN_mm_irp6ot_tfg_preset_positions, ABN_mm_irp6ot_tfg_servo_algorithm, NULL);
 						break;
@@ -178,7 +179,7 @@ int UiRobotIrp6ot_tfg::manage_interface()
 	return 1;
 }
 
-int UiRobotIrp6ot_tfg::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -193,7 +194,7 @@ int UiRobotIrp6ot_tfg::close_all_windows()
 
 }
 
-int UiRobotIrp6ot_tfg::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;
