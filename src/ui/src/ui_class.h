@@ -114,7 +114,7 @@ public:
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6ot_tfg::UiRobot *irp6ot_tfg;
 	irp6p_m::UiRobot *irp6p_m;
-	UiRobotIrp6p_tfg *irp6p_tfg;
+	irp6p_tfg::UiRobot *irp6p_tfg;
 	UiRobotSarkofag *sarkofag;
 	irp6m::UiRobot *irp6m_m;
 	conveyor::UiRobot *conveyor;

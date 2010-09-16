@@ -27,9 +27,6 @@ namespace irp6ot_tfg {
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-
 class UiRobot : public common::UiRobot
 {
 private:

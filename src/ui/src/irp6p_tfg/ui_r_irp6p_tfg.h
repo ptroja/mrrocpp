@@ -15,20 +15,20 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
-//
-//
-// KLASA UiRobotIrp6p_tfg
-//
-//
-
-
-// super klasa agregujaca porozrzucane struktury
-
 class Ui;
 class ui_tfg_and_conv_robot;
+}
+namespace irp6p_tfg {
 
-class UiRobotIrp6p_tfg: public UiRobot {
+//
+//
+// KLASA UiRobot
+//
+//
+
+
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
@@ -40,9 +40,9 @@ public:
 	bool is_wind_irp6p_tfg_moves_open; // informacja czy okno ruchow
 	bool is_wind_irp6p_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	common::ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotIrp6p_tfg(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int close_all_windows();
