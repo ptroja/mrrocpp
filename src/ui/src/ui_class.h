@@ -36,7 +36,7 @@
 
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 class sr_buffer;
@@ -155,7 +155,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 #endif
 

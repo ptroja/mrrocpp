@@ -13,7 +13,7 @@
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 class Interface;
 }
@@ -54,7 +54,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

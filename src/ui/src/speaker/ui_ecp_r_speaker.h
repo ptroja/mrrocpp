@@ -15,7 +15,7 @@
 #include "base/lib/configurator.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace speaker {
 
 // ---------------------------------------------------------------
@@ -39,7 +39,7 @@ public:
 }; // end: class ui_speaker_robot
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

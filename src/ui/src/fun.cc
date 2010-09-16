@@ -45,7 +45,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 // odblokowanie widgetu
 int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -251,7 +251,7 @@ int yes_no_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 		interface.ui_ecp_obj->ui_rep.reply = lib::ANSWER_NO;
 	}
 
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_yes_no_window);
 
@@ -287,7 +287,7 @@ int input_integer_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		interface.ui_ecp_obj->ui_rep.integer_number = 0;
 	}
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_integer);
 
@@ -323,7 +323,7 @@ int input_double_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 		interface.ui_ecp_obj->ui_rep.double_number = 0.0;
 	}
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_input_double);
 
@@ -370,7 +370,7 @@ int choose_option_callback(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	{
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
 	PtDestroyWidget(ABW_wnd_choose_option);
 
@@ -386,8 +386,8 @@ int close_file_selection_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((interface.file_window_mode == uin::common::FSTRAJECTORY) && (interface.ui_ecp_obj->communication_state
-			!= uin::common::UI_ECP_REPLY_READY)) {
+	if ((interface.file_window_mode == ui::common::FSTRAJECTORY) && (interface.ui_ecp_obj->communication_state
+			!= ui::common::UI_ECP_REPLY_READY)) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -406,7 +406,7 @@ int close_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -499,10 +499,10 @@ int teaching_window_end_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.teachingstate = uin::common::MP_RUNNING;
+	interface.teachingstate = ui::common::MP_RUNNING;
 	interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 	PtDestroyWidget(ABW_teaching_window);
 
 	return (Pt_CONTINUE);
@@ -521,7 +521,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 	// dla pliku trajektorii
 	if (item != NULL) {
-		if (interface.file_window_mode == uin::common::FSTRAJECTORY) {
+		if (interface.file_window_mode == ui::common::FSTRAJECTORY) {
 			if ((item->type) == Pt_FS_FILE) {
 				strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(item->fullpath, '/') + 1, strlen(rindex(item->fullpath, '/'))
 						- 1);
@@ -541,10 +541,10 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 			// kopiowanie biezacej sciezki, aby w nastepnym wywolaniu okna od niej zaczynac
 			interface.teach_filesel_fullpath = interface.ui_ecp_obj->ui_rep.path;
 			// opuszczenie semaforu dla watku UI_COMM
-			interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+			interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
 			// dla pliku konfiguracyjnego
-		} else if (interface.file_window_mode == uin::common::FSCONFIG) {
+		} else if (interface.file_window_mode == ui::common::FSCONFIG) {
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
@@ -594,7 +594,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 	switch (interface.file_window_mode)
 	{
-		case uin::common::FSCONFIG:
+		case ui::common::FSCONFIG:
 			// 	printf("aaa:\n");
 			// ustawienie katalogu root
 			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, interface.config_file_fullpath.c_str(), 0);
@@ -606,7 +606,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			item = *item_list;
 			PtFSSelect(ABW_PtFileSel_sl, item);
 			break;
-		case uin::common::FSTRAJECTORY:
+		case ui::common::FSTRAJECTORY:
 			// printf("bbb:\n");
 			// ustawienie katalogu root
 			PtSetArg(&args[0], Pt_ARG_FS_ROOT_DIR, "/net", 0);
@@ -757,7 +757,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 			switch (interface.mp.state)
 			{
-				case uin::common::UI_MP_PERMITED_TO_RUN:
+				case ui::common::UI_MP_PERMITED_TO_RUN:
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -766,7 +766,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case uin::common::UI_MP_WAITING_FOR_START_PULSE:
+				case ui::common::UI_MP_WAITING_FOR_START_PULSE:
 					interface.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -775,7 +775,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					block_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case uin::common::UI_MP_TASK_RUNNING:
+				case ui::common::UI_MP_TASK_RUNNING:
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					interface.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					interface.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -784,7 +784,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 					unblock_all_ecp_trigger_widgets(NULL, NULL, NULL);
 					break;
-				case uin::common::UI_MP_TASK_PAUSED:
+				case ui::common::UI_MP_TASK_PAUSED:
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					interface.unblock_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_pause);
@@ -920,9 +920,9 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	if (!interface.is_file_selection_window_open) {
 		interface.is_file_selection_window_open = 1;
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_browse_config_file) {
-			interface.file_window_mode = uin::common::FSCONFIG; // wybor pliku konfiguracyjnego
+			interface.file_window_mode = ui::common::FSCONFIG; // wybor pliku konfiguracyjnego
 		} else {
-			interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+			interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
 		}
 		ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
 	} else {
@@ -986,7 +986,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// brutal overkilling
 
-	for (std::list <uin::common::program_node_def>::iterator program_node_list_iterator = interface.program_node_list.begin(); program_node_list_iterator
+	for (std::list <ui::common::program_node_def>::iterator program_node_list_iterator = interface.program_node_list.begin(); program_node_list_iterator
 			!= interface.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
@@ -1141,7 +1141,7 @@ int close_yes_no_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -1156,7 +1156,7 @@ int close_input_integer_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -1171,7 +1171,7 @@ int close_input_double_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -1186,7 +1186,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.ui_ecp_obj->communication_state != uin::common::UI_ECP_REPLY_READY) {
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
 	interface.ui_ecp_obj->synchroniser.command();
@@ -1236,7 +1236,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	interface.ui_ecp_obj->ui_rep.double_number = *motion_time;
 	interface.ui_ecp_obj->ui_rep.reply = lib::NEXT;
-	interface.ui_ecp_obj->communication_state = uin::common::UI_ECP_REPLY_READY;
+	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 	interface.ui_ecp_obj->synchroniser.command();
 
 	return (Pt_CONTINUE);
@@ -1250,8 +1250,8 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface.mp.state == uin::common::UI_MP_NOT_PERMITED_TO_RUN) || (interface.mp.state == uin::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface.mp.state == uin::common::UI_MP_WAITING_FOR_START_PULSE)) {
+	if ((interface.mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (interface.mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
+			|| (interface.mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (interface.check_synchronised_and_loaded(interface.irp6ot_m->state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
@@ -1371,9 +1371,9 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 						break;
 					}
 
-				interface.teachingstate = uin::common::MP_RUNNING;
+				interface.teachingstate = ui::common::MP_RUNNING;
 
-				interface.mp.state = uin::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+				interface.mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 				pt_res = PtEnter(0);
 				start_process_control_window(widget, apinfo, cbinfo);
 				if (pt_res >= 0)
@@ -1397,7 +1397,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (interface.mp.pid != -1) {
 
-		if ((interface.mp.state == uin::common::UI_MP_TASK_RUNNING) || (interface.mp.state == uin::common::UI_MP_TASK_PAUSED)) {
+		if ((interface.mp.state == ui::common::UI_MP_TASK_RUNNING) || (interface.mp.state == ui::common::UI_MP_TASK_PAUSED)) {
 
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
@@ -1407,7 +1407,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
 		SignalKill(interface.mp.node_nr, interface.mp.pid, 0, SIGTERM, 0, 0);
-		interface.mp.state = uin::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
+		interface.mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
 	// delay(1000);
@@ -1436,9 +1436,9 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.mp.state == uin::common::UI_MP_WAITING_FOR_START_PULSE) {
+	if (interface.mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE) {
 
-		interface.mp.state = uin::common::UI_MP_TASK_RUNNING;// czekanie na stop
+		interface.mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		// zamkniecie okien ruchow recznych o ile sa otwarte
 
@@ -1470,9 +1470,9 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if ((interface.mp.state == uin::common::UI_MP_TASK_RUNNING) || (interface.mp.state == uin::common::UI_MP_TASK_PAUSED)) {
+	if ((interface.mp.state == ui::common::UI_MP_TASK_RUNNING) || (interface.mp.state == ui::common::UI_MP_TASK_PAUSED)) {
 
-		interface.mp.state = uin::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
+		interface.mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		interface.execute_mp_pulse(MP_STOP);
 
@@ -1492,9 +1492,9 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.mp.state == uin::common::UI_MP_TASK_RUNNING) {
+	if (interface.mp.state == ui::common::UI_MP_TASK_RUNNING) {
 
-		interface.mp.state = uin::common::UI_MP_TASK_PAUSED;// czekanie na stop
+		interface.mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
 
 		interface.execute_mp_pulse(MP_PAUSE);
 
@@ -1514,9 +1514,9 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.mp.state == uin::common::UI_MP_TASK_PAUSED) {
+	if (interface.mp.state == ui::common::UI_MP_TASK_PAUSED) {
 
-		interface.mp.state = uin::common::UI_MP_TASK_RUNNING;// czekanie na stop
+		interface.mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		interface.execute_mp_pulse(MP_RESUME);
 
@@ -1536,7 +1536,7 @@ int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.mp.state == uin::common::UI_MP_TASK_RUNNING) {
+	if (interface.mp.state == ui::common::UI_MP_TASK_RUNNING) {
 
 		interface.execute_mp_pulse(MP_TRIGGER);
 
@@ -1578,7 +1578,7 @@ int signal_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wnd_processes_control_signal_resume) {
 		// Odwieszenie procesow EDP, ECP i MP sygnalem
 		signo=SIGCONT;
-		interface.teachingstate = uin::common::MP_RUNNING;
+		interface.teachingstate = ui::common::MP_RUNNING;
 	}
 
 	/*int SignalKill( uint32_t nd,

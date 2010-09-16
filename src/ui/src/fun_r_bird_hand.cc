@@ -36,7 +36,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 int EDP_bird_hand_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -88,7 +88,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 				interface.bird_hand->state.edp.node_nr = interface.config->return_node_number(interface.bird_hand->state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					interface.bird_hand->ui_ecp_robot = new uin::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
+					interface.bird_hand->ui_ecp_robot = new ui::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
 
 				}
 

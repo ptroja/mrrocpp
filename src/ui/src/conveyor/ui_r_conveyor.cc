@@ -13,7 +13,7 @@
 #include "../gcc_ntox86/proto.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace conveyor {
 
 // extern ui_state_def ui_state;

@@ -49,7 +49,7 @@
 #include <Ph.h>
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 void sr_buffer::operator()() {
@@ -160,5 +160,5 @@ bool sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

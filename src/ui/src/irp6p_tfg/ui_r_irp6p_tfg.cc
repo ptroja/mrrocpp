@@ -13,7 +13,7 @@
 #include "../gcc_ntox86/proto.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace irp6p_tfg {
 
 //
@@ -198,6 +198,6 @@ int UiRobot::delete_ui_ecp_robot()
 
 }
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 

@@ -52,7 +52,7 @@
 #include <Pt.h>
 #include <Ph.h>
 
-uin::common::Interface interface;
+ui::common::Interface interface;
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)

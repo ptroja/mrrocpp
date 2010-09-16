@@ -26,7 +26,7 @@
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace speaker {
 
 EcpRobot::EcpRobot(common::edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
@@ -71,7 +71,7 @@ void EcpRobot::read_state(bool* local_state)
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 

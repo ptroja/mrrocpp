@@ -32,7 +32,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 int init_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -161,7 +161,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					boost::unique_lock < boost::mutex > lock(interface.process_creation_mtx);
 
 					interface.irp6m_m->ui_ecp_robot
-							= new uin::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6m::ROBOT_NAME);
+							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6m::ROBOT_NAME);
 				}
 
 				interface.irp6m_m->state.edp.pid = interface.irp6m_m->ui_ecp_robot->ecp->get_EDP_pid();
@@ -512,7 +512,7 @@ int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
+			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
 			while ((interface.irp6m_m->state.ecp.trigger_fd
 					= name_open(interface.irp6m_m->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

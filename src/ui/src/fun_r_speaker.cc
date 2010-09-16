@@ -32,7 +32,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 // zamykanie okna odtwarzania dzwiekow dla robota speaker
 
@@ -240,7 +240,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 				interface.speaker->state.edp.node_nr = interface.config->return_node_number(interface.speaker->state.edp.node_name);
 
 				interface.speaker->ui_ecp_robot
-						= new uin::speaker::EcpRobot(&interface.speaker->state.edp, *interface.config, *interface.all_ecp_msg);
+						= new ui::speaker::EcpRobot(&interface.speaker->state.edp, *interface.config, *interface.all_ecp_msg);
 				interface.speaker->state.edp.pid = interface.speaker->ui_ecp_robot->get_EDP_pid();
 
 				if (interface.speaker->state.edp.pid < 0) {
@@ -370,7 +370,7 @@ int pulse_ecp_speaker(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 			short tmp = 0;
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
+			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
 			while ((interface.speaker->state.ecp.trigger_fd
 					= name_open(interface.speaker->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

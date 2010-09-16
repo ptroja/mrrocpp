@@ -17,7 +17,7 @@
 #include "base/ecp/ecp_robot.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace irp6 {
 
 // ---------------------------------------------------------------
@@ -46,7 +46,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

@@ -21,7 +21,7 @@
 //
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace bird_hand {
 
 UiRobot::UiRobot(common::Interface& _interface) :
@@ -176,5 +176,5 @@ int UiRobot::delete_ui_ecp_robot()
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

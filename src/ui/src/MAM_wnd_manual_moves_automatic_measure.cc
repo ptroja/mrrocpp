@@ -35,7 +35,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 // Tryb debugowania.
 // #define MAMDEBUG

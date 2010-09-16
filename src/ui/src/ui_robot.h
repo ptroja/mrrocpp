@@ -11,7 +11,7 @@
 #include "ui/src/ui.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 class Interface;

@@ -34,7 +34,7 @@
 #include "robot/shead/ecp_r_shead.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
@@ -211,7 +211,7 @@ void EcpRobot::move_joints(const double final_position[])
 // ---------------------------------------------------------------
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 

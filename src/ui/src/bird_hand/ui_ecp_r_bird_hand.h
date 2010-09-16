@@ -16,7 +16,7 @@
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace bird_hand {
 
 // ---------------------------------------------------------------
@@ -51,7 +51,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

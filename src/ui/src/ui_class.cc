@@ -40,7 +40,7 @@
 
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 Interface::Interface() :
@@ -51,7 +51,7 @@ Interface::Interface() :
 	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.pid = -1;
 	ui_state = 1;// ui working
-	file_window_mode = uin::common::FSTRAJECTORY; // uczenie
+	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 	is_task_window_open = false;// informacja czy okno zadanai jest otwarte
 	is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
 	process_control_window_renew = true;
@@ -1045,5 +1045,5 @@ void Interface::create_threads()
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

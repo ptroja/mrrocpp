@@ -27,10 +27,10 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::busy_flag communication_flag;
+extern ui::common::busy_flag communication_flag;
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
@@ -65,7 +65,7 @@ void ecp_buffer::operator()()
 	}
 
 	while (1) {
-		// communication_state = uin::common::UI_ECP_REPLY_READY;
+		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
 		_msg_info info;
@@ -116,7 +116,7 @@ void ecp_buffer::operator()()
 			case lib::C_MOTOR:
 				//  printf("C_MOTOR\n");
 				synchroniser.null_command();
-				if (interface.teachingstate == uin::common::MP_RUNNING) {
+				if (interface.teachingstate == ui::common::MP_RUNNING) {
 					interface.teachingstate = ECP_TEACHING;
 				}
 				PtEnter(0);
@@ -216,13 +216,13 @@ void ecp_buffer::operator()()
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::LOAD_FILE\n");
-				if (interface.teachingstate == uin::common::MP_RUNNING) {
+				if (interface.teachingstate == ui::common::MP_RUNNING) {
 					synchroniser.null_command();
 					wyjscie = false;
 					while (!wyjscie) {
 						if (!interface.is_file_selection_window_open) {
 							interface.is_file_selection_window_open = 1;
-							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+							interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -244,13 +244,13 @@ void ecp_buffer::operator()()
 				break;
 			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::SAVE_FILE\n");
-				if (interface.teachingstate == uin::common::MP_RUNNING) {
+				if (interface.teachingstate == ui::common::MP_RUNNING) {
 					synchroniser.null_command();
 					wyjscie = false;
 					while (!wyjscie) {
 						if (!interface.is_file_selection_window_open) {
 							interface.is_file_selection_window_open = 1;
-							interface.file_window_mode = uin::common::FSTRAJECTORY; // wybor pliku z trajektoria
+							interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
 							wyjscie = true;
 							PtEnter(0);
 							ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
@@ -355,5 +355,5 @@ void ecp_buffer::operator()()
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

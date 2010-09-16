@@ -34,7 +34,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 // zamykanie okien ruchow recznych dla robota irp6_postument
 
@@ -2305,7 +2305,7 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
 					interface.irp6p_m->ui_ecp_robot
-							= new uin::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
+							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
 				}
 
 				interface.irp6p_m->state.edp.pid = interface.irp6p_m->ui_ecp_robot->ecp->get_EDP_pid();
@@ -2423,7 +2423,7 @@ int pulse_ecp_irp6_postument(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 			// kilka sekund  (~1) na otworzenie urzadzenia
 			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-			ualarm(uin::common::SIGALRM_TIMEOUT, 0);
+			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
 			while ((interface.irp6p_m->state.ecp.trigger_fd
 					= name_open(interface.irp6p_m->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
 					< 0) {

@@ -36,7 +36,7 @@
 #include "robot/spkm/ecp_r_spkm.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace irp6 {
 
 // ---------------------------------------------------------------
@@ -517,5 +517,5 @@ void EcpRobot::read_xyz_angle_axis(double current_position[])
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

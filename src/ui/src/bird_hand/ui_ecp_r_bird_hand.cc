@@ -26,7 +26,7 @@
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace bird_hand {
 
 // ---------------------------------------------------------------
@@ -88,5 +88,5 @@ void EcpRobot::execute_motion(void)
 // ---------------------------------------------------------------
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

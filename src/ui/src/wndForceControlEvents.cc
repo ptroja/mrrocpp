@@ -39,7 +39,7 @@
 
 // Wiadomosc wysylana do ECP.
 lib::UI_ECP_message ui_ecp_msg;
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 uint64_t e; // kod bledu systemowego
 

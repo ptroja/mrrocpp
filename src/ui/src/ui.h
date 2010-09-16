@@ -29,7 +29,7 @@ enum UI_NOTIFICATION_STATE_ENUM
 int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 enum TEACHING_STATE
@@ -252,7 +252,7 @@ public:
 }
 
 // TODO: reimplement this as a singleton
-extern uin::common::busy_flag communication_flag;
+extern ui::common::busy_flag communication_flag;
 
 #endif
 

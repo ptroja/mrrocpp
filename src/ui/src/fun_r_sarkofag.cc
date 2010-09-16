@@ -33,7 +33,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 int close_wind_sarkofag_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -116,7 +116,7 @@ int EDP_sarkofag_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
 					interface.sarkofag->ui_ecp_robot
-							= new uin::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::sarkofag::ROBOT_NAME);
+							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::sarkofag::ROBOT_NAME);
 				}
 
 				interface.sarkofag->state.edp.pid = interface.sarkofag->ui_ecp_robot->ecp->get_EDP_pid();

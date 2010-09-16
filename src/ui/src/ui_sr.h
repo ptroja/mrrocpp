@@ -23,7 +23,7 @@
 #include "ui/src/ui.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 static const int UI_SR_BUFFER_LENGHT = 50;
@@ -52,7 +52,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 #endif
 

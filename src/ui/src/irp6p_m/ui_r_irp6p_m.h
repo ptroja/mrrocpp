@@ -13,7 +13,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 class Interface;
 }
@@ -62,7 +62,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

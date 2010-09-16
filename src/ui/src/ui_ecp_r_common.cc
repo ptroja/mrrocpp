@@ -26,7 +26,7 @@
 #include "ui/src/ui_ecp_r_common.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 // ---------------------------------------------------------------
@@ -215,6 +215,6 @@ void EcpRobot::read_joints(double current_position[]) {
 // ---------------------------------------------------------------
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 

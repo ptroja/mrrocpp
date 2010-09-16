@@ -14,7 +14,7 @@
 #include "../gcc_ntox86/proto.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace bird_hand {
 
 //
@@ -49,5 +49,5 @@ int WndConfiguration::copy_command()
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

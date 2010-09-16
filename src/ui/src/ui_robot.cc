@@ -5,7 +5,7 @@
 #include "ui/src/ui_class.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 //
@@ -113,5 +113,5 @@ int UiRobot::EDP_slay_int()
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp

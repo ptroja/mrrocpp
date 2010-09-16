@@ -26,9 +26,9 @@
 #include "abimport.h"
 #include "proto.h"
 
-uin::common::busy_flag communication_flag;
+ui::common::busy_flag communication_flag;
 
-extern uin::common::Interface interface;
+extern ui::common::Interface interface;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -43,7 +43,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	Iteration_counter++;
 
-	if ((Iteration_counter % uin::common::CHECK_SPEAKER_STATE_ITER) == 0) {
+	if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
 		if (interface.speaker->is_wind_speaker_play_open) // otworz okno
 		{
 			speaker_check_state(widget, apinfo, cbinfo);

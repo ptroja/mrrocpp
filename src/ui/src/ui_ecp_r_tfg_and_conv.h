@@ -16,7 +16,7 @@
 #include "ui/src/ui_ecp_r_common.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
@@ -34,6 +34,6 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 #endif

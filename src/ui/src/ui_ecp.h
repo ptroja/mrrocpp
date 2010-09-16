@@ -21,7 +21,7 @@
 #include "ui/src/ui.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 /**************************** ecp_buffer *****************************/
@@ -48,7 +48,7 @@ public:
 };
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
 
 #endif

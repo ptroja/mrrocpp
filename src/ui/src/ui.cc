@@ -9,7 +9,7 @@
 #include "ui/src/ui.h"
 
 namespace mrrocpp {
-namespace uin {
+namespace ui {
 namespace common {
 
 busy_flagger::busy_flagger(busy_flag & _flag) :
@@ -106,5 +106,5 @@ feb_thread::~feb_thread() {
 }
 
 }
-} //namespace uin
+} //namespace ui
 } //namespace mrrocpp
