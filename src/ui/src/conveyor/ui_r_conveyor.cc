@@ -14,8 +14,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
-
+namespace conveyor {
 
 // extern ui_state_def ui_state;
 
@@ -26,14 +25,14 @@ namespace common {
 //
 
 
-UiRobotConveyor::UiRobotConveyor(Ui& _ui) :
-	UiRobot(_ui, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION), is_wind_conv_servo_algorithm_open(false),
-			is_wind_conveyor_moves_open(false), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION),
+			is_wind_conv_servo_algorithm_open(false), is_wind_conveyor_moves_open(false), ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotConveyor::reload_configuration()
+int UiRobot::reload_configuration()
 {
 
 	// jesli conveyor ma byc aktywny
@@ -114,7 +113,7 @@ int UiRobotConveyor::reload_configuration()
 	return 1;
 }
 
-int UiRobotConveyor::manage_interface()
+int UiRobot::manage_interface()
 {
 
 	switch (state.edp.state)
@@ -138,17 +137,17 @@ int UiRobotConveyor::manage_interface()
 
 				switch (ui.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, ABN_mm_conveyor_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
 						break;
@@ -170,7 +169,7 @@ int UiRobotConveyor::manage_interface()
 }
 
 // aktualizacja ustawien przyciskow
-int UiRobotConveyor::process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
@@ -198,7 +197,7 @@ int UiRobotConveyor::process_control_window_conveyor_section_init(bool &wlacz_Pt
 
 }
 
-int UiRobotConveyor::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -213,7 +212,7 @@ int UiRobotConveyor::close_all_windows()
 
 }
 
-int UiRobotConveyor::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;

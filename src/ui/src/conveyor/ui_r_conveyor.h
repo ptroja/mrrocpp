@@ -15,9 +15,11 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
-
 class Ui;
+class ui_tfg_and_conv_robot;
+
+}
+namespace conveyor {
 
 //
 // KLASA UiRobotConveyor
@@ -25,12 +27,7 @@ class Ui;
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-
-class ui_tfg_and_conv_robot;
-
-class UiRobotConveyor : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
@@ -42,9 +39,9 @@ public:
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	common::ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotConveyor(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int

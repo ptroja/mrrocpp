@@ -85,7 +85,7 @@ void Ui::init()
 	irp6p_tfg = new UiRobotIrp6p_tfg(*this);
 	sarkofag = new UiRobotSarkofag(*this);
 	irp6m_m = new UiRobotIrp6m_m(*this);
-	conveyor = new UiRobotConveyor(*this);
+	conveyor = new conveyor::UiRobot(*this);
 	speaker = new UiRobotSpeaker(*this);
 	spkm = new UiRobotSpkm(*this);
 	smb = new UiRobotSmb(*this);

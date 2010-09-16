@@ -117,7 +117,7 @@ public:
 	UiRobotIrp6p_tfg *irp6p_tfg;
 	UiRobotSarkofag *sarkofag;
 	UiRobotIrp6m_m *irp6m_m;
-	UiRobotConveyor *conveyor;
+	conveyor::UiRobot *conveyor;
 	UiRobotSpeaker *speaker;
 	UiRobotSpkm *spkm;
 	UiRobotSmb *smb;
