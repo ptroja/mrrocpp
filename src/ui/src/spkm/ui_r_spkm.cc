@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace uin {
-namespace common {
+namespace spkm {
 
 //
 //
@@ -23,13 +23,13 @@ namespace common {
 //
 
 
-UiRobotSpkm::UiRobotSpkm(Ui& _ui) :
-	UiRobot(_ui, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Ui& _ui) :
+	common::UiRobot(_ui, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION), ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotSpkm::reload_configuration()
+int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
 	if ((state.is_active = ui.config->value <int> ("is_spkm_active")) == 1) {
@@ -97,7 +97,7 @@ int UiRobotSpkm::reload_configuration()
 	return 1;
 }
 
-int UiRobotSpkm::manage_interface()
+int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
 	{
@@ -155,7 +155,7 @@ int UiRobotSpkm::manage_interface()
 	return 1;
 }
 
-int UiRobotSpkm::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;

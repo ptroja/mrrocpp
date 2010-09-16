@@ -87,8 +87,8 @@ void Ui::init()
 	irp6m_m = new irp6m::UiRobot(*this);
 	conveyor = new conveyor::UiRobot(*this);
 	speaker = new UiRobotSpeaker(*this);
-	spkm = new UiRobotSpkm(*this);
-	smb = new UiRobotSmb(*this);
+	spkm = new spkm::UiRobot(*this);
+	smb = new smb::UiRobot(*this);
 	shead = new shead::UiRobot(*this);
 
 	ui_node_name = sysinfo.nodename;

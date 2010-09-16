@@ -14,25 +14,27 @@
 namespace mrrocpp {
 namespace uin {
 namespace common {
-
-//
-//
-// KLASA UiRobotSpkm
-//
-//
-
-
 class Ui;
 class ui_tfg_and_conv_robot;
+}
+namespace spkm {
 
-class UiRobotSpkm: public UiRobot {
+//
+//
+// KLASA UiRobot
+//
+//
+
+
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	common::ui_tfg_and_conv_robot *ui_ecp_robot;
 
-	UiRobotSpkm(Ui& _ui);
+	UiRobot(common::Ui& _ui);
 	int reload_configuration();
 	int manage_interface();
 	int delete_ui_ecp_robot();

@@ -119,8 +119,8 @@ public:
 	irp6m::UiRobot *irp6m_m;
 	conveyor::UiRobot *conveyor;
 	UiRobotSpeaker *speaker;
-	UiRobotSpkm *spkm;
-	UiRobotSmb *smb;
+	spkm::UiRobot *spkm;
+	smb::UiRobot *smb;
 	shead::UiRobot *shead;
 
 	Ui();
