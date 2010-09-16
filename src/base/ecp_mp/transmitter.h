@@ -18,6 +18,7 @@ namespace task {
 // XXX Forward declaration
 class task;
 }
+namespace transmitter {
 
 /*!
  * @brief Base abstract class of all ecp_mp transmitters
@@ -25,8 +26,6 @@ class task;
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-namespace transmitter {
-
 class transmitter_base
 {
 public:
