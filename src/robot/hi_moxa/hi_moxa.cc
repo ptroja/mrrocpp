@@ -192,21 +192,25 @@ uint64_t HI_moxa::read_write_hardware(void)
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
 		if (select_retval == 0) {
 			receive_timeouts++;
-			std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
-					<< (((float) receive_timeouts) / receive_attempts) << ")";
-			//<< std::endl;
+			if (!master.robot_test_mode) {
+				std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
+						<< (((float) receive_timeouts) / receive_attempts) << ")";
 
-			//throw(std::runtime_error("communication timeout !!!"));
-			/*std::cout << "[error] communication timeout ("
-			 << ++receive_timeouts << "/" << receive_attempts << "="
-			 << ((float) receive_timeouts / receive_attempts) << ")";
-			 //					<< std::endl;*/
+				//<< std::endl;
 
-			for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
-				if (bytes_received[drive_number] < READ_BYTES)
-					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
+				//throw(std::runtime_error("communication timeout !!!"));
+				/*std::cout << "[error] communication timeout ("
+				 << ++receive_timeouts << "/" << receive_attempts << "="
+				 << ((float) receive_timeouts / receive_attempts) << ")";
+				 //					<< std::endl;*/
+
+				for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+					if (bytes_received[drive_number] < READ_BYTES)
+						std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number]
+								<< ")";
+				}
+				std::cout << std::endl;
 			}
-			std::cout << std::endl;
 
 			hardware_read_ok = false;
 			break;
