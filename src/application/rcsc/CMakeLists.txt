@@ -39,9 +39,6 @@ add_executable(ecp_speak_rcsc
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
 	../../subtask/ecp_st_go.cc
-	../../generator/ecp/ecp_g_smooth.cc
-	../../generator/ecp/ecp_g_force.cc
-	../../generator/ecp/ecp_g_jarosz.cc
 	../../generator/ecp/ecp_g_operator_reaction_condition.cc
 )
 
