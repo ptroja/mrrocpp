@@ -42,7 +42,6 @@ public:
 	 * @param _number_of_servos Number of servos (joints).
 	 */
 	model_calibrated_with_wrist(int _number_of_servos);
-
 };
 
 } // namespace irp6ot

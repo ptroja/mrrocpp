@@ -17,4 +17,6 @@ add_library(ecp_generators
 	../../generator/ecp/trajectory_interpolator/bang_bang_interpolator.cc
 )
 
-target_link_libraries(ecp_generators mrrocpp)
+# @bug cyclic dependency between ecp<->ecp_generators prevents building as
+# shared libraries // ptroja
+target_link_libraries(ecp_generators mrrocpp ecp)

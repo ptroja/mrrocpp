@@ -7,6 +7,7 @@ if(ROBOT_SPEAKER AND QNXNTO)
 	
 	target_link_libraries(edp_speaker edp
 		$ENV{QNX_TARGET}/x86/lib/libasound.so
+		kinematics
 		${COMMON_LIBRARIES})
 	
 	add_library(ecp_r_speaker ecp_r_speaker.cc)

@@ -36,21 +36,21 @@ add_library(mprobots
 	sarkofag/mp_r_sarkofag.cc
 )
 
-add_library(ecprobots
+add_library(ecp_robots
 	../base/ecp/ecp_robot.cc
 )
 
-# enable conditional inclusion to ecprobots
-target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_m)
-target_link_library_if(ROBOT_IRP6_ON_TRACK ecprobots ecp_r_irp6ot_tfg)
-target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_m)
-target_link_library_if(ROBOT_IRP6_POSTUMENT ecprobots ecp_r_irp6p_tfg)
-target_link_library_if(ROBOT_IRP6_MECHATRONICS ecprobots ecp_r_irp6m)
-target_link_library_if(ROBOT_POLYCRANK ecprobots ecp_r_polycrank)
-target_link_library_if(ROBOT_CONVEYOR ecprobots ecp_r_conv)
-target_link_library_if(ROBOT_SPEAKER ecprobots ecp_r_speaker)
-target_link_library_if(ROBOT_BIRD_HAND ecprobots ecp_r_bird_hand)
-target_link_library_if(ROBOT_SARKOFAG ecprobots ecp_r_sarkofag)
-target_link_library_if(ROBOT_SHEAD ecprobots ecp_r_shead)
-target_link_library_if(ROBOT_SMB ecprobots ecp_r_smb)
-target_link_library_if(ROBOT_SPKM ecprobots ecp_r_spkm)
+# enable conditional inclusion to ecp_robots
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_robots ecp_r_irp6ot_m)
+target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_robots ecp_r_irp6ot_tfg)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_robots ecp_r_irp6p_m)
+target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_robots ecp_r_irp6p_tfg)
+target_link_library_if(ROBOT_IRP6_MECHATRONICS ecp_robots ecp_r_irp6m)
+target_link_library_if(ROBOT_POLYCRANK ecp_robots ecp_r_polycrank)
+target_link_library_if(ROBOT_CONVEYOR ecp_robots ecp_r_conv)
+target_link_library_if(ROBOT_SPEAKER ecp_robots ecp_r_speaker)
+target_link_library_if(ROBOT_BIRD_HAND ecp_robots ecp_r_bird_hand)
+target_link_library_if(ROBOT_SARKOFAG ecp_robots ecp_r_sarkofag)
+target_link_library_if(ROBOT_SHEAD ecp_robots ecp_r_shead)
+target_link_library_if(ROBOT_SMB ecp_robots ecp_r_smb)
+target_link_library_if(ROBOT_SPKM ecp_robots ecp_r_spkm)
