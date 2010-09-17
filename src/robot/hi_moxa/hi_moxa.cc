@@ -275,6 +275,8 @@ uint64_t HI_moxa::read_write_hardware(void) {
 		}
 	}
 
+
+
 	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
 	master.controller_state_edp_buf.is_robot_blocked = power_fault;
 	if (power_fault) {
