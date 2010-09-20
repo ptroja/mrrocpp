@@ -107,7 +107,7 @@ void visualservo_tester::main_task_algorithm(void)
 		sr_ecp_msg->message("Conveyor started.");
 	}
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(2, 2, ROBOT_NAME_MB.c_str(), lib::conveyor::ROBOT_NAME.c_str(), ROBOT_NAME_MB.c_str(), lib::conveyor::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(2, 2, ROBOT_NAME_MB.c_str(), lib::conveyor::ROBOT_NAME.c_str(), ROBOT_NAME_MB.c_str(), lib::conveyor::ROBOT_NAME.c_str());
 
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }

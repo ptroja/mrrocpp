@@ -356,12 +356,12 @@ wait_ms(state.getNumArgument());
 
 void fsautomat::runEmptyGen(common::State &state)
 {
-run_extended_empty_gen(state.getNumArgument(), 1, (state.getRobot()).c_str());
+run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
 }
 
 void fsautomat::runEmptyGenForSet(common::State &state)
 {
-run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+run_extended_empty_gen_and_wait(
 		state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet,
 		state.robotSet->secondSet);
 }

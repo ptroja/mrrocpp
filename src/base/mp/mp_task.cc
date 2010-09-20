@@ -159,7 +159,7 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 	mp_semte_gen.Move();
 }
 
-void task::run_extended_empty_gen(bool activate_trigger, int number_of_robots, ...)
+void task::run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...)
 {
 	generator::extended_empty mp_ext_empty_gen(*this);
 
@@ -179,7 +179,7 @@ void task::run_extended_empty_gen(bool activate_trigger, int number_of_robots, .
 	mp_ext_empty_gen.Move();
 }
 
-void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...)
+void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...)
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
@@ -237,7 +237,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
 		// wtedy wyjscie z petli
 
-		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf(" run_extended_empty_gen_and_wait 1\n");
 		// przygotowanie zapasowych list robotow
 		robots_to_move_tmp.clear();
 		robots_to_wait_for_task_termination_tmp.clear();
@@ -269,15 +269,15 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
-		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_gen_and_wait 1\n");
 		// uruchomienie generatora
 		mp_ext_empty_gen.Move();
 
-		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_gen_and_wait 1\n");
 	} while (true);
 }
 
-void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
+void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
 {
 	// CZYNNOSCI WSTEPNE
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
@@ -335,7 +335,7 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
 		// wtedy wyjscie z petli
 
-		//	if (debug_tmp) printf(" run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf(" run_extended_empty_gen_and_wait 1\n");
 		// przygotowanie zapasowych list robotow
 		robots_to_move_tmp.clear();
 		robots_to_wait_for_task_termination_tmp.clear();
@@ -367,10 +367,10 @@ void task::run_extended_empty_generator_for_set_of_robots_and_wait_for_task_term
 		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
-		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_gen_and_wait 1\n");
 		// uruchomienie generatora
 		mp_ext_empty_gen.Move();
-		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots 1\n");
+		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_gen_and_wait 1\n");
 	} while (true);
 	// koniec petli
 }
