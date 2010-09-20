@@ -119,6 +119,7 @@ public:
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel
+	 * @return pulse approached
 	 */
 	bool pulse_check();
 

@@ -266,10 +266,21 @@ private:
 	 */
 	bool ui_new_pulse;
 
+	/**
+	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
+	 * @param process_type - process type to wait for the pulses
+	 * @param desired_wait_mode - decides if the method should wait for desired pulse or not
+	 * @return desired pulse found
+	 */
 	bool
 			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
+/**
+ * @brief returns inherited task pointer
+ * @param _config configurator object reference
+ * @return inherited task pointer
+ */
 task* return_created_mp_task(lib::configurator &_config);
 
 } // namespace task
