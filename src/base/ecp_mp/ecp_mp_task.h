@@ -110,31 +110,36 @@ public:
 	/**
 	 * @brief operator bool decision (Yes/No) request through UI
 	 * @param question string with question to display
+	 * @return bool decision
 	 */
 	bool operator_reaction(const char* question);
 
 	/**
 	 * @brief operator decision (1/2/3...) request through UI
 	 * @param question string with question to display
-	 * @param nr_of_options_input number of options
+	 * @param uint8_t decision
+	 *
 	 */
 	uint8_t choose_option(const char* question, uint8_t nr_of_options_input);
 
 	/**
 	 * @brief operator integer decision request through UI
 	 * @param question string with question to display
+	 * @param int decision
 	 */
 	int input_integer(const char* question);
 
 	/**
 	 * @brief operator double decision request through UI
 	 * @param question string with question to display
+	 * @param double decision
 	 */
 	double input_double(const char* question);
 
 	/**
 	 * @brief message send to display in UI
 	 * @param message string to display
+	 * @return communcation status
 	 */
 	bool show_message(const char* message);
 
@@ -168,6 +173,7 @@ public:
 	 * @brief creates trajectory
 	 * @param fileName actNode xml_node
 	 * @param stateID task state id
+	 * @return Trajectory pointer
 	 */
 	ecp_mp::common::Trajectory * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID);
 
@@ -175,6 +181,7 @@ public:
 	 * @brief loads trajectory
 	 * @param fileName file that stores trajectory
 	 * @param robot_name_t robot associated with trajectory
+	 * @return trajectories_t pointer
 	 */
 	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
 };
