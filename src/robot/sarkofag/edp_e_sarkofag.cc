@@ -99,7 +99,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	common::motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
 	reply.servo_step = step_counter;
-
 }
 
 common::servo_buffer* effector::return_created_servo_buffer()
@@ -114,7 +113,6 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::sarkofag::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-
 }
 
 } // namespace sarkofag

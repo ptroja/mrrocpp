@@ -15,7 +15,7 @@
 #include "ui/src/ui.h"
 
 #include "base/lib/sr/srlib.h"
-// #include "base/ecp/ecp.h"
+#include "base/ecp/ecp_task.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/mis_fun.h"
 #include "ui/src/ui_class.h"
@@ -30,6 +30,21 @@
 extern ui::common::busy_flag communication_flag;
 
 namespace mrrocpp {
+
+namespace ecp {
+namespace common {
+namespace task {
+
+//! Dummy task required for dynamic linking
+mrrocpp::ecp::common::task::task * return_created_ecp_task(mrrocpp::lib::configurator&)
+{
+	return NULL;
+}
+
+} // namespace ecp
+} // namespace common
+} // namespace task
+
 namespace ui {
 namespace common {
 
