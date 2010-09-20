@@ -158,55 +158,113 @@ public:
 	 * @param ... robots labels
 	 */
 	void run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...);
+
+	/**
+	 * @brief runs extended empty generator and waits for task termination
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
+	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
+	 * @param number_of_robots_to_move number of robots to move
+	 * @param ... robots labels - first set, then second set
+	 */
 	void
 	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...);
+
+	/**
+	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
+	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
+	 * @param number_of_robots_to_move number of robots to move
+	 * @param robotsToMove robot to move list
+	 * @param robotsWaitingForTaskTermination robot to wait list
+	 */
 	void
 			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
+	/**
+	 * @brief executes delay
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param _ms_delay delay time
+	 */
 	void wait_ms(int _ms_delay); // zamiast delay
 
-	// Oczekiwanie na zlecenie START od UI
+	/**
+	 * @brief waits for START pulse from UI
+	 */
 	void wait_for_start(void);// by Y&W
 
-	// Oczekiwanie na zlecenie STOP od UI
+	/**
+	 * @brief waits for STOP pulse from UI
+	 */
 	void wait_for_stop(void);// by Y&W dodany tryb
 
-	// Wystartowanie wszystkich ECP
+	/**
+	 * @brief starts all ECP's
+	 * it sends special MP command
+	 */
 	void start_all(const common::robots_t & _robot_m);
 
-	// Zatrzymanie wszystkich ECP
+	/**
+	 * @brief termianted all ECP's
+	 * it sends special MP command
+	 */
 	void terminate_all(const common::robots_t & _robot_m);
 
-	// warunkowe wyslanie pulsu zadania komunikacji do ECP
+	/**
+	 * @brief sends communication request pulse to ECP
+	 */
 	void request_communication_with_robots(const common::robots_t & _robot_m);
 
-	// Wyslanie rozkazu do wszystkich ECP
+	/**
+	 * @brief communicates with all ECP's that are set to communicate
+	 */
 	void execute_all(const common::robots_t & _robot_m);
 
-	/// method redefine in concrete classes
+	/**
+	 * @brief main task algorith
+	 * to implement ni inherited classes
+	 */
 	virtual void main_task_algorithm(void) = 0;
 
-	/// mapa wszystkich robotow
+	/**
+	 * @brief map of all robots used in the task
+	 */
 	common::robots_t robot_m;
 
-	// funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
+	/**
+	 * @brief receives pulse from UI or ECP
+	 */
 	void mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator);
 
 private:
 	friend class robot::robot;
 
-	//! wait until ECP/UI calls name_open() to pulse channel;
-	//! \return {identifier (scoid/QNET or socket/messip) of the next connected process}
+	/**
+	 * @brief wait until ECP/UI calls name_open() to pulse channel;]
+	 * @return identifier (scoid/QNET or socket/messip) of the next connected process
+	 */
 	int wait_for_name_open(void);
 
-	//! A server connection ID identifying UI
+	/**
+	 * @brief A server connection ID identifying UI
+	 */
 	int ui_scoid;
 
-	//! flag indicating opened pulse connection from UI
+	/**
+	 * @brief flag indicating opened pulse connection from UI
+	 */
 	bool ui_opened;
 
-	char ui_pulse_code; // kod pulsu ktory zostal wyslany przez ECP w celu zgloszenia gotowosci do komunikacji (wartosci w impconst.h)
-	bool ui_new_pulse; // okresla czy jest nowy puls
+	/**
+	 * @brief code of the pulse received from UI
+	 */
+	char ui_pulse_code;
+
+	/**
+	 * @brief new UI pulse flaf
+	 */
+	bool ui_new_pulse;
 
 	bool
 			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
