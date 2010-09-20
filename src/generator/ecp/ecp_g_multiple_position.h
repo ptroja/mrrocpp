@@ -572,9 +572,32 @@ public:
 		coordinate_vector.clear();
 		calculated = false;
 		interpolated = false;
-		sr_ecp_msg.message("Generator reset");
 		angle_axis_absolute_transformed_into_relative = false;
+		sr_ecp_msg.message("Generator reset");
 	}
+	/**
+	 * Detection of possible jerks. Method scans the vector with coordinates and checks if the allowed acceleration was not exceeded.
+	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
+	 */
+/*	virtual int detect_jerks()
+	{
+		coordinate_vector_iterator = coordinate_vector.begin();
+		std::vector<double> temp1 = pose_vector.begin()->start_position;
+		std::vector<double> temp2 = (*coordinate_vector_iterator);
+
+
+
+		for (int i = 0; i < coordinate_vector.size(); i++) {
+			//tempIter = (*coordinate_vector_iterator).begin();
+			printf("%d:\t", (i + 1));
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				printf(" %f\t", *tempIter);
+			}
+			coordinate_vector_iterator++;
+		}
+
+		return 0;
+	}*/
 };
 
 } // namespace generator

@@ -1,5 +1,5 @@
 /**
-* @file
+* @file ecp_g_newsmooth.h
 * @brief Smooth class and its methods.
 * @author rtulwin
 * @date	2010
@@ -112,6 +112,11 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * @return true if the addition was successful
 		 */
 		bool load_relative_angle_axis_trajectory_pose(const std::vector<double> & coordinates);
+		/**
+		 * Loads the whole trajectory chain (possibly more than one position) stored in a text file.
+		 * @param file_name name of the file with the trajectory
+		 */
+		bool load_trajectory_from_file(const char* file_name);
 
 };
 

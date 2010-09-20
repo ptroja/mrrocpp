@@ -55,6 +55,8 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
+		sgenjoint->load_trajectory_from_file("/net/koleszko/mnt/mrroc/src/application/generator_tester/trajectory.trj");
+
 		coordinates2[0] = 0.1;
 		coordinates2[1] = -0.067;
 		coordinates2[2] = -1.342;

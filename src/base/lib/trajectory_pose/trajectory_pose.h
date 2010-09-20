@@ -1,6 +1,7 @@
 /**
  * @file
- * @rief Header file for trajectory_pose
+ * @brief Header file for trajectory_pose
+ * @author rtulwin
  *
  * Contains declaration of trajectory_pose class and its methods.
  */
@@ -18,7 +19,7 @@ namespace common {
 namespace trajectory_pose {
 
 /**
- * Base class for all trajectory pose types. Contains fields common for  all trajectory pose descriptions.
+ * Base class for all trajectory pose types. Contains fields common for all trajectory pose descriptions.
  */
 class trajectory_pose {
 public:
