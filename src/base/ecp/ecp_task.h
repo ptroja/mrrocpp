@@ -45,76 +45,144 @@ class task : public ecp_mp::task::task
 {
 private:
 #if !defined(USE_MESSIP_SRR)
+	/**
+	 * @brief communication channels descriptors
+	 */
 	name_attach_t *ecp_attach, *trigger_attach; // by Y
+
+	/**
+	 * @brief MP server communication channel descriptor to send pulses
+	 */
 	int MP_fd;
 #else
 	messip_channel_t *ecp_attach, *trigger_attach, *MP_fd;
 #endif
-	// Wysyla puls do Mp przed oczekiwaniem na spotkanie
+
+	/**
+	 * @brief sends pulse to MP to signalize communication readiness
+	 */
 	void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
 
-	// Receive of mp message
+	/**
+	 * @brief Receives MP message
+	 */
 	int receive_mp_message(bool block);
 
-	// Badanie typu polecenia z MP
+	/**
+	 * @brief Returns MP command type
+	 */
 	lib::MP_COMMAND mp_command_type(void) const;
 
+	/**
+	 * @brief Initializes communication channels
+	 */
 	void initialize_communication(void);
 protected:
-	// Oczekiwanie na nowy stan od MP
+
+	/**
+	 * @brief Gets next state from MP
+	 */
 	void get_next_state(void);
 
 public:
 	// TODO: following packages should be 'protected'
-	// Odpowiedz ECP do MP, pola do ew. wypelnienia przez generatory
+	/**
+	 * @brief Reply to MP
+	 */
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
+	/**
+	 * @brief ECP subtasks stl map
+	 */
 	subtasks_t subtask_m;
 
+	/**
+	 * @brief buffered next state label sent by MP
+	 */
 	std::string mp_2_ecp_next_state_string;
 
-	// Polecenie od MP dla TASKa
+	/**
+	 * @brief buffered MP command
+	 */
 	lib::MP_COMMAND_PACKAGE mp_command;
 
+	/**
+	 * @brief associated single robot object pointer
+	 */
 	robot::ecp_robot* ecp_m_robot;
 
-	//ew. koordynacja ciagla domyslnie wylaczona ma wplyw na instrukcje move
+	/**
+	 * @brief continuous coordination flag
+	 * influences generator Move method behavior
+	 */
 	bool continuous_coordination;
 
-	// sprawdza czy przeszedl puls do ECP lub MP
+	/**
+	 * @brief checks if new pulse arrived from UI on trigger channel
+	 */
 	bool pulse_check();
 
-	// KONSTRUKTOR
+	/**
+	 * @brief Constructor
+	 * @param _config configurator object reference.
+	 */
 	task(lib::configurator &_config);
 
-	// dla gcc: `'class Foo' has virtual functions but non-virtual destructor` warning.
+	/**
+	 * @brief Destructor
+	 */
 	virtual ~task();
 
-	// methods for ECP template to redefine in concrete classes
+	/**
+	 * @brief main task algorithm
+	 * it can be reimplemented in inherited classes
+	 */
 	virtual void main_task_algorithm(void);
 
+	/**
+	 * @brief method called from main_task_algorithm to handle next_state command from MP
+	 * it can be reimplemented in inherited classes
+	 */
 	virtual void mp_2_ecp_next_state_string_handler(void);
 
+	/**
+	 * @brief method called from main_task_algorithm to handle stop command from MP
+	 * it can be reimplemented in inherited classes
+	 */
 	virtual void ecp_stop_accepted_handler(void);
 
-	// Informacja dla MP o zakonczeniu zadania uzytkownika
+	/**
+	 * @brief sends the message to MP after task execution is finished
+	 */
 	void ecp_termination_notice(void);
 
-	// Oczekiwanie na polecenie START od MP
+	/**
+	 * @brief Waits for START command from MP
+	 */
 	bool ecp_wait_for_start(void);
 
-	// Oczekiwanie na STOP
+	/**
+	 * @brief Waits for STOP command from MP
+	 */
 	void ecp_wait_for_stop(void);
 
+	/**
+	 * @brief method called from main_task_algorithm to handle ecp subtasks execution
+	 * it can be reimplemented in inherited classes
+	 */
 	void subtasks_conditional_execution();
 
 public:
 	// TODO: what follows should be private method
 
-	// Oczekiwanie na polecenie od MP
+	/**
+	 * @brief communicates with MP
+	 */
 	bool mp_buffer_receive_and_send(void);
 
-	// Ustawienie typu odpowiedzi z ECP do MP
+	/**
+	 * @brief Sets ECP reply type before communication with MP
+	 */
 	void set_ecp_reply(lib::ECP_REPLY ecp_r);
 };
 
