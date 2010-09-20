@@ -21,10 +21,26 @@ namespace task {
 
 class ecp_sub_task;
 
+/**
+ * @brief Container type for storing ecp_subtask objects.
+ *
+ * @ingroup ecp
+ */
 typedef std::map <std::string, ecp_sub_task *> subtasks_t;
+
+/**
+ * @brief Type for Items from subtasks_t container.
+ *
+ * @ingroup ecp
+ */
 typedef subtasks_t::value_type subtask_pair_t;
 
-// klasa globalna dla calego procesu MP
+/*!
+ * @brief Base class of all ecp tasks
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class task : public ecp_mp::task::task
 {
 private:
@@ -104,19 +120,32 @@ public:
 
 task* return_created_ecp_task(lib::configurator &_config);
 
-// klasa podzadania
+/*!
+ * @brief Base class of all ecp sub tasks
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class ecp_sub_task
 {
 protected:
+
+	/**
+	 * @brief ecp task object reference
+	 */
 	task &ecp_t;
 
 public:
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_t ecp task object reference.
+	 */
 	ecp_sub_task(task &_ecp_t);
 
-	/*
-	 * executed on the MP demand
+	/**
+	 * @brief method to implement in derived classes that stores main sub task algorithm
 	 */
-
 	virtual void conditional_execution() = 0;
 };
 
