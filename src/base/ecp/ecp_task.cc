@@ -308,7 +308,7 @@ void task::ecp_wait_for_stop(void)
 }
 
 // Oczekiwanie na polecenie START od MP
-bool task::ecp_wait_for_start(void)
+void task::ecp_wait_for_start(void)
 {
 	bool ecp_stop = false;
 	bool mp_pulse_received = false;
@@ -371,7 +371,6 @@ bool task::ecp_wait_for_start(void)
 	}
 
 	sr_ecp_msg->message("ecp user program is running");
-	return false;
 }
 
 // Oczekiwanie na kolejne zlecenie od MP

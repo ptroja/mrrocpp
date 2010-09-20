@@ -65,11 +65,13 @@ private:
 
 	/**
 	 * @brief Receives MP message
+	 * @return caller (MP) ID
 	 */
 	int receive_mp_message(bool block);
 
 	/**
 	 * @brief Returns MP command type
+	 * @return mp command variant
 	 */
 	lib::MP_COMMAND mp_command_type(void) const;
 
@@ -160,7 +162,7 @@ public:
 	/**
 	 * @brief Waits for START command from MP
 	 */
-	bool ecp_wait_for_start(void);
+	void ecp_wait_for_start(void);
 
 	/**
 	 * @brief Waits for STOP command from MP
@@ -178,6 +180,7 @@ public:
 
 	/**
 	 * @brief communicates with MP
+	 * @return true if MP sended NEXT_POSE, false if MP sended END_MOTION command
 	 */
 	bool mp_buffer_receive_and_send(void);
 
