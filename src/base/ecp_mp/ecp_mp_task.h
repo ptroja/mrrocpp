@@ -19,74 +19,163 @@
 
 #include "base/ecp_mp/Trajectory.h"
 
+/**
+ * @brief Container type for storing cc_t internal agent memory boost::any objects.
+ *
+ * @ingroup ecp_mp
+ */
 typedef std::map <std::string, boost::any> cc_t;
+
+/**
+ * @brief Type for Items from cc_t container.
+ *
+ * @ingroup ecp_mp
+ */
 typedef cc_t::value_type cc_item_t;
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-// klasa macierzysta dla klas globalnych procesow ECP i MP
+/*!
+ * @brief Base class of all ecp and mp tasks
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class task
 {
 public:
+	/**
+	 * @brief Container type for storing trajectory objects.
+	 */
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
+	/**
+	 * @brief Constructor
+	 * @param _config configurator object reference.
+	 */
 	task(lib::configurator &_config);
+
+	/**
+	 * @brief Destructor
+	 */
 	virtual ~task();
 
-	// mapa wszystkich czujnikow
+	/**
+	 * @brief the map of sensors
+	 */
 	sensors_t sensor_m;
 
-	// the map of the shared memory (ccj buffer)
+	/**
+	 * @brief the map of the shared memory (ccj buffer)
+	 */
 	cc_t cc_m;
 
-	// mapa wszystkich transmiterow
+	/**
+	 * @brief the map of transmitters
+	 */
 	transmitters_t transmitter_m;
 
+	/**
+	 * @brief the pointer to sr communication object in multi thread version
+	 */
 	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
+
+	/**
+	 * @brief the pointer to sr communication object in single thread version
+	 * to be used in e.g. singnal handlers
+	 */
 	static lib::sr_ecp* sh_msg; // TODO: rename from _ecp_ (?!)
 
+	/**
+	 * @brief configurator object reference
+	 */
 	lib::configurator &config;
 
 #if !defined(USE_MESSIP_SRR)
+	/**
+	 * @brief UI communication channel descriptor
+	 */
 	int UI_fd;
 #else
 	messip_channel_t *UI_fd;
 #endif
+
+	/**
+	 * @brief path to mrrocpp directory structure with network node prefix
+	 */
 	const std::string mrrocpp_network_path;
 
-	// METODY
-	// Odpowiedz operatora na zadane pytanie: (Yes/No)
+	/**
+	 * @brief operator bool decision (Yes/No) request through UI
+	 * @param question string with question to display
+	 */
 	bool operator_reaction(const char* question);
 
-	// by Y - Wybor przez operatora jednej z opcji
+	/**
+	 * @brief operator decision (1/2/3...) request through UI
+	 * @param question string with question to display
+	 * @param nr_of_options_input number of options
+	 */
 	uint8_t choose_option(const char* question, uint8_t nr_of_options_input);
 
-	// Zadanie od operatora wprowadzenia liczby calkowitej (int)
+	/**
+	 * @brief operator integer decision request through UI
+	 * @param question string with question to display
+	 */
 	int input_integer(const char* question);
 
-	// --------------------------------------------------------------------------
-	// Zadanie od operatora wprowadzenia liczby rzeczywistej (double)
+	/**
+	 * @brief operator double decision request through UI
+	 * @param question string with question to display
+	 */
 	double input_double(const char* question);
 
-	// --------------------------------------------------------------------------
-	// Wyswietlenie komunikatu
+	/**
+	 * @brief message send to display in UI
+	 * @param message string to display
+	 */
 	bool show_message(const char* message);
 
-	// funkcje do obslugi czujnikow
+	/**
+	 * @brief calls initiate reading method for sensor from sensor map
+	 * @param _sensor_m stl map of sensors
+	 */
 	void all_sensors_initiate_reading(sensors_t & _sensor_m);
+
+	/**
+	 * @brief calls get reading method for sensor from sensor map
+	 * @param _sensor_m stl map of sensors
+	 */
 	void all_sensors_get_reading(sensors_t & _sensor_m);
 
-	// funkcjonalnosc dodana na potrzeby czytania trajektorii z pliku xml
+	/**
+	 * @brief implemented for xml trajectory handling
+	 */
 	class str_cmp
 	{
 	public:
+		/**
+		 * @brief returns str_cmp result
+		 */
 		bool operator()(char const *a, char const *b) const;
 	};
 
 	//ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
+
+	/**
+	 * @brief creates trajectory
+	 * @param fileName actNode xml_node
+	 * @param stateID task state id
+	 */
 	ecp_mp::common::Trajectory * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID);
+
+	/**
+	 * @brief loads trajectory
+	 * @param fileName file that stores trajectory
+	 * @param robot_name_t robot associated with trajectory
+	 */
 	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
 };
 
@@ -128,4 +217,4 @@ public:
 } // namespace ecp_mp
 } // namespace mrrocpp
 
-#endif /* _ECP_MP_H */
+#endif /* _ECP_MP_TASK_H */
