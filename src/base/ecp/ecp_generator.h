@@ -25,20 +25,37 @@ class task;
 
 namespace generator {
 
+/*!
+ * @brief Base class of all ecp generators
+ * The generator both generates command and checks terminal condition
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class generator : public ecp_mp::generator::generator
 {
 
 protected:
+	/**
+	 * @brief ecp task object reference
+	 */
 	common::task::task& ecp_t;
 
 public:
-	// Zlecenie ruchu dla EDP
+	/**
+	 * @brief Main generator method to execute transition cycle
+	 */
 	void Move(void);
+
+	/**
+	 * @brief communicates with EDP
+	 */
 	virtual void execute_motion(void);
 
+	/**
+	 * @brief initiates Move method
+	 */
 	void move_init(void);
-
-	bool communicate_with_mp_in_move;
 
 	robot::ecp_robot* the_robot;
 

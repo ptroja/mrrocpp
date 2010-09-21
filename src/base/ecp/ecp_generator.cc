@@ -16,7 +16,7 @@ namespace common {
 namespace generator {
 
 generator::generator(common::task::task& _ecp_task) :
-	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task), communicate_with_mp_in_move(true),
+	ecp_mp::generator::generator(*(ecp_t.sr_ecp_msg)), ecp_t(_ecp_task),
 			the_robot(ecp_t.ecp_m_robot)
 {
 }
@@ -40,7 +40,7 @@ bool generator::is_EDP_error(robot::ecp_robot& _robot) const
 void generator::move_init()
 {
 
-	// domyslnie komunikumemy sie z robotem o ile on jest
+	// domyslnie komunikujemy sie z robotem o ile on jest
 	if (the_robot) {
 		// default communication mode
 		the_robot->communicate_with_edp = true;
@@ -63,7 +63,7 @@ void generator::Move()
 
 	move_init();
 
-	if (!first_step() || (communicate_with_mp_in_move && !ecp_t.mp_buffer_receive_and_send())) {
+	if (!first_step() || (!ecp_t.mp_buffer_receive_and_send())) {
 		return; // Warunek koncowy spelniony w pierwszym kroku
 	}
 
@@ -96,7 +96,7 @@ void generator::Move()
 			trigger = true;
 		}
 
-	} while (next_step() && (!communicate_with_mp_in_move || ecp_t.mp_buffer_receive_and_send()));
+	} while (next_step() && (ecp_t.mp_buffer_receive_and_send()));
 }
 
 void generator::execute_motion(void)
