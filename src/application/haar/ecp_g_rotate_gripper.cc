@@ -36,7 +36,7 @@ bool ecp_g_rotate_gripper::first_step()
 
 	vsp_fradia->set_initiate_message(PERFORM_ROTATION);
 
-	ecp_t.sr_ecp_msg->message("first_step");
+	sr_ecp_msg.message("first_step");
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -51,7 +51,7 @@ bool ecp_g_rotate_gripper::first_step()
 
 bool ecp_g_rotate_gripper::next_step()
 {
-	ecp_t.sr_ecp_msg->message("Next step");
+	sr_ecp_msg.message("Next step");
 
 	if (lastStep) {
 		std::cout << "Last step\n";
@@ -64,17 +64,17 @@ bool ecp_g_rotate_gripper::next_step()
 	//Sprwadz czy otrzymano rozwiazanie od VSP.
 	lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::sensor::VSP_REPLY_OK) {
-		ecp_t.sr_ecp_msg->message("Weszlo do  VSP_REP_OK\n");
+		sr_ecp_msg.message("Weszlo do  VSP_REP_OK\n");
 		state = vsp_fradia->get_reading_message().reading_state;
 		if (state == HD_SOLUTION_NOTFOUND) {
 			std::cout << "Weszlo do HD_SOLUTION_NOTFOUND\n";
-			ecp_t.sr_ecp_msg->message("Weszlo do HD_SOLUTION_NOTFOUND\n");
+			sr_ecp_msg.message("Weszlo do HD_SOLUTION_NOTFOUND\n");
 			vsp_fradia->set_initiate_message(WITHOUT_ROTATION);
 			return false;
 		} else if (state == HD_SOLUTION_FOUND) {
 			angle = vsp_fradia->get_reading_message().angle;
 			//Obliczam ile krokow.
-			ecp_t.sr_ecp_msg->message("Weszlo do HD_SOLUTION_FOUND\n");
+			sr_ecp_msg.message("Weszlo do HD_SOLUTION_FOUND\n");
 			td.internode_step_no = (int) ((angle / speed) / 0.002);
 			std::cout << "angle: " << angle << std::endl;
 			std::cout << "motionsteps: " << td.internode_step_no << std::endl;
@@ -87,13 +87,13 @@ bool ecp_g_rotate_gripper::next_step()
 		//Rotacja sie wykonuje nastepny krok bez rotacji.
 		vsp_fradia->set_initiate_message(WITHOUT_ROTATION);
 		std::cout << "Weszlo do VSP_READING_NOT_READY\n";
-		ecp_t.sr_ecp_msg->message("Weszlo do VSP_READING_NOT_READY\n");
+		sr_ecp_msg.message("Weszlo do VSP_READING_NOT_READY\n");
 	} else {
 		angle = 0.0;
 		td.internode_step_no = 30;
 		vsp_fradia->set_initiate_message(WITHOUT_ROTATION);
 		std::cout << "Weszlo do NOT VSP_REP_OK\n";
-		ecp_t.sr_ecp_msg->message("Weszlo do NOT VSP_REP_OK\n");
+		sr_ecp_msg.message("Weszlo do NOT VSP_REP_OK\n");
 	}
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;

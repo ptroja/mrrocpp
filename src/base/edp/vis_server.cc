@@ -16,11 +16,11 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
-#define MAXBUFLEN 100
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+static const int MAXBUFLEN = 100;
 
 vis_server::vis_server(motor_driven_effector &_master) :
 	master(_master), thread_id(NULL)

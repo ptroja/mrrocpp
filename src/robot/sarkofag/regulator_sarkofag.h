@@ -15,13 +15,13 @@ namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-#define SARKOFAG_SYNCHRO_STEP_COARSE -0.05
-#define SARKOFAG_SYNCHRO_STEP_FINE   -0.02
+const double SYNCHRO_STEP_COARSE = -0.05;
+const double SYNCHRO_STEP_FINE = -0.02;
 
-#define INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define SARKOFAG_MAX_PWM_INCREMENT	1000
+const int SARKOFAG_MAX_PWM_INCREMENT = 1000;
 /*-----------------------------------------------------------------------*/
-class NL_regulator_8_sarkofag: public common::NL_regulator {
+class NL_regulator_8_sarkofag : public common::NL_regulator
+{
 	/* Klasa regulatorow konkretnych */
 	// Obiekt z algorytmem regulacji
 
@@ -29,9 +29,7 @@ class NL_regulator_8_sarkofag: public common::NL_regulator {
 	int sum_of_currents, current_index;
 
 public:
-	NL_regulator_8_sarkofag(uint8_t reg_no, uint8_t reg_par_no, double aa,
-			double bb0, double bb1, double k_ff,
-			common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_8_sarkofag(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

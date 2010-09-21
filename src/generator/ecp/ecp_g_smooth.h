@@ -24,7 +24,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/datastr.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp_mp/smooth_trajectory_pose.h"

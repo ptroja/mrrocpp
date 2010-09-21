@@ -30,7 +30,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -58,7 +58,7 @@ bool tfg::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_t.sr_ecp_msg->message("tfg first step");
+	sr_ecp_msg.message("tfg first step");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
@@ -77,7 +77,7 @@ bool tfg::first_step()
 // --------------------------------------------------------------------------
 bool tfg::next_step()
 {
-	ecp_t.sr_ecp_msg->message("tfg next step");
+	sr_ecp_msg.message("tfg next step");
 	// static int count;
 	// struct timespec start[9];
 	if (check_and_null_trigger()) {
@@ -93,7 +93,7 @@ bool tfg::next_step()
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << "position: " << the_robot->reply_package.arm.pf_def.arm_coordinates[0] << ", node_counter:  " << node_counter;
 
-	ecp_t.sr_ecp_msg->message(ss.str().c_str());
+	sr_ecp_msg.message(ss.str().c_str());
 
 	if (node_counter == 2) {
 		return false;

@@ -17,7 +17,8 @@ namespace ecp_mp {
 namespace common {
 
 /**
- * Class is a container used by smooth trajectory generator. One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ * @brief DEPRECATED Class is a container used by smooth trajectory generator. One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ *
  */
 class smooth_trajectory_pose
 {

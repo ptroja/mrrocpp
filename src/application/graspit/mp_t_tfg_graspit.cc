@@ -1,3 +1,8 @@
+//!!!
+//!!! This MP TFG task (mp_t_tfg_graspit) was created for testing purposes only and should be deleted eventually.
+//!!! Use MP Bird Hand task instead (mp_t_birdhand_graspit).
+//!!!
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -6,7 +11,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/mp/mp_task.h"
 
 #include "base/mp/MP_main_error.h"
@@ -14,6 +19,7 @@
 #include "robot/irp6_tfg/dp_tfg.h"
 #include "mp_t_tfg_graspit.h"
 #include "ecp_mp_t_graspit.h"
+#include "ecp_mp_g_birdhand.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -43,9 +49,7 @@ namespace task {
 graspit::graspit(lib::configurator &_config) :
 	task(_config)
 {
-
-	trgraspit
-			= new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
+	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -96,7 +100,7 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[8] += trgraspit->from_va.grasp_joint[7];
 	trgraspit->from_va.grasp_joint[9] += trgraspit->from_va.grasp_joint[8];
 
-	//synchro with GraspIt
+	//IRp6 synchro with GraspIt
 	//trgraspit->from_va.grasp_joint[0] ;
 	trgraspit->from_va.grasp_joint[1] -= 1.542;
 	//trgraspit->from_va.grasp_joint[2] ;
@@ -111,6 +115,7 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[10] += 4.712;
 	//trgraspit->from_va.grasp_joint[11] ;
 
+	//TFG synchro with GraspIt
 	trgraspit->from_va.grasp_joint[12] = (45.5 - trgraspit->from_va.grasp_joint[12]) * 2;
 	trgraspit->from_va.grasp_joint[12] /= 1000;
 
@@ -140,7 +145,7 @@ void graspit::main_task_algorithm(void)
 	{
 		double joint[6];
 	} mp_ecp_irp6_command;
-	lib::irp6_tfg::command mp_ecp_command;
+	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i];
@@ -151,11 +156,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];
@@ -166,11 +171,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	for (int i = 6; i < 13; ++i)

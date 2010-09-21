@@ -1,6 +1,6 @@
 /**
- * \file constant_velocity_trajectory_pose.h
- * \brief Header file for constant_velocity_trajectory_pose
+ * @file constant_velocity_trajectory_pose.h
+ * @brief Header file for constant_velocity_trajectory_pose
  *
  * Contains declaration of bang_bang_trajectory_pose class and its methods.
  */
@@ -44,9 +44,9 @@ public:
   constant_velocity_trajectory_pose (void);
   /**
    * Constructor which initiates some variables (those which can be found in the file containing trajectory).
-   * \param at representation used in the given pose
-   * \param coordinates desired position for all of the axes
-   * \param v maximal velocities for the trajectory segment for all of the axes
+   * @param at representation used in the given pose
+   * @param coordinates desired position for all of the axes
+   * @param v maximal velocities for the trajectory segment for all of the axes
    */
   constant_velocity_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		  const std::vector<double> & coordinates,

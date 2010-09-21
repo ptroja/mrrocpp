@@ -8,6 +8,13 @@ namespace ecp {
 namespace bird_hand {
 namespace task {
 
+/*!
+ * \class bird_hand_test
+ * \brief Class for getting commands from MP and moving Bird Hand
+ *
+ * \author kczajkow
+ * \date Jan 05, 2010
+ */
 class bird_hand_test: public common::task::task {
 protected:
 	//generatory

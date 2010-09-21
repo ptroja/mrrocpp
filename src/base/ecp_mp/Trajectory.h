@@ -4,7 +4,7 @@
 /*!
  * @file
  * @brief File contains Trajectory class declaration
- * @author lorenzo, Warsaw University of Technology
+ * @author mkisiel, jstocka, Warsaw University of Technology
  *
  * @ingroup ecp_mp
  */

@@ -15,14 +15,32 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
+/*!
+ * @brief ECP main error handling class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class ECP_main_error
-{ // Klasa obslugi bledow ECP
+{
 public:
+	/**
+	 * @brief error class (type)
+	 */
 	const lib::error_class_t error_class;
+
+	/**
+	 * @brief error number
+	 */
 	const uint64_t error_no;
 
+	/**
+	 * @brief constructor
+	 * @param err_cl error class
+	 * @param err_no error number
+	 */
 	ECP_main_error(lib::error_class_t err_cl, uint64_t err_no);
-}; // end: class ECP_main_error // by Y&W przerzucone do wnetrza klasy
+};
 
 } // namespace common
 } // namespace ecp

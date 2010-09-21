@@ -1,6 +1,6 @@
 /**
- * \file bang_bang_trajectory_pose.h
- * \brief Header file for bang_bang_trajectory_pose
+ * @file bang_bang_trajectory_pose.h
+ * @brief Header file for bang_bang_trajectory_pose
  *
  * Contains declaration of bang_bang_trajectory_pose class and its methods.
  */
@@ -88,11 +88,10 @@ public:
   bang_bang_trajectory_pose (void);
   /**
    * Constructor which initiates some variables (those which can be found in the file containing trajectory).
-   * \param at representation used in the given pose
-   * \param coordinates desired position for all of the axes
-   * \param vv maximal velocities for the trajectory segment for all of the axes
-   * \param aa maximal accelerations for the trajectory segment for all of the axes
-   * \param axes_num number of axes
+   * @param arm_type representation used in the given pose
+   * @param coordinates desired position for all of the axes
+   * @param v maximal velocities for the trajectory segment for all of the axes
+   * @param a maximal accelerations for the trajectory segment for all of the axes
    */
   bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		  const std::vector<double> & coordinates,

@@ -15,10 +15,6 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "robot/irp6_tfg/dp_tfg.h"
-#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/const_irp6p_tfg.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "application/edge_follow/ecp_mp_st_edge_follow.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
@@ -27,10 +23,8 @@
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#
 
 namespace mrrocpp {
 namespace mp {
@@ -100,7 +94,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
 
-	lib::irp6_tfg::command mp_ecp_command;
+	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
 	mp_ecp_command.desired_position = 0.078;
 
@@ -109,7 +103,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
-	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	 */
 
@@ -117,15 +111,15 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::task::ECP_ST_EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
 	sr_ecp_msg->message("END");
 

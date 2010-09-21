@@ -4,19 +4,11 @@
  * - class declaration
  * @author yoyek
  * @date 01.01.2002
- *
- * $URL$
- * $LastChangedRevision$
- * $LastChangedDate$
- * $LastChangedBy$
  */
 
 // -------------------------------------------------------------------------
-//                            ecp.cc
 //            Effector Control Process (lib::ECP) - force methods
 // Funkcje do tworzenia procesow ECP z wykorzystaniem sily
-//
-// Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
 
 #include <cstdio>
@@ -32,7 +24,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_force.h"
 

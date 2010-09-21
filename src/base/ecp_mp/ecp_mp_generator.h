@@ -9,47 +9,78 @@
  * @ingroup ecp_mp
  */
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
+/*!
+ * @brief Base class of all ecp and mp generators
+ * The generator both generates command and checks terminal condition
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class generator
 {
-	// Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
-	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-	// sprawdzania spelnienia warunku koncowego
-
 protected:
-	lib::sr_ecp& sr_ecp_msg; // obiekt do komunikacji z SR
+	/**
+	 * @brief the reference to sr communication object in multi thread version
+	 */
+	lib::sr_ecp& sr_ecp_msg;
 
 public:
-	bool trigger; // informacja czy pszyszedl puls trigger
+	/**
+	 * @brief trigger received flad
+	 */
+	bool trigger;
 
+	/**
+	 * @brief Constructor
+	 * @param sr_ecp_msg the reference to sr communication object in multi thread version
+	 */
 	generator(lib::sr_ecp& _sr_ecp_msg);
 
+	/**
+	 * @brief checks if trigger approach and then nulls trigger flag
+	 * @return initial trigger flag state
+	 */
 	bool check_and_null_trigger(); // zwraca wartosc trigger i zeruje go
 
-	unsigned int node_counter; // biezacy wezel interpolacji
+	/**
+	 * @brief current macrostep number
+	 */
+	unsigned int node_counter;
 
+	/**
+	 * @brief Destructor
+	 */
 	virtual ~generator();
 
-	// mapa wszystkich czujnikow
+	/**
+	 * @brief the map of sensors
+	 */
 	sensors_t sensor_m;
 
-	// mapa wszystkich transmiterow
+	/**
+	 * @brief the map of transmitters
+	 */
 	transmitters_t transmitter_m;
 
-	// generuje pierwszy krok ruchu -
-	// pierwszy krok czesto rozni sie od pozostalych,
-	// np. do jego generacji nie wykorzystuje sie czujnikow
-	// (zadanie realizowane przez klase konkretna)
+	/**
+	 * @brief generates first step of transition function
+	 * it is reimplemented in inherited classes
+	 * @return terminal condition value
+	 */
 	virtual bool first_step(void) = 0;
 
-	// generuje kazdy nastepny krok ruchu
-	// (zadanie realizowane przez klase konkretna)
+	/**
+	 * @brief generates next steps (starting from the second) of transition function
+	 * it is reimplemented in inherited classes
+	 * @return terminal condition value
+	 */
 	virtual bool next_step(void) = 0;
 };
 

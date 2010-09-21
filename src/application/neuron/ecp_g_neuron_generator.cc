@@ -30,7 +30,7 @@ neuron_generator::~neuron_generator()
 
 bool neuron_generator::first_step()
 {
-	ecp_t.sr_ecp_msg->message("neuron generator first step");
+	sr_ecp_msg.message("neuron generator first step");
 	printf("neuron generator first step\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -62,6 +62,7 @@ bool neuron_generator::next_step()
 	if (neuron_sensor->current_period == 5) { //this section is not performed during breaking
 		if (neuron_sensor->startBraking()) {
 			breaking = true;
+
 			printf("\n-------- breaking ----------\n");
 			flushall();
 		}
@@ -94,7 +95,6 @@ bool neuron_generator::next_step()
 	}
 
 	for (i = 0; i < 6; i++) { //for all of the axes...
-
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
 			position[i] = actual_position[i]; //position remains the same
 			printf("%f\t", position[i]);
@@ -139,6 +139,7 @@ bool neuron_generator::next_step()
 		} else {
 			position[i] = actual_position[i] + (k[i] * (s[i] / 5) * node); //normal motion (not breaking), distance between desired and current position is divided by 5, desired position is reached in 5 macrosteps and added to actual position
 			v[i] = (s[i] / 5) / 0.02;//current velocity, last v[i] is the velocity just before breaking, it is not updated during breaking
+
 		}
 		printf("%f\t", position[i]);
 	}

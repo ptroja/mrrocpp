@@ -20,20 +20,34 @@ namespace mrrocpp {
 namespace ecp {
 namespace irp6p_tfg {
 
-// ---------------------------------------------------------------
+/*!
+ * @brief IRp6 postument gripper ecp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup irp6p_tfg
+ */
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
-	// Klasa dla robota irp6_postument (sztywnego)
+
 protected:
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na torze.
+
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	robot(common::task::task& _ecp_object);
 
-}; // end: class ecp_irp6_postument_robot
-// ---------------------------------------------------------------
+	/**
+	 * @brief constructor called from UI
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
+	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _ecp_object ecp tak object reference
+	 */
+	robot(common::task::task& _ecp_object);
+};
 
 } // namespace irp6p
 } // namespace ecp

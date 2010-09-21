@@ -19,7 +19,7 @@
 
 #include "base/ecp_mp/Trajectory.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

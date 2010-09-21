@@ -8,8 +8,13 @@
 #ifndef __UI_CLASS_H
 #define __UI_CLASS_H
 
-#include "ui/src/ui.h"
+/* Local headers */
+#include "../ablibs.h"
+
+#include "base/lib/sr/sr_ecp.h"
+#include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "ui/src/ui.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
@@ -23,29 +28,31 @@
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
 
-/* Local headers */
-#include "../ablibs.h"
-
 //
 //
 // KLASA ui
 //
 //
 
-class ui_sr_buffer;
-class ui_ecp_buffer;
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
+class sr_buffer;
+class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
 
-class Ui
+class Interface
 {
 private:
 
 public:
 
-	ui_sr_buffer* ui_sr_obj;
-	ui_ecp_buffer* ui_ecp_obj;
+	sr_buffer* ui_sr_obj;
+	ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 
@@ -62,7 +69,7 @@ public:
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
-	int teachingstate; // dawne systemState do nauki
+	TEACHING_STATE teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 
@@ -103,20 +110,20 @@ public:
 
 
 	// The Ui robots
-	UiRobotBirdHand *bird_hand;
-	UiRobotIrp6ot_m *irp6ot_m;
-	UiRobotIrp6ot_tfg *irp6ot_tfg;
-	UiRobotIrp6p_m *irp6p_m;
-	UiRobotIrp6p_tfg *irp6p_tfg;
-	UiRobotSarkofag *sarkofag;
-	UiRobotIrp6m_m *irp6m_m;
-	UiRobotConveyor *conveyor;
-	UiRobotSpeaker *speaker;
-	UiRobotSpkm *spkm;
-	UiRobotSmb *smb;
-	UiRobotShead *shead;
+	bird_hand::UiRobot *bird_hand;
+	irp6ot_m::UiRobot *irp6ot_m;
+	irp6ot_tfg::UiRobot *irp6ot_tfg;
+	irp6p_m::UiRobot *irp6p_m;
+	irp6p_tfg::UiRobot *irp6p_tfg;
+	sarkofag::UiRobot *sarkofag;
+	irp6m::UiRobot *irp6m_m;
+	conveyor::UiRobot *conveyor;
+	speaker::UiRobot *speaker;
+	spkm::UiRobot *spkm;
+	smb::UiRobot *smb;
+	shead::UiRobot *shead;
 
-	Ui();
+	Interface();
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
@@ -147,5 +154,8 @@ public:
 
 };
 
+}
+} //namespace ui
+} //namespace mrrocpp
 #endif
 

@@ -30,8 +30,8 @@ bool head_soldify::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_shead_head_soldification_structure = mp_ecp_shead_head_soldification_structure;
-	shead_head_soldification_data_port->set(ecp_edp_shead_head_soldification_structure);
+	shead_head_soldification_data_port->data = mp_ecp_shead_head_soldification_structure;
+	shead_head_soldification_data_port->set();
 	shead_reply_data_request_port->set_request();
 
 	return true;
@@ -40,9 +40,9 @@ bool head_soldify::first_step()
 bool head_soldify::next_step()
 {
 
-	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
+	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = ecp_edp_shead_reply_structure.head_state;
+	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -78,8 +78,8 @@ bool head_desoldify::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_shead_head_soldification_structure = mp_ecp_shead_head_soldification_structure;
-	shead_head_soldification_data_port->set(ecp_edp_shead_head_soldification_structure);
+	shead_head_soldification_data_port->data = mp_ecp_shead_head_soldification_structure;
+	shead_head_soldification_data_port->set();
 	shead_reply_data_request_port->set_request();
 
 	return true;
@@ -88,9 +88,9 @@ bool head_desoldify::first_step()
 bool head_desoldify::next_step()
 {
 
-	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
+	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = ecp_edp_shead_reply_structure.head_state;
+	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -125,8 +125,8 @@ bool head_vacuum_on::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_shead_vacuum_activation_structure = mp_ecp_shead_vacuum_activation_structure;
-	shead_vacuum_activation_data_port->set(ecp_edp_shead_vacuum_activation_structure);
+	shead_vacuum_activation_data_port->data = mp_ecp_shead_vacuum_activation_structure;
+	shead_vacuum_activation_data_port->set();
 	shead_reply_data_request_port->set_request();
 
 	return true;
@@ -135,9 +135,9 @@ bool head_vacuum_on::first_step()
 bool head_vacuum_on::next_step()
 {
 
-	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
+	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_VACUUM motion_in_progress = ecp_edp_shead_reply_structure.vacuum_state;
+	lib::shead::STATE_OF_THE_VACUUM motion_in_progress = shead_reply_data_request_port->data.vacuum_state;
 
 	if (motion_in_progress == lib::shead::VACUUM_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -172,8 +172,8 @@ bool head_vacuum_off::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_shead_vacuum_activation_structure = mp_ecp_shead_vacuum_activation_structure;
-	shead_vacuum_activation_data_port->set(ecp_edp_shead_vacuum_activation_structure);
+	shead_vacuum_activation_data_port->data = mp_ecp_shead_vacuum_activation_structure;
+	shead_vacuum_activation_data_port->set();
 	shead_reply_data_request_port->set_request();
 
 	return true;
@@ -181,9 +181,9 @@ bool head_vacuum_off::first_step()
 
 bool head_vacuum_off::next_step()
 {
-	shead_reply_data_request_port->get(ecp_edp_shead_reply_structure);
+	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_VACUUM motion_in_progress = ecp_edp_shead_reply_structure.vacuum_state;
+	lib::shead::STATE_OF_THE_VACUUM motion_in_progress = shead_reply_data_request_port->data.vacuum_state;
 
 	if (motion_in_progress == lib::shead::VACUUM_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();

@@ -4,7 +4,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_bird_hand_test.h"
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"

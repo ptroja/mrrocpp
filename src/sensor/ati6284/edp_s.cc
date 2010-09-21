@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "sensor/ati6284/edp_s.h"
 #include "base/edp/edp_e_manip.h"
 
@@ -22,7 +22,7 @@
 #include "display.h"
 #include "ftconfig.h"
 
-#include "robot/irp6p_m/hi_irp6p_m.h"
+#include "robot/hi_moxa/hi_moxa.h"
 
 short int invalid_value;
 Calibration *cal; //!< struct containing calibration information
@@ -169,7 +169,10 @@ void ATI6284_force::connect_to_hardware(void)
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-		irq_no = edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+
+		//Wacek: karta ISA zniknela!
+
+		irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
 		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
 			//!< Obsluga bledu

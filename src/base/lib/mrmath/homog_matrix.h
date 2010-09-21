@@ -12,6 +12,7 @@
 #include <ostream>
 #include <cstring>
 #include <cassert>
+#include <cmath>
 
 #include "base/lib/impconst.h"	// frame_tab
 #define delta_m (M_PI - 3.14154)
@@ -44,6 +45,9 @@ class Homog_matrix
 private:
 	//! Matrix placeholder
 	frame_tab matrix_m;
+
+	//! Eps for alpha representation
+	const static double ALPHA_SENSITIVITY;
 
 public:
 	/**

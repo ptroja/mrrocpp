@@ -23,6 +23,9 @@ private:
 	generator::constant_velocity* cvgeneuler;
 	generator::constant_velocity* cvgenangle;
 
+	bool track;
+	bool postument;
+
 public:
 	ecp_sub_task_const_vel_gen_test(task & _ecp_t);
 	~ecp_sub_task_const_vel_gen_test();

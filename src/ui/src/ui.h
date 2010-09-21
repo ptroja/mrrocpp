@@ -18,13 +18,30 @@
 #include <list>
 
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
+
+enum UI_NOTIFICATION_STATE_ENUM
+{
+	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
+};
+
+// FIXME: moved from proto.h for linux compatibility
+int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
+enum TEACHING_STATE
+{
+	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
+};
 
 #define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
 	if (e.error_class == lib::SYSTEM_ERROR) \
 		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
-		ui.ui_state=2; \
+		interface.ui_state=2; \
 	/*  exit(EXIT_FAILURE);*/ \
   } /*end: catch */ \
 \
@@ -40,10 +57,10 @@ catch (ecp::common::robot::ECP_error & er) { \
 		case EDP_ERROR: \
 		case INVALID_ROBOT_MODEL_TYPE: \
 			/* Komunikat o bledzie wysylamy do SR */ \
-			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
+			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \
 		default: \
-			ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
+			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
 			perror("Unidentified exception"); \
 		} /* end: switch */ \
 	} \
@@ -52,7 +69,7 @@ catch (ecp::common::robot::ECP_error & er) { \
 catch(const std::exception & e){\
 	std::string tmp_string(" The following error has been detected: ");\
 	tmp_string += e.what(); \
-	ui.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
+	interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
    std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
 }\
 \
@@ -63,28 +80,18 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-enum TEACHING_STATE_ENUM {
+enum TEACHING_STATE_ENUM
+{
 	FSTRAJECTORY, FSCONFIG
 };
 
-enum UI_NOTIFICATION_STATE_ENUM {
-	UI_N_STARTING,
-	UI_N_READY,
-	UI_N_BUSY,
-	UI_N_EXITING,
-	UI_N_COMMUNICATION,
-	UI_N_PROCESS_CREATION,
-	UI_N_SYNCHRONISATION
-};
-
-// FIXME: moved from proto.h for linux compatibility
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
-
-enum UI_ECP_COMMUNICATION_STATE {
+enum UI_ECP_COMMUNICATION_STATE
+{
 	UI_ECP_AFTER_RECEIVE, UI_ECP_REPLY_READY, UI_ECP_AFTER_REPLY
 };
 
-enum UI_MP_STATE {
+enum UI_MP_STATE
+{
 	UI_MP_NOT_PERMITED_TO_RUN,
 	UI_MP_PERMITED_TO_RUN,
 	UI_MP_WAITING_FOR_START_PULSE,
@@ -92,7 +99,8 @@ enum UI_MP_STATE {
 	UI_MP_TASK_PAUSED
 };
 
-enum UI_ALL_EDPS_STATE {
+enum UI_ALL_EDPS_STATE
+{
 	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
 	UI_ALL_EDPS_NONE_EDP_LOADED,
 	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
@@ -105,9 +113,12 @@ enum UI_ALL_EDPS_STATE {
 
 
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
-#define SIGALRM_TIMEOUT 1000000
+static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
-typedef struct {
+static const int CHECK_SPEAKER_STATE_ITER = 10; // co ile iteracji ma byc sprawdzony stan speakera
+
+typedef struct
+{
 	pid_t pid;
 	int test_mode;
 	std::string node_name;
@@ -128,7 +139,8 @@ typedef struct {
 	double front_position[lib::MAX_SERVOS_NR];
 } edp_state_def;
 
-typedef struct {
+typedef struct
+{
 	pid_t pid;
 	std::string node_name;
 	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
@@ -139,13 +151,15 @@ typedef struct {
 	int last_state;
 } ecp_state_def;
 
-typedef struct {
+typedef struct
+{
 	bool is_active;
 	edp_state_def edp;
 	ecp_state_def ecp;
 } ecp_edp_ui_robot_def;
 
-typedef struct {
+typedef struct
+{
 	pid_t pid;
 	std::string node_name;
 	std::string network_pulse_attach_point;
@@ -155,14 +169,16 @@ typedef struct {
 	UI_MP_STATE last_state;
 } mp_state_def;
 
-typedef struct {
+typedef struct
+{
 	std::string program_name;
 	std::string node_name;
 } program_node_def;
 
-class function_execution_buffer {
+class function_execution_buffer
+{
 public:
-	typedef boost::function<int()> command_function_t;
+	typedef boost::function <int()> command_function_t;
 
 	int wait_and_execute();
 	void command(command_function_t _com_fun);
@@ -176,7 +192,8 @@ private:
 	command_function_t com_fun; //! command functor
 };
 
-class feb_thread: public boost::noncopyable {
+class feb_thread : public boost::noncopyable
+{
 private:
 	function_execution_buffer & feb;
 	boost::thread *thread_id;
@@ -192,7 +209,8 @@ public:
 // forward declaration
 class busy_flag;
 
-class busy_flagger {
+class busy_flagger
+{
 private:
 	//! flag object to decrement in destructor
 	busy_flag & flag;
@@ -205,7 +223,8 @@ public:
 	~busy_flagger();
 };
 
-class busy_flag {
+class busy_flag
+{
 	friend class busy_flagger;
 
 private:
@@ -228,8 +247,12 @@ public:
 	busy_flag();
 };
 
+}
+}
+}
+
 // TODO: reimplement this as a singleton
-extern busy_flag communication_flag;
+extern ui::common::busy_flag communication_flag;
 
 #endif
 

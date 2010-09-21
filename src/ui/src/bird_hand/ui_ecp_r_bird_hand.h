@@ -15,27 +15,27 @@
 #include "base/ecp/ecp_robot.h"
 #include "robot/bird_hand/ecp_r_bird_hand.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace bird_hand {
+
 // ---------------------------------------------------------------
-class ui_bird_hand_robot
+class EcpRobot
 {
 
 public:
 
 	// zadawanie nastaw regulatorow
 	mrrocpp::lib::single_thread_port <mrrocpp::lib::bird_hand::command> *bird_hand_command_data_port;
-	mrrocpp::lib::bird_hand::command bird_hand_command_structure;
 
 	// zadawanie parametrow konfiguracji
 	lib::single_thread_port <lib::bird_hand::configuration> *bird_hand_configuration_command_data_port;
-	lib::bird_hand::configuration bird_hand_configuration_command_structure;
 
 	// odbieranie statusu robota
 	lib::single_thread_request_port <lib::bird_hand::status> *bird_hand_status_reply_data_request_port;
-	lib::bird_hand::status bird_hand_status_reply_structure;
 
 	// odczytanie parametrow konfiguracji
 	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
-	lib::bird_hand::configuration bird_hand_configuration_reply_structure;
 
 	ecp::bird_hand::robot *the_robot;
 
@@ -44,9 +44,15 @@ public:
 	virtual void execute_motion(void);
 
 	// ecp_buffer ui_edp_package; // by Y
-	ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
-	virtual ~ui_bird_hand_robot();
+	virtual ~EcpRobot();
 
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
+
 #endif
+

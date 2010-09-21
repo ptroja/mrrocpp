@@ -15,7 +15,7 @@
 
 #include "ui/src/ui.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 // #include "base/ecp/ecp.h"
 #include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
@@ -26,9 +26,9 @@
 #include "abimport.h"
 #include "proto.h"
 
-busy_flag communication_flag;
+ui::common::busy_flag communication_flag;
 
-extern Ui ui;
+extern ui::common::Interface interface;
 
 int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -36,21 +36,21 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	//fprintf(stderr, "OnTimer()\n");
 
-#define CHECK_SPEAKER_STATE_ITER 10 // co ile iteracji ma byc sprawdzony stan speakera
+
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
 	static int Iteration_counter = 0; // licznik uruchomienia fukcji
 
 
 	Iteration_counter++;
 
-	if ((Iteration_counter % CHECK_SPEAKER_STATE_ITER) == 0) {
-		if (ui.speaker->is_wind_speaker_play_open) // otworz okno
+	if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
+		if (interface.speaker->is_wind_speaker_play_open) // otworz okno
 		{
 			speaker_check_state(widget, apinfo, cbinfo);
 		}
 	}
 
-	if (!(ui.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
 		int attributes_mask;
@@ -61,10 +61,10 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		char current_line[400];
 		lib::sr_package_t sr_msg;
 
-		while (!(ui.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while (!(interface.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
 
 
-			ui.ui_sr_obj->get_one_msg(sr_msg);
+			interface.ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
@@ -137,40 +137,40 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
 
-			(*ui.log_file_outfile) << current_line;
+			(*interface.log_file_outfile) << current_line;
 		}
 
-		(*ui.log_file_outfile).flush();
+		(*interface.log_file_outfile).flush();
 
 	}
 
-	if (ui.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
+	if (interface.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
 		set_ui_state_notification(UI_N_EXITING);
 		// 	printf("w ontimer 2\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui.ui_state = 3;
+		interface.ui_state = 3;
 		// 		delay(5000);
 		MPslay(widget, apinfo, cbinfo);
-		ui.ui_msg->message("closing");
-	} else if (ui.ui_state == 3) {// odliczanie
+		interface.ui_msg->message("closing");
+	} else if (interface.ui_state == 3) {// odliczanie
 		// 	printf("w ontimer 3\n");
 		if ((--closing_delay_counter) <= 0)
-			ui.ui_state = 4;
-	} else if (ui.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
+			interface.ui_state = 4;
+	} else if (interface.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
 		//	printf("w ontimer 4\n");
 		closing_delay_counter = 20;// opoznienie zamykania
-		ui.ui_state = 5;
+		interface.ui_state = 5;
 		EDP_all_robots_slay(widget, apinfo, cbinfo);
 
-	} else if (ui.ui_state == 5) {// odlcizanie do zamnkiecia
+	} else if (interface.ui_state == 5) {// odlcizanie do zamnkiecia
 		//	printf("w ontimer 5\n");
 		if ((--closing_delay_counter) <= 0)
-			ui.ui_state = 6;
-	} else if (ui.ui_state == 6) {// zakonczenie aplikacji
-		(*ui.log_file_outfile).close();
-		delete ui.log_file_outfile;
+			interface.ui_state = 6;
+	} else if (interface.ui_state == 6) {// zakonczenie aplikacji
+		(*interface.log_file_outfile).close();
+		delete interface.log_file_outfile;
 		printf("UI CLOSED\n");
-		ui.abort_threads();
+		interface.abort_threads();
 		PtExit(EXIT_SUCCESS);
 	} else {
 		if (!(communication_flag.is_busy())) {
