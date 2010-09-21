@@ -14,6 +14,7 @@
 #include "base/ecp/ecp_g_transparent.h"
 #include "generator/ecp/force/ecp_g_weight_measure.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
 #include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {
