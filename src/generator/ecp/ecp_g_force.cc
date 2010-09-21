@@ -18,11 +18,8 @@
 #include <unistd.h>
 #include <cmath>
 #include <iostream>
-#include <string>
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
 #include "base/ecp/ecp_robot.h"

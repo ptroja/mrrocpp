@@ -7,8 +7,6 @@
 // -------------------------------------------------------------------------
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_force.h"
