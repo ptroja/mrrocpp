@@ -33,7 +33,7 @@ public:
 	bool next_step();
 };
 
-// generator for sending end_motion mesage to ecps
+// generator for sending end_motion message to ecps
 
 class send_end_motion_to_ecps : public generator
 {

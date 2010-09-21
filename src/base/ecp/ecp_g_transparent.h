@@ -29,7 +29,7 @@ class transparent : public common::generator::generator
 public:
 	/**
 	 * @brief Constructor
-	 * @param _ecp_t ecp task object reference.
+	 * @param _ecp_task ecp task object reference.
 	 */
 	transparent(common::task::task& _ecp_task);
 
