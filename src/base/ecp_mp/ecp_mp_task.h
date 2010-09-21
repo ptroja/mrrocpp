@@ -117,7 +117,8 @@ public:
 	/**
 	 * @brief operator decision (1/2/3...) request through UI
 	 * @param question string with question to display
-	 * @param uint8_t decision
+	 * @param nr_of_options_input number of options to choose
+	 * @return uint8_t decision
 	 *
 	 */
 	uint8_t choose_option(const char* question, uint8_t nr_of_options_input);
@@ -125,21 +126,21 @@ public:
 	/**
 	 * @brief operator integer decision request through UI
 	 * @param question string with question to display
-	 * @param int decision
+	 * @return int decision
 	 */
 	int input_integer(const char* question);
 
 	/**
 	 * @brief operator double decision request through UI
 	 * @param question string with question to display
-	 * @param double decision
+	 * @return double decision
 	 */
 	double input_double(const char* question);
 
 	/**
 	 * @brief message send to display in UI
 	 * @param message string to display
-	 * @return communcation status
+	 * @return communication status
 	 */
 	bool show_message(const char* message);
 

@@ -16,13 +16,19 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
+/*!
+ * @brief Base class of all ecp and mp generators
+ * The generator both generates command and checks terminal condition
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class generator
 {
-	// Klasa bazowa dla generatorow trajektorii (klasa abstrakcyjna)
-	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-	// sprawdzania spelnienia warunku koncowego
-
 protected:
+	/**
+	 * @brief the reference to sr communication object in multi thread version
+	 */
 	lib::sr_ecp& sr_ecp_msg; // obiekt do komunikacji z SR
 
 public:
