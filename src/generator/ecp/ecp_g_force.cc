@@ -71,7 +71,7 @@ double weight_meassure::check_average_weight_in_buffer(void) const
 	for (int i = 0; i < WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++) {
 		returned_value += weight_in_cyclic_buffer[current_buffer_pointer];
 	}
-	returned_value /= 10;
+	returned_value /= WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE;
 	return returned_value;
 }
 
@@ -129,7 +129,7 @@ bool weight_meassure::next_step()
 				|| ((weight_difference < 0) && (check_average_weight_in_buffer() - initial_weight) < weight_difference))
 
 		{
-			// wszytkie potweridzenia warunku koncowego musza wystapic pod rzad
+			// wszytkie potwierdzenia warunku koncowego musza wystapic pod rzad
 			if (!terminate_state_recognized) {
 				catch_lag = initial_catch_lag;
 			}

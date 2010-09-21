@@ -17,14 +17,32 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-// Generator do wykrywania zmiany wagi chwytaka wraz z obiektem chwytanym
-// ciezary wyskalowane w newtonach
-#define WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE 10
-#define USLEEP_TIME 10000
-
+/*!
+ * @brief generator to measure weight.
+ * The generator do not move robot. First it measures initial force (weight) in x direction of tool.\n
+ * Then in the following macrosteps it checks if the filtered (through cyclic buffer) force exceeds the desired increment.\n
+ * If it is so it waits the desired time and finishes.\n
+ *  *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup generators
+ */
 class weight_meassure : public common::generator::generator
 {
 private:
+
+	/**
+	 * @brief cyclic buffer size
+	 */
+	static const int WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE = 10;
+
+	/**
+	 * @brief single macrostep duration in mikrosecond
+	 */
+	static const int USLEEP_TIME = 10000;
+
+	/**
+	 * @brief single macrostep duration in mikrosecond
+	 */
 	double weight_difference; // roznica wagi do wykrycia
 	double weight_in_cyclic_buffer[WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE];
 	int current_buffer_pointer;

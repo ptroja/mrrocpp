@@ -23,7 +23,7 @@ namespace generator {
  * @brief generator to move though the list of stored positions (poses)
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup ecp
+ * @ingroup generators
  */
 class teach_in : public common::generator::generator
 {
