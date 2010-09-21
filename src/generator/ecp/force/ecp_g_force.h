@@ -18,33 +18,6 @@ namespace common {
 namespace generator {
 
 // --------------------------------------------------------------------------
-// Generator do obracania sciany kostki
-
-class tff_rubik_face_rotate : public common::generator::generator
-{
-protected:
-	lib::trajectory_description td;
-
-	// do konfiguracji pracy generatora
-
-	double stored_gamma, turn_angle;
-	bool range_change;
-
-public:
-	const int step_no;
-
-	// konstruktor
-	tff_rubik_face_rotate(common::task::task& _ecp_task, int step = 0);
-
-	void configure(double l_turn_angle);
-
-	bool first_step();
-	bool next_step();
-
-}; // end : class ecp_tff_rubik_face_rotate_generator
-
-
-// --------------------------------------------------------------------------
 // Generator do nasuniecia chwytaka na kostke
 
 class tff_gripper_approach : public common::generator::generator
