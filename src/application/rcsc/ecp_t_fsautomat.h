@@ -12,7 +12,7 @@
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_st_go.h"
 #include "base/ecp/ecp_g_transparent.h"
-
+#include "generator/ecp/force/ecp_g_weight_measure.h"
 #include "base/ecp_mp/Trajectory.h"
 
 namespace mrrocpp {

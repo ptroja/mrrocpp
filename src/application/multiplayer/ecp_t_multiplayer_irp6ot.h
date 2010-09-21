@@ -4,6 +4,7 @@
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_st_go.h"
 #include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/force/ecp_g_weight_measure.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -19,17 +20,16 @@ private:
 
 	common::generator::weight_meassure* wmg;
 
-    //podzadania
+	//podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 
-   	common::generator::tff_rubik_grab *rgg;
-
+	common::generator::tff_rubik_grab *rgg;
 
 public:
-    multiplayer(lib::configurator &_config);
+	multiplayer(lib::configurator &_config);
 
-    // methods for ECP template to redefine in concrete classes
-    void mp_2_ecp_next_state_string_handler(void);
+	// methods for ECP template to redefine in concrete classes
+	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }
