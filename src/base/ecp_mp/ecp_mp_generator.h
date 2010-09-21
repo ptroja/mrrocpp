@@ -29,7 +29,7 @@ protected:
 	/**
 	 * @brief the reference to sr communication object in multi thread version
 	 */
-	lib::sr_ecp& sr_ecp_msg; // obiekt do komunikacji z SR
+	lib::sr_ecp& sr_ecp_msg;
 
 public:
 	bool trigger; // informacja czy pszyszedl puls trigger

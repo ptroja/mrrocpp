@@ -1441,7 +1441,7 @@ bool parabolic_teach_in::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
@@ -1612,7 +1612,7 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 #endif
 		e = errno;
 		perror("ecp: Send() to UI failed");
-		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
@@ -1830,7 +1830,7 @@ bool calibration::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 
@@ -2140,7 +2140,7 @@ bool cubic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -2598,7 +2598,7 @@ bool smooth_cubic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -2979,7 +2979,7 @@ bool quintic_spline::next_step()
 		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 
 		first_interval = false;
@@ -3208,7 +3208,7 @@ void elipsoid::ecp_save_trajectory()
 #endif
 		e = errno;
 		perror("ecp: Send() to UI failed");
-		ecp_t.sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_error(lib::SYSTEM_ERROR, 0);
 	}
 
@@ -3349,7 +3349,7 @@ bool elipsoid::next_step()
 		the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
 		the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 		the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-		the_robot->ecp_command.instruction.motion_steps = (uint16_t)(INTERVAL / lib::EDP_STEP);
+		the_robot->ecp_command.instruction.motion_steps = (uint16_t) (INTERVAL / lib::EDP_STEP);
 		the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps - 2;
 		first_interval = false;
 

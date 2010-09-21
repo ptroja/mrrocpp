@@ -15,15 +15,15 @@ acq_eih::acq_eih(task &_ecp_t) :
 	acquisition(_ecp_t)
 {
 	printf("acq_eih::acq_eih() 1\n");
-	fflush( stdout);
+	fflush(stdout);
 	// Create an adequate robot. - depending on the ini section name.
 	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
-		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
+		ecp_sub_task::sr_ecp_msg.message("IRp6ot loaded");
 		robot = TRACK;
 	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
-		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
+		ecp_sub_task::sr_ecp_msg.message("IRp6p loaded");
 		robot = POSTUMENT;
 	}
 
@@ -65,7 +65,7 @@ acq_eih::acq_eih(task &_ecp_t) :
 	printf("acq_eih::acq_eih() 7\n");
 	fflush(stdout);
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp loaded eihacquisition");
+	ecp_sub_task::sr_ecp_msg.message("ecp loaded eihacquisition");
 
 	// TODO: UWAGA: TU JEST WIELKI BUG: pole ofp nie jest zainicjalizowane
 	ofp.number_of_measures = ecp_sub_task::ecp_t.config.value <int> ("measures_count");
@@ -106,7 +106,7 @@ void acq_eih::main_task_algorithm(void)
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int) (delay_ms / 1000);
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp eihacquisition ready");
+	ecp_sub_task::sr_ecp_msg.message("ecp eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
 	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
@@ -131,7 +131,7 @@ void acq_eih::main_task_algorithm(void)
 	 }
 	 nose->Move();*/
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("Data collection\n");
+	ecp_sub_task::sr_ecp_msg.message("Data collection\n");
 
 	// maximum velocity and acceleration of smooth generator
 	double vv[lib::MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
@@ -199,7 +199,7 @@ void acq_eih::main_task_algorithm(void)
 				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0
 						* m * d, 0.0, 0.0, true);
 				printf("acq_eih::main_task_alg() 1\n");
-				fflush( stdout);
+				fflush(stdout);
 				smoothgen->Move();
 				m = 0;
 				nanosleep(&delay, NULL);

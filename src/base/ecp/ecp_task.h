@@ -207,6 +207,11 @@ protected:
 	 */
 	task &ecp_t;
 
+	/**
+	 * @brief the reference to sr communication object in multi thread version
+	 */
+	lib::sr_ecp& sr_ecp_msg;
+
 public:
 
 	/**

@@ -31,7 +31,7 @@ neuron_generator::~neuron_generator()
 
 bool neuron_generator::first_step()
 {
-	ecp_t.sr_ecp_msg->message("neuron generator first step");
+	sr_ecp_msg.message("neuron generator first step");
 	printf("neuron generator first step\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;

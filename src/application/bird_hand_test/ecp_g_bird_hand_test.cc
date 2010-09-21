@@ -74,7 +74,7 @@ bool bird_hand::next_step()
 		ss << "licznik: " << bird_hand_status_reply_data_request_port->data.thumb_f[0].meassured_torque
 				<< ", node_counter:  " << node_counter;
 
-		ecp_t.sr_ecp_msg->message(ss.str().c_str());
+		sr_ecp_msg.message(ss.str().c_str());
 
 	}
 

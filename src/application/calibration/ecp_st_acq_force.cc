@@ -24,10 +24,10 @@ acq_force::acq_force(task &_ecp_t) :
 {
 	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
-		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6ot loaded");
+		ecp_sub_task::sr_ecp_msg.message("IRp6ot loaded");
 	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
-		ecp_sub_task::ecp_t.sr_ecp_msg->message("IRp6p loaded");
+		ecp_sub_task::sr_ecp_msg.message("IRp6p loaded");
 	}
 
 	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]
@@ -40,7 +40,7 @@ acq_force::acq_force(task &_ecp_t) :
 	nose_run->configure_pulse_check(true);
 	nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
 
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp loaded kcz_force");
+	ecp_sub_task::sr_ecp_msg.message("ecp loaded kcz_force");
 }
 ;
 
@@ -66,7 +66,7 @@ void acq_force::write_data(const std::string & _K_fp, const std::string & _kk_fp
 
 void acq_force::main_task_algorithm(void)
 {
-	ecp_sub_task::ecp_t.sr_ecp_msg->message("ecp kcz_force ready");
+	ecp_sub_task::sr_ecp_msg.message("ecp kcz_force ready");
 
 	int i, j, t;
 	FILE *FP;

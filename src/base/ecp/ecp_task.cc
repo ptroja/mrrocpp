@@ -631,7 +631,7 @@ int task::receive_mp_message(bool block)
 }
 
 ecp_sub_task::ecp_sub_task(task &_ecp_t) :
-	ecp_t(_ecp_t)
+	ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
 {
 }
 

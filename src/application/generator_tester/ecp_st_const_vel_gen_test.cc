@@ -53,7 +53,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 	std::vector<double> coordinates2(7);
 
 	// JOINT ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Joint absolute");
+	sr_ecp_msg.message("Joint absolute");
 	cvgenjoint->reset();
 	cvgenjoint->set_absolute();
 
@@ -121,7 +121,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// JOINT RELATIVE
-	ecp_t.sr_ecp_msg->message("Joint relative");
+	sr_ecp_msg.message("Joint relative");
 	cvgenjoint->reset();
 	cvgenjoint->set_relative();
 
@@ -189,7 +189,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// MOTOR ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Motor absolute");
+	sr_ecp_msg.message("Motor absolute");
 	cvgenmotor->reset();
 	cvgenmotor->set_absolute();
 
@@ -257,7 +257,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// MOTOR RELATIVE
-	ecp_t.sr_ecp_msg->message("Motor relative");
+	sr_ecp_msg.message("Motor relative");
 	cvgenmotor->reset();
 	cvgenmotor->set_relative();
 
@@ -325,7 +325,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// EULER ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Euler absolute");
+	sr_ecp_msg.message("Euler absolute");
 	cvgeneuler->reset();
 	cvgeneuler->set_absolute();
 
@@ -387,7 +387,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// EULER RELATIVE
-	ecp_t.sr_ecp_msg->message("Euler relative");
+	sr_ecp_msg.message("Euler relative");
 	cvgeneuler->reset();
 	cvgeneuler->set_relative();
 
@@ -449,7 +449,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Angle axis absolute");
+	sr_ecp_msg.message("Angle axis absolute");
 	cvgenangle->reset();
 	cvgenangle->set_absolute();
 
@@ -511,7 +511,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS RELATIVE
-	ecp_t.sr_ecp_msg->message("Angle axis relative");
+	sr_ecp_msg.message("Angle axis relative");
 	cvgenangle->reset();
 	cvgenangle->set_relative();
 
