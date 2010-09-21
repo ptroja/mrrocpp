@@ -89,32 +89,6 @@ public:
 	// (zadanie realizowane przez klase konkretna)
 };
 
-// ####################################################################################################
-// KLASA BAZOWA dla generatorow o zadany przyrost polozenia/orientacji
-// ####################################################################################################
-
-class delta : public generator
-{
-public:
-	delta(task::task& _mp_task);
-	lib::trajectory_description irp6ot_td;
-	lib::trajectory_description irp6p_td;
-};
-
-// ####################################################################################################
-// Generator prostoliniowy o zadany przyrost polozenia/orientacji
-// ####################################################################################################
-
-class tight_coop : public delta
-{
-public:
-			tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des, lib::trajectory_description irp6p_tr_des);
-
-	virtual bool first_step();
-
-	virtual bool next_step();
-};
-
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
