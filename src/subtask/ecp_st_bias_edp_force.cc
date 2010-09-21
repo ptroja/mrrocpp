@@ -1,10 +1,10 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-//
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp_sub_task_bias_edp_force definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup subtasks
+ */
 
 #include "base/lib/typedefs.h"
 

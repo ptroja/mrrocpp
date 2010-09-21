@@ -1,13 +1,12 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-//
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains ecp_sub_task_tff_nose_run definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup subtasks
+ */
 
 #include "base/lib/typedefs.h"
-
 #include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"

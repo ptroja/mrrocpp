@@ -1,9 +1,13 @@
 #if !defined(_ECP_TEACH_IN_GENERATOR_H)
 #define  _ECP_TEACH_IN_GENERATOR_H
 
-// ####################################################################################################
-// ###############     KLASA glowna dla odtwarzania listy pozycji     #################################
-// ####################################################################################################
+/*!
+ * @file
+ * @brief File contains teach_in generator declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
+ */
 
 #include <list>
 

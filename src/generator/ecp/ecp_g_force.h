@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            generator/ecp_g_force.h dla QNX6
-// Deklaracje generatorow dla procesow ECP z wykorzystaniem sily
-//
-// -------------------------------------------------------------------------
-
-
 #if !defined(_ECP_GEN_FORCE_H)
 #define _ECP_GEN_FORCE_H
+
+/*!
+ * @file
+ * @brief File contains force generators declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
+ */
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"

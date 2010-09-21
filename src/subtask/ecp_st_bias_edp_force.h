@@ -1,9 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.h
-// -------------------------------------------------------------------------
-
 #if !defined(_ECP_ST_BIAS_EDP_FORCE_H)
 #define _ECP_ST_BIAS_EDP_FORCE_H
+
+/*!
+ * @file
+ * @brief File contains ecp_sub_task_bias_edp_force declaration
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup subtasks
+ */
 
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"

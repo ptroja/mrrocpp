@@ -1,15 +1,10 @@
-/**
+/*!
  * @file
- * @brief ECP force generators
- * - class declaration
- * @author yoyek
- * @date 01.01.2002
+ * @brief File contains force generators definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
  */
-
-// -------------------------------------------------------------------------
-//            Effector Control Process (lib::ECP) - force methods
-// Funkcje do tworzenia procesow ECP z wykorzystaniem sily
-// -------------------------------------------------------------------------
 
 #include <cstdio>
 #include <fstream>
