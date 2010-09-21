@@ -17,16 +17,6 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-class bias_edp_force : public common::generator::generator
-{
-public:
-	// konstruktor
-	bias_edp_force(common::task::task& _ecp_task);
-
-	virtual bool first_step();
-	virtual bool next_step();
-};
-
 // --------------------------------------------------------------------------
 // Generator do lapania kostki
 

@@ -25,36 +25,6 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
-//
-// 			bias_edp_force_generator
-//
-// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
-
-
-bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
-	generator(_ecp_task)
-{
-}
-
-bool bias_edp_force::first_step()
-{
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_BIAS;
-
-	return true;
-}
-
-// --------------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------------
-bool bias_edp_force::next_step()
-{
-	return false;
-}
-
 tff_rubik_grab::tff_rubik_grab(common::task::task& _ecp_task, int step) :
 	generator(_ecp_task), step_no(step)
 {

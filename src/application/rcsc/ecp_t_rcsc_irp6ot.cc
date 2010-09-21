@@ -15,6 +15,7 @@
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 #include "generator/ecp/force/ecp_g_force.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
