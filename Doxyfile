@@ -589,6 +589,16 @@ INPUT                  = src/base/kinematics \
                          src/base/ecp \
                          src/base/mp \
                          src/base/base.dox \
+                         src/generator/ecp/ecp_g_teach_in.h \
+                         src/generator/ecp/ecp_g_teach_in.cc \
+                         src/generator/ecp/ecp_g_force.h \
+                         src/generator/ecp/ecp_g_force.cc \
+                         src/subtask/ecp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_bias_edp_force.cc \
+                         src/subtask/ecp_mp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_tff_nose_run.h \
+                         src/subtask/ecp_st_tff_nose_run.cc \
+                         src/subtask/ecp_mp_st_tff_nose_run.h \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
