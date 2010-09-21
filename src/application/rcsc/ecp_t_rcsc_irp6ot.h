@@ -8,6 +8,7 @@
 #include "generator/ecp/force/ecp_g_weight_measure.h"
 #include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "subtask/ecp_st_go.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 

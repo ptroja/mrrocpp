@@ -17,32 +17,6 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-// --------------------------------------------------------------------------
-// Generator do nasuniecia chwytaka na kostke
-
-class tff_gripper_approach : public common::generator::generator
-{
-protected:
-
-	lib::trajectory_description td;
-
-	// do konfiguracji pracy generatora
-	double speed;
-	unsigned int motion_time;
-
-public:
-	const int step_no;
-
-	// konstruktor
-	tff_gripper_approach(common::task::task& _ecp_task, int step = 0);
-
-	void configure(double l_speed, unsigned int l_motion_time);
-
-	bool first_step();
-	bool next_step();
-
-}; // end : class ecp_tff_gripper_approach_generator
-
 class force_tool_change : public common::generator::generator
 {
 protected:

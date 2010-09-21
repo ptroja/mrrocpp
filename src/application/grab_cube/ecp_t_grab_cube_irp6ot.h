@@ -6,9 +6,11 @@
 #include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "robot/irp6ot_m/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.h"
+#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include "base/lib/com_buf.h"
 #include "generator/ecp/force/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
