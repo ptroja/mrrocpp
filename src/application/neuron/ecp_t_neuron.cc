@@ -33,6 +33,8 @@ Neuron::~Neuron(){
 
 /*====================mp_2_ecp_next_state_string_handler=====================*/
 void Neuron::mp_2_ecp_next_state_string_handler(void){
+	printf("poczatek\n");
+	sr_ecp_msg->message("poczatek");
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_T_NEURON) {
 		neuronSensor = new ecp_mp::sensor::neuron_sensor(config);
 		sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR] = neuronSensor;
@@ -109,12 +111,15 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 		if(smoothGenerator->calculate_interpolate())
 			smoothGenerator->Move();*/
 	}
+	printf("koniec\n");
+	sr_ecp_msg->message("koniec");
 }
 
 /*====================mp_2_ecp_next_state_string_handler=====================*/
 void Neuron::ecp_stop_accepted_handler(){
 	sr_ecp_msg->message("mp_stop_pressed");
 	delete sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
+	sensor_m.erase(ecp_mp::sensor::ECP_MP_NEURON_SENSOR);
 }
 
 }  //namespace task

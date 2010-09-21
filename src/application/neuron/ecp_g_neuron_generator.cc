@@ -20,13 +20,12 @@ namespace generator {
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
-
 	reset();
 }
 
 neuron_generator::~neuron_generator()
 {
-	delete neuron_sensor;
+	//delete neuron_sensor;
 }
 
 bool neuron_generator::first_step()

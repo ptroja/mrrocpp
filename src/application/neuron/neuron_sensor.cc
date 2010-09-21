@@ -196,8 +196,11 @@ void neuron_sensor::startGettingTrajectory(){
 }
 
 void neuron_sensor::waitForVSPStart(){
+	printf("dupa\n");
 	sendCommand(MRROCPP_READY);
+	printf("dupa1\n");
 	get_reading();
+	printf("dupa2\n");
 }
 
 void neuron_sensor::sendCommunicationFinished(){
