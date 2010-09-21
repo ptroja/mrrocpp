@@ -64,7 +64,7 @@ public:
 
 	/**
 	 * @brief Constructor
-	 * @param _ecp_t ecp task object reference.
+	 * @param _ecp_task ecp task object reference.
 	 */
 	generator(common::task::task& _ecp_task);
 

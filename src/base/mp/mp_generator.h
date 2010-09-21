@@ -19,6 +19,8 @@ namespace task {
 class task;
 } // namespace task
 
+namespace generator {
+
 /*!
  * @brief Base class of all mp generators
  * The generator both generates command and checks terminal condition
@@ -26,8 +28,6 @@ class task;
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-namespace generator {
-
 class generator : public ecp_mp::generator::generator
 {
 private:
