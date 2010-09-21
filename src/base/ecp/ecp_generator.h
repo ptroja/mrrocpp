@@ -57,18 +57,32 @@ public:
 	 */
 	void move_init(void);
 
+	/**
+	 * @brief associated ecp_robot object pointer
+	 */
 	robot::ecp_robot* the_robot;
 
+	/**
+	 * @brief Constructor
+	 * @param _ecp_t ecp task object reference.
+	 */
 	generator(common::task::task& _ecp_task);
 
+	/**
+	 * @brief Desstructor
+	 */
 	virtual ~generator();
 
-	bool is_EDP_error(robot::ecp_robot& _robot) const;
+	/**
+	 * @brief checks robot reply_package and detects edp_error
+	 * @return edp_error occurred
+	 */
+	bool is_EDP_error() const;
 
+	/**
+	 * @brief single trajectory node
+	 */
 	lib::trajectory_description td;
-
-	//virtual bool first_step () = 0;
-	//virtual bool next_step () = 0;
 
 };
 
