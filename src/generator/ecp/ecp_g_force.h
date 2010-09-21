@@ -22,7 +22,7 @@ namespace generator {
  * The generator do not move robot. First it measures initial force (weight) in x direction of tool.\n
  * Then in the following macrosteps it checks if the filtered (through cyclic buffer) force exceeds the desired increment.\n
  * If it is so it waits the desired time and finishes.\n
- *  *
+ *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
@@ -115,7 +115,6 @@ public:
 	 * @param _weight_difference desired weight difference (optional)
 	 * @param _catch_time desired catch time to wait after weight difference is detected
 	 */
-
 	weight_meassure(common::task::task& _ecp_task, double _weight_difference = 0.0, double _catch_time = 1.0);
 
 	bool first_step();
@@ -123,19 +122,29 @@ public:
 
 };
 
-// --------------------------------------------------------------------------
-// Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
-
+/*!
+ * @brief generator to move manipulator end-effector by exerting force to the tool
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup generators
+ */
 class tff_nose_run : public common::generator::generator
 {
 protected:
-	lib::trajectory_description td;
-	// skladowe silowe i pozycyjne (zablokowane)
-	bool selection_vector_l[6];
-	// czy pulse_check ma byc aktywne
+
+	/**
+	 * @brief if set the trigger pulse from UI finishes generator
+	 */
 	bool pulse_check_activated;
+
+	/**
+	 * @brief if set the measured force is displayed
+	 */
 	bool force_meassure;
 
+	/**
+	 * @brief stores desired EDP behavior
+	 */
 	struct generator_edp_data_type
 	{
 		double next_inertia[6], next_reciprocal_damping[6];
@@ -144,24 +153,95 @@ protected:
 	} generator_edp_data;
 
 public:
+
+	/**
+	 * @brief the number of macrostep steps
+	 */
 	const int step_no;
 
-	// konstruktor
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 * @param step the number of macrostep steps (optional)
+	 */
 	tff_nose_run(common::task::task& _ecp_task, int step = 0);
+
+	/**
+	 * @brief communicates with EDP
+	 * here it and handles kinematic exceptions to achieve constant motion without generator interuption after such an exception
+	 */
 	void execute_motion(void);
 
+	/**
+	 * @brief sets pulse check flag
+	 * @param pulse_check_activated_l desired pulse check flag value
+	 */
+	void configure_pulse_check(bool pulse_check_activated_l);
+
+	/**
+	 * @brief sets force measure flag
+	 * @param fm desired force measure flag value
+	 */
+	void set_force_meassure(bool fm);
+
+	/**
+	 * @brief Sets behavior parameters for all directions
+	 * @param x linear x direction
+	 * @param y linear y direction
+	 * @param z linear z direction
+	 * @param ax angular x direction
+	 * @param ay angular y direction
+	 * @param az angular z direction
+	 */
 	void
 			configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z, lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az);
-	void configure_pulse_check(bool pulse_check_activated_l);
+
+	/**
+	 * @brief Sets desired velocity for all directions
+	 * @param x linear x direction
+	 * @param y linear y direction
+	 * @param z linear z direction
+	 * @param ax angular x direction
+	 * @param ay angular y direction
+	 * @param az angular z direction
+	 */
 	void configure_velocity(double x, double y, double z, double ax, double ay, double az);
+
+	/**
+	 * @brief Sets desired force for all directions
+	 * @param x linear x direction
+	 * @param y linear y direction
+	 * @param z linear z direction
+	 * @param ax angular x direction
+	 * @param ay angular y direction
+	 * @param az angular z direction
+	 */
 	void configure_force(double x, double y, double z, double ax, double ay, double az);
+
+	/**
+	 * @brief Sets desired reciprocal of damping for all directions
+	 * @param x linear x direction
+	 * @param y linear y direction
+	 * @param z linear z direction
+	 * @param ax angular x direction
+	 * @param ay angular y direction
+	 * @param az angular z direction
+	 */
 	void configure_reciprocal_damping(double x, double y, double z, double ax, double ay, double az);
+
+	/**
+	 * @brief Sets desired inertia for all directions
+	 * @param x linear x direction
+	 * @param y linear y direction
+	 * @param z linear z direction
+	 * @param ax angular x direction
+	 * @param ay angular y direction
+	 * @param az angular z direction
+	 */
 	void configure_inertia(double x, double y, double z, double ax, double ay, double az);
 
-	virtual bool first_step();
-	virtual bool next_step();
-
-	void set_force_meassure(bool fm);
+	bool first_step();
+	bool next_step();
 
 }; // end : class ecp_tff_nose_run_generator
 
@@ -199,8 +279,8 @@ public:
 			configure(double l_goal_position, double l_position_increment, unsigned int l_min_node_counter, bool l_both_axes_running =
 					true);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step();
 
 }; // end : class ecp_tff_rubik_grab_generator
 
@@ -226,8 +306,8 @@ public:
 
 	void configure(double l_turn_angle);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step();
 
 }; // end : class ecp_tff_rubik_face_rotate_generator
 
@@ -253,8 +333,8 @@ public:
 
 	void configure(double l_speed, unsigned int l_motion_time);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step();
 
 }; // end : class ecp_tff_gripper_approach_generator
 
@@ -268,8 +348,8 @@ public:
 	//ecp_force_tool_change_generator(common::task::task& _ecp_task, bool _is_synchronised, bool _debug);
 	void set_tool_parameters(double x, double y, double z, double weight); // tez zobaczyc jakie tu mamy parametry
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step();
 };
 
 } // namespace generator
