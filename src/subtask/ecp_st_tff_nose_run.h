@@ -11,6 +11,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {

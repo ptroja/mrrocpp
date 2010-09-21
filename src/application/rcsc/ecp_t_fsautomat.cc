@@ -186,11 +186,11 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));
 										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_meassure_gen")) {
+									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											wmg
-													= new common::generator::weight_meassure(*this, atoi((char *) argument));
+													= new common::generator::weight_measure(*this, atoi((char *) argument));
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_sub_task_gripper_opening")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);

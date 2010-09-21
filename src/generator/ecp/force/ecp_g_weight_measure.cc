@@ -27,19 +27,19 @@ namespace generator {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
-// 			weight_meassure_generator
+// 			weight_measure_generator
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 
-weight_meassure::weight_meassure(common::task::task& _ecp_task, double _weight_difference, double _catch_time) :
+weight_measure::weight_measure(common::task::task& _ecp_task, double _weight_difference, double _catch_time) :
 	generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false), catch_time(_catch_time), terminate_state_recognized(false)
 {
 	clear_buffer();
 }
 
-void weight_meassure::insert_in_buffer(double fx)
+void weight_measure::insert_in_buffer(double fx)
 {
 
 	weight_in_cyclic_buffer[current_buffer_pointer] = fx;
@@ -50,7 +50,7 @@ void weight_meassure::insert_in_buffer(double fx)
 
 }
 
-void weight_meassure::clear_buffer()
+void weight_measure::clear_buffer()
 {
 	for (int i = 0; i < WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE; i++) {
 		weight_in_cyclic_buffer[current_buffer_pointer] = 0.0;
@@ -60,11 +60,11 @@ void weight_meassure::clear_buffer()
 	terminate_state_recognized = false;
 
 	catch_lag = initial_catch_lag = (int) (1000000 * catch_time / (USLEEP_TIME));
-	// std::cout << "weight_meassure_generator" << initial_catch_lag << std::endl;
+	// std::cout << "weight_measure_generator" << initial_catch_lag << std::endl;
 
 }
 
-double weight_meassure::check_average_weight_in_buffer(void) const
+double weight_measure::check_average_weight_in_buffer(void) const
 {
 	double returned_value = 0.0;
 
@@ -75,12 +75,12 @@ double weight_meassure::check_average_weight_in_buffer(void) const
 	return returned_value;
 }
 
-void weight_meassure::set_weight_difference(double _weight_difference)
+void weight_measure::set_weight_difference(double _weight_difference)
 {
 	weight_difference = _weight_difference;
 }
 
-bool weight_meassure::first_step()
+bool weight_measure::first_step()
 {
 	clear_buffer();
 
@@ -92,7 +92,7 @@ bool weight_meassure::first_step()
 	return true;
 }
 
-bool weight_meassure::next_step()
+bool weight_measure::next_step()
 {
 	usleep( USLEEP_TIME);
 

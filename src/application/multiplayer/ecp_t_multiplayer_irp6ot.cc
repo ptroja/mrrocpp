@@ -29,7 +29,7 @@ multiplayer::multiplayer(lib::configurator &_config) :
 	//powolanie generatorow
 
 	sg = new common::generator::smooth(*this, true);
-	wmg = new common::generator::weight_meassure(*this, -0.3, 2);
+	wmg = new common::generator::weight_measure(*this, -0.3, 2);
 	gt = new common::generator::transparent(*this);
 
 	go_st = new common::task::ecp_sub_task_gripper_opening(*this);

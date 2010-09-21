@@ -37,7 +37,7 @@ protected:
 	common::generator::teach_in* tig;
 	common::generator::smooth* sg;
 
-	common::generator::weight_meassure* wmg;
+	common::generator::weight_measure* wmg;
 	//podzadania
 	common::task::ecp_sub_task_gripper_opening* go_st;
 

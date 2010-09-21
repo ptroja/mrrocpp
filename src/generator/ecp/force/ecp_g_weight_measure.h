@@ -26,7 +26,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class weight_meassure : public common::generator::generator
+class weight_measure : public common::generator::generator
 {
 private:
 
@@ -115,7 +115,7 @@ public:
 	 * @param _weight_difference desired weight difference (optional)
 	 * @param _catch_time desired catch time to wait after weight difference is detected
 	 */
-	weight_meassure(common::task::task& _ecp_task, double _weight_difference = 0.0, double _catch_time = 1.0);
+	weight_measure(common::task::task& _ecp_task, double _weight_difference = 0.0, double _catch_time = 1.0);
 
 	bool first_step();
 	bool next_step();

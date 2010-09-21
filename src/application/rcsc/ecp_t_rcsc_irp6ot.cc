@@ -42,7 +42,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	tig = new common::generator::teach_in(*this);
 
 	sg = new common::generator::smooth(*this, true);
-	wmg = new common::generator::weight_meassure(*this, 1);
+	wmg = new common::generator::weight_measure(*this, 1);
 
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
 	if (config.exists("fradia_task", fradia_config_section_name)) {
