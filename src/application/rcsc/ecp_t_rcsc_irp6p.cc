@@ -8,14 +8,14 @@
 #include "application/rcsc/ecp_mp_t_rcsc.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 
 //#include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "ecp_t_rcsc_irp6p.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"

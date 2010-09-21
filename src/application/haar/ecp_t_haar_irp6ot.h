@@ -15,7 +15,7 @@
 #include "ecp_g_rotate_gripper.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_jarosz.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 

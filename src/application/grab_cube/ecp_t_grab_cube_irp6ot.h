@@ -9,7 +9,7 @@
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"
 #include "base/lib/com_buf.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 

@@ -6,7 +6,7 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "generator/ecp/ecp_g_smooth.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 #include "ecp_t_multiplayer_irp6ot.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"

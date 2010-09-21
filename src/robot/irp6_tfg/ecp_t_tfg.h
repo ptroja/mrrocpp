@@ -2,7 +2,7 @@
 #define _ECP_T_TFG_H
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/force/ecp_g_force.h"
+
 #include "robot/irp6_tfg/ecp_g_tfg.h"
 
 namespace mrrocpp {
