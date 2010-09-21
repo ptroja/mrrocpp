@@ -17,10 +17,20 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+/*!
+ * @brief generator to send the bias (set offset) command to EDP force measurements
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup generators
+ */
 class bias_edp_force : public common::generator::generator
 {
 public:
-	// konstruktor
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
 	bias_edp_force(common::task::task& _ecp_task);
 
 	virtual bool first_step();
