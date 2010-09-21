@@ -1,3 +1,5 @@
+add_subdirectory (force)
+
 add_library(ecp_generators
 	../../generator/ecp/ecp_g_teach_in.cc
 	../../generator/ecp/ecp_g_delta.cc
@@ -7,7 +9,6 @@ add_library(ecp_generators
 	../../generator/ecp/ecp_g_visual_servo.cc
 	../../generator/ecp/ecp_g_smooth.cc
 	../../generator/ecp/ecp_g_sleep.cc
-	../../generator/ecp/ecp_g_force.cc
 	../../generator/ecp/ecp_g_get_position.cc
 	../../generator/ecp/ecp_g_constant_velocity.cc
 	../../generator/ecp/ecp_g_newsmooth.cc
@@ -19,4 +20,4 @@ add_library(ecp_generators
 
 # @bug cyclic dependency between ecp<->ecp_generators prevents building as
 # shared libraries // ptroja
-target_link_libraries(ecp_generators mrrocpp ecp)
+target_link_libraries(ecp_generators ecp_generators_force mrrocpp ecp)

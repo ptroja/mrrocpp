@@ -4,7 +4,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "ecp_g_pcbird_nose_run.h"
-#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_force.h"
 #include "ecp_st_acquisition.h"
 
 namespace mrrocpp {

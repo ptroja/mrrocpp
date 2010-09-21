@@ -3,7 +3,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
-#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_force.h"
 #include "base/lib/com_buf.h"
 #include "subtask/ecp_st_go.h"
 #include "generator/ecp/ecp_g_sleep.h"

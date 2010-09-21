@@ -12,7 +12,7 @@
 #include "base/lib/com_buf.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
-#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_force.h"
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {

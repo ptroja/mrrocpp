@@ -8,7 +8,7 @@
 
 #include "base/lib/typedefs.h"
 #include "base/lib/sr/srlib.h"
-#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
 namespace mrrocpp {

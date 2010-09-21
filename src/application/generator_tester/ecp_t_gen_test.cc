@@ -3,7 +3,7 @@
 
 //#include "subtask/ecp_st_bias_edp_force.h"
 //#include "subtask/ecp_st_tff_nose_run.h"
-//#include "generator/ecp/ecp_g_force.h"
+//#include "generator/ecp/force/ecp_g_force.h"
 
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_gen_test.h"
