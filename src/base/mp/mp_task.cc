@@ -23,7 +23,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
-#include "base/mp/generator/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "base/mp/generator/mp_g_delay_ms_condition.h"
 #include "base/mp/generator/mp_g_set_next_ecps_state.h"
 #include "base/mp/generator/mp_g_send_end_motion_to_ecps.h"

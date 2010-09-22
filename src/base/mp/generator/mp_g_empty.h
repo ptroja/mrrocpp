@@ -1,9 +1,9 @@
-#ifndef MP_GEN_COMMON_H_
-#define MP_GEN_COMMON_H_
+#ifndef MP_GEN_EMPTY_H_
+#define MP_GEN_EMPTY_H_
 
 /*!
  * @file
- * @brief File contains mp common generators declaration
+ * @brief File contains mp empty generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup mp

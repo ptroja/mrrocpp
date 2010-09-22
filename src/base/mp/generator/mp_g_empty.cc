@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains mp common generators definition
+ * @brief File contains mp empty generator definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup mp
@@ -14,7 +14,7 @@
 #include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
-#include "base/mp/generator/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 
 namespace mrrocpp {
 namespace mp {

@@ -6,7 +6,7 @@
  * @ingroup mp
  */
 
-#include "base/mp/generator/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "base/mp/mp_robot.h"
 #include "base/mp/mp_task.h"
 
