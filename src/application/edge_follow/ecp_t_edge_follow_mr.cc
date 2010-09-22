@@ -40,16 +40,16 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	// utworzenie podzadan
 	{
 		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::sub_task_edge_follow(*this);
+		ecpst = new sub_task::edge_follow(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_EDGE_FOLLOW] = ecpst;
 
-		ecpst = new sub_task::sub_task_bias_edp_force(*this);
+		ecpst = new sub_task::bias_edp_force(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		sub_task::sub_task_tff_nose_run* ecpst;
-		ecpst = new sub_task::sub_task_tff_nose_run(*this);
+		sub_task::tff_nose_run* ecpst;
+		ecpst = new sub_task::tff_nose_run(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 		ecpst->nrg->configure_pulse_check(true);
 	}

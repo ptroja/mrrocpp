@@ -72,18 +72,18 @@ rcsc::rcsc(lib::configurator &_config) :
 		sm->configure();
 	}
 
-	go_st = new common::sub_task::sub_task_gripper_opening(*this);
+	go_st = new common::sub_task::gripper_opening(*this);
 
 	// utworzenie podzadan
 	{
 		common::sub_task::sub_task* ecpst;
-		ecpst = new common::sub_task::sub_task_bias_edp_force(*this);
+		ecpst = new common::sub_task::bias_edp_force(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		common::sub_task::sub_task_tff_nose_run* ecpst;
-		ecpst = new common::sub_task::sub_task_tff_nose_run(*this);
+		common::sub_task::tff_nose_run* ecpst;
+		ecpst = new common::sub_task::tff_nose_run(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 

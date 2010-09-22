@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains sub_task_bias_edp_force declaration
+ * @brief File contains bias_edp_force declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup subtasks
@@ -27,7 +27,7 @@ namespace sub_task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup subtasks
  */
-class sub_task_bias_edp_force : public sub_task
+class bias_edp_force : public sub_task
 {
 
 private:
@@ -42,7 +42,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	sub_task_bias_edp_force(task::task &_ecp_t);
+	bias_edp_force(task::task &_ecp_t);
 
 	void conditional_execution();
 };
