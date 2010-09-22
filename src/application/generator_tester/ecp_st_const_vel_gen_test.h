@@ -14,7 +14,7 @@ namespace generator {
 
 namespace task {
 
-class ecp_sub_task_const_vel_gen_test : public ecp_sub_task
+class sub_task_const_vel_gen_test : public sub_task
 {
 
 private:
@@ -27,8 +27,8 @@ private:
 	bool postument;
 
 public:
-	ecp_sub_task_const_vel_gen_test(task & _ecp_t);
-	~ecp_sub_task_const_vel_gen_test();
+	sub_task_const_vel_gen_test(task & _ecp_t);
+	~sub_task_const_vel_gen_test();
 
 	void conditional_execution();
 };

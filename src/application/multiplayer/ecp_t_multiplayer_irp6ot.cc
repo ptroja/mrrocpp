@@ -33,15 +33,15 @@ multiplayer::multiplayer(lib::configurator &_config) :
 	wmg = new common::generator::weight_measure(*this, -0.3, 2);
 	gt = new common::generator::transparent(*this);
 
-	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
+	go_st = new common::task::sub_task_gripper_opening(*this);
 
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
 
 	// utworzenie podzadan
 	{
-		common::task::ecp_sub_task* ecpst;
+		common::task::sub_task* ecpst;
 
-		ecpst = new common::task::ecp_sub_task_bias_edp_force(*this);
+		ecpst = new common::task::sub_task_bias_edp_force(*this);
 		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 

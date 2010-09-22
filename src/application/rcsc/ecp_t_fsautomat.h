@@ -40,7 +40,7 @@ protected:
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_measure* wmg;
 	//podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
+	common::task::sub_task_gripper_opening* go_st;
 
 	trajectories_t * trjMap;
 

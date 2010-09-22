@@ -45,18 +45,18 @@ rcsc::rcsc(lib::configurator &_config) :
 
 	sg = new common::generator::smooth(*this, true);
 
-	go_st = new common::task::ecp_sub_task_gripper_opening(*this);
+	go_st = new common::task::sub_task_gripper_opening(*this);
 
 	// utworzenie podzadan
 	{
-		common::task::ecp_sub_task* ecpst;
-		ecpst = new common::task::ecp_sub_task_bias_edp_force(*this);
+		common::task::sub_task* ecpst;
+		ecpst = new common::task::sub_task_bias_edp_force(*this);
 		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		common::task::ecp_sub_task_tff_nose_run* ecpst;
-		ecpst = new common::task::ecp_sub_task_tff_nose_run(*this);
+		common::task::sub_task_tff_nose_run* ecpst;
+		ecpst = new common::task::sub_task_tff_nose_run(*this);
 		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 

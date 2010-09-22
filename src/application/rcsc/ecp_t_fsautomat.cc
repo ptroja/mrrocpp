@@ -142,8 +142,8 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
-											ecp_sub_task_tff_nose_run* ecpst;
-											ecpst = new ecp_sub_task_tff_nose_run(*this);
+											sub_task_tff_nose_run* ecpst;
+											ecpst = new sub_task_tff_nose_run(*this);
 											subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 										}
 										xmlFree(argument);
@@ -183,8 +183,8 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
 										{
-											ecp_sub_task* ecpst;
-											ecpst = new ecp_sub_task_bias_edp_force(*this);
+											sub_task* ecpst;
+											ecpst = new sub_task_bias_edp_force(*this);
 											subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 										}
 										xmlFree(argument);
@@ -198,11 +198,11 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											wmg = new common::generator::weight_measure(*this, atoi((char *) argument));
 										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_sub_task_gripper_opening")) {
+									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "sub_task_gripper_opening")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
-										go_st = new common::task::ecp_sub_task_gripper_opening(*this);
+										go_st = new common::task::sub_task_gripper_opening(*this);
 										xmlFree(argument);
 									}
 								}

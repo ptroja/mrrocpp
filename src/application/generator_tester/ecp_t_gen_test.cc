@@ -28,11 +28,11 @@ gen_test::gen_test(lib::configurator &_config) :
 
 	// utworzenie podzadan
 	{
-		ecp_sub_task* ecpst;
-		ecpst = new ecp_sub_task_const_vel_gen_test(*this);
+		sub_task* ecpst;
+		ecpst = new sub_task_const_vel_gen_test(*this);
 		subtask_m[ecp_mp::task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
 
-		ecpst = new ecp_sub_task_smooth_gen_test(*this);
+		ecpst = new sub_task_smooth_gen_test(*this);
 		subtask_m[ecp_mp::task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
 	}
 

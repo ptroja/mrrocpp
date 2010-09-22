@@ -19,14 +19,14 @@ class ecp_robot;
 }
 namespace task {
 
-class ecp_sub_task;
+class sub_task;
 
 /**
  * @brief Container type for storing ecp_subtask objects.
  *
  * @ingroup ecp
  */
-typedef std::map <std::string, ecp_sub_task *> subtasks_t;
+typedef std::map <std::string, sub_task *> subtasks_t;
 
 /**
  * @brief Type for Items from subtasks_t container.
@@ -198,7 +198,7 @@ task* return_created_ecp_task(lib::configurator &_config);
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-class ecp_sub_task
+class sub_task
 {
 protected:
 
@@ -218,7 +218,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	ecp_sub_task(task &_ecp_t);
+	sub_task(task &_ecp_t);
 
 	/**
 	 * @brief method to implement in derived classes that stores main sub task algorithm

@@ -28,7 +28,7 @@ protected:
 
 	common::generator::weight_measure* wmg;
 	//podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
+	common::task::sub_task_gripper_opening* go_st;
 
 public:
 	// KONSTRUKTORY

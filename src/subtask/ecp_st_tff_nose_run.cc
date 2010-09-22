@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains ecp_sub_task_tff_nose_run definition
+ * @brief File contains sub_task_tff_nose_run definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup subtasks
@@ -16,13 +16,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-ecp_sub_task_tff_nose_run::ecp_sub_task_tff_nose_run(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+sub_task_tff_nose_run::sub_task_tff_nose_run(task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	nrg = new generator::tff_nose_run(_ecp_t, 8);
 }
 
-void ecp_sub_task_tff_nose_run::conditional_execution()
+void sub_task_tff_nose_run::conditional_execution()
 {
 
 	nrg->Move();

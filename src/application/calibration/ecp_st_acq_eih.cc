@@ -17,28 +17,28 @@ acq_eih::acq_eih(task &_ecp_t) :
 	printf("acq_eih::acq_eih() 1\n");
 	fflush(stdout);
 	// Create an adequate robot. - depending on the ini section name.
-	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
-		ecp_sub_task::sr_ecp_msg.message("IRp6ot loaded");
+	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
+		sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
+		sub_task::sr_ecp_msg.message("IRp6ot loaded");
 		robot = TRACK;
-	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
-		ecp_sub_task::sr_ecp_msg.message("IRp6p loaded");
+	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
+		sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
+		sub_task::sr_ecp_msg.message("IRp6p loaded");
 		robot = POSTUMENT;
 	}
 
 	printf("acq_eih::acq_eih() 2\n");
 	fflush(stdout);
 
-	smooth_path = ecp_sub_task::ecp_t.config.value <std::string> ("smooth_path");
-	delay_ms = ecp_sub_task::ecp_t.config.value <int> ("delay");
-	M = ecp_sub_task::ecp_t.config.value <int> ("M");
-	A = ecp_sub_task::ecp_t.config.value <double> ("A");
-	C = ecp_sub_task::ecp_t.config.value <double> ("C");
-	D = ecp_sub_task::ecp_t.config.value <double> ("D");
-	E = ecp_sub_task::ecp_t.config.value <double> ("E");
-	acc = ecp_sub_task::ecp_t.config.value <double> ("acceleration");
-	vel = ecp_sub_task::ecp_t.config.value <double> ("velocity");
+	smooth_path = sub_task::ecp_t.config.value <std::string> ("smooth_path");
+	delay_ms = sub_task::ecp_t.config.value <int> ("delay");
+	M = sub_task::ecp_t.config.value <int> ("M");
+	A = sub_task::ecp_t.config.value <double> ("A");
+	C = sub_task::ecp_t.config.value <double> ("C");
+	D = sub_task::ecp_t.config.value <double> ("D");
+	E = sub_task::ecp_t.config.value <double> ("E");
+	acc = sub_task::ecp_t.config.value <double> ("acceleration");
+	vel = sub_task::ecp_t.config.value <double> ("velocity");
 	calibrated = false;
 
 	printf("acq_eih::acq_eih() 3\n");
@@ -55,20 +55,20 @@ acq_eih::acq_eih(task &_ecp_t) :
 
 	fradia
 			= new ecp_mp::sensor::fradia_sensor <lib::empty_t, chessboard_t, eihcalibration_t>(_ecp_t.config, "[vsp_fradia_sensor]");
-	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = fradia;
+	sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = fradia;
 
-	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
+	sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
 	generator = new generator::eihgenerator(_ecp_t);
-	generator->sensor_m = ecp_sub_task::ecp_t.sensor_m;
+	generator->sensor_m = sub_task::ecp_t.sensor_m;
 
 	printf("acq_eih::acq_eih() 7\n");
 	fflush(stdout);
 
-	ecp_sub_task::sr_ecp_msg.message("ecp loaded eihacquisition");
+	sub_task::sr_ecp_msg.message("ecp loaded eihacquisition");
 
 	// TODO: UWAGA: TU JEST WIELKI BUG: pole ofp nie jest zainicjalizowane
-	ofp.number_of_measures = ecp_sub_task::ecp_t.config.value <int> ("measures_count");
+	ofp.number_of_measures = sub_task::ecp_t.config.value <int> ("measures_count");
 
 	// translation vector (from robot base to tool frame) - received from MRROC
 	ofp.k = gsl_vector_calloc(3 * ofp.number_of_measures);
@@ -106,10 +106,10 @@ void acq_eih::main_task_algorithm(void)
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int) (delay_ms / 1000);
 
-	ecp_sub_task::sr_ecp_msg.message("ecp eihacquisition ready");
+	sub_task::sr_ecp_msg.message("ecp eihacquisition ready");
 
 	//Czekam, az czujnik bedzie skonfigurowany.
-	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
+	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 	fradia->get_reading();
 	while (fradia->get_report() == lib::sensor::VSP_SENSOR_NOT_CONFIGURED) {
 		fradia->get_reading();
@@ -131,7 +131,7 @@ void acq_eih::main_task_algorithm(void)
 	 }
 	 nose->Move();*/
 
-	ecp_sub_task::sr_ecp_msg.message("Data collection\n");
+	sub_task::sr_ecp_msg.message("Data collection\n");
 
 	// maximum velocity and acceleration of smooth generator
 	double vv[lib::MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
@@ -147,7 +147,7 @@ void acq_eih::main_task_algorithm(void)
 		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
-		ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
+		sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
 		generator->Move();
 		store_data();
 		++i;
@@ -159,7 +159,7 @@ void acq_eih::main_task_algorithm(void)
 	smoothgen->Move();
 	nanosleep(&delay, NULL);
 	--i;
-	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
+	sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
 
 	// zabezpieczenie przed przekroczeniem obszaru roboczego robota
 	bool flaga = true;
@@ -191,7 +191,7 @@ void acq_eih::main_task_algorithm(void)
 				generator->Move();
 				store_data();
 				++m;
-				ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
+				sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
 			}
 
 			if (m != 0) {
@@ -337,7 +337,7 @@ bool acq_eih::store_data(void)
 {
 	int i, j = 0;
 
-	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
+	//ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> * fradia = dynamic_cast<ecp_mp::sensor::fradia_sensor<chessboard_t,lib::empty_t> *> (sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
 	if (fradia->get_reading_message().found == true && !calibrated) {
 		for (i = 0; i < 12; ++i) {

@@ -12,7 +12,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class ecp_sub_task_gripper_opening : public ecp_sub_task
+class sub_task_gripper_opening : public sub_task
 {
 
 private:
@@ -21,7 +21,7 @@ private:
     void init();
 
 public:
-    ecp_sub_task_gripper_opening(task &_ecp_t);
+    sub_task_gripper_opening(task &_ecp_t);
     void configure(double gripper_increment, int motion_time);
     void execute();
     void conditional_execution();

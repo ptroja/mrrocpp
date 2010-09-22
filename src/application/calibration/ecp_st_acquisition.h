@@ -10,7 +10,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class acquisition: public ecp_sub_task {
+class acquisition: public sub_task {
 	public:
 		// KONSTRUKTORY
 		acquisition(task &_ecp_t);

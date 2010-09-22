@@ -42,7 +42,7 @@ protected:
 
 	common::generator::weight_measure* wmg;
 	//podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
+	common::task::sub_task_gripper_opening* go_st;
 
 	shared_ptr <simple_visual_servo_manager> sm;
 	shared_ptr <visual_servo> vs;

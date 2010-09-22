@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains ecp_sub_task_tff_nose_run declaration
+ * @brief File contains sub_task_tff_nose_run declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup subtasks
@@ -28,7 +28,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup subtasks
  */
-class ecp_sub_task_tff_nose_run : public ecp_sub_task
+class sub_task_tff_nose_run : public sub_task
 {
 
 private:
@@ -44,7 +44,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	ecp_sub_task_tff_nose_run(task &_ecp_t);
+	sub_task_tff_nose_run(task &_ecp_t);
 
 	void conditional_execution();
 };

@@ -8,7 +8,7 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-acquisition::acquisition(task &_ecp_t) : ecp_sub_task(_ecp_t)
+acquisition::acquisition(task &_ecp_t) : sub_task(_ecp_t)
 {
 }
 

@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains ecp_sub_task_bias_edp_force definition
+ * @brief File contains sub_task_bias_edp_force definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup subtasks
@@ -17,13 +17,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-ecp_sub_task_bias_edp_force::ecp_sub_task_bias_edp_force(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+sub_task_bias_edp_force::sub_task_bias_edp_force(task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	befg = new generator::bias_edp_force(_ecp_t);
 }
 
-void ecp_sub_task_bias_edp_force::conditional_execution()
+void sub_task_bias_edp_force::conditional_execution()
 {
 
 	befg->Move();

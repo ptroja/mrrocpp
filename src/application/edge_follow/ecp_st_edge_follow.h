@@ -21,14 +21,14 @@ class y_edge_follow_force;
 
 namespace task {
 
-class ecp_sub_task_edge_follow : public ecp_sub_task
+class sub_task_edge_follow : public sub_task
 {
 
 private:
 	generator::y_edge_follow_force* yefg;
 
 public:
-	ecp_sub_task_edge_follow(task &_ecp_t);
+	sub_task_edge_follow(task &_ecp_t);
 
 	void conditional_execution();
 };
