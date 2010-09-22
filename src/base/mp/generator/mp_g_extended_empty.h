@@ -1,9 +1,9 @@
-#ifndef MP_GEN_COMMON_H_
-#define MP_GEN_COMMON_H_
+#ifndef MP_GEN_EXTENDED_EMPTY_H_
+#define MP_GEN_EXTENDED_EMPTY_H_
 
 /*!
  * @file
- * @brief File contains mp common generators declaration
+ * @brief File contains mp extended_empty generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup mp
@@ -18,25 +18,24 @@ namespace mp {
 namespace generator {
 
 // ####################################################################################################
-// Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
+// Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
 
-class empty : public generator
+class extended_empty : public generator
 {
 	// Klasa dla generatorow trajektorii
 	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
 	// sprawdzania spelnienia warunku koncowego
-public:
-	empty(task::task& _mp_task);
+protected:
+	bool activate_trigger;
 
-	virtual bool first_step();
-	// generuje pierwszy krok ruchu -
-	// pierwszy krok czesto rozni sie od pozostalych,
-	// np. do jego generacji nie wykorzystuje sie czujnikow
-	// (zadanie realizowane przez klase konkretna)
-	virtual bool next_step();
-	// generuje kazdy nastepny krok ruchu
-	// (zadanie realizowane przez klase konkretna)
+public:
+	extended_empty(task::task& _mp_task);
+
+	void configure(bool l_activate_trigger);
+
+	bool first_step();
+	bool next_step();
 };
 
 } // namespace generator

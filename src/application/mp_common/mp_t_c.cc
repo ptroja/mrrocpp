@@ -13,7 +13,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "mp_t_c.h"
-#include "base/mp/generator/mp_g_common.h"
+#include "base/mp/generator/mp_g_extended_empty.h"
 
 #include <boost/foreach.hpp>
 
@@ -74,10 +74,10 @@ void cxx::main_task_algorithm(void)
 {
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
+				{
+					robot_node.second->ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
 
-	}
+				}
 
 	generator::extended_empty empty_gen(*this); // "Pusty" generator
 	empty_gen.robot_m = robot_m;

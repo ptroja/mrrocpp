@@ -27,6 +27,7 @@
 #include "base/mp/generator/mp_g_delay_ms_condition.h"
 #include "base/mp/generator/mp_g_set_next_ecps_state.h"
 #include "base/mp/generator/mp_g_send_end_motion_to_ecps.h"
+#include "base/mp/generator/mp_g_extended_empty.h"
 #include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)

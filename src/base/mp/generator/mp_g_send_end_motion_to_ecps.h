@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains mp common generators declaration
+ * @brief File contains mp send_end_motion_to_ecps generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup mp
