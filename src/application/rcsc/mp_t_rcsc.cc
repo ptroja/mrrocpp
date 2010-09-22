@@ -13,7 +13,7 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
-#include "base/mp/mp_g_common.h"
+#include "base/mp/generator/mp_g_common.h"
 #include "mp_t_rcsc.h"
 #include "cube_face.h"
 #include "ecp_mp_tr_rc_windows.h"

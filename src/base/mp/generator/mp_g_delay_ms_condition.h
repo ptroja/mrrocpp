@@ -9,7 +9,7 @@
  * @ingroup mp
  */
 
-#include "base/mp/mp_generator.h"
+#include "base/mp/generator/mp_generator.h"
 #include "base/lib/timer.h"
 
 namespace mrrocpp {

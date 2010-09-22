@@ -9,7 +9,7 @@
  * @ingroup generators
  */
 
-#include "base/mp/mp_generator.h"
+#include "base/mp/generator/mp_generator.h"
 
 // generator for setting the next ecps state
 

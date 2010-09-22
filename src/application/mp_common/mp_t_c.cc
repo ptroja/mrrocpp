@@ -13,7 +13,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "mp_t_c.h"
-#include "base/mp/mp_g_common.h"
+#include "base/mp/generator/mp_g_common.h"
 
 #include <boost/foreach.hpp>
 
