@@ -17,20 +17,6 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-
-// generator for sending end_motion message to ecps
-
-class send_end_motion_to_ecps : public generator
-{
-public:
-
-	// konstruktor
-	send_end_motion_to_ecps(task::task& _mp_task);
-
-	bool first_step();
-	bool next_step();
-};
-
 // ####################################################################################################
 // Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ####################################################################################################
