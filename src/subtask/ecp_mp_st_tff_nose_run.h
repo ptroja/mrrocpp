@@ -13,6 +13,9 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
+/*!
+ * @brief tff nose run ecp subtask label
+ */
 const std::string ECP_ST_TFF_NOSE_RUN = "ECP_ST_TFF_NOSE_RUN";
 
 } // namespace task

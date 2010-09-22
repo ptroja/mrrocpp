@@ -22,13 +22,28 @@ class tff_nose_run;
 
 namespace task {
 
+/*!
+ * @brief subtask to execute tff_nose_run generator
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup subtasks
+ */
 class ecp_sub_task_tff_nose_run : public ecp_sub_task
 {
 
 private:
 
 public:
+
+	/*!
+	 * @brief tff_nose_run generator pojnter
+	 */
 	generator::tff_nose_run* nrg;
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_t ecp task object reference.
+	 */
 	ecp_sub_task_tff_nose_run(task &_ecp_t);
 
 	void conditional_execution();

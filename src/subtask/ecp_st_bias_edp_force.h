@@ -21,13 +21,27 @@ class bias_edp_force;
 
 namespace task {
 
+/*!
+ * @brief subtask to execute bias_edp_force generator
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup subtasks
+ */
 class ecp_sub_task_bias_edp_force : public ecp_sub_task
 {
 
 private:
+
+	/*!
+	 * @brief bias_edp_force generator pojnter
+	 */
 	generator::bias_edp_force* befg;
 public:
 
+	/**
+	 * @brief Constructor
+	 * @param _ecp_t ecp task object reference.
+	 */
 	ecp_sub_task_bias_edp_force(task &_ecp_t);
 
 	void conditional_execution();
