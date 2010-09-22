@@ -17,21 +17,36 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// ####################################################################################################
-// Rozszerzony Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
-// ####################################################################################################
-
+/*!
+ * @brief Generator waiting for ECP task termination message of any robot coordinated
+ * it optionally can be finished by sending MP trigger from UI
+ * the trajectory is generated in ECPs
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class extended_empty : public generator
 {
-	// Klasa dla generatorow trajektorii
-	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-	// sprawdzania spelnienia warunku koncowego
+
 protected:
+
+	/**
+	 * @brief if flag is set mp_trigger finishes generator execution
+	 */
 	bool activate_trigger;
 
 public:
+
+	/**
+	 * @brief Constructor
+	 * @param _mp_task mp task object reference.
+	 */
 	extended_empty(task::task& _mp_task);
 
+	/**
+	 * @brief sets desired total time to pass
+	 * @param l_activate_trigger set activate_trigger flag
+	 */
 	void configure(bool l_activate_trigger);
 
 	bool first_step();

@@ -16,7 +16,8 @@ namespace mp {
 namespace generator {
 
 /*!
- * @brief Generator waiting for ECP task termination message of any robot coordinated
+ * @brief Generator waiting for ECP task termination message of any robot coordinated.
+ * the trajectory is generated in ECPs
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp

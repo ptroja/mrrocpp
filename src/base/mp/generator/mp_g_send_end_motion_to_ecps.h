@@ -11,19 +11,24 @@
 
 #include "base/mp/generator/mp_generator.h"
 
-// generator for setting the next ecps state
-
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// generator for sending end_motion message to ecps
-
+/*!
+ * @brief Generator that sends END_MOTION command to coordinated robots
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class send_end_motion_to_ecps : public generator
 {
 public:
 
-	// konstruktor
+	/**
+	 * @brief Constructor
+	 * @param _mp_task mp task object reference.
+	 */
 	send_end_motion_to_ecps(task::task& _mp_task);
 
 	bool first_step();
