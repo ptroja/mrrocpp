@@ -7,11 +7,17 @@
 #include "State.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
-#include "generator/ecp/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_force_tool_change.h"
+#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
-#include "generator/ecp/ecp_mp_g_force.h"
+#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "robot/speaker/ecp_mp_g_speak.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
 
@@ -160,10 +166,10 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::task::ECP_ST_BIAS_EDP_FORCE;
-	else if (genType == "ECP_WEIGHT_MEASURE_GENERATOR")
-		this->generatorType = ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR;
+	else if (genType == "ECP_GEN_WEIGHT_MEASURE")
+		this->generatorType = ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
-		this->generatorType = ecp_mp::common::generator::ECP_TOOL_CHANGE_GENERATOR;
+		this->generatorType = ecp_mp::common::generator::ECP_GEN_FORCE_TOOL_CHANGE;
 	else
 		this->generatorType = ecp_mp::speaker::generator::ECP_GEN_SPEAK;
 	// TODO: unknown generatorType handler should throw an exception

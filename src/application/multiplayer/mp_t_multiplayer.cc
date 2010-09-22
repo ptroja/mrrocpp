@@ -27,7 +27,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
-#include "generator/ecp/ecp_mp_g_force.h"
+#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
@@ -222,7 +222,7 @@ void multiplayer::main_task_algorithm(void)
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// FAZA ODBIERANIA KOSTKI
-	set_next_ecps_state(ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "prosze~ odbierz kostke~", 0, 1, lib::festival::ROBOT_NAME.c_str());
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());

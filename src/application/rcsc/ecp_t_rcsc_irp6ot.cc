@@ -6,6 +6,10 @@
 
 #include "base/lib/sr/srlib.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
@@ -19,7 +23,7 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
-#include "generator/ecp/ecp_mp_g_force.h"
+#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
 #include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
 
@@ -104,7 +108,7 @@ rcsc::~rcsc()
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR) {
+	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE) {
 
 		wmg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {

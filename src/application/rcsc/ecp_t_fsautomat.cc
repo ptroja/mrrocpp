@@ -26,7 +26,11 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "generator/ecp/ecp_g_smooth.h"
 
-#include "generator/ecp/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
@@ -35,7 +39,7 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
-#include "generator/ecp/ecp_mp_g_force.h"
+#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "base/lib/datastr.h"
@@ -270,7 +274,7 @@ void fsautomat::main_task_algorithm(void)
 				sg->load_file_with_path(path.c_str());
 			}//else
 			sg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_WEIGHT_MEASURE_GENERATOR) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 			gt->Move();

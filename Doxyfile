@@ -592,8 +592,10 @@ INPUT                  = src/base/kinematics \
                          src/generator/generators.dox \
                          src/generator/ecp/ecp_g_teach_in.h \
                          src/generator/ecp/ecp_g_teach_in.cc \
+                         src/generator/ecp/force/ecp_mp_g_bias_edp_force.h \
                          src/generator/ecp/force/ecp_g_bias_edp_force.h \
                          src/generator/ecp/force/ecp_g_bias_edp_force.cc \
+                         src/generator/ecp/force/ecp_mp_g_tff_nose_run.h \                   
                          src/generator/ecp/force/ecp_g_tff_nose_run.h \
                          src/generator/ecp/force/ecp_g_tff_nose_run.cc \
                          src/subtask/subtasks.dox \
