@@ -15,17 +15,22 @@
 #include <list>
 
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/condition_synchroniser.h"
 
 #include "ui/src/ui.h"
 
-/**************************** ui_ecp_buffer *****************************/
+namespace mrrocpp {
+namespace ui {
+namespace common {
 
-class ui_ecp_buffer  : public boost::noncopyable{
+/**************************** ecp_buffer *****************************/
+
+class ecp_buffer : public boost::noncopyable
+{
 private:
 
-	Ui& ui;
+	Interface& interface;
 	boost::thread *thread_id;
 
 public:
@@ -37,10 +42,14 @@ public:
 	void operator()();
 
 	lib::condition_synchroniser synchroniser;
-	ui_ecp_buffer(Ui& _ui);
-	~ui_ecp_buffer();
+	ecp_buffer(Interface& _interface);
+	~ecp_buffer();
 
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

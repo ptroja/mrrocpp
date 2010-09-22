@@ -50,7 +50,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::first_step()
 	 breaking = false;
 	 first_move =  true;
 
-	 ecp_t.sr_ecp_msg->message("PIERWSZY");
+	 sr_ecp_msg.message("PIERWSZY");
 
 	 //z = 0;
 
@@ -185,7 +185,7 @@ bool ecp_vis_ib_eih_planar_irp6ot::check_if_followed()
 	old_frame_no = frame_no;
 	//sprawdzam czy nie bylo zbyt dlugiej przerwy w wykryciach obiektu
 	if (holes > 10) {
-		ecp_t.sr_ecp_msg->message("Zgubiono obiekt\n");
+		sr_ecp_msg.message("Zgubiono obiekt\n");
 		first_move = true;
 		holes = 0;
 		return false;

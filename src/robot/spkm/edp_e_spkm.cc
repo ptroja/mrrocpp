@@ -71,9 +71,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::spkm::ROBOT_SPKM)
+	manip_effector(_config, lib::spkm::ROBOT_NAME)
 {
-	number_of_servos = SPKM_NUM_OF_SERVOS;
+	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -144,7 +144,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//lib::JointArray desired_joints_tmp(MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
+	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznikaaa = (-11);
@@ -185,21 +185,18 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = new common::reader_buffer(*this);
-	vis_obj = new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
 {
-
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
-
 }
 
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-
 }
 
 }

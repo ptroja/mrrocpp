@@ -4,7 +4,7 @@
 
 #include "ui/src/irp6m_m/ui_r_irp6m_m.h"
 #include "ui/src/ui_ecp_r_irp6_common.h"
-#include "robot/irp6_mechatronika/const_irp6m.h"
+#include "robot/irp6m/const_irp6m.h"
 #include "ui/src/ui_class.h"
 
 /* Local headers */
@@ -12,17 +12,21 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace irp6m {
+
 // extern ui_state_def ui_state;
 
 //
 //
-// KLASA UiRobotIrp6m_m
+// KLASA UiRobot
 //
 //
 
 
-UiRobotIrp6m_m::UiRobotIrp6m_m(Ui& _ui) :
-	UiRobot(_ui, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
 			is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
@@ -31,17 +35,17 @@ UiRobotIrp6m_m::UiRobotIrp6m_m(Ui& _ui) :
 
 }
 
-int UiRobotIrp6m_m::reload_configuration()
+int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_irp6_mechatronika_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_irp6m_active")) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
-		if (ui.is_mp_and_ecps_active) {
+		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -61,10 +65,10 @@ int UiRobotIrp6m_m::reload_configuration()
 					char tmp_string[50];
 					sprintf(tmp_string, "preset_position_%d", i);
 
-					if (ui.config->exists(tmp_string, state.edp.section_name)) {
+					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
 						tmp1 = tmp
-								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < 8; j++) {
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
@@ -77,21 +81,21 @@ int UiRobotIrp6m_m::reload_configuration()
 					}
 				}
 
-				if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (ROBOT_TEST_MODE, state.edp.section_name);
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point
-						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name.c_str());
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name.c_str());
 
 				state.edp.network_reader_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
 
-				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name.c_str());
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
 
 				break;
 			case 1:
@@ -122,7 +126,7 @@ int UiRobotIrp6m_m::reload_configuration()
 	return 1;
 }
 
-int UiRobotIrp6m_m::manage_interface()
+int UiRobot::manage_interface()
 {
 
 	switch (state.edp.state)
@@ -146,19 +150,19 @@ int UiRobotIrp6m_m::manage_interface()
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_pre_synchro_moves, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui.mp.state)
+				switch (interface.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_mechatronika_edp_unload, ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_mechatronika_edp_load, ABN_mm_irp6_mechatronika_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_irp6_mechatronika_absolute_moves, ABN_mm_irp6_mechatronika_preset_positions, ABN_mm_irp6_mechatronika_tool_specification, ABN_mm_irp6_mechatronika_kinematic, ABN_mm_irp6_mechatronika_servo_algorithm, NULL);
 						break;
@@ -182,25 +186,25 @@ int UiRobotIrp6m_m::manage_interface()
 }
 
 // aktualizacja ustawien przyciskow
-int UiRobotIrp6m_m::process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+int UiRobot::process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-		ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			ui.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
-			ui.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
+			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_start);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_stop);
+			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_reader_trigger);
 		}
 	}
 
@@ -210,7 +214,7 @@ int UiRobotIrp6m_m::process_control_window_irp6m_section_init(bool &wlacz_PtButt
 
 }
 
-int UiRobotIrp6m_m::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -230,9 +234,13 @@ int UiRobotIrp6m_m::close_all_windows()
 	return 1;
 
 }
-int UiRobotIrp6m_m::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;
 }
+
+}
+} //namespace ui
+} //namespace mrrocpp
 

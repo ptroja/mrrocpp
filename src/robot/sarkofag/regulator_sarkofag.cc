@@ -19,7 +19,7 @@
 // Klasa servo_buffer.
 #include "robot/sarkofag/regulator_sarkofag.h"
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "robot/sarkofag/edp_e_sarkofag.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -70,7 +70,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 	// i zestawu jego parametrow
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
@@ -79,7 +79,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * SARKOFAG_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new=position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	//	printf("(%d) step_new_pulse: %f, position_increment_new: %f\n", ++iteracja, step_new_pulse,
@@ -101,7 +101,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -153,7 +153,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -180,7 +180,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -189,7 +189,7 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}; // end: switch (algorithm_no)
 	}

@@ -5,26 +5,26 @@
 #if !defined(_ECP_SUB_TASK_GO_H)
 #define _ECP_SUB_TASK_GO_H
 
-#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-class ecp_sub_task_gripper_opening : public ecp_sub_task
+class gripper_opening : public sub_task
 {
 
 private:
-    lib::trajectory_description tdes;
+	lib::trajectory_description tdes;
 
-    void init();
+	void init();
 
 public:
-    ecp_sub_task_gripper_opening(task &_ecp_t);
-    void configure(double gripper_increment, int motion_time);
-    void execute();
-    void conditional_execution();
+	gripper_opening(task::task &_ecp_t);
+	void configure(double gripper_increment, int motion_time);
+	void execute();
+	void conditional_execution();
 };
 
 } // namespace task

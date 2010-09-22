@@ -49,7 +49,7 @@ void ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void)
 {
 	while (1) {
 		get_next_state();
-		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_CONVEYOR_VS_TEST) {
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST) {
 			uniform_acceleration_gen->Move();
 		} else {
 			log("ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());

@@ -144,8 +144,8 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL )
 #endif
 	{
-		if ((tmp++) < CONNECT_RETRY) {
-			usleep(1000 * CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			usleep(1000 * lib::CONNECT_DELAY);
 			printf(".");
 			fflush(stdout);
 		} else {
@@ -190,7 +190,7 @@ void ecp_robot::send()
 	}
 
 	// TODO: this is called much too often (?!)
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 }
 
 void ecp_robot::create_command()

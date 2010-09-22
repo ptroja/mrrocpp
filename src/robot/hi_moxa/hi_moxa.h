@@ -1,9 +1,10 @@
-// -------------------------------------------------------------------------
-//                            hi_rydz.h
-// Definicje struktur danych i metod dla interfejsu sprzetowego
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
+/* TODO:
+ *
+ * inicjalizacja struktur servo_data w konstruktorze hi_moxa
+ * przekazanie do konstruktora hi_moxa danych o ilosci i numerach portow
+*/
+
+
 
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
@@ -44,45 +45,38 @@ const long COMMCYCLE_TIME_NS = 2000000;
 // ------------------------------------------------------------------------
 
 
-class HI_moxa : public common::HardwareInterface
-{
+class HI_moxa: public common::HardwareInterface {
 
 public:
 
-	HI_moxa(common::motor_driven_effector &_master); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int first_drive_n, int last_drive_n); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
-	virtual void insert_set_value(int drive_number, double set_value);
-	virtual int get_current(int drive_number);
-	virtual double get_increment(int drive_number);
-	virtual long int get_position(int drive_number);
+	virtual void insert_set_value(int drive_offset, double set_value);
+	virtual int get_current(int drive_offset);
+	virtual double get_increment(int drive_offset);
+	virtual long int get_position(int drive_offset);
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
-	virtual void start_synchro(int drive_number);
-	virtual void finish_synchro(int drive_number);
+	virtual void start_synchro(int drive_offset);
+	virtual void finish_synchro(int drive_offset);
 
-	virtual bool is_impulse_zero(int drive_number);
-	virtual void reset_position(int i);
+	virtual bool is_impulse_zero(int drive_offset);
+	virtual void reset_position(int drive_offset);
 
 protected:
 private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int fd[8];
+	int fd[8], fd_max;
+	int first_drive_number, last_drive_number;
+	struct servo_St servo_data[8];
 	struct termios oldtio[8];
 	struct timespec wake_time;
 
-	char buf[30];
-	uint8_t command_params[8];
-	struct status_St drive_status[8];
-	int32_t position_offset[8];
-	int32_t current_absolute_position[8];
-	int32_t previous_absolute_position[8];
-	double current_position_inc[8];
-	bool first_hardware_read[8];
-	bool trace_resolver_zero[8];
+	
 
 }; // koniec: class hardware_interface
 

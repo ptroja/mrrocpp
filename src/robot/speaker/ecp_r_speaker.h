@@ -9,7 +9,7 @@
 #define _ECP_R_SPEAKER_H
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/speaker/speaker_const.h"
+#include "robot/speaker/const_speaker.h"
 
 namespace mrrocpp {
 namespace ecp {

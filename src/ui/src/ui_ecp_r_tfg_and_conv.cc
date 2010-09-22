@@ -21,7 +21,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
@@ -33,24 +33,28 @@
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/shead/ecp_r_shead.h"
 
-// ---------------------------------------------------------------
-ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
-		lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	ui_common_robot(_config, _sr_ecp_msg, _robot_name) {
+namespace mrrocpp {
+namespace ui {
+namespace tfg_and_conv {
 
-	if (_robot_name == lib::irp6ot_tfg::ROBOT_IRP6OT_TFG) {
+// ---------------------------------------------------------------
+EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+	common::EcpRobot(_config, _sr_ecp_msg, _robot_name)
+{
+
+	if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
 		ecp = new ecp::irp6ot_tfg::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::irp6p_tfg::ROBOT_IRP6P_TFG) {
+	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
 		ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::sarkofag::ROBOT_SARKOFAG) {
+	} else if (_robot_name == lib::sarkofag::ROBOT_NAME) {
 		ecp = new ecp::sarkofag::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
@@ -64,19 +68,19 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 
 	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
 
-	} else if (_robot_name == lib::spkm::ROBOT_SPKM) {
+	} else if (_robot_name == lib::spkm::ROBOT_NAME) {
 		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::smb::ROBOT_SMB) {
+	} else if (_robot_name == lib::smb::ROBOT_NAME) {
 		ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::shead::ROBOT_SHEAD) {
+	} else if (_robot_name == lib::shead::ROBOT_NAME) {
 		ecp = new ecp::shead::robot(_config, _sr_ecp_msg);
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
@@ -87,8 +91,7 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 	assert(ecp);
 
 	// Konstruktor klasy
-	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no
-			= 0;
+	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no = 0;
 	ecp->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
 	ecp->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
@@ -100,7 +103,8 @@ ui_tfg_and_conv_robot::ui_tfg_and_conv_robot(lib::configurator &_config,
 }
 
 // ---------------------------------------------------------------
-void ui_tfg_and_conv_robot::move_motors(const double final_position[]) {
+void EcpRobot::move_motors(const double final_position[])
+{
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps; // Liczba krokow
 	double max_inc = 0.0, temp = 0.0; // Zmienne pomocnicze
@@ -150,8 +154,7 @@ void ui_tfg_and_conv_robot::move_motors(const double final_position[]) {
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
 	for (int j = 0; j < ecp->number_of_servos; j++)
-		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-				= final_position[j];
+		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
 	// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",ecp_command.instruction.motion_steps, ecp_command.instruction.value_in_step_no, ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
 
@@ -159,13 +162,13 @@ void ui_tfg_and_conv_robot::move_motors(const double final_position[]) {
 
 	if (ecp->is_synchronised())
 		for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
-			current_position[j]
-					= ecp->reply_package.arm.pf_def.arm_coordinates[j];
+			current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 }
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_tfg_and_conv_robot::move_joints(const double final_position[]) {
+void EcpRobot::move_joints(const double final_position[])
+{
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
 
 	double max_inc_lin = 0.0, temp = 0.0; // Zmienne pomocnicze
@@ -198,8 +201,7 @@ void ui_tfg_and_conv_robot::move_joints(const double final_position[]) {
 		return;
 
 	for (int j = 0; j < ecp->number_of_servos; j++)
-		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j]
-				= final_position[j];
+		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
 
 	execute_motion();
 
@@ -207,5 +209,9 @@ void ui_tfg_and_conv_robot::move_joints(const double final_position[]) {
 		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
 }
 // ---------------------------------------------------------------
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 

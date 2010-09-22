@@ -10,6 +10,9 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -62,7 +65,7 @@ void effector::create_threads()
 #ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 
-	vs = sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));
@@ -75,10 +78,10 @@ void effector::create_threads()
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::irp6p_m::ROBOT_IRP6P_M)
+	manip_effector(_config, lib::irp6p_m::ROBOT_NAME)
 {
 
-	number_of_servos = IRP6P_M_NUM_OF_SERVOS;
+	number_of_servos = lib::irp6p_m::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 

@@ -37,7 +37,6 @@ add_executable(ecp_t_axzb_force
 	ecp_st_acquisition.cc
 	ecp_t_axzb_force.cc
 	ecp_g_pcbird_nose_run.cc
-	../../generator/ecp/ecp_g_force.cc
 	../../sensor/pcbird/birdclient.cc
 	../../sensor/pcbird/ecp_mp_s_pcbird.cc
 )

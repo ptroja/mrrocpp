@@ -1,7 +1,7 @@
 #ifndef ECP_WII_VELOCITY_GENERATOR_H
 #define ECP_WII_VELOCITY_GENERATOR_H
 
-#include "generator/ecp/ecp_g_force.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -22,13 +22,13 @@ namespace generator {
 
 class wii_velocity : public common::generator::tff_nose_run
 {
-	public:
-    wii_velocity (common::task::task& _ecp_task);
-    virtual bool first_step();
-    virtual bool next_step();
+public:
+	wii_velocity(common::task::task& _ecp_task);
+	virtual bool first_step();
+	virtual bool next_step();
 };
 
-/** @} */ // end of wii_velocity
+/** @} */// end of wii_velocity
 
 }
 } // namespace irp6ot

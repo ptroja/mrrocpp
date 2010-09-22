@@ -1,8 +1,9 @@
-/*
- * logger.h
+/**
+ * \file logger.h
+ * \brief Logging utilities.
+ * \bug Not multi-thread safe
  *
- *  Created on: Apr 21, 2010
- *      Author: mboryn
+ * \author Mateusz Boryń <mateusz.boryn@gmail.com>
  */
 
 #ifndef LOGGER_H_

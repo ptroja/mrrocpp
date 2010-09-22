@@ -1,16 +1,15 @@
-// -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
-// Plik:			configurator.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera klase lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
+/**
+ * \file configurator.h
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ * \author Tomasz Winiarski <tomrobotics@gmail.com>
+ *
+ * \brief Declarations of configurator.
+ */
 
 #if !defined(__CONFIGURATOR_H)
 #define __CONFIGURATOR_H
 
-#include <pthread.h>
 #include <sys/utsname.h>
 
 #include <iostream>
@@ -27,9 +26,11 @@
 
 #if defined(USE_MESSIP_SRR)
 #include "messip.h"
+#else
+#include <boost/property_tree/ptree.hpp>
 #endif
-// Typy zmiennych odczytywanych z pliku INI.
-#include "base/lib/cfgopts.h"
+
+#include <sched.h>
 
 namespace mrrocpp {
 namespace lib {
@@ -41,93 +42,188 @@ namespace lib {
 class configurator
 {
 private:
+	//! Node name of the installation folder
 	const std::string node;
+
+	//! Installation directory
 	const std::string dir;
+
+	//! Configuration file
 	std::string ini_file;
+
+	//! Installation network path
 	std::string mrrocpp_network_path;
+
+	//! System info
 	struct utsname sysinfo;
 
-	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
-	mutable boost::mutex file_mutex;
-
-	const std::string session_name; // nazwa sesji skojarzona z pojedynczym uruchomieniem aplikacji mroka
+	//! Session name
+	const std::string session_name;
 
 #ifdef USE_MESSIP_SRR
+	//! Communication channel to the configuration server
 	messip_channel_t *ch;
 #else
+	//! Mutex to protect exclusive access
+	mutable boost::mutex access_mutex;
+
+	//! Configuration file location
 	std::string file_location;
+
+	//! Common configuration file location
 	std::string common_file_location;
 
-	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-	std::string return_ini_file_path() const;
+	/**
+	 * Get the path to the configuration file
+	 * @return path to the configuration file
+	 */
+	std::string get_config_file_path() const;
 
-	// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-	std::string return_common_ini_file_path() const;
+	/**
+	 * Get the path to the common configuration file
+	 * @return path to the configuration file
+	 */
+	std::string get_common_config_file_path() const;
 
+	//! Property trees of configuration files
+	boost::property_tree::ptree common_file_pt, file_pt;
+
+	/**
+	 * Read property tree from configuration file
+	 * @param pt property tree
+	 * @param file configuration file
+	 */
+	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
 #endif /* USE_MESSIP_SRR */
 
-	// Zwraca wartosc (char*) dla klucza.
-	std::string return_string_value(const char* _key, const char* __section_name = NULL) const;
-
 public:
+	/**
+	 * Get network path to the installed MRROC++ system
+	 * @return folder path
+	 */
 	std::string return_mrrocpp_network_path() const;
+
+	/**
+	 * Get path to the default reader measures folder
+	 * @return folder path
+	 */
 	std::string return_default_reader_measures_path() const;
 
+	/**
+	 * Configuration section name
+	 */
 	const std::string section_name;
 
-	bool check_config(const std::string & s);
+	/**
+	 * Check if key non-zero key exist in the configuration file
+	 * @bug does not protect from changing configuration during check
+	 * @param key
+	 * @return
+	 */
+	bool check_config(const std::string & key) const;
 
-	// Konstruktor obiektu - konfiguratora.
-			configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
+	/**
+	 * Constructor
+	 * @param _node node of the install folder
+	 * @param _dir directory to the install folder
+	 * @param _ini_file configuration file name
+	 * @param _section_name configuration section name
+	 * @param _session_name session ID
+	 */
+	configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
 
-	// zmiana nazwy sesji z modyfikacja pliku konfiguracyjnego
-	void change_ini_file(const std::string & _ini_file);
+	/**
+	 * Change configuration file
+	 * @param _ini_file new configuration file
+	 */
+	void change_config_file(const std::string & _ini_file);
 
-	// Odpalenie procesu zapisanego w danej sekcji INI.
+	/**
+	 * Spawn new process
+	 * @param _section_name configuration section of the process to spawn
+	 * @return
+	 */
 	pid_t process_spawn(const std::string & _section_name);
 
-	// Zwraca numer wezla.
+	/**
+	 * Get QNX node number
+	 * @param node_name_l node name
+	 * @return node number
+	 */
 	static int return_node_number(const std::string & node_name_l);
 
-	// Zwraca attach point'a serwerow w zaleznosci od typu
-
+	//! Path types of the network resources
 	typedef enum _config_path_type
 	{
 		CONFIG_RESOURCEMAN_LOCAL, CONFIG_RESOURCEMAN_GLOBAL, CONFIG_SERVER
 	} config_path_type_t;
 
-	std::string
-	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	/**
+	 * Return network attach point
+	 * @param _type type of the network path
+	 * @param _key configuration key
+	 * @param __section_name section name
+	 * @return network path
+	 */
+	std::string	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Return network attach point
+	 * @param _type type of the network path
+	 * @param _key configuration key
+	 * @param __section_name section name
+	 * @return network path
+	 */
 	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & __section_name) const
 	{
 		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
 	}
-	;
 
+	/**
+	 * Get value from the configuration
+	 * @param Type typename of the requested value
+	 * @param _key configuration key
+	 * @param __section_name section name
+	 * @return configuration value
+	 */
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-		std::string str_value = return_string_value(_key.c_str(), __section_name.c_str());
-		boost::algorithm::trim(str_value);
+#if defined(USE_MESSIP_SRR)
+		// TODO: ask configuration server
+		return Type();
+#else
+		// initialize property tree path
+		std::string pt_path = __section_name;
+
+		// trim leading '[' char
+		pt_path.erase(0,1);
+		// trim trailing '[' char
+		pt_path.erase(pt_path.length()-1,1);
+
+		pt_path += ".";
+		pt_path += _key;
+
+		boost::mutex::scoped_lock l(access_mutex);
+
 		try {
-			return boost::lexical_cast <Type>(str_value);
-		} catch (const std::exception &ex) {
-			throw std::runtime_error("lib::configurator::value() section \"" + __section_name + "\", key: \"" + _key
-					+ "\", value: \"" + str_value + "\", " + ex.what());
+			return file_pt.get<Type>(pt_path);
+		} catch (boost::property_tree::ptree_error & e) {
+			return common_file_pt.get<Type>(pt_path);
 		}
+#endif
 	}
 
+	/**
+	 * Get value from the configuration with the default section name
+	 * @param Type typename of the requested value
+	 * @param _key configuration key
+	 * @return configuration value
+	 */
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		std::string str_value = return_string_value(_key.c_str());
-		boost::algorithm::trim(str_value);
-		try {
-			return boost::lexical_cast <Type>(str_value);
-		} catch (const std::exception &ex) {
-			throw std::runtime_error("lib::configurator::value() key: \"" + _key + "\", value: \"" + str_value + "\", "
-					+ ex.what());
-		}
+		return value<Type>(_key, section_name);
 	}
 
 	/**
@@ -140,14 +236,29 @@ public:
 	template <int ROWS, int COLS>
 	Eigen::Matrix <double, ROWS, COLS> value(const std::string & key, const std::string & section_name) const;
 
-	// Zwraca czy dany klucz istnieje
+	/**
+	 * Check is non-zero configuration value exist
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
 	bool exists(const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Check is non-zero configuration value exist
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
 	bool exists(const std::string & _key, const std::string & __section_name) const
 	{
 		return exists(_key.c_str(), __section_name.c_str());
 	}
 
+#if defined(USE_MESSIP_SRR)
+	//! Destructor
 	~configurator();
+#endif
 
 protected:
 	/**
@@ -155,8 +266,7 @@ protected:
 	 */
 	template <int COLS>
 	Eigen::Matrix <double, 1, COLS> get_vector_elements(std::string text_value) const;
-
-};// : configurator
+};
 
 template <int COLS>
 Eigen::Matrix <double, 1, COLS> configurator::get_vector_elements(std::string text_value) const
@@ -198,7 +308,7 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 	Eigen::Matrix <double, ROWS, COLS> matrix_value;
 
 	// get string value and remove leading and trailing spaces
-	std::string text_value = return_string_value(key.c_str(), section_name.c_str());
+	std::string text_value = value<std::string>(key, section_name);
 	boost::algorithm::trim(text_value);
 
 	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
@@ -231,6 +341,5 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 
 } // namespace lib
 } // namespace mrrocpp
-
 
 #endif

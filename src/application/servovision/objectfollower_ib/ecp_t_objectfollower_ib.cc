@@ -34,7 +34,7 @@ namespace common {
 namespace task {
 
 const double
-		ecp_t_objectfollower_ib::initial_position_joints[MAX_SERVOS_NR] = { 0.0, 0.0, -1.428, 0.0, 0.0, 4.720, 0.0, 0.075 };
+		ecp_t_objectfollower_ib::initial_position_joints[lib::MAX_SERVOS_NR] = { 0.0, 0.0, -1.428, 0.0, 0.0, 4.720, 0.0, 0.075 };
 
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)
@@ -81,7 +81,7 @@ void ecp_t_objectfollower_ib::main_task_algorithm(void)
 {
 	while (1) {
 		get_next_state();
-		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 			sm->Move();
 		} else {
 			log("ecp_t_objectfollower_ib::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());

@@ -4,7 +4,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_swarmitfix.h"
 
 #include "robot/smb/ecp_r_smb.h"
@@ -47,11 +47,11 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
@@ -69,12 +69,12 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		sg->load_file_with_path(path.c_str());
 		sg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SLEEP) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
 		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_EPOS_CUBIC) {
 		g_epos_cubic->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_EPOS_TRAPEZOIDAL) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_EPOS_TRAPEZOIDAL) {
 		g_epos_trapezoidal->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOCK) {
 		g_pin_lock->Move();

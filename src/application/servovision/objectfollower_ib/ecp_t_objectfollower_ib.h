@@ -51,7 +51,7 @@ protected:
 	/** Moves (using smooth generator) to initial position. */
 //	void moveToInitialPosition();
 
-	static const double initial_position_joints[MAX_SERVOS_NR];
+	static const double initial_position_joints[lib::MAX_SERVOS_NR];
 };
 
 /** @} */

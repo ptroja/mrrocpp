@@ -31,7 +31,7 @@ neuron_generator::~neuron_generator()
 
 bool neuron_generator::first_step()
 {
-	ecp_t.sr_ecp_msg->message("neuron generator first step");
+	sr_ecp_msg.message("neuron generator first step");
 	printf("neuron generator first step\n");
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
@@ -42,7 +42,6 @@ bool neuron_generator::first_step()
 	the_robot->ecp_command.instruction.motion_steps = 10;
 	the_robot->ecp_command.instruction.value_in_step_no = 10 - 2;
 	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	//the_robot->communicate_with_edp = false;
 
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
@@ -51,12 +50,11 @@ bool neuron_generator::first_step()
 	return true;
 }
 
-bool neuron_generator::next_step()
-{
-	//the_robot->communicate_with_edp = true;
+bool neuron_generator::next_step(){
+
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	flushall();
-	int i; //lop counter
+	int i; //loop counter
 
 	/*Check if entire trajectory was already sent, if so, finish the generator*/
 	if (neuron_sensor->transmissionFinished()) {
@@ -65,38 +63,23 @@ bool neuron_generator::next_step()
 		return false;
 	}
 
-	//double general_temp[6];
-	//double coordinate_backup[6];
 
-	//lib::Homog_matrix goal_frame;
-	//lib::Homog_matrix begining_frame;
+	if(neuron_sensor->current_period==5){ //this section is not performed during breaking
+		if(neuron_sensor->getCommand()==START_BREAKING) {
+			breaking=true;
 
-	/*when current_period==0 get_reading is called, so new data is available*/
-	//printf("current_period: %d\n", neuron_sensor->current_period);
-	//printf("nextStep: currentPeriod: %d\n",neuron_sensor->current_period);
-
-	if (neuron_sensor->current_period == 5) {
-		if (neuron_sensor->getCommand() == START_BREAKING) {
-			breaking = true;
 			printf("\n-------- breaking ----------\n");
 			flushall();
 		}
 
-		//printf("period 5: x:%lf y:%lf z:%lf\n",neuron_sensor->getCoordinates().x,neuron_sensor->getCoordinates().y,neuron_sensor->getCoordinates().z);
 		flushall();
 		// ------------ read the current robot position ----------
-		if (!breaking) {
-			actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-			actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-			angle_axis_vector.to_table(actual_position);
-		}
+		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
+		angle_axis_vector.to_table(actual_position);
+
 		// ------------ read the current robot position (end) ---------
 
-		//printf("actual_pos: \t");
-		for (i = 0; i < 6; i++) {
-			//printf("%f\t", actual_position[i]);
-		}
-		//printf("\n");
 		flushall();
 		desired_position[0] = neuron_sensor->getCoordinates().x;
 		desired_position[1] = neuron_sensor->getCoordinates().y;
@@ -105,74 +88,30 @@ bool neuron_generator::next_step()
 		desired_position[4] = position[4] = actual_position[4];
 		desired_position[5] = position[5] = actual_position[5];
 
-		/*actual_position_matrix.set_from_xyz_angle_axis(actual_position);
-		 desired_position_matrix.set_from_xyz_angle_axis(desired_position);
-
-		 ((!actual_position_matrix) * desired_position_matrix).get_xyz_angle_axis(angle_axis_vector);
-		 angle_axis_vector.to_table(desired_position);
-
-		 begining_frame.set_from_xyz_angle_axis(actual_position);
-		 goal_frame.set_from_xyz_angle_axis(actual_position);
-
-		 printf("x: %f\t y: %f\t z: %f\n %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
-		 flushall();*/
 		if (breaking) {
+			printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
 			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		}
 	}
-	/*
-	 printf("poza if\n");
-	 flushall();
-
-	 //interpolacja
-
-	 for (i = 0; i < 6; i++) {
-	 position[i] = 0;
-	 }
-
-	 for (i = 0; i < 6; i++) {
-	 coordinate_backup[i] = position[i];
-	 }
-
-	 lib::Homog_matrix begining_frame_with_current_translation = begining_frame;
-	 begining_frame_with_current_translation.set_translation_vector(goal_frame);
-
-	 lib::Xyz_Angle_Axis_vector step_of_total_increment_vector =
-	 lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-	 * goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinate_backup);
-
-	 goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
-
-	 lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
-	 goal_frame.get_xyz_angle_axis(tmp_angle_axis_vector);
-	 tmp_angle_axis_vector.to_table(general_temp);
-
-	 for(int g = 0; g < 6; g++) {
-	 printf("%f\t", general_temp[g]);
-	 }
-	 printf("\n");
-
-
-	 position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(general_temp));
-	 position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-	 */
 
 	int node = 6 - neuron_sensor->current_period;
 
-	if (breaking) {
-		neuron_sensor->current_period = 4;
+	if(breaking){//set the current period to 4 to avoid entering the above "if" condition
+		neuron_sensor->current_period=4;
 	}
 
-	//printf(" position: \t");
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i ++) { //for all of the axes...
 
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
-			position[i] = actual_position[i];
+			position[i] = actual_position[i]; //position remains the same
 			printf("%f\t", position[i]);
+			if (breaking) {
+				reached[i] = true;//current position is the desired position so the goal is reached
+			}
 			continue;
 		}
 
-		if (!breaking) {
+		if (!breaking) { //if breaking, the direction of the motion is not changed
 			if (desired_position[i] - actual_position[i] > 0) {
 				k[i] = 1;
 			} else {
@@ -180,58 +119,59 @@ bool neuron_generator::next_step()
 			}
 		}
 
-		s[i] = fabs(desired_position[i] - actual_position[i]);
+		s[i] = fabs(desired_position[i] - actual_position[i]);//distance between current and desired position (s[i] is not updated during breaking
 
 		if (breaking) {
-			printf("v: %f ", v[i]);
-			double a;
-			if (s[i] < (0.5 * v[i])) {
-				//printf("breaking with a_max\n");
-				a = a_max[i];
-			} else {
+			double a;//acceleration while breaking
 
-				a = (v[i] * v[i]) / (2 * s[i]);
-			}
-
-			if (v[i] <= 0) {
-				position[i] = actual_position[i];
-			} else {
-				position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node
-						* 0.02 * 0.02 * a / 2));
-			}
-
-			if ((breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
+			if (s[i] == 0 || v[i] == 0) {//if no motion in the axis or the velocity from which the robot breaks (v[i] is the velocity read in the moment when the breaking was started) is equal to 0
 				reached[i] = true;
 			}
 
-			breaking_node++;
-		} else {
+			if (s[i] < (0.5 * v[i] * v[i] / 2)) {//if the generator is not able to break before reaching the desired position, the breaking is made with the maximal acceleration
+				a = a_max[i];
+			} else {
+				a = (v[i] * v[i]) / (2 * s[i]);//acceleration with which the robot should break in a single axis to reach the desired position
+			}
 
-			position[i] = actual_position[i] + (k[i] * (s[i] / 5) * node);
-			v[i] = (s[i] / 5) / 0.02;
-			printf("v: %f ", v[i]);
+			if ((breaking_node * 0.02 * v[i]/2 - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
+				reached[i] = true;
+			}
+
+			if (!reached[i]) {//calculating the next position while breaking  (0.02 is the macrostep time)
+				position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
+			}
+
+		} else {
+			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node); //normal motion (not breaking), distance between desired and current position is divided by 5, desired position is reached in 5 macrosteps and added to actual position
+			v[i] = (s[i]/5)/0.02;//current velocity, last v[i] is the velocity just before breaking, it is not updated during breaking
 		}
 		printf("%f\t", position[i]);
 	}
+
+	if (breaking) {
+		breaking_node++;//increment the breaking node counter
+	}
+
 	printf("\n");
 	flushall();
 
+	// --------- send new position to the robot (EDP) --------------
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
-	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);//send new position to the robot
+	// --------- send new position to the robot (EDP) (end) --------------
 
-	if (neuron_sensor->current_period == 1)
-		neuron_sensor->sendCoordinates(position[0], position[1], position[2]);
+	if(neuron_sensor->current_period==1) {
+		neuron_sensor->sendCoordinates(position[0],position[1],position[2]);
+	}
 
 	for (i = 0; i < 6; i++) {
-		if (reached[i] == false) {
+		if (reached[i] == false) {//return true if the generator did not reach the desired position in all of the axes
 			return true;
 		}
 	}
 
-	printf("return false\n");
-	flushall();
-
-	return false;
+	return false;//return false, desired positions in all of the axes reached
 
 }
 

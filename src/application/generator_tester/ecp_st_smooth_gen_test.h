@@ -1,7 +1,7 @@
 #if !defined(_ECP_SUB_TASK_SMOOTH_GEN_TEST_H)
 #define _ECP_SUB_TASK_SMOOTH_GEN_TEST_H
 
-#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "application/generator_tester/ecp_mp_st_smooth_gen_test.h"
 
 namespace mrrocpp {
@@ -9,12 +9,12 @@ namespace ecp {
 namespace common {
 
 namespace generator {
-	class newsmooth;
+class newsmooth;
 }
 
-namespace task {
+namespace sub_task {
 
-class ecp_sub_task_smooth_gen_test : public ecp_sub_task
+class sub_task_smooth_gen_test : public sub_task
 {
 
 private:
@@ -23,9 +23,12 @@ private:
 	generator::newsmooth * sgeneuler;
 	generator::newsmooth * sgenangle;
 
+	bool track;
+	bool postument;
+
 public:
-	ecp_sub_task_smooth_gen_test(task & _ecp_t);
-	~ecp_sub_task_smooth_gen_test();
+	sub_task_smooth_gen_test(task::task & _ecp_t);
+	~sub_task_smooth_gen_test();
 
 	void conditional_execution();
 };

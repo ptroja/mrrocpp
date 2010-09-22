@@ -14,10 +14,10 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6m/ecp_r_irp6m.h"
 
 #include "application/teach-dll/ecp_t_teach.h"
 #include "application/teach-dll/ecp_g_teach.h"
@@ -40,7 +40,7 @@ teach::teach(lib::configurator &_config) : task(_config)
     {
         ecp_m_robot = new irp6ot_m::robot (*this);
     }
-    else if (config.section_name == ECP_IRP6P_M_SECTION)
+    else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
         ecp_m_robot = new irp6p_m::robot (*this);
     }
@@ -90,10 +90,10 @@ void teach::main_task_algorithm(void)
 
     switch (ecp_m_robot->robot_name)
     {
-    case lib::irp6ot_m::ROBOT_IRP6OT_M:
+    case lib::irp6ot_m::ROBOT_NAME:
         sr_ecp_msg->message("ecp teach irp6ot");
         break;
-    case lib::irp6p_m::ROBOT_IRP6P_M:
+    case lib::irp6p_m::ROBOT_NAME:
         sr_ecp_msg->message("ecp teach irp6p");
         break;
     default:

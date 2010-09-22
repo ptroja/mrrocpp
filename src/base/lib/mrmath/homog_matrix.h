@@ -12,8 +12,12 @@
 #include <ostream>
 #include <cstring>
 #include <cassert>
+#include <cmath>
 
 #include "base/lib/impconst.h"	// frame_tab
+#define delta_m (M_PI - 3.14154)
+#define zero_eps 1.0E-4
+#define ALFA_SENSITIVITY 0.00001
 
 namespace mrrocpp {
 namespace lib {
@@ -41,6 +45,9 @@ class Homog_matrix
 private:
 	//! Matrix placeholder
 	frame_tab matrix_m;
+
+	//! Eps for alpha representation
+	const static double ALPHA_SENSITIVITY;
 
 public:
 	/**
@@ -75,7 +82,7 @@ public:
 	 * @param[in] versor_x, versor_y, versor_z versors of X,Y,Z axes
 	 * @param[in] angles rotation around 3 axes
 	 */
-	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 
 	/**
 	 * Constructor for a small-rotation around 3 axes
@@ -125,7 +132,7 @@ public:
 	 *
 	 * @param[in] r??,t? rotation and translation matrix elements
 	 */
-	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
+			Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
 
 	/**
 	 * Get the matrix with removed translation
@@ -252,7 +259,6 @@ private:
 		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
 	}
 };
-
 
 } // namespace lib
 } // namespace mrrocpp

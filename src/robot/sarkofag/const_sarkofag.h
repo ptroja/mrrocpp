@@ -15,13 +15,41 @@ namespace mrrocpp {
 namespace lib {
 namespace sarkofag {
 
-const robot_name_t ROBOT_SARKOFAG = "ROBOT_SARKOFAG";
+/*!
+ * @brief Sarkofag robot label
+ * @ingroup sarkofag
+ */
+const robot_name_t ROBOT_NAME = "ROBOT_SARKOFAG";
 
-#define SARKOFAG_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define EDP_SARKOFAG_SECTION "[edp_sarkofag]"
-#define ECP_SARKOFAG_SECTION "[ecp_sarkofag]"
+/*!
+ * @brief configuration file EDP Sarkofag section string
+ * @ingroup sarkofag
+ */
+const std::string EDP_SECTION = "[edp_sarkofag]";
 
-#define SARKOFAG_NUM_OF_SERVOS	1
+/*!
+ * @brief configuration file ECP Sarkofag section string
+ * @ingroup sarkofag
+ */
+const std::string ECP_SECTION = "[ecp_sarkofag]";
+
+/*!
+ * @brief Sarkofag total number of servos
+ * @ingroup sarkofag
+ */
+const int NUM_OF_SERVOS = 1;
+
+/*!
+ * @brief IRp6 postument first Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int FIRST_MOXA_PORT_NUM = 0;
+
+/*!
+ * @brief IRp6 postument last Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int LAST_MOXA_PORT_NUM = 0;
 
 }
 } // namespace lib

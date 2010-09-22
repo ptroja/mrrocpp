@@ -23,7 +23,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
@@ -39,6 +39,22 @@
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "cube_face.h"
 
+#include "robot/conveyor/mp_r_conveyor.h"
+#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
+#include "robot/irp6p_m/mp_r_irp6p_m.h"
+#include "robot/irp6m/mp_r_irp6m.h"
+#include "robot/speaker/mp_r_speaker.h"
+#include "robot/polycrank/mp_r_polycrank.h"
+#include "robot/bird_hand/mp_r_bird_hand.h"
+#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
+#include "robot/shead/mp_r_shead.h"
+#include "robot/spkm/mp_r_spkm.h"
+#include "robot/smb/mp_r_smb.h"
+#include "robot/sarkofag/mp_r_sarkofag.h"
+#include "robot/festival/const_festival.h"
+#include "robot/player/const_player.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -46,6 +62,29 @@ namespace task {
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new fsautomat(_config);
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void fsautomat::create_robots()
+{
+	ACTIVATE_MP_ROBOT(conveyor);
+	ACTIVATE_MP_ROBOT(speaker);
+	ACTIVATE_MP_ROBOT(irp6m);
+	ACTIVATE_MP_ROBOT(polycrank);
+	ACTIVATE_MP_ROBOT(bird_hand);
+	ACTIVATE_MP_ROBOT(spkm);
+	ACTIVATE_MP_ROBOT(smb);
+	ACTIVATE_MP_ROBOT(shead);
+	ACTIVATE_MP_ROBOT(irp6ot_tfg);
+	ACTIVATE_MP_ROBOT(irp6ot_m);
+	ACTIVATE_MP_ROBOT(irp6p_tfg);
+	ACTIVATE_MP_ROBOT(irp6p_m);
+	ACTIVATE_MP_ROBOT(sarkofag);
+
+	ACTIVATE_MP_DEFAULT_ROBOT(electron);
+	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
+	ACTIVATE_MP_DEFAULT_ROBOT(festival);
+
 }
 
 fsautomat::fsautomat(lib::configurator &_config) :
@@ -317,12 +356,12 @@ wait_ms(state.getNumArgument());
 
 void fsautomat::runEmptyGen(common::State &state)
 {
-run_extended_empty_gen(state.getNumArgument(), 1, (state.getRobot()).c_str());
+run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
 }
 
 void fsautomat::runEmptyGenForSet(common::State &state)
 {
-run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+run_extended_empty_gen_and_wait(
 		state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet,
 		state.robotSet->secondSet);
 }
@@ -330,7 +369,7 @@ run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_mes
 void fsautomat::executeMotion(common::State &state)
 {
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
-if (trjConf && state.getGeneratorType() == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_SMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {

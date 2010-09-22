@@ -110,7 +110,7 @@ lib::Ft_vector ForceTrans::getForce(const lib::Ft_vector _inputForceTorque, cons
 		// sprowadzenie sil i momentow sil do ukladu umieszczonego w srodku czujnika ale z orientacja koncowki
 		lib::Ft_vector input_force_torque(ft_tr_sensor_in_wrist * inputForceTorque);
 		/*
-		 if ((debugi%10==0)&&(force_sensor_name==lib::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
+		 if ((debugi%10==0)&&(force_sensor_name==edp::sensor::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		 {
 		 printf("ft: ");
 		 input_force_torque.wypisz_wartosc_na_konsole();
@@ -162,7 +162,7 @@ lib::Ft_vector ForceTrans::getForce(const lib::Ft_vector _inputForceTorque, cons
 		//		lib::Ft_v_vector tmp_force_torque = lib::Ft_v_tr (current_orientation*sensor_frame_translation, FT_VARIANT) * output_force_torque;
 
 		/*
-		 if ((debugi%10==0)&&(force_sensor_name==lib::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
+		 if ((debugi%10==0)&&(force_sensor_name==edp::sensor::FORCE_SENSOR_ATI3084)&&(last_debugi!=debugi))
 		 {
 		 printf("ft2: ");
 		 output_force_torque.wypisz_wartosc_na_konsole();

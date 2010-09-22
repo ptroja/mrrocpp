@@ -21,12 +21,16 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/bird_hand/ui_ecp_r_bird_hand.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace bird_hand {
+
 // ---------------------------------------------------------------
-ui_bird_hand_robot::ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	the_robot(NULL)
 {
 
@@ -48,13 +52,13 @@ ui_bird_hand_robot::ui_bird_hand_robot(lib::configurator &_config, lib::sr_ecp &
 
 }
 
-ui_bird_hand_robot::~ui_bird_hand_robot()
+EcpRobot::~EcpRobot()
 {
 	delete the_robot;
 }
 
 // do odczytu stanu poczatkowego robota
-void ui_bird_hand_robot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
+void EcpRobot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 
@@ -68,7 +72,7 @@ void ui_bird_hand_robot::get_controller_state(lib::controller_state_t & robot_co
 	the_robot->synchronised = robot_controller_initial_state_l.is_synchronised;
 }
 
-void ui_bird_hand_robot::execute_motion(void)
+void EcpRobot::execute_motion(void)
 {
 
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
@@ -83,4 +87,6 @@ void ui_bird_hand_robot::execute_motion(void)
 }
 // ---------------------------------------------------------------
 
-
+}
+} //namespace ui
+} //namespace mrrocpp

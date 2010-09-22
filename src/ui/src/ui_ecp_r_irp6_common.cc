@@ -24,23 +24,27 @@
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_ecp_r_irp6_common.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6_mechatronika/ecp_r_irp6m.h"
+#include "robot/irp6m/ecp_r_irp6m.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/spkm/ecp_r_spkm.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace irp6 {
+
 // ---------------------------------------------------------------
-ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	ui_common_robot(_config, _sr_ecp_msg, _robot_name)
+EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+	common::EcpRobot(_config, _sr_ecp_msg, _robot_name)
 {
 
-	if (_robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (_robot_name == lib::irp6ot_m::ROBOT_NAME) {
 
 		ecp = new ecp::irp6ot_m::robot(_config, _sr_ecp_msg);
 
@@ -48,7 +52,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
 		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
 
-	} else if (_robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
+	} else if (_robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp = new ecp::irp6p_m::robot(_config, _sr_ecp_msg);
 
 		MOTOR_GRIPPER_STEP = DBL_MAX;
@@ -58,7 +62,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
 
 		ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
-	} else if (_robot_name == lib::polycrank::ROBOT_POLYCRANK) {
+	} else if (_robot_name == lib::polycrank::ROBOT_NAME) {
 
 		ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
 	}
@@ -85,7 +89,7 @@ ui_irp6_common_robot::ui_irp6_common_robot(lib::configurator &_config, lib::sr_e
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
+void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
@@ -103,7 +107,7 @@ void ui_irp6_common_robot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vec
 
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
+void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 	ecp->ecp_command.instruction.instruction_type = lib::SET;
 	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
@@ -121,7 +125,7 @@ void ui_irp6_common_robot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vecto
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector)
+void EcpRobot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -139,7 +143,7 @@ void ui_irp6_common_robot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector &
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
+void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction.instruction_type = lib::GET;
@@ -156,7 +160,7 @@ void ui_irp6_common_robot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &to
 
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_motors(const double final_position[])
+void EcpRobot::move_motors(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
 	int nr_of_steps, nr_ang, nr_grip; // Liczba krokow
@@ -171,7 +175,7 @@ void ui_irp6_common_robot::move_motors(const double final_position[])
 	if (ecp->is_synchronised()) { // Robot zsynchronizowany
 		// Odczyt aktualnego polozenia
 		//   	printf("is synchronised przed read motors\n");
-		read_motors(current_position);
+		read_motors( current_position);
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			temp = fabs(final_position[j] - current_position[j]);
@@ -234,7 +238,7 @@ void ui_irp6_common_robot::move_motors(const double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_joints(const double final_position[])
+void EcpRobot::move_joints(const double final_position[])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
 	int nr_of_steps; // Liczba krokow
@@ -244,11 +248,11 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 	max_inc_ang = max_inc_lin = 0.0;
 
 	// Odczyt aktualnego polozenia
-	read_joints(current_position);
+	read_joints( current_position);
 
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
-		if (ecp->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M && j == 0) // tor
+		if (ecp->robot_name == lib::irp6ot_m::ROBOT_NAME && j == 0) // tor
 			max_inc_lin = (max_inc_lin > temp) ? max_inc_lin : temp;
 		else if (j == ecp->number_of_servos - 1) // gripper
 			max_inc_grip = (max_inc_grip > temp) ? max_inc_grip : temp;
@@ -260,7 +264,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 	nr_lin = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
 	nr_grip = (int) ceil(max_inc_grip / JOINT_GRIPPER_STEP);
 	nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
-	if (ecp->robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+	if (ecp->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		nr_of_steps = (nr_ang > nr_lin) ? nr_ang : nr_lin;
 	}
 	nr_of_steps = (nr_of_steps > nr_grip) ? nr_of_steps : nr_grip;
@@ -292,7 +296,7 @@ void ui_irp6_common_robot::move_joints(const double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
+void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 {
 	// Zlecenie wykonania makrokroku ruchu zadanego we wspolrzednych
 	// zewnetrznych: xyz i katy Euler'a Z-Y-Z
@@ -303,7 +307,7 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
 
 	max_inc_ang = max_inc_lin = 0.0;
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz(current_position);
+	read_xyz_euler_zyz( current_position);
 
 	for (int j = 0; j < 3; j++) {
 		temp_lin = fabs(final_position[j] - current_position[j]);
@@ -350,7 +354,7 @@ void ui_irp6_common_robot::move_xyz_euler_zyz(const double final_position[7])
 // ---------------------------------------------------------------
 
 
-void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
+void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 {
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
 	// do formy XYZ_EULER_ZYZ
@@ -372,7 +376,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
 	A.get_xyz_euler_zyz(aa_eul); // zadane polecenie w formie XYZ_EULER_ZYZ
 
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz(current_position);
+	read_xyz_euler_zyz( current_position);
 
 	// Wyznaczenie liczby krokow
 
@@ -425,7 +429,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis(const double final_position[7])
 
 }
 
-void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_increment[7])
+void EcpRobot::move_xyz_angle_axis_relative(const double position_increment[7])
 {
 	int nr_of_steps; // Liczba krokow
 	int nr_ang, nr_lin, nr_grip;
@@ -472,7 +476,7 @@ void ui_irp6_common_robot::move_xyz_angle_axis_relative(const double position_in
 }
 
 // ---------------------------------------------------------------
-void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[])
+void EcpRobot::read_xyz_euler_zyz(double current_position[])
 {
 	// Zlecenie odczytu polozenia
 
@@ -494,7 +498,7 @@ void ui_irp6_common_robot::read_xyz_euler_zyz(double current_position[])
 // ---------------------------------------------------------------
 
 
-void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[])
+void EcpRobot::read_xyz_angle_axis(double current_position[])
 {
 	// Pobranie aktualnego polozenia ramienia robota
 
@@ -511,3 +515,7 @@ void ui_irp6_common_robot::read_xyz_angle_axis(double current_position[])
 	tmp_vector.to_table(current_position);
 
 }
+
+}
+} //namespace ui
+} //namespace mrrocpp

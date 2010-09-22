@@ -63,9 +63,9 @@ ui_model::ui_model() : tabs_visible(0),
 	builder = gtk_builder_new();
 
 	GError *error = NULL;
-	if (gtk_builder_add_from_file(builder, "ui.xml", &error) == 0) {
+	if (gtk_builder_add_from_file(builder, "interface.xml", &error) == 0) {
 		if (error) {
-			fprintf (stderr, "Unable to read file ui.xml: %s\n", error->message);
+			fprintf (stderr, "Unable to read file interface.xml: %s\n", error->message);
 			g_error_free(error);
 			exit(-1);
 		} else {
@@ -102,7 +102,7 @@ ui_model::ui_model() : tabs_visible(0),
 	this->config = new lib::configurator(
 			g_get_host_name(),
 			cwd,
-			"rcsc.ini", UI_SECTION, "");
+			"rcsc.ini", lib::UI_SECTION, "");
 }
 
 void ui_model::init_sr(void) {

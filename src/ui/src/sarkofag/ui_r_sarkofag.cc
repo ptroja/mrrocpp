@@ -12,29 +12,33 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace sarkofag {
+
 //
 //
-// KLASA UiRobotSarkofag
+// KLASA UiRobot
 //
 //
 
 
-UiRobotSarkofag::UiRobotSarkofag(Ui& _ui) :
-	UiRobot(_ui, EDP_SARKOFAG_SECTION, ECP_SARKOFAG_SECTION),
-	is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION), is_wind_sarkofag_moves_open(false),
+			is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobotSarkofag::reload_configuration()
+int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_sarkofag_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_sarkofag_active")) == 1) {
 		// ini_con->create_ecp_sarkofag (ini_con->ui->ecp_sarkofag_section);
 		//ui_state.is_any_edp_active = true;
-		if (ui.is_mp_and_ecps_active) {
+		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = -1;
@@ -54,19 +58,19 @@ int UiRobotSarkofag::reload_configuration()
 					char tmp_string[50];
 					sprintf(tmp_string, "preset_position_%d", i);
 
-					if (ui.config->exists(tmp_string, state.edp.section_name)) {
+					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
 						tmp1 = tmp
-								= strdup(ui.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
-						for (int j = 0; j < SARKOFAG_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::sarkofag::NUM_OF_SERVOS; j++) {
 
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 
 						}
 						free(toDel);
 					} else {
-						for (int j = 0; j < SARKOFAG_NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < lib::sarkofag::NUM_OF_SERVOS; j++) {
 
 							state.edp.preset_position[i][j] = 0.074;
 
@@ -74,21 +78,21 @@ int UiRobotSarkofag::reload_configuration()
 					}
 				}
 
-				if (ui.config->exists(ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (ROBOT_TEST_MODE, state.edp.section_name);
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point
-						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
 
 				state.edp.network_reader_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name);
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
 				break;
 			case 1:
 			case 2:
@@ -118,7 +122,7 @@ int UiRobotSarkofag::reload_configuration()
 	return 1;
 }
 
-int UiRobotSarkofag::manage_interface()
+int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
 	{
@@ -139,19 +143,19 @@ int UiRobotSarkofag::manage_interface()
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_synchronisation, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui.mp.state)
+				switch (interface.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, ABN_mm_sarkofag_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						break;
@@ -172,7 +176,7 @@ int UiRobotSarkofag::manage_interface()
 	return 1;
 }
 
-int UiRobotSarkofag::close_all_windows()
+int UiRobot::close_all_windows()
 {
 
 	int pt_res = PtEnter(0);
@@ -187,9 +191,13 @@ int UiRobotSarkofag::close_all_windows()
 
 }
 
-int UiRobotSarkofag::delete_ui_ecp_robot()
+int UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 	return 1;
 
 }
+}
+} //namespace ui
+} //namespace mrrocpp
+

@@ -3,13 +3,11 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
 const std::string ECP_GEN_SMOOTH = "ECP_GEN_SMOOTH";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
 

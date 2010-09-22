@@ -15,13 +15,29 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6ot_tfg {
 
-const robot_name_t ROBOT_IRP6OT_TFG = "ROBOT_IRP6OT_TFG";
+/*!
+ * @brief IRp6 on track two finger gripper robot label
+ * @ingroup irp6ot_tfg
+ */
+const robot_name_t ROBOT_NAME = "ROBOT_IRP6OT_TFG";
 
-#define AXIS_7_INC_PER_REVOLUTION  128.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define EDP_IRP6OT_TFG_SECTION "[edp_irp6ot_tfg]"
-#define ECP_IRP6OT_TFG_SECTION "[ecp_irp6ot_tfg]"
+/*!
+ * @brief configuration file EDP IRp6 on track two finger gripper section string
+ * @ingroup irp6ot_tfg
+ */
+const std::string EDP_SECTION = "[edp_irp6ot_tfg]";
 
-#define IRP6OT_TFG_NUM_OF_SERVOS	1
+/*!
+ * @brief configuration file ECP IRp6 on track two finger gripper section string
+ * @ingroup irp6ot_tfg
+ */
+const std::string ECP_SECTION = "[ecp_irp6ot_tfg]";
+
+/*!
+ * @brief IRp6 on track two finger gripper total number of servos
+ * @ingroup irp6ot_tfg
+ */
+const int NUM_OF_SERVOS = 1;
 
 }
 } // namespace lib

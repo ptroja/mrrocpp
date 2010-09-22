@@ -589,6 +589,22 @@ INPUT                  = src/base/kinematics \
                          src/base/ecp \
                          src/base/mp \
                          src/base/base.dox \
+                         src/generator/generators.dox \
+                         src/generator/ecp/ecp_g_teach_in.h \
+                         src/generator/ecp/ecp_g_teach_in.cc \
+                         src/generator/ecp/force/ecp_mp_g_bias_edp_force.h \
+                         src/generator/ecp/force/ecp_g_bias_edp_force.h \
+                         src/generator/ecp/force/ecp_g_bias_edp_force.cc \
+                         src/generator/ecp/force/ecp_mp_g_tff_nose_run.h \                   
+                         src/generator/ecp/force/ecp_g_tff_nose_run.h \
+                         src/generator/ecp/force/ecp_g_tff_nose_run.cc \
+                         src/subtask/subtasks.dox \
+                         src/subtask/ecp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_bias_edp_force.cc \
+                         src/subtask/ecp_mp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_tff_nose_run.h \
+                         src/subtask/ecp_st_tff_nose_run.cc \
+                         src/subtask/ecp_mp_st_tff_nose_run.h \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
@@ -600,7 +616,8 @@ INPUT                  = src/base/kinematics \
                          src/robot/conveyor/const_conveyor.h \ 
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.h \
                          src/robot/irp6_tfg/kinematic_model_irp6_tfg.cc \
-                         src/robot/irp6_tfg/dp_tfg.h \ 
+                         src/robot/irp6_tfg/dp_tfg.h \
+                         src/robot/irp6_tfg/robot.dox \ 
                          src/robot/bird_hand/kinematic_parameters_bird_hand.h \
                          src/robot/bird_hand/kinematic_parameters_bird_hand.cc \
                          src/robot/bird_hand/kinematic_model_bird_hand.h \

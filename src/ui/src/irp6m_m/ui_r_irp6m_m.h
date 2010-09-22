@@ -10,7 +10,20 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
-#include "robot/irp6_mechatronika/const_irp6m.h"
+#include "robot/irp6m/const_irp6m.h"
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+
+namespace irp6 {
+class EcpRobot;
+}
+
+
+namespace irp6m {
 
 //
 //
@@ -19,12 +32,7 @@
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_irp6_common_robot;
-
-class UiRobotIrp6m_m : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
@@ -42,9 +50,9 @@ public:
 	bool is_wind_irp6m_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6m_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	ui_irp6_common_robot *ui_ecp_robot;
+	irp6::EcpRobot *ui_ecp_robot;
 
-	UiRobotIrp6m_m(Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 	int
@@ -53,6 +61,10 @@ public:
 	int delete_ui_ecp_robot();
 
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

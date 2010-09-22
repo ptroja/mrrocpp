@@ -36,6 +36,8 @@ y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step
 
 bool y_edge_follow_force::first_step()
 {
+
+	double delta[6];
 	for (int i = 0; i < 6; i++)
 		delta[i] = 0.0;
 
@@ -43,7 +45,7 @@ bool y_edge_follow_force::first_step()
 	//	int a = boost::any_cast <int>(ecp_t.cc_m["swarm 1"]);
 
 	ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "] = (std::string) "sdsadsa";
-	std::cout << "dupa" << boost::any_cast <int>(ecp_t.cc_m["swarm 1"])
+	std::cout << "pupa" << boost::any_cast <int>(ecp_t.cc_m["swarm 1"])
 			<< boost::any_cast <std::string>(ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "]) << std::endl;
 	create_pose_list_head(emptyps, 0.0, delta, 2);
 
@@ -67,8 +69,8 @@ bool y_edge_follow_force::first_step()
 	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = TORQUE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	for (int i = 0; i < 6; i++) {
@@ -78,7 +80,7 @@ bool y_edge_follow_force::first_step()
 		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = lib::FORCE_RECIPROCAL_DAMPING;
 	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
 	// Sila dosciku do rawedzi
 	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 4;
@@ -123,7 +125,7 @@ bool y_edge_follow_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	for (int i = 0; i < MAX_SERVOS_NR; i++) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0.0;
 	}
 
@@ -136,6 +138,9 @@ bool y_edge_follow_force::next_step()
 	double v = hypot(wx, wy);
 
 	if (v != 0.0) {
+
+		lib::Homog_matrix basic_rot_frame;
+		lib::Homog_matrix ex_rot_frame;
 		double s_alfa = wy / v;
 		double c_alfa = wx / v;
 
@@ -175,7 +180,7 @@ bool y_edge_follow_force::next_step()
 		 */
 
 		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx), lround(wy), lround(v), atan2(s_alfa, c_alfa)
-				* DEGREES_TO_RADIANS);
+				* (180.0 / M_PI));
 	}
 
 	return true;

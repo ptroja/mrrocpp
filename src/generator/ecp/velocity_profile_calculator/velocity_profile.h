@@ -181,13 +181,20 @@ class velocity_profile {
 			double start_position[6];
 			double coordinates[6];
 
-			memcpy( start_position, &it->start_position[0], sizeof(int) * it->start_position.size() );
-			memcpy( coordinates, &it->coordinates[0], sizeof(int) * it->coordinates.size() );
+			if (it->start_position.size() != 6) {
+				return false;
+			}
+
+			memcpy( start_position, &it->start_position[0], sizeof(double) * it->start_position.size() ); //it->start_position.size() should always be equal to 6
+			memcpy( coordinates, &it->coordinates[0], sizeof(double) * it->coordinates.size() );
 
 			start_position_matrix.set_from_xyz_angle_axis(start_position);
 			desired_position_matrix.set_from_xyz_angle_axis(coordinates);
 			((!start_position_matrix) * desired_position_matrix).get_xyz_angle_axis(relative_angle_axis_vector);
 			relative_angle_axis_vector.to_vector(it->coordinates);
+
+			printf("relative vector: \n");
+			printf("%f\t%f\t%f\t%f\t%f\t%f\n", it->coordinates[0], it->coordinates[1], it->coordinates[2], it->coordinates[3], it->coordinates[4], it->coordinates[5]);
 
 			return true;
 		}

@@ -13,20 +13,29 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+/*!
+ * @brief Task that executes motion of manipulator and its gripper to follow an unknown contour
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup edge_follow
+ */
 class edge_follow_mr : public task
 {
 protected:
 
 public:
 
+	/**
+	 * @brief Constructor
+	 * @param _config configurator object reference.
+	 */
 	edge_follow_mr(lib::configurator &_config);
 
-	// methods for mp template
+	void create_robots(void);
+
 	void main_task_algorithm(void);
 
 };
-
-/** @} */// end of edge_follow
 
 } // namespace task
 } // namespace mp

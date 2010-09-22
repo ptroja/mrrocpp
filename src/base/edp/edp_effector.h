@@ -21,7 +21,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_edp.h"
 #include "base/edp/edp_typedefs.h"
 
 

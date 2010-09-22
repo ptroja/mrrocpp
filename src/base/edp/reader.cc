@@ -44,7 +44,7 @@ namespace common {
 reader_config::reader_config() :
 	step(false), measure_time(false), servo_mode(false)
 {
-	for (int i = 0; i < MAX_SERVOS_NR; ++i) {
+	for (int i = 0; i < lib::MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
 		current_inc[i] = false;
 		pwm[i] = false;
@@ -67,7 +67,7 @@ reader_config::reader_config() :
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	new_data(false), master(_master), write_csv(true)
 {
-	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer()
@@ -96,7 +96,7 @@ void reader_buffer::operator()()
 	std::string reader_meassures_dir;
 
 	if (master.config.exists("reader_meassures_dir")) {
-		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", UI_SECTION);
+		reader_meassures_dir = master.config.value <std::string> ("reader_meassures_dir", lib::UI_SECTION);
 	} else {
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
@@ -159,7 +159,7 @@ void reader_buffer::operator()()
 	}
 
 	// ustawienie priorytetu watku
-	lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
@@ -190,10 +190,10 @@ void reader_buffer::operator()()
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -253,7 +253,7 @@ void reader_buffer::operator()()
 
 		master.msg->message("measures started");
 
-		lib::set_thread_priority(pthread_self(), MAX_PRIORITY + 1);
+		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 1);
 
 		// dopoki nie przyjdzie puls stopu
 		do {

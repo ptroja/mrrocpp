@@ -471,10 +471,11 @@ bool bang_bang_profile::set_model(vector<ecp_mp::common::trajectory_pose::bang_b
 			  && eq(it->v_k[i], it->v_r[i])) { //tutaj bylo tez ze vk > vr (w or razem z drugim warunkiem)
 		it->model[i] = 3;
 	} else if (eq(it->v_p[i], it->v_r[i])
-			   && it->v_k[i] < it->v_r[i]) {
+			   && (it->v_k[i] < it->v_r[i] || it->v_k[i] > it->v_r[i])) {
 		it-> model[i] = 4;
 	} else {
-		printf("###################### undetermined model #######################");
+		printf("###################### undetermined model #######################\n");
+		flushall();
 		it->model[i] = -1;
 		return false;
 	}

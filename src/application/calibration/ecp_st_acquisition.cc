@@ -1,14 +1,16 @@
 #include <string>
 #include <iostream>
 #include "ecp_st_acquisition.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
 // KONSTRUKTORY
-acquisition::acquisition(task &_ecp_t) : ecp_sub_task(_ecp_t)
+acquisition::acquisition(task::task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 }
 

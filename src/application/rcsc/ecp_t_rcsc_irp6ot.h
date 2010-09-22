@@ -5,6 +5,10 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/force/ecp_g_weight_measure.h"
+#include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
+#include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "subtask/ecp_st_go.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
@@ -24,10 +28,10 @@ namespace ecp {
 namespace irp6ot_m {
 namespace task {
 
-class rcsc: public common::task::task
+class rcsc : public common::task::task
 {
 protected:
-    //generatory
+	//generatory
 	common::generator::transparent* gt;
 
 	common::generator::tff_rubik_grab* rgg;
@@ -36,21 +40,20 @@ protected:
 	common::generator::teach_in* tig;
 	common::generator::smooth* sg;
 
+	common::generator::weight_measure* wmg;
+	//podzadania
+	common::sub_task::gripper_opening* go_st;
 
-	common::generator::weight_meassure* wmg;
-    //podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
-
-	shared_ptr<simple_visual_servo_manager> sm;
-	shared_ptr<visual_servo> vs;
-	shared_ptr<visual_servo_regulator> reg;
-	shared_ptr<termination_condition> term_cond;
+	shared_ptr <simple_visual_servo_manager> sm;
+	shared_ptr <visual_servo> vs;
+	shared_ptr <visual_servo_regulator> reg;
+	shared_ptr <termination_condition> term_cond;
 public:
-    rcsc(lib::configurator &_config);
-    ~rcsc();
+	rcsc(lib::configurator &_config);
+	~rcsc();
 
-    // methods for ECP template to redefine in concrete classes
-    void mp_2_ecp_next_state_string_handler(void);
+	// methods for ECP template to redefine in concrete classes
+	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

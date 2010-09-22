@@ -10,7 +10,11 @@
 
 #include "ui/src/ui.h"
 
-class Ui;
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
+class Interface;
 
 //
 //
@@ -26,7 +30,7 @@ class UiRobot
 {
 protected:
 
-	Ui& ui;
+	Interface& interface;
 
 public:
 
@@ -35,7 +39,7 @@ public:
 
 	ecp_edp_ui_robot_def state;
 
-	UiRobot(Ui& _ui, const std::string edp_section_name, const std::string ecp_section_name);
+	UiRobot(Interface& _interface, const std::string edp_section_name, const std::string ecp_section_name);
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
@@ -48,5 +52,8 @@ public:
 
 };
 
+}
+}
+}
 #endif
 

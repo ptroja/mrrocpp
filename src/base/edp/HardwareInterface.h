@@ -53,9 +53,9 @@ struct motor_data
 	uint16_t register_adress; // adres rejestru dla trybu INT_SINGLE_COMMAND
 	uint16_t value; // wartosc do wstawienia dla trybu INT_SINGLE_COMMAND
 
-	long int current_absolute_position[MAX_SERVOS_NR];
-	control_a_dof robot_control[MAX_SERVOS_NR];
-	status_of_a_dof robot_status[MAX_SERVOS_NR];
+	long int current_absolute_position[lib::MAX_SERVOS_NR];
+	control_a_dof robot_control[lib::MAX_SERVOS_NR];
+	status_of_a_dof robot_status[lib::MAX_SERVOS_NR];
 
 	uint64_t hardware_error;
 };

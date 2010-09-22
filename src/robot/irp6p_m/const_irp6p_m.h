@@ -15,13 +15,41 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6p_m {
 
-#define IRP6_POSTUMENT_AXIS_0_TO_5_INC_PER_REVOLUTION  4000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-#define IRP6_POSTUMENT_AXIS_6_INC_PER_REVOLUTION  2000.0  // Liczba impulsow enkodera na obrot walu - musi byc float
-const robot_name_t ROBOT_IRP6P_M = "ROBOT_IRP6P_M";
-#define EDP_IRP6P_M_SECTION "[edp_irp6p_m]"
-#define ECP_IRP6P_M_SECTION "[ecp_irp6p_m]"
+/*!
+ * @brief IRp6 postument manipulator robot label
+ * @ingroup irp6p_m
+ */
+const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_M";
 
-#define IRP6P_M_NUM_OF_SERVOS	6
+/*!
+ * @brief configuration file EDP IRp6 postument manipulator section string
+ * @ingroup irp6p_m
+ */
+const std::string EDP_SECTION = "[edp_irp6p_m]";
+
+/*!
+ * @brief configuration file ECP IRp6 postument manipulator section string
+ * @ingroup irp6p_m
+ */
+const std::string ECP_SECTION = "[ecp_irp6p_m]";
+
+/*!
+ * @brief IRp6 postument manipulator total number of servos
+ * @ingroup irp6p_m
+ */
+const int NUM_OF_SERVOS = 6;
+
+/*!
+ * @brief IRp6 postument first Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int FIRST_MOXA_PORT_NUM = 0;
+
+/*!
+ * @brief IRp6 postument last Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int LAST_MOXA_PORT_NUM = 5;
 
 } // namespace irp6p_m
 } // namespace lib

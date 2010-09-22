@@ -16,11 +16,11 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
-#define MAXBUFLEN 100
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
+
+static const int MAXBUFLEN = 100;
 
 vis_server::vis_server(motor_driven_effector &_master) :
 	master(_master), thread_id(NULL)
@@ -82,11 +82,11 @@ void vis_server::operator()(void)
 		// korekta aby polozenia byly wzgledem poprzedniego czlonu
 
 
-		if (master.robot_name == lib::irp6ot_m::ROBOT_IRP6OT_M) {
+		if (master.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 
 			tmp[3] -= tmp[2] + M_PI_2;
 			tmp[4] -= tmp[3] + tmp[2] + M_PI_2;
-		} else if (master.robot_name == lib::irp6p_m::ROBOT_IRP6P_M) {
+		} else if (master.robot_name == lib::irp6p_m::ROBOT_NAME) {
 
 			tmp[2] -= tmp[1] + M_PI_2;
 			tmp[3] -= tmp[2] + tmp[1] + M_PI_2;
@@ -95,7 +95,7 @@ void vis_server::operator()(void)
 		struct
 		{
 			int synchronised;
-			float joints[MAX_SERVOS_NR];
+			float joints[lib::MAX_SERVOS_NR];
 		} reply;
 
 		reply.synchronised = (master.is_synchronised()) ? 1 : 0;

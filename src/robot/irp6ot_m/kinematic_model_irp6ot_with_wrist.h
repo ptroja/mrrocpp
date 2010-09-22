@@ -152,7 +152,6 @@ public:
 	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
 	 */
 	virtual void inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
-
 };
 
 } // namespace irp6ot

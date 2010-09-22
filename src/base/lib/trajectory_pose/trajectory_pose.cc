@@ -1,6 +1,6 @@
 /**
- * \file trajectory_pose.cc
- * \brief rajectory_pose class and its methods
+ * @file trajectory_pose.cc
+ * @brief rajectory_pose class and its methods
  *
  * Contains bodies of the methods of trajectory_pose class.
  */

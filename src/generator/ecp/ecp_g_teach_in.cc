@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains teach_in generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
+ */
+
 #include <cstring>
 #include <cmath>
 #include <cerrno>
@@ -150,7 +158,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 		for (i = 0; i < number_of_poses; i++) {
 			get_pose(tip);
 			to_file << tip.motion_time << ' ';
-			for (j = 0; j < MAX_SERVOS_NR; j++)
+			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			if (ps == lib::ECP_PF_VELOCITY) { // by Y
 				to_file << tip.extra_info << ' ';
@@ -212,7 +220,7 @@ bool teach_in::load_file_with_path(const char* file_name)
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	uint64_t i, j; // Liczniki petli
 	bool first_time = true; // Znacznik
-	double coordinates[MAX_SERVOS_NR]; // Wczytane wspolrzedne
+	double coordinates[lib::MAX_SERVOS_NR]; // Wczytane wspolrzedne
 	int extra_info = 0; // by Y - dodatkowe info do dowolnego wykorzystania
 	double motion_time; // Czas dojscia do wspolrzednych
 
@@ -258,7 +266,7 @@ bool teach_in::load_file_with_path(const char* file_name)
 		if (!(from_file >> motion_time)) {
 			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		}
-		for (j = 0; j < MAX_SERVOS_NR; j++) {
+		for (j = 0; j < lib::MAX_SERVOS_NR; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 			}
@@ -315,17 +323,17 @@ void teach_in::get_pose(ecp_taught_in_pose& tip)
 }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
-void teach_in::get_next_pose(double next_pose[MAX_SERVOS_NR])
+void teach_in::get_next_pose(double next_pose[lib::MAX_SERVOS_NR])
 {
-	memcpy(next_pose, pose_list_iterator->coordinates, MAX_SERVOS_NR * sizeof(double));
+	memcpy(next_pose, pose_list_iterator->coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 // -------------------------------------------------------
-void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info)
+void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list_iterator->arm_type = ps;
 	pose_list_iterator->motion_time = motion_time;
 	pose_list_iterator->extra_info = extra_info;
-	memcpy(pose_list_iterator->coordinates, coordinates, MAX_SERVOS_NR * sizeof(double));
+	memcpy(pose_list_iterator->coordinates, coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 // -------------------------------------------------------
 bool teach_in::is_pose_list_element(void)
@@ -354,13 +362,13 @@ bool teach_in::is_last_list_element(void)
 }
 // -------------------------------------------------------
 
-void teach_in::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void teach_in::create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator = pose_list.begin();
 }
 
-void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info)
+void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info)
 {
 	pose_list.push_back(ecp_taught_in_pose(ps, motion_time, coordinates, extra_info));
 	pose_list_iterator++;
@@ -424,9 +432,9 @@ bool teach_in::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
 			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
 			break;
 		case lib::ECP_JOINT:
@@ -436,9 +444,9 @@ bool teach_in::next_step()
 			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / STEP);
+			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
 			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, MAX_SERVOS_NR
+			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
 			// printf("lumpu: %f\n", the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]);
 			break;

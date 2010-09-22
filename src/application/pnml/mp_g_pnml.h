@@ -8,7 +8,7 @@
 #ifndef MP_G_PNML_H_
 #define MP_G_PNML_H_
 
-#include "base/mp/mp_generator.h"
+#include "base/mp/generator/mp_generator.h"
 #include "PNExec/Net.hh"
 
 namespace mrrocpp {

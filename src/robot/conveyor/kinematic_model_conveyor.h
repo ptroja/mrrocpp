@@ -70,7 +70,7 @@ public:
 	virtual void
 		i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
-};//: kinematic_model_conveyor
+};
 
 } // namespace conveyor
 } // namespace kinematic
