@@ -2,8 +2,8 @@
 //                            ecp_st_go.h
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_SUB_task_EDGE_FOLLOW_H)
-#define _ECP_MP_SUB_task_EDGE_FOLLOW_H
+#if !defined(_ECP_MP_SUB_TASK_EDGE_FOLLOW_H)
+#define _ECP_MP_SUB_TASK_EDGE_FOLLOW_H
 
 /*!
  * @file
@@ -17,7 +17,10 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sub_task {
 
-const std::string ECP_ST_EDGE_FOLLOW = "ECP_ST_EDGE_FOLLOW";
+/*!
+ * @brief edge_follow ecp subtask label
+ */
+const std::string EDGE_FOLLOW = "EDGE_FOLLOW";
 
 } // namespace task
 } // namespace ecp_mp
