@@ -25,6 +25,7 @@
 #include "base/mp/mp_task.h"
 #include "base/mp/generator/mp_g_common.h"
 #include "base/mp/generator/mp_g_delay_ms_condition.h"
+#include "base/mp/generator/mp_g_set_next_ecps_state.h"
 #include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
