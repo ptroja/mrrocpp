@@ -11,7 +11,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace task {
+namespace sub_task {
 
 /*!
  * @brief tff nose run ecp subtask label

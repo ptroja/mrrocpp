@@ -142,9 +142,9 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
-											sub_task_tff_nose_run* ecpst;
-											ecpst = new sub_task_tff_nose_run(*this);
-											subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+											sub_task::sub_task_tff_nose_run* ecpst;
+											ecpst = new sub_task::sub_task_tff_nose_run(*this);
+											subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_rubik_grab_gen")) {
@@ -183,9 +183,9 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
 										{
-											sub_task* ecpst;
-											ecpst = new sub_task_bias_edp_force(*this);
-											subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+											sub_task::sub_task* ecpst;
+											ecpst = new sub_task::sub_task_bias_edp_force(*this);
+											subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
@@ -202,7 +202,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
-										go_st = new common::task::sub_task_gripper_opening(*this);
+										go_st = new common::sub_task::sub_task_gripper_opening(*this);
 										xmlFree(argument);
 									}
 								}
@@ -300,7 +300,7 @@ void fsautomat::main_task_algorithm(void)
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			gag->configure(gen_args[0], (unsigned int) gen_args[1]);
 			gag->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			go_st->configure(gen_args[0], (int) gen_args[1]);

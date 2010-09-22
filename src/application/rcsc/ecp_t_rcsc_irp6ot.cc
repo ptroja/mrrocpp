@@ -10,7 +10,6 @@
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
 
-
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 //#include "generator/ecp/ecp_g_smooth.h"
@@ -64,7 +63,8 @@ rcsc::rcsc(lib::configurator &_config) :
 
 		reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
 		vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
-		term_cond = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(0.005, 0.005, 50));
+		term_cond
+				= shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(0.005, 0.005, 50));
 		sm
 				= shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, fradia_config_section_name, vs));
 		//sm->add_position_constraint(cube);
@@ -72,19 +72,19 @@ rcsc::rcsc(lib::configurator &_config) :
 		sm->configure();
 	}
 
-	go_st = new common::task::sub_task_gripper_opening(*this);
+	go_st = new common::sub_task::sub_task_gripper_opening(*this);
 
 	// utworzenie podzadan
 	{
-		common::task::sub_task* ecpst;
-		ecpst = new common::task::sub_task_bias_edp_force(*this);
-		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+		common::sub_task::sub_task* ecpst;
+		ecpst = new common::sub_task::sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		common::task::sub_task_tff_nose_run* ecpst;
-		ecpst = new common::task::sub_task_tff_nose_run(*this);
-		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+		common::sub_task::sub_task_tff_nose_run* ecpst;
+		ecpst = new common::sub_task::sub_task_tff_nose_run(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 
 	sr_ecp_msg->message("ecp loaded");
@@ -168,7 +168,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 		rfrg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_GO_VAR_1:

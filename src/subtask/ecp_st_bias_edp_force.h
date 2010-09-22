@@ -9,7 +9,7 @@
  * @ingroup subtasks
  */
 
-#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 
 namespace mrrocpp {
@@ -19,7 +19,7 @@ namespace generator {
 class bias_edp_force;
 }
 
-namespace task {
+namespace sub_task {
 
 /*!
  * @brief subtask to execute bias_edp_force generator
@@ -42,7 +42,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	sub_task_bias_edp_force(task &_ecp_t);
+	sub_task_bias_edp_force(task::task &_ecp_t);
 
 	void conditional_execution();
 };

@@ -45,19 +45,19 @@ rcsc::rcsc(lib::configurator &_config) :
 
 	sg = new common::generator::smooth(*this, true);
 
-	go_st = new common::task::sub_task_gripper_opening(*this);
+	go_st = new common::sub_task::sub_task_gripper_opening(*this);
 
 	// utworzenie podzadan
 	{
-		common::task::sub_task* ecpst;
-		ecpst = new common::task::sub_task_bias_edp_force(*this);
-		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+		common::sub_task::sub_task* ecpst;
+		ecpst = new common::sub_task::sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		common::task::sub_task_tff_nose_run* ecpst;
-		ecpst = new common::task::sub_task_tff_nose_run(*this);
-		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+		common::sub_task::sub_task_tff_nose_run* ecpst;
+		ecpst = new common::sub_task::sub_task_tff_nose_run(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 	}
 
 	sr_ecp_msg->message("ecp loaded");
@@ -125,7 +125,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 		rfrg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_GO_VAR_1:

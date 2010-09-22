@@ -9,12 +9,14 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
+#include "base/ecp/ecp_task.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-sub_task_smooth_gen_test::sub_task_smooth_gen_test(task & _ecp_t) :
+sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 	sub_task(_ecp_t)
 {
 

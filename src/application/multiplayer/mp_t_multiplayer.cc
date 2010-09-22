@@ -123,7 +123,7 @@ void multiplayer::main_task_algorithm(void)
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	run_extended_empty_gen_and_wait(2, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	set_next_ecps_state(ecp_mp::task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 #endif
@@ -186,7 +186,7 @@ void multiplayer::main_task_algorithm(void)
 	run_extended_empty_gen_and_wait(1, 1, lib::festival::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 
 	//biasowanie czujnika sily
-	set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//oczekiwanie na ustalenie balansu bieli w kamerze
 	wait_ms(7000);

@@ -14,6 +14,7 @@
 #include <boost/foreach.hpp>
 
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
@@ -628,11 +629,6 @@ int task::receive_mp_message(bool block)
 #endif
 		return caller;
 	}
-}
-
-sub_task::sub_task(task &_ecp_t) :
-	ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
-{
 }
 
 } // namespace task

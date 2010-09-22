@@ -11,13 +11,14 @@
 #include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_jarosz.h"
 #include "subtask/ecp_st_go.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-sub_task_gripper_opening::sub_task_gripper_opening(task &_ecp_t) :
+sub_task_gripper_opening::sub_task_gripper_opening(task::task &_ecp_t) :
 	sub_task(_ecp_t)
 {
 	init();

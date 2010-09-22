@@ -623,7 +623,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	run_extended_empty_gen_base(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// wstepne rozwarcie chwytaka postumenta
-	//set_next_ecps_state ((int) ecp_mp::task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0,1, lib::irp6p_m::ROBOT_NAME.c_str());
+	//set_next_ecps_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0,1, lib::irp6p_m::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::RELATIVE, "src/application/rcsc/trj/gripper_opening.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	// uruchomienie generatora empty_gen
 	run_extended_empty_gen_base(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -696,11 +696,11 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 void rubik_cube_solver::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	}
 
 	if (configure_postument) {
-		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	}
 
 	if ((configure_track) && (!configure_postument)) {
@@ -727,7 +727,7 @@ void rubik_cube_solver::approach_op(int mode)
 
 	if ((config.exists("irp6p_compliant")) && ((bool) config.value <int> ("irp6p_compliant"))) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
-		set_next_ecps_state(ecp_mp::task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		// uruchomienie generatora empty_gen
 		run_extended_empty_gen_base(true, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -736,7 +736,7 @@ void rubik_cube_solver::approach_op(int mode)
 		send_end_motion_to_ecps(1, lib::irp6p_m::ROBOT_NAME.c_str());
 	} else {
 		// wlaczenie genrator tff_nose_run_generator w tracku
-		set_next_ecps_state(ecp_mp::task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 		// uruchomienie generatora empty_gen
 		run_extended_empty_gen_base(true, 1, lib::irp6ot_m::ROBOT_NAME.c_str());

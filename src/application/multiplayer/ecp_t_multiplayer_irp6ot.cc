@@ -33,16 +33,16 @@ multiplayer::multiplayer(lib::configurator &_config) :
 	wmg = new common::generator::weight_measure(*this, -0.3, 2);
 	gt = new common::generator::transparent(*this);
 
-	go_st = new common::task::sub_task_gripper_opening(*this);
+	go_st = new common::sub_task::sub_task_gripper_opening(*this);
 
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
 
 	// utworzenie podzadan
 	{
-		common::task::sub_task* ecpst;
+		common::sub_task::sub_task* ecpst;
 
-		ecpst = new common::task::sub_task_bias_edp_force(*this);
-		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+		ecpst = new common::sub_task::sub_task_bias_edp_force(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	sr_ecp_msg->message("ecp loaded");
@@ -57,7 +57,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_ST_GRIPPER_OPENING) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::MULTIPLAYER_GO_VAR_1:

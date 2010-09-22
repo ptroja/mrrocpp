@@ -14,7 +14,7 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "generator/ecp/ecp_g_smooth.h"
 #include "base/ecp/ecp_g_transparent.h"
 
@@ -30,7 +30,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
 class acq_eih : public acquisition
 {
@@ -72,7 +72,7 @@ protected:
 public:
 
 	void conditional_execution();
-	acq_eih(task &_ecp_t);
+	acq_eih(task::task &_ecp_t);
 	void
 			write_data(const std::string & _K_fp, const std::string & _k_fp, const std::string & _M_fp, const std::string & _m_fp, int _number_of_measures);
 };

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "base/ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
@@ -16,10 +17,10 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
 //Constructors
-acq_force::acq_force(task &_ecp_t) :
+acq_force::acq_force(task::task &_ecp_t) :
 	acquisition(_ecp_t)
 {
 	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {

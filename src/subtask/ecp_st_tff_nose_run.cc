@@ -14,9 +14,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-sub_task_tff_nose_run::sub_task_tff_nose_run(task &_ecp_t) :
+sub_task_tff_nose_run::sub_task_tff_nose_run(task::task &_ecp_t) :
 	sub_task(_ecp_t)
 {
 	nrg = new generator::tff_nose_run(_ecp_t, 8);

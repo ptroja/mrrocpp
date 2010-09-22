@@ -149,7 +149,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_GEN_TFF_NOSE_RUN")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_NOSE_RUN;
 	else if (genType == "ECP_ST_TFF_NOSE_RUN")
-		this->generatorType = ecp_mp::task::ECP_ST_TFF_NOSE_RUN;
+		this->generatorType = ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN;
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_SMOOTH")
@@ -161,11 +161,11 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
 	else if (genType == "ECP_ST_GRIPPER_OPENING")
-		this->generatorType = ecp_mp::task::ECP_ST_GRIPPER_OPENING;
+		this->generatorType = ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
-		this->generatorType = ecp_mp::task::ECP_ST_BIAS_EDP_FORCE;
+		this->generatorType = ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE;
 	else if (genType == "ECP_GEN_WEIGHT_MEASURE")
 		this->generatorType = ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")

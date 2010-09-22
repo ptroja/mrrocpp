@@ -12,9 +12,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-sub_task_edge_follow::sub_task_edge_follow(task &_ecp_t) :
+sub_task_edge_follow::sub_task_edge_follow(task::task &_ecp_t) :
 	sub_task(_ecp_t)
 {
 	yefg = new generator::y_edge_follow_force(_ecp_t, 8);

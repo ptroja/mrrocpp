@@ -4,14 +4,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "ecp_st_acq_eih.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
 //Constructors
-acq_eih::acq_eih(task &_ecp_t) :
+acq_eih::acq_eih(task::task &_ecp_t) :
 	acquisition(_ecp_t)
 {
 	printf("acq_eih::acq_eih() 1\n");
