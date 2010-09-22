@@ -99,8 +99,8 @@ void ball::main_task_algorithm(void)
 	generator::ball mp_h_gen(*this, 10);
 	mp_h_gen.robot_m = robot_m;
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -109,8 +109,8 @@ void ball::main_task_algorithm(void)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	mp_h_gen.configure(1, 0);
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");

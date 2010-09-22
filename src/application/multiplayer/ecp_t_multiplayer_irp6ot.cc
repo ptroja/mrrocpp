@@ -51,11 +51,11 @@ multiplayer::multiplayer(lib::configurator &_config) :
 void multiplayer::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 
 		wmg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 		switch ((ecp_mp::task::MULTIPLAYER_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
@@ -71,7 +71,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 			default:
 				break;
 		}
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 		sg->load_file_with_path(path.c_str());

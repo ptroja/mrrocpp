@@ -7,13 +7,11 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
 const std::string ECP_GEN_FORCE_TOOL_CHANGE = "ECP_GEN_FORCE_TOOL_CHANGE";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
 

@@ -7,13 +7,11 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
 const std::string ECP_GEN_TFF_RUBIK_GRAB = "ECP_GEN_TFF_RUBIK_GRAB";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
 

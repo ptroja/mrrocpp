@@ -11,7 +11,6 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
 /*!
@@ -20,7 +19,6 @@ namespace generator {
 const std::string ECP_GEN_TFF_NOSE_RUN = "ECP_GEN_TFF_NOSE_RUN";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
 

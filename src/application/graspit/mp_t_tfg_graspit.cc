@@ -154,7 +154,7 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
@@ -173,7 +173,7 @@ void graspit::main_task_algorithm(void)
 
 	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 

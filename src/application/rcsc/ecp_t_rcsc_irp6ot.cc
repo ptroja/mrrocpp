@@ -108,14 +108,14 @@ rcsc::~rcsc()
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 
 		wmg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
@@ -144,11 +144,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 		rgg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 		gag->configure(0.01, 1000);
 		gag->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RCSC_CCL_90:
@@ -183,7 +183,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TEACH_IN) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
@@ -194,7 +194,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 		tig->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
@@ -213,7 +213,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		sg->load_file_with_path(path.c_str());
 		sg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_IB_EIH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_IB_EIH) {
 		sm->Move();
 
 	}

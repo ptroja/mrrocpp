@@ -38,7 +38,7 @@ tfg::tfg(lib::configurator &_config) :
 void tfg::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFG) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFG) {
 
 		tfgg->Move();
 	}

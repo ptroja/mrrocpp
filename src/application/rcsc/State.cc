@@ -145,31 +145,31 @@ void State::setGeneratorType(const std::string & genType)
 	//std::cout<<strcmp(genType, (const char *)"ECP_GEN_TRANSPARENT")<<std::endl;
 	//strcpy(this->generatorType, genType);
 	if (genType == "ECP_GEN_TRANSPARENT")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TRANSPARENT;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TRANSPARENT;
 	else if (genType == "ECP_GEN_TFF_NOSE_RUN")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_NOSE_RUN;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN;
 	else if (genType == "ECP_ST_TFF_NOSE_RUN")
 		this->generatorType = ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN;
 	else if (genType == "ECP_GEN_TEACH_IN")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TEACH_IN;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_SMOOTH")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_SMOOTH;
+		this->generatorType = ecp_mp::generator::ECP_GEN_SMOOTH;
 	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB;
 	else if (genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
+		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
 	else if (genType == "ECP_ST_GRIPPER_OPENING")
 		this->generatorType = ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE;
+		this->generatorType = ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE;
 	else if (genType == "ECP_GEN_WEIGHT_MEASURE")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE;
+		this->generatorType = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
-		this->generatorType = ecp_mp::common::generator::ECP_GEN_FORCE_TOOL_CHANGE;
+		this->generatorType = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
 	else
 		this->generatorType = ecp_mp::speaker::generator::ECP_GEN_SPEAK;
 	// TODO: unknown generatorType handler should throw an exception

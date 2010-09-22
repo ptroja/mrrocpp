@@ -241,7 +241,7 @@ void fsautomat::main_task_algorithm(void)
 
 		subtasks_conditional_execution();
 
-		if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TEACH_IN) {
+		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
 			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 			tig->flush_pose_list();
@@ -252,7 +252,7 @@ void fsautomat::main_task_algorithm(void)
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
 
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SMOOTH) {
 
 			if (trjConf) {
 
@@ -274,15 +274,15 @@ void fsautomat::main_task_algorithm(void)
 				sg->load_file_with_path(path.c_str());
 			}//else
 			sg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_WEIGHT_MEASURE) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 			gt->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_NOSE_RUN) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN) {
 			nrg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_BIAS_EDP_FORCE) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE) {
 			befg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_GRAB) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
 			int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			if (size > 3)
@@ -290,12 +290,12 @@ void fsautomat::main_task_algorithm(void)
 			else
 				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2]);
 			rgg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			double gen_args[2];
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			gag->configure(gen_args[0], (unsigned int) gen_args[1]);

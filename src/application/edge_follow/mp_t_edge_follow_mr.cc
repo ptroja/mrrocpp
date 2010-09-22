@@ -101,7 +101,7 @@ void edge_follow_mr::main_task_algorithm(void)
 	memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 	/*
 
-	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
 	 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
