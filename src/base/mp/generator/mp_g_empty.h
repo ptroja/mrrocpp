@@ -11,32 +11,31 @@
 
 #include "base/mp/generator/mp_generator.h"
 
-// generator for setting the next ecps state
-
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// ####################################################################################################
-// Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
-// ####################################################################################################
-
+/*!
+ * @brief Generator waiting for ECP task termination message of any robot coordinated
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class empty : public generator
 {
-	// Klasa dla generatorow trajektorii
-	// Sluzy zarowno do wyznaczania nastepnej wartosci zadanej jak i
-	// sprawdzania spelnienia warunku koncowego
+
 public:
+
+	/**
+	 * @brief Constructor
+	 * @param _mp_task mp task object reference.
+	 */
 	empty(task::task& _mp_task);
 
-	virtual bool first_step();
-	// generuje pierwszy krok ruchu -
-	// pierwszy krok czesto rozni sie od pozostalych,
-	// np. do jego generacji nie wykorzystuje sie czujnikow
-	// (zadanie realizowane przez klase konkretna)
-	virtual bool next_step();
-	// generuje kazdy nastepny krok ruchu
-	// (zadanie realizowane przez klase konkretna)
+	bool first_step();
+
+	bool next_step();
+
 };
 
 } // namespace generator
