@@ -10,14 +10,16 @@
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) :
-	ecp_sub_task(_ecp_t) {
+sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
+	sub_task(_ecp_t)
+{
 
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
@@ -47,10 +49,11 @@ ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) 
 	cvgenangle->set_debug(true);
 }
 
-void ecp_sub_task_const_vel_gen_test::conditional_execution() {
+void sub_task_const_vel_gen_test::conditional_execution()
+{
 
-	std::vector<double> coordinates1(6);
-	std::vector<double> coordinates2(7);
+	std::vector <double> coordinates1(6);
+	std::vector <double> coordinates2(7);
 
 	// JOINT ABSOLUTE
 	sr_ecp_msg.message("Joint absolute");
@@ -573,7 +576,8 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 }
 
-ecp_sub_task_const_vel_gen_test::~ecp_sub_task_const_vel_gen_test() {
+sub_task_const_vel_gen_test::~sub_task_const_vel_gen_test()
+{
 	delete cvgenjoint;
 	delete cvgenmotor;
 	delete cvgeneuler;

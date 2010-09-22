@@ -9,13 +9,15 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
+#include "base/ecp/ecp_task.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
-	ecp_sub_task(_ecp_t)
+sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
+	sub_task(_ecp_t)
 {
 
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
@@ -46,7 +48,7 @@ ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
 	sgenangle->set_debug(true);
 }
 
-void ecp_sub_task_smooth_gen_test::conditional_execution()
+void sub_task_smooth_gen_test::conditional_execution()
 {
 
 	std::vector <double> coordinates1(6);
@@ -568,7 +570,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution()
 	// ANGLE AXIS RELATIVE END
 }
 
-ecp_sub_task_smooth_gen_test::~ecp_sub_task_smooth_gen_test()
+sub_task_smooth_gen_test::~sub_task_smooth_gen_test()
 {
 	delete sgenjoint;
 	delete sgenmotor;

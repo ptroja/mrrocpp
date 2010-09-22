@@ -39,7 +39,7 @@ public:
 
 	/**
 	 * @brief Constructor
-	 * @param sr_ecp_msg the reference to sr communication object in multi thread version
+	 * @param _sr_ecp_msg the reference to sr communication object in multi thread version
 	 */
 	generator(lib::sr_ecp& _sr_ecp_msg);
 
@@ -71,14 +71,12 @@ public:
 
 	/**
 	 * @brief generates first step of transition function
-	 * it is reimplemented in inherited classes
 	 * @return terminal condition value
 	 */
 	virtual bool first_step(void) = 0;
 
 	/**
 	 * @brief generates next steps (starting from the second) of transition function
-	 * it is reimplemented in inherited classes
 	 * @return terminal condition value
 	 */
 	virtual bool next_step(void) = 0;

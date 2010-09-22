@@ -369,7 +369,7 @@ run_extended_empty_gen_and_wait(
 void fsautomat::executeMotion(common::State &state)
 {
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
-if (trjConf && state.getGeneratorType() == ecp_mp::common::generator::ECP_GEN_SMOOTH) {
+if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_SMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {

@@ -6,7 +6,7 @@
  * @ingroup mp
  */
 
-#include "base/mp/mp_generator.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "base/mp/mp_robot.h"
 #include "base/mp/mp_task.h"
 
@@ -29,21 +29,23 @@ void generator::Move()
 
 	// czyszczenie aby nie czekac na pulsy z ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
-	{	if (robot_node.second->new_pulse) {
-			robot_node.second->new_pulse_checked = false;
-		}
-	}
+				{
+					if (robot_node.second->new_pulse) {
+						robot_node.second->new_pulse_checked = false;
+					}
+				}
 
 	// by Y - linia ponizej dodana 26.02.2007 - usunac komentarz jak bedzie dzialalo
 	// ze wzgledu na obluge pulsow z UI w szczegolnosci stopu i wstrzymania
 	mp_t.mp_receive_ui_or_ecp_pulse(mp_t.robot_m, *this);
 
 	// czyszczenie aby nie czekac na pulsy z ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m) {
-		if (robot_node.second->new_pulse) {
-			robot_node.second->new_pulse_checked = false;
-		}
-	}
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
+				{
+					if (robot_node.second->new_pulse) {
+						robot_node.second->new_pulse_checked = false;
+					}
+				}
 
 	node_counter = 0;
 	// (Inicjacja) generacja pierwszego kroku ruchu

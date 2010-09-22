@@ -82,7 +82,7 @@ public:
 
 	/**
 	 * @brief constructor
-	 * @param err0 error class
+	 * @param err_cl error class
 	 */
 	transmitter_error(lib::error_class_t err_cl);
 

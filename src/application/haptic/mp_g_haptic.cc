@@ -18,7 +18,7 @@
 #include "base/mp/mp_robot.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/mp/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "base/ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
@@ -16,31 +17,31 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
 //Constructors
-acq_force::acq_force(task &_ecp_t) :
+acq_force::acq_force(task::task &_ecp_t) :
 	acquisition(_ecp_t)
 {
-	if (ecp_sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
-		ecp_sub_task::sr_ecp_msg.message("IRp6ot loaded");
-	} else if (ecp_sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
-		ecp_sub_task::sr_ecp_msg.message("IRp6p loaded");
+	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
+		sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
+		sub_task::sr_ecp_msg.message("IRp6ot loaded");
+	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
+		sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
+		sub_task::sr_ecp_msg.message("IRp6p loaded");
 	}
 
-	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]
+	sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]
 			= new ecp_mp::sensor::pcbird("[vsp_pcbird]", *_ecp_t.sr_ecp_msg, _ecp_t.config);
-	ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
+	sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
 	bias_run = new common::generator::bias_edp_force(_ecp_t);
 
 	nose_run = new common::generator::pcbird_nose_run(_ecp_t, 8);
 	nose_run->configure_pulse_check(true);
-	nose_run->sensor_m = ecp_sub_task::ecp_t.sensor_m;
+	nose_run->sensor_m = sub_task::ecp_t.sensor_m;
 
-	ecp_sub_task::sr_ecp_msg.message("ecp loaded kcz_force");
+	sub_task::sr_ecp_msg.message("ecp loaded kcz_force");
 }
 ;
 
@@ -66,7 +67,7 @@ void acq_force::write_data(const std::string & _K_fp, const std::string & _kk_fp
 
 void acq_force::main_task_algorithm(void)
 {
-	ecp_sub_task::sr_ecp_msg.message("ecp kcz_force ready");
+	sub_task::sr_ecp_msg.message("ecp kcz_force ready");
 
 	int i, j, t;
 	FILE *FP;
@@ -87,9 +88,9 @@ void acq_force::main_task_algorithm(void)
 		//(rotation matrix & meters)
 		for (j = 0; j < 3; j++)
 			for (t = 0; t < 3; t++)
-				gsl_matrix_set(K, j, t, ecp_sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][t]);
+				gsl_matrix_set(K, j, t, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][t]);
 		for (j = 0; j < 3; j++)
-			gsl_vector_set(k, j, ecp_sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][3]);
+			gsl_vector_set(k, j, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][3]);
 		//pcbird (M,m)
 		//(degrees & meters)
 		//returns Euler angles:
@@ -106,7 +107,7 @@ void acq_force::main_task_algorithm(void)
 		//conversion from Euler angles ZYX to rotation matrix
 		//conversion to radians first
 		ecp_mp::sensor::pcbird * bird =
-				dynamic_cast <ecp_mp::sensor::pcbird *> (ecp_sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
+				dynamic_cast <ecp_mp::sensor::pcbird *> (sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
 		float Zang = bird->image.a * M_PI / 180;
 		float Yang = bird->image.b * M_PI / 180;
 		float Xang = bird->image.g * M_PI / 180;

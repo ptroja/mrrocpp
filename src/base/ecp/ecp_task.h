@@ -17,16 +17,18 @@ namespace common {
 namespace robot {
 class ecp_robot;
 }
-namespace task {
+namespace sub_task {
 
-class ecp_sub_task;
+class sub_task;
+}
+namespace task {
 
 /**
  * @brief Container type for storing ecp_subtask objects.
  *
  * @ingroup ecp
  */
-typedef std::map <std::string, ecp_sub_task *> subtasks_t;
+typedef std::map <std::string, sub_task::sub_task *> subtasks_t;
 
 /**
  * @brief Type for Items from subtasks_t container.
@@ -191,40 +193,6 @@ public:
 };
 
 task* return_created_ecp_task(lib::configurator &_config);
-
-/*!
- * @brief Base class of all ecp sub tasks
- *
- * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup ecp
- */
-class ecp_sub_task
-{
-protected:
-
-	/**
-	 * @brief ecp task object reference
-	 */
-	task &ecp_t;
-
-	/**
-	 * @brief the reference to sr communication object in multi thread version
-	 */
-	lib::sr_ecp& sr_ecp_msg;
-
-public:
-
-	/**
-	 * @brief Constructor
-	 * @param _ecp_t ecp task object reference.
-	 */
-	ecp_sub_task(task &_ecp_t);
-
-	/**
-	 * @brief method to implement in derived classes that stores main sub task algorithm
-	 */
-	virtual void conditional_execution() = 0;
-};
 
 } // namespace task
 } // namespace common

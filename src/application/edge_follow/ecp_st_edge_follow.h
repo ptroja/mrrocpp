@@ -9,7 +9,7 @@
  * @ingroup edge_follow
  */
 
-#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "application/edge_follow/ecp_mp_st_edge_follow.h"
 
 namespace mrrocpp {
@@ -19,16 +19,16 @@ namespace generator {
 class y_edge_follow_force;
 }
 
-namespace task {
+namespace sub_task {
 
-class ecp_sub_task_edge_follow : public ecp_sub_task
+class edge_follow : public sub_task
 {
 
 private:
 	generator::y_edge_follow_force* yefg;
 
 public:
-	ecp_sub_task_edge_follow(task &_ecp_t);
+	edge_follow(task::task &_ecp_t);
 
 	void conditional_execution();
 };

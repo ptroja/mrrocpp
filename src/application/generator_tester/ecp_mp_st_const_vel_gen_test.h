@@ -3,7 +3,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace task {
+namespace sub_task {
 
 const std::string ECP_ST_CONST_VEL_GEN_TEST = "ECP_ST_CONST_VEL_GEN_TEST";
 
