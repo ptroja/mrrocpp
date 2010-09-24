@@ -21,8 +21,7 @@ model::model(void)
 
 	// Ustawienie parametrow kinematycznych.
 	set_kinematic_parameters();
-} //: set_kinematic_parameters
-
+}
 
 void model::set_kinematic_parameters(void)
 {
@@ -30,32 +29,27 @@ void model::set_kinematic_parameters(void)
 	synchro_motor_position = 0;
 	// Stosunek polozenia walu silnika do polozenia we wsp. wewn (zewn) w metrach.
 	motor_to_intext_ratio = 2250;
-} //: set_kinematic_parameters
-
+}
 
 void model::check_motor_position(const lib::MotorArray & motor_position)
 {
 	return;
-} //: check_motor_position
-
+}
 
 void model::check_joints(const lib::JointArray & q)
 {
 	return;
-} //: check_joints
-
+}
 
 void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
 	local_current_joints[0] = local_current_motor_pos[0] / motor_to_intext_ratio;
-}//: mp2i_transform
-
+}
 
 void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 	local_desired_motor_pos_new[0] = local_desired_joints[0] * motor_to_intext_ratio;
-} //: i2mp_transform
-
+}
 
 } // namespace conveyor
 } // namespace kinematic

@@ -1,9 +1,8 @@
 /**
  * @file
- * @brief Header file for trajectory_pose
+ * @brief Contains declarations of the methods of trajectory_pose class.
  * @author rtulwin
- *
- * Contains declaration of trajectory_pose class and its methods.
+ * @ingroup generators
  */
 
 #if !defined(_TRAJECTORY_POSE_H)
@@ -19,7 +18,12 @@ namespace common {
 namespace trajectory_pose {
 
 /**
- * Base class for all trajectory pose types. Contains fields common for all trajectory pose descriptions.
+ * @brief Base class for all trajectory pose types.
+ *
+ * Contains fields common for all trajectory pose descriptions.
+ *
+ * @author rtulwin
+ * @ingroup trajectory_pose
  */
 class trajectory_pose {
 public:

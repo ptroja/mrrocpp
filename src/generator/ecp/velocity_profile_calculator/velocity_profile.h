@@ -1,8 +1,8 @@
-/*
- * velocity_profile.h
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of velocity_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _VELOCITY_PROFILE_H_
@@ -21,8 +21,10 @@ namespace generator {
 namespace velocity_profile_calculator {
 
 /**
- * Base class for all of the velocity profile calculators. Usually any velocity profile calculator contains methods used to create the description
- * of the velocity profile f.g. bang bang velocity profile etc.. This information is usually stored in the appropriate trajectory_pose class.
+ * @brief Base class for all of the velocity profile calculators.
+ *
+ * Usually any velocity profile calculator contains methods used to create the description
+ * of the velocity profile f.g. bang bang velocity profile. This information is usually stored in the appropriate trajectory_pose class.
  */
 template <class Pos>
 class velocity_profile {

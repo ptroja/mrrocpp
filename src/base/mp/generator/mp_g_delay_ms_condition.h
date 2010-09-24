@@ -9,31 +9,49 @@
  * @ingroup mp
  */
 
-#include "base/mp/mp_generator.h"
+#include "base/mp/generator/mp_generator.h"
 #include "base/lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// condition to wait for desired time in ms
-
+/*!
+ * @brief Condition that finishes after desired time passes
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup mp
+ */
 class delay_ms_condition : public generator
 {
 protected:
+	/**
+	 * @brief timer to measure time
+	 */
 	lib::timer local_timer;
-	float sec;
+
+	/**
+	 * @brief desired total time to pass
+	 */
 	int ms_delay;
 
 public:
 
-	// konstruktor
+	/**
+	 * @brief Constructor
+	 * @param _mp_task mp task object reference.
+	 * @param _ms_delay desired total time to pass
+	 */
 	delay_ms_condition(task::task& _mp_task, int _ms_delay);
 
+	/**
+	 * @brief sets desired total time to pass
+	 * @param _ms_delay desired total time to pass
+	 */
 	void configure(int _ms_delay);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step();
 };
 
 } // namespace generator

@@ -1,8 +1,8 @@
-/*
- * trajectory_interpolator.h
- *
- *  Created on: Jun 3, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of trajectory_interpolator class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _TRAJECTORY_INTERPOLATOR_H_
@@ -19,7 +19,10 @@ namespace generator {
 namespace trajectory_interpolator {
 
 /**
- * Base class for all trajectory interpolators.
+ * @brief Base class for all trajectory interpolators.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 template <class Pos>
 class trajectory_interpolator {

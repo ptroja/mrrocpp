@@ -1,8 +1,8 @@
-/*
- * bang_bang_profile.cc
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of bang_bang_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "bang_bang_profile.h"

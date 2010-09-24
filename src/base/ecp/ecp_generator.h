@@ -25,33 +25,64 @@ class task;
 
 namespace generator {
 
+/*!
+ * @brief Base class of all ecp generators
+ * The generator both generates command and checks terminal condition
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class generator : public ecp_mp::generator::generator
 {
 
 protected:
+	/**
+	 * @brief ecp task object reference
+	 */
 	common::task::task& ecp_t;
 
 public:
-	// Zlecenie ruchu dla EDP
+	/**
+	 * @brief Main generator method to execute transition cycle
+	 */
 	void Move(void);
+
+	/**
+	 * @brief communicates with EDP
+	 */
 	virtual void execute_motion(void);
 
+	/**
+	 * @brief initiates Move method
+	 */
 	void move_init(void);
 
-	bool communicate_with_mp_in_move;
-
+	/**
+	 * @brief associated ecp_robot object pointer
+	 */
 	robot::ecp_robot* the_robot;
 
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
 	generator(common::task::task& _ecp_task);
 
+	/**
+	 * @brief Desstructor
+	 */
 	virtual ~generator();
 
-	bool is_EDP_error(robot::ecp_robot& _robot) const;
+	/**
+	 * @brief checks robot reply_package and detects edp_error
+	 * @return edp_error occurred
+	 */
+	bool is_EDP_error() const;
 
+	/**
+	 * @brief single trajectory node
+	 */
 	lib::trajectory_description td;
-
-	//virtual bool first_step () = 0;
-	//virtual bool next_step () = 0;
 
 };
 

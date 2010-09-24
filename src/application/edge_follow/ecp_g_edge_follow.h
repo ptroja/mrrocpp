@@ -9,9 +9,6 @@
  * @ingroup edge_follow
  */
 
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 

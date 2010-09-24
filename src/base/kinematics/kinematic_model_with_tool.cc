@@ -26,25 +26,25 @@ kinematic_model_with_tool::~kinematic_model_with_tool(void)
 {
 }
 
-inline void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& homog_matrix)
+void kinematic_model_with_tool::attached_tool_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix *= tool;
 }
 
 
-inline void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix)
+void kinematic_model_with_tool::attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix *= (!tool);
 }
 
 
-inline void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& homog_matrix)
+void kinematic_model_with_tool::global_frame_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix = (global_base * homog_matrix);
 }
 
 
-inline void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& homog_matrix)
+void kinematic_model_with_tool::global_frame_inverse_transform(lib::Homog_matrix& homog_matrix)
 {
 	homog_matrix = ((!global_base) * homog_matrix);
 }
@@ -72,7 +72,6 @@ void kinematic_model_with_tool::i2e_transform(const lib::JointArray & local_curr
 
 void kinematic_model_with_tool::i2e_wo_tool_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
-
 	// Solution of the direct kinematics.
 	direct_kinematics_transform(local_current_joints, local_current_end_effector_frame);
 
@@ -85,7 +84,6 @@ void kinematic_model_with_tool::i2e_wo_tool_transform(const lib::JointArray & lo
 
 	// Retrieve computations result.
 	local_current_end_effector_frame = local_current_end_effector_matrix;
-
 }
 
 void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
@@ -101,10 +99,8 @@ void kinematic_model_with_tool::e2i_transform(lib::JointArray & local_desired_jo
 	if (global_frame_computations)
 		global_frame_inverse_transform(local_desired_end_effector_matrix);
 
-
 	// Compute inverse kinematics transformation.
 	inverse_kinematics_transform(local_desired_joints, local_current_joints, local_desired_end_effector_matrix);
-
 }
 
 void kinematic_model_with_tool::e2i_wo_tool_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)

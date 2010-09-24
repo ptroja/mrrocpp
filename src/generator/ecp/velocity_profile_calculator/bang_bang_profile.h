@@ -1,8 +1,8 @@
-/*
- * bang_bang_profile.h
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of bang_bang_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _BANG_BANG_PROFILE_H_
@@ -17,6 +17,12 @@ namespace common {
 namespace generator {
 namespace velocity_profile_calculator {
 
+/**
+ * @brief Class contains methods used to create and calculate the description of the smooth motion of the robot.
+ *
+ * This velocity profile calculator is used to fill in the objects of trajectory_pose type in the way that they describe the smooth motion of the robot.
+ * Methods implemented here can cope with the absolute and relative type of motion.
+ */
 class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> {
 	public:
 		/**

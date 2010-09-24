@@ -55,7 +55,7 @@ void bird_hand_test::main_task_algorithm(void)
 	sr_ecp_msg->message("New bird_hand_test series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::bird_hand::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::bird_hand::ROBOT_NAME.c_str());
 
 	send_end_motion_to_ecps(1, lib::bird_hand::ROBOT_NAME.c_str());
 
@@ -63,7 +63,7 @@ void bird_hand_test::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST, (int) 5, "", 0, 1, lib::bird_hand::ROBOT_NAME.c_str());
 	sr_ecp_msg->message("5");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::bird_hand::ROBOT_NAME.c_str(), lib::bird_hand::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::bird_hand::ROBOT_NAME.c_str(), lib::bird_hand::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 

@@ -16,6 +16,10 @@
 @brief Main, base namespace for ECP_MP task classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
 
+@namespace mrrocpp::ecp_mp::sub_task
+@brief Main, base namespace for ECP_MP sub_task defines etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
 @namespace mrrocpp::ecp_mp::transmitter
 @brief Main, base namespace for ECP_MP transmitter classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology

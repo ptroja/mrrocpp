@@ -1,37 +1,35 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-//
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains bias_edp_force definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup subtasks
+ */
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "generator/ecp/ecp_g_force.h"
+
 #include "subtask/ecp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_bias_edp_force::ecp_sub_task_bias_edp_force(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+bias_edp_force::bias_edp_force(task::task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	befg = new generator::bias_edp_force(_ecp_t);
 }
 
-void ecp_sub_task_bias_edp_force::conditional_execution()
+void bias_edp_force::conditional_execution()
 {
 
 	befg->Move();
 }
 
-} // namespace task
+} // namespace sub_task
 
 } // namespace common
 } // namespace ecp

@@ -1,8 +1,8 @@
-/*
- * multiple_position.h
- *
- *  Created on: May 21, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of multiple_position class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _MULTIPLE_POSITION_H_
@@ -25,6 +25,9 @@ namespace generator {
 
 /**
  * Base class for the motion generators interpolating between fixed trajectory points.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 template <class Pos, class Inter, class Calc>
 class multiple_position : public generator
@@ -579,25 +582,61 @@ public:
 	 * Detection of possible jerks. Method scans the vector with coordinates and checks if the allowed acceleration was not exceeded.
 	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
-/*	virtual int detect_jerks()
+    virtual int detect_jerks() //TODO dokonczyc!!! :)
 	{
+    	printf("############### detect_jerks ###############\n");
+
 		coordinate_vector_iterator = coordinate_vector.begin();
 		std::vector<double> temp1 = pose_vector.begin()->start_position;
 		std::vector<double> temp2 = (*coordinate_vector_iterator);
 
+		int i, j;//loop counters
 
+		printf("0: ");
 
-		for (int i = 0; i < coordinate_vector.size(); i++) {
-			//tempIter = (*coordinate_vector_iterator).begin();
-			printf("%d:\t", (i + 1));
-			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
-				printf(" %f\t", *tempIter);
+		for (i = 0; i < axes_num; i++) {
+			if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > 1) {//TODO check what is the reasonable value here...
+				return 1; //jerk in the first macrostep
 			}
+
+			double x = (2*fabs(temp2[i]-temp1[i]))/(mc*mc);
+			printf("%f\t", x);
+
+		}
+		printf("\n");
+
+		coordinate_vector_iterator++;
+
+		for (i = 1; i < coordinate_vector.size(); i++) {
+			//printf("%d:\t", (i + 1));
+
+			//TODO dokonczyc!!
+			j = 0;
+			printf("%f: ", i);
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > 1) {//TODO check what is the reasonable value here...
+					double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
+					printf("%f\t", x);
+					return i;
+				}
+
+				double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
+				printf("%f\t", x);
+
+				j++;
+			}
+			printf("\n");
+
+			temp1 = temp2;
+			temp2 = *coordinate_vector_iterator;
+
 			coordinate_vector_iterator++;
 		}
 
+		flushall();
+
 		return 0;
-	}*/
+	}
 };
 
 } // namespace generator

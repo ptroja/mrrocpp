@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains teach_in generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
+ */
+
 #include <cstring>
 #include <cmath>
 #include <cerrno>

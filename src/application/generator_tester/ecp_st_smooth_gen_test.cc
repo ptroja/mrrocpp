@@ -9,13 +9,16 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
+#include "base/ecp/ecp_task.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
-	ecp_sub_task(_ecp_t) {
+sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
+	sub_task(_ecp_t)
+{
 
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
@@ -45,13 +48,14 @@ ecp_sub_task_smooth_gen_test::ecp_sub_task_smooth_gen_test(task & _ecp_t) :
 	sgenangle->set_debug(true);
 }
 
-void ecp_sub_task_smooth_gen_test::conditional_execution() {
+void sub_task_smooth_gen_test::conditional_execution()
+{
 
-	std::vector<double> coordinates1(6);
-	std::vector<double> coordinates2(7);
+	std::vector <double> coordinates1(6);
+	std::vector <double> coordinates2(7);
 
 	// JOINT ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Joint absolute");
+	sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
@@ -113,14 +117,14 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 
-	if (sgenjoint->calculate_interpolate()) {
+	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks() == 0) {
 		sgenjoint->Move();
 	}
 	// JOINT ABSOLUTE END
 
 
 	// JOINT RELATIVE
-	ecp_t.sr_ecp_msg->message("Joint relative");
+	sr_ecp_msg.message("Joint relative");
 	sgenjoint->reset();
 	sgenjoint->set_relative();
 	if (track) {
@@ -187,7 +191,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// MOTOR ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Motor absolute");
+	sr_ecp_msg.message("Motor absolute");
 	sgenmotor->reset();
 	sgenmotor->set_absolute();
 	if (track) {
@@ -254,7 +258,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// MOTOR RELATIVE
-	ecp_t.sr_ecp_msg->message("Motor relative");
+	sr_ecp_msg.message("Motor relative");
 	sgenmotor->reset();
 	sgenmotor->set_relative();
 	if (track) {
@@ -321,7 +325,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// EULER ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Euler absolute");
+	sr_ecp_msg.message("Euler absolute");
 	sgeneuler->reset();
 	sgeneuler->set_absolute();
 
@@ -383,7 +387,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// EULER RELATIVE
-	ecp_t.sr_ecp_msg->message("Euler relative");
+	sr_ecp_msg.message("Euler relative");
 	sgeneuler->reset();
 	sgeneuler->set_relative();
 
@@ -445,7 +449,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Angle axis absolute");
+	sr_ecp_msg.message("Angle axis absolute");
 	sgenangle->reset();
 	sgenangle->set_absolute();
 
@@ -507,7 +511,7 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS RELATIVE
-	ecp_t.sr_ecp_msg->message("Angle axis relative");
+	sr_ecp_msg.message("Angle axis relative");
 	sgenangle->reset();
 	sgenangle->set_relative();
 
@@ -568,7 +572,8 @@ void ecp_sub_task_smooth_gen_test::conditional_execution() {
 	// ANGLE AXIS RELATIVE END
 }
 
-ecp_sub_task_smooth_gen_test::~ecp_sub_task_smooth_gen_test() {
+sub_task_smooth_gen_test::~sub_task_smooth_gen_test()
+{
 	delete sgenjoint;
 	delete sgenmotor;
 	delete sgeneuler;

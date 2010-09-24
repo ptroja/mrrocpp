@@ -3,6 +3,10 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/force/ecp_g_weight_measure.h"
+#include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
+#include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "subtask/ecp_st_go.h"
 
 namespace mrrocpp {
@@ -22,9 +26,9 @@ protected:
 	common::generator::teach_in* tig;
 	common::generator::smooth* sg;
 
-	common::generator::weight_meassure* wmg;
+	common::generator::weight_measure* wmg;
 	//podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
+	common::sub_task::gripper_opening* go_st;
 
 public:
 	// KONSTRUKTORY

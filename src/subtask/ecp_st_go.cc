@@ -7,25 +7,24 @@
 // -------------------------------------------------------------------------
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_jarosz.h"
 #include "subtask/ecp_st_go.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_gripper_opening::ecp_sub_task_gripper_opening(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+gripper_opening::gripper_opening(task::task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	init();
 }
 
-void ecp_sub_task_gripper_opening::init()
+void gripper_opening::init()
 {
 	/*
 	 tdes.arm_type = lib::XYZ_EULER_ZYZ;
@@ -41,21 +40,21 @@ void ecp_sub_task_gripper_opening::init()
 	 */
 }
 
-void ecp_sub_task_gripper_opening::configure(double gripper_increment, int motion_time)
+void gripper_opening::configure(double gripper_increment, int motion_time)
 {
 	tdes.internode_step_no = motion_time;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;
 	tdes.coordinate_delta[6] = gripper_increment; // przyrost wspolrzednej PSI
 }
 
-void ecp_sub_task_gripper_opening::execute()
+void gripper_opening::execute()
 {
 	// Generator trajektorii prostoliniowej
 	generator::linear lg(ecp_t, tdes, 1);
 	lg.Move();
 }
 
-void ecp_sub_task_gripper_opening::conditional_execution()
+void gripper_opening::conditional_execution()
 {
 
 }

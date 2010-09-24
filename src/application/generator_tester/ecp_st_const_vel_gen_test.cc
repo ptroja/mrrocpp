@@ -10,14 +10,16 @@
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) :
-	ecp_sub_task(_ecp_t) {
+sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
+	sub_task(_ecp_t)
+{
 
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
@@ -47,13 +49,14 @@ ecp_sub_task_const_vel_gen_test::ecp_sub_task_const_vel_gen_test(task & _ecp_t) 
 	cvgenangle->set_debug(true);
 }
 
-void ecp_sub_task_const_vel_gen_test::conditional_execution() {
+void sub_task_const_vel_gen_test::conditional_execution()
+{
 
-	std::vector<double> coordinates1(6);
-	std::vector<double> coordinates2(7);
+	std::vector <double> coordinates1(6);
+	std::vector <double> coordinates2(7);
 
 	// JOINT ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Joint absolute");
+	sr_ecp_msg.message("Joint absolute");
 	cvgenjoint->reset();
 	cvgenjoint->set_absolute();
 
@@ -121,7 +124,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// JOINT RELATIVE
-	ecp_t.sr_ecp_msg->message("Joint relative");
+	sr_ecp_msg.message("Joint relative");
 	cvgenjoint->reset();
 	cvgenjoint->set_relative();
 
@@ -189,7 +192,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// MOTOR ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Motor absolute");
+	sr_ecp_msg.message("Motor absolute");
 	cvgenmotor->reset();
 	cvgenmotor->set_absolute();
 
@@ -257,7 +260,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// MOTOR RELATIVE
-	ecp_t.sr_ecp_msg->message("Motor relative");
+	sr_ecp_msg.message("Motor relative");
 	cvgenmotor->reset();
 	cvgenmotor->set_relative();
 
@@ -325,7 +328,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// EULER ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Euler absolute");
+	sr_ecp_msg.message("Euler absolute");
 	cvgeneuler->reset();
 	cvgeneuler->set_absolute();
 
@@ -387,7 +390,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// EULER RELATIVE
-	ecp_t.sr_ecp_msg->message("Euler relative");
+	sr_ecp_msg.message("Euler relative");
 	cvgeneuler->reset();
 	cvgeneuler->set_relative();
 
@@ -449,7 +452,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS ABSOLUTE
-	ecp_t.sr_ecp_msg->message("Angle axis absolute");
+	sr_ecp_msg.message("Angle axis absolute");
 	cvgenangle->reset();
 	cvgenangle->set_absolute();
 
@@ -511,7 +514,7 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 
 	// ANGLE AXIS RELATIVE
-	ecp_t.sr_ecp_msg->message("Angle axis relative");
+	sr_ecp_msg.message("Angle axis relative");
 	cvgenangle->reset();
 	cvgenangle->set_relative();
 
@@ -573,7 +576,8 @@ void ecp_sub_task_const_vel_gen_test::conditional_execution() {
 
 }
 
-ecp_sub_task_const_vel_gen_test::~ecp_sub_task_const_vel_gen_test() {
+sub_task_const_vel_gen_test::~sub_task_const_vel_gen_test()
+{
 	delete cvgenjoint;
 	delete cvgenmotor;
 	delete cvgeneuler;

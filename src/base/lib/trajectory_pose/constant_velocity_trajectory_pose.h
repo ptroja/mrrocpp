@@ -1,8 +1,8 @@
 /**
- * @file constant_velocity_trajectory_pose.h
- * @brief Header file for constant_velocity_trajectory_pose
- *
- * Contains declaration of bang_bang_trajectory_pose class and its methods.
+ * @file
+ * @brief Contains declarations of the methods of constant_velocity_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #if !defined(_ECP_CONSTANT_VELOCITY_TRAJECTORY_POSE_H)
@@ -17,8 +17,12 @@ namespace common {
 namespace trajectory_pose {
 
 /**
- * Class is a container used by generators performing motion with the constant velocity.
+ * @brief Class is a container used by generators performing motion with the constant velocity.
+ *
  * One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ *
+ * @author rtulwin
+ * @ingroup trajectory_pose
  */
 class constant_velocity_trajectory_pose : public trajectory_pose {
 public:

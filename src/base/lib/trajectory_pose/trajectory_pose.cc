@@ -1,8 +1,8 @@
 /**
- * @file trajectory_pose.cc
- * @brief rajectory_pose class and its methods
- *
- * Contains bodies of the methods of trajectory_pose class.
+ * @file
+ * @brief Contains definitions of the methods of trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include <cstring>

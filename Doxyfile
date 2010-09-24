@@ -589,6 +589,31 @@ INPUT                  = src/base/kinematics \
                          src/base/ecp \
                          src/base/mp \
                          src/base/base.dox \
+                         src/generator/generators.dox \
+                         src/generator/ecp/ecp_g_teach_in.h \
+                         src/generator/ecp/ecp_g_teach_in.cc \
+                         src/generator/ecp/force/ecp_mp_g_bias_edp_force.h \
+                         src/generator/ecp/force/ecp_g_bias_edp_force.h \
+                         src/generator/ecp/force/ecp_g_bias_edp_force.cc \
+                         src/generator/ecp/force/ecp_mp_g_tff_nose_run.h \                   
+                         src/generator/ecp/force/ecp_g_tff_nose_run.h \
+                         src/generator/ecp/force/ecp_g_tff_nose_run.cc \
+                         src/generator/ecp/trajectory_interpolator \
+                         src/generator/ecp/velocity_profile_calculator \
+                         src/generator/ecp/ecp_g_multiple_position.h \
+                         src/generator/ecp/ecp_g_constant_velocity.cc \
+                         src/generator/ecp/ecp_g_constant_velocity.h \
+                         src/generator/ecp/ecp_g_get_position.cc \
+                         src/generator/ecp/ecp_g_get_position.h \
+                         src/generator/ecp/ecp_g_newsmooth.cc \
+                         src/generator/ecp/ecp_g_newsmooth.h \
+                         src/subtask/subtasks.dox \
+                         src/subtask/ecp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_bias_edp_force.cc \
+                         src/subtask/ecp_mp_st_bias_edp_force.h \
+                         src/subtask/ecp_st_tff_nose_run.h \
+                         src/subtask/ecp_st_tff_nose_run.cc \
+                         src/subtask/ecp_mp_st_tff_nose_run.h \
                          src/robot/robots.dox \
                          src/robot/conveyor/kinematic_model_conveyor.h \
                          src/robot/conveyor/kinematic_model_conveyor.cc \
@@ -699,6 +724,7 @@ INPUT                  = src/base/kinematics \
                          src/base/lib/sensor_interface.h \
                          src/base/lib/single_thread_port.h \
                          src/base/lib/single_thread_port.cc \
+                         src/base/lib/trajectory_pose \
                          src/sensor/sensors.dox \
                          src/sensor/fradia \
                          src/sensor/pcbird \

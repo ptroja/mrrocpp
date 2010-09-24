@@ -12,14 +12,12 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
 const std::string ECP_GEN_VISUAL_SERVO_TEST = "ECP_GEN_VISUAL_SERVO_TEST";
 const std::string ECP_GEN_CONVEYOR_VS_TEST = "ECP_GEN_CONVEYOR_VS_TEST";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
 

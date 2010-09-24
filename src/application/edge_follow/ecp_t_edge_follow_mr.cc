@@ -16,7 +16,8 @@
 #include "ecp_st_edge_follow.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
-#include "generator/ecp/ecp_g_force.h"
+
+#include "subtask/ecp_mp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,18 +39,18 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 
 	// utworzenie podzadan
 	{
-		ecp_sub_task* ecpst;
-		ecpst = new ecp_sub_task_edge_follow(*this);
-		subtask_m[ecp_mp::task::ECP_ST_EDGE_FOLLOW] = ecpst;
+		sub_task::sub_task* ecpst;
+		ecpst = new sub_task::edge_follow(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_EDGE_FOLLOW] = ecpst;
 
-		ecpst = new ecp_sub_task_bias_edp_force(*this);
-		subtask_m[ecp_mp::task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+		ecpst = new sub_task::bias_edp_force(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{
-		ecp_sub_task_tff_nose_run* ecpst;
-		ecpst = new ecp_sub_task_tff_nose_run(*this);
-		subtask_m[ecp_mp::task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+		sub_task::tff_nose_run* ecpst;
+		ecpst = new sub_task::tff_nose_run(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 		ecpst->nrg->configure_pulse_check(true);
 	}
 

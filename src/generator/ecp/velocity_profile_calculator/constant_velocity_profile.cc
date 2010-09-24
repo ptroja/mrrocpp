@@ -1,8 +1,8 @@
-/*
- * constant_velocity_profile.cc
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of constant_velocity_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "constant_velocity_profile.h"

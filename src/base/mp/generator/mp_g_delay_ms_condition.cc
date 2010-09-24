@@ -7,7 +7,7 @@
  */
 
 #include "base/mp/mp_task.h"
-#include "base/mp/mp_g_delay_ms_condition.h"
+#include "base/mp/generator/mp_g_delay_ms_condition.h"
 
 #include "unistd.h"
 
@@ -36,6 +36,7 @@ bool delay_ms_condition::first_step()
 
 bool delay_ms_condition::next_step()
 {
+	float sec;
 	local_timer.stop();
 	local_timer.get_time(sec);
 	if (1000 * sec > (float) ms_delay)
