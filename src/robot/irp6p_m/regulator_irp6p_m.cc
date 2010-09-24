@@ -260,8 +260,8 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	}
 
 	a = 0.412429378531;
-	b0 = 2.594932; //stara z przelicz rezolwer/enkoder 15.219541375872
-	b1 = 2.504769; //
+	b0 = 2.594932 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //stara z przelicz rezolwer/enkoder 15.219541375872
+	b1 = 2.504769 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //
 
 	switch (algorithm_no)
 	{
@@ -489,8 +489,8 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	}
 
 	a = 0.655629139073;
-	b0 = 1.030178; //6.042100283822;
-	b1 = 0.986142;
+	b0 = 1.030178 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //6.042100283822;
+	b1 = 0.986142 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
 
 	switch (algorithm_no)
 	{
@@ -716,8 +716,8 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	}
 
 	a = 0.315789473684;
-	b0 = 1.997464;
-	b1 = 1.904138;
+	b0 = 1.997464 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
+	b1 = 1.904138 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
 
 	switch (algorithm_no)
 	{
@@ -939,8 +939,8 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 	}
 
 	a = 0.548946716233;
-	b0 = 1.576266; //9.244959545156;
-	b1 = 1.468599; //8.613484947882;
+	b0 = 1.576266 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //9.244959545156;
+	b1 = 1.468599 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //8.613484947882;
 
 
 	switch (algorithm_no)
@@ -1171,8 +1171,8 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	}
 
 	a = 0.391982182628;
-	b0 = 1.114648; //6.537527839644;
-	b1 = 1.021348; //5.990311804009;
+	b0 = 1.114648 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //6.537527839644;
+	b1 = 1.021348 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //5.990311804009;
 
 
 	switch (algorithm_no)
@@ -1379,7 +1379,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 						k_feedforward = 0;
 						break;
 					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
-						// => przywrocic stary algorytm i j stary zestaw parametrow
+						// => przywrocic stary algorytm i j stab0 =ry zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
 						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
@@ -1407,8 +1407,8 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	 */
 
 	a = 0.3;
-	b0 = 1.364; //4
-	b1 = 1.264; //1.364//4
+	b0 = 1.364 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //4
+	b1 = 1.264 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //1.364//4
 
 	switch (algorithm_no)
 	{
@@ -1421,7 +1421,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
 					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
+		case 2: // algorytm nr 2 - sterowanie pradoweb0 =
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[5] / 158);
 			current_measured = (meassured_current - 128 - 3) * 0.02;

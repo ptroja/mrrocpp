@@ -104,7 +104,7 @@ void HI_moxa::insert_set_value(int drive_offset, double set_value)
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
 	//temp->pwm = set_value * (300.0 / 255.0);
-	temp->pwm = set_value * (550.0 / 255.0);
+	temp->pwm = set_value * (1000.0 / 255.0);
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::insert_set_value(" << drive_offset << ", " << set_value << ")" << std::endl;
