@@ -33,7 +33,7 @@ class bias_edp_force : public sub_task
 private:
 
 	/*!
-	 * @brief bias_edp_force generator pojnter
+	 * @brief bias_edp_force generator pointer
 	 */
 	generator::bias_edp_force* befg;
 public:

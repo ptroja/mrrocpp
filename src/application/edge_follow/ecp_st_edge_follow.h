@@ -21,13 +21,28 @@ class y_edge_follow_force;
 
 namespace sub_task {
 
+/*!
+ * @brief subtask to execute y_edge_follow_force generator
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup subtasks edge_follow
+ */
 class edge_follow : public sub_task
 {
 
 private:
+
+	/*!
+	 * @brief y_edge_follow_force generator pointer
+	 */
 	generator::y_edge_follow_force* yefg;
 
 public:
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_t ecp task object reference.
+	 */
 	edge_follow(task::task &_ecp_t);
 
 	void conditional_execution();
