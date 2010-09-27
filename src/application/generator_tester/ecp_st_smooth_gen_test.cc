@@ -59,7 +59,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
-		sgenjoint->load_trajectory_from_file("/net/koleszko/mnt/mrroc/src/application/generator_tester/trajectory.trj");
+		//sgenjoint->load_trajectory_from_file("/net/koleszko/mnt/mrroc/src/application/generator_tester/trajectory.trj");
 
 		coordinates2[0] = 0.1;
 		coordinates2[1] = -0.067;
@@ -117,7 +117,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 
-	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks() == 0) {
+	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
 	// JOINT ABSOLUTE END

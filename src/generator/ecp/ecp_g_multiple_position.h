@@ -580,9 +580,10 @@ public:
 	}
 	/**
 	 * Detection of possible jerks. Method scans the vector with coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
+	 * @param max_acc maximal allowed acceleration
 	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
-    virtual int detect_jerks() //TODO dokonczyc!!! :)
+    virtual int detect_jerks(int max_acc)
 	{
     	printf("############### detect_jerks ###############\n");
 
@@ -595,7 +596,7 @@ public:
 		printf("0: ");
 
 		for (i = 0; i < axes_num; i++) {
-			if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > 1) {//TODO check what is the reasonable value here...
+			if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
 				return 1; //jerk in the first macrostep
 			}
 
@@ -610,11 +611,10 @@ public:
 		for (i = 1; i < coordinate_vector.size(); i++) {
 			//printf("%d:\t", (i + 1));
 
-			//TODO dokonczyc!!
 			j = 0;
 			printf("%d: ", i);
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
-				if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > 1) {//TODO check what is the reasonable value here...
+				if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
 					double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
 
 					printf("\nt1: %f\t t2: %f\t  tempIter: %f\t", temp1[j], temp2[j], *tempIter);

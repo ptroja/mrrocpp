@@ -50,7 +50,7 @@ bool neuron_generator::first_step()
 	return true;
 }
 
-bool neuron_generator::next_step(){
+bool neuron_generator::next_step() {
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	flushall();
