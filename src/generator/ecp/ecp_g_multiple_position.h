@@ -585,7 +585,9 @@ public:
 	 */
     virtual int detect_jerks(int max_acc)
 	{
-    	printf("############### detect_jerks ###############\n");
+    	if (debug) {
+    		printf("############### detect_jerks ###############\n");
+		}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
 		std::vector<double> temp1 = pose_vector.begin()->start_position;
@@ -593,41 +595,46 @@ public:
 
 		int i, j;//loop counters
 
-		printf("0: ");
-
 		for (i = 0; i < axes_num; i++) {
-			if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
-				return 1; //jerk in the first macrostep
+			if (motion_type == lib::ABSOLUTE) {
+				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					return 1; //jerk in the first macrostep
+				}
+			} else if (motion_type == lib::RELATIVE) {
+				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					return 1; //jerk in the first macrostep
+				}
+			} else {
+				sr_ecp_msg.message("Wrong motion type");
+				throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 			}
-
-			double x = (2*fabs(temp2[i]-temp1[i]))/(mc*mc);
-			printf("%f\t", x);
-
 		}
-		printf("\n");
 
 		coordinate_vector_iterator++;
 
 		for (i = 1; i < coordinate_vector.size(); i++) {
-			//printf("%d:\t", (i + 1));
 
 			j = 0;
-			printf("%d: ", i);
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
-				if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
-					double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
-
-					printf("\nt1: %f\t t2: %f\t  tempIter: %f\t", temp1[j], temp2[j], *tempIter);
-					printf("%f\n", x);
-					return i;
+				if (motion_type == lib::ABSOLUTE) {
+					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						return i;
+					}
+				} else if (motion_type == lib::RELATIVE) {
+					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						return i;
+					}
+				} else {
+					sr_ecp_msg.message("Wrong motion type");
+					throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 				}
-
-				double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
-				printf("%f\t", x);
 
 				j++;
 			}
-			printf("\n");
 
 			temp1 = temp2;
 			temp2 = *coordinate_vector_iterator;

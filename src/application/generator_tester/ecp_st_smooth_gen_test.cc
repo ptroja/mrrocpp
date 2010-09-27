@@ -184,7 +184,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenjoint->load_relative_joint_trajectory_pose(coordinates1);
 	}
 
-	if (sgenjoint->calculate_interpolate()) {
+	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
 	// JOINT RELATIVE END
@@ -288,7 +288,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[4] = -20.0;
 		coordinates2[5] = 0.0;
 		coordinates2[6] = 0.0;
-		sgenjoint->load_relative_motor_trajectory_pose(coordinates2);
+		sgenmotor->load_relative_motor_trajectory_pose(coordinates2);
 	} else if (postument) {
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
