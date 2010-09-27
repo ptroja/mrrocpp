@@ -24,7 +24,7 @@ namespace common {
 namespace generator {
 
 /**
- * Base class for the motion generators interpolating between fixed trajectory points.
+ * @brief Base class for the motion generators interpolating between fixed trajectory points.
  *
  * @author rtulwin
  * @ingroup generators
@@ -579,7 +579,7 @@ public:
 		sr_ecp_msg.message("Generator reset");
 	}
 	/**
-	 * Detection of possible jerks. Method scans the vector with coordinates and checks if the allowed acceleration was not exceeded.
+	 * Detection of possible jerks. Method scans the vector with coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
 	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
     virtual int detect_jerks() //TODO dokonczyc!!! :)
@@ -612,11 +612,13 @@ public:
 
 			//TODO dokonczyc!!
 			j = 0;
-			printf("%f: ", i);
+			printf("%d: ", i);
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > 1) {//TODO check what is the reasonable value here...
 					double x = fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc;
-					printf("%f\t", x);
+
+					printf("\nt1: %f\t t2: %f\t  tempIter: %f\t", temp1[j], temp2[j], *tempIter);
+					printf("%f\n", x);
 					return i;
 				}
 

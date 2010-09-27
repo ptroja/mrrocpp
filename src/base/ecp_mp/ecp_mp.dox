@@ -24,6 +24,10 @@
 @brief Main, base namespace for ECP_MP transmitter classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
 
+@namespace mrrocpp::ecp_mp::common::trajectory_pose
+@brief Namespace for trajectory poses.
+@author rtulwin
+
  @defgroup ecp_mp ECP_MP
  @ingroup base
    
