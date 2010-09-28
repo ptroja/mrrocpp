@@ -90,6 +90,8 @@ void HI_moxa::init()
 	std::cout << "[info] fd_max: " << fd_max << std::endl;
 
 	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+
+	reset_counters();
 }
 
 void HI_moxa::insert_set_value(int drive_offset, double set_value)
@@ -314,7 +316,17 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 void HI_moxa::reset_counters(void)
 {
-	std::cout << "[func] HI_moxa::reset_counters" << std::endl;
+
+	for (int i = 0; i < master.number_of_servos; i++) {
+
+		servo_data[i].current_absolute_position = 0L;
+		servo_data[i].previous_absolute_position = 0L;
+		servo_data[i].current_position_inc = 0.0;
+
+	} // end: for
+
+
+	//	std::cout << "[func] HI_moxa::reset_counters" << std::endl;
 }
 
 void HI_moxa::start_synchro(int drive_offset)
