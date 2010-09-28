@@ -586,7 +586,7 @@ public:
     virtual int detect_jerks(int max_acc)
 	{
     	if (debug) {
-    		printf("############### detect_jerks ###############\n");
+    		printf("##################################### detect_jerks #####################################\n");
 		}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
@@ -599,11 +599,17 @@ public:
 			if (motion_type == lib::ABSOLUTE) {
 				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+					}
 					return 1; //jerk in the first macrostep
 				}
 			} else if (motion_type == lib::RELATIVE) {
 				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+					}
 					return 1; //jerk in the first macrostep
 				}
 			} else {
@@ -621,11 +627,17 @@ public:
 				if (motion_type == lib::ABSOLUTE) {
 					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+						}
 						return i;
 					}
 				} else if (motion_type == lib::RELATIVE) {
 					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+						}
 						return i;
 					}
 				} else {
