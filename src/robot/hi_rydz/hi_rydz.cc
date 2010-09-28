@@ -130,7 +130,7 @@ void HI_rydz::init()
 	if (hi_int_wait(common::INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
-		if (master.robot_test_mode == 0) {
+		if (!master.robot_test_mode) {
 			// Ustawienie czestotliwosci przerwan
 			uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
 			out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
@@ -152,7 +152,7 @@ void HI_rydz::init()
 
 	// Zakaz pracy recznej we wszystkich osiach
 
-	if (master.robot_test_mode == 0) {
+	if (!master.robot_test_mode) {
 		for (int i = 0; i < master.number_of_servos; i++) {
 			/*
 			 out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
@@ -216,7 +216,7 @@ long int HI_rydz::get_position(int drive_number)
 // ------------------------------------------------------------------------
 HI_rydz::~HI_rydz(void) // destruktor
 {
-	if (master.robot_test_mode == 0) {
+	if (!master.robot_test_mode) {
 		reset_counters();
 
 		// Zezwolenie na prace reczna
