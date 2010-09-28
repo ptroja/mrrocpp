@@ -109,31 +109,6 @@ void ATI6284_force::connect_to_hardware(void)
 		//!< create Calibration struct
 		cal = createCalibration(calfilepath.c_str(), index);
 
-		/*
-		 // Temporary debug
-		 cal = new Calibration(); //createCalibration(calfilepath.c_str(), index);
-
-		 cal->Serial = "FT6284";
-		 cal->BodyStyle = "Gamma";
-		 cal->rt.NumChannels = 6;
-		 cal->Family = "DAQ";
-
-		 cal->PartNumber = "SI-65-5";
-
-		 cal->CalDate = "7/21/2005";
-
-		 cal->ForceUnits = "N";
-		 cal->TorqueUnits = "N-m";
-
-		 cal->BasicTransform.DistUnits = "m";
-		 cal->cfg.UserTransform.DistUnits = "m";
-
-		 cal->TempCompAvailable = false;
-
-		 cal->BasicTransform.AngleUnits = "degrees";
-		 cal->cfg.UserTransform.AngleUnits = "degrees";
-		 // temporary debuf end
-		 */
 		if (cal == NULL) {
 			printf("\nSpecified calibration could not be loaded.\n");
 		}
