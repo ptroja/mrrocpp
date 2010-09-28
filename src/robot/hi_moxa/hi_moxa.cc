@@ -57,8 +57,8 @@ void HI_moxa::init()
 
 	fd_max = 0;
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
-		std::cout << "[info] opening port : " << (port + (char) (i + 50)).c_str();
-		fd[i] = open((port + (char) (i + 50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+		std::cout << "[info] opening port : " << (port + (char) (i + INIT_PORT_CHAR)).c_str();
+		fd[i] = open((port + (char) (i + INIT_PORT_CHAR)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			//	throw(std::runtime_error("unable to open device!!!"));
 			std::cout << std::endl << "[error] fd == " << (int) fd[i] << std::endl;
@@ -154,7 +154,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
-	unsigned int bytes_received[8];
+	unsigned int bytes_received[MOXA_SERVOS_NR];
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;

@@ -87,7 +87,7 @@ const struct sigevent *isr_handler(void *area, int id)
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
-//	sr_msg->message("ATI6284_force 1");
+	//	sr_msg->message("ATI6284_force 1");
 }
 
 void ATI6284_force::connect_to_hardware(void)
@@ -108,6 +108,32 @@ void ATI6284_force::connect_to_hardware(void)
 
 		//!< create Calibration struct
 		cal = createCalibration(calfilepath.c_str(), index);
+
+		/*
+		 // Temporary debug
+		 cal = new Calibration(); //createCalibration(calfilepath.c_str(), index);
+
+		 cal->Serial = "FT6284";
+		 cal->BodyStyle = "Gamma";
+		 cal->rt.NumChannels = 6;
+		 cal->Family = "DAQ";
+
+		 cal->PartNumber = "SI-65-5";
+
+		 cal->CalDate = "7/21/2005";
+
+		 cal->ForceUnits = "N";
+		 cal->TorqueUnits = "N-m";
+
+		 cal->BasicTransform.DistUnits = "m";
+		 cal->cfg.UserTransform.DistUnits = "m";
+
+		 cal->TempCompAvailable = false;
+
+		 cal->BasicTransform.AngleUnits = "degrees";
+		 cal->cfg.UserTransform.AngleUnits = "degrees";
+		 // temporary debuf end
+		 */
 		if (cal == NULL) {
 			printf("\nSpecified calibration could not be loaded.\n");
 		}
@@ -208,7 +234,7 @@ void ATI6284_force::configure_sensor(void)
 {
 	if (!(master.force_sensor_test_mode)) {
 
-//		sr_msg->message("configure_sensor 1");
+		//		sr_msg->message("configure_sensor 1");
 
 		// double kartez_force[6];
 		// short  measure_report;
@@ -250,7 +276,7 @@ void ATI6284_force::configure_sensor(void)
 					local_timer.get_time(sec);
 				} while (sec < START_TO_READ_TIME_INTERVAL);
 
-	//			sr_msg->message("configure_sensor 21");
+				//			sr_msg->message("configure_sensor 21");
 #if	 WITHOUT_INTERRUPT
 
 				local_timer.start();
@@ -396,13 +422,13 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
-//	sr_msg->message("wait_for_event");
+	//	sr_msg->message("wait_for_event");
 	if (!is_sensor_configured)
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if (!(master.force_sensor_test_mode)) {
 
-	//	sr_msg->message("wait_for_event ni test");
+		//	sr_msg->message("wait_for_event ni test");
 
 		lib::timer local_timer;
 		float sec;
