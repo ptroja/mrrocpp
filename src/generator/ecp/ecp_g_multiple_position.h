@@ -601,6 +601,7 @@ public:
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
 						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						flushall();
 					}
 					return 1; //jerk in the first macrostep
 				}
@@ -609,6 +610,7 @@ public:
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
 						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						flushall();
 					}
 					return 1; //jerk in the first macrostep
 				}
@@ -629,6 +631,7 @@ public:
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
 							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+							flushall();
 						}
 						return i;
 					}
@@ -637,6 +640,7 @@ public:
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
 							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+							flushall();
 						}
 						return i;
 					}

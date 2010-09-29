@@ -73,6 +73,7 @@ bool newsmooth::calculate() {
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
 				if (debug) {
 					printf("calculate_absolute_distance_direction_pose returned false\n");
+
 				}
 				return false;
 			}
@@ -116,9 +117,13 @@ bool newsmooth::calculate() {
 				vpc.calculate_s_uni(pose_vector_iterator, j);//calculate s_uni
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
+
 				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
+
+				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
 
 				if(!vpc.reduction_axis(pose_vector_iterator, j)) {
 					return calculate();
@@ -134,9 +139,6 @@ bool newsmooth::calculate() {
 			!vpc.set_times_to_t(pose_vector_iterator)) {//set times to t
 			return false;
 		}
-
-		//printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
-		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 

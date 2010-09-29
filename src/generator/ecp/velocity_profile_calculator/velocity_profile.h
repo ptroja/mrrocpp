@@ -88,7 +88,7 @@ class velocity_profile {
 			return true;
 		}
 		/**
-		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type..
+		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type.
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the coordinates vector was initiated and filled in before)
 		 */
@@ -102,7 +102,10 @@ class velocity_profile {
 			it->k.clear();
 			for (int i = 0; i < it->axes_num; i++) {
 				it->s.push_back(fabs(it->coordinates[i]));
-				if (it->coordinates[i] >= 0) {
+
+				if (eq(it->coordinates[i], 0)) {
+					it->k.push_back(0);
+				} else if (it->coordinates[i] > 0) {
 					it->k.push_back(1);
 				} else {
 					it->k.push_back(-1);
