@@ -71,7 +71,6 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		/**
 		 * Reduces the initial velocity so that the given distance can be covered in the given time. Calculated initial velocity is the one at which
 		 * the given distance is covered in the given time keeping the velocity constant.
-		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -93,7 +92,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		bool optimize_time2(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &it, int i);
 		/**
 		 * Calculates the shortest time for the fourth motion model velocity profile (1 phase motion, only deceleration), in which the given distance
-		 * can be covered with the given constraints on maximal velocity and acceleration.
+		 * can be covered with the given constraints on maximal velocity and acceleration. Reduces the initial velocity if necessary.
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -123,14 +122,14 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		/**
 		 * Sets the v_p (initial velocity) of a single pose and all axes.
 		 * @param it iterator to the list of positions
-		 * @param beginning_it iterator to the one past last element in the pose list
+		 * @param beginning_it iterator to the first element in the pose list
 		 * @return true if the calculation was successful
 		 */
 		bool set_v_p_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & beginning_it);
 		/**
 		 * Sets the v_p (initial velocity) of a single axis of a single pose.
 		 * @param it iterator to the list of positions
-		 * @param beginning_it iterator to the one past last element in the pose list
+		 * @param beginning_it iterator to the first element in the pose list
 		 * @param i number of axis for which the setting is made
 		 * @return true if the calculation was successful
 		 */
