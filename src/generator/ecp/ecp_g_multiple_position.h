@@ -583,7 +583,7 @@ public:
 	 * @param max_acc maximal allowed acceleration
 	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
-    virtual int detect_jerks(int max_acc)
+    virtual int detect_jerks(double max_acc)
 	{
     	if (debug) {
     		printf("##################################### detect_jerks #####################################\n");
@@ -601,6 +601,7 @@ public:
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
 						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
 						flushall();
 					}
 					return 1; //jerk in the first macrostep
@@ -610,6 +611,7 @@ public:
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
 						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
 						flushall();
 					}
 					return 1; //jerk in the first macrostep
@@ -630,19 +632,21 @@ public:
 					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
 							flushall();
 						}
-						return i;
+						return i+1;
 					}
 				} else if (motion_type == lib::RELATIVE) {
 					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i, j);
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
 							flushall();
 						}
-						return i;
+						return i+1;
 					}
 				} else {
 					sr_ecp_msg.message("Wrong motion type");
