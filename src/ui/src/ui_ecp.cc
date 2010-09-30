@@ -65,7 +65,7 @@ void ecp_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
-
+#if !defined(USE_MESSIP_SRR)
 	name_attach_t *attach;
 
 	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
@@ -361,6 +361,7 @@ void ecp_buffer::operator()()
 				perror("Strange ECP message");
 		}
 	}
+#endif
 }
 
 }
