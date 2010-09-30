@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+#include <cstdio>
 
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_vis_ib_eih_wrist_turner_irp6ot.h"

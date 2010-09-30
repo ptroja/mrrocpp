@@ -719,7 +719,7 @@ std::ostream & operator<<(std::ostream & stream, const Homog_matrix & m)
 	for (int j = 0; j < 3; j++) {
 		for (int i = 0; i < 4; i++) {
 			stream.width(8);
-			stream.setf(ios::showpos | ios::left);
+			stream.setf(std::ios::showpos | std::ios::left);
 			stream << "\t" << m.matrix_m[j][i];
 		}
 		stream << ";\n";

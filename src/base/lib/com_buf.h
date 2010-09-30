@@ -27,7 +27,7 @@
 #include "base/lib/impconst.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 #include <boost/serialization/serialization.hpp>

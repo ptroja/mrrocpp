@@ -32,10 +32,18 @@ add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc
 	../../subtask/ecp_st_go.cc
 )
+
+if(ROBOT_SPEAKER)
 add_executable(ecp_speak_rcsc
 	ecp_t_rcsc_speaker.cc
 	../../robot/speaker/ecp_g_speak.cc
 )
+target_link_libraries(ecp_speak_rcsc ecp_r_speaker ecp)
+install(TARGETS
+	ecp_speak_rcsc
+	DESTINATION bin)
+endif(ROBOT_SPEAKER)
+
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
 	../../subtask/ecp_st_go.cc
@@ -47,11 +55,10 @@ target_link_libraries(mp_fsautomat mp)
 
 target_link_libraries(ecp_irp6ot_rcsc ecp_r_irp6ot_m ecp)
 target_link_libraries(ecp_irp6p_rcsc ecp_r_irp6p_m ecp)
-target_link_libraries(ecp_speak_rcsc ecp_r_speaker ecp)
 target_link_libraries(ecp_fsautomat ecp_r_irp6p_m ecp_r_irp6ot_m ecp)
 
 install(TARGETS
 	mp_fsautomat ecp_fsautomat
-	mp_rcsc ecp_speak_rcsc
+	mp_rcsc
 	ecp_irp6ot_rcsc ecp_irp6p_rcsc
 	DESTINATION bin)

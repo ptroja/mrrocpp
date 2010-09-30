@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <cmath>
 
 #include "base/ecp/ecp_robot.h"
