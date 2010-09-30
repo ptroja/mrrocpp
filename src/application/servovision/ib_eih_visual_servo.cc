@@ -80,10 +80,14 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	Eigen::Matrix <double, 6, 1> e;
 	Eigen::Matrix <double, 3, 1> e_translation;
 
+	e.setZero();
+
 	e(0, 0) = vsp_fradia->get_reading_message().error.x;
 	e(1, 0) = vsp_fradia->get_reading_message().error.y;
 	e(2, 0) = vsp_fradia->get_reading_message().error.z;
 	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
+
+	error = e;
 
 	e_translation(0, 0) = e(0, 0);
 	e_translation(1, 0) = e(1, 0);

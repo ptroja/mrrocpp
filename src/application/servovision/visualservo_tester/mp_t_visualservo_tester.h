@@ -18,6 +18,13 @@ namespace mp {
 
 namespace task {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class visualservo_tester : public mrrocpp::mp::task::task
 {
 public:
@@ -33,6 +40,8 @@ private:
 	bool run_conveyor;
 	int vs_settle_time;
 };
+
+/** @} */
 
 }
 

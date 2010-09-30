@@ -22,7 +22,7 @@ add_executable(ecp_irp6ot_rcsc
     ../servovision/ib_eih_visual_servo.cc
     ../servovision/visual_servo.cc
     ../servovision/visual_servo_manager.cc
-    ../servovision/simple_visual_servo_manager.cc
+    ../servovision/single_visual_servo_manager.cc
     ../servovision/position_constraint.cc
     ../servovision/cubic_constraint.cc
     ../servovision/termination_condition.cc

@@ -27,12 +27,21 @@ namespace ecp {
 
 namespace servovision {
 
+/** @addtogroup servovision
+ *  @{
+ */
 
+/**
+ *
+ */
 struct data{
 	struct timespec measure_time;
 	lib::Homog_matrix error;
 };
 
+/**
+ *
+ */
 class vs_logger
 {
 public:
@@ -54,6 +63,9 @@ private:
 	int counter;
 	static const int MAX_ENTRIES = 1000;
 };
+
+/** @} */
+
 
 }//namespace servovision
 
