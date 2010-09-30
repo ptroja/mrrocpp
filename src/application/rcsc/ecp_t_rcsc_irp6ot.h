@@ -44,10 +44,6 @@ protected:
 	//podzadania
 	common::sub_task::gripper_opening* go_st;
 
-	common::generator::weight_meassure* wmg;
-    //podzadania
-	common::task::ecp_sub_task_gripper_opening* go_st;
-
 	shared_ptr<single_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
 	shared_ptr<visual_servo_regulator> reg;

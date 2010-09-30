@@ -26,7 +26,7 @@
 #include "generator/ecp/ecp_mp_g_smooth.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "robot/festival/const_festival.h"
-#include "application/servovision/ecp_mp_g_simple_visual_servo_manager.h"
+#include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_force_tool_change.h"
