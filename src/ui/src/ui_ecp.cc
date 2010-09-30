@@ -66,6 +66,8 @@ void ecp_buffer::operator()()
 
 	lib::set_thread_name("comm");
 #if !defined(USE_MESSIP_SRR)
+	bool wyjscie;
+
 	name_attach_t *attach;
 
 	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
@@ -228,7 +230,7 @@ void ecp_buffer::operator()()
 				//    printf("lib::LOAD_FILE\n");
 				if (interface.teachingstate == ui::common::MP_RUNNING) {
 					synchroniser.null_command();
-					bool wyjscie = false;
+					wyjscie = false;
 					while (!wyjscie) {
 						if (!interface.is_file_selection_window_open) {
 							interface.is_file_selection_window_open = 1;
