@@ -58,9 +58,11 @@ int MAM_btn_start_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 #ifdef MAMDEBUG
 	printf("MAM_btn_start_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> start pomiarow.
 	ui_ecp_msg.command = lib::MAM_START;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -85,9 +87,11 @@ int MAM_btn_stop_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 #ifdef MAMDEBUG
 	printf("MAM_btn_stop_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_STOP;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -112,9 +116,11 @@ int MAM_btn_clear_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 #ifdef MAMDEBUG
 	printf("MAM_btn_clear_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_CLEAR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -151,9 +157,11 @@ int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 #ifdef MAMDEBUG
 	printf("MAM_btn_calibrate\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_CALIBRATE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -177,9 +185,11 @@ int MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef MAMDEBUG
 	printf("MAM_btn_exit\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::MAM_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
