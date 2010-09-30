@@ -75,8 +75,8 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_1_MAX_ACC, common::SG_REG_1_MAX_SPEED);
+	
+	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
