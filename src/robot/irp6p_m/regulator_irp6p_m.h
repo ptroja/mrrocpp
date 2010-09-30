@@ -16,15 +16,6 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6p_m {
 
-// ograniczenia przyrostu PWM dla IRP6_POSTUMENT
-const int IRP6_POSTUMENT_AXE1_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT = 1000;
-const int IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT = 1000;
-
 // Stale dla celow synchronizacji IRP6_POSTUMENT
 // #define IRP6_POSTUMENT_SYNCHRO_STEP_COARSE -4*2*M_PI/IRP6_POSTUMENT_INC_PER_REVOLUTION
 // #define IRP6_POSTUMENT_SYNCHRO_STEP_FINE   -1*2*M_PI/IRP6_POSTUMENT_INC_PER_REVOLUTION
@@ -32,6 +23,9 @@ const double AXIS_0_TO_5_SYNCHRO_STEP_COARSE = -0.03;
 const double AXIS_0_TO_5_SYNCHRO_STEP_FINE = -0.007;
 const double AXIS_6_SYNCHRO_STEP_COARSE = -0.05;
 const double AXIS_6_SYNCHRO_STEP_FINE = -0.05;
+
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO = 0.60;
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2 = 0.40;
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_2_irp6p : public common::NL_regulator

@@ -1,8 +1,8 @@
-/*
- * bang_bang_profile.cc
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of bang_bang_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include <cstdio>
@@ -261,33 +261,9 @@ bool bang_bang_profile::vp_reduction(vector<ecp_mp::common::trajectory_pose::ban
 	it->v_r[i] = it->s[i]/it->times[i];
 	it->v[i] = it->v_r[i]/it->v_max[i];
 
-	//it->v_r[i] = it->v[i] * it->v_max[i];
+	//printf("------------ recursion axis: %d, v_r: %f\n", i, it->v_r[i]);
+	//flushall();
 
-	/*switch (td.arm_type) {//zapisanie nowej predkoscici w liscie pozycji, dla danej pozycji
-
-		case lib::ECP_XYZ_EULER_ZYZ:
-			pose_list_backup_iterator->v[i] = v_r/v_max_zyz[i];
-			break;
-
-		case lib::ECP_XYZ_ANGLE_AXIS:
-			pose_list_backup_iterator->v[i] = v_r/v_max_aa[i];
-			break;
-
-		case lib::ECP_MOTOR:
-			pose_list_backup_iterator->v[i] = v_r/v_max_motor[i];
-			break;
-
-		case lib::ECP_JOINT:
-			pose_list_backup_iterator->v[i] = v_r/v_max_zyz[i];
-			break;
-		default:
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-	}
-
-	return v_r;*/
-	//pose_list = pose_list_backup;
-
-	//calculate();
 	return false;
 }
 
@@ -364,16 +340,14 @@ bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::trajectory_pose::b
 }
 
 bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &it, int i) {
-	double v_r;
-	double t;
 
-	v_r = sqrt(2 * it->a_r[i] * it->s[i] + it->v_k[i] * it->v_k[i]);
-	it->v_p[i] = v_r; //unnecessary?
-	t = (it->v_p[i] - it->v_k[i])/it->a_r[i];
+	it->v_p[i] = sqrt(2 * it->a_r[i] * it->s[i] + it->v_k[i] * it->v_k[i]);
+	it->times[i] = (it->v_p[i] - it->v_k[i])/it->a_r[i];
 
-	it->times[i] = t;
+	it->v_r[i] = it->v_p[i];//preparation for recalculation
+	it->v[i] = it->v_r[i]/it->v_max[i];
 
-	return true;
+	return false;
 }
 
 bool bang_bang_profile::calculate_time(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i) {
@@ -389,6 +363,7 @@ bool bang_bang_profile::set_v_k(vector<ecp_mp::common::trajectory_pose::bang_ban
 
 	if (eq(it->s[i],0)) {
 		it->v_k[i] = 0;
+		//printf("v_k: %f\t", it->v_k[i]);
 		return true;
 	}
 
@@ -412,6 +387,7 @@ bool bang_bang_profile::set_v_k(vector<ecp_mp::common::trajectory_pose::bang_ban
 			it->v_k[i] = 0;
 		}
 	}
+	//printf("v_k: %f\t", it->v_k[i]);
 	return true;
 }
 
@@ -424,6 +400,7 @@ bool bang_bang_profile::set_v_k_pose(vector<ecp_mp::common::trajectory_pose::ban
 		}
 	}
 
+	//printf("\n");
 	return trueFlag;
 }
 
@@ -435,6 +412,7 @@ bool bang_bang_profile::set_v_p_pose(vector<ecp_mp::common::trajectory_pose::ban
 			trueFlag = false;
 		}
 	}
+	//printf("\n");
 
 	return trueFlag;
 }
@@ -442,7 +420,8 @@ bool bang_bang_profile::set_v_p_pose(vector<ecp_mp::common::trajectory_pose::ban
 bool bang_bang_profile::set_v_p(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & beginning_it, int i) {
 
 	if (eq(it->s[i],0)) {
-		it->v_k[i] = 0;
+		it->v_p[i] = 0;
+		//printf("v_p: %f\t", it->v_p[i]);
 		return true;
 	}
 
@@ -454,6 +433,7 @@ bool bang_bang_profile::set_v_p(vector<ecp_mp::common::trajectory_pose::bang_ban
 		it++;
 		it->v_p[i] = temp_v_p;
 	}
+	//printf("v_p: %f\t", it->v_p[i]);
 	return true;
 }
 
@@ -472,7 +452,7 @@ bool bang_bang_profile::set_model(vector<ecp_mp::common::trajectory_pose::bang_b
 	} else if (eq(it->v_p[i], it->v_r[i])
 			  && eq(it->v_k[i], it->v_r[i])) { //tutaj bylo tez ze vk > vr (w or razem z drugim warunkiem)
 		it->model[i] = 3;
-	} else if (eq(it->v_p[i], it->v_r[i])
+	} else if ((eq(it->v_p[i], it->v_r[i]) || it->v_p[i] > it->v_r[i])
 			   && (it->v_k[i] < it->v_r[i] || it->v_k[i] > it->v_r[i])) {
 		it-> model[i] = 4;
 	} else {

@@ -51,7 +51,7 @@ bool neuron_generator::next_step()
 {
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	flushall();
-	int i; //loop counter
+	int i; // loop counter
 
 	/*Check if entire trajectory was already sent, if so, finish the generator*/
 	if (neuron_sensor->transmissionFinished()) {

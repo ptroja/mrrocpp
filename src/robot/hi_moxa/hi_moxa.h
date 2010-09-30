@@ -2,9 +2,7 @@
  *
  * inicjalizacja struktur servo_data w konstruktorze hi_moxa
  * przekazanie do konstruktora hi_moxa danych o ilosci i numerach portow
-*/
-
-
+ */
 
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
@@ -37,6 +35,9 @@ const std::string PORT = "/dev/ser";
 const int BAUD = 921600;
 const int WRITE_BYTES = 10;
 const int READ_BYTES = 8;
+const char INIT_PORT_CHAR = 50;
+
+const int MOXA_SERVOS_NR = 8;
 
 const long COMMCYCLE_TIME_NS = 2000000;
 
@@ -45,7 +46,8 @@ const long COMMCYCLE_TIME_NS = 2000000;
 // ------------------------------------------------------------------------
 
 
-class HI_moxa: public common::HardwareInterface {
+class HI_moxa : public common::HardwareInterface
+{
 
 public:
 
@@ -70,13 +72,11 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int fd[8], fd_max;
+	int fd[MOXA_SERVOS_NR], fd_max;
 	int first_drive_number, last_drive_number;
-	struct servo_St servo_data[8];
-	struct termios oldtio[8];
+	struct servo_St servo_data[MOXA_SERVOS_NR];
+	struct termios oldtio[MOXA_SERVOS_NR];
 	struct timespec wake_time;
-
-	
 
 }; // koniec: class hardware_interface
 

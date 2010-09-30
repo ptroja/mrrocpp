@@ -57,8 +57,8 @@ void HI_moxa::init()
 
 	fd_max = 0;
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
-		std::cout << "[info] opening port : " << (port + (char) (i + 50)).c_str();
-		fd[i] = open((port + (char) (i + 50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+		std::cout << "[info] opening port : " << (port + (char) (i + INIT_PORT_CHAR)).c_str();
+		fd[i] = open((port + (char) (i + INIT_PORT_CHAR)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			//	throw(std::runtime_error("unable to open device!!!"));
 			std::cout << std::endl << "[error] fd == " << (int) fd[i] << std::endl;
@@ -90,6 +90,8 @@ void HI_moxa::init()
 	std::cout << "[info] fd_max: " << fd_max << std::endl;
 
 	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+
+	reset_counters();
 }
 
 void HI_moxa::insert_set_value(int drive_offset, double set_value)
@@ -104,7 +106,7 @@ void HI_moxa::insert_set_value(int drive_offset, double set_value)
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
 	//temp->pwm = set_value * (300.0 / 255.0);
-	temp->pwm = set_value * (550.0 / 255.0);
+	temp->pwm = set_value * (1000.0 / 255.0);
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::insert_set_value(" << drive_offset << ", " << set_value << ")" << std::endl;
@@ -154,7 +156,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
-	unsigned int bytes_received[8];
+	unsigned int bytes_received[MOXA_SERVOS_NR];
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
@@ -314,7 +316,17 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 void HI_moxa::reset_counters(void)
 {
-	std::cout << "[func] HI_moxa::reset_counters" << std::endl;
+
+	for (int i = 0; i < master.number_of_servos; i++) {
+
+		servo_data[i].current_absolute_position = 0L;
+		servo_data[i].previous_absolute_position = 0L;
+		servo_data[i].current_position_inc = 0.0;
+
+	} // end: for
+
+
+	//	std::cout << "[func] HI_moxa::reset_counters" << std::endl;
 }
 
 void HI_moxa::start_synchro(int drive_offset)

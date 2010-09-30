@@ -1,8 +1,8 @@
-/*
- * ecp_g_get_position.cpp
- *
- *  Created on: Apr 29, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of get_position class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "base/ecp/ecp_robot.h"

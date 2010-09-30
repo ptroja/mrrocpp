@@ -1,8 +1,8 @@
 /**
- * @file constant_velocity_trajectory_pose.cc
- * @brief constant_velocity_trajectory_pose class and its methods
- *
- * Contains bodies of the methods of bang_bang_trajectory_pose class.
+ * @file
+ * @brief Contains definitions of the methods of constant_velocity_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include <cstring>

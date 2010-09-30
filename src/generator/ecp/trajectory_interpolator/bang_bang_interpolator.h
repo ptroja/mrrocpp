@@ -1,8 +1,8 @@
-/*
- * bang_bang_interpolator.h
- *
- *  Created on: Jun 3, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of bang_bang_interpolator class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _BANG_BANG_INTERPOLATOR_H_
@@ -22,6 +22,9 @@ namespace trajectory_interpolator {
  * @brief Methods to perform the interpolation of the motion with the trapezoidal velocity profile.
  *
  * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a trapezoidal velocity.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 class bang_bang_interpolator : public mrrocpp::ecp::common::generator::trajectory_interpolator::trajectory_interpolator <
 		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>

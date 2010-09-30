@@ -1,21 +1,23 @@
 add_subdirectory (force)
 
 add_library(ecp_generators
-	../../generator/ecp/ecp_g_teach_in.cc
-	../../generator/ecp/ecp_g_delta.cc
-	../../generator/ecp/ecp_g_operator_reaction_condition.cc
-	../../generator/ecp/ecp_g_jarosz.cc
-	../../generator/ecp/ecp_g_visual_servo_manager.cc
-	../../generator/ecp/ecp_g_visual_servo.cc
-	../../generator/ecp/ecp_g_smooth.cc
-	../../generator/ecp/ecp_g_sleep.cc
-	../../generator/ecp/ecp_g_get_position.cc
-	../../generator/ecp/ecp_g_constant_velocity.cc
-	../../generator/ecp/ecp_g_newsmooth.cc
-	../../generator/ecp/velocity_profile_calculator/bang_bang_profile.cc
-	../../generator/ecp/velocity_profile_calculator/constant_velocity_profile.cc
-	../../generator/ecp/trajectory_interpolator/constant_velocity_interpolator.cc
-	../../generator/ecp/trajectory_interpolator/bang_bang_interpolator.cc
+	ecp_g_teach_in.cc
+	ecp_g_delta.cc
+	ecp_g_operator_reaction_condition.cc
+	ecp_g_jarosz.cc
+	ecp_g_visual_servo_manager.cc
+	ecp_g_visual_servo.cc
+	ecp_g_smooth.cc
+	ecp_g_sleep.cc
+	ecp_g_get_position.cc
+	ecp_g_constant_velocity.cc
+	ecp_g_newsmooth.cc
+	velocity_profile_calculator/bang_bang_profile.cc
+	velocity_profile_calculator/constant_velocity_profile.cc
+	trajectory_interpolator/constant_velocity_interpolator.cc
+	trajectory_interpolator/bang_bang_interpolator.cc
+	vision/ecp_g_vis_ib_eih_planar_irp6ot.cc
+	vision/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
 )
 
 # @bug cyclic dependency between ecp<->ecp_generators prevents building as
