@@ -275,12 +275,6 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE1_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE1_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE1_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -464,12 +458,7 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE2_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE2_MAX_PWM_INCREMENT;
+
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -647,12 +636,7 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE3_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE3_MAX_PWM_INCREMENT;
+
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -834,12 +818,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE4_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE4_MAX_PWM_INCREMENT;
+
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -1015,12 +994,7 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE5_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE5_MAX_PWM_INCREMENT;
+
 
 	// if (fabs(set_value_new) > 200.0 && first) {
 	// cprintf("PIN=%lf PIO=%lf DIN=%lf DIO=%lf SO=%lf SVVO=%lf SV0=%lf\n", position_increment_new,
@@ -1194,12 +1168,7 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE6_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE6_MAX_PWM_INCREMENT;
+
 
 	// scope-locked reader data update
 	{
@@ -1406,12 +1375,7 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 
 	// if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + AXE7_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - AXE7_MAX_PWM_INCREMENT;
+
 
 	// scope-locked reader data update
 	{

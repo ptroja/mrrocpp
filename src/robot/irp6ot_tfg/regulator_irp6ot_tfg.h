@@ -16,7 +16,6 @@ namespace edp {
 namespace irp6ot_tfg {
 class effector;
 
-const int AXE8_MAX_PWM_INCREMENT = 1000;
 
 const double AXIS_7_SYNCHRO_STEP_COARSE = -0.5;
 const double AXIS_7_SYNCHRO_STEP_FINE = -0.2;

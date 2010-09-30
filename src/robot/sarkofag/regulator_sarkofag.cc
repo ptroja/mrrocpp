@@ -241,13 +241,6 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > SARKOFAG_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + SARKOFAG_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -SARKOFAG_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - SARKOFAG_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
