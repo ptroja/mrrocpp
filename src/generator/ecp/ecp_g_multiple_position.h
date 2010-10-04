@@ -385,7 +385,7 @@ public:
 		return true;
 	}
 	/**
-	 * Implementation of the next_step method.
+	 * Definition of the next_step method.
 	 */
 	bool next_step()
 	{
@@ -548,10 +548,10 @@ public:
 	/**
 	 * Sets the chosen type of interpolation.
 	 */
-	void set_interpolation_type()
+	/*void set_interpolation_type()
 	{
 		//TODO
-	}
+	}*/
 	/**
 	 * Sets the relative type of motion.
 	 */

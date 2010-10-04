@@ -25,7 +25,7 @@ CaptureTask::CaptureTask(mrrocpp::lib::configurator& configurator) :
 	log("CaptureTask::CaptureTask()\n");
 	log_enabled = log_dbg_enabled = true;
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
-	smoothGen = new mrrocpp::ecp::common::generator::smooth(*this, true);
+	smoothGen = new mrrocpp::ecp::common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	fradiaSensor = new capture_image_sensor(configurator, "[capture_task_fradia_config]");
 	fradiaSensor->configure_sensor();
 	et.captureNow = false;
@@ -112,17 +112,26 @@ void CaptureTask::main_task_algorithm(void) {
 }
 
 void CaptureTask::nextPosition(double deltaX, double deltaY, double deltaZ) {
-	double
-			v[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
-	double
-			a[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//double
+		//	v[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
+	//double
+		//	a[lib::MAX_SERVOS_NR] = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 };
 
 	et.x += deltaX;
 	et.y += deltaY;
 	et.z += deltaZ;
 
-	smoothGen->load_xyz_angle_axis(v, a, deltaX, deltaY, deltaZ, 0, 0, 0, 0, 0,
-			true);
+	std::vector <double> coordinates(6);
+
+	coordinates[0] = deltaX;
+	coordinates[1] = deltaY;
+	coordinates[2] = deltaZ;
+	coordinates[3] = 0.0;
+	coordinates[4] = 0.0;
+	coordinates[5] = 0.0;
+
+	//smoothGen->load_relative_angle_axis_trajectory_pose(v, a, deltaX, deltaY, deltaZ, 0, 0, 0, 0, 0,
+		//	true);
 	smoothGen->Move();
 }
 
