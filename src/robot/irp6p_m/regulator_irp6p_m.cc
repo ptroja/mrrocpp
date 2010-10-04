@@ -119,7 +119,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	//                         delta r[k-2] -- mierzone w impulsach)
 	// step_new               - nastepna wartosc zadana dla jednego kroku
 	//                         regulacji (przyrost wartosci zadanej polozenia --
-	//                         delta r[k			-1] -- mierzone w radianach)
+	//                         delta r[k-1] -- mierzone w radianach)
 	// set_value_new          - wielkosc kroku do realizacji przez HIP
 	//                         (wypelnienie PWM -- u[k]): czas trwania jedynki
 	// set_value_old          - wielkosc kroku do realizacji przez HIP

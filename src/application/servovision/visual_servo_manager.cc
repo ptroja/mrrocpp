@@ -141,31 +141,24 @@ bool visual_servo_manager::next_step()
 
 void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
 {
-	bool constraints_kept = false;
-
-	int nearest_allowed_area_idx = -1;
 	double nearest_allowed_area_distance = INFINITY;
+	lib::Homog_matrix constrained_position = new_position;
 
 	for (int i = 0; i < position_constraints.size(); ++i) {
-		position_constraints[i]->set_new_position(new_position);
-		if (position_constraints[i]->is_translation_ok()) { // end effector is in allowed region
-			if (!position_constraints[i]->is_rotation_ok()) { // correct end effector's rotation if necessary
-				position_constraints[i]->apply_constraint();
-				new_position = position_constraints[i]->get_constrained_position();
-			}
-			constraints_kept = true;
-		} else {
-			double dist = position_constraints[i]->get_distance_from_allowed_area();
-			if (nearest_allowed_area_distance > dist) {
-				nearest_allowed_area_distance = dist;
-				nearest_allowed_area_idx = i;
-			}
+		lib::Homog_matrix c1 = position_constraints[i]->apply_constraint(new_position);
+		Eigen::Matrix <double, 3, 1> translation;
+		translation(0, 0) = c1(0, 3) - new_position(0, 3);
+		translation(1, 0) = c1(1, 3) - new_position(1, 3);
+		translation(2, 0) = c1(2, 3) - new_position(2, 3);
+
+		double d = translation.norm();
+
+		if(nearest_allowed_area_distance > d){
+			nearest_allowed_area_distance = d;
+			constrained_position = c1;
 		}
 	}
-	if (!constraints_kept && nearest_allowed_area_idx >= 0) {
-		position_constraints[nearest_allowed_area_idx]->apply_constraint();
-		new_position = position_constraints[nearest_allowed_area_idx]->get_constrained_position();
-	}
+	new_position = constrained_position;
 }
 
 void visual_servo_manager::constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Eigen::Matrix <double, 3, 1> &prev_v, Eigen::Matrix <
@@ -238,6 +231,31 @@ void visual_servo_manager::add_position_constraint(boost::shared_ptr <position_c
 void visual_servo_manager::add_termination_condition(boost::shared_ptr <termination_condition> term_cond)
 {
 	termination_conditions.push_back(term_cond);
+}
+
+double visual_servo_manager::get_linear_speed() const
+{
+	return velocity.norm();
+}
+
+double visual_servo_manager::get_angular_speed() const
+{
+	return angular_velocity.norm();
+}
+
+double visual_servo_manager::get_linear_acceleration() const
+{
+	return acceleration.norm();
+}
+
+double visual_servo_manager::get_angular_acceleration() const
+{
+	return angular_acceleration.norm();
+}
+
+const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& visual_servo_manager::get_servos() const
+{
+	return servos;
 }
 
 } // namespace generator

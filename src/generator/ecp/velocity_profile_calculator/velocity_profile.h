@@ -8,6 +8,8 @@
 #ifndef _VELOCITY_PROFILE_H_
 #define _VELOCITY_PROFILE_H_
 
+#include <cstdio>
+
 #include <algorithm>
 #include <vector>
 

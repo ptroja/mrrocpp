@@ -25,7 +25,7 @@
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #else
 #include <boost/property_tree/ptree.hpp>
 #endif
@@ -60,13 +60,13 @@ private:
 	//! Session name
 	const std::string session_name;
 
+	//! Mutex to protect exclusive access
+	mutable boost::mutex access_mutex;
+
 #ifdef USE_MESSIP_SRR
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
 #else
-	//! Mutex to protect exclusive access
-	mutable boost::mutex access_mutex;
-
 	//! Configuration file location
 	std::string file_location;
 

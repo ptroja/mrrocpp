@@ -129,9 +129,7 @@ void CaptureTask::nextPosition(double deltaX, double deltaY, double deltaZ) {
 	coordinates[3] = 0.0;
 	coordinates[4] = 0.0;
 	coordinates[5] = 0.0;
-
-	//smoothGen->load_relative_angle_axis_trajectory_pose(v, a, deltaX, deltaY, deltaZ, 0, 0, 0, 0, 0,
-		//	true);
+	smoothGen->load_relative_angle_axis_trajectory_pose(deltaX, deltaY, deltaZ, 0, 0, 0);
 	smoothGen->Move();
 }
 

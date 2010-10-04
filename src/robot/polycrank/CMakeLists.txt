@@ -2,7 +2,6 @@ if(ROBOT_POLYCRANK)
 
 add_executable(edp_polycrank
 	edp_e_polycrank.cc
-	../../base/edp/int_hand_suplement.cc
 )
 
 target_link_libraries(edp_polycrank kinematicspolycrank edp

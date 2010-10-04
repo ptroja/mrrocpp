@@ -30,7 +30,7 @@
 #include <string>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 #else
 #include <boost/filesystem.hpp>

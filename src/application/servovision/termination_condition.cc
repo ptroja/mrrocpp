@@ -13,12 +13,16 @@ namespace ecp {
 
 namespace servovision {
 
-termination_condition::termination_condition()
+termination_condition::termination_condition() : condition_met(false)
 {
 }
 
 termination_condition::~termination_condition()
 {
+}
+
+bool termination_condition::is_condition_met() const {
+	return condition_met;
 }
 
 }//namespace servovision

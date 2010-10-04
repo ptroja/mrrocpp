@@ -5,6 +5,9 @@
  *      Author: ptroja
  */
 
+#include <cstdio>
+#include <cstring>
+
 #include "base/lib/sr/sr_vsp.h"
 
 namespace mrrocpp {

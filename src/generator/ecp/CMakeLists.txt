@@ -7,7 +7,6 @@ add_library(ecp_generators
 	ecp_g_jarosz.cc
 	ecp_g_visual_servo_manager.cc
 	ecp_g_visual_servo.cc
-	ecp_g_smooth.cc
 	ecp_g_sleep.cc
 	ecp_g_get_position.cc
 	ecp_g_constant_velocity.cc

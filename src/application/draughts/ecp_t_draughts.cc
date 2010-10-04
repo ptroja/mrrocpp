@@ -358,18 +358,18 @@ void Draughts::takeStaticPawn(int from, int type)
 {
 
 	printf("taking pawn\n");
-	sgen2->reset();
-	sgen2->set_absolute();
+	//sgen2->reset();
+	//sgen2->set_absolute();
 
 	if (type == PAWN) {
-		sgen2->load_coordinates(lib::ECP_JOINT, moves_table[from][0], moves_table[from][1], moves_table[from][2], moves_table[from][3], moves_table[from][4], moves_table[from][5], moves_table[from][6], moves_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, moves_table[from][0], moves_table[from][1], moves_table[from][2], moves_table[from][3], moves_table[from][4], moves_table[from][5], moves_table[from][6], moves_table[from][7], true);
 	} else if (type == WKING) {
-		sgen2->load_coordinates(lib::ECP_JOINT, wkings_table[from][0], wkings_table[from][1], wkings_table[from][2], wkings_table[from][3], wkings_table[from][4], wkings_table[from][5], wkings_table[from][6], wkings_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, wkings_table[from][0], wkings_table[from][1], wkings_table[from][2], wkings_table[from][3], wkings_table[from][4], wkings_table[from][5], wkings_table[from][6], wkings_table[from][7], true);
 	} else if (type == BKING) {
-		sgen2->load_coordinates(lib::ECP_JOINT, bkings_table[from][0], bkings_table[from][1], bkings_table[from][2], bkings_table[from][3], bkings_table[from][4], bkings_table[from][5], bkings_table[from][6], bkings_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, bkings_table[from][0], bkings_table[from][1], bkings_table[from][2], bkings_table[from][3], bkings_table[from][4], bkings_table[from][5], bkings_table[from][6], bkings_table[from][7], true);
 	}
 
-	sgen2->Move();
+	//sgen2->Move();
 
 	befgen->Move();
 

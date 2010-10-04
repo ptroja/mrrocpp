@@ -9,10 +9,12 @@
 
 #include <cassert>
 #include <cerrno>
+#include <cstdio>
+#include <cstring>
 #include <string>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #else
 #include <unistd.h>
 #include <sys/iofunc.h>
@@ -74,13 +76,12 @@ SenderBase::SenderBase(const std::string & sr_name)
 }
 
 SenderBase::~SenderBase() {
-	fprintf(stderr, "~sr: messip::port_disconnect(%s)\n", sr_message.process_name);
 	if(messip::port_disconnect(ch) == -1) {
 		perror("messip::port_disconnect()");
 	}
 }
 
-void sr::Send(const sr_package_t & sr_mess)
+void SenderBase::Send(const sr_package_t & sr_mess)
 {
 	// TODO: error check and throw an exception
 	messip::port_send_sync(ch, 0, 0, sr_mess);

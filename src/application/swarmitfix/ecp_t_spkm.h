@@ -14,7 +14,7 @@ class swarmitfix : public common::task::task
 protected:
 	//generatory
 	common::generator::transparent* gt;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 	common::generator::sleep* g_sleep;
 	common::generator::epos_cubic* g_epos_cubic;
 	common::generator::epos_trapezoidal* g_epos_trapezoidal;

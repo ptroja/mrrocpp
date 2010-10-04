@@ -14,7 +14,7 @@
 #if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
 #else
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <string>
 

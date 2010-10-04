@@ -11,3 +11,7 @@ add_executable(messip_sin messip_sin.c)
 target_link_libraries (messip_sin messip
 	${CMAKE_THREAD_LIBS_INIT} ${COMPATIBILITY_LIBRARIES})
 install(TARGETS messip_sin DESTINATION bin)
+
+if(QNXNTO)
+target_link_libraries (messip socket)
+endif(QNXNTO)

@@ -8,6 +8,8 @@
 #ifndef _MULTIPLE_POSITION_H_
 #define _MULTIPLE_POSITION_H_
 
+#include <cstdio>
+
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"

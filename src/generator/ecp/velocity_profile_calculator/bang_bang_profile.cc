@@ -5,6 +5,8 @@
  * @ingroup generators
  */
 
+#include <cstdio>
+
 #include "bang_bang_profile.h"
 
 namespace mrrocpp {
