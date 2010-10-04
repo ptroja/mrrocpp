@@ -221,10 +221,9 @@ public:
 #endif
     template<class T>
     void load_override(const boost::serialization::nvp<T> & t, int){
-         T x;
+         T& x(t.value());
          * this >> x;
-         t.value() = x;
-     }
+    }
 
     /**
      * Loading Archive Concept::operator>>
