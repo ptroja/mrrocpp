@@ -101,6 +101,17 @@ public:
 	LOAD_A_TYPE(unsigned long, xdr_u_long)
 	LOAD_A_TYPE(unsigned short, xdr_u_short)
 
+//	LOAD_A_TYPE(int16_t, xdr_int16_t)
+//	LOAD_A_TYPE(uint16_t, xdr_u_int16_t)
+//	LOAD_A_TYPE(int32_t, xdr_int32_t)
+//	LOAD_A_TYPE(uint32_t, xdr_u_int32_t)
+	LOAD_A_TYPE(int64_t, xdr_int64_t)
+#if defined(__QNXNTO__)
+	LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+	LOAD_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
+
     /**
      * Saving Archive Concept::is_loading
      */
@@ -112,7 +123,7 @@ public:
     typedef boost::mpl::bool_<false> is_saving;
 
     /**
-     * Construtor
+     * Constructor
      * @param _buffer data buffer
      * @param _buffer_size data buffer size
      * @return
