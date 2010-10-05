@@ -38,7 +38,7 @@ Draughts::Draughts(lib::configurator &_config) :
 	ecp_m_robot = new irp6ot_m::robot(*this); //initialization of robot
 
 	//sgen=new common::generator::smooth(*this, true);
-	sgen2 = new common::generator::smooth(*this, true);
+	//sgen2 = new common::generator::smooth(*this, true);
 	befgen = new common::generator::bias_edp_force(*this);
 	gagen = new common::generator::tff_gripper_approach(*this, 8); //gripper approach constructor (task&, no_of_steps)
 	sleepgen = new common::generator::sleep(*this);
@@ -55,7 +55,7 @@ Draughts::~Draughts()
 {
 	delete ecp_m_robot;
 	//delete sgen;
-	delete sgen2;
+	//delete sgen2;
 	delete befgen;
 	delete gagen;
 	delete sleepgen;
@@ -152,22 +152,22 @@ BOARD_STATUS Draughts::getBoardStatus()
 /*============================goToInitialPos=================================*/
 void Draughts::goToInitialPos()
 {
-	sgen2->reset();
+	/*sgen2->reset();
 	sgen2->set_absolute();
 	sgen2->load_coordinates(lib::ECP_JOINT, 0, -0.013, -1.442, -0.275, 0.045, 4.720, -0.100, 0.090, true);
-	sgen2->Move();
+	sgen2->Move();*/
 }
 
 /*===============================goUp=======================================*/
 void Draughts::goUp()
 {
 
-	double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
+	/*double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
 	double a[lib::MAX_SERVOS_NR] = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.1 };
 	sgen2->reset();
 	sgen2->set_relative();
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, -0.1, 0, 0, 0, 0, 0, true); //move up
-	sgen2->Move();
+	sgen2->Move();*/
 
 }
 
@@ -300,11 +300,11 @@ void Draughts::putStaticPawn(int to)
 {
 	printf("putting pawn\n");
 
-	sgen2->reset();
+	/*sgen2->reset();
 	sgen2->set_absolute();
 	sgen2->load_coordinates(lib::ECP_JOINT, moves_table[to][0], moves_table[to][1], moves_table[to][2], moves_table[to][3], moves_table[to][4], moves_table[to][5], moves_table[to][6], GRIPPER_CLOSED, true);
 	sgen2->load_coordinates(lib::ECP_JOINT, moves_table[to][0], moves_table[to][1], moves_table[to][2], moves_table[to][3], moves_table[to][4], moves_table[to][5], moves_table[to][6], GRIPPER_OPENED, false);
-	sgen2->Move();
+	sgen2->Move();*/
 	goUp();
 }
 
@@ -341,14 +341,14 @@ void Draughts::takeDynamicPawn(int from)
 	gagen->configure(0.01, 300);
 	gagen->Move();
 
-	double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
+	/*double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
 	double a[lib::MAX_SERVOS_NR] = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.1 };
 
 	sgen2->reset();
 	sgen2->set_relative();
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, -0.001, 0, 0, 0, 0, 0, true); //go up to not touch board
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, 0, 0, 0, 0, -0.033, 0, false); //close gripper
-	sgen2->Move();
+	sgen2->Move();*/
 	goUp();
 
 }
@@ -358,18 +358,18 @@ void Draughts::takeStaticPawn(int from, int type)
 {
 
 	printf("taking pawn\n");
-	sgen2->reset();
-	sgen2->set_absolute();
+	//sgen2->reset();
+	//sgen2->set_absolute();
 
 	if (type == PAWN) {
-		sgen2->load_coordinates(lib::ECP_JOINT, moves_table[from][0], moves_table[from][1], moves_table[from][2], moves_table[from][3], moves_table[from][4], moves_table[from][5], moves_table[from][6], moves_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, moves_table[from][0], moves_table[from][1], moves_table[from][2], moves_table[from][3], moves_table[from][4], moves_table[from][5], moves_table[from][6], moves_table[from][7], true);
 	} else if (type == WKING) {
-		sgen2->load_coordinates(lib::ECP_JOINT, wkings_table[from][0], wkings_table[from][1], wkings_table[from][2], wkings_table[from][3], wkings_table[from][4], wkings_table[from][5], wkings_table[from][6], wkings_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, wkings_table[from][0], wkings_table[from][1], wkings_table[from][2], wkings_table[from][3], wkings_table[from][4], wkings_table[from][5], wkings_table[from][6], wkings_table[from][7], true);
 	} else if (type == BKING) {
-		sgen2->load_coordinates(lib::ECP_JOINT, bkings_table[from][0], bkings_table[from][1], bkings_table[from][2], bkings_table[from][3], bkings_table[from][4], bkings_table[from][5], bkings_table[from][6], bkings_table[from][7], true);
+		//sgen2->load_coordinates(lib::ECP_JOINT, bkings_table[from][0], bkings_table[from][1], bkings_table[from][2], bkings_table[from][3], bkings_table[from][4], bkings_table[from][5], bkings_table[from][6], bkings_table[from][7], true);
 	}
 
-	sgen2->Move();
+	//sgen2->Move();
 
 	befgen->Move();
 
@@ -377,14 +377,14 @@ void Draughts::takeStaticPawn(int from, int type)
 	gagen->configure(0.01, 300);
 	gagen->Move();
 
-	double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
+	/*double v[lib::MAX_SERVOS_NR] = { 0.20, 0.20, 0.01, 0.20, 0.20, 0.20, 0.002, 0.20 };
 	double a[lib::MAX_SERVOS_NR] = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.01, 0.1 };
 
 	sgen2->reset();
 	sgen2->set_relative();
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, -0.001, 0, 0, 0, 0, 0, true); //go up to not touch board
 	sgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, v, a, 0, 0, 0, 0, 0, 0, -0.033, 0, false); //close gripper
-	sgen2->Move();
+	sgen2->Move();*/
 	goUp();
 
 }
@@ -394,11 +394,11 @@ void Draughts::throwPawn(int from)
 {
 	takeDynamicPawn(from);
 	//takeStaticPawn(from,PAWN);
-	sgen2->reset();
+	/*sgen2->reset();
 	sgen2->set_absolute();
 	sgen2->load_coordinates(lib::ECP_JOINT, 0, -0.366, -1.184, 0.180, 0.01, 4.704, -0.407, GRIPPER_CLOSED, true); //go beyond board
 	sgen2->load_coordinates(lib::ECP_JOINT, 0, -0.366, -1.184, 0.180, 0.01, 4.704, -0.407, GRIPPER_OPENED, false); //throw pawn
-	sgen2->Move();
+	sgen2->Move();*/
 }
 
 /*=======================trackPawn===========================================*/

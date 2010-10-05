@@ -1,8 +1,8 @@
-/*
- * constant_velocity_interpolator.h
- *
- *  Created on: Jun 3, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of constant_velocity_interpolator class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _CONSTANT_VELOCITY_INTERPOLATOR_H_
@@ -21,6 +21,9 @@ namespace trajectory_interpolator {
  * @brief Methods to perform the interpolation of the motion with the constant velocity.
  *
  * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a constant velocity.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 class constant_velocity_interpolator: public trajectory_interpolator<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
 public:

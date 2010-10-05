@@ -15,44 +15,9 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-static const double MAX_INC = 80;
-
 static const uint8_t ALGORITHM_AND_PARAMETERS_OK = 0;
 static const uint8_t UNIDENTIFIED_ALGORITHM_NO = 1;
 static const uint8_t UNIDENTIFIED_ALGORITHM_PARAMETERS_NO = 2;
-
-// stale ograniczen na predkosc i przyspieszenie w regulatorach
-
-const double SG_REG_1_MAX_SPEED = 0.4;
-//const double SG_REG_1_MAX_ACC = 0.01;
-const double SG_REG_1_MAX_ACC = 1;
-
-const double SG_REG_2_MAX_SPEED = 0.4;
-//const double SG_REG_2_MAX_ACC = 0.01;
-const double SG_REG_2_MAX_ACC = 1;
-
-const double SG_REG_3_MAX_SPEED = 0.4;
-//const double SG_REG_3_MAX_ACC = 0.01;
-const double SG_REG_3_MAX_ACC = 1;
-
-const double SG_REG_4_MAX_SPEED = 0.4;
-//const double SG_REG_4_MAX_ACC = 0.01;
-const double SG_REG_4_MAX_ACC = 1;
-
-const double SG_REG_5_MAX_SPEED = 0.4;
-//const double SG_REG_5_MAX_ACC = 0.01;
-const double SG_REG_5_MAX_ACC = 1;
-
-const double SG_REG_6_MAX_SPEED = 0.4;
-//const double SG_REG_6_MAX_ACC = 0.01;
-const double SG_REG_6_MAX_ACC = 1;
-
-const double SG_REG_7_MAX_SPEED = 1.0;
-//const double SG_REG_7_MAX_ACC = 0.01;
-const double SG_REG_7_MAX_ACC = 1;
-
-const double SG_REG_8_MAX_SPEED = 1000.0;
-const double SG_REG_8_MAX_ACC = 1000.0;
 
 /*-----------------------------------------------------------------------*/
 class regulator
@@ -104,21 +69,13 @@ protected:
 
 	lib::GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	// stara wersja - nieuzywana
-	// void constraint_detector(double max_acc_local, double max_vel_local, double max_diff_local, bool debug = false);
-	// nowa wersja
-	void constraint_detector(double max_acc_local, double max_vel_local, bool debug = false);
 
 public:
 
 	motor_driven_effector &master;
 	regulator(uint8_t reg_no, uint8_t reg_par_no, motor_driven_effector &_master); // konstruktor
 
-	virtual ~regulator()
-	{
-	}
-	;
+	virtual ~regulator();
 
 	virtual uint8_t compute_set_value(void) = 0;
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
@@ -173,22 +130,17 @@ protected:
 	unsigned int counter; // Licznik krokow zerowego PWM
 	double MAX_PWM;
 
-	//
 	double int_current_error;
 	int display;
-	//
 
 public:
 
-			NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master); // konstruktor
+			NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master);
 
 	virtual uint8_t compute_set_value(void) = 0;
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
 
-	virtual ~NL_regulator()
-	{
-	}
-	;
+	virtual ~NL_regulator();
 };
 // ----------------------------------------------------------------------
 

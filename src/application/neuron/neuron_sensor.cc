@@ -5,30 +5,34 @@
  *      Author: tbem
  */
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "neuron_sensor.h"
-
 #include <ctime>
+#include <cstdio>
 
 #include <sys/socket.h>
 #include <netinet/tcp.h>
 #include <netdb.h>
 #include <netinet/in.h>
 
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+
+#include "neuron_sensor.h"
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-#define NR_OF_TRAJECTORIES		1
-#define FIRST_COORDINATES		2
-#define TRAJECTORY				3
-#define TRAJECTORY_END			4
-#define FINISH_COMMUNICATION	5
-#define ACTUAL_POSITION			6
-#define START_BREAKING			7
+#define MRROCPP_READY			0x01
+#define MRROCPP_FINISHED		0x02
+#define VSP_START				0x11
+#define VSP_STOP				0x12
+
+#define FIRST_COORDINATES		0x21
+#define TRAJECTORY_FIRST		0x22
+#define CURRENT_POSITION		0x23
+#define TR_NEXT_POSITION		0x24
+#define START_BREAKING			0x25
 
 /*Sensor creation along with initialization of communication*/
 neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_configurator) {
@@ -77,7 +81,6 @@ neuron_sensor::~neuron_sensor() {
 }
 
 void neuron_sensor::get_reading(){
-	counter++;
 	/*timespec acttime;
 	if( clock_gettime( CLOCK_REALTIME , &acttime) == -1 ){
 		printf("sleep generator: next step time measurement error");
@@ -101,31 +104,22 @@ void neuron_sensor::get_reading(){
 	//copy data from packet to variables
 	memcpy(&command,buff,1);
 	switch(command){
-		case NR_OF_TRAJECTORIES:
-			memcpy(&(numberOfTrajectories),buff+1,4);
+		case VSP_START:
+			printf("VSP start command received\n");
+			break;
+
+		case VSP_STOP:
+			printf("VSP end command received\n");
 			break;
 
 		case FIRST_COORDINATES:
-		case TRAJECTORY:
-			memcpy(&(coordinates.x),buff+1,8);
-			memcpy(&(coordinates.y),buff+9,8);
-			memcpy(&(coordinates.z),buff+17,8);
-			printf("coordinates %d, %lf %lf %lf\n",command,coordinates.x,coordinates.y,coordinates.z);
-			break;
-
-		case TRAJECTORY_END:
-			printf("Neuron Sensor->get_Reading: Trajectory End\n");
-			break;
-
-		case FINISH_COMMUNICATION:
-			printf("communication finished\n");
-			break;
-
+		case TRAJECTORY_FIRST:
+		case TR_NEXT_POSITION:
 		case START_BREAKING:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
 			memcpy(&(coordinates.z),buff+17,8);
-			printf("neuron_sensor->get_reading: start breaking %lf %lf %lf",coordinates.x,coordinates.y,coordinates.z);
+			printf("coordinates %d, %lf %lf %lf\n",command,coordinates.x,coordinates.y,coordinates.z);
 			break;
 
 		default:
@@ -137,7 +131,13 @@ void neuron_sensor::get_reading(){
 
 /*Check whether appropriate information was sent from VSP, that finishes communication*/
 bool neuron_sensor::transmissionFinished(){
-	if(command==TRAJECTORY_END)
+	if(command==VSP_STOP)
+		return true;
+	return false;
+}
+
+bool neuron_sensor::startBraking(){
+	if(command==START_BREAKING)
 		return true;
 	return false;
 }
@@ -165,7 +165,7 @@ void neuron_sensor::sendCommand(uint8_t command){
 
 void neuron_sensor::sendCoordinates(double x, double y, double z){
 	char buff[25];
-	uint8_t temp_command=ACTUAL_POSITION;
+	uint8_t temp_command=CURRENT_POSITION;
 	memcpy(buff,&temp_command,1);
 	memcpy(buff+1,&x,8);
 	memcpy(buff+9,&y,8);
@@ -185,12 +185,6 @@ void neuron_sensor::sendCoordinates(double x, double y, double z){
 
 }
 
-int neuron_sensor::getNumberOfTrajectories(){
-	sendCommand(NR_OF_TRAJECTORIES);
-	get_reading();
-	return numberOfTrajectories;
-}
-
 Coordinates neuron_sensor::getFirstCoordinates(){
 	sendCommand(FIRST_COORDINATES);
 	get_reading();
@@ -199,11 +193,19 @@ Coordinates neuron_sensor::getFirstCoordinates(){
 
 void neuron_sensor::startGettingTrajectory(){
 	current_period=1;
-	sendCommand(TRAJECTORY);
+	sendCommand(TRAJECTORY_FIRST);
+}
+
+void neuron_sensor::waitForVSPStart(){
+	printf("dupa\n");
+	sendCommand(MRROCPP_READY);
+	printf("dupa1\n");
+	get_reading();
+	printf("dupa2\n");
 }
 
 void neuron_sensor::sendCommunicationFinished(){
-	sendCommand(FINISH_COMMUNICATION);
+	sendCommand(MRROCPP_FINISHED);
 }
 
 void neuron_sensor::configure_sensor(){

@@ -36,7 +36,7 @@
 #include "StateHeap.h"
 
 #include "base/lib/datastr.h"
-#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "cube_face.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
@@ -369,7 +369,7 @@ run_extended_empty_gen_and_wait(
 void fsautomat::executeMotion(common::State &state)
 {
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
-if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_SMOOTH) {
+if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {

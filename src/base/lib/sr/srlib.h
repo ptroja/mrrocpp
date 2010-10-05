@@ -17,7 +17,7 @@
 #include <boost/shared_ptr.hpp>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 #include "base/lib/typedefs.h"

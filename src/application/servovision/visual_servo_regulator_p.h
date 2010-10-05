@@ -20,7 +20,9 @@ namespace servovision {
  *  @{
  */
 
-//template <int ERROR_SIZE, int CONTROL_SIZE>
+/**
+ *
+ */
 class regulator_p: public visual_servo_regulator
 {
 public:

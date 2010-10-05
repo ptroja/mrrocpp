@@ -4,8 +4,10 @@
  *  Created on: Jul 2, 2010
  *      Author: tbem
  */
-#include "base/ecp/ecp_task.h"
+
 #include "base/ecp/ecp_robot.h"
+#include "base/ecp/ecp_task.h"
+
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
 #include <ctime>
@@ -15,18 +17,15 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-#define START_BREAKING			7
-
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
 	generator(_ecp_task)
 {
-
 	reset();
 }
 
 neuron_generator::~neuron_generator()
 {
-	delete neuron_sensor;
+	//delete neuron_sensor;
 }
 
 bool neuron_generator::first_step()
@@ -45,28 +44,24 @@ bool neuron_generator::first_step()
 
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
-	neuron_sensor->counter = 0;
-	printf("firstStep: currentPeriod: %d\n", neuron_sensor->current_period);
 	return true;
 }
 
-bool neuron_generator::next_step(){
-
+bool neuron_generator::next_step()
+{
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
 	flushall();
-	int i; //loop counter
+	int i; // loop counter
 
 	/*Check if entire trajectory was already sent, if so, finish the generator*/
 	if (neuron_sensor->transmissionFinished()) {
-		printf("End of transmission %d\n", neuron_sensor->counter);
-		flushall();
+		printf("End of transmission\n");
 		return false;
 	}
 
-
-	if(neuron_sensor->current_period==5){ //this section is not performed during breaking
-		if(neuron_sensor->getCommand()==START_BREAKING) {
-			breaking=true;
+	if (neuron_sensor->current_period == 5) { //this section is not performed during breaking
+		if (neuron_sensor->startBraking()) {
+			breaking = true;
 
 			printf("\n-------- breaking ----------\n");
 			flushall();
@@ -77,7 +72,6 @@ bool neuron_generator::next_step(){
 		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 		angle_axis_vector.to_table(actual_position);
-
 		// ------------ read the current robot position (end) ---------
 
 		flushall();
@@ -96,12 +90,11 @@ bool neuron_generator::next_step(){
 
 	int node = 6 - neuron_sensor->current_period;
 
-	if(breaking){//set the current period to 4 to avoid entering the above "if" condition
-		neuron_sensor->current_period=4;
+	if (breaking) {//set the current period to 4 to avoid entering the above "if" condition
+		neuron_sensor->current_period = 4;
 	}
 
-	for (i = 0; i < 6; i ++) { //for all of the axes...
-
+	for (i = 0; i < 6; i++) { //for all of the axes...
 		if (desired_position[i] == actual_position[i]) {//if no motion in the axis
 			position[i] = actual_position[i]; //position remains the same
 			printf("%f\t", position[i]);
@@ -134,17 +127,19 @@ bool neuron_generator::next_step(){
 				a = (v[i] * v[i]) / (2 * s[i]);//acceleration with which the robot should break in a single axis to reach the desired position
 			}
 
-			if ((breaking_node * 0.02 * v[i]/2 - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
+			if ((breaking_node * 0.02 * v[i] / 2 - breaking_node * breaking_node * 0.02 * 0.02 * a / 2) <= 0) {
 				reached[i] = true;
 			}
 
 			if (!reached[i]) {//calculating the next position while breaking  (0.02 is the macrostep time)
-				position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node * 0.02 * 0.02 * a / 2));
+				position[i] = actual_position[i] + (k[i] * (breaking_node * 0.02 * v[i] - breaking_node * breaking_node
+						* 0.02 * 0.02 * a / 2));
 			}
 
 		} else {
-			position[i] = actual_position[i] + (k[i] * (s[i]/5) * node); //normal motion (not breaking), distance between desired and current position is divided by 5, desired position is reached in 5 macrosteps and added to actual position
-			v[i] = (s[i]/5)/0.02;//current velocity, last v[i] is the velocity just before breaking, it is not updated during breaking
+			position[i] = actual_position[i] + (k[i] * (s[i] / 5) * node); //normal motion (not breaking), distance between desired and current position is divided by 5, desired position is reached in 5 macrosteps and added to actual position
+			v[i] = (s[i] / 5) / 0.02;//current velocity, last v[i] is the velocity just before breaking, it is not updated during breaking
+
 		}
 		printf("%f\t", position[i]);
 	}
@@ -161,8 +156,8 @@ bool neuron_generator::next_step(){
 	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);//send new position to the robot
 	// --------- send new position to the robot (EDP) (end) --------------
 
-	if(neuron_sensor->current_period==1) {
-		neuron_sensor->sendCoordinates(position[0],position[1],position[2]);
+	if (neuron_sensor->current_period == 1) {
+		neuron_sensor->sendCoordinates(position[0], position[1], position[2]);
 	}
 
 	for (i = 0; i < 6; i++) {

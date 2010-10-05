@@ -49,8 +49,10 @@ int FLbtnAcceptFile(PtWidget_t *widget, ApInfo_t *apinfo,
 	printf("FLbtnAcceptFile\n");
 #endif
 	// Ustawienie typu wiadomosci.
+#if !defined(USE_MESSIP_SRR)
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Przepisanie polecenia dla ECP.
 	ui_ecp_msg.command = FDCommand;
 	// Odczytanie sciezki.

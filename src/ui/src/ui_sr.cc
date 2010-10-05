@@ -40,19 +40,21 @@
 
 #include "base/lib/sr/srlib.h"
 
-#if !defined(USE_MESSIP_SRR)
+#if !defined(__QNXNTO__)
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
 #include "proto.h"
 #include <Pt.h>
 #include <Ph.h>
+#endif
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 void sr_buffer::operator()() {
+#if !defined(USE_MESSIP_SRR)
 	lib::set_thread_name("sr");
 
 	name_attach_t *attach;
@@ -120,20 +122,18 @@ void sr_buffer::operator()() {
 		}
 
 	}
-}
-
 #endif /* USE_MESSIP_SRR */
+}
 
 sr_buffer::sr_buffer(Interface& _interface) :
 	interface(_interface), cb(UI_SR_BUFFER_LENGHT) {
-	thread_id = new boost::thread(boost::bind(&sr_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
 
 sr_buffer::~sr_buffer() {
 	//	printf("sr_buffer\n");
-	//	thread_id->interrupt();
-	//	thread_id->join(); // join it
-	//	delete thread_id;
+	//	thread_id.interrupt();
+	//	thread_id.join();
 }
 
 void sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {

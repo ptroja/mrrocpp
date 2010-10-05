@@ -58,7 +58,7 @@ bool ecp_g_rotate_gripper::next_step()
 		return false;
 	}
 
-	double angle;
+	double angle = 0.0;
 	HD_READING state;
 
 	//Sprwadz czy otrzymano rozwiazanie od VSP.

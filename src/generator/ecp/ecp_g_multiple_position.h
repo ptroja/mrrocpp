@@ -1,12 +1,14 @@
-/*
- * multiple_position.h
- *
- *  Created on: May 21, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of multiple_position class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _MULTIPLE_POSITION_H_
 #define _MULTIPLE_POSITION_H_
+
+#include <cstdio>
 
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
@@ -24,7 +26,10 @@ namespace common {
 namespace generator {
 
 /**
- * Base class for the motion generators interpolating between fixed trajectory points.
+ * @brief Base class for the motion generators interpolating between fixed trajectory points.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 template <class Pos, class Inter, class Calc>
 class multiple_position : public generator
@@ -382,7 +387,7 @@ public:
 		return true;
 	}
 	/**
-	 * Implementation of the next_step method.
+	 * Definition of the next_step method.
 	 */
 	bool next_step()
 	{
@@ -545,10 +550,10 @@ public:
 	/**
 	 * Sets the chosen type of interpolation.
 	 */
-	void set_interpolation_type()
+	/*void set_interpolation_type()
 	{
 		//TODO
-	}
+	}*/
 	/**
 	 * Sets the relative type of motion.
 	 */
@@ -572,8 +577,96 @@ public:
 		coordinate_vector.clear();
 		calculated = false;
 		interpolated = false;
-		sr_ecp_msg.message("Generator reset");
 		angle_axis_absolute_transformed_into_relative = false;
+		sr_ecp_msg.message("Generator reset");
+	}
+	/**
+	 * Detection of possible jerks. Method scans the vector with coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
+	 * @param max_acc maximal allowed acceleration
+	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
+	 */
+    virtual int detect_jerks(double max_acc)
+	{
+    	if (debug) {
+    		printf("##################################### detect_jerks #####################################\n");
+		}
+
+		coordinate_vector_iterator = coordinate_vector.begin();
+		std::vector<double> temp1 = pose_vector.begin()->start_position;
+		std::vector<double> temp2 = (*coordinate_vector_iterator);
+
+		int i, j;//loop counters
+
+		for (i = 0; i < axes_num; i++) {
+			if (motion_type == lib::ABSOLUTE) {
+				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
+						flushall();
+					}
+					return 1; //jerk in the first macrostep
+				}
+			} else if (motion_type == lib::RELATIVE) {
+				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
+						flushall();
+					}
+					return 1; //jerk in the first macrostep
+				}
+			} else {
+				sr_ecp_msg.message("Wrong motion type");
+				throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			}
+		}
+
+		coordinate_vector_iterator++;
+
+		for (i = 1; i < coordinate_vector.size(); i++) {
+
+			j = 0;
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				if (motion_type == lib::ABSOLUTE) {
+					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
+							flushall();
+						}
+						return i+1;
+					}
+				} else if (motion_type == lib::RELATIVE) {
+					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
+							flushall();
+						}
+						return i+1;
+					}
+				} else {
+					sr_ecp_msg.message("Wrong motion type");
+					throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+				}
+
+				j++;
+			}
+
+			temp1 = temp2;
+			temp2 = *coordinate_vector_iterator;
+
+			coordinate_vector_iterator++;
+		}
+
+		flushall();
+
+		return 0;
 	}
 };
 

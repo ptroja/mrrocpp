@@ -9,6 +9,10 @@
 #define __SERVO_GR_H
 
 #include <boost/utility.hpp>
+#ifndef __QNXNTO__
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition.hpp>
+#endif
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/condition_synchroniser.h"
@@ -59,7 +63,6 @@ protected:
 	// ktore zostana zastapione regulatorami konkretnymi
 
 	// input_buffer
-
 
 	// output_buffer
 	lib::servo_group_reply servo_data; // informacja przesylana do EDP_MASTER

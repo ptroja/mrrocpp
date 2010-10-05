@@ -47,7 +47,9 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
 
+#if !defined(USE_MESSIP_SRR)
 	sr_message.hdr.type = 0;
+#endif
 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;

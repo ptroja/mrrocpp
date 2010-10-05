@@ -58,7 +58,9 @@ public:
 	 * Implement this to indicate when generator should be terminated.
 	 * @return true if generator should be terminated.
 	 */
-	virtual bool is_condition_met() const = 0;
+	bool is_condition_met() const;
+protected:
+	bool condition_met;
 };
 
 /** @} */

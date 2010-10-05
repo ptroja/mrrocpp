@@ -16,7 +16,7 @@
 #include "base/lib/single_thread_port.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 class ui_common_robot;

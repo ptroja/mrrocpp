@@ -6,5 +6,6 @@
 
 
  @defgroup base Foundation
+ @defgroup trajectory_pose Trajectory poses
   
 */

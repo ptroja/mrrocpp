@@ -19,7 +19,7 @@
 #include "generator/ecp/ecp_g_teach_in.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
 namespace mrrocpp {

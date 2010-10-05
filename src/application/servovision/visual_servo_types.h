@@ -56,6 +56,9 @@ struct image_based_configuration
 	image_based_position desired_position;
 };
 
+/**
+ *
+ */
 struct image_based_reading
 {
 	/** Set to true only if object is found in the image. */
@@ -64,6 +67,9 @@ struct image_based_reading
 	image_based_position error;
 };
 
+/**
+ *
+ */
 struct position_based_reading
 {
 	/** Set to true only if object is found in the image. */

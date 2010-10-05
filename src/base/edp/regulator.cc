@@ -63,116 +63,8 @@ regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_ef
 }
 /*-----------------------------------------------------------------------*/
 
-// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie regulatorow  - stara wersja
-/*
- void regulator::constraint_detector(double max_acc_local, double max_vel_local, double max_diff_local, bool debug)
- {
- double step_new_over_constraint_sum_tmp;
- double step_new_tmp = step_new;
- // przyspieszenie i roznica predkosci
- double current_acc, vel_diff;
-
- //	if (debug) printf("step_new: %f, step_new_over_constraint_sum: %f\n", step_new, step_new_over_constraint_sum);
- step_new += step_new_over_constraint_sum;
-
- step_new_over_constraint_sum_tmp = step_new;
-
- // ograniczenie na przekroczenie step_new (aby predkosc biezaca nie odbiegala zby mocno od zadanej,
- // co zmniejsza przeregulowania i oscylacje)
- vel_diff = step_new - step_new_tmp;
- if (vel_diff > max_diff_local) step_new = step_new_tmp + max_diff_local;
- if (vel_diff < -max_diff_local) step_new = step_new_tmp - max_diff_local;
-
- // sprawdzenie ograniczenia na predkosc (co do predkosci maksymalnej)
- if (step_new > max_vel_local) step_new = max_vel_local;
- if (step_new < -max_vel_local) step_new = -max_vel_local;
-
- // sprawdzenie ograniczenia na przyspieszenie
- current_acc = step_new - step_old;
- if (current_acc > max_acc_local) step_new = step_old + max_acc_local;
- if (current_acc < -max_acc_local) step_new = step_old - max_acc_local;
-
- step_new_over_constraint_sum = step_new_over_constraint_sum_tmp - step_new;
-
- //	if (debug) printf("acc: %f, vel: %f, const_sum: %f\n", current_acc, step_new, step_new_over_constraint_sum);
-
- step_old = step_new;
- }
- */
-
-// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie regulatorow
-
-void regulator::constraint_detector(double max_acc_local, double max_vel_local, bool debug)
+regulator::~regulator()
 {
-
-	double sum_min = 0.0, sum_mid = 0.0, sum_max = 0.0;
-
-	double step_new_beginning = step_new;
-
-	double step_diff = step_old - step_new;
-	double abs_step_diff = fabs(step_diff);
-
-	// zliczanie minimalnej, dodatkowej drogi przebytej do czasu zrownania predkosci biezacej z zadana -
-	// suma ciagu arytmetycznego dla wariantu minimalnego
-	double abs_step_diff_min = abs_step_diff - max_acc_local;
-	if (abs_step_diff_min < 0.0)
-		abs_step_diff_min = 0.0;
-
-	double first_elem = abs_step_diff_min;
-	int step_no = (int) (floor(abs_step_diff_min / max_acc_local));
-	double last_elem = abs_step_diff_min - step_no * max_acc_local;
-
-	sum_min = ((first_elem + last_elem) * step_no) / 2;
-	if (step_diff < 0)
-		sum_min = -sum_min;
-
-	// liczenie sumy sredniej i maksymalnej
-	sum_mid = sum_min + step_diff;
-
-	if (step_diff >= 0.0)
-		sum_max = sum_mid + step_diff + max_acc_local;
-	else if (step_diff < 0.0)
-		sum_max = sum_mid + step_diff - max_acc_local;
-
-	// podjecie decyzji o zmianie predkosci
-	// jezeli jestesmy dostatecznie blisko zadanej trajektorii
-	if ((abs_step_diff <= max_acc_local) && (fabs(step_new_over_constraint_sum) <= max_acc_local)) {
-		step_new = step_new_beginning + step_new_over_constraint_sum;
-	} else {
-		if (step_diff >= 0.0) {
-			if (step_new_over_constraint_sum > sum_max) {
-				step_new = step_old + max_acc_local;
-			} else if (step_new_over_constraint_sum >= sum_mid) {
-				step_new = step_old;
-			} else if (step_new_over_constraint_sum >= sum_min) {
-				step_new = step_old - max_acc_local;
-			} else {
-				step_new = step_old - max_acc_local;
-			}
-		} else // 	if (step_diff >= 0.0)
-		if (step_new_over_constraint_sum < sum_max) {
-			step_new = step_old - max_acc_local;
-		} else if (step_new_over_constraint_sum <= sum_mid) {
-			step_new = step_old;
-		} else if (step_new_over_constraint_sum <= sum_min) {
-			step_new = step_old + max_acc_local;
-		} else {
-			step_new = step_old + max_acc_local;
-		}
-	}
-
-	// sprawdzenie ograniczenia na predkosc (co do predkosci maksymalnej)
-	if (step_new > max_vel_local)
-		step_new = max_vel_local;
-	if (step_new < -max_vel_local)
-		step_new = -max_vel_local;
-
-	step_new_over_constraint_sum = step_new_over_constraint_sum + step_new_beginning - step_new;
-
-	if (debug)
-		printf("sn: %f, snb: %f, sum: %f\n", step_new, step_new_beginning, step_new_over_constraint_sum);
-
-	step_old = step_new;
 }
 
 double regulator::get_set_value(void) const
@@ -312,6 +204,10 @@ NL_regulator::NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double
 	meassured_current = 0;
 }
 /*-----------------------------------------------------------------------*/
+
+NL_regulator::~NL_regulator()
+{
+}
 
 } // namespace common
 } // namespace edp

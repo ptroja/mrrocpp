@@ -20,6 +20,13 @@ namespace common {
 
 namespace generator {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class ecp_g_conveyor_uniform_acceleration : public mrrocpp::ecp::common::generator::generator
 {
 public:
@@ -40,6 +47,8 @@ private:
 	bool initial_position_saved;
 	double current_position;
 };
+
+/** @} */
 
 }//namespace
 

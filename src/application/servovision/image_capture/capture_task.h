@@ -9,7 +9,7 @@
 #define CAPTURETASK_H_
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 namespace mrrocpp {
@@ -39,7 +39,7 @@ public:
 	virtual ~CaptureTask();
 	void main_task_algorithm(void);
 protected:
-	mrrocpp::ecp::common::generator::smooth* smoothGen;
+	mrrocpp::ecp::common::generator::newsmooth* smoothGen;
 	capture_image_sensor* fradiaSensor;
 
 	effectorTranslation et;

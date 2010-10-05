@@ -10,10 +10,6 @@
 #ifndef __EDP_E_MANIP_H
 #define __EDP_E_MANIP_H
 
-#if defined(USE_MESSIP_SRR)
-#include "messip.h"
-#endif
-
 #include "base/edp/edp_e_motor_driven.h"
 
 // Konfigurator

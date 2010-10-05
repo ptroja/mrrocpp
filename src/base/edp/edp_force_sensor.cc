@@ -14,6 +14,9 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()()
 {
+
+	//	sr_msg->message("operator");
+
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
 	connect_to_hardware();
@@ -43,6 +46,8 @@ void force::operator()()
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
+	//sr_msg->message("dupa 1");
+	clock_gettime(CLOCK_MONOTONIC, &wake_time);
 
 	while (!TERMINATE) //!< for (;;)
 	{
@@ -63,6 +68,8 @@ void force::operator()()
 				}
 				set_command_execution_finish();
 			} else {
+
+				//	sr_msg->message("else 12");
 				wait_for_event();
 
 				initiate_reading();
@@ -86,7 +93,7 @@ void force::operator()()
 
 				// scope-locked reader data update
 				{
-					if(master.rb_obj) {
+					if (master.rb_obj) {
 						boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 						current_force_torque.to_table(master.rb_obj->step_data.force);
@@ -129,6 +136,8 @@ force::force(common::manip_effector &_master) :
 	/*!Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg
 			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true);
+
+	sr_msg->message("force");
 
 	if (master.config.exists("is_right_turn_frame")) {
 		is_right_turn_frame = master.config.value <bool> ("is_right_turn_frame");

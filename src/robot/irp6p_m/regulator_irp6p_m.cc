@@ -142,8 +142,6 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -315,13 +313,6 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -372,8 +363,6 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -541,13 +530,6 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -600,8 +582,8 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	// constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
+
+	// 
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -769,13 +751,6 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -827,8 +802,6 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -993,13 +966,6 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT;
-
 	// if (fabs(set_value_new) > 200.0 && first) {
 	// cprintf("PIN=%lf PIO=%lf DIN=%lf DIO=%lf SO=%lf SVVO=%lf SV0=%lf\n", position_increment_new,
 	//     position_increment_old, delta_eint, delta_eint_old,
@@ -1057,9 +1023,6 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	double root_position_increment_new = position_increment_new;
-
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1214,13 +1177,6 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT;
-
 	// scope-locked reader data update
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
@@ -1285,8 +1241,6 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_7_MAX_ACC, common::SG_REG_7_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1324,7 +1278,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	//pos_increment_new_sum += root_position_increment_new;
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
-	// Przyrost calki uchybu
+	// Przyrost calki uchybu, czyli cuhyb polozenia
 	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
 			- position_increment_old);
 
@@ -1452,12 +1406,6 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 
 	// if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

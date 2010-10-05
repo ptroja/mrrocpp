@@ -43,7 +43,7 @@ NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no, uint8_t reg_par
 /*-----------------------------------------------------------------------*/
 uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 {
-	static long iteracja = 0;
+//	static long iteracja = 0;
 
 	// algorytm regulacji dla serwomechanizmu
 	// position_increment_old - przedostatnio odczytany przyrost polozenie
@@ -74,8 +74,8 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_1_MAX_ACC, common::SG_REG_1_MAX_SPEED);
+	
+	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -240,13 +240,6 @@ uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 		set_value_new = MAX_PWM;
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
-
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > SARKOFAG_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + SARKOFAG_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -SARKOFAG_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - SARKOFAG_MAX_PWM_INCREMENT;
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;

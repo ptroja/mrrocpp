@@ -15,7 +15,7 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "base/ecp/ecp_sub_task.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "base/ecp/ecp_g_transparent.h"
 
 #include "ecp_g_eih_nose_run.h"
@@ -63,7 +63,7 @@ protected:
 	// generator do wodzenia za nos
 	generator::eih_nose_run* nose;
 	// generator smooth
-	generator::smooth* smoothgen;
+	generator::newsmooth* smoothgen;
 	// generator do wysylania danych do fradii
 	generator::eihgenerator* generator;
 	bool store_data(void);

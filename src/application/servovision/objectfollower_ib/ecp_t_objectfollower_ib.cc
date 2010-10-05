@@ -33,9 +33,6 @@ namespace common {
 
 namespace task {
 
-const double
-		ecp_t_objectfollower_ib::initial_position_joints[lib::MAX_SERVOS_NR] = { 0.0, 0.0, -1.428, 0.0, 0.0, 4.720, 0.0, 0.075 };
-
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
 	task(configurator)
 {
@@ -57,10 +54,10 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 2\n");
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
 
-	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(0.005, 0.005, 50));
+	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(configurator, config_section_name));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 3\n");
-	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
+	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 4\n");
 	sm->add_position_constraint(cube);

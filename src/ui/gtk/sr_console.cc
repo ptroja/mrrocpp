@@ -20,7 +20,7 @@
 #include "base/lib/sr/srlib.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
 enum

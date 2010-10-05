@@ -9,7 +9,7 @@
 #define __UI_SR_H
 
 #include <boost/function.hpp>
-#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
 #include <stdexcept>
@@ -26,21 +26,19 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
-static const int UI_SR_BUFFER_LENGHT = 50;
-
 class sr_buffer : public boost::noncopyable
 {
 private:
-
 	Interface& interface;
-	boost::thread *thread_id;
+	boost::thread thread_id;
 	boost::circular_buffer <lib::sr_package_t> cb;
-	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
+	boost::mutex mtx;
 
+	static const int UI_SR_BUFFER_LENGHT = 50;
 
 public:
-
 	sr_buffer(Interface& _interface);
+
 	~sr_buffer();
 
 	//! main thread loop

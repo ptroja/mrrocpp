@@ -16,9 +16,6 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
-// ograniczenia przyrostu PWM dla CONVEYOR
-const int AXE1_MAX_PWM_INCREMENT = 1000;
-
 /*-----------------------------------------------------------------------*/
 class NL_regulator_1_conv : public common::NL_regulator
 {

@@ -18,7 +18,7 @@ namespace sarkofag {
 const double SYNCHRO_STEP_COARSE = -0.05;
 const double SYNCHRO_STEP_FINE = -0.02;
 
-const int SARKOFAG_MAX_PWM_INCREMENT = 1000;
+
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_sarkofag : public common::NL_regulator
 {
