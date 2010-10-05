@@ -49,14 +49,19 @@
 #include <Ph.h>
 #endif
 
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
-void sr_buffer::operator()() {
-#if !defined(USE_MESSIP_SRR)
+void sr_buffer::operator()()
+{
 	lib::set_thread_name("sr");
 
+#if !defined(USE_MESSIP_SRR)
 	name_attach_t *attach;
 
 	if ((attach = name_attach(NULL, interface.sr_attach_point.c_str(),
@@ -65,13 +70,18 @@ void sr_buffer::operator()() {
 				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
+#else
+	messip_channel_t *ch = messip::port_create(interface.sr_attach_point);
+	assert(ch);
+#endif /* USE_MESSIP_SRR */
 
 	interface.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
-		//	printf("przed MsgReceive: \n");
+
+#if !defined(USE_MESSIP_SRR)
 		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-		//	printf("za MsgReceive: \n");
+
 		if (rcvid < 0) /* Error condition, exit */
 		{
 			if (rcvid == -EINTR) {
@@ -80,13 +90,12 @@ void sr_buffer::operator()() {
 			}
 
 			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// TODO: throw
 			break;
 		}
 
 		if (rcvid == 0) /* Pulse received */
 		{
-			// printf("sr puls\n");
 			switch (sr_msg.hdr.code) {
 			case _PULSE_CODE_DISCONNECT:
 				ConnectDetach(sr_msg.hdr.scoid);
@@ -109,20 +118,25 @@ void sr_buffer::operator()() {
 
 		int16_t status;
 		MsgReply(rcvid, EOK, &status, sizeof(status));
+#else
+		int32_t type, subtype;
+		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
+
+		std::cout << "sr_buffer::rcvid = " << rcvid << std::endl;
+
+		if(rcvid != MESSIP_MSG_NOREPLY)
+			continue;
+#endif
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			// prrintf("srt: \n");
 			flushall();
 
 			put_one_msg(sr_msg);
-
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
-
 	}
-#endif /* USE_MESSIP_SRR */
 }
 
 sr_buffer::sr_buffer(Interface& _interface) :

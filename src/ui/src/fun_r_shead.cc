@@ -86,7 +86,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 				interface.ui_msg->message(lib::NON_FATAL_ERROR,
 						"edp_shead already exists");
 			} else if (interface.check_node_existence(interface.shead->state.edp.node_name,
-					std::string("edp_shead"))) {
+					"edp_shead")) {
 
 				interface.shead->state.edp.node_nr = interface.config->return_node_number(
 						interface.shead->state.edp.node_name);
