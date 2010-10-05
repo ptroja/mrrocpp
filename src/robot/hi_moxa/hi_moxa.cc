@@ -1,7 +1,4 @@
-//#include "robot/sarkofag/edp_e_sarkofag.h"
 #include "robot/hi_moxa/hi_moxa.h"
-
-//#include "hi_sarkofag.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -60,8 +57,8 @@ void HI_moxa::init()
 		std::cout << "[info] opening port : " << (port + (char) (i + 50)).c_str();
 		fd[i] = open((port + (char) (i + 50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
-			//	throw(std::runtime_error("unable to open device!!!"));
 			std::cout << std::endl << "[error] fd == " << (int) fd[i] << std::endl;
+			throw(std::runtime_error("unable to open device!!!"));
 		} else {
 			std::cout << "...OK (" << (int) fd[i] << ")" << std::endl;
 			if (fd[i] > fd_max)
@@ -103,7 +100,7 @@ void HI_moxa::insert_set_value(int drive_offset, double set_value)
 	servo_data[drive_number].buf[4] = START_BYTE;
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
-	//temp->pwm = set_value * (300.0 / 255.0);
+	// Nowa karta sterownika: -1000..+1000, stara karta: -255..+255
 	temp->pwm = set_value * (1000.0 / 255.0);
 
 #ifdef T_INFO_FUNC
@@ -159,24 +156,14 @@ uint64_t HI_moxa::read_write_hardware(void)
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	//	std::cout << "[info] pos:";													// ############# Pozycja
-	//	 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++){
-	//	 std::cout << " " << servo_data[drive_number].current_absolute_position;
-	//	 }
-	//	 std::cout << std::endl;
-
-	//	std::cout << "[info] przed write: " << std::endl;
 
 	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
 		bytes_received[drive_number] = 0;
 	}
 
-	//	std::cout << "[info] po write: " << std::endl;
-
-
 	receive_attempts++;
-	//for (int i = 0; i < 7; i++)
+
 	while (1) {
 		FD_ZERO(&rfds);
 		for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
@@ -185,7 +172,6 @@ uint64_t HI_moxa::read_write_hardware(void)
 			}
 		}
 
-		// timeout
 		struct timeval timeout;
 		timeout.tv_sec = (time_t) 0;
 		timeout.tv_usec = 500;
@@ -196,18 +182,9 @@ uint64_t HI_moxa::read_write_hardware(void)
 				std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
 						<< (((float) receive_timeouts) / receive_attempts) << ")";
 
-				//<< std::endl;
-
-				//throw(std::runtime_error("communication timeout !!!"));
-				/*std::cout << "[error] communication timeout ("
-				 << ++receive_timeouts << "/" << receive_attempts << "="
-				 << ((float) receive_timeouts / receive_attempts) << ")";
-				 //					<< std::endl;*/
-
 				for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 					if (bytes_received[drive_number] < READ_BYTES)
-						std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number]
-								<< ")";
+						std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
 				}
 				std::cout << std::endl;
 			}
@@ -226,18 +203,9 @@ uint64_t HI_moxa::read_write_hardware(void)
 					all_hardware_read = false;
 				}
 			}
-			//		std::cout << all_hardware_read << std::endl;	//############################
 			if (all_hardware_read) {
 				break;
 			}
-			//			else{
-			//			 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
-			//			 if(bytes_received[drive_number] < READ_BYTES){
-			//			 std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
-			//			 }
-			//			 }
-			//			 }
-			//			std::cout << std::endl;	//############################
 		}
 	}
 
