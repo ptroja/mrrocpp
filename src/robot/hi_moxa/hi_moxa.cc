@@ -79,8 +79,8 @@ void HI_moxa::init()
 		std::cout << "[info] opening port : " << (port + (char) (i + INIT_PORT_CHAR)).c_str();
 		fd[i] = open((port + (char) (i + INIT_PORT_CHAR)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
-			std::cout << std::endl << "[error] fd == " << (int) fd[i] << std::endl;
-			throw(std::runtime_error("unable to open device!!!"));
+			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
+			//throw(std::runtime_error("unable to open device!!!"));
 		} else {
 			std::cout << "...OK (" << (int) fd[i] << ")" << std::endl;
 			if (fd[i] > fd_max)
@@ -269,12 +269,6 @@ uint64_t HI_moxa::read_write_hardware(void)
 		}
 	}
 
-	//zeby zbik3d ruszyl
-//	if (!master.robot_test_mode) {
-//		master.controller_state_edp_buf.is_synchronised = robot_synchronized;
-//	} else {
-//		master.controller_state_edp_buf.is_synchronised = true;
-//	}
 	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
 	master.controller_state_edp_buf.is_robot_blocked = power_fault;
 	if (power_fault) {
