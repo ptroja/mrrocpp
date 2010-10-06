@@ -17,5 +17,5 @@ Main authors:
 === Build instructions
 
 To build this software for QNX OS please do the following:
-mkdir build; cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../Toolchain-QCC.cmake ../
+mkdir build; cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../Toolchain-QCC.cmake ../; cmake .
 make && make install 
