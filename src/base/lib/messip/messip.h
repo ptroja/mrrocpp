@@ -208,6 +208,7 @@ int32_t messip_buffered_send( messip_channel_t * ch,
    void *send_buffer,
    int send_len,
    int32_t msec_timeout );
+#if !defined(__FreeBSD__) && !defined(__APPLE__) && !defined(__MACH__)
 timer_t messip_timer_create( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
@@ -216,6 +217,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
    int32_t msec_timeout );
 int messip_timer_delete( messip_channel_t * ch,
    timer_t timer_id );
+#endif
 int messip_death_notify( messip_cnx_t * cnx,
    int32_t msec_timeout,
    int status );

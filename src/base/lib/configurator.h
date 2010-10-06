@@ -21,13 +21,12 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
-#else
-#include <boost/property_tree/ptree.hpp>
 #endif
 
 #include <sched.h>
@@ -63,6 +62,9 @@ private:
 	//! Mutex to protect exclusive access
 	mutable boost::mutex access_mutex;
 
+	//! Property trees of configuration files
+	boost::property_tree::ptree common_file_pt, file_pt;
+
 #ifdef USE_MESSIP_SRR
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
@@ -84,9 +86,6 @@ private:
 	 * @return path to the configuration file
 	 */
 	std::string get_common_config_file_path() const;
-
-	//! Property trees of configuration files
-	boost::property_tree::ptree common_file_pt, file_pt;
 
 	/**
 	 * Read property tree from configuration file
@@ -189,10 +188,6 @@ public:
 	template <class Type>
 	Type value(const std::string & _key, const std::string & __section_name) const
 	{
-#if defined(USE_MESSIP_SRR)
-		// TODO: ask configuration server
-		return Type();
-#else
 		// initialize property tree path
 		std::string pt_path = __section_name;
 
@@ -211,7 +206,6 @@ public:
 		} catch (boost::property_tree::ptree_error & e) {
 			return common_file_pt.get<Type>(pt_path);
 		}
-#endif
 	}
 
 	/**

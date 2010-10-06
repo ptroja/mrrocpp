@@ -37,7 +37,8 @@ int UiRobot::manage_interface()
 {
 }
 
-int UiRobot::delete_ui_ecp_robot()
+
+void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 }

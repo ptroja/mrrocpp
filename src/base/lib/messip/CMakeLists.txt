@@ -13,5 +13,5 @@ target_link_libraries (messip_sin messip
 install(TARGETS messip_sin DESTINATION bin)
 
 if(QNXNTO)
-target_link_libraries (messip socket)
+target_link_libraries (messip socket rpc)
 endif(QNXNTO)

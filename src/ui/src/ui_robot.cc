@@ -15,7 +15,7 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string edp_section_name, const std::string ecp_section_name) :
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name) :
 	interface(_interface), tid(NULL)
 {
 	state.edp.section_name = edp_section_name;
@@ -24,17 +24,19 @@ UiRobot::UiRobot(Interface& _interface, const std::string edp_section_name, cons
 	state.edp.last_state = -1; // edp nieaktywne
 	state.ecp.trigger_fd = -1;
 	state.edp.is_synchronised = false; // edp nieaktywne
-
 }
 
 void UiRobot::create_thread()
 {
+	assert(tid == NULL);
 	tid = new feb_thread(eb);
 }
 
 void UiRobot::abort_thread()
 {
+	assert(tid);
 	delete tid;
+	tid = NULL;
 }
 
 bool UiRobot::pulse_reader_start_exec_pulse()

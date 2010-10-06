@@ -102,7 +102,7 @@ public:
 	}
 
 	void Set(const T & data) {
-		xdr_oarchive<4096> oa;
+		xdr_oarchive<> oa;
 		oa << name;
 		oa << data;
 

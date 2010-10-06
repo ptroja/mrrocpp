@@ -191,11 +191,9 @@ int UiRobot::close_all_windows()
 
 }
 
-int UiRobot::delete_ui_ecp_robot()
+void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
-	return 1;
-
 }
 }
 } //namespace ui

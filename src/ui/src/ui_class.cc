@@ -336,17 +336,17 @@ int Interface::manage_interface(void)
 	return 1;
 }
 
-int Interface::reload_whole_configuration()
+void Interface::reload_whole_configuration()
 {
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
-		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
+		std::cerr << "Wrong entry in default_file.cfg - load another configuration than: " << config_file_relativepath << std::endl;
 		config_file_relativepath = "../configs/common.ini";
 	}
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
-		config->change_config_file(config_file.c_str());
+		config->change_config_file(config_file);
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -444,8 +444,6 @@ int Interface::reload_whole_configuration()
 	}
 
 	manage_interface();
-
-	return 1;
 }
 
 void Interface::UI_close(void)
@@ -466,9 +464,8 @@ void Interface::abort_threads()
 #endif
 }
 
-bool Interface::check_node_existence(const std::string _node, const std::string beginnig_of_message)
+bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
-
 	std::string opendir_path("/net/");
 	opendir_path += _node;
 
@@ -911,7 +908,7 @@ int Interface::fill_section_list(const char* file_name_and_path)
 }
 
 // fills node list
-int Interface::fill_node_list()
+void Interface::fill_node_list()
 {
 	// fill all network nodes list
 
@@ -946,19 +943,16 @@ int Interface::fill_node_list()
 		}
 
 	}
-
-	return 1;
 }
 
-int Interface::pulse_reader_execute(int coid, int pulse_code, int pulse_value)
-
+void Interface::pulse_reader_execute(int coid, int pulse_code, int pulse_value)
 {
-
+#if !defined(USE_MESSIP_SRR)
 	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
 		perror("Blad w wysylaniu pulsu do redera");
 	}
-
-	return 1;
+#else
+#endif
 }
 
 int Interface::execute_mp_pulse(char pulse_code)
@@ -975,8 +969,8 @@ int Interface::execute_mp_pulse(char pulse_code)
 			delay(1000);
 		}
 	}
-	return ret;
 
+	return ret;
 }
 
 bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)

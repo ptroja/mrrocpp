@@ -107,7 +107,7 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 			if (((!(interface.irp6ot_tfg->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_irp6ot_tfg already exists");
-			} else if (interface.check_node_existence(interface.irp6ot_tfg->state.edp.node_name, std::string("edp_irp6ot_tfg"))) {
+			} else if (interface.check_node_existence(interface.irp6ot_tfg->state.edp.node_name, "edp_irp6ot_tfg")) {
 
 				interface.irp6ot_tfg->state.edp.node_nr = interface.config->return_node_number(interface.irp6ot_tfg->state.edp.node_name);
 

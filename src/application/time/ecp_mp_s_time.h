@@ -14,6 +14,19 @@
 
 #include "base/ecp_mp/ecp_mp_sensor.h"				// klasa bazowa ecp_mp_task
 
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+void serialize(Archive & ar, struct timespec & ts, const unsigned int version)
+{
+    ar & ts.tv_sec;
+    ar & ts.tv_nsec;
+}
+
+} // namespace serialization
+} // namespace boost
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {

@@ -25,10 +25,16 @@
 
 #include <rpc/rpc.h>
 
+#if BOOST_VERSION >104200
+#define BOOST_IARCHIVE_EXCEPTION input_stream_error
+#else
+#define BOOST_IARCHIVE_EXCEPTION stream_error
+#endif
+
 #define THROW_LOAD_EXCEPTION \
 	boost::serialization::throw_exception( \
 			boost::archive::archive_exception( \
-				boost::archive::archive_exception::stream_error))
+				boost::archive::archive_exception::BOOST_IARCHIVE_EXCEPTION))
 
 #define LOAD_A_TYPE(T, P) \
     /** conversion for T */ \
@@ -44,7 +50,7 @@
         return *this; \
     }
 
-template <std::size_t size=4096>
+template <std::size_t size = 16384>
 class xdr_iarchive
 {
 private:
@@ -101,6 +107,17 @@ public:
 	LOAD_A_TYPE(unsigned long, xdr_u_long)
 	LOAD_A_TYPE(unsigned short, xdr_u_short)
 
+//	LOAD_A_TYPE(int16_t, xdr_int16_t)
+//	LOAD_A_TYPE(uint16_t, xdr_u_int16_t)
+//	LOAD_A_TYPE(int32_t, xdr_int32_t)
+//	LOAD_A_TYPE(uint32_t, xdr_u_int32_t)
+	LOAD_A_TYPE(int64_t, xdr_int64_t)
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+	LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+	LOAD_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
+
     /**
      * Saving Archive Concept::is_loading
      */
@@ -112,7 +129,7 @@ public:
     typedef boost::mpl::bool_<false> is_saving;
 
     /**
-     * Construtor
+     * Constructor
      * @param _buffer data buffer
      * @param _buffer_size data buffer size
      * @return
@@ -210,10 +227,9 @@ public:
 #endif
     template<class T>
     void load_override(const boost::serialization::nvp<T> & t, int){
-         T x;
+         T& x(t.value());
          * this >> x;
-         t.value() = x;
-     }
+    }
 
     /**
      * Loading Archive Concept::operator>>
