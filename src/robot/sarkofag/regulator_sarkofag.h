@@ -15,8 +15,8 @@ namespace mrrocpp {
 namespace edp {
 namespace sarkofag {
 
-const double SYNCHRO_STEP_COARSE = -0.05;
-const double SYNCHRO_STEP_FINE = -0.02;
+const double SYNCHRO_STEP_COARSE = 0.5;
+const double SYNCHRO_STEP_FINE = 0.02;
 
 
 /*-----------------------------------------------------------------------*/
