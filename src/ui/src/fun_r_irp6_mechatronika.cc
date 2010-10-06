@@ -156,9 +156,10 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 				interface.ui_msg->message("edp_irp6_mechatronika already exists");
 
 			} else if (interface.check_node_existence(interface.irp6m_m->state.edp.node_name, "edp_irp6_mechatronika")) {
-				interface.irp6m_m->state.edp.node_nr = interface.config->return_node_number(interface.irp6m_m->state.edp.node_name);
+				interface.irp6m_m->state.edp.node_nr
+						= interface.config->return_node_number(interface.irp6m_m->state.edp.node_name);
 				{
-					boost::unique_lock < boost::mutex > lock(interface.process_creation_mtx);
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
 					interface.irp6m_m->ui_ecp_robot
 							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6m::ROBOT_NAME);
@@ -500,45 +501,9 @@ int pulse_ecp_irp6_mechatronika(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 {
 
-	char pulse_code = ECP_TRIGGER;
-	long pulse_value = 1;
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	if (interface.irp6m_m->state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (interface.irp6m_m->state.ecp.trigger_fd < 0) {
-
-			short tmp = 0;
-			// kilka sekund  (~1) na otworzenie urzadzenia
-			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-			while ((interface.irp6m_m->state.ecp.trigger_fd
-					= name_open(interface.irp6m_m->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-					< 0) {
-				if (errno == EINTR)
-					break;
-				if ((tmp++) < lib::CONNECT_RETRY)
-					delay(lib::CONNECT_DELAY);
-				else {
-					perror("blad odwolania do ECP_TRIGGER");
-				}
-			}
-			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
-		}
-
-		if (interface.irp6m_m->state.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(interface.irp6m_m->state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
-					== -1) {
-
-				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
-				delay(1000);
-			}
-		} else {
-			printf("W PULS ECP:  BLAD name_open \n");
-		}
-	}
+	interface.irp6m_m->pulse_ecp();
 
 	return (Pt_CONTINUE);
 
