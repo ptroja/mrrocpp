@@ -629,6 +629,7 @@ INPUT                  = src/base \
                          src/sensor/pcbird \
                          src/application/applications.dox \
                          src/application/edge_follow \
+                         src/application/neuron \
                      
 
 # This tag can be used to specify the character encoding of the source files 

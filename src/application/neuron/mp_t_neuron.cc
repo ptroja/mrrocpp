@@ -1,8 +1,9 @@
-/*
- * mp_t_neuron.cpp
- *
- *  Created on: Jun 25, 2010
- *      Author: tbem
+/**
+ * @file mp_t_neuron.h
+ * @brief Header file for neuron class.
+ * @author Tomasz Bem (mebmot@wp.pl)
+ * @ingroup neuron
+ * @date 25.06.2010
  */
 
 #include "base/lib/typedefs.h"
@@ -21,17 +22,30 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+/*=======================return_created_mp_task===========================*//**
+ * @brief returns inherited task pointer.
+ * @param _config configurator object reference.
+ * @return inherited task pointer.
+ */
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new neuron(_config);
 }
 
+/*================================constructor=============================*//**
+ * @brief Constructor, with task configurator.
+ * @param configurator object reference.
+ */
 neuron::neuron(lib::configurator &_config) :
 	task(_config)
 {
 }
 
-// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+/*================================create_robots===========================*//**
+ * @brief Brings robots into being.
+ * @details Which robots are bring into being depends on neuron.ini
+ * configuration file.
+ */
 void neuron::create_robots()
 {
 	//ACTIVATE_MP_ROBOT(conveyor);
@@ -54,6 +68,10 @@ void neuron::create_robots()
 
 }
 
+/*===============================main_task_algorithm======================*//**
+ * @brief Main taks algorithm.
+ * @details It initializes neuron subtask.
+ */
 void neuron::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Neuron task initialization");
@@ -66,7 +84,6 @@ void neuron::main_task_algorithm(void)
 
 neuron::~neuron()
 {
-	// TODO Auto-generated destructor stub
 }
 
 } //task

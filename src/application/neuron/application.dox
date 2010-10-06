@@ -1,0 +1,8 @@
+/** 
+
+   @defgroup neuron Neuron
+   @ingroup applications
+   Application for optimization of trajectory with usage of neural networks. Neural networks are
+   implemented as external VSP module, which is necessary to make entire system working.
+  
+*/
