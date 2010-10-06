@@ -17,7 +17,7 @@
 #include <boost/shared_ptr.hpp>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 #include "base/lib/typedefs.h"
@@ -69,6 +69,18 @@ typedef struct sr_package
 	//  sr_package();
 } /*__attribute__((__packed__))*/ // not packed in case of msg_header_t
 sr_package_t;
+
+template<class Archive>
+void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
+{
+    ar & p.ts.tv_sec;
+    ar & p.ts.tv_nsec;
+    ar & p.process_type;
+    ar & p.message_type;
+    ar & p.process_name;
+    ar & p.host_name;
+    ar & p.description;
+}
 
 //! System reporting (SR)
 class sr : public boost::noncopyable

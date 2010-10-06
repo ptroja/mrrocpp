@@ -15,9 +15,7 @@
 #include <cstdlib>
 #include <string>
 
-#if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
-#endif
+#include "base/lib/messip/messip_dataport.h"
 
 #include "base/lib/configsrv.h"
 #include "base/lib/config_types.h"
@@ -31,7 +29,7 @@ sigint_handler(int signum)
 int
 main(int argc, char *argv[])
 {
-	configsrv config(argv[1], argv[2], argv[3]);
+	configsrv config(argv[1], argv[2]);
 
 	messip_channel_t *ch = messip::port_create(CONFIGSRV_CHANNEL_NAME);
 	assert(ch);
@@ -42,65 +40,35 @@ main(int argc, char *argv[])
 
 	while(true) {
 		int32_t type, subtype;
-		config_msg_t config_msg;
+		std::string config_file;
 
-		int rcvid = messip::port_receive(ch,
+		const int rcvid = messip::port_receive(ch,
 				type, subtype,
-				config_msg);
+				config_file);
 
 		if (rcvid < 0) {
 			continue;
 		}
 
-		config_request_t req = (config_request_t) type;
+		std::cout << "configsrv_m: rcvid " << rcvid <<
+				" : " << config_file <<
+				" lenght " << config_file.length() <<
+				std::endl;
 
-		switch(req) {
-			case CONFIG_CHANGE_INI_FILE:
-				{
-					config.change_ini_file(config_msg.configfile);
-					messip::port_reply_ack(ch, rcvid);
-				}
-				break;
-			case CONFIG_RETURN_INT_VALUE:
-				{
-					const int reply = config.value<int>(
-							config_msg.query.key,
-							config_msg.query.section);
+		if(config_file.length() > 0) {
+			// TODO: try/catch -> ack/nack ?
+			config.change_ini_file(config_file);
+		}
 
-					messip::port_reply(ch, rcvid, 0, reply);
-				}
-				break;
-			case CONFIG_RETURN_DOUBLE_VALUE:
-				{
-					const double reply = config.value<double>(
-							config_msg.query.key,
-							config_msg.query.section);
+		property_trees_t ptrees;
+		ptrees.common_file_pt = config.common_file_pt;
+		ptrees.file_pt = config.file_pt;
 
-					messip::port_reply(ch, rcvid, 0, reply);
-				}
-				break;
-			case CONFIG_RETURN_STRING_VALUE:
-				{
-					const std::string reply = config.value<std::string>(
-							config_msg.query.key,
-							config_msg.query.section);
-
-					messip_reply(ch, rcvid,
-						0, reply.c_str(), reply.size()+1,
-						MESSIP_NOTIMEOUT);
-				}
-				break;
-			case CONFIG_EXISTS:
-				{
-					const bool reply = config.exists(
-							config_msg.query.key,
-							config_msg.query.section);
-
-					messip::port_reply(ch, rcvid, 0, reply);
-				}
-				break;
-			default:
-				messip::port_reply_nack(ch, rcvid);
+		try {
+			messip::port_reply(ch, rcvid, 0, ptrees);
+		} catch (std::exception & e) {
+			std::cerr << "configsrv exception: " << e.what() << std::endl;
+			break;
 		}
 	}
 

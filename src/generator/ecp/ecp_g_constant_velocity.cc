@@ -1,8 +1,8 @@
-/*
- * ecp_g_constant_velocity.cc
- *
- *  Created on: May 18, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of constant_velocity class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "ecp_g_constant_velocity.h"

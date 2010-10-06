@@ -30,7 +30,7 @@
 #include <string>
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 #else
 #include <boost/filesystem.hpp>
@@ -71,6 +71,8 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
+
+	change_config_file("");
 #else
 	file_location = get_config_file_path();
 	common_file_location = get_common_config_file_path();
@@ -100,14 +102,17 @@ void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt
 void configurator::change_config_file(const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
-	configfile_t configfile;
-	snprintf(configfile, sizeof(configfile), "%s", _ini_file.c_str());
-
 	boost::mutex::scoped_lock l(access_mutex);
 
-	messip::port_send_sync(this->ch,
-			CONFIG_CHANGE_INI_FILE, 0,
-			configfile);
+	property_trees_t ptrees;
+
+	messip::port_send(this->ch,
+			0, 0,
+			_ini_file, ptrees);
+
+	common_file_pt = ptrees.common_file_pt;
+	file_pt = ptrees.file_pt;
+
 #else
 	boost::mutex::scoped_lock l(access_mutex);
 
@@ -199,23 +204,6 @@ std::string configurator::return_mrrocpp_network_path() const
 
 bool configurator::exists(const char* _key, const char* __section_name) const
 {
-#ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-
-	query_t query;
-	snprintf(query.key, sizeof(query.key), "%s", _key);
-	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-
-	bool value;
-
-	boost::mutex::scoped_lock l(access_mutex);
-
-	messip::port_send(this->ch,
-			CONFIG_EXISTS, 0,
-			query, value);
-
-	return value;
-#else
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	try {
@@ -225,7 +213,6 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	}
 
 	return true;
-#endif /* USE_MESSIP_SRR */
 }
 
 

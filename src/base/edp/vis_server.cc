@@ -109,7 +109,7 @@ void vis_server::operator()(void)
 			perror("sendto()");
 			break;
 		} else if (numbytes < (ssize_t) sizeof(reply)) {
-			fprintf(stderr, "send only %d of %d bytes\n", numbytes, sizeof(reply));
+			fprintf(stderr, "send only %d of %lu bytes\n", numbytes, sizeof(reply));
 			break;
 		}
 

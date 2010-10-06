@@ -27,7 +27,7 @@
 #include "base/ecp/ECP_main_error.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
 #include <libxml/xmlmemory.h>
@@ -99,7 +99,7 @@ bool task::operator_reaction(const char* question)
 	ecp_to_ui_msg.hdr.type = 0;
 	if (MsgSend(UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0) {// by Y&W
 #else
-		if(messip::port_send(UI_fd, 0, 0, &ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 #endif
 		uint64_t e = errno;
 		perror("ecp operator_reaction(): Send() to UI failed");

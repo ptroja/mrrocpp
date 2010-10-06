@@ -31,7 +31,7 @@
 #include "base/mp/mp_robot.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
 namespace mrrocpp {

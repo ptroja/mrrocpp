@@ -1,8 +1,8 @@
-/*
- * ecp_g_constant_velocity.h
- *
- *  Created on: May 18, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of constant_velocity class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _ECP_G_CONSTANT_VELOCITY_H_
@@ -22,13 +22,16 @@ namespace generator {
  * @brief Generator which moves the robot with a constant velocity.
  *
  * Generator is able to generate the list of trajectory points and send it to the robot. Trajectory is generated in a way that
- * the robot moves with a constans velocity. The generator is able to interpolate the trajectory described as the list of
+ * the robot moves with a constant velocity. The generator is able to interpolate the trajectory described as the list of
  * %constant_velocity_trajectory_pose objects.
  *
  * Usage:
  * Load one or more of trajectory poses using one of the load methods. Velocities are set automatically. Call %calculate_interpolate() method.
  * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
- * successfull termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
+ * successful termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 class constant_velocity : public multiple_position<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose,
 		ecp::common::generator::trajectory_interpolator::constant_velocity_interpolator,
@@ -100,7 +103,7 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 */
 		bool load_trajectory_pose(const std::vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const std::vector<double> & v, const std::vector<double> & v_max);
 		/**
-		 * Creates the vectors containning the information about the maximal and typical velocities for each representation.
+		 * Creates the vectors containing the information about the maximal and typical velocities for each representation.
 		 * @axes_num actual number of axes
 		 */
 		void create_velocity_vectors(int axes_num);

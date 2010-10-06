@@ -17,7 +17,7 @@ class multiplayer : public common::task::task
 private:
 	//generatory
 	common::generator::transparent* gt;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 
 	common::generator::weight_measure* wmg;
 

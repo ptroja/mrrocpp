@@ -6,18 +6,19 @@
  * @date 23.06.2010
  */
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "neuron_sensor.h"
-
 #include <ctime>
+#include <cstdio>
 
 #include <sys/socket.h>
 #include <netinet/tcp.h>
 #include <netdb.h>
 #include <netinet/in.h>
+
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+
+#include "neuron_sensor.h"
 
 namespace mrrocpp {
 namespace ecp_mp {

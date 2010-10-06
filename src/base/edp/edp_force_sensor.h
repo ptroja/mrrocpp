@@ -31,6 +31,8 @@ enum FORCE_ORDER
 }
 namespace sensor {
 
+const long COMMCYCLE_TIME_NS = 2000000;
+
 enum FORCE_SENSOR_ENUM
 {
 	FORCE_SENSOR_ATI3084, FORCE_SENSOR_ATI6284
@@ -68,6 +70,8 @@ protected:
 		lib::sensor::VSP_REPORT_t vsp_report;
 		force_data_t force;
 	} from_vsp;
+
+	struct timespec wake_time;
 
 public:
 	void operator()();

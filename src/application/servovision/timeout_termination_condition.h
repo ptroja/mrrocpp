@@ -8,24 +8,37 @@
 #ifndef TIMEOUT_TERMINATION_CONDITION_H_
 #define TIMEOUT_TERMINATION_CONDITION_H_
 
+#include <time.h>
+
 #include "termination_condition.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace servovision {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class timeout_termination_condition : public termination_condition
 {
 public:
 	timeout_termination_condition(double timeout);
 	virtual ~timeout_termination_condition();
 	virtual void reset();
-	virtual void update(const visual_servo_manager* vsm);
-	virtual bool is_condition_met() const;
+	virtual void update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm);
 protected:
 	double timeout;
-	double time_left;
+
+	double start_time;
+
+	double get_time_s();
 };
+
+/** @} */
 
 }//namespace generator
 }

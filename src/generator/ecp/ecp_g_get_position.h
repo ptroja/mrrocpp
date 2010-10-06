@@ -1,8 +1,8 @@
-/*
- * ecp_g_get_position.h
- *
- *  Created on: Apr 29, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of get_position class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _ECP_GEN_GET_POSITION_H_
@@ -19,7 +19,10 @@ namespace common {
 namespace generator {
 
 /**
- * Generator used to get the actual position of the robot in the given representation and form.
+ * @brief Generator used to get the actual position of the robot in the given representation and form.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 class get_position : public generator {
 	public:

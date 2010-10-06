@@ -21,7 +21,7 @@
 #include <sys/dispatch.h>
 
 #else
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif /* !USE_MESSIP_SRR */
 #include <pthread.h>
 #include <cerrno>

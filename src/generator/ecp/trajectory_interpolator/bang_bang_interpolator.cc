@@ -1,8 +1,8 @@
-/*
- * bang_bang_interpolator.cc
- *
- *  Created on: Jun 3, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains definitions of the methods of bang_bang_interpolator class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "bang_bang_interpolator.h"

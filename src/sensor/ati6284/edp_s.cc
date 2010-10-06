@@ -87,6 +87,7 @@ const struct sigevent *isr_handler(void *area, int id)
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
+	//	sr_msg->message("ATI6284_force 1");
 }
 
 void ATI6284_force::connect_to_hardware(void)
@@ -107,6 +108,7 @@ void ATI6284_force::connect_to_hardware(void)
 
 		//!< create Calibration struct
 		cal = createCalibration(calfilepath.c_str(), index);
+
 		if (cal == NULL) {
 			printf("\nSpecified calibration could not be loaded.\n");
 		}
@@ -169,15 +171,15 @@ void ATI6284_force::connect_to_hardware(void)
 		memset(&hi_event, 0, sizeof(hi_event));
 		hi_event.sigev_notify = SIGEV_INTR;
 
-
 		//Wacek: karta ISA zniknela!
+		/*
+		 irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
 
-		irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
-
-		if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
-			//!< Obsluga bledu
-			perror("Unable to attach szafa interrupt handler: ");
-		}
+		 if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
+		 //!< Obsluga bledu
+		 perror("Unable to attach szafa interrupt handler: ");
+		 }
+		 */
 	}
 
 }
@@ -206,6 +208,9 @@ ATI6284_force::~ATI6284_force(void)
 void ATI6284_force::configure_sensor(void)
 {
 	if (!(master.force_sensor_test_mode)) {
+
+		//		sr_msg->message("configure_sensor 1");
+
 		// double kartez_force[6];
 		// short  measure_report;
 		short int sensor_overload = 0;
@@ -241,10 +246,12 @@ void ATI6284_force::configure_sensor(void)
 
 				do {
 					//!< odczekaj
-					InterruptWait(0, NULL);
+					usleep(1000);
 					local_timer.stop();
 					local_timer.get_time(sec);
 				} while (sec < START_TO_READ_TIME_INTERVAL);
+
+				//			sr_msg->message("configure_sensor 21");
 #if	 WITHOUT_INTERRUPT
 
 				local_timer.start();
@@ -390,10 +397,14 @@ void ATI6284_force::configure_sensor(void)
 
 void ATI6284_force::wait_for_event()
 {
+	//	sr_msg->message("wait_for_event");
 	if (!is_sensor_configured)
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	if (!(master.force_sensor_test_mode)) {
+
+		//	sr_msg->message("wait_for_event ni test");
+
 		lib::timer local_timer;
 		float sec;
 
@@ -418,7 +429,12 @@ void ATI6284_force::wait_for_event()
 
 		do {
 			//!< odczekaj
-			InterruptWait(0, NULL);
+			while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+				wake_time.tv_sec += 1;
+				wake_time.tv_nsec -= 1000000000;
+			}
+
+			clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
 
 			local_timer.stop();
 			local_timer.get_time(sec);

@@ -34,7 +34,9 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
 option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
 option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
+if(QNXNTO)
 option(ROBOT_SPEAKER "Build support for speaker robot" ON)
+endif(QNXNTO)
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
 CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
@@ -64,7 +66,7 @@ if (QNXNTO)
 
 	# keep this flag until bug in QNX stack alignment is fixed
 	add_definitions (-DEIGEN_DONT_ALIGN)	
-	set(EIGEN2_INCLUDE_DIR "${MRLIB}/include/eigen2") 
+	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
@@ -86,8 +88,8 @@ else (QNXNTO) # Linux, etc.
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 
-	# Eigen2 is not supported by CMake
-	set(EIGEN2_INCLUDE_DIR /usr/include/eigen2) 
+	# Eigen2 is not directly supported by CMake
+	pkg_check_modules(EIGEN2 REQUIRED eigen2)
 
 	# clock_gettime() can be missing in -lc
 	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
@@ -103,7 +105,7 @@ endif (QNXNTO)
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
 include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
-include_directories (${EIGEN2_INCLUDE_DIR}) 
+include_directories (${EIGEN2_INCLUDE_DIRS})
 
 if(USE_MESSIP)
 	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)

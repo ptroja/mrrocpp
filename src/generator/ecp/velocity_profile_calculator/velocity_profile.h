@@ -1,12 +1,14 @@
-/*
- * velocity_profile.h
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of velocity_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _VELOCITY_PROFILE_H_
 #define _VELOCITY_PROFILE_H_
+
+#include <cstdio>
 
 #include <algorithm>
 #include <vector>
@@ -21,8 +23,10 @@ namespace generator {
 namespace velocity_profile_calculator {
 
 /**
- * Base class for all of the velocity profile calculators. Usually any velocity profile calculator contains methods used to create the description
- * of the velocity profile f.g. bang bang velocity profile etc.. This information is usually stored in the appropriate trajectory_pose class.
+ * @brief Base class for all of the velocity profile calculators.
+ *
+ * Usually any velocity profile calculator contains methods used to create the description
+ * of the velocity profile f.g. bang bang velocity profile. This information is usually stored in the appropriate trajectory_pose class.
  */
 template <class Pos>
 class velocity_profile {
@@ -86,7 +90,7 @@ class velocity_profile {
 			return true;
 		}
 		/**
-		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type..
+		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type.
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the coordinates vector was initiated and filled in before)
 		 */
@@ -100,7 +104,10 @@ class velocity_profile {
 			it->k.clear();
 			for (int i = 0; i < it->axes_num; i++) {
 				it->s.push_back(fabs(it->coordinates[i]));
-				if (it->coordinates[i] >= 0) {
+
+				if (eq(it->coordinates[i], 0)) {
+					it->k.push_back(0);
+				} else if (it->coordinates[i] > 0) {
 					it->k.push_back(1);
 				} else {
 					it->k.push_back(-1);

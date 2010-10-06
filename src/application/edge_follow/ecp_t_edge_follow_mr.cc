@@ -41,7 +41,7 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	{
 		sub_task::sub_task* ecpst;
 		ecpst = new sub_task::edge_follow(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_EDGE_FOLLOW] = ecpst;
+		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
 
 		ecpst = new sub_task::bias_edp_force(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;

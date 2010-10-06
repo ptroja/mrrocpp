@@ -7,6 +7,8 @@
  * @ingroup LIB
  */
 
+#include <cstdio>
+
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 #include <boost/thread/mutex.hpp>

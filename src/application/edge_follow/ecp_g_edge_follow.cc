@@ -36,6 +36,8 @@ y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step
 
 bool y_edge_follow_force::first_step()
 {
+
+	double delta[6];
 	for (int i = 0; i < 6; i++)
 		delta[i] = 0.0;
 
@@ -136,6 +138,9 @@ bool y_edge_follow_force::next_step()
 	double v = hypot(wx, wy);
 
 	if (v != 0.0) {
+
+		lib::Homog_matrix basic_rot_frame;
+		lib::Homog_matrix ex_rot_frame;
 		double s_alfa = wy / v;
 		double c_alfa = wx / v;
 
@@ -175,7 +180,7 @@ bool y_edge_follow_force::next_step()
 		 */
 
 		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx), lround(wy), lround(v), atan2(s_alfa, c_alfa)
-				* (180.0/M_PI));
+				* (180.0 / M_PI));
 	}
 
 	return true;

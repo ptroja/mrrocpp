@@ -1,11 +1,12 @@
 /**
- * @file ecp_g_newsmooth.cc
- * @brief newsmooth class and its methods
- *
- * Contains bodies of the methods of newsmooth class.
+ * @file
+ * @brief Contains definitions of the methods of newsmooth class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include "generator/ecp/ecp_g_newsmooth.h"
+#include <fstream>
 
 namespace mrrocpp {
 namespace ecp {
@@ -72,6 +73,7 @@ bool newsmooth::calculate() {
 			if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
 				if (debug) {
 					printf("calculate_absolute_distance_direction_pose returned false\n");
+
 				}
 				return false;
 			}
@@ -115,9 +117,13 @@ bool newsmooth::calculate() {
 				vpc.calculate_s_uni(pose_vector_iterator, j);//calculate s_uni
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
+
 				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
+
+				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
 
 				if(!vpc.reduction_axis(pose_vector_iterator, j)) {
 					return calculate();
@@ -133,9 +139,6 @@ bool newsmooth::calculate() {
 			!vpc.set_times_to_t(pose_vector_iterator)) {//set times to t
 			return false;
 		}
-
-		//printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
-		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 
@@ -363,6 +366,124 @@ bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MO
 	pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 
 	sr_ecp_msg.message("Pose loaded");
+
+	return true;
+}
+//TODO change exceptions into "return false"s
+bool newsmooth::load_trajectory_from_file(const char* file_name) {
+
+	sr_ecp_msg.message(file_name);
+
+	char coordinate_type_desc[80]; //description of pose specification read from the file
+	char motion_type_desc[80]; //description of motion type read from the file
+	lib::ECP_POSE_SPECIFICATION ps; //pose specification read from the file
+	lib::MOTION_TYPE mt; //type of the commanded motion (relative or absolute)
+	int number_of_poses = 0; //number of poses to be read
+	int i, j; //loop counters
+	std::vector <double> v(axes_num); //vector of read velocities
+	std::vector <double> a(axes_num); //vector of read accelerations
+	std::vector <double> coordinates(axes_num); //vector of read coordinates
+
+	std::ifstream from_file(file_name); // open the file
+	if (!from_file.good()) {
+		//perror(file_name);
+		//throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		return false;
+	}
+
+	if (!(from_file >> coordinate_type_desc)) {
+		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		return false;
+	}
+
+	//removing spaces and tabs
+	i = 0;
+	j = 0;
+	while (coordinate_type_desc[i] == ' ' || coordinate_type_desc[i] == '\t')
+		i++;
+	while (coordinate_type_desc[i] != ' ' && coordinate_type_desc[i] != '\t' && coordinate_type_desc[i] != '\n' && coordinate_type_desc[i]
+			!= '\r' && coordinate_type_desc[j] != '\0') {
+		coordinate_type_desc[j] = toupper(coordinate_type_desc[i]);
+		i++;
+		j++;
+	}
+	coordinate_type_desc[j] = '\0';
+
+	if (!strcmp(coordinate_type_desc, "MOTOR")) {
+		ps = lib::ECP_MOTOR;
+	} else if (!strcmp(coordinate_type_desc, "JOINT")) {
+		ps = lib::ECP_JOINT;
+	} else if (!strcmp(coordinate_type_desc, "XYZ_EULER_ZYZ")) {
+		ps = lib::ECP_XYZ_EULER_ZYZ;
+	} else if (!strcmp(coordinate_type_desc, "XYZ_ANGLE_AXIS")) {
+		ps = lib::ECP_XYZ_ANGLE_AXIS;
+	} else {
+		//throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		return false;
+	}
+
+	if (ps != pose_spec) {
+		return false;
+	}
+
+	if (!(from_file >> number_of_poses)) {
+		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		return false;
+	}
+
+	if (!(from_file >> motion_type_desc)) {
+		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		return false;
+	}
+
+	if (!strcmp(motion_type_desc, "ABSOLUTE")) {
+		mt = lib::ABSOLUTE;
+	} else if (!strcmp(motion_type_desc, "RELATIVE")) {
+		mt = lib::RELATIVE;
+	} else {
+		//throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		return false;
+	}
+
+	for (i = 0; i < number_of_poses; i++) {
+
+		for (j = 0; j < axes_num; j++) {
+			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				return false;
+			}
+		}
+
+		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		for (j = 0; j < axes_num; j++) {
+			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				return false;
+			}
+		}
+
+		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		for (j = 0; j < axes_num; j++) {
+			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				return false;
+			}
+		}
+
+		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		if (ps == lib::ECP_MOTOR) {
+			load_trajectory_pose(coordinates, mt, ps, v, a, motor_max_velocity, motor_max_acceleration);
+		} else if (ps == lib::ECP_JOINT) {
+			load_trajectory_pose(coordinates, mt, ps, v, a, joint_max_velocity, joint_max_acceleration);
+		} else if (ps == lib::ECP_XYZ_EULER_ZYZ) {
+			load_trajectory_pose(coordinates, mt, ps, v, a, euler_zyz_max_velocity, euler_zyz_max_acceleration);
+		} else if (ps == lib::ECP_XYZ_ANGLE_AXIS) {
+			load_trajectory_pose(coordinates, mt, ps, v, a, angle_axis_max_velocity, angle_axis_max_acceleration);
+		}
+	}
 
 	return true;
 }

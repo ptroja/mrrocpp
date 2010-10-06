@@ -12,13 +12,13 @@
 #include "subtask/ecp_st_go.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
-#include "../servovision/simple_visual_servo_manager.h"
+#include "../servovision/single_visual_servo_manager.h"
 #include "../servovision/ib_eih_visual_servo.h"
 #include "../servovision/cubic_constraint.h"
 #include "../servovision/visual_servo_regulator_p.h"
 #include "../servovision/object_reached_termination_condition.h"
 
-using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
+using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;
 using namespace mrrocpp::ecp::servovision;
 using boost::shared_ptr;
@@ -38,16 +38,16 @@ protected:
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 
 	common::generator::weight_measure* wmg;
 	//podzadania
 	common::sub_task::gripper_opening* go_st;
 
-	shared_ptr <simple_visual_servo_manager> sm;
-	shared_ptr <visual_servo> vs;
-	shared_ptr <visual_servo_regulator> reg;
-	shared_ptr <termination_condition> term_cond;
+	shared_ptr<single_visual_servo_manager> sm;
+	shared_ptr<visual_servo> vs;
+	shared_ptr<visual_servo_regulator> reg;
+	shared_ptr<termination_condition> term_cond;
 public:
 	rcsc(lib::configurator &_config);
 	~rcsc();

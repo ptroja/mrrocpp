@@ -16,14 +16,24 @@ namespace ecp {
 namespace common {
 namespace task {
 
+/*!
+ * @brief task to execute edge_following.
+ * it executes two subtasks EDGE_FOLLOW and ECP_ST_BIAS_EDP_FORCE
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup edge_follow
+ */
 class edge_follow_mr : public common::task::task
 {
 protected:
 
 public:
-	// KONSTRUKTORY
-	edge_follow_mr(lib::configurator &_config);
 
+	/**
+	 * @brief Constructor
+	 * @param _config configurator object reference.
+	 */
+	edge_follow_mr(lib::configurator &_config);
 };
 
 }

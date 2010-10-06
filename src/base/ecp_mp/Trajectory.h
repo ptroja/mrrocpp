@@ -12,7 +12,7 @@
 #include <list>
 #include <string>
 
-#include "base/ecp_mp/smooth_trajectory_pose.h"
+//#include "base/ecp_mp/smooth_trajectory_pose.h"
 
 #include <boost/serialization/utility.hpp>
 
@@ -27,8 +27,8 @@ public:
 			Trajectory(const std::string & numOfPoses, const std::string & trajectoryName, const std::string & poseSpecification);
 	Trajectory(const Trajectory &trajectory);
 
-	static void writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list <
-			ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
+	//static void writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list <
+	//		ecp_mp::common::smooth_trajectory_pose> &poses);//for smooth
 	void createNewPose();
 	void addPoseToTrajectory();
 
@@ -58,14 +58,14 @@ public:
 
 	void showTime();
 
-	std::list <ecp_mp::common::smooth_trajectory_pose> & getPoses();
+	//std::list <ecp_mp::common::smooth_trajectory_pose> & getPoses();
 
 private:
 	std::string trjID;
 	unsigned int numOfPoses;
 	lib::ECP_POSE_SPECIFICATION poseSpec;
-	ecp_mp::common::smooth_trajectory_pose actPose;
-	std::list <ecp_mp::common::smooth_trajectory_pose> trjPoses;
+	//ecp_mp::common::smooth_trajectory_pose actPose;
+	//std::list <ecp_mp::common::smooth_trajectory_pose> trjPoses;
 
 	// boost serialization methods
 	friend class boost::serialization::access;
@@ -76,7 +76,7 @@ private:
 		ar & BOOST_SERIALIZATION_NVP(trjID);
 		ar & BOOST_SERIALIZATION_NVP(numOfPoses);
 		ar & BOOST_SERIALIZATION_NVP(poseSpec);
-		ar & BOOST_SERIALIZATION_NVP(trjPoses);
+		//ar & BOOST_SERIALIZATION_NVP(trjPoses);
 	}
 };
 

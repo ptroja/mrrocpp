@@ -84,8 +84,8 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_8_MAX_ACC, common::SG_REG_8_MAX_SPEED);
+	
+	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -230,11 +230,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			if (set_value_new < -MAX_PWM)
 				set_value_new = -MAX_PWM;
 
-			if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-			if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-
 			set_value_old = set_value_new;
 
 			// wyznaczenie wartosci zadanej pradu
@@ -295,11 +290,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				set_value_new = MAX_PWM;
 			if (set_value_new < -MAX_PWM)
 				set_value_new = -MAX_PWM;
-
-			if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-			if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
 
 			set_value_old = set_value_new;
 
@@ -377,12 +367,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

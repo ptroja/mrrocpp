@@ -1,8 +1,8 @@
-/*
- * constant_velocity_profile.h
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations of the methods of constant_velocity_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _CONSTANT_VELOCITY_PROFILE_H_
@@ -18,7 +18,9 @@ namespace generator {
 namespace velocity_profile_calculator {
 
 /**
- * Class contains methods used to fill in the trajectory pose list in a way that created trajectory describes the motion of the
+ * @brief Class contains methods used to create and calculate the description of the motion of the robot with a constant velocity.
+ *
+ * This velocity profile calculator is used to fill in the trajectory pose list in a way that created trajectory describes the motion of the
  * robot with a constant velocity. Methods implemented here can cope with the absolute and relative type of motion.
  */
 class constant_velocity_profile : public velocity_profile<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {

@@ -1,8 +1,8 @@
 /**
- * @file bang_bang_trajectory_pose.h
- * @brief Header file for bang_bang_trajectory_pose
- *
- * Contains declaration of bang_bang_trajectory_pose class and its methods.
+ * @file
+ * @brief Contains declarations of the methods of bang_bang_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #if !defined(_ECP_BANG_BANG_TRAJECTORY_POSE_H)
@@ -17,7 +17,12 @@ namespace common {
 namespace trajectory_pose {
 
 /**
- * Class is a container used by smooth trajectory generator. One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ * @brief Class is a container used by smooth trajectory generator.
+ *
+ * One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ *
+ * @author rtulwin
+ * @ingroup trajectory_pose
  */
 class bang_bang_trajectory_pose : public trajectory_pose {
 public:

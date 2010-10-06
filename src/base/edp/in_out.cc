@@ -25,6 +25,9 @@ in_out_buffer::in_out_buffer()
 #ifdef __QNXNTO__
     memset( &input_spinlock, 0, sizeof(input_spinlock));
     memset( &output_spinlock, 0, sizeof(output_spinlock));
+#elif (defined(__APPLE__) && defined(__MACH__))
+    input_spinlock = 0;
+    output_spinlock = 0;
 #else
     pthread_spin_init(&input_spinlock, PTHREAD_PROCESS_PRIVATE);
     pthread_spin_init(&output_spinlock, PTHREAD_PROCESS_PRIVATE);
@@ -33,7 +36,7 @@ in_out_buffer::in_out_buffer()
 }
 
 in_out_buffer::~in_out_buffer() {
-#ifndef __QNXNTO__
+#if !defined(__QNXNTO__) && !(defined(__APPLE__) && defined(__MACH__))
 	pthread_spin_destroy(&input_spinlock);
 	pthread_spin_destroy(&output_spinlock);
 #endif
@@ -43,54 +46,29 @@ in_out_buffer::~in_out_buffer() {
 // ustawienie wyjsc
 void in_out_buffer::set_output(uint16_t out_value)
 {
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&output_spinlock);
+	SPIN_LOCK (&output_spinlock);
 
     set_output_flag=true;   // aby f. obslugi przerwania wiedziala ze ma ustawic wyjscie
     binary_output=out_value;
 
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&output_spinlock);
+    SPIN_UNLOCK (&output_spinlock);
 }
 
 // odczytanie wyjsc
 void in_out_buffer::get_output(uint16_t *out_value)
 {
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&output_spinlock);
+	SPIN_LOCK (&output_spinlock);
 
     *out_value=binary_output;
 
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&output_spinlock);
+    SPIN_UNLOCK (&output_spinlock);
 }
 
 
 // ustawienie wejsc
 void in_out_buffer::set_input (uint16_t binary_in_value, const uint8_t analog_in_table[])
 {
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&input_spinlock);
+	SPIN_LOCK (&input_spinlock);
 
     binary_input=binary_in_value;		// wejscie binarne
     for (int i=0; i<8; i++)
@@ -98,24 +76,14 @@ void in_out_buffer::set_input (uint16_t binary_in_value, const uint8_t analog_in
         analog_input[i]=analog_in_table[i];
     }
 
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&input_spinlock);
+    SPIN_UNLOCK (&input_spinlock);
 }
 
 
 // odczytanie wejsc
 void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t analog_in_table[])
 {
-#ifdef __QNXNTO__
-    InterruptLock
-#else
-    pthread_spin_lock
-#endif
-		(&input_spinlock);
+	SPIN_LOCK (&input_spinlock);
 
     *binary_in_value=binary_input;		// wejscie binarne
     for (int i=0; i<8; i++)
@@ -123,12 +91,7 @@ void in_out_buffer::get_input (uint16_t *binary_in_value, uint8_t analog_in_tabl
         analog_in_table[i]=analog_input[i];
     }
 
-#ifdef __QNXNTO__
-    InterruptUnlock
-#else
-    pthread_spin_unlock
-#endif
-		(&input_spinlock);
+    SPIN_UNLOCK	(&input_spinlock);
 }
 
 } // namespace common

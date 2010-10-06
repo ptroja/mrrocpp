@@ -51,27 +51,24 @@ namespace common {
 ecp_buffer::ecp_buffer(Interface& _interface) :
 	interface(_interface), communication_state(UI_ECP_AFTER_REPLY), synchroniser()
 {
-	thread_id = new boost::thread(boost::bind(&ecp_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
 
 ecp_buffer::~ecp_buffer()
 {
-	//	printf("ecp_buffer\n");
-	//	thread_id->interrupt();
-	//	thread_id->join(); // join it
-	//	delete thread_id;
+	// thread_id.interrupt();
+	// thread_id.join(); // join it
 }
 
 void ecp_buffer::operator()()
 {
-
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
+#if !defined(USE_MESSIP_SRR)
+	bool wyjscie;
 
 	name_attach_t *attach;
-
-	bool wyjscie;
 
 	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// TODO: throw
@@ -364,9 +361,9 @@ void ecp_buffer::operator()()
 
 			default:
 				perror("Strange ECP message");
-		}; // end: switch
-	}// end while
-
+		}
+	}
+#endif
 }
 
 }

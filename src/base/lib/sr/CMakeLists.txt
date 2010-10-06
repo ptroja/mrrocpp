@@ -10,5 +10,5 @@ add_library(sr
 )
 
 if(USE_MESSIP)
-target_link_libraries(sr messip)
+    target_link_libraries(sr messip)
 endif(USE_MESSIP)

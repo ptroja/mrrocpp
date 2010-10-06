@@ -1,8 +1,8 @@
 /**
- * @file bang_bang_trajectory_pose.cc
- * @brief bang_bang_trajectory_pose class and its methods
- *
- * Contains bodies of the methods of bang_bang_trajectory_pose class.
+ * @file
+ * @brief Contains definitions of the methods of bang_bang_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include <cstring>

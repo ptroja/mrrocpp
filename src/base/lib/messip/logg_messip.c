@@ -74,10 +74,19 @@ file_logg(
 	struct timespec ts;
 
 	// get the time as soon as possible
+
+#if _POSIX_TIMERS > 0
 	if(clock_gettime(CLOCK_REALTIME, &ts) == -1) {
 		perror("clock_gettime()");
 		return -1;
 	}
+#else
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    ts.tv_sec = tv.tv_sec;
+    ts.tv_nsec = tv.tv_usec*1000;
+#endif
+
 
 	if ( logg_dir )
 	{

@@ -1,8 +1,5 @@
 // -------------------------------------------------------------------------
-//                            ui.h
 // Definicje struktur danych i metod dla procesu UI
-//
-// Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
 #ifndef __UI_ECP_H
@@ -29,9 +26,8 @@ namespace common {
 class ecp_buffer : public boost::noncopyable
 {
 private:
-
 	Interface& interface;
-	boost::thread *thread_id;
+	boost::thread thread_id;
 
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
@@ -42,9 +38,10 @@ public:
 	void operator()();
 
 	lib::condition_synchroniser synchroniser;
-	ecp_buffer(Interface& _interface);
-	~ecp_buffer();
 
+	ecp_buffer(Interface& _interface);
+
+	~ecp_buffer();
 };
 
 }

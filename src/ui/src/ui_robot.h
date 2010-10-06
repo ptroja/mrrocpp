@@ -39,7 +39,7 @@ public:
 
 	ecp_edp_ui_robot_def state;
 
-	UiRobot(Interface& _interface, const std::string edp_section_name, const std::string ecp_section_name);
+	UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name);
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
@@ -48,8 +48,7 @@ public:
 	bool pulse_reader_trigger_exec_pulse(void);
 	virtual int close_all_windows();
 	int EDP_slay_int();
-	virtual int delete_ui_ecp_robot() = 0;
-
+	virtual void delete_ui_ecp_robot() = 0;
 };
 
 }

@@ -46,6 +46,8 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 	sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgenangle->set_debug(true);
+
+	network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
 void sub_task_smooth_gen_test::conditional_execution()
@@ -59,6 +61,9 @@ void sub_task_smooth_gen_test::conditional_execution()
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
+		network_path += "src/application/generator_tester/trajectory.trj";
+		sgenjoint->load_trajectory_from_file(network_path.c_str());
+
 		coordinates2[0] = 0.1;
 		coordinates2[1] = -0.067;
 		coordinates2[2] = -1.342;
@@ -82,7 +87,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[1] = -0.087;
 		coordinates2[2] = -1.542;
 		coordinates2[3] = -0.044;
-		coordinates2[4] = 1.119;
+		coordinates2[4] = 1.109;
 		coordinates2[5] = 4.173;
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
@@ -115,7 +120,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 
-	if (sgenjoint->calculate_interpolate()) {
+	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
 	// JOINT ABSOLUTE END
@@ -182,7 +187,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenjoint->load_relative_joint_trajectory_pose(coordinates1);
 	}
 
-	if (sgenjoint->calculate_interpolate()) {
+	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
 	// JOINT RELATIVE END
@@ -249,7 +254,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenmotor->load_absolute_motor_trajectory_pose(coordinates1);
 	}
 
-	if (sgenmotor->calculate_interpolate()) {
+	if (sgenmotor->calculate_interpolate() && sgenmotor->detect_jerks(6) == 0) {
 		sgenmotor->Move();
 	}
 	// MOTOR ABSOLUTE END
@@ -286,7 +291,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[4] = -20.0;
 		coordinates2[5] = 0.0;
 		coordinates2[6] = 0.0;
-		sgenjoint->load_relative_motor_trajectory_pose(coordinates2);
+		sgenmotor->load_relative_motor_trajectory_pose(coordinates2);
 	} else if (postument) {
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
@@ -316,7 +321,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgenmotor->load_relative_motor_trajectory_pose(coordinates1);
 	}
 
-	if (sgenmotor->calculate_interpolate()) {
+	if (sgenmotor->calculate_interpolate() && sgenmotor->detect_jerks(6) == 0) {
 		sgenmotor->Move();
 	}
 	// MOTOR RELATIVE END
@@ -378,7 +383,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgeneuler->load_absolute_euler_zyz_trajectory_pose(coordinates1);
 
-	if (sgeneuler->calculate_interpolate()) {
+	if (sgeneuler->calculate_interpolate() && sgeneuler->detect_jerks(0.3) == 0) {
 		sgeneuler->Move();
 	}
 	// EULER ABSOLUTE END
@@ -440,7 +445,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgeneuler->load_relative_euler_zyz_trajectory_pose(coordinates1);
 
-	if (sgeneuler->calculate_interpolate()) {
+	if (sgeneuler->calculate_interpolate() && sgeneuler->detect_jerks(0.3) == 0) {
 		sgeneuler->Move();
 	}
 	// EULER RELATIVE END
@@ -502,7 +507,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate()) {
+	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS ABSOLUTE END
@@ -564,7 +569,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_relative_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate()) {
+	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END
