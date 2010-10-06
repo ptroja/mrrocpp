@@ -21,7 +21,7 @@ namespace trajectory_interpolator {
 /**
  * @brief Methods to perform the interpolation of the motion with the trapezoidal velocity profile.
  *
- * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a trapezoidal velocity.
+ * Class contains methods used to create the list of coordinates basing on the trajectory pose list which describes the motion of the robot with a trapezoidal velocity profile.
  *
  * @author rtulwin
  * @ingroup generators
