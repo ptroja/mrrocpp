@@ -73,6 +73,17 @@ private:
 
 		/** @brief Aggregated reading - communication image. */
 		SENSOR_IMAGE comm_image;
+
+	    //! Give access to boost::serialization framework
+	    friend class boost::serialization::access;
+
+	    //! Serialization of the data structure
+	    template <class Archive>
+	    void serialize(Archive & ar, const unsigned int version)
+	    {
+	        ar & vsp_report;
+	        ar & comm_image;
+	    }
 	} from_vsp;
 
 public:
@@ -91,6 +102,17 @@ public:
 
 		/** @brief Additional command parameters - FEATURE NOT IMPLEMENTED. */
 		CONFIGURE_DATA command;
+
+	    //! Give access to boost::serialization framework
+	    friend class boost::serialization::access;
+
+	    //! Serialization of the data structure
+	    template <class Archive>
+	    void serialize(Archive & ar, const unsigned int version)
+	    {
+	        ar & i_code;
+	        ar & command;
+	    }
 	} to_vsp;
 
 	/** @brief Sensor name. */
@@ -104,7 +126,7 @@ public:
 	 * @param _sr_ecp_msg communication object.
 	 * @param config Configuration object.
 	 */
-			sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
+	sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/** @brief Virtual destructor. Sends TERMINATE command to VSP. */
 	virtual ~sensor();

@@ -41,8 +41,8 @@ bool busy_flag::is_busy() const {
 }
 
 function_execution_buffer::function_execution_buffer() :
-	has_command(false) {
-
+	has_command(false)
+{
 }
 
 void function_execution_buffer::command(command_function_t _com_fun) {
@@ -95,14 +95,14 @@ void feb_thread::operator()() {
 }
 
 feb_thread::feb_thread(function_execution_buffer & _feb) :
-	feb(_feb) {
-	thread_id = new boost::thread(boost::bind(&feb_thread::operator(), this));
+	feb(_feb)
+{
+	thread_id = boost::thread(boost::bind(&feb_thread::operator(), this));
 }
 
 feb_thread::~feb_thread() {
-	thread_id->interrupt();
-	thread_id->join(); // join it
-	delete thread_id;
+	thread_id.interrupt();
+	thread_id.join(); // join it
 }
 
 }

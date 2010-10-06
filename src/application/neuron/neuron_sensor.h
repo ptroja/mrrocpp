@@ -1,8 +1,9 @@
-/*
- * neuron_sensor.h
- *
- *  Created on: Jun 23, 2010
- *      Author: tbem
+/**
+ * @file neuron_sensor.h
+ * @brief Header file for neuron_sensor class.
+ * @author Tomasz Bem (mebmot@wp.pl)
+ * @ingroup neuron
+ * @date 23.06.2010
  */
 
 #ifndef NEURON_SENSOR_H_
@@ -15,23 +16,44 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
+/**
+ * @brief Structure that represents coordinates in 3D space.
+ */
 struct Coordinates{
 	double x;
 	double y;
 	double z;
 };
-/*
- * Class responsible for representing neuron vsp in mrrocpp that in fact handles communication between
- * mrrocpp and external vsp
+
+/**
+ * @brief Representation of neuron VSP module in MRROC++.
+ * @details In fact class handles communication between MRROC++ and external
+ * module which is neuron VSP. It allows sending information about state of
+ * the MRROC++ to VSP, sending requests for next position and receving some
+ * control commands from VSP which is considered as a server and thus holds
+ * main control over entire system.
  */
 class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 
 	private:
-		/** Configurator. */
+		/**
+		 * @brief Configurator.
+		 */
 		mrrocpp::lib::configurator& config;
+
+		/**
+		 * @brief Socket used to connect with server (VSP).
+		 */
 		int socketDescriptor;
+
+		/**
+		 * @brief command received from VSP.
+		 */
 		uint8_t command;
-		int numberOfTrajectories;
+
+		/**
+		 * Coordinates received from VSP
+		 */
 		Coordinates coordinates;
 		void sendCommand(uint8_t command);
 
@@ -41,9 +63,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		void get_reading();
 		void configure_sensor();
 		void initiate_reading();
-		bool transmissionFinished();
+		bool stop();
 		uint8_t getCommand();
-		int getNumberOfTrajectories();
 		Coordinates getFirstCoordinates();
 		Coordinates getCoordinates();
 		void startGettingTrajectory();

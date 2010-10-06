@@ -19,13 +19,20 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/version.hpp>
 
 #include <rpc/rpc.h>
+
+#if BOOST_VERSION >104200
+#define BOOST_OARCHIVE_EXCEPTION output_stream_error
+#else
+#define BOOST_OARCHIVE_EXCEPTION stream_error
+#endif
 
 #define THROW_SAVE_EXCEPTION \
 	boost::serialization::throw_exception( \
 			boost::archive::archive_exception( \
-				boost::archive::archive_exception::stream_error))
+				boost::archive::archive_exception::BOOST_OARCHIVE_EXCEPTION))
 
 #define SAVE_A_TYPE(T, P) \
     /** conversion for T */ \
@@ -41,11 +48,10 @@
         return *this; \
     }
 
-template <std::size_t size = 4096>
+template <std::size_t size = 16384>
 class xdr_oarchive
 {
 private:
-
 	char buffer[size];
 	XDR xdrs;
 
@@ -104,6 +110,17 @@ public:
 	SAVE_A_TYPE(unsigned int, xdr_u_int)
 	SAVE_A_TYPE(unsigned long, xdr_u_long)
 	SAVE_A_TYPE(unsigned short, xdr_u_short)
+
+//	SAVE_A_TYPE(int16_t, xdr_int16_t)
+//	SAVE_A_TYPE(uint16_t, xdr_u_int16_t)
+//	SAVE_A_TYPE(int32_t, xdr_int32_t)
+//	SAVE_A_TYPE(uint32_t, xdr_u_int32_t)
+	SAVE_A_TYPE(int64_t, xdr_int64_t)
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+	SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+	SAVE_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
 
 	/**
 	 * Saving Archive Concept::is_loading

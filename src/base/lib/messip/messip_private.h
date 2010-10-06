@@ -56,7 +56,7 @@ struct itimerspec
 
 #if defined(__linux__) || defined(__QNX__) || defined(sun)
 #	define SIGVAL_PTR sival_ptr
-#elif defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || (defined(__APPLE__) && defined(__MACH__))
 #	define SIGVAL_PTR sigval_ptr
 #else
 #error Unsupported platform!

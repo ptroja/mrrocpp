@@ -83,12 +83,14 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 			if (((!(interface.bird_hand->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_bird_hand already exists");
-			} else if (interface.check_node_existence(interface.bird_hand->state.edp.node_name, std::string("edp_bird_hand"))) {
+			} else if (interface.check_node_existence(interface.bird_hand->state.edp.node_name, "edp_bird_hand")) {
 
-				interface.bird_hand->state.edp.node_nr = interface.config->return_node_number(interface.bird_hand->state.edp.node_name);
+				interface.bird_hand->state.edp.node_nr
+						= interface.config->return_node_number(interface.bird_hand->state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					interface.bird_hand->ui_ecp_robot = new ui::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
+					interface.bird_hand->ui_ecp_robot
+							= new ui::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
 
 				}
 
@@ -103,18 +105,7 @@ int EDP_bird_hand_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 					interface.bird_hand->state.edp.state = 1;
 
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((interface.bird_hand->state.edp.reader_fd
-							= name_open(interface.bird_hand->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					interface.bird_hand->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

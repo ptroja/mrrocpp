@@ -986,8 +986,8 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	// brutal overkilling
 
-	for (std::list <ui::common::program_node_def>::iterator program_node_list_iterator = interface.program_node_list.begin(); program_node_list_iterator
-			!= interface.program_node_list.end(); program_node_list_iterator++) {
+	for (std::list <ui::common::program_node_def>::iterator program_node_list_iterator =
+			interface.program_node_list.begin(); program_node_list_iterator != interface.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
 		 #if 0 && defined(PROCESS_SPAWN_RSH)
@@ -1250,8 +1250,8 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface.mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (interface.mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface.mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
+	if ((interface.mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (interface.mp.state
+			== ui::common::UI_MP_PERMITED_TO_RUN) || (interface.mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
 		if (interface.check_synchronised_and_loaded(interface.irp6ot_m->state))
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
@@ -1327,9 +1327,6 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
-
-
 	interface.main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);
@@ -1355,15 +1352,15 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			interface.ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (interface.check_node_existence(interface.mp.node_name, std::string("mp"))) {
+		} else if (interface.check_node_existence(interface.mp.node_name, "mp")) {
 			interface.mp.pid = interface.config->process_spawn(lib::MP_SECTION);
 
 			if (interface.mp.pid > 0) {
 
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((interface.mp.pulse_fd = name_open(interface.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-						< 0)
+				while ((interface.mp.pulse_fd
+						= name_open(interface.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						delay(lib::CONNECT_DELAY);
 					else {
@@ -1397,7 +1394,8 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 	if (interface.mp.pid != -1) {
 
-		if ((interface.mp.state == ui::common::UI_MP_TASK_RUNNING) || (interface.mp.state == ui::common::UI_MP_TASK_PAUSED)) {
+		if ((interface.mp.state == ui::common::UI_MP_TASK_RUNNING) || (interface.mp.state
+				== ui::common::UI_MP_TASK_PAUSED)) {
 
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}

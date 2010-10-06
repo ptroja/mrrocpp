@@ -108,7 +108,7 @@ int EDP_sarkofag_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 			if (((!(interface.sarkofag->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_sarkofag already exists");
-			} else if (interface.check_node_existence(interface.sarkofag->state.edp.node_name, std::string("edp_sarkofag"))) {
+			} else if (interface.check_node_existence(interface.sarkofag->state.edp.node_name, "edp_sarkofag")) {
 
 				interface.sarkofag->state.edp.node_nr = interface.config->return_node_number(interface.sarkofag->state.edp.node_name);
 
@@ -130,18 +130,7 @@ int EDP_sarkofag_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 					interface.sarkofag->state.edp.state = 1;
 
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((interface.sarkofag->state.edp.reader_fd
-							= name_open(interface.sarkofag->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					interface.sarkofag->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

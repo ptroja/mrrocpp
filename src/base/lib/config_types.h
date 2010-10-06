@@ -10,33 +10,23 @@
 #if !defined(_CONFIG_TYPES_H)
 #define _CONFIG_TYPES_H
 
-#define CONFIG_MAX_KEY_LEN				80
-#define CONFIG_MAX_SECTION_NAME_LEN		80
-#define CONFIG_MAX_CONFIGFILE_LEN		80
+#include <boost/array.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_serialization.hpp>
+#include <boost/serialization/string.hpp>
 
 #define CONFIGSRV_CHANNEL_NAME			"configsrv"
 
-typedef enum _config_request
-{
-	CONFIG_CHANGE_INI_FILE,
-	CONFIG_RETURN_INT_VALUE,
-	CONFIG_RETURN_DOUBLE_VALUE,
-	CONFIG_RETURN_STRING_VALUE,
-	CONFIG_EXISTS
-} config_request_t;
+//! Data structure for passing two property trees
+typedef struct _property_trees {
+	boost::property_tree::ptree common_file_pt, file_pt;
+} property_trees_t;
 
-typedef struct _query
+template<class Archive>
+void serialize(Archive & ar, property_trees_t & pt, const unsigned int version)
 {
-	char key[CONFIG_MAX_KEY_LEN];
-	char section[CONFIG_MAX_SECTION_NAME_LEN];
-} query_t;
-
-typedef char configfile_t[CONFIG_MAX_CONFIGFILE_LEN];
-
-typedef union data_t
-{
-	query_t query;
-	configfile_t configfile;
-} config_msg_t;
+    ar & pt.common_file_pt;
+    ar & pt.file_pt;
+}
 
 #endif /* _CONFIG_TYPES_H */

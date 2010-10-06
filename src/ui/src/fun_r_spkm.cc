@@ -78,9 +78,10 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 			if (((!(interface.spkm->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_spkm already exists");
-			} else if (interface.check_node_existence(interface.spkm->state.edp.node_name, std::string("edp_spkm"))) {
+			} else if (interface.check_node_existence(interface.spkm->state.edp.node_name, "edp_spkm")) {
 
-				interface.spkm->state.edp.node_nr = interface.config->return_node_number(interface.spkm->state.edp.node_name);
+				interface.spkm->state.edp.node_nr
+						= interface.config->return_node_number(interface.spkm->state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 					interface.spkm->ui_ecp_robot
@@ -99,18 +100,7 @@ int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 					interface.spkm->state.edp.state = 1;
 
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((interface.spkm->state.edp.reader_fd
-							= name_open(interface.spkm->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					interface.spkm->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
