@@ -13,7 +13,7 @@
 #include "base/edp/servo_gr.h"
 
 // os od ktorej startuje synchronizacja - numeracja od 0
-#define IRP6P_SYN_INIT_AXE 0
+#define IRP6P_SYN_INIT_AXE 1
 
 namespace mrrocpp {
 namespace edp {

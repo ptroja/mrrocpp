@@ -45,12 +45,26 @@ void HI_moxa::init()
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::init()" << std::endl;
 #endif
-
 	// inicjalizacja zmiennych
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
 		servo_data[i].first_hardware_read = true;
 		servo_data[i].command_params = 0;
+		for(int j=0; j<SERVO_ST_BUF_LEN; j++)
+			servo_data[i].buf[j] = 0;
 	}
+
+	// informacja o stanie robota
+	master.controller_state_edp_buf.is_power_on = true;
+	master.controller_state_edp_buf.is_robot_blocked = false;
+
+	if (master.robot_test_mode) {
+		// domyslnie robot jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = true;
+	} else {
+		// domyslnie robot nie jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = false;
+	}
+
 
 	fd_max = 0;
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
