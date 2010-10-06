@@ -480,17 +480,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 					delete interface.conveyor->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					interface.conveyor->state.edp.state = 1;
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-					while ((interface.conveyor->state.edp.reader_fd
-							= name_open(interface.conveyor->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY)
-							delay(lib::CONNECT_DELAY);
-						else {
-							perror("blad odwolania do READER_C");
-							break;
-						}
+					interface.conveyor->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

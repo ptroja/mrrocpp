@@ -107,19 +107,7 @@ int EDP_shead_create_int(PtWidget_t *widget, ApInfo_t *apinfo,
 					delete interface.shead->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					interface.shead->state.edp.state = 1;
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((interface.shead->state.edp.reader_fd
-							= name_open(
-									interface.shead->state.edp.network_reader_attach_point.c_str(),
-									NAME_FLAG_ATTACH_GLOBAL)) < 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					interface.shead->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

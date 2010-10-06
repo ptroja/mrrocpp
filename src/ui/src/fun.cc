@@ -1327,9 +1327,6 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
-
-
 	interface.main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
 
 	return (Pt_CONTINUE);

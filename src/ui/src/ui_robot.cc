@@ -117,6 +117,24 @@ bool UiRobot::pulse_ecp()
 	return true;
 }
 
+bool UiRobot::connect_to_reader()
+{
+
+	short tmp = 0;
+	// kilka sekund  (~1) na otworzenie urzadzenia
+
+	while ((state.edp.reader_fd = name_open(state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
+			< 0)
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			delay(lib::CONNECT_DELAY);
+		} else {
+			perror("blad odwolania do READER");
+			break;
+		}
+
+	return true;
+}
+
 int UiRobot::close_all_windows()
 {
 

@@ -49,6 +49,7 @@ public:
 	bool pulse_ecp(void);
 	virtual int close_all_windows();
 	int EDP_slay_int();
+	bool connect_to_reader(void);
 	virtual void delete_ui_ecp_robot() = 0;
 };
 
