@@ -3,7 +3,7 @@
 
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "application/wii_ellipse/generator/ecp_g_wii_ellipse.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -32,7 +32,7 @@ class wii_ellipse: public common::task::task
 protected:
 	//Generator ruchu
 	generator::wii_ellipse* eg;
-	common::generator::smooth* sg;
+	common::generator::newsmooth* sg;
 
 	/**
 	 * Pobiera od uzytkownika wartosc typu double

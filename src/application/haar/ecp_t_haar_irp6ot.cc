@@ -53,7 +53,7 @@ haar::haar(lib::configurator &_config) :
 	planar_vis->sensor_m = sensor_m;
 
 	//Smooth generator
-	smooth_gen = new common::generator::smooth(*this, true);
+	//smooth_gen = new common::generator::newsmooth(*this, true);
 	bef_gen = new common::generator::bias_edp_force(*this);
 	//gripper approach constructor (task&, no_of_steps)
 	ga_gen = new common::generator::tff_gripper_approach(*this, 8);

@@ -19,21 +19,15 @@
 #include "base/lib/configsrv.h"
 
 // Konstruktor obiektu - konfiguratora.
-configsrv::configsrv (const std::string & _node, const std::string & _dir, const std::string & _ini_file)
-	: node(_node), dir(_dir), ini_file(_ini_file)
+configsrv::configsrv (const std::string & _dir, const std::string & _ini_file)
+	: dir(_dir), ini_file(_ini_file)
 {
 	// Stworzenie sciezki do pliku.
-	mrrocpp_network_path = "/net/";
-	mrrocpp_network_path += node;
-	mrrocpp_network_path += dir;
-
-	// Stworzenie sciezki do pliku.
-	file_location = mrrocpp_network_path;
-	file_location += "configs/";
+	file_location = dir;
 	file_location += ini_file;
 
 	// Stworzenie sciezki do pliku.
-	common_file_location = mrrocpp_network_path;
+	common_file_location = dir;
 	common_file_location += "configs/";
 	common_file_location += "common.ini";
 
@@ -44,6 +38,7 @@ configsrv::configsrv (const std::string & _node, const std::string & _dir, const
 
 void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
 {
+	std::cerr << "Reading config from: " << file << std::endl;
 	try {
 		if(boost::filesystem::extension(file) == ".ini") {
 			boost::property_tree::read_ini(file, pt);
@@ -61,18 +56,11 @@ void configsrv::change_ini_file (const std::string & _ini_file)
 {
 	ini_file = _ini_file;
 
+	// Stworzenie sciezki do pliku.
+	file_location = dir;
+	file_location += ini_file;
+
 	// Reload configuration
 	read_property_tree_from_file(file_pt, file_location);
 	read_property_tree_from_file(common_file_pt, common_file_location);
-}
-
-bool configsrv::exists(const std::string & _key, const std::string & _section_name) const
-{
-	try {
-		value<std::string>(_key, _section_name);
-	} catch (boost::property_tree::ptree_bad_path & e) {
-		return false;
-	}
-
-	return true;
 }

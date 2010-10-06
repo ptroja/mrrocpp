@@ -35,6 +35,7 @@ wii_teach::wii_teach(lib::configurator &_config) :
 			= new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
 	//configure the sensor
 	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
+	coordinates = std::vector<double>(6);
 }
 
 int wii_teach::load_trajectory()
@@ -249,8 +250,15 @@ void wii_teach::move_to_current(void)
 	if (trajectory.current) {
 		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
 		sr_ecp_msg->message(buffer);
+		sg->reset();
+		coordinates[0] = -0.150;
+		coordinates[1] = 1.12;
+		coordinates[2] = -0.1;
+		coordinates[3] = 0.729*3.14;
+		coordinates[4] = 0.685*3.14;
+		coordinates[5] = -0.001*3.14;
 		sg->set_absolute();
-		sg->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper, 0, true);
+		sg->load_absolute_angle_axis_trajectory_pose(coordinates);
 		sg->Move();
 	}
 
@@ -264,7 +272,7 @@ void wii_teach::main_task_algorithm(void)
 
 	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
-	sg = new common::generator::smooth(*this, true);
+	sg = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	ag = new irp6ot_m::generator::wii_absolute(*this, wii);
 	rg = new irp6ot_m::generator::wii_relative(*this, wii);
 	jg = new irp6ot_m::generator::wii_joint(*this, wii);

@@ -11,6 +11,8 @@
 /* Local headers */
 #include "../ablibs.h"
 
+// TODO: #include <boost/shared_ptr.hpp>
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
@@ -127,9 +129,9 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
-	int reload_whole_configuration();
+	void reload_whole_configuration();
 	void abort_threads();
-	int fill_node_list(void);
+	void fill_node_list(void);
 	int fill_section_list(const char *file_name_and_path);
 	int initiate_configuration(void);
 	int clear_all_configuration_lists(void);
@@ -142,10 +144,10 @@ public:
 	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
-	bool check_node_existence(const std::string _node, const std::string beginnig_of_message);
+	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
 	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
 	int execute_mp_pulse(char pulse_code);
-	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
+	void pulse_reader_execute(int coid, int pulse_code, int pulse_value);
 	int set_toggle_button(PtWidget_t *widget);
 	int unset_toggle_button(PtWidget_t *widget);
 	int block_widget(PtWidget_t *widget);

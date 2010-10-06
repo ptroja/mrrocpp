@@ -13,14 +13,14 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 //#include "generator/ecp/ecp_g_smooth.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "ecp_t_rcsc_irp6ot.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
-#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
@@ -45,7 +45,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
 
-	sg = new common::generator::smooth(*this, true);
+	//sg = new common::generator::smooth(*this, true);
 	wmg = new common::generator::weight_measure(*this, 1);
 
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
@@ -99,7 +99,7 @@ rcsc::~rcsc()
 	delete tig;
 	//	delete befg;
 	//delete sg;
-	delete sg;
+	//delete sg;
 	delete wmg;
 	delete go_st;
 }
@@ -193,24 +193,24 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 		tig->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SMOOTH) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
 			case ecp_mp::task::RELATIVE:
-				sg->set_relative();
+				//sg->set_relative();
 				break;
 			case ecp_mp::task::ABSOLUTE:
-				sg->set_absolute();
+				//sg->set_absolute();
 				break;
 			default:
 				break;
 		}
 
-		sg->load_file_with_path(path.c_str());
-		sg->Move();
+		//sg->load_file_with_path(path.c_str());
+		//sg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_IB_EIH) {
 		sm->Move();

@@ -11,7 +11,8 @@
 #include <boost/function.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/circular_buffer.hpp>
+#include <boost/thread/thread.hpp>
+
 #include <stdexcept>
 #include <iostream>
 #include <string>
@@ -196,7 +197,7 @@ class feb_thread : public boost::noncopyable
 {
 private:
 	function_execution_buffer & feb;
-	boost::thread *thread_id;
+	boost::thread thread_id;
 
 public:
 	void operator()();

@@ -2,7 +2,7 @@
 #define ECP_T_WII_TEACH_H
 
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "application/wii_teach/generator/ecp_g_wii_relative.h"
 #include "application/wii_teach/generator/ecp_g_wii_absolute.h"
 #include "application/wii_teach/generator/ecp_g_wii_joint.h"
@@ -30,7 +30,7 @@ class wii_teach: public common::task::task
 {
     protected:
 	//Generator ruchu
-        common::generator::smooth* sg;
+        common::generator::newsmooth* sg;
         irp6ot_m::generator::wii_absolute* ag;
         irp6ot_m::generator::wii_relative* rg;
         irp6ot_m::generator::wii_joint* jg;
@@ -38,6 +38,7 @@ class wii_teach: public common::task::task
         ecp_mp::sensor::wiimote_t buttonsPressed;
         char path[80];
         char filename[20];
+        std::vector <double> coordinates;
 
         char gripper_path[80];
         char gripper_filename[20];

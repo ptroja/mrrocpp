@@ -1355,7 +1355,7 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
 		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			interface.ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (interface.check_node_existence(interface.mp.node_name, std::string("mp"))) {
+		} else if (interface.check_node_existence(interface.mp.node_name, "mp")) {
 			interface.mp.pid = interface.config->process_spawn(lib::MP_SECTION);
 
 			if (interface.mp.pid > 0) {

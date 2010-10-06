@@ -13,7 +13,7 @@
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "ecp_g_rotate_gripper.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_jarosz.h"
 
 
@@ -37,7 +37,7 @@ class haar : public common::task::task
 	std::string smooth_path;
 	int object_type;
 	//Smoth movement generator
-	common::generator::smooth* smooth_gen;
+	common::generator::newsmooth* smooth_gen;
 	//Calibration of force
 	common::generator::bias_edp_force* bef_gen;
 	//Gripper approach with force control

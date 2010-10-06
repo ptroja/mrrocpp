@@ -40,7 +40,7 @@ Trajectory::Trajectory(const Trajectory &trajectory)
 	trjID = trajectory.trjID;
 	numOfPoses = trajectory.numOfPoses;
 	poseSpec = trajectory.poseSpec;
-	trjPoses = trajectory.trjPoses;
+	//trjPoses = trajectory.trjPoses;
 }
 
 void Trajectory::setTrjID(const std::string & trjID)
@@ -52,8 +52,8 @@ std::string Trajectory::getTrjID() const
 {
 	return trjID;
 }
-
-void Trajectory::writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list <
+//TODO do poprawki, zmiana na newsmooth
+/*void Trajectory::writeTrajectoryToXmlFile(const std::string & fileName, lib::POSE_SPECIFICATION ps, const std::list <
 		ecp_mp::common::smooth_trajectory_pose> &poses)
 {
 	int posCount = poses.size();
@@ -77,17 +77,17 @@ void Trajectory::writeTrajectoryToXmlFile(const std::string & fileName, lib::POS
 	xmlKeepBlanksDefault(0);
 	xmlSaveFormatFile(file.c_str(), doc, 1);
 	std::cout << "-->  File " << fileName << " was saved to XML file" << std::endl;
-}
+}*/
 
 void Trajectory::createNewPose()
 {
 	//actPose = new ecp_mp::common::smooth_trajectory_pose();
-	actPose.arm_type = this->poseSpec;
+	//actPose.arm_type = this->poseSpec;
 }
 
 void Trajectory::addPoseToTrajectory()
 {
-	trjPoses.push_back(actPose);
+	//trjPoses.push_back(actPose);
 }
 
 void Trajectory::setNumOfPoses(unsigned int numOfPoses)
@@ -112,49 +112,52 @@ lib::ECP_POSE_SPECIFICATION Trajectory::getPoseSpecification() const
 
 void Trajectory::setVelocities(const std::string & Velocities)
 {
-	lib::setValuesInArray(actPose.v, Velocities);
+	//lib::setValuesInArray(actPose.v, Velocities);
 }
 
 const double* Trajectory::getVelocities() const
 {
-	return actPose.v;
+	//return actPose.v;
+	return NULL;
 }
 
 void Trajectory::setAccelerations(const std::string & accelerations)
 {
-	lib::setValuesInArray(actPose.a, accelerations);
+	//lib::setValuesInArray(actPose.a, accelerations);
 }
 
 const double* Trajectory::getAccelerations() const
 {
-	return actPose.a;
+	return NULL;
+	//return actPose.a;
 }
 
 void Trajectory::setCoordinates(const std::string & cCoordinates)
 {
-	lib::setValuesInArray(actPose.coordinates, cCoordinates);
+	//lib::setValuesInArray(actPose.coordinates, cCoordinates);
 }
 
 const double* Trajectory::getCoordinates() const
 {
-	return actPose.coordinates;
+	return NULL;
+	//return actPose.coordinates;
 }
 
 void Trajectory::showTime()
 {
-	std::list <ecp_mp::common::smooth_trajectory_pose>::const_iterator it;
+	/*std::list <ecp_mp::common::smooth_trajectory_pose>::const_iterator it;
 	printf("Nazwa: %s, PoseSpec: %d, NumOfPoses: %u\n", trjID.c_str(), poseSpec, numOfPoses);
 	for (it = trjPoses.begin(); it != trjPoses.end(); ++it) {
 		printf("%f %f %f %f %f %f %f %f\n", (*it).v[0], (*it).v[1], (*it).v[2], (*it).v[3], (*it).v[4], (*it).v[5], (*it).v[6], (*it).v[7]);
 		printf("%f %f %f %f %f %f %f %f\n", (*it).a[0], (*it).a[1], (*it).a[2], (*it).a[3], (*it).a[4], (*it).a[5], (*it).a[6], (*it).a[7]);
 		printf("%f %f %f %f %f %f %f %f\n***\n\n", (*it).coordinates[0], (*it).coordinates[1], (*it).coordinates[2], (*it).coordinates[3], (*it).coordinates[4], (*it).coordinates[5], (*it).coordinates[6], (*it).coordinates[7]);
-	}
+	}*/
 }
 
-std::list <ecp_mp::common::smooth_trajectory_pose> & Trajectory::getPoses()
+/*std::list <ecp_mp::common::smooth_trajectory_pose> & Trajectory::getPoses()
 {
 	return trjPoses;
-}
+}*/
 
 } // namespace common
 } // namespace ecp_mp

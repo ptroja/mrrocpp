@@ -15,7 +15,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
 
 #include "generator/ecp/ecp_mp_g_transparent.h"
-#include "generator/ecp/ecp_mp_g_smooth.h"
+#include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "robot/speaker/ecp_mp_g_speak.h"
@@ -153,7 +153,7 @@ void State::setGeneratorType(const std::string & genType)
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_SMOOTH")
-		this->generatorType = ecp_mp::generator::ECP_GEN_SMOOTH;
+		this->generatorType = ecp_mp::generator::ECP_GEN_NEWSMOOTH;
 	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB;
 	else if (genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")

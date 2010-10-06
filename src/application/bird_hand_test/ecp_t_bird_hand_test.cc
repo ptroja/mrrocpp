@@ -8,7 +8,7 @@
 #include "ecp_mp_t_bird_hand_test.h"
 
 #include "robot/bird_hand/ecp_r_bird_hand.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_bird_hand_test.h"
 #include "ecp_t_bird_hand_test.h"

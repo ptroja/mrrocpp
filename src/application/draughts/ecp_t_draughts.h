@@ -2,7 +2,7 @@
 #define _ECP_T_TB_IRP6OT_H
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_smooth.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
@@ -64,7 +64,7 @@ class Draughts : public common::task::task
 private:
 	fradia_sensor_board_and_draughts *vsp_fradia; //Virtual sensor
 	//common::generator::smooth* sgen;				//smooth movement generator
-	common::generator::smooth* sgen2; //smooth movement generator
+	//common::generator::smooth* sgen2; //smooth movement generator
 	common::generator::bias_edp_force* befgen; //calibration of force
 	common::generator::tff_gripper_approach* gagen; //gripper approach with force control
 	lib::trajectory_description tdes; //trajectory description from com_buf.h

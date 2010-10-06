@@ -38,7 +38,7 @@ protected:
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 
 	common::generator::weight_measure* wmg;
 	//podzadania

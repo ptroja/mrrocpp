@@ -44,7 +44,7 @@ acq_eih::acq_eih(task::task &_ecp_t) :
 
 	printf("acq_eih::acq_eih() 3\n");
 	fflush(stdout);
-	smoothgen = new generator::smooth(_ecp_t, true);
+	smoothgen = new generator::newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS,6);
 	printf("acq_eih::acq_eih() 4\n");
 	fflush(stdout);
 
@@ -106,6 +106,7 @@ void acq_eih::main_task_algorithm(void)
 	struct timespec delay;
 	delay.tv_nsec = (delay_ms % 1000) * 1000000;//delay in ms
 	delay.tv_sec = (int) (delay_ms / 1000);
+	std::vector <double> coordinates(6);
 
 	sub_task::sr_ecp_msg.message("ecp eihacquisition ready");
 
@@ -116,10 +117,11 @@ void acq_eih::main_task_algorithm(void)
 		fradia->get_reading();
 	}
 
+	smoothgen->reset();
 	smoothgen->set_absolute();
 
 	// wczytanie pozycji poczatkowej i przejscie do niej za pomoca smooth
-	smoothgen->load_file_with_path(smooth_path.c_str());
+	smoothgen->load_trajectory_from_file(smooth_path.c_str());
 	smoothgen->Move();
 
 	// doprowadzenie chwytaka do szachownicy "wodzeniem za nos"
@@ -135,8 +137,8 @@ void acq_eih::main_task_algorithm(void)
 	sub_task::sr_ecp_msg.message("Data collection\n");
 
 	// maximum velocity and acceleration of smooth generator
-	double vv[lib::MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
-	double aa[lib::MAX_SERVOS_NR] = { acc, acc, acc, acc, acc, acc, acc, acc };
+	//double vv[lib::MAX_SERVOS_NR] = { vel, vel, vel, vel, vel, vel, vel, vel };
+	//double aa[lib::MAX_SERVOS_NR] = { acc, acc, acc, acc, acc, acc, acc, acc };
 	//double coordinates[lib::MAX_SERVOS_NR]={0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0};
 	smoothgen->set_relative();
 
@@ -145,7 +147,15 @@ void acq_eih::main_task_algorithm(void)
 	//opusc chwytak az przestanie "widziec" szachownice
 	while (fradia->get_reading_message().found == true && !calibrated) {
 		//opuszczenie chwytaka o 2.5 cm
-		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smoothgen->reset();
+		coordinates[0] = 0.0;
+		coordinates[1] = 0.0;
+		coordinates[2] = A;
+		coordinates[3] = 0.0;
+		coordinates[4] = 0.0;
+		coordinates[5] = 0.0;
+		smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
 		sub_task::ecp_t.sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->get_reading();
@@ -156,7 +166,15 @@ void acq_eih::main_task_algorithm(void)
 	}
 
 	// podnies chwytak do ostatniej pozycji w ktorej wykryto szachownice
-	smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smoothgen->reset();
+	coordinates[0] = 0.0;
+	coordinates[1] = 0.0;
+	coordinates[2] = A;
+	coordinates[3] = 0.0;
+	coordinates[4] = 0.0;
+	coordinates[5] = 0.0;
+	//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+	smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
 	smoothgen->Move();
 	nanosleep(&delay, NULL);
 	--i;
@@ -186,7 +204,15 @@ void acq_eih::main_task_algorithm(void)
 			}
 
 			while (((fradia->get_reading_message().found) == true) && calibrated == false && m < M) {
-				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
+				smoothgen->reset();
+				coordinates[0] = 0.0;
+				coordinates[1] = 0.0;
+				coordinates[2] = 0.0;
+				coordinates[3] = e;
+				coordinates[4] = c;
+				coordinates[5] = d;
+				//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
+				smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
 				smoothgen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
@@ -197,8 +223,15 @@ void acq_eih::main_task_algorithm(void)
 
 			if (m != 0) {
 				//powrot do poprzedniej pozycji
-				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0
-						* m * d, 0.0, 0.0, true);
+				smoothgen->reset();
+				coordinates[0] = 0.0;
+				coordinates[1] = 0.0;
+				coordinates[2] = 0.0;
+				coordinates[3] = -1.0 * m * e;
+				coordinates[4] = -1.0 * m * c;
+				coordinates[5] = -1.0 * m * d;
+				//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0, 0.0, true);
+				smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
 				printf("acq_eih::main_task_alg() 1\n");
 				fflush(stdout);
 				smoothgen->Move();
@@ -234,7 +267,15 @@ void acq_eih::main_task_algorithm(void)
 			}
 
 			while (fradia->get_reading_message().found == true && calibrated == false && flaga) {
-				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				smoothgen->reset();
+				coordinates[0] = a;
+				coordinates[1] = b;
+				coordinates[2] = 0.0;
+				coordinates[3] = 0.0;
+				coordinates[4] = 0.0;
+				coordinates[5] = 0.0;
+				smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
+				//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 				smoothgen->Move();
 				nanosleep(&delay, NULL);
 				generator->Move();
@@ -267,7 +308,15 @@ void acq_eih::main_task_algorithm(void)
 						/*start1 a>0 c>0 ot i p*/flaga = false;
 
 					while (((fradia->get_reading_message().found) == true) && (calibrated == false) && m < M && flaga) {
-						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
+						smoothgen->reset();
+						coordinates[0] = 0.0;
+						coordinates[1] = 0.0;
+						coordinates[2] = 0.0;
+						coordinates[3] = e;
+						coordinates[4] = c;
+						coordinates[5] = d;
+						smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
+						//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, e, c, d, 0.0, 0.0, true);
 						smoothgen->Move();
 						nanosleep(&delay, NULL);
 						generator->Move();
@@ -280,8 +329,15 @@ void acq_eih::main_task_algorithm(void)
 
 					if (m != 0) {
 						//powrot do poprzedniej pozycjiodczyt danych do obliczen z zadanych plikow
-						smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0
-								* m * c, -1.0 * m * d, 0.0, 0.0, true);
+						smoothgen->reset();
+						coordinates[0] = 0.0;
+						coordinates[1] = 0.0;
+						coordinates[2] = 0.0;
+						coordinates[3] = -1.0 * m * e;
+						coordinates[4] = -1.0 * m * c;
+						coordinates[5] = -1.0 * m * d;
+						smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
+						//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, 0.0, -1.0 * m * e, -1.0 * m * c, -1.0 * m * d, 0.0, 0.0, true);
 						smoothgen->Move();
 						m = 0;
 						nanosleep(&delay, NULL);
@@ -298,7 +354,15 @@ void acq_eih::main_task_algorithm(void)
 
 			if (j != 0) {
 				//powrot do poprzedniej pozycji
-				smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, -1.0 * j * a, -1.0 * j * b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+				smoothgen->reset();
+				coordinates[0] = -1.0 * j * a;
+				coordinates[1] = -1.0 * j * b;
+				coordinates[2] = 0.0;
+				coordinates[3] = 0.0;
+				coordinates[4] = 0.0;
+				coordinates[5] = 0.0;
+				smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
+				//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, -1.0 * j * a, -1.0 * j * b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 				smoothgen->Move();
 				j = 0;
 				nanosleep(&delay, NULL);
@@ -307,7 +371,15 @@ void acq_eih::main_task_algorithm(void)
 		}
 
 		// podnies chwytak o 2.5 cm
-		smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
+		smoothgen->reset();
+		coordinates[0] = 0.0;
+		coordinates[1] = 0.0;
+		coordinates[2] = -1.0 * A;
+		coordinates[3] = 0.0;
+		coordinates[4] = 0.0;
+		coordinates[5] = 0.0;
+		smoothgen->load_relative_angle_axis_trajectory_pose(coordinates);
+		//smoothgen->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa, 0.0, 0.0, -1.0 * A, 0.0, 0.0, 0.0, 0.0, 0.0, true);
 		smoothgen->Move();
 		nanosleep(&delay, NULL);
 		fradia->get_reading();

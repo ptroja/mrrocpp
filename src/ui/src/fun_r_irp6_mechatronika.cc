@@ -155,7 +155,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 					|| (access(resourceman_attach_point.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message("edp_irp6_mechatronika already exists");
 
-			} else if (interface.check_node_existence(interface.irp6m_m->state.edp.node_name, std::string("edp_irp6_mechatronika"))) {
+			} else if (interface.check_node_existence(interface.irp6m_m->state.edp.node_name, "edp_irp6_mechatronika")) {
 				interface.irp6m_m->state.edp.node_nr = interface.config->return_node_number(interface.irp6m_m->state.edp.node_name);
 				{
 					boost::unique_lock < boost::mutex > lock(interface.process_creation_mtx);
