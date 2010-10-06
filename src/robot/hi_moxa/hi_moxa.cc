@@ -60,10 +60,18 @@ void HI_moxa::init()
 	if (master.robot_test_mode) {
 		// domyslnie robot jest zsynchronizowany
 		master.controller_state_edp_buf.is_synchronised = true;
-	} else {
-		// domyslnie robot nie jest zsynchronizowany
-		master.controller_state_edp_buf.is_synchronised = false;
-	}
+		// informacja o stanie robota
+		master.controller_state_edp_buf.is_power_on = true;
+		master.controller_state_edp_buf.is_robot_blocked = false;
+
+		clock_gettime(CLOCK_MONOTONIC, &wake_time);
+		reset_counters();
+		return;
+	} // end test mode
+
+	// domyslnie robot nie jest zsynchronizowany
+	master.controller_state_edp_buf.is_synchronised = false;
+
 
 
 	fd_max = 0;
@@ -172,6 +180,15 @@ uint64_t HI_moxa::read_write_hardware(void)
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
+	// test mode
+	if (master.robot_test_mode) {
+		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+			wake_time.tv_sec += 1;
+			wake_time.tv_nsec -= 1000000000;
+		}
+		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		return ret;
+	}// end test mode
 
 	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
@@ -194,17 +211,14 @@ uint64_t HI_moxa::read_write_hardware(void)
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
 		if (select_retval == 0) {
 			receive_timeouts++;
-			if (!master.robot_test_mode) {
-				std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
-						<< (((float) receive_timeouts) / receive_attempts) << ")";
+			std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
+					<< (((float) receive_timeouts) / receive_attempts) << ")";
 
-				for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
-					if (bytes_received[drive_number] < READ_BYTES)
-						std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
-				}
-				std::cout << std::endl;
+			for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+				if (bytes_received[drive_number] < READ_BYTES)
+					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
 			}
-
+			std::cout << std::endl;
 			hardware_read_ok = false;
 			break;
 		} else {
@@ -256,11 +270,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 	}
 
 	//zeby zbik3d ruszyl
-	if (!master.robot_test_mode) {
-		master.controller_state_edp_buf.is_synchronised = robot_synchronized;
-	} else {
-		master.controller_state_edp_buf.is_synchronised = true;
-	}
+//	if (!master.robot_test_mode) {
+//		master.controller_state_edp_buf.is_synchronised = robot_synchronized;
+//	} else {
+//		master.controller_state_edp_buf.is_synchronised = true;
+//	}
 
 	master.controller_state_edp_buf.is_robot_blocked = power_fault;
 	if (power_fault) {
