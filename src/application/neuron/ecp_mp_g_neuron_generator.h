@@ -1,8 +1,9 @@
-/*
- * ecp_mp_g_neuron_generator.h
- *
- *  Created on: Jul 02, 2010
- *      Author: tbem
+/**
+ * @file ecp_mp_g_neuron_generator.h
+ * @brief Header file for neuron generator label definition.
+ * @author Tomasz Bem (mebmot@wp.pl)
+ * @ingroup neuron
+ * @date 02.07.2010
  */
 
 #ifndef ECP_MP_G_NEURON_GENERATOR_H_
@@ -13,6 +14,9 @@ namespace ecp_mp{
 namespace common{
 namespace generator{
 
+/**
+ * @brief Neuron generator label definition.
+ */
 const std::string ECP_MP_G_NEURON_GENERATOR="ECP_MP_G_NEURON_GENERATOR";
 
 }//generator

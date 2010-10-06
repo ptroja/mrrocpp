@@ -1,8 +1,9 @@
-/*
- * mp_t_neuron.h
- *
- *  Created on: Jun 25, 2010
- *      Author: tbem
+/**
+ * @file mp_t_neuron.h
+ * @brief Header file for neuron class.
+ * @author Tomasz Bem (mebmot@wp.pl)
+ * @ingroup neuron
+ * @date 25.06.2010
  */
 
 #ifndef MP_T_NEURON_H_
@@ -12,6 +13,10 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+/**
+ * @brief neuron task class declaration.
+ * @detials Taks for optimization trajectory with usage of neural networks.
+ */
 class neuron : public task
 {
 public:

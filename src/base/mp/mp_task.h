@@ -222,7 +222,7 @@ public:
 	void execute_all(const common::robots_t & _robot_m);
 
 	/**
-	 * @brief main task algorith
+	 * @brief main task algorithm
 	 * to implement ni inherited classes
 	 */
 	virtual void main_task_algorithm(void) = 0;
