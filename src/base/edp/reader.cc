@@ -361,10 +361,9 @@ void reader_buffer::operator()()
 			// TODO: throw
 		} else { // jesli plik istnieje
 
-			if(write_csv){
+			if (write_csv) {
 				write_header_csv(outfile);
-			}
-			else{
+			} else {
 				write_header_old_format(outfile);
 			}
 
@@ -379,10 +378,9 @@ void reader_buffer::operator()()
 
 				reader_data & data = reader_buf.front();
 
-				if(write_csv){
+				if (write_csv) {
 					write_data_csv(outfile, data);
-				}
-				else{
+				} else {
 					write_data_old_format(outfile, data);
 				}
 
