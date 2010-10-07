@@ -8,8 +8,8 @@
 #ifndef VS_DEFINES_H_
 #define VS_DEFINES_H_
 
-#define ROBOT_OT
-//#define ROBOT_P
+//#define ROBOT_OT
+#define ROBOT_P
 
 #ifdef ROBOT_P
 #include "robot/irp6p_m/const_irp6p_m.h"

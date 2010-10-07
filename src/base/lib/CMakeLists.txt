@@ -3,14 +3,14 @@ if(USE_MESSIP)
 
 	# configsrv is needed only for non-QNX platforms and then messip is used
 	add_executable(configsrv configsrv.cc configsrv_m.cc)
-	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 	install(TARGETS configsrv DESTINATION bin)
 endif(USE_MESSIP)
 
 add_subdirectory (agent)
 add_subdirectory (sr)
 
-# Create a library called "mrrocpp" which includes the source file "hello.cxx".
+# Create a library called "mrrocpp" which includes the following source files.
 # The extension is already found. Any number of sources could be listed here. 
 
 add_library(mrrocpp 
@@ -37,6 +37,11 @@ add_library(mrrocpp
 )
 
 target_link_libraries (mrrocpp sr)
+
 if(NOT USE_MESSIP)
 	target_link_libraries (mrrocpp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 endif(NOT USE_MESSIP)
+
+if(USE_MESSIP)
+    target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
+endif(USE_MESSIP)

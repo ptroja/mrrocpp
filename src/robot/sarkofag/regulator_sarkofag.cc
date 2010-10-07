@@ -43,7 +43,7 @@ NL_regulator_8_sarkofag::NL_regulator_8_sarkofag(uint8_t reg_no, uint8_t reg_par
 /*-----------------------------------------------------------------------*/
 uint8_t NL_regulator_8_sarkofag::compute_set_value(void)
 {
-	static long iteracja = 0;
+//	static long iteracja = 0;
 
 	// algorytm regulacji dla serwomechanizmu
 	// position_increment_old - przedostatnio odczytany przyrost polozenie

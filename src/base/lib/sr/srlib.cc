@@ -67,7 +67,9 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 
 void sr::send_package(void)
 {
-	clock_gettime(CLOCK_REALTIME, &sr_message.ts);
+	if(clock_gettime(CLOCK_REALTIME, &sr_message.ts) == -1) {
+		perror("clock_gettime()");
+	}
 	sender->send_package(sr_message);
 }
 

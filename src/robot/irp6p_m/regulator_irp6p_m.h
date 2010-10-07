@@ -24,8 +24,8 @@ const double AXIS_0_TO_5_SYNCHRO_STEP_FINE = -0.007;
 const double AXIS_6_SYNCHRO_STEP_COARSE = -0.05;
 const double AXIS_6_SYNCHRO_STEP_FINE = -0.05;
 
-const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO = 0.60;
-const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2 = 0.40;
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO = 0.60;	// Preskaler dla osi 1-3
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2 = 0.40;	// Preskaler dla osi 5-7
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_2_irp6p : public common::NL_regulator

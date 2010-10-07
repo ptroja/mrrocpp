@@ -62,8 +62,8 @@ SenderBase::SenderBase(const std::string & sr_name)
 {
 	unsigned int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
-		if (tmp++ < 50) {
-			delay(50);
+		if (tmp++ < lib::CONNECT_RETRY) {
+			delay(lib::CONNECT_DELAY);
 		} else {
 			fprintf(stderr, "messip::port_connect(\"%s\") @ %s:%d: %s\n",
 					sr_name.c_str(), __FILE__, __LINE__, strerror(errno));
@@ -84,7 +84,7 @@ SenderBase::~SenderBase() {
 void SenderBase::Send(const sr_package_t & sr_mess)
 {
 	// TODO: error check and throw an exception
-	messip::port_send_sync(ch, 0, 0, sr_mess);
+	messip::port_send_async(ch, 0, 0, sr_mess);
 }
 #endif /* !USE_MESSIP_SRR */
 

@@ -463,7 +463,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 			if (((!(interface.conveyor->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_conveyor already exists");
-			} else if (interface.check_node_existence(interface.conveyor->state.edp.node_name, std::string("edp_conveyor"))) {
+			} else if (interface.check_node_existence(interface.conveyor->state.edp.node_name, "edp_conveyor")) {
 				interface.conveyor->state.edp.node_nr
 						= interface.config->return_node_number(interface.conveyor->state.edp.node_name.c_str());
 				{
@@ -480,17 +480,7 @@ int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 					delete interface.conveyor->ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
 					interface.conveyor->state.edp.state = 1;
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-					while ((interface.conveyor->state.edp.reader_fd
-							= name_open(interface.conveyor->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY)
-							delay(lib::CONNECT_DELAY);
-						else {
-							perror("blad odwolania do READER_C");
-							break;
-						}
+					interface.conveyor->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
@@ -571,46 +561,9 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 {
 
-	char pulse_code = ECP_TRIGGER;
-	long pulse_value = 1;
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	if (interface.conveyor->state.edp.is_synchronised > 0) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (interface.conveyor->state.ecp.trigger_fd < 0) {
-
-			short tmp = 0;
-			// kilka sekund  (~1) na otworzenie urzadzenia
-			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-			while ((interface.conveyor->state.ecp.trigger_fd
-					= name_open(interface.conveyor->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-					< 0) {
-				if (errno == EINTR)
-					break;
-				if ((tmp++) < lib::CONNECT_RETRY)
-					delay(lib::CONNECT_DELAY);
-				else {
-					perror("blad odwolania do ECP_TRIGGER");
-				}
-			}
-			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
-		}
-
-		if (interface.conveyor->state.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(interface.conveyor->state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
-					== -1) {
-
-				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
-				delay(1000);
-			}
-		} else {
-			printf("W PULS ECP:  BLAD name_open \n");
-		}
-	}
-
+	interface.conveyor->pulse_ecp();
 	return (Pt_CONTINUE);
 
 }

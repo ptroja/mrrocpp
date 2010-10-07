@@ -1972,12 +1972,13 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			if (((!(interface.irp6ot_m->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_irp6_on_track already exists");
-			} else if (interface.check_node_existence(interface.irp6ot_m->state.edp.node_name, std::string("edp_irp6_on_track"))) {
+			} else if (interface.check_node_existence(interface.irp6ot_m->state.edp.node_name, "edp_irp6_on_track")) {
 
-				interface.irp6ot_m->state.edp.node_nr = interface.config->return_node_number(interface.irp6ot_m->state.edp.node_name);
+				interface.irp6ot_m->state.edp.node_nr
+						= interface.config->return_node_number(interface.irp6ot_m->state.edp.node_name);
 
 				{
-					boost::unique_lock < boost::mutex > lock(interface.process_creation_mtx);
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
 					interface.irp6ot_m->ui_ecp_robot
 							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6ot_m::ROBOT_NAME);
@@ -1994,18 +1995,7 @@ int EDP_irp6_on_track_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 					interface.irp6ot_m->state.edp.state = 1;
 
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((interface.irp6ot_m->state.edp.reader_fd
-							= name_open(interface.irp6ot_m->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
+					interface.irp6ot_m->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
@@ -2091,47 +2081,10 @@ int pulse_ecp_irp6_on_track(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 {
 
-	char pulse_code = ECP_TRIGGER;
-	long pulse_value = 1;
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.irp6ot_m->state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (interface.irp6ot_m->state.ecp.trigger_fd < 0) {
-
-			short tmp = 0;
-			// kilka sekund  (~1) na otworzenie urzadzenia
-			// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
-
-			ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-			while ((interface.irp6ot_m->state.ecp.trigger_fd
-					= name_open(interface.irp6ot_m->state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-					< 0) {
-				if (errno == EINTR)
-					break;
-				if ((tmp++) < lib::CONNECT_RETRY) {
-					delay(lib::CONNECT_DELAY);
-				} else {
-					perror("blad odwolania do ECP_TRIGGER");
-				}
-			}
-			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
-		}
-
-		if (interface.irp6ot_m->state.ecp.trigger_fd >= 0) {
-			if (MsgSendPulse(interface.irp6ot_m->state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)
-					== -1) {
-
-				fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
-				delay(1000);
-			}
-		} else {
-			printf("W PULS ECP:  BLAD name_open \n");
-		}
-	}
-
+	interface.irp6ot_m->pulse_ecp();
 	return (Pt_CONTINUE);
 
 }
