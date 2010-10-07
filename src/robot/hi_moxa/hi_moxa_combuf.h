@@ -7,6 +7,7 @@ namespace mrrocpp {
 namespace edp {
 namespace hi_moxa {
 
+#define SERVO_ST_BUF_LEN 30
 const char START_BYTE = '#';
 
 // commands
@@ -44,7 +45,7 @@ struct pwm_St {
 }__attribute__((__packed__));
 
 struct servo_St{
-	char buf[30];
+	char buf[SERVO_ST_BUF_LEN];
 	uint8_t command_params;
 	struct status_St drive_status;
 //	int32_t position_offset;

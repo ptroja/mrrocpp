@@ -1,7 +1,4 @@
-//#include "robot/sarkofag/edp_e_sarkofag.h"
 #include "robot/hi_moxa/hi_moxa.h"
-
-//#include "hi_sarkofag.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -48,20 +45,42 @@ void HI_moxa::init()
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::init()" << std::endl;
 #endif
-
 	// inicjalizacja zmiennych
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
 		servo_data[i].first_hardware_read = true;
 		servo_data[i].command_params = 0;
+		for(int j=0; j<SERVO_ST_BUF_LEN; j++)
+			servo_data[i].buf[j] = 0;
 	}
+
+	// informacja o stanie robota
+	master.controller_state_edp_buf.is_power_on = true;
+	master.controller_state_edp_buf.is_robot_blocked = false;
+
+	if (master.robot_test_mode) {
+		// domyslnie robot jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = true;
+		// informacja o stanie robota
+		master.controller_state_edp_buf.is_power_on = true;
+		master.controller_state_edp_buf.is_robot_blocked = false;
+
+		clock_gettime(CLOCK_MONOTONIC, &wake_time);
+		reset_counters();
+		return;
+	} // end test mode
+
+	// domyslnie robot nie jest zsynchronizowany
+	master.controller_state_edp_buf.is_synchronised = false;
+
+
 
 	fd_max = 0;
 	for (unsigned int i = first_drive_number; i <= last_drive_number; i++) {
 		std::cout << "[info] opening port : " << (port + (char) (i + INIT_PORT_CHAR)).c_str();
 		fd[i] = open((port + (char) (i + INIT_PORT_CHAR)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
-			//	throw(std::runtime_error("unable to open device!!!"));
-			std::cout << std::endl << "[error] fd == " << (int) fd[i] << std::endl;
+			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
+			//throw(std::runtime_error("unable to open device!!!"));
 		} else {
 			std::cout << "...OK (" << (int) fd[i] << ")" << std::endl;
 			if (fd[i] > fd_max)
@@ -105,7 +124,7 @@ void HI_moxa::insert_set_value(int drive_offset, double set_value)
 	servo_data[drive_number].buf[4] = START_BYTE;
 	servo_data[drive_number].buf[5] = COMMAND_MODE_PWM | servo_data[drive_number].command_params;
 	struct pwm_St* temp = (pwm_St*) &(servo_data[drive_number].buf[6]);
-	//temp->pwm = set_value * (300.0 / 255.0);
+	// Nowa karta sterownika: -1000..+1000, stara karta: -255..+255
 	temp->pwm = set_value * (1000.0 / 255.0);
 
 #ifdef T_INFO_FUNC
@@ -161,24 +180,23 @@ uint64_t HI_moxa::read_write_hardware(void)
 	uint64_t ret = 0;
 	uint8_t drive_number;
 
-	//	std::cout << "[info] pos:";													// ############# Pozycja
-	//	 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++){
-	//	 std::cout << " " << servo_data[drive_number].current_absolute_position;
-	//	 }
-	//	 std::cout << std::endl;
-
-	//	std::cout << "[info] przed write: " << std::endl;
+	// test mode
+	if (master.robot_test_mode) {
+		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+			wake_time.tv_sec += 1;
+			wake_time.tv_nsec -= 1000000000;
+		}
+		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		return ret;
+	}// end test mode
 
 	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
 		bytes_received[drive_number] = 0;
 	}
 
-	//	std::cout << "[info] po write: " << std::endl;
-
-
 	receive_attempts++;
-	//for (int i = 0; i < 7; i++)
+
 	while (1) {
 		FD_ZERO(&rfds);
 		for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
@@ -187,33 +205,20 @@ uint64_t HI_moxa::read_write_hardware(void)
 			}
 		}
 
-		// timeout
 		struct timeval timeout;
 		timeout.tv_sec = (time_t) 0;
 		timeout.tv_usec = 500;
 		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
 		if (select_retval == 0) {
 			receive_timeouts++;
-			if (!master.robot_test_mode) {
-				std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
-						<< (((float) receive_timeouts) / receive_attempts) << ")";
+			std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
+					<< (((float) receive_timeouts) / receive_attempts) << ")";
 
-				//<< std::endl;
-
-				//throw(std::runtime_error("communication timeout !!!"));
-				/*std::cout << "[error] communication timeout ("
-				 << ++receive_timeouts << "/" << receive_attempts << "="
-				 << ((float) receive_timeouts / receive_attempts) << ")";
-				 //					<< std::endl;*/
-
-				for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
-					if (bytes_received[drive_number] < READ_BYTES)
-						std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number]
-								<< ")";
-				}
-				std::cout << std::endl;
+			for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+				if (bytes_received[drive_number] < READ_BYTES)
+					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
 			}
-
+			std::cout << std::endl;
 			hardware_read_ok = false;
 			break;
 		} else {
@@ -228,18 +233,9 @@ uint64_t HI_moxa::read_write_hardware(void)
 					all_hardware_read = false;
 				}
 			}
-			//		std::cout << all_hardware_read << std::endl;	//############################
 			if (all_hardware_read) {
 				break;
 			}
-			//			else{
-			//			 for(drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
-			//			 if(bytes_received[drive_number] < READ_BYTES){
-			//			 std::cout << "Waiting for " << (int)drive_number << std::endl;	//############################
-			//			 }
-			//			 }
-			//			 }
-			//			std::cout << std::endl;	//############################
 		}
 	}
 
@@ -273,13 +269,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		}
 	}
 
-	//zeby zbik3d ruszyl
-	if (!master.robot_test_mode) {
-		master.controller_state_edp_buf.is_synchronised = robot_synchronized;
-	} else {
-		master.controller_state_edp_buf.is_synchronised = true;
-	}
-
+	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
 	master.controller_state_edp_buf.is_robot_blocked = power_fault;
 	if (power_fault) {
 		if (error_msg_power_stage == 0) {
