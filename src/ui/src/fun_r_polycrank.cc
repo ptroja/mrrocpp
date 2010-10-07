@@ -181,18 +181,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 					interface.irp6m_m->state.edp.state = 1;
 
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-					while ((interface.irp6m_m->state.edp.reader_fd
-									= name_open(
-											interface.irp6m_m->state.edp.network_reader_attach_point.c_str(),
-											NAME_FLAG_ATTACH_GLOBAL)) < 0)
-					if ((tmp++) < lib::CONNECT_RETRY)
-					delay(lib::CONNECT_DELAY);
-					else {
-						perror("blad odwolania do READER_M");
-						break;
-					};
+					interface.polycrank->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;

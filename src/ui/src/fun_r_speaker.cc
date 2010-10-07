@@ -237,7 +237,8 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 			} else if (interface.check_node_existence(interface.speaker->state.edp.node_name, "edp_speaker")) {
 
-				interface.speaker->state.edp.node_nr = interface.config->return_node_number(interface.speaker->state.edp.node_name);
+				interface.speaker->state.edp.node_nr
+						= interface.config->return_node_number(interface.speaker->state.edp.node_name);
 
 				interface.speaker->ui_ecp_robot
 						= new ui::speaker::EcpRobot(&interface.speaker->state.edp, *interface.config, *interface.all_ecp_msg);
@@ -251,18 +252,7 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 					interface.speaker->state.edp.state = 1;
 
-					/*
-					 tmp = 0;
-					 // kilka sekund  (~1) na otworzenie urzadzenia
-					 while((interface.speaker->state.edp.reader_fd = name_open(ini_con->edp_speaker->network_reader_attach_point,
-					 NAME_FLAG_ATTACH_GLOBAL))  < 0)
-					 if((tmp++)<20)
-					 delay(50);
-					 else{
-					 perror("blad odwolania do READER_START");
-					 break;
-					 };
-					 */
+					//interface.speaker->connect_to_reader();
 
 					//interface.speaker->state.edp.state=1;// edp wlaczone reader czeka na start
 					interface.speaker->state.edp.is_synchronised = true;
