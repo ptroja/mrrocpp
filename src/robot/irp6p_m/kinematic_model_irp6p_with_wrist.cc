@@ -426,8 +426,6 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
 
 	// poprawka w celu dostosowania do konwencji DH
-
-
 	local_current_joints[2] -= local_current_joints[1] + M_PI_2;
 	local_current_joints[3] -= local_current_joints[2] + local_current_joints[1] + M_PI_2;
 
