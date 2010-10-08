@@ -48,7 +48,7 @@ public:
 	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int close_all_windows();
+	void close_all_windows();
 	void delete_ui_ecp_robot();
 
 };

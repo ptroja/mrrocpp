@@ -51,7 +51,7 @@ int UiRobot::reload_configuration()
 			case 0:
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
@@ -161,9 +161,8 @@ int UiRobot::manage_interface()
 
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_speaker_play(NULL, NULL, NULL);
@@ -171,7 +170,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
 }
 
 

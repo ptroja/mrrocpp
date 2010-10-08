@@ -21,6 +21,10 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
 enum UI_NOTIFICATION_STATE_ENUM
 {
 	UI_N_STARTING, UI_N_READY, UI_N_BUSY, UI_N_EXITING, UI_N_COMMUNICATION, UI_N_PROCESS_CREATION, UI_N_SYNCHRONISATION
@@ -118,7 +122,14 @@ static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
 static const int CHECK_SPEAKER_STATE_ITER = 10; // co ile iteracji ma byc sprawdzony stan speakera
 
-typedef struct
+typedef enum _EDP_STATE {
+	INACTIVE = -1,
+	OFF = 0,
+	WAITING_TO_START_READER = 1,
+	WAITING_TO_STOP_READER = 2
+} EDP_STATE;
+
+typedef struct _edp_state_def
 {
 	pid_t pid;
 	int test_mode;
@@ -128,8 +139,17 @@ typedef struct
 	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
 	std::string network_reader_attach_point;
 	int node_nr;
-	int reader_fd;
+#if !defined(USE_MESSIP_SRR)
+	typedef int reader_fd_t;
+	static const reader_fd_t invalid_reader_fd = -1;
+#else
+	typedef messip_channel_t * reader_fd_t;
+	// NOTE: C++ forbids inline defining of non-integral types
+	static const reader_fd_t invalid_reader_fd;
+#endif
+	reader_fd_t reader_fd;
 	bool is_synchronised;
+	//! TODO: change from int to EDP_STATE enum
 	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop
 	int last_state;
 	std::string preset_sound_0; // dla EDP speaker

@@ -32,10 +32,7 @@ namespace irp6p_m {
 
 class UiRobot : public common::UiRobot
 {
-private:
-
 public:
-
 	double irp6p_current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
 	double irp6p_desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
 
@@ -49,15 +46,13 @@ public:
 	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-
 	irp6::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int
-			process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	int close_all_windows();
+	void process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	void close_all_windows();
 	void delete_ui_ecp_robot();
 };
 
