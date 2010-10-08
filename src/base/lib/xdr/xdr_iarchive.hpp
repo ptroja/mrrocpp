@@ -60,7 +60,9 @@ private:
 public:
     //! conversion for bool, special since bool != bool_t
     xdr_iarchive &load_a_type(bool &t,boost::mpl::true_) {
-        if(!xdr_bool(&xdrs, (bool_t *) &t)) THROW_LOAD_EXCEPTION;
+    	bool_t b;
+        if(!xdr_bool(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (b) ? true : false;
         return *this;
     }
 

@@ -59,7 +59,8 @@ public:
 	//! conversion for bool, special since bool != bool_t
 	xdr_oarchive &save_a_type(bool const &t, boost::mpl::true_)
 	{
-		if (!xdr_bool(&xdrs, (bool_t *) &t))
+		bool_t b = (t) ? true : false;
+		if (!xdr_bool(&xdrs, &b))
 			THROW_SAVE_EXCEPTION;
 		return *this;
 	}
