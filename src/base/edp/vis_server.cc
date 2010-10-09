@@ -79,19 +79,6 @@ void vis_server::operator()(void)
 		double tmp[master.number_of_servos];
 		master.master_joints_read(tmp);
 
-		// korekta aby polozenia byly wzgledem poprzedniego czlonu
-
-
-		if (master.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-
-			tmp[3] -= tmp[2] + M_PI_2;
-			tmp[4] -= tmp[3] + tmp[2] + M_PI_2;
-		} else if (master.robot_name == lib::irp6p_m::ROBOT_NAME) {
-
-			tmp[2] -= tmp[1] + M_PI_2;
-			tmp[3] -= tmp[2] + tmp[1] + M_PI_2;
-		}
-
 		struct
 		{
 			int synchronised;
