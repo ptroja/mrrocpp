@@ -32,8 +32,11 @@ public:
 	//! Property trees of configuration files
 	boost::property_tree::ptree common_file_pt, file_pt;
 
-	// Konstruktor obiektu - konfiguratora.
+	//! Constructor
 	configsrv(const std::string & _dir, const std::string & _ini_file);
+
+	//! Get the config value at the path
+	std::string value(const std::string & path) const;
 
 	void change_ini_file(const std::string & _ini_file);
 };
