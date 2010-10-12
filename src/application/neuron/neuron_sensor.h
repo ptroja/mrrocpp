@@ -56,6 +56,7 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		 */
 		Coordinates coordinates;
 		void sendCommand(uint8_t command);
+		void sendCoordinates(uint8_t command, double x, double y, double z);
 
 	public:
 		neuron_sensor(mrrocpp::lib::configurator& _configurator);
@@ -71,7 +72,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		void sendCommunicationFinished();
 		void waitForVSPStart();
 		bool startBraking();
-		void sendCoordinates(double x, double y, double z);
+		void sendFinalPosition(double x, double y, double z);
+		void sendCurrentPosition(double x, double y, double z);
 };
 
 } //sensor

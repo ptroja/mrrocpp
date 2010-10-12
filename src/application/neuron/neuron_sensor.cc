@@ -101,6 +101,12 @@ namespace sensor {
  */
 #define START_BREAKING			0x25
 
+/**
+ *
+ */
+//TODO: dopisac komentarz
+#define FINAL_POSITION			0x26
+
 /*==================================Constructor===========================*//**
  * @brief Constructor, creates and initalizes a communication with VSP.
  * @param _configurator MRROC++ configurator.
@@ -259,6 +265,15 @@ void neuron_sensor::sendCommand(uint8_t command){
 	}
 }
 
+//TODO: dodac komentarz
+void neuron_sensor::sendCurrentPosition(double x, double y, double z){
+	sendCoordinates(CURRENT_POSITION,x,y,z);
+}
+
+void neuron_sensor::sendFinalPosition(double x, double y, double z){
+	sendCoordinates(FINAL_POSITION,x,y,z);
+}
+
 /*==============================sendCoordinates===========================*//**
  * @brief Sends coordinates to VSP.
  * @details Sends CURRENT_POSITION command along with coordinates to VSP.
@@ -266,9 +281,9 @@ void neuron_sensor::sendCommand(uint8_t command){
  * @param y Y coordinate.
  * @param z Z coordinate.
  */
-void neuron_sensor::sendCoordinates(double x, double y, double z){
+void neuron_sensor::sendCoordinates(uint8_t comand, double x, double y, double z){
 	char buff[25];
-	uint8_t temp_command=CURRENT_POSITION;
+	uint8_t temp_command=command;
 	memcpy(buff,&temp_command,1);
 	memcpy(buff+1,&x,8);
 	memcpy(buff+9,&y,8);

@@ -205,7 +205,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (neuron_sensor->current_period == 1) {
-		neuron_sensor->sendCoordinates(position[0], position[1], position[2]);
+		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
 	}
 
 	//return true if the generator did not reach the desired position in all of
