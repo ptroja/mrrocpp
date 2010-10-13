@@ -55,7 +55,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 	std::vector <double> coordinates1(6);
 	std::vector <double> coordinates2(7);
 
-	// JOINT ABSOLUTE
+	/*// JOINT ABSOLUTE
 	sr_ecp_msg.message("Joint absolute");
 	cvgenjoint->reset();
 	cvgenjoint->set_absolute();
@@ -448,7 +448,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 	if (cvgeneuler->calculate_interpolate()) {
 		cvgeneuler->Move();
 	}
-	// EULER RELATIVE END
+	// EULER RELATIVE END*/
 
 
 	// ANGLE AXIS ABSOLUTE
@@ -460,7 +460,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 		coordinates1[0] = 0.534987;
 		coordinates1[1] = -0.176317;
 		coordinates1[2] = 0.180306;
-		coordinates1[3] = 1.200713;
+		coordinates1[3] = 1.000713;
 		coordinates1[4] = -1.447889;
 		coordinates1[5] = -0.264191;
 	} else if (postument) {
@@ -475,7 +475,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
 	if (track) {
 		coordinates1[0] = 0.504987;
-		coordinates1[1] = -0.176317;
+		coordinates1[1] = -0.146317;
 		coordinates1[2] = 0.106306;
 		coordinates1[3] = 1.103713;
 		coordinates1[4] = -1.407889;
@@ -513,7 +513,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 	// ANGLE AXIS ABSOLUTE END
 
 
-	// ANGLE AXIS RELATIVE
+	/*// ANGLE AXIS RELATIVE
 	sr_ecp_msg.message("Angle axis relative");
 	cvgenangle->reset();
 	cvgenangle->set_relative();
@@ -572,7 +572,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 	if (cvgenangle->calculate_interpolate()) {
 		cvgenangle->Move();
 	}
-	// ANGLE AXIS RELATIVE END
+	// ANGLE AXIS RELATIVE END*/
 
 }
 

@@ -460,7 +460,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.534987;
 		coordinates1[1] = -0.176317;
 		coordinates1[2] = 0.180306;
-		coordinates1[3] = 1.200713;
+		coordinates1[3] = 1.000713;
 		coordinates1[4] = -1.447889;
 		coordinates1[5] = -0.264191;
 	} else if (postument) {
@@ -469,13 +469,13 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[2] = 0.178306;
 		coordinates1[3] = 1.267713;
 		coordinates1[4] = -1.219889;
-		coordinates1[5] = 0.114191;
+		coordinates1[5] = 0.174191;
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 	if (track) {
 		coordinates1[0] = 0.504987;
-		coordinates1[1] = -0.176317;
+		coordinates1[1] = -0.146317;
 		coordinates1[2] = 0.106306;
 		coordinates1[3] = 1.103713;
 		coordinates1[4] = -1.407889;
@@ -507,7 +507,8 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
+	if (sgenangle->calculate_interpolate()) {
+		sgenangle->detect_jerks(0.3);
 		sgenangle->Move();
 	}
 	// ANGLE AXIS ABSOLUTE END

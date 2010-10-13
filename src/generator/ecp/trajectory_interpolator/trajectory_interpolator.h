@@ -67,7 +67,7 @@ public:
 		typename std::vector<double> coordinates (it->axes_num);
 
 		double start_position_array[6];
-		double coordinate_backup[6];
+		double coordinates_array[6];
 
 		lib::Homog_matrix begining_frame;
 		lib::Homog_matrix goal_frame;
@@ -86,16 +86,20 @@ public:
 		goal_frame.set_from_xyz_angle_axis(start_position_array);
 
 		for (int i = 0; i < it->interpolation_node_no; i++) {
+			printf("coord %d:\t", i+1);
 			for (int j = 0; j < it->axes_num; j++) {
 				if (fabs(it->s[j]) < 0.0000001) {
 					coordinates[j] = 0;
+					printf("%f\t", coordinates[j]);
 				} else {
 					coordinates[j] = generate_relative_coordinate(i, it, j, mc);
+					printf("%f\t", coordinates[j]);
 				}
 			}
 
+			printf("\n");
 			for (z = 0; z < 6; z++) {
-				coordinate_backup[z] = coordinates[z];
+				coordinates_array[z] = coordinates[z];
 			}
 
 			begining_frame_with_current_translation = begining_frame;
@@ -103,7 +107,7 @@ public:
 
 			step_of_total_increment_vector =
 						lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-								* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinate_backup);
+								* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinates_array);
 
 			goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
 
