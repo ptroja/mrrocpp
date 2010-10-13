@@ -668,7 +668,13 @@ struct servo_group_reply
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union c_buffer_robot_model
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+c_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
@@ -840,6 +846,9 @@ struct c_buffer
 		ar & interpolation_type;
 		ar & motion_type;
 		ar & motion_steps;
+		ar & value_in_step_no;
+		ar & robot_model;
+		ar & arm;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -987,7 +996,13 @@ typedef struct _controller_state_t
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union r_buffer_arm
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+r_buffer_arm
 {
 	struct
 	{
@@ -1029,8 +1044,8 @@ typedef union r_buffer_arm
 		ar & pf_def.arm_frame;
 		ar & pf_def.arm_coordinates;
 		ar & pf_def.force_xyz_torque_xyz;
-//		ar & pf_def.gripper_reg_state;
-//		ar & text_def.speaking;
+		ar & pf_def.gripper_reg_state;
+		ar & text_def.speaking;
 //		ar & serialized_reply;
 	}
 } r_buffer_arm_t;

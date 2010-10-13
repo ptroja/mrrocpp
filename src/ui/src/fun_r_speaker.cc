@@ -270,42 +270,17 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 }
 
 int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
 {
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	// dla robota speaker
-	if (interface.speaker->state.edp.state > 0) { // jesli istnieje EDP
-		if (interface.speaker->state.edp.reader_fd >= 0) {
-			if (name_close(interface.speaker->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_speaker, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
-		}
-
-		delete interface.speaker->ui_ecp_robot;
-		interface.speaker->state.edp.state = 0; // edp wylaczone
-		interface.speaker->state.edp.is_synchronised = false;
-
-		interface.speaker->state.edp.pid = -1;
-		interface.speaker->state.edp.reader_fd = -1;
-
-		close_wnd_speaker_play(NULL, NULL, NULL);
-
-	}
-
-	// modyfikacja menu
-	interface.manage_interface();
+	interface.speaker->EDP_slay_int();
 
 	return (Pt_CONTINUE);
-
 }
 
 int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
 {
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -313,7 +288,6 @@ int pulse_reader_speaker_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 		process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
-
 }
 
 int pulse_reader_speaker_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)

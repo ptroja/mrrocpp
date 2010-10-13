@@ -33,7 +33,6 @@ protected:
 	Interface& interface;
 
 public:
-
 	feb_thread* tid;
 	function_execution_buffer eb;
 
@@ -43,13 +42,15 @@ public:
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
+
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);
 	bool pulse_reader_trigger_exec_pulse(void);
-	bool pulse_ecp(void);
-	virtual int close_all_windows();
-	int EDP_slay_int();
-	bool connect_to_reader(void);
+
+	void pulse_ecp(void);
+	virtual void close_all_windows();
+	void EDP_slay_int();
+	void connect_to_reader(void);
 	virtual void delete_ui_ecp_robot() = 0;
 };
 

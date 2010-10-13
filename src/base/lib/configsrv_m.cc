@@ -38,38 +38,43 @@ main(int argc, char *argv[])
 		perror("signal()");
 	}
 
-	while(true) {
-		int32_t type, subtype;
-		std::string config_file;
+	try {
+		while(true) {
+			int32_t type, subtype;
+			config_query_t query;
 
-		const int rcvid = messip::port_receive(ch,
-				type, subtype,
-				config_file);
+			const int rcvid = messip::port_receive(ch,
+					type, subtype,
+					query);
 
-		if (rcvid < 0) {
-			continue;
+			if (rcvid < 0) {
+				continue;
+			}
+
+			config_query_t reply;
+			reply.flag = false;
+
+			if(query.flag) {
+				//! Flag set means request to change a config file
+				try {
+					config.change_ini_file(query.key);
+					reply.flag = true;
+				} catch (std::exception & e) {
+					// Do nothing. Reply will send the error flag.
+				}
+			} else {
+				//! Flag not set means request about config value
+				try {
+					reply.key = config.value(query.key);
+					reply.flag = true;
+				} catch (boost::property_tree::ptree_error & e) {
+					// Do nothing. Reply will send the error flag.
+				}
+			}
+			messip::port_reply(ch, rcvid, 0, reply);
 		}
-
-		std::cout << "configsrv_m: rcvid " << rcvid <<
-				" : " << config_file <<
-				" lenght " << config_file.length() <<
-				std::endl;
-
-		if(config_file.length() > 0) {
-			// TODO: try/catch -> ack/nack ?
-			config.change_ini_file(config_file);
-		}
-
-		property_trees_t ptrees;
-		ptrees.common_file_pt = config.common_file_pt;
-		ptrees.file_pt = config.file_pt;
-
-		try {
-			messip::port_reply(ch, rcvid, 0, ptrees);
-		} catch (std::exception & e) {
-			std::cerr << "configsrv exception: " << e.what() << std::endl;
-			break;
-		}
+	} catch (std::exception & e) {
+		std::cerr << "configsrv exception: port_reply failed: " << e.what() << std::endl;
 	}
 
 	messip::port_delete(ch);

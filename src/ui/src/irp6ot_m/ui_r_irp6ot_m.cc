@@ -54,7 +54,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				for (int i = 0; i < 4; i++) {
@@ -222,9 +222,8 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
@@ -240,8 +239,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

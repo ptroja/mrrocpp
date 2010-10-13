@@ -7,6 +7,7 @@
 // Ostatnia modyfikacja:
 // -------------------------------------------------------------------------
 
+#include <exception>
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
@@ -135,6 +136,10 @@ int main(int argc, char *argv[])
 		 }
 		 */
 	} // end: catch(System_error fe)
+
+	catch(std::exception & e) {
+		std::cerr << "EDP: " << e.what() << std::endl;
+	}
 
 	catch (...) { // Dla zewnetrznej petli try
 		perror("Unidentified error in EDP");

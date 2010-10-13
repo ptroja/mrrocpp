@@ -64,3 +64,12 @@ void configsrv::change_ini_file (const std::string & _ini_file)
 	read_property_tree_from_file(file_pt, file_location);
 	read_property_tree_from_file(common_file_pt, common_file_location);
 }
+
+std::string configsrv::value(const std::string & pt_path) const
+{
+	try {
+		return file_pt.get<std::string>(pt_path);
+	} catch (boost::property_tree::ptree_error & e) {
+		return common_file_pt.get<std::string>(pt_path);
+	}
+}

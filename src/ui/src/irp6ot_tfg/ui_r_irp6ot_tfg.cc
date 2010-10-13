@@ -53,7 +53,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6ot_tfg (ini_con->ui->edp_irp6ot_tfg_section);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				for (int i = 0; i < 3; i++) {
@@ -179,9 +179,8 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wind_irp6ot_tfg_moves(NULL, NULL, NULL);
@@ -190,8 +189,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

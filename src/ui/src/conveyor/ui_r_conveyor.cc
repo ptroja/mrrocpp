@@ -54,7 +54,7 @@ int UiRobot::reload_configuration()
 			case 0:
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists("preset_position_0", state.edp.section_name))
@@ -197,9 +197,8 @@ int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_w
 
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wind_conveyor_moves(NULL, NULL, NULL);
@@ -208,8 +207,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

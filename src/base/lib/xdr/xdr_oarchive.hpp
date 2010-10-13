@@ -59,12 +59,14 @@ public:
 	//! conversion for bool, special since bool != bool_t
 	xdr_oarchive &save_a_type(bool const &t, boost::mpl::true_)
 	{
-		if (!xdr_bool(&xdrs, (bool_t *) &t))
+		bool_t b = (t) ? true : false;
+		if (!xdr_bool(&xdrs, &b))
 			THROW_SAVE_EXCEPTION;
 		return *this;
 	}
 
 	//! conversion for bool[], special since bool != bool_t
+	/* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
 	template <int N>
 	xdr_oarchive &save_a_type(bool const(&t)[N], boost::mpl::false_)
 	{
@@ -72,6 +74,7 @@ public:
 			THROW_SAVE_EXCEPTION;
 		return *this;
 	}
+	*/
 
 	//! conversion for an enum
 	template <class T>

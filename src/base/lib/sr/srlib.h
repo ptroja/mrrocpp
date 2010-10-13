@@ -87,7 +87,7 @@ class sr : public boost::noncopyable
 {
 private:
 	//! Size of the array with error codes
-	static const unsigned int ERROR_TAB_SIZE = 2;
+	static const size_t ERROR_TAB_SIZE = 2;
 
 	//! One-thread a time access mutex
 	boost::mutex srMutex;
