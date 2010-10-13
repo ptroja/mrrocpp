@@ -55,7 +55,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 
 				state.edp.state = 0;
 
@@ -197,7 +197,7 @@ int UiRobot::manage_interface()
 }
 
 // aktualizacja ustawien przyciskow
-int UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+void UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
@@ -220,14 +220,10 @@ int UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_
 	}
 
 	state.edp.last_state = state.edp.state;
-
-	return 1;
-
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_irp6_postument_inc(NULL, NULL, NULL);
@@ -243,8 +239,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

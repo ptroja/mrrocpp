@@ -71,8 +71,6 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
-
-	change_config_file("");
 #else
 	file_location = get_config_file_path();
 	common_file_location = get_common_config_file_path();
@@ -102,17 +100,23 @@ void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt
 void configurator::change_config_file(const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
-	boost::mutex::scoped_lock l(access_mutex);
+	config_query_t query, reply;
 
-	property_trees_t ptrees;
+	query.key = _ini_file;
+	query.flag = true;
 
-	messip::port_send(this->ch,
-			0, 0,
-			_ini_file, ptrees);
+	{
+		boost::mutex::scoped_lock l(access_mutex);
 
-	common_file_pt = ptrees.common_file_pt;
-	file_pt = ptrees.file_pt;
+		messip::port_send(this->ch,
+				0, 0,
+				query, reply);
+	}
 
+	if(!reply.flag) {
+		// TODO: throw
+		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
+	}
 #else
 	boost::mutex::scoped_lock l(access_mutex);
 
@@ -215,7 +219,6 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	return true;
 }
 
-
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
 #if defined(PROCESS_SPAWN_RSH)
@@ -235,7 +238,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		if (access(opendir_path.c_str(), R_OK) != 0) {
 			printf("spawned node absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned node absent: " + opendir_path);
+			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
 	}
 

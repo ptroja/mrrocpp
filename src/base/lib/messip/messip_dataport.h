@@ -31,8 +31,6 @@ int port_send( messip_channel_t * ch,
 	int32_t answer;
 	char reply_data[16384];
 
-	printf("messip_send bytes: %d\n", oa.getArchiveSize());
-
 	int r = messip_send(ch, type, subtype,
 			oa.get_buffer(), oa.getArchiveSize(),
 			&answer,
@@ -40,7 +38,6 @@ int port_send( messip_channel_t * ch,
 			msec_timeout);
 
 	if (r == 0) {
-		printf("messip_send/received bytes: %d\n", ch->datalenr);
 		xdr_iarchive<> ia(reply_data, ch->datalenr);
 
 		ia >> reply;
@@ -93,8 +90,6 @@ int port_receive( messip_channel_t * ch,
 
 	int r = messip_receive(ch, &type, &subtype, &receive_data, sizeof(receive_data), msec_timeout);
 
-	printf("messip_receive bytes: %d\n", ch->datalenr);
-
 	if (r >= 0 || r == MESSIP_MSG_NOREPLY) {
 		xdr_iarchive<> ia(receive_data, ch->datalenr);
 
@@ -118,8 +113,6 @@ int port_reply( messip_channel_t * ch,
 {
 	xdr_oarchive<> oa;
 	oa << data;
-
-	printf("messip_reply bytes: %d\n", oa.getArchiveSize());
 
 	return messip_reply(ch, index, status, oa.get_buffer(), oa.getArchiveSize(), msec_timeout);
 }
