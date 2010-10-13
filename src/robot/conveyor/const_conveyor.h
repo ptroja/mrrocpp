@@ -39,6 +39,18 @@ const std::string ECP_SECTION = "[ecp_conveyor]";
  */
 const int NUM_OF_SERVOS = 1;
 
+/*!
+ * @brief IRp6 postument first Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int FIRST_MOXA_PORT_NUM = 7;
+
+/*!
+ * @brief IRp6 postument last Moxa port number [0..7]
+ * @ingroup irp6p_m
+ */
+const int LAST_MOXA_PORT_NUM = 7;
+
 } // namespace conveyor
 } // namespace lib
 } // namespace mrrocpp
