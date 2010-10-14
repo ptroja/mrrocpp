@@ -287,7 +287,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[0] = 0.0;
 		coordinates2[1] = -10.0;
 		coordinates2[2] = 0.0;
-		coordinates2[3] = 50.0;
+		coordinates2[3] = 20.0;
 		coordinates2[4] = -20.0;
 		coordinates2[5] = 0.0;
 		coordinates2[6] = 0.0;
@@ -296,7 +296,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
 		coordinates1[2] = 0.0;
-		coordinates1[3] = 50.0;
+		coordinates1[3] = 20.0;
 		coordinates1[4] = -20.0;
 		coordinates1[5] = 0.0;
 		sgenmotor->load_relative_motor_trajectory_pose(coordinates1);
@@ -315,8 +315,8 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
 		coordinates1[2] = 0.0;
-		coordinates1[3] = -50.0;
-		coordinates1[4] = -0.0;
+		coordinates1[3] = -20.0;
+		coordinates1[4] = 0.0;
 		coordinates1[5] = 0.0;
 		sgenmotor->load_relative_motor_trajectory_pose(coordinates1);
 	}
@@ -507,7 +507,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate()) {
+	if (sgenangle->calculate_interpolate() && sgeneuler->detect_jerks(0.3) == 0) {
 		sgenangle->detect_jerks(0.3);
 		sgenangle->Move();
 	}

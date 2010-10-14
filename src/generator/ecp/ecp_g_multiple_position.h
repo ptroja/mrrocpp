@@ -582,7 +582,7 @@ public:
 		sr_ecp_msg.message("Generator reset");
 	}
 	/**
-	 * Detection of possible jerks. Method scans the vector with coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
+	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
 	 * @param max_acc maximal allowed acceleration
 	 * @return -1 if the trajectory was not interpolated before, 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */

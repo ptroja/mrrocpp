@@ -32,7 +32,7 @@ newsmooth::~newsmooth() {
 }
 
 bool newsmooth::calculate() {
-	printf("\n################################## Calculate #################################\n");
+	//printf("\n################################## Calculate #################################\n");
 	sr_ecp_msg.message("Calculating...");
 	int i,j;//loop counters
 

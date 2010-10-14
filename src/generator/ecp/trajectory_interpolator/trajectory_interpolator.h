@@ -67,13 +67,12 @@ public:
 		typename std::vector<double> coordinates (it->axes_num);
 
 		double start_position_array[6];
-		double coordinates_array[6];
 
 		lib::Homog_matrix begining_frame;
 		lib::Homog_matrix goal_frame;
-		lib::Homog_matrix begining_frame_with_current_translation;
+		lib::Homog_matrix total_increment_frame;
 
-		lib::Xyz_Angle_Axis_vector step_of_total_increment_vector;
+		lib::Xyz_Angle_Axis_vector total_angle_axis_increment_vector;
 		lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
 
 		int z;
@@ -99,17 +98,12 @@ public:
 
 			printf("\n");
 			for (z = 0; z < 6; z++) {
-				coordinates_array[z] = coordinates[z];
+				total_angle_axis_increment_vector[z] += coordinates[z];
 			}
 
-			begining_frame_with_current_translation = begining_frame;
-			begining_frame_with_current_translation.set_translation_vector(goal_frame);
+			total_increment_frame.set_from_xyz_angle_axis(total_angle_axis_increment_vector);
 
-			step_of_total_increment_vector =
-						lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-								* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinates_array);
-
-			goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
+			goal_frame = begining_frame * total_increment_frame;
 
 			goal_frame.get_xyz_angle_axis(tmp_angle_axis_vector);
 			tmp_angle_axis_vector.to_vector(coordinates);
