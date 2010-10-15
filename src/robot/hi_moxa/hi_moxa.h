@@ -63,6 +63,7 @@ public:
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
 	virtual void start_synchro(int drive_offset);
 	virtual void finish_synchro(int drive_offset);
+	virtual void set_command_param(int drive_offset, uint8_t param);
 
 	virtual bool is_impulse_zero(int drive_offset);
 	virtual void reset_position(int drive_offset);
