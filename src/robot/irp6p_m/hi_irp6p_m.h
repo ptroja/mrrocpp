@@ -40,18 +40,9 @@ const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na ob
 class hardware_interface : public hi_moxa::HI_moxa
 {
 public:
-			hardware_interface(common::motor_driven_effector &_master); // Konstruktor
+	hardware_interface(common::motor_driven_effector &_master); // Konstruktor
 
 }; // koniec: class hardware_interface
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-const struct sigevent *
-int_handler(void *arg, int id);
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace common
 } // namespace edp

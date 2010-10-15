@@ -67,7 +67,6 @@ void servo_buffer::load_hardware_interface(void)
 	//		HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
 	//		INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::FIRST_MOXA_PORT_NUM, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM);
-
 	hi->init();
 
 	// utworzenie tablicy regulatorow
