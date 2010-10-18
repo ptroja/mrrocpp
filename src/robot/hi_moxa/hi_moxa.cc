@@ -258,14 +258,14 @@ uint64_t HI_moxa::read_write_hardware(void)
 				- servo_data[drive_number].previous_absolute_position);
 	}
 
-	robot_synchronized = false;
+	robot_synchronized = true;
 	power_fault = false;
 	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
 		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
 			power_fault = true;
 		}
-		if (servo_data[drive_number].drive_status.isSynchronized != 0) {
-			robot_synchronized = true;
+		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
+			robot_synchronized = false;
 		}
 	}
 
@@ -304,6 +304,129 @@ uint64_t HI_moxa::read_write_hardware(void)
 	return ret;
 }
 
+/*uint64_t HI_moxa::set_parameter(int drive_offset, const int parameter, uint32_t new_value)
+{
+
+	char buf[SERVO_ST_BUF_LEN];
+	static int receive_attempts = 0, receive_timeouts = 0;
+
+	drive_number;
+
+
+	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
+		bytes_received[drive_number] = 0;
+	}
+
+	receive_attempts++;
+
+	while (1) {
+		FD_ZERO(&rfds);
+		for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+			if (bytes_received[drive_number] < READ_BYTES) {
+				FD_SET(fd[drive_number], &rfds);
+			}
+		}
+
+		struct timeval timeout;
+		timeout.tv_sec = (time_t) 0;
+		timeout.tv_usec = 500;
+		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
+		if (select_retval == 0) {
+			receive_timeouts++;
+			std::cout << "[error] communication timeout (" << receive_timeouts << "/" << receive_attempts << "="
+					<< (((float) receive_timeouts) / receive_attempts) << ")";
+
+			for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+				if (bytes_received[drive_number] < READ_BYTES)
+					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
+			}
+			std::cout << std::endl;
+			hardware_read_ok = false;
+			break;
+		} else {
+			all_hardware_read = true;
+			for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+				if (FD_ISSET(fd[drive_number], &rfds)) {
+					bytes_received[drive_number]
+							+= read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
+									+ bytes_received[drive_number], READ_BYTES - bytes_received[drive_number]);
+				}
+				if (bytes_received[drive_number] < READ_BYTES) {
+					all_hardware_read = false;
+				}
+			}
+			if (all_hardware_read) {
+				break;
+			}
+		}
+	}
+
+	// Wypelnienie pol odebranymi danymi
+	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+
+		// Wypelnienie pol odebranymi danymi
+		if (bytes_received[drive_number] >= READ_BYTES) {
+			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
+			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
+		}
+
+		// W pierwszym odczycie danych z napedu przyrost pozycji musi byc 0.
+		if (servo_data[drive_number].first_hardware_read && hardware_read_ok) {
+			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
+			servo_data[drive_number].first_hardware_read = false;
+		}
+
+		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position
+				- servo_data[drive_number].previous_absolute_position);
+	}
+
+	robot_synchronized = true;
+	power_fault = false;
+	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
+			power_fault = true;
+		}
+		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
+			robot_synchronized = false;
+		}
+	}
+
+	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
+	master.controller_state_edp_buf.is_robot_blocked = power_fault;
+	if (power_fault) {
+		if (error_msg_power_stage == 0) {
+			master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
+			error_msg_power_stage++;
+		}
+
+	} else {
+		error_msg_power_stage = 0;
+	}
+
+	for (drive_number = first_drive_number; drive_number <= last_drive_number; drive_number++) {
+		if (servo_data[drive_number].drive_status.sw1 != 0)
+			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5 * (drive_number - first_drive_number))); // Zadzialal wylacznik "gorny" krancowy
+		if (servo_data[drive_number].drive_status.sw2 != 0)
+			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5 * (drive_number - first_drive_number))); // Zadzialal wylacznik "dolny" krancowy
+		if (servo_data[drive_number].drive_status.swSynchr != 0)
+			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5 * (drive_number - first_drive_number))); // Zadzialal wylacznik synchronizacji
+		if (servo_data[drive_number].drive_status.synchroZero != 0)
+			ret |= (uint64_t) (SYNCHRO_ZERO << (5 * (drive_number - first_drive_number))); // Impuls zera rezolwera
+		if (servo_data[drive_number].drive_status.overcurrent != 0)
+			ret |= (uint64_t) (OVER_CURRENT << (5 * (drive_number - first_drive_number))); // Przekroczenie dopuszczalnego pradu
+	}
+
+	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+		wake_time.tv_sec += 1;
+		wake_time.tv_nsec -= 1000000000;
+	}
+
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+
+	return ret;
+}*/
+
 void HI_moxa::reset_counters(void)
 {
 
@@ -330,11 +453,16 @@ void HI_moxa::start_synchro(int drive_offset)
 
 void HI_moxa::finish_synchro(int drive_offset)
 {
-	servo_data[first_drive_number + drive_offset].command_params &= 0;
+	servo_data[first_drive_number + drive_offset].command_params &= ~COMMAND_PARAM_SYNCHRO;
 
 	//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::finish_synchro(" << drive_offset << ")" << std::endl;
 	//#endif
+}
+
+void HI_moxa::set_command_param(int drive_offset, uint8_t param)
+{
+	servo_data[first_drive_number + drive_offset].command_params |= param;
 }
 
 bool HI_moxa::is_impulse_zero(int drive_offset)

@@ -38,6 +38,13 @@ bool newsmooth::calculate() {
 
 	pose_vector_iterator = pose_vector.begin();
 
+	for (i = 0; i < pose_vector.size(); i++) {
+		vpc.clean_up_pose(pose_vector_iterator);
+		pose_vector_iterator++;
+	}
+
+	pose_vector_iterator = pose_vector.begin();
+
 	for (i = 0; i < pose_vector.size(); i++) { //this has to be done here (not in the load_trajectory_pose method) because of the potential recursive call of calculate method
 		if (!vpc.calculate_v_r_a_r_pose(pose_vector_iterator)) {
 			if (debug) {
@@ -99,13 +106,17 @@ bool newsmooth::calculate() {
 
 	for (i = 0; i < pose_vector.size(); i++) { //for each pose
 
+		//printf("\n------------ first print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
+
 		if (!vpc.set_v_k_pose(pose_vector_iterator, tempIter) ||//set up v_k for the pose
 		!vpc.set_v_p_pose(pose_vector_iterator, tempIter2) ||//set up v_p for the pose
 		!vpc.set_model_pose(pose_vector_iterator) || //choose motion model for the pose
 		!vpc.calculate_s_acc_s_dec_pose(pose_vector_iterator)) { //calculate s_acc and s_dec for the pose
 			return false;
 		}
-		//printf("\n------------ first print pose %d --------------\n", pose_vector_iterator->pos_num);
+
+		//printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
 		//print_pose(pose_vector_iterator);
 
 		for(j = 0; j < axes_num; j++) { //for each axis
@@ -148,12 +159,12 @@ bool newsmooth::calculate() {
 			}
 		}
 
-		//printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
-		//print_pose(pose_vector_iterator);
-
 		if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, mc)) {//set uni and acc
 			return false;
 		}
+
+		//printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator++;
 	}
@@ -171,6 +182,11 @@ void newsmooth::print_pose_vector() {
 }
 
 void newsmooth::print_pose(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it) {
+
+	if (it == pose_vector.end() || pose_vector.empty()) {
+		return;
+	}
+
 	int z;
 	printf("coords:\t");
 	for (z = 0; z < pose_vector_iterator->coordinates.size(); z++) {

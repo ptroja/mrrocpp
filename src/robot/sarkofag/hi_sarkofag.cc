@@ -18,7 +18,7 @@ namespace sarkofag {
 
 // ------------------------------------------------------------------------
 hardware_interface::hardware_interface(common::motor_driven_effector &_master) :
-	hi_moxa::HI_moxa(_master, 0, 0)
+	hi_moxa::HI_moxa(_master, mrrocpp::lib::sarkofag::FIRST_MOXA_PORT_NUM, mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM)
 {
 } // koniec: hardware_interface::hardware_interface( )
 // ------------------------------------------------------------------------

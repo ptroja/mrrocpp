@@ -14,9 +14,20 @@ const char START_BYTE = '#';
 const int COMMAND_MODE_PWM = 0x00;
 const int COMMAND_MODE_CURRENT = 0x01;
 const int COMMAND_MODE_POSITION = 0x02;
+const int COMMAND_SET_PARAM = 0x0f;
 
 // command params
 const int COMMAND_PARAM_SYNCHRO = 0x10;
+
+// parameters
+const int PARAM_SYNCHRONIZED = 0x00;
+const int PARAM_MAXCURRENT = 0x00;
+const int PARAM_PID_POS_P = 0x00;
+const int PARAM_PID_POS_I = 0x00;
+const int PARAM_PID_POS_D = 0x00;
+const int PARAM_PID_CURR_P = 0x00;
+const int PARAM_PID_CURR_I = 0x00;
+const int PARAM_PID_CURR_D = 0x00;
 
 // error flags returned by hi::read_write_hardware (defined in servo_gr.h)
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
