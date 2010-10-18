@@ -8,9 +8,11 @@
 #ifndef _TRAJECTORY_INTERPOLATOR_H_
 #define _TRAJECTORY_INTERPOLATOR_H_
 
+#include <vector>
+#include <cstdio>
+
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "base/lib/mrmath/mrmath.h"
-#include <vector>
 
 namespace mrrocpp {
 namespace ecp {
@@ -85,18 +87,18 @@ public:
 		goal_frame.set_from_xyz_angle_axis(start_position_array);
 
 		for (int i = 0; i < it->interpolation_node_no; i++) {
-			printf("coord %d:\t", i+1);
+			std::printf("coord %d:\t", i+1);
 			for (int j = 0; j < it->axes_num; j++) {
 				if (fabs(it->s[j]) < 0.0000001) {
 					coordinates[j] = 0;
-					printf("%f\t", coordinates[j]);
+					std::printf("%f\t", coordinates[j]);
 				} else {
 					coordinates[j] = generate_relative_coordinate(i, it, j, mc);
-					printf("%f\t", coordinates[j]);
+					std::printf("%f\t", coordinates[j]);
 				}
 			}
 
-			printf("\n");
+			std::printf("\n");
 			for (z = 0; z < 6; z++) {
 				total_angle_axis_increment_vector[z] += coordinates[z];
 			}
