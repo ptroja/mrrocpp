@@ -39,3 +39,4 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Recurse into the "src" subdirectories.
 add_subdirectory (src)
+add_subdirectory (doc)
