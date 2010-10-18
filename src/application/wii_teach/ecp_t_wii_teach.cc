@@ -55,39 +55,28 @@ int wii_teach::load_trajectory()
 		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
 
-	if (chdir(gripper_path) != 0) {
-		perror(gripper_path);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
-	}
-
-	std::ifstream from_file_gripper(gripper_filename); // otworz plik do zapisu
-	e = errno;
-	if (!from_file_gripper) {
-		perror(gripper_filename);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	}
-
 	node* current = NULL;
 	trajectory.position = 0;
 	trajectory.count = 0;
 	std::string type;
-	int count;
+	int count = 0;
 
 	from_file >> type;
 	from_file >> count;
-	from_file_gripper >> type;
-	from_file_gripper >> count;
-	while (!from_file.eof() && !from_file_gripper.eof()) {
+
+	while (trajectory.count < count && !from_file.eof()) {
+		++trajectory.count;
 		if (current) {
 			current->next = new node();
 			current->next->prev = current;
+			current = current->next;
 		} else {
 			current = new node();
-		}
-
-		if (!trajectory.head) {
 			trajectory.head = current;
 		}
+
+		current->id = trajectory.count;
+
 		trajectory.tail = current;
 
 		from_file >> current->position[0];
@@ -97,16 +86,12 @@ int wii_teach::load_trajectory()
 		from_file >> current->position[4];
 		from_file >> current->position[5];
 
-		from_file_gripper >> current->gripper;
-
-		trajectory.position = 1;
-		++trajectory.count;
-
-		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
 		sr_ecp_msg->message(buffer);
 	}
 
 	trajectory.current = trajectory.head;
+	trajectory.position = 1;
 
 	return 0;
 }
@@ -140,28 +125,6 @@ bool wii_teach::get_filenames(void)
 	strncpy(path, ui_to_ecp_rep.path, 79);
 	strncpy(filename, ui_to_ecp_rep.filename, 19);
 
-	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
-	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
-	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
-	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
-	{// by Y&W
-		e = errno;
-		perror("ecp: Send() to UI failed");
-		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
-	}
-
-	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-		return false;
-	}
-
-	strncpy(gripper_path, ui_to_ecp_rep.path, 79);
-	strncpy(gripper_filename, ui_to_ecp_rep.filename, 19);
 	return true;
 }
 
@@ -181,12 +144,6 @@ void wii_teach::save_trajectory(void)
 		perror(filename);
 		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
-	std::ofstream to_file_gripper(gripper_filename); // otworz plik do zapisu
-	e = errno;
-	if (!to_file_gripper) {
-		perror(gripper_filename);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	}
 
 	node* current = trajectory.head;
 	to_file << "XYZ_ANGLE_AXIS" << '\n';
@@ -199,10 +156,8 @@ void wii_teach::save_trajectory(void)
 		to_file << current->position[3] << ' ';
 		to_file << current->position[4] << ' ';
 		to_file << current->position[5] << ' ';
-		to_file_gripper << current->gripper;
 
 		to_file << '\n';
-		to_file_gripper << '\n';
 
 		current = current->next;
 	}
@@ -232,11 +187,10 @@ void wii_teach::print_trajectory(void)
 {
 	char buffer[200];
 	node* current = trajectory.head;
-	int i = 0;
 
 	sr_ecp_msg->message("=== Trajektoria ===");
 	while (current) {
-		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", ++i, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
 		sr_ecp_msg->message(buffer);
 		current = current->next;
 	}
@@ -248,18 +202,23 @@ void wii_teach::move_to_current(void)
 
 	char buffer[200];
 	if (trajectory.current) {
-		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
+		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5]);
 		sr_ecp_msg->message(buffer);
 		sg->reset();
-		coordinates[0] = -0.150;
-		coordinates[1] = 1.12;
-		coordinates[2] = -0.1;
-		coordinates[3] = 0.729*3.14;
-		coordinates[4] = 0.685*3.14;
-		coordinates[5] = -0.001*3.14;
+		
+		coordinates[0] = trajectory.current->position[0];
+		coordinates[1] = trajectory.current->position[1];
+		coordinates[2] = trajectory.current->position[2];
+		coordinates[3] = trajectory.current->position[3];
+		coordinates[4] = trajectory.current->position[4];
+		coordinates[5] = trajectory.current->position[5];
+
 		sg->set_absolute();
 		sg->load_absolute_angle_axis_trajectory_pose(coordinates);
-		sg->Move();
+		if(sg->calculate_interpolate())
+		{
+			sg->Move();
+		}
 	}
 
 }
@@ -273,13 +232,15 @@ void wii_teach::main_task_algorithm(void)
 	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
 	sg = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	sg->set_debug(true);
 	ag = new irp6ot_m::generator::wii_absolute(*this, wii);
 	rg = new irp6ot_m::generator::wii_relative(*this, wii);
 	jg = new irp6ot_m::generator::wii_joint(*this, wii);
 
-	bool has_filenames = false;//get_filenames();
+	bool has_filenames = get_filenames();
 	if (has_filenames) {
 		load_trajectory();
+		print_trajectory();
 		move_to_current();
 	}
 
@@ -382,16 +343,60 @@ void wii_teach::main_task_algorithm(void)
 			} else if (buttonsPressed.up) {
 				buttonsPressed.up = 0;
 				if (trajectory.count > 0) {
-					trajectory.position = trajectory.count;
-					trajectory.current = trajectory.tail;
-					move_to_current();
+					sg->reset();
+					sg->set_absolute();
+do
+{
+	if(trajectory.current->next) 
+	{
+		trajectory.current = trajectory.current->next;
+		trajectory.position += 1;
+	}
+
+							coordinates[0] = trajectory.current->position[0];
+							coordinates[1] = trajectory.current->position[1];
+							coordinates[2] = trajectory.current->position[2];
+							coordinates[3] = trajectory.current->position[3];
+							coordinates[4] = trajectory.current->position[4];
+							coordinates[5] = trajectory.current->position[5];
+
+							sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+}					
+while(trajectory.current->next);
+
+		if(sg->calculate_interpolate())
+		{
+			sg->Move();
+		}
 				}
 			} else if (buttonsPressed.down) {
 				buttonsPressed.down = 0;
 				if (trajectory.count > 0) {
-					trajectory.position = 1;
-					trajectory.current = trajectory.head;
-					move_to_current();
+
+do
+{
+	if(trajectory.current->prev) 
+	{
+		trajectory.current = trajectory.current->prev;
+		trajectory.position -= 1;
+	}
+
+							coordinates[0] = trajectory.current->position[0];
+							coordinates[1] = trajectory.current->position[1];
+							coordinates[2] = trajectory.current->position[2];
+							coordinates[3] = trajectory.current->position[3];
+							coordinates[4] = trajectory.current->position[4];
+							coordinates[5] = trajectory.current->position[5];
+
+							sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+}					
+while(trajectory.current->prev);
+
+		if(sg->calculate_interpolate())
+		{
+			sg->Move();
+		}
+
 				}
 			} else if (buttonsPressed.buttonPlus) {
 				buttonsPressed.buttonPlus = 0;
@@ -418,7 +423,7 @@ void wii_teach::main_task_algorithm(void)
 				++trajectory.position;
 				++trajectory.count;
 
-				sprintf(buffer, "Added %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], current->gripper);
+				sprintf(buffer, "Added %d: %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
 				sr_ecp_msg->message(buffer);
 
 				print_trajectory();
@@ -438,7 +443,15 @@ void wii_teach::main_task_algorithm(void)
 					if (trajectory.current->next) {
 						trajectory.current->next->prev = trajectory.current->prev;
 					}
-					trajectory.current = trajectory.current->prev;
+					if(trajectory.current->prev)
+					{
+						trajectory.current = trajectory.current->prev;
+					}
+					else
+					{
+						trajectory.current = trajectory.current->next;
+					}
+
 
 					sprintf(buffer, "Removed %d", tmp->id);
 					sr_ecp_msg->message(buffer);
@@ -464,7 +477,7 @@ void wii_teach::main_task_algorithm(void)
 					homog_matrix.get_xyz_angle_axis(tmp_vector);
 					tmp_vector.to_table(trajectory.current->position);
 
-					sprintf(buffer, "Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], trajectory.current->gripper);
+					sprintf(buffer, "Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5]);
 					sr_ecp_msg->message(buffer);
 				}
 
