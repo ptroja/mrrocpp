@@ -84,6 +84,8 @@ public:
 
 	virtual void reset_position(int i);
 
+	virtual int set_parameter(int drive_number, const int parameter, uint32_t new_value);
+
 private:
 	int int_id; // Identyfikator obslugi przerwania
 

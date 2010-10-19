@@ -34,6 +34,7 @@ namespace hi_moxa {
 const std::string PORT = "/dev/ser";
 const int BAUD = 921600;
 const int WRITE_BYTES = 10;
+const int MAX_PARAM_SET_ATTEMPTS = 3;
 const int READ_BYTES = 8;
 const char INIT_PORT_CHAR = 50;
 
@@ -60,6 +61,7 @@ public:
 	virtual double get_increment(int drive_offset);
 	virtual long int get_position(int drive_offset);
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
+	virtual int  set_parameter(int drive_offset, const int parameter, uint32_t new_value);
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
 	virtual void start_synchro(int drive_offset);
 	virtual void finish_synchro(int drive_offset);

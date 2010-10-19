@@ -449,6 +449,11 @@ void HI_rydz::reset_position(int i)
 	current_position_inc[i] = 0.0;
 }
 
+int HI_rydz::set_parameter(int drive_number, const int parameter, uint32_t new_value)
+{
+	return 0;
+}
+
 } // namespace hi_rydz
 } // namespace edp
 } // namespace mrrocpp

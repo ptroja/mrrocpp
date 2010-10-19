@@ -95,6 +95,7 @@ public:
 	virtual bool is_impulse_zero(int drive_number) = 0;
 	virtual void reset_position(int i) = 0;
 
+	virtual int set_parameter(int drive_number, const int parameter, uint32_t new_value) = 0;
 };
 
 }
