@@ -25,7 +25,7 @@ wii_absolute::wii_absolute(common::task::task& _ecp_task, ecp_mp::sensor::wiimot
 	}
 }
 
-void wii_absolute::set_position(void)
+void wii_absolute::set_position(bool changed)
 {
 	double rotation[3][3];
 	double translation[3];
@@ -39,8 +39,9 @@ void wii_absolute::set_position(void)
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	homog_matrix.get_translation_vector(old_translation);
 
+	homog_matrix.get_translation_vector(old_translation);
+	
 	translation[0] = nextChange[1];
 	translation[1] = nextChange[0];
 	translation[2] = nextChange[2];

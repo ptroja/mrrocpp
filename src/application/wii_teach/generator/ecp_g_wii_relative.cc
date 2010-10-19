@@ -25,7 +25,7 @@ wii_relative::wii_relative(common::task::task& _ecp_task, ecp_mp::sensor::wiimot
 	}
 }
 
-void wii_relative::set_position(void)
+void wii_relative::set_position(bool changed)
 {
 	//   char buffer[200];
 

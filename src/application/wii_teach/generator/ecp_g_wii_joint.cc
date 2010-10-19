@@ -24,13 +24,13 @@ wii_joint::wii_joint (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wi
     }
 }
 
-void wii_joint::set_position(void)
+void wii_joint::set_position(bool changed)
 {
     the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
     for(int i = 0; i <= 7; ++i)
     {
-        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = nextChange[0];
+        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = nextChange[i];
     }
 }
 
