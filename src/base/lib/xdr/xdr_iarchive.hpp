@@ -60,16 +60,20 @@ private:
 public:
     //! conversion for bool, special since bool != bool_t
     xdr_iarchive &load_a_type(bool &t,boost::mpl::true_) {
-        if(!xdr_bool(&xdrs, (bool_t *) &t)) THROW_LOAD_EXCEPTION;
+    	bool_t b;
+        if(!xdr_bool(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (b) ? true : false;
         return *this;
     }
 
     //! conversion for bool[], special since bool != bool_t
+    /* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
     template<int N>
     xdr_iarchive &load_a_type(bool (&t)[N],boost::mpl::false_) {
         if(!xdr_vector(&xdrs, (char *)t, N, sizeof(bool), (xdrproc_t) xdr_bool)) THROW_LOAD_EXCEPTION;
         return *this;
     }
+    */
 
     //! conversion for an enum
     template <class T>

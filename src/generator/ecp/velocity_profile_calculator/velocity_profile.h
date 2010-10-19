@@ -200,8 +200,8 @@ class velocity_profile {
 			((!start_position_matrix) * desired_position_matrix).get_xyz_angle_axis(relative_angle_axis_vector);
 			relative_angle_axis_vector.to_vector(it->coordinates);
 
-			printf("relative vector: \n");
-			printf("%f\t%f\t%f\t%f\t%f\t%f\n", it->coordinates[0], it->coordinates[1], it->coordinates[2], it->coordinates[3], it->coordinates[4], it->coordinates[5]);
+			//printf("relative vector: \n");
+			//printf("%f\t%f\t%f\t%f\t%f\t%f\n", it->coordinates[0], it->coordinates[1], it->coordinates[2], it->coordinates[3], it->coordinates[4], it->coordinates[5]);
 
 			return true;
 		}

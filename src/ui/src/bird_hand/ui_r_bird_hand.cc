@@ -53,7 +53,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_bird_hand (ini_con->ui->edp_bird_hand_section);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
@@ -154,9 +154,8 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
@@ -165,8 +164,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

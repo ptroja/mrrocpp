@@ -73,12 +73,12 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
-		coordinates1[0] = 0.101;
-		coordinates1[1] = -1.242;
-		coordinates1[2] = 0.049;
-		coordinates1[3] = 1.082;
-		coordinates1[4] = 3.058;
-		coordinates1[5] = -2.738;
+		coordinates1[0] = -0.104;
+		coordinates1[1] = -1.542;
+		coordinates1[2] = 0.020;
+		coordinates1[3] = 1.404;
+		coordinates1[4] = 3.358;
+		coordinates1[5] = -2.538;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 
@@ -92,11 +92,11 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
-		coordinates1[0] = -0.101;
-		coordinates1[1] = -1.542;
-		coordinates1[2] = 0.049;
-		coordinates1[3] = 1.182;
-		coordinates1[4] = 3.658;
+		coordinates1[0] = -0.104;
+		coordinates1[1] = -1.342;
+		coordinates1[2] = 0.020;
+		coordinates1[3] = 1.034;
+		coordinates1[4] = 3.458;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
@@ -111,10 +111,10 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
-		coordinates1[0] = -0.101;
+		coordinates1[0] = -0.104;
 		coordinates1[1] = -1.542;
-		coordinates1[2] = 0.049;
-		coordinates1[3] = 1.182;
+		coordinates1[2] = 0.020;
+		coordinates1[3] = 1.134;
 		coordinates1[4] = 3.658;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
@@ -287,7 +287,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[0] = 0.0;
 		coordinates2[1] = -10.0;
 		coordinates2[2] = 0.0;
-		coordinates2[3] = 50.0;
+		coordinates2[3] = 20.0;
 		coordinates2[4] = -20.0;
 		coordinates2[5] = 0.0;
 		coordinates2[6] = 0.0;
@@ -296,7 +296,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
 		coordinates1[2] = 0.0;
-		coordinates1[3] = 50.0;
+		coordinates1[3] = 20.0;
 		coordinates1[4] = -20.0;
 		coordinates1[5] = 0.0;
 		sgenmotor->load_relative_motor_trajectory_pose(coordinates1);
@@ -315,8 +315,8 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.0;
 		coordinates1[1] = -10.0;
 		coordinates1[2] = 0.0;
-		coordinates1[3] = -50.0;
-		coordinates1[4] = -0.0;
+		coordinates1[3] = -20.0;
+		coordinates1[4] = 0.0;
 		coordinates1[5] = 0.0;
 		sgenmotor->load_relative_motor_trajectory_pose(coordinates1);
 	}
@@ -460,7 +460,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[0] = 0.534987;
 		coordinates1[1] = -0.176317;
 		coordinates1[2] = 0.180306;
-		coordinates1[3] = 1.200713;
+		coordinates1[3] = 1.000713;
 		coordinates1[4] = -1.447889;
 		coordinates1[5] = -0.264191;
 	} else if (postument) {
@@ -469,13 +469,13 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[2] = 0.178306;
 		coordinates1[3] = 1.267713;
 		coordinates1[4] = -1.219889;
-		coordinates1[5] = 0.114191;
+		coordinates1[5] = 0.174191;
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 	if (track) {
 		coordinates1[0] = 0.504987;
-		coordinates1[1] = -0.176317;
+		coordinates1[1] = -0.146317;
 		coordinates1[2] = 0.106306;
 		coordinates1[3] = 1.103713;
 		coordinates1[4] = -1.407889;
@@ -507,7 +507,8 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
+	if (sgenangle->calculate_interpolate() && sgeneuler->detect_jerks(0.3) == 0) {
+		sgenangle->detect_jerks(0.3);
 		sgenangle->Move();
 	}
 	// ANGLE AXIS ABSOLUTE END

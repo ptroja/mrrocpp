@@ -189,6 +189,10 @@ bool bang_bang_profile::reduction_model_3(vector<ecp_mp::common::trajectory_pose
 bool bang_bang_profile::reduction_model_4(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &it, int i) {
 	double a;
 
+	//printf("############## reduction model 4 axis %d ############\n", i);
+
+	//printf("v_p: %f\t v_k: %f\t s: %f\t times: %f\n", it->v_p[i], it->v_k[i], it->s[i], it->times[i]);
+
 	a = (it->v_p[i] - it->v_k[i]) * (it->v_p[i] - it->v_k[i]) /
 		((-2) * (it->s[i] - it->v_p[i] * it->times[i]));
 
@@ -198,7 +202,9 @@ bool bang_bang_profile::reduction_model_4(vector<ecp_mp::common::trajectory_pose
 		} else {
 			a = (0.5 * (it->v_p[i] - it->v_k[i]) * (it->v_p[i] - it->v_k[i])) /
 				(it->s[i] - it->v_k[i]*it->times[i]);
+
 		}
+
 		if (a > it->a_r[i] || a <= 0) {//trzeci stopien redukcji
 			double t1; //czas konca opoznienia (relatywny - liczac od poczatku redukowanego odcinka)
 			double s1; // droga w etapie w ktorym redukujemy czas (po etapie odcinanym)
@@ -341,13 +347,19 @@ bool bang_bang_profile::optimize_time2(vector<ecp_mp::common::trajectory_pose::b
 
 bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &it, int i) {
 
+
+
 	it->v_p[i] = sqrt(2 * it->a_r[i] * it->s[i] + it->v_k[i] * it->v_k[i]);
 	it->times[i] = (it->v_p[i] - it->v_k[i])/it->a_r[i];
 
 	it->v_r[i] = it->v_p[i];//preparation for recalculation
 	it->v[i] = it->v_r[i]/it->v_max[i];
 
+	//printf("------------ recursion 2 axis: %d, v_r: %f\n", i, it->v_r[i]);
+	//flushall();
+
 	return false;
+	//return vp_reduction(it, i);
 }
 
 bool bang_bang_profile::calculate_time(vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i) {
@@ -376,18 +388,22 @@ bool bang_bang_profile::set_v_k(vector<ecp_mp::common::trajectory_pose::bang_ban
 	} else {
 		if (temp_k == it->k[i]) {
 			double temp_v_k = it->v_r[i];
+			//printf("v_r of next pose: %f\t", it->v_r[i]);
 			it--;
-			if (temp_v_k > it->v_k[i]) {
+			if (temp_v_k > it->v_r[i]) {
 				it->v_k[i] = it->v_r[i];
+				//printf("temp_v_k: %f\t", temp_v_k);
 			} else {
 				it->v_k[i] = temp_v_k;
+				//printf("else temp_v_k: %f\t", temp_v_k);
 			}
 		} else {
 			it--;
 			it->v_k[i] = 0;
 		}
 	}
-	//printf("v_k: %f\t", it->v_k[i]);
+
+	//printf("v_k: %f\n", it->v_k[i]);
 	return true;
 }
 
@@ -444,10 +460,12 @@ bool bang_bang_profile::set_model(vector<ecp_mp::common::trajectory_pose::bang_b
 		return true;
 	}
 
+	//printf("v_p: %f\t v_r: %f\t v_k: %f\n", it->v_p[i], it->v_r[i], it->v_k[i]);
+
 	if (it->v_p[i] < it->v_r[i] && it->v_k[i] < it->v_r[i]) {
 		it->model[i] = 1;
-	} else if (it->v_p[i] < it->v_r[i]
-	           && eq(it->v_k[i], it->v_r[i])) {//tutaj bylo tez ze vk > vr (w or razem z drugim warunkiem)
+	} else if ((it->v_p[i] < it->v_r[i]
+	           && eq(it->v_k[i], it->v_r[i])) || (it->v_k[i] > it->v_r[i] && it->v_k[i] > it->v_p[i])) {//tutaj bylo tez ze vk > vr (w or razem z drugim warunkiem)
 		it->model[i] = 2;
 	} else if (eq(it->v_p[i], it->v_r[i])
 			  && eq(it->v_k[i], it->v_r[i])) { //tutaj bylo tez ze vk > vr (w or razem z drugim warunkiem)
@@ -655,6 +673,23 @@ bool bang_bang_profile::calculate_v_r_a_r(vector<ecp_mp::common::trajectory_pose
 	it->a_r[i] = it->a[i] * it->a_max[i];
 
 	return true;
+}
+
+void bang_bang_profile::clean_up_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator &it) {
+
+	for (int i = 0; i < it->axes_num; i++) {
+		it->a_r[i] = 0;
+		it->v_r[i] = 0;
+		it->model[i] = 0;
+		it->s_acc[i] = 0;
+		it->s_dec[i] = 0;
+		it->acc[i] = 0;
+		it->s_uni[i] = 0;
+		it->v_k[i] = 0;
+		it->v_p[i] = 0;
+		it->uni[i] = 0;
+		it->k[i] = 0;
+	}
 }
 
 } // namespace velocity_profile_calculator

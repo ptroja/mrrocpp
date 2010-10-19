@@ -25,7 +25,7 @@ wii_relative::wii_relative(common::task::task& _ecp_task, ecp_mp::sensor::wiimot
 	}
 }
 
-void wii_relative::set_position(void)
+void wii_relative::set_position(bool changed)
 {
 	//   char buffer[200];
 
@@ -34,8 +34,6 @@ void wii_relative::set_position(void)
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(nextChange[2], nextChange[0], nextChange[1], nextChange[4], nextChange[6], nextChange[5]));
 
 	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-
-	//  the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = nextChange[7];
 }
 
 bool wii_relative::first_step()

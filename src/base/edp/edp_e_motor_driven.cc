@@ -218,7 +218,6 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 
 	// is_get_arm_read_hardware=false;
 
-
 	//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
@@ -227,7 +226,6 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 #ifdef __QNXNTO__
 	ThreadCtl(_NTO_TCTL_IO, NULL);
 #endif
-
 }
 
 motor_driven_effector::~motor_driven_effector()

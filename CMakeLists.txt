@@ -4,6 +4,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (MRROCPP)
 
+
+
 set(CMAKE_MODULE_PATH ${MRROCPP_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 
@@ -37,3 +39,4 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Recurse into the "src" subdirectories.
 add_subdirectory (src)
+add_subdirectory (doc)

@@ -10,7 +10,7 @@ namespace lib {
 //                                     definicje skladowych klasy Homog_matrix
 // ******************************************************************************************
 
-const double Homog_matrix::ALPHA_SENSITIVITY = 0.00001;
+const double Homog_matrix::ALPHA_SENSITIVITY = 0.000001;
 
 Homog_matrix::Homog_matrix()
 {
@@ -423,8 +423,8 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
-	static const double EPS = 1.0E-4;
-	static const double delta = (M_PI - 3.14154);
+	static const double EPS = 1.0E-6;
+	static const double delta = (M_PI - 3.14158);
 
 	double Kd[3]; // Kd - K z "daszkiem" - wersor kierunkowy
 

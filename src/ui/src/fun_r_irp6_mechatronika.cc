@@ -174,17 +174,7 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 				} else { // jesli spawn sie powiodl
 
 					interface.irp6m_m->state.edp.state = 1;
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-					while ((interface.irp6m_m->state.edp.reader_fd
-							= name_open(interface.irp6m_m->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY)
-							delay(lib::CONNECT_DELAY);
-						else {
-							perror("blad odwolania do READER_M");
-							break;
-						}
+					interface.irp6m_m->connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
@@ -206,35 +196,13 @@ int EDP_irp6_mechatronika_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 }
 
 int EDP_irp6_mechatronika_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
 {
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	// dla robota irp6_mechatronika
-	if (interface.irp6m_m->state.edp.state > 0) { // jesli istnieje EDP
-		if (interface.irp6m_m->state.edp.reader_fd >= 0) {
-			if (name_close(interface.irp6m_m->state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6m, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
-		}
-
-		delete interface.irp6m_m->ui_ecp_robot;
-		interface.irp6m_m->state.edp.state = 0; // edp wylaczone
-		interface.irp6m_m->state.edp.is_synchronised = false;
-
-		interface.irp6m_m->state.edp.pid = -1;
-		interface.irp6m_m->state.edp.reader_fd = -1;
-
-		interface.irp6m_m->close_all_windows();
-	}
-
-	// modyfikacja menu
-	interface.manage_interface();
+	interface.irp6m_m->EDP_slay_int();
 
 	return (Pt_CONTINUE);
-
 }
 
 int EDP_irp6_mechatronika_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)

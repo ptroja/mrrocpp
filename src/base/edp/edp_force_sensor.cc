@@ -98,7 +98,7 @@ void force::operator()()
 
 						current_force_torque.to_table(master.rb_obj->step_data.force);
 					} else {
-						std::cerr << "Error reader object not ready (force::operator()())" << std::endl;
+						std::cerr << " " << std::endl;
 					}
 				}
 			}

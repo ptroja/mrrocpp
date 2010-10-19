@@ -38,6 +38,9 @@
 //
 //
 
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
 
 namespace mrrocpp {
 namespace ui {
@@ -945,14 +948,16 @@ void Interface::fill_node_list()
 	}
 }
 
-void Interface::pulse_reader_execute(int coid, int pulse_code, int pulse_value)
+void Interface::pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, int value)
 {
 #if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1) {
+	if(MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
+#else
+	if(messip::port_send_pulse(coid, code, value))
+#endif
+	{
 		perror("Blad w wysylaniu pulsu do redera");
 	}
-#else
-#endif
 }
 
 int Interface::execute_mp_pulse(char pulse_code)

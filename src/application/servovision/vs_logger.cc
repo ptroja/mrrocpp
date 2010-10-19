@@ -39,7 +39,7 @@ void vs_logger::start()
 	time_t time_of_day = time(NULL);
 	strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
 
-	sprintf(filename, "%s/%s_%s_VS_readings", reader_meassures_dir.c_str(), file_date);
+	sprintf(filename, "%s/%s_VS_readings", reader_meassures_dir.c_str(), file_date);
 	fp = fopen(filename, "w");
 	if(fp == NULL){
 		throw logic_error(string("vs_logger::start(): error opening file ") +  filename);
