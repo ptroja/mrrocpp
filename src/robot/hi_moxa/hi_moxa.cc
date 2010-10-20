@@ -82,7 +82,7 @@ void HI_moxa::init()
 			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
 			//throw(std::runtime_error("unable to open device!!!"));
 		} else {
-			std::cout << "...OK (" << (int) fd[i] << ")" << std::endl;
+			std::cout << "...OK" << std::endl;
 			if (fd[i] > fd_max)
 				fd_max = fd[i];
 		}
@@ -106,7 +106,6 @@ void HI_moxa::init()
 		tcflush(fd[i], TCIFLUSH);
 		tcsetattr(fd[i], TCSANOW, &newtio);
 	}
-	std::cout << "[info] fd_max: " << fd_max << std::endl;
 
 	clock_gettime(CLOCK_MONOTONIC, &wake_time);
 
@@ -306,17 +305,21 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 int HI_moxa::set_parameter(int drive_offset, const int parameter, uint32_t new_value)
 {
-	char buf[SERVO_ST_BUF_LEN];
+	char tx_buf[SERVO_ST_BUF_LEN];
+	char rx_buf[SERVO_ST_BUF_LEN];
 	fd_set rfds;
-	int param_set_attmempt;
+	int drive_number;
+	int param_set_attmempt=0, bytes_received=0;
 
-	buf[0] = 0x00;
-	buf[1] = 0x00;
-	buf[2] = 0x00;
-	buf[3] = 0x00;
-	buf[4] = START_BYTE;
-	buf[5] = COMMAND_SET_PARAM | parameter;
-	union param_Un* temp = (param_Un*) &(buf[6]);
+	drive_number = first_drive_number + drive_offset;
+
+	tx_buf[0] = 0x00;
+	tx_buf[1] = 0x00;
+	tx_buf[2] = 0x00;
+	tx_buf[3] = 0x00;
+	tx_buf[4] = START_BYTE;
+	tx_buf[5] = COMMAND_SET_PARAM | parameter;
+	union param_Un* temp = (param_Un*) &(tx_buf[6]);
 	temp->largest = 0;
 
 	switch(parameter)
@@ -347,22 +350,28 @@ int HI_moxa::set_parameter(int drive_offset, const int parameter, uint32_t new_v
 
 	for(int param_set_attempt = 0; param_set_attempt < MAX_PARAM_SET_ATTEMPTS; param_set_attempt++)
 	{
-		write(fd[first_drive_number + drive_offset], buf, WRITE_BYTES);
+		write(fd[drive_number], tx_buf, WRITE_BYTES);
+		bytes_received = 0;
 
 		FD_ZERO(&rfds);
-		FD_SET(fd[first_drive_number + drive_offset], &rfds);
+		FD_SET(fd[drive_number], &rfds);
 
-		struct timeval timeout;
-		timeout.tv_sec = (time_t) 0;
-		timeout.tv_usec = 500;
-		int select_retval = select(fd[first_drive_number + drive_offset] + 1, &rfds, NULL, NULL, &timeout);
-		if (select_retval == 0) {
-			std::cout << "[error] param set ack timeout (" << param_set_attempt << ")" << std::endl;
-		} else {
+		for(int i=0; i<3; i++)
+		{
+			struct timeval timeout;
+			timeout.tv_sec = (time_t) 0;
+			timeout.tv_usec = 500;
+			int select_retval = select(fd[drive_number] + 1, &rfds, NULL, NULL, &timeout);
+			if (select_retval == 0) {
+				std::cout << "[error] param set ack timeout for drive (" << drive_offset << ")" << std::endl;
+			} else {
+				bytes_received += read(fd[drive_number], rx_buf + bytes_received, READ_BYTES - bytes_received);
 
-			return 0;
+				if(bytes_received == READ_BYTES)
+					return 0;
+			}
 		}
-		usleep(200);
+		usleep(2000);
 	}
 	return 1;
 }

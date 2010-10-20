@@ -49,7 +49,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::sarkofag::FIRST_MOXA_PORT_NUM, mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM);
 	hi->init();
-
+	hi->set_parameter(0, hi_moxa::PARAM_SYNCHRONIZED, 1);
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
 
