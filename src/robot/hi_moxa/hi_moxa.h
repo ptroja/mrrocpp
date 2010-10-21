@@ -13,6 +13,7 @@
 //#define T_INFO_CALC
 
 #define USLEEP_US 500000
+#define STATUS_DISP_T 100
 
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"

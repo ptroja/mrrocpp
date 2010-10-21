@@ -178,6 +178,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
+	static int status_disp_cnt = 0;
 
 	// test mode
 	if (master.robot_test_mode) {
@@ -291,6 +292,12 @@ uint64_t HI_moxa::read_write_hardware(void)
 			ret |= (uint64_t) (SYNCHRO_ZERO << (5 * (drive_number - first_drive_number))); // Impuls zera rezolwera
 		if (servo_data[drive_number].drive_status.overcurrent != 0)
 			ret |= (uint64_t) (OVER_CURRENT << (5 * (drive_number - first_drive_number))); // Przekroczenie dopuszczalnego pradu
+	}
+
+	if(status_disp_cnt++ == STATUS_DISP_T)
+	{
+	//	std::cout << "[info] current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
+		status_disp_cnt = 0;
 	}
 
 	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
