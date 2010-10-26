@@ -66,7 +66,11 @@ void servo_buffer::load_hardware_interface(void)
 	//hi = new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER,
 	//		HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR,
 	//		INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::FIRST_MOXA_PORT_NUM, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM);
+
+
+	const std::vector<std::string> ports_vector(mrrocpp::lib::irp6p_m::ports_strings,
+			mrrocpp::lib::irp6p_m::ports_strings+mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM+1);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM, ports_vector);
 	hi->init();
 
 	// utworzenie tablicy regulatorow
