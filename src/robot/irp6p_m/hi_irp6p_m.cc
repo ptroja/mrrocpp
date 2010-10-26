@@ -17,10 +17,10 @@ namespace edp {
 namespace irp6p_m {
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface(common::motor_driven_effector &_master) :
-	hi_moxa::HI_moxa(_master, mrrocpp::lib::irp6p_m::FIRST_MOXA_PORT_NUM, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM)
-{
-}
+//hardware_interface::hardware_interface(common::motor_driven_effector &_master) :
+//	hi_moxa::HI_moxa(_master, mrrocpp::lib::irp6p_m::FIRST_MOXA_PORT_NUM, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM)
+//{
+//}
 // ------------------------------------------------------------------------
 
 

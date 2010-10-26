@@ -24,6 +24,8 @@
 #include <stdint.h>
 #include <termios.h>
 #include <ctime>
+#include <string>
+#include <vector>
 
 namespace mrrocpp {
 namespace edp {
@@ -53,7 +55,7 @@ class HI_moxa : public common::HardwareInterface
 
 public:
 
-	HI_moxa(common::motor_driven_effector &_master, int first_drive_n, int last_drive_n); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
@@ -76,8 +78,9 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
+	std::vector<std::string> port_names;
 	int fd[MOXA_SERVOS_NR], fd_max;
-	int first_drive_number, last_drive_number;
+	int last_drive_number;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];
 	struct timespec wake_time;
