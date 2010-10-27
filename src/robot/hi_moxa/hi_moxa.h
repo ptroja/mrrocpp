@@ -59,15 +59,17 @@ public:
 	~HI_moxa();
 
 	virtual void init();
-	virtual void insert_set_value(int drive_offset, double set_value);
-	virtual int get_current(int drive_offset);
-	virtual double get_increment(int drive_offset);
-	virtual long int get_position(int drive_offset);
+	virtual void insert_set_value(int drive_number, double set_value);
+	virtual int get_current(int drive_number);
+	virtual double get_increment(int drive_number);
+	virtual long int get_position(int drive_number);
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
-	virtual int  set_parameter(int drive_offset, const int parameter, uint32_t new_value);
+	virtual int  set_parameter(int drive_number, const int parameter, uint32_t new_value);
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
-	virtual void start_synchro(int drive_offset);
-	virtual void finish_synchro(int drive_offset);
+	virtual void start_synchro(int drive_number);
+	virtual void finish_synchro(int drive_number);
+	virtual bool in_synchro_area(int drive_number);
+	virtual bool robot_synchronized();
 	virtual void set_command_param(int drive_offset, uint8_t param);
 
 	virtual bool is_impulse_zero(int drive_offset);

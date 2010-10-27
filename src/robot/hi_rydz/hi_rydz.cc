@@ -432,6 +432,16 @@ void HI_rydz::finish_synchro(int drive_number)
 } // end: finish_synchro()
 
 
+bool HI_rydz::in_synchro_area(int drive_number)
+{
+	return false;
+}
+
+bool HI_rydz::robot_synchronized()
+{
+	return false;
+}
+
 // Sprawdzenie czy pojawilo sie zero  (synchronizacji rezolwera)
 bool HI_rydz::is_impulse_zero(int drive_number)
 {

@@ -410,6 +410,22 @@ void HI_moxa::finish_synchro(int drive_number)
 	//#endif
 }
 
+bool HI_moxa::in_synchro_area(int drive_number)
+{
+	return (servo_data[drive_number].drive_status.swSynchr != 0);
+}
+
+bool HI_moxa::robot_synchronized()
+{
+	bool ret = true;
+	for (int i = 0; i <= last_drive_number; i++) {
+		if (servo_data[i].drive_status.isSynchronized == 0) {
+			ret = false;
+		}
+	}
+	return ret;
+}
+
 void HI_moxa::set_command_param(int drive_number, uint8_t param)
 {
 	servo_data[drive_number].command_params |= param;
