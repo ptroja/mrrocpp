@@ -311,7 +311,7 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 	char tx_buf[SERVO_ST_BUF_LEN];
 	char rx_buf[SERVO_ST_BUF_LEN];
 	fd_set rfds;
-	int param_set_attmempt=0, bytes_received=0;
+	int bytes_received=0;
 
 
 	tx_buf[0] = 0x00;

@@ -80,9 +80,9 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
+	int last_drive_number;
 	std::vector<std::string> port_names;
 	int fd[MOXA_SERVOS_NR], fd_max;
-	int last_drive_number;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];
 	struct timespec wake_time;
