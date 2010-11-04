@@ -248,9 +248,9 @@ bool neuron_generator::next_step()
 
 	flushall();
 
-	if ((position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2] < overshoot) {
-		overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
-	}
+	//if ((position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2] < overshoot) {
+		//overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
+	//}
 
 	//printf("pos:\t %f\t %f\t %f\t %f\t %f\t %f\n", position[0], position[1], position[2], position[3], position[4], position[5]);
 	// --------- send new position to the robot (EDP) ---------------
