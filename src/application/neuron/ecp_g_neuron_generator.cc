@@ -248,8 +248,12 @@ bool neuron_generator::next_step()
 
 	flushall();
 
+	if ((position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2] < overshoot) {
+		overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
+	}
+
 	//printf("pos:\t %f\t %f\t %f\t %f\t %f\t %f\n", position[0], position[1], position[2], position[3], position[4], position[5]);
-	// --------- send new position to the robot (EDP) --------------
+	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	//send new position to the robot
 	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
@@ -282,11 +286,20 @@ double * neuron_generator::get_position()
 
 /**
  * @brief Returns time necessary to reach the desired position while breaking.
- * @return time necessary to reach the desired position while breaking
+ * @return time necessary to reach the desired position while breaking (in seconds)
  */
 double neuron_generator::get_breaking_time()
 {
 	return breaking_node * 0.02;
+}
+
+/**
+ * @brief
+ * @return the biggest value of the overshoot while breaking
+ */
+double neuron_generator::get_overshoot()
+{
+	return overshoot;
 }
 
 /**
@@ -308,6 +321,11 @@ void neuron_generator::reset()
 		t = 0.02;
 		almost_reached[i] = false;
 		breaking_possible[i] = false;
+		overshoot = 0;
+	}
+
+	for (i = 0; i < 3; i++) {
+		//normalized_vector[i] = (costam - desired_position[i])/sqrt((costam - desired_position[0]) * (costam - desired_position[0]) + (costam - desired_position[1]) * (costam - desired_position[1]) (costam - desired_position[2]) * (costam - desired_position[2]))
 	}
 
 	breaking = false;

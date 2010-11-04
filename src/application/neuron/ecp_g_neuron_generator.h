@@ -148,6 +148,11 @@ class neuron_generator: public common::generator::generator{
 		/**
 		 *
 		 */
+		double normalized_vector[3];
+		/**
+		 *
+		 */
+		double overshoot;
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
@@ -157,6 +162,7 @@ class neuron_generator: public common::generator::generator{
 
 		double get_breaking_time();
 		double * get_position();
+		double get_overshoot();
 		void reset();
 };
 
