@@ -309,7 +309,9 @@ double neuron_generator::get_overshoot()
  */
 void neuron_generator::reset()
 {
-	for (int i = 0; i < 6; i++) {
+	int i;
+
+	for (i = 0; i < 6; i++) {
 		v[i] = 0.0;
 		u[i] = 0.0;
 		a_max[i] = 0.15;
