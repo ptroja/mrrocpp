@@ -12,13 +12,6 @@
 #include <cstring>
 #include <boost/shared_ptr.hpp>
 
-#include <netdb.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/lib/configurator.h"
 #include "base/lib/timer.h"
@@ -76,6 +69,11 @@ private:
 	/** @brief Socket file descriptor.  */
 	int sockfd;
 
+	/** Size of reading_message_header in XDR */
+	int reading_message_header_size;
+
+	void timer_init();
+	void timer_show(const char *str = "");
 }; // class discode_sensor
 
 } // namespace discode

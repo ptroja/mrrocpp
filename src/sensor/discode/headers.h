@@ -5,8 +5,11 @@
  *      Author: mboryn
  */
 
-#ifndef HEADERS_H_
-#define HEADERS_H_
+#ifndef DISCODE_SENSOR_HEADERS_H_
+#define DISCODE_SENSOR_HEADERS_H_
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 namespace mrrocpp {
 
@@ -16,12 +19,25 @@ namespace sensor {
 
 namespace discode {
 
-struct initiate_message_header {
+struct initiate_message_header
+{
 	int data_size;
+
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & data_size;
+	}
 };
 
-struct reading_message_header {
+struct reading_message_header
+{
 	int data_size;
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & data_size;
+	}
 };
 
 } // namespace discode
@@ -32,4 +48,4 @@ struct reading_message_header {
 
 } // namespace mrrocpp
 
-#endif /* HEADERS_H_ */
+#endif /* DISCODE_SENSOR_HEADERS_H_ */

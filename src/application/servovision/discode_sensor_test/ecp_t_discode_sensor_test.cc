@@ -34,7 +34,7 @@ void ecp_t_discode_sensor_test::main_task_algorithm()
 {
 	sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm()");
 
-	mrrocpp::ecp_mp::sensor::discode_sensor ds(config, "asfd");
+	mrrocpp::ecp_mp::sensor::discode::discode_sensor ds(config, "dokladnie");
 	ds.configure_sensor();
 
 	mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, ds);

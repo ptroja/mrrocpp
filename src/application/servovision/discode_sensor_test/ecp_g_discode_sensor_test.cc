@@ -19,7 +19,7 @@ namespace common {
 
 namespace generator {
 
-ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode_sensor &ds) :
+ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor &ds) :
 	generator(ecp_task), ds(ds)
 {
 	// TODO Auto-generated constructor stub

@@ -280,8 +280,21 @@ public:
     {
 		assert(_buffer_size <= size);
 		std::memcpy(buffer, _buffer, _buffer_size);
-		xdr_setpos(&xdrs, 0);
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
     }
+
+    char *get_buffer(){
+    	return buffer;
+    }
+
+    void clear_buffer()
+	{
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
+	}
 };
 
 // required by export
