@@ -17,10 +17,10 @@ namespace edp {
 namespace conveyor {
 
 // ------------------------------------------------------------------------
-hardware_interface::hardware_interface(common::motor_driven_effector &_master) :
-	hi_moxa::HI_moxa(_master, mrrocpp::lib::conveyor::FIRST_MOXA_PORT_NUM, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM)
-{
-} // koniec: hardware_interface::hardware_interface( )
+//hardware_interface::hardware_interface(common::motor_driven_effector &_master) :
+//	hi_moxa::HI_moxa(_master, mrrocpp::lib::conveyor::FIRST_MOXA_PORT_NUM, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM))
+//{
+//} // koniec: hardware_interface::hardware_interface( )
 // ------------------------------------------------------------------------
 
 

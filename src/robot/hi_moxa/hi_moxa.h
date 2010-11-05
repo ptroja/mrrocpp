@@ -13,6 +13,7 @@
 //#define T_INFO_CALC
 
 #define USLEEP_US 500000
+#define STATUS_DISP_T 100
 
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
@@ -23,6 +24,8 @@
 #include <stdint.h>
 #include <termios.h>
 #include <ctime>
+#include <string>
+#include <vector>
 
 namespace mrrocpp {
 namespace edp {
@@ -32,13 +35,9 @@ class motor_driven_effector;
 namespace hi_moxa {
 
 #ifndef __QNXNTO__
-const std::string PORT = "/dev/ttyMI";
 const int BAUD = B921600;
-const char INIT_PORT_CHAR = 48;
 #else
-const std::string PORT = "/dev/ser";
 const int BAUD = 921600;
-const char INIT_PORT_CHAR = 50;
 #endif
 
 const int WRITE_BYTES = 10;
@@ -57,18 +56,21 @@ class HI_moxa : public common::HardwareInterface
 
 public:
 
-	HI_moxa(common::motor_driven_effector &_master, int first_drive_n, int last_drive_n); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports); // Konstruktor
 	~HI_moxa();
 
 	virtual void init();
-	virtual void insert_set_value(int drive_offset, double set_value);
-	virtual int get_current(int drive_offset);
-	virtual double get_increment(int drive_offset);
-	virtual long int get_position(int drive_offset);
+	virtual void insert_set_value(int drive_number, double set_value);
+	virtual int get_current(int drive_number);
+	virtual double get_increment(int drive_number);
+	virtual long int get_position(int drive_number);
 	virtual uint64_t read_write_hardware(void); // Obsluga sprzetu
+	virtual int  set_parameter(int drive_number, const int parameter, uint32_t new_value);
 	virtual void reset_counters(void); // Zerowanie licznikow polozenia
-	virtual void start_synchro(int drive_offset);
-	virtual void finish_synchro(int drive_offset);
+	virtual void start_synchro(int drive_number);
+	virtual void finish_synchro(int drive_number);
+	virtual bool in_synchro_area(int drive_number);
+	virtual bool robot_synchronized();
 	virtual void set_command_param(int drive_offset, uint8_t param);
 
 	virtual bool is_impulse_zero(int drive_offset);
@@ -79,8 +81,9 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
+	int last_drive_number;
+	std::vector<std::string> port_names;
 	int fd[MOXA_SERVOS_NR], fd_max;
-	int first_drive_number, last_drive_number;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];
 	struct timespec wake_time;
