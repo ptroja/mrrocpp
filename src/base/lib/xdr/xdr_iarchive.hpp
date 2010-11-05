@@ -269,6 +269,13 @@ public:
     std::size_t getArchiveSize(void) const {
     	return ((std::size_t) xdr_getpos(&xdrs));
     }
+
+    void set_buffer(const char * _buffer, std::size_t _buffer_size)
+    {
+		assert(_buffer_size <= size);
+		std::memcpy(buffer, _buffer, _buffer_size);
+		xdr_setpos(&xdrs, 0);
+    }
 };
 
 // required by export

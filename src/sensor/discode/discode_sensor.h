@@ -8,15 +8,20 @@
 #ifndef DISCODE_SENSOR_H_
 #define DISCODE_SENSOR_H_
 
-
-#include "base/ecp_mp/ecp_mp_sensor.h"
-
-#include "base/lib/configurator.h"
-
-#include "base/lib/timer.h"
-
+#include <string>
+#include <cstring>
 #include <boost/shared_ptr.hpp>
 
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+#include "base/ecp_mp/ecp_mp_sensor.h"
+#include "base/lib/configurator.h"
+#include "base/lib/timer.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "base/lib/xdr/xdr_oarchive.hpp"
 
@@ -26,9 +31,16 @@ namespace ecp_mp {
 
 namespace sensor {
 
+namespace discode {
+
 class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
 {
 public:
+//	enum discode_sensor_state{
+//		NOT_CONFIGURED,
+//	};
+
+
 	discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name);
 	virtual ~discode_sensor();
 
@@ -54,11 +66,19 @@ private:
 	mrrocpp::lib::configurator& config;
 	const std::string& section_name;
 
+	boost::shared_ptr<xdr_iarchive<> > header_iarchive;
 	boost::shared_ptr<xdr_iarchive<> > iarchive;
+	boost::shared_ptr<xdr_oarchive<> > header_oarchive;
 	boost::shared_ptr<xdr_oarchive<> > oarchive;
 
 	mrrocpp::lib::timer timer;
+
+	/** @brief Socket file descriptor.  */
+	int sockfd;
+
 }; // class discode_sensor
+
+} // namespace discode
 
 } // namespace sensor
 
