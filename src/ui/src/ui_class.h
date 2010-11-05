@@ -113,6 +113,7 @@ public:
 	std::string sr_attach_point;
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
+	std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
 	bird_hand::UiRobot *bird_hand;
