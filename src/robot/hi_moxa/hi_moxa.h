@@ -31,12 +31,18 @@ class motor_driven_effector;
 }
 namespace hi_moxa {
 
+#ifndef __QNXNTO__
+const std::string PORT = "/dev/ttyMI";
+const int BAUD = B921600;
+const char INIT_PORT_CHAR = 48;
+#else
 const std::string PORT = "/dev/ser";
 const int BAUD = 921600;
+const char INIT_PORT_CHAR = 50;
+#endif
+
 const int WRITE_BYTES = 10;
 const int READ_BYTES = 8;
-const char INIT_PORT_CHAR = 50;
-
 const int MOXA_SERVOS_NR = 8;
 
 const long COMMCYCLE_TIME_NS = 2000000;
