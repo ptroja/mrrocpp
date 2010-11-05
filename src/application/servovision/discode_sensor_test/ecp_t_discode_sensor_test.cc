@@ -34,13 +34,15 @@ void ecp_t_discode_sensor_test::main_task_algorithm()
 {
 	sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm()");
 
-	mrrocpp::ecp_mp::sensor::discode::discode_sensor ds(config, "dokladnie");
+	mrrocpp::ecp_mp::sensor::discode::discode_sensor ds(config, "[dokladnie]");
+
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 2\n");
 	ds.configure_sensor();
-
-	mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, ds);
-
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 3\n");
+	mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, &ds);
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
 	g.Move();
-
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 5\n");
 	ecp_termination_notice();
 }
 

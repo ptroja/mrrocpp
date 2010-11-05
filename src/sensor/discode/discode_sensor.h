@@ -57,7 +57,7 @@ protected:
 
 private:
 	mrrocpp::lib::configurator& config;
-	const std::string& section_name;
+	const std::string section_name;
 
 	boost::shared_ptr<xdr_iarchive<> > header_iarchive;
 	boost::shared_ptr<xdr_iarchive<> > iarchive;

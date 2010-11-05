@@ -23,13 +23,13 @@ namespace generator {
 class ecp_g_discode_sensor_test : public mrrocpp::ecp::common::generator::generator
 {
 public:
-	ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor &ds);
+	ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor* ds);
 	virtual ~ecp_g_discode_sensor_test();
 
 	bool first_step();
 	bool next_step();
 private:
-	mrrocpp::ecp_mp::sensor::discode::discode_sensor &ds;
+	mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds;
 	int jjj;
 };
 

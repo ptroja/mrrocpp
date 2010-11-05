@@ -19,11 +19,11 @@ namespace common {
 
 namespace generator {
 
-ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor &ds) :
+ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds) :
 	generator(ecp_task), ds(ds)
 {
 	// TODO Auto-generated constructor stub
-	sensor_m["my_discode_sensor"] = &ds;
+	sensor_m["my_discode_sensor"] = ds;
 }
 
 ecp_g_discode_sensor_test::~ecp_g_discode_sensor_test()
@@ -63,13 +63,13 @@ bool ecp_g_discode_sensor_test::next_step()
 	printf("bool ecp_g_discode_sensor_test::next_step()\n");
 	fflush( stdout);
 
-	jjj++;
-	if (jjj % 4 == 0) {
-		*ds.get_oarchive() << jjj;
-	}
-	if (jjj % 20 == 0) {
-		ds.get_oarchive()->clear_buffer();
-	}
+//	jjj++;
+//	if (jjj % 4 == 0) {
+//		*ds->get_oarchive() << jjj;
+//	}
+//	if (jjj % 20 == 0) {
+//		ds.get_oarchive()->clear_buffer();
+//	}
 	return true;
 }
 
