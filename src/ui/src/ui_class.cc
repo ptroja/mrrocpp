@@ -100,6 +100,7 @@ void Interface::init()
 	binaries_local_path = cwd;
 	mrrocpp_local_path = cwd;
 	mrrocpp_local_path.erase(mrrocpp_local_path.length() - 3);// kopiowanie lokalnej sciezki bez "bin" - 3 znaki
+	mrrocpp_local_path += "../";
 	binaries_network_path = "/net/";
 	binaries_network_path += ui_node_name;
 	binaries_network_path += binaries_local_path;
@@ -174,7 +175,7 @@ void Interface::init()
 	sprintf(file_name, "/%s_sr_log", file_date);
 
 	// 	strcpy(file_name,"/pomiar.p");
-	strcpy(log_file_with_dir, "../logs/");
+	strcpy(log_file_with_dir, "../../logs/");
 
 	if (access(log_file_with_dir, R_OK) != 0) {
 		mkdir(log_file_with_dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
@@ -343,8 +344,9 @@ void Interface::reload_whole_configuration()
 {
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
-		std::cerr << "Wrong entry in default_file.cfg - load another configuration than: " << config_file_relativepath << std::endl;
-		config_file_relativepath = "../configs/common.ini";
+		std::cerr << "Wrong entry in default_file.cfg - load another configuration than: " << config_file_relativepath
+				<< std::endl;
+		config_file_relativepath = "../../configs/common.ini";
 	}
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
@@ -393,7 +395,7 @@ void Interface::reload_whole_configuration()
 
 		// sczytanie listy sekcji
 		fill_section_list(config_file_relativepath.c_str());
-		fill_section_list("../configs/common.ini");
+		fill_section_list("../../configs/common.ini");
 		fill_node_list();
 		fill_program_node_list();
 
@@ -710,7 +712,7 @@ bool Interface::check_loaded(ecp_edp_ui_robot_def& robot)
 int Interface::get_default_configuration_file_name()
 {
 
-	FILE * fp = fopen("../configs/default_file.cfg", "r");
+	FILE * fp = fopen("../../configs/default_file.cfg", "r");
 	if (fp != NULL) {
 		//printf("alala\n");
 		char tmp_buf[255];
@@ -718,7 +720,7 @@ int Interface::get_default_configuration_file_name()
 		char *tmp_buf1 = strtok(tmp_buf, "=\n\r"); // get first token
 		config_file = tmp_buf1;
 
-		config_file_relativepath = "../";
+		config_file_relativepath = "../../";
 		config_file_relativepath += config_file;
 
 		fclose(fp);
@@ -728,14 +730,14 @@ int Interface::get_default_configuration_file_name()
 		//	printf("balala\n");
 		// jesli plik z domyslna konfiguracja (default_file.cfg) nie istnieje to utworz go i wpisz do niego common.ini
 		printf("Utworzono plik default_file.cfg z konfiguracja common.ini\n");
-		fp = fopen("../configs/default_file.cfg", "w");
+		fp = fopen("../../configs/default_file.cfg", "w");
 		fclose(fp);
 
 		config_file = "configs/common.ini";
-		config_file_relativepath = "../";
+		config_file_relativepath = "../../";
 		config_file_relativepath += config_file;
 
-		std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+		std::ofstream outfile("../../configs/default_file.cfg", std::ios::out);
 		if (!outfile.good()) {
 			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
 			perror("because of");
@@ -750,10 +752,10 @@ int Interface::get_default_configuration_file_name()
 int Interface::set_default_configuration_file_name()
 {
 
-	config_file_relativepath = "../";
+	config_file_relativepath = "../../";
 	config_file_relativepath += config_file;
 
-	std::ofstream outfile("../configs/default_file.cfg", std::ios::out);
+	std::ofstream outfile("../../configs/default_file.cfg", std::ios::out);
 	if (!outfile.good()) {
 		std::cerr << "Cannot open file: default_file.cfg\n";
 		perror("because of");
@@ -803,7 +805,7 @@ int Interface::initiate_configuration()
 {
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
-		config_file_relativepath = "../configs/common.ini";
+		config_file_relativepath = "../../configs/common.ini";
 	}
 
 	// sprawdzenie czy nazwa sesji jest unikalna
@@ -858,7 +860,7 @@ int Interface::initiate_configuration()
 
 	// sczytanie listy sekcji
 	fill_section_list(config_file_relativepath.c_str());
-	fill_section_list("../configs/common.ini");
+	fill_section_list("../../configs/common.ini");
 	fill_node_list();
 	fill_program_node_list();
 
@@ -955,7 +957,7 @@ void Interface::fill_node_list()
 void Interface::pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, int value)
 {
 #if !defined(USE_MESSIP_SRR)
-	if(MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
+	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
 #else
 	if(messip::port_send_pulse(coid, code, value))
 #endif
