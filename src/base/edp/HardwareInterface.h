@@ -91,6 +91,8 @@ public:
 	virtual void reset_counters(void) = 0; // Zerowanie licznikow polozenia
 	virtual void start_synchro(int drive_number) = 0;
 	virtual void finish_synchro(int drive_number) = 0;
+	virtual bool in_synchro_area(int drive_number) = 0;
+	virtual bool robot_synchronized() = 0;
 
 	virtual bool is_impulse_zero(int drive_number) = 0;
 	virtual void reset_position(int i) = 0;

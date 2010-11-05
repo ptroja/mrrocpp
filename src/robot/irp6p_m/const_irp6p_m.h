@@ -10,6 +10,7 @@
  */
 
 #include "base/lib/impconst.h"
+#include<string>
 
 namespace mrrocpp {
 namespace lib {
@@ -40,19 +41,24 @@ const std::string ECP_SECTION = "[ecp_irp6p_m]";
 const int NUM_OF_SERVOS = 6;
 
 /*!
- * @brief IRp6 postument first Moxa port number [0..7]
- * @ingroup irp6p_m
- */
-const int FIRST_MOXA_PORT_NUM = 0;
-
-/*!
  * @brief IRp6 postument last Moxa port number [0..7]
  * @ingroup irp6p_m
  */
 const int LAST_MOXA_PORT_NUM = 5;
 
+/*!
+ * @brief IRp6 postument array of communication port names
+ * @ingroup irp6p_m
+ */
+#ifndef __QNXNTO__
+const std::string ports_strings[] = {"/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5"};
+#else
+const std::string ports_strings[] = {"/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
+#endif
+
 } // namespace irp6p_m
 } // namespace lib
 } // namespace mrrocpp
+
 
 #endif /* _IRP6P_M_CONST_H */

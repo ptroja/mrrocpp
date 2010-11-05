@@ -548,8 +548,11 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 			if ((item->type) == Pt_FS_FILE) {
 				// To sie pozniej sprawdzi, czy wogule jest wzorzec znaleziony
 				std::string str_fullpath(item->fullpath);
-				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_local_path)
-						+ interface.mrrocpp_local_path.length());
+
+				std::string tmp_str = interface.mrrocpp_local_path;
+				tmp_str += "../";
+
+				std::string str_tail = str_fullpath.substr(str_fullpath.rfind(tmp_str) + tmp_str.length());
 				//fprintf(stderr, "mrrocpp_local_path: %s\n", interface.mrrocpp_local_path.c_str());
 				//fprintf(stderr, "fullpath: %s\n", item->fullpath);
 				//fprintf(stderr, "tail: %s\n", str_tail.c_str());
@@ -559,6 +562,7 @@ int file_selection_window_send_location(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 				// interface.config_file = buff;
 				interface.config_file = str_tail;
+				std::cout << str_tail << std::endl;
 
 				PtSetResource(ABW_PtText_config_file, Pt_ARG_TEXT_STRING, interface.config_file.c_str(), 0);
 				PtDamageWidget(ABW_PtText_config_file);
