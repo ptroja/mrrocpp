@@ -469,6 +469,9 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+#if defined(USE_MESSIP_SRR)
+	return true;
+#else
 	std::string opendir_path("/net/");
 	opendir_path += _node;
 
@@ -480,6 +483,7 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 		return false;
 	}
 	return true;
+#endif
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
