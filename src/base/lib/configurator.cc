@@ -197,7 +197,7 @@ std::string configurator::get_common_config_file_path() const
 std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
-	path += "msr/";
+	path += "../msr/";
 
 	return path;
 }
