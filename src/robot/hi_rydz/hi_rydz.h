@@ -80,6 +80,10 @@ public:
 
 	virtual void finish_synchro(int drive_number);
 
+	virtual bool in_synchro_area(int drive_number);
+
+	virtual bool robot_synchronized();
+
 	virtual bool is_impulse_zero(int drive_number);
 
 	virtual void reset_position(int i);

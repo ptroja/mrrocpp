@@ -40,7 +40,9 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::FIRST_MOXA_PORT_NUM, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM);
+	const std::vector<std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings,
+				mrrocpp::lib::conveyor::ports_strings+mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM+1);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector);
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika

@@ -206,7 +206,7 @@ struct ECP_message
 		{
 			double robot_position[lib::MAX_SERVOS_NR];
 			double sensor_reading[6];
-			int measure_number;
+                        int32_t measure_number;
 		}
 		/*! Robot positions + Sensor readings + Measure number. */
 		MAM;
@@ -251,7 +251,7 @@ struct UI_reply
 	msg_header_t hdr;
 #endif
 	UI_TO_ECP_COMMAND reply;
-	int integer_number;
+        int32_t integer_number;
 	double double_number;
 	double coordinates[lib::MAX_SERVOS_NR];
 	char path[80];
@@ -1021,7 +1021,7 @@ r_buffer_arm
 		 *  Stan w ktorym znajduje sie regulator chwytaka.
 		 *  @todo Translate to English.
 		 */
-		short gripper_reg_state;
+                int16_t gripper_reg_state;
 	} pf_def;
 	//----------------------------------------------------------
 	struct
@@ -1076,7 +1076,7 @@ struct r_buffer
 	uint8_t analog_input[8];
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
-	unsigned long servo_step;
+        uint32_t servo_step;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */

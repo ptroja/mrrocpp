@@ -111,7 +111,7 @@ typedef struct
 {
 	int32_t little_endian;
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	char process_name[MESSIP_MAXLEN_TASKNAME+1];	// Process name (read from /proc/pid/stat
 }
 messip_send_connect_t;
@@ -130,7 +130,7 @@ messip_reply_connect_t;
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	int32_t maxnb_msg_buffered;
 	char channel_name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
@@ -154,7 +154,7 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 } messip_send_channel_delete_t;
 
@@ -170,7 +170,7 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 } messip_send_channel_connect_t;
 
@@ -179,7 +179,7 @@ typedef struct
 	int32_t ok;
 	int32_t f_already_connected;
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	in_port_t sin_port;						// 2 bytes
 	in_addr_t sin_addr;						// 4 bytes
 	char sin_addr_str[48];
@@ -195,7 +195,7 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 }
 messip_send_channel_disconnect_t;
@@ -214,7 +214,7 @@ messip_reply_channel_disconnect_t;
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 }
 messip_send_channel_ping_t;
 
@@ -232,7 +232,7 @@ messip_reply_channel_ping_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	int32_t type,
 	  subtype;
 	int32_t datalen;
@@ -255,7 +255,7 @@ messip_reply_buffered_send_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	pid_t pid_to;
 	char *data;
 	int nbytes;
@@ -278,7 +278,7 @@ messip_reply_proxy_attach_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	pid_t proxy;								// Index into proxies[] table
 }
 messip_send_proxy_detach_t;
@@ -297,7 +297,7 @@ messip_reply_proxy_detach_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	pid_t pid_to;
 }
 messip_send_proxy_trigger_t;
@@ -317,7 +317,7 @@ messip_reply_proxy_trigger_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	pid_t pid_to;
 }
 messip_send_proxy_get_owner_t;
@@ -337,7 +337,7 @@ messip_reply_proxy_get_owner_t;
 typedef struct
 {
 	pid_t pid_from;
-	pthread_t tid_from;
+        uint64_t tid_from;
 	int32_t status;
 }
 messip_send_death_notify_t;
@@ -367,7 +367,7 @@ typedef struct
 {
 	int32_t flag;
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	int32_t type,
 	  subtype;
 	int32_t datalen;
@@ -377,7 +377,7 @@ messip_datasend_t;
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	int32_t answer;
 	int32_t datalen;
 }
@@ -398,10 +398,10 @@ messip_datareply_t;
 typedef struct
 {
 	pid_t pid;
-	pthread_t tid;
+        uint64_t tid;
 	int32_t status;
 	pid_t pid_blocked_on;
-	pthread_t tid_blocked_on;
+        uint64_t tid_blocked_on;
 	time_t when_blocked_on;
 }
 messip_send_inform_messipmgr_t;

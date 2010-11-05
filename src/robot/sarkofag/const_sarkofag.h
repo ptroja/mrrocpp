@@ -10,6 +10,7 @@
  */
 
 #include "base/lib/impconst.h"
+#include <string>
 
 namespace mrrocpp {
 namespace lib {
@@ -40,17 +41,20 @@ const std::string ECP_SECTION = "[ecp_sarkofag]";
 const int NUM_OF_SERVOS = 1;
 
 /*!
- * @brief Sarkofag first Moxa port number [0..7]
- * @ingroup sarkofag
- */
-const int FIRST_MOXA_PORT_NUM = 0;
-
-/*!
  * @brief Sarkofag last Moxa port number [0..7]
  * @ingroup sarkofag
  */
 const int LAST_MOXA_PORT_NUM = 0;
 
+/*!
+ * @brief IRp6 Sarkofag array of communication port names
+ * @ingroup sarkofag
+ */
+#ifndef __QNXNTO__
+const std::string ports_strings[] = {"/dev/ttyMI0"};
+#else
+const std::string ports_strings[] = {"/dev/ser2"};
+#endif
 /*!
  * @brief Sarkofag overcurrent threshold [mA]
  * @ingroup sarkofag
