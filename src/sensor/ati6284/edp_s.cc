@@ -99,7 +99,7 @@ void ATI6284_force::connect_to_hardware(void)
 		index = 1;
 
 		std::string calfilepath(master.config.return_mrrocpp_network_path());
-		calfilepath += "src/sensor/ati6284/ft6284.cal";
+		calfilepath += "../src/sensor/ati6284/ft6284.cal";
 
 		for (int i = 0; i < 5; i++)
 			last_correct[i] = 0;
