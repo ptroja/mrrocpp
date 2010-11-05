@@ -43,6 +43,7 @@ const int BAUD = 921600;
 const int WRITE_BYTES = 10;
 const int READ_BYTES = 8;
 const int MOXA_SERVOS_NR = 8;
+const int MAX_PARAM_SET_ATTEMPTS = 3;
 
 const long COMMCYCLE_TIME_NS = 2000000;
 
