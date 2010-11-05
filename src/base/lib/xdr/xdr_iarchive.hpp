@@ -145,6 +145,11 @@ public:
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
     }
 
+    xdr_iarchive()
+	{
+		xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
+	}
+
     /**
      * Destructor
      */
