@@ -152,6 +152,10 @@ class neuron_generator: public common::generator::generator{
 		/**
 		 *
 		 */
+		double last_but_one[3];
+		/**
+		 *
+		 */
 		double overshoot;
 
 	public:
