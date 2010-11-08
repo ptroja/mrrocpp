@@ -93,6 +93,10 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 				//loop for another start signal.
 				if(neuronSensor->stop())
 					break;
+
+				double * finalPosition;
+				finalPosition=neuronGenerator->get_position();
+				neuronSensor->sendFinalPosition(finalPosition[0], finalPosition[1], finalPosition[2]);
 			}
 		}
 

@@ -68,8 +68,9 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
-			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&sr_msg.ts.tv_sec));
-			sprintf(current_line + 20, ".%03d   ", sr_msg.ts.tv_nsec / 1000000);
+                        uint32_t time =  sr_msg.time/1000000000;
+                        strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
+                        sprintf(current_line + 20, ".%03d   ", (sr_msg.time%1000000000) / 1000000);
 
 			switch (sr_msg.process_type)
 			{

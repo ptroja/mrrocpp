@@ -19,8 +19,8 @@
 #include "base/lib/configsrv.h"
 
 // Konstruktor obiektu - konfiguratora.
-configsrv::configsrv (const std::string & _dir, const std::string & _ini_file)
-	: dir(_dir), ini_file(_ini_file)
+configsrv::configsrv(const std::string & _dir, const std::string & _ini_file) :
+	dir(_dir), ini_file(_ini_file)
 {
 	// Stworzenie sciezki do pliku.
 	file_location = dir;
@@ -28,7 +28,7 @@ configsrv::configsrv (const std::string & _dir, const std::string & _ini_file)
 
 	// Stworzenie sciezki do pliku.
 	common_file_location = dir;
-	common_file_location += "configs/";
+	common_file_location += "../configs/";
 	common_file_location += "common.ini";
 
 	// Read configuration
@@ -40,7 +40,7 @@ void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, c
 {
 	std::cerr << "Reading config from: " << file << std::endl;
 	try {
-		if(boost::filesystem::extension(file) == ".ini") {
+		if (boost::filesystem::extension(file) == ".ini") {
 			boost::property_tree::read_ini(file, pt);
 		} else if (boost::filesystem::extension(file) == ".xml") {
 			boost::property_tree::read_xml(file, pt);
@@ -52,7 +52,7 @@ void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, c
 	}
 }
 
-void configsrv::change_ini_file (const std::string & _ini_file)
+void configsrv::change_ini_file(const std::string & _ini_file)
 {
 	ini_file = _ini_file;
 
@@ -68,8 +68,8 @@ void configsrv::change_ini_file (const std::string & _ini_file)
 std::string configsrv::value(const std::string & pt_path) const
 {
 	try {
-		return file_pt.get<std::string>(pt_path);
+		return file_pt.get <std::string> (pt_path);
 	} catch (boost::property_tree::ptree_error & e) {
-		return common_file_pt.get<std::string>(pt_path);
+		return common_file_pt.get <std::string> (pt_path);
 	}
 }
