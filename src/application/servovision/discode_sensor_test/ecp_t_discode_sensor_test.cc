@@ -5,6 +5,7 @@
  *      Author: mboryn
  */
 
+#include <string>
 #include "ecp_t_discode_sensor_test.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
@@ -18,7 +19,10 @@ namespace discode_sensor_test {
 
 namespace task {
 
-ecp_t_discode_sensor_test::ecp_t_discode_sensor_test(mrrocpp::lib::configurator& config) : task(config)
+using namespace std;
+
+ecp_t_discode_sensor_test::ecp_t_discode_sensor_test(mrrocpp::lib::configurator& config) :
+	task(config)
 {
 	// TODO Auto-generated constructor stub
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
@@ -36,9 +40,15 @@ void ecp_t_discode_sensor_test::main_task_algorithm()
 
 	mrrocpp::ecp_mp::sensor::discode::discode_sensor ds(config, "[dokladnie]");
 
-	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 2\n");
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): before ds.configure_sensor()\n");
 	ds.configure_sensor();
-	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 3\n");
+	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): after ds.configure_sensor()\n");
+
+	while (1) {
+		string received = ds.call_remote_procedure<string>(string("void ecp_t_discode_sensor_test::main_task_algorithm()"));
+		logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): received: \"%s\"\n", received.c_str());
+	}
+
 	mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, &ds);
 	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
 	g.Move();

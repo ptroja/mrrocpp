@@ -38,16 +38,13 @@ discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::st
 	config(config), section_name(section_name)
 {
 	base_period = current_period = 1;
-	timer.print_last_status();
-	fflush(stdout);
 
 	header_iarchive = shared_ptr <xdr_iarchive <> > (new xdr_iarchive <> );
 	iarchive = shared_ptr <xdr_iarchive <> > (new xdr_iarchive <> );
 	header_oarchive = shared_ptr <xdr_oarchive <> > (new xdr_oarchive <> );
 	oarchive = shared_ptr <xdr_oarchive <> > (new xdr_oarchive <> );
 
-	reading_message_header rmh;
-
+	// determine size of rmh after serialization
 	*header_oarchive << rmh;
 	reading_message_header_size = header_oarchive->getArchiveSize();
 	header_oarchive->clear_buffer();
@@ -108,9 +105,72 @@ void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
 
+	timer_show("discode_sensor::initiate_reading() end");
+}
+
+void discode_sensor::get_reading()
+{
+	timer_show("discode_sensor::get_reading() begin");
+
+	timer_show("discode_sensor::get_reading() end");
+}
+
+void discode_sensor::terminate()
+{
+	close(sockfd);
+}
+
+bool discode_sensor::is_data_available(int usec)
+{
+	fd_set rfds;
+	struct timeval tv;
+	int retval;
+
+	FD_ZERO(&rfds);
+	FD_SET(sockfd, &rfds);
+	tv.tv_sec = 0;
+	tv.tv_usec = usec;
+
+	retval = select(sockfd + 1, &rfds, NULL, NULL, &tv);
+
+	if (retval < 0) {
+		throw runtime_error("discode_sensor::is_data_available(): select() failed: " + string(strerror(errno)));
+	}
+	return retval > 0;
+}
+
+void discode_sensor::receive_buffers_from_discode()
+{
+	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
+
+	header_iarchive->clear_buffer();
+	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
+	if (nread == -1) {
+		throw runtime_error(string("read() failed: ") + strerror(errno));
+	}
+	if (nread != reading_message_header_size) {
+		throw runtime_error("read() failed: nread != reading_message_header_size");
+	}
+
+	*header_iarchive >> rmh;
+
+	logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
+
+	iarchive->clear_buffer();
+	nread = read(sockfd, iarchive->get_buffer(), rmh.data_size);
+	if (nread == -1) {
+		throw runtime_error(string("read() failed: ") + strerror(errno));
+	}
+	if (nread != rmh.data_size) {
+		throw runtime_error("read() failed: nread != rmh.data_size");
+	}
+	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
+}
+
+void discode_sensor::send_buffers_to_discode()
+{
 	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
 
-	initiate_message_header imh;
 	imh.data_size = oarchive->getArchiveSize();
 
 	header_oarchive->clear_buffer();
@@ -133,51 +193,6 @@ void discode_sensor::initiate_reading()
 	}
 
 	oarchive->clear_buffer();
-
-	timer_show("discode_sensor::initiate_reading() end");
-}
-
-void discode_sensor::get_reading()
-{
-	timer_show("discode_sensor::get_reading() begin");
-
-	header_iarchive->clear_buffer();
-	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
-	if (nread == -1) {
-		throw runtime_error(string("read() failed: ") + strerror(errno));
-	}
-	if (nread != reading_message_header_size) {
-		throw runtime_error("read() failed: nread != reading_message_header_size");
-	}
-
-	reading_message_header rmh;
-	*header_iarchive >> rmh;
-
-	iarchive->clear_buffer();
-	nread = read(sockfd, iarchive->get_buffer(), rmh.data_size);
-	if (nread == -1) {
-		throw runtime_error(string("read() failed: ") + strerror(errno));
-	}
-	if (nread != rmh.data_size) {
-		throw runtime_error("read() failed: nread != rmh.data_size");
-	}
-
-	timer_show("discode_sensor::get_reading() end");
-}
-
-void discode_sensor::terminate()
-{
-	close(sockfd);
-}
-
-shared_ptr <xdr_iarchive <> > discode_sensor::get_iarchive()
-{
-	return iarchive;
-}
-
-shared_ptr <xdr_oarchive <> > discode_sensor::get_oarchive()
-{
-	return oarchive;
 }
 
 void discode_sensor::timer_init()

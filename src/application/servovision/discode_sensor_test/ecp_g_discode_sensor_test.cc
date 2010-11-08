@@ -6,10 +6,11 @@
  */
 
 #include <cstdio>
-
+#include <string>
 #include "ecp_g_discode_sensor_test.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 
@@ -18,6 +19,10 @@ namespace ecp {
 namespace common {
 
 namespace generator {
+
+using boost::shared_ptr;
+using namespace std;
+using namespace logger;
 
 ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds) :
 	generator(ecp_task), ds(ds)
@@ -62,6 +67,13 @@ bool ecp_g_discode_sensor_test::next_step()
 
 	printf("bool ecp_g_discode_sensor_test::next_step()\n");
 	fflush( stdout);
+
+//	shared_ptr <xdr_iarchive <> > ia = ds->get_iarchive();
+//	string s;
+//	*ia >> s;
+//	log("ecp_g_discode_sensor_test::next_step() received: \"%s\"", s.c_str());
+//
+//	*(ds->get_oarchive()) << string("bool ecp_g_discode_sensor_test::next_step()");
 
 //	jjj++;
 //	if (jjj % 4 == 0) {

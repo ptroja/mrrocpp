@@ -22,21 +22,26 @@ namespace discode {
 struct initiate_message_header
 {
 	int data_size;
+	bool is_rpc_call;
 
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & data_size;
+		ar & is_rpc_call;
 	}
 };
 
 struct reading_message_header
 {
 	int data_size;
+	bool is_rpc_call;
+
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & data_size;
+		ar & is_rpc_call;
 	}
 };
 
