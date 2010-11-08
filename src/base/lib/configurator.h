@@ -21,12 +21,15 @@
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
-#include <boost/property_tree/ptree.hpp>
 
 #include <Eigen/Core>
 
 #if defined(USE_MESSIP_SRR)
-#include "base/lib/messip/messip.h"
+#include "base/lib/messip/messip_dataport.h"
+#include "base/lib/config_types.h"
+#include <boost/property_tree/exceptions.hpp>
+#else
+#include <boost/property_tree/ptree.hpp>
 #endif
 
 #include <sched.h>
@@ -62,13 +65,13 @@ private:
 	//! Mutex to protect exclusive access
 	mutable boost::mutex access_mutex;
 
-	//! Property trees of configuration files
-	boost::property_tree::ptree common_file_pt, file_pt;
-
 #ifdef USE_MESSIP_SRR
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
 #else
+	//! Property trees of configuration files
+	boost::property_tree::ptree common_file_pt, file_pt;
+
 	//! Configuration file location
 	std::string file_location;
 
@@ -200,12 +203,28 @@ public:
 		pt_path += _key;
 
 		boost::mutex::scoped_lock l(access_mutex);
+#ifdef USE_MESSIP_SRR
+		config_query_t query, reply;
 
+		query.key = pt_path;
+		query.flag = false;
+
+		messip::port_send(this->ch,
+				0, 0,
+				query, reply);
+
+		if(reply.flag) {
+			return boost::lexical_cast<Type>(reply.key);
+		} else {
+			throw boost::property_tree::ptree_error("remote config query failed");
+		}
+#else
 		try {
 			return file_pt.get<Type>(pt_path);
 		} catch (boost::property_tree::ptree_error & e) {
 			return common_file_pt.get<Type>(pt_path);
 		}
+#endif
 	}
 
 	/**

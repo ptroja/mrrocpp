@@ -397,6 +397,12 @@ public:
 			flushall();
 		}
 
+		if (coordinate_vector_iterator == coordinate_vector.end()) {
+			sr_ecp_msg.message("Motion finished");
+			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+			return false;
+		}
+
 		int i;//loop counter
 
 		if (coordinate_vector.empty()) {
@@ -498,13 +504,8 @@ public:
 		}// end:switch
 
 		coordinate_vector_iterator++;
-		if (coordinate_vector_iterator == coordinate_vector.end()) {
-			sr_ecp_msg.message("Motion finished");
-			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
-			return false;
-		} else {
-			return true;
-		}
+
+		return true;
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
@@ -581,15 +582,19 @@ public:
 		sr_ecp_msg.message("Generator reset");
 	}
 	/**
-	 * Detection of possible jerks. Method scans the vector with coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
+	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
 	 * @param max_acc maximal allowed acceleration
-	 * @return 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
+	 * @return -1 if the trajectory was not interpolated before, 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
     virtual int detect_jerks(double max_acc)
 	{
     	if (debug) {
     		printf("##################################### detect_jerks #####################################\n");
 		}
+
+    	if (!interpolated) {
+    		return -1;
+    	}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
 		std::vector<double> temp1 = pose_vector.begin()->start_position;

@@ -24,8 +24,8 @@ namespace irp6ot_m {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION), is_wind_irp6ot_int_open(false),
-			is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(false),
+	common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION),
+			is_wind_irp6ot_int_open(false), is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(false),
 			is_wind_irp6ot_xyz_angle_axis_open(false), is_wind_irp6ot_xyz_aa_relative_open(false),
 			is_wind_irp6ot_xyz_angle_axis_ts_open(false), is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6ot_kinematic_open(false), is_wind_irp6ot_servo_algorithm_open(false), ui_ecp_robot(NULL)
@@ -54,7 +54,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
 				state.edp.state = 0;
 
 				for (int i = 0; i < 4; i++) {
@@ -67,8 +67,9 @@ int UiRobot::reload_configuration()
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
-						tmp1 = tmp
-								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						tmp1
+								= tmp
+										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < lib::irp6ot_m::NUM_OF_SERVOS; j++) {
 							if (i < 3) {
@@ -222,9 +223,8 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
@@ -240,8 +240,6 @@ int UiRobot::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
 void UiRobot::delete_ui_ecp_robot()

@@ -12,6 +12,10 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+#if defined(USE_MESSIP_SRR)
+const edp_state_def::reader_fd_t edp_state_def::invalid_reader_fd = NULL;
+#endif
+
 busy_flagger::busy_flagger(busy_flag & _flag) :
 	flag(_flag) {
 	flag.increment();

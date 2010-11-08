@@ -81,7 +81,15 @@ if (QNXNTO)
 	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
 	
 	# QNX provides networking with separate library
+
 	set (COMPATIBILITY_LIBRARIES socket m)
+
+	# warn about almost everything except:
+	# -Wcast-qual
+	# -Wshadow
+	# -Wsign-compare
+	# optimization option -O1 is required for the compiler to find uninitialized local variables.
+	set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
 	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
@@ -99,6 +107,8 @@ else (QNXNTO) # Linux, etc.
 
 	# for non-QNX target messip is the only messaging protocol
 	set(USE_MESSIP ON)
+
+	set(CMAKE_CXX_FLAGS "-Wall")
 endif (QNXNTO)
 
 # Make sure the compiler can find include files

@@ -41,19 +41,16 @@
 lib::UI_ECP_message ui_ecp_msg;
 extern ui::common::Interface interface;
 
-uint64_t e; // kod bledu systemowego
-
-
 // Numer makrokroku.
 int macrostep_number;
 // PID ECP
 int ECPfd;
 // Tworzenie polaczenia z ECP.
-bool CREATE_CONNECTION;
+static bool CREATE_CONNECTION;
 // Pobranie polozenia robota.
-bool GET_ROBOT_POSITION;
+static bool GET_ROBOT_POSITION;
 // Kontrola readera.
-bool READER_ON;
+static bool READER_ON;
 // Rodzaj sterowania.
 lib::POSE_SPECIFICATION ps;
 
@@ -81,7 +78,6 @@ int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo,
 	ps = lib::MOTOR;
 	return (Pt_CONTINUE);
 }
-; // end: FCwndForceControlRealised
 
 int FCCreateConnection(void) {
 #ifdef FCDEBUG
@@ -100,7 +96,6 @@ int FCCreateConnection(void) {
 #endif
 	// Otwarcie polaczenia.
 	if ((ECPfd = name_open(tmp_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
-		e = errno;
 		perror("FCCreateConnection: Connect to ECP failed");
 		return EXIT_FAILURE;
 	}
@@ -313,28 +308,31 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_STOP; // stop
 	else
 		pulse_code = READER_START;// start
-	if (MsgSendPulse(interface.irp6ot_m->state.edp.reader_fd, sched_get_priority_min(
-			SCHED_FIFO), pulse_code, pulse_value) == -1) {
-		perror("FCbtnOnOffReader: Send pulse to Reader failed");
-	} else {
-		// Reader wylaczony.
-		if (READER_ON) {
-			// Wylaczenie.
-			READER_ON = false;
-			// Zmiana przycisku.
-			PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "ON", 0);
-			PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [OFF]",
-					0);
-		} else {
-			// Wylaczenie.
-			READER_ON = true;
-			// Zmiana przycisku.
-			PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "OFF", 0);
-			PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [ON]", 0);
-		}
-		// Odswiezenie okna.
-		PtDamageWidget(ABW_wndForceControl);
+
+	try {
+		interface.pulse_reader_execute(interface.irp6ot_m->state.edp.reader_fd, pulse_code, pulse_value);
+	} catch (std::exception & e) {
+		return (Pt_CONTINUE);
 	}
+
+	// Reader wylaczony.
+	if (READER_ON) {
+		// Wylaczenie.
+		READER_ON = false;
+		// Zmiana przycisku.
+		PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "ON", 0);
+		PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [OFF]",
+				0);
+	} else {
+		// Wylaczenie.
+		READER_ON = true;
+		// Zmiana przycisku.
+		PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "OFF", 0);
+		PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [ON]", 0);
+	}
+	// Odswiezenie okna.
+	PtDamageWidget(ABW_wndForceControl);
+
 	return (Pt_CONTINUE);
 }
 

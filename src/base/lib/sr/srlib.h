@@ -48,7 +48,7 @@ typedef struct sr_package
 	msg_header_t hdr;
 #endif
 	//! Message timestamp
-	struct timespec ts;
+        uint64_t time;
 
 	//! Sender process type
 	process_type_t process_type;
@@ -73,8 +73,7 @@ sr_package_t;
 template<class Archive>
 void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 {
-    ar & p.ts.tv_sec;
-    ar & p.ts.tv_nsec;
+    ar & p.time;
     ar & p.process_type;
     ar & p.message_type;
     ar & p.process_name;
@@ -87,7 +86,7 @@ class sr : public boost::noncopyable
 {
 private:
 	//! Size of the array with error codes
-	static const unsigned int ERROR_TAB_SIZE = 2;
+	static const size_t ERROR_TAB_SIZE = 2;
 
 	//! One-thread a time access mutex
 	boost::mutex srMutex;

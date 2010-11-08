@@ -16,6 +16,8 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
+const double CONVEYOR35V_TO_CONVEYOR_VOLTAGE_RATIO = 0.60;
+
 /*-----------------------------------------------------------------------*/
 class NL_regulator_1_conv : public common::NL_regulator
 {

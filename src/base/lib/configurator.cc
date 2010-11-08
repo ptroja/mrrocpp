@@ -71,8 +71,6 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
-
-	change_config_file("");
 #else
 	file_location = get_config_file_path();
 	common_file_location = get_common_config_file_path();
@@ -86,7 +84,7 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
 {
 	try {
-		if(boost::filesystem::extension(file) == ".ini") {
+		if (boost::filesystem::extension(file) == ".ini") {
 			boost::property_tree::read_ini(file, pt);
 		} else if (boost::filesystem::extension(file) == ".xml") {
 			boost::property_tree::read_xml(file, pt);
@@ -102,17 +100,23 @@ void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt
 void configurator::change_config_file(const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
-	boost::mutex::scoped_lock l(access_mutex);
+	config_query_t query, reply;
 
-	property_trees_t ptrees;
+	query.key = _ini_file;
+	query.flag = true;
 
-	messip::port_send(this->ch,
-			0, 0,
-			_ini_file, ptrees);
+	{
+		boost::mutex::scoped_lock l(access_mutex);
 
-	common_file_pt = ptrees.common_file_pt;
-	file_pt = ptrees.file_pt;
+		messip::port_send(this->ch,
+				0, 0,
+				query, reply);
+	}
 
+	if(!reply.flag) {
+		// TODO: throw
+		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
+	}
 #else
 	boost::mutex::scoped_lock l(access_mutex);
 
@@ -175,6 +179,7 @@ std::string configurator::get_config_file_path() const
 {
 	std::string value(mrrocpp_network_path);
 	//value += "configs/";
+	value += "../";
 	value += ini_file;
 
 	return value;
@@ -183,7 +188,7 @@ std::string configurator::get_config_file_path() const
 std::string configurator::get_common_config_file_path() const
 {
 	std::string value(mrrocpp_network_path);
-	value += "configs/common.ini";
+	value += "../configs/common.ini";
 
 	return value;
 }
@@ -192,7 +197,7 @@ std::string configurator::get_common_config_file_path() const
 std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
-	path += "msr/";
+	path += "../msr/";
 
 	return path;
 }
@@ -207,14 +212,13 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	try {
-		value<std::string>(_key, _section_name);
+		value <std::string> (_key, _section_name);
 	} catch (boost::property_tree::ptree_error & e) {
 		return false;
 	}
 
 	return true;
 }
-
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
@@ -235,16 +239,16 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		if (access(opendir_path.c_str(), R_OK) != 0) {
 			printf("spawned node absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned node absent: " + opendir_path);
+			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
 	}
 
 	// Sciezka do binariow.
 	char bin_path[PATH_MAX];
 	if (exists("binpath", _section_name)) {
-		std::string _bin_path = value<std::string>("binpath", _section_name);
+		std::string _bin_path = value <std::string> ("binpath", _section_name);
 		strcpy(bin_path, _bin_path.c_str());
-		if(strlen(bin_path) && bin_path[strlen(bin_path)-1] != '/') {
+		if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
 			strcat(bin_path, "/");
 		}
 
@@ -275,7 +279,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 

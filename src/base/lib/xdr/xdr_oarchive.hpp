@@ -59,12 +59,14 @@ public:
 	//! conversion for bool, special since bool != bool_t
 	xdr_oarchive &save_a_type(bool const &t, boost::mpl::true_)
 	{
-		if (!xdr_bool(&xdrs, (bool_t *) &t))
+		bool_t b = (t) ? true : false;
+		if (!xdr_bool(&xdrs, &b))
 			THROW_SAVE_EXCEPTION;
 		return *this;
 	}
 
 	//! conversion for bool[], special since bool != bool_t
+	/* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
 	template <int N>
 	xdr_oarchive &save_a_type(bool const(&t)[N], boost::mpl::false_)
 	{
@@ -72,6 +74,7 @@ public:
 			THROW_SAVE_EXCEPTION;
 		return *this;
 	}
+	*/
 
 	//! conversion for an enum
 	template <class T>
@@ -103,22 +106,28 @@ public:
 	SAVE_A_TYPE(char, xdr_char)
 	SAVE_A_TYPE(double, xdr_double)
 	SAVE_A_TYPE(float, xdr_float)
+//	SAVE_A_TYPE(int, xdr_int)
+//	SAVE_A_TYPE(long, xdr_long)
+//	SAVE_A_TYPE(short, xdr_short)
+	SAVE_A_TYPE(unsigned char, xdr_u_char)
+//	SAVE_A_TYPE(unsigned int, xdr_u_int)
+//	SAVE_A_TYPE(unsigned long, xdr_u_long)
+//	SAVE_A_TYPE(unsigned short, xdr_u_short)
+
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
 	SAVE_A_TYPE(int, xdr_int)
 	SAVE_A_TYPE(long, xdr_long)
 	SAVE_A_TYPE(short, xdr_short)
-	SAVE_A_TYPE(unsigned char, xdr_u_char)
 	SAVE_A_TYPE(unsigned int, xdr_u_int)
 	SAVE_A_TYPE(unsigned long, xdr_u_long)
 	SAVE_A_TYPE(unsigned short, xdr_u_short)
-
-//	SAVE_A_TYPE(int16_t, xdr_int16_t)
-//	SAVE_A_TYPE(uint16_t, xdr_u_int16_t)
-//	SAVE_A_TYPE(int32_t, xdr_int32_t)
-//	SAVE_A_TYPE(uint32_t, xdr_u_int32_t)
-	SAVE_A_TYPE(int64_t, xdr_int64_t)
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
 	SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
 #else
+	SAVE_A_TYPE(int16_t, xdr_int16_t)
+	SAVE_A_TYPE(int32_t, xdr_int32_t)
+	SAVE_A_TYPE(int64_t, xdr_int64_t)
+	SAVE_A_TYPE(uint16_t, xdr_uint16_t)
+	SAVE_A_TYPE(uint32_t, xdr_uint32_t)
 	SAVE_A_TYPE(uint64_t, xdr_uint64_t)
 #endif
 

@@ -4,6 +4,10 @@
 #include "ui/src/ui_robot.h"
 #include "ui/src/ui_class.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -39,9 +43,30 @@ void UiRobot::abort_thread()
 	tid = NULL;
 }
 
+
+void UiRobot::connect_to_reader()
+{
+	short tmp = 0;
+	// kilka sekund  (~1) na otworzenie urzadzenia
+
+	while ((state.edp.reader_fd =
+#if !defined(USE_MESSIP_SRR)
+			name_open(state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
+#else
+			messip::port_connect(state.edp.network_reader_attach_point)) == NULL
+#endif
+			) {
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			delay(lib::CONNECT_DELAY);
+		} else {
+			perror("blad odwolania do READER");
+			break;
+		}
+	}
+}
+
 bool UiRobot::pulse_reader_start_exec_pulse()
 {
-
 	if (state.edp.state == 1) {
 		interface.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
 		state.edp.state = 2;
@@ -53,7 +78,6 @@ bool UiRobot::pulse_reader_start_exec_pulse()
 
 bool UiRobot::pulse_reader_stop_exec_pulse()
 {
-
 	if (state.edp.state == 2) {
 		interface.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
 		state.edp.state = 1;
@@ -65,7 +89,6 @@ bool UiRobot::pulse_reader_stop_exec_pulse()
 
 bool UiRobot::pulse_reader_trigger_exec_pulse()
 {
-
 	if (state.edp.state == 2) {
 		interface.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
 
@@ -75,9 +98,8 @@ bool UiRobot::pulse_reader_trigger_exec_pulse()
 	return false;
 }
 
-bool UiRobot::pulse_ecp()
+void UiRobot::pulse_ecp()
 {
-
 	char pulse_code = ECP_TRIGGER;
 	long pulse_value = 1;
 
@@ -97,10 +119,10 @@ bool UiRobot::pulse_ecp()
 					delay(lib::CONNECT_DELAY);
 				} else {
 					perror("blad odwolania do ECP_TRIGGER");
-				};
+				}
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t)(0), 0);
+			ualarm((useconds_t) (0), 0);
 		}
 
 		if (state.ecp.trigger_fd >= 0) {
@@ -113,46 +135,31 @@ bool UiRobot::pulse_ecp()
 			printf("W PULS ECP:  BLAD name_open \n");
 		}
 	}
-
-	return true;
 }
 
-bool UiRobot::connect_to_reader()
+void UiRobot::close_all_windows()
 {
-
-	short tmp = 0;
-	// kilka sekund  (~1) na otworzenie urzadzenia
-
-	while ((state.edp.reader_fd = name_open(state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-			< 0)
-		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
-		} else {
-			perror("blad odwolania do READER");
-			break;
-		}
-
-	return true;
 }
 
-int UiRobot::close_all_windows()
+void UiRobot::EDP_slay_int()
 {
-
-	return 1;
-
-}
-
-int UiRobot::EDP_slay_int()
-
-{
-
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
+#if !defined(USE_MESSIP_SRR)
 		if (state.edp.reader_fd >= 0) {
 			if (name_close(state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
 			}
 		}
+		state.edp.reader_fd = -1;
+#else
+		if (state.edp.reader_fd ) {
+			if (messip::port_disconnect(state.edp.reader_fd) != 0) {
+				fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
+			}
+		}
+		state.edp.reader_fd = NULL;
+#endif
 		close_all_windows();
 
 		delete_ui_ecp_robot();
@@ -160,18 +167,13 @@ int UiRobot::EDP_slay_int()
 		state.edp.is_synchronised = false;
 
 		state.edp.pid = -1;
-		state.edp.reader_fd = -1;
 
 		abort_thread();
-
 	}
 
 	// modyfikacja menu
 
 	interface.manage_interface();
-
-	return 1;
-
 }
 
 }

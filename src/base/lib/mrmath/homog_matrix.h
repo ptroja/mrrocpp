@@ -82,7 +82,7 @@ public:
 	 * @param[in] versor_x, versor_y, versor_z versors of X,Y,Z axes
 	 * @param[in] angles rotation around 3 axes
 	 */
-			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 
 	/**
 	 * Constructor for a small-rotation around 3 axes

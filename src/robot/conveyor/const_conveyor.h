@@ -10,6 +10,7 @@
  */
 
 #include "base/lib/impconst.h"
+#include <string>
 
 namespace mrrocpp {
 namespace lib {
@@ -38,6 +39,19 @@ const std::string ECP_SECTION = "[ecp_conveyor]";
  * @ingroup conveyor
  */
 const int NUM_OF_SERVOS = 1;
+
+
+/*!
+ * @brief IRp6 conveyor last Moxa port number [0..7]
+ * @ingroup conveyor
+ */
+const int LAST_MOXA_PORT_NUM = 0;
+
+/*!
+ * @brief IRp6 conveyor array of communication port names
+ * @ingroup conveyor
+ */
+const std::string ports_strings[] = {"/dev/ser9"};
 
 } // namespace conveyor
 } // namespace lib

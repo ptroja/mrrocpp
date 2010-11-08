@@ -2470,6 +2470,7 @@ messip_reply( messip_channel_t * ch,
 			free(symbols);
 	    	}
 #endif /* __gnu_linux__ */
+			assert(0);
 			ret = -1;
 	} /* switch */
 

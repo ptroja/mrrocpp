@@ -2334,18 +2334,12 @@ int EDP_irp6_postument_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	interface.manage_interface();
 
 	return 1;
-
 }
 
 int EDP_irp6_postument_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
 {
-
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
-
 
 	interface.irp6p_m->EDP_slay_int();
 

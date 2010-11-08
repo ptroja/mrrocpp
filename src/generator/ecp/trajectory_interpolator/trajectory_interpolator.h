@@ -8,9 +8,11 @@
 #ifndef _TRAJECTORY_INTERPOLATOR_H_
 #define _TRAJECTORY_INTERPOLATOR_H_
 
+#include <vector>
+#include <cstdio>
+
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "base/lib/mrmath/mrmath.h"
-#include <vector>
 
 namespace mrrocpp {
 namespace ecp {
@@ -67,13 +69,12 @@ public:
 		typename std::vector<double> coordinates (it->axes_num);
 
 		double start_position_array[6];
-		double coordinate_backup[6];
 
 		lib::Homog_matrix begining_frame;
 		lib::Homog_matrix goal_frame;
-		lib::Homog_matrix begining_frame_with_current_translation;
+		lib::Homog_matrix total_increment_frame;
 
-		lib::Xyz_Angle_Axis_vector step_of_total_increment_vector;
+		lib::Xyz_Angle_Axis_vector total_angle_axis_increment_vector;
 		lib::Xyz_Angle_Axis_vector tmp_angle_axis_vector;
 
 		int z;
@@ -86,26 +87,25 @@ public:
 		goal_frame.set_from_xyz_angle_axis(start_position_array);
 
 		for (int i = 0; i < it->interpolation_node_no; i++) {
+			std::printf("coord %d:\t", i+1);
 			for (int j = 0; j < it->axes_num; j++) {
 				if (fabs(it->s[j]) < 0.0000001) {
 					coordinates[j] = 0;
+					std::printf("%f\t", coordinates[j]);
 				} else {
 					coordinates[j] = generate_relative_coordinate(i, it, j, mc);
+					std::printf("%f\t", coordinates[j]);
 				}
 			}
 
+			std::printf("\n");
 			for (z = 0; z < 6; z++) {
-				coordinate_backup[z] = coordinates[z];
+				total_angle_axis_increment_vector[z] += coordinates[z];
 			}
 
-			begining_frame_with_current_translation = begining_frame;
-			begining_frame_with_current_translation.set_translation_vector(goal_frame);
+			total_increment_frame.set_from_xyz_angle_axis(total_angle_axis_increment_vector);
 
-			step_of_total_increment_vector =
-						lib::V_tr(!(lib::V_tr(!begining_frame_with_current_translation
-								* goal_frame))) * lib::Xyz_Angle_Axis_vector(coordinate_backup);
-
-			goal_frame = goal_frame * lib::Homog_matrix(step_of_total_increment_vector);
+			goal_frame = begining_frame * total_increment_frame;
 
 			goal_frame.get_xyz_angle_axis(tmp_angle_axis_vector);
 			tmp_angle_axis_vector.to_vector(coordinates);

@@ -122,8 +122,6 @@ void sr_buffer::operator()()
 		int32_t type, subtype;
 		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
 
-		std::cout << "sr_buffer::rcvid = " << rcvid << std::endl;
-
 		if(rcvid != MESSIP_MSG_NOREPLY)
 			continue;
 #endif
