@@ -107,7 +107,20 @@ bool neuron_generator::next_step()
 		desired_position[4] = position[4] = actual_position[4];
 		desired_position[5] = position[5] = actual_position[5];
 
+		last_but_one[0] = neuron_sensor->getLastButOne().x;
+		last_but_one[1] = neuron_sensor->getLastButOne().y;
+		last_but_one[2] = neuron_sensor->getLastButOne().z;
+
+
+
 		if (breaking) {
+			for (int i = 0; i < 3; i++) {
+				normalized_vector[i] = (last_but_one[i] - desired_position[i]) /
+						sqrt((last_but_one[0] - desired_position[0]) * (last_but_one[0] - desired_position[0]) +
+							 (last_but_one[1] - desired_position[1]) * (last_but_one[1] - desired_position[1]) +
+						     (last_but_one[2] - desired_position[2]) * (last_but_one[2] - desired_position[2]));
+			}
+			overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
 			printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
 			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		}
@@ -248,9 +261,11 @@ bool neuron_generator::next_step()
 
 	flushall();
 
-	//if ((position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2] < overshoot) {
-		//overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
-	//}
+	if ((position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2] < overshoot && breaking) {
+		overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
+	}
+
+	//printf("overshoot: %f\n", overshoot);
 
 	//printf("pos:\t %f\t %f\t %f\t %f\t %f\t %f\n", position[0], position[1], position[2], position[3], position[4], position[5]);
 	// --------- send new position to the robot (EDP) ---------------
@@ -310,9 +325,8 @@ double neuron_generator::get_overshoot()
  */
 void neuron_generator::reset()
 {
-	int i;
 
-	for (i = 0; i < 6; i++) {
+	for (int i = 0; i < 6; i++) {
 		v[i] = 0.0;
 		u[i] = 0.0;
 		a_max[i] = 0.15;
@@ -325,10 +339,6 @@ void neuron_generator::reset()
 		almost_reached[i] = false;
 		breaking_possible[i] = false;
 		overshoot = 0;
-	}
-
-	for (i = 0; i < 3; i++) {
-		//normalized_vector[i] = (costam - desired_position[i])/sqrt((costam - desired_position[0]) * (costam - desired_position[0]) + (costam - desired_position[1]) * (costam - desired_position[1]) (costam - desired_position[2]) * (costam - desired_position[2]))
 	}
 
 	breaking = false;
