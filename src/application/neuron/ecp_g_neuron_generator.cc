@@ -205,6 +205,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (neuron_sensor->current_period == 1) {
+		printf("coordiantes sent from current period = 1\n");
 		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
 	}
 

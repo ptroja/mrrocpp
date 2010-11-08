@@ -55,6 +55,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		 * Coordinates received from VSP
 		 */
 		Coordinates coordinates;
+		Coordinates lastButOne;
+
 		void sendCommand(uint8_t command);
 		void sendCoordinates(uint8_t command, double x, double y, double z);
 
@@ -68,6 +70,7 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		uint8_t getCommand();
 		Coordinates getFirstCoordinates();
 		Coordinates getCoordinates();
+		Coordinates getLastButOne();
 		void startGettingTrajectory();
 		void sendCommunicationFinished();
 		void waitForVSPStart();

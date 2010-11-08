@@ -166,7 +166,7 @@ neuron_sensor::~neuron_sensor() {
  * from VSP and stores command and if needed new coordinates.
  */
 void neuron_sensor::get_reading(){
-	char buff[25];
+	char buff[49];
 
 	//Read packet from socket*/
 	int result = read(socketDescriptor, buff, sizeof(buff));
@@ -176,11 +176,11 @@ void neuron_sensor::get_reading(){
 
 	//copy data from packet to variables
 	memcpy(&command,buff,1);
+	printf("command: %x\n",command);
 	switch(command){
 		case VSP_START:
 			printf("VSP start command received\n");
 			break;
-
 		case VSP_STOP:
 			printf("VSP end command received\n");
 			break;
@@ -188,10 +188,19 @@ void neuron_sensor::get_reading(){
 		case FIRST_COORDINATES:
 		case TRAJECTORY_FIRST:
 		case TR_NEXT_POSITION:
+			memcpy(&(coordinates.x),buff+1,8);
+			memcpy(&(coordinates.y),buff+9,8);
+			memcpy(&(coordinates.z),buff+17,8);
+			break;
 		case START_BREAKING:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
 			memcpy(&(coordinates.z),buff+17,8);
+			memcpy(&(lastButOne.x),buff+25,8);
+			memcpy(&(lastButOne.y),buff+33,8);
+			memcpy(&(lastButOne.z),buff+41,8);
+			printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
+			printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
 			break;
 
 		default:
@@ -232,6 +241,14 @@ Coordinates neuron_sensor::getCoordinates(){
 	return coordinates;
 }
 
+/*===============================getLastButOne============================*//**
+ * @brief Returns last but one coordinates received from VSP.
+ * @return Last but one coordinates received from VSP.
+ */
+Coordinates neuron_sensor::getLastButOne(){
+	return lastButOne;
+}
+
 /*=================================getCommand=============================*//**
  * @brief Returns latest command received from VSP.
  * @return Latest command received from VSP.
@@ -253,7 +270,7 @@ uint8_t neuron_sensor::getCommand(){
  * @param command One of the above command.
  */
 void neuron_sensor::sendCommand(uint8_t command){
-	printf("neuron_sensor->sendCommand: command : %d\n",command);
+	printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
 	int result = write(socketDescriptor, &command, sizeof(uint8_t));
 
 	if (result < 0) {
@@ -267,6 +284,7 @@ void neuron_sensor::sendCommand(uint8_t command){
 
 //TODO: dodac komentarz
 void neuron_sensor::sendCurrentPosition(double x, double y, double z){
+	printf("current position %d\n",CURRENT_POSITION);
 	sendCoordinates(CURRENT_POSITION,x,y,z);
 }
 
@@ -281,15 +299,15 @@ void neuron_sensor::sendFinalPosition(double x, double y, double z){
  * @param y Y coordinate.
  * @param z Z coordinate.
  */
-void neuron_sensor::sendCoordinates(uint8_t comand, double x, double y, double z){
+void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double z){
 	char buff[25];
-	uint8_t temp_command=command;
+	uint8_t temp_command=_command;
 	memcpy(buff,&temp_command,1);
 	memcpy(buff+1,&x,8);
 	memcpy(buff+9,&y,8);
 	memcpy(buff+17,&z,8);
 
-	//printf("neuron_sensor->sendCoordinates: command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
 
 	int result=write(socketDescriptor,buff,sizeof(buff));
 
