@@ -243,6 +243,8 @@ void reader_buffer::operator()()
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype);
 
+			std::cerr << "pulse received: " << rcvid << " " << type << " " << subtype << std::endl;
+
 			if (rcvid >= 0) {
 				if (type == READER_START) {
 					start = true;
@@ -329,6 +331,8 @@ void reader_buffer::operator()()
 #else
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype, 0);
+
+			std::cerr << "pulse received: " << rcvid << " " << type << " " << subtype << std::endl;
 
 			if (rcvid >= 0) {
 				if (type == READER_STOP) {
