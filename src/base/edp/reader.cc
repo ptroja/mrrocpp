@@ -333,6 +333,7 @@ void reader_buffer::operator()()
 			if (rcvid >= 0) {
 				if (type == READER_STOP) {
 					stop = true;
+					master.onReaderStopped();
 				} else if (type == READER_TRIGGER) {
 					ui_trigger = true;
 				}

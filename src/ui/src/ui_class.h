@@ -154,10 +154,10 @@ public:
 
 	//! TODO: throw an exception (assumed inheritance from std::exception)
 	void pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, int value);
-	int set_toggle_button(PtWidget_t *widget);
-	int unset_toggle_button(PtWidget_t *widget);
-	int block_widget(PtWidget_t *widget);
-	int unblock_widget(PtWidget_t *widget);
+	void set_toggle_button(PtWidget_t *widget);
+	void unset_toggle_button(PtWidget_t *widget);
+	void block_widget(PtWidget_t *widget);
+	void unblock_widget(PtWidget_t *widget);
 	void create_threads();
 };
 

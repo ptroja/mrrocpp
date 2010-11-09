@@ -1000,44 +1000,35 @@ bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
 	return false;
 }
 
-int Interface::set_toggle_button(PtWidget_t * widget)
+void Interface::set_toggle_button(PtWidget_t * widget)
 {
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_SET);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
-int Interface::unset_toggle_button(PtWidget_t * widget)
+void Interface::unset_toggle_button(PtWidget_t * widget)
 {
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SET);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 // blokowanie widgetu
-int Interface::block_widget(PtWidget_t *widget)
+void Interface::block_widget(PtWidget_t *widget)
 {
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 // odblokowanie widgetu
-int Interface::unblock_widget(PtWidget_t *widget)
+void Interface::unblock_widget(PtWidget_t *widget)
 {
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 void Interface::create_threads()
-
 {
 	meb_tid = new feb_thread(main_eb);
 	ui_ecp_obj = new ecp_buffer(*this);
