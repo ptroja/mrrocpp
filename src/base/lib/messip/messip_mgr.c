@@ -1281,7 +1281,7 @@ client_channel_delete( int sockfd,
 	}
 
 #if 1
-	printf( "channel_delete: pid=%d tid=%ld name=%s\n", msg.pid, msg.tid, msg.name );
+	printf( "channel_delete: pid=%d tid=%lld name=%s\n", msg.pid, msg.tid, msg.name );
 #endif
 
 	/*--- Search this channel name ---*/
