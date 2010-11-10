@@ -138,6 +138,7 @@ void Interface::init()
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
+		std::cerr << "ui a" << std::endl;
 		initiate_configuration();
 		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
@@ -155,13 +156,14 @@ void Interface::init()
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
+		std::cerr << "ui b" << std::endl;
 		reload_whole_configuration();
 
 	} else {
 		printf("Blad manage_default_configuration_file\n");
 		PtExit(EXIT_SUCCESS);
 	}
-
+	std::cerr << "ui c" << std::endl;
 	// inicjacja pliku z logami sr
 	check_gns();
 
@@ -352,7 +354,11 @@ void Interface::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
+
+#if !defined(USE_MESSIP_SRR)
+		// funkcja dziala niepoprawnie z config serwerem
 		config->change_config_file(config_file);
+#endif
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -804,6 +810,9 @@ int Interface::clear_all_configuration_lists()
 
 int Interface::initiate_configuration()
 {
+
+	std::cerr << "ui 1" << std::endl;
+
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = mrrocpp_bin_to_root_path + "configs/common.ini";
