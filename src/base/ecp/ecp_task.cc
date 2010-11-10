@@ -488,7 +488,13 @@ bool task::mp_buffer_receive_and_send(void)
 
 		caller = receive_mp_message(false);
 
-		if (caller == 0) {
+#if !defined(USE_MESSIP_SRR)
+		if (caller == 0)
+#else
+		if (caller == MESSIP_MSG_TIMEOUT)
+#endif
+		{
+
 			// przyszedl puls od mp, ktore chce sie komunikowac
 			mp_pulse_received = true;
 			send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
@@ -560,6 +566,8 @@ bool task::mp_buffer_receive_and_send(void)
 int task::receive_mp_message(bool block)
 {
 	while (1) {
+		int caller = -100;
+
 #if !defined(USE_MESSIP_SRR)
 		if (!block) {
 			// by Y zamiast creceive i flagi z EDP_MASTER
@@ -567,10 +575,17 @@ int task::receive_mp_message(bool block)
 				perror("ecp_task: TimerTimeout()");
 			}
 		}
-		int caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
+		caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
 #else
 		int32_t type, subtype;
-		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+
+		if (block) {
+
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+		} else
+		{
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command,0);
+		}
 #endif
 
 		if (caller < 0) {/* Error condition, exit */
@@ -580,7 +595,13 @@ int task::receive_mp_message(bool block)
 			}
 #else
 			if (caller == MESSIP_MSG_CONNECTING)
-			continue;
+			{
+				continue;
+			} else if (caller == MESSIP_MSG_TIMEOUT)
+			{
+				return MESSIP_MSG_TIMEOUT;
+			}
+
 #endif
 			uint64_t e = errno; // kod bledu systemowego
 			std::cerr << "ecp 1b1" << caller << std::endl;
