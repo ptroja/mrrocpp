@@ -71,6 +71,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 				smoothGenerator->set_absolute();
 
 				//set coordinates for smooth generator.
+
 				coordinates1[0]=coordinates.x;
 				coordinates1[1]=coordinates.y;
 				coordinates1[2]=coordinates.z;

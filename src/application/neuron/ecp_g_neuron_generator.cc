@@ -59,6 +59,7 @@ bool neuron_generator::first_step()
 	//get neuron sensor and send information about starting new trajectory.
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
+
 	return true;
 }
 
@@ -68,10 +69,8 @@ bool neuron_generator::first_step()
  * coordinates from VSP. It also received information whether to start breaking
  * or not.
  */
-bool neuron_generator::next_step()
-{
+bool neuron_generator::next_step(){
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	flushall();
 
 	//Check if stop button in VSP was pressed
 	if (neuron_sensor->stop()) {
@@ -107,22 +106,24 @@ bool neuron_generator::next_step()
 		desired_position[4] = position[4] = actual_position[4];
 		desired_position[5] = position[5] = actual_position[5];
 
-		last_but_one[0] = neuron_sensor->getLastButOne().x;
-		last_but_one[1] = neuron_sensor->getLastButOne().y;
-		last_but_one[2] = neuron_sensor->getLastButOne().z;
+		normalized_vector[0] = neuron_sensor->getLastButOne().x;
+		normalized_vector[1] = neuron_sensor->getLastButOne().y;
+		normalized_vector[2] = neuron_sensor->getLastButOne().z;
 
 
+		//printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
+		//printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 
 		if (breaking) {
-			for (int i = 0; i < 3; i++) {
-				normalized_vector[i] = (last_but_one[i] - desired_position[i]) /
-						sqrt((last_but_one[0] - desired_position[0]) * (last_but_one[0] - desired_position[0]) +
-							 (last_but_one[1] - desired_position[1]) * (last_but_one[1] - desired_position[1]) +
-						     (last_but_one[2] - desired_position[2]) * (last_but_one[2] - desired_position[2]));
-			}
+//			for (int i = 0; i < 3; i++) {
+//				normalized_vector[i] = (last_but_one[i] - desired_position[i]) /
+//						sqrt((last_but_one[0] - desired_position[0]) * (last_but_one[0] - desired_position[0]) +
+//							 (last_but_one[1] - desired_position[1]) * (last_but_one[1] - desired_position[1]) +
+//						     (last_but_one[2] - desired_position[2]) * (last_but_one[2] - desired_position[2]));
+//			}
 			overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
-			printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
-			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
+			//printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
+			//printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		}
 	}
 
@@ -228,7 +229,7 @@ bool neuron_generator::next_step()
 				s[i] = v[i] * t;
 			}
 			position[i] += k[i] * s[i];
-			printf("%f\t", (k[i] * s[i]));
+			//printf("%f\t", (k[i] * s[i]));
 
 		} else {
 			//normal motion (not breaking), distance between desired and
@@ -241,7 +242,7 @@ bool neuron_generator::next_step()
 			//printf("v[%d]: %f\n", i, v[i]);
 		}
 	}
-	printf("\n");
+	//printf("\n");
 	/*printf("k:\t %d\t\t %d\t\t %d\t\t %d\t\t %d\t\t %d\n", k[0], k[1], k[2], k[3], k[4], k[5]);
 	printf("s:\t %f\t %f\t %f\t %f\t %f\t %f\n", s[0], s[1], s[2], s[3], s[4], s[5]);
 	printf("u:\t %f\t %f\t %f\t %f\t %f\t %f\n", u[0], u[1], u[2], u[3], u[4], u[5]);
@@ -275,7 +276,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (neuron_sensor->current_period == 1) {
-		printf("coordiantes sent from current period = 1\n");
+		//printf("coordiantes sent from current period = 1\n");
 		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
 	}
 

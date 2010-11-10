@@ -176,7 +176,6 @@ void neuron_sensor::get_reading(){
 
 	//copy data from packet to variables
 	memcpy(&command,buff,1);
-	printf("command: %x\n",command);
 	switch(command){
 		case VSP_START:
 			printf("VSP start command received\n");
@@ -191,6 +190,7 @@ void neuron_sensor::get_reading(){
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
 			memcpy(&(coordinates.z),buff+17,8);
+			//printf("get_reading() %lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
 			break;
 		case START_BREAKING:
 			memcpy(&(coordinates.x),buff+1,8);
@@ -199,8 +199,8 @@ void neuron_sensor::get_reading(){
 			memcpy(&(lastButOne.x),buff+25,8);
 			memcpy(&(lastButOne.y),buff+33,8);
 			memcpy(&(lastButOne.z),buff+41,8);
-			printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
-			printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
+			//printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
+			//printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
 			break;
 
 		default:
@@ -270,7 +270,7 @@ uint8_t neuron_sensor::getCommand(){
  * @param command One of the above command.
  */
 void neuron_sensor::sendCommand(uint8_t command){
-	printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
+	//printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
 	int result = write(socketDescriptor, &command, sizeof(uint8_t));
 
 	if (result < 0) {
@@ -284,7 +284,7 @@ void neuron_sensor::sendCommand(uint8_t command){
 
 //TODO: dodac komentarz
 void neuron_sensor::sendCurrentPosition(double x, double y, double z){
-	printf("current position %d\n",CURRENT_POSITION);
+	//printf("current position %d\n",CURRENT_POSITION);
 	sendCoordinates(CURRENT_POSITION,x,y,z);
 }
 
@@ -307,7 +307,7 @@ void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double
 	memcpy(buff+9,&y,8);
 	memcpy(buff+17,&z,8);
 
-	printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	//printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
 
 	int result=write(socketDescriptor,buff,sizeof(buff));
 
