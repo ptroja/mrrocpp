@@ -183,7 +183,7 @@ typedef struct
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	int pulse_fd;
+	fd_t pulse_fd;
 	UI_MP_STATE state;
 	UI_MP_STATE last_state;
 } mp_state_def;

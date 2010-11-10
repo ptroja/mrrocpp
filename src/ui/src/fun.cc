@@ -1363,8 +1363,13 @@ int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((interface.mp.pulse_fd
-						= name_open(interface.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
+				while ((interface.mp.pulse_fd =
+#if !defined(USE_MESSIP_SRR)
+						name_open(interface.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
+#else
+					messip::port_connect(interface.mp.network_pulse_attach_point)) == NULL
+#endif
+					)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						delay(lib::CONNECT_DELAY);
 					else {
@@ -1404,7 +1409,11 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
+#if !defined(USE_MESSIP_SRR)
 		name_close(interface.mp.pulse_fd);
+#else
+		messip::port_disconnect(interface.mp.pulse_fd);
+#endif
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
@@ -1416,7 +1425,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// 	kill(interface.mp_pid,SIGTERM);
 	// 	printf("mp pupa po kill\n");
 	interface.mp.pid = -1;
-	interface.mp.pulse_fd = -1;
+	interface.mp.pulse_fd = ui::common::invalid_fd;
 
 	interface.deactivate_ecp_trigger(interface.irp6ot_m->state);
 	interface.deactivate_ecp_trigger(interface.irp6p_m->state);

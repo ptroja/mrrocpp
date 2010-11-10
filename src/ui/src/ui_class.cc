@@ -969,20 +969,24 @@ void Interface::pulse_reader_execute(fd_t coid, int code, int value)
 
 int Interface::execute_mp_pulse(char pulse_code)
 {
-	int ret = -2;
 
 	// printf("w send pulse\n");
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
-		if ((ret = MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)) == -1) {
 
+#if !defined(USE_MESSIP_SRR)
+		if (MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
+#else
+		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
+#endif
+		{
 			perror("Blad w wysylaniu pulsu do mp");
 			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
 			delay(1000);
 		}
 	}
 
-	return ret;
+	return 1;
 }
 
 bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
