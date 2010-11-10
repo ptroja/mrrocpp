@@ -38,11 +38,11 @@ namespace ui {
 namespace common {
 
 #if !defined(USE_MESSIP_SRR)
-typedef int reader_fd_t;
-static const reader_fd_t invalid_reader_fd = -1;
+typedef int fd_t;
+static const fd_t invalid_fd = -1;
 #else
-typedef messip_channel_t * reader_fd_t;
-static const reader_fd_t invalid_reader_fd = NULL;
+typedef messip_channel_t * fd_t;
+static const fd_t invalid_fd = NULL;
 #endif
 
 enum TEACHING_STATE
@@ -145,7 +145,7 @@ typedef struct _edp_state_def
 	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
 	std::string network_reader_attach_point;
 	int node_nr;
-	reader_fd_t reader_fd;
+	fd_t reader_fd;
 	bool is_synchronised;
 	//! TODO: change from int to EDP_STATE enum
 	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop

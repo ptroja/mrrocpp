@@ -2236,7 +2236,7 @@ int reload_polycrank_configuration()
 				// ini_con->create_edp_irp6_mechatronika (ini_con->ui->edp_irp6_mechatronika_section);
 
 				interface.irp6m_m->state.edp.pid = -1;
-				interface.irp6m_m->state.edp.reader_fd = common::invalid_reader_fd;
+				interface.irp6m_m->state.edp.reader_fd = common::invalid_fd;
 				interface.irp6m_m->state.edp.state = 0;
 
 				for (int i = 0; i < 3; i++) {

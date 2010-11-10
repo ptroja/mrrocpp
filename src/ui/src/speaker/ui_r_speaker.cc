@@ -51,7 +51,7 @@ int UiRobot::reload_configuration()
 			case 0:
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = common::invalid_reader_fd;
+				state.edp.reader_fd = common::invalid_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))

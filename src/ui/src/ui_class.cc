@@ -955,7 +955,7 @@ void Interface::fill_node_list()
 	}
 }
 
-void Interface::pulse_reader_execute(reader_fd_t coid, int code, int value)
+void Interface::pulse_reader_execute(fd_t coid, int code, int value)
 {
 #if !defined(USE_MESSIP_SRR)
 	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), code, value) == -1)

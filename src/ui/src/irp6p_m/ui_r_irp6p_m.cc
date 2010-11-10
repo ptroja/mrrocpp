@@ -55,7 +55,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6_postument (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = common::invalid_reader_fd;
+				state.edp.reader_fd = common::invalid_fd;
 
 				state.edp.state = 0;
 

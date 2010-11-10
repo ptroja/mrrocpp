@@ -145,7 +145,7 @@ void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
-		if (state.edp.reader_fd != common::invalid_reader_fd) {
+		if (state.edp.reader_fd != common::invalid_fd) {
 #if !defined(USE_MESSIP_SRR)
 			if (name_close(state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
@@ -156,7 +156,7 @@ void UiRobot::EDP_slay_int()
 			}
 #endif
 		}
-		state.edp.reader_fd = common::invalid_reader_fd;
+		state.edp.reader_fd = common::invalid_fd;
 
 		close_all_windows();
 
