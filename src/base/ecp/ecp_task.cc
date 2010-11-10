@@ -311,11 +311,12 @@ void task::ecp_wait_for_stop(void)
 // Oczekiwanie na polecenie START od MP
 void task::ecp_wait_for_start(void)
 {
+	std::cerr << "ecp 1a" << std::endl;
 	bool ecp_stop = false;
 	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_START);
-
+	std::cerr << "ecp 1b" << std::endl;
 	int caller = -2;
 
 	while (caller <= 0) {
@@ -328,6 +329,7 @@ void task::ecp_wait_for_start(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+	std::cerr << "ecp 1d" << std::endl;
 
 	switch (mp_command_type())
 	{
@@ -572,13 +574,18 @@ int task::receive_mp_message(bool block)
 #endif
 
 		if (caller < 0) {/* Error condition, exit */
-
+#if !defined(USE_MESSIP_SRR)
 			if (caller == -ETIMEDOUT) {
 				return caller;
 			}
-
+#else
+			if (caller == MESSIP_MSG_CONNECTING)
+			continue;
+#endif
 			uint64_t e = errno; // kod bledu systemowego
+			std::cerr << "ecp 1b1" << caller << std::endl;
 			perror("ecp: Receive from MP failed");
+			std::cerr << "ecp 1b2" << std::endl;
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
 			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
