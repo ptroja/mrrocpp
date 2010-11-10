@@ -75,7 +75,7 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		void sendCommunicationFinished();
 		void waitForVSPStart();
 		bool startBraking();
-		void sendFinalPosition(double x, double y, double z);
+		void sendOvershoot(double overshoot);
 		void sendCurrentPosition(double x, double y, double z);
 };
 

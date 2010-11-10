@@ -105,7 +105,7 @@ namespace sensor {
  *
  */
 //TODO: dopisac komentarz
-#define FINAL_POSITION			0x26
+#define OVERSHOOT				0x26
 
 /*==================================Constructor===========================*//**
  * @brief Constructor, creates and initalizes a communication with VSP.
@@ -288,8 +288,22 @@ void neuron_sensor::sendCurrentPosition(double x, double y, double z){
 	sendCoordinates(CURRENT_POSITION,x,y,z);
 }
 
-void neuron_sensor::sendFinalPosition(double x, double y, double z){
-	sendCoordinates(FINAL_POSITION,x,y,z);
+void neuron_sensor::sendOvershoot(double overshoot){
+	char buff[9];
+	uint8_t command=OVERSHOOT;
+	memcpy(buff,&command,1);
+	memcpy(buff+1,&overshoot,8);
+
+	printf("overshoot sent: %lf\n",overshoot);
+	int result=write(socketDescriptor,buff,sizeof(buff));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+
+	if (result != sizeof(buff)) {
+		throw std::runtime_error("write() failed: result != sizeof(buff)");
+	}
 }
 
 /*==============================sendCoordinates===========================*//**
