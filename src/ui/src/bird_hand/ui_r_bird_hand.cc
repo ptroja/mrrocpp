@@ -53,7 +53,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_bird_hand (ini_con->ui->edp_bird_hand_section);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = common::edp_state_def::invalid_reader_fd;
+				state.edp.reader_fd = common::invalid_reader_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))

@@ -37,6 +37,14 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+#if !defined(USE_MESSIP_SRR)
+typedef int reader_fd_t;
+static const reader_fd_t invalid_reader_fd = -1;
+#else
+typedef messip_channel_t * reader_fd_t;
+static const reader_fd_t invalid_reader_fd = NULL;
+#endif
+
 enum TEACHING_STATE
 {
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
@@ -122,11 +130,9 @@ static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
 static const int CHECK_SPEAKER_STATE_ITER = 10; // co ile iteracji ma byc sprawdzony stan speakera
 
-typedef enum _EDP_STATE {
-	INACTIVE = -1,
-	OFF = 0,
-	WAITING_TO_START_READER = 1,
-	WAITING_TO_STOP_READER = 2
+typedef enum _EDP_STATE
+{
+	INACTIVE = -1, OFF = 0, WAITING_TO_START_READER = 1, WAITING_TO_STOP_READER = 2
 } EDP_STATE;
 
 typedef struct _edp_state_def
@@ -139,14 +145,6 @@ typedef struct _edp_state_def
 	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
 	std::string network_reader_attach_point;
 	int node_nr;
-#if !defined(USE_MESSIP_SRR)
-	typedef int reader_fd_t;
-	static const reader_fd_t invalid_reader_fd = -1;
-#else
-	typedef messip_channel_t * reader_fd_t;
-	// NOTE: C++ forbids inline defining of non-integral types
-	static const reader_fd_t invalid_reader_fd;
-#endif
 	reader_fd_t reader_fd;
 	bool is_synchronised;
 	//! TODO: change from int to EDP_STATE enum
