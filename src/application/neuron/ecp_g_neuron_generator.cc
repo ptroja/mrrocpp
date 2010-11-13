@@ -1,5 +1,5 @@
 /**
- * @file ecp_g_neuron_generator.cpp
+ * @file ecp_g_neuron_generator.cc
  * @brief Header file for neuron_generator class
  * @author Tomasz Bem (mebmot@wp.pl)
  * @author Rafal Tulwin (rtulwin@gmail.com)
@@ -21,7 +21,7 @@ namespace generator {
 
 /*================================Constructor=============================*//**
  * @brief Constructor along with task configurator.
- * @param _ecp_taks Reference to task configurator.
+ * @param _ecp_task Reference to task configurator.
  */
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
 	generator(_ecp_task)
@@ -66,8 +66,8 @@ bool neuron_generator::first_step()
 /*================================next_step===============================*//**
  * @brief next step for neuron generator.
  * @details Next step interpolates 5 consecutive macro steps basing on received
- * coordinates from VSP. It also received information whether to start breaking
- * or not.
+ * coordinates from VSP. It also receives information whether to start breaking
+ * or not. More over it calculates the overshoot of the manipulator.
  */
 bool neuron_generator::next_step(){
 	the_robot->ecp_command.instruction.instruction_type = lib::SET;
@@ -311,8 +311,8 @@ double neuron_generator::get_breaking_time()
 }
 
 /**
- * @brief
- * @return the biggest value of the overshoot while breaking
+ * @brief returns the overshoot.
+ * @return the biggest value of the overshoot while breaking.
  */
 double neuron_generator::get_overshoot()
 {
@@ -321,7 +321,7 @@ double neuron_generator::get_overshoot()
 
 /**
  * @brief Resets generator between consecutive call of Move() method.
- * @detail Resets all of the temporary variables. It is necessary to call the
+ * @details Resets all of the temporary variables. It is necessary to call the
  * reset between the calls of the generator Move() method.
  */
 void neuron_generator::reset()

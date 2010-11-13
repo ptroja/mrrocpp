@@ -101,10 +101,15 @@ namespace sensor {
  */
 #define START_BREAKING			0x25
 
+
 /**
- *
+ * @brief Message from MRROC++ to VSP with an overshoot information.
+ * @details Message is created by the MRROC++ after execution of entire
+ * trajectory therefore after breaking phase. The overshoot is the maximum
+ * distance between hyperplane perpendicular to the difference between last and
+ * last but one position on trajectory and the robot position beyond this
+ * hyperplane. Value is used for rewarding or punishing the neural nerworks.
  */
-//TODO: dopisac komentarz
 #define OVERSHOOT				0x26
 
 /*==================================Constructor===========================*//**
@@ -282,12 +287,20 @@ void neuron_sensor::sendCommand(uint8_t command){
 	}
 }
 
-//TODO: dodac komentarz
+/**
+ * @brief Sends given position to the VSP
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param z Z coordinate.
+ */
 void neuron_sensor::sendCurrentPosition(double x, double y, double z){
-	//printf("current position %d\n",CURRENT_POSITION);
 	sendCoordinates(CURRENT_POSITION,x,y,z);
 }
 
+/**
+ * @brief Sends the overshoot to the VSP
+ * @param overshoot value of the overshoot.
+ */
 void neuron_sensor::sendOvershoot(double overshoot){
 	char buff[9];
 	uint8_t command=OVERSHOOT;

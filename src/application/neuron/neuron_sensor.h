@@ -20,8 +20,19 @@ namespace sensor {
  * @brief Structure that represents coordinates in 3D space.
  */
 struct Coordinates{
+	/**
+	 * @brief x coordinate.
+	 */
 	double x;
+
+	/**
+	 * @brief y coordinate.
+	 */
 	double y;
+
+	/**
+	 * @brief z coordinate.
+	 */
 	double z;
 };
 

@@ -39,7 +39,7 @@ Neuron::~Neuron(){
 
 /*====================mp_2_ecp_next_state_string_handler==================*//**
  * @brief Method called from main_task_algorithm to handle next_state command.
- * @details Method that handles main algorithm and informatin flow for Neuron
+ * @details Method that handles main algorithm and information flow for Neuron
  * task. Starts generators and waits for start and stop signal from VSP.
  */
 void Neuron::mp_2_ecp_next_state_string_handler(void){

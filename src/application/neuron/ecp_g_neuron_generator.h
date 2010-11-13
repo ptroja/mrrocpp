@@ -25,7 +25,7 @@ namespace generator{
 
 /**
  * @brief Generator working with VSP and neural networks.
- * @detials Trajectory generator is intended to work with external VSP module.
+ * @details Trajectory generator is intended to work with external VSP module.
  * Generator generates trajectory basing on one coordinates given from VSP for
  * next 5 macro steps, therefor it has to interpolate each macro step between
  * current and given after 5 macro steps. At the beginning it takes first
@@ -117,44 +117,52 @@ class neuron_generator: public common::generator::generator{
 		 * @brief Motion direction.
 		 */
 		int k[6];
+
 		/**
 		 * @brief Acceleration while breaking
 		 */
 		double a;
+
 		/**
 		 * @brief Distance covered in the set of five macrosteps.
 		 */
 		double s[6];
+
 		/**
 		 * @brief Set to true if change of the direction is needed.
 		 */
 		bool change[6];
+
 		/**
 		 * @brief Current position error.
 		 */
 		double u[6];
+
 		/**
-		 * @bried Time of a macrostep.
+		 * @brief Time of a macrostep.
 		 */
 		double t;
+
 		/**
-		 * Flag set to true if final breaking begins.
+		 * @brief Flag set to true if final breaking begins.
 		 */
 		bool almost_reached[6];
+
 		/**
-		 * Flag set to true if breaking without overshoot is possible.
+		 * @brief Flag set to true if breaking without overshoot is possible.
 		 */
 		bool breaking_possible[6];
+
 		/**
-		 *
+		 * @brief Difference between last and last but one position.
+		 * @details Calculated on the VSP side.
 		 */
 		double normalized_vector[3];
+
 		/**
-		 *
-		 */
-		//double last_but_one[3];
-		/**
-		 *
+		 * @brief Value of an overshoot.
+		 * @details Overshoot is a maximal distance from the perpendicular hyperplane to
+		 * normalized vector.
 		 */
 		double overshoot;
 

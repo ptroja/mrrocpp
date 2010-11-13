@@ -27,14 +27,14 @@ namespace task {
  * @param _config configurator object reference.
  * @return inherited task pointer.
  */
-task* return_created_mp_task(lib::configurator &_config)
+task* return_created_mp_task(lib::configurator& _config)
 {
 	return new neuron(_config);
 }
 
 /*================================constructor=============================*//**
  * @brief Constructor, with task configurator.
- * @param configurator object reference.
+ * @param _config configurator object reference.
  */
 neuron::neuron(lib::configurator &_config) :
 	task(_config)

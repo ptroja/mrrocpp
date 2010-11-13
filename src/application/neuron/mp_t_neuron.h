@@ -15,7 +15,7 @@ namespace task {
 
 /**
  * @brief neuron task class declaration.
- * @detials Taks for optimization trajectory with usage of neural networks.
+ * @details Taks for optimization trajectory with usage of neural networks.
  */
 class neuron : public task
 {
