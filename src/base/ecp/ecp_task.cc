@@ -265,6 +265,7 @@ void task::ecp_wait_for_stop(void)
 	// Oczekiwanie na wiadomosc.
 	int caller = -2;
 
+#if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
 
 		caller = receive_mp_message(true);
@@ -275,6 +276,18 @@ void task::ecp_wait_for_stop(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+#else
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+#endif
 	bool ecp_stop = false;
 	if (mp_command_type() == lib::STOP) {
 		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -400,6 +413,7 @@ void task::get_next_state(void)
 
 	int caller = -2;
 
+#if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
 
 		caller = receive_mp_message(true);
@@ -410,6 +424,18 @@ void task::get_next_state(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+#else
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+#endif
 
 	bool ecp_stop = false;
 
@@ -484,6 +510,7 @@ bool task::mp_buffer_receive_and_send(void)
 		// zglaszamy chec i mozliwosc komunikacji
 		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
+#if !defined(USE_MESSIP_SRR)
 		while (caller <= 0) {
 
 			caller = receive_mp_message(true);
@@ -494,6 +521,18 @@ bool task::mp_buffer_receive_and_send(void)
 			}
 			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 		}
+#else
+		while (caller < 0) {
+
+			caller = receive_mp_message(true);
+			if (caller == MESSIP_MSG_NOREPLY) {
+				mp_pulse_received = true;
+				// przyszedl puls
+
+			}
+			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+		}
+#endif
 
 		mp_ecp_randevouz = true;
 
