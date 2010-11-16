@@ -29,19 +29,42 @@ namespace task {
 class wii_teach: public common::task::task
 {
     protected:
-	//Generator ruchu
+	//Generatory ruchu
         common::generator::newsmooth* sg;
         irp6ot_m::generator::wii_absolute* ag;
         irp6ot_m::generator::wii_relative* rg;
         irp6ot_m::generator::wii_joint* jg;
+    
+	//Przyciski
         ecp_mp::sensor::wiimote_t lastButtons;
         ecp_mp::sensor::wiimote_t buttonsPressed;
+    
+	//Plik z trajektoria
         char path[80];
         char filename[20];
+    
         std::vector <double> coordinates;
 
         lib::Homog_matrix homog_matrix;
 
+	//Numeracja wezlow
+	int cnt;
+    
+	//Numer aktualnego generatora
+	int gen;
+	
+	//Czy wybrano plik trajektorii
+	bool has_filenames;
+	
+	//Aktualny generator
+	common::generator::generator* g;
+    
+	//Bufor na komunikaty konsolowe
+	char buffer[200];
+	
+	//Struktura komunikacyjna z Wii-mote
+	ecp_mp::sensor::wii_command_t message;
+    
         class n;
         class n
         {
@@ -84,7 +107,20 @@ class wii_teach: public common::task::task
 
         void print_trajectory(void);
 
+	//Odtwarzanie trajektorii
         void move_to_current(void);
+	void move_to_next(void);
+	void move_to_prev(void);
+	void move_to_first(void);
+	void move_to_last(void);
+	
+	//Obsluga przyciskow
+	void handle12();
+	void handleA();
+	void handleB();
+	void handlePlus();
+	void handleMinus();
+	void handleHome();
 
         bool get_filenames(void);
 
