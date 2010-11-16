@@ -921,7 +921,6 @@ http_thread( void *arg )
 	int sockfd;
 	int status;
 	int reuse;
-	int flag = 0;
 	struct sockaddr_in server_addr;
 
 	sigemptyset( &set );
@@ -942,11 +941,6 @@ http_thread( void *arg )
 					(void *) &reuse, sizeof(int))) < 0) {
 		fprintf( stderr, "%s %d\n\tUnable to set SO_REUSEADDR a socket!\n", __FILE__, __LINE__ );
 		exit( -1 );
-	}
-
-	/* Disable the Nagle (TCP No Delay) algorithm */
-	if (setsockopt( sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-	  perror("setsockopt(TCP_NODELAY)");
 	}
 
 	/*--- Bind the socket ---*/
@@ -996,11 +990,6 @@ http_thread( void *arg )
 			if ( close( sockfd ) == -1 )
 				fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 			exit( -1 );
-		}
-
-		/* Disable the Nagle (TCP No Delay) algorithm */
-		if (setsockopt(descr->sockfd_accept, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int)) == -1) {
-		  perror("setsockopt(TCP_NODELAY)");
 		}
 
 #if 1
