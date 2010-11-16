@@ -35,13 +35,15 @@ class wii_teach: public common::task::task
         irp6ot_m::generator::wii_relative* rg;
         irp6ot_m::generator::wii_joint* jg;
     
+	common::generator::get_position* gg;
+    
 	//Przyciski
         ecp_mp::sensor::wiimote_t lastButtons;
         ecp_mp::sensor::wiimote_t buttonsPressed;
     
 	//Plik z trajektoria
         char path[80];
-        char filename[20];
+        char filename[40];
     
         std::vector <double> coordinates;
 
@@ -65,6 +67,14 @@ class wii_teach: public common::task::task
 	//Struktura komunikacyjna z Wii-mote
 	ecp_mp::sensor::wii_command_t message;
     
+	lib::ECP_POSE_SPECIFICATION pose_spec;
+	int axis_num;
+	
+	std::string velocity;
+	std::string acceleration;
+	std::string type;
+	std::string mode;
+    
         class n;
         class n
         {
@@ -72,7 +82,7 @@ class wii_teach: public common::task::task
                 n* next;
                 n* prev;
                 int id;
-                double position[6];
+		std::vector<double> position;
 
                 n() : next(NULL), prev(NULL) {}
 

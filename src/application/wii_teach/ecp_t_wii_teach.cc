@@ -5,6 +5,8 @@
 #include "base/lib/com_buf.h"
 #include <fstream>
 
+#include <sys/stat.h>
+
 #include "base/lib/sr/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
@@ -35,7 +37,6 @@ wii_teach::wii_teach(lib::configurator &_config) : task(_config)
 	
 	//configure the sensor
 	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
-	coordinates = std::vector<double>(6);
 }
 
 int wii_teach::load_trajectory()
@@ -53,48 +54,76 @@ int wii_teach::load_trajectory()
 		perror(filename);
 		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 	}
-
+	
 	node* current = NULL;
 	trajectory.position = 0;
 	trajectory.count = 0;
-	std::string type;
 	int count = 0;
-
-	from_file >> type;
-	from_file >> count;
-
-	while (trajectory.count < count && !from_file.eof()) 
+	
+	struct stat filestatus;
+	stat(filename, &filestatus);
+	
+	if(filestatus.st_size)
 	{
-		++trajectory.count;
-		if (current) 
+		from_file >> type;
+		from_file >> count;
+		from_file >> mode;
+		
+		if(!strcmp(type.c_str(),"JOINT"))
 		{
-			current->next = new node();
-			current->next->prev = current;
-			current = current->next;
-		} 
-		else 
+			pose_spec = lib::ECP_JOINT;
+			axis_num = 7;
+		}
+		else
 		{
-			current = new node();
-			trajectory.head = current;
+			pose_spec = lib::ECP_XYZ_ANGLE_AXIS;
+			axis_num = 6;
+		}
+		
+		coordinates = std::vector<double>(axis_num);
+		
+		do
+		{
+			getline(from_file, velocity);
+		} while (!velocity.length() || from_file.eof());
+		
+		do
+		{
+			getline(from_file, acceleration);
+		} while (!acceleration.length() || from_file.eof());
+		
+		
+		while (trajectory.count < count && !from_file.eof()) 
+		{
+			++trajectory.count;
+			if (current) 
+			{
+				current->next = new node();
+				current->next->prev = current;
+				current = current->next;
+			} 
+			else 
+			{
+				current = new node();
+				trajectory.head = current;
+			}
+			
+			current->position = std::vector<double>(axis_num);
+			current->id = trajectory.count;
+
+			trajectory.tail = current;
+			for(int i = 0; i < axis_num; ++i)
+			{
+				from_file >> current->position[i];
+			}
+			
+			sprintf(buffer, "Loaded %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
+			sr_ecp_msg->message(buffer);
 		}
 
-		current->id = trajectory.count;
-
-		trajectory.tail = current;
-
-		from_file >> current->position[0];
-		from_file >> current->position[1];
-		from_file >> current->position[2];
-		from_file >> current->position[3];
-		from_file >> current->position[4];
-		from_file >> current->position[5];
-
-		sprintf(buffer, "Loaded %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
-		sr_ecp_msg->message(buffer);
+		trajectory.current = trajectory.head;
+		trajectory.position = 1;
 	}
-
-	trajectory.current = trajectory.head;
-	trajectory.position = 1;
 
 	return 0;
 }
@@ -149,18 +178,28 @@ void wii_teach::save_trajectory(void)
 	}
 
 	node* current = trajectory.head;
-	to_file << "XYZ_ANGLE_AXIS" << '\n';
+	
+	if(pose_spec == lib::ECP_JOINT)
+	{
+		to_file << "JOINT" << '\n';
+	}
+	else
+	{
+		to_file << "XYZ_ANGLE_AXIS" << '\n';
+	}
 	to_file << trajectory.count << '\n';
+	
+	to_file << "ABSOLUTE" << '\n' << '\n';
+	
+	to_file << velocity << '\n' << acceleration << '\n';
 
 	while (current) 
 	{
-		to_file << current->position[0] << ' ';
-		to_file << current->position[1] << ' ';
-		to_file << current->position[2] << ' ';
-		to_file << current->position[3] << ' ';
-		to_file << current->position[4] << ' ';
-		to_file << current->position[5] << ' ';
-
+		for(int i = 0; i < axis_num; ++i)
+		{
+			to_file << current->position[i] << ' ';
+		}
+		
 		to_file << '\n';
 
 		current = current->next;
@@ -195,7 +234,7 @@ void wii_teach::print_trajectory(void)
 	
 	while (current) 
 	{
-		sprintf(buffer, "Pozycja %d: %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
+		sprintf(buffer, "Pozycja %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 		current = current->next;
 	}
@@ -230,12 +269,9 @@ void wii_teach::handleHome(void)
 	buttonsPressed.buttonHome = 0;
 	if (trajectory.position > 0) 
 	{
-		homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-		lib::Xyz_Angle_Axis_vector tmp_vector;
-		homog_matrix.get_xyz_angle_axis(tmp_vector);
-		tmp_vector.to_table(trajectory.current->position);
+		trajectory.current->position = gg->get_position_vector();
 
-		sprintf(buffer, "Changed %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5]);
+		sprintf(buffer, "Changed %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], axis_num > 6 ? trajectory.current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 	}
 
@@ -368,6 +404,8 @@ void wii_teach::handleA(void)
 	((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
 
 	g->Move();
+	
+	gg->Move();
 
 	message.led_change = true;
 	message.led_status &= 0x1 | 0x2 | 0x4;
@@ -382,10 +420,7 @@ void wii_teach::handlePlus(void)
 	node* current = new node;
 	current->id = ++cnt;
 
-	homog_matrix.set_from_frame_tab(ecp_m_robot->reply_package.arm.pf_def.arm_frame);
-	lib::Xyz_Angle_Axis_vector tmp_vector;
-	homog_matrix.get_xyz_angle_axis(tmp_vector);
-	tmp_vector.to_table(current->position);
+	current->position = gg->get_position_vector();
 
 	if (trajectory.current) 
 	{
@@ -407,7 +442,7 @@ void wii_teach::handlePlus(void)
 	++trajectory.position;
 	++trajectory.count;
 
-	sprintf(buffer, "Added %d: %.4f %.4f %.4f %.4f %.4f %.4f", current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5]);
+	sprintf(buffer, "Added %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
 	sr_ecp_msg->message(buffer);
 
 	print_trajectory();
@@ -479,27 +514,35 @@ void wii_teach::move_to_last(void)
 
 void wii_teach::move_to_current(void)
 {
-	if (trajectory.current) 
+	if (trajectory.count) 
 	{
-		sprintf(buffer, "Move to %d: %.4f %.4f %.4f %.4f %.4f %.4f", trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5]);
+		sprintf(buffer, "Move to %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], axis_num > 6 ? trajectory.current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 		sg->reset();
 		
-		coordinates[0] = trajectory.current->position[0];
-		coordinates[1] = trajectory.current->position[1];
-		coordinates[2] = trajectory.current->position[2];
-		coordinates[3] = trajectory.current->position[3];
-		coordinates[4] = trajectory.current->position[4];
-		coordinates[5] = trajectory.current->position[5];
-
+		for(int i = 0; i < axis_num; ++i)
+		{
+			coordinates[i] = trajectory.current->position[i];
+		}
+		
 		sg->set_absolute();
-		sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+		
+		if(pose_spec == lib::ECP_JOINT)
+		{
+			sg->load_absolute_joint_trajectory_pose(coordinates);
+		}
+		else
+		{
+			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+		}
 		
 		if(sg->calculate_interpolate())
 		{
 			sg->Move();
 		}
 	}
+	
+	gg->Move();
 
 }
 
@@ -507,6 +550,10 @@ void wii_teach::main_task_algorithm(void)
 {
 	cnt = 0;
 	gen = 0;
+	velocity = "0.1 0.1 0.1 0.1 0.1 0.1 0.1";
+	acceleration = "0.1 0.1 0.1 0.1 0.1 0.1 0.1";
+	mode = "ABSOLUTE";
+	type = "XYZ_ANGLE_AXIS";
 
 	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
@@ -522,9 +569,33 @@ void wii_teach::main_task_algorithm(void)
 	{
 		load_trajectory();
 		print_trajectory();
-		move_to_current();
+		if(trajectory.count)
+		{
+			move_to_current();
+		}
 	}
-
+	
+	uint8_t response = 0;
+	if(!trajectory.count)
+	{
+		response = choose_option("Pose specification: [1] Angle Axis, [2] Joint", 2);
+	}
+	
+	switch(response)
+	{
+		case 2:
+			pose_spec = lib::ECP_JOINT;
+			axis_num = 7;
+			break;
+		default:
+			pose_spec = lib::ECP_XYZ_ANGLE_AXIS;
+			axis_num = 6;
+			break;
+	}
+	
+	coordinates = std::vector<double>(axis_num);
+	gg = new common::generator::get_position(*this, pose_spec, axis_num);
+	
 	g = ag;
 
 	message.led_change = true;
