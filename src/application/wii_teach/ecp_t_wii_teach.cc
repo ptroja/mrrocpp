@@ -514,11 +514,12 @@ void wii_teach::move_to_last(void)
 
 void wii_teach::move_to_current(void)
 {
-	if (trajectory.count) 
+	if (trajectory.current) 
 	{
 		sprintf(buffer, "Move to %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], axis_num > 6 ? trajectory.current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 		sg->reset();
+		
 		
 		for(int i = 0; i < axis_num; ++i)
 		{
@@ -535,7 +536,7 @@ void wii_teach::move_to_current(void)
 		{
 			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
 		}
-		
+	
 		if(sg->calculate_interpolate())
 		{
 			sg->Move();
@@ -543,7 +544,6 @@ void wii_teach::move_to_current(void)
 	}
 	
 	gg->Move();
-
 }
 
 void wii_teach::main_task_algorithm(void)
@@ -568,7 +568,9 @@ void wii_teach::main_task_algorithm(void)
 	if (has_filenames) 
 	{
 		load_trajectory();
+		gg = new common::generator::get_position(*this, pose_spec, axis_num);
 		print_trajectory();
+
 		if(trajectory.count)
 		{
 			move_to_current();
@@ -593,8 +595,12 @@ void wii_teach::main_task_algorithm(void)
 			break;
 	}
 	
+	if(!gg)
+	{
+		gg = new common::generator::get_position(*this, pose_spec, axis_num);
+	}
+	
 	coordinates = std::vector<double>(axis_num);
-	gg = new common::generator::get_position(*this, pose_spec, axis_num);
 	
 	g = ag;
 
