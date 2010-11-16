@@ -287,7 +287,7 @@ messip_connect0(const char *mgr_ref,
 	messip_send_connect_t msgsend;
 	messip_reply_connect_t reply;
 	struct iovec iovec[2];
-	int flag = 0;
+	const int flag = 1;
 
 #if BYTE_ORDER == BIG_ENDIAN
 	pid = messip_int_little_endian( pid );
@@ -484,7 +484,7 @@ messip_sin( char *mgr_ref )
 	int32_t op;
 	struct iovec iovec[1];
 	int sockfd;
-	int flag = 0;
+	const int flag = 1;
 
 	/*--- NULL and /etc/messip does not exist ? ---*/
 	port = MESSIP_DEFAULT_PORT;
@@ -602,7 +602,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	messip_send_channel_create_t msgsend;
 	messip_reply_channel_create_t reply;
 	struct iovec iovec[2];
-	int flag = 0;
+	const int flag = 1;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1] = "/dev/";
 #endif /* USE_QNXMSG */
@@ -982,7 +982,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	messip_reply_channel_connect_t msgreply;
 	struct iovec iovec[2];
 	struct sockaddr_in sockaddr;
-	int flag = 0;
+	const int flag = 1;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1];
 #endif /* USE_QNXMSG */
@@ -1816,6 +1816,9 @@ messip_receive( messip_channel_t * ch,
 	/*--- Accept a new connection ---*/
 	if ( !n )
 	{
+//		int fff;
+//		socklen_t optlen;
+
 		client_addr_len = sizeof( struct sockaddr_in );
 		new_sockfd = accept( ch->recv_sockfd[0],
 		   ( struct sockaddr * ) &client_addr, &client_addr_len );
@@ -1827,6 +1830,11 @@ messip_receive( messip_channel_t * ch,
 			ch->channel_type[index] = CHANNEL_TYPE_MESSIP;
 			return -1;
 		}
+//		if (getsockopt( new_sockfd, IPPROTO_TCP, TCP_NODELAY, &fff, &optlen) == -1) {
+//		  perror("getsockopt(TCP_NODELAY)");
+//		}
+//		printf("%d TCP_NODELAY = %d\n", new_sockfd, fff);
+
 
 //		logg( NULL,
 //		   "%s: accepted a msg from %s, port=%d  - old socket=%d new=%d\n",
