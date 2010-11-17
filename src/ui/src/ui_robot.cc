@@ -26,7 +26,7 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -1; // edp nieaktywne
-	state.ecp.trigger_fd = -1;
+	state.ecp.trigger_fd = common::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
 }
 
@@ -109,15 +109,6 @@ void UiRobot::pulse_reader_execute(int code, int value)
 	}
 }
 
-void UiRobot::pulse_ecp_execute(int code, int value)
-{
-	if (MsgSendPulse(state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1) {
-
-		fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
-		delay(1000);
-	}
-}
-
 void UiRobot::connect_to_ecp_pulse_chanell()
 {
 	short tmp = 0;
@@ -139,10 +130,17 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	ualarm((useconds_t)(0), 0);
 }
 
+void UiRobot::pulse_ecp_execute(int code, int value)
+{
+	if (MsgSendPulse(state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1) {
+
+		fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
+		delay(1000);
+	}
+}
+
 void UiRobot::pulse_ecp()
 {
-	char pulse_code = ECP_TRIGGER;
-	long pulse_value = 1;
 
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
 		if (state.ecp.trigger_fd < 0) {
@@ -150,7 +148,7 @@ void UiRobot::pulse_ecp()
 		}
 
 		if (state.ecp.trigger_fd >= 0) {
-			pulse_ecp_execute(pulse_code, pulse_value);
+			pulse_ecp_execute(ECP_TRIGGER, 1);
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
 		}
