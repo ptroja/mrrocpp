@@ -60,7 +60,7 @@ public:
 	bool check_synchronised_and_loaded();
 	bool check_loaded_or_inactive();
 	bool check_loaded();
-
+	bool deactivate_ecp_trigger();
 };
 
 }

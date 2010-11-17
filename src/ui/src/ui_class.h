@@ -145,7 +145,6 @@ public:
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
 	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
-	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
 	int execute_mp_pulse(char pulse_code);
 
 	//! TODO: throw an exception (assumed inheritance from std::exception)

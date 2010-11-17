@@ -165,6 +165,21 @@ void UiRobot::pulse_ecp()
 	}
 }
 
+bool UiRobot::deactivate_ecp_trigger()
+{
+
+	if (state.is_active) {
+		if (state.ecp.trigger_fd >= 0) {
+			name_close(state.ecp.trigger_fd);
+		}
+		state.ecp.trigger_fd = -1;
+		state.ecp.pid = -1;
+		return true;
+	}
+
+	return false;
+}
+
 void UiRobot::close_all_windows()
 {
 }

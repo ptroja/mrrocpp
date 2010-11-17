@@ -1427,11 +1427,11 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	interface.mp.pid = -1;
 	interface.mp.pulse_fd = ui::common::invalid_fd;
 
-	interface.deactivate_ecp_trigger(interface.irp6ot_m->state);
-	interface.deactivate_ecp_trigger(interface.irp6p_m->state);
-	interface.deactivate_ecp_trigger(interface.conveyor->state);
-	interface.deactivate_ecp_trigger(interface.speaker->state);
-	interface.deactivate_ecp_trigger(interface.irp6m_m->state);
+	interface.irp6ot_m->deactivate_ecp_trigger();
+	interface.irp6p_m->deactivate_ecp_trigger();
+	interface.conveyor->deactivate_ecp_trigger();
+	interface.speaker->deactivate_ecp_trigger();
+	interface.irp6m_m->deactivate_ecp_trigger();
 
 	// modyfikacja menu
 	interface.manage_interface();

@@ -962,21 +962,6 @@ int Interface::execute_mp_pulse(char pulse_code)
 	return 1;
 }
 
-bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
-{
-
-	if (robot_l.is_active) {
-		if (robot_l.ecp.trigger_fd >= 0) {
-			name_close(robot_l.ecp.trigger_fd);
-		}
-		robot_l.ecp.trigger_fd = -1;
-		robot_l.ecp.pid = -1;
-		return true;
-	}
-
-	return false;
-}
-
 void Interface::set_toggle_button(PtWidget_t * widget)
 {
 
