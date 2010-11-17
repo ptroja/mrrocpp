@@ -49,7 +49,24 @@
 
 #define MESSIP_ETC	"/etc/messip"
 #define	MESSIP_DEFAULT_PORT	9200
+
+#define MESSIP_SOCK_DOMAIN	AF_INET
 #define MESSIP_SOCK_TYPE	SOCK_STREAM
+
+// Uncomment the line below for use of Stream Control Transmission Protocol
+// instead of plain old TCP
+//#define MESSIP_USE_SCTP
+
+#ifndef MESSIP_USE_SCTP
+#define MESSIP_SOCK_PROTO	0
+#define MESSIP_NODELAY_LEVEL	IPPROTO_TCP
+#define MESSIP_NODELAY_OPTNAME	TCP_NODELAY
+#else
+#include <netinet/sctp.h>
+#define MESSIP_SOCK_PROTO	IPPROTO_SCTP
+#define MESSIP_NODELAY_LEVEL	SOL_SCTP
+#define MESSIP_NODELAY_OPTNAME	SCTP_NODELAY
+#endif
 
 #define VERSION_MAJOR	0
 #define	VERSION_MINOR	8
