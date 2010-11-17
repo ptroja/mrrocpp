@@ -920,8 +920,7 @@ http_thread( void *arg )
 	sigset_t set;
 	int sockfd;
 	int status;
-	int reuse;
-	int flag = 0;
+	const int reuse = 1;
 	struct sockaddr_in server_addr;
 
 	sigemptyset( &set );
@@ -936,17 +935,10 @@ http_thread( void *arg )
 		exit( -1 );
 	}
 
-	reuse = 1;
-
 	if ((setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
 					(void *) &reuse, sizeof(int))) < 0) {
 		fprintf( stderr, "%s %d\n\tUnable to set SO_REUSEADDR a socket!\n", __FILE__, __LINE__ );
 		exit( -1 );
-	}
-
-	/* Disable the Nagle (TCP No Delay) algorithm */
-	if (setsockopt( sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-	  perror("setsockopt(TCP_NODELAY)");
 	}
 
 	/*--- Bind the socket ---*/
@@ -992,15 +984,10 @@ http_thread( void *arg )
 		{
 			if ( errno == EINTR )	// A signal has been applied
 				continue;
-			fprintf( stderr, "Socket non accepted: %s\n", strerror(errno) );
+			fprintf( stderr, "HTTP socket non accepted: %s\n", strerror(errno) );
 			if ( close( sockfd ) == -1 )
 				fprintf( stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno) );
 			exit( -1 );
-		}
-
-		/* Disable the Nagle (TCP No Delay) algorithm */
-		if (setsockopt(descr->sockfd_accept, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int)) == -1) {
-		  perror("setsockopt(TCP_NODELAY)");
 		}
 
 #if 1
@@ -1281,7 +1268,7 @@ client_channel_delete( int sockfd,
 	}
 
 #if 1
-	printf( "channel_delete: pid=%d tid=%ld name=%s\n", msg.pid, msg.tid, msg.name );
+	printf( "channel_delete: pid=%d tid=%lld name=%s\n", msg.pid, msg.tid, msg.name );
 #endif
 
 	/*--- Search this channel name ---*/
@@ -1783,7 +1770,7 @@ client_buffered_send( int sockfd,
 		struct iovec iovec[1];
 		ssize_t dcount;
 
-		ch->bufferedsend_sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+		ch->bufferedsend_sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 		if ( ch->bufferedsend_sockfd < 0 )
 		{
 			UNLOCK;
@@ -2100,7 +2087,7 @@ client_proxy_attach( int sockfd,
 		struct iovec iovec[1];
 		ssize_t dcount;
 
-		proxy->process_to_trigger_sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+		proxy->process_to_trigger_sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 		if ( proxy->process_to_trigger_sockfd < 0 )
 		{
 			UNLOCK;
@@ -2520,7 +2507,7 @@ notify_server_death_client( channel_t * ch,
 	fd_set ready;
 	struct sockaddr_in sockaddr;
 
-	sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 	if ( sockfd < 0 )
 	{
 		fprintf( stderr, "%s %d\n\tUnable to open a socket!\n", __FILE__, __LINE__ );
@@ -2814,13 +2801,14 @@ main( int argc,
 	int sockfd;
 	struct sockaddr_in server_addr;
 	int status;
-	int reuse;
+	const int reuse = 1;
 	pthread_t tid;
 	pthread_attr_t attr;
 	char hostname[64] = "localhost";
 	struct sigaction sa;
 	sigset_t set;
 	int port, port_http;
+	const int flag = 1;
 	int c;
 	/*
 	int option_index, c;
@@ -2897,19 +2885,22 @@ main( int argc,
 	}
 
 	/*--- Create socket ---*/
-	sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 	if ( sockfd < 0 )
 	{
 		fprintf( stderr, "%s %d\n\tUnable to open a socket!\n", __FILE__, __LINE__ );
 		return -1;
 	}
 
-	reuse = 1;
-
 	if ((setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
 					(void *) &reuse, sizeof(int))) < 0) {
 		fprintf( stderr, "%s %d\n\tUnable to set SO_REUSEADDR a socket!\n", __FILE__, __LINE__ );
 		exit( -1 );
+	}
+
+	/* Disable the Nagle (TCP No Delay) algorithm */
+	if (setsockopt( sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &flag, sizeof(int) ) == -1) {
+	  perror("setsockopt(MESSIP_NODELAY_OPTNAME)");
 	}
 
 	/*--- Bind the socket ---*/
@@ -2941,7 +2932,10 @@ main( int argc,
 		return -1;
 	}
 
-	listen( sockfd, 8 );
+	if(listen( sockfd, 8 ) == -1) {
+		perror("listen()");
+		return -1;
+	}
 
 	/*--- Create a specific thread to debug information (apply SIGUSR1) ---*/
 	pthread_attr_init( &attr );

@@ -327,6 +327,7 @@ public:
 		}
 
 		if (!calculated || !interpolated) {
+			sr_ecp_msg.message("Trajectory not inerpolated");
 			reset();
 			return false;
 		}
@@ -548,13 +549,6 @@ public:
 		this->axes_num = axes_num;
 		create_velocity_vectors(axes_num);
 	}
-	/**
-	 * Sets the chosen type of interpolation.
-	 */
-	/*void set_interpolation_type()
-	{
-		//TODO
-	}*/
 	/**
 	 * Sets the relative type of motion.
 	 */

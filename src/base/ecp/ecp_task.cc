@@ -265,6 +265,7 @@ void task::ecp_wait_for_stop(void)
 	// Oczekiwanie na wiadomosc.
 	int caller = -2;
 
+#if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
 
 		caller = receive_mp_message(true);
@@ -275,6 +276,18 @@ void task::ecp_wait_for_stop(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+#else
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+#endif
 	bool ecp_stop = false;
 	if (mp_command_type() == lib::STOP) {
 		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -311,13 +324,15 @@ void task::ecp_wait_for_stop(void)
 // Oczekiwanie na polecenie START od MP
 void task::ecp_wait_for_start(void)
 {
+	std::cerr << "ecp ecp_wait_for_start 1" << std::endl;
 	bool ecp_stop = false;
 	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_START);
-
+	std::cerr << "ecp ecp_wait_for_start 2" << std::endl;
 	int caller = -2;
 
+#if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
 
 		caller = receive_mp_message(true);
@@ -328,6 +343,20 @@ void task::ecp_wait_for_start(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+#else
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+#endif
+
+	std::cerr << "ecp ecp_wait_for_start 3" << std::endl;
 
 	switch (mp_command_type())
 	{
@@ -384,6 +413,7 @@ void task::get_next_state(void)
 
 	int caller = -2;
 
+#if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
 
 		caller = receive_mp_message(true);
@@ -394,6 +424,18 @@ void task::get_next_state(void)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
+#else
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+#endif
 
 	bool ecp_stop = false;
 
@@ -468,6 +510,7 @@ bool task::mp_buffer_receive_and_send(void)
 		// zglaszamy chec i mozliwosc komunikacji
 		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
+#if !defined(USE_MESSIP_SRR)
 		while (caller <= 0) {
 
 			caller = receive_mp_message(true);
@@ -478,6 +521,18 @@ bool task::mp_buffer_receive_and_send(void)
 			}
 			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 		}
+#else
+		while (caller < 0) {
+
+			caller = receive_mp_message(true);
+			if (caller == MESSIP_MSG_NOREPLY) {
+				mp_pulse_received = true;
+				// przyszedl puls
+
+			}
+			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+		}
+#endif
 
 		mp_ecp_randevouz = true;
 
@@ -486,7 +541,13 @@ bool task::mp_buffer_receive_and_send(void)
 
 		caller = receive_mp_message(false);
 
-		if (caller == 0) {
+#if !defined(USE_MESSIP_SRR)
+		if (caller == 0)
+#else
+		if (caller == MESSIP_MSG_TIMEOUT)
+#endif
+		{
+
 			// przyszedl puls od mp, ktore chce sie komunikowac
 			mp_pulse_received = true;
 			send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
@@ -557,33 +618,63 @@ bool task::mp_buffer_receive_and_send(void)
 // Receive of mp message
 int task::receive_mp_message(bool block)
 {
+
+	std::cerr << "ecp receive_mp_message 1" << std::endl;
+
 	while (1) {
+		int caller = -100;
+
 #if !defined(USE_MESSIP_SRR)
+		std::cerr << "ecp receive_mp_message 2" << std::endl;
 		if (!block) {
 			// by Y zamiast creceive i flagi z EDP_MASTER
 			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
 				perror("ecp_task: TimerTimeout()");
 			}
 		}
-		int caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
+
+		caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
+		std::cerr << "ecp receive_mp_message 3" << std::endl;
 #else
 		int32_t type, subtype;
-		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+		std::cerr << "ecp receive_mp_message messip 2" << std::endl;
+		if (block) {
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+		} else
+		{
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command,0);
+		}
+		std::cerr << "ecp receive_mp_message messip 3" << std::endl;
 #endif
 
 		if (caller < 0) {/* Error condition, exit */
-
+#if !defined(USE_MESSIP_SRR)
+			std::cerr << "ecp receive_mp_message 4" << std::endl;
 			if (caller == -ETIMEDOUT) {
 				return caller;
 			}
+#else
+			if (caller == MESSIP_MSG_CONNECTING)
+			{
+				std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
+				continue;
+			} else if (caller == MESSIP_MSG_TIMEOUT)
+			{
+				std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
+				return MESSIP_MSG_TIMEOUT;
+			}
 
+#endif
 			uint64_t e = errno; // kod bledu systemowego
+			std::cerr << "ecp 1b1" << caller << std::endl;
 			perror("ecp: Receive from MP failed");
+			std::cerr << "ecp 1b2" << std::endl;
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
 			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
 #if !defined(USE_MESSIP_SRR)
 		if (caller == 0) {/* Pulse received */
+			//		std::cerr << "ecp receive_mp_message 5" << std::endl;
 			switch (mp_command.hdr.code)
 			{
 				case _PULSE_CODE_DISCONNECT:
@@ -614,19 +705,21 @@ int task::receive_mp_message(bool block)
 			}
 			continue;
 		}
-
+		std::cerr << "ecp receive_mp_message 6" << std::endl;
 		/* A QNX IO message received, reject */
 		if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
 			MsgReply(caller, EOK, 0, 0);
 			continue;
 		}
 #else
+		std::cerr << "ecp receive_mp_message messip 5" << std::endl;
 		if (caller < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
 			fprintf(stderr, "mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 			continue;
 		}
 #endif
+		std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
 		return caller;
 	}
 }

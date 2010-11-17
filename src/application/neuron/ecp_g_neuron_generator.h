@@ -93,6 +93,11 @@ class neuron_generator: public common::generator::generator{
 		double a_max[6];
 
 		/**
+		 * @brief Maximal allowed velocity in all axes.
+		 */
+		double v_max[6];
+
+		/**
 		 * @brief Node counter used for breaking.
 		 * @details When generator knows that it should start breaking, it
 		 * calculates how many macro steps its going to need to stop. The
@@ -112,11 +117,46 @@ class neuron_generator: public common::generator::generator{
 		 * @brief Motion direction.
 		 */
 		int k[6];
-
+		/**
+		 * @brief Acceleration while breaking
+		 */
+		double a;
 		/**
 		 * @brief Distance covered in the set of five macrosteps.
 		 */
 		double s[6];
+		/**
+		 * @brief Set to true if change of the direction is needed.
+		 */
+		bool change[6];
+		/**
+		 * @brief Current position error.
+		 */
+		double u[6];
+		/**
+		 * @bried Time of a macrostep.
+		 */
+		double t;
+		/**
+		 * Flag set to true if final breaking begins.
+		 */
+		bool almost_reached[6];
+		/**
+		 * Flag set to true if breaking without overshoot is possible.
+		 */
+		bool breaking_possible[6];
+		/**
+		 *
+		 */
+		double normalized_vector[3];
+		/**
+		 *
+		 */
+		double last_but_one[3];
+		/**
+		 *
+		 */
+		double overshoot;
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
@@ -124,7 +164,9 @@ class neuron_generator: public common::generator::generator{
 		virtual bool first_step();
 		virtual bool next_step();
 
+		double get_breaking_time();
 		double * get_position();
+		double get_overshoot();
 		void reset();
 };
 
