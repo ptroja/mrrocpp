@@ -43,7 +43,6 @@ void UiRobot::abort_thread()
 	tid = NULL;
 }
 
-
 void UiRobot::connect_to_reader()
 {
 	short tmp = 0;
@@ -53,9 +52,9 @@ void UiRobot::connect_to_reader()
 #if !defined(USE_MESSIP_SRR)
 			name_open(state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
 #else
-			messip::port_connect(state.edp.network_reader_attach_point)) == NULL
+	messip::port_connect(state.edp.network_reader_attach_point)) == NULL
 #endif
-			) {
+	) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			delay(lib::CONNECT_DELAY);
 		} else {
@@ -68,7 +67,7 @@ void UiRobot::connect_to_reader()
 bool UiRobot::pulse_reader_start_exec_pulse()
 {
 	if (state.edp.state == 1) {
-		interface.pulse_reader_execute(state.edp.reader_fd, READER_START, 0);
+		pulse_reader_execute(READER_START, 0);
 		state.edp.state = 2;
 		return true;
 	}
@@ -79,7 +78,7 @@ bool UiRobot::pulse_reader_start_exec_pulse()
 bool UiRobot::pulse_reader_stop_exec_pulse()
 {
 	if (state.edp.state == 2) {
-		interface.pulse_reader_execute(state.edp.reader_fd, READER_STOP, 0);
+		pulse_reader_execute(READER_STOP, 0);
 		state.edp.state = 1;
 		return true;
 	}
@@ -90,12 +89,24 @@ bool UiRobot::pulse_reader_stop_exec_pulse()
 bool UiRobot::pulse_reader_trigger_exec_pulse()
 {
 	if (state.edp.state == 2) {
-		interface.pulse_reader_execute(state.edp.reader_fd, READER_TRIGGER, 0);
+		pulse_reader_execute(READER_TRIGGER, 0);
 
 		return true;
 	}
 
 	return false;
+}
+
+void UiRobot::pulse_reader_execute(int code, int value)
+{
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSendPulse(state.edp.reader_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
+#else
+	if(messip::port_send_pulse(state.edp.reader_fd, code, value))
+#endif
+	{
+		perror("Blad w wysylaniu pulsu do redera");
+	}
 }
 
 void UiRobot::pulse_ecp()
@@ -122,7 +133,7 @@ void UiRobot::pulse_ecp()
 				}
 			}
 			// odwolanie alarmu
-			ualarm((useconds_t) (0), 0);
+			ualarm((useconds_t)(0), 0);
 		}
 
 		if (state.ecp.trigger_fd >= 0) {

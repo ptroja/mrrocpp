@@ -42,6 +42,7 @@ public:
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
+	void pulse_reader_execute(int code, int value);
 
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);

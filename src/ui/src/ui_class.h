@@ -153,7 +153,7 @@ public:
 	int execute_mp_pulse(char pulse_code);
 
 	//! TODO: throw an exception (assumed inheritance from std::exception)
-	void pulse_reader_execute(fd_t coid, int code, int value);
+
 	void set_toggle_button(PtWidget_t *widget);
 	void unset_toggle_button(PtWidget_t *widget);
 	void block_widget(PtWidget_t *widget);
