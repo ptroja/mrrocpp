@@ -169,10 +169,20 @@ bool UiRobot::deactivate_ecp_trigger()
 {
 
 	if (state.is_active) {
-		if (state.ecp.trigger_fd >= 0) {
-			name_close(state.ecp.trigger_fd);
+		if (state.ecp.trigger_fd != common::invalid_fd) {
+
+#if !defined(USE_MESSIP_SRR)
+			if (name_close(state.ecp.trigger_fd) == -1) {
+				fprintf(stderr, "UI: ECP trigger, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
+			}
+#else
+			if (messip::port_disconnect(state.ecp.trigger_fd) != 0) {
+				fprintf(stderr, "UIRobot::ECP trigger @%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
+			}
+#endif
+
 		}
-		state.ecp.trigger_fd = -1;
+		state.ecp.trigger_fd = common::invalid_fd;
 		state.ecp.pid = -1;
 		return true;
 	}
