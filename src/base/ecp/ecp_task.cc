@@ -455,7 +455,6 @@ bool task::mp_buffer_receive_and_send(void)
 
 	int caller = -2;
 
-	bool ecp_communication_request;
 	bool mp_pulse_received = false;
 
 	bool mp_ecp_randevouz = false;
@@ -463,15 +462,6 @@ bool task::mp_buffer_receive_and_send(void)
 	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
 			|| (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
-		ecp_communication_request = true;
-
-	} else {
-		// czy
-		ecp_communication_request = false;
-
-	}
-
-	if (ecp_communication_request) {
 		// Wyslanie pulsu do MP
 		// zglaszamy chec i mozliwosc komunikacji
 		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
@@ -480,9 +470,8 @@ bool task::mp_buffer_receive_and_send(void)
 
 		mp_ecp_randevouz = true;
 
-		// jesli nie odebralismy pulsu od mp to sprawdzamy czy czasem nie pownninsmy go odebrac na podstawie komunikatu z mp
 	} else {
-
+		// czy
 		caller = receive_mp_message(false);
 
 #if !defined(USE_MESSIP_SRR)
