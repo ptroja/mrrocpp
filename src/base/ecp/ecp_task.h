@@ -61,6 +61,13 @@ private:
 #endif
 
 	/**
+	 * @brief replies to MP message
+	 * @param caller calling MP id
+	 * @param mp_pulse_received mp pulse received flag
+	 */
+	bool reply_to_mp(int &caller, bool &mp_pulse_received);
+
+	/**
 	 * @brief sends pulse to MP to signalize communication readiness
 	 */
 	void send_pulse_to_mp(int pulse_code, int pulse_value = 1);

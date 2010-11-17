@@ -457,8 +457,6 @@ bool task::mp_buffer_receive_and_send(void)
 
 	bool mp_pulse_received = false;
 
-	bool mp_ecp_randevouz = false;
-
 	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
 			|| (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
@@ -468,7 +466,7 @@ bool task::mp_buffer_receive_and_send(void)
 
 		wait_for_randevous_with_mp(caller, mp_pulse_received);
 
-		mp_ecp_randevouz = true;
+		return reply_to_mp(caller, mp_pulse_received);
 
 	} else {
 		// czy
@@ -484,65 +482,69 @@ bool task::mp_buffer_receive_and_send(void)
 			// przyszedl puls od mp, ktore chce sie komunikowac
 			mp_pulse_received = true;
 			send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
-			mp_ecp_randevouz = true;
 			caller = receive_mp_message(true);
+			return reply_to_mp(caller, mp_pulse_received);
 		}
 
 	}
 
 	//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
 
+	return true;
+}
+
+// Receive of mp message
+bool task::reply_to_mp(int &caller, bool &mp_pulse_received)
+{
+
 	bool returned_value = true;
 	bool ecp_stop = false;
 
-	if (mp_ecp_randevouz) {
-
-		switch (mp_command_type())
-		{
-			case lib::NEXT_POSE:
-				if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
-					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				break;
-			case lib::STOP:
+	switch (mp_command_type())
+	{
+		case lib::NEXT_POSE:
+			if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				ecp_stop = true;
-				break;
-			case lib::END_MOTION:
-				// dla ulatwienia programowania aplikacji wielorobotowych
-				if (ecp_reply.reply != lib::ERROR_IN_ECP)
-					set_ecp_reply(lib::TASK_TERMINATED);
-				returned_value = false;
-				break;
-			default:
-				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-				break;
-		}
+			break;
+		case lib::STOP:
+			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+			ecp_stop = true;
+			break;
+		case lib::END_MOTION:
+			// dla ulatwienia programowania aplikacji wielorobotowych
+			if (ecp_reply.reply != lib::ERROR_IN_ECP)
+				set_ecp_reply(lib::TASK_TERMINATED);
+			returned_value = false;
+			break;
+		default:
+			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+			break;
+	}
 
 #if !defined(USE_MESSIP_SRR)
-		if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
+	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
 #else
-		if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 #endif
-		{// by Y&W
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ecp: Reply to MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
+	{// by Y&W
+		uint64_t e = errno; // kod bledu systemowego
+		perror("ecp: Reply to MP failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
+	}
 
-		// ew. odebranie pulsu z MP
-		// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
-			caller = receive_mp_message(true);
-		}
+	// ew. odebranie pulsu z MP
+	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+		caller = receive_mp_message(true);
+	}
 
-		if (ecp_stop)
-			throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+	if (ecp_stop)
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 
-		if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-			fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-			throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-		}
+	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return returned_value;
