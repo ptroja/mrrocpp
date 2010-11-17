@@ -143,11 +143,11 @@ void UiRobot::pulse_ecp()
 {
 
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (state.ecp.trigger_fd < 0) {
+		if (state.ecp.trigger_fd == common::invalid_fd) {
 			connect_to_ecp_pulse_chanell();
 		}
 
-		if (state.ecp.trigger_fd >= 0) {
+		if (state.ecp.trigger_fd != common::invalid_fd) {
 			pulse_ecp_execute(ECP_TRIGGER, 1);
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
