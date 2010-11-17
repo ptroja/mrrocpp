@@ -116,8 +116,13 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
 	ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-	while ((state.ecp.trigger_fd = name_open(state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-			< 0) {
+	while ((state.ecp.trigger_fd =
+#if !defined(USE_MESSIP_SRR)
+			name_open(state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
+#else
+	messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
+#endif
+	) {
 		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
