@@ -1257,19 +1257,19 @@ int all_robots_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	if ((interface.mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (interface.mp.state
 			== ui::common::UI_MP_PERMITED_TO_RUN) || (interface.mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
 		// ruch do pozcyji synchronizacji dla Irp6_on_track i dla dalszych analogicznie
-		if (interface.check_synchronised_and_loaded(interface.irp6ot_m->state))
+		if (interface.irp6ot_m->check_synchronised_and_loaded())
 			irp6ot_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.irp6ot_tfg->state))
+		if (interface.irp6ot_tfg->check_synchronised_and_loaded())
 			irp6ot_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.irp6p_m->state))
+		if (interface.irp6p_m->check_synchronised_and_loaded())
 			irp6p_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.irp6p_tfg->state))
+		if (interface.irp6p_tfg->check_synchronised_and_loaded())
 			irp6p_tfg_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.sarkofag->state))
+		if (interface.sarkofag->check_synchronised_and_loaded())
 			sarkofag_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.conveyor->state))
+		if (interface.conveyor->check_synchronised_and_loaded())
 			conveyor_move_to_preset_position(widget, apinfo, cbinfo);
-		if (interface.check_synchronised_and_loaded(interface.irp6m_m->state))
+		if (interface.irp6m_m->check_synchronised_and_loaded())
 			irp6m_move_to_preset_position(widget, apinfo, cbinfo);
 	}
 

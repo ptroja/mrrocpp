@@ -633,30 +633,30 @@ int Interface::check_edps_state_and_modify_mp_state()
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (check_synchronised_or_inactive(irp6p_m->state) && check_synchronised_or_inactive(irp6ot_m->state)
-			&& check_synchronised_or_inactive(conveyor->state) && check_synchronised_or_inactive(speaker->state)
-			&& check_synchronised_or_inactive(irp6m_m->state) && check_synchronised_or_inactive(irp6ot_tfg->state)
-			&& check_synchronised_or_inactive(irp6p_tfg->state) && check_synchronised_or_inactive(sarkofag->state)
-			&& check_synchronised_or_inactive(bird_hand->state) && check_synchronised_or_inactive(spkm->state)
-			&& check_synchronised_or_inactive(smb->state) && check_synchronised_or_inactive(shead->state)) {
+	} else if (irp6p_m->check_synchronised_or_inactive() && irp6ot_m->check_synchronised_or_inactive()
+			&& conveyor->check_synchronised_or_inactive() && speaker->check_synchronised_or_inactive()
+			&& irp6m_m->check_synchronised_or_inactive() && irp6ot_tfg->check_synchronised_or_inactive()
+			&& irp6p_tfg->check_synchronised_or_inactive() && sarkofag->check_synchronised_or_inactive()
+			&& bird_hand->check_synchronised_or_inactive() && spkm->check_synchronised_or_inactive()
+			&& smb->check_synchronised_or_inactive() && shead->check_synchronised_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (check_loaded_or_inactive(irp6p_m->state) && check_loaded_or_inactive(irp6ot_m->state)
-			&& check_loaded_or_inactive(conveyor->state) && check_loaded_or_inactive(speaker->state)
-			&& check_loaded_or_inactive(irp6m_m->state) && check_loaded_or_inactive(irp6ot_tfg->state)
-			&& check_loaded_or_inactive(irp6p_tfg->state) && check_loaded_or_inactive(sarkofag->state)
-			&& check_loaded_or_inactive(bird_hand->state) && check_loaded_or_inactive(spkm->state)
-			&& check_loaded_or_inactive(smb->state) && check_loaded_or_inactive(shead->state))
+	} else if (irp6p_m->check_loaded_or_inactive() && irp6ot_m->check_loaded_or_inactive()
+			&& conveyor->check_loaded_or_inactive() && speaker->check_loaded_or_inactive()
+			&& irp6m_m->check_loaded_or_inactive() && irp6ot_tfg->check_loaded_or_inactive()
+			&& irp6p_tfg->check_loaded_or_inactive() && sarkofag->check_loaded_or_inactive()
+			&& bird_hand->check_loaded_or_inactive() && spkm->check_loaded_or_inactive()
+			&& smb->check_loaded_or_inactive() && shead->check_loaded_or_inactive())
 
 	{
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (check_loaded(irp6p_m->state) || check_loaded(irp6ot_m->state) || check_loaded(conveyor->state)
-			|| check_loaded(speaker->state) || check_loaded(irp6m_m->state) || check_loaded(irp6ot_tfg->state)
-			|| check_loaded(irp6p_tfg->state) || check_loaded(sarkofag->state) || check_loaded(bird_hand->state)
-			|| check_loaded(spkm->state) || check_loaded(smb->state) || check_loaded(shead->state))
+	} else if (irp6p_m->check_loaded() || irp6ot_m->check_loaded() || conveyor->check_loaded()
+			|| speaker->check_loaded() || irp6m_m->check_loaded() || irp6ot_tfg->check_loaded()
+			|| irp6p_tfg->check_loaded() || sarkofag->check_loaded() || bird_hand->check_loaded()
+			|| spkm->check_loaded() || smb->check_loaded() || shead->check_loaded())
 
 	{
 		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
@@ -689,30 +689,6 @@ int Interface::check_edps_state_and_modify_mp_state()
 			break;
 	}
 	return 1;
-}
-
-// ustala stan wszytkich EDP
-bool Interface::check_synchronised_or_inactive(ecp_edp_ui_robot_def& robot)
-{
-	return (((robot.is_active) && (robot.edp.is_synchronised)) || (!(robot.is_active)));
-
-}
-
-bool Interface::check_synchronised_and_loaded(ecp_edp_ui_robot_def& robot)
-{
-	return (((robot.edp.state > 0) && (robot.edp.is_synchronised)));
-
-}
-
-bool Interface::check_loaded_or_inactive(ecp_edp_ui_robot_def& robot)
-{
-	return (((robot.is_active) && (robot.edp.state > 0)) || (!(robot.is_active)));
-
-}
-
-bool Interface::check_loaded(ecp_edp_ui_robot_def& robot)
-{
-	return ((robot.is_active) && (robot.edp.state > 0));
 }
 
 // odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
@@ -963,7 +939,6 @@ void Interface::fill_node_list()
 
 	}
 }
-
 
 int Interface::execute_mp_pulse(char pulse_code)
 {

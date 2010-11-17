@@ -56,6 +56,11 @@ public:
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot() = 0;
 
+	bool check_synchronised_or_inactive();
+	bool check_synchronised_and_loaded();
+	bool check_loaded_or_inactive();
+	bool check_loaded();
+
 };
 
 }

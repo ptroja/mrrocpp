@@ -142,10 +142,6 @@ public:
 	int fill_program_node_list(void);
 	int get_default_configuration_file_name(void);
 	int set_default_configuration_file_name(void);
-	bool check_synchronised_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
-	bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
 	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);

@@ -137,8 +137,13 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 
 void UiRobot::pulse_ecp_execute(int code, int value)
 {
-	if (MsgSendPulse(state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1) {
 
+#if !defined(USE_MESSIP_SRR)
+	if (MsgSendPulse(state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
+#else
+	if(messip::port_send_pulse(state.ecp.trigger_fd, code, value))
+#endif
+	{
 		fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
 		delay(1000);
 	}
@@ -195,6 +200,30 @@ void UiRobot::EDP_slay_int()
 	// modyfikacja menu
 
 	interface.manage_interface();
+}
+
+// ustala stan wszytkich EDP
+bool UiRobot::check_synchronised_or_inactive()
+{
+	return (((state.is_active) && (state.edp.is_synchronised)) || (!(state.is_active)));
+
+}
+
+bool UiRobot::check_synchronised_and_loaded()
+{
+	return (((state.edp.state > 0) && (state.edp.is_synchronised)));
+
+}
+
+bool UiRobot::check_loaded_or_inactive()
+{
+	return (((state.is_active) && (state.edp.state > 0)) || (!(state.is_active)));
+
+}
+
+bool UiRobot::check_loaded()
+{
+	return ((state.is_active) && (state.edp.state > 0));
 }
 
 }
