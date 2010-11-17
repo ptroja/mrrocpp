@@ -287,7 +287,7 @@ messip_connect0(const char *mgr_ref,
 	messip_send_connect_t msgsend;
 	messip_reply_connect_t reply;
 	struct iovec iovec[2];
-	int flag = 0;
+	const int flag = 1;
 
 #if BYTE_ORDER == BIG_ENDIAN
 	pid = messip_int_little_endian( pid );
@@ -323,7 +323,7 @@ messip_connect0(const char *mgr_ref,
 	memset( cnx, 0, sizeof( messip_cnx_t ) );
 
 	/*--- Create socket ---*/
-	cnx->sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	cnx->sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 	if ( cnx->sockfd < 0 )
 	{
 		perror("socket()");
@@ -334,8 +334,8 @@ messip_connect0(const char *mgr_ref,
 //	logg( NULL, "%s: sockfd=%d\n", __FUNCTION__, cnx->sockfd );
 
 	/* Disable the Nagle (TCP No Delay) algorithm */
-	if (setsockopt( cnx->sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-	  perror("setsockopt(TCP_NODELAY)");
+	if (setsockopt( cnx->sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &flag, sizeof(int) ) == -1) {
+	  perror("setsockopt(MESSIP_NODELAY_OPTNAME)");
 	}
 
 	/*
@@ -484,7 +484,7 @@ messip_sin( char *mgr_ref )
 	int32_t op;
 	struct iovec iovec[1];
 	int sockfd;
-	int flag = 0;
+	const int flag = 1;
 
 	/*--- NULL and /etc/messip does not exist ? ---*/
 	port = MESSIP_DEFAULT_PORT;
@@ -511,7 +511,7 @@ messip_sin( char *mgr_ref )
 	}
 
 	/*--- Create socket ---*/
-	sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 	if ( sockfd < 0 )
 	{
 		perror("socket()");
@@ -520,8 +520,8 @@ messip_sin( char *mgr_ref )
 	fcntl( sockfd, F_SETFL, FD_CLOEXEC );
 
 	/* Disable the Nagle (TCP No Delay) algorithm */
-	if (setsockopt( sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-	  perror("setsockopt(TCP_NODELAY)");
+	if (setsockopt( sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &flag, sizeof(int) ) == -1) {
+	  perror("setsockopt(MESSIP_NODELAY_OPTNAME)");
 	}
 
 	/*--- Connect to the port ---*/
@@ -602,7 +602,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	messip_send_channel_create_t msgsend;
 	messip_reply_channel_create_t reply;
 	struct iovec iovec[2];
-	int flag = 0;
+	const int flag = 1;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1] = "/dev/";
 #endif /* USE_QNXMSG */
@@ -617,7 +617,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	}
 
 	/*--- Create socket ---*/
-	sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 	if ( sockfd < 0 )
 	{
 		perror("socket()");
@@ -627,8 +627,8 @@ messip_channel_create0( messip_cnx_t * cnx,
 //	logg( NULL, "%s:, sockfd=%d\n", __FUNCTION__, sockfd );
 
 	/* Disable the Nagle (TCP No Delay) algorithm */
-	if (setsockopt( sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-	  perror("setsockopt(TCP_NODELAY)");
+	if (setsockopt( sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &flag, sizeof(int) ) == -1) {
+	  perror("setsockopt(MESSIP_NODELAY_OPTNAME)");
 	}
 
 	/*--- Bind the socket ---*/
@@ -982,7 +982,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	messip_reply_channel_connect_t msgreply;
 	struct iovec iovec[2];
 	struct sockaddr_in sockaddr;
-	int flag = 0;
+	const int flag = 1;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1];
 #endif /* USE_QNXMSG */
@@ -1140,7 +1140,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		strcpy( info->name, name );
 
 		/*--- Create socket ---*/
-		info->send_sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+		info->send_sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
 //		logg( NULL, "%s: send_sockfd = %d \n", __FUNCTION__, info->send_sockfd );
 		if ( info->send_sockfd < 0 )
 		{
@@ -1151,8 +1151,8 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		fcntl( info->send_sockfd, F_SETFL, FD_CLOEXEC );
 
 		/* Disable the Nagle (TCP No Delay) algorithm */
-		if (setsockopt( info->send_sockfd, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(int) ) == -1) {
-		  perror("setsockopt(TCP_NODELAY)");
+		if (setsockopt( info->send_sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &flag, sizeof(int) ) == -1) {
+		  perror("setsockopt(MESSIP_NODELAY_OPTNAME)");
 		}
 
 		/*--- Connect socket using name specified ---*/
@@ -1816,6 +1816,9 @@ messip_receive( messip_channel_t * ch,
 	/*--- Accept a new connection ---*/
 	if ( !n )
 	{
+//		int fff;
+//		socklen_t optlen;
+
 		client_addr_len = sizeof( struct sockaddr_in );
 		new_sockfd = accept( ch->recv_sockfd[0],
 		   ( struct sockaddr * ) &client_addr, &client_addr_len );
@@ -1827,6 +1830,11 @@ messip_receive( messip_channel_t * ch,
 			ch->channel_type[index] = CHANNEL_TYPE_MESSIP;
 			return -1;
 		}
+//		if (getsockopt( new_sockfd, MESSIP_NODELAY_LEVEL, MESSIP_NODELAY_OPTNAME, &fff, &optlen) == -1) {
+//		  perror("getsockopt(MESSIP_NODELAY_OPTNAME)");
+//		}
+//		printf("%d MESSIP_NODELAY_OPTNAME = %d\n", new_sockfd, fff);
+
 
 //		logg( NULL,
 //		   "%s: accepted a msg from %s, port=%d  - old socket=%d new=%d\n",

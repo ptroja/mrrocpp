@@ -138,6 +138,7 @@ void Interface::init()
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
+		std::cerr << "ui a" << std::endl;
 		initiate_configuration();
 		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
@@ -155,13 +156,14 @@ void Interface::init()
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
+		std::cerr << "ui b" << std::endl;
 		reload_whole_configuration();
 
 	} else {
 		printf("Blad manage_default_configuration_file\n");
 		PtExit(EXIT_SUCCESS);
 	}
-
+	std::cerr << "ui c" << std::endl;
 	// inicjacja pliku z logami sr
 	check_gns();
 
@@ -352,7 +354,11 @@ void Interface::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
+
+#if !defined(USE_MESSIP_SRR)
+		// funkcja dziala niepoprawnie z config serwerem
 		config->change_config_file(config_file);
+#endif
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -804,6 +810,9 @@ int Interface::clear_all_configuration_lists()
 
 int Interface::initiate_configuration()
 {
+
+	std::cerr << "ui 1" << std::endl;
+
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = mrrocpp_bin_to_root_path + "configs/common.ini";
@@ -955,7 +964,7 @@ void Interface::fill_node_list()
 	}
 }
 
-void Interface::pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, int value)
+void Interface::pulse_reader_execute(fd_t coid, int code, int value)
 {
 #if !defined(USE_MESSIP_SRR)
 	if (MsgSendPulse(coid, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
@@ -969,20 +978,24 @@ void Interface::pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, 
 
 int Interface::execute_mp_pulse(char pulse_code)
 {
-	int ret = -2;
 
 	// printf("w send pulse\n");
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
-		if ((ret = MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value)) == -1) {
 
+#if !defined(USE_MESSIP_SRR)
+		if (MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
+#else
+		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
+#endif
+		{
 			perror("Blad w wysylaniu pulsu do mp");
 			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
 			delay(1000);
 		}
 	}
 
-	return ret;
+	return 1;
 }
 
 bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
@@ -1000,44 +1013,35 @@ bool Interface::deactivate_ecp_trigger(ecp_edp_ui_robot_def& robot_l)
 	return false;
 }
 
-int Interface::set_toggle_button(PtWidget_t * widget)
+void Interface::set_toggle_button(PtWidget_t * widget)
 {
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_SET);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
-int Interface::unset_toggle_button(PtWidget_t * widget)
+void Interface::unset_toggle_button(PtWidget_t * widget)
 {
 
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SET);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 // blokowanie widgetu
-int Interface::block_widget(PtWidget_t *widget)
+void Interface::block_widget(PtWidget_t *widget)
 {
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 // odblokowanie widgetu
-int Interface::unblock_widget(PtWidget_t *widget)
+void Interface::unblock_widget(PtWidget_t *widget)
 {
 	PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_BLOCKED | Pt_GHOST);
 	PtDamageWidget(widget);
-
-	return 1;
 }
 
 void Interface::create_threads()
-
 {
 	meb_tid = new feb_thread(main_eb);
 	ui_ecp_obj = new ecp_buffer(*this);

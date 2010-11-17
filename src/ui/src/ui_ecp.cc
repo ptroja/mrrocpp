@@ -27,6 +27,10 @@
 #include "abimport.h"
 #include "proto.h"
 
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
 extern ui::common::busy_flag communication_flag;
 
 namespace mrrocpp {
@@ -65,8 +69,8 @@ void ecp_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
-#if !defined(USE_MESSIP_SRR)
 	bool wyjscie;
+#if !defined(USE_MESSIP_SRR)
 
 	name_attach_t *attach;
 
@@ -76,12 +80,17 @@ void ecp_buffer::operator()()
 		// printf("NIE MA ATTACHA");
 	}
 
+#else
+	messip_channel_t *ch = messip::port_create(interface.ui_attach_point);
+	assert(ch);
+
+#endif
 	while (1) {
 		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
 		_msg_info info;
-
+#if !defined(USE_MESSIP_SRR)
 		int rcvid = MsgReceive(attach->chid, &ecp_to_ui_msg, sizeof(ecp_to_ui_msg), &info);
 
 		communication_state = UI_ECP_AFTER_RECEIVE;
@@ -113,6 +122,14 @@ void ecp_buffer::operator()()
 			continue;
 		}
 
+#else
+		int32_t type, subtype;
+		int rcvid = messip::port_receive(ch, type, subtype, ecp_to_ui_msg);
+
+		if(rcvid != MESSIP_MSG_NOREPLY)
+		continue;
+#endif
+
 		//! FIXME:
 		if (interface.irp6ot_m->state.ecp.pid <= 0) {
 
@@ -141,9 +158,14 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
+
 				break;
 			case lib::YES_NO:
 				synchroniser.null_command();
@@ -154,9 +176,13 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 
 				break;
 			case lib::MESSAGE:
@@ -168,9 +194,13 @@ void ecp_buffer::operator()()
 
 				ui_rep.reply = lib::ANSWER_YES;
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 				break;
 			case lib::DOUBLE_NUMBER:
 				synchroniser.null_command();
@@ -181,9 +211,13 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 				break;
 			case lib::INTEGER_NUMBER:
 				synchroniser.null_command();
@@ -194,9 +228,13 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 				break;
 			case lib::CHOOSE_OPTION:
 				synchroniser.null_command();
@@ -221,9 +259,13 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
@@ -248,9 +290,13 @@ void ecp_buffer::operator()()
 					ui_rep.reply = lib::FILE_LOADED;
 					synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 					if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 						printf("Blad w UI reply\n");
 					}
+#else
+					messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 
 				}
 				break;
@@ -275,9 +321,13 @@ void ecp_buffer::operator()()
 					ui_rep.reply = lib::FILE_SAVED;
 					synchroniser.wait();
 
+#if !defined(USE_MESSIP_SRR)
 					if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
 						printf("Blad w UI reply\n");
 					}
+#else
+					messip::port_reply(ch, rcvid, 0, ui_rep);
+#endif
 				}
 				break;
 			case lib::OPEN_FORCE_SENSOR_MOVE_WINDOW:
@@ -290,9 +340,13 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 			case lib::OPEN_TRAJECTORY_REPRODUCE_WINDOW:
 				// obsluga odtwarzania trajektorii
@@ -303,9 +357,13 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 			case lib::TR_REFRESH_WINDOW:
 				// przejecie kontroli nad Fotonen
@@ -315,9 +373,13 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 			case lib::TR_DANGEROUS_FORCE_DETECTED:
 				// przejecie kontroli nad Fotonen
@@ -327,9 +389,13 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 
 			case lib::MAM_OPEN_WINDOW:
@@ -342,9 +408,13 @@ void ecp_buffer::operator()()
 				// Oddanie kontroli.
 				PtLeave(0);
 				// Odeslanie -> odwieszenie ECP.
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 			case lib::MAM_REFRESH_WINDOW:
 				// Przejecie kontroli nad Photonen.
@@ -354,16 +424,20 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// Odeslanie -> odwieszenie ECP.
+#if !defined(USE_MESSIP_SRR)
 				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
 					printf("Blad w UI reply\n");
 				}
+#else
+				messip::port_reply_ack(ch, rcvid);
+#endif
 				break;
 
 			default:
 				perror("Strange ECP message");
 		}
 	}
-#endif
+
 }
 
 }

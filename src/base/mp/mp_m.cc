@@ -41,7 +41,7 @@ void catch_signal_in_mp(int sig)
 			// restore default (none) handler for SIGCHLD
 			signal(SIGCHLD, SIG_DFL);
 			delete mp_t;
-			exit( EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			signal(SIGSEGV, SIG_DFL);
@@ -60,10 +60,8 @@ void catch_signal_in_mp(int sig)
 				if (WIFSIGNALED(status)) {
 #ifdef WCOREDUMP
 					if (WCOREDUMP(status)) {
-						fprintf(stderr, "mp: child %d terminated by signal %d (core dumped)\n",
-								child_pid, WTERMSIG(status));
-					}
-					else
+						fprintf(stderr, "mp: child %d terminated by signal %d (core dumped)\n", child_pid, WTERMSIG(status));
+					} else
 #endif /* WCOREDUMP */
 					{
 						fprintf(stderr, "mp: child %d terminated by signal %d\n", child_pid, WTERMSIG(status));
@@ -90,21 +88,26 @@ int main(int argc, char *argv[], char **arge)
 {
 	// zewnetrzne try
 	try {
+		std::cerr << "mp 1" << std::endl;
 
 		if (argc < 6) {
 			printf("Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
-			exit( EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		}
 
 		try {
 			// TODO: new/delete fixup
+			std::cerr << "mp 2" << std::endl;
 			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], lib::MP_SECTION, argv[5]);
-
+			std::cerr << "mp 3" << std::endl;
 			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
+			std::cerr << "mp 4" << std::endl;
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
 			mp::common::mp_t->create_robots();
+			std::cerr << "mp 5" << std::endl;
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
+			std::cerr << "mp 6" << std::endl;
 
 			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
 
@@ -119,13 +122,13 @@ int main(int argc, char *argv[], char **arge)
 		} catch (ecp_mp::task::ECP_MP_main_error & e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit( EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 		} /*end: catch */
 		catch (mp::common::MP_main_error & e) {
 
 			perror("initialize incorrect");
 			if (e.error_class == lib::SYSTEM_ERROR)
-				exit( EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 
 			/* Obsluga lib::NON_FATAL_ERROR*/
 			switch (e.error_no)
@@ -169,7 +172,7 @@ int main(int argc, char *argv[], char **arge)
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-			exit( EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		} /*end: catch  */
 
 		for (;;) { // Wewnetrzna petla nieskonczona
@@ -195,12 +198,12 @@ int main(int argc, char *argv[], char **arge)
 			catch (ecp_mp::task::ECP_MP_main_error & e) {
 				/* Obsluga bledow ECP_MP_main_error */
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit( EXIT_FAILURE);
+					exit(EXIT_FAILURE);
 			} /*end: catch */
 			catch (mp::common::MP_main_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit( EXIT_FAILURE);
+					exit(EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR */
 				switch (e.error_no)
@@ -223,7 +226,7 @@ int main(int argc, char *argv[], char **arge)
 			} /*end: catch */
 			catch (mp::robot::MP_error & e) {
 				if (e.error_class == lib::SYSTEM_ERROR) {
-					exit( EXIT_FAILURE);
+					exit(EXIT_FAILURE);
 				}
 
 				/* Obsluga lib::NON_FATAL_ERROR */
@@ -246,7 +249,7 @@ int main(int argc, char *argv[], char **arge)
 			catch (mp::generator::MP_error & e) {
 
 				if (e.error_class == lib::SYSTEM_ERROR)
-					exit( EXIT_FAILURE);
+					exit(EXIT_FAILURE);
 
 				/* Obsluga lib::NON_FATAL_ERROR*/
 				switch (e.error_no)
@@ -291,7 +294,7 @@ int main(int argc, char *argv[], char **arge)
 				/*   Wylapywanie niezdfiniowanych bledow  */
 				/*  Komunikat o bledzie wysylamy do SR */
 				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-				exit( EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 			} /*end: catch  */
 
 		} // koniec: for(;;) - zewnetrzna petla
@@ -301,7 +304,7 @@ int main(int argc, char *argv[], char **arge)
 		/* Komunikat o bledzie wysylamy do SR */
 		printf("unexpected exception throw from catch section (@%s:%d)\n", __FILE__, __LINE__);
 		mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
-		exit( EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	} /* end: catch  */
 
 }

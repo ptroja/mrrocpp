@@ -113,8 +113,9 @@ int main(int argc, char *argv[])
 
 		try {
 			ecp::common::ecp_t->sr_ecp_msg->message("Press START");
+			std::cerr << "ecp 1" << std::endl;
 			ecp::common::ecp_t->ecp_wait_for_start();
-
+			std::cerr << "ecp 2" << std::endl;
 			ecp::common::ecp_t->main_task_algorithm();
 
 			ecp::common::ecp_t->ecp_wait_for_stop();

@@ -777,6 +777,7 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
+	std::cerr << "mp 3a" << std::endl;
 	const std::string sr_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 	const std::string mp_attach_point =
@@ -809,6 +810,7 @@ void task::initialize_communication()
 	// unexepected possible resolution of bug 1526
 	delay(100);
 	ui_opened = true;
+	std::cerr << "mp 3z" << std::endl;
 }
 // -------------------------------------------------------------------
 
