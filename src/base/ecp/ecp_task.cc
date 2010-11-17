@@ -619,13 +619,13 @@ bool task::mp_buffer_receive_and_send(void)
 int task::receive_mp_message(bool block)
 {
 
-	std::cerr << "ecp receive_mp_message 1" << std::endl;
+	//std::cerr << "ecp receive_mp_message 1" << std::endl;
 
 	while (1) {
 		int caller = -100;
 
 #if !defined(USE_MESSIP_SRR)
-		std::cerr << "ecp receive_mp_message 2" << std::endl;
+		//	std::cerr << "ecp receive_mp_message 2" << std::endl;
 		if (!block) {
 			// by Y zamiast creceive i flagi z EDP_MASTER
 			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
@@ -634,33 +634,33 @@ int task::receive_mp_message(bool block)
 		}
 
 		caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
-		std::cerr << "ecp receive_mp_message 3" << std::endl;
+		//	std::cerr << "ecp receive_mp_message 3" << std::endl;
 #else
 		int32_t type, subtype;
-		std::cerr << "ecp receive_mp_message messip 2" << std::endl;
+		//	std::cerr << "ecp receive_mp_message messip 2" << std::endl;
 		if (block) {
 			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
 		} else
 		{
 			caller = messip::port_receive(ecp_attach, type, subtype, mp_command,0);
 		}
-		std::cerr << "ecp receive_mp_message messip 3" << std::endl;
+		//	std::cerr << "ecp receive_mp_message messip 3" << std::endl;
 #endif
 
 		if (caller < 0) {/* Error condition, exit */
 #if !defined(USE_MESSIP_SRR)
-			std::cerr << "ecp receive_mp_message 4" << std::endl;
+			//	std::cerr << "ecp receive_mp_message 4" << std::endl;
 			if (caller == -ETIMEDOUT) {
 				return caller;
 			}
 #else
 			if (caller == MESSIP_MSG_CONNECTING)
 			{
-				std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
+				//			std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
 				continue;
 			} else if (caller == MESSIP_MSG_TIMEOUT)
 			{
-				std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
+				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
 				return MESSIP_MSG_TIMEOUT;
 			}
 
@@ -705,21 +705,21 @@ int task::receive_mp_message(bool block)
 			}
 			continue;
 		}
-		std::cerr << "ecp receive_mp_message 6" << std::endl;
+		//	std::cerr << "ecp receive_mp_message 6" << std::endl;
 		/* A QNX IO message received, reject */
 		if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
 			MsgReply(caller, EOK, 0, 0);
 			continue;
 		}
 #else
-		std::cerr << "ecp receive_mp_message messip 5" << std::endl;
+		//		std::cerr << "ecp receive_mp_message messip 5" << std::endl;
 		if (caller < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
 			fprintf(stderr, "mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 			continue;
 		}
 #endif
-		std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
+		//	std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
 		return caller;
 	}
 }
