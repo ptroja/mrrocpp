@@ -110,7 +110,7 @@ bool tff_nose_run::first_step()
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
 	// cout << "first_step" << endl;
 
-	std::cout << "tff_nose_run" << node_counter << std::endl;
+	//	std::cout << "tff_nose_run" << node_counter << std::endl;
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -152,7 +152,7 @@ bool tff_nose_run::first_step()
 bool tff_nose_run::next_step()
 {
 
-	std::cout << "tff_nose_run" << node_counter << std::endl;
+	//	std::cout << "tff_nose_run" << node_counter << std::endl;
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana

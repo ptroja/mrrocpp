@@ -451,6 +451,8 @@ bool task::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 bool task::mp_buffer_receive_and_send(void)
 {
 
+	std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
+
 	int caller = -2;
 
 	bool ecp_communication_request;
@@ -604,6 +606,9 @@ int task::receive_mp_message(bool block)
 			{
 				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
 				return MESSIP_MSG_TIMEOUT;
+			} else if (caller == MESSIP_MSG_NOREPLY)
+			{
+				continue;
 			}
 
 #endif
