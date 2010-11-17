@@ -456,7 +456,7 @@ bool task::mp_buffer_receive_and_send(void)
 	int caller = -2;
 
 	bool mp_pulse_received = false;
-
+	// ECP communication request
 	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
 			|| (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
@@ -467,7 +467,7 @@ bool task::mp_buffer_receive_and_send(void)
 		wait_for_randevous_with_mp(caller, mp_pulse_received);
 
 		return reply_to_mp(caller, mp_pulse_received);
-
+		// MP communication request
 	} else {
 		// czy
 		caller = receive_mp_message(false);
@@ -560,6 +560,7 @@ int task::receive_mp_message(bool block)
 		int caller = -100;
 
 #if !defined(USE_MESSIP_SRR)
+
 		//	std::cerr << "ecp receive_mp_message 2" << std::endl;
 		if (!block) {
 			// by Y zamiast creceive i flagi z EDP_MASTER
@@ -570,39 +571,15 @@ int task::receive_mp_message(bool block)
 
 		caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
 		//	std::cerr << "ecp receive_mp_message 3" << std::endl;
-#else
-		int32_t type, subtype;
-		//	std::cerr << "ecp receive_mp_message messip 2" << std::endl;
-		if (block) {
-			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
-		} else
-		{
-			caller = messip::port_receive(ecp_attach, type, subtype, mp_command,0);
-		}
-		//	std::cerr << "ecp receive_mp_message messip 3" << std::endl;
-#endif
+
 
 		if (caller < 0) {/* Error condition, exit */
-#if !defined(USE_MESSIP_SRR)
+
 			//	std::cerr << "ecp receive_mp_message 4" << std::endl;
 			if (caller == -ETIMEDOUT) {
 				return caller;
 			}
-#else
-			if (caller == MESSIP_MSG_CONNECTING)
-			{
-				//			std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
-				continue;
-			} else if (caller == MESSIP_MSG_TIMEOUT)
-			{
-				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
-				return MESSIP_MSG_TIMEOUT;
-			} else if (caller == MESSIP_MSG_NOREPLY)
-			{
-				continue;
-			}
 
-#endif
 			uint64_t e = errno; // kod bledu systemowego
 			std::cerr << "ecp 1b1" << caller << std::endl;
 			perror("ecp: Receive from MP failed");
@@ -610,7 +587,7 @@ int task::receive_mp_message(bool block)
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
 			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
-#if !defined(USE_MESSIP_SRR)
+
 		if (caller == 0) {/* Pulse received */
 			//		std::cerr << "ecp receive_mp_message 5" << std::endl;
 			switch (mp_command.hdr.code)
@@ -649,13 +626,45 @@ int task::receive_mp_message(bool block)
 			MsgReply(caller, EOK, 0, 0);
 			continue;
 		}
+
 #else
+
+		int32_t type, subtype;
+		//	std::cerr << "ecp receive_mp_message messip 2" << std::endl;
+		if (block) {
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+		} else {
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command, 0);
+		}
+		//	std::cerr << "ecp receive_mp_message messip 3" << std::endl;
+
+
+		if (caller < 0) {/* Error condition, exit */
+
+			if (caller == MESSIP_MSG_CONNECTING) {
+				//			std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
+				continue;
+			} else if (caller == MESSIP_MSG_TIMEOUT) {
+				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
+				return MESSIP_MSG_TIMEOUT;
+			} else if (caller == MESSIP_MSG_NOREPLY) {
+				continue;
+			}
+
+			uint64_t e = errno; // kod bledu systemowego
+			std::cerr << "ecp 1b1" << caller << std::endl;
+			perror("ecp: Receive from MP failed");
+			std::cerr << "ecp 1b2" << std::endl;
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
+			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		}
 		//		std::cerr << "ecp receive_mp_message messip 5" << std::endl;
 		if (caller < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
 			fprintf(stderr, "mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 			continue;
 		}
+
 #endif
 		//	std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
 		return caller;
