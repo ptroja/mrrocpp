@@ -165,7 +165,7 @@ typedef struct
 	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
 	std::string network_trigger_attach_point;
 	int node_nr;
-	int trigger_fd;
+	fd_t trigger_fd;
 	int state;
 	int last_state;
 } ecp_state_def;

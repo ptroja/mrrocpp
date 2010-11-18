@@ -408,7 +408,6 @@ int wind_sarkofag_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 			{
 				interface.unblock_widget(ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos);
 				interface.unblock_widget(ABW_PtButton_wind_sarkofag_moves_inc_exec);
-
 				interface.unblock_widget(ABW_PtButton_wind_sarkofag_moves_int_left);
 				interface.unblock_widget(ABW_PtButton_wind_sarkofag_moves_int_right);
 				interface.unblock_widget(ABW_PtNumericFloat_wind_sarkofag_moves_int_step);

@@ -1202,6 +1202,7 @@ struct MP_COMMAND_PACKAGE
 		ar & command;
 		ar & ecp_next_state;
 		ar & instruction;
+		ar & pulse_to_ecp_sent;
 	}
 };
 
