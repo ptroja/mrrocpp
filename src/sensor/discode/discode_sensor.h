@@ -32,9 +32,9 @@ namespace discode {
 class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
 {
 public:
-	//	enum discode_sensor_state{
-	//		NOT_CONFIGURED,
-	//	};
+//	enum discode_sensor_state{
+//		NOT_CONFIGURED, INITIATE_SET, INITIATE_SENT, REA
+//	};
 
 
 	discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name);
@@ -64,8 +64,14 @@ public:
 	 * @brief Set object to be send by initiate_reading().
 	 * @param initiate_object this object will be serialized to buffer and send by initiate_reading().
 	 */
-	template <typename INITIATE_T>
-	void set_initiate_object(const INITIATE_T& initiate_object);
+//	template <typename INITIATE_T>
+//	void set_initiate_object(const INITIATE_T& initiate_object);
+
+	/**
+	 *
+	 * @return True, if get_reading() received data from discode. False otherwise.
+	 */
+	bool is_reading_ready();
 
 	/**
 	 * @brief Get object received by get_reading().
@@ -109,6 +115,8 @@ private:
 	 */
 	initiate_message_header imh;
 
+	bool initiate_reading_object_set;
+
 	/**
 	 * @brief Returns true, if there's data available to read.
 	 * @param usec Timeout, if 0 is passed, method returns immediately.
@@ -139,8 +147,6 @@ void discode_sensor::set_initiate_object(const INITIATE_T& initiate_object)
 
 	oarchive->clear_buffer();
 	*oarchive << initiate_object;
-
-	send_buffers_to_discode();
 }
 
 template <typename READING_T>
@@ -174,6 +180,8 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	RECEIVED_T received;
 
 	*iarchive >> received;
+
+	initiate_reading_object_set = false;
 
 	logger::log("discode_sensor::call_remote_procedure() end\n");
 

@@ -98,12 +98,25 @@ void discode_sensor::configure_sensor()
 		throw std::runtime_error("connect(): " + std::string(strerror(errno)));
 	}
 
+	//	initiate_reading_object_set = false;
+	rmh.data_size = 0;
+
 	timer_show("discode_sensor::configure_sensor() end");
 }
 
 void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
+
+	//	if (!initiate_reading_object_set) {
+	imh.data_size = 0;
+	imh.is_rpc_call = false;
+	oarchive->clear_buffer();
+	//	}
+
+	send_buffers_to_discode();
+
+	//	initiate_reading_object_set = 0;
 
 	timer_show("discode_sensor::initiate_reading() end");
 }
@@ -112,12 +125,19 @@ void discode_sensor::get_reading()
 {
 	timer_show("discode_sensor::get_reading() begin");
 
+	receive_buffers_from_discode();
+
 	timer_show("discode_sensor::get_reading() end");
 }
 
 void discode_sensor::terminate()
 {
 	close(sockfd);
+}
+
+bool discode_sensor::is_reading_ready()
+{
+	return rmh.data_size > 0 && rmh.is_rpc_call == false;
 }
 
 bool discode_sensor::is_data_available(int usec)
@@ -163,6 +183,9 @@ void discode_sensor::receive_buffers_from_discode()
 	}
 	if (nread != rmh.data_size) {
 		throw runtime_error("read() failed: nread != rmh.data_size");
+	}
+	if (rmh.is_rpc_call) {
+		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
 	}
 	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 }
