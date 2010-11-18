@@ -451,7 +451,7 @@ bool task::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 bool task::mp_buffer_receive_and_send(void)
 {
 
-	std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
+	//std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
 
 	int caller = -2;
 

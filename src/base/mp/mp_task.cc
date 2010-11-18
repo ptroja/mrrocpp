@@ -646,7 +646,7 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 						exit_from_while = true;
 					}
 				}
-				fprintf(stderr, "new UI pulse type %d received\n", type);
+				//fprintf(stderr, "new UI pulse type %d received\n", type);
 				continue;
 			}
 
@@ -663,7 +663,7 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 						}
 					}
 					// can we get out of this loop?
-					fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
+					//	fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
 				}
 			}
 		}
