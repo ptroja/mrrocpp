@@ -140,14 +140,14 @@ private:
 	void timer_show(const char *str = "");
 }; // class discode_sensor
 
-template <typename INITIATE_T>
-void discode_sensor::set_initiate_object(const INITIATE_T& initiate_object)
-{
-	imh.is_rpc_call = false;
-
-	oarchive->clear_buffer();
-	*oarchive << initiate_object;
-}
+//template <typename INITIATE_T>
+//void discode_sensor::set_initiate_object(const INITIATE_T& initiate_object)
+//{
+//	imh.is_rpc_call = false;
+//
+//	oarchive->clear_buffer();
+//	*oarchive << initiate_object;
+//}
 
 template <typename READING_T>
 READING_T discode_sensor::get_received_object()
