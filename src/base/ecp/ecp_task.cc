@@ -475,7 +475,7 @@ bool task::mp_buffer_receive_and_send(void)
 #if !defined(USE_MESSIP_SRR)
 		if (caller == 0)
 #else
-		if (caller == MESSIP_MSG_TIMEOUT)
+		if (caller == MESSIP_MSG_NOREPLY)
 #endif
 		{
 
@@ -648,7 +648,12 @@ int task::receive_mp_message(bool block)
 				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
 				return MESSIP_MSG_TIMEOUT;
 			} else if (caller == MESSIP_MSG_NOREPLY) {
-				continue;
+				if (type==MP_TO_ECP_COMMUNICATION_REQUEST)
+				{
+					return caller;
+				} else {
+					continue;
+				}
 			}
 
 			uint64_t e = errno; // kod bledu systemowego

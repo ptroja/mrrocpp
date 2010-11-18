@@ -967,9 +967,9 @@ void task::request_communication_with_robots(const common::robots_t & _robot_m)
 void task::terminate_all(const common::robots_t & _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
-
+	std::cerr << "mp terminate_all 1" << std::endl;
 	request_communication_with_robots(_robot_m);
-
+	std::cerr << "mp terminate_all 2" << std::endl;
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	common::robots_t robots_m_tmp = _robot_m;
 
