@@ -57,7 +57,7 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 	"Build support for sarkofag"
 	ON "ROBOTS_SWARMITFIX" OFF)
 
-option(USE_MESSIP "Use MESSIP TCP messaging protocol" OFF)
+option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
 # QNX is default MRROC++ target
 if (QNXNTO)

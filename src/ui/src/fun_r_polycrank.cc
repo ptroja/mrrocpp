@@ -2226,7 +2226,7 @@ int reload_polycrank_configuration()
 					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", interface.irp6m_m->state.ecp.section_name.c_str());
 
 			interface.irp6m_m->state.ecp.pid = -1;
-			interface.irp6m_m->state.ecp.trigger_fd = -1;
+			interface.irp6m_m->state.ecp.trigger_fd = common::invalid_fd;
 		}
 
 		switch (interface.irp6m_m->state.edp.state)

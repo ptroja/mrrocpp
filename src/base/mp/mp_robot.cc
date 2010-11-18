@@ -186,6 +186,8 @@ void robot::terminate_ecp(void)
 { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
 
+	std::cerr << "mp terminate_ecp 1" << std::endl;
+
 #if !defined(USE_MESSIP_SRR)
 	mp_command.hdr.type = 0;
 	if (MsgSend(ECP_fd, &mp_command, sizeof(mp_command), &ecp_reply_package, sizeof(ecp_reply_package)) == -1) {// by Y&W
@@ -198,6 +200,7 @@ void robot::terminate_ecp(void)
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
+	std::cerr << "mp terminate_ecp 2" << std::endl;
 	mp_command.pulse_to_ecp_sent = false;
 	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie

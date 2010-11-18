@@ -57,8 +57,8 @@ lib::POSE_SPECIFICATION ps;
 // komenda wysylana z okna FileDialog po wcisnieciu accept
 extern uint8_t FDCommand;
 
-int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCwndForceControlRealised\n");
 #endif
@@ -79,7 +79,8 @@ int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCCreateConnection(void) {
+int FCCreateConnection(void)
+{
 #ifdef FCDEBUG
 	printf("FCCreateConnection\n");
 #endif
@@ -87,9 +88,9 @@ int FCCreateConnection(void) {
 	// 	lib::ECP_message from_ecp;
 
 	// Stworzenie nazwy.
-	std::string tmp_name = interface.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point",
-			lib::irp6ot_m::ECP_SECTION);
+	std::string
+			tmp_name =
+					interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", lib::irp6ot_m::ECP_SECTION);
 
 #ifdef FCDEBUG
 	printf("FCCreateConnection: %s\n",tmp_name.c_str());
@@ -102,7 +103,8 @@ int FCCreateConnection(void) {
 	return EXIT_SUCCESS;
 }
 
-int FCRefreshPosition(void) {
+int FCRefreshPosition(void)
+{
 	// Wiadomosc odbierana z ECP.
 	lib::ECP_message from_ecp;
 #if !defined(USE_MESSIP_SRR)
@@ -113,8 +115,7 @@ int FCRefreshPosition(void) {
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_GET_DATA;
 	// Wyslanie polecenia i odebranie polozenia robota.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &from_ecp,
-			sizeof(lib::ECP_message)) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &from_ecp, sizeof(lib::ECP_message)) == -1) {
 		perror("FCRefreshWindow: Send to ECP failed");
 		return EXIT_FAILURE;
 	} else {
@@ -155,7 +156,8 @@ int FCRefreshPosition(void) {
 	return EXIT_SUCCESS;
 }
 
-int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCTimerTick\n");
 #endif
@@ -174,8 +176,8 @@ int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) 
 	return (Pt_CONTINUE);
 }
 
-int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnCalibrateSensor\n");
 #endif
@@ -192,8 +194,8 @@ int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnAddMacrostep\n");
 #endif
@@ -232,8 +234,8 @@ int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnNewTrajectory\n");
 #endif
@@ -263,8 +265,8 @@ int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnSaveTrajectory\n");
 #endif
@@ -275,7 +277,8 @@ int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnExit\n");
 #endif
@@ -296,8 +299,8 @@ int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
 	return (Pt_CONTINUE);
 }
 
-int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	char pulse_code;
 	long pulse_value = 0;
 #ifdef FCDEBUG
@@ -310,7 +313,7 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_START;// start
 
 	try {
-		interface.pulse_reader_execute(interface.irp6ot_m->state.edp.reader_fd, pulse_code, pulse_value);
+		interface.irp6ot_m->pulse_reader_execute(pulse_code, pulse_value);
 	} catch (std::exception & e) {
 		return (Pt_CONTINUE);
 	}
@@ -336,8 +339,8 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }
 
-int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnChangeExternalMotorControl\n");
 #endif
@@ -409,7 +412,8 @@ int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo,
 }
 
 /**************************** MOVE COMMANDS *****************************/
-void SendMoveCommand(int move_type) {
+void SendMoveCommand(int move_type)
+{
 #ifdef FCDEBUG
 	printf("SendMoveCommand: %i\n",move_type);
 #endif
@@ -432,96 +436,96 @@ void SendMoveCommand(int move_type) {
 }
 ; // end: SendMoveCommand
 
-int FCbtnMove0Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove0Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-1);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove1Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove1Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-2);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove2Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove2Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-3);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove3Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove3Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-4);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove4Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove4Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-5);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove5Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove5Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-6);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove0Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove0Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+1);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove1Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove1Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+2);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove2Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove2Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+3);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove3Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove3Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+4);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove4Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove4Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+5);
 	return (Pt_CONTINUE);
 }
 
-int FCbtnMove5Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove5Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+6);
