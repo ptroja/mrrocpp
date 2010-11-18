@@ -654,6 +654,9 @@ int task::receive_mp_message(bool block)
 				} else {
 					continue;
 				}
+			} else if (caller == MESSIP_MSG_DISCONNECT) {
+
+				return MESSIP_MSG_DISCONNECT;
 			}
 
 			uint64_t e = errno; // kod bledu systemowego
