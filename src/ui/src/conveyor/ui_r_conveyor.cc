@@ -45,7 +45,7 @@ int UiRobot::reload_configuration()
 					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
 
 			state.ecp.pid = -1;
-			state.ecp.trigger_fd = -1;
+			state.ecp.trigger_fd = common::invalid_fd;
 		}
 
 		switch (state.edp.state)

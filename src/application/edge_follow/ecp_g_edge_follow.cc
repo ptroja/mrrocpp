@@ -37,6 +37,8 @@ y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step
 bool y_edge_follow_force::first_step()
 {
 
+	std::cout << "y_edge_follow_force" << node_counter << std::endl;
+
 	double delta[6];
 	for (int i = 0; i < 6; i++)
 		delta[i] = 0.0;
@@ -98,6 +100,8 @@ bool y_edge_follow_force::next_step()
 	if (check_and_null_trigger()) {
 		return false;
 	}
+
+	std::cout << "y_edge_follow_force" << node_counter << std::endl;
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
 	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);

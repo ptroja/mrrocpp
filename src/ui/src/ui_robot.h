@@ -42,6 +42,7 @@ public:
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
+	void pulse_reader_execute(int code, int value);
 
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);
@@ -51,7 +52,15 @@ public:
 	virtual void close_all_windows();
 	void EDP_slay_int();
 	void connect_to_reader(void);
+	void connect_to_ecp_pulse_chanell(void);
+	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot() = 0;
+
+	bool check_synchronised_or_inactive();
+	bool check_synchronised_and_loaded();
+	bool check_loaded_or_inactive();
+	bool check_loaded();
+	bool deactivate_ecp_trigger();
 };
 
 }
