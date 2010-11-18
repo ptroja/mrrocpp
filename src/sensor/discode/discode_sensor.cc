@@ -184,9 +184,9 @@ void discode_sensor::receive_buffers_from_discode()
 	if (nread != rmh.data_size) {
 		throw runtime_error("read() failed: nread != rmh.data_size");
 	}
-	if (rmh.is_rpc_call) {
-		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
-	}
+//	if (rmh.is_rpc_call) {
+//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
+//	}
 	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 }
 

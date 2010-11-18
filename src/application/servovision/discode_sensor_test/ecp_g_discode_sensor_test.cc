@@ -65,23 +65,28 @@ bool ecp_g_discode_sensor_test::next_step()
 	current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	current_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
 
-	printf("bool ecp_g_discode_sensor_test::next_step()\n");
-	fflush( stdout);
+//	log_dbg("bool ecp_g_discode_sensor_test::next_step()\n");
 
-//	shared_ptr <xdr_iarchive <> > ia = ds->get_iarchive();
-//	string s;
-//	*ia >> s;
-//	log("ecp_g_discode_sensor_test::next_step() received: \"%s\"", s.c_str());
-//
-//	*(ds->get_oarchive()) << string("bool ecp_g_discode_sensor_test::next_step()");
+	//	shared_ptr <xdr_iarchive <> > ia = ds->get_iarchive();
+	//	string s;
+	//	*ia >> s;
+	//	log("ecp_g_discode_sensor_test::next_step() received: \"%s\"", s.c_str());
+	//
+	//	*(ds->get_oarchive()) << string("bool ecp_g_discode_sensor_test::next_step()");
 
-//	jjj++;
-//	if (jjj % 4 == 0) {
-//		*ds->get_oarchive() << jjj;
-//	}
-//	if (jjj % 20 == 0) {
-//		ds.get_oarchive()->clear_buffer();
-//	}
+	//	jjj++;
+	//	if (jjj % 4 == 0) {
+	//		*ds->get_oarchive() << jjj;
+	//	}
+	//	if (jjj % 20 == 0) {
+	//		ds.get_oarchive()->clear_buffer();
+	//	}
+	if (ds->is_reading_ready()) {
+		string s = ds->get_received_object <string> ();
+		log("ecp_g_discode_sensor_test::next_step(): \"%s\"\n", s.c_str());
+	} else {
+		log("ecp_g_discode_sensor_test::next_step(): reading not ready.\n");
+	}
 	return true;
 }
 

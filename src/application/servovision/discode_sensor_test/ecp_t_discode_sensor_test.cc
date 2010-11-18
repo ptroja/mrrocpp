@@ -44,10 +44,10 @@ void ecp_t_discode_sensor_test::main_task_algorithm()
 	ds.configure_sensor();
 	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): after ds.configure_sensor()\n");
 
-	while (1) {
-		string received = ds.call_remote_procedure<string>(string("void ecp_t_discode_sensor_test::main_task_algorithm()"));
-		logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): received: \"%s\"\n", received.c_str());
-	}
+//	while (1) {
+//		string received = ds.call_remote_procedure<string>(string("void ecp_t_discode_sensor_test::main_task_algorithm()"));
+//		logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): received: \"%s\"\n", received.c_str());
+//	}
 
 	mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, &ds);
 	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
