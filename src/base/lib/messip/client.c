@@ -17,7 +17,7 @@
 
 #include "messip.h"
 
-#define SEND_TIMES	2
+#define SEND_TIMES	10
 //#define ONEWAY_MESSAGE	1
 
 int
