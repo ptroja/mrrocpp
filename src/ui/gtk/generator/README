@@ -1,6 +1,0 @@
-MRROC++ GUI generator
-=====================
-To generate GUI windows for robots type:
-'xsltproc robots.xml --xinclude'
-
-Resulting glade window files will be generated in this folder
