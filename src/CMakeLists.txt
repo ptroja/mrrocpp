@@ -92,6 +92,7 @@ if (QNXNTO)
 	set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
+        set(BOOST_ROOT "/opt/boost")
 	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
