@@ -49,13 +49,29 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 {
     printf("FT6284KB created !!! \n");
 
+    conversion_matrix <<
+            -0.40709,  -0.27318,   0.34868, -33.58156,  -0.32609,  33.54162,
+             0.35472,  38.22730,  -0.41173, -19.49156,   0.49550, -19.15271,
+            18.72635,  -0.59676,  19.27843,  -0.56931,  18.69352,  -0.67633,
+            -0.40836,  -0.95908, -33.37957,   1.38537,  32.52522,  -0.51156,
+            37.13715,  -1.02875, -20.00474,  -0.27959, -19.34135,   1.42577,
+            -0.15775, -18.16831,  -0.00133, -18.78961,   0.31895, -18.38586;
+
+    conversion_scale <<
+            4.5511972116989,
+            4.5511972116989,
+            1.41244051397552,
+           84.8843245576086,
+           84.8843245576086,
+           80.9472037525247;
+
 }
 
 void ATI6284_force::connect_to_hardware(void)
 {
         if (!(master.force_sensor_test_mode)) {
 
-            device = comedi_open("/dev/comedi0");
+            device = comedi_open(dev_name.c_str());
 
             if(!device)
                 printf("unable to open device !!! \n");
@@ -73,10 +89,9 @@ void ATI6284_force::connect_to_hardware(void)
 
 ATI6284_force::~ATI6284_force(void)
 {
-        if (!(master.force_sensor_test_mode)) {
-		//delete recvSocket;
-		//delete sendSocket;
-	}
+        if(device)
+            comedi_close(device);
+
 	if (gravity_transformation)
 		delete gravity_transformation;
 	printf("Destruktor edp_ATI6284_force_sensor\n");
@@ -90,7 +105,6 @@ void ATI6284_force::configure_sensor(void)
 
         printf("force thread id : %lu \n", tid);
 
-
 	is_sensor_configured = true;
 	//  printf("edp Sensor configured\n");
 	sr_msg->message("edp Sensor configured");
@@ -101,7 +115,6 @@ void ATI6284_force::configure_sensor(void)
 
 		// polozenie kisci bez narzedzia wzgledem bazy
 		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
                 wait_for_event();
 
@@ -124,7 +137,6 @@ void ATI6284_force::configure_sensor(void)
 
                     } else
                             sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
-                    // lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
 
                     double weight = master.config.value <double> ("weight");
 
@@ -134,8 +146,7 @@ void ATI6284_force::configure_sensor(void)
                     for (int i = 0; i < 3; i++)
                             point[i] = strtod(tmp, &tmp);
                     free(toDel);
-                    // double point[3] = { master.config.value<double>("x_axis_arm"),
-                    // 		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+
                     lib::K_vector pointofgravity(point);
                     gravity_transformation
                                     = new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
@@ -182,8 +193,6 @@ void ATI6284_force::wait_for_event()
 void ATI6284_force::initiate_reading(void)
 {
 	lib::Ft_vector kartez_force;
-	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-	short measure_report;
 
 	if (!is_sensor_configured) {
                 //throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
@@ -191,11 +200,7 @@ void ATI6284_force::initiate_reading(void)
 
 	lib::Ft_vector ft_table;
 
-        convert_data(datav, bias_data, force_fresh);
-
-	for (int i = 0; i < 6; ++i) {
-		ft_table[i] = force_fresh[i];
-	}
+        convert_data(datav, bias_data, ft_table);
 
 	is_reading_ready = true;
 
@@ -225,23 +230,17 @@ force* return_created_edp_force_sensor(common::manip_effector &_master)
 // int16_t result_raw[6] - voltage [V]
 // int16_t bias_raw[6] - bias data [V]
 // double force[6] - output data in N, N*m
-void convert_data(double result_raw[6], double bias_raw[6], double force[6])
+void ATI6284_force::convert_data(double result_raw[6], double bias_raw[6], lib::Ft_vector &force)
 {
-	int i, j;
-	double result_voltage[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+        Matrix<double, 6, 1> result_voltage;
 
-	for (i = 0; i < 6; ++i) {
+        for (int i = 0; i < 6; ++i) {
                 result_voltage[i] = (result_raw[i] - bias_raw[i]);
 		force[i] = 0.0;
 	}
 
-	for (i = 0; i < 6; ++i) {
-		for (j = 0; j < 6; ++j) {
-			force[i] += (double) (result_voltage[j] * conversion_matrix[i][j]);
-		}
-		force[i] /= conversion_scale[i];
-	}
-
+        force = conversion_matrix * result_voltage;
+        force = force.cwise() / conversion_scale;
 
 }
 
