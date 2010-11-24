@@ -5,12 +5,15 @@
  *      Author: mboryn
  */
 
+#include <iostream>
 #include <cstdio>
 #include <string>
 #include "ecp_g_discode_sensor_test.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/logger.h"
+
+#include "PBReading.h"
 
 namespace mrrocpp {
 
@@ -82,8 +85,14 @@ bool ecp_g_discode_sensor_test::next_step()
 	//		ds.get_oarchive()->clear_buffer();
 	//	}
 	if (ds->is_reading_ready()) {
-		string s = ds->get_received_object <string> ();
-		log("ecp_g_discode_sensor_test::next_step(): \"%s\"\n", s.c_str());
+		Processors::VisualServoPB::PBReading r = ds->get_received_object <Processors::VisualServoPB::PBReading> ();
+		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int)r.objectVisible);
+		if(r.objectVisible){
+			lib::Homog_matrix hm(r.objectPosition.elements);
+			cout<<"Object position:\n";
+			cout<<hm<<endl;
+			cout.flush();
+		}
 	} else {
 		log("ecp_g_discode_sensor_test::next_step(): reading not ready.\n");
 	}
