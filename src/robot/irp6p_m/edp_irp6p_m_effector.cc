@@ -62,17 +62,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-#ifdef __QNXNTO__
+//#ifdef __QNXNTO__
 	// jesli wlaczono obsluge sily
 
 	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
-	new boost::thread(boost::bind(&sensor::force::operator(), vs));
+        new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 	vs->thread_started.wait();
 
-#endif
+//#endif
 	motor_driven_effector::hi_create_threads();
 }
 

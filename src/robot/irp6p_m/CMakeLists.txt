@@ -16,7 +16,18 @@ target_link_libraries(
 	edp_irp6p_m
 	ati6284
 )
+else(QNXNTO)
+target_link_libraries(
+        edp_irp6p_m
+        ati6284KB
+)
 endif(QNXNTO)
+
+
+
+
+
+
 	
 add_library(kinematicsirp6p_m
 	kinematic_model_calibrated_irp6p_with_wrist.cc
