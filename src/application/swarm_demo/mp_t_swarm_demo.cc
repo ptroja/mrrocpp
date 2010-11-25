@@ -20,7 +20,6 @@
 #include "ecp_mp_t_swarm_demo.h"
 #include "application/swarm_demo/ecp_mp_st_smooth_joint.h"
 
-
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
@@ -53,25 +52,13 @@ void swarm_demo::main_task_algorithm(void)
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
 
-	// Track
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT, (int) 5, "../../src/application/swarm_demo/trajectory_track.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT, (int) 5, "../../src/application/swarm_demo/trajectory_postument.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	/*if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
-		//------------------- SMOOTH GENERATOR -------------------
-		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
-		//------------------- SMOOTH GENERATOR END -------------------
-	}
-
-	// Postument
-
-	if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
-		//------------------- SMOOTH GENERATOR -------------------
-		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT, (int) 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
-		//------------------- SMOOTH GENERATOR END -------------------
-	}*/
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT, (int) 5, "../../src/application/swarm_demo/trajectory_track.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT, (int) 5, "../../src/application/swarm_demo/trajectory_postument.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Swarm Demo END");
 

@@ -19,13 +19,7 @@ class sub_task_smooth_joint : public sub_task
 
 private:
 	generator::newsmooth * sgenjoint;
-	generator::newsmooth * sgenmotor;
-	generator::newsmooth * sgeneuler;
-	generator::newsmooth * sgenangle;
-
-	bool track;
-	bool postument;
-	std::string network_path;;
+	std::string path;
 
 public:
 	sub_task_smooth_joint(task::task & _ecp_t);
