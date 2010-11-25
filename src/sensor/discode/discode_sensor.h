@@ -136,6 +136,7 @@ private:
 
 	// timer stuff, TODO: remove after discode_sensor is considered bug-free.
 	mrrocpp::lib::timer timer;
+	bool timer_print_enabled;
 	void timer_init();
 	void timer_show(const char *str = "");
 }; // class discode_sensor

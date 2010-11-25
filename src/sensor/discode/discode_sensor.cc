@@ -35,7 +35,7 @@ using namespace boost;
 using lib::configurator;
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	config(config), section_name(section_name)
+	config(config), section_name(section_name), timer_print_enabled(false)
 {
 	base_period = current_period = 1;
 
@@ -161,7 +161,7 @@ bool discode_sensor::is_data_available(int usec)
 
 void discode_sensor::receive_buffers_from_discode()
 {
-	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
+//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
 
 	header_iarchive->clear_buffer();
 	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
@@ -174,7 +174,14 @@ void discode_sensor::receive_buffers_from_discode()
 
 	*header_iarchive >> rmh;
 
-	logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
+	if(rmh.data_size > 0){
+		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
+		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+	}else{
+		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
+	}
+
 
 	iarchive->clear_buffer();
 	nread = read(sockfd, iarchive->get_buffer(), rmh.data_size);
@@ -187,12 +194,12 @@ void discode_sensor::receive_buffers_from_discode()
 //	if (rmh.is_rpc_call) {
 //		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
 //	}
-	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
+//	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 }
 
 void discode_sensor::send_buffers_to_discode()
 {
-	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
+//	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
 
 	imh.data_size = oarchive->getArchiveSize();
 
@@ -240,7 +247,10 @@ void discode_sensor::timer_show(const char *str)
 		fflush(stdout);
 		throw logic_error("discode_sensor::get_reading(): timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED");
 	}
-	log_dbg("Time elapsed (in %s): %g s\n", str, seconds);
+
+	if(timer_print_enabled){
+		log_dbg("Time elapsed (in %s): %g s\n", str, seconds);
+	}
 
 	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
 		timer.print_last_status();

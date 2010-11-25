@@ -94,7 +94,7 @@ bool ecp_g_discode_sensor_test::next_step()
 			cout.flush();
 		}
 	} else {
-		log("ecp_g_discode_sensor_test::next_step(): reading not ready.\n");
+//		log("ecp_g_discode_sensor_test::next_step(): reading not ready.\n");
 	}
 	return true;
 }
