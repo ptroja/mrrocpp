@@ -179,7 +179,7 @@ void discode_sensor::receive_buffers_from_discode()
 		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
 		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
 	}else{
-		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
+//		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
 	}
 
 
