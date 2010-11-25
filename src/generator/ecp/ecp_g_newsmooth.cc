@@ -434,7 +434,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	} else if (!strcmp(coordinate_type_desc, "XYZ_ANGLE_AXIS")) {
 		ps = lib::ECP_XYZ_ANGLE_AXIS;
 	} else {
-		//throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 		return false;
 	}
 
