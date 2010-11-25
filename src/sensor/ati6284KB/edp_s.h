@@ -9,8 +9,8 @@
 // -------------------------------------------------------------------------
 
 
-#if !defined(_EDP_S_ATI6284_MS_H)
-#define _EDP_S_ATI6284_MS_H
+#if !defined(_EDP_S_ATI6284_KB_H)
+#define _EDP_S_ATI6284_KB_H
 
 #include <comedilib.h>
 #include <Eigen/Core>
@@ -25,24 +25,13 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-    const std::string dev_name = "/dev/comedi0";
+typedef Matrix<double, 6, 6> Matrix6d;
+typedef Matrix<double, 6, 1> Vector6d;
+
+
 
 /********** klasa czujnikow po stronie VSP **************/
 class ATI6284_force : public force{
-
-private:
-        comedi_t *device;
-        lsampl_t adc_data[6];
-        double datav[6];
-        double bias_data[6];
-
-        comedi_polynomial_t ADC_calib[6];
-
-        Matrix<double, 6, 6> conversion_matrix;
-        Matrix<double, 6, 1> conversion_scale;
-
-        void convert_data(double result_raw[6], double bias_raw[6], lib::Ft_vector &force);
-
 public:
 
 	void connect_to_hardware (void);
@@ -51,20 +40,28 @@ public:
 	virtual ~ATI6284_force();
 
 	void configure_sensor (void);	// konfiguracja czujnika
-        void wait_for_event(void);	// oczekiwanie na zdarzenie
-        void initiate_reading (void);	// zadanie odczytu od VSP
-        void get_reading (void);	// odebranie odczytu od VSP		// zwraca blad
+	void wait_for_event(void);	// oczekiwanie na zdarzenie
+	void initiate_reading (void);	// zadanie odczytu od VSP
+	void get_reading (void);	// odebranie odczytu od VSP		// zwraca blad
 
+private:
+  const std::string dev_name;
+  comedi_t *device; // device dyscryptor
+  lsampl_t adc_data[6]; // raw ADC data
+  Vector6d datav; // mensured voltage
+  Vector6d bias_data; // sensor bias voltage
+
+  comedi_polynomial_t ADC_calib[6]; // ADC calibration polynomial
+
+  Matrix6d conversion_matrix; // F/T conversion matrix
+  Vector6d conversion_scale; // F/T scaling
+
+  void convert_data(const Vector6d &result_raw, const Vector6d &bias_raw, lib::Ft_vector &force) const;
 }; // end: class vsp_sensor
-
-
-
-
-
 
 } // namespace sensor
 } // namespace edp
 } // namespace mrrocpp
 
 
-#endif
+#endif //_EDP_S_ATI6284_KB_H
