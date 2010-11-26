@@ -26,6 +26,9 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 
 		ecpst = new sub_task::sub_task_smooth_joint(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT] = ecpst;
+
+		ecpst = new sub_task::sub_task_smooth_angle_axis(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS] = ecpst;
 	}
 
 	sr_ecp_msg->message("ecp SWARM DEMO loaded");

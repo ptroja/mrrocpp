@@ -39,6 +39,7 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 	public:
 		/**
 		 * Constructor. Sets the axes_num and pose_spec variables.
+		 * @param _ecp_task current ecp task
 		 * @param axes_num number of axes for a given robot and representation
 		 * @param pose_spec representation in which the robot position is expressed
 		 */
@@ -104,7 +105,7 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		bool load_trajectory_pose(const std::vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const std::vector<double> & v, const std::vector<double> & v_max);
 		/**
 		 * Creates the vectors containing the information about the maximal and typical velocities for each representation.
-		 * @axes_num actual number of axes
+		 * @param axes_num actual number of axes
 		 */
 		void create_velocity_vectors(int axes_num);
 		/**

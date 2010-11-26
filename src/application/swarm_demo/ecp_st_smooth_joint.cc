@@ -22,13 +22,11 @@ sub_task_smooth_joint::sub_task_smooth_joint(task::task & _ecp_t) :
 
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
-		std::vector <double> coordinates1(6);
 		sgenjoint->set_absolute();
 		sgenjoint->set_debug(true);
 
 	} else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 7);
-		std::vector <double> coordinates2(7);
 		sgenjoint->set_debug(true);
 	}
 
@@ -46,7 +44,6 @@ void sub_task_smooth_joint::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT ABSOLUTE END
 }
 
 sub_task_smooth_joint::~sub_task_smooth_joint()

@@ -591,14 +591,14 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/../src/base/kinematics \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/vsp \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/ecp_mp \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/ecp \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/mp \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/lib \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/base/base.dox \
-                         @CMAKE_CURRENT_SOURCE_DIR@/../src/generator/generators.dox \
+INPUT                  = ../src/base/kinematics \
+                         ../src/base/vsp \
+                         ../src/base/ecp_mp \
+                         ../src/base/ecp \
+                         ../src/base/mp \
+                         ../src/base/lib \
+                         ../src/base/base.dox \
+                         ../src/generator/generators.dox \
                          @CMAKE_CURRENT_SOURCE_DIR@/../src/generator/ecp/ecp_g_teach_in.h \
                          @CMAKE_CURRENT_SOURCE_DIR@/../src/generator/ecp/ecp_g_teach_in.cc \
                          @CMAKE_CURRENT_SOURCE_DIR@/../src/generator/ecp/force/ecp_mp_g_bias_edp_force.h \

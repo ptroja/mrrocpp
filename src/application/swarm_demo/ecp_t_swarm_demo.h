@@ -14,9 +14,11 @@
 
 #include "ecp_mp_t_swarm_demo.h"
 #include "ecp_st_smooth_joint.h"
+#include "ecp_st_smooth_angle_axis.h"
 
 #include "base/ecp/ecp_task.h"
 #include "application/swarm_demo/ecp_mp_st_smooth_joint.h"
+#include "application/swarm_demo/ecp_mp_st_smooth_angle_axis.h"
 
 namespace mrrocpp {
 namespace ecp {
