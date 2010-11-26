@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!--
-MRROC++ GUI generator
-XSD schema for the robots XML file. 
- -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-<xs:element name="MRROCppGUIgenerator" />
-</xs:schema>
