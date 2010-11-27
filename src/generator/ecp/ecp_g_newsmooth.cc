@@ -129,8 +129,8 @@ bool newsmooth::calculate() {
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
 
-				printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
-				print_pose(pose_vector_iterator);
+				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
 
 				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
 					return calculate();
