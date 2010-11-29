@@ -355,8 +355,8 @@ bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::trajectory_pose::b
 	it->v_r[i] = it->v_p[i];//preparation for recalculation
 	it->v[i] = it->v_r[i]/it->v_max[i];
 
-	printf("------------ recursion 2 axis: %d, v_r: %f\n", i, it->v_r[i]);
-	flushall();
+	//printf("------------ recursion 2 axis: %d, v_r: %f\n", i, it->v_r[i]);
+	//flushall();
 
 	return false;
 	//return vp_reduction(it, i);
