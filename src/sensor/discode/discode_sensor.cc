@@ -175,9 +175,9 @@ void discode_sensor::receive_buffers_from_discode()
 	*header_iarchive >> rmh;
 
 	if(rmh.data_size > 0){
-		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
-		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
-		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+//		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
+//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
 	}else{
 //		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
 	}
