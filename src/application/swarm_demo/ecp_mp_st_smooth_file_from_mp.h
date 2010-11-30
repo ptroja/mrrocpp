@@ -5,8 +5,8 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sub_task {
 
-const std::string ECP_ST_SMOOTH_ANGLE_AXIS = "ECP_ST_SMOOTH_ANGLE_AXIS";
-const std::string ECP_ST_SMOOTH_JOINT = "ECP_ST_SMOOTH_JOINT";
+const std::string ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP = "ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP";
+const std::string ECP_ST_SMOOTH_JOINT_FILE_FROM_MP = "ECP_ST_SMOOTH_JOINT_FILE_FROM_MP";
 
 } // namespace task
 } // namespace ecp_mp

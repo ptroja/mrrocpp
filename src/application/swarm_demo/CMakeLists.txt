@@ -1,7 +1,5 @@
 add_executable(ecp_swarm_demo
 	ecp_t_swarm_demo.cc
-	ecp_st_smooth_joint.cc
-	ecp_st_smooth_angle_axis.cc
 	ecp_st_smooth_file_from_mp.cc
 )
 

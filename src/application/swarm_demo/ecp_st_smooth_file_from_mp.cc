@@ -20,15 +20,7 @@ sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, 
 	sub_task(_ecp_t)
 {
 
-	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-		sgen = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
-		sgen->set_absolute();
-		sgen->set_debug(true);
-
-	} else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		sgen = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 7);
-		sgen->set_debug(true);
-	}
+	sgen = new generator::newsmooth(ecp_t, pose_spec, coordinates_nr);
 
 }
 
