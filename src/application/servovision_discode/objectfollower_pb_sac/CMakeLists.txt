@@ -9,10 +9,12 @@ add_executable(ecp_objectfollower_pb_sac
     ../position_constraint.cc
     ../cubic_constraint.cc
     ../termination_condition.cc
+    ../../../sensor/discode/discode_sensor.cc
 )
 
 target_link_libraries(ecp_objectfollower_pb_sac
 	ecp_r_irp6p_m
+	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 )
 

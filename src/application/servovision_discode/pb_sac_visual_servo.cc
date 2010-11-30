@@ -9,10 +9,10 @@
 
 #include "pb_sac_visual_servo.h"
 
-using ecp_mp::sensor::fradia_sensor;
 using namespace logger;
 using namespace visual_servo_types;
 using namespace std;
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 namespace mrrocpp {
 
@@ -20,11 +20,10 @@ namespace ecp {
 
 namespace servovision {
 
-pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	pb_visual_servo(regulator, section_name, configurator)
+pb_sac_visual_servo::pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
+	pb_visual_servo(regulator, sensor, section_name, configurator)
 {
 	O_T_C = configurator.value <3, 4> ("O_T_C", section_name);
-	//	cout << "\nO_T_C\n" << O_T_C << endl;
 }
 
 pb_sac_visual_servo::~pb_sac_visual_servo()
@@ -33,7 +32,7 @@ pb_sac_visual_servo::~pb_sac_visual_servo()
 
 lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	lib::Homog_matrix C_T_G(vsp_fradia->get_reading_message().position);
+	lib::Homog_matrix C_T_G(reading.objectPosition.elements);
 	lib::Homog_matrix error_matrix;
 	lib::Homog_matrix E_T_O = !current_position;
 

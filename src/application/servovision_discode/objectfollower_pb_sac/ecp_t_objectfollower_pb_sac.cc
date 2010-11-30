@@ -9,8 +9,10 @@
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 
+using boost::shared_ptr;
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 namespace mrrocpp {
 
@@ -29,10 +31,11 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 
 	log_dbg_enabled = true;
 
-	shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
-	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
-	vs = shared_ptr <visual_servo> (new pb_sac_visual_servo(reg, config_section_name, config));
-	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
+	boost::shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
+	reg = boost::shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
+	boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
+	vs = boost::shared_ptr <visual_servo> (new pb_sac_visual_servo(reg, ds, config_section_name, config));
+	sm = boost::shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 	sm->add_position_constraint(cube);
 	sm->configure();
 }

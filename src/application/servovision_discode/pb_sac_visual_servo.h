@@ -10,9 +10,6 @@
 
 #include "pb_visual_servo.h"
 
-using visual_servo_types::position_based_configuration;
-using visual_servo_types::position_based_reading;
-
 namespace mrrocpp {
 
 namespace ecp {
@@ -29,7 +26,8 @@ namespace servovision {
 class pb_sac_visual_servo : public pb_visual_servo
 {
 public:
-	pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string& section_name, mrrocpp::lib::configurator& configurator);
+	pb_sac_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
+			mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_sac_visual_servo();
 
 protected:
