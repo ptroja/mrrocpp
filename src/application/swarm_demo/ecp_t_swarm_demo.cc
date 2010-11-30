@@ -24,10 +24,10 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	{
 		sub_task::sub_task_smooth_file_from_mp* ecpst;
 
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_m_robot->number_of_servos);
+		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT);
 		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = ecpst;
 
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS);
 		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = ecpst;
 	}
 

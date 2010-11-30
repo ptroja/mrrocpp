@@ -22,7 +22,7 @@ private:
 	std::string path;
 
 public:
-	sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, int coordinates_nr);
+	sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec);
 	~sub_task_smooth_file_from_mp();
 
 	void conditional_execution();

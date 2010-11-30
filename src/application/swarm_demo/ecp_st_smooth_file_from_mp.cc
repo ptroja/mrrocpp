@@ -16,11 +16,22 @@ namespace ecp {
 namespace common {
 namespace sub_task {
 
-sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, int coordinates_nr) :
+sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec) :
 	sub_task(_ecp_t)
 {
 
-	sgen = new generator::newsmooth(ecp_t, pose_spec, coordinates_nr);
+	switch (pose_spec)
+	{
+		case lib::ECP_JOINT:
+			sgen = new generator::newsmooth(ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
+			break;
+		case lib::ECP_XYZ_ANGLE_AXIS:
+			sgen = new generator::newsmooth(ecp_t, pose_spec, 6);
+			break;
+		default:
+			break;
+
+	}
 
 }
 
