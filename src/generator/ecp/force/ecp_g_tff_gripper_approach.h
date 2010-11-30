@@ -29,6 +29,7 @@ protected:
 	// do konfiguracji pracy generatora
 	double speed;
 	unsigned int motion_time;
+	double force_level;
 
 public:
 	const int step_no;
@@ -36,7 +37,7 @@ public:
 	// konstruktor
 	tff_gripper_approach(common::task::task& _ecp_task, int step = 0);
 
-	void configure(double l_speed, unsigned int l_motion_time);
+	void configure(double l_speed, unsigned int l_motion_time, double l_force_level);
 
 	bool first_step();
 	bool next_step();

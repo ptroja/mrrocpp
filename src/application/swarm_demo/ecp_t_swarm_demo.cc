@@ -3,6 +3,7 @@
 #include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -21,6 +22,9 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	} else {
 		// TODO: throw
 	}
+
+	// utworzenie generatorow
+	gag = new common::generator::tff_gripper_approach(*this, 8);
 
 	// utworzenie podzadan
 
@@ -42,6 +46,17 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	}
 
 	sr_ecp_msg->message("ecp SWARM DEMO loaded");
+}
+
+void swarm_demo::mp_2_ecp_next_state_string_handler(void)
+{
+
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+		gag->configure(0.02, 500, 3);
+		gag->Move();
+
+	}
+
 }
 
 task* return_created_ecp_task(lib::configurator &_config)
