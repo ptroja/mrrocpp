@@ -1,6 +1,8 @@
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_swarm_demo.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "subtask/ecp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -21,6 +23,14 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	}
 
 	// utworzenie podzadan
+
+
+	{
+		sub_task::sub_task* ecpst;
+		ecpst = new sub_task::bias_edp_force(*this);
+		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
+	}
+
 	{
 		sub_task::sub_task_smooth_file_from_mp* ecpst;
 
