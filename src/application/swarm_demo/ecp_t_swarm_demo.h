@@ -13,8 +13,6 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "ecp_mp_t_swarm_demo.h"
-#include "ecp_st_smooth_joint.h"
-#include "ecp_st_smooth_angle_axis.h"
 
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
