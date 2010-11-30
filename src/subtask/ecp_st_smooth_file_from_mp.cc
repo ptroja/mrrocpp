@@ -27,6 +27,7 @@ sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, 
 			break;
 		case lib::ECP_XYZ_ANGLE_AXIS:
 			sgen = new generator::newsmooth(ecp_t, pose_spec, 6);
+			sgen->set_debug(true);
 			break;
 		default:
 			break;
