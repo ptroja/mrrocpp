@@ -52,7 +52,7 @@ void swarm_demo::mp_2_ecp_next_state_string_handler(void)
 {
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.02, 500, 3);
+		gag->configure(0.02, 300, 3);
 		gag->Move();
 
 	}
