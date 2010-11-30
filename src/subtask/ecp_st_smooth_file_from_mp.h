@@ -2,7 +2,7 @@
 #define _ECP_SUB_TASK_SMOOTH_FILE_FROM_MP_H
 
 #include "base/ecp/ecp_sub_task.h"
-#include "application/swarm_demo/ecp_mp_st_smooth_file_from_mp.h"
+#include "ecp_mp_st_smooth_file_from_mp.h"
 
 namespace mrrocpp {
 namespace ecp {

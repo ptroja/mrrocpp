@@ -17,7 +17,7 @@
 #include "ecp_st_smooth_angle_axis.h"
 
 #include "base/ecp/ecp_task.h"
-#include "application/swarm_demo/ecp_mp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 
 namespace mrrocpp {
 namespace ecp {
