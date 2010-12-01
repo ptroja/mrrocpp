@@ -44,7 +44,9 @@ void sub_task_smooth_file_from_mp::conditional_execution()
 	path += ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 	sgen->load_trajectory_from_file(path.c_str());
 
-	if (sgen->calculate_interpolate() && sgen->detect_jerks(1) == 0) {
+	if (sgen->calculate_interpolate()
+	//		&& sgen->detect_jerks(1) == 0
+	) {
 		sgen->Move();
 	}
 }
