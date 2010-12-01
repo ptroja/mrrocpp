@@ -1095,7 +1095,7 @@ int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, P
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->irp6ot_current_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->irp6ot_current_pos[6], 0);
 
-				for (int i = 0; i < 7; i++)
+				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
 					interface.irp6ot_m->irp6ot_desired_pos[i] = interface.irp6ot_m->irp6ot_current_pos[i];
 			} else {
 
@@ -1170,7 +1170,7 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
 				interface.irp6ot_m->irp6ot_desired_pos[i] = *wektor[i];
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
@@ -1282,7 +1282,7 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, 
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->irp6ot_current_pos[6], 0);
 
-				for (int i = 0; i < 7; ++i)
+				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; ++i)
 					interface.irp6ot_m->irp6ot_desired_pos[i] = interface.irp6ot_m->irp6ot_current_pos[i];
 			} else {
 
@@ -1399,7 +1399,7 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 
 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
 				interface.irp6ot_m->irp6ot_desired_pos[i] = wektor[i];
 
 			}
