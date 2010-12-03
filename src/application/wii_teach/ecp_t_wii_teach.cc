@@ -579,8 +579,7 @@ void wii_teach::main_task_algorithm(void)
 	{
 		response = choose_option("Pose specification: [1] Angle Axis, [2] Joint", 2);
 	}
-sprintf(buffer, "Loaded %d", response);
-			sr_ecp_msg->message(buffer);	
+
 	switch(response)
 	{
 		case lib::OPTION_TWO:
