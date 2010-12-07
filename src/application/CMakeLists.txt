@@ -23,3 +23,7 @@ add_subdirectory (neuron)
 add_subdirectory (generator_tester)
 add_subdirectory (ecp_transparent)
 add_subdirectory (mp_common)
+add_subdirectory (swarm_demo)
+
+
+

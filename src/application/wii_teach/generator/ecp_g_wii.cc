@@ -140,10 +140,6 @@ bool wii::next_step()
 
     set_position(changed);
 
-    char buffer[500];
-	sprintf(buffer,"SET: %.4f %.4f %.4f %.4f %.4f %.4f", nextChange[0], nextChange[1], nextChange[2], nextChange[3], nextChange[4], nextChange[5]);
-	sr_ecp_msg.message(buffer);
-    
     return true;
 }
 

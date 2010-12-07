@@ -68,7 +68,7 @@ const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
 
-const int QNX_MAX_PRIORITY = 50;
+const int QNX_MAX_PRIORITY = 30;
 
 // STALE PULSOW MP, ECP, READER
 

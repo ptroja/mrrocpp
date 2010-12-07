@@ -37,12 +37,14 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * Reduces velocity and acceleration of the first motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call reduction_model_2, reduction_model_3 or reduction_model_4 methods if it is necessary.
 		 * @param i number of axis for which the calculations are performed
+		 * @param it iterator to the list of positions
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
 		bool reduction_model_1(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 		/**
 		 * Reduces velocity and acceleration of the second motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -50,6 +52,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		/**
 		 * Reduces velocity and acceleration of the third motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -57,6 +60,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		/**
 		 * Reduces velocity and acceleration of the fourth motion model velocity profile, so that the given distance is covered in a given time.
 		 * Can call vp_reduction method.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -65,12 +69,14 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * Reduces the terminal velocity so that the given distance can be covered in the given time.
 		 * Can call vp_reduction method.
 		 * @param i number of axis for which the calculations are performed
+		 * @param it iterator to the list of positions
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
 		bool vk_reduction(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 		/**
 		 * Reduces the initial velocity so that the given distance can be covered in the given time. Calculated initial velocity is the one at which
 		 * the given distance is covered in the given time keeping the velocity constant.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -79,6 +85,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * Calculates the shortest time for the first motion model velocity profile (2 phase motion), in which the given distance can be covered
 		 * with the given constraints on maximal velocity and acceleration.
 		 * Can call vp_reduction or vk_reduction method.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -86,6 +93,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		/**
 		 * Calculates the shortest time for the second motion model velocity profile (1 phase motion, only acceleration), in which the given distance
 		 * can be covered with the given constraints on maximal velocity and acceleration.
+		 * @param it iterator to the list of positions
 		 * @param i number of axis for which the calculations are performed
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
@@ -94,6 +102,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 * Calculates the shortest time for the fourth motion model velocity profile (1 phase motion, only deceleration), in which the given distance
 		 * can be covered with the given constraints on maximal velocity and acceleration. Reduces the initial velocity if necessary.
 		 * @param i number of axis for which the calculations are performed
+		 * @param it iterator to the list of positions
 		 * @return true if the trajectory recalculation is not needed (if initial velocity was not changed)
 		 */
 		bool optimize_time4(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);

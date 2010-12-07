@@ -126,8 +126,10 @@ void ecp_buffer::operator()()
 		int32_t type, subtype;
 		int rcvid = messip::port_receive(ch, type, subtype, ecp_to_ui_msg);
 
-		if(rcvid != MESSIP_MSG_NOREPLY)
-		continue;
+		if((rcvid != MESSIP_MSG_NOREPLY) && (rcvid != 0))
+		{
+			continue;
+		}
 #endif
 
 		//! FIXME:

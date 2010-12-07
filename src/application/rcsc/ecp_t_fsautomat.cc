@@ -77,8 +77,7 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 #endif
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) :
-	task(_config), gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL),
-			go_st(NULL)
+	task(_config), gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
@@ -191,8 +190,8 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-										//	sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));
-										xmlFree(argument);
+											//	sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));
+											xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
@@ -298,7 +297,7 @@ void fsautomat::main_task_algorithm(void)
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			double gen_args[2];
 			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			gag->configure(gen_args[0], (unsigned int) gen_args[1]);
+			gag->configure(gen_args[0], (unsigned int) gen_args[1], -10);
 			gag->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];

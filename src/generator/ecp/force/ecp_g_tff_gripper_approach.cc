@@ -26,14 +26,15 @@ namespace common {
 namespace generator {
 
 tff_gripper_approach::tff_gripper_approach(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step)
+	generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
 {
 }
 
-void tff_gripper_approach::configure(double l_speed, unsigned int l_motion_time)
+void tff_gripper_approach::configure(double l_speed, unsigned int l_motion_time, double l_force_level)
 {
 	speed = l_speed;
 	motion_time = l_motion_time;
+	force_level = l_force_level;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -98,8 +99,13 @@ bool tff_gripper_approach::next_step()
 
 	if (node_counter == 1) {
 
-	} else if (node_counter > motion_time) {
-		return false;
+	} else {
+		if (node_counter > motion_time) {
+			return false;
+		}
+		if ((force_level > 0) && (the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[2] > force_level)) {
+			return false;
+		}
 	}
 
 	return true;
