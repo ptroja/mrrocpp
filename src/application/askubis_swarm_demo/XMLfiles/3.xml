@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+
+<TaskDescription>
+
+	<State id="INIT" type="systemInitialization" xpos="11" ypos="22">
+		<taskInit>
+			<ecp name="ROBOT_IRP6_ON_TRACK">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_smooth_gen>10</ecp_smooth_gen>
+				<ecp_sub_task_gripper_opening>10</ecp_sub_task_gripper_opening>		
+			</ecp>
+			<ecp name="ROBOT_IRP6_POSTUMENT">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_smooth_gen>10</ecp_smooth_gen>
+				<ecp_sub_task_gripper_opening>10</ecp_sub_task_gripper_opening>		
+			</ecp>
+		</taskInit>
+		<transition condition="true" target="stan1"/>
+	</State>
+	
+	
+	
+	<State id="rcTaskInit" type="configureAllSensors"  xpos="11" ypos="22">
+		<AddArg>1</AddArg>
+		<transition condition="true" target="stan1"/>
+	</State>
+	
+	
+	<State id= "stan1" type="runGenerator" xpos="11" ypos="22">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<TimeSpan>1000</TimeSpan>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/XMLfiles/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
+		<transition condition="true" target="stan2"/>
+	</State>
+	
+	
+	<State id="stan2" type="runGenerator" xpos="11" ypos="22">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/XMLfiles/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
+		<transition condition="true" target="stan3"/>
+	</State>
+	
+	
+	
+	
+	<State id="stan3" type="emptyGen" xpos="11" ypos="22">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		<AddArg>1</AddArg>
+		<transition condition="true" target="stan4"/>
+	</State>
+	
+	
+		<State id="stan4" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/trj/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
+		<transition condition="true" target="stan5"/>
+	</State>
+	
+	
+	<State id="stan5" type="emptyGen" xpos="11" ypos="22">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		<AddArg>1</AddArg>
+		<transition condition="true" target="stan6"/>
+	</State>
+	
+	
+	<State id="stan6" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<TimeSpan>1000</TimeSpan>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/trj/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
+		<transition condition="true" target="stan7"/>
+	</State>
+	
+	
+	<State id="stan7" type="emptyGen" xpos="11" ypos="22">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+		<AddArg>1</AddArg>
+		<transition condition="true" target="stan8"/>
+	</State>
+	
+	<State id="stan8" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<TimeSpan>1000</TimeSpan>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/trj/irp6ot_sm_ap_2.trj</TrajectoryFilePath>
+		<transition condition="true" target="stan9"/>
+	</State>
+	
+	
+	<State id="stan9" type="stopGen" xpos="11" ypos="22">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</FirstSet>			
+		</SetOfRobots>
+		<transition condition="true" target="_STOP_"/>
+	</State>
+
+
+</TaskDescription>

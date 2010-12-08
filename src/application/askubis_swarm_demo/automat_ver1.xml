@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription [
+	<!ELEMENT TaskDescription (State+)>
+
+	<!ELEMENT State (ROBOT+,ECPGeneratorType?,(TrajectoryFilePath|GeneratorCoordinates)?,Trajectory?)>
+		<!ATTLIST State name CDATA #REQUIRED>
+		<!ATTLIST State type CDATA #REQUIRED>
+
+	<!ELEMENT ROBOT (#PCDATA)>
+	<!ELEMENT ECPGeneratorType (#PCDATA)>
+	<!ELEMENT TrajectoryFilePath (#PCDATA)>
+	<!ELEMENT GeneratorCoordinates (#PCDATA)>
+	<!ELEMENT Trajectory (Pose+)>
+		<!ATTLIST Trajectory coordinateType CDATA #REQUIRED>
+		<!ATTLIST Trajectory numOfPoses CDATA #REQUIRED>
+		
+	<!ELEMENT Pose (StartVelocity,EndVelocity,Velocity,Accelerations,Coordinates)>
+		<!ELEMENT StartVelocity (#PCDATA)>
+		<!ELEMENT EndVelocity (#PCDATA)>
+		<!ELEMENT Velocity (#PCDATA)>
+		<!ELEMENT Accelerations (#PCDATA)>
+		<!ELEMENT Coordinates (#PCDATA)>
+]>
+<!--	
+	Autor: Marek Kisiel
+	Data: 2008
+	Zadanie nalewania: "pouring"
+-->
+<TaskDescription>
+	<State name="approach_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_ap.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	0.05</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1</Accelerations>
+				<Coordinates>0.0 0.100 -1.162 0.172 1.367 2.936 1.371 0.088</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_ap.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.04	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1</Accelerations>
+				<Coordinates>-0.072647 -1.503280 0.162187 1.492185 2.332158 -1.622411 0.08 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="approach_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="grab_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_grab.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.948 -0.309 0.145 -1.269 1.529 0.0 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="grab_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_grab.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	1.0</Accelerations>
+				<Coordinates>0.840 1.774 0.083 -0.868 1.504 -3.128 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="grab_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="grab_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<GeneratorCoordinates>-0.03	1000</GeneratorCoordinates>
+	</State>
+	<State name="grab_4" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<GeneratorCoordinates>-0.018	1000</GeneratorCoordinates>
+	</State>
+	<State name="grab_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="weight_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_weight.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.948 -0.309 0.185 -1.269 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="weight_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_weight.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	1.0</Accelerations>
+				<Coordinates>0.840 1.774 0.123 -0.868 1.504 -3.128 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="weight_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="meet_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_meet.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="MOTOR" numOfPoses="3">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.777 -0.031 0.185 -0.031 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.607 0.262 0.185 -0.031 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.05	0.05	0.05	0.05	0.05	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.507 0.762 0.185 -0.031 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="meet_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_meet.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.05	0.05	0.05	0.05	0.05	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.274 1.024 0.141 -0.868 1.504 -3.128 0.068 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="meet_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="meet_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_track_meet.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.16 1.247939 -1.305014 0.111729 1.424721 2.849218 1.431256 0.058</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="meet_end_2" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+	</State>
+	<State name="pour_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_TOOL_CHANGE_GENERATOR</ECPGeneratorType>
+		<GeneratorCoordinates>-0.18	0.0	0.25</GeneratorCoordinates>
+	</State>
+	<State name="pour_end_1" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_2.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.510 1.088 0.255 -0.034 1.528 -2.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="pour_end_2" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_3.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.05	0.05	0.05	0.05	0.05	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.510 1.088 0.255 -0.034 1.528 -1.18 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="pour_end_3" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_4" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_TOOL_CHANGE_GENERATOR</ECPGeneratorType>
+		<GeneratorCoordinates>0.0	0.0	0.25</GeneratorCoordinates>
+	</State>
+	<State name="pour_end_4" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="pour_5" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_pour_4.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.507 0.922 0.186 -0.033 1.528 0.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="pour_end_5" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+	</State>
+	<State name="go_back_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_track_put_back.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.05	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.000000 1.247939 -1.305014 0.111729 1.424721 2.849218 1.431256 0.058</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="go_back_end_1" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+	</State>
+	<State name="go_back_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_go_back.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="3">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.607 0.262 0.185 -0.031 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.05	0.05	0.05	0.05	0.05	0.05	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.777 -0.031 0.185 -0.031 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.948 -0.309 0.185 -1.269 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="go_back_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_go_back.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	1.0</Accelerations>
+				<Coordinates>0.840 1.774 0.123 -0.868 1.504 -3.128 0.068 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="go_back_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="put_back_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_put_back.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	1.0	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	1.0	1.0</Accelerations>
+				<Coordinates>0.948 -0.309 0.145 -1.269 1.529 0.0 0.058 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="put_back_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_put_back.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	1.0</Accelerations>
+				<Coordinates>0.840 1.774 0.083 -0.868 1.504 -3.128 0.068 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="put_back_end_1" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="put_back_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<GeneratorCoordinates>0.03	1000</GeneratorCoordinates>
+	</State>
+	<State name="put_back_4" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>RCSC_GRIPPER_OPENING</ECPGeneratorType>
+		<GeneratorCoordinates>0.015	1000</GeneratorCoordinates>
+	</State>
+	<State name="put_back_end_2" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>
+	</State>
+	<State name="put_back_5" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_dep_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.1	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1</Accelerations>
+				<Coordinates>0.948 -0.161 0.145 -1.269 1.529 0.0 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="put_back_6" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_dep_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="XYZ_EULER_ZYZ" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.01	0.01	0.01	0.01	0.01	0.01	0.1	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1</Accelerations>
+				<Coordinates>0.789 1.842 0.152 -0.868 1.504 -3.128 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="put_back_end_3" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+	<State name="depart_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_ot_dep_2.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.000000 -0.087404 -1.541820 0.024063 1.218727 2.591305 -2.664387 0.073999</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="depart_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>trj/pouring/irp6_p_dep_2.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</StartVelocity>
+				<EndVelocity>0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1.0</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>-0.100623 -1.541943 0.048609 1.197722 2.100977 -2.731184 0.088 0.0</Coordinates>
+			</Pose>
+		</Trajectory>
+	</State>
+	<State name="depart_end" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT</ROBOT>		
+	</State>
+</TaskDescription>
