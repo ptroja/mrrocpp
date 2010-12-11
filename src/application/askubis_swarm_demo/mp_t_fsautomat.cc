@@ -89,8 +89,8 @@ void fsautomat::create_robots()
 
 fsautomat::fsautomat(lib::configurator &_config) :
 	task(_config)
-{//*
-	 int size, conArg;
+{/*
+		int size, conArg;
 	 char *filePath;
 	 char *fileName = config.value<std::string>("xml_file", "[xml_settings]");
 	 xmlNode *cur_node, *child_node;

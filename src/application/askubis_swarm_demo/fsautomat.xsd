@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Accelerations">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="AddArg">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="bias_edp_force_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="Coordinates">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="cube_state">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ecp_gen_t" minOccurs="0"/>
+                <xs:element ref="ecp_tool_change_gen" minOccurs="0"/>
+                <xs:element ref="ecp_tff_nose_run_gen" minOccurs="0"/>
+                <xs:element ref="ecp_tff_rubik_grab_gen" minOccurs="0"/>
+                <xs:element ref="ecp_tff_gripper_approach_gen" minOccurs="0"/>
+                <xs:element ref="ecp_tff_rubik_face_rotate_gen" minOccurs="0"/>
+                <xs:element ref="ecp_teach_in_gen" minOccurs="0"/>
+                <xs:element ref="bias_edp_force_gen" minOccurs="0"/>
+                <xs:element ref="ecp_smooth_gen" minOccurs="0"/>
+                <xs:element ref="weight_meassure_gen" minOccurs="0"/>
+                <xs:element ref="ecp_sub_task_gripper_opening" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ecp_gen_t">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_smooth_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_sub_task_gripper_opening">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_teach_in_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_tff_gripper_approach_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_tff_nose_run_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_tff_rubik_face_rotate_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_tff_rubik_grab_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ecp_tool_change_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="ECPGeneratorType">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="EndVelocity">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="FirstSet">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ROBOT" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GeneratorParameters">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="mp">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cube_state" minOccurs="0"/>
+                <xs:element ref="Sensor" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="Transmitter" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Parameters">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="Pose">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="StartVelocity"/>
+                <xs:element ref="EndVelocity"/>
+                <xs:element ref="Velocity"/>
+                <xs:element ref="Accelerations"/>
+                <xs:element ref="Coordinates"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ROBOT">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="SecSet">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ROBOT" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Sensor">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="SetOfRobots">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="FirstSet" minOccurs="0"/>
+                <xs:element ref="SecSet" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Speech">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="StartVelocity">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="State">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="ROBOT"/>
+                    <xs:element ref="SetOfRobots"/>
+                </xs:choice>
+                <xs:element ref="ECPGeneratorType" minOccurs="0"/>
+                <xs:element ref="TrajectoryFilePath" minOccurs="0"/>
+                <xs:element ref="Trajectory" minOccurs="0"/>
+                <xs:element ref="taskInit" minOccurs="0"/>
+                <xs:element ref="Speech" minOccurs="0"/>
+                <xs:element ref="AddArg" minOccurs="0"/>
+                <xs:element ref="Sensor" minOccurs="0"/>
+                <xs:element ref="TimeSpan" minOccurs="0"/>
+                <xs:element ref="GeneratorParameters" minOccurs="0"/>
+                <xs:element ref="Parameters" minOccurs="0"/>
+                <xs:element ref="transition" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SubTask">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="TaskDescription">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State" maxOccurs="unbounded"/>
+                <xs:element ref="SubTask" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="taskInit">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ecp" maxOccurs="unbounded"/>
+                <xs:element ref="mp" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="TimeSpan">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="Trajectory">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Pose" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="numOfPoses" type="xs:string" use="required"/>
+            <xs:attribute name="coordinateType" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="TrajectoryFilePath">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="transition">
+        <xs:complexType mixed="true">
+            <xs:attribute name="target" type="xs:string" use="required"/>
+            <xs:attribute name="condition" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Transmitter">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="Velocity">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+    <xs:element name="weight_meassure_gen">
+        <xs:complexType mixed="true"/>
+    </xs:element>
+
+</xs:schema>

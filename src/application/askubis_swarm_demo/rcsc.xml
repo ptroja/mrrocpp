@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+
+<TaskDescription>
+	<State id="INIT" type="systemInitialization">
+		<taskInit>
+			<ecp name="ROBOT_IRP6_ON_TRACK">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_tff_nose_run_gen>8</ecp_tff_nose_run_gen>
+				<ecp_tff_rubik_grab_gen>8</ecp_tff_rubik_grab_gen>
+				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+				<ecp_tff_rubik_face_rotate_gen>8</ecp_tff_rubik_face_rotate_gen>
+				<ecp_teach_in_gen></ecp_teach_in_gen>
+				<bias_edp_force_gen></bias_edp_force_gen>
+				<ecp_smooth_gen>1</ecp_smooth_gen>
+				<weight_meassure_gen>1</weight_meassure_gen>
+				<ecp_sub_task_gripper_opening></ecp_sub_task_gripper_opening>		
+			</ecp>
+			<ecp name="ROBOT_IRP6_POSTUMENT">
+				<ecp_gen_t></ecp_gen_t>
+				<ecp_tff_nose_run_gen>8</ecp_tff_nose_run_gen>
+				<ecp_tff_rubik_grab_gen>8</ecp_tff_rubik_grab_gen>
+				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+				<ecp_tff_rubik_face_rotate_gen>8</ecp_tff_rubik_face_rotate_gen>
+				<ecp_teach_in_gen></ecp_teach_in_gen>
+				<bias_edp_force_gen></bias_edp_force_gen>
+				<ecp_smooth_gen>1</ecp_smooth_gen>
+				<ecp_sub_task_gripper_opening></ecp_sub_task_gripper_opening>		
+			</ecp>
+			<ecp name="FESTIVAL">
+				<!--
+				<festival_gen></festival_gen>
+				-->
+			</ecp>
+			<mp>
+				<cube_state></cube_state>
+				<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+				<Sensor>SENSOR_CAMERA_SA</Sensor>
+				<Transmitter>TRANSMITTER_RC_WINDOWS</Transmitter>
+			</mp>
+		</taskInit>
+		<transition condition="true" target="approach_1"/>
+	</State>
+	<!-- proba zapisania inicjalizacji elementow potrzebnych do wykonania zadania ukladania kostki (pomijam inicjalizaje na poziome ECP)  -->
+	<!-- configure_edp_force_sensor(true, true) -->
+	<!-- ########################################## APPROACH_OP ######################################################################## -->
+	<!--
+	<State id="rcTaskInit" type="configureAllSensors">
+		<AddArg>1</AddArg>
+		<transition condition="true" target="approach_1"/>
+	</State>
+	-->
+	<State id="approach_1" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_BIAS_EDP_FORCE</ECPGeneratorType>
+		<transition condition="true" target="approach_2"/>
+	</State>
+	<State id="approach_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_BIAS_EDP_FORCE</ECPGeneratorType>
+		<transition condition="true" target="approach_3"/>
+	</State>
+	<State id="approach_3" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_4"/>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy  -->
+	<State id="approach_4" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>jestem podatny</Speech>
+		<AddArg>1</AddArg>
+		<transition condition="true" target="approach_5"/>
+	</State>
+	<State id="approach_5" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="iniFile.irp6p_compliant" target="approach_6"/>
+		<transition condition="true" target="approach_9"/>
+	</State>
+
+	<!-- sprawdzenie warunku z pliku konfiguracyjnego i wejscie w zbior stanow -->
+	<!-- dla POSTUMENT -->
+	<State id="approach_6" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_NOSE_RUN</ECPGeneratorType>
+		<transition condition="true" target="approach_7"/>
+	</State>
+	<State id="approach_7" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+		<AddArg>1</AddArg>
+		<transition condition="true" target="approach_8"/>
+	</State>
+	<State id="approach_8" type="stopGen">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</FirstSet>			
+		</SetOfRobots>
+		<transition condition="true" target="approach_12"/>
+	</State>
+	<!-- dla ON_TRACK'a -->
+	<State id="approach_9" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_NOSE_RUN</ECPGeneratorType>
+		<transition condition="true" target="approach_10"/>
+	</State>
+	<State id="approach_10" type="emptyGen">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>		
+		<AddArg>1</AddArg>
+		<transition condition="true" target="approach_11"/>
+	</State>
+	<State id="approach_11" type="stopGen">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>			
+			</FirstSet>			
+		</SetOfRobots>
+		<transition condition="true" target="approach_12"/>
+	</State>
+	<!-- wykonanie ruchu -->	
+	<State id="approach_12" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	-0.087462	-1.54187	0.024063	1.21873	2.57816	-2.66439	0.057</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="approach_13"/>
+	</State>
+	<State id="approach_13" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_ap_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>-0.100633	-1.54194	0.048591	1.19773	2.10098	-2.7312	0.074	0</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="approach_14"/>
+	</State>
+	<State id="approach_14" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_15"/>
+	</State>
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy i ON_TRACK'a -->
+	<State id="approach_15" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>jestem robotem usl/ugowym</Speech>
+		<transition condition="true" target="approach_16"/>
+	</State>
+	<State id="approach_16" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_2.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.3	0.3	0.3	0.3	0.3	0.3	0.3	1</Accelerations>
+				<Coordinates>0.000000 -0.000056 -1.570689 0.000365 1.559536 1.570215 -2.320805 0.088</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="approach_17"/>
+	</State>
+	<State id="approach_17" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_18"/>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State id="approach_18" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>ul/oz*e~ kostke~ rubika</Speech>
+		<transition condition="true" target="approach_19"/>
+	</State>
+	<State id="approach_19" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_20"/>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State id="approach_20" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>podaj kostke~</Speech>
+		<transition condition="true" target="approach_21"/>
+	</State>
+	<State id="approach_21" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_22"/>
+	</State>
+
+	<!-- wlaczenie generatora transparentnego -->	
+	<State id="approach_22" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<transition condition="true" target="approach_23"/>
+	</State>
+	<State id="approach_23" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<transition condition="true" target="approach_26"/>
+	</State>
+	<!--
+	<State id="approach_24" type="emptyGenForSet">
+		<ROBOT>ROBOT_IRP6_ON_TRACK;ROBOT_IRP6_POSTUMENT;ROBOT_FESTIVAL</ROBOT>		
+	</State>
+	-->
+	
+	<!-- sprawdzenie warunku dla wlaczenia serwa wizyjnego i wlaczenie go -->	
+	<!--
+	<State id="approach_25" type="eyeGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<AddArg>4</AddArg>
+		<Sensor>SENSOR_CAMERA_SA</Sensor>
+	</State>
+	-->
+	<!-- zatrzymanie generatora dla robotow -->
+	<State id="approach_26" type="stopGen">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</FirstSet>			
+		</SetOfRobots>
+		<transition condition="true" target="approach_27"/>
+	</State>
+	
+	<!-- czekanie wsazana liczbe milisekund -->
+	<State id="approach_27" type="wait">
+		<TimeSpan>500</TimeSpan>
+		<transition condition="true" target="approach_28"/>
+	</State>
+	
+	<!-- zacisniecie chwytaka na kostce  -->
+	<State id="approach_28" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<GeneratorParameters>0.057	0.00005	0</GeneratorParameters>
+		<transition condition="true" target="approach_29"/>
+	</State>
+	<State id="approach_29" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_30"/>
+	</State>
+	<State id="approach_30" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TFF_RUBIK_GRAB</ECPGeneratorType>
+		<GeneratorParameters>0.057	0.00005	50</GeneratorParameters>
+		<transition condition="true" target="approach_31"/>
+	</State>
+	<State id="approach_31" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_32"/>
+	</State>
+
+	<!-- uruchomienie festivala, czyli wlaczenie generatora mowy -->
+	<State id="approach_32" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>pus~c~ kostke~</Speech>
+		<transition condition="true" target="approach_33"/>
+	</State>
+	<State id="approach_33" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="approach_34"/>
+	</State>
+	<State id="approach_34" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="approach_35"/>
+	</State>
+	
+	<!-- wykonanie ruchu -->	
+	<State id="approach_35" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_ap_3.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="4">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	0.618665	-1.80556	0.094866	0.109006	1.5269	-2.07706	0.057</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	0.618665	-1.80556	0.094866	0.109006	1.5269	-2.07706	0.062</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	0.618665	-1.80556	0.094866	0.109006	1.5269	-2.07706	0.057</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0.160123	1.81156	-1.57159	0.185117	0.573102	2.50217	0.518841	0.057</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="approach_36"/>
+	</State>
+	<State id="approach_36" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="identify_colors_1"/>
+		<transition condition="false" target="_STOP_"/>
+	</State>
+	
+	<!-- ########################################## IDENTIFY_COLORS ######################################################################## -->
+	<State id="identify_colors_1" type="cubeStateInit">
+		<Parameters>BLUE	GREEN	RED	ORANGE	WHITE	YELLOW</Parameters>
+		<transition condition="true" target="ica_1>>identify_colors_2"/>
+		<transition condition="true" target="_STOP_"/>
+	</State>
+	<State id="identify_colors_2" type="cubeStateWriting">
+		<AddArg>0</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_3"/>
+	</State>
+	<State id="identify_colors_3" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_0_1>>identify_colors_4"/>
+	</State>
+
+	<State id="identify_colors_4" type="intermediateState">
+		<transition condition="true" target="ica_1>>identify_colors_5"/>
+	</State>
+	<State id="identify_colors_5" type="cubeStateWriting">
+		<AddArg>1</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_6"/>
+	</State>
+	<State id="identify_colors_6" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_0_1>>identify_colors_7"/>
+	</State>
+
+	<State id="identify_colors_7" type="intermediateState">
+		<transition condition="true" target="ica_1>>identify_colors_8"/>
+	</State>
+	<State id="identify_colors_8" type="cubeStateWriting">
+		<AddArg>2</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_9"/>
+	</State>
+	<State id="identify_colors_9" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_180_1>>identify_colors_10"/>
+	</State>
+
+	<State id="identify_colors_10" type="intermediateState">
+		<transition condition="true" target="ica_1>>identify_colors_11"/>
+	</State>
+	<State id="identify_colors_11" type="cubeStateWriting">
+		<AddArg>3</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_12"/>
+	</State>
+	<State id="identify_colors_12" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_0_1>>identify_colors_13"/>
+	</State>
+
+	<State id="identify_colors_13" type="intermediateState">
+		<transition condition="true" target="ica_1>>identify_colors_14"/>
+	</State>
+	<State id="identify_colors_14" type="cubeStateWriting">
+		<AddArg>4</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_15"/>
+	</State>
+	<State id="identify_colors_15" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_180_1>>identify_colors_16"/>
+	</State>
+
+	<State id="identify_colors_16" type="intermediateState">
+		<transition condition="true" target="ica_1>>identify_colors_17"/>
+	</State>
+	<State id="identify_colors_17" type="cubeStateWriting">
+		<AddArg>5</AddArg>
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="identify_colors_18"/>
+	</State>
+	<State id="identify_colors_18" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="fco_CL_0_1>>communicate_wws_1"/>
+	</State>
+	
+	<!-- ################################################################################################################################### -->
+	<!-- identify colors main algorithm -->
+	<State id="ica_1" type="intermediateState">
+		<transition condition="true" target="fto_CL_0_1>>ica_2"/>
+	</State>
+	<State id="ica_2" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>oglo~dam kolory na s~ciance</Speech>
+		<transition condition="true" target="ica_3"/>
+	</State>
+	<State id="ica_3" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="ica_4"/>
+	</State>
+	<State id="ica_4" type="wait">
+		<TimeSpan>5000</TimeSpan>
+		<transition condition="true" target="ica_5"/>
+	</State>
+	<State id="ica_5" type="initiateSensorReading">
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="ica_6"/>
+	</State>
+	<State id="ica_6" type="wait">
+		<TimeSpan>1000</TimeSpan>
+		<transition condition="true" target="ica_7"/>
+	</State>
+	<State id="ica_7" type="getSensorReading">
+		<Sensor>SENSOR_CAMERA_ON_TRACK</Sensor>
+		<transition condition="true" target="_END_"/>
+	</State>
+	
+	<!-- ################################################################################################################################### -->
+	<!--  -->
+	<!-- ########################################## COMMUNICATE_WITH_WINDOWS_SOLVER ######################################################## -->
+	<State id="communicate_wws_1" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>mys~le~</Speech>
+		<transition condition="true" target="communicate_wws_2"/>
+	</State>
+	<State id="communicate_wws_2" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="communicate_wws_3"/>
+	</State>
+	<State id="communicate_wws_3" type="communicateWithSolver">
+		<transition condition="stateOperationResult" target="communicate_wws_4"/>
+		<transition condition="true" target="depop_1"/>
+	</State>
+	<State id="communicate_wws_4" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>juZ ukl/adam</Speech>
+		<transition condition="true" target="communicate_wws_5"/>
+	</State>
+	<State id="communicate_wws_5" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="man_1"/>
+	</State>
+	
+	<!--  -->
+	<!-- ################################################################################################################################### -->
+
+	<!-- ########################################## MANIPULATE - SEQUENCE EXECUTION ######################################################## -->
+	<State id="man_1" type="intermediateState">
+		<transition condition="true" target="fto_CL_0_1>>man_2"/>
+	</State>
+	<State id="man_2" type="intermediateState">	
+		<transition condition="true" target="man_3>>depop_1"/>
+	</State>
+	<State id="man_3" type="intermediateState">	
+		<transition condition="true" target="man_4>>fco_CL_0_1"/>
+	</State>	
+
+	<State id="man_4" type="manipulationSeqTranslation">	
+		<transition condition="true" target="_END_"/>
+	</State>
+	<!--  -->
+	<!-- ########################################## DEPARTURE_OPERATION #################################################################### -->
+	<State id="depop_1" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>skon~czyl/em</Speech>
+		<transition condition="true" target="depop_2"/>
+	</State>
+	<State id="depop_2" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6ot_sm_de_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="2">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	-0.087462	-1.54187	0.024063	1.21873	2.57816	-2.66439	0.057</Coordinates>
+			</Pose>
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>0	-0.087462	-1.54187	0.024063	1.21873	2.57816	-2.66439	0.065</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="depop_3"/>
+	</State>
+	<State id="depop_3" type="runGenerator">
+		<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>
+		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<TrajectoryFilePath>src/application/rcsc/rcsc2/irp6p_sm_de_1.trj</TrajectoryFilePath>
+		<Trajectory coordinateType="JOINT" numOfPoses="1">
+			<Pose>
+				<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
+				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>
+				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
+				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
+				<Coordinates>-0.100633	-1.54194	0.048591	1.19773	2.10098	-2.7312	0.074	0</Coordinates>
+			</Pose>
+		</Trajectory>
+		<transition condition="true" target="depop_4"/>
+	</State>
+	<State id="depop_4" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="depop_5"/>
+	</State>
+	<State id="depop_5" type="runGenerator">
+		<ROBOT>ROBOT_FESTIVAL</ROBOT>
+		<ECPGeneratorType>ECP_GEN_TRANSPARENT</ECPGeneratorType>
+		<Speech>jade~ pracowac~ do anglii</Speech>
+		<transition condition="true" target="depop_6"/>
+	</State>
+	<State id="depop_6" type="emptyGenForSet">
+		<SetOfRobots>
+			<FirstSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+				<ROBOT>ROBOT_FESTIVAL</ROBOT>		
+			</FirstSet>			
+			<SecSet>
+				<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
+				<ROBOT>ROBOT_IRP6_POSTUMENT</ROBOT>		
+			</SecSet>
+		</SetOfRobots>
+		<transition condition="true" target="_STOP_"/>
+	</State>
+	
+	<!-- ################################################################################################################################### -->
+
+	<xi:include href="faceTurnOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/>
+	<xi:include href="faceChangeOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/>
+	<!-- ################################################################################################################################### -->
+	<!--  -->
+	<!--  -->
+	
+</TaskDescription>
+
