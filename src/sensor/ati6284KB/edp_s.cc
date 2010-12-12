@@ -40,7 +40,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	conversion_scale << 4.5511972116989, 4.5511972116989, 1.41244051397552, 84.8843245576086, 84.8843245576086, 80.9472037525247;
 
 	sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
-
+	force_sensor_name = edp::sensor::FORCE_SENSOR_ATI6284;
 
 }
 
@@ -82,43 +82,14 @@ void ATI6284_force::configure_sensor(void)
 
 		// synchronize gravity transformation
 
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-
 		wait_for_event();
 
 		bias_data = datav;
 
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-
-			lib::Xyz_Angle_Axis_vector tab;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				free(toDel);
-				sensor_frame = lib::Homog_matrix(tab);
-
-			}
-			double weight = master.config.value <double> ("weight");
-
-			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
-			free(toDel);
-
-			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI3084, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
-
-		} else {
-			gravity_transformation->synchro(frame);
-		}
 	}
+
+	force::configure_sensor();
+
 }
 
 void ATI6284_force::wait_for_event()

@@ -97,6 +97,7 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	_master.registerReaderStoppedCallback(boost::bind(&ATI6284_force::stopMeasurements, this));
 
 	sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+	force_sensor_name = edp::sensor::FORCE_SENSOR_ATI6284;
 
 }
 
@@ -160,8 +161,6 @@ void ATI6284_force::configure_sensor(void)
 
 		// synchronize gravity transformation
 
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
 
@@ -179,39 +178,9 @@ void ATI6284_force::configure_sensor(void)
 			bias_data[i] = adc_data[i];
 		}
 
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-
-			lib::Xyz_Angle_Axis_vector tab;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				sensor_frame = lib::Homog_matrix(tab);
-				free(toDel);
-				// std::cout<<sensor_frame<<std::endl;
-			}
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-
-			double weight = master.config.value <double> ("weight");
-
-			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
-			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
-
-		} else {
-			gravity_transformation->synchro(frame);
-		}
 	}
+
+	force::configure_sensor();
 }
 
 void ATI6284_force::wait_for_event()

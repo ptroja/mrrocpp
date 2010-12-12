@@ -57,6 +57,9 @@ class force : public lib::sensor::sensor_interface
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
+	// nazwa czujnika
+	short force_sensor_name;
+
 	// is sensor_frame right turn
 	bool is_right_turn_frame;
 	// sensor_frame related to wrist frame
@@ -67,6 +70,8 @@ protected:
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+
+	virtual void configure_sensor(void);
 
 	struct _from_vsp
 	{
@@ -80,7 +85,6 @@ public:
 	void operator()();
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
-
 
 	lib::sr_vsp *sr_msg; //!< komunikacja z SR
 	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
