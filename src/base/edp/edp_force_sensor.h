@@ -57,7 +57,10 @@ class force : public lib::sensor::sensor_interface
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
+	// is sensor_frame right turn
 	bool is_right_turn_frame;
+	// sensor_frame related to wrist frame
+	lib::Homog_matrix sensor_frame;
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
@@ -77,6 +80,7 @@ public:
 	void operator()();
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
+
 
 	lib::sr_vsp *sr_msg; //!< komunikacja z SR
 	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp

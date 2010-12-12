@@ -87,6 +87,8 @@ const struct sigevent *isr_handler(void *area, int id)
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	force(_master)
 {
+	sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
+
 	//	sr_msg->message("ATI6284_force 1");
 }
 
@@ -361,7 +363,6 @@ void ATI6284_force::configure_sensor(void)
 	{
 
 		lib::Xyz_Angle_Axis_vector tab;
-		lib::Homog_matrix sensor_frame;
 		if (master.config.exists("sensor_in_wrist")) {
 			char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 			char* toDel = tmp;
@@ -370,8 +371,7 @@ void ATI6284_force::configure_sensor(void)
 			free(toDel);
 			sensor_frame = lib::Homog_matrix(tab);
 
-		} else
-			sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
+		}
 		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(-1, 0, 0, 0,  0, -1, 0, 0,  0, 0, 1, 0.09);
 
 		double weight = master.config.value <double> ("weight");
@@ -445,7 +445,6 @@ void ATI6284_force::wait_for_event()
 	is_reading_ready = true;
 
 }
-
 
 // // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 void ATI6284_force::get_reading(void)
@@ -619,8 +618,6 @@ void ATI6284_force::get_reading(void)
 	}
 	show++;
 	is_reading_ready = true;
-
-
 
 }
 

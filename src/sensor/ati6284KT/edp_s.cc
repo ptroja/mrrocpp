@@ -96,6 +96,8 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 	_master.registerReaderStartedCallback(boost::bind(&ATI6284_force::startMeasurements, this));
 	_master.registerReaderStoppedCallback(boost::bind(&ATI6284_force::stopMeasurements, this));
 
+	sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+
 }
 
 void ATI6284_force::startMeasurements()
@@ -181,7 +183,6 @@ void ATI6284_force::configure_sensor(void)
 		{
 
 			lib::Xyz_Angle_Axis_vector tab;
-			lib::Homog_matrix sensor_frame;
 			if (master.config.exists("sensor_in_wrist")) {
 				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 				char* toDel = tmp;
@@ -190,8 +191,7 @@ void ATI6284_force::configure_sensor(void)
 				sensor_frame = lib::Homog_matrix(tab);
 				free(toDel);
 				// std::cout<<sensor_frame<<std::endl;
-			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+			}
 			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
 			double weight = master.config.value <double> ("weight");
@@ -250,8 +250,6 @@ void ATI6284_force::wait_for_event()
 
 }
 
-
-
 /***************************** odczyt z czujnika *****************************/
 void ATI6284_force::get_reading(void)
 {
@@ -278,7 +276,6 @@ void ATI6284_force::get_reading(void)
 		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 		master.force_msr_upload(output);
 	}
-
 
 }
 /*******************************************************************/

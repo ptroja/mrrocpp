@@ -116,6 +116,7 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 	force(_master), int_attached(false)
 {
 	memset(&mds, 0, sizeof(mds));
+	sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 }
 
 void ATI3084_force::connect_to_hardware(void)
@@ -254,7 +255,6 @@ void ATI3084_force::configure_sensor(void)
 	if (!gravity_transformation) // nie powolano jeszcze obiektu
 	{
 		lib::Xyz_Angle_Axis_vector tab;
-		lib::Homog_matrix sensor_frame;
 		if (master.config.exists("sensor_in_wrist")) {
 			char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 			char* toDel = tmp;
@@ -263,8 +263,8 @@ void ATI3084_force::configure_sensor(void)
 			sensor_frame = lib::Homog_matrix(tab);
 			free(toDel);
 			// std::cout<<sensor_frame<<std::endl;
-		} else
-			sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+		}
+
 		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
 
 		double weight = master.config.value <double> ("weight");
@@ -345,7 +345,6 @@ void ATI3084_force::wait_for_event()
 		usleep(1000);
 	}
 }
-
 
 /***************************** odczyt z czujnika *****************************/
 void ATI3084_force::get_reading(void)
