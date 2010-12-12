@@ -250,8 +250,10 @@ void ATI6284_force::wait_for_event()
 
 }
 
-/*************************** inicjacja odczytu ******************************/
-void ATI6284_force::initiate_reading(void)
+
+
+/***************************** odczyt z czujnika *****************************/
+void ATI6284_force::get_reading(void)
 {
 	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -276,11 +278,8 @@ void ATI6284_force::initiate_reading(void)
 		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 		master.force_msr_upload(output);
 	}
-}
 
-/***************************** odczyt z czujnika *****************************/
-void ATI6284_force::get_reading(void)
-{
+
 }
 /*******************************************************************/
 force* return_created_edp_force_sensor(common::manip_effector &_master)

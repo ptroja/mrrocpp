@@ -72,8 +72,6 @@ void force::operator()()
 				//	sr_msg->message("else 12");
 				wait_for_event();
 
-				initiate_reading();
-
 				get_reading();
 
 				lib::Ft_vector current_force;

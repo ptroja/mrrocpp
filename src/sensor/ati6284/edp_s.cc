@@ -445,10 +445,12 @@ void ATI6284_force::wait_for_event()
 	is_reading_ready = true;
 
 }
-// // // // // // // // // // // // // // /   odczyt danych  // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::initiate_reading(void)
+
+// // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
+void ATI6284_force::get_reading(void)
 {
+
 	short int no_result = 0; //brak wyniku
 	static short int show = 0; //wyswietl
 	float force_torque[6]; //wektor z siami i napiciami
@@ -617,11 +619,9 @@ void ATI6284_force::initiate_reading(void)
 	}
 	show++;
 	is_reading_ready = true;
-}
 
-// // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::get_reading(void)
-{
+
+
 }
 
 // // // // // // // // // // // // // // /  inne potrzebne funkcje // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////

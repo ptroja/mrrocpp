@@ -218,41 +218,39 @@ void ATI6284_force::wait_for_event()
 	rpcController.reset();
 }
 
-/*************************** inicjacja odczytu ******************************/
-void ATI6284_force::initiate_reading(void)
-{
-	lib::Ft_vector kartez_force;
-	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-	short measure_report;
 
-	if (!is_sensor_configured) {
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-
-	lib::Ft_vector ft_table;
-
-	convert_data(adc_data, bias_data, force_fresh);
-
-	for (int i = 0; i < 6; ++i) {
-		ft_table[i] = force_fresh[i];
-	}
-
-	is_reading_ready = true;
-
-	// jesli ma byc wykorzytstywana biblioteka transformacji sil
-	if (gravity_transformation) {
-
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-		master.force_msr_upload(output);
-
-	}
-}
 
 /***************************** odczyt z czujnika *****************************/
 void ATI6284_force::get_reading(void)
 {
+	lib::Ft_vector kartez_force;
+		double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+		short measure_report;
+
+		if (!is_sensor_configured) {
+			throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		}
+
+		lib::Ft_vector ft_table;
+
+		convert_data(adc_data, bias_data, force_fresh);
+
+		for (int i = 0; i < 6; ++i) {
+			ft_table[i] = force_fresh[i];
+		}
+
+		is_reading_ready = true;
+
+		// jesli ma byc wykorzytstywana biblioteka transformacji sil
+		if (gravity_transformation) {
+
+			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+			master.force_msr_upload(output);
+
+		}
+
 }
 /*******************************************************************/
 force* return_created_edp_force_sensor(common::manip_effector &_master)
