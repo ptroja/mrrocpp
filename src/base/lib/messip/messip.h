@@ -26,6 +26,8 @@
 #include <pthread.h>
 #include <netinet/in.h>
 #include <sys/select.h>
+#include <signal.h>
+#include <time.h>
 
 //#define USE_MESSIP_SRR
 
@@ -198,7 +200,8 @@ int32_t
 		messip_buffered_send(messip_channel_t * ch, int32_t type, int32_t subtype, void *send_buffer, int send_len, int32_t msec_timeout);
 #if !defined(__FreeBSD__) && !defined(__APPLE__) && !defined(__MACH__)
 timer_t
-		messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int32_t msec_timeout);
+	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int32_t msec_timeout);
+		
 int messip_timer_delete(messip_channel_t * ch, timer_t timer_id);
 #endif
 int messip_death_notify(messip_cnx_t * cnx, int32_t msec_timeout, int status);
