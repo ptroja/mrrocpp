@@ -532,18 +532,12 @@ void ATI6284_force::get_particular_reading(void)
 	printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
 #endif
 	// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-	lib::Ft_vector kartez_force, root_force;
+	lib::Ft_vector kartez_force;
 	if (gravity_transformation) {
-		for (int i = 0; i < 6; i++)
-			root_force[i] = force_torque[i];
+		for (int i = 0; i < 6; i++) {
+			ft_table[i] = force_torque[i];
+		}
 
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-		lib::Ft_vector output = gravity_transformation->getForce(root_force, frame);
-
-		//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
-		//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
-		master.force_msr_upload(output);
 		/*		if (show==1000){
 		 cerr << "Output\t";
 		 for(int i=0;i<3;i++) {
