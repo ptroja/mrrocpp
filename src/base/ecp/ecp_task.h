@@ -46,16 +46,11 @@ typedef subtasks_t::value_type subtask_pair_t;
 class task : public ecp_mp::task::task
 {
 private:
-#if !defined(USE_MESSIP_SRR)
+
 	/**
 	 * @brief communication channels descriptors
 	 */
-	name_attach_t *ecp_attach, *trigger_attach; // by Y
-
-
-#else
-	messip_channel_t *ecp_attach, *trigger_attach;
-#endif
+	lib::fd_server_t ecp_attach, trigger_attach; // by Y
 
 	/**
 	 * @brief MP server communication channel descriptor to send pulses

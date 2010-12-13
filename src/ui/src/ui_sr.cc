@@ -61,15 +61,16 @@ void sr_buffer::operator()()
 {
 	lib::set_thread_name("sr");
 
-#if !defined(USE_MESSIP_SRR)
-	name_attach_t *attach;
+	lib::fd_server_t ch;
 
-	if ((attach = name_attach(NULL, interface.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+#if !defined(USE_MESSIP_SRR)
+
+	if ((ch = name_attach(NULL, interface.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
 #else
-	messip_channel_t *ch = messip::port_create(interface.sr_attach_point);
+	ch = messip::port_create(interface.sr_attach_point);
 	assert(ch);
 #endif /* USE_MESSIP_SRR */
 
@@ -78,7 +79,7 @@ void sr_buffer::operator()()
 		lib::sr_package_t sr_msg;
 
 #if !defined(USE_MESSIP_SRR)
-		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
+		int rcvid = MsgReceive_r(ch->chid, &sr_msg, sizeof(sr_msg), NULL);
 
 		if (rcvid < 0) /* Error condition, exit */
 		{

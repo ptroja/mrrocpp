@@ -51,19 +51,10 @@ private:
 	 */
 	pid_t ECP_pid;
 
-#if !defined(USE_MESSIP_SRR)
-
 	/**
 	 * @brief main ECP communication channel descriptor
 	 */
-	int ECP_fd;
-#else
-
-	/**
-	 * @brief main ECP communication channel descriptor
-	 */
-	messip_channel_t* ECP_fd;
-#endif
+	lib::fd_client_t ECP_fd;
 
 protected:
 

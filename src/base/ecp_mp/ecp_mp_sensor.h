@@ -47,13 +47,8 @@ private:
 	/** @brief VSP process id. */
 	pid_t pid;
 
-#if !defined(USE_MESSIP_SRR)
 	/** @brief Sensor descriptor. */
-	int sd;
-#else
-	/** @brief Sensor descriptor. */
-	messip_channel_t *sd;
-#endif /* USE_MESSIP_SRR */
+	lib::fd_client_t sd;
 
 	/** @brief Sensor (VSP process) name. */
 	std::string VSP_NAME;

@@ -23,7 +23,8 @@ namespace lib {
 typedef class sr_package sr_package_t;
 
 //! Base class for senders of system report messages
-class SenderBase {
+class SenderBase
+{
 #if !defined(USE_MESSIP_SRR)
 	//! Descriptor of SR communication channel
 	int fd;

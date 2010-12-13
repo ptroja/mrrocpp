@@ -40,11 +40,9 @@ namespace task {
 
 using namespace std;
 
-#if !defined(USE_MESSIP_SRR)
-name_attach_t* task::mp_pulse_attach = NULL;
-#else
-messip_channel_t* task::mp_pulse_attach = NULL;
-#endif
+
+lib::fd_server_t task::mp_pulse_attach = NULL;
+
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :

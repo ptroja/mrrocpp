@@ -26,7 +26,8 @@
 /**
  * Agent base class
  */
-class Agent : public AgentBase {
+class Agent : public AgentBase
+{
 private:
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrDataCondition &condition);
@@ -53,7 +54,7 @@ private:
 
 	//! Store data from archive into a buffer
 	template <std::size_t size>
-	void Store(const std::string & buffer_name, xdr_iarchive<size> & ia)
+	void Store(const std::string & buffer_name, xdr_iarchive <size> & ia)
 	{
 		//	std::cout << "Message received for data buffer: "
 		//		<< msg_buffer_name << ", size "
@@ -68,9 +69,7 @@ private:
 			result->second->Store(ia);
 		} else {
 			// TODO: exception?
-			std::cerr << "Message received for unknown buffer '"
-				<< buffer_name
-				<< "'" << std::endl;
+			std::cerr << "Message received for unknown buffer '" << buffer_name << "'" << std::endl;
 		}
 	}
 
@@ -85,7 +84,7 @@ private:
 
 protected:
 	//! Datatype of buffers container
-	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
+	typedef boost::unordered_map <std::string, DataBufferBase *> buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;

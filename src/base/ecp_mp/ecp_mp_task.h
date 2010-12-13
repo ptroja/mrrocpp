@@ -93,14 +93,10 @@ public:
 	 */
 	lib::configurator &config;
 
-#if !defined(USE_MESSIP_SRR)
 	/**
 	 * @brief UI communication channel descriptor
 	 */
-	int UI_fd;
-#else
-	messip_channel_t *UI_fd;
-#endif
+	lib::fd_client_t UI_fd;
 
 	/**
 	 * @brief path to mrrocpp directory structure with network node prefix
