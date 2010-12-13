@@ -90,11 +90,8 @@ void fsautomat::create_robots()
 
 fsautomat::fsautomat(lib::configurator &_config) :
 	task(_config)
-<<<<<<< HEAD
-{/*
-=======
-{	//*
->>>>>>> origin/master
+{//*
+
 	 int size, conArg;
 	 char *filePath;
 	 std::string fileName;
@@ -113,7 +110,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 printf("ERROR in ecp initialization: could not parse file: %s\n",fileName.c_str());
 	 return;
 	 }
-std::cout<<filePath<<std::endl;
 	 // XML root
 	 xmlNode *root = NULL;
 	 root = xmlDocGetRootElement(doc);
