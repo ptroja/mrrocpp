@@ -55,7 +55,7 @@ public:
 	ATI6284_force(common::manip_effector &_master);       //!< konstruktor uruchamiaj�cy czujnik i ustawiaj�cuy bias
 	virtual ~ATI6284_force();    //!< destruktor od��czaj�cy kart� z magistrali PCI
 
-	void configure_sensor (void);           //!<  konfiguracja czujnika
+	void configure_particular_sensor (void);           //!<  konfiguracja czujnika
 	void wait_for_event(void);              //!<  oczekiwanie na zdarzenie
 	void get_reading (void);                //!<  odebranie odczytu od VSP
 }; //!<  end: class vsp_sensor

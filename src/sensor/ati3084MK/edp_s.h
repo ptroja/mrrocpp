@@ -32,7 +32,7 @@ public:
 	ATI3084_force(common::manip_effector &_master);
 	virtual ~ATI3084_force();
 
-	void configure_sensor(void); // konfiguracja czujnika
+	void configure_particular_sensor(void); // konfiguracja czujnika
 	void wait_for_event(void); // oczekiwanie na zdarzenie
 	void get_reading(void); // odebranie odczytu od VSP		// zwraca blad
 

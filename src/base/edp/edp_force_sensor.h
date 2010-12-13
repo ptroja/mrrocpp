@@ -71,7 +71,10 @@ protected:
 
 	virtual void connect_to_hardware(void) = 0;
 
-	virtual void configure_sensor(void);
+	void configure_sensor(void);
+
+	// particular force sensor configuration
+	virtual void configure_particular_sensor(void) = 0;
 
 	struct _from_vsp
 	{

@@ -71,7 +71,7 @@ public:
 	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
 
-	void configure_sensor(void); // konfiguracja czujnika
+	void configure_particular_sensor(void); // konfiguracja czujnika
 	void wait_for_event(void); // oczekiwanie na zdarzenie
 	void get_reading(void); // odebranie odczytu od VSP		// zwraca blad
 }; // end: class vsp_sensor

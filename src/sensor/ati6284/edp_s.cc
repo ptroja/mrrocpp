@@ -207,156 +207,149 @@ ATI6284_force::~ATI6284_force(void)
 }
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::configure_sensor(void)
+void ATI6284_force::configure_particular_sensor(void)
 {
-	if (!(master.force_sensor_test_mode)) {
 
-		//		sr_msg->message("configure_sensor 1");
+	//		sr_msg->message("configure_sensor 1");
 
-		// double kartez_force[6];
-		// short  measure_report;
-		short int sensor_overload = 0;
-		float force_torque[6];
+	// double kartez_force[6];
+	// short  measure_report;
+	short int sensor_overload = 0;
+	float force_torque[6];
 
-		lib::timer local_timer;
-		float sec;
+	lib::timer local_timer;
+	float sec;
 
-		overload = 0;
+	overload = 0;
+	do {
+
+#if	 WITHOUT_INTERRUPT
 		do {
-
-#if	 WITHOUT_INTERRUPT
-			do {
 #endif
-				//!< Clear ADC FIFO
-				Clear_FIFO();
+			//!< Clear ADC FIFO
+			Clear_FIFO();
 
-				//!< Enable interrupts
-				AI_Interrupt_Enable();
+			//!< Enable interrupts
+			AI_Interrupt_Enable();
 
-				//!< Arm the analog input counters
-				AI_Arming();
+			//!< Arm the analog input counters
+			AI_Arming();
 
-				//!< Add back _enable and _disable from comment
-				//!< _disable;
+			//!< Add back _enable and _disable from comment
+			//!< _disable;
 
-				//!< Start the acquistion
-				AI_Start_The_Acquisition();
-				Samples_Acquired = 0;
-				invalid_value = 0;
+			//!< Start the acquistion
+			AI_Start_The_Acquisition();
+			Samples_Acquired = 0;
+			invalid_value = 0;
 
-				local_timer.start();
+			local_timer.start();
 
-				do {
-					//!< odczekaj
-					usleep(1000);
-					local_timer.stop();
-					local_timer.get_time(sec);
-				} while (sec < START_TO_READ_TIME_INTERVAL);
+			do {
+				//!< odczekaj
+				usleep(1000);
+				local_timer.stop();
+				local_timer.get_time(sec);
+			} while (sec < START_TO_READ_TIME_INTERVAL);
 
-				//			sr_msg->message("configure_sensor 21");
+			//			sr_msg->message("configure_sensor 21");
 #if	 WITHOUT_INTERRUPT
 
-				local_timer.start();
-				do {
-					//!< this is the ISR
-					uStatus = theSTC->AI_Status_1.readRegister();
-					if (!((uStatus & 0x1000) == 0x1000)) {
-						//!< If the FIFO is not empty, call the ISR.
-						Interrupt_Service_Routine();
-					}
-					local_timer.stop();
-					local_timer.get_time(sec);
-				} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
-
-				if (sec >= START_TO_READ_FAILURE) {
-					printf("aa :%f\n", sec);
-					if (show_no_result == 0) {
-						sr_msg->message("edp Sensor configure_sensor - brak wyniku");
-						show_no_result = 1;
-					}
-				} else {
-					if (show_no_result == 1) {
-						sr_msg->message("edp Sensor configure_sensor - wynik otrzymany");
-						show_no_result = 0;
-					}
+			local_timer.start();
+			do {
+				//!< this is the ISR
+				uStatus = theSTC->AI_Status_1.readRegister();
+				if (!((uStatus & 0x1000) == 0x1000)) {
+					//!< If the FIFO is not empty, call the ISR.
+					Interrupt_Service_Routine();
 				}
-			} while (sec >= START_TO_READ_FAILURE); //!< przeciwdzialanie zawieszeniu w petli podczas odczytu
+				local_timer.stop();
+				local_timer.get_time(sec);
+			} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
+
+			if (sec >= START_TO_READ_FAILURE) {
+				printf("aa :%f\n", sec);
+				if (show_no_result == 0) {
+					sr_msg->message("edp Sensor configure_sensor - brak wyniku");
+					show_no_result = 1;
+				}
+			} else {
+				if (show_no_result == 1) {
+					sr_msg->message("edp Sensor configure_sensor - wynik otrzymany");
+					show_no_result = 0;
+				}
+			}
+		} while (sec >= START_TO_READ_FAILURE); //!< przeciwdzialanie zawieszeniu w petli podczas odczytu
 
 #endif
 
 #if	 INTERRUPT
 
-			local_timer.start();
-			do
-			{
-				//!< odczekaj
-				local_timer.stop();
-				local_timer.get_time(sec);
-			}
-			while(sec<INTERRUPT_INTERVAL);
+		local_timer.start();
+		do
+		{
+			//!< odczekaj
+			local_timer.stop();
+			local_timer.get_time(sec);
+		}
+		while(sec<INTERRUPT_INTERVAL);
 #if DEBUG
 
-			printf("Interrupt enabling!!!\n");
+		printf("Interrupt enabling!!!\n");
 #endif
 
-			theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
-			theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-			theSTC->Interrupt_Control.flush();
+		theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
+		theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+		theSTC->Interrupt_Control.flush();
 #if DEBUG
 
-			printf("Interrupt enabled!!!\n");
+		printf("Interrupt enabled!!!\n");
 #endif
 
-			InterruptWait (0, NULL);
-			do
-			{
-				uValues[Samples_Acquired] = board->AIFifoData.readRegister();
-				Samples_Acquired++;
-			}
-			while (Samples_Acquired<Total_Number_of_Samples);
+		InterruptWait (0, NULL);
+		do
+		{
+			uValues[Samples_Acquired] = board->AIFifoData.readRegister();
+			Samples_Acquired++;
+		}
+		while (Samples_Acquired<Total_Number_of_Samples);
 #if DEBUG
 
-			printf("After InterruptWait!!!\n");
+		printf("After InterruptWait!!!\n");
 #endif
 
-			theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
-			theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-			theSTC->Interrupt_Control.flush();
+		theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
+		theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+		theSTC->Interrupt_Control.flush();
 
 #endif
 
-			Clear_FIFO();
-			Samples_Acquired = 0;
-			Input_to_Volts();
+		Clear_FIFO();
+		Samples_Acquired = 0;
+		Input_to_Volts();
 
-			for (int i = 0; i < 6; i++) {
-				sBias[i] = 0;
+		for (int i = 0; i < 6; i++) {
+			sBias[i] = 0;
+		}
+		ftconvert(sVolt, sBias, force_torque);
+
+		//!< jesli pomiar byl poprawny
+		if (invalid_value == 0) {
+			sr_msg->message("edp Sensor configure_sensor - OK");
+			sensor_overload = 0;
+			overload = 0;
+			is_sensor_configured = true;
+		} else {
+			if (overload == 0) {
+				sr_msg->message("edp Sensor configure_sensor - OVERLOAD!!!");
 			}
-			ftconvert(sVolt, sBias, force_torque);
+			sensor_overload = 1;
+			overload = 1;
+		}
+	} while (sensor_overload == 1);
 
-			//!< jesli pomiar byl poprawny
-			if (invalid_value == 0) {
-				sr_msg->message("edp Sensor configure_sensor - OK");
-				sensor_overload = 0;
-				overload = 0;
-				is_sensor_configured = true;
-			} else {
-				if (overload == 0) {
-					sr_msg->message("edp Sensor configure_sensor - OVERLOAD!!!");
-				}
-				sensor_overload = 1;
-				overload = 1;
-			}
-		} while (sensor_overload == 1);
-
-		for (int j = 0; j < 6; j++)
-			sBias[j] = sVolt[j];
-	} else {
-		is_sensor_configured = true;
-	}
-
-	//!< synchronize gravity transformation
-	force::configure_sensor();
+	for (int j = 0; j < 6; j++)
+		sBias[j] = sVolt[j];
 
 }
 

@@ -222,23 +222,21 @@ ATI3084_force::~ATI3084_force(void)
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI3084_force::configure_sensor(void)
+void ATI3084_force::configure_particular_sensor(void)
 {// by Y
-	is_sensor_configured = true;
-	//  printf("edp Sensor configured\n");
-	sr_msg->message("edp Sensor configured");
-	if (!master.force_sensor_test_mode) {
-		InterruptLock(&mds.spinlock);
-		mds.intr_mode = 0;
-		InterruptUnlock(&mds.spinlock);
 
-		do_send_command(SB);
-		do_Wait();
+
+	InterruptLock(&mds.spinlock);
+	mds.intr_mode = 0;
+	InterruptUnlock(&mds.spinlock);
+
+	do_send_command(SB);
+	do_Wait();
 
 #ifdef PARALLEL
-		do_Wait();
+	do_Wait();
 #endif
-	}
+
 	InterruptLock(&mds.spinlock);
 	mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
 	mds.byte_counter = 0;
@@ -246,9 +244,6 @@ void ATI3084_force::configure_sensor(void)
 	// cout << "Przed konf" << endl;
 	// jesli ma byc wykorzytstywana biblioteka transformacji sil
 
-	// synchronize gravity transformation
-
-	force::configure_sensor();
 
 }
 

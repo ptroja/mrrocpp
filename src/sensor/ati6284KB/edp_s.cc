@@ -72,23 +72,14 @@ ATI6284_force::~ATI6284_force(void)
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI6284_force::configure_sensor(void)
+void ATI6284_force::configure_particular_sensor(void)
 {
 
-	is_sensor_configured = true;
-	sr_msg->message("edp Sensor configured");
+	// synchronize gravity transformation
 
-	if (!(master.force_sensor_test_mode)) {
+	wait_for_event();
 
-		// synchronize gravity transformation
-
-		wait_for_event();
-
-		bias_data = datav;
-
-	}
-
-	force::configure_sensor();
+	bias_data = datav;
 
 }
 

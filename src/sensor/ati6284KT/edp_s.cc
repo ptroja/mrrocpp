@@ -149,36 +149,29 @@ ATI6284_force::~ATI6284_force(void)
 }
 
 /**************************** inicjacja czujnika ****************************/
-void ATI6284_force::configure_sensor(void)
+void ATI6284_force::configure_particular_sensor(void)
 {// by Y
-	is_sensor_configured = true;
-	//  printf("edp Sensor configured\n");
-	sr_msg->message("edp Sensor configured");
-
-	if (!(master.force_sensor_test_mode)) {
-
-		// synchronize gravity transformation
-
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
 
-		//send_request(frame_counter, sendSocket); //send request for data
+	// synchronize gravity transformation
 
-		usleep(250); //250us
+	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 
 
-		wait_for_event();
-		wait_for_event();
-		wait_for_event();
-		wait_for_event();
+	//send_request(frame_counter, sendSocket); //send request for data
 
-		for (int i = 0; i < 6; ++i) {
-			bias_data[i] = adc_data[i];
-		}
+	usleep(250); //250us
 
+
+	wait_for_event();
+	wait_for_event();
+	wait_for_event();
+	wait_for_event();
+
+	for (int i = 0; i < 6; ++i) {
+		bias_data[i] = adc_data[i];
 	}
 
-	force::configure_sensor();
 }
 
 void ATI6284_force::wait_for_event()

@@ -149,6 +149,14 @@ force::force(common::manip_effector &_master) :
 void force::configure_sensor(void)
 {// by Y
 
+	is_sensor_configured = true;
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
+
+	if (!(master.force_sensor_test_mode)) {
+		configure_particular_sensor();
+	}
+
 	// polozenie kisci bez narzedzia wzgledem bazy
 	lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
 	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
