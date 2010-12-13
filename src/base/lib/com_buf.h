@@ -40,11 +40,13 @@ namespace lib {
 #define EDP_ECP_SERIALIZED_REPLY_SIZE 1000
 
 #if !defined(USE_MESSIP_SRR)
-typedef int fd_t;
-static const fd_t invalid_fd = -1;
+typedef int fd_client_t;
+static const fd_client_t invalid_fd = -1;
+typedef name_attach_t * fd_server_t;
 #else
-typedef messip_channel_t * fd_t;
-static const fd_t invalid_fd = NULL;
+typedef messip_channel_t * fd_client_t;
+static const fd_client_t invalid_fd = NULL;
+typedef messip_channel_t * fd_server_t;
 #endif
 
 //------------------------------------------------------------------------------

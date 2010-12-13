@@ -52,13 +52,15 @@ private:
 	 */
 	name_attach_t *ecp_attach, *trigger_attach; // by Y
 
+
+#else
+	messip_channel_t *ecp_attach, *trigger_attach;
+#endif
+
 	/**
 	 * @brief MP server communication channel descriptor to send pulses
 	 */
-	int MP_fd;
-#else
-	messip_channel_t *ecp_attach, *trigger_attach, *MP_fd;
-#endif
+	lib::fd_client_t MP_fd;
 
 	/**
 	 * @brief replies to MP message
