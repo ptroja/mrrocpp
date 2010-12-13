@@ -1,0 +1,5 @@
+add_library(discode_sensor
+	discode_sensor.cc
+)
+
+target_link_libraries(discode_sensor ${Boost_SERIALIZATION_LIBRARY} rpc)

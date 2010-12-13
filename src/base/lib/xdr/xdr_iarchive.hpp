@@ -164,6 +164,11 @@ public:
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
     }
 
+    xdr_iarchive()
+	{
+		xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
+	}
+
     /**
      * Destructor
      */
@@ -283,6 +288,26 @@ public:
     std::size_t getArchiveSize(void) const {
         return ((std::size_t) xdr_getpos(&xdrs));
     }
+
+    void set_buffer(const char * _buffer, std::size_t _buffer_size)
+    {
+		assert(_buffer_size <= size);
+		std::memcpy(buffer, _buffer, _buffer_size);
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
+    }
+
+    char *get_buffer(){
+    	return buffer;
+    }
+
+    void clear_buffer()
+	{
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
+	}
 };
 
 // required by export
