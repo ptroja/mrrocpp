@@ -46,19 +46,19 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 
 void ATI6284_force::connect_to_hardware(void)
 {
-	if (!(master.force_sensor_test_mode)) {
-		device = comedi_open(dev_name.c_str());
 
-		if (!device)
-			printf("unable to open device !!! \n");
-		//  throw runtime_error("Could not open device");
+	device = comedi_open(dev_name.c_str());
 
-		if (comedi_apply_calibration(device, 0, 0, 0, 0, NULL) != 0)
-			printf("unable to callibrate device \n");
+	if (!device)
+		printf("unable to open device !!! \n");
+	//  throw runtime_error("Could not open device");
 
-		for (int i = 0; i < 6; i++)
-			comedi_get_hardcal_converter(device, 0, i, 0, COMEDI_TO_PHYSICAL, &ADC_calib[i]);
-	}
+	if (comedi_apply_calibration(device, 0, 0, 0, 0, NULL) != 0)
+		printf("unable to callibrate device \n");
+
+	for (int i = 0; i < 6; i++)
+		comedi_get_hardcal_converter(device, 0, i, 0, COMEDI_TO_PHYSICAL, &ADC_calib[i]);
+
 }
 
 ATI6284_force::~ATI6284_force(void)

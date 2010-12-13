@@ -33,13 +33,13 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-	if (!master.force_sensor_test_mode) {
-		uart = open_port();
-		//printf("2\n");
-		tcflush(uart, TCIFLUSH);
 
-		sendBias();
-	}
+	uart = open_port();
+	//printf("2\n");
+	tcflush(uart, TCIFLUSH);
+
+	sendBias();
+
 }
 
 ATI3084_force::~ATI3084_force(void)

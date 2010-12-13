@@ -19,7 +19,9 @@ void force::operator()()
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
-	connect_to_hardware();
+	if (!(master.force_sensor_test_mode)) {
+		connect_to_hardware();
+	}
 
 	thread_started.command();
 

@@ -122,91 +122,89 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-	if (!(master.force_sensor_test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
 
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-		// 	printf("KONTRUKTOR EDP_S POCATEK\n");
+	ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
+	// 	printf("KONTRUKTOR EDP_S POCATEK\n");
 
-		// ZMIENNE POMOCNICZE
-		int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
+	// ZMIENNE POMOCNICZE
+	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
 
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+	tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
 
-		// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
+	// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
 
-		phdl = pci_attach(0);
-		if (phdl == -1) {
-			fprintf(stderr, "Unable to initialize PCI\n");
+	phdl = pci_attach(0);
+	if (phdl == -1) {
+		fprintf(stderr, "Unable to initialize PCI\n");
 
-			// 	return EXIT_FAILURE;
-		}
-
-		/* Initialize the pci_dev_info structure */
-		memset(&info, 0, sizeof(info));
-		pidx = 0x0;
-		info.VendorId = 0x13fe;
-		info.DeviceId = 0x1751;
-
-		hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
-		if (hdl == NULL) {
-			fprintf(stderr, "Unable to locate Advantech 1751\n");
-		} else {
-			// 	printf("connected to Advantech 1751\n");
-			delay(100);
-			// printf("Przerwanie numer: %d\n",info.Irq);
-			base_io_address = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
-			// 	printf("base: %d\n",base_io_address);
-
-			initiate_registers();// konfiguracja karty
-
-			mds.sevent.sigev_notify = SIGEV_INTR;
-
-			// spinlock is not required until interrupt attached
-			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-			mds.byte_counter = 0;
-			mds.is_received = false;
-
-			if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
-				printf("Unable to attach interrupt handler: \n");
-		}
-
-		// setup serial device
-		uart = open("/dev/ser1", O_RDWR);
-		if (uart == -1) {
-			// TODO: throw
-			perror("unable to open serial device for ATI3084 sensor");
-		}
-
-		// serial port settings: 38400, 8-N-1
-		struct termios tattr;
-		if (tcgetattr(uart, &tattr) == -1) {
-			// TODO: throw
-			perror("tcgetattr()");
-		}
-
-		// setup input speed
-		if (cfsetispeed(&tattr, B38400) == -1) {
-			perror("cfsetispeed()");
-		}
-
-		// setup output speed
-		if (cfsetospeed(&tattr, B38400) == -1) {
-			perror("cfsetospeed()");
-		}
-
-		// setup raw mode
-		if (cfmakeraw(&tattr) == -1) {
-			perror("cfmakeraw()");
-		}
-
-		// apply settings to serial port
-		if (tcsetattr(uart, TCSANOW, &tattr) == -1) {
-			perror("tcsetattr()");
-		}
-
-		do_init(); // komunikacja wstepna
+		// 	return EXIT_FAILURE;
 	}
+
+	/* Initialize the pci_dev_info structure */
+	memset(&info, 0, sizeof(info));
+	pidx = 0x0;
+	info.VendorId = 0x13fe;
+	info.DeviceId = 0x1751;
+
+	hdl = pci_attach_device(NULL, PCI_INIT_ALL, pidx, &info);
+	if (hdl == NULL) {
+		fprintf(stderr, "Unable to locate Advantech 1751\n");
+	} else {
+		// 	printf("connected to Advantech 1751\n");
+		delay(100);
+		// printf("Przerwanie numer: %d\n",info.Irq);
+		base_io_address = mmap_device_io(info.BaseAddressSize[2], PCI_IO_ADDR(info.CpuBaseAddress[2]));
+		// 	printf("base: %d\n",base_io_address);
+
+		initiate_registers();// konfiguracja karty
+
+		mds.sevent.sigev_notify = SIGEV_INTR;
+
+		// spinlock is not required until interrupt attached
+		mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
+		mds.byte_counter = 0;
+		mds.is_received = false;
+
+		if ((sint_id = InterruptAttach(info.Irq, schunk_int_handler, (void *) &mds, sizeof(mds), 0)) == -1)
+			printf("Unable to attach interrupt handler: \n");
+	}
+
+	// setup serial device
+	uart = open("/dev/ser1", O_RDWR);
+	if (uart == -1) {
+		// TODO: throw
+		perror("unable to open serial device for ATI3084 sensor");
+	}
+
+	// serial port settings: 38400, 8-N-1
+	struct termios tattr;
+	if (tcgetattr(uart, &tattr) == -1) {
+		// TODO: throw
+		perror("tcgetattr()");
+	}
+
+	// setup input speed
+	if (cfsetispeed(&tattr, B38400) == -1) {
+		perror("cfsetispeed()");
+	}
+
+	// setup output speed
+	if (cfsetospeed(&tattr, B38400) == -1) {
+		perror("cfsetospeed()");
+	}
+
+	// setup raw mode
+	if (cfmakeraw(&tattr) == -1) {
+		perror("cfmakeraw()");
+	}
+
+	// apply settings to serial port
+	if (tcsetattr(uart, TCSANOW, &tattr) == -1) {
+		perror("tcsetattr()");
+	}
+
+	do_init(); // komunikacja wstepna
+
 
 }
 

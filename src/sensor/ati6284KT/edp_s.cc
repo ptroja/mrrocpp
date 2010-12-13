@@ -115,25 +115,23 @@ void ATI6284_force::stopMeasurements()
 
 void ATI6284_force::connect_to_hardware(void)
 {
-	if (!(master.force_sensor_test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
 
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
+	// 	printf("Konstruktor VSP!\n");
 
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
-		int_timeout = new (uint64_t);
+	ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 
-		delay(100);
+	tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+	int_timeout = new (uint64_t);
 
-		//inicjalizacja
-		try {
-			//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
-			//recvSocket = new RawSockeib -t("en1");
+	delay(100);
 
-		} catch (std::exception & e) {
-			throw std::runtime_error("Could not open device");
-		}
+	//inicjalizacja
+	try {
+		//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
+		//recvSocket = new RawSockeib -t("en1");
 
+	} catch (std::exception & e) {
+		throw std::runtime_error("Could not open device");
 	}
 
 }

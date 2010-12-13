@@ -97,93 +97,92 @@ void ATI6284_force::connect_to_hardware(void)
 {
 	// unsigned  uCount;  //!< Count index
 	// unsigned  uStatus; //!< Flag to indicate FIFO not empty
-	if (!(master.force_sensor_test_mode)) {
-		Total_Number_of_Samples = 6;
-		index = 1;
 
-		std::string calfilepath(master.config.return_mrrocpp_network_path());
-		calfilepath += "../src/sensor/ati6284/ft6284.cal";
+	Total_Number_of_Samples = 6;
+	index = 1;
 
-		for (int i = 0; i < 5; i++)
-			last_correct[i] = 0;
-		overload = 0;
-		show_no_result = 0;
+	std::string calfilepath(master.config.return_mrrocpp_network_path());
+	calfilepath += "../src/sensor/ati6284/ft6284.cal";
 
-		//!< create Calibration struct
-		cal = createCalibration(calfilepath.c_str(), index);
+	for (int i = 0; i < 5; i++)
+		last_correct[i] = 0;
+	overload = 0;
+	show_no_result = 0;
 
-		if (cal == NULL) {
-			printf("\nSpecified calibration could not be loaded.\n");
-		}
+	//!< create Calibration struct
+	cal = createCalibration(calfilepath.c_str(), index);
 
-		if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
-			printf("Unable to connect to card\n");
-
-		bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiajca kart
-
-		if (bus == NULL) {
-			printf("Error accessing the PCI device.  Exiting.\n");
-			exit(EXIT_FAILURE);
-		}
-
-		Bar1 = bus->createAddressSpace(kPCI_BAR1);
-		board = new tESeries(Bar1);
-		theSTC = new tSTC(Bar1);
-
-		//!< Intitialise Mite Chip.
-		InitMite();
-
-		//!< Configure the board with the channel settings.
-		Configure_Board();
-
-		//!< Now Program the DAQ-STC
-
-		//!< Configure the timebase options for DAQ-STC
-		MSC_Clock_Configure();
-
-		//!< Clear ADC FIFO
-		Clear_FIFO();
-
-		//!< Stop any activities in progress
-		AI_Reset_All();
-
-		//!< Set DAQ STC for E-series board
-		AI_Board_Personalize();
-
-		//!< Access the first value in the configuration FIFO
-		AI_Initialize_Configuration_Memory_Output();
-
-		//!< Setup for any external multiplexer
-		AI_Board_Environmentalize();
-
-		//!< Set triggering options
-		AI_Trigger_Signals();
-
-		//!< Select the number of scans
-		Number_of_Scans();
-
-		//!< Select the scan start event
-		AI_Scan_Start();
-
-		//!< Select the end of scan event
-		AI_End_of_Scan();
-
-		//!< Select the convert signal
-		Convert_Signal();
-
-		memset(&hi_event, 0, sizeof(hi_event));
-		hi_event.sigev_notify = SIGEV_INTR;
-
-		//Wacek: karta ISA zniknela!
-		/*
-		 irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
-
-		 if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
-		 //!< Obsluga bledu
-		 perror("Unable to attach szafa interrupt handler: ");
-		 }
-		 */
+	if (cal == NULL) {
+		printf("\nSpecified calibration could not be loaded.\n");
 	}
+
+	if (ThreadCtl(_NTO_TCTL_IO, NULL) == -1) //!< dostep do sprzetu
+		printf("Unable to connect to card\n");
+
+	bus = acquireBoard(0x10932CA0); //!< funkcja uruchamiajca kart
+
+	if (bus == NULL) {
+		printf("Error accessing the PCI device.  Exiting.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	Bar1 = bus->createAddressSpace(kPCI_BAR1);
+	board = new tESeries(Bar1);
+	theSTC = new tSTC(Bar1);
+
+	//!< Intitialise Mite Chip.
+	InitMite();
+
+	//!< Configure the board with the channel settings.
+	Configure_Board();
+
+	//!< Now Program the DAQ-STC
+
+	//!< Configure the timebase options for DAQ-STC
+	MSC_Clock_Configure();
+
+	//!< Clear ADC FIFO
+	Clear_FIFO();
+
+	//!< Stop any activities in progress
+	AI_Reset_All();
+
+	//!< Set DAQ STC for E-series board
+	AI_Board_Personalize();
+
+	//!< Access the first value in the configuration FIFO
+	AI_Initialize_Configuration_Memory_Output();
+
+	//!< Setup for any external multiplexer
+	AI_Board_Environmentalize();
+
+	//!< Set triggering options
+	AI_Trigger_Signals();
+
+	//!< Select the number of scans
+	Number_of_Scans();
+
+	//!< Select the scan start event
+	AI_Scan_Start();
+
+	//!< Select the end of scan event
+	AI_End_of_Scan();
+
+	//!< Select the convert signal
+	Convert_Signal();
+
+	memset(&hi_event, 0, sizeof(hi_event));
+	hi_event.sigev_notify = SIGEV_INTR;
+
+	//Wacek: karta ISA zniknela!
+	/*
+	 irq_no = 0;//  edp::irp6p_m::IRQ_REAL; //!< Numer przerwania sprzetowego od karty ISA
+
+	 if ((szafa_id = InterruptAttach(irq_no, szafa_handler, NULL, NULL, 0)) == -1) {
+	 //!< Obsluga bledu
+	 perror("Unable to attach szafa interrupt handler: ");
+	 }
+	 */
 
 }
 
