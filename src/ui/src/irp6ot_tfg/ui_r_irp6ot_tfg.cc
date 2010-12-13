@@ -43,7 +43,7 @@ int UiRobot::reload_configuration()
 					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
-			state.ecp.trigger_fd = common::invalid_fd;
+			state.ecp.trigger_fd = lib::invalid_fd;
 		}
 
 		switch (state.edp.state)
@@ -53,7 +53,7 @@ int UiRobot::reload_configuration()
 				// ini_con->create_edp_irp6ot_tfg (ini_con->ui->edp_irp6ot_tfg_section);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = common::invalid_fd;
+				state.edp.reader_fd = lib::invalid_fd;
 				state.edp.state = 0;
 
 				for (int i = 0; i < 3; i++) {

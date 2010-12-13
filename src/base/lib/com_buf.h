@@ -39,6 +39,14 @@ namespace lib {
 #define ECP_EDP_SERIALIZED_COMMAND_SIZE 1000
 #define EDP_ECP_SERIALIZED_REPLY_SIZE 1000
 
+#if !defined(USE_MESSIP_SRR)
+typedef int fd_t;
+static const fd_t invalid_fd = -1;
+#else
+typedef messip_channel_t * fd_t;
+static const fd_t invalid_fd = NULL;
+#endif
+
 //------------------------------------------------------------------------------
 /*!
  *  Type of command sent from MP to ECP.

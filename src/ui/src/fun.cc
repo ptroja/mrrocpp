@@ -1425,7 +1425,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// 	kill(interface.mp_pid,SIGTERM);
 	// 	printf("mp pupa po kill\n");
 	interface.mp.pid = -1;
-	interface.mp.pulse_fd = ui::common::invalid_fd;
+	interface.mp.pulse_fd = lib::invalid_fd;
 
 	interface.irp6ot_m->deactivate_ecp_trigger();
 	interface.irp6p_m->deactivate_ecp_trigger();
