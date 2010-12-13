@@ -70,7 +70,7 @@ public:
 
 	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
-
+	void disconnect_from_hardware(void);
 	void configure_particular_sensor(void); // konfiguracja czujnika
 	void wait_for_particular_event(void); // oczekiwanie na zdarzenie
 	void get_particular_reading(void); // odebranie odczytu od VSP		// zwraca blad

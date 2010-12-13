@@ -63,12 +63,16 @@ void ATI6284_force::connect_to_hardware(void)
 
 ATI6284_force::~ATI6284_force(void)
 {
+	if (!(master.force_sensor_test_mode)) {
+		disconnect_from_hardware();
+	}
+	printf("Destruktor edp_ATI6284_force_sensor\n");
+}
+
+void ATI6284_force::disconnect_from_hardware(void)
+{
 	if (device)
 		comedi_close(device);
-
-	if (gravity_transformation)
-		delete gravity_transformation;
-	printf("Destruktor edp_ATI6284_force_sensor\n");
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -93,15 +97,14 @@ void ATI6284_force::wait_for_particular_event()
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
 
-
-		for (int i = 0; i < 6; i++) {
-			comedi_data_read(device, 0, i, 0, AREF_DIFF, &adc_data[i]);
-		}
-
-		for (int i = 0; i < 6; i++) {
-			datav[i] = comedi_to_physical(adc_data[i], &ADC_calib[i]);
-		}
+	for (int i = 0; i < 6; i++) {
+		comedi_data_read(device, 0, i, 0, AREF_DIFF, &adc_data[i]);
 	}
+
+	for (int i = 0; i < 6; i++) {
+		datav[i] = comedi_to_physical(adc_data[i], &ADC_calib[i]);
+	}
+
 }
 
 /***************************** odczyt z czujnika *****************************/

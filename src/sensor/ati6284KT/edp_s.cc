@@ -139,12 +139,14 @@ void ATI6284_force::connect_to_hardware(void)
 ATI6284_force::~ATI6284_force(void)
 {
 	if (!(master.force_sensor_test_mode)) {
-		//delete recvSocket;
-		//delete sendSocket;
+		disconnect_from_hardware();
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
 	printf("Destruktor edp_ATI6284_force_sensor\n");
+
+}
+
+void ATI6284_force::disconnect_from_hardware(void)
+{
 
 }
 

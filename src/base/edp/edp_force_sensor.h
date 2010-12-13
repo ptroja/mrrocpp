@@ -70,6 +70,7 @@ protected:
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+	virtual void disconnect_from_hardware(void) = 0;
 
 	void configure_sensor(void);
 

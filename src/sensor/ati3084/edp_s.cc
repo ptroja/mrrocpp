@@ -210,15 +210,19 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!master.force_sensor_test_mode) {
-		InterruptDetach(sint_id);
-		pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
-		pci_detach(phdl); // Disconnect from the PCI server
-		close(uart);
+	if (!(master.force_sensor_test_mode)) {
+		disconnect_from_hardware();
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
+
 	printf("ATI3084_force::~ATI3084_force\n");
+}
+
+void ATI3084_force::disconnect_from_hardware(void)
+{
+	InterruptDetach(sint_id);
+	pci_detach_device(hdl); // odlacza driver od danego urzadzenia na PCI
+	pci_detach(phdl); // Disconnect from the PCI server
+	close(uart);
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -253,54 +257,54 @@ void ATI3084_force::wait_for_particular_event()
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
 
-		if (!int_attached) {
-			int_attached = true;
+	if (!int_attached) {
+		int_attached = true;
+		InterruptLock(&mds.spinlock);
+		mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
+		InterruptUnlock(&mds.spinlock);
+	}
+
+	do {
+		iter_counter++;
+
+		InterruptLock(&mds.spinlock);
+
+		mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
+		mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
+		mds.byte_counter = 0;
+
+		InterruptUnlock(&mds.spinlock);
+
+		do_send_command(SGET1);
+
+		int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
+		TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
+		iw_ret = InterruptWait(0, NULL);
+		// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
+		if (iw_ret == -1) {
+			if (iter_counter == 1) {
+				sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
+			}
+			if (iter_counter % 10 == 0) // raz na 10
+			{
+
+				solve_transducer_controller_failure(); // na wypadek bledu kontrolera
+
+			}
+			usleep(10000); // aby nadmiernie nie obciazac procesora
 			InterruptLock(&mds.spinlock);
-			mds.intr_mode = 1; // obsluga przerwania ustawiona na odbior 7 slow
+			mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
+			mds.byte_counter = 0;
+			mds.is_received = false;
 			InterruptUnlock(&mds.spinlock);
+			do_init(); // komunikacja wstepna
+		} else {
+			if (iter_counter > 1) {
+				sr_msg->message("Force / Torque sensor connection reastablished");
+			}
 		}
 
-		do {
-			iter_counter++;
-
-			InterruptLock(&mds.spinlock);
-
-			mds.byte_counter = 0;// zabezpieczenie przed niektorymi bledami pomiarow - sprawdzone dziala ;)
-			mds.intr_mode = 1; // przywrocenie do 7 bajtowego trybu odbiotu danych
-			mds.byte_counter = 0;
-
-			InterruptUnlock(&mds.spinlock);
-
-			do_send_command(SGET1);
-
-			int_timeout = SCHUNK_INTR_TIMEOUT_LOW;// by Y
-			TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR, &tim_event, &int_timeout, NULL);
-			iw_ret = InterruptWait(0, NULL);
-			// kiedy po uplynieciu okreslonego czasu nie zostanie zgloszone przerwanie
-			if (iw_ret == -1) {
-				if (iter_counter == 1) {
-					sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque read error - check sensor controller");
-				}
-				if (iter_counter % 10 == 0) // raz na 10
-				{
-
-					solve_transducer_controller_failure(); // na wypadek bledu kontrolera
-
-				}
-				usleep(10000); // aby nadmiernie nie obciazac procesora
-				InterruptLock(&mds.spinlock);
-				mds.intr_mode = 0; // obsluga przerwania ustawiona na odbior pojedynczych slow
-				mds.byte_counter = 0;
-				mds.is_received = false;
-				InterruptUnlock(&mds.spinlock);
-				do_init(); // komunikacja wstepna
-			} else {
-				if (iter_counter > 1) {
-					sr_msg->message("Force / Torque sensor connection reastablished");
-				}
-			}
-
-		} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
+	} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
 
 }
 

@@ -44,11 +44,16 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!master.force_sensor_test_mode) {
-		close(uart);
+	if (!(master.force_sensor_test_mode)) {
+		disconnect_from_hardware();
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
+
+}
+
+void ATI3084_force::disconnect_from_hardware(void)
+{
+
+	close(uart);
 }
 
 /**************************** inicjacja czujnika ****************************/
@@ -64,7 +69,7 @@ void ATI3084_force::wait_for_particular_event()
 	//	sr_msg->message("wait_for_event");
 
 
-		ftxyz = getFT();
+	ftxyz = getFT();
 
 }
 

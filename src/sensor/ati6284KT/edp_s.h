@@ -12,7 +12,6 @@
 #if !defined(_EDP_S_ATI6284_MS_H)
 #define _EDP_S_ATI6284_MS_H
 
-
 #include "sensor/ati6284KT/TimeUtil.h"
 #include "sensor/ati6284KT/RawSocket.h"
 #include "sensor/ati6284KT/ForceSensor.h"
@@ -58,7 +57,7 @@ public:
 
 	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
-
+	void disconnect_from_hardware(void);
 	void configure_particular_sensor(void); // konfiguracja czujnika
 	void wait_for_particular_event(void); // oczekiwanie na zdarzenie
 	void get_particular_reading(void); // odebranie odczytu od VSP		// zwraca blad

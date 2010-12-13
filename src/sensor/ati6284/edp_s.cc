@@ -191,19 +191,21 @@ void ATI6284_force::connect_to_hardware(void)
 ATI6284_force::~ATI6284_force(void)
 {
 	if (!(master.force_sensor_test_mode)) {
-		delete theSTC;
-		delete board;
+		disconnect_from_hardware();
+	}
+}
 
-		bus->destroyAddressSpace(Bar1);
+void ATI6284_force::disconnect_from_hardware(void)
+{
+	delete theSTC;
+	delete board;
+
+	bus->destroyAddressSpace(Bar1);
 #if INTERRUPT
-		InterruptDetach (szafa_id);
+	InterruptDetach (szafa_id);
 #endif
 
-		releaseBoard(bus);
-		if (gravity_transformation)
-			delete gravity_transformation;
-	}
-	printf("Destruktor VSP\n");
+	releaseBoard(bus);
 }
 
 // // // // // // // // // // // // // // /   inicjacja odczytu // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////

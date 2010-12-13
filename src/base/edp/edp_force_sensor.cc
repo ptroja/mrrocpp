@@ -236,6 +236,7 @@ void force::configure_sensor(void)
 force::~force()
 {
 	delete sr_msg;
+
 }
 
 void force::set_force_tool(void)
