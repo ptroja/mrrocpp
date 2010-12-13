@@ -308,66 +308,51 @@ void ATI3084_force::wait_for_event()
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
+void ATI3084_force::get_particular_reading(void)
 {
-
-	if (!is_sensor_configured)
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	lib::Ft_vector kartez_force;
 
-	if (master.force_sensor_test_mode) {
-		for (int i = 0; i < 6; ++i) {
-			kartez_force[i] = 0.0;
-		}
-		master.force_msr_upload(kartez_force);
-	} else {
-		lib::Ft_vector ft_table;
+	InterruptLock(&mds.spinlock);
 
-		InterruptLock(&mds.spinlock);
+	for (int i = 0; i < 6; i++)
+		ft_table[i] = static_cast <double> (mds.data[i + 1]);
+	int16_t measure_report = mds.data[0];
 
-		for (int i = 0; i < 6; i++)
-			ft_table[i] = static_cast <double> (mds.data[i + 1]);
-		int16_t measure_report = mds.data[0];
+	InterruptUnlock(&mds.spinlock);
 
-		InterruptUnlock(&mds.spinlock);
+	// jesli pomiar byl poprawny
+	if (measure_report == COMMAND_OK) {
+		is_reading_ready = true;
 
-		// jesli pomiar byl poprawny
-		if (measure_report == COMMAND_OK) {
-			is_reading_ready = true;
+		// jesli ma byc wykorzytstywana biblioteka transformacji sil
 
-			// jesli ma byc wykorzytstywana biblioteka transformacji sil
+		for (int i = 0; i < 3; i++)
+			ft_table[i] /= 20;
+		//			for(int i=3;i<6;i++) ft_table[i]/=333;
+		for (int i = 3; i < 6; i++)
+			ft_table[i] /= 1000; // by Y - korekta
 
-			for (int i = 0; i < 3; i++)
-				ft_table[i] /= 20;
-			//			for(int i=3;i<6;i++) ft_table[i]/=333;
-			for (int i = 3; i < 6; i++)
-				ft_table[i] /= 1000; // by Y - korekta
 
-			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-			master.force_msr_upload(output);
 #if 0
-			static int ms_nr = 0; // numer odczytu z czujnika
-			if (!((ms_nr++)%1000)) {
-				cerr << "Output\t";
-				for(int i=0;i<3;i++) output[i]*=20;
-				for(int i=3;i<6;i++) output[i]*=333;
-				for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
-				cerr << endl;// << "Input\t";
-				for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-				cerr << endl << endl;// << "Gravity\t";
-				for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-				cerr << endl << "Bias\t";
-				for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-				cerr << endl << endl;
-				cerr << frame << endl;
-			}
-#endif
+		static int ms_nr = 0; // numer odczytu z czujnika
+		if (!((ms_nr++)%1000)) {
+			cerr << "Output\t";
+			for(int i=0;i<3;i++) output[i]*=20;
+			for(int i=3;i<6;i++) output[i]*=333;
+			for(int i=0;i<6;i++) cerr << ceil(output[i]) << "  ";
+			cerr << endl;// << "Input\t";
+			for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
+			cerr << endl << endl;// << "Gravity\t";
+			for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
+			cerr << endl << "Bias\t";
+			for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
+			cerr << endl << endl;
+			cerr << frame << endl;
 		}
-
+#endif
 	}
+
 }
 
 void ATI3084_force::set_output(int16_t value)

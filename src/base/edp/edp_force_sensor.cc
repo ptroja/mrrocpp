@@ -143,6 +143,34 @@ force::force(common::manip_effector &_master) :
 		is_right_turn_frame = master.config.value <bool> ("is_right_turn_frame");
 	}
 
+	for (int i = 0; i < 6; ++i) {
+		ft_table[i] = 0.0;
+	}
+
+}
+
+/***************************** odczyt z czujnika *****************************/
+void force::get_reading(void)
+{
+
+	if (!is_sensor_configured) {
+		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	}
+
+	is_reading_ready = true;
+
+	if (!(master.force_sensor_test_mode)) {
+		get_particular_reading();
+	}
+
+	// jesli ma byc wykorzytstywana biblioteka transformacji sil
+	if (gravity_transformation) {
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+		master.force_msr_upload(output);
+	}
+
 }
 
 /**************************** inicjacja czujnika ****************************/

@@ -73,51 +73,36 @@ void ATI3084_force::wait_for_event()
 }
 
 /***************************** odczyt z czujnika *****************************/
-void ATI3084_force::get_reading(void)
+void ATI3084_force::get_particular_reading(void)
 {
-
-	if (!is_sensor_configured)
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
 	lib::Ft_vector kartez_force;
 
-	if (master.force_sensor_test_mode) {
-		for (int i = 0; i < 6; ++i) {
-			kartez_force[i] = 0.0;
-		}
-		master.force_msr_upload(kartez_force);
-	} else {
-
-		lib::Ft_vector ft_table;
-
-		for (int i = 0; i < 6; i++) {
-			ft_table[i] = static_cast <double> (ftxyz.ft[i]);
-		}
-		/*
-		 char aaa[50];
-		 sprintf(aaa,"%f",ft_table[0]);
-		 sr_msg->message(aaa);
-		 */
-		is_reading_ready = true;
-
-		// jesli ma byc wykorzytstywana biblioteka transformacji sil
-		if (gravity_transformation) {
-			for (int i = 0; i < 3; i++) {
-				ft_table[i] *= 10;
-				ft_table[i] /= 115;
-			}
-			//ft_table[i]*=(10/115);
-			//			for(int i=3;i<6;i++) ft_table[i]/=333;
-			for (int i = 3; i < 6; i++) {
-				ft_table[i] *= 5; // by Y - korekta 5/1000
-				ft_table[i] /= 940; // by Y - korekta 5/1000
-			}
-			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-			master.force_msr_upload(output);
-		}
+	for (int i = 0; i < 6; i++) {
+		ft_table[i] = static_cast <double> (ftxyz.ft[i]);
 	}
+	/*
+	 char aaa[50];
+	 sprintf(aaa,"%f",ft_table[0]);
+	 sr_msg->message(aaa);
+	 */
+	is_reading_ready = true;
+
+	// jesli ma byc wykorzytstywana biblioteka transformacji sil
+	if (gravity_transformation) {
+		for (int i = 0; i < 3; i++) {
+			ft_table[i] *= 10;
+			ft_table[i] /= 115;
+		}
+		//ft_table[i]*=(10/115);
+		//			for(int i=3;i<6;i++) ft_table[i]/=333;
+		for (int i = 3; i < 6; i++) {
+			ft_table[i] *= 5; // by Y - korekta 5/1000
+			ft_table[i] /= 940; // by Y - korekta 5/1000
+		}
+
+	}
+
 }
 
 // metoda na wypadek skasowanie pamiecia nvram

@@ -76,6 +76,14 @@ protected:
 	// particular force sensor configuration
 	virtual void configure_particular_sensor(void) = 0;
 
+	// particular force sensor get reading
+	virtual void get_particular_reading(void) = 0;
+
+	// ft_table used in get_reading and get_particualr_reading
+	lib::Ft_vector ft_table;
+
+	void get_reading(void);
+
 	struct _from_vsp
 	{
 		lib::sensor::VSP_REPORT_t vsp_report;

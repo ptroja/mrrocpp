@@ -407,7 +407,7 @@ void ATI6284_force::wait_for_event()
 }
 
 // // // // // // // // // // // // // // /   odczyt z czujnika // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
-void ATI6284_force::get_reading(void)
+void ATI6284_force::get_particular_reading(void)
 {
 
 	short int no_result = 0; //brak wyniku
@@ -415,169 +415,159 @@ void ATI6284_force::get_reading(void)
 	float force_torque[6]; //wektor z siami i napiciami
 	force_readring_status_t sensor_status = EDP_FORCE_SENSOR_READING_CORRECT;
 
-	if (!is_sensor_configured)
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	//!< jezeli chcemy jakikolwiek odczyt	-> is_reading_ready
 	if (!is_reading_ready)
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, READING_NOT_READY);
 
-	if (!(master.force_sensor_test_mode)) {
 #if	 WITHOUT_INTERRUPT
 
-		lib::timer local_timer;
-		float sec;
+	lib::timer local_timer;
+	float sec;
 
-		local_timer.start();
+	local_timer.start();
 
-		do {
-			//!< this is the ISR
-			//!< Flag to indicate FIFO not empty
-			uint16_t uStatus = theSTC->AI_Status_1.readRegister();
-			if (!((uStatus & 0x1000) == 0x1000)) {
-				//!< If the FIFO is not empty, call the ISR.
-				Interrupt_Service_Routine();
-			}
-
-			local_timer.stop();
-			local_timer.get_time(sec);
-		} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
-		if (sec >= START_TO_READ_FAILURE) {
-			no_result = 1;
-			invalid_value = 1;
-		} else {
-			no_result = 0;
-			invalid_value = 0;
+	do {
+		//!< this is the ISR
+		//!< Flag to indicate FIFO not empty
+		uint16_t uStatus = theSTC->AI_Status_1.readRegister();
+		if (!((uStatus & 0x1000) == 0x1000)) {
+			//!< If the FIFO is not empty, call the ISR.
+			Interrupt_Service_Routine();
 		}
+
+		local_timer.stop();
+		local_timer.get_time(sec);
+	} while ((Samples_Acquired < Total_Number_of_Samples) && (sec < START_TO_READ_FAILURE));
+	if (sec >= START_TO_READ_FAILURE) {
+		no_result = 1;
+		invalid_value = 1;
+	} else {
+		no_result = 0;
+		invalid_value = 0;
+	}
 
 #endif
 
 #if	 INTERRUPT
-		local_timer.start();
-		do
-		{
-			//!< odczekaj
-			local_timer.stop();
-			local_timer.get_time(sec);
-		}
-		while(sec<INTERRUPT_INTERVAL);
+	local_timer.start();
+	do
+	{
+		//!< odczekaj
+		local_timer.stop();
+		local_timer.get_time(sec);
+	}
+	while(sec<INTERRUPT_INTERVAL);
 #if DEBUG
 
-		printf("Interrupt enabling!!!\n");
+	printf("Interrupt enabling!!!\n");
 #endif
 
-		theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
-		theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-		theSTC->Interrupt_Control.flush();
+	theSTC->Interrupt_Control.setInterrupt_A_Output_Select(0);
+	theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+	theSTC->Interrupt_Control.flush();
 #if DEBUG
 
-		printf("Interrupt enabled!!!\n");
+	printf("Interrupt enabled!!!\n");
 #endif
 
-		InterruptWait (0, NULL);
-		do
-		{
-			uValues[Samples_Acquired] = board->AIFifoData.readRegister();
-			Samples_Acquired++;
-		}
-		while (Samples_Acquired<Total_Number_of_Samples);
+	InterruptWait (0, NULL);
+	do
+	{
+		uValues[Samples_Acquired] = board->AIFifoData.readRegister();
+		Samples_Acquired++;
+	}
+	while (Samples_Acquired<Total_Number_of_Samples);
 #if DEBUG
 
-		printf("After InterruptWait!!!\n");
+	printf("After InterruptWait!!!\n");
 #endif
 
-		theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
-		theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
-		theSTC->Interrupt_Control.flush();
+	theSTC->Interrupt_Control.setInterrupt_A_Output_Select(4);
+	theSTC->Interrupt_Control.setInterrupt_A_Enable(1);
+	theSTC->Interrupt_Control.flush();
 
 #endif
 
-		if (no_result == 0) {
-			Input_to_Volts();
-			ftconvert(sVolt, sBias, force_torque);
-		}
-		if (invalid_value == 1) {
-			if (no_result == 1) {
-				if (show_no_result == 0) {
-					sr_msg->message("edp Sensor initiate_reading - brak wyniku");
-					show_no_result = 1;
-					sensor_status = EDP_FORCE_SENSOR_READING_ERROR;
-				}
-			} else {
-				if (overload == 0) {
-					sr_msg->message("edp Sensor initiate_reading - OVERLOAD!!!");
-					overload = 1;
-					sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
-				}
-			}
-			for (int i = 0; i < 6; i++) {
-				force_torque[i] = last_correct[i];
+	if (no_result == 0) {
+		Input_to_Volts();
+		ftconvert(sVolt, sBias, force_torque);
+	}
+	if (invalid_value == 1) {
+		if (no_result == 1) {
+			if (show_no_result == 0) {
+				sr_msg->message("edp Sensor initiate_reading - brak wyniku");
+				show_no_result = 1;
+				sensor_status = EDP_FORCE_SENSOR_READING_ERROR;
 			}
 		} else {
-			if (show_no_result == 1) {
-				sr_msg->message("edp Sensor initiate_reading - wynik otrzymany");
-				show_no_result = 0;
-			} else {
-				if (overload == 1) {
-					sr_msg->message("edp Sensor initiate_reading - OVERLOAD REMOVED");
-					overload = 0;
-				}
-			}
-			for (int i = 0; i < 6; i++) {
-				last_correct[i] = force_torque[i];
+			if (overload == 0) {
+				sr_msg->message("edp Sensor initiate_reading - OVERLOAD!!!");
+				overload = 1;
+				sensor_status = EDP_FORCE_SENSOR_OVERLOAD;
 			}
 		}
-		//!< ok
-		from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
-		//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
-		//!< przepisanie do bufora komunikacyjnego
-#if WYNIKI_MRROCPP
-
-		printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
-#endif
-		// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
-		lib::Ft_vector kartez_force, root_force;
-		if (gravity_transformation) {
-			for (int i = 0; i < 6; i++)
-				root_force[i] = force_torque[i];
-
-			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(root_force, frame);
-
-			//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
-			//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
-			master.force_msr_upload(output);
-			/*		if (show==1000){
-			 cerr << "Output\t";
-			 for(int i=0;i<3;i++) {
-			 output[i] *= 20;
-			 cerr << ceil(output[i]) << "  ";
-			 }
-			 for(int i=3;i<6;i++) {
-			 output[i] *= 333;
-			 cerr << ceil(output[i]) << "  ";
-			 }
-			 cerr << endl;// << "Input\t";
-			 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << "Gravity\t";
-			 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << "Bias\t";
-			 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
-			 cerr << endl << endl;
-			 cerr << frame;
-			 show=0;
-			 }
-			 */
+		for (int i = 0; i < 6; i++) {
+			force_torque[i] = last_correct[i];
 		}
 	} else {
-		lib::Ft_vector kartez_force;
-		for (int i = 0; i < 6; i++) {
-			kartez_force[i] = 0.0;
+		if (show_no_result == 1) {
+			sr_msg->message("edp Sensor initiate_reading - wynik otrzymany");
+			show_no_result = 0;
+		} else {
+			if (overload == 1) {
+				sr_msg->message("edp Sensor initiate_reading - OVERLOAD REMOVED");
+				overload = 0;
+			}
 		}
-		master.force_msr_upload(kartez_force);
+		for (int i = 0; i < 6; i++) {
+			last_correct[i] = force_torque[i];
+		}
 	}
+	//!< ok
+	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
+	//!< tutaj: czujnik skalibrowany, odczyt dokonany, przepisanie wszystkich pol
+	//!< przepisanie do bufora komunikacyjnego
+#if WYNIKI_MRROCPP
+
+	printf ("aaa: %f, %f, %f: \n", force_torque[0], force_torque[1], force_torque[2]);
+#endif
+	// // // // // // // // // // // // // // / PRZEPISANIE WYNIKU // // // // // // // // // // // // // // // // // // // // // // // //
+	lib::Ft_vector kartez_force, root_force;
+	if (gravity_transformation) {
+		for (int i = 0; i < 6; i++)
+			root_force[i] = force_torque[i];
+
+		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+		lib::Ft_vector output = gravity_transformation->getForce(root_force, frame);
+
+		//		printf("output: %f, %f, %f, %f, %f, %f\n", output[0], output[1], output[2], output[3], output[4], output[5]);
+		//		printf("output: %f, %f, %f, %f, %f, %f\n", root_force[0], root_force[1], root_force[2], root_force[3], root_force[4], root_force[5]);
+		master.force_msr_upload(output);
+		/*		if (show==1000){
+		 cerr << "Output\t";
+		 for(int i=0;i<3;i++) {
+		 output[i] *= 20;
+		 cerr << ceil(output[i]) << "  ";
+		 }
+		 for(int i=3;i<6;i++) {
+		 output[i] *= 333;
+		 cerr << ceil(output[i]) << "  ";
+		 }
+		 cerr << endl;// << "Input\t";
+		 for(int i=6;i<12;i++) cerr << ceil(output[i]) << "  ";
+		 cerr << endl << "Gravity\t";
+		 for(int i=12;i<18;i++) cerr << ceil(output[i]) << "  ";
+		 cerr << endl << "Bias\t";
+		 for(int i=18;i<24;i++) cerr << ceil(output[i]) << "  ";
+		 cerr << endl << endl;
+		 cerr << frame;
+		 show=0;
+		 }
+		 */
+	}
+
 	show++;
-	is_reading_ready = true;
 
 }
 
