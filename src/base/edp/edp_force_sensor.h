@@ -115,7 +115,8 @@ public:
 
 	virtual ~force();
 
-	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+	void wait_for_event(void); // oczekiwanie na zdarzenie
+	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
 }; // end: class edp_force_sensor

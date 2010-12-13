@@ -355,53 +355,49 @@ void ATI6284_force::configure_particular_sensor(void)
 
 // // // // // // // // // // // // // // /   inicjalizacja zbierania danych z czujnika, wait_for_event // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////
 
-void ATI6284_force::wait_for_event()
+void ATI6284_force::wait_for_particular_event()
 {
 	//	sr_msg->message("wait_for_event");
 	if (!is_sensor_configured)
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 
-	if (!(master.force_sensor_test_mode)) {
+	//	sr_msg->message("wait_for_event ni test");
 
-		//	sr_msg->message("wait_for_event ni test");
+	lib::timer local_timer;
+	float sec;
 
-		lib::timer local_timer;
-		float sec;
+	//!< Clear ADC FIFO
+	Clear_FIFO();
 
-		//!< Clear ADC FIFO
-		Clear_FIFO();
+	//!< Enable interrupts
+	AI_Interrupt_Enable();
 
-		//!< Enable interrupts
-		AI_Interrupt_Enable();
+	//!< Arm the analog input counters
+	AI_Arming();
 
-		//!< Arm the analog input counters
-		AI_Arming();
+	//!< Add back _enable and _disable from comment
+	//!< _disable;
 
-		//!< Add back _enable and _disable from comment
-		//!< _disable;
+	//!< Start the acquistion
+	AI_Start_The_Acquisition();
+	Samples_Acquired = 0;
+	invalid_value = 0;
 
-		//!< Start the acquistion
-		AI_Start_The_Acquisition();
-		Samples_Acquired = 0;
-		invalid_value = 0;
+	local_timer.start();
 
-		local_timer.start();
+	do {
+		//!< odczekaj
+		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+			wake_time.tv_sec += 1;
+			wake_time.tv_nsec -= 1000000000;
+		}
 
-		do {
-			//!< odczekaj
-			while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-				wake_time.tv_sec += 1;
-				wake_time.tv_nsec -= 1000000000;
-			}
+		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
 
-			clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		local_timer.stop();
+		local_timer.get_time(sec);
+	} while (sec < START_TO_READ_TIME_INTERVAL);
 
-			local_timer.stop();
-			local_timer.get_time(sec);
-		} while (sec < START_TO_READ_TIME_INTERVAL);
-	} else {
-		usleep(1000);
-	}
 	is_reading_ready = true;
 
 }

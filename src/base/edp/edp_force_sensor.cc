@@ -149,6 +149,17 @@ force::force(common::manip_effector &_master) :
 
 }
 
+void force::wait_for_event()
+{
+	if (!master.force_sensor_test_mode) {
+
+		wait_for_particular_event();
+
+	} else {
+		usleep(1000);
+	}
+}
+
 /***************************** odczyt z czujnika *****************************/
 void force::get_reading(void)
 {

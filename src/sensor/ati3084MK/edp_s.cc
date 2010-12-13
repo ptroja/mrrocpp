@@ -59,17 +59,13 @@ void ATI3084_force::configure_particular_sensor(void)
 
 }
 
-void ATI3084_force::wait_for_event()
+void ATI3084_force::wait_for_particular_event()
 {
 	//	sr_msg->message("wait_for_event");
 
-	if (!master.force_sensor_test_mode) {
 
 		ftxyz = getFT();
 
-	} else {
-		usleep(1000);
-	}
 }
 
 /***************************** odczyt z czujnika *****************************/
@@ -84,7 +80,7 @@ void ATI3084_force::get_particular_reading(void)
 	/*
 	 char aaa[50];
 	 sprintf(aaa,"%f",ft_table[0]);
-	 sr_msg->message(aaa);
+	 sr_msg->message(aaa);g
 	 */
 	is_reading_ready = true;
 

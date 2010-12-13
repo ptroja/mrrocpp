@@ -163,10 +163,10 @@ void ATI6284_force::configure_particular_sensor(void)
 	usleep(250); //250us
 
 
-	wait_for_event();
-	wait_for_event();
-	wait_for_event();
-	wait_for_event();
+	wait_for_particular_event();
+	wait_for_particular_event();
+	wait_for_particular_event();
+	wait_for_particular_event();
 
 	for (int i = 0; i < 6; ++i) {
 		bias_data[i] = adc_data[i];
@@ -174,7 +174,7 @@ void ATI6284_force::configure_particular_sensor(void)
 
 }
 
-void ATI6284_force::wait_for_event()
+void ATI6284_force::wait_for_particular_event()
 
 {
 	const boost::posix_time::time_duration timeout = boost::posix_time::microseconds(1500);

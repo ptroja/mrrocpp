@@ -40,7 +40,7 @@ public:
 	virtual ~ATI6284_force();
 
 	void configure_particular_sensor (void);	// konfiguracja czujnika
-	void wait_for_event(void);	// oczekiwanie na zdarzenie
+	void wait_for_particular_event(void);	// oczekiwanie na zdarzenie
 	void get_particular_reading (void);	// odebranie odczytu od VSP		// zwraca blad
 
 private:

@@ -247,12 +247,11 @@ void ATI3084_force::configure_particular_sensor(void)
 
 }
 
-void ATI3084_force::wait_for_event()
+void ATI3084_force::wait_for_particular_event()
 {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
 
-	if (!master.force_sensor_test_mode) {
 
 		if (!int_attached) {
 			int_attached = true;
@@ -302,9 +301,7 @@ void ATI3084_force::wait_for_event()
 			}
 
 		} while (iw_ret == -1); // dopoki nie zostanie odebrana paczka pomiarow
-	} else {
-		usleep(1000);
-	}
+
 }
 
 /***************************** odczyt z czujnika *****************************/

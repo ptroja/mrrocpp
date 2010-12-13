@@ -77,13 +77,13 @@ void ATI6284_force::configure_particular_sensor(void)
 
 	// synchronize gravity transformation
 
-	wait_for_event();
+	wait_for_particular_event();
 
 	bias_data = datav;
 
 }
 
-void ATI6284_force::wait_for_event()
+void ATI6284_force::wait_for_particular_event()
 {
 	//!< odczekaj
 	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
@@ -93,17 +93,13 @@ void ATI6284_force::wait_for_event()
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
 
-	if (!(master.force_sensor_test_mode)) {
+
 		for (int i = 0; i < 6; i++) {
 			comedi_data_read(device, 0, i, 0, AREF_DIFF, &adc_data[i]);
 		}
 
 		for (int i = 0; i < 6; i++) {
 			datav[i] = comedi_to_physical(adc_data[i], &ADC_calib[i]);
-		}
-	} else {
-		for (int i = 0; i < 6; i++) {
-			datav[i] = 0.0;
 		}
 	}
 }
