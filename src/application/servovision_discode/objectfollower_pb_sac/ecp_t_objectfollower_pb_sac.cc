@@ -25,19 +25,42 @@ namespace task {
 ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configurator& config) :
 	task(config)
 {
+	log_dbg_enabled = true;
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() begin\n");
+
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 
 	char config_section_name[] = { "[object_follower_sac_1]" };
 
-	log_dbg_enabled = true;
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 1\n");
 
 	boost::shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 2\n");
+
 	reg = boost::shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 3 \n");
+
 	boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 4\n");
+
 	vs = boost::shared_ptr <visual_servo> (new pb_sac_visual_servo(reg, ds, config_section_name, config));
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 5\n");
+
 	sm = boost::shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 6\n");
+
 	sm->add_position_constraint(cube);
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() 7\n");
+
 	sm->configure();
+
+	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() end\n");
 }
 
 ecp_t_objectfollower_pb_sac::~ecp_t_objectfollower_pb_sac()
@@ -47,6 +70,7 @@ ecp_t_objectfollower_pb_sac::~ecp_t_objectfollower_pb_sac()
 
 void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 {
+	log_dbg("ecp_t_objectfollower_pb_sac::main_task_algorithm() begin\n");
 	while (1) {
 		get_next_state();
 		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
