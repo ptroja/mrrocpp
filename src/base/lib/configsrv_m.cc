@@ -68,7 +68,8 @@ main(int argc, char *argv[])
 					reply.key = config.value(query.key);
 					reply.flag = true;
 				} catch (boost::property_tree::ptree_error & e) {
-					// Do nothing. Reply will send the error flag.
+					std::cerr<<e.what()<<std::endl;
+					// Print the error to the standard error output
 				}
 			}
 			messip::port_reply(ch, rcvid, 0, reply);

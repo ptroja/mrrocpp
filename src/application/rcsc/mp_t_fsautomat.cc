@@ -38,6 +38,7 @@
 #include "base/lib/datastr.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "cube_face.h"
+#include "CubeState.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -89,26 +90,26 @@ void fsautomat::create_robots()
 
 fsautomat::fsautomat(lib::configurator &_config) :
 	task(_config)
-{//*
+{	//*
 	 int size, conArg;
 	 char *filePath;
-	 char *fileName = config.value<std::string>("xml_file", "[xml_settings]");
+	 std::string fileName;
+	 fileName = config.value<std::string>("xml_file", "[xml_settings]");
 	 xmlNode *cur_node, *child_node;
 	 xmlChar *stateType, *argument;
-
-	 size = 1 + strlen(mrrocpp_network_path) + strlen(fileName);
+	 size = 1 + mrrocpp_network_path.length() + fileName.length();
 	 filePath = new char[size];
 
-	 sprintf(filePath, "%s%s", mrrocpp_network_path, fileName);
+	 sprintf(filePath, "%s%s", mrrocpp_network_path.c_str(), fileName.c_str());
 	 // open xml document
 	 xmlDocPtr doc;
 	 doc = xmlParseFile(filePath);
 	 if(doc == NULL)
 	 {
-	 printf("ERROR in ecp initialization: could not parse file: %s\n",fileName);
+	 printf("ERROR in ecp initialization: could not parse file: %s\n",fileName.c_str());
 	 return;
 	 }
-
+std::cout<<filePath<<std::endl;
 	 // XML root
 	 xmlNode *root = NULL;
 	 root = xmlDocGetRootElement(doc);
@@ -136,12 +137,11 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 {
 	 for(;child_node->children; child_node->children = child_node->children->next)
 	 {
-	 if(child_node->children->type == XML_ELEMENT_NODE &&
-	 !xmlStrcmp(child_node->children->name, (const xmlChar *)"cube_state"))
+	 if(child_node->children->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->children->name, (const xmlChar *)"cube_state"))
 	 {
 	 //argument = xmlNodeGetContent(child_node->children);
 	 //if(argument && xmlStrcmp(argument, (const xmlChar *)""));
-	 cube_state = new CubeState();
+	 cube_state = new common::CubeState();
 	 //xmlFree(argument);
 	 }
 	 if(child_node->children->type == XML_ELEMENT_NODE &&
@@ -180,10 +180,10 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	{	sensor_item.second->configure_sensor();
 	}
 
-	// dodanie transmitter'a
+	/*// dodanie transmitter'a
 	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
 			= new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
-
+*/
 	cube_state = new common::CubeState();
 }
 
