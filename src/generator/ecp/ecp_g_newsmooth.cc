@@ -129,6 +129,9 @@ bool newsmooth::calculate() {
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
 
+				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
+
 				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
@@ -347,7 +350,7 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
 
-	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in joint representation
+	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
 
 		sr_ecp_msg.message("Representation different than the previous one");
 		return false;
@@ -403,12 +406,12 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	std::ifstream from_file(file_name); // open the file
 	if (!from_file.good()) {
 		//perror(file_name);
-		//throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
 		return false;
 	}
 
 	if (!(from_file >> coordinate_type_desc)) {
-		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		return false;
 	}
 
@@ -439,16 +442,17 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	}
 
 	if (ps != pose_spec) {
+		sr_ecp_msg.message("Bad pose spec in loaded file");
 		return false;
 	}
 
 	if (!(from_file >> number_of_poses)) {
-		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		return false;
 	}
 
 	if (!(from_file >> motion_type_desc)) {
-		//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 		return false;
 	}
 
@@ -457,7 +461,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	} else if (!strcmp(motion_type_desc, "RELATIVE")) {
 		mt = lib::RELATIVE;
 	} else {
-		//throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
 		return false;
 	}
 
@@ -465,7 +469,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
@@ -474,7 +478,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
@@ -483,7 +487,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				//throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}

@@ -28,6 +28,7 @@ class get_position : public generator {
 	public:
 		/**
 		 * Constructor. Creates a position vector. Sets the axes_num and pose_spec variables.
+		 * @param _ecp_task current ecp task
 		 * @param axes_num number of axes for a given robot and representation
 		 * @param pose_spec representation in which the robot position is expressed
 		 */

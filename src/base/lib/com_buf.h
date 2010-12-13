@@ -206,7 +206,7 @@ struct ECP_message
 		{
 			double robot_position[lib::MAX_SERVOS_NR];
 			double sensor_reading[6];
-                        int32_t measure_number;
+			int32_t measure_number;
 		}
 		/*! Robot positions + Sensor readings + Measure number. */
 		MAM;
@@ -214,31 +214,30 @@ struct ECP_message
 	};
 #endif
 
-    //! Give access to boost::serialization framework
-    friend class boost::serialization::access;
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
-    //! Serialization of the data structure
-    template <class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & ecp_message;
-        ar & robot_name;
-        ar & nr_of_options;
-        /*
-        ar & string;
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & ecp_message;
+		ar & robot_name;
+		ar & nr_of_options;
 
-        ar & RS.robot_position;
-        ar & RS.sensor_reading;
+		ar & string;
 
-        ar & R2S.robot_position;
-        ar & R2S.digital_scales_sensor_reading;
-        ar & R2S.force_sensor_reading;
+		ar & RS.robot_position;
+		ar & RS.sensor_reading;
 
-        ar & MAM.robot_position;
-        ar & MAM.sensor_reading;
-        ar & MAM.measure_number;
-        */
-    }
+		ar & R2S.robot_position;
+		ar & R2S.digital_scales_sensor_reading;
+		ar & R2S.force_sensor_reading;
+
+		ar & MAM.robot_position;
+		ar & MAM.sensor_reading;
+		ar & MAM.measure_number;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -251,26 +250,26 @@ struct UI_reply
 	msg_header_t hdr;
 #endif
 	UI_TO_ECP_COMMAND reply;
-        int32_t integer_number;
+	int32_t integer_number;
 	double double_number;
 	double coordinates[lib::MAX_SERVOS_NR];
 	char path[80];
 	char filename[20];
 
-    //! Give access to boost::serialization framework
-    friend class boost::serialization::access;
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
-    //! Serialization of the data structure
-    template <class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & reply;
-        ar & integer_number;
-        ar & double_number;
-        ar & coordinates;
-        ar & path;
-        ar & filename;
-    }
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply;
+		ar & integer_number;
+		ar & double_number;
+		ar & coordinates;
+		ar & path;
+		ar & filename;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -590,8 +589,9 @@ struct edp_error
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & error0;
 		ar & error1;
 	}
@@ -763,10 +763,10 @@ typedef union c_buffer_arm
 		ar & pf_def.arm_frame;
 		ar & pf_def.behaviour;
 
-//		ar & text_def.text;
-//		ar & text_def.prosody;
+		//		ar & text_def.text;
+		//		ar & text_def.prosody;
 
-///		ar & serialized_command;
+		///		ar & serialized_command;
 	}
 } c_buffer_arm_t;
 
@@ -947,8 +947,9 @@ _r_buffer_robot_model
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & tool_frame_def.tool_frame;
 		ar & kinematic_model.kinematic_model_no;
 		ar & servo_algorithm.servo_algorithm_no;
@@ -985,8 +986,9 @@ typedef struct _controller_state_t
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & is_synchronised;
 		ar & is_power_on;
 		ar & is_wardrobe_on;
@@ -1021,7 +1023,7 @@ r_buffer_arm
 		 *  Stan w ktorym znajduje sie regulator chwytaka.
 		 *  @todo Translate to English.
 		 */
-                int16_t gripper_reg_state;
+		int16_t gripper_reg_state;
 	} pf_def;
 	//----------------------------------------------------------
 	struct
@@ -1039,14 +1041,15 @@ r_buffer_arm
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & pf_def.arm_frame;
 		ar & pf_def.arm_coordinates;
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.gripper_reg_state;
 		ar & text_def.speaking;
-//		ar & serialized_reply;
+		//		ar & serialized_reply;
 	}
 } r_buffer_arm_t;
 
@@ -1076,7 +1079,7 @@ struct r_buffer
 	uint8_t analog_input[8];
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
-        uint32_t servo_step;
+	uint32_t servo_step;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
@@ -1093,8 +1096,9 @@ struct r_buffer
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & reply_type;
 		ar & error_no;
 		ar & robot_model_type;
@@ -1152,8 +1156,9 @@ struct ecp_next_state_t
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & mp_2_ecp_next_state;
 		ar & mp_2_ecp_next_state_variant;
 		ar & mp_2_ecp_next_state_string;
@@ -1170,15 +1175,15 @@ struct ecp_command_buffer
 #endif
 	c_buffer instruction;
 
-    //! Give access to boost::serialization framework
-    friend class boost::serialization::access;
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
-    //! Serialization of the data structure
-    template <class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & instruction;
-    }
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & instruction;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -1197,8 +1202,9 @@ struct MP_COMMAND_PACKAGE
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & command;
 		ar & ecp_next_state;
 		ar & instruction;
@@ -1220,8 +1226,9 @@ struct ECP_REPLY_PACKAGE
 	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
 		ar & reply;
 		ar & reply_package;
 		ar & recognized_command; // TODO: this should be handled in better way...
@@ -1235,14 +1242,14 @@ struct ECP_REPLY_PACKAGE
  */
 typedef struct _empty
 {
-    //! Give access to boost::serialization framework
-    friend class boost::serialization::access;
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
-    //! Serialization of the data structure
-    template <class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-    }
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+	}
 } empty_t;
 
 /*

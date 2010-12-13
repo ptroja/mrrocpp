@@ -349,7 +349,7 @@ bool bang_bang_profile::optimize_time4(vector<ecp_mp::common::trajectory_pose::b
 
 
 
-	it->v_p[i] = sqrt(2 * it->a_r[i] * it->s[i] + it->v_k[i] * it->v_k[i]);
+	it->v_p[i] = sqrt(2 * it->a_r[i] * it->s[i] + it->v_k[i] * it->v_k[i]) - 0.00001;
 	it->times[i] = (it->v_p[i] - it->v_k[i])/it->a_r[i];
 
 	it->v_r[i] = it->v_p[i];//preparation for recalculation
