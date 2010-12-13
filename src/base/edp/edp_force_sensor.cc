@@ -172,14 +172,17 @@ void force::get_reading(void)
 
 	if (!(master.force_sensor_test_mode)) {
 		get_particular_reading();
-	}
+		// jesli ma byc wykorzytstywana biblioteka transformacji sil
+		if (gravity_transformation) {
+			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+			master.force_msr_upload(output);
+		}
 
-	// jesli ma byc wykorzytstywana biblioteka transformacji sil
-	if (gravity_transformation) {
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-		master.force_msr_upload(output);
+	} else {
+		master.force_msr_upload(ft_table);
+
 	}
 
 }
