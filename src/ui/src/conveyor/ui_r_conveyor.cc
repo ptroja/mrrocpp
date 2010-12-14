@@ -45,7 +45,7 @@ int UiRobot::reload_configuration()
 					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
 
 			state.ecp.pid = -1;
-			state.ecp.trigger_fd = common::invalid_fd;
+			state.ecp.trigger_fd = lib::invalid_fd;
 		}
 
 		switch (state.edp.state)
@@ -54,7 +54,7 @@ int UiRobot::reload_configuration()
 			case 0:
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = common::invalid_fd;
+				state.edp.reader_fd = lib::invalid_fd;
 				state.edp.state = 0;
 
 				if (interface.config->exists("preset_position_0", state.edp.section_name))

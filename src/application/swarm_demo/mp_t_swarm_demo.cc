@@ -110,6 +110,10 @@ void swarm_demo::main_task_algorithm(void)
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
+	sr_ecp_msg->message("Wait");
+
+	wait_ms(2000);
+
 	sr_ecp_msg->message("Both angle axis");
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) 5, "../../src/application/swarm_demo/trajectory_track_angle.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());

@@ -26,7 +26,7 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -1; // edp nieaktywne
-	state.ecp.trigger_fd = common::invalid_fd;
+	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
 }
 
@@ -159,11 +159,11 @@ void UiRobot::pulse_ecp()
 {
 
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (state.ecp.trigger_fd == common::invalid_fd) {
+		if (state.ecp.trigger_fd == lib::invalid_fd) {
 			connect_to_ecp_pulse_chanell();
 		}
 
-		if (state.ecp.trigger_fd != common::invalid_fd) {
+		if (state.ecp.trigger_fd != lib::invalid_fd) {
 			pulse_ecp_execute(ECP_TRIGGER, 1);
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
@@ -175,7 +175,7 @@ bool UiRobot::deactivate_ecp_trigger()
 {
 
 	if (state.is_active) {
-		if (state.ecp.trigger_fd != common::invalid_fd) {
+		if (state.ecp.trigger_fd != lib::invalid_fd) {
 
 #if !defined(USE_MESSIP_SRR)
 			if (name_close(state.ecp.trigger_fd) == -1) {
@@ -188,7 +188,7 @@ bool UiRobot::deactivate_ecp_trigger()
 #endif
 
 		}
-		state.ecp.trigger_fd = common::invalid_fd;
+		state.ecp.trigger_fd = lib::invalid_fd;
 		state.ecp.pid = -1;
 		return true;
 	}
@@ -204,7 +204,7 @@ void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
-		if (state.edp.reader_fd != common::invalid_fd) {
+		if (state.edp.reader_fd != lib::invalid_fd) {
 #if !defined(USE_MESSIP_SRR)
 			if (name_close(state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
@@ -215,7 +215,7 @@ void UiRobot::EDP_slay_int()
 			}
 #endif
 		}
-		state.edp.reader_fd = common::invalid_fd;
+		state.edp.reader_fd = lib::invalid_fd;
 
 		close_all_windows();
 

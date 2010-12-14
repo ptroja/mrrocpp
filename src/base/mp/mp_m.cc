@@ -115,10 +115,10 @@ int main(int argc, char *argv[], char **arge)
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
 			signal(SIGCHLD, &(mp::common::catch_signal_in_mp));
-#if defined(PROCESS_SPAWN_RSH)
+
 			// ignore Ctrl-C signal, which cames from UI console
 			signal(SIGINT, SIG_IGN);
-#endif
+
 		} catch (ecp_mp::task::ECP_MP_main_error & e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == lib::SYSTEM_ERROR)
