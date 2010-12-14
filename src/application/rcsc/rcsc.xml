@@ -12,7 +12,7 @@
 				<ecp_smooth_gen>1</ecp_smooth_gen>
 			</ecp>
 		</taskInit>
-		<transition condition="true" target="approach_12"/>
+		<transition condition="true" target="approach_13"/>
 	</State>	
 	<State id="approach_12" type="runGenerator">
 		<ROBOT>ROBOT_IRP6_ON_TRACK</ROBOT>
@@ -59,8 +59,8 @@
 	
 	<!-- ################################################################################################################################### -->
 
-	<xi:include href="faceTurnOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/>
-	<xi:include href="faceChangeOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/>
+	<!-- <xi:include href="faceTurnOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/> -->
+	<!-- <xi:include href="faceChangeOperations.xml" parse="xml" xmlns:xi='http://www.w3.org/2001/XInclude'/> -->
 	<!-- ################################################################################################################################### -->
 	<!--  -->
 	<!--  -->

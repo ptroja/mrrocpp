@@ -90,13 +90,14 @@ void fsautomat::create_robots()
 
 fsautomat::fsautomat(lib::configurator &_config) :
 	task(_config)
-{	//*
-	 int size, conArg;
+{/*
+
+	 int size;
 	 char *filePath;
 	 std::string fileName;
 	 fileName = config.value<std::string>("xml_file", "[xml_settings]");
 	 xmlNode *cur_node, *child_node;
-	 xmlChar *stateType, *argument;
+	 xmlChar *stateType;
 	 size = 1 + mrrocpp_network_path.length() + fileName.length();
 	 filePath = new char[size];
 
@@ -109,7 +110,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 printf("ERROR in ecp initialization: could not parse file: %s\n",fileName.c_str());
 	 return;
 	 }
-std::cout<<filePath<<std::endl;
 	 // XML root
 	 xmlNode *root = NULL;
 	 root = xmlDocGetRootElement(doc);
@@ -282,6 +282,8 @@ std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat:
 	std::string filePath(mrrocpp_network_path);
 	filePath += fileName;
 
+	std::cout << "XML FilePath: " << filePath << std::endl;
+
 	// open xml document
 	xmlDocPtr doc = xmlParseFile(filePath.c_str());
 	xmlXIncludeProcess(doc);
@@ -305,12 +307,14 @@ std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat:
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
 					common::State * actState = createState(child_node);
 					statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
+					std::cout << "INSERTED A STATE from subtask: " << actState->getStateID() << std::endl;
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			common::State * actState = createState(cur_node);
-			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
+			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));\
+			std::cout << "INSERTED A STATE (normal): " << actState->getStateID() << std::endl;
 		}
 	}
 	// free the document
@@ -368,13 +372,18 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
+	std::cout<<"TEST"<<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
+	std::cout<<"TEST1.1"<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
+	std::cout<<"TEST1.2"<<std::endl;
 } else {
+	std::cout<<"TEST2.1"<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
+	std::cout<<"TEST2.2"<<std::endl;
 }
 }
 
@@ -776,11 +785,13 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {
 	if (!strcmp(nextState, (const char *) "_END_"))
 	strcpy(nextState, sh.popTargetName());
+	std::cout << "KOPYTKO STAN HEJ " << (*stateMap)[nextState].getType() << std::endl;
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
 	break;
 	if (strcmp((*stateMap)[nextState].getType(), "runGenerator") == 0) {
 		executeMotion((*stateMap)[nextState]);
+		std::cout << "TESTmotion" << std::endl;
 		std::cout << nextState << " -> zakonczony" << std::endl;
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "emptyGenForSet") == 0) {
