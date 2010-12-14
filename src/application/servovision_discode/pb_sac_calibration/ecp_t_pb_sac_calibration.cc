@@ -19,6 +19,7 @@ namespace irp6p_m {
 namespace task {
 
 using namespace logger;
+using namespace std;
 using namespace mrrocpp::ecp::servovision;
 using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 using mrrocpp::ecp::common::generator::single_visual_servo_manager;
@@ -31,7 +32,7 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 	ecp_m_robot = new ecp::irp6p_m::robot(*this);
 
 	log_dbg("\necp_t_pb_sac_calibration::ecp_t_pb_sac_calibration() 1\n");
-	char config_section_name[] = { "sac_calibration" };
+	string config_section_name = "[sac_calibration]";
 
 	ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
 
@@ -41,7 +42,7 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 
 	log_dbg("\necp_t_pb_sac_calibration::ecp_t_pb_sac_calibration() 3\n");
 
-	sm = boost::shared_ptr <single_visual_servo_manager>(new single_visual_servo_manager(*this, config_section_name, vs));
+	sm = boost::shared_ptr <single_visual_servo_manager>(new single_visual_servo_manager(*this, config_section_name.c_str(), vs));
 
 	log_dbg("\necp_t_pb_sac_calibration::ecp_t_pb_sac_calibration() 4\n");
 }

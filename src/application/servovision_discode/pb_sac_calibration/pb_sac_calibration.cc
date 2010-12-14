@@ -12,7 +12,6 @@
 
 #include "base/lib/logger.h"
 
-
 namespace mrrocpp {
 
 namespace ecp {
@@ -23,11 +22,12 @@ using namespace std;
 using namespace logger;
 
 pb_sac_calibration::pb_sac_calibration(boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	pb_visual_servo(boost::shared_ptr <visual_servo_regulator>(new regulator_p(configurator, section_name)), sensor, section_name, configurator)
+	pb_visual_servo(boost::shared_ptr <visual_servo_regulator>(), sensor, section_name, configurator)
 {
-	log_dbg("pb_sac_calibration::pb_sac_calibration() begin");
+	log_enabled = true;
+	log_dbg("pb_sac_calibration::pb_sac_calibration() begin: section_name=%s\n", section_name.c_str());
 	E_T_G = configurator.value <3, 4> ("E_T_G", section_name);
-	log_dbg("pb_sac_calibration::pb_sac_calibration() end");
+	log_dbg("pb_sac_calibration::pb_sac_calibration() end\n");
 }
 
 pb_sac_calibration::~pb_sac_calibration()
@@ -40,10 +40,7 @@ lib::Homog_matrix pb_sac_calibration::compute_position_change(const lib::Homog_m
 
 	lib::Homog_matrix O_T_C = current_position * E_T_G * (!C_T_G);
 
-	cout<<"=====================================================================\n";
-	cout<<"\n\nO_T_C = \n" << O_T_C << "\n";
-	cout<<"=====================================================================\n";
-	cout.flush();
+	log(O_T_C);
 
 	lib::Homog_matrix delta_position;
 	return delta_position;
