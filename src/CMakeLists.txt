@@ -59,6 +59,8 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 
 option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
+option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
+
 # QNX is default MRROC++ target
 if (QNXNTO)
 	# QNX headers and libraries are kept in 'mrlib' repository
