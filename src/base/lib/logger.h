@@ -9,6 +9,8 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#include "mrmath/mrmath.h"
+
 namespace logger {
 
 /** Is log enabled*/
@@ -25,6 +27,12 @@ __attribute__ ((format (printf, 1, 2)))
 ;
 
 /**
+ * Print Homog_matrix.
+ * @param hm
+ */
+void log(const lib::Homog_matrix& hm);
+
+/**
  * Print message to the console only if logDbgEnabled is set to true.
  * @param fmt printf-like format
  */
@@ -33,6 +41,12 @@ void log_dbg(const char *fmt, ...)
 // 1 - number of argument with string format, 2 - first variable argument to check
 __attribute__ ((format (printf, 1, 2)))
 ;
+
+/**
+ * Print Homog_matrix.
+ * @param hm
+ */
+void log_dbg(const lib::Homog_matrix& hm);
 
 } // namespace logger
 
