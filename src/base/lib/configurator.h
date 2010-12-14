@@ -37,7 +37,7 @@
 namespace mrrocpp {
 namespace lib {
 
-#define PROCESS_SPAWN_RSH
+
 
 class configurator
 {

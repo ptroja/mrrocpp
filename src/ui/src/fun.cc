@@ -24,7 +24,7 @@
 #include "ui/src/ui_ecp.h"
 
 // #include "ui/src/ui.h"
-// Konfigurator (dla PROCESS_SPAWN_RSH)
+
 #include "base/lib/configurator.h"
 #include "robot/irp6m/const_irp6m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
@@ -994,7 +994,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			interface.program_node_list.begin(); program_node_list_iterator != interface.program_node_list.end(); program_node_list_iterator++) {
 		char system_command[100];
 		/*
-		 #if 0 && defined(PROCESS_SPAWN_RSH)
+		 #if 0
 		 sprintf(system_command, "rsh %s killall -e -q -v %s",
 		 program_node_list_iterator->node_name,
 		 program_node_list_iterator->program_name
@@ -1010,7 +1010,7 @@ int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		 */
 		delay(10);
 
-#if 0 && defined(PROCESS_SPAWN_RSH)
+#if 0
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
 				program_node_list_iterator->node_name.c_str(),
 				program_node_list_iterator->program_name.c_str()

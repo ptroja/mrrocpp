@@ -134,11 +134,9 @@ bool configurator::check_config(const std::string & key) const
 
 int configurator::return_node_number(const std::string & node_name_l)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 	return ND_LOCAL_NODE;
-#else
-	return netmgr_strtond(node_name_l.c_str(), NULL);
-#endif
+
 }
 
 std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
@@ -219,7 +217,7 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 
 	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
 	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
@@ -316,7 +314,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	return child_pid;
-#endif
+
 }
 
 #ifdef USE_MESSIP_SRR

@@ -132,14 +132,14 @@ void ecp_buffer::operator()()
 			continue;
 		}
 #endif
-
+#if !defined(USE_MESSIP_SRR)
 		//! FIXME:
 		if (interface.irp6ot_m->state.ecp.pid <= 0) {
 
 			interface.irp6ot_m->state.ecp.pid = info.pid;
 
 		}
-
+#endif
 		switch (ecp_to_ui_msg.ecp_message)
 		{ // rodzaj polecenia z ECP
 			case lib::C_XYZ_ANGLE_AXIS:
