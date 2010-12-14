@@ -38,8 +38,6 @@ namespace mrrocpp {
 namespace lib {
 
 #define PROCESS_SPAWN_RSH
-// by Y - jesli usuna buga to mozna powrocic do tego rozwiazania ale sadze ze nie warto
-//#define PROCESS_SPAWN_SPAWN
 
 class configurator
 {
@@ -132,7 +130,7 @@ public:
 	 * @param _section_name configuration section name
 	 * @param _session_name session ID
 	 */
-	configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
+			configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
 
 	/**
 	 * Change configuration file
@@ -167,7 +165,8 @@ public:
 	 * @param __section_name section name
 	 * @return network path
 	 */
-	std::string	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	std::string
+			return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
 
 	/**
 	 * Return network attach point
@@ -195,9 +194,9 @@ public:
 		std::string pt_path = __section_name;
 
 		// trim leading '[' char
-		pt_path.erase(0,1);
+		pt_path.erase(0, 1);
 		// trim trailing '[' char
-		pt_path.erase(pt_path.length()-1,1);
+		pt_path.erase(pt_path.length() - 1, 1);
 
 		pt_path += ".";
 		pt_path += _key;
@@ -220,9 +219,9 @@ public:
 		}
 #else
 		try {
-			return file_pt.get<Type>(pt_path);
+			return file_pt.get <Type> (pt_path);
 		} catch (boost::property_tree::ptree_error & e) {
-			return common_file_pt.get<Type>(pt_path);
+			return common_file_pt.get <Type> (pt_path);
 		}
 #endif
 	}
@@ -236,7 +235,7 @@ public:
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		return value<Type>(_key, section_name);
+		return value <Type> (_key, section_name);
 	}
 
 	/**
@@ -321,7 +320,7 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 	Eigen::Matrix <double, ROWS, COLS> matrix_value;
 
 	// get string value and remove leading and trailing spaces
-	std::string text_value = value<std::string>(key, section_name);
+	std::string text_value = value <std::string> (key, section_name);
 	boost::algorithm::trim(text_value);
 
 	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";
