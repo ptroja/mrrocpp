@@ -57,13 +57,33 @@ class force : public lib::sensor::sensor_interface
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
+	// nazwa czujnika
+	short force_sensor_name;
+
+	// is sensor_frame right turn
 	bool is_right_turn_frame;
+	// sensor_frame related to wrist frame
+	lib::Homog_matrix sensor_frame;
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+	virtual void disconnect_from_hardware(void) = 0;
+
+	void configure_sensor(void);
+
+	// particular force sensor configuration
+	virtual void configure_particular_sensor(void) = 0;
+
+	// particular force sensor get reading
+	virtual void get_particular_reading(void) = 0;
+
+	// ft_table used in get_reading and get_particualr_reading
+	lib::Ft_vector ft_table;
+
+	void get_reading(void);
 
 	struct _from_vsp
 	{
@@ -96,7 +116,8 @@ public:
 
 	virtual ~force();
 
-	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+	void wait_for_event(void); // oczekiwanie na zdarzenie
+	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
 }; // end: class edp_force_sensor

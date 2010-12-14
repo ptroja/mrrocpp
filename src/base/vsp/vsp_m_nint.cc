@@ -33,7 +33,7 @@
 #include <sys/sched.h>
 #include <fstream>
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -372,9 +372,9 @@ int main(int argc, char *argv[])
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::nint_shell::catch_signal);
 	signal(SIGSEGV, &vsp::nint_shell::catch_signal);
-#if defined(PROCESS_SPAWN_RSH)
+
 	signal(SIGINT, SIG_IGN);
-#endif
+
 
 	// Check number of arguments.
 	if (argc <= 6) {

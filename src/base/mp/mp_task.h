@@ -67,14 +67,10 @@ private:
 	void initialize_communication(void);
 
 public:
-#if !defined(USE_MESSIP_SRR)
 	/**
 	 * @brief communication channels descriptors
 	 */
-	static name_attach_t *mp_pulse_attach;
-#else
-	static messip_channel_t *mp_pulse_attach;
-#endif
+	static lib::fd_server_t mp_pulse_attach;
 
 	/**
 	 * @brief Constructor

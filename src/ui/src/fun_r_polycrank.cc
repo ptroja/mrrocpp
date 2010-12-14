@@ -2226,7 +2226,7 @@ int reload_polycrank_configuration()
 					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", interface.irp6m_m->state.ecp.section_name.c_str());
 
 			interface.irp6m_m->state.ecp.pid = -1;
-			interface.irp6m_m->state.ecp.trigger_fd = common::invalid_fd;
+			interface.irp6m_m->state.ecp.trigger_fd = lib::invalid_fd;
 		}
 
 		switch (interface.irp6m_m->state.edp.state)
@@ -2236,7 +2236,7 @@ int reload_polycrank_configuration()
 				// ini_con->create_edp_irp6_mechatronika (ini_con->ui->edp_irp6_mechatronika_section);
 
 				interface.irp6m_m->state.edp.pid = -1;
-				interface.irp6m_m->state.edp.reader_fd = common::invalid_fd;
+				interface.irp6m_m->state.edp.reader_fd = lib::invalid_fd;
 				interface.irp6m_m->state.edp.state = 0;
 
 				for (int i = 0; i < 3; i++) {

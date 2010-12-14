@@ -20,43 +20,40 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 #include "base/edp/edp_force_sensor.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-typedef Matrix<double, 6, 6> Matrix6d;
-typedef Matrix<double, 6, 1> Vector6d;
-
-
+typedef Matrix <double, 6, 6> Matrix6d;
+typedef Matrix <double, 6, 1> Vector6d;
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI6284_force : public force{
+class ATI6284_force : public force
+{
 public:
 
-	void connect_to_hardware (void);
+	void connect_to_hardware(void);
 
 	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
-
-	void configure_sensor (void);	// konfiguracja czujnika
-	void wait_for_event(void);	// oczekiwanie na zdarzenie
-	void initiate_reading (void);	// zadanie odczytu od VSP
-	void get_reading (void);	// odebranie odczytu od VSP		// zwraca blad
+	void disconnect_from_hardware(void);
+	void configure_particular_sensor(void); // konfiguracja czujnika
+	void wait_for_particular_event(void); // oczekiwanie na zdarzenie
+	void get_particular_reading(void); // odebranie odczytu od VSP		// zwraca blad
 
 private:
-  const std::string dev_name;
-  comedi_t *device; // device dyscryptor
-  lsampl_t adc_data[6]; // raw ADC data
-  Vector6d datav; // mensured voltage
-  Vector6d bias_data; // sensor bias voltage
+	const std::string dev_name;
+	comedi_t *device; // device dyscryptor
+	lsampl_t adc_data[6]; // raw ADC data
+	Vector6d datav; // mensured voltage
+	Vector6d bias_data; // sensor bias voltage
 
-  comedi_polynomial_t ADC_calib[6]; // ADC calibration polynomial
+	comedi_polynomial_t ADC_calib[6]; // ADC calibration polynomial
 
-  Matrix6d conversion_matrix; // F/T conversion matrix
-  Vector6d conversion_scale; // F/T scaling
+	Matrix6d conversion_matrix; // F/T conversion matrix
+	Vector6d conversion_scale; // F/T scaling
 
-  void convert_data(const Vector6d &result_raw, const Vector6d &bias_raw, lib::Ft_vector &force) const;
+	void convert_data(const Vector6d &result_raw, const Vector6d &bias_raw, lib::Ft_vector &force) const;
 }; // end: class vsp_sensor
 
 } // namespace sensor
