@@ -137,7 +137,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 	printf("connect_to_edp");
 	fflush( stdout);
 
-	short tmp = 0;
+	unsigned int tmp = 0;
 #if !defined(USE_MESSIP_SRR)
 	while ((EDP_fd = name_open(edp_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
 #else

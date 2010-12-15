@@ -186,7 +186,7 @@ protected:
 
 			if (debug) {
 				printf("actual position vector, size: %d\n", get_pos->get_position_vector().size());
-				for (int j = 0; j < get_pos->get_position_vector().size(); j++) {
+				for (std::size_t j = 0; j < get_pos->get_position_vector().size(); j++) {
 					printf("%f\t", get_pos->get_position_vector()[j]);
 				}
 				printf("\n");
@@ -226,7 +226,7 @@ protected:
 		coordinate_vector_iterator = coordinate_vector.begin();
 		pose_vector_iterator = pose_vector.begin();
 
-		int i; //loop counter
+		std::size_t i; //loop counter
 
 		bool trueFlag = true;//flag set to false if interpolation is not successful at some point
 
@@ -246,7 +246,7 @@ protected:
 			}
 			set_absolute();
 		} else if (motion_type == lib::RELATIVE) {
-			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			for (std::size_t i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -275,7 +275,7 @@ protected:
 	{
 		coordinate_vector_iterator = coordinate_vector.begin();
 		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
-		for (int i = 0; i < coordinate_vector.size(); i++) {
+		for (std::size_t i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
 			printf("%d:\t", (i + 1));
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
@@ -594,7 +594,7 @@ public:
 		std::vector<double> temp1 = pose_vector.begin()->start_position;
 		std::vector<double> temp2 = (*coordinate_vector_iterator);
 
-		int i, j;//loop counters
+		std::size_t i, j;//loop counters
 
 		for (i = 0; i < axes_num; i++) {
 			if (motion_type == lib::ABSOLUTE) {
