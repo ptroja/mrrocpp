@@ -169,15 +169,15 @@ void reader_buffer::operator()()
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
+
+	lib::fd_server_t my_attach;
+
 #if !defined(USE_MESSIP_SRR)
-	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
 
 	if ((my_attach
 			= name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL))
 			== NULL) {
 #else
-		messip_channel_t *my_attach;
-
 		if ((my_attach = messip::port_create(
 								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 				== NULL) {

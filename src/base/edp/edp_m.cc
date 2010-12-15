@@ -19,7 +19,6 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -88,9 +87,9 @@ int main(int argc, char *argv[])
 		signal(SIGSEGV, &edp::common::catch_signal);
 
 		// avoid transporting Ctrl-C signal from UI console
-#if defined(PROCESS_SPAWN_RSH)
+
 		signal(SIGINT, SIG_IGN);
-#endif
+
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);

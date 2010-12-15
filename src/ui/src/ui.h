@@ -37,14 +37,6 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
-#if !defined(USE_MESSIP_SRR)
-typedef int fd_t;
-static const fd_t invalid_fd = -1;
-#else
-typedef messip_channel_t * fd_t;
-static const fd_t invalid_fd = NULL;
-#endif
-
 enum TEACHING_STATE
 {
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
@@ -145,7 +137,7 @@ typedef struct _edp_state_def
 	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
 	std::string network_reader_attach_point;
 	int node_nr;
-	fd_t reader_fd;
+	lib::fd_client_t reader_fd;
 	bool is_synchronised;
 	//! TODO: change from int to EDP_STATE enum
 	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop
@@ -165,7 +157,7 @@ typedef struct
 	std::string section_name; // nazwa sekcji, w ktorej zapisana jest konfiguracja
 	std::string network_trigger_attach_point;
 	int node_nr;
-	fd_t trigger_fd;
+	lib::fd_client_t trigger_fd;
 	int state;
 	int last_state;
 } ecp_state_def;
@@ -183,7 +175,7 @@ typedef struct
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	fd_t pulse_fd;
+	lib::fd_client_t pulse_fd;
 	UI_MP_STATE state;
 	UI_MP_STATE last_state;
 } mp_state_def;

@@ -33,9 +33,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-
 const lib::sensor::SENSOR_t SENSOR_FRADIA = "SENSOR_FRADIA";
-
 
 /**
  * @brief Class for communication with FraDIA. Parametrized by received structure.
@@ -153,7 +151,8 @@ public:
 	 * @param section_name Name of the section in ini file. Specified section in config must contain following options: fradia_node_name, fradia_port, fradia_task.
 	 * @param configure_message Message that will be send by configure_sensor().
 	 */
-	fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message = CONFIGURE_T());
+			fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message =
+					CONFIGURE_T());
 
 	/**
 	 * @brief Destructor - closes FraDIA socket connection.
@@ -200,11 +199,9 @@ public:
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::fradia_sensor(mrrocpp::lib::configurator& _configurator, const std::string& section_name, const CONFIGURE_T& configure_message) :
-	fradia_task(_configurator.value <std::string> ("fradia_task", section_name)),
-	configurator(_configurator),
-	report(lib::sensor::VSP_SENSOR_NOT_CONFIGURED),
-	configure_message(configure_message),
-	send_initiate_message(false)
+	fradia_task(_configurator.value <std::string> ("fradia_task", section_name)), configurator(_configurator),
+			report(lib::sensor::VSP_SENSOR_NOT_CONFIGURED), configure_message(configure_message),
+			send_initiate_message(false)
 {
 	// Set period variables.
 	base_period = current_period = 1;
@@ -380,9 +377,9 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading()
 		if (result == 0) {
 			break;
 		}
-//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 1\n");
+		//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 1\n");
 		reading_message = receive_from_fradia <READING_T> ();
-//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 2\n");
+		//		logger::log_dbg("fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::get_reading() 2\n");
 		report = lib::sensor::VSP_REPLY_OK;
 	}
 }

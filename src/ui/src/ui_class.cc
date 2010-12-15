@@ -19,7 +19,7 @@
 #include <iostream>
 #include <fstream>
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+
 #include "base/lib/configurator.h"
 #include "base/lib/mis_fun.h"
 
@@ -129,9 +129,9 @@ void Interface::init()
 	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
-#ifdef PROCESS_SPAWN_RSH
+
 	signal(SIGCHLD, &catch_signal);
-#endif /* PROCESS_SPAWN_RSH */
+
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 
