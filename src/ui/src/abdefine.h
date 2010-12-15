@@ -2705,6 +2705,7 @@ extern const int ABN_mm_conveyor_servo_algorithm;
 extern const int ABN_mm_spkm;
 extern const int ABN_mm_spkm_edp_load;
 extern const int ABN_mm_spkm_edp_unload;
+extern const int ABN_mm_spkm_synchronisation;
 extern const int ABN_mm_smb;
 extern const int ABN_mm_smb_edp_load;
 extern const int ABN_mm_smb_edp_unload;
