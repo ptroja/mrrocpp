@@ -372,18 +372,14 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
-	std::cout<<"TEST"<<std::endl;
+	std::cout<< "Ruch w stanie: " << state.getStateID() <<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-	std::cout<<"TEST1.1"<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
-	std::cout<<"TEST1.2"<<std::endl;
 } else {
-	std::cout<<"TEST2.1"<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
-	std::cout<<"TEST2.2"<<std::endl;
 }
 }
 
