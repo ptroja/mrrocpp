@@ -1212,6 +1212,7 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	EDP_sarkofag_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_postument_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_synchronise(widget, apinfo, cbinfo);
+	EDP_spkm_synchronise(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
