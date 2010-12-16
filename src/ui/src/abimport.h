@@ -423,4 +423,5 @@ int sarkofag_servo_algorithm_set( PtWidget_t *widget, ApInfo_t *data, PtCallback
 int wind_sarkofag_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int clear_wind_sarkofag_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int wind_sarkofag_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_spkm_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

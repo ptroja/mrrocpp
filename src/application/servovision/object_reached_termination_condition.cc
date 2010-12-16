@@ -41,7 +41,7 @@ void object_reached_termination_condition::reset()
 void object_reached_termination_condition::update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm)
 {
 	bool object_visible_and_error_small = false;
-	for (int i = 0; i < vsm->get_servos().size(); ++i) {
+	for (std::size_t i = 0; i < vsm->get_servos().size(); ++i) {
 		Eigen::Matrix <double, 6, 1> e = vsm->get_servos()[i]->get_error();
 		Eigen::Matrix <double, 3, 1> linear_error = e.block(0, 0, 3, 1);
 		Eigen::Matrix <double, 3, 1> angular_error = e.block(3, 0, 3, 1);

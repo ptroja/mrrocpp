@@ -105,9 +105,7 @@ int UiRobot::manage_interface()
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			break;
 		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload,
-
-			NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, ABN_mm_spkm_edp_load, NULL);
 
 			break;
@@ -117,7 +115,7 @@ int UiRobot::manage_interface()
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_synchronisation, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
 				switch (interface.mp.state)
@@ -143,7 +141,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 			}
