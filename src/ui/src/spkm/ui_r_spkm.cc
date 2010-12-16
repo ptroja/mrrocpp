@@ -30,6 +30,10 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
+void UiRobot::close_all_windows()
+{
+}
+
 int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne

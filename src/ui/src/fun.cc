@@ -19,6 +19,8 @@
 #include <process.h>
 #include <cassert>
 
+#include <boost/foreach.hpp>
+
 #include "base/lib/sr/srlib.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
@@ -1452,17 +1454,12 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 		interface.mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
-		// zamkniecie okien ruchow recznych o ile sa otwarte
+		// close_all_windows
 
-		interface.irp6ot_m->close_all_windows();
-		interface.irp6p_m->close_all_windows();
-		interface.irp6m_m->close_all_windows();
-		interface.bird_hand->close_all_windows();
-		interface.conveyor->close_all_windows();
-		interface.irp6ot_tfg->close_all_windows();
-		interface.irp6p_tfg->close_all_windows();
-		interface.sarkofag->close_all_windows();
-		interface.speaker->close_all_windows();
+		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface.robot_m)
+					{
+						robot_node.second->close_all_windows();
+					}
 
 		interface.execute_mp_pulse(MP_START);
 

@@ -54,7 +54,7 @@ public:
 	bool pulse_reader_trigger_exec_pulse(void);
 
 	void pulse_ecp(void);
-	virtual void close_all_windows();
+	virtual void close_all_windows() = 0;
 	void EDP_slay_int();
 	void connect_to_reader(void);
 	void connect_to_ecp_pulse_chanell(void);

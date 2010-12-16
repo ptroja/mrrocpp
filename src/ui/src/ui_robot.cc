@@ -196,10 +196,6 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
-void UiRobot::close_all_windows()
-{
-}
-
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
