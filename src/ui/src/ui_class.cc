@@ -600,6 +600,65 @@ int Interface::check_gns()
 	return (Pt_CONTINUE);
 }
 
+bool Interface::is_any_robot_active()
+{
+	bool r_value = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->state.is_active) {
+						return true;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::are_all_robots_synchronised_or_inactive()
+{
+	bool r_value = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active)
+							&& (robot_node.second->state.edp.is_synchronised))
+							|| (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::are_all_robots_loaded_or_inactive()
+{
+	bool r_value = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+							> 0)) || (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::is_any_active_robot_loaded()
+{
+	bool r_value = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						return true;
+					}
+				}
+
+	return r_value;
+}
+
 // ustala stan wszytkich EDP
 int Interface::check_edps_state_and_modify_mp_state()
 {
@@ -607,39 +666,19 @@ int Interface::check_edps_state_and_modify_mp_state()
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(irp6p_m->state.is_active)) && (!(irp6ot_m->state.is_active)) && (!(irp6ot_tfg->state.is_active))
-			&& (!(irp6p_tfg->state.is_active)) && (!(sarkofag->state.is_active)) && (!(conveyor->state.is_active))
-			&& (!(speaker->state.is_active)) && (!(irp6m_m->state.is_active)) && (!(bird_hand->state.is_active))
-			&& (!(spkm->state.is_active)) && (!(smb->state.is_active)) && (!(shead->state.is_active))) {
+	if (!is_any_robot_active()) {
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (irp6p_m->check_synchronised_or_inactive() && irp6ot_m->check_synchronised_or_inactive()
-			&& conveyor->check_synchronised_or_inactive() && speaker->check_synchronised_or_inactive()
-			&& irp6m_m->check_synchronised_or_inactive() && irp6ot_tfg->check_synchronised_or_inactive()
-			&& irp6p_tfg->check_synchronised_or_inactive() && sarkofag->check_synchronised_or_inactive()
-			&& bird_hand->check_synchronised_or_inactive() && spkm->check_synchronised_or_inactive()
-			&& smb->check_synchronised_or_inactive() && shead->check_synchronised_or_inactive()) {
+	} else if (are_all_robots_synchronised_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (irp6p_m->check_loaded_or_inactive() && irp6ot_m->check_loaded_or_inactive()
-			&& conveyor->check_loaded_or_inactive() && speaker->check_loaded_or_inactive()
-			&& irp6m_m->check_loaded_or_inactive() && irp6ot_tfg->check_loaded_or_inactive()
-			&& irp6p_tfg->check_loaded_or_inactive() && sarkofag->check_loaded_or_inactive()
-			&& bird_hand->check_loaded_or_inactive() && spkm->check_loaded_or_inactive()
-			&& smb->check_loaded_or_inactive() && shead->check_loaded_or_inactive())
-
-	{
+	} else if (are_all_robots_loaded_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (irp6p_m->check_loaded() || irp6ot_m->check_loaded() || conveyor->check_loaded()
-			|| speaker->check_loaded() || irp6m_m->check_loaded() || irp6ot_tfg->check_loaded()
-			|| irp6p_tfg->check_loaded() || sarkofag->check_loaded() || bird_hand->check_loaded()
-			|| spkm->check_loaded() || smb->check_loaded() || shead->check_loaded())
-
-	{
+	} else if (is_any_active_robot_loaded()) {
 		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
 
 		// jesli zaden nie jest zaladowany

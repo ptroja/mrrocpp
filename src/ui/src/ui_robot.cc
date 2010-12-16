@@ -230,27 +230,11 @@ void UiRobot::EDP_slay_int()
 }
 
 // ustala stan wszytkich EDP
-bool UiRobot::check_synchronised_or_inactive()
-{
-	return (((state.is_active) && (state.edp.is_synchronised)) || (!(state.is_active)));
-
-}
 
 bool UiRobot::check_synchronised_and_loaded()
 {
 	return (((state.edp.state > 0) && (state.edp.is_synchronised)));
 
-}
-
-bool UiRobot::check_loaded_or_inactive()
-{
-	return (((state.is_active) && (state.edp.state > 0)) || (!(state.is_active)));
-
-}
-
-bool UiRobot::check_loaded()
-{
-	return ((state.is_active) && (state.edp.state > 0));
 }
 
 }

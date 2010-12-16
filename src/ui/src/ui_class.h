@@ -165,6 +165,12 @@ public:
 	void block_widget(PtWidget_t *widget);
 	void unblock_widget(PtWidget_t *widget);
 	void create_threads();
+
+	bool is_any_robot_active();
+	bool are_all_robots_synchronised_or_inactive();
+	bool are_all_robots_loaded_or_inactive();
+	bool is_any_active_robot_loaded();
+
 };
 
 }
