@@ -12,7 +12,7 @@
 				<ecp_smooth_gen>1</ecp_smooth_gen>
 			</ecp>
 		</taskInit>
-		<transition condition="true" target="approach_11"/>
+		<transition condition="true" target="approach_13"/>
 	</State>	
 	<State id="approach_11" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>

@@ -779,13 +779,14 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 }
 
 for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {
-	/*if (!strcmp(nextState, (const char *) "_END_"))
-	strcpy(nextState, sh.popTargetName());*/
-	//TODO odkomentowac
-	std::cout << "KOPYTKO STAN HEJ " << (*stateMap)[nextState].getType() << std::endl;
+	if (!strcmp(nextState, (const char *) "_END_"))
+	strcpy(nextState, sh.popTargetName());
+
+	std::cout << "KOPYTKO STAN HEJ TEST 1" << (*stateMap)[nextState].getType() << std::endl;
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
 	break;
+
 	if (strcmp((*stateMap)[nextState].getType(), "runGenerator") == 0) {
 		executeMotion((*stateMap)[nextState]);
 		std::cout << "TESTmotion" << std::endl;
@@ -853,7 +854,7 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 
 	}
 }
-
+std::cout << "KOPYTKO STAN HEJ TEST 2" << (*stateMap)[nextState].getType() << std::endl;
 }
 
 } // namespace task
