@@ -60,6 +60,7 @@ public:
 	void connect_to_ecp_pulse_chanell(void);
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot() = 0;
+	virtual int manage_interface() = 0;
 
 	bool check_synchronised_or_inactive();
 	bool check_synchronised_and_loaded();
