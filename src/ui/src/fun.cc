@@ -1310,18 +1310,11 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	EDP_irp6_on_track_slay(widget, apinfo, cbinfo);
-	EDP_irp6ot_tfg_slay(widget, apinfo, cbinfo);
-	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
-	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
-	EDP_sarkofag_slay(widget, apinfo, cbinfo);
-	EDP_conveyor_slay(widget, apinfo, cbinfo);
-	EDP_bird_hand_slay(widget, apinfo, cbinfo);
-	EDP_spkm_slay(widget, apinfo, cbinfo);
-	EDP_smb_slay(widget, apinfo, cbinfo);
-	EDP_shead_slay(widget, apinfo, cbinfo);
-	EDP_speaker_slay(widget, apinfo, cbinfo);
-	EDP_irp6_mechatronika_slay(widget, apinfo, cbinfo);
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface.robot_m)
+				{
+					robot_node.second->EDP_slay_int();
+				}
 
 	return (Pt_CONTINUE);
 
