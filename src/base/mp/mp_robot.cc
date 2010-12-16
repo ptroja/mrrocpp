@@ -55,7 +55,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	ecp_opened = true;
 
 	// nawiazanie komunikacji z ECP
-	short tmp = 0;
+	unsigned int tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 #if !defined(USE_MESSIP_SRR)
 	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)

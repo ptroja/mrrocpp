@@ -170,7 +170,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
-	unsigned int bytes_received[MOXA_SERVOS_NR];
+	std::size_t bytes_received[MOXA_SERVOS_NR];
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
@@ -310,9 +310,6 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 {
 	char tx_buf[SERVO_ST_BUF_LEN];
 	char rx_buf[SERVO_ST_BUF_LEN];
-	fd_set rfds;
-	int bytes_received=0;
-
 
 	tx_buf[0] = 0x00;
 	tx_buf[1] = 0x00;
@@ -352,10 +349,13 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 	for(int param_set_attempt = 0; param_set_attempt < MAX_PARAM_SET_ATTEMPTS; param_set_attempt++)
 	{
 		write(fd[drive_number], tx_buf, WRITE_BYTES);
-		bytes_received = 0;
+
+		fd_set rfds;
 
 		FD_ZERO(&rfds);
 		FD_SET(fd[drive_number], &rfds);
+
+		std::size_t bytes_received = 0;
 
 		for(int i=0; i<3; i++)
 		{
@@ -418,7 +418,7 @@ bool HI_moxa::in_synchro_area(int drive_number)
 bool HI_moxa::robot_synchronized()
 {
 	bool ret = true;
-	for (int i = 0; i <= last_drive_number; i++) {
+	for (std::size_t i = 0; i <= last_drive_number; i++) {
 		if (servo_data[i].drive_status.isSynchronized == 0) {
 			ret = false;
 		}

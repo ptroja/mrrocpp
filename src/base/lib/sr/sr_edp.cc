@@ -34,7 +34,7 @@ void sr_edp::interpret()
 		case NON_FATAL_ERROR: // interpretacja do funkcji:
 			// message(int16_t message_type, uint64_t error_code0, uint64_t error_code1)
 			s_error = error_tab[0];
-			for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
+			for (unsigned int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 				if (s_error & 0x00000001) {
 					sprintf(tbuf, "%1d", j + 1);
 					strcpy(sr_message.description, "SERVO_");
@@ -305,7 +305,7 @@ void sr_edp::interpret()
 
 			// analiza informacji zawartej w error_tab[1]
 			s_error = error_tab[1];
-			for (int j = 0; j < lib::MAX_SERVOS_NR; j++) {
+			for (unsigned int j = 0; j < lib::MAX_SERVOS_NR; j++) {
 				if (s_error & 0x00000001) {
 					sprintf(tbuf, "%1d", j + 1);
 					strcat(sr_message.description, "SERVO ");

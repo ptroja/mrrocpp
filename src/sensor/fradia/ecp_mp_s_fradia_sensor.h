@@ -55,7 +55,7 @@ class fradia_sensor : public ecp_mp::sensor::sensor_interface
 {
 private:
 	/** @brief Maximal size of task name. */
-	const static int task_name_size = 256;
+	const static std::size_t task_name_size = 256;
 
 	/**
 	 * @brief Message sent to FraDIA by configure_sensor()
