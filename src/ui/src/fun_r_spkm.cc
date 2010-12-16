@@ -135,16 +135,63 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
+int EDP_spkm_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-EDP_spkm_synchronise( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
-	}
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota spkm_
+
+		if ((interface.spkm->state.edp.state > 0) && (interface.spkm->state.edp.is_synchronised == false)) {
+			interface.spkm->ui_ecp_robot->ecp->synchronise();
+			interface.spkm->state.edp.is_synchronised = interface.spkm->ui_ecp_robot->ecp->is_synchronised();
+		} else {
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	interface.manage_interface();
+
+	return (Pt_CONTINUE);
+
+}
+
+int EDP_spkm_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota spkm_
+
+		if ((interface.spkm->state.edp.state > 0) && (interface.spkm->state.edp.is_synchronised == false)) {
+			interface.spkm->ui_ecp_robot->ecp->synchronise();
+			interface.spkm->state.edp.is_synchronised = interface.spkm->ui_ecp_robot->ecp->is_synchronised();
+		} else {
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	interface.manage_interface();
+
+	return (Pt_CONTINUE);
+
+}
 

@@ -93,8 +93,7 @@ ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, 
 	int nSize = backtrace(array, 25);
 	char ** symbols = backtrace_symbols(array, nSize);
 
-	for (int i = 0; i < nSize; i++)
-	{
+	for (int i = 0; i < nSize; i++) {
 		std::cerr << symbols[i] << std::endl;
 	}
 
@@ -135,7 +134,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
 
 	printf("connect_to_edp");
-	fflush( stdout);
+	fflush(stdout);
 
 	short tmp = 0;
 #if !defined(USE_MESSIP_SRR)

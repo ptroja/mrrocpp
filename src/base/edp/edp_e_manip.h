@@ -177,7 +177,7 @@ public:
 	 *
 	 * This method synchronises motors of the robots.
 	 */
-	void synchronise();
+	virtual void synchronise();
 
 	/*!
 	 * \brief The method checks the initial state of the controller.
@@ -210,8 +210,7 @@ public:
 	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 
 public:
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
 
 } // namespace common
 } // namespace edp
