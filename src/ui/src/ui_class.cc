@@ -241,35 +241,6 @@ int Interface::manage_interface(void)
 				{
 					robot_node.second->manage_interface();
 				}
-	/*
-	 // Dla robota IRP6 ON_TRACK
-	 irp6ot_m->manage_interface();
-	 irp6ot_tfg->manage_interface();
-
-	 // Dla robota IRP6 POSTUMENT
-	 irp6p_m->manage_interface();
-	 irp6p_tfg->manage_interface();
-	 sarkofag->manage_interface();
-
-	 // Dla robota CONVEYOR
-	 conveyor->manage_interface();
-
-	 // ROBOTY SwamrmItFix
-	 spkm->manage_interface();
-	 smb->manage_interface();
-	 shead->manage_interface();
-
-	 bird_hand->manage_interface();
-
-	 // Dla robota SPEAKER
-	 speaker->manage_interface();
-
-	 // Dla robota IRP6 MECHATRONIKA
-	 irp6m_m->manage_interface();
-	 */
-	// zadanie
-	// kolorowanie menu all robots
-
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -397,31 +368,11 @@ void Interface::reload_whole_configuration()
 			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 			case UI_ALL_EDPS_NONE_EDP_LOADED:
 
-				// dla robota irp6 on_track
-				irp6ot_m->reload_configuration();
-				irp6ot_tfg->reload_configuration();
-
-				// dla robota irp6 postument
-				irp6p_m->reload_configuration();
-				irp6p_tfg->reload_configuration();
-
-				sarkofag->reload_configuration();
-
-				// dla robota conveyor
-				conveyor->reload_configuration();
-
-				// ROBOTY SwamrmItFix
-				spkm->reload_configuration();
-				smb->reload_configuration();
-				shead->reload_configuration();
-
-				bird_hand->reload_configuration();
-
-				// dla robota speaker
-				speaker->reload_configuration();
-
-				// dla robota irp6 mechatronika
-				irp6m_m->reload_configuration();
+				// uruchmomienie manage interface dla wszystkich robotow
+				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+							{
+								robot_node.second->reload_configuration();
+							}
 				break;
 			default:
 				break;
