@@ -19,8 +19,8 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name) :
-	interface(_interface), tid(NULL)
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name) :
+	interface(_interface), tid(NULL), robot_name(_robot_name)
 {
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;

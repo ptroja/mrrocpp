@@ -19,7 +19,6 @@
 #include <iostream>
 #include <fstream>
 
-
 #include "base/lib/configurator.h"
 #include "base/lib/mis_fun.h"
 
@@ -83,17 +82,40 @@ void Interface::init()
 	}
 
 	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
+
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
 	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
 	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
 	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
 	irp6m_m = new irp6m::UiRobot(*this);
+	robot_m[irp6m_m->robot_name] = irp6m_m;
+
 	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
 	speaker = new speaker::UiRobot(*this);
+	robot_m[speaker->robot_name] = speaker;
+
 	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
 	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
 	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
 
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
@@ -131,7 +153,6 @@ void Interface::init()
 	signal(SIGSEGV, &catch_signal);
 
 	signal(SIGCHLD, &catch_signal);
-
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 

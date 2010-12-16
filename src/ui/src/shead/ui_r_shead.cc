@@ -24,7 +24,7 @@ namespace shead {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION), ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION, lib::shead::ROBOT_NAME), ui_ecp_robot(NULL)
 {
 
 }

@@ -24,7 +24,7 @@ namespace smb {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME), ui_ecp_robot(NULL)
 {
 
 }

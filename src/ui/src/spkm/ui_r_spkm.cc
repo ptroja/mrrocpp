@@ -24,7 +24,8 @@ namespace spkm {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION), ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
+			ui_ecp_robot(NULL)
 {
 
 }

@@ -44,6 +44,9 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
+typedef robots_t::value_type robot_pair_t;
+
 class sr_buffer;
 class ecp_buffer;
 
@@ -116,7 +119,15 @@ public:
 	std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
+
+	/**
+	 * @brief map of all robots used in the task
+	 */
+	common::robots_t robot_m;
+
 	bird_hand::UiRobot *bird_hand;
+	//robot_m[lib::] = bird_hand;
+
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6ot_tfg::UiRobot *irp6ot_tfg;
 	irp6p_m::UiRobot *irp6p_m;
