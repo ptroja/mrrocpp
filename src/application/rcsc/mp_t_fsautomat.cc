@@ -779,8 +779,9 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 }
 
 for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {
-	if (!strcmp(nextState, (const char *) "_END_"))
-	strcpy(nextState, sh.popTargetName());
+	/*if (!strcmp(nextState, (const char *) "_END_"))
+	strcpy(nextState, sh.popTargetName());*/
+	//TODO odkomentowac
 	std::cout << "KOPYTKO STAN HEJ " << (*stateMap)[nextState].getType() << std::endl;
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
