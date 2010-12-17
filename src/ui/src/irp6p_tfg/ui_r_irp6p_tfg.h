@@ -36,7 +36,7 @@ private:
 
 public:
 
-	double irp6p_tfg_current_pos[lib::irp6p_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double current_pos[lib::irp6p_tfg::NUM_OF_SERVOS];// pozycja biezaca
 	double irp6p_tfg_desired_pos[lib::irp6p_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 

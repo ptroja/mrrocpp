@@ -36,7 +36,7 @@ private:
 
 public:
 
-	double irp6ot_tfg_current_pos[lib::irp6ot_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double current_pos[lib::irp6ot_tfg::NUM_OF_SERVOS];// pozycja biezaca
 	double irp6ot_tfg_desired_pos[lib::irp6ot_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6ot_tfg_moves_open; // informacja czy okno ruchow

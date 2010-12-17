@@ -35,7 +35,7 @@ class UiRobot : public common::UiRobot
 private:
 
 public:
-	double irp6ot_current_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double current_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja biezaca
 	double irp6ot_desired_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja zadana
 
 

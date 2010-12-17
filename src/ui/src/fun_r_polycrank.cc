@@ -699,22 +699,22 @@ try {
 		{
 
 			interface.unblock_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
-			if (!(interface.irp6m_m->ui_ecp_robot->read_motors(interface.irp6m_m->irp6m_current_pos))) // Odczyt polozenia walow silnikow
+			if (!(interface.irp6m_m->ui_ecp_robot->read_motors(interface.irp6m_m->current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read motors\n");
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p0,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[0], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[0], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p1,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[1], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[1], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p2,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[2], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[2], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p3,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[3], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[3], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_motors_cur_p4,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[4], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[4], 0);
 
 			for (int i = 0; i < NUM_OF_SERVOS; i++)
-			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->irp6m_current_pos[i];
+			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->current_pos[i];
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
 			interface.block_widget(ABW_PtPane_wind_irp6m_inc_post_synchro_moves);
@@ -919,24 +919,24 @@ try {
 	if (interface.irp6m_m->state.edp.pid != -1) {
 		if (interface.irp6m_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			if (!(interface.irp6m_m->ui_ecp_robot->read_joints(interface.irp6m_m->irp6m_current_pos))) // Odczyt polozenia walow silnikow
+			if (!(interface.irp6m_m->ui_ecp_robot->read_joints(interface.irp6m_m->current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read joints\n");
 
 			// 	interface.unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p1,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[0], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[0], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p2,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[1], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[1], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p3,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[2], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[2], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p4,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[3], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[3], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p5,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[4], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[4], 0);
 
 			for (int i = 0; i < NUM_OF_SERVOS; i++)
-			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->irp6m_current_pos[i];
+			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->current_pos[i];
 		} else {
 			// 	interface.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
 		}
@@ -1421,26 +1421,26 @@ try {
 		if (interface.irp6m_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			if (!(interface.irp6m_m->ui_ecp_robot->read_xyz_angle_axis(
-									interface.irp6m_m->irp6m_current_pos))) // Odczyt polozenia walow silnikow
+									interface.irp6m_m->current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read read_xyz_angle_axis\n");
 
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_read_p1,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[0], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[0], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_read_p2,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[1], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[1], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_read_p3,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[2], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[2], 0);
 
-			alfa = sqrt(interface.irp6m_m->irp6m_current_pos[3] * interface.irp6m_m->irp6m_current_pos[3]
-					+ interface.irp6m_m->irp6m_current_pos[4] * interface.irp6m_m->irp6m_current_pos[4]
-					+ interface.irp6m_m->irp6m_current_pos[5] * interface.irp6m_m->irp6m_current_pos[5]);
+			alfa = sqrt(interface.irp6m_m->current_pos[3] * interface.irp6m_m->current_pos[3]
+					+ interface.irp6m_m->current_pos[4] * interface.irp6m_m->current_pos[4]
+					+ interface.irp6m_m->current_pos[5] * interface.irp6m_m->current_pos[5]);
 
-			kx = interface.irp6m_m->irp6m_current_pos[3] / alfa;
-			ky = interface.irp6m_m->irp6m_current_pos[4] / alfa;
-			kz = interface.irp6m_m->irp6m_current_pos[5] / alfa;
+			kx = interface.irp6m_m->current_pos[3] / alfa;
+			ky = interface.irp6m_m->current_pos[4] / alfa;
+			kz = interface.irp6m_m->current_pos[5] / alfa;
 
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_angle_axis_read_p4,
@@ -1456,7 +1456,7 @@ try {
 					Pt_ARG_NUMERIC_VALUE, &alfa, 0);
 
 			for (int i = 0; i < 6; i++)
-			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->irp6m_current_pos[i];
+			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->current_pos[i];
 		} else {
 
 		}
@@ -1826,30 +1826,30 @@ try {
 		if (interface.irp6m_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			if (!(interface.irp6m_m->ui_ecp_robot->read_xyz_euler_zyz(
-									interface.irp6m_m->irp6m_current_pos))) // Odczyt polozenia walow silnikow
+									interface.irp6m_m->current_pos))) // Odczyt polozenia walow silnikow
 			printf("Blad w read external\n");
 
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p1,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[0], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[0], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p2,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[1], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[1], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p3,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[2], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[2], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p4,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[3], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[3], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p5,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[4], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[4], 0);
 			PtSetResource(
 					ABW_PtNumericFloat_wind_irp6m_xyz_euler_zyz_read_p6,
-					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->irp6m_current_pos[5], 0);
+					Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[5], 0);
 
 			for (int i = 0; i < 6; i++)
-			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->irp6m_current_pos[i];
+			interface.irp6m_m->irp6m_desired_pos[i] = interface.irp6m_m->current_pos[i];
 		} else {
 
 		}

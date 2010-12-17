@@ -286,13 +286,13 @@ int wind_irp6p_tfg_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 				interface.unblock_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos);
 				interface.unblock_widget(ABW_PtButton_wind_irp6p_tfg_moves_int_exec);
 
-				interface.irp6p_tfg->ui_ecp_robot->read_motors(interface.irp6p_tfg->irp6p_tfg_current_pos); // Odczyt polozenia walow silnikow
+				interface.irp6p_tfg->ui_ecp_robot->read_motors(interface.irp6p_tfg->current_pos); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &interface.irp6p_tfg->irp6p_tfg_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &interface.irp6p_tfg->current_pos[0], 0);
 
-				interface.irp6p_tfg->ui_ecp_robot->read_joints(interface.irp6p_tfg->irp6p_tfg_current_pos);
+				interface.irp6p_tfg->ui_ecp_robot->read_joints(interface.irp6p_tfg->current_pos);
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &interface.irp6p_tfg->irp6p_tfg_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &interface.irp6p_tfg->current_pos[0], 0);
 
 			} else {
 				interface.block_widget(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos);

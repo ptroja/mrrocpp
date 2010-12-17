@@ -36,7 +36,7 @@ private:
 
 public:
 
-	double conveyor_current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
+	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
 	double conveyor_desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte

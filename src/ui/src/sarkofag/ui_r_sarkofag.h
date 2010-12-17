@@ -39,7 +39,7 @@ private:
 
 public:
 
-	double sarkofag_current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
+	double current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
 	double sarkofag_desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 

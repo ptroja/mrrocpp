@@ -37,7 +37,7 @@ private:
 
 public:
 
-	double irp6m_current_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja biezaca
+	double current_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja biezaca
 	double irp6m_desired_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte

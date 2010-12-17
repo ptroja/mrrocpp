@@ -284,13 +284,13 @@ int wind_sarkofag_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 				interface.unblock_widget(ABW_PtNumericFloat_wind_sarkofag_moves_int_pos);
 				interface.unblock_widget(ABW_PtButton_wind_sarkofag_moves_int_exec);
 
-				interface.sarkofag->ui_ecp_robot->read_motors(interface.sarkofag->sarkofag_current_pos); // Odczyt polozenia walow silnikow
+				interface.sarkofag->ui_ecp_robot->read_motors(interface.sarkofag->current_pos); // Odczyt polozenia walow silnikow
 
-				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &interface.sarkofag->sarkofag_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_read_motor_pos, Pt_ARG_NUMERIC_VALUE, &interface.sarkofag->current_pos[0], 0);
 
-				interface.sarkofag->ui_ecp_robot->read_joints(interface.sarkofag->sarkofag_current_pos);
+				interface.sarkofag->ui_ecp_robot->read_joints(interface.sarkofag->current_pos);
 
-				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &interface.sarkofag->sarkofag_current_pos[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_read_int_pos, Pt_ARG_NUMERIC_VALUE, &interface.sarkofag->current_pos[0], 0);
 
 			} else {
 				interface.block_widget(ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos);

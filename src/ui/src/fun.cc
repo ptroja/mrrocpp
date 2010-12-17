@@ -1228,13 +1228,13 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6ot_m->irp6ot_current_pos[i];
+			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6ot_m->current_pos[i];
 	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6p_m->irp6p_current_pos[i];
+			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6p_m->current_pos[i];
 	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6m_m->irp6m_current_pos[i];
+			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6m_m->current_pos[i];
 	}
 
 	interface.ui_ecp_obj->ui_rep.double_number = *motion_time;

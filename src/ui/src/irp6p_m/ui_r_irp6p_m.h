@@ -33,7 +33,7 @@ namespace irp6p_m {
 class UiRobot : public common::UiRobot
 {
 public:
-	double irp6p_current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
 	double irp6p_desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
