@@ -23,12 +23,6 @@ target_link_libraries(
 )
 endif(QNXNTO)
 
-
-
-
-
-
-	
 add_library(kinematicsirp6p_m
 	kinematic_model_calibrated_irp6p_with_wrist.cc
 	kinematic_model_irp6p_5dof.cc
