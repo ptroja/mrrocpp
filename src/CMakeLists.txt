@@ -65,7 +65,7 @@ if (QNXNTO)
 	set(MRLIB "$ENV{QNX_TARGET}/mrlib")
 
 	# keep this flag until bug in QNX stack alignment is fixed
-	add_definitions (-DEIGEN_DONT_ALIGN)	
+	add_definitions (-DEIGEN_DONT_ALIGN)
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
@@ -122,6 +122,7 @@ elseif (UBUNTU32BIT)
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
+	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
         set(BOOST_ROOT "/opt/boost")
@@ -143,6 +144,8 @@ else (QNXNTO) # Linux, etc.
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif (QNXNTO)
+
+include(FindComedi)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
