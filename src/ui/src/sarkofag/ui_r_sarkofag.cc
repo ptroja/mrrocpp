@@ -109,7 +109,7 @@ int UiRobot::execute_motor_motion()
 {
 	try {
 
-		ui_ecp_robot->move_motors(sarkofag_desired_pos);
+		ui_ecp_robot->move_motors(desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -121,7 +121,7 @@ int UiRobot::execute_joint_motion()
 {
 	try {
 
-		ui_ecp_robot->move_joints(sarkofag_desired_pos);
+		ui_ecp_robot->move_joints(desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI

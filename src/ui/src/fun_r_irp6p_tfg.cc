@@ -142,33 +142,33 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
 				&& (my_data->key_cap == 0x73))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
-				interface.irp6p_tfg->irp6p_tfg_desired_pos[i] = 0.0;
+				interface.irp6p_tfg->desired_pos[i] = 0.0;
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_motor_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
-				interface.irp6p_tfg->irp6p_tfg_desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[0][i];
+				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[0][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
-				interface.irp6p_tfg->irp6p_tfg_desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[1][i];
+				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[1][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
-				interface.irp6p_tfg->irp6p_tfg_desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[2][i];
+				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[2][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
 		}
 
-		//	interface.irp6p_tfg->ui_ecp_robot->move_motors(interface.irp6p_tfg->irp6p_tfg_desired_pos);
+		//	interface.irp6p_tfg->ui_ecp_robot->move_motors(interface.irp6p_tfg->desired_pos);
 
 	} // end if (interface.irp6p_tfg->state.edp.pid!=-1)
 
@@ -330,7 +330,7 @@ int wind_irp6p_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 {
 
-	double *wektor_ptgr, irp6p_tfg_desired_pos_motors[6], irp6p_tfg_desired_pos_int[6];
+	double *wektor_ptgr, desired_pos_motors[6], desired_pos_int[6];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -348,20 +348,20 @@ int wind_irp6p_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 				if (interface.irp6p_tfg->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					irp6p_tfg_desired_pos_motors[0] = (*wektor_ptgr);
+					desired_pos_motors[0] = (*wektor_ptgr);
 				} else {
-					irp6p_tfg_desired_pos_motors[0] = 0.0;
+					desired_pos_motors[0] = 0.0;
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_irp6p_tfg_moves_inc_left) {
-					irp6p_tfg_desired_pos_motors[0] -= (*step1);
+					desired_pos_motors[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_irp6p_tfg_moves_inc_right) {
-					irp6p_tfg_desired_pos_motors[0] += (*step1);
+					desired_pos_motors[0] += (*step1);
 				}
 
-				interface.irp6p_tfg->ui_ecp_robot->move_motors(irp6p_tfg_desired_pos_motors);
+				interface.irp6p_tfg->ui_ecp_robot->move_motors(desired_pos_motors);
 
 			}
 
@@ -371,24 +371,24 @@ int wind_irp6p_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 					== ABW_PtButton_wind_irp6p_tfg_moves_int_exec)) {
 				if (interface.irp6p_tfg->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					irp6p_tfg_desired_pos_int[0] = (*wektor_ptgr);
+					desired_pos_int[0] = (*wektor_ptgr);
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_irp6p_tfg_moves_int_left) {
-					irp6p_tfg_desired_pos_int[0] -= (*step1);
+					desired_pos_int[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_irp6p_tfg_moves_int_right) {
-					irp6p_tfg_desired_pos_int[0] += (*step1);
+					desired_pos_int[0] += (*step1);
 				}
-				interface.irp6p_tfg->ui_ecp_robot->move_joints(irp6p_tfg_desired_pos_int);
+				interface.irp6p_tfg->ui_ecp_robot->move_joints(desired_pos_int);
 			}
 
 			// odswierzenie pozycji robota
 			if ((interface.irp6p_tfg->state.edp.is_synchronised) && (interface.irp6p_tfg->is_wind_irp6p_tfg_moves_open)) {
 
-				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &irp6p_tfg_desired_pos_motors[0], 0);
-				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &irp6p_tfg_desired_pos_int[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_motors[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_irp6p_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_int[0], 0);
 
 			}
 		}

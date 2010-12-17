@@ -102,7 +102,7 @@ int UiRobot::execute_motor_motion()
 {
 	try {
 
-		ui_ecp_robot->move_motors(irp6p_desired_pos);
+		ui_ecp_robot->move_motors(desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -114,7 +114,7 @@ int UiRobot::execute_joint_motion()
 {
 	try {
 
-		ui_ecp_robot->move_joints(irp6p_desired_pos);
+		ui_ecp_robot->move_joints(desired_pos);
 
 	} // end try
 	CATCH_SECTION_UI

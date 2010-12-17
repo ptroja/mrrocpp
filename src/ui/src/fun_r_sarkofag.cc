@@ -141,33 +141,33 @@ int sarkofag_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
 				&& (my_data->key_cap == 0x73))) && (interface.sarkofag->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
 			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
-				interface.sarkofag->sarkofag_desired_pos[i] = 0.0;
+				interface.sarkofag->desired_pos[i] = 0.0;
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_motor_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
-				interface.sarkofag->sarkofag_desired_pos[i] = interface.sarkofag->state.edp.preset_position[0][i];
+				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[0][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
-				interface.sarkofag->sarkofag_desired_pos[i] = interface.sarkofag->state.edp.preset_position[1][i];
+				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[1][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
-				interface.sarkofag->sarkofag_desired_pos[i] = interface.sarkofag->state.edp.preset_position[2][i];
+				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[2][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
 		}
 
-		//	interface.sarkofag->ui_ecp_robot->move_motors(interface.sarkofag->sarkofag_desired_pos);
+		//	interface.sarkofag->ui_ecp_robot->move_motors(interface.sarkofag->desired_pos);
 
 	} // end if (interface.sarkofag->state.edp.pid!=-1)
 
@@ -328,7 +328,7 @@ int wind_sarkofag_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 {
 
-	double *wektor_ptgr, sarkofag_desired_pos_motors[6], sarkofag_desired_pos_int[6];
+	double *wektor_ptgr, desired_pos_motors[6], desired_pos_int[6];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -346,20 +346,20 @@ int wind_sarkofag_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 				if (interface.sarkofag->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					sarkofag_desired_pos_motors[0] = (*wektor_ptgr);
+					desired_pos_motors[0] = (*wektor_ptgr);
 				} else {
-					sarkofag_desired_pos_motors[0] = 0.0;
+					desired_pos_motors[0] = 0.0;
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_sarkofag_moves_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_sarkofag_moves_inc_left) {
-					sarkofag_desired_pos_motors[0] -= (*step1);
+					desired_pos_motors[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_sarkofag_moves_inc_right) {
-					sarkofag_desired_pos_motors[0] += (*step1);
+					desired_pos_motors[0] += (*step1);
 				}
 
-				interface.sarkofag->ui_ecp_robot->move_motors(sarkofag_desired_pos_motors);
+				interface.sarkofag->ui_ecp_robot->move_motors(desired_pos_motors);
 
 			}
 
@@ -369,24 +369,24 @@ int wind_sarkofag_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 					== ABW_PtButton_wind_sarkofag_moves_int_exec)) {
 				if (interface.sarkofag->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_sarkofag_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					sarkofag_desired_pos_int[0] = (*wektor_ptgr);
+					desired_pos_int[0] = (*wektor_ptgr);
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_sarkofag_moves_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_sarkofag_moves_int_left) {
-					sarkofag_desired_pos_int[0] -= (*step1);
+					desired_pos_int[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_sarkofag_moves_int_right) {
-					sarkofag_desired_pos_int[0] += (*step1);
+					desired_pos_int[0] += (*step1);
 				}
-				interface.sarkofag->ui_ecp_robot->move_joints(sarkofag_desired_pos_int);
+				interface.sarkofag->ui_ecp_robot->move_joints(desired_pos_int);
 			}
 
 			// odswierzenie pozycji robota
 			if ((interface.sarkofag->state.edp.is_synchronised) && (interface.sarkofag->is_wind_sarkofag_moves_open)) {
 
-				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &sarkofag_desired_pos_motors[0], 0);
-				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &sarkofag_desired_pos_int[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_motors[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_sarkofag_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_int[0], 0);
 
 			}
 		}

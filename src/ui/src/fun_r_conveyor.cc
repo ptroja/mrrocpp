@@ -199,7 +199,7 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 					&& (my_data->key_cap == 0x73))) && (interface.conveyor->state.edp.is_synchronised)) {
 				// powrot do pozycji synchronizacji
 				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->conveyor_desired_pos[i] = 0.0;
+					interface.conveyor->desired_pos[i] = 0.0;
 				}
 
 			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_0) || (ApName(ApWidget(cbinfo))
@@ -207,25 +207,25 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 					&& (my_data->key_cap == 0x30))) && (interface.conveyor->state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->conveyor_desired_pos[i] = interface.conveyor->state.edp.preset_position[0][i];
+					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[0][i];
 				}
 			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_1) || (ApName(ApWidget(cbinfo))
 					== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x31))) && (interface.conveyor->state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->conveyor_desired_pos[i] = interface.conveyor->state.edp.preset_position[1][i];
+					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[1][i];
 				}
 			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_2) || (ApName(ApWidget(cbinfo))
 					== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY)
 					&& (my_data->key_cap == 0x32))) && (interface.conveyor->state.edp.is_synchronised)) {
 				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->conveyor_desired_pos[i] = interface.conveyor->state.edp.preset_position[2][i];
+					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[2][i];
 				}
 			}
 
-			interface.conveyor->ui_ecp_robot->move_motors(interface.conveyor->conveyor_desired_pos);
+			interface.conveyor->ui_ecp_robot->move_motors(interface.conveyor->desired_pos);
 
 		}
 
@@ -238,7 +238,7 @@ int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 int wind_conveyor_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
-	double *wektor_ptgr, conveyor_desired_pos_motors[6], conveyor_desired_pos_int[6];
+	double *wektor_ptgr, desired_pos_motors[6], desired_pos_int[6];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -256,20 +256,20 @@ int wind_conveyor_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 				if (interface.conveyor->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					conveyor_desired_pos_motors[0] = (*wektor_ptgr);
+					desired_pos_motors[0] = (*wektor_ptgr);
 				} else {
-					conveyor_desired_pos_motors[0] = 0.0;
+					desired_pos_motors[0] = 0.0;
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_conveyor_moves_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_conveyor_moves_inc_left) {
-					conveyor_desired_pos_motors[0] -= (*step1);
+					desired_pos_motors[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_conveyor_moves_inc_right) {
-					conveyor_desired_pos_motors[0] += (*step1);
+					desired_pos_motors[0] += (*step1);
 				}
 
-				interface.conveyor->ui_ecp_robot->move_motors(conveyor_desired_pos_motors);
+				interface.conveyor->ui_ecp_robot->move_motors(desired_pos_motors);
 
 			}
 
@@ -279,24 +279,24 @@ int wind_conveyor_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 					== ABW_PtButton_wind_conveyor_moves_int_exec)) {
 				if (interface.conveyor->state.edp.is_synchronised) {
 					PtGetResource(ABW_PtNumericFloat_wind_conveyor_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr, 0);
-					conveyor_desired_pos_int[0] = (*wektor_ptgr);
+					desired_pos_int[0] = (*wektor_ptgr);
 				}
 
 				PtGetResource(ABW_PtNumericFloat_wind_conveyor_moves_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 				if (widget == ABW_PtButton_wind_conveyor_moves_int_left) {
-					conveyor_desired_pos_int[0] -= (*step1);
+					desired_pos_int[0] -= (*step1);
 				} else if (widget == ABW_PtButton_wind_conveyor_moves_int_right) {
-					conveyor_desired_pos_int[0] += (*step1);
+					desired_pos_int[0] += (*step1);
 				}
-				interface.conveyor->ui_ecp_robot->move_joints(conveyor_desired_pos_int);
+				interface.conveyor->ui_ecp_robot->move_joints(desired_pos_int);
 			}
 
 			// odswierzenie pozycji robota
 			if ((interface.conveyor->state.edp.is_synchronised) && (interface.conveyor->is_wind_conveyor_moves_open)) {
 
-				PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &conveyor_desired_pos_motors[0], 0);
-				PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &conveyor_desired_pos_int[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_motors[0], 0);
+				PtSetResource(ABW_PtNumericFloat_wind_conveyor_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &desired_pos_int[0], 0);
 
 			}
 		}
