@@ -23,9 +23,17 @@ namespace conveyor {
 // KLASA UiRobotIrp6ot_m
 //
 //
+
 int UiRobot::edp_create()
 
 {
+
+	if (state.edp.state == 0) {
+		create_thread();
+
+		eb.command(boost::bind(&ui::conveyor::UiRobot::edp_create_int, &(*this)));
+
+	}
 
 	return 1;
 
