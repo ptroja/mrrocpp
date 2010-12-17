@@ -7,7 +7,7 @@ add_library(ati6284KB
 
 target_link_libraries(
         ati6284KB
-        ${COMEDI_LIBS}
+        ${COMEDI_LIBRARY}
 )
 
 endif(COMEDILIB_FOUND)

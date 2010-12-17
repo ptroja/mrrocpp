@@ -122,6 +122,7 @@ elseif (UBUNTU32BIT)
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
+	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
         set(BOOST_ROOT "/opt/boost")
