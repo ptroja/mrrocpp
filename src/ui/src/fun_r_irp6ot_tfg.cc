@@ -78,8 +78,6 @@ int EDP_irp6ot_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 }
 
-
-
 int EDP_irp6ot_tfg_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -146,28 +144,28 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			for (int i = 0; i < lib::irp6ot_tfg::NUM_OF_SERVOS; i++) {
 				interface.irp6ot_tfg->irp6ot_tfg_desired_pos[i] = 0.0;
 			}
-			interface.irp6ot_tfg->eb.command(boost::bind(irp6ot_tfg_execute_motor_motion));
+			interface.irp6ot_tfg->eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_motor_motion, &(*interface.irp6ot_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.irp6ot_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6ot_tfg::NUM_OF_SERVOS; i++) {
 				interface.irp6ot_tfg->irp6ot_tfg_desired_pos[i] = interface.irp6ot_tfg->state.edp.preset_position[0][i];
 			}
-			interface.irp6ot_tfg->eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+			interface.irp6ot_tfg->eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_joint_motion, &(*interface.irp6ot_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.irp6ot_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6ot_tfg::NUM_OF_SERVOS; i++) {
 				interface.irp6ot_tfg->irp6ot_tfg_desired_pos[i] = interface.irp6ot_tfg->state.edp.preset_position[1][i];
 			}
-			interface.irp6ot_tfg->eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+			interface.irp6ot_tfg->eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_joint_motion, &(*interface.irp6ot_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6ot_tfg_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.irp6ot_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
 			for (int i = 0; i < lib::irp6ot_tfg::NUM_OF_SERVOS; i++) {
 				interface.irp6ot_tfg->irp6ot_tfg_desired_pos[i] = interface.irp6ot_tfg->state.edp.preset_position[2][i];
 			}
-			interface.irp6ot_tfg->eb.command(boost::bind(irp6ot_tfg_execute_joint_motion));
+			interface.irp6ot_tfg->eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_joint_motion, &(*interface.irp6ot_tfg)));
 		}
 
 		//	interface.irp6ot_tfg->ui_ecp_robot->move_motors(interface.irp6ot_tfg->irp6ot_tfg_desired_pos);
@@ -177,30 +175,6 @@ int irp6ot_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 
 	return (Pt_CONTINUE);
 
-}
-
-int irp6ot_tfg_execute_motor_motion()
-{
-	try {
-
-		interface.irp6ot_tfg->ui_ecp_robot->move_motors(interface.irp6ot_tfg->irp6ot_tfg_desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
-}
-
-int irp6ot_tfg_execute_joint_motion()
-{
-	try {
-
-		interface.irp6ot_tfg->ui_ecp_robot->move_joints(interface.irp6ot_tfg->irp6ot_tfg_desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
 }
 
 int start_wnd_irp6ot_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)

@@ -787,30 +787,6 @@ int irp6p_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	return (Pt_CONTINUE);
 }
 
-int irp6p_execute_motor_motion()
-{
-	try {
-
-		interface.irp6p_m->ui_ecp_robot->move_motors(interface.irp6p_m->irp6p_desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
-}
-
-int irp6p_execute_joint_motion()
-{
-	try {
-
-		interface.irp6p_m->ui_ecp_robot->move_joints(interface.irp6p_m->irp6p_desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
-}
-
 int irp6p_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
