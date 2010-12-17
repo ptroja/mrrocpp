@@ -1,14 +1,13 @@
 
-if(QNXNTO)
+if(COMEDILIB_FOUND)
 
-else(QNXNTO)
 add_library(ati6284KB
         edp_s.cc
 )
 
 target_link_libraries(
         ati6284KB
-        comedi
+        ${COMEDI_LIBS}
 )
 
-endif(QNXNTO)
+endif(COMEDILIB_FOUND)

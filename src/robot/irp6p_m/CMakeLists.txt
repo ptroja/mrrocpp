@@ -16,7 +16,7 @@ target_link_libraries(
 	edp_irp6p_m
 	ati6284
 )
-else(QNXNTO)
+elseif(COMEDILIB_FOUND)
 target_link_libraries(
         edp_irp6p_m
         ati6284KB
