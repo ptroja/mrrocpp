@@ -18,8 +18,6 @@
 #include <process.h>
 #include <cmath>
 
-#include <boost/bind.hpp>
-
 #include "base/lib/sr/srlib.h"
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
@@ -402,8 +400,6 @@ int EDP_conveyor_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	return (Pt_CONTINUE);
 
 }
-
-
 
 int EDP_conveyor_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 

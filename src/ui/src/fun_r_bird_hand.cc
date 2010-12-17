@@ -18,7 +18,7 @@
 #include <process.h>
 #include <cmath>
 
-#include <boost/bind.hpp>
+
 
 #include "base/lib/sr/srlib.h"
 

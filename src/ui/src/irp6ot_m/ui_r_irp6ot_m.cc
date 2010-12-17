@@ -106,6 +106,30 @@ int UiRobot::edp_create_int()
 
 }
 
+int UiRobot::execute_motor_motion()
+{
+	try {
+
+		ui_ecp_robot->move_motors(irp6ot_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_joint_motion()
+{
+	try {
+
+		ui_ecp_robot->move_joints(irp6ot_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME),
 			is_wind_irp6ot_int_open(false), is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(false),
