@@ -315,39 +315,7 @@ int EDP_conveyor_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
-
-	interface.conveyor->eb.command(boost::bind(EDP_conveyor_synchronise_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_conveyor_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota irp6_on_track
-
-		if ((interface.conveyor->state.edp.state > 0) && (interface.conveyor->state.edp.is_synchronised == false)) {
-			interface.conveyor->ui_ecp_robot->ecp->synchronise();
-			interface.conveyor->state.edp.is_synchronised = interface.conveyor->ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp conveyor niepowolane, synchronizacja niedozwolona\n");
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	// modyfikacje menu
-	interface.manage_interface();
+	interface.conveyor->synchronise();
 
 	return (Pt_CONTINUE);
 

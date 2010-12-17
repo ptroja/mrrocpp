@@ -28,14 +28,42 @@ int UiRobot::synchronise()
 
 {
 
+	eb.command(boost::bind(&ui::irp6m::UiRobot::synchronise_int, &(*this)));
+
 	return 1;
 
 }
 
+int UiRobot::synchronise_int()
+
+{
+
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota irp6_on_track
+
+		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->ecp->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+		} else {
+			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	interface.manage_interface();
+
+	return 1;
+
+}
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME), is_wind_irp6m_int_open(false),
-			is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
+	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME),
+			is_wind_irp6m_int_open(false), is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
 			is_wind_irp6m_servo_algorithm_open(false), ui_ecp_robot(NULL)
@@ -75,8 +103,9 @@ int UiRobot::reload_configuration()
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
-						tmp1 = tmp
-								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						tmp1
+								= tmp
+										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < 8; j++) {
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
@@ -103,7 +132,8 @@ int UiRobot::reload_configuration()
 				state.edp.network_reader_attach_point
 						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
 
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
+				state.edp.node_name
+						= interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
 
 				break;
 			case 1:

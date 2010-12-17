@@ -28,10 +28,38 @@ int UiRobot::synchronise()
 
 {
 
+	eb.command(boost::bind(&ui::conveyor::UiRobot::synchronise_int, &(*this)));
+
 	return 1;
 
 }
 
+int UiRobot::synchronise_int()
+
+{
+
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota irp6_on_track
+
+		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->ecp->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+		} else {
+			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	interface.manage_interface();
+
+	return 1;
+
+}
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME),
@@ -89,7 +117,8 @@ int UiRobot::reload_configuration()
 				state.edp.network_reader_attach_point
 						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
 
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
+				state.edp.node_name
+						= interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
 
 				break;
 			case 1:

@@ -140,6 +140,16 @@ int UiRobot::synchronise()
 
 {
 
+	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::synchronise_int, &(*this)));
+
+	return 1;
+
+}
+
+int UiRobot::synchronise_int()
+
+{
+
 	set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot

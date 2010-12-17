@@ -1207,14 +1207,10 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	EDP_conveyor_synchronise(widget, apinfo, cbinfo);
-	EDP_irp6_on_track_synchronise(widget, apinfo, cbinfo);
-	EDP_irp6ot_tfg_synchronise(widget, apinfo, cbinfo);
-	EDP_irp6p_tfg_synchronise(widget, apinfo, cbinfo);
-	EDP_sarkofag_synchronise(widget, apinfo, cbinfo);
-	EDP_irp6_postument_synchronise(widget, apinfo, cbinfo);
-	EDP_irp6_mechatronika_synchronise(widget, apinfo, cbinfo);
-	EDP_spkm_synchronise(widget, apinfo, cbinfo);
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface.robot_m)
+				{
+					robot_node.second->synchronise();
+				}
 
 	return (Pt_CONTINUE);
 
