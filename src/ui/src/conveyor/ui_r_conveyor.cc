@@ -24,6 +24,14 @@ namespace conveyor {
 //
 //
 
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME),

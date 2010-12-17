@@ -136,7 +136,7 @@ int UiRobot::reload_configuration()
 	return 1;
 }
 
-int UiRobot::EDP_irp6_on_track_synchronise_int()
+int UiRobot::synchronise()
 
 {
 
@@ -146,9 +146,9 @@ int UiRobot::EDP_irp6_on_track_synchronise_int()
 	try {
 		// dla robota irp6_on_track
 
-		if ((interface.irp6ot_m->state.edp.state > 0) && (interface.irp6ot_m->state.edp.is_synchronised == false)) {
-			interface.irp6ot_m->ui_ecp_robot->ecp->synchronise();
-			interface.irp6ot_m->state.edp.is_synchronised = interface.irp6ot_m->ui_ecp_robot->ecp->is_synchronised();
+		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->ecp->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
 		} else {
 			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
 		}

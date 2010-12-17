@@ -62,6 +62,7 @@ public:
 	virtual void delete_ui_ecp_robot() = 0;
 	virtual int manage_interface() = 0;
 
+	virtual int synchronise() = 0;
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();

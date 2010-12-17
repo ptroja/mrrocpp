@@ -1432,7 +1432,7 @@ int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
 	//	interface.irp6ot_m->eb.command(boost::bind(EDP_irp6_on_track_synchronise_int, widget, apinfo, cbinfo));
-	interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::EDP_irp6_on_track_synchronise_int, &(*interface.irp6ot_m)));
+	interface.irp6ot_m->eb.command(boost::bind(&ui::common::UiRobot::synchronise, &(*interface.irp6ot_m)));
 
 	return (Pt_CONTINUE);
 

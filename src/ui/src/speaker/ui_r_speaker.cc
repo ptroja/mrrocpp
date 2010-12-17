@@ -22,6 +22,14 @@ namespace speaker {
 //
 //
 
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION, lib::speaker::ROBOT_NAME),

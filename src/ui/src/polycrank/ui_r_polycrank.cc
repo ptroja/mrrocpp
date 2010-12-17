@@ -21,6 +21,14 @@ namespace polycrank {
 //
 //
 
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::polycrank::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),

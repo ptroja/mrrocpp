@@ -21,6 +21,14 @@ namespace spkm {
 // KLASA UiRobotIrp6ot_m
 //
 //
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 
 UiRobot::UiRobot(common::Interface& _interface) :

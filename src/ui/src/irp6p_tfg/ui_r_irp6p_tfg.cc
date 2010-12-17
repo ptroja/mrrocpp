@@ -21,6 +21,14 @@ namespace irp6p_tfg {
 // KLASA UiRobot
 //
 //
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 
 UiRobot::UiRobot(common::Interface& _interface) :

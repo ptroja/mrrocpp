@@ -22,6 +22,14 @@ namespace irp6p_m {
 //
 //
 
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME),
