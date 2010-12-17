@@ -144,6 +144,7 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();
 	void fill_node_list(void);

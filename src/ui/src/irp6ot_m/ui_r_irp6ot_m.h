@@ -35,8 +35,8 @@ class UiRobot : public common::UiRobot
 private:
 
 public:
-	double irp6ot_current_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja biezaca
-	double irp6ot_desired_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::irp6ot_m::NUM_OF_SERVOS]; // pozycja zadana
 
 
 	bool is_wind_irp6ot_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
@@ -59,6 +59,14 @@ public:
 			process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	int edp_create();
+	int edp_create_int();
+
+	int execute_motor_motion();
+	int execute_joint_motion();
+
 };
 
 }

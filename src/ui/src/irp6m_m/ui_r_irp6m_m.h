@@ -22,7 +22,6 @@ namespace irp6 {
 class EcpRobot;
 }
 
-
 namespace irp6m {
 
 //
@@ -38,8 +37,8 @@ private:
 
 public:
 
-	double irp6m_current_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja biezaca
-	double irp6m_desired_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::irp6m::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6m_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6m_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
@@ -55,10 +54,14 @@ public:
 	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int	process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	int
+			process_control_window_irp6m_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
-
+	int synchronise();
+	int synchronise_int();
+	int edp_create();
+	int edp_create_int();
 };
 
 }
