@@ -220,6 +220,61 @@ void Interface::init()
 
 }
 
+int Interface::MPup_int()
+
+{
+
+	int pt_res;
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
+
+	if (mp.pid == -1) {
+
+		mp.node_nr = config->return_node_number(mp.node_name.c_str());
+
+		std::string mp_network_pulse_attach_point("/dev/name/global/");
+		mp_network_pulse_attach_point += mp.network_pulse_attach_point;
+
+		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
+		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
+			ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
+		} else if (check_node_existence(mp.node_name, "mp")) {
+			mp.pid = config->process_spawn(lib::MP_SECTION);
+
+			if (mp.pid > 0) {
+
+				short tmp = 0;
+				// kilka sekund  (~1) na otworzenie urzadzenia
+				while ((mp.pulse_fd =
+#if !defined(USE_MESSIP_SRR)
+						name_open(mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
+#else
+					messip::port_connect(mp.network_pulse_attach_point)) == NULL
+#endif
+					)
+					if ((tmp++) < lib::CONNECT_RETRY)
+						delay(lib::CONNECT_DELAY);
+					else {
+						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
+						break;
+					}
+
+				teachingstate = ui::common::MP_RUNNING;
+
+				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+				pt_res = PtEnter(0);
+				start_process_control_window(NULL, NULL, NULL);
+				if (pt_res >= 0)
+					PtLeave(0);
+			} else {
+				fprintf(stderr, "mp spawn failed\n");
+			}
+			manage_interface();
+		}
+	}
+
+	return 1;
+}
+
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
 int Interface::manage_interface(void)

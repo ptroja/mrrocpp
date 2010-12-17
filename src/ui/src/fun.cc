@@ -1315,67 +1315,10 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.main_eb.command(boost::bind(MPup_int, widget, apinfo, cbinfo));
+	interface.main_eb.command(boost::bind(&ui::common::Interface::MPup_int, &interface));
 
 	return (Pt_CONTINUE);
 
-}
-
-int MPup_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	int pt_res;
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	if (interface.mp.pid == -1) {
-
-		interface.mp.node_nr = interface.config->return_node_number(interface.mp.node_name.c_str());
-
-		std::string mp_network_pulse_attach_point("/dev/name/global/");
-		mp_network_pulse_attach_point += interface.mp.network_pulse_attach_point;
-
-		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			interface.ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (interface.check_node_existence(interface.mp.node_name, "mp")) {
-			interface.mp.pid = interface.config->process_spawn(lib::MP_SECTION);
-
-			if (interface.mp.pid > 0) {
-
-				short tmp = 0;
-				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((interface.mp.pulse_fd =
-#if !defined(USE_MESSIP_SRR)
-						name_open(interface.mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
-					messip::port_connect(interface.mp.network_pulse_attach_point)) == NULL
-#endif
-					)
-					if ((tmp++) < lib::CONNECT_RETRY)
-						delay(lib::CONNECT_DELAY);
-					else {
-						fprintf(stderr, "name_open() for %s failed: %s\n", interface.mp.network_pulse_attach_point.c_str(), strerror(errno));
-						break;
-					}
-
-				interface.teachingstate = ui::common::MP_RUNNING;
-
-				interface.mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-				pt_res = PtEnter(0);
-				start_process_control_window(widget, apinfo, cbinfo);
-				if (pt_res >= 0)
-					PtLeave(0);
-			} else {
-				fprintf(stderr, "mp spawn failed\n");
-			}
-			interface.manage_interface();
-		}
-	}
-
-	return 1;
 }
 
 int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
