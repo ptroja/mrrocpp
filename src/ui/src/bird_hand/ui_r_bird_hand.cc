@@ -25,7 +25,8 @@ namespace ui {
 namespace bird_hand {
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME),
+			ui_ecp_robot(NULL)
 {
 	wnd_command_and_status = new WndCommandAndStatus(interface, *this);
 	wnd_configuration = new WndConfiguration(interface, *this);

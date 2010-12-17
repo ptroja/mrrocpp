@@ -24,8 +24,8 @@ namespace speaker {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION), is_wind_speaker_play_open(false),
-			ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION, lib::speaker::ROBOT_NAME),
+			is_wind_speaker_play_open(false), ui_ecp_robot(NULL)
 {
 
 }
@@ -70,9 +70,12 @@ int UiRobot::reload_configuration()
 
 				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
 
-				state.edp.preset_sound_0 = interface.config->value <std::string> ("preset_sound_0", state.edp.section_name);
-				state.edp.preset_sound_1 = interface.config->value <std::string> ("preset_sound_1", state.edp.section_name);
-				state.edp.preset_sound_2 = interface.config->value <std::string> ("preset_sound_2", state.edp.section_name);
+				state.edp.preset_sound_0
+						= interface.config->value <std::string> ("preset_sound_0", state.edp.section_name);
+				state.edp.preset_sound_1
+						= interface.config->value <std::string> ("preset_sound_1", state.edp.section_name);
+				state.edp.preset_sound_2
+						= interface.config->value <std::string> ("preset_sound_2", state.edp.section_name);
 
 				break;
 			case 1:
@@ -171,7 +174,6 @@ void UiRobot::close_all_windows()
 		PtLeave(0);
 	}
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {

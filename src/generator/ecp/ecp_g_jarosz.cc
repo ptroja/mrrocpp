@@ -56,7 +56,7 @@ linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des
 
 	td = tr_des;
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;

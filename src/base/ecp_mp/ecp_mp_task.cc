@@ -58,7 +58,7 @@ task::task(lib::configurator &_config) :
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
 
 	// kilka sekund  (~1) na otworzenie urzadzenia
-	short tmp = 0;
+	unsigned int tmp = 0;
 #if !defined(USE_MESSIP_SRR)
 	while ((UI_fd = name_open(ui_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 #else

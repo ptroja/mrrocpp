@@ -19,8 +19,8 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name) :
-	interface(_interface), tid(NULL)
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name) :
+	interface(_interface), tid(NULL), robot_name(_robot_name)
 {
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
@@ -196,10 +196,6 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
-void UiRobot::close_all_windows()
-{
-}
-
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
@@ -234,27 +230,11 @@ void UiRobot::EDP_slay_int()
 }
 
 // ustala stan wszytkich EDP
-bool UiRobot::check_synchronised_or_inactive()
-{
-	return (((state.is_active) && (state.edp.is_synchronised)) || (!(state.is_active)));
-
-}
 
 bool UiRobot::check_synchronised_and_loaded()
 {
 	return (((state.edp.state > 0) && (state.edp.is_synchronised)));
 
-}
-
-bool UiRobot::check_loaded_or_inactive()
-{
-	return (((state.is_active) && (state.edp.state > 0)) || (!(state.is_active)));
-
-}
-
-bool UiRobot::check_loaded()
-{
-	return ((state.is_active) && (state.edp.state > 0));
 }
 
 }

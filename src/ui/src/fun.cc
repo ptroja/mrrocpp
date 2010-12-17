@@ -19,6 +19,8 @@
 #include <process.h>
 #include <cassert>
 
+#include <boost/foreach.hpp>
+
 #include "base/lib/sr/srlib.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
@@ -1212,6 +1214,7 @@ int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	EDP_sarkofag_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_postument_synchronise(widget, apinfo, cbinfo);
 	EDP_irp6_mechatronika_synchronise(widget, apinfo, cbinfo);
+	EDP_spkm_synchronise(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
@@ -1307,18 +1310,11 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	EDP_irp6_on_track_slay(widget, apinfo, cbinfo);
-	EDP_irp6ot_tfg_slay(widget, apinfo, cbinfo);
-	EDP_irp6_postument_slay(widget, apinfo, cbinfo);
-	EDP_irp6p_tfg_slay(widget, apinfo, cbinfo);
-	EDP_sarkofag_slay(widget, apinfo, cbinfo);
-	EDP_conveyor_slay(widget, apinfo, cbinfo);
-	EDP_bird_hand_slay(widget, apinfo, cbinfo);
-	EDP_spkm_slay(widget, apinfo, cbinfo);
-	EDP_smb_slay(widget, apinfo, cbinfo);
-	EDP_shead_slay(widget, apinfo, cbinfo);
-	EDP_speaker_slay(widget, apinfo, cbinfo);
-	EDP_irp6_mechatronika_slay(widget, apinfo, cbinfo);
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface.robot_m)
+				{
+					robot_node.second->EDP_slay_int();
+				}
 
 	return (Pt_CONTINUE);
 
@@ -1451,17 +1447,12 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 		interface.mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
-		// zamkniecie okien ruchow recznych o ile sa otwarte
+		// close_all_windows
 
-		interface.irp6ot_m->close_all_windows();
-		interface.irp6p_m->close_all_windows();
-		interface.irp6m_m->close_all_windows();
-		interface.bird_hand->close_all_windows();
-		interface.conveyor->close_all_windows();
-		interface.irp6ot_tfg->close_all_windows();
-		interface.irp6p_tfg->close_all_windows();
-		interface.sarkofag->close_all_windows();
-		interface.speaker->close_all_windows();
+		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface.robot_m)
+					{
+						robot_node.second->close_all_windows();
+					}
 
 		interface.execute_mp_pulse(MP_START);
 
