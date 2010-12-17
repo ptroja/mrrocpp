@@ -98,6 +98,30 @@ int UiRobot::edp_create_int()
 
 }
 
+int UiRobot::execute_motor_motion()
+{
+	try {
+
+		ui_ecp_robot->move_motors(irp6p_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_joint_motion()
+{
+	try {
+
+		ui_ecp_robot->move_joints(irp6p_desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 int UiRobot::synchronise()
 
 {

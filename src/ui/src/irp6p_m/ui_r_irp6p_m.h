@@ -59,6 +59,8 @@ public:
 	int synchronise_int();
 	int edp_create();
 	int edp_create_int();
+	int execute_motor_motion();
+	int execute_joint_motion();
 };
 
 }
