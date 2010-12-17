@@ -44,12 +44,8 @@ int EDP_shead_create(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.shead->state.edp.state == 0) {
-		interface.shead->create_thread();
+	interface.shead->edp_create();
 
-		interface.shead->eb.command(boost::bind(EDP_shead_create_int, widget, apinfo,
-				cbinfo));
-	}
 	return (Pt_CONTINUE);
 
 }

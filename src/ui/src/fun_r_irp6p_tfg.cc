@@ -71,10 +71,8 @@ int EDP_irp6p_tfg_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.irp6p_tfg->state.edp.state == 0) {
-		interface.irp6p_tfg->create_thread();
-		interface.irp6p_tfg->eb.command(boost::bind(EDP_irp6p_tfg_create_int, widget, apinfo, cbinfo));
-	}
+
+	interface.irp6p_tfg->edp_create();
 
 	return (Pt_CONTINUE);
 

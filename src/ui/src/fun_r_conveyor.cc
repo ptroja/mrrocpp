@@ -397,10 +397,8 @@ int EDP_conveyor_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.conveyor->state.edp.state == 0) {
-		interface.conveyor->create_thread();
-		interface.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget, apinfo, cbinfo));
-	}
+	interface.conveyor->edp_create();
+
 	return (Pt_CONTINUE);
 
 }

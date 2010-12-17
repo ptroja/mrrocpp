@@ -42,10 +42,9 @@ int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.spkm->state.edp.state == 0) {
-		interface.spkm->create_thread();
-		interface.spkm->eb.command(boost::bind(EDP_spkm_create_int, widget, apinfo, cbinfo));
-	}
+
+	interface.spkm->edp_create();
+
 	return (Pt_CONTINUE);
 
 }

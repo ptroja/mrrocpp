@@ -1903,10 +1903,8 @@ int EDP_irp6_on_track_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.irp6ot_m->state.edp.state == 0) {
-		interface.irp6ot_m->create_thread();
-		interface.irp6ot_m->eb.command(boost::bind(EDP_irp6_on_track_create_int, widget, apinfo, cbinfo));
-	}
+	interface.irp6ot_m->edp_create();
+
 	return (Pt_CONTINUE);
 
 }

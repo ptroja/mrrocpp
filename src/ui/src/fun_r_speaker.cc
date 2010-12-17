@@ -212,62 +212,13 @@ int EDP_speaker_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	//char tmp_string[100];
-	//char tmp2_string[100];
-
-	try { // dla bledow robot :: ECP_error
-
-		// dla robota speaker
-		if (interface.speaker->state.edp.state == 0) {
-			interface.speaker->state.edp.state = 0;
-			interface.speaker->state.edp.is_synchronised = false;
-
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += interface.speaker->state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += interface.speaker->state.edp.network_resourceman_attach_point;
-
-			// sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(interface.speaker->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message("edp_speaker already exists");
-
-			} else if (interface.check_node_existence(interface.speaker->state.edp.node_name, "edp_speaker")) {
-
-				interface.speaker->state.edp.node_nr
-						= interface.config->return_node_number(interface.speaker->state.edp.node_name);
-
-				interface.speaker->ui_ecp_robot
-						= new ui::speaker::EcpRobot(&interface.speaker->state.edp, *interface.config, *interface.all_ecp_msg);
-				interface.speaker->state.edp.pid = interface.speaker->ui_ecp_robot->get_EDP_pid();
-
-				if (interface.speaker->state.edp.pid < 0) {
-					interface.speaker->state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete interface.speaker->ui_ecp_robot;
-				} else { // jesli spawn sie powiodl
-
-					interface.speaker->state.edp.state = 1;
-
-					//interface.speaker->connect_to_reader();
-
-					//interface.speaker->state.edp.state=1;// edp wlaczone reader czeka na start
-					interface.speaker->state.edp.is_synchronised = true;
-				}
-			}
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	interface.manage_interface();
+	interface.speaker->edp_create();
 
 	return (Pt_CONTINUE);
 
 }
+
+
 
 int EDP_speaker_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {

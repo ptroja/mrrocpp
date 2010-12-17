@@ -2231,10 +2231,8 @@ int EDP_irp6_postument_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
 
-	if (interface.irp6p_m->state.edp.state == 0) {
-		interface.irp6p_m->create_thread();
-		interface.irp6p_m->eb.command(boost::bind(EDP_irp6_postument_create_int, widget, apinfo, cbinfo));
-	}
+	interface.irp6p_m->edp_create();
+
 	return (Pt_CONTINUE);
 
 }

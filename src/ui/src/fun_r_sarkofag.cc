@@ -71,10 +71,8 @@ int EDP_sarkofag_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.sarkofag->state.edp.state == 0) {
-		interface.sarkofag->create_thread();
-		interface.sarkofag->eb.command(boost::bind(EDP_sarkofag_create_int, widget, apinfo, cbinfo));
-	}
+
+	interface.sarkofag->edp_create();
 
 	return (Pt_CONTINUE);
 

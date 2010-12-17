@@ -42,11 +42,7 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.smb->state.edp.state == 0) {
-		interface.smb->create_thread();
-
-		interface.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo, cbinfo));
-	}
+	interface.smb->edp_create();
 	return (Pt_CONTINUE);
 
 }
