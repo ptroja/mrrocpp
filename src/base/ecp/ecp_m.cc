@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
 
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
-#if defined(PROCESS_SPAWN_RSH)
+
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
-#endif
+
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)
 			exit(EXIT_FAILURE);

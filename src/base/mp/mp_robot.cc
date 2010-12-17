@@ -38,10 +38,6 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 
 	std::string node_name(mp_object.config.value <std::string> ("node_name", _section_name));
 
-#if !defined(PROCESS_SPAWN_RSH)
-	nd = mp_object.config.return_node_number(node_name.c_str());
-#endif
-
 	std::string
 			ecp_attach_point(mp_object.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
 
@@ -59,7 +55,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	ecp_opened = true;
 
 	// nawiazanie komunikacji z ECP
-	short tmp = 0;
+	unsigned int tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 #if !defined(USE_MESSIP_SRR)
 	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
@@ -92,7 +88,7 @@ robot::~robot()
 	}
 #endif /* USE_MESSIP_SRR */
 
-#if defined(PROCESS_SPAWN_RSH)
+
 	if (kill(ECP_pid, SIGTERM) == -1) {
 		perror("kill()");
 		fprintf(stderr, "kill failed for robot %s pid %d\n", lib::toString(robot_name).c_str(), ECP_pid);
@@ -101,9 +97,7 @@ robot::~robot()
 			perror("waitpid()");
 		}
 	}
-#else
-	SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
-#endif
+
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie

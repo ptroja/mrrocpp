@@ -9,11 +9,10 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
 
-std::string ECP_GEN_TFG = "ECP_GEN_TFG";
+const std::string ECP_GEN_TFG = "ECP_GEN_TFG";
 
 }// namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

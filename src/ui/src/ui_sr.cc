@@ -61,17 +61,16 @@ void sr_buffer::operator()()
 {
 	lib::set_thread_name("sr");
 
-#if !defined(USE_MESSIP_SRR)
-	name_attach_t *attach;
+	lib::fd_server_t ch;
 
-	if ((attach = name_attach(NULL, interface.sr_attach_point.c_str(),
-			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
-		perror(
-				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
+#if !defined(USE_MESSIP_SRR)
+
+	if ((ch = name_attach(NULL, interface.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
 #else
-	messip_channel_t *ch = messip::port_create(interface.sr_attach_point);
+	ch = messip::port_create(interface.sr_attach_point);
 	assert(ch);
 #endif /* USE_MESSIP_SRR */
 
@@ -80,7 +79,7 @@ void sr_buffer::operator()()
 		lib::sr_package_t sr_msg;
 
 #if !defined(USE_MESSIP_SRR)
-		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
+		int rcvid = MsgReceive_r(ch->chid, &sr_msg, sizeof(sr_msg), NULL);
 
 		if (rcvid < 0) /* Error condition, exit */
 		{
@@ -96,14 +95,15 @@ void sr_buffer::operator()()
 
 		if (rcvid == 0) /* Pulse received */
 		{
-			switch (sr_msg.hdr.code) {
-			case _PULSE_CODE_DISCONNECT:
-				ConnectDetach(sr_msg.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				break;
-			default:
-				break;
+			switch (sr_msg.hdr.code)
+			{
+				case _PULSE_CODE_DISCONNECT:
+					ConnectDetach(sr_msg.hdr.scoid);
+					break;
+				case _PULSE_CODE_UNBLOCK:
+					break;
+				default:
+					break;
 			}
 			continue;
 		}
@@ -123,7 +123,7 @@ void sr_buffer::operator()()
 		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
 
 		if(rcvid != MESSIP_MSG_NOREPLY)
-			continue;
+		continue;
 #endif
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
@@ -138,17 +138,20 @@ void sr_buffer::operator()()
 }
 
 sr_buffer::sr_buffer(Interface& _interface) :
-	interface(_interface), cb(UI_SR_BUFFER_LENGHT) {
+	interface(_interface), cb(UI_SR_BUFFER_LENGHT)
+{
 	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
 
-sr_buffer::~sr_buffer() {
+sr_buffer::~sr_buffer()
+{
 	//	printf("sr_buffer\n");
 	//	thread_id.interrupt();
 	//	thread_id.join();
 }
 
-void sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
+void sr_buffer::put_one_msg(const lib::sr_package_t& new_msg)
+{
 
 	boost::mutex::scoped_lock lock(mtx);
 	cb.push_back(new_msg);

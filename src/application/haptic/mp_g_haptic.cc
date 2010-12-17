@@ -216,7 +216,7 @@ bool haptic::next_step()
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
 	}
 
-	std::cout << node_counter << std::endl;
+	std::cout << time_interval << std::endl;
 
 	/*
 	 if ((node_counter % 10) == 0) {
