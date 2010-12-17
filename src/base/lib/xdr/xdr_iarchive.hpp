@@ -285,7 +285,7 @@ public:
         if(!xdr_opaque(&xdrs, address, count)) THROW_LOAD_EXCEPTION;
     }
 
-    std::size_t getArchiveSize(void) const {
+    std::size_t getArchiveSize(void) {
         return ((std::size_t) xdr_getpos(&xdrs));
     }
 
