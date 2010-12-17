@@ -315,39 +315,7 @@ int EDP_conveyor_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	//	EDP_irp6_postumentcreate_int(widget, apinfo, cbinfo);
-
-	interface.conveyor->eb.command(boost::bind(EDP_conveyor_synchronise_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_conveyor_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota irp6_on_track
-
-		if ((interface.conveyor->state.edp.state > 0) && (interface.conveyor->state.edp.is_synchronised == false)) {
-			interface.conveyor->ui_ecp_robot->ecp->synchronise();
-			interface.conveyor->state.edp.is_synchronised = interface.conveyor->ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp conveyor niepowolane, synchronizacja niedozwolona\n");
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	// modyfikacje menu
-	interface.manage_interface();
+	interface.conveyor->synchronise();
 
 	return (Pt_CONTINUE);
 
@@ -429,77 +397,13 @@ int EDP_conveyor_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (interface.conveyor->state.edp.state == 0) {
-		interface.conveyor->create_thread();
-		interface.conveyor->eb.command(boost::bind(EDP_conveyor_create_int, widget, apinfo, cbinfo));
-	}
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_conveyor_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	try { // dla bledow robot :: ECP_error
-
-		// dla robota conveyor
-		if (interface.conveyor->state.edp.state == 0) {
-			interface.conveyor->state.edp.state = 0;
-			interface.conveyor->state.edp.is_synchronised = false;
-
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += interface.conveyor->state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += interface.conveyor->state.edp.network_resourceman_attach_point;
-
-			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(interface.conveyor->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_conveyor already exists");
-			} else if (interface.check_node_existence(interface.conveyor->state.edp.node_name, "edp_conveyor")) {
-				interface.conveyor->state.edp.node_nr
-						= interface.config->return_node_number(interface.conveyor->state.edp.node_name.c_str());
-				{
-					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					interface.conveyor->ui_ecp_robot
-							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::conveyor::ROBOT_NAME);
-
-				}
-				interface.conveyor->state.edp.pid = interface.conveyor->ui_ecp_robot->ecp->get_EDP_pid();
-
-				if (interface.conveyor->state.edp.pid < 0) {
-					interface.conveyor->state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete interface.conveyor->ui_ecp_robot;
-				} else { // jesli spawn sie powiodl
-					interface.conveyor->state.edp.state = 1;
-					interface.conveyor->connect_to_reader();
-
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
-					interface.conveyor->ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
-
-					//interface.conveyor->state.edp.state = 1; // edp wlaczone reader czeka na start
-					interface.conveyor->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
-				}
-			}
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	interface.manage_interface();
+	interface.conveyor->edp_create();
 
 	return (Pt_CONTINUE);
 
 }
+
+
 
 int EDP_conveyor_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 

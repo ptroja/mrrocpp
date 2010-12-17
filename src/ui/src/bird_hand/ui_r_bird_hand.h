@@ -46,6 +46,9 @@ public:
 	int manage_interface();
 	void close_all_windows();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int edp_create();
+	int edp_create_int();
 };
 
 }

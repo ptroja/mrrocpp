@@ -41,6 +41,9 @@ public:
 	int reload_configuration();
 	int manage_interface();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int edp_create();
+	int edp_create_int();
 };
 
 }

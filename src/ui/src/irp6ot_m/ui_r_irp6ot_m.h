@@ -59,6 +59,10 @@ public:
 			process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	int edp_create();
+	int edp_create_int();
 };
 
 }
