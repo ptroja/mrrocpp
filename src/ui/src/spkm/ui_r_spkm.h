@@ -42,6 +42,7 @@ public:
 	int manage_interface();
 	void delete_ui_ecp_robot();
 	int synchronise();
+	int synchronise_int();
 };
 
 }

@@ -110,7 +110,8 @@ int EDP_sarkofag_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_sarkofag already exists");
 			} else if (interface.check_node_existence(interface.sarkofag->state.edp.node_name, "edp_sarkofag")) {
 
-				interface.sarkofag->state.edp.node_nr = interface.config->return_node_number(interface.sarkofag->state.edp.node_name);
+				interface.sarkofag->state.edp.node_nr
+						= interface.config->return_node_number(interface.sarkofag->state.edp.node_name);
 
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
@@ -173,38 +174,7 @@ int EDP_sarkofag_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.sarkofag->eb.command(boost::bind(EDP_sarkofag_synchronise_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_sarkofag_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota sarkofag_
-
-		if ((interface.sarkofag->state.edp.state > 0) && (interface.sarkofag->state.edp.is_synchronised == false)) {
-			interface.sarkofag->ui_ecp_robot->ecp->synchronise();
-			interface.sarkofag->state.edp.is_synchronised = interface.sarkofag->ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp sarkofag niepowolane, synchronizacja niedozwolona\n");
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	// modyfikacje menu
-	interface.manage_interface();
-
+	interface.sarkofag->synchronise();
 	return (Pt_CONTINUE);
 
 }

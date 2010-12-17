@@ -109,7 +109,8 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_irp6ot_tfg already exists");
 			} else if (interface.check_node_existence(interface.irp6ot_tfg->state.edp.node_name, "edp_irp6ot_tfg")) {
 
-				interface.irp6ot_tfg->state.edp.node_nr = interface.config->return_node_number(interface.irp6ot_tfg->state.edp.node_name);
+				interface.irp6ot_tfg->state.edp.node_nr
+						= interface.config->return_node_number(interface.irp6ot_tfg->state.edp.node_name);
 
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
@@ -137,7 +138,8 @@ int EDP_irp6ot_tfg_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 					//interface.irp6ot_tfg->state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					interface.irp6ot_tfg->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					interface.irp6ot_tfg->state.edp.is_synchronised
+							= robot_controller_initial_state_tmp.is_synchronised;
 				}
 			}
 		}
@@ -171,37 +173,7 @@ int EDP_irp6ot_tfg_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.irp6ot_tfg->eb.command(boost::bind(EDP_irp6ot_tfg_synchronise_int, widget, apinfo, cbinfo));
-
-	return (Pt_CONTINUE);
-
-}
-
-int EDP_irp6ot_tfg_synchronise_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota irp6ot_tfg_
-
-		if ((interface.irp6ot_tfg->state.edp.state > 0) && (interface.irp6ot_tfg->state.edp.is_synchronised == false)) {
-			interface.irp6ot_tfg->ui_ecp_robot->ecp->synchronise();
-			interface.irp6ot_tfg->state.edp.is_synchronised = interface.irp6ot_tfg->ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp irp6ot_tfg niepowolane, synchronizacja niedozwolona\n");
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	// modyfikacje menu
-	interface.manage_interface();
+	interface.irp6ot_tfg->synchronise();
 
 	return (Pt_CONTINUE);
 
@@ -512,7 +484,8 @@ int wind_irp6ot_tfg_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 			}
 
 			// odswierzenie pozycji robota
-			if ((interface.irp6ot_tfg->state.edp.is_synchronised) && (interface.irp6ot_tfg->is_wind_irp6ot_tfg_moves_open)) {
+			if ((interface.irp6ot_tfg->state.edp.is_synchronised)
+					&& (interface.irp6ot_tfg->is_wind_irp6ot_tfg_moves_open)) {
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_inc_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_desired_pos_motors[0], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_tfg_moves_int_pos, Pt_ARG_NUMERIC_VALUE, &irp6ot_tfg_desired_pos_int[0], 0);

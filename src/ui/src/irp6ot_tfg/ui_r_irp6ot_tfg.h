@@ -51,6 +51,7 @@ public:
 	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();
+	int synchronise_int();
 
 };
 
