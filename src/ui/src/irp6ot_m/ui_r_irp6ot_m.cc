@@ -21,7 +21,21 @@ namespace irp6ot_m {
 // KLASA UiRobot
 //
 //
+int UiRobot::edp_create()
 
+{
+
+	return 1;
+
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	return 1;
+
+}
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME),

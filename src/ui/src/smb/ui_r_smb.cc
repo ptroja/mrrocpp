@@ -22,7 +22,7 @@ namespace smb {
 //
 //
 
-int UiRobot::synchronise()
+int UiRobot::edp_create()
 
 {
 
@@ -30,6 +30,21 @@ int UiRobot::synchronise()
 
 }
 
+int UiRobot::edp_create_int()
+
+{
+
+	return 1;
+
+}
+
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME), ui_ecp_robot(NULL)
@@ -40,7 +55,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 void UiRobot::close_all_windows()
 {
 }
-
 
 int UiRobot::reload_configuration()
 {
@@ -169,7 +183,6 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {

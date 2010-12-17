@@ -24,6 +24,23 @@ namespace irp6m {
 //
 //
 
+
+int UiRobot::edp_create()
+
+{
+
+	return 1;
+
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	return 1;
+
+}
+
 int UiRobot::synchronise()
 
 {

@@ -24,6 +24,21 @@ namespace mrrocpp {
 namespace ui {
 namespace bird_hand {
 
+int UiRobot::edp_create()
+
+{
+
+	return 1;
+
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	return 1;
+
+}
 
 int UiRobot::synchronise()
 
@@ -32,7 +47,6 @@ int UiRobot::synchronise()
 	return 1;
 
 }
-
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME),

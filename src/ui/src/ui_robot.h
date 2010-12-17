@@ -63,6 +63,8 @@ public:
 	virtual int manage_interface() = 0;
 
 	virtual int synchronise() = 0;
+	virtual int edp_create() = 0;
+	virtual int edp_create_int() = 0;
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
