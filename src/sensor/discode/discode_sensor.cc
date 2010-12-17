@@ -161,7 +161,7 @@ bool discode_sensor::is_data_available(int usec)
 
 void discode_sensor::receive_buffers_from_discode()
 {
-//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
+	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
 
 	header_iarchive->clear_buffer();
 	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
@@ -194,7 +194,7 @@ void discode_sensor::receive_buffers_from_discode()
 //	if (rmh.is_rpc_call) {
 //		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
 //	}
-//	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
+	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 }
 
 void discode_sensor::send_buffers_to_discode()
