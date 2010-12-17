@@ -45,7 +45,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		if (steps_without_reading > max_steps_without_reading) {
 			// The object is no longer visible
 			object_visible = false;
-			log_dbg("visual_servo::get_position_change(): object considered no longer visible\n");
+			//log_dbg("visual_servo::get_position_change(): object considered no longer visible\n");
 			return delta_position;
 		} else {
 			steps_without_reading++;

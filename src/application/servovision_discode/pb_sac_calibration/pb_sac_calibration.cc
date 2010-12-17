@@ -40,10 +40,15 @@ lib::Homog_matrix pb_sac_calibration::compute_position_change(const lib::Homog_m
 
 	lib::Homog_matrix O_T_C = current_position * E_T_G * (!C_T_G);
 
-	log(O_T_C);
+	all_O_T_C.push_back(O_T_C);
 
 	lib::Homog_matrix delta_position;
 	return delta_position;
+}
+
+std::vector<lib::Homog_matrix> pb_sac_calibration::get_all_O_T_C()
+{
+	return all_O_T_C;
 }
 
 } //namespace

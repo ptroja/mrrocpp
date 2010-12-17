@@ -7,6 +7,7 @@ add_executable(ecp_pb_sac_calibration
     ../visual_servo_manager.cc
     ../single_visual_servo_manager.cc
     ../termination_condition.cc
+    ../timeout_termination_condition.cc
     ../../../sensor/discode/discode_sensor.cc
 )
 

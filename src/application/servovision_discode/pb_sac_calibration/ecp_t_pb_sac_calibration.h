@@ -8,9 +8,12 @@
 #ifndef ECP_T_SAC_CALIBRATION_H_
 #define ECP_T_SAC_CALIBRATION_H_
 
-#include "sensor/discode/discode_sensor.h"
 #include <boost/shared_ptr.hpp>
+
+#include "sensor/discode/discode_sensor.h"
 #include "../single_visual_servo_manager.h"
+#include "../timeout_termination_condition.h"
+#include "pb_sac_calibration.h"
 
 #include "base/ecp/ecp_task.h"
 
@@ -28,9 +31,10 @@ public:
 	void main_task_algorithm();
 
 private:
-	boost::shared_ptr<mrrocpp::ecp_mp::sensor::discode::discode_sensor> ds;
+	boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> ds;
 	boost::shared_ptr <mrrocpp::ecp::common::generator::single_visual_servo_manager> sm;
-	boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> vs;
+	boost::shared_ptr <mrrocpp::ecp::servovision::pb_sac_calibration> vs;
+	boost::shared_ptr <mrrocpp::ecp::servovision::termination_condition> term_cond;
 };
 
 } // namespace task
