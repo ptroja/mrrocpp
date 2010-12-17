@@ -24,8 +24,8 @@ namespace sarkofag {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION), is_wind_sarkofag_moves_open(false),
-			is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME),
+			is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
 }
@@ -60,8 +60,9 @@ int UiRobot::reload_configuration()
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
-						tmp1 = tmp
-								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						tmp1
+								= tmp
+										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < lib::sarkofag::NUM_OF_SERVOS; j++) {
 
@@ -187,7 +188,6 @@ void UiRobot::close_all_windows()
 		PtLeave(0);
 	}
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {

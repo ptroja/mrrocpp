@@ -1246,6 +1246,7 @@ static const ApEventLink_t AbLinks_robot_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_conveyor_servo_algorithm", 2009, start_wnd_conveyor_servo_algorithm, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_edp_load", 2009, EDP_spkm_create, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_edp_unload", 2009, EDP_spkm_slay, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_synchronisation", 2009, EDP_spkm_synchronise, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_smb_edp_load", 2009, EDP_smb_create, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_smb_edp_unload", 2009, EDP_smb_slay, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_shead_edp_load", 2009, EDP_shead_create, 0, 0, 0, 0, },

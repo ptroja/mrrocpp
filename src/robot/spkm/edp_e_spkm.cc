@@ -40,8 +40,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
-		controller_state_edp_buf.is_synchronised = true;
+	if (robot_test_mode) {
+		// correct
+		// controller_state_edp_buf.is_synchronised = true;
+		// debug
+		controller_state_edp_buf.is_synchronised = false;
+	}
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
@@ -182,11 +186,18 @@ void effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
+void effector::synchronise(void)
+{
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+	}
+}
+
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()

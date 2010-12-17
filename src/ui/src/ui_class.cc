@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 
+#include <boost/foreach.hpp>
 
 #include "base/lib/configurator.h"
 #include "base/lib/mis_fun.h"
@@ -83,17 +84,40 @@ void Interface::init()
 	}
 
 	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
+
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
 	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
 	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
 	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
 	irp6m_m = new irp6m::UiRobot(*this);
+	robot_m[irp6m_m->robot_name] = irp6m_m;
+
 	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
 	speaker = new speaker::UiRobot(*this);
+	robot_m[speaker->robot_name] = speaker;
+
 	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
 	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
 	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
 
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
@@ -131,7 +155,6 @@ void Interface::init()
 	signal(SIGSEGV, &catch_signal);
 
 	signal(SIGCHLD, &catch_signal);
-
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 
@@ -212,34 +235,12 @@ int Interface::manage_interface(void)
 	// menu file
 	// ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
 
-	// Dla robota IRP6 ON_TRACK
-	irp6ot_m->manage_interface();
-	irp6ot_tfg->manage_interface();
 
-	// Dla robota IRP6 POSTUMENT
-	irp6p_m->manage_interface();
-	irp6p_tfg->manage_interface();
-	sarkofag->manage_interface();
-
-	// Dla robota CONVEYOR
-	conveyor->manage_interface();
-
-	// ROBOTY SwamrmItFix
-	spkm->manage_interface();
-	smb->manage_interface();
-	shead->manage_interface();
-
-	bird_hand->manage_interface();
-
-	// Dla robota SPEAKER
-	speaker->manage_interface();
-
-	// Dla robota IRP6 MECHATRONIKA
-	irp6m_m->manage_interface();
-
-	// zadanie
-	// kolorowanie menu all robots
-
+	// uruchmomienie manage interface dla wszystkich robotow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->manage_interface();
+				}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -367,31 +368,11 @@ void Interface::reload_whole_configuration()
 			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 			case UI_ALL_EDPS_NONE_EDP_LOADED:
 
-				// dla robota irp6 on_track
-				irp6ot_m->reload_configuration();
-				irp6ot_tfg->reload_configuration();
-
-				// dla robota irp6 postument
-				irp6p_m->reload_configuration();
-				irp6p_tfg->reload_configuration();
-
-				sarkofag->reload_configuration();
-
-				// dla robota conveyor
-				conveyor->reload_configuration();
-
-				// ROBOTY SwamrmItFix
-				spkm->reload_configuration();
-				smb->reload_configuration();
-				shead->reload_configuration();
-
-				bird_hand->reload_configuration();
-
-				// dla robota speaker
-				speaker->reload_configuration();
-
-				// dla robota irp6 mechatronika
-				irp6m_m->reload_configuration();
+				// uruchmomienie manage interface dla wszystkich robotow
+				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+							{
+								robot_node.second->reload_configuration();
+							}
 				break;
 			default:
 				break;
@@ -619,6 +600,65 @@ int Interface::check_gns()
 	return (Pt_CONTINUE);
 }
 
+bool Interface::is_any_robot_active()
+{
+	bool r_value = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->state.is_active) {
+						return true;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::are_all_robots_synchronised_or_inactive()
+{
+	bool r_value = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active)
+							&& (robot_node.second->state.edp.is_synchronised))
+							|| (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::are_all_robots_loaded_or_inactive()
+{
+	bool r_value = true;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+							> 0)) || (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
+	return r_value;
+}
+
+bool Interface::is_any_active_robot_loaded()
+{
+	bool r_value = false;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						return true;
+					}
+				}
+
+	return r_value;
+}
+
 // ustala stan wszytkich EDP
 int Interface::check_edps_state_and_modify_mp_state()
 {
@@ -626,39 +666,19 @@ int Interface::check_edps_state_and_modify_mp_state()
 	// wyznaczenie stanu wszytkich EDP abstahujac od MP
 
 	// jesli wszytkie sa nieaktywne
-	if ((!(irp6p_m->state.is_active)) && (!(irp6ot_m->state.is_active)) && (!(irp6ot_tfg->state.is_active))
-			&& (!(irp6p_tfg->state.is_active)) && (!(sarkofag->state.is_active)) && (!(conveyor->state.is_active))
-			&& (!(speaker->state.is_active)) && (!(irp6m_m->state.is_active)) && (!(bird_hand->state.is_active))
-			&& (!(spkm->state.is_active)) && (!(smb->state.is_active)) && (!(shead->state.is_active))) {
+	if (!is_any_robot_active()) {
 		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (irp6p_m->check_synchronised_or_inactive() && irp6ot_m->check_synchronised_or_inactive()
-			&& conveyor->check_synchronised_or_inactive() && speaker->check_synchronised_or_inactive()
-			&& irp6m_m->check_synchronised_or_inactive() && irp6ot_tfg->check_synchronised_or_inactive()
-			&& irp6p_tfg->check_synchronised_or_inactive() && sarkofag->check_synchronised_or_inactive()
-			&& bird_hand->check_synchronised_or_inactive() && spkm->check_synchronised_or_inactive()
-			&& smb->check_synchronised_or_inactive() && shead->check_synchronised_or_inactive()) {
+	} else if (are_all_robots_synchronised_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (irp6p_m->check_loaded_or_inactive() && irp6ot_m->check_loaded_or_inactive()
-			&& conveyor->check_loaded_or_inactive() && speaker->check_loaded_or_inactive()
-			&& irp6m_m->check_loaded_or_inactive() && irp6ot_tfg->check_loaded_or_inactive()
-			&& irp6p_tfg->check_loaded_or_inactive() && sarkofag->check_loaded_or_inactive()
-			&& bird_hand->check_loaded_or_inactive() && spkm->check_loaded_or_inactive()
-			&& smb->check_loaded_or_inactive() && shead->check_loaded_or_inactive())
-
-	{
+	} else if (are_all_robots_loaded_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
 		// jesli chociaz jeden jest zaladowany
-	} else if (irp6p_m->check_loaded() || irp6ot_m->check_loaded() || conveyor->check_loaded()
-			|| speaker->check_loaded() || irp6m_m->check_loaded() || irp6ot_tfg->check_loaded()
-			|| irp6p_tfg->check_loaded() || sarkofag->check_loaded() || bird_hand->check_loaded()
-			|| spkm->check_loaded() || smb->check_loaded() || shead->check_loaded())
-
-	{
+	} else if (is_any_active_robot_loaded()) {
 		all_edps = UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED;
 
 		// jesli zaden nie jest zaladowany
