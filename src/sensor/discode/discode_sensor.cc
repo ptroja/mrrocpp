@@ -120,9 +120,13 @@ void discode_sensor::configure_sensor()
 void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
-	if (state != DSS_CONNECTED) {
+	if (!(state == DSS_CONNECTED || state == DSS_INITIATE_SENT)) {
 		state = DSS_ERROR;
-		throw logic_error("discode_sensor::initiate_reading(): state != DSS_CONNECTED");
+		throw logic_error("discode_sensor::initiate_reading(): !(state == DSS_CONNECTED || state == DSS_INITIATE_SENT)");
+	}
+
+	if(state == DSS_INITIATE_SENT){
+		return;
 	}
 
 	//	if (!initiate_reading_object_set) {
