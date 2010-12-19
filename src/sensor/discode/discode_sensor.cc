@@ -35,14 +35,15 @@ using namespace boost;
 using lib::configurator;
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	state(NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(false)
+	state(DSS_NOT_CONNECTED), config(config), section_name(section_name),
+			timer_print_enabled(false)
 {
 	base_period = current_period = 1;
 
-	header_iarchive = shared_ptr <xdr_iarchive <> > (new xdr_iarchive <> );
-	iarchive = shared_ptr <xdr_iarchive <> > (new xdr_iarchive <> );
-	header_oarchive = shared_ptr <xdr_oarchive <> > (new xdr_oarchive <> );
-	oarchive = shared_ptr <xdr_oarchive <> > (new xdr_oarchive <> );
+	header_iarchive = shared_ptr<xdr_iarchive<> > (new xdr_iarchive<> );
+	iarchive = shared_ptr<xdr_iarchive<> > (new xdr_iarchive<> );
+	header_oarchive = shared_ptr<xdr_oarchive<> > (new xdr_oarchive<> );
+	oarchive = shared_ptr<xdr_oarchive<> > (new xdr_oarchive<> );
 
 	// determine size of rmh after serialization
 	*header_oarchive << rmh;
@@ -61,25 +62,34 @@ void discode_sensor::configure_sensor()
 {
 	timer_show("discode_sensor::configure_sensor() begin");
 
+	if (state != DSS_NOT_CONNECTED) {
+		state = DSS_ERROR;
+		throw logic_error("discode_sensor::configure_sensor(): state != DSS_NOT_CONNECTED");
+	}
+
 	// Retrieve FraDIA node name and port from configuration file.
-	uint16_t discode_port = config.value <uint16_t> ("discode_port", section_name);
-	const std::string discode_node_name = config.value <std::string> ("discode_node_name", section_name);
+	uint16_t discode_port = config.value<uint16_t> ("discode_port", section_name);
+	const string discode_node_name = config.value<string> ("discode_node_name", section_name);
 
 	// Try to open socket.
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1) {
-		throw std::runtime_error("socket(): " + std::string(strerror(errno)));
+		state = DSS_ERROR;
+		throw runtime_error("socket(): " + string(strerror(errno)));
 	}
 
 	int flag = 1;
 	if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) == -1) {
-		throw std::runtime_error("setsockopt(): " + std::string(strerror(errno)));
+		state = DSS_ERROR;
+		throw runtime_error("setsockopt(): " + string(strerror(errno)));
 	}
 
 	// Get server hostname.
 	hostent * server = gethostbyname(discode_node_name.c_str());
 	if (server == NULL) {
-		throw std::runtime_error("gethostbyname(" + discode_node_name + "): " + std::string(hstrerror(h_errno)));
+		state = DSS_ERROR;
+		throw runtime_error("gethostbyname(" + discode_node_name + "): " + string(
+				hstrerror(h_errno)));
 	}
 
 	// Data with address of connection
@@ -95,11 +105,14 @@ void discode_sensor::configure_sensor()
 
 	// Try to establish a connection with FraDIA.
 	if (connect(sockfd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
-		throw std::runtime_error("connect(): " + std::string(strerror(errno)));
+		state = DSS_ERROR;
+		throw runtime_error("connect(): " + string(strerror(errno)));
 	}
 
 	//	initiate_reading_object_set = false;
 	rmh.data_size = 0;
+
+	state = DSS_CONNECTED;
 
 	timer_show("discode_sensor::configure_sensor() end");
 }
@@ -107,6 +120,10 @@ void discode_sensor::configure_sensor()
 void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
+	if (state != DSS_CONNECTED) {
+		state = DSS_ERROR;
+		throw logic_error("discode_sensor::initiate_reading(): state != DSS_CONNECTED");
+	}
 
 	//	if (!initiate_reading_object_set) {
 	imh.data_size = 0;
@@ -117,28 +134,45 @@ void discode_sensor::initiate_reading()
 	send_buffers_to_discode();
 
 	//	initiate_reading_object_set = 0;
-
+	state = DSS_INITIATE_SENT;
 	timer_show("discode_sensor::initiate_reading() end");
 }
 
 void discode_sensor::get_reading()
 {
 	timer_show("discode_sensor::get_reading() begin");
+	if (state != DSS_INITIATE_SENT) {
+		state = DSS_ERROR;
+		throw logic_error("discode_sensor::get_reading(): state != DSS_INITIATE_SENT");
+	}
 
-	receive_buffers_from_discode();
+	if (is_data_available()) {
+		receive_buffers_from_discode();
+		state = DSS_READING_RECEIVED;
+	}
 
 	timer_show("discode_sensor::get_reading() end");
 }
 
 void discode_sensor::terminate()
 {
+	if (state != DSS_CONNECTED) {
+		state = DSS_ERROR;
+		throw logic_error("discode_sensor::terminate(): state != DSS_CONNECTED");
+	}
 	close(sockfd);
+	state = DSS_NOT_CONNECTED;
 }
 
-bool discode_sensor::is_reading_ready()
+discode_sensor::discode_sensor_state discode_sensor::get_state()
 {
-	return rmh.data_size > 0 && rmh.is_rpc_call == false;
+	return state;
 }
+
+//bool discode_sensor::is_reading_ready()
+//{
+//	return rmh.data_size > 0 && rmh.is_rpc_call == false;
+//}
 
 bool discode_sensor::is_data_available(int usec)
 {
@@ -154,7 +188,8 @@ bool discode_sensor::is_data_available(int usec)
 	retval = select(sockfd + 1, &rfds, NULL, NULL, &tv);
 
 	if (retval < 0) {
-		throw runtime_error("discode_sensor::is_data_available(): select() failed: " + string(strerror(errno)));
+		throw runtime_error("discode_sensor::is_data_available(): select() failed: " + string(
+				strerror(errno)));
 	}
 	return retval > 0;
 }
@@ -174,14 +209,13 @@ void discode_sensor::receive_buffers_from_discode()
 
 	*header_iarchive >> rmh;
 
-	if(rmh.data_size > 0){
-//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
-//		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
-//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
-	}else{
-//		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
+	if (rmh.data_size > 0) {
+		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: rmh.data_size: %d\n", rmh.data_size);
+		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: ========================================================\n");
+	} else {
+		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
 	}
-
 
 	iarchive->clear_buffer();
 	nread = read(sockfd, iarchive->get_buffer(), rmh.data_size);
@@ -191,15 +225,15 @@ void discode_sensor::receive_buffers_from_discode()
 	if (nread != rmh.data_size) {
 		throw runtime_error("read() failed: nread != rmh.data_size");
 	}
-//	if (rmh.is_rpc_call) {
-//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
-//	}
+	//	if (rmh.is_rpc_call) {
+	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
+	//	}
 	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 }
 
 void discode_sensor::send_buffers_to_discode()
 {
-//	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
+	//	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
 
 	imh.data_size = oarchive->getArchiveSize();
 
@@ -218,8 +252,9 @@ void discode_sensor::send_buffers_to_discode()
 	if (nwritten == -1) {
 		throw runtime_error("writev(sockfd, iov, 2) == -1");
 	}
-	if (nwritten != header_oarchive->getArchiveSize() + oarchive->getArchiveSize()) {
-		throw runtime_error("writev(sockfd, iov, 2) != header_oarchive->getArchiveSize() + oarchive->getArchiveSize()");
+	if (nwritten != (int)(header_oarchive->getArchiveSize() + oarchive->getArchiveSize())) {
+		throw runtime_error(
+				"writev(sockfd, iov, 2) != header_oarchive->getArchiveSize() + oarchive->getArchiveSize()");
 	}
 
 	oarchive->clear_buffer();
@@ -229,8 +264,9 @@ void discode_sensor::timer_init()
 {
 	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
 		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
+		fflush( stdout);
+		throw logic_error(
+				"discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
 }
 
@@ -238,24 +274,27 @@ void discode_sensor::timer_show(const char *str)
 {
 	if (timer.stop() != mrrocpp::lib::timer::TIMER_STOPPED) {
 		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("discode_sensor::get_reading(): timer.stop() != mrrocpp::lib::timer::TIMER_STOPPED");
+		fflush( stdout);
+		throw logic_error(
+				"discode_sensor::get_reading(): timer.stop() != mrrocpp::lib::timer::TIMER_STOPPED");
 	}
 	float seconds;
 	if (timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED) {
 		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("discode_sensor::get_reading(): timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED");
+		fflush( stdout);
+		throw logic_error(
+				"discode_sensor::get_reading(): timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED");
 	}
 
-	if(timer_print_enabled){
+	if (timer_print_enabled) {
 		log_dbg("Time elapsed (in %s): %g s\n", str, seconds);
 	}
 
 	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
 		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("discode_sensor::get_reading(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
+		fflush( stdout);
+		throw logic_error(
+				"discode_sensor::get_reading(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
 }
 

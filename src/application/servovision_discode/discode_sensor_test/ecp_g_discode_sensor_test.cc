@@ -26,6 +26,7 @@ namespace generator {
 using boost::shared_ptr;
 using namespace std;
 using namespace logger;
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds) :
 	generator(ecp_task), ds(ds)
@@ -84,7 +85,7 @@ bool ecp_g_discode_sensor_test::next_step()
 	//	if (jjj % 20 == 0) {
 	//		ds.get_oarchive()->clear_buffer();
 	//	}
-	if (ds->is_reading_ready()) {
+	if (ds->get_state() == discode_sensor::DSS_READING_RECEIVED) {
 		Processors::VisualServoPB::PBReading r = ds->get_received_object <Processors::VisualServoPB::PBReading> ();
 		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int)r.objectVisible);
 		if(r.objectVisible){

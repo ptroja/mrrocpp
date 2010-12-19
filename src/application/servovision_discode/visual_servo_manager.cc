@@ -77,7 +77,7 @@ bool visual_servo_manager::first_step()
 	acceleration.setZero();
 	angular_acceleration.setZero();
 
-	for (int i = 0; i < termination_conditions.size(); ++i) {
+	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
 
@@ -129,7 +129,7 @@ bool visual_servo_manager::next_step()
 
 	// check termination conditions
 	bool any_condition_met = false;
-	for (int i = 0; i < termination_conditions.size(); ++i) {
+	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->update(this);
 		if (termination_conditions[i]->is_condition_met()) {
 			any_condition_met = true;
@@ -144,7 +144,7 @@ void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
 	double nearest_allowed_area_distance = INFINITY;
 	lib::Homog_matrix constrained_position = new_position;
 
-	for (int i = 0; i < position_constraints.size(); ++i) {
+	for (size_t i = 0; i < position_constraints.size(); ++i) {
 		lib::Homog_matrix c1 = position_constraints[i]->apply_constraint(new_position);
 		Eigen::Matrix <double, 3, 1> translation;
 		translation(0, 0) = c1(0, 3) - new_position(0, 3);
