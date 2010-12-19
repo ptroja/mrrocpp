@@ -32,9 +32,9 @@ namespace discode {
 class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
 {
 public:
-//	enum discode_sensor_state{
-//		NOT_CONFIGURED, INITIATE_SET, INITIATE_SENT, REA
-//	};
+	enum discode_sensor_state{
+		NOT_CONNECTED, CONNECTED, INITIATE_SENT, READING_RECEIVED
+	};
 
 
 	discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name);
@@ -89,6 +89,8 @@ public:
 	template <typename RECEIVED_T, typename TO_SEND_T>
 	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 private:
+	discode_sensor_state state;
+
 	mrrocpp::lib::configurator& config;
 	const std::string section_name;
 

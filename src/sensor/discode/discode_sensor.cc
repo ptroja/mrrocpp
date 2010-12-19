@@ -35,7 +35,7 @@ using namespace boost;
 using lib::configurator;
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	config(config), section_name(section_name), timer_print_enabled(false)
+	state(NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(false)
 {
 	base_period = current_period = 1;
 
