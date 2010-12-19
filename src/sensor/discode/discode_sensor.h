@@ -11,6 +11,7 @@
 #include <string>
 #include <cstring>
 #include <boost/shared_ptr.hpp>
+#include <stdexcept>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/lib/configurator.h"
@@ -75,8 +76,8 @@ public:
 	 * @param to_send Data to send.
 	 * @return data returned from call.
 	 */
-//	template<typename RECEIVED_T, typename TO_SEND_T>
-//	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
+	template<typename RECEIVED_T, typename TO_SEND_T>
+	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 private:
 	discode_sensor_state state;
 
@@ -161,33 +162,38 @@ READING_T discode_sensor::get_received_object()
 	return reading;
 }
 
-//template<typename RECEIVED_T, typename TO_SEND_T>
-//RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
-//{
-//	logger::log("discode_sensor::call_remote_procedure() begin\n");
-//	imh.is_rpc_call = true;
-//	oarchive->clear_buffer();
-//	*oarchive << to_send;
-//
-//	logger::log("discode_sensor::call_remote_procedure() before send_buffers\n");
-//	send_buffers_to_discode();
-//
-//	logger::log("discode_sensor::call_remote_procedure() before loop\n");
-//	do {
-//		logger::log("discode_sensor::call_remote_procedure() inside loop\n");
-//		receive_buffers_from_discode();
-//	} while (!rmh.is_rpc_call); // skip non-RPC messages
-//
-//	RECEIVED_T received;
-//
-//	*iarchive >> received;
-//
-//	initiate_reading_object_set = false;
-//
-//	logger::log("discode_sensor::call_remote_procedure() end\n");
-//
-//	return received;
-//}
+template<typename RECEIVED_T, typename TO_SEND_T>
+RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
+{
+	logger::log("discode_sensor::call_remote_procedure() begin\n");
+
+	if(state != DSS_CONNECTED){
+		throw std::logic_error("discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
+	}
+
+	imh.is_rpc_call = true;
+	oarchive->clear_buffer();
+	*oarchive << to_send;
+
+	logger::log("discode_sensor::call_remote_procedure() before send_buffers\n");
+	send_buffers_to_discode();
+
+	logger::log("discode_sensor::call_remote_procedure() before loop\n");
+	do {
+		logger::log("discode_sensor::call_remote_procedure() inside loop\n");
+		receive_buffers_from_discode();
+	} while (!rmh.is_rpc_call); // skip non-RPC messages
+
+	RECEIVED_T received;
+
+	*iarchive >> received;
+
+	initiate_reading_object_set = false;
+
+	logger::log("discode_sensor::call_remote_procedure() end\n");
+
+	return received;
+}
 
 } // namespace discode
 
