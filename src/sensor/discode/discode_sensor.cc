@@ -7,7 +7,7 @@
 
 #include <stdexcept>
 #include <cstdio>
-
+#include <sstream>
 #include <sys/uio.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -59,7 +59,7 @@ ds_wrong_state_exception::ds_wrong_state_exception(const string& arg) :
 }
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	state(DSS_NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(false)
+	state(DSS_NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(true)
 {
 	base_period = current_period = 1;
 
@@ -138,15 +138,21 @@ void discode_sensor::configure_sensor()
 
 	state = DSS_CONNECTED;
 
+	log_dbg("discode_sensor::configure_sensor(): state = %d\n", (int)state);
 	timer_show("discode_sensor::configure_sensor() end");
 }
 
 void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
+	log_dbg("discode_sensor::initiate_reading(): state = %d\n", (int)state);
 	if (!(state == DSS_CONNECTED || state == DSS_READING_RECEIVED || state == DSS_INITIATE_SENT)) {
+		stringstream ss;
+		ss
+				<< "discode_sensor::initiate_reading(): !(state == DSS_CONNECTED || state == DSS_READING_RECEIVED || state == DSS_INITIATE_SENT): "
+				<< state;
 		state = DSS_ERROR;
-		throw ds_wrong_state_exception("discode_sensor::initiate_reading(): !(state == DSS_CONNECTED || state == DSS_READING_RECEIVED || state == DSS_INITIATE_SENT)");
+		throw ds_wrong_state_exception(ss.str());
 	}
 
 	if (state == DSS_INITIATE_SENT) {
@@ -178,7 +184,8 @@ void discode_sensor::check_reading_timeout()
 	}
 	double delta_t = (current_time.tv_sec - initiate_sent_time.tv_sec) + (double) (current_time.tv_nsec
 			- initiate_sent_time.tv_nsec) * 1e-9;
-	if(delta_t > reading_timeout){
+	if (delta_t > reading_timeout) {
+		log_dbg("discode_sensor::check_reading_timeout(): state = %d\n", (int)state);
 		state = DSS_ERROR;
 		throw ds_timeout_exception("Timeout while waiting for reading.");
 	}

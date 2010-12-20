@@ -20,7 +20,7 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor) :
 	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5), steps_without_reading(0)
 {
-	log_dbg("visual_servo::visual_servo() begin");
+	//log_dbg("visual_servo::visual_servo() begin\n");
 }
 
 visual_servo::~visual_servo()

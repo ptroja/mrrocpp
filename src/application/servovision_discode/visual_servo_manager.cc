@@ -43,7 +43,7 @@ visual_servo_manager::~visual_servo_manager()
 
 bool visual_servo_manager::first_step()
 {
-	log_dbg("ecp_g_ib_eih::first_step()\n");
+	log_dbg("visual_servo_manager::first_step() begin\n");
 
 	the_robot->ecp_command.instruction.instruction_type = lib::GET;
 	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
