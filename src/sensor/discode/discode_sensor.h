@@ -12,6 +12,7 @@
 #include <cstring>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
+#include <time.h>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/lib/configurator.h"
@@ -29,12 +30,39 @@ namespace sensor {
 
 namespace discode {
 
-class discode_sensor: public mrrocpp::ecp_mp::sensor::sensor_interface {
+class ds_exception : public std::runtime_error
+{
+public:
+	/** Takes a character string describing the error.  */
+	explicit ds_exception(const std::string& arg);
+};
+
+class ds_connection_exception : public ds_exception
+{
+public:
+	explicit ds_connection_exception(const std::string& arg);
+};
+
+class ds_timeout_exception : public ds_exception
+{
+public:
+	explicit ds_timeout_exception(const std::string& arg);
+};
+
+class ds_wrong_state_exception : public ds_exception
+{
+public:
+	explicit ds_wrong_state_exception(const std::string& arg);
+};
+
+class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
+{
 public:
 	/**
 	 * DSS (short form of discode_sensor_state). State of the sensor.
 	 */
-	enum discode_sensor_state {
+	enum discode_sensor_state
+	{
 		DSS_NOT_CONNECTED, DSS_CONNECTED, DSS_INITIATE_SENT, DSS_READING_RECEIVED, DSS_ERROR
 	};
 
@@ -68,7 +96,7 @@ public:
 	 * This method may be called only once after get_reading(). Just because.
 	 * @return
 	 */
-	template<typename READING_T>
+	template <typename READING_T>
 	READING_T get_received_object();
 
 	/**
@@ -76,7 +104,7 @@ public:
 	 * @param to_send Data to send.
 	 * @return data returned from call.
 	 */
-	template<typename RECEIVED_T, typename TO_SEND_T>
+	template <typename RECEIVED_T, typename TO_SEND_T>
 	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 private:
 	discode_sensor_state state;
@@ -84,10 +112,10 @@ private:
 	mrrocpp::lib::configurator& config;
 	const std::string section_name;
 
-	boost::shared_ptr<xdr_iarchive<> > header_iarchive;
-	boost::shared_ptr<xdr_iarchive<> > iarchive;
-	boost::shared_ptr<xdr_oarchive<> > header_oarchive;
-	boost::shared_ptr<xdr_oarchive<> > oarchive;
+	boost::shared_ptr <xdr_iarchive <> > header_iarchive;
+	boost::shared_ptr <xdr_iarchive <> > iarchive;
+	boost::shared_ptr <xdr_oarchive <> > header_oarchive;
+	boost::shared_ptr <xdr_oarchive <> > oarchive;
 
 	/** @brief Socket file descriptor.  */
 	int sockfd;
@@ -126,6 +154,12 @@ private:
 	 */
 	void send_buffers_to_discode();
 
+	double reading_timeout;
+	double rpc_call_timeout;
+	struct timespec initiate_sent_time;
+
+	void check_reading_timeout();
+
 	// timer stuff, TODO: remove after discode_sensor is considered bug-free.
 	mrrocpp::lib::timer timer;
 	bool timer_print_enabled;
@@ -142,19 +176,17 @@ private:
 //	*oarchive << initiate_object;
 //}
 
-template<typename READING_T>
+template <typename READING_T>
 READING_T discode_sensor::get_received_object()
 {
 	if (state != DSS_READING_RECEIVED) {
 		state = DSS_ERROR;
-		throw std::logic_error(
-				"discode_sensor::get_received_object(): state != DSS_READING_RECEIVED");
+		throw ds_wrong_state_exception("discode_sensor::get_received_object(): state != DSS_READING_RECEIVED");
 	}
 
 	READING_T reading;
 
-	logger::log_dbg("discode_sensor::get_received_object(): iarchive->getArchiveSize()=%d\n",
-			iarchive->getArchiveSize());
+	logger::log_dbg("discode_sensor::get_received_object(): iarchive->getArchiveSize()=%d\n", iarchive->getArchiveSize());
 
 	*iarchive >> reading;
 
@@ -162,13 +194,13 @@ READING_T discode_sensor::get_received_object()
 	return reading;
 }
 
-template<typename RECEIVED_T, typename TO_SEND_T>
+template <typename RECEIVED_T, typename TO_SEND_T>
 RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 {
 	logger::log("discode_sensor::call_remote_procedure() begin\n");
 
-	if(state != DSS_CONNECTED){
-		throw std::logic_error("discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
+	if (state != DSS_CONNECTED) {
+		throw ds_wrong_state_exception("discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
 	}
 
 	imh.is_rpc_call = true;
