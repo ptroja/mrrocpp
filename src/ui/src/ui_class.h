@@ -44,6 +44,9 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
+typedef robots_t::value_type robot_pair_t;
+
 class sr_buffer;
 class ecp_buffer;
 
@@ -116,7 +119,15 @@ public:
 	std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
+
+	/**
+	 * @brief map of all robots used in the task
+	 */
+	common::robots_t robot_m;
+
 	bird_hand::UiRobot *bird_hand;
+	//robot_m[lib::] = bird_hand;
+
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6ot_tfg::UiRobot *irp6ot_tfg;
 	irp6p_m::UiRobot *irp6p_m;
@@ -133,6 +144,7 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();
 	void fill_node_list(void);
@@ -154,6 +166,12 @@ public:
 	void block_widget(PtWidget_t *widget);
 	void unblock_widget(PtWidget_t *widget);
 	void create_threads();
+
+	bool is_any_robot_active();
+	bool are_all_robots_synchronised_or_inactive();
+	bool are_all_robots_loaded_or_inactive();
+	bool is_any_active_robot_loaded();
+
 };
 
 }

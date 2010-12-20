@@ -25,9 +25,121 @@ namespace irp6m {
 //
 
 
+int UiRobot::edp_create()
+
+{
+
+	if (state.edp.state == 0) {
+		create_thread();
+
+		eb.command(boost::bind(&ui::irp6m::UiRobot::edp_create_int, &(*this)));
+
+	}
+
+	return 1;
+
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
+
+	try { // dla bledow robot :: ECP_error
+
+		// dla robota conveyor
+		if (state.edp.state == 0) {
+			state.edp.state = 0;
+			state.edp.is_synchronised = false;
+
+			std::string tmp_string("/dev/name/global/");
+			tmp_string += state.edp.hardware_busy_attach_point;
+
+			std::string tmp2_string("/dev/name/global/");
+			tmp2_string += state.edp.network_resourceman_attach_point;
+
+			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
+			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_conveyor already exists");
+			} else if (interface.check_node_existence(state.edp.node_name, "edp_conveyor")) {
+				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name.c_str());
+				{
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
+					ui_ecp_robot
+							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::conveyor::ROBOT_NAME);
+
+				}
+				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+
+				if (state.edp.pid < 0) {
+					state.edp.state = 0;
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+					delete ui_ecp_robot;
+				} else { // jesli spawn sie powiodl
+					state.edp.state = 1;
+					connect_to_reader();
+
+					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+					lib::controller_state_t robot_controller_initial_state_tmp;
+					ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
+
+					//state.edp.state = 1; // edp wlaczone reader czeka na start
+					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+				}
+			}
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	interface.manage_interface();
+
+	return 1;
+
+}
+
+int UiRobot::synchronise()
+
+{
+
+	eb.command(boost::bind(&ui::irp6m::UiRobot::synchronise_int, &(*this)));
+
+	return 1;
+
+}
+
+int UiRobot::synchronise_int()
+
+{
+
+	set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota irp6_on_track
+
+		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->ecp->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+		} else {
+			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	// modyfikacje menu
+	interface.manage_interface();
+
+	return 1;
+
+}
+
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION), is_wind_irp6m_int_open(false),
-			is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
+	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME),
+			is_wind_irp6m_int_open(false), is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
 			is_wind_irp6m_servo_algorithm_open(false), ui_ecp_robot(NULL)
@@ -67,8 +179,9 @@ int UiRobot::reload_configuration()
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 						char* tmp, *tmp1;
-						tmp1 = tmp
-								= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						tmp1
+								= tmp
+										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
 						for (int j = 0; j < 8; j++) {
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
@@ -95,7 +208,8 @@ int UiRobot::reload_configuration()
 				state.edp.network_reader_attach_point
 						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
 
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
+				state.edp.node_name
+						= interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
 
 				break;
 			case 1:
