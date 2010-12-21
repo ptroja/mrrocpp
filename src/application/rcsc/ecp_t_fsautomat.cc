@@ -190,7 +190,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											//	sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));
+//												sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));//changed askubis
 											xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -220,23 +220,24 @@ fsautomat::fsautomat(lib::configurator &_config) :
 
 void fsautomat::main_task_algorithm(void)
 {
-
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
-
 	if (trjConf && ecpLevel) {
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name);
 		printf("Lista %s zawiera: %d elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-
 	for (;;) {
-
 		sr_ecp_msg->message("Waiting for MP order");
 
 		get_next_state();
 
+		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
+
 		sr_ecp_msg->message("Order received");
+		std::cout<< "generator1: " << mp_command.ecp_next_state.mp_2_ecp_next_state_string <<std::endl;
+		std::cout<< "generator2: " << mp_command.ecp_next_state.mp_2_ecp_next_state<<std::endl;
+		std::cout<< "generator3: " << mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 
 		subtasks_conditional_execution();
 
@@ -252,7 +253,7 @@ void fsautomat::main_task_algorithm(void)
 			//tig->Move();
 
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-
+std::cout<<"ECP GOT NEWSMOOTH"<<std::endl;
 			if (trjConf) {
 
 				if (ecpLevel) {
@@ -272,7 +273,7 @@ void fsautomat::main_task_algorithm(void)
 				//	sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				//sg->load_file_with_path(path.c_str());
 			}//else
-			//sg->Move();
+//			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {

@@ -5,46 +5,15 @@
 <TaskDescription>
 	<State id="INIT" type="systemInitialization">
 		<taskInit>
-			<ecp name="ROBOT_IRP6_ON_TRACK">
-				<ecp_smooth_gen>1</ecp_smooth_gen>		
-			</ecp>
 			<ecp name="ROBOT_IRP6_POSTUMENT">
 				<ecp_smooth_gen>1</ecp_smooth_gen>
 			</ecp>
 		</taskInit>
 		<transition condition="true" target="approach_13"/>
-	</State>	
-	<State id="approach_11" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
-		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<Trajectory coordinateType="JOINT" numOfPoses="1">
-			<Pose>
-				<!--<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
-				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>-->
-				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
-				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0	-0.087462	-1.04187	0.024063	2.11873	0.57816	-1.66439	0.057</Coordinates>
-			</Pose>
-		</Trajectory>
-		<transition condition="true" target="approach_12"/>
-	</State>	
-	<State id="approach_12" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
-		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
-		<Trajectory coordinateType="JOINT" numOfPoses="1">
-			<Pose>
-				<!--<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
-				<EndVelocity>0	0	0	0	0	0	0	0</EndVelocity>-->
-				<Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
-				<Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-				<Coordinates>0	-0.087462	-1.54187	0.024063	1.21873	2.57816	-2.66439	0.057</Coordinates>
-			</Pose>
-		</Trajectory>
-		<transition condition="true" target="approach_13"/>
 	</State>
 	<State id="approach_13" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
-		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<!--<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>
@@ -58,7 +27,7 @@
 	</State>
 	<State id="approach_14" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
-		<ECPGeneratorType>ECP_GEN_SMOOTH</ECPGeneratorType>
+		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<!--<StartVelocity>0	0	0	0	0	0	0	0</StartVelocity>

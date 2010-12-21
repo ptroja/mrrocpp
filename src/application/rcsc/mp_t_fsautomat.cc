@@ -202,16 +202,17 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 	if (stateType) {
 		actState->setType((char*) stateType);
 	}
-
 	// For each child of state: i.e. Robot
 	for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
 		if (child_node->type == XML_ELEMENT_NODE) {
-			if (!xmlStrcmp(child_node->name, (const xmlChar *) "base/ecpGeneratorType")) {
+			if (!xmlStrcmp(child_node->name, (const xmlChar *) "ECPGeneratorType")) {
+
 				xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
 				if (ecpGeneratorType)
-					actState->setGeneratorType((char*) ecpGeneratorType);
+					actState->setGeneratorType((const char *) ecpGeneratorType);
 				xmlFree(ecpGeneratorType);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
+
 				xmlChar * robot = xmlNodeGetContent(child_node);
 				if (robot)
 					actState->setRobot((char*) robot);
@@ -269,7 +270,6 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 	}
 	xmlFree(stateType);
 	xmlFree(stateID);
-
 	return actState;
 }
 
@@ -307,14 +307,14 @@ std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat:
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
 					common::State * actState = createState(child_node);
 					statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
-					std::cout << "INSERTED A STATE from subtask: " << actState->getStateID() << std::endl;
+					std::cout << "INSERTED A STATE from subtask: " << actState->getStateID() <<"            "<< actState->getGeneratorType()<<"A"<< std::endl;
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			common::State * actState = createState(cur_node);
-			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));\
-			std::cout << "INSERTED A STATE (normal): " << actState->getStateID() << std::endl;
+			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
+			std::cout << "INSERTED A STATE (normal): " << actState->getStateID() <<"            "<< actState->getGeneratorType() <<"A"<< std::endl;
 		}
 	}
 	// free the document
@@ -372,14 +372,16 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
-	std::cout<< "Ruch w stanie: " << state.getStateID() <<std::endl;
+	std::cout<< "Ruch w stanie: " << state.getStateID() << " generator: "<<state.getGeneratorType()<<" argumenty "<<state.getNumArgument() <<" robot: "<<state.getRobot() <<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
+	std::cout<<"test1"<<std::endl;
 } else {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
+	std::cout<<"test2"<<std::endl;
 }
 }
 
