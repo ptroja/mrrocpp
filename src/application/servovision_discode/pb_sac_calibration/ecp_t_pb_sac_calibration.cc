@@ -36,6 +36,8 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 
 	ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
 
+	ds->configure_sensor();
+
 	vs = boost::shared_ptr <pb_sac_calibration>(new pb_sac_calibration(ds, config_section_name, config));
 
 	term_cond = boost::shared_ptr <termination_condition> (new timeout_termination_condition(10));
