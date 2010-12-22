@@ -87,3 +87,16 @@ start_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 	}
 
+
+int
+spkm_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

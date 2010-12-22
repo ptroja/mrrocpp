@@ -125,13 +125,13 @@ int UiRobot::synchronise_int()
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		// dla robota irp6_on_track
+		// dla robota spkm
 
 		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->ecp->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
 		} else {
-			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -231,7 +231,7 @@ int UiRobot::manage_interface()
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			break;
 		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, ABN_mm_spkm_edp_load, NULL);
 
 			break;
@@ -241,33 +241,31 @@ int UiRobot::manage_interface()
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_synchronisation, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_pre_synchro_moves, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-						NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, ABN_mm_spkm_edp_unload, NULL);
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						NULL);
+						ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 			}

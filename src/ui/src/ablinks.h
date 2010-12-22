@@ -414,22 +414,22 @@ ApMenuLink_t all_robots_menu = {
 	1201, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 158 ] = {
-	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
+static ApItem_t ApItems_robot_menu[ 166 ] = {
+	{ 1, 2, 0, NULL, 0, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 2, 0, NULL, 1, "mm_irp6_on_track_pre_synchro_moves", "P&re Synchro Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_pre_synchro_moves_synchronisation", "&Synchronisation", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_pre_synchro_moves_incremental", "&Motors", NULL },
-	{ 2, 2, 0, NULL, 1, "mm_irp6_on_track_absolute_moves", "A&bsolute Moves", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_irp6_on_track_absolute_moves", "A&bsolute Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_post_synchro_moves_incremental", "&Motors", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_post_synchro_moves_internal", "&Joints", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_post_synchro_moves_xyz_euler_zyz", "Xyz &Euler Zyz", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_post_synchro_moves_xyz_angle_axis", "Xyz &Angle Axis", NULL },
 	{ 2, 2, 0, NULL, 1, "mm_irp6_on_track_relative_moves", "Re&lative Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_relative_moves_xyz_angle_axis", "Xyz &Angle Axis", NULL },
-	{ 2, 2, 0, NULL, 1, "mm_irp6_on_track_preset_positions", "&Preset Positions", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_irp6_on_track_preset_positions", "&Preset Positions", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_preset_position_synchro", "&Synchro Position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_preset_position_front", "&Front position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_on_track_preset_position_0", "Position &0", NULL },
@@ -454,7 +454,7 @@ static ApItem_t ApItems_robot_menu[ 158 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6ot_tfg_preset_position_2", "Position &2", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6ot_tfg_servo_algorithm", "Servo &Algorithm", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_irp6_postument", "Irp6-&Postument", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_irp6_postument", "Irp6-&Postument", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
@@ -468,7 +468,7 @@ static ApItem_t ApItems_robot_menu[ 158 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_xyz_angle_axis", "Xyz &Angle Axis", NULL },
 	{ 2, 2, 0, NULL, 1, "mm_irp6_postument_relative_moves", "Re&lative Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_xyz_angle_axis_relative", "Xyz &Angle Axis", NULL },
-	{ 2, 2, 0, NULL, 0, "mm_irp6_postument_preset_positions", "&Preset Positions", NULL },
+	{ 2, 2, 0, NULL, 1, "mm_irp6_postument_preset_positions", "&Preset Positions", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_preset_position_synchro", "&Synchro Position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_preset_position_front", "&Front position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_preset_position_0", "Position &0", NULL },
@@ -511,9 +511,17 @@ static ApItem_t ApItems_robot_menu[ 158 ] = {
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
-	{ 2, 2, 0, NULL, 0, "mm_spkm_preset_positions", "P&re Synchro Moves", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_spkm_pre_synchro_moves", "P&re Synchro Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_synchronisation", "&Synchronisation", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_pre_synchro_moves_incremental", "&Motors", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_spkm_absolute_moves", "A&bsolute Moves", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_post_synchro_moves_incremental", "&Motors", NULL },
+	{ 2, 2, 0, NULL, 0, "mm_spkm_preset_positions", "&Preset Positions", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_synchro", "&Synchro Position", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_front", "&Front position", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_0", "Position &0", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_1", "Position &1", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_2", "Position &2", NULL },
 	{ 1, 2, 0, NULL, 1, "mm_smb", "sm&B", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_smb_edp_unload", "EDP &Unload", NULL },
@@ -583,7 +591,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1212, 106, 157
+	1212, 112, 165
 	};
 
 

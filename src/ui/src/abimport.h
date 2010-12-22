@@ -425,4 +425,5 @@ int clear_wind_sarkofag_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallba
 int wind_sarkofag_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_spkm_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int spkm_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif
