@@ -60,7 +60,8 @@ extern ApWindowLink_t wnd_bird_hand_configuration;
 extern ApWindowLink_t wnd_bird_hand_command_and_status;
 extern ApWindowLink_t wnd_sarkofag_moves;
 extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
-extern ApWidget_t AbWidgets[ 1186 ];
+extern ApWindowLink_t wnd_spkm_inc;
+extern ApWidget_t AbWidgets[ 1231 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;

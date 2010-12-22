@@ -318,6 +318,12 @@ ApWindowLink_t wnd_sarkofag_servo_algorithm = {
 	AbLinks_wnd_sarkofag_servo_algorithm, 1179, 8
 	};
 
+ApWindowLink_t wnd_spkm_inc = {
+	"wnd_spkm_inc.wgtw",
+	&AbContext,
+	NULL, 1186, 0
+	};
+
 static ApItem_t ApItems_file_menu[ 2 ] = {
 	{ 1, 1, 0, NULL, 0, "mm_file_quit", "&Quit", NULL },
 	{ 0, 0, NULL, NULL, 0, NULL, NULL, NULL } };
@@ -331,7 +337,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	1186, 1, 1
+	1231, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -351,7 +357,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	1188, 4, 5
+	1233, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -367,7 +373,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	1194, 1, 1
+	1239, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -386,7 +392,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	1196, 3, 4
+	1241, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 11 ] = {
@@ -411,7 +417,7 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	1201, 8, 10
+	1246, 8, 10
 	};
 
 static ApItem_t ApItems_robot_menu[ 166 ] = {
@@ -591,7 +597,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1212, 112, 165
+	1257, 112, 165
 	};
 
 
