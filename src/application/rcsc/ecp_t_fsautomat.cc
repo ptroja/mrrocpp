@@ -122,7 +122,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 				for (xmlNode *child_node = cur_node->children->children; child_node != NULL; child_node
 						= child_node->next) {
 					if (child_node->type == XML_ELEMENT_NODE
-							&& !xmlStrcmp(child_node->name, (const xmlChar *) "base/ecp")) {
+							&& !xmlStrcmp(child_node->name, (const xmlChar *) "ecp")) {
 						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *) "name");
 						if (robot && !xmlStrcmp(robot, (const xmlChar *) whichECP.c_str())) {
 							for (; child_node->children; child_node->children = child_node->children->next) {
@@ -190,7 +190,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-//												sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));//changed askubis
+												sg = new common::generator::newsmooth(*this,lib::ECP_JOINT, atoi((char *)argument));//changed askubis
 											xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -268,12 +268,12 @@ std::cout<<"ECP GOT NEWSMOOTH"<<std::endl;
 			{
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-				//	sg->get_type_for_smooth_xml(path.c_str());
+					//sg->get_type_for_smooth_xml(path.c_str());
 				//
-				//	sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					//sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				//sg->load_file_with_path(path.c_str());
 			}//else
-//			sg->Move();//changed askubis
+			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {

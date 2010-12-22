@@ -5,7 +5,7 @@
 <TaskDescription>
 	<State id="INIT" type="systemInitialization">
 		<taskInit>
-			<ecp name="ROBOT_IRP6_POSTUMENT">
+			<ecp name="ROBOT_IRP6P_M">
 				<ecp_smooth_gen>1</ecp_smooth_gen>
 			</ecp>
 		</taskInit>
