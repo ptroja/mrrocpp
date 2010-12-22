@@ -1143,6 +1143,46 @@ static const ApEventLink_t AbLinks_wnd_sarkofag_servo_algorithm[] = {
 	{ 0 }
 	};
 
+static const ApEventLink_t AbLinks_wnd_spkm_inc[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 2010, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 2011, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 1012, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 1012, wnd_spkm_motors_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_inc", 1013, clear_wnd_spkm_inc_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_motors_set_desired_as_current", 2009, wnd_spkm_motors_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_exec_move", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_exec_move", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_read_pos", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_export", 2009, export_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_import", 2009, import_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_0l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_0l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_0r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_0r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_1l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_1l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_1r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_1r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_2l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_2l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_2r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_2r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_3l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_3l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_3r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_3r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_4l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_4l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_4r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_4r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_5l", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_5l", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_5r", 2009, spkm_inc_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_inc_5r", 2009, init_wnd_spkm_inc, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
 static const ApEventLink_t AbLinks_file_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_file_quit", 2009, quit, 0, 0, 0, 0, },
 	{ 0 }

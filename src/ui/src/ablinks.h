@@ -321,7 +321,7 @@ ApWindowLink_t wnd_sarkofag_servo_algorithm = {
 ApWindowLink_t wnd_spkm_inc = {
 	"wnd_spkm_inc.wgtw",
 	&AbContext,
-	NULL, 1186, 0
+	AbLinks_wnd_spkm_inc, 1186, 36
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {

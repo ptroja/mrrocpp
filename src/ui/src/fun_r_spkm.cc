@@ -100,3 +100,81 @@ spkm_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 	}
 
+
+int
+init_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+wnd_spkm_motors_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+clear_wnd_spkm_inc_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+spkm_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+import_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+export_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
