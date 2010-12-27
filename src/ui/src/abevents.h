@@ -61,6 +61,7 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_bird_hand_configuration, NULL, NULL, 0, NULL, 0, 11, 10, 30, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_moves, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_spkm_inc, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 0 }
 	};
 

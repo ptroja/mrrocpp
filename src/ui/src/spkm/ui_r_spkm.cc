@@ -146,13 +146,14 @@ int UiRobot::synchronise_int()
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
-			ui_ecp_robot(NULL)
+			is_wind_spkm_inc_open(false), ui_ecp_robot(NULL)
 {
 
 }
 
 void UiRobot::close_all_windows()
 {
+	close_wnd_spkm_inc(NULL, NULL, NULL);
 }
 
 int UiRobot::reload_configuration()

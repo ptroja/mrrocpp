@@ -107,6 +107,8 @@ extern const int ABI_wnd_sarkofag_moves;
 #define ABM_wnd_sarkofag_moves               &AbInternalLinks[ABI_wnd_sarkofag_moves]
 extern const int ABI_wnd_sarkofag_servo_algorithm;
 #define ABM_wnd_sarkofag_servo_algorithm     &AbInternalLinks[ABI_wnd_sarkofag_servo_algorithm]
+extern const int ABI_wnd_spkm_inc;
+#define ABM_wnd_spkm_inc                     &AbInternalLinks[ABI_wnd_spkm_inc]
 
 /* 'task_config_window' Window link */
 extern const int ABN_task_config_window;

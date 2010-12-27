@@ -56,6 +56,7 @@ const int ABI_wnd_bird_hand_command_and_status = 47;
 const int ABI_wnd_bird_hand_configuration = 48;
 const int ABI_wnd_sarkofag_moves = 49;
 const int ABI_wnd_sarkofag_servo_algorithm = 50;
+const int ABI_wnd_spkm_inc = 51;
 
 /* 'task_config_window' Window link */
 const int ABN_task_config_window = 0;

@@ -47,8 +47,6 @@ int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 }
 
-
-
 int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -74,107 +72,115 @@ int EDP_spkm_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 }
 
+int start_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-start_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
-
+	if (!interface.spkm->is_wind_spkm_inc_open) // otworz okno
+	{
+		ApCreateModule(ABM_wnd_spkm_inc, widget, cbinfo);
+		interface.spkm->is_wind_spkm_inc_open = true;
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_wnd_spkm_inc);
 	}
 
+	return (Pt_CONTINUE);
 
-int
-spkm_move_to_preset_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+}
 
-	{
+int spkm_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	return (Pt_CONTINUE);
 
-	}
+}
 
+int init_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-init_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	return (Pt_CONTINUE);
 
-	}
+}
 
+int wnd_spkm_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-wnd_spkm_motors_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	return (Pt_CONTINUE);
 
-	}
+}
 
+int clear_wnd_spkm_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-clear_wnd_spkm_inc_flag( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	interface.spkm->is_wind_spkm_inc_open = false;
 
-	}
+	return (Pt_CONTINUE);
 
+}
 
-int
-spkm_inc_motion( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+int spkm_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-	{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	return( Pt_CONTINUE );
-
-	}
-
-
-int
-import_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	return (Pt_CONTINUE);
 
-	}
+}
 
+int import_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-export_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	return( Pt_CONTINUE );
+	return (Pt_CONTINUE);
 
+}
+
+int export_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return (Pt_CONTINUE);
+
+}
+
+int close_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	if (interface.spkm->is_wind_spkm_inc_open) {
+		PtDestroyWidget(ABW_wnd_spkm_inc);
 	}
+
+	return (Pt_CONTINUE);
+
+}
 

@@ -191,6 +191,9 @@ void effector::synchronise(void)
 	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
 	}
+
+	std::cout << "EDP synchronisation" << std::endl;
+
 }
 
 /*--------------------------------------------------------------------------*/

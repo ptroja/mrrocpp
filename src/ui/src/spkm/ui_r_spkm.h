@@ -34,6 +34,9 @@ private:
 
 public:
 
+	bool is_wind_spkm_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
+
+
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
