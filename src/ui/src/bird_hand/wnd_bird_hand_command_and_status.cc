@@ -25,7 +25,7 @@ namespace bird_hand {
 
 
 WndCommandAndStatus::WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand) :
-	interface(_interface), bird_hand(_bird_hand), is_open(false)
+	common::WndBase(_interface), bird_hand(_bird_hand)
 {
 
 }
