@@ -62,6 +62,7 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_moves, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_sarkofag_servo_algorithm, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_spkm_inc, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_polycrank_int, NULL, NULL, 0, NULL, 0, 0, 0, 0, },
 	{ 0 }
 	};
 
@@ -1184,6 +1185,50 @@ static const ApEventLink_t AbLinks_wnd_spkm_inc[] = {
 	{ 0 }
 	};
 
+static const ApEventLink_t AbLinks_wnd_polycrank_int[] = {
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 2010, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 2011, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 1012, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 1012, wnd_polycrank_joints_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_polycrank_int", 1013, clear_wnd_polycrank_int_flag, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_1l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_1l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_1r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_1r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_2l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_2l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_2r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_2r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_3l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_3l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_3r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_3r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_4l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_4l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_4r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_4r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_5l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_5l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_5r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_5r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_6l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_6l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_6r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_6r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_7l", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_7l", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_7r", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_7r", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_exec_move", 2009, polycrank_int_motion, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_exec_move", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_import", 2009, import_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_int_export", 2009, export_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_joints_read_pos", 2009, init_wnd_polycrank_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_polycrank_joints_set_desired_as_current", 2009, wnd_polycrank_joints_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 0 }
+	};
+
 static const ApEventLink_t AbLinks_file_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_file_quit", 2009, quit, 0, 0, 0, 0, },
 	{ 0 }
@@ -1334,6 +1379,9 @@ static const ApEventLink_t AbLinks_robot_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_irp6_mechatonika_xyz_angle_axis_ts", 2009, start_wnd_irp6m_xyz_angle_axis_ts, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_irp6_mechatronika_kinematic", 2009, start_wnd_irp6m_kinematic, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_irp6_mechatronika_servo_algorithm", 2009, start_wnd_irp6m_servo_algorithm, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_polycrank_edp_load", 2009, EDP_polycrank_create, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_polycrank_edp_unload", 2009, EDP_polycrank_slay, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_polycrank_internal", 2009, start_wnd_polycrank_int, 0, 0, 0, 0, },
 	{ 0 }
 	};
 

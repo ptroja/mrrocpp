@@ -12,7 +12,7 @@ add_executable(ui
 	../fun_r_irp6p_tfg.cc
 	../fun_r_sarkofag.cc
 	../fun_r_bird_hand.cc
-	#../fun_r_polycrank.cc
+	../fun_r_polycrank.cc
 	../fun_r_shead.cc
 	../fun_r_smb.cc
 	../fun_r_speaker.cc
@@ -34,7 +34,7 @@ add_executable(ui
 	../irp6p_tfg/ui_r_irp6p_tfg.cc
 	../sarkofag/ui_r_sarkofag.cc
 	../irp6m_m/ui_r_irp6m_m.cc
-	#../polycrank/ui_r_polycrank.cc
+	../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
 	../speaker/ui_r_speaker.cc
 	../spkm/ui_r_spkm.cc

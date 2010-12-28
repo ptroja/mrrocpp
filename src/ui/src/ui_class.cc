@@ -119,6 +119,9 @@ void Interface::init()
 	shead = new shead::UiRobot(*this);
 	robot_m[shead->robot_name] = shead;
 
+	polycrank = new polycrank::UiRobot(*this);
+	robot_m[polycrank->robot_name] = polycrank;
+
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
 
