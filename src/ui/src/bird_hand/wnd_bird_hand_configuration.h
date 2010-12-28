@@ -40,6 +40,8 @@ private:
 public:
 	bool is_open;
 
+	int close();
+
 	WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand);
 
 	int get_configuration();

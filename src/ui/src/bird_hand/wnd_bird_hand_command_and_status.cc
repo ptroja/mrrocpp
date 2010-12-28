@@ -30,6 +30,16 @@ WndCommandAndStatus::WndCommandAndStatus(common::Interface& _interface, UiRobot&
 
 }
 
+int WndCommandAndStatus::close()
+{
+
+	if (is_open) {
+		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
+	}
+
+	return 1;
+}
+
 int WndCommandAndStatus::get_command()
 {
 
