@@ -54,11 +54,6 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 
 }
 
-EcpRobot::~EcpRobot()
-{
-	delete the_robot;
-}
-
 }
 } //namespace ui
 } //namespace mrrocpp

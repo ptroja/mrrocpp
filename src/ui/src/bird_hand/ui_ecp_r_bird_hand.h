@@ -41,7 +41,6 @@ public:
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
-	virtual ~EcpRobot();
 
 };
 
