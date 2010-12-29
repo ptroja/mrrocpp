@@ -23,6 +23,7 @@ add_executable(ui
 	../ui_ecp_r_irp6_common.cc
 	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
+	../ui_ecp_r_data_port.cc
 	../bird_hand/ui_ecp_r_bird_hand.cc
 	../bird_hand/wnd_bird_hand_command_and_status.cc
 	../bird_hand/wnd_bird_hand_configuration.cc
@@ -37,6 +38,7 @@ add_executable(ui
 	../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
 	../speaker/ui_r_speaker.cc
+	../spkm/ui_ecp_r_spkm.cc
 	../spkm/ui_r_spkm.cc
 	../spkm/wnd_spkm_inc.cc
 	../smb/ui_r_smb.cc
