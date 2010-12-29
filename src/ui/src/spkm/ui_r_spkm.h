@@ -16,9 +16,6 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace tfg_and_conv {
-class EcpRobot;
-}
 namespace spkm {
 
 //
@@ -27,6 +24,7 @@ namespace spkm {
 //
 //
 
+class EcpRobot;
 class WndInc;
 
 class UiRobot : public common::UiRobot
@@ -35,7 +33,7 @@ private:
 
 public:
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	EcpRobot *ui_ecp_robot;
 	WndInc *wnd_inc;
 
 	UiRobot(common::Interface& _interface);

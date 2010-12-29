@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/spkm/ui_r_spkm.h"
-#include "ui/src/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/spkm/ui_ecp_r_spkm.h"
 #include "ui/src/spkm/wnd_spkm_inc.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
@@ -68,12 +68,11 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot
-							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::spkm::ROBOT_NAME);
+					ui_ecp_robot = new ui::spkm::EcpRobot(*interface.config, *interface.all_ecp_msg);
 
 				}
 
-				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (state.edp.pid < 0) {
 
@@ -129,8 +128,8 @@ int UiRobot::synchronise_int()
 		// dla robota spkm
 
 		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
-			ui_ecp_robot->ecp->synchronise();
-			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+			ui_ecp_robot->the_robot->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
 		} else {
 			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
 		}
