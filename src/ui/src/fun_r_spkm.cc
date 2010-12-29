@@ -111,6 +111,8 @@ int init_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_inc->init();
+
 	return (Pt_CONTINUE);
 
 }
@@ -121,8 +123,6 @@ int wnd_spkm_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	interface.spkm->wnd_inc->init();
 
 	return (Pt_CONTINUE);
 
