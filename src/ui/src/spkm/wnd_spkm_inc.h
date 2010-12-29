@@ -5,53 +5,50 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __UI_R_SPKM_H
-#define __UI_R_SPKM_H
+#ifndef __WND_SPKM_INC_H
+#define __WND_SPKM_INC_H
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "ui/src/wnd_base.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
 }
-namespace tfg_and_conv {
-class EcpRobot;
-}
+
 namespace spkm {
 
 //
 //
-// KLASA UiRobot
+// KLASA WndInc
 //
 //
 
-class WndInc;
 
-class UiRobot : public common::UiRobot
+// super klasa agregujaca porozrzucane struktury
+
+
+class UiRobot;
+
+class WndInc : public common::WndBase
 {
 private:
+	UiRobot& robot;
 
 public:
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	WndInc *wnd_inc;
+	int close();
 
-	UiRobot(common::Interface& _interface);
-	void close_all_windows();
-	int reload_configuration();
-	int manage_interface();
-	void delete_ui_ecp_robot();
-	int synchronise();
-	int synchronise_int();
-	int edp_create();
-	int edp_create_int();
+	WndInc(common::Interface& _interface, UiRobot& _robot);
+
 };
 
 }
 } //namespace ui
 } //namespace mrrocpp
+
 
 #endif
 

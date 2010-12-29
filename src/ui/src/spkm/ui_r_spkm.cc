@@ -4,6 +4,7 @@
 
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/spkm/wnd_spkm_inc.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
@@ -146,8 +147,9 @@ int UiRobot::synchronise_int()
 
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
-			is_wind_spkm_inc_open(false), ui_ecp_robot(NULL)
+			ui_ecp_robot(NULL)
 {
+	wnd_inc = new WndInc(interface, *this);
 
 }
 

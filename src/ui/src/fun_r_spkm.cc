@@ -21,6 +21,8 @@
 #include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_class.h"
+#include "ui/src/spkm/wnd_spkm_inc.h"
+
 // #include "ui/src/ui.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
@@ -79,10 +81,10 @@ int start_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!interface.spkm->is_wind_spkm_inc_open) // otworz okno
+	if (!interface.spkm->wnd_inc->is_open) // otworz okno
 	{
 		ApCreateModule(ABM_wnd_spkm_inc, widget, cbinfo);
-		interface.spkm->is_wind_spkm_inc_open = true;
+		interface.spkm->wnd_inc->is_open = true;
 	} else { // przelacz na okno
 		PtWindowToFront(ABW_wnd_spkm_inc);
 	}
@@ -131,7 +133,7 @@ int clear_wnd_spkm_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.spkm->is_wind_spkm_inc_open = false;
+	interface.spkm->wnd_inc->is_open = false;
 
 	return (Pt_CONTINUE);
 
@@ -176,9 +178,8 @@ int close_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.spkm->is_wind_spkm_inc_open) {
-		PtDestroyWidget(ABW_wnd_spkm_inc);
-	}
+
+	interface.spkm->wnd_inc->close();
 
 	return (Pt_CONTINUE);
 
