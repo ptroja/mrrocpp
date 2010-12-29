@@ -755,7 +755,7 @@ typedef union c_buffer_arm
 		char prosody[lib::MAX_PROSODY];
 	} text_def;
 	//----------------------------------------------------------
-	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
+	uint8_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -776,7 +776,7 @@ typedef union c_buffer_arm
 		//		ar & text_def.text;
 		//		ar & text_def.prosody;
 
-		///		ar & serialized_command;
+		ar & serialized_command;
 	}
 } c_buffer_arm_t;
 
@@ -1045,7 +1045,7 @@ r_buffer_arm
 		bool speaking;
 	} text_def;
 
-	char serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
+	uint8_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -1059,7 +1059,7 @@ r_buffer_arm
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.gripper_reg_state;
 		ar & text_def.speaking;
-		//		ar & serialized_reply;
+		ar & serialized_reply;
 	}
 } r_buffer_arm_t;
 

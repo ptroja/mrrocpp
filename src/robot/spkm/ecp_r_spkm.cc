@@ -157,6 +157,7 @@ void robot::create_command()
 void robot::get_reply()
 {
 
+
 	// message deserialization
 	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
 
@@ -170,6 +171,9 @@ void robot::get_reply()
 		epos_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
 		epos_reply_data_request_port.set();
+
+
+
 	}
 
 }
