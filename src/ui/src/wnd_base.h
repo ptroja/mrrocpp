@@ -35,10 +35,13 @@ public:
 	common::Interface& interface;
 	bool is_open;
 	PtWidget_t * ABW_window;
+	ApEventLink_t *ABM_window;
 
+	int start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 	int close();
+	int clear_flag();
 
-	WndBase(common::Interface& _interface, PtWidget_t * _ABW_window);
+	WndBase(common::Interface& _interface, PtWidget_t * _ABW_window, ApEventLink_t *_ABM_window);
 
 };
 

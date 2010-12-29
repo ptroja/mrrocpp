@@ -21,10 +21,26 @@ namespace common {
 //
 
 
-WndBase::WndBase(Interface& _interface, PtWidget_t * _ABW_window) :
-	interface(_interface), is_open(false), ABW_window(_ABW_window)
+WndBase::WndBase(Interface& _interface, PtWidget_t * _ABW_window, ApEventLink_t *_ABM_window) :
+	interface(_interface), is_open(false), ABW_window(_ABW_window), ABM_window(_ABM_window)
 {
 
+}
+
+int WndBase::start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
+
+	if (!is_open) // otworz okno
+	{
+		ApCreateModule(ABM_window, widget, cbinfo);
+		is_open = true;
+
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_window);
+
+	}
+
+	return 1;
 }
 
 int WndBase::close()
@@ -33,6 +49,14 @@ int WndBase::close()
 	if (is_open) {
 		PtDestroyWidget(ABW_window);
 	}
+
+	return 1;
+}
+
+int WndBase::clear_flag()
+{
+
+	is_open = false;
 
 	return 1;
 }

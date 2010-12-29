@@ -81,13 +81,7 @@ int start_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!interface.spkm->wnd_inc->is_open) // otworz okno
-	{
-		ApCreateModule(ABM_wnd_spkm_inc, widget, cbinfo);
-		interface.spkm->wnd_inc->is_open = true;
-	} else { // przelacz na okno
-		PtWindowToFront(ABW_wnd_spkm_inc);
-	}
+	interface.spkm->wnd_inc->start(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
@@ -135,7 +129,7 @@ int clear_wnd_spkm_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.spkm->wnd_inc->is_open = false;
+	interface.spkm->wnd_inc->clear_flag();
 
 	return (Pt_CONTINUE);
 

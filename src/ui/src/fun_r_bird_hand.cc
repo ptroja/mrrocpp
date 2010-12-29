@@ -107,15 +107,7 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!interface.bird_hand->wnd_command_and_status->is_open) // otworz okno
-	{
-		ApCreateModule(ABM_wnd_bird_hand_command_and_status, widget, cbinfo);
-		interface.bird_hand->wnd_command_and_status->is_open = true;
-
-	} else { // przelacz na okno
-		PtWindowToFront(ABW_wnd_bird_hand_command_and_status);
-
-	}
+	interface.bird_hand->wnd_command_and_status->start(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
@@ -139,7 +131,7 @@ int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.bird_hand->wnd_command_and_status->is_open = false;
+	interface.bird_hand->wnd_command_and_status->clear_flag();
 	return (Pt_CONTINUE);
 
 }
@@ -189,13 +181,7 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	if (!interface.bird_hand->wnd_configuration->is_open) // otworz okno
-	{
-		ApCreateModule(ABM_wnd_bird_hand_configuration, widget, cbinfo);
-		interface.bird_hand->wnd_configuration->is_open = true;
-	} else { // przelacz na okno
-		PtWindowToFront(ABW_wnd_bird_hand_configuration);
-	}
+	interface.bird_hand->wnd_configuration->start(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
@@ -219,7 +205,7 @@ int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.bird_hand->wnd_configuration->is_open = false;
+	interface.bird_hand->wnd_configuration->clear_flag();
 	return (Pt_CONTINUE);
 
 }

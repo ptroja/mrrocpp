@@ -25,12 +25,11 @@ namespace bird_hand {
 
 
 WndConfiguration::WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand) :
-	common::WndBase(_interface, ABW_wnd_bird_hand_configuration), bird_hand(_bird_hand)
+	common::WndBase(_interface, ABW_wnd_bird_hand_configuration, ABM_wnd_bird_hand_configuration),
+			bird_hand(_bird_hand)
 {
 
 }
-
-
 
 int WndConfiguration::get_configuration()
 {

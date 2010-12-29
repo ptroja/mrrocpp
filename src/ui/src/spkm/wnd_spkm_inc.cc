@@ -25,12 +25,10 @@ namespace spkm {
 
 
 WndInc::WndInc(common::Interface& _interface, UiRobot& _robot) :
-	common::WndBase(_interface, ABW_wnd_spkm_inc), robot(_robot)
+	common::WndBase(_interface, ABW_wnd_spkm_inc, ABM_wnd_spkm_inc), robot(_robot)
 {
 
 }
-
-
 
 int WndInc::init()
 {
