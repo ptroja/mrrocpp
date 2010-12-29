@@ -39,6 +39,16 @@ int WndInc::close()
 	return 1;
 }
 
+int WndInc::init()
+{
+
+	interface.set_toggle_button(ABW_thumb_wind_spkm_motors_mip_0);
+	interface.set_toggle_button(ABW_thumb_wind_spkm_motors_mip_1);
+	interface.unset_toggle_button(ABW_thumb_wind_spkm_motors_mip_1);
+
+	return 1;
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp
