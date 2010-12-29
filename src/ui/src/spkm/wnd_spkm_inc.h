@@ -39,7 +39,7 @@ private:
 
 public:
 
-	int close();
+
 	int init();
 
 	WndInc(common::Interface& _interface, UiRobot& _robot);

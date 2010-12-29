@@ -25,20 +25,12 @@ namespace bird_hand {
 
 
 WndConfiguration::WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand) :
-	common::WndBase(_interface), bird_hand(_bird_hand)
+	common::WndBase(_interface, ABW_wnd_bird_hand_configuration), bird_hand(_bird_hand)
 {
 
 }
 
-int WndConfiguration::close()
-{
 
-	if (is_open) {
-		PtDestroyWidget(ABW_wnd_bird_hand_configuration);
-	}
-
-	return 1;
-}
 
 int WndConfiguration::get_configuration()
 {

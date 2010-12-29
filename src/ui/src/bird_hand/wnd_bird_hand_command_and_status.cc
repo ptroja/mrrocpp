@@ -25,19 +25,9 @@ namespace bird_hand {
 
 
 WndCommandAndStatus::WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand) :
-	common::WndBase(_interface), bird_hand(_bird_hand)
+	common::WndBase(_interface, ABW_wnd_bird_hand_command_and_status), bird_hand(_bird_hand)
 {
 
-}
-
-int WndCommandAndStatus::close()
-{
-
-	if (is_open) {
-		PtDestroyWidget(ABW_wnd_bird_hand_command_and_status);
-	}
-
-	return 1;
 }
 
 int WndCommandAndStatus::get_command()

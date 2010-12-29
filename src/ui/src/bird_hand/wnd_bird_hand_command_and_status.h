@@ -39,7 +39,7 @@ private:
 
 public:
 
-	int close();
+
 
 	WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand);
 

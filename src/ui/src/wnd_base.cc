@@ -21,10 +21,20 @@ namespace common {
 //
 
 
-WndBase::WndBase(Interface& _interface) :
-	interface(_interface), is_open(false)
+WndBase::WndBase(Interface& _interface, PtWidget_t * _ABW_window) :
+	interface(_interface), is_open(false), ABW_window(_ABW_window)
 {
 
+}
+
+int WndBase::close()
+{
+
+	if (is_open) {
+		PtDestroyWidget(ABW_window);
+	}
+
+	return 1;
 }
 
 }

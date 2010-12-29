@@ -10,6 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "ablibs.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -33,10 +34,11 @@ private:
 public:
 	common::Interface& interface;
 	bool is_open;
+	PtWidget_t * ABW_window;
 
-	virtual int close() = 0;
+	int close();
 
-	WndBase(common::Interface& _interface);
+	WndBase(common::Interface& _interface, PtWidget_t * _ABW_window);
 
 };
 
