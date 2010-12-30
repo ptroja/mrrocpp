@@ -32,7 +32,7 @@ const int MAX_PROSODY = 20; // MAC7
 
 
 const unsigned int CONNECT_RETRY = 200;
-const unsigned int CONNECT_DELAY = 50;
+const unsigned int CONNECT_DELAY = 1000;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
