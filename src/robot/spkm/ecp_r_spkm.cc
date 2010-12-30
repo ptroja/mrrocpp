@@ -58,6 +58,11 @@ void robot::create_command()
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
+		if (!is_synchronised()) {
+			ecp_command.instruction.motion_type = lib::RELATIVE;
+			ecp_command.instruction.set_arm_type = lib::MOTOR;
+		}
+
 		// generator command interpretation
 		// narazie proste przepisanie
 
