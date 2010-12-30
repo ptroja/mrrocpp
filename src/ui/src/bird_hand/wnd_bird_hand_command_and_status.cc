@@ -124,6 +124,131 @@ int WndCommandAndStatus::copy_command()
 	return 1;
 }
 
+int WndCommandAndStatus::get_variant_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_absolute, PtWidget_t *ABW_relative, PtWidget_t *ABW_velocity)
+{
+
+	unsigned long *flags;
+
+	PtGetResource(ABW_absolute, Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		finger.profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
+	}
+
+	PtGetResource(ABW_relative, Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		finger.profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+	}
+
+	PtGetResource(ABW_velocity, Pt_ARG_FLAGS, &flags, 0);
+
+	if (*flags & Pt_SET) {
+		finger.profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
+	}
+
+	return 1;
+
+}
+
+int WndCommandAndStatus::get_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_position, PtWidget_t *ABW_torque, PtWidget_t *ABW_damping)
+{
+
+	double* tmp_double;
+
+	PtGetResource(ABW_position, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	finger.desired_position = *tmp_double;
+
+	PtGetResource(ABW_torque, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	finger.desired_torque = *tmp_double;
+
+	PtGetResource(ABW_damping, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+	finger.reciprocal_of_damping = *tmp_double;
+
+	return 1;
+
+}
+
+int WndCommandAndStatus::set_fingerstatus(lib::bird_hand::single_joint_status &finger, PtWidget_t *ABW_position, PtWidget_t *ABW_torque, PtWidget_t *ABW_current, PtWidget_t *ABW_limit_1, PtWidget_t *ABW_limit_2, PtWidget_t *ABW_limit_3, PtWidget_t *ABW_limit_4, PtWidget_t *ABW_limit_5, PtWidget_t *ABW_limit_6, PtWidget_t *ABW_limit_7, PtWidget_t *ABW_limit_8)
+{
+
+	PtSetResource(ABW_position, Pt_ARG_NUMERIC_VALUE, &finger.meassured_position, 0);
+	PtSetResource(ABW_torque, Pt_ARG_NUMERIC_VALUE, &finger.meassured_torque, 0);
+	PtSetResource(ABW_current, Pt_ARG_NUMERIC_VALUE, &finger.meassured_current, 0);
+
+	if (finger.lower_limit_of_absolute_position) {
+		interface.set_toggle_button(ABW_limit_1);
+
+	} else {
+		interface.unset_toggle_button(ABW_limit_1);
+	}
+
+	if (finger.lower_limit_of_absolute_value_of_desired_torque) {
+		interface.set_toggle_button(ABW_limit_2);
+	} else {
+		interface.unset_toggle_button(ABW_limit_2);
+	}
+
+	if (finger.upper_limit_of_absolute_position) {
+		interface.set_toggle_button(ABW_limit_3);
+	} else {
+		interface.unset_toggle_button(ABW_limit_3);
+	}
+
+	if (finger.upper_limit_of_absolute_value_of_computed_position_increment) {
+		interface.set_toggle_button(ABW_limit_4);
+	} else {
+		interface.unset_toggle_button(ABW_limit_4);
+	}
+
+	if (finger.upper_limit_of_absolute_value_of_desired_position_increment) {
+		interface.set_toggle_button(ABW_limit_5);
+	} else {
+		interface.unset_toggle_button(ABW_limit_5);
+	}
+
+	if (finger.upper_limit_of_absolute_value_of_desired_torque) {
+		interface.set_toggle_button(ABW_limit_6);
+	} else {
+		interface.unset_toggle_button(ABW_limit_6);
+	}
+
+	if (finger.upper_limit_of_absolute_value_of_meassured_torque) {
+		interface.set_toggle_button(ABW_limit_7);
+	} else {
+		interface.unset_toggle_button(ABW_limit_7);
+	}
+
+	if (finger.upper_limit_of_meassured_current) {
+		interface.set_toggle_button(ABW_limit_8);
+	} else {
+		interface.unset_toggle_button(ABW_limit_8);
+	}
+
+	return 1;
+
+}
+
+int WndCommandAndStatus::copy_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_current, PtWidget_t *ABW_desired)
+{
+
+	double* tmp_double;
+
+	if (finger.profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION) {
+
+		PtGetResource(ABW_current, Pt_ARG_NUMERIC_VALUE, &tmp_double, 0);
+
+		double set_double = *tmp_double;
+
+		PtSetResource(ABW_desired, Pt_ARG_NUMERIC_VALUE, &set_double, 0);
+
+	}
+	return 1;
+}
+
 //
 //
 // thumb_f_0

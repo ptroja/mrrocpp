@@ -11,6 +11,7 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 #include "ui/src/wnd_base.h"
+#include "robot/bird_hand/const_bird_hand.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -39,13 +40,22 @@ private:
 
 public:
 
-
-
 	WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand);
 
 	int get_command();
 	int set_status();
 	int copy_command();
+
+	int
+			get_variant_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_absolute, PtWidget_t *ABW_relative, PtWidget_t *ABW_velocity);
+
+	int
+			get_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_position, PtWidget_t *ABW_torque, PtWidget_t *ABW_damping);
+	int
+			set_fingerstatus(lib::bird_hand::single_joint_status &finger, PtWidget_t *ABW_position, PtWidget_t *ABW_torque, PtWidget_t *ABW_current, PtWidget_t *ABW_limit_1, PtWidget_t *ABW_limit_2, PtWidget_t *ABW_limit_3, PtWidget_t *ABW_limit_4, PtWidget_t *ABW_limit_5, PtWidget_t *ABW_limit_6, PtWidget_t *ABW_limit_7, PtWidget_t *ABW_limit_8);
+
+	int
+			copy_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_current, PtWidget_t *ABW_desired);
 
 	//
 	//
