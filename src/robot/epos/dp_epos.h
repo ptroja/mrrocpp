@@ -34,6 +34,12 @@ enum EPOS_GEN_PROFILE
  * @brief SwarmItFix Epos cubic trajectory command data port
  * @ingroup epos
  */
+const std::string EPOS_MOTOR_COMMAND_DATA_PORT = "EPOS_MOTOR_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos cubic trajectory command data port
+ * @ingroup epos
+ */
 const std::string EPOS_CUBIC_COMMAND_DATA_PORT = "EPOS_CUBIC_COMMAND_DATA_PORT";
 
 /*!
@@ -94,6 +100,15 @@ struct epos_cubic_command
 	double aa[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double da[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double av[EPOS_DATA_PORT_SERVOS_NUMBER];
+};
+
+/*!
+ * @brief SwarmItFix Epos trapezoid trajectory command, called fro UI
+ * @ingroup epos
+ */
+struct epos_motor_command
+{
+	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
 };
 
 /*!

@@ -30,6 +30,11 @@ protected:
 	//bufory wejsciowe z generatora
 
 	/**
+	 * @brief epos motor motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_motor_command> epos_motor_command_data_port;
+
+	/**
 	 * @brief epos cubic motion command data port
 	 */
 	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;

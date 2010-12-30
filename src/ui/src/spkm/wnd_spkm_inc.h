@@ -43,6 +43,7 @@ public:
 	int import();
 	int exporto();
 	int copy();
+	int motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 
 	int set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb);
 

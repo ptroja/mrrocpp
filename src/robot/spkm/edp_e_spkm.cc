@@ -115,6 +115,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		 }
 		 break;*/
+		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
+			lib::epos::epos_motor_command epos_motor_command_structure;
+			memcpy(&epos_motor_command_structure, &(ecp_edp_cbuffer.epos_motor_command_structure), sizeof(epos_motor_command_structure));
+
+			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
+					<< epos_motor_command_structure.desired_position[4] << std::endl;
+		}
+			break;
+
 		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
 			lib::epos::epos_cubic_command epos_cubic_command_structure;
 			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
