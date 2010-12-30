@@ -78,6 +78,7 @@ struct mp_to_ecp_cubic_trapezoidal_parameters
  */
 struct single_controller_epos_reply
 {
+	double current;
 	double position;
 	bool motion_in_progress;
 	bool buffer_full;

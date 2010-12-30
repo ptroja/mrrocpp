@@ -39,8 +39,8 @@ private:
 
 public:
 
-
 	int init();
+	int set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb);
 
 	WndInc(common::Interface& _interface, UiRobot& _robot);
 

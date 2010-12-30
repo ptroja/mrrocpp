@@ -160,14 +160,19 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 
 	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+	edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+	edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+
+	edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+	edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
 	if (licznikaaa < 10) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < number_of_servos; i++) {
 			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
 		}
 
 	} else {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < number_of_servos; i++) {
 			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 		}
 	}
@@ -211,6 +216,7 @@ void effector::instruction_deserialization()
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 }

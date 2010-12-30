@@ -45,13 +45,12 @@ int WndInc::init()
 				robot.ui_ecp_robot->execute_motion();
 				robot.ui_ecp_robot->epos_reply_data_request_port->get();
 
-				lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
-
-				if (er.epos_controller[0].motion_in_progress) {
-					interface.set_toggle_button(ABW_thumb_wind_spkm_motors_mip_0);
-				} else {
-					interface.unset_toggle_button(ABW_thumb_wind_spkm_motors_mip_0);
-				}
+				set_single_axis(0, ABW_PtNumericFloat_wind_spkm_motors_mcur_0, ABW_PtNumericFloat_wind_spkm_motors_cur_p0, ABW_thumb_wind_spkm_motors_mip_0);
+				set_single_axis(1, ABW_PtNumericFloat_wind_spkm_motors_mcur_1, ABW_PtNumericFloat_wind_spkm_motors_cur_p1, ABW_thumb_wind_spkm_motors_mip_1);
+				set_single_axis(2, ABW_PtNumericFloat_wind_spkm_motors_mcur_2, ABW_PtNumericFloat_wind_spkm_motors_cur_p2, ABW_thumb_wind_spkm_motors_mip_2);
+				set_single_axis(3, ABW_PtNumericFloat_wind_spkm_motors_mcur_3, ABW_PtNumericFloat_wind_spkm_motors_cur_p3, ABW_thumb_wind_spkm_motors_mip_3);
+				set_single_axis(4, ABW_PtNumericFloat_wind_spkm_motors_mcur_4, ABW_PtNumericFloat_wind_spkm_motors_cur_p4, ABW_thumb_wind_spkm_motors_mip_4);
+				set_single_axis(5, ABW_PtNumericFloat_wind_spkm_motors_mcur_5, ABW_PtNumericFloat_wind_spkm_motors_cur_p5, ABW_thumb_wind_spkm_motors_mip_5);
 
 				/*
 				 for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
@@ -63,28 +62,26 @@ int WndInc::init()
 			}
 		}
 
-		//	mrrocpp::lib::bird_hand::status &bhsrs = bird_hand.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
-
-
-		/*
-		 set_thumb_f_0_status();
-		 set_thumb_f_1_status();
-
-		 set_index_f_0_status();
-		 set_index_f_1_status();
-		 set_index_f_2_status();
-
-		 set_ring_f_0_status();
-		 set_ring_f_1_status();
-		 set_ring_f_2_status();
-		 */
 	} // end try
 	CATCH_SECTION_UI
-	/*
-	 interface.set_toggle_button(ABW_thumb_wind_spkm_motors_mip_0);
-	 interface.set_toggle_button(ABW_thumb_wind_spkm_motors_mip_1);
-	 interface.unset_toggle_button(ABW_thumb_wind_spkm_motors_mip_1);
-	 */
+
+	return 1;
+}
+
+int WndInc::set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb)
+{
+
+	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
+
+	PtSetResource(ABW_current, Pt_ARG_NUMERIC_VALUE, &er.epos_controller[axis].current, 0);
+	PtSetResource(ABW_position, Pt_ARG_NUMERIC_VALUE, &er.epos_controller[axis].position, 0);
+
+	if (er.epos_controller[axis].motion_in_progress) {
+		interface.set_toggle_button(ABW_thumb);
+	} else {
+		interface.unset_toggle_button(ABW_thumb);
+	}
+
 	return 1;
 }
 
