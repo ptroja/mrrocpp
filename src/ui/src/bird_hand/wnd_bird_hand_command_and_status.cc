@@ -25,7 +25,7 @@ namespace bird_hand {
 
 
 WndCommandAndStatus::WndCommandAndStatus(common::Interface& _interface, UiRobot& _bird_hand) :
-	common::WndBase(_interface, ABW_wnd_bird_hand_command_and_status, ABM_wnd_bird_hand_command_and_status),
+	common::WndBase(_interface, ABN_wnd_bird_hand_command_and_status, ABI_wnd_bird_hand_command_and_status),
 			bird_hand(_bird_hand)
 {
 

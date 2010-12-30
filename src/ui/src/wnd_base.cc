@@ -21,10 +21,20 @@ namespace common {
 //
 
 
-WndBase::WndBase(Interface& _interface, PtWidget_t * _ABW_window, ApEventLink_t *_ABM_window) :
-	interface(_interface), is_open(false), ABW_window(_ABW_window), ABM_window(_ABM_window)
+WndBase::WndBase(common::Interface& _interface, int _ABN_window, int _ABI_window) :
+	interface(_interface), is_open(false), ABN_window(_ABN_window), ABI_window(_ABI_window)
 {
 
+}
+
+PtWidget_t * WndBase::ABW_window()
+{
+	return AbGetABW( ABN_window );
+}
+
+ApEventLink_t * WndBase::ABM_window()
+{
+	return &AbInternalLinks[ABI_window];
 }
 
 int WndBase::start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -32,11 +42,11 @@ int WndBase::start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 	if (!is_open) // otworz okno
 	{
-		ApCreateModule(ABM_window, widget, cbinfo);
+		ApCreateModule(ABM_window(), widget, cbinfo);
 		is_open = true;
 
 	} else { // przelacz na okno
-		PtWindowToFront(ABW_window);
+		PtWindowToFront(ABW_window());
 
 	}
 
@@ -47,7 +57,7 @@ int WndBase::close()
 {
 
 	if (is_open) {
-		PtDestroyWidget(ABW_window);
+		PtDestroyWidget(ABW_window());
 	}
 
 	return 1;

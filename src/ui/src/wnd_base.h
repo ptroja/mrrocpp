@@ -34,14 +34,16 @@ private:
 public:
 	common::Interface& interface;
 	bool is_open;
-	PtWidget_t * ABW_window;
-	ApEventLink_t *ABM_window;
+
+	int ABN_window, ABI_window;
 
 	int start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 	int close();
 	int clear_flag();
+	PtWidget_t * ABW_window();
+	ApEventLink_t *ABM_window();
 
-	WndBase(common::Interface& _interface, PtWidget_t * _ABW_window, ApEventLink_t *_ABM_window);
+	WndBase(common::Interface& _interface, int _ABN_window, int _ABI_window);
 
 };
 
