@@ -41,8 +41,10 @@ protected:
 
 	//! Abstract method, implemented in the effector class - creates a list of available kinematic models for given effector.
 	virtual void create_kinematic_models_for_given_robot(void) = 0;
-
 public:
+	//! Default constructor
+	kinematics_manager();
+
 	//! Destroys kinematics available on the list.
 	virtual ~kinematics_manager(void);
 
