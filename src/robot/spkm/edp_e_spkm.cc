@@ -122,6 +122,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
 					<< epos_motor_command_structure.desired_position[4] << std::endl;
+			desired_motor_pos_new[4] = epos_motor_command_structure.desired_position[4];
 		}
 			break;
 
@@ -172,6 +173,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
 	edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
 	edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+
+	edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
 	edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
 	edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
