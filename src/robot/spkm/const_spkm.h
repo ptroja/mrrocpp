@@ -9,7 +9,7 @@
  * @ingroup spkm
  */
 
-#include <iostream>
+#include <ostream>
 
 #include "robot/spkm/dp_spkm.h"
 
@@ -49,7 +49,7 @@ struct cbuffer
 		epos::epos_operational_command epos_operational_command_structure;
 	};
 
-	friend ostream& operator<<(ostream& os, const cbuffer& m) {
+	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m) {
 		switch (m.variant) {
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
