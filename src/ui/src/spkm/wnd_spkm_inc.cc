@@ -85,6 +85,93 @@ int WndInc::set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_p
 	return 1;
 }
 
+int WndInc::import()
+{
+
+	char *tmp_ptgr, *tmp;
+	double val;
+
+	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
+	tmp = new char[strlen(tmp_ptgr)];
+	strcpy(tmp, tmp_ptgr);
+
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	val = strtod(tmp, &tmp);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &val, 0);
+
+	return 1;
+}
+
+int WndInc::exporto()
+{
+
+	char buffer[200];
+
+	double *wektor[lib::spkm::NUM_OF_SERVOS];
+
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+
+	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
+
+	interface.ui_msg->message(buffer);
+
+	return 1;
+}
+
+int WndInc::copy()
+{
+
+	// wychwytania ew. bledow ECP::robot
+	double *wektor_ptgr[lib::spkm::NUM_OF_SERVOS], wektor[lib::spkm::NUM_OF_SERVOS];
+
+	if (robot.state.edp.pid != -1) {
+		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		{
+
+			interface.unblock_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
+
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
+
+			for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+				wektor[i] = *wektor_ptgr[i];
+			}
+
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+
+		} else {
+			// Wygaszanie elementow przy niezsynchronizowanym robocie
+			interface.block_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
+
+		}
+	}
+
+	return 1;
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

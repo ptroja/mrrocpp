@@ -118,6 +118,8 @@ int wnd_spkm_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_inc->copy();
+
 	return (Pt_CONTINUE);
 
 }
@@ -153,6 +155,8 @@ int import_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_inc->import();
+
 	return (Pt_CONTINUE);
 
 }
@@ -163,6 +167,8 @@ int export_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->exporto();
 
 	return (Pt_CONTINUE);
 
