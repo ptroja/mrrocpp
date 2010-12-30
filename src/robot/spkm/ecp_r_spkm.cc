@@ -151,13 +151,12 @@ void robot::create_command()
 	// message serialization
 	if (communicate_with_edp) {
 		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.instruction.arm.serialized_command) <= sizeof(ecp_edp_cbuffer));
 	}
 }
 
 void robot::get_reply()
 {
-
-
 	// message deserialization
 	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
 
@@ -171,11 +170,7 @@ void robot::get_reply()
 		epos_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
 		epos_reply_data_request_port.set();
-
-
-
 	}
-
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
