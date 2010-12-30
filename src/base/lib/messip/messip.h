@@ -64,7 +64,11 @@
 #define MESSIP_NODELAY_LEVEL	IPPROTO_TCP
 #define MESSIP_NODELAY_OPTNAME	TCP_NODELAY
 #else
+#if defined(__linux__)
 #include <netinet/sctp.h>
+#elif defined(__QNXNTO__)
+#include <netinet/in.h>
+#endif
 #define MESSIP_SOCK_PROTO	IPPROTO_SCTP
 #define MESSIP_NODELAY_LEVEL	SOL_SCTP
 #define MESSIP_NODELAY_OPTNAME	SCTP_NODELAY
