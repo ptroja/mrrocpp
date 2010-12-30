@@ -608,70 +608,6 @@ struct edp_error
 };
 
 //------------------------------------------------------------------------------
-enum SERVO_COMMAND
-{
-	MOVE, READ, SYNCHRONISE, SERVO_ALGORITHM_AND_PARAMETERS
-};
-
-//------------------------------------------------------------------------------
-/*! Structure of a command from EDP_MASTER to SERVO_GROUP. */
-struct edp_master_command
-{
-	/*! Code for the instruction sent to SERVO_GROUP. */
-	SERVO_COMMAND instruction_code;
-	union
-	{
-		//------------------------------------------------------
-		struct
-		{
-			/*! Number of steps for a macrostep. */
-			uint16_t number_of_steps;
-			/*!
-			 *  Number of steps after which the information about the previously
-			 *  realized position is to be sent.
-			 *  Information is sent to EDP_MASTER using READING_BUFFER.
-			 *  After k steps SERVO has the position from the k-1 step.
-			 */
-			uint16_t return_value_in_step_no;
-			/*! Length of a macrostep (given value of a macrostep - increase). */
-			double macro_step[lib::MAX_SERVOS_NR];
-			/*! Given absolute position at the end of a macrostep. */
-			double abs_position[lib::MAX_SERVOS_NR];
-		} move;
-		//------------------------------------------------------
-		struct
-		{
-			/*! Servo algorithm numbers. */
-			uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
-			/*! Numbers fo servo algorithm parameters set. */
-			uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
-		} servo_alg_par;
-
-	} parameters;
-};
-
-//------------------------------------------------------------------------------
-/*! Structure of a reply from SERVO_GROUP to EDP_MASTER. */
-struct servo_group_reply
-{
-	/*! Error code. */
-	edp_error error;
-	/*! Position increment of the motor shaft reached since the last reading. */
-	double position[lib::MAX_SERVOS_NR];
-	/*! Absolute position of the joints (in radians). */
-	double abs_position[lib::MAX_SERVOS_NR];
-	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-	int16_t PWM_value[lib::MAX_SERVOS_NR];
-	/*! Control current - (usualy unnecessary). */
-	int16_t current[lib::MAX_SERVOS_NR];
-	/*! Numbers for the regulation algorithms in use. */
-	uint8_t algorithm_no[lib::MAX_SERVOS_NR];
-	uint8_t algorithm_parameters_no[lib::MAX_SERVOS_NR];
-	/*! Gripper regulator state. */
-	short gripper_reg_state;
-};
-
-//------------------------------------------------------------------------------
 //                                  c_buffer
 //------------------------------------------------------------------------------
 
@@ -689,7 +625,7 @@ c_buffer_robot_model
 	//----------------------------------------------------------
 	struct
 	{
-		/*! Tool trihedron ralative to the collar. */
+		/*! Tool trihedron relative to the collar. */
 		frame_tab tool_frame;
 	} tool_frame_def;
 	//----------------------------------------------------------
@@ -742,7 +678,7 @@ c_buffer_arm
 	//----------------------------------------------------------
 	struct
 	{
-		/*!  End's trihedron ralative to the base system. */
+		/*!  End's trihedron relative to the base system. */
 		frame_tab arm_frame;
 		/*! XYZ + end's orientation relative to the base system. */
 		double arm_coordinates[lib::MAX_SERVOS_NR];
