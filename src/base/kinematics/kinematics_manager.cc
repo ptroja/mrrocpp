@@ -19,7 +19,7 @@ namespace kinematics {
 namespace common {
 
 kinematics_manager::kinematics_manager()
-	: current_kinematic_model(NULL), current_kinematic_model_no(-1)
+	: current_kinematic_model_no(-1), current_kinematic_model(NULL)
 {
 }
 
