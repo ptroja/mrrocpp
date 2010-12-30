@@ -122,8 +122,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-
-	struct timespec current_timespec;
 	lib::JointArray desired_joints_tmp_abs(number_of_servos); // Wspolrzedne wewnetrzne
 	lib::JointArray desired_joints_tmp_rel(number_of_servos);
 	lib::MotorArray desired_motor_pos_new_tmp_abs(number_of_servos);
@@ -164,6 +162,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
+	struct timespec current_timespec;
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
