@@ -160,6 +160,7 @@ void effector::instruction_deserialization()
 
 void effector::reply_serialization(void)
 {
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 

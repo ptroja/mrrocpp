@@ -36,6 +36,9 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 
 	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
+	epos_motor_command_data_port
+			= the_robot->port_manager.get_port <lib::epos::epos_motor_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
+
 	epos_cubic_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);
 
@@ -53,6 +56,19 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	assert(the_robot);
 
 }
+
+// ---------------------------------------------------------------
+void EcpRobot::move_motors(const double final_position[])
+{
+	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+		epos_motor_command_data_port->data.desired_position[i] = final_position[i];
+	}
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_motor_command_data_port->set();
+	execute_motion();
+
+}
+// ---------------------------------------------------------------
 
 }
 } //namespace ui
