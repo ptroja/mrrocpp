@@ -731,7 +731,13 @@ c_buffer_robot_model
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union c_buffer_arm
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+c_buffer_arm
 {
 	//----------------------------------------------------------
 	struct
