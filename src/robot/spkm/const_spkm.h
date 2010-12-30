@@ -10,6 +10,7 @@
  */
 
 #include <ostream>
+#include <exception>
 
 #include "robot/spkm/dp_spkm.h"
 
@@ -50,6 +51,34 @@ struct cbuffer
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
 	};
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & variant;
+		switch (variant) {
+			case CBUFFER_EPOS_MOTOR_COMMAND:
+				ar & epos_motor_command_structure;
+				break;
+			case CBUFFER_EPOS_CUBIC_COMMAND:
+				ar & epos_cubic_command_structure;
+				break;
+			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
+				ar & epos_trapezoidal_command_structure;
+				break;
+			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
+				ar & epos_operational_command_structure;
+				break;
+			case CBUFFER_EPOS_BRAKE_COMMAND:
+				break;
+			default:
+				throw std::bad_cast("unknown SPKM CBUFFER_VARIANT");
+		}
+	}
 
 	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m) {
 		switch (m.variant) {
@@ -101,6 +130,17 @@ struct rbuffer
 {
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & epos_controller;
+		ar & contact;
+	}
 };
 
 /*!
