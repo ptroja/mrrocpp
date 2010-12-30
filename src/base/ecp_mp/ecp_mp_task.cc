@@ -65,7 +65,7 @@ task::task(lib::configurator &_config) :
 		while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
 #endif
 		if ((tmp++) < lib::CONNECT_RETRY)
-			usleep(1000 * lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		else {
 			int e = errno;
 			perror("Connect to UI failed");

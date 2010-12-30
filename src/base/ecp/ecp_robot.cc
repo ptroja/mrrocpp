@@ -144,7 +144,7 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 #endif
 	{
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(1000 * lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 			printf(".");
 			fflush(stdout);
 		} else {
