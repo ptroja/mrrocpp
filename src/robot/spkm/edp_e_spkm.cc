@@ -193,7 +193,6 @@ void effector::synchronise(void)
 	}
 
 	std::cout << "EDP synchronisation" << std::endl;
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -206,6 +205,8 @@ void effector::create_threads()
 void effector::instruction_deserialization()
 {
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
+
+	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
 }
 
 void effector::reply_serialization(void)

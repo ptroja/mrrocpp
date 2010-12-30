@@ -23,10 +23,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
-
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
 }
 
 robot::robot(common::task::task& _ecp_object) :
@@ -38,14 +36,12 @@ robot::robot(common::task::task& _ecp_object) :
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
-
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 void robot::create_command()
 {
-
 	//	int new_data_counter;
 	bool is_new_data;
 	bool is_new_request;
@@ -53,6 +49,10 @@ void robot::create_command()
 	sr_ecp_msg.message("create_command");
 
 	is_new_data = false;
+
+	// Set default variant to error in order to help tracking errors in communication
+	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
+	ecp_edp_cbuffer.variant = (lib::spkm::CBUFFER_VARIANT) -1;
 
 	if (epos_cubic_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.instruction.set_type = ARM_DEFINITION;
@@ -151,7 +151,8 @@ void robot::create_command()
 	// message serialization
 	if (communicate_with_edp) {
 		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.instruction.arm.serialized_command) <= sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;
 	}
 }
 
