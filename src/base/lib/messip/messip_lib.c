@@ -1890,9 +1890,9 @@ messip_receive( messip_channel_t * ch,
 //		goto restart;
 		return MESSIP_MSG_DISCONNECT;
 	}
-	if ( dcount == -1 )
+	if ( dcount == -1 && dcount != sizeof( datasend ))
 	{
-		fprintf( stderr, "messip_receive) %s %d\n\tdcount=%d  errno=%d\n",
+		fprintf( stderr, "(messip_receive) %s %d\n\tdcount=%d  errno=%d\n",
 		   __FILE__, __LINE__, dcount, errno );
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;
@@ -2005,8 +2005,18 @@ messip_receive( messip_channel_t * ch,
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;
 	}
-	assert( dcount == (ssize_t) (sizeof( uint32_t ) + len_to_read) );
-	ch->datalenr = len_to_read;
+	if(dcount != (ssize_t) (sizeof( uint32_t ) + len_to_read)) {
+#if defined(__linux__)
+		fprintf(stderr, "LINUX\n");
+#elif defined(__QNXNTO__)
+		fprintf(stderr, "QNX\n");
+#else
+		fprintf(stderr, "OTHER\n");
+#endif
+		fprintf(stderr, "MTU test: dcount %d =? header+data %d\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
+	}
+	assert( dcount >= sizeof( uint32_t ) );
+	ch->datalenr = dcount - sizeof(uint32_t);
 
 	/*
 		Allocate a temp buffer to hold the whole message - used by Msgread()
@@ -2026,12 +2036,41 @@ messip_receive( messip_channel_t * ch,
 	}
 
 	/*
+		Read more data? (if the packet if bigger than MTU)
+	*/
+	//fprintf(stderr, "ch->datalenr < ch->datalen: %d < %d\n", ch->datalenr, ch->datalen);
+	while(ch->datalenr < ch->datalen) {
+		fprintf(stderr, "READ UP !!!\n");
+		FD_ZERO( &ready );
+		FD_SET( new_sockfd, &ready );
+		do {
+			status = select( new_sockfd+1, &ready, NULL, NULL, NULL );
+		} while ( (status == -1) && (errno == EINTR) );
+		assert(status != -1);
+		assert(FD_ISSET(new_sockfd, &ready));
+		iovec[0].iov_base = rec_buffer + ch->datalenr;
+		iovec[0].iov_len  = len_to_read - ch->datalenr;
+		dcount = messip_readv( new_sockfd, iovec, 1 );
+		if ( ( dcount == 0 ) || ( ( dcount == -1 ) && ( errno == ECONNRESET ) ) )
+		{
+			shutdown( ch->recv_sockfd[n], SHUT_RDWR );
+			close( ch->recv_sockfd[n] );
+			for ( k = n + 1; k < ch->recv_sockfd_sz; k++ )
+				ch->recv_sockfd[k - 1] = ch->recv_sockfd[k];
+			ch->recv_sockfd_sz--;
+			goto restart;
+		}
+		ch->datalenr += dcount;
+		fprintf(stderr, "ch->datalenr < ch->datalen: %d < %d\n", ch->datalenr, ch->datalen);
+	}
+
+	/*
 		Read more data ? (provided buffer was too small)
 	*/
 //	logg( NULL, "+++ datalen=%d maxlen=%d\n", datasend.datalen, maxlen );
 	if ( (rec_buffer != NULL) && (maxlen != 0) && (maxlen < datasend.datalen) )
 	{
-
+		assert(0); // PT: I am not sure about this code.
 		/*--- Now read the message, unless if it's a timer ---*/
 		char *t = (char *)ch->receive_allmsg[ index ];
 		iovec[0].iov_base = &t[ len_to_read ];
@@ -2048,7 +2087,6 @@ messip_receive( messip_channel_t * ch,
 //			  dcount, len_to_read );
 		assert( dcount == len_to_read );
 		ch->datalenr += len_to_read;
-
 	}
 
 	/*--- Dynamic allocation ? ---*/
