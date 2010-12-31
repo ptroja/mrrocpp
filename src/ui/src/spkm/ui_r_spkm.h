@@ -48,7 +48,7 @@ public:
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
-	int edp_create();
+	void edp_create();
 	int edp_create_int();
 };
 
