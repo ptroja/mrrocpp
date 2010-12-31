@@ -36,8 +36,8 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 750
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 750
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 500
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 500
 
 #if !defined(USE_MESSIP_SRR)
 typedef int fd_client_t;
