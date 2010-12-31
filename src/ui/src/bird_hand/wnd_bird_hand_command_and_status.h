@@ -55,9 +55,7 @@ public:
 			set_finger_status(lib::bird_hand::single_joint_status &finger, PtWidget_t *ABW_position, PtWidget_t *ABW_torque, PtWidget_t *ABW_current, PtWidget_t *ABW_limit_1, PtWidget_t *ABW_limit_2, PtWidget_t *ABW_limit_3, PtWidget_t *ABW_limit_4, PtWidget_t *ABW_limit_5, PtWidget_t *ABW_limit_6, PtWidget_t *ABW_limit_7, PtWidget_t *ABW_limit_8);
 
 	int
-			copy_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_current, PtWidget_t *ABW_desired);
-
-
+	copy_finger_command(lib::bird_hand::single_joint_command &finger, PtWidget_t *ABW_current, PtWidget_t *ABW_desired);
 
 };
 
