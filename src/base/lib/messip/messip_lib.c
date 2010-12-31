@@ -167,13 +167,13 @@ _init(  )
 #endif
 
 
-int
+ssize_t
 messip_writev( int sockfd,
    const struct iovec *iov,
    int iovcnt )
 {
-	int dcount;
-	int cnt = 0;
+	ssize_t dcount;
+	unsigned int cnt = 0;
 
 	for ( ;; )
 	{
@@ -197,13 +197,13 @@ messip_writev( int sockfd,
 }								// messip_writev
 
 
-int
+ssize_t
 messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt )
 {
-	int dcount;
-	int cnt = 0;
+	ssize_t dcount;
+	unsigned int cnt = 0;
 
 	for ( ;; )
 	{
@@ -2038,9 +2038,7 @@ messip_receive( messip_channel_t * ch,
 	/*
 		Read more data? (if the packet if bigger than MTU)
 	*/
-	//fprintf(stderr, "ch->datalenr < ch->datalen: %d < %d\n", ch->datalenr, ch->datalen);
 	while(ch->datalenr < ch->datalen) {
-		fprintf(stderr, "READ UP !!!\n");
 		FD_ZERO( &ready );
 		FD_SET( new_sockfd, &ready );
 		do {
@@ -2061,7 +2059,6 @@ messip_receive( messip_channel_t * ch,
 			goto restart;
 		}
 		ch->datalenr += dcount;
-		fprintf(stderr, "ch->datalenr < ch->datalen: %d < %d\n", ch->datalenr, ch->datalen);
 	}
 
 	/*
@@ -2153,7 +2150,8 @@ messip_send0( messip_channel_t *ch,
 	int status;
 	uint32_t len;
 	int len_to_read;
-	void *rbuff = NULL;
+	size_t datalenr;
+	void *rbuff;
 
 #ifdef MESSIP_INFORM_STATE
 printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
@@ -2262,6 +2260,8 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			fprintf( stderr, "%s %d:\n\terrno=%d\n", __FILE__, __LINE__, errno );
 		return -1;
 	}
+	// Check if complete header has been received
+	assert(dcount == sizeof( datareply ));
 	*answer = datareply.answer;
 
 	/*--- (S3) Read now the reply, if there is one ---*/
@@ -2270,18 +2270,29 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	{
 		len_to_read = datareply.datalen;
 		rbuff = malloc( datareply.datalen );
-		iovec[0].iov_base = rbuff;
-		iovec[0].iov_len  = len_to_read;
+		assert(rbuff);
 	}
 	else
 	{
 		len_to_read =
 		   ( datareply.datalen < reply_maxlen ) ? datareply.datalen : reply_maxlen;
-		iovec[0].iov_base = reply_buffer;
-		iovec[0].iov_len  = len_to_read;
+		rbuff = reply_buffer;
 	}
-	if ( len_to_read > 0 )
-	{
+
+	/*
+	 * Loop reading data; requred if packet bigger than MTU is fragmented
+	 */
+	datalenr = 0;
+	while(datalenr < len_to_read) {
+		FD_ZERO( &ready );
+		FD_SET( ch->send_sockfd, &ready );
+		status = select( ch->send_sockfd+1, &ready, NULL, NULL, NULL );
+		assert( status != -1 );
+		assert( FD_ISSET(ch->send_sockfd, &ready));
+
+		iovec[0].iov_base = rbuff+datalenr;
+		iovec[0].iov_len  = len_to_read-datalenr;
+
 		dcount = messip_readv( ch->send_sockfd, iovec, 1 );
 		LIBTRACE( ( "@messip_send: recvmsg dcount=%d local_fd=%d [errno=%d]\n",
 			  dcount, ch->send_sockfd, errno ) );
@@ -2296,7 +2307,8 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			fprintf( stderr, "%s %d:\n\terrno=%d\n", __FILE__, __LINE__, errno );
 			return -1;
 		}
-	}							// if
+		datalenr += dcount;
+	}
 
 	if ( len_to_read < datareply.datalen )
 	{
@@ -2327,7 +2339,6 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	ch->remote_pid = datareply.pid;
 	ch->remote_tid = datareply.tid;
 	return 0;
-
 }								// messip_send
 
 int
@@ -2441,7 +2452,7 @@ messip_reply( messip_channel_t * ch,
 	fd_set ready;
 	struct timeval tv;
 	int ret;
-	int status, sz;
+	int status;
 
 	if ( ( index < 0 ) || ( index > ch->nb_replies_pending ) )
 		return -1;
@@ -2485,15 +2496,14 @@ messip_reply( messip_channel_t * ch,
 			}
 
 			/*--- Now wait for an answer from the server ---*/
-			sz = 0;
-			iovec[sz].iov_base  = &datareply;
-			iovec[sz++].iov_len = sizeof( messip_datareply_t );
+			iovec[0].iov_base  = &datareply;
+			iovec[0].iov_len = sizeof( messip_datareply_t );
 			if ( reply_len > 0 )
 			{
-				iovec[sz].iov_base  = (void *) reply_buffer;
-				iovec[sz++].iov_len = reply_len;
+				iovec[1].iov_base  = (void *) reply_buffer;
+				iovec[1].iov_len = reply_len;
 			}
-			dcount = messip_writev( ch->new_sockfd[index], iovec, sz );
+			dcount = messip_writev( ch->new_sockfd[index], iovec, 2 );
 			LIBTRACE( ( "@messip_reply: sendmsg: dcount=%d  index=%d new_sockfd=%d errno=%d\n",
 				  dcount, index, ch->new_sockfd[index], errno ) );
 			assert( dcount == (ssize_t) ( sizeof( messip_datareply_t ) + reply_len ) );
