@@ -53,7 +53,7 @@ void print_hm(const lib::Homog_matrix& hm)
 	printf("[");
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 4; ++j) {
-			printf("\t", hm(i, j));
+			printf("%f\t", hm(i, j));
 		}
 		if (i < 2) {
 			printf("\t;\n");

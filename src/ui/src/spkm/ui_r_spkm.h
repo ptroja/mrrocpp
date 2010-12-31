@@ -10,6 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -33,6 +34,10 @@ private:
 
 public:
 
+	double current_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja zadana
+
+
 	EcpRobot *ui_ecp_robot;
 	WndInc *wnd_inc;
 
@@ -43,7 +48,7 @@ public:
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
-	int edp_create();
+	void edp_create();
 	int edp_create_int();
 };
 

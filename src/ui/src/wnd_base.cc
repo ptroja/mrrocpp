@@ -21,10 +21,54 @@ namespace common {
 //
 
 
-WndBase::WndBase(Interface& _interface) :
-	interface(_interface), is_open(false)
+WndBase::WndBase(common::Interface& _interface, int _ABN_window, int _ABI_window) :
+	interface(_interface), is_open(false), ABN_window(_ABN_window), ABI_window(_ABI_window)
 {
 
+}
+
+PtWidget_t * WndBase::ABW_window()
+{
+	return AbGetABW( ABN_window );
+}
+
+ApEventLink_t * WndBase::ABM_window()
+{
+	return &AbInternalLinks[ABI_window];
+}
+
+int WndBase::start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
+
+	if (!is_open) // otworz okno
+	{
+		ApCreateModule(ABM_window(), widget, cbinfo);
+		is_open = true;
+
+	} else { // przelacz na okno
+		PtWindowToFront(ABW_window());
+
+	}
+
+	return 1;
+}
+
+int WndBase::close()
+{
+
+	if (is_open) {
+		PtDestroyWidget(ABW_window());
+	}
+
+	return 1;
+}
+
+int WndBase::clear_flag()
+{
+
+	is_open = false;
+
+	return 1;
 }
 
 }

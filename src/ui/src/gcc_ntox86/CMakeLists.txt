@@ -59,7 +59,7 @@ find_library(PH_LIBRARY ph $ENV{QNX_TARGET}/x86/usr/lib)
 set(PHOTON_LIBRARIES ${PHEX_LIBRARY} ${AP_LIBRARY} ${PH_LIBRARY})
 
 target_link_libraries(ui
-	ecp
+	ecp_robots ecp_mp
 	${PHOTON_LIBRARIES}
 	${COMMON_LIBRARIES}
 )

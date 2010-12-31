@@ -52,7 +52,7 @@ public:
 	int synchronise();
 	//int synchronise_int();
 
-	int edp_create();
+	void edp_create();
 	int edp_create_int();
 
 /*

@@ -63,7 +63,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 		while ((ECP_fd = messip::port_connect(ecp_attach_point)) == NULL)
 #endif
 		if ((tmp++) < lib::CONNECT_RETRY)
-			usleep(1000 * lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		else {
 			uint64_t e = errno; // kod bledu
 			fprintf(stderr, "Connect to ECP failed at channel '%s'\n", ecp_attach_point.c_str());

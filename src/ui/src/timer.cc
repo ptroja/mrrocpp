@@ -4,27 +4,21 @@
 
 /* Standard headers */
 #include <cstdio>
-#include <cstdlib>
 #include <unistd.h>
 #include <cstring>
-#include <cerrno>// Y&7
 #include <ctime>
-#include <iostream>
 #include <fstream>
-#include <boost/circular_buffer.hpp>
 
 #include "ui/src/ui.h"
 
 #include "base/lib/sr/srlib.h"
-// #include "base/ecp/ecp.h"
-#include "base/lib/com_buf.h"
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_sr.h"
 
 /* Local headers */
-#include "ablibs.h"
+//#include "ablibs.h"
 #include "abimport.h"
-#include "proto.h"
+//#include "proto.h"
 
 ui::common::busy_flag communication_flag;
 
