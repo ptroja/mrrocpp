@@ -112,6 +112,7 @@ void robot::create_command()
 	// message serialization
 	if (communicate_with_edp) {
 		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 

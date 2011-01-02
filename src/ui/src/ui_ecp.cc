@@ -90,8 +90,8 @@ void ecp_buffer::operator()()
 		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
-		_msg_info info;
 #if !defined(USE_MESSIP_SRR)
+		_msg_info info;
 		int rcvid = MsgReceive(ch->chid, &ecp_to_ui_msg, sizeof(ecp_to_ui_msg), &info);
 
 		communication_state = UI_ECP_AFTER_RECEIVE;

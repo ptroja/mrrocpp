@@ -60,7 +60,9 @@ extern ApWindowLink_t wnd_bird_hand_configuration;
 extern ApWindowLink_t wnd_bird_hand_command_and_status;
 extern ApWindowLink_t wnd_sarkofag_moves;
 extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
-extern ApWidget_t AbWidgets[ 1186 ];
+extern ApWindowLink_t wnd_polycrank_int;
+extern ApWindowLink_t wnd_spkm_inc;
+extern ApWidget_t AbWidgets[ 1272 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -424,4 +426,21 @@ int wind_sarkofag_moves_init( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo
 int clear_wind_sarkofag_moves_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int wind_sarkofag_moves_move( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_spkm_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int spkm_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wnd_spkm_motors_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_spkm_inc_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int spkm_inc_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int import_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int export_wnd_spkm_inc( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wnd_polycrank_joints_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_polycrank_int_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int polycrank_int_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int import_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int export_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int EDP_polycrank_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

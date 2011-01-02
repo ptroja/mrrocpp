@@ -3,7 +3,8 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/spkm/ui_r_spkm.h"
-#include "ui/src/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/spkm/ui_ecp_r_spkm.h"
+#include "ui/src/spkm/wnd_spkm_inc.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
@@ -22,20 +23,13 @@ namespace spkm {
 //
 //
 
-
-int UiRobot::edp_create()
-
+void UiRobot::edp_create()
 {
-
 	if (state.edp.state == 0) {
 		create_thread();
 
 		eb.command(boost::bind(&ui::spkm::UiRobot::edp_create_int, &(*this)));
-
 	}
-
-	return 1;
-
 }
 
 int UiRobot::edp_create_int()
@@ -67,12 +61,11 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot
-							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::spkm::ROBOT_NAME);
+					ui_ecp_robot = new ui::spkm::EcpRobot(*interface.config, *interface.all_ecp_msg);
 
 				}
 
-				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (state.edp.pid < 0) {
 
@@ -125,13 +118,13 @@ int UiRobot::synchronise_int()
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		// dla robota irp6_on_track
+		// dla robota spkm
 
 		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
-			ui_ecp_robot->ecp->synchronise();
-			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+			ui_ecp_robot->the_robot->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
 		} else {
-			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
 		}
 
 	} // end try
@@ -148,11 +141,13 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
 			ui_ecp_robot(NULL)
 {
+	wnd_inc = new WndInc(interface, *this);
 
 }
 
 void UiRobot::close_all_windows()
 {
+	close_wnd_spkm_inc(NULL, NULL, NULL);
 }
 
 int UiRobot::reload_configuration()
@@ -231,7 +226,7 @@ int UiRobot::manage_interface()
 			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			break;
 		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, ABN_mm_spkm_edp_load, NULL);
 
 			break;
@@ -241,33 +236,31 @@ int UiRobot::manage_interface()
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_synchronisation, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_pre_synchro_moves, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-						NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, ABN_mm_spkm_edp_unload, NULL);
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						NULL);
+						ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_synchronisation, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, NULL);
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 			}

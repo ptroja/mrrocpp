@@ -124,20 +124,27 @@ public:
 //    LOAD_A_TYPE(unsigned long, xdr_u_long)
 //    LOAD_A_TYPE(unsigned short, xdr_u_short)
 
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
     LOAD_A_TYPE(int, xdr_int)
     LOAD_A_TYPE(long, xdr_long)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
     LOAD_A_TYPE(unsigned long, xdr_u_long)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
+
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+    //LOAD_A_TYPE(int, xdr_int)
+    //LOAD_A_TYPE(long, xdr_long)
+    //LOAD_A_TYPE(short, xdr_short)
+    //LOAD_A_TYPE(unsigned int, xdr_u_int)
+    //LOAD_A_TYPE(unsigned long, xdr_u_long)
+    //LOAD_A_TYPE(unsigned short, xdr_u_short)
     LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
 #else
-    LOAD_A_TYPE(int16_t, xdr_int16_t)
-    LOAD_A_TYPE(int32_t, xdr_int32_t)
-    LOAD_A_TYPE(int64_t, xdr_int64_t)
-    LOAD_A_TYPE(uint16_t, xdr_uint16_t)
-    LOAD_A_TYPE(uint32_t, xdr_uint32_t)
+    //LOAD_A_TYPE(int16_t, xdr_int16_t)
+    //LOAD_A_TYPE(int32_t, xdr_int32_t)
+    //LOAD_A_TYPE(int64_t, xdr_int64_t)
+    //LOAD_A_TYPE(uint16_t, xdr_uint16_t)
+    //LOAD_A_TYPE(uint32_t, xdr_uint32_t)
     LOAD_A_TYPE(uint64_t, xdr_uint64_t)
 #endif
 

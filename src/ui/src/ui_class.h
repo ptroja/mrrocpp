@@ -29,6 +29,7 @@
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
+#include "ui/src/polycrank/ui_r_polycrank.h"
 
 //
 //
@@ -139,6 +140,7 @@ public:
 	spkm::UiRobot *spkm;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
+	polycrank::UiRobot *polycrank;
 
 	Interface();
 	void UI_close(void);
