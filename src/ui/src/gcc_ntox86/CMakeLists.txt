@@ -42,6 +42,7 @@ add_executable(ui
 	../spkm/ui_r_spkm.cc
 	../spkm/wnd_spkm_inc.cc
 	../spkm/wnd_spkm_int.cc
+	../spkm/wnd_spkm_external.cc
 	../smb/ui_r_smb.cc
 	../shead/ui_r_shead.cc
 	../ui_init.cc

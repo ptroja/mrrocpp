@@ -28,6 +28,7 @@ namespace spkm {
 class EcpRobot;
 class WndInc;
 class WndInt;
+class WndExternal;
 
 class UiRobot : public common::UiRobot
 {
@@ -42,6 +43,7 @@ public:
 	EcpRobot *ui_ecp_robot;
 	WndInc *wnd_inc;
 	WndInt *wnd_int;
+	WndExternal *wnd_external;
 
 	UiRobot(common::Interface& _interface);
 	void close_all_windows();
