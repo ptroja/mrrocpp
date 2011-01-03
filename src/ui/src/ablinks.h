@@ -333,7 +333,7 @@ ApWindowLink_t wnd_spkm_inc = {
 ApWindowLink_t wnd_spkm_int = {
 	"wnd_spkm_int.wgtw",
 	&AbContext,
-	NULL, 1272, 0
+	AbLinks_wnd_spkm_int, 1272, 36
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {
