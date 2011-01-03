@@ -1,8 +1,8 @@
-/*
- * bcl_types.h
- *
- *  Created on: Jul 13, 2010
- *      Author: kszkudla
+/**
+ * \file bcl_types.h
+ * \brief Declaration of types used in project
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef BCL_TYPES_H_

@@ -1,8 +1,8 @@
-/*
- * bcl_t_switcher.h
- *
- *  Created on: Jul 6, 2010
- *      Author: kszkudla
+/**
+ * \file bcl_t_switcher.h
+ * \brief Main ECP task file header
+ * \date 02.09.2010
+ * \author Kacper Szkudlarek
  */
 
 #ifndef BCL_T_SWITCHER_H_
@@ -25,6 +25,8 @@ namespace common {
 
 namespace task {
 
+
+///Definition of movement positions
 #ifdef IRP6_OT
 #ifdef JOINT
 #define VEC_SIZE 7
@@ -65,12 +67,31 @@ enum BCL_MOTION_DIR{
 
 class bcl_t_switcher: public mrrocpp::ecp::common::task::task {
 public:
+	/**
+	 * Class constructor, creating FraDIA sensor, smooth generator, insance
+	 * of robot object. Also take care about creating subtasks
+	 * @param _config reference to configuration file parser object
+	 */
 	bcl_t_switcher(lib::configurator &_config);
+	/**
+	 * Class destructor
+	 */
 	virtual ~bcl_t_switcher();
 
+	/**
+	 * Method for handling communication with MP
+	 */
     void mp_2_ecp_next_state_string_handler(void);
+
+    /**
+     * Method used by subtask to get access to FraDIA sensor
+     * @return pointer to fradia sensor structure
+     */
     virtual bcl_fradia_sensor* get_vsp_fradia();
 
+    /**
+     * VSP Fradia object pointer
+     */
 	bcl_fradia_sensor* vsp_fradia;
 
 private:
