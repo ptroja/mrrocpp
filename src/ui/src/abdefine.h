@@ -2994,6 +2994,7 @@ extern const int ABN_mm_spkm_synchronisation;
 extern const int ABN_mm_spkm_pre_synchro_moves_incremental;
 extern const int ABN_mm_spkm_absolute_moves;
 extern const int ABN_mm_spkm_post_synchro_moves_incremental;
+extern const int ABN_mm_spkm_internal;
 extern const int ABN_mm_spkm_preset_positions;
 extern const int ABN_mm_spkm_preset_position_synchro;
 extern const int ABN_mm_spkm_preset_position_front;

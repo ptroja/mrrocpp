@@ -450,4 +450,5 @@ int clear_wnd_spkm_int_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_
 int spkm_int_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int import_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int export_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

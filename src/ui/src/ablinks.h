@@ -432,7 +432,7 @@ ApMenuLink_t all_robots_menu = {
 	1337, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 170 ] = {
+static ApItem_t ApItems_robot_menu[ 171 ] = {
 	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
@@ -476,7 +476,7 @@ static ApItem_t ApItems_robot_menu[ 170 ] = {
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_postument_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
-	{ 2, 2, 0, NULL, 0, "mm_irp6_postument_pre_synchro_moves", "P&re Synchro Moves", NULL },
+	{ 2, 2, 0, NULL, 1, "mm_irp6_postument_pre_synchro_moves", "P&re Synchro Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_pre_synchro_moves_synchronisation", "&Synchronisation", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_irp6_postument_pre_synchro_moves_incremental", "&Motors", NULL },
 	{ 2, 2, 0, NULL, 0, "mm_irp6_postument_absolute_moves", "A&bsolute Moves", NULL },
@@ -525,7 +525,7 @@ static ApItem_t ApItems_robot_menu[ 170 ] = {
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_conveyor_servo_algorithm", "Servo &Algorithm", NULL },
 	{ 1, 16, 0, NULL, 4, "", "", NULL },
-	{ 1, 2, 0, NULL, 1, "mm_spkm", "sp&Km", NULL },
+	{ 1, 2, 0, NULL, 0, "mm_spkm", "sp&Km", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_spkm_edp_unload", "EDP &Unload", NULL },
 	{ 2, 16, 0, NULL, 4, "", "", NULL },
@@ -534,6 +534,7 @@ static ApItem_t ApItems_robot_menu[ 170 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_spkm_pre_synchro_moves_incremental", "&Motors", NULL },
 	{ 2, 2, 0, NULL, 0, "mm_spkm_absolute_moves", "A&bsolute Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_post_synchro_moves_incremental", "&Motors", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_internal", "&Joints", NULL },
 	{ 2, 2, 0, NULL, 0, "mm_spkm_preset_positions", "&Preset Positions", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_synchro", "&Synchro Position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_front", "&Front position", NULL },
@@ -598,7 +599,7 @@ static ApItem_t ApItems_robot_menu[ 170 ] = {
 	{ 3, 1, 0, NULL, 0, "mm_irp6_mechatonika_xyz_angle_axis_ts", "Xyz &Angle Axis", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_mechatronika_kinematic", "&Kinematic", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_mechatronika_servo_algorithm", "Servo &Algorithm", NULL },
-	{ 1, 2, 0, NULL, 0, "mm_polycrank", "&Polycrank", NULL },
+	{ 1, 2, 0, NULL, 1, "mm_polycrank", "&Polycrank", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_polycrank_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_polycrank_edp_unload", "EDP &Unload", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_polycrank_internal", "&Joints", NULL },
@@ -613,7 +614,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1348, 115, 169
+	1348, 116, 170
 	};
 
 
