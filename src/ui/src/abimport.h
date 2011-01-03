@@ -63,7 +63,8 @@ extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
 extern ApWindowLink_t wnd_polycrank_int;
 extern ApWindowLink_t wnd_spkm_inc;
 extern ApWindowLink_t wnd_spkm_int;
-extern ApWidget_t AbWidgets[ 1322 ];
+extern ApWindowLink_t wnd_spkm_external;
+extern ApWidget_t AbWidgets[ 1378 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -451,4 +452,5 @@ int spkm_int_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinf
 int import_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int export_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

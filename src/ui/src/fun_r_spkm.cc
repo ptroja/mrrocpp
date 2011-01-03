@@ -280,3 +280,16 @@ start_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 	}
 
+
+int
+start_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

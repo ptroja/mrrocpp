@@ -64,6 +64,7 @@ ApEventLink_t AbInternalLinks[] = {
 	{ 3, 0, 0L, 0L, 0L, &wnd_spkm_inc, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_polycrank_int, NULL, NULL, 0, NULL, 0, 0, 0, 0, },
 	{ 3, 0, 0L, 0L, 0L, &wnd_spkm_int, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
+	{ 3, 0, 0L, 0L, 0L, &wnd_spkm_external, NULL, NULL, 0, NULL, 0, 11, 10, 20, },
 	{ 0 }
 	};
 
@@ -1377,6 +1378,7 @@ static const ApEventLink_t AbLinks_robot_menu[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_pre_synchro_moves_incremental", 2009, start_wnd_spkm_inc, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_post_synchro_moves_incremental", 2009, start_wnd_spkm_inc, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_internal", 2009, start_wnd_spkm_int, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_xyz_angle_axis", 2009, start_wnd_spkm_external, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_preset_position_synchro", 2009, spkm_move_to_preset_position, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_preset_position_front", 2009, spkm_move_to_preset_position, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "mm_spkm_preset_position_0", 2009, spkm_move_to_preset_position, 0, 0, 0, 0, },

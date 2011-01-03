@@ -336,6 +336,12 @@ ApWindowLink_t wnd_spkm_int = {
 	AbLinks_wnd_spkm_int, 1272, 36
 	};
 
+ApWindowLink_t wnd_spkm_external = {
+	"wnd_spkm_external.wgtw",
+	&AbContext,
+	NULL, 1322, 0
+	};
+
 static ApItem_t ApItems_file_menu[ 2 ] = {
 	{ 1, 1, 0, NULL, 0, "mm_file_quit", "&Quit", NULL },
 	{ 0, 0, NULL, NULL, 0, NULL, NULL, NULL } };
@@ -349,7 +355,7 @@ ApMenuLink_t file_menu = {
 	ApItems_file_menu,
 	& AbContext,
 	AbLinks_file_menu,
-	1322, 1, 1
+	1378, 1, 1
 	};
 
 static ApItem_t ApItems_task_menu[ 6 ] = {
@@ -369,7 +375,7 @@ ApMenuLink_t task_menu = {
 	ApItems_task_menu,
 	& AbContext,
 	AbLinks_task_menu,
-	1324, 4, 5
+	1380, 4, 5
 	};
 
 static ApItem_t ApItems_help_menu[ 2 ] = {
@@ -385,7 +391,7 @@ ApMenuLink_t help_menu = {
 	ApItems_help_menu,
 	& AbContext,
 	AbLinks_help_menu,
-	1330, 1, 1
+	1386, 1, 1
 	};
 
 static ApItem_t ApItems_special_menu[ 5 ] = {
@@ -404,7 +410,7 @@ ApMenuLink_t special_menu = {
 	ApItems_special_menu,
 	& AbContext,
 	AbLinks_special_menu,
-	1332, 3, 4
+	1388, 3, 4
 	};
 
 static ApItem_t ApItems_all_robots_menu[ 11 ] = {
@@ -429,10 +435,10 @@ ApMenuLink_t all_robots_menu = {
 	ApItems_all_robots_menu,
 	& AbContext,
 	AbLinks_all_robots_menu,
-	1337, 8, 10
+	1393, 8, 10
 	};
 
-static ApItem_t ApItems_robot_menu[ 171 ] = {
+static ApItem_t ApItems_robot_menu[ 172 ] = {
 	{ 1, 2, 0, NULL, 1, "mm_irp6_on_track", "Irp6-on-&Track", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_load", "EDP &Load", NULL },
 	{ 2, 1, 0, NULL, 0, "mm_irp6_on_track_edp_unload", "EDP &Unload", NULL },
@@ -535,6 +541,7 @@ static ApItem_t ApItems_robot_menu[ 171 ] = {
 	{ 2, 2, 0, NULL, 0, "mm_spkm_absolute_moves", "A&bsolute Moves", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_post_synchro_moves_incremental", "&Motors", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_internal", "&Joints", NULL },
+	{ 3, 1, 0, NULL, 0, "mm_spkm_xyz_angle_axis", "Xyz &Angle Axis", NULL },
 	{ 2, 2, 0, NULL, 0, "mm_spkm_preset_positions", "&Preset Positions", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_synchro", "&Synchro Position", NULL },
 	{ 3, 1, 0, NULL, 0, "mm_spkm_preset_position_front", "&Front position", NULL },
@@ -614,7 +621,7 @@ ApMenuLink_t robot_menu = {
 	ApItems_robot_menu,
 	& AbContext,
 	AbLinks_robot_menu,
-	1348, 116, 170
+	1404, 117, 171
 	};
 
 
