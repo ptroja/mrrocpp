@@ -36,7 +36,7 @@ SenderBase::SenderBase(const std::string & sr_name)
 	unsigned int tmp = 0;
 	while ((fd = name_open(sr_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			// TODO: throw
 			std::perror("SR cannot be located ");
@@ -63,7 +63,7 @@ SenderBase::SenderBase(const std::string & sr_name)
 	unsigned int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
 		if (tmp++ < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			fprintf(stderr, "messip::port_connect(\"%s\") @ %s:%d: %s\n",
 					sr_name.c_str(), __FILE__, __LINE__, strerror(errno));

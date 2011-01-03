@@ -56,7 +56,7 @@ void UiRobot::connect_to_reader()
 #endif
 	) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do READER");
 			break;
@@ -129,7 +129,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do ECP_TRIGGER");
 		}
