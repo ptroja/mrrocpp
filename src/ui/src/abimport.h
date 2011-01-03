@@ -62,7 +62,8 @@ extern ApWindowLink_t wnd_sarkofag_moves;
 extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
 extern ApWindowLink_t wnd_polycrank_int;
 extern ApWindowLink_t wnd_spkm_inc;
-extern ApWidget_t AbWidgets[ 1272 ];
+extern ApWindowLink_t wnd_spkm_int;
+extern ApWidget_t AbWidgets[ 1322 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
