@@ -88,11 +88,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-	if (is_synchronised()) {
-		msg->message("move_arm synchronised");
-	} else {
-		msg->message("move_arm not synchronised");
-	}
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -232,6 +227,7 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
+
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;

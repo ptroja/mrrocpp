@@ -215,8 +215,12 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	caller = rcvid;
 
 	instruction = new_ecp_command.instruction;
+	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
 
-	instruction_deserialization();
+		std::cout << "edp effector: " << instruction.instruction_type << "\n";
+
+		instruction_deserialization();
+	}
 
 	return instruction.instruction_type;
 }
