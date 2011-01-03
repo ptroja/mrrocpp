@@ -9,8 +9,6 @@ r_buffer::r_buffer (void) :
   arm_type(FRAME),
   input_values(0)
 {
-  // konstruktor (inicjalizator) bufora odpowiedzi dla ECP
-
   error_no.error0 = OK;
   error_no.error1 = OK;
 

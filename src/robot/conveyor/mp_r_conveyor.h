@@ -16,9 +16,19 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
+/*!
+ * @brief Conveyor mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup conveyor
+ */
 class conveyor : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	conveyor(task::task &mp_object_l);
 };
 

@@ -54,7 +54,7 @@ bool epos_cubic::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_t.sr_ecp_msg->message("epos first_step");
+	sr_ecp_msg.message("epos first_step");
 
 	//epos_data_port_command_structure.da[3] = 3.13;
 	epos_reply_data_request_port->set_request();
@@ -64,21 +64,21 @@ bool epos_cubic::first_step()
 
 bool epos_cubic::next_step()
 {
-	ecp_t.sr_ecp_msg->message("epos next_step");
+	sr_ecp_msg.message("epos next_step");
 
-	if (epos_reply_data_request_port->get(edp_ecp_epos_reply_structure) == mrrocpp::lib::NewData) {
+	if (epos_reply_data_request_port->get() == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << edp_ecp_epos_reply_structure.epos_controller[3].position;
+		ss << "licznik: " << epos_reply_data_request_port->data.epos_controller[3].position;
 
-		ecp_t.sr_ecp_msg->message(ss.str().c_str());
+		sr_ecp_msg.message(ss.str().c_str());
 
 	}
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 6; i++) {
-		if (edp_ecp_epos_reply_structure.epos_controller[i].motion_in_progress == true) {
+		if (epos_reply_data_request_port->data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -133,7 +133,7 @@ bool epos_trapezoidal::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_t.sr_ecp_msg->message("epos first_step");
+	sr_ecp_msg.message("epos first_step");
 
 	//epos_data_port_command_structure.da[3] = 3.13;
 	epos_reply_data_request_port->set_request();
@@ -143,21 +143,21 @@ bool epos_trapezoidal::first_step()
 
 bool epos_trapezoidal::next_step()
 {
-	ecp_t.sr_ecp_msg->message("epos next_step");
+	sr_ecp_msg.message("epos next_step");
 
-	if (epos_reply_data_request_port->get(edp_ecp_epos_reply_structure) == mrrocpp::lib::NewData) {
+	if (epos_reply_data_request_port->get() == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << edp_ecp_epos_reply_structure.epos_controller[3].position;
+		ss << "licznik: " << epos_reply_data_request_port->data.epos_controller[3].position;
 
-		ecp_t.sr_ecp_msg->message(ss.str().c_str());
+		sr_ecp_msg.message(ss.str().c_str());
 
 	}
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 6; i++) {
-		if (edp_ecp_epos_reply_structure.epos_controller[i].motion_in_progress == true) {
+		if (epos_reply_data_request_port->data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -212,7 +212,7 @@ bool epos_operational::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_t.sr_ecp_msg->message("epos first_step");
+	sr_ecp_msg.message("epos first_step");
 
 	//epos_data_port_command_structure.da[3] = 3.13;
 	epos_reply_data_request_port->set_request();
@@ -222,21 +222,21 @@ bool epos_operational::first_step()
 
 bool epos_operational::next_step()
 {
-	ecp_t.sr_ecp_msg->message("epos next_step");
+	sr_ecp_msg.message("epos next_step");
 
-	if (epos_reply_data_request_port->get(edp_ecp_epos_reply_structure) == mrrocpp::lib::NewData) {
+	if (epos_reply_data_request_port->get() == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << edp_ecp_epos_reply_structure.epos_controller[3].position;
+		ss << "licznik: " << epos_reply_data_request_port->data.epos_controller[3].position;
 
-		ecp_t.sr_ecp_msg->message(ss.str().c_str());
+		sr_ecp_msg.message(ss.str().c_str());
 
 	}
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 6; i++) {
-		if (edp_ecp_epos_reply_structure.epos_controller[i].motion_in_progress == true) {
+		if (epos_reply_data_request_port->data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}

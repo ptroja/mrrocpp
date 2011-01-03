@@ -14,16 +14,15 @@
 #if !defined(USE_MESSIP_SRR)
 #include <sys/dispatch.h>
 #else
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif /* !USE_MESSIP_SRR */
 #include <string>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_edp.h"
 #include "base/edp/edp_typedefs.h"
-
 
 // Konfigurator
 #include "base/lib/configurator.h"
@@ -43,7 +42,8 @@ namespace common {
  *
  * \author yoyek
  */
-class effector {
+class effector
+{
 protected:
 
 	/*!
@@ -67,16 +67,12 @@ protected:
 	 */
 	int caller; // by 7&Y
 
-#if !defined(USE_MESSIP_SRR)
 	/*!
 	 * \brief indentificator of EDP server attach point
 	 *
 	 * It is stored for a communication with ECP purpose.
 	 */
-	name_attach_t *server_attach;
-#else /* USE_MESSIP_SRR */
-	messip_channel_t *server_attach;
-#endif /* USE_MESSIP_SRR */
+	lib::fd_server_t server_attach;
 
 	/*!
 	 * \brief method to receive instruction from ECP

@@ -9,45 +9,150 @@
  * @ingroup spkm
  */
 
-#include "robot/epos/dp_epos.h"
+#include <ostream>
+#include <exception>
 
-#include "base/lib/impconst.h"
+#include "robot/spkm/dp_spkm.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
 
-const int NUM_OF_SERVOS = 7;
-
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine robot label
+ * @ingroup spkm
+ */
 const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
+ * @ingroup spkm
+ */
 enum CBUFFER_VARIANT
 {
+	CBUFFER_EPOS_MOTOR_COMMAND,
 	CBUFFER_EPOS_CUBIC_COMMAND,
 	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
 	CBUFFER_EPOS_OPERATIONAL_COMMAND,
 	CBUFFER_EPOS_BRAKE_COMMAND
 };
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer
+ * @ingroup spkm
+ */
 struct cbuffer
 {
 	CBUFFER_VARIANT variant;
 	union
 	{
 		epos::epos_cubic_command epos_cubic_command_structure;
+		epos::epos_motor_command epos_motor_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
 	};
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & variant;
+		switch (variant) {
+			case CBUFFER_EPOS_MOTOR_COMMAND:
+				ar & epos_motor_command_structure;
+				break;
+			case CBUFFER_EPOS_CUBIC_COMMAND:
+				ar & epos_cubic_command_structure;
+				break;
+			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
+				ar & epos_trapezoidal_command_structure;
+				break;
+			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
+				ar & epos_operational_command_structure;
+				break;
+			case CBUFFER_EPOS_BRAKE_COMMAND:
+				break;
+			default:
+				throw std::bad_cast("unknown SPKM CBUFFER_VARIANT");
+		}
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m) {
+		switch (m.variant) {
+			case CBUFFER_EPOS_CUBIC_COMMAND:
+				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
+				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os <<
+						"\t" << m.epos_cubic_command_structure.aa[i] <<
+						"\t" << m.epos_cubic_command_structure.av[i] <<
+						"\t" << m.epos_cubic_command_structure.da[i] <<
+						"\t" << m.epos_cubic_command_structure.emdm[i] << "\n";
+				}
+				break;
+			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
+				os << "CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:\n";
+				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os <<
+						"\t" << m.epos_trapezoidal_command_structure.em[i] <<
+						"\t" << m.epos_trapezoidal_command_structure.emdm[i] <<
+						"\n";
+				}
+				os << "\t" << m.epos_trapezoidal_command_structure.tt << "\n";
+				break;
+			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
+				os << "CBUFFER_EPOS_OPERATIONAL_COMMAND:\n";
+				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os <<
+						"\t" << m.epos_operational_command_structure.em[i] <<
+						"\t" << m.epos_operational_command_structure.v[i] <<
+						"\n";
+				}
+				os << "\t" << m.epos_operational_command_structure.tau << "\n";
+				break;
+			case CBUFFER_EPOS_BRAKE_COMMAND:
+				os << "CBUFFER_EPOS_BRAKE_COMMAND\n";
+				break;
+			default:
+				os << "Error: unknown CBUFFER_VARIANT";
+		}
+		return os;
+	}
 };
 
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
+ * @ingroup spkm
+ */
 struct rbuffer
 {
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
-}__attribute__((__packed__));
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & epos_controller;
+		ar & contact;
+	}
+};
+
+/*!
+ * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string
+ * @ingroup spkm
+ */
 const std::string EDP_SECTION = "[edp_spkm]";
+
+/*!
+ * @brief configuration file ECP SwarmItFix Parallel Kinematic Machine section string
+ * @ingroup spkm
+ */
 const std::string ECP_SECTION = "[ecp_spkm]";
 
 } // namespace spkm

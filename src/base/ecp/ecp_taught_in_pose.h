@@ -15,17 +15,47 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
+/*!
+ * @brief class to store single position
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 class ecp_taught_in_pose
 {
 public:
+	/**
+	 * @brief position (pose) representation
+	 */
 	lib::ECP_POSE_SPECIFICATION arm_type;
+
+	/**
+	 * @brief motion duration
+	 */
 	double motion_time;
+
+	/**
+	 * @brief position (pose) coordinates vector
+	 */
 	double coordinates[lib::MAX_SERVOS_NR];
 
-	int extra_info; // by Y uzupelnienie struktury o dodatkowe pole, do dowolnego wykorzystania
+	/**
+	 * @brief extra information associated with pose
+	 */
+	int extra_info;
 
+	/**
+	 * @brief Constructor
+	 */
 	ecp_taught_in_pose(void);
 
+	/**
+	 * @brief Constructor
+	 * @param at position (pose) representation
+	 * @param mt motion duration
+	 * @param c position (pose) coordinates vector
+	 * @param e_info extra info
+	 */
 	ecp_taught_in_pose(lib::ECP_POSE_SPECIFICATION at, double mt, const double c[lib::MAX_SERVOS_NR], int e_info = 0);
 }; // end:class ecp_taught_in_pose
 

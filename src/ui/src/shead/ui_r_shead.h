@@ -11,30 +11,44 @@
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+namespace tfg_and_conv {
+class EcpRobot;
+}
+
+namespace shead {
+
 //
 //
-// KLASA UiRobotShead
+// KLASA UiRobot
 //
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_tfg_and_conv_robot;
-
-class UiRobotShead: public UiRobot {
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
-
-	UiRobotShead(Ui& _ui);
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	void close_all_windows();
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int delete_ui_ecp_robot();
+	void delete_ui_ecp_robot();
+	int synchronise();
+	void edp_create();
+	int edp_create_int();
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

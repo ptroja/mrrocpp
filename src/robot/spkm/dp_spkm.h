@@ -9,19 +9,26 @@
  * @ingroup spkm
  */
 
-#define SPKM_DATA_PORT_SERVOS_NUMBER 7
-
-#include "epos.h"
+#include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
 
-}
-struct spkm_mp_to_ecp_parameters
+/*!
+ * @brief SwarmItFix arallel Kinematic Machine total number of servos
+ * @ingroup spkm
+ */
+const int NUM_OF_SERVOS = 7;
+
+/*!
+ * @brief SwarmItFix arallel Kinematic Machine mp to ecp command
+ * @ingroup spkm
+ */
+struct mp_to_ecp_parameters
 {
-	EPOS_GEN_PROFILE motion_type;
-	smb_mp_to_ecp_cubic_spline_parameters cubic_trapezoidal[SMB_DATA_PORT_SERVOS_NUMBER];
+	epos::EPOS_GEN_PROFILE motion_type;
+	epos::mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[NUM_OF_SERVOS];
 	lib::frame_tab goal_frame;
 	double m;
 	double tau;

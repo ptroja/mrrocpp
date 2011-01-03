@@ -28,7 +28,7 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	sensor_m[ecp_mp::sensor::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this->sr_ecp_msg, this->config);
 	sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]->configure_sensor();
 
-	smoothgen2 = new common::generator::smooth(*this, true);
+	smoothgen2 = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	smoothgen2->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ecp loaded kcz_test");
@@ -37,28 +37,47 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 void kcz_test::main_task_algorithm(void ) {
 	sr_ecp_msg->message("ecp kcz_test ready");
 
+	std::vector <double> coordinates(6);
+
 	smoothgen2->set_absolute();
 
 	ecp_mp::sensor::pcbird * bird = dynamic_cast<ecp_mp::sensor::pcbird *> (sensor_m[ecp_mp::sensor::SENSOR_PCBIRD]);
-
-	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, -0.150, 1.12, -0.1, 0.729*3.14, 0.685*3.14, -0.001*3.14, 0.09, 0.000, true);
-	smoothgen2->Move();
 	smoothgen2->reset();
-	smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
+	coordinates[0] = -0.150;
+	coordinates[1] = 1.12;
+	coordinates[2] = -0.1;
+	coordinates[3] = 0.729*3.14;
+	coordinates[4] = 0.685*3.14;
+	coordinates[5] = -0.001*3.14;
+	smoothgen2->load_absolute_angle_axis_trajectory_pose(coordinates);
+	smoothgen2->Move();
+	//smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, -0.150, 1.12, -0.1, 0.729*3.14, 0.685*3.14, -0.001*3.14, 0.09, 0.000, true);
+
+
+	smoothgen2->reset();
+	coordinates[0] = bird->image.x - 0.421;
+	coordinates[1] = -1.0 * bird->image.y + 1.119;
+	coordinates[2] = -1.0 * bird->image.z - 0.22 + 0.20;
+	coordinates[3] = 0.729*3.14;
+	coordinates[4] = 0.685*3.14;
+	coordinates[5] = -0.001*3.14;
+	smoothgen2->load_absolute_angle_axis_trajectory_pose(coordinates);
+	smoothgen2->Move();
+
+	/*smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS,
 						bird->image.x - 0.421,
 						-1.0 * bird->image.y + 1.119,
 						-1.0 * bird->image.z - 0.22 + 0.20,
 						0.729*3.14,
 						0.685*3.14,
 						-0.001*3.14,
-						0.09, 0.000, true);
-	smoothgen2->Move();
+						0.09, 0.000, true);*/
 	smoothgen2->reset();
 
 	smoothgen2->set_relative();
 
-	double vv[lib::MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
-	double aa[lib::MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+	//double vv[lib::MAX_SERVOS_NR]={0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3};
+	//double aa[lib::MAX_SERVOS_NR]={0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
 	float lastx = bird->image.x;
 	float lasty = bird->image.y;
@@ -112,14 +131,22 @@ void kcz_test::main_task_algorithm(void ) {
     moveb = abs(temp1[4] - lastb) > delta ? temp1[4] - lastb : 0;
     movec = abs(temp1[5] - lastc) > delta ? temp1[5] - lastc : 0;
 
-    smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa,
+	coordinates[0] = -1.0 * movex;
+	coordinates[1] = 1.0 * movey;
+	coordinates[2] = 1.0 * movez;
+	coordinates[3] = 1.0 * moveb;
+	coordinates[4] = -1.0 * movea;
+	coordinates[5] = -1.0 * movec;
+	smoothgen2->load_relative_angle_axis_trajectory_pose(coordinates);
+
+    /*smoothgen2->load_coordinates(lib::ECP_XYZ_ANGLE_AXIS, vv, aa,
 															-1.0 * movex,
 															1.0 * movey,
 															1.0 * movez,
 															1.0 * moveb,
 															-1.0 * movea,
 															-1.0 * movec,
-															0.0, 0.0, true);
+															0.0, 0.0, true);*/
 	lastx = bird->image.x;
 	lasty = bird->image.y;
 	lastz = bird->image.z;

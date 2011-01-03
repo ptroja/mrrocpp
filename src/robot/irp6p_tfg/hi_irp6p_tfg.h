@@ -30,7 +30,6 @@ const int ISA_CARD_OFFSET = 0x20; // w zaleznosci od ustawienia na karcie isa
 const int AXIS_7_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla zacisku chwytaka
 // 34,7 j na 100ma, streafa nieczulosci 40ma
 
-const double AXIS_7_INC_PER_REVOLUTION = 128; // Liczba impulsow enkodera na obrot walu - musi byc float
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class

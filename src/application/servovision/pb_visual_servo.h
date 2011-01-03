@@ -22,6 +22,13 @@ namespace servovision {
 
 typedef ecp_mp::sensor::fradia_sensor <position_based_configuration, position_based_reading> pb_fradia_sensor;
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class pb_visual_servo : public visual_servo
 {
 public:
@@ -36,6 +43,8 @@ protected:
 
 	lib::Homog_matrix G_T_E_desired;
 };
+
+/** @} */
 
 }//namespace generator {
 

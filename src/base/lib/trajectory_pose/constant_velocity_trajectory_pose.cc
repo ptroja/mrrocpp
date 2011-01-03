@@ -1,8 +1,8 @@
 /**
- * \file constant_velocity_trajectory_pose.cc
- * \brief constant_velocity_trajectory_pose class and its methods
- *
- * Contains bodies of the methods of bang_bang_trajectory_pose class.
+ * @file
+ * @brief Contains definitions of the methods of constant_velocity_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #include <cstring>
@@ -35,10 +35,6 @@ constant_velocity_trajectory_pose::constant_velocity_trajectory_pose (lib::ECP_P
 constant_velocity_trajectory_pose::~constant_velocity_trajectory_pose() {
 
 }
-
-/*bool constant_velocity_trajectory_pose::set_max_velocity(const vector<double> & v_max) {
-	this->v_max = v_max;
-}*/
 
 } // namespace trajectory_pose
 } // namespace common

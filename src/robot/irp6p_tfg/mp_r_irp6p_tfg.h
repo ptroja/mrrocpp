@@ -16,9 +16,19 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
+/*!
+ * @brief Irp6 postument two finger gripper mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup irp6p_tfg
+ */
 class irp6p_tfg : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	irp6p_tfg(task::task &mp_object_l);
 };
 

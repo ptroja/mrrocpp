@@ -1,5 +1,5 @@
 /*!
- * @file
+ * @file sensor_error.h
  * @brief File containing class representing sensor errors.
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  * @date Aug 3, 2010

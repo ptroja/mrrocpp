@@ -1,12 +1,14 @@
-/*
- * velocity_profile.h
- *
- *  Created on: May 4, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of velocity_profile class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _VELOCITY_PROFILE_H_
 #define _VELOCITY_PROFILE_H_
+
+#include <cstdio>
 
 #include <algorithm>
 #include <vector>
@@ -21,8 +23,10 @@ namespace generator {
 namespace velocity_profile_calculator {
 
 /**
- * Base class for all of the velocity profile calculators. Usually any velocity profile calculator contains methods used to create the description
- * of the velocity profile f.g. bang bang velocity profile etc.. This information is usually stored in the appropriate trajectory_pose class.
+ * @brief Base class for all of the velocity profile calculators.
+ *
+ * Usually any velocity profile calculator contains methods used to create the description
+ * of the velocity profile f.g. bang bang velocity profile. This information is usually stored in the appropriate trajectory_pose class.
  */
 template <class Pos>
 class velocity_profile {
@@ -86,7 +90,7 @@ class velocity_profile {
 			return true;
 		}
 		/**
-		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type..
+		 * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of relative type.
 		 * @param it iterator to the list of positions
 		 * @return true if the set of the distance and direction was successful (usually is if the coordinates vector was initiated and filled in before)
 		 */
@@ -100,7 +104,10 @@ class velocity_profile {
 			it->k.clear();
 			for (int i = 0; i < it->axes_num; i++) {
 				it->s.push_back(fabs(it->coordinates[i]));
-				if (it->coordinates[i] >= 0) {
+
+				if (eq(it->coordinates[i], 0)) {
+					it->k.push_back(0);
+				} else if (it->coordinates[i] > 0) {
 					it->k.push_back(1);
 				} else {
 					it->k.push_back(-1);
@@ -181,13 +188,20 @@ class velocity_profile {
 			double start_position[6];
 			double coordinates[6];
 
-			memcpy( start_position, &it->start_position[0], sizeof(int) * it->start_position.size() );
-			memcpy( coordinates, &it->coordinates[0], sizeof(int) * it->coordinates.size() );
+			if (it->start_position.size() != 6) {
+				return false;
+			}
+
+			memcpy( start_position, &it->start_position[0], sizeof(double) * it->start_position.size() ); //it->start_position.size() should always be equal to 6
+			memcpy( coordinates, &it->coordinates[0], sizeof(double) * it->coordinates.size() );
 
 			start_position_matrix.set_from_xyz_angle_axis(start_position);
 			desired_position_matrix.set_from_xyz_angle_axis(coordinates);
 			((!start_position_matrix) * desired_position_matrix).get_xyz_angle_axis(relative_angle_axis_vector);
 			relative_angle_axis_vector.to_vector(it->coordinates);
+
+			//printf("relative vector: \n");
+			//printf("%f\t%f\t%f\t%f\t%f\t%f\n", it->coordinates[0], it->coordinates[1], it->coordinates[2], it->coordinates[3], it->coordinates[4], it->coordinates[5]);
 
 			return true;
 		}

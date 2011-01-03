@@ -10,7 +10,7 @@
  */
 
 #include "base/lib/impconst.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -18,64 +18,102 @@ namespace task {
 // XXX Forward declaration
 class task;
 }
-}
-}
-
-namespace mrrocpp {
-namespace ecp_mp {
 namespace transmitter {
 
+/*!
+ * @brief Base abstract class of all ecp_mp transmitters
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class transmitter_base
 {
-	// Klasa bazowa dla transmitterow (klasa abstrakcyjna)
-	// Transmittery konkretne wyprowadzane sa z klasy bazowej
 public:
+	/**
+	 * @brief Unique transmitter name
+	 */
 	const lib::TRANSMITTER_t transmitter_name; // nazwa czujnika z define w impconst.h
 
 protected:
-	// Wskaznik na obiekt do komunikacji z SR
+	/**
+	 * @brief sr communication object reference
+	 */
 	lib::sr_ecp &sr_ecp_msg;
 
 public:
-	transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
+	/**
+	 * @brief Constructor
+	 * @param _transmitter_name Unique transmitter name.
+	 * @param _section_name configuration section name
+	 * @param _ecp_mp_object ecp_mp task object reference
+	 */
+			transmitter_base(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object);
 
-	virtual ~transmitter_base()
-	{
-	}
+	/**
+	 * @brief Destructor
+	 */
+	virtual ~transmitter_base();
 
-	// odczyt z zawieszaniem lub bez
-	virtual bool t_read(bool wait)
-	{
-		return true;
-	}
+	/**
+	 * @brief reads data
+	 */
+	virtual bool t_read(bool wait);
 
-	// zapis
-	virtual bool t_write(void)
-	{
-		return true;
-	}
+	/**
+	 * @brief writes data
+	 */
+	virtual bool t_write(void);
 
 };
 
+/*!
+ * @brief ECP_MP transmitter_error error handling class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 class transmitter_error
-{ // Klasa obslugi bledow czujnikow
+{
 public:
+	/**
+	 * @brief error number
+	 */
 	const lib::error_class_t error_class;
 
+	/**
+	 * @brief constructor
+	 * @param err_cl error class
+	 */
 	transmitter_error(lib::error_class_t err_cl);
 
-}; // end: class transmitter_error
+};
 
+/*!
+ * @brief Template ecp_mp transmitter class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp_mp
+ */
 template <typename TO_VA, typename FROM_VA>
 class transmitter : public transmitter_base
 {
 public:
-	// Bufor nadawczy
+	/**
+	 * @brief Template output buffer
+	 */
 	TO_VA to_va;
-	// Bufor odbiorczy
+
+	/**
+	 * @brief Template input buffer
+	 */
 	FROM_VA from_va;
 
-	//! Constructor
+	/**
+	 * @brief Constructor
+	 * @param _transmitter_name Unique transmitter name.
+	 * @param _section_name configuration section name
+	 * @param _ecp_mp_object ecp_mp task object reference
+	 */
 	transmitter(lib::TRANSMITTER_t _transmitter_name, const std::string & _section_name, task::task& _ecp_mp_object) :
 		transmitter_base(_transmitter_name, _section_name, _ecp_mp_object)
 	{

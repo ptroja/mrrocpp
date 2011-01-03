@@ -12,11 +12,16 @@ namespace edp {
 namespace sensor {
 
 //!< watek do komunikacji ze sprzetem
-void force::operator()(void)
+void force::operator()()
 {
+
+	//	sr_msg->message("operator");
+
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
-	connect_to_hardware();
+	if (!(master.force_sensor_test_mode)) {
+		connect_to_hardware();
+	}
 
 	thread_started.command();
 
@@ -43,6 +48,8 @@ void force::operator()(void)
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
+	//sr_msg->message("dupa 1");
+	clock_gettime(CLOCK_MONOTONIC, &wake_time);
 
 	while (!TERMINATE) //!< for (;;)
 	{
@@ -63,9 +70,9 @@ void force::operator()(void)
 				}
 				set_command_execution_finish();
 			} else {
-				wait_for_event();
 
-				initiate_reading();
+				//	sr_msg->message("else 12");
+				wait_for_event();
 
 				get_reading();
 
@@ -86,9 +93,13 @@ void force::operator()(void)
 
 				// scope-locked reader data update
 				{
-					boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
+					if (master.rb_obj) {
+						boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-					current_force_torque.to_table(master.rb_obj->step_data.force);
+						current_force_torque.to_table(master.rb_obj->step_data.force);
+					} else {
+						std::cerr << " " << std::endl;
+					}
 				}
 			}
 			edp_vsp_synchroniser.command();
@@ -126,8 +137,101 @@ force::force(common::manip_effector &_master) :
 	sr_msg
 			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true);
 
+	sr_msg->message("force");
+
 	if (master.config.exists("is_right_turn_frame")) {
 		is_right_turn_frame = master.config.value <bool> ("is_right_turn_frame");
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		ft_table[i] = 0.0;
+	}
+
+}
+
+void force::wait_for_event()
+{
+	if (!master.force_sensor_test_mode) {
+
+		wait_for_particular_event();
+
+	} else {
+		usleep(1000);
+	}
+}
+
+/***************************** odczyt z czujnika *****************************/
+void force::get_reading(void)
+{
+
+	if (!is_sensor_configured) {
+		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	}
+
+	is_reading_ready = true;
+
+	if (!(master.force_sensor_test_mode)) {
+		get_particular_reading();
+		// jesli ma byc wykorzytstywana biblioteka transformacji sil
+		if (gravity_transformation) {
+			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
+			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
+			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+			master.force_msr_upload(output);
+		}
+
+	} else {
+		master.force_msr_upload(ft_table);
+
+	}
+
+}
+
+/**************************** inicjacja czujnika ****************************/
+void force::configure_sensor(void)
+{// by Y
+
+	is_sensor_configured = true;
+	//  printf("edp Sensor configured\n");
+	sr_msg->message("edp Sensor configured");
+
+	if (!(master.force_sensor_test_mode)) {
+		configure_particular_sensor();
+	}
+
+	// polozenie kisci bez narzedzia wzgledem bazy
+	lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
+	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
+	if (!gravity_transformation) // nie powolano jeszcze obiektu
+	{
+		lib::Xyz_Angle_Axis_vector tab;
+		if (master.config.exists("sensor_in_wrist")) {
+			char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
+			char* toDel = tmp;
+			for (int i = 0; i < 6; i++)
+				tab[i] = strtod(tmp, &tmp);
+			sensor_frame = lib::Homog_matrix(tab);
+			free(toDel);
+			// std::cout<<sensor_frame<<std::endl;
+		}
+
+		// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+
+		double weight = master.config.value <double> ("weight");
+
+		double point[3];
+		char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
+		char* toDel = tmp;
+		for (int i = 0; i < 3; i++)
+			point[i] = strtod(tmp, &tmp);
+		free(toDel);
+		// double point[3] = { master.config.value<double>("x_axis_arm"),
+		//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
+		lib::K_vector pointofgravity(point);
+		gravity_transformation
+				= new lib::ForceTrans(force_sensor_name, frame, sensor_frame, weight, pointofgravity, is_right_turn_frame);
+	} else {
+		gravity_transformation->synchro(frame);
 	}
 
 }
@@ -135,6 +239,7 @@ force::force(common::manip_effector &_master) :
 force::~force()
 {
 	delete sr_msg;
+
 }
 
 void force::set_force_tool(void)

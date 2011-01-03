@@ -1,10 +1,11 @@
-/*
- * pvt.hpp
+/*!
+ * @file pvt.hpp
+ * @brief Position-Velocity-Time triples calculation for Maxon EPOS motino controller.
  *
- *  Created on: Mar 14, 2010
- *      Author: ptroja
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
  */
-
 #ifndef PVT_HPP_
 #define PVT_HPP_
 

@@ -12,13 +12,13 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 #include "application/ball/mp_g_ball.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/mp/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 

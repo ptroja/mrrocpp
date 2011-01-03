@@ -122,8 +122,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-
-	struct timespec current_timespec;
 	lib::JointArray desired_joints_tmp_abs(number_of_servos); // Wspolrzedne wewnetrzne
 	lib::JointArray desired_joints_tmp_rel(number_of_servos);
 	lib::MotorArray desired_motor_pos_new_tmp_abs(number_of_servos);
@@ -164,6 +162,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
+	struct timespec current_timespec;
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
@@ -303,8 +302,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = new common::reader_buffer(*this);
-	vis_obj = new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
@@ -317,7 +316,7 @@ void effector::instruction_deserialization()
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 }

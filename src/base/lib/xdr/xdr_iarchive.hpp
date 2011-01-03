@@ -18,6 +18,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_array.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/version.hpp>
 
@@ -25,10 +26,16 @@
 
 #include <rpc/rpc.h>
 
+#if BOOST_VERSION >104200
+#define BOOST_IARCHIVE_EXCEPTION input_stream_error
+#else
+#define BOOST_IARCHIVE_EXCEPTION stream_error
+#endif
+
 #define THROW_LOAD_EXCEPTION \
-	boost::serialization::throw_exception( \
-			boost::archive::archive_exception( \
-				boost::archive::archive_exception::stream_error))
+    boost::serialization::throw_exception( \
+            boost::archive::archive_exception( \
+                boost::archive::archive_exception::BOOST_IARCHIVE_EXCEPTION))
 
 #define LOAD_A_TYPE(T, P) \
     /** conversion for T */ \
@@ -44,7 +51,7 @@
         return *this; \
     }
 
-template <std::size_t size=4096>
+template <std::size_t size = 16384>
 class xdr_iarchive
 {
 private:
@@ -53,17 +60,33 @@ private:
 
 public:
     //! conversion for bool, special since bool != bool_t
-    xdr_iarchive &load_a_type(bool &t,boost::mpl::true_) {
-        if(!xdr_bool(&xdrs, (bool_t *) &t)) THROW_LOAD_EXCEPTION;
+    xdr_iarchive &load_a_type(bool &t, boost::mpl::true_) {
+        bool_t b;
+        if(!xdr_bool(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (b) ? true : false;
+        return *this;
+    }
+
+    //! conversion for std::size_t, special since it depends on the 32/64 architecture
+    xdr_iarchive &load_a_type(boost::serialization::collection_size_type &t, boost::mpl::true_) {
+        uint64_t b;
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+        if(!xdr_u_int64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+#else
+        if(!xdr_uint64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+#endif
+        t = (std::size_t) b;
         return *this;
     }
 
     //! conversion for bool[], special since bool != bool_t
+    /* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
     template<int N>
     xdr_iarchive &load_a_type(bool (&t)[N],boost::mpl::false_) {
         if(!xdr_vector(&xdrs, (char *)t, N, sizeof(bool), (xdrproc_t) xdr_bool)) THROW_LOAD_EXCEPTION;
         return *this;
     }
+    */
 
     //! conversion for an enum
     template <class T>
@@ -74,32 +97,56 @@ public:
     }
 
     //! conversion for std::string
-	xdr_iarchive &load_a_type(std::string & t,boost::mpl::true_) {
-    	char b[size];
-    	char * p = b;
-    	if(!xdr_wrapstring(&xdrs, &p)) THROW_LOAD_EXCEPTION;
-    	t = p;
-    	return *this;
+    xdr_iarchive &load_a_type(std::string & t,boost::mpl::true_) {
+        char b[size];
+        char * p = b;
+        if(!xdr_wrapstring(&xdrs, &p)) THROW_LOAD_EXCEPTION;
+        t = p;
+        return *this;
     }
 
-	//! conversion for 'char *' string
-	xdr_iarchive &load_a_type(char *t, boost::mpl::false_)
-	{
-		if (!xdr_wrapstring(&xdrs, (char **)&t))
-			THROW_LOAD_EXCEPTION;
-		return *this;
-	}
+    //! conversion for 'char *' string
+    xdr_iarchive &load_a_type(char *t, boost::mpl::false_)
+    {
+        if (!xdr_wrapstring(&xdrs, (char **)&t))
+            THROW_LOAD_EXCEPTION;
+        return *this;
+    }
 
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(double, xdr_double)
-	LOAD_A_TYPE(float, xdr_float)
-	LOAD_A_TYPE(int, xdr_int)
-	LOAD_A_TYPE(long, xdr_long)
-	LOAD_A_TYPE(short, xdr_short)
-	LOAD_A_TYPE(unsigned char, xdr_u_char)
-	LOAD_A_TYPE(unsigned int, xdr_u_int)
-	LOAD_A_TYPE(unsigned long, xdr_u_long)
-	LOAD_A_TYPE(unsigned short, xdr_u_short)
+    LOAD_A_TYPE(float, xdr_float)
+//    LOAD_A_TYPE(int, xdr_int)
+//    LOAD_A_TYPE(long, xdr_long)
+//    LOAD_A_TYPE(short, xdr_short)
+    LOAD_A_TYPE(unsigned char, xdr_u_char)
+//    LOAD_A_TYPE(unsigned int, xdr_u_int)
+//    LOAD_A_TYPE(unsigned long, xdr_u_long)
+//    LOAD_A_TYPE(unsigned short, xdr_u_short)
+
+    LOAD_A_TYPE(int, xdr_int)
+    LOAD_A_TYPE(long, xdr_long)
+    LOAD_A_TYPE(short, xdr_short)
+    LOAD_A_TYPE(unsigned int, xdr_u_int)
+    LOAD_A_TYPE(unsigned long, xdr_u_long)
+    LOAD_A_TYPE(unsigned short, xdr_u_short)
+
+#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+    //LOAD_A_TYPE(int, xdr_int)
+    //LOAD_A_TYPE(long, xdr_long)
+    //LOAD_A_TYPE(short, xdr_short)
+    //LOAD_A_TYPE(unsigned int, xdr_u_int)
+    //LOAD_A_TYPE(unsigned long, xdr_u_long)
+    //LOAD_A_TYPE(unsigned short, xdr_u_short)
+    LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
+#else
+    //LOAD_A_TYPE(int16_t, xdr_int16_t)
+    //LOAD_A_TYPE(int32_t, xdr_int32_t)
+    //LOAD_A_TYPE(int64_t, xdr_int64_t)
+    //LOAD_A_TYPE(uint16_t, xdr_uint16_t)
+    //LOAD_A_TYPE(uint32_t, xdr_uint32_t)
+    LOAD_A_TYPE(uint64_t, xdr_uint64_t)
+#endif
 
     /**
      * Saving Archive Concept::is_loading
@@ -112,17 +159,22 @@ public:
     typedef boost::mpl::bool_<false> is_saving;
 
     /**
-     * Construtor
+     * Constructor
      * @param _buffer data buffer
      * @param _buffer_size data buffer size
      * @return
      */
     xdr_iarchive(const char * _buffer, std::size_t _buffer_size)
     {
-    	assert(_buffer_size <= size);
-    	std::memcpy(buffer, _buffer, _buffer_size);
+        assert(_buffer_size <= size);
+        std::memcpy(buffer, _buffer, _buffer_size);
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
     }
+
+    xdr_iarchive()
+	{
+		xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
+	}
 
     /**
      * Destructor
@@ -176,9 +228,9 @@ public:
     typename boost::disable_if<boost::is_array<T>, xdr_iarchive &>::type
     load_a_type(T &t,boost::mpl::false_){
 #if BOOST_VERSION >=104100
-    	boost::archive::detail::load_non_pointer_type<xdr_iarchive<> >::load_only::invoke(*this,t);
+        boost::archive::detail::load_non_pointer_type<xdr_iarchive<> >::load_only::invoke(*this,t);
 #else
-    	boost::archive::detail::load_non_pointer_type<xdr_iarchive<>,T>::load_only::invoke(*this,t);
+        boost::archive::detail::load_non_pointer_type<xdr_iarchive<>,T>::load_only::invoke(*this,t);
 #endif
         return *this;
     }
@@ -190,10 +242,10 @@ public:
      */
     template<class T, int N>
     xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_){
-    	for(int i = 0; i < N; ++i) {
-    		*this >> t[i];
-    	}
-    	return *this;
+        for(int i = 0; i < N; ++i) {
+            *this >> t[i];
+        }
+        return *this;
     }
 
     /**
@@ -210,10 +262,9 @@ public:
 #endif
     template<class T>
     void load_override(const boost::serialization::nvp<T> & t, int){
-         T x;
+         T& x(t.value());
          * this >> x;
-         t.value() = x;
-     }
+    }
 
     /**
      * Loading Archive Concept::operator>>
@@ -238,12 +289,32 @@ public:
 
     // archives are expected to support this function
     void load_binary(void *address, std::size_t count) {
-    	if(!xdr_opaque(&xdrs, address, count)) THROW_LOAD_EXCEPTION;
+        if(!xdr_opaque(&xdrs, address, count)) THROW_LOAD_EXCEPTION;
     }
 
-    std::size_t getArchiveSize(void) const {
-    	return ((std::size_t) xdr_getpos(&xdrs));
+    std::size_t getArchiveSize(void) {
+        return ((std::size_t) xdr_getpos(&xdrs));
     }
+
+    void set_buffer(const char * _buffer, std::size_t _buffer_size)
+    {
+		assert(_buffer_size <= size);
+		std::memcpy(buffer, _buffer, _buffer_size);
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
+    }
+
+    char *get_buffer(){
+    	return buffer;
+    }
+
+    void clear_buffer()
+	{
+		if( !xdr_setpos(&xdrs, 0) ){
+			THROW_LOAD_EXCEPTION;
+		}
+	}
 };
 
 // required by export

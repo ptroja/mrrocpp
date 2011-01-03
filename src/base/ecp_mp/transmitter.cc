@@ -18,6 +18,20 @@ transmitter_base::transmitter_base(lib::TRANSMITTER_t _transmitter_name, const s
 {
 }
 
+transmitter_base::~transmitter_base()
+{
+}
+
+bool transmitter_base::t_read(bool wait)
+{
+	return true;
+}
+
+bool transmitter_base::t_write(void)
+{
+	return true;
+}
+
 transmitter_error::transmitter_error(lib::error_class_t err_cl) :
 	error_class(err_cl)
 {

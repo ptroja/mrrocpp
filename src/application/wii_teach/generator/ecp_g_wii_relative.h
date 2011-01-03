@@ -35,7 +35,7 @@ public:
 
 	void preset_position(void);
 
-	virtual void set_position(void);
+	virtual void set_position(bool changed);
 };
 
 /** @} */// end of wii_teach

@@ -15,7 +15,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "robot/speaker/ecp_t_s.h"
 

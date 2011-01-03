@@ -11,8 +11,16 @@
 #include <stdint.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
+#define SPIN_LOCK	InterruptLock
+#define SPIN_UNLOCK	InterruptUnlock
+#elif (defined(__APPLE__) && defined(__MACH__))
+#include <libkern/OSAtomic.h>
+#define SPIN_LOCK	OSSpinLockLock
+#define SPIN_UNLOCK	OSSpinLockUnlock
 #else
 #include <pthread.h>
+#define SPIN_LOCK	pthread_spin_lock
+#define SPIN_UNLOCK	pthread_spin_unlock
 #endif
 
 namespace mrrocpp {
@@ -29,6 +37,8 @@ private:
     uint16_t binary_output;		// wyjscie binarne
 #ifdef __QNXNTO__
     intrspin_t
+#elif (defined(__APPLE__) && defined(__MACH__))
+    OSSpinLock
 #else
     pthread_spinlock_t
 #endif /* __QNXNTO__ */

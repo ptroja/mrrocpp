@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace lib {
 
 timer::timer() :
-	initialized(true), stopped(false), started(false), last_status(TIMER_INITIALIZED)
+	initialized(true), started(false), stopped(false), last_status(TIMER_INITIALIZED)
 {
 }
 

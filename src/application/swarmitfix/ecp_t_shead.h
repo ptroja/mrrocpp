@@ -15,7 +15,7 @@ class swarmitfix: public common::task::task
 protected:
     //generatory
 	common::generator::transparent* gt;
-	common::generator::smooth* sg;
+	//common::generator::smooth* sg;
 	common::generator::sleep* g_sleep;
 	generator::head_soldify* g_head_soldify;
 	generator::head_desoldify* g_head_desoldify;

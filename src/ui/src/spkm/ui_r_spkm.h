@@ -10,29 +10,55 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "robot/spkm/const_spkm.h"
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+namespace spkm {
 
 //
 //
-// KLASA UiRobotSpkm
+// KLASA UiRobot
 //
 //
 
+class EcpRobot;
+class WndInc;
+class WndInt;
+class WndExternal;
 
-class Ui;
-class ui_tfg_and_conv_robot;
-
-class UiRobotSpkm: public UiRobot {
+class UiRobot : public common::UiRobot
+{
 private:
 
 public:
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	double current_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja zadana
 
-	UiRobotSpkm(Ui& _ui);
+
+	EcpRobot *ui_ecp_robot;
+	WndInc *wnd_inc;
+	WndInt *wnd_int;
+	WndExternal *wnd_external;
+
+	UiRobot(common::Interface& _interface);
+	void close_all_windows();
 	int reload_configuration();
 	int manage_interface();
-	int delete_ui_ecp_robot();
+	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

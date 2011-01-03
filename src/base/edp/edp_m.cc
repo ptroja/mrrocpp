@@ -7,6 +7,7 @@
 // Ostatnia modyfikacja:
 // -------------------------------------------------------------------------
 
+#include <exception>
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
@@ -18,16 +19,14 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/edp/edp_effector.h"
 
-#define TIME_SLICE 500000 // by Y
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -36,6 +35,7 @@ effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
 
 #ifdef __QNXNTO__
 static _clockperiod old_cp;
+static const int TIME_SLICE = 500000; // by Y
 #endif /* __QNXNTO__ */
 
 /* Przechwycenie sygnalu */
@@ -48,7 +48,7 @@ void catch_signal(int sig)
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
 			master->sh_msg->message("edp terminated");
-			_exit( EXIT_SUCCESS);
+			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
@@ -70,13 +70,14 @@ int main(int argc, char *argv[])
 		// allow for empty session name for easier valgrind/tcheck_cl launching
 		if (argc < 5) {
 			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
-			exit( EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		}
 
 #ifdef __QNXNTO__
+
 		// zmniejszenie stalej czasowej ticksize dla szeregowania
 		_clockperiod new_cp;
-		new_cp.nsec = TIME_SLICE;
+		new_cp.nsec = edp::common::TIME_SLICE;
 		new_cp.fract = 0;
 		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
 #endif /* __QNXNTO__ */
@@ -86,9 +87,9 @@ int main(int argc, char *argv[])
 		signal(SIGSEGV, &edp::common::catch_signal);
 
 		// avoid transporting Ctrl-C signal from UI console
-#if defined(PROCESS_SPAWN_RSH)
+
 		signal(SIGINT, SIG_IGN);
-#endif
+
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
@@ -134,6 +135,10 @@ int main(int argc, char *argv[])
 		 }
 		 */
 	} // end: catch(System_error fe)
+
+	catch(std::exception & e) {
+		std::cerr << "EDP: " << e.what() << std::endl;
+	}
 
 	catch (...) { // Dla zewnetrznej petli try
 		perror("Unidentified error in EDP");

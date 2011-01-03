@@ -20,14 +20,6 @@ class effector;
 // os od ktorej startuje synchronizacja - numeracja od 0
 const int SYN_INIT_AXE = 2;
 
-// ograniczenia przyrostu PWM dla IRP6_ON_TRACK
-const int AXE1_MAX_PWM_INCREMENT = 1000;
-const int AXE2_MAX_PWM_INCREMENT = 1000;
-const int AXE3_MAX_PWM_INCREMENT = 1000;
-const int AXE4_MAX_PWM_INCREMENT = 1000;
-const int AXE5_MAX_PWM_INCREMENT = 1000;
-const int AXE6_MAX_PWM_INCREMENT = 1000;
-const int AXE7_MAX_PWM_INCREMENT = 1000;
 
 // Stale dla celow synchronizacji IRP6_ON_TRACK
 // const int  IRP6_ON_TRACK_SYNCHRO_STEP_COARSE -4*2*M_PI/IRP6_ON_TRACK_INC_PER_REVOLUTION

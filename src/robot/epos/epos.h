@@ -52,7 +52,7 @@
 #include <exception>
 #include <vector>
 
-#include <ftdi.hpp>
+#include <ftdi.h>
 
 /* added oct06 for openTCPEPOS() */
 /*

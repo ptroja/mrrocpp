@@ -1,7 +1,6 @@
 if(ROBOT_SMB)
 add_executable(edp_smb
 	edp_e_smb.cc
-	../../base/edp/int_hand_suplement.cc
 )
 
 target_link_libraries(edp_smb kinematicssmb edp

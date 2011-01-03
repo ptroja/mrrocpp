@@ -13,7 +13,11 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6_tfg {
 
-struct command
+/*!
+ * @brief Two finger gripper common mp to ecp command
+ * @ingroup irp6_tfg
+ */
+struct mp_to_ecp_parameters
 {
 	double desired_position;
 };

@@ -12,7 +12,6 @@
 namespace mrrocpp {
 namespace ecp_mp {
 
-
 /*!
  * @brief Base class of all ecp and mp robots
  *

@@ -1,8 +1,8 @@
 /**
- * \file bang_bang_trajectory_pose.h
- * \brief Header file for bang_bang_trajectory_pose
- *
- * Contains declaration of bang_bang_trajectory_pose class and its methods.
+ * @file
+ * @brief Contains declarations of the methods of bang_bang_trajectory_pose class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #if !defined(_ECP_BANG_BANG_TRAJECTORY_POSE_H)
@@ -17,7 +17,12 @@ namespace common {
 namespace trajectory_pose {
 
 /**
- * Class is a container used by smooth trajectory generator. One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ * @brief Class is a container used by smooth trajectory generator.
+ *
+ * One instance of the class contains information about one segment of the trajectory (single movement in one particular direction).
+ *
+ * @author rtulwin
+ * @ingroup trajectory_pose
  */
 class bang_bang_trajectory_pose : public trajectory_pose {
 public:
@@ -88,11 +93,10 @@ public:
   bang_bang_trajectory_pose (void);
   /**
    * Constructor which initiates some variables (those which can be found in the file containing trajectory).
-   * \param at representation used in the given pose
-   * \param coordinates desired position for all of the axes
-   * \param vv maximal velocities for the trajectory segment for all of the axes
-   * \param aa maximal accelerations for the trajectory segment for all of the axes
-   * \param axes_num number of axes
+   * @param arm_type representation used in the given pose
+   * @param coordinates desired position for all of the axes
+   * @param v maximal velocities for the trajectory segment for all of the axes
+   * @param a maximal accelerations for the trajectory segment for all of the axes
    */
   bang_bang_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_type,
 		  const std::vector<double> & coordinates,

@@ -32,7 +32,7 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 	shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 	vs = shared_ptr <visual_servo> (new pb_sac_visual_servo(reg, config_section_name, config));
-	sm = shared_ptr <simple_visual_servo_manager> (new simple_visual_servo_manager(*this, config_section_name, vs));
+	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 	sm->add_position_constraint(cube);
 	sm->configure();
 }
@@ -46,7 +46,7 @@ void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 {
 	while (1) {
 		get_next_state();
-		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::common::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 			sm->Move();
 		} else {
 			log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());

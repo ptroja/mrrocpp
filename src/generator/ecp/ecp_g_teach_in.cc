@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains teach_in generator definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup generators
+ */
+
 #include <cstring>
 #include <cmath>
 #include <cerrno>
@@ -11,7 +19,7 @@
 #include "generator/ecp/ecp_g_teach_in.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
 namespace mrrocpp {

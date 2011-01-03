@@ -30,8 +30,8 @@ bool pin_lock::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_smb_multi_pin_locking_structure = mp_ecp_smb_multi_pin_locking_structure;
-	smb_multi_pin_locking_data_port->set(ecp_edp_smb_multi_pin_locking_structure);
+	smb_multi_pin_locking_data_port->data = mp_ecp_smb_multi_pin_locking_structure;
+	smb_multi_pin_locking_data_port->set();
 	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
@@ -39,12 +39,12 @@ bool pin_lock::first_step()
 
 bool pin_lock::next_step()
 {
-	smb_multi_leg_reply_data_request_port->get(edp_ecp_smb_multi_leg_reply_structure);
+	smb_multi_leg_reply_data_request_port->get();
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 3; i++) {
-		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].locking_in_progress == true) {
+		if (smb_multi_leg_reply_data_request_port->data.leg[i].locking_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -82,8 +82,8 @@ bool pin_unlock::first_step()
 {
 	// parameters copying
 	get_mp_ecp_command();
-	ecp_edp_smb_multi_pin_locking_structure = mp_ecp_smb_multi_pin_locking_structure;
-	smb_multi_pin_locking_data_port->set(ecp_edp_smb_multi_pin_locking_structure);
+	smb_multi_pin_locking_data_port->data = mp_ecp_smb_multi_pin_locking_structure;
+	smb_multi_pin_locking_data_port->set();
 	smb_multi_leg_reply_data_request_port->set_request();
 	return true;
 }
@@ -91,12 +91,12 @@ bool pin_unlock::first_step()
 bool pin_unlock::next_step()
 {
 
-	smb_multi_leg_reply_data_request_port->get(edp_ecp_smb_multi_leg_reply_structure);
+	smb_multi_leg_reply_data_request_port->get();
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 3; i++) {
-		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].locking_in_progress == true) {
+		if (smb_multi_leg_reply_data_request_port->data.leg[i].locking_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -136,8 +136,8 @@ bool pin_rise::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_smb_multi_pin_insertion_structure = mp_ecp_smb_multi_pin_insertion_structure;
-	smb_multi_pin_insertion_data_port->set(ecp_edp_smb_multi_pin_insertion_structure);
+	smb_multi_pin_insertion_data_port->data = mp_ecp_smb_multi_pin_insertion_structure;
+	smb_multi_pin_insertion_data_port->set();
 	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
@@ -146,12 +146,12 @@ bool pin_rise::first_step()
 bool pin_rise::next_step()
 {
 
-	smb_multi_leg_reply_data_request_port->get(edp_ecp_smb_multi_leg_reply_structure);
+	smb_multi_leg_reply_data_request_port->get();
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 3; i++) {
-		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].insertion_in_progress == true) {
+		if (smb_multi_leg_reply_data_request_port->data.leg[i].insertion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -191,8 +191,8 @@ bool pin_lower::first_step()
 	// parameters copying
 	get_mp_ecp_command();
 
-	ecp_edp_smb_multi_pin_insertion_structure = mp_ecp_smb_multi_pin_insertion_structure;
-	smb_multi_pin_insertion_data_port->set(ecp_edp_smb_multi_pin_insertion_structure);
+	smb_multi_pin_insertion_data_port->data = mp_ecp_smb_multi_pin_insertion_structure;
+	smb_multi_pin_insertion_data_port->set();
 	smb_multi_leg_reply_data_request_port->set_request();
 
 	return true;
@@ -201,12 +201,12 @@ bool pin_lower::first_step()
 bool pin_lower::next_step()
 {
 
-	smb_multi_leg_reply_data_request_port->get(edp_ecp_smb_multi_leg_reply_structure);
+	smb_multi_leg_reply_data_request_port->get();
 
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 3; i++) {
-		if (edp_ecp_smb_multi_leg_reply_structure.leg[i].insertion_in_progress == true) {
+		if (smb_multi_leg_reply_data_request_port->data.leg[i].insertion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}

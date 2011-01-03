@@ -5,9 +5,10 @@ add_executable(ecp_objectfollower_pb_sac
     ../pb_visual_servo.cc
     ../visual_servo.cc
     ../visual_servo_manager.cc
-    ../simple_visual_servo_manager.cc
+    ../single_visual_servo_manager.cc
     ../position_constraint.cc
     ../cubic_constraint.cc
+    ../termination_condition.cc
 )
 
 target_link_libraries(ecp_objectfollower_pb_sac

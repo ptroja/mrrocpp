@@ -50,6 +50,8 @@ public:
 	 * @return
 	 */
 	bool is_object_visible();
+
+	const Eigen::Matrix <double, 6, 1> & get_error();
 protected:
 	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator);
 
@@ -60,6 +62,8 @@ protected:
 	virtual bool is_object_visible_in_latest_reading() = 0;
 
 	boost::shared_ptr <visual_servo_regulator> regulator;
+
+	Eigen::Matrix <double, 6, 1> error;
 private:
 	bool object_visible;
 

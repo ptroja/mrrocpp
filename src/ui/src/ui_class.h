@@ -8,8 +8,15 @@
 #ifndef __UI_CLASS_H
 #define __UI_CLASS_H
 
-#include "ui/src/ui.h"
+/* Local headers */
+#include "../ablibs.h"
+
+// TODO: #include <boost/shared_ptr.hpp>
+
+#include "base/lib/sr/sr_ecp.h"
+#include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "ui/src/ui.h"
 #include "ui/src/bird_hand/ui_r_bird_hand.h"
 #include "ui/src/irp6ot_m/ui_r_irp6ot_m.h"
 #include "ui/src/irp6ot_tfg/ui_r_irp6ot_tfg.h"
@@ -22,9 +29,7 @@
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
-
-/* Local headers */
-#include "../ablibs.h"
+#include "ui/src/polycrank/ui_r_polycrank.h"
 
 //
 //
@@ -32,20 +37,31 @@
 //
 //
 
-class ui_sr_buffer;
-class ui_ecp_buffer;
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
+typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
+typedef robots_t::value_type robot_pair_t;
+
+class sr_buffer;
+class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
 
-class Ui
+class Interface
 {
 private:
 
 public:
 
-	ui_sr_buffer* ui_sr_obj;
-	ui_ecp_buffer* ui_ecp_obj;
+	sr_buffer* ui_sr_obj;
+	ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 
@@ -62,7 +78,7 @@ public:
 	pid_t ui_pid; // pid UI
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
-	int teachingstate; // dawne systemState do nauki
+	TEACHING_STATE teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 
@@ -101,51 +117,67 @@ public:
 	std::string sr_attach_point;
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
+	std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
-	UiRobotBirdHand *bird_hand;
-	UiRobotIrp6ot_m *irp6ot_m;
-	UiRobotIrp6ot_tfg *irp6ot_tfg;
-	UiRobotIrp6p_m *irp6p_m;
-	UiRobotIrp6p_tfg *irp6p_tfg;
-	UiRobotSarkofag *sarkofag;
-	UiRobotIrp6m_m *irp6m_m;
-	UiRobotConveyor *conveyor;
-	UiRobotSpeaker *speaker;
-	UiRobotSpkm *spkm;
-	UiRobotSmb *smb;
-	UiRobotShead *shead;
 
-	Ui();
+	/**
+	 * @brief map of all robots used in the task
+	 */
+	common::robots_t robot_m;
+
+	bird_hand::UiRobot *bird_hand;
+	//robot_m[lib::] = bird_hand;
+
+	irp6ot_m::UiRobot *irp6ot_m;
+	irp6ot_tfg::UiRobot *irp6ot_tfg;
+	irp6p_m::UiRobot *irp6p_m;
+	irp6p_tfg::UiRobot *irp6p_tfg;
+	sarkofag::UiRobot *sarkofag;
+	irp6m::UiRobot *irp6m_m;
+	conveyor::UiRobot *conveyor;
+	speaker::UiRobot *speaker;
+	spkm::UiRobot *spkm;
+	smb::UiRobot *smb;
+	shead::UiRobot *shead;
+	polycrank::UiRobot *polycrank;
+
+	Interface();
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
-	int reload_whole_configuration();
+	int MPup_int();
+	void reload_whole_configuration();
 	void abort_threads();
-	int fill_node_list(void);
+	void fill_node_list(void);
 	int fill_section_list(const char *file_name_and_path);
 	int initiate_configuration(void);
 	int clear_all_configuration_lists(void);
 	int fill_program_node_list(void);
 	int get_default_configuration_file_name(void);
 	int set_default_configuration_file_name(void);
-	bool check_synchronised_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
-	bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
-	bool check_node_existence(const std::string _node, const std::string beginnig_of_message);
-	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
+	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
 	int execute_mp_pulse(char pulse_code);
-	int pulse_reader_execute(int coid, int pulse_code, int pulse_value);
-	int set_toggle_button(PtWidget_t *widget);
-	int unset_toggle_button(PtWidget_t *widget);
-	int block_widget(PtWidget_t *widget);
-	int unblock_widget(PtWidget_t *widget);
+
+	//! TODO: throw an exception (assumed inheritance from std::exception)
+
+	void set_toggle_button(PtWidget_t *widget);
+	void unset_toggle_button(PtWidget_t *widget);
+	void block_widget(PtWidget_t *widget);
+	void unblock_widget(PtWidget_t *widget);
 	void create_threads();
+
+	bool is_any_robot_active();
+	bool are_all_robots_synchronised_or_inactive();
+	bool are_all_robots_loaded_or_inactive();
+	bool is_any_active_robot_loaded();
 
 };
 
+}
+} //namespace ui
+} //namespace mrrocpp
 #endif
 

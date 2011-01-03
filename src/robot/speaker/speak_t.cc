@@ -12,7 +12,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/lib/mis_fun.h"
 
 // Klasa edp_speaker_effector.

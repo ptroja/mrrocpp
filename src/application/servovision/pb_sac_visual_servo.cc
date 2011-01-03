@@ -62,6 +62,7 @@ lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_
 
 	lib::Xyz_Angle_Axis_vector aa_vector;
 	error_matrix.get_xyz_angle_axis(aa_vector);
+	error = aa_vector;
 
 //	log_dbg("aa_vector: %10lg, %10lg, %10lg, %10lg, %10lg, %10lg\n", aa_vector(0, 0), aa_vector(1, 0), aa_vector(2, 0), aa_vector(3, 0), aa_vector(4, 0), aa_vector(5, 0));
 

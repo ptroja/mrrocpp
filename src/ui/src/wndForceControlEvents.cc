@@ -24,7 +24,7 @@
 
 #include "ui/src/ui.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 // #include "common/y_config.h"
 // Konfigurator.
@@ -39,29 +39,26 @@
 
 // Wiadomosc wysylana do ECP.
 lib::UI_ECP_message ui_ecp_msg;
-extern Ui ui;
-
-uint64_t e; // kod bledu systemowego
-
+extern ui::common::Interface interface;
 
 // Numer makrokroku.
 int macrostep_number;
 // PID ECP
 int ECPfd;
 // Tworzenie polaczenia z ECP.
-bool CREATE_CONNECTION;
+static bool CREATE_CONNECTION;
 // Pobranie polozenia robota.
-bool GET_ROBOT_POSITION;
+static bool GET_ROBOT_POSITION;
 // Kontrola readera.
-bool READER_ON;
+static bool READER_ON;
 // Rodzaj sterowania.
 lib::POSE_SPECIFICATION ps;
 
 // komenda wysylana z okna FileDialog po wcisnieciu accept
 extern uint8_t FDCommand;
 
-int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCwndForceControlRealised\n");
 #endif
@@ -81,9 +78,9 @@ int FCwndForceControlRealised(PtWidget_t *widget, ApInfo_t *apinfo,
 	ps = lib::MOTOR;
 	return (Pt_CONTINUE);
 }
-; // end: FCwndForceControlRealised
 
-int FCCreateConnection(void) {
+int FCCreateConnection(void)
+{
 #ifdef FCDEBUG
 	printf("FCCreateConnection\n");
 #endif
@@ -91,40 +88,40 @@ int FCCreateConnection(void) {
 	// 	lib::ECP_message from_ecp;
 
 	// Stworzenie nazwy.
-	std::string tmp_name = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point",
-			lib::irp6ot_m::ECP_SECTION);
+	std::string
+			tmp_name =
+					interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_sec_chan_attach_point", lib::irp6ot_m::ECP_SECTION);
 
 #ifdef FCDEBUG
 	printf("FCCreateConnection: %s\n",tmp_name.c_str());
 #endif
 	// Otwarcie polaczenia.
 	if ((ECPfd = name_open(tmp_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
-		e = errno;
 		perror("FCCreateConnection: Connect to ECP failed");
 		return EXIT_FAILURE;
-	};
+	}
 	return EXIT_SUCCESS;
 }
-; // end: FCCreateConnection
 
-int FCRefreshPosition(void) {
-	char tmp[20];
+int FCRefreshPosition(void)
+{
 	// Wiadomosc odbierana z ECP.
 	lib::ECP_message from_ecp;
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_GET_DATA;
 	// Wyslanie polecenia i odebranie polozenia robota.
-	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &from_ecp,
-			sizeof(lib::ECP_message)) == -1) {
+	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), &from_ecp, sizeof(lib::ECP_message)) == -1) {
 		perror("FCRefreshWindow: Send to ECP failed");
 		return EXIT_FAILURE;
 	} else {
 		// Wypisanie pozycji robota w oknie.
 		// Zerowa os.
+		char tmp[20];
 		sprintf(tmp, "%5.5f", from_ecp.RS.robot_position[0]);
 		PtSetResource(ABW_FCedtArm0, Pt_ARG_TEXT_STRING, tmp, 0);
 		// Pierwsza os.
@@ -155,12 +152,12 @@ int FCRefreshPosition(void) {
 		PtSetResource(ABW_FCedtForceReading4, Pt_ARG_TEXT_STRING, tmp, 0);
 		sprintf(tmp, "%5.5f", from_ecp.RS.sensor_reading[5]);
 		PtSetResource(ABW_FCedtForceReading5, Pt_ARG_TEXT_STRING, tmp, 0);
-	};
+	}
 	return EXIT_SUCCESS;
 }
-; // end: FCRefreshPosition
 
-int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCTimerTick\n");
 #endif
@@ -170,48 +167,50 @@ int FCTimerTick(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) 
 		if (FCCreateConnection() != EXIT_FAILURE)
 			CREATE_CONNECTION = false;
 		return (Pt_CONTINUE);
-	}; // end: if
+	}
 	// Jezeli trzeba odswiezyc pozycje robota.
 	if (GET_ROBOT_POSITION) {
 		FCRefreshPosition();
 		return (Pt_CONTINUE);
-	}; // end: if
+	}
 	return (Pt_CONTINUE);
 }
-; // end: FCTimerTick
 
-
-int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnCalibrateSensor\n");
 #endif
-	// ustawienie typu wiadomosci
+#if !defined(USE_MESSIP_SRR)
+	// Ustawienie typu wiadomosci
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// polecenie dla ECP -> kalibracja czujnika
 	ui_ecp_msg.command = lib::FC_CALIBRATE_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("btnCalibrateSensor: Send to ECP failed");
-	};
+	}
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnCalibrateSensor
 
-
-int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnAddMacrostep\n");
 #endif
-	char tmp[5];
-	int* i = new int;
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_ADD_MACROSTEP;
+
 	// Zczytanie czasu wykonywana kroku.
+	int ivalue;
+	int *i = &ivalue;
+
 	PtGetResource(ABW_FCPtMotionTime, Pt_ARG_NUMERIC_VALUE, &i, 0);
 	ui_ecp_msg.motion_time = *i;
 	// Wyslanie danych o pozycji oraz odblokowanie ruchu.
@@ -222,6 +221,7 @@ int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo,
 		// Dodanie makrokroku.
 		macrostep_number++;
 		// Wyswietlenie numeru makrokroku.
+		char tmp[5];
 		sprintf(tmp, "%i", macrostep_number);
 		PtSetResource(ABW_FCedtMacrostepNumber, Pt_ARG_TEXT_STRING, tmp, 0);
 		// aktywacja przycisku SAVE
@@ -230,20 +230,20 @@ int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo,
 		SetButtonState(ABW_FCbtnNewTrajectory, true);
 		// odswiezenie okna
 		PtDamageWidget(ABW_wndForceControl);
-	}; // end: else
+	}
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnAddMacrostep
 
-int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnNewTrajectory\n");
 #endif
-	char tmp[5];
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_NEW_TRAJECTORY;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -252,6 +252,7 @@ int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 		// Wyzerowanie liczby makrokrokow.
 		macrostep_number = 0;
 		// Wyswietlenie numeru makrokroku.
+		char tmp[5];
 		sprintf(tmp, "%i", macrostep_number);
 		PtSetResource(ABW_FCedtMacrostepNumber, Pt_ARG_TEXT_STRING, tmp, 0);
 		// Deaktywacja przycisku SAVE.
@@ -260,13 +261,12 @@ int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 		SetButtonState(ABW_FCbtnNewTrajectory, false);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndForceControl);
-	}; // end: else
+	}
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnNewTrajectory
 
-int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnSaveTrajectory\n");
 #endif
@@ -276,31 +276,31 @@ int FCbtnSaveTrajectory(PtWidget_t *widget, ApInfo_t *apinfo,
 	ApCreateModule(ABM_wndFileLocation, widget, cbinfo);
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnSaveTrajectory
 
-int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnExit\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("FCbtnExit: Send to ECP failed");
-	};
+	}
 	// Zamkniecie polaczenia.
 	name_close(ECPfd);
 	// Zamkniecie okna.
 	PtDestroyWidget(ABW_wndForceControl);
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnExit
 
-
-int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	char pulse_code;
 	long pulse_value = 0;
 #ifdef FCDEBUG
@@ -311,40 +311,44 @@ int FCbtnOnOffReader(PtWidget_t *widget, ApInfo_t *apinfo,
 		pulse_code = READER_STOP; // stop
 	else
 		pulse_code = READER_START;// start
-	if (MsgSendPulse(ui.irp6ot_m->state.edp.reader_fd, sched_get_priority_min(
-			SCHED_FIFO), pulse_code, pulse_value) == -1) {
-		perror("FCbtnOnOffReader: Send pulse to Reader failed");
+
+	try {
+		interface.irp6ot_m->pulse_reader_execute(pulse_code, pulse_value);
+	} catch (std::exception & e) {
+		return (Pt_CONTINUE);
+	}
+
+	// Reader wylaczony.
+	if (READER_ON) {
+		// Wylaczenie.
+		READER_ON = false;
+		// Zmiana przycisku.
+		PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "ON", 0);
+		PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [OFF]",
+				0);
 	} else {
-		// Reader wylaczony.
-		if (READER_ON) {
-			// Wylaczenie.
-			READER_ON = false;
-			// Zmiana przycisku.
-			PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "ON", 0);
-			PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [OFF]",
-					0);
-		} else {
-			// Wylaczenie.
-			READER_ON = true;
-			// Zmiana przycisku.
-			PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "OFF", 0);
-			PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [ON]", 0);
-		};
-		// Odswiezenie okna.
-		PtDamageWidget(ABW_wndForceControl);
-	}; // end: else
+		// Wylaczenie.
+		READER_ON = true;
+		// Zmiana przycisku.
+		PtSetResource(ABW_FCbtnOnOffReader, Pt_ARG_TEXT_STRING, "OFF", 0);
+		PtSetResource(ABW_FClblReader, Pt_ARG_TEXT_STRING, "Reader [ON]", 0);
+	}
+	// Odswiezenie okna.
+	PtDamageWidget(ABW_wndForceControl);
+
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnOnOffReader
 
-int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef FCDEBUG
 	printf("FCbtnChangeExternalMotorControl\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_CHANGE_CONTROL;
 	// Zmiana sterowania.
@@ -399,23 +403,25 @@ int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo,
 	 PtSetResource(ABW_lblRobotControl3, Pt_ARG_TEXT_STRING ,  "Arm[3]", 0);
 	 PtSetResource(ABW_lblRobotControl4, Pt_ARG_TEXT_STRING ,  "Arm[4]", 0);
 	 PtSetResource(ABW_lblRobotControl5, Pt_ARG_TEXT_STRING ,  "Arm[5]", 0);
-	 }; // end: else
+	 }
 	 // Odswiezenie okna.
 	 PtDamageWidget(ABW_wndForceControl);
-	 }; // end: else
+	 }
 	 */
 	return (Pt_CONTINUE);
 }
-; // end: FCbtnChangeExternalMotorControl
 
 /**************************** MOVE COMMANDS *****************************/
-void SendMoveCommand(int move_type) {
+void SendMoveCommand(int move_type)
+{
 #ifdef FCDEBUG
 	printf("SendMoveCommand: %i\n",move_type);
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_MOVE_ROBOT;
 	// Rodzaj ruchu -> (okreslenie osi 1..6) && (+/- lewo/prawo).
@@ -426,115 +432,102 @@ void SendMoveCommand(int move_type) {
 	} else {
 		// Odczyt polozenia w nastepnym cyklu timera.
 		GET_ROBOT_POSITION = true;
-	}; // end: else
+	}
 }
 ; // end: SendMoveCommand
 
-int FCbtnMove0Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove0Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-1);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove1Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove1Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-2);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove2Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove2Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-3);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove3Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove3Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-4);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove4Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove4Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-5);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove5Left(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove5Left(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(-6);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove0Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove0Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+1);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove1Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove1Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+2);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove2Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove2Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+3);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove3Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove3Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+4);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove4Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove4Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+5);
 	return (Pt_CONTINUE);
 }
-;
 
-int FCbtnMove5Right(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int FCbtnMove5Right(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 	// Wyslanie odpowiedniego polecenia do ECP.
 	// (okreslenie osi 1..6) && (+/- lewo/prawo)
 	SendMoveCommand(+6);
 	return (Pt_CONTINUE);
 }
-;
-

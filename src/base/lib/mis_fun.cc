@@ -26,32 +26,28 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	int policy;
 	struct sched_param param;
 	if (pthread_getschedparam(thread, &policy, &param)) {
-		perror("pthread_getschedparam()");
+                perror("pthread_getschedparam() ");
 	}
 
 	// check priority range
-	int policy_priority_min = sched_get_priority_min(policy);
+        int policy_priority_min = sched_get_priority_min(SCHED_RR);
 	if (policy_priority_min == -1) {
-		perror("sched_get_priority_min()");
+                perror("sched_get_priority_min() ");
 	}
 
-	int policy_priority_max = sched_get_priority_max(policy);
+        int policy_priority_max = sched_get_priority_max(SCHED_RR);
 	if (policy_priority_max == -1) {
-		perror("sched_get_priority_max()");
+                perror("sched_get_priority_max() ");
 	}
 
-	if ((sched_priority_l < policy_priority_min) || (sched_priority_l > policy_priority_max)) {
-		// TODO: rewrite static variable with pthread_once
-		static bool warned = true; // priorities warning apply only to Linux, skip for now
-		if (!warned)
-			fprintf(stderr, "requested thread priority (%d) not in <%d:%d> priority range\n", sched_priority_l, policy_priority_min, policy_priority_max);
-		//		warned = true;
-	} else {
+        if ((sched_priority_l < policy_priority_min) || (sched_priority_l > policy_priority_max)) {
+            fprintf(stderr, "requested thread priority (%d) not in <%d:%d> priority range\n", sched_priority_l, policy_priority_min, policy_priority_max);
+        } else {
 		param.sched_priority = sched_priority_l;
-		if (pthread_setschedparam(thread, policy, &param)) {
-			perror("pthread_setschedparam()");
+                if (pthread_setschedparam(thread, SCHED_RR, &param)) {
+                        perror("pthread_setschedparam() ");
 		}
-	}
+        }
 }
 
 //! set the thread name for debugging

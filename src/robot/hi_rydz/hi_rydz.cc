@@ -130,7 +130,7 @@ void HI_rydz::init()
 	if (hi_int_wait(common::INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
 	{
 		// inicjacja wystawiania przerwan
-		if (master.robot_test_mode == 0) {
+		if (!master.robot_test_mode) {
 			// Ustawienie czestotliwosci przerwan
 			uint16_t int_freq = SET_INT_FREQUENCY | hi_intr_freq_divider;
 			out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
@@ -152,7 +152,7 @@ void HI_rydz::init()
 
 	// Zakaz pracy recznej we wszystkich osiach
 
-	if (master.robot_test_mode == 0) {
+	if (!master.robot_test_mode) {
 		for (int i = 0; i < master.number_of_servos; i++) {
 			/*
 			 out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), FIRST_SERVO_PTR + (uint8_t)i);
@@ -216,7 +216,7 @@ long int HI_rydz::get_position(int drive_number)
 // ------------------------------------------------------------------------
 HI_rydz::~HI_rydz(void) // destruktor
 {
-	if (master.robot_test_mode == 0) {
+	if (!master.robot_test_mode) {
 		reset_counters();
 
 		// Zezwolenie na prace reczna
@@ -432,6 +432,16 @@ void HI_rydz::finish_synchro(int drive_number)
 } // end: finish_synchro()
 
 
+bool HI_rydz::in_synchro_area(int drive_number)
+{
+	return false;
+}
+
+bool HI_rydz::robot_synchronized()
+{
+	return false;
+}
+
 // Sprawdzenie czy pojawilo sie zero  (synchronizacji rezolwera)
 bool HI_rydz::is_impulse_zero(int drive_number)
 {
@@ -447,6 +457,11 @@ void HI_rydz::reset_position(int i)
 	current_absolute_position[i] = 0L;
 	previous_absolute_position[i] = 0L;
 	current_position_inc[i] = 0.0;
+}
+
+int HI_rydz::set_parameter(int drive_number, const int parameter, uint32_t new_value)
+{
+	return 0;
 }
 
 } // namespace hi_rydz

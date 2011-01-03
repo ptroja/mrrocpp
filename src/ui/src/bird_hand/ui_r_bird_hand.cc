@@ -20,27 +20,115 @@
 //
 //
 
+namespace mrrocpp {
+namespace ui {
+namespace bird_hand {
 
-UiRobotBirdHand::UiRobotBirdHand(Ui& _ui) :
-	UiRobot(_ui, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION), ui_ecp_robot(NULL)
+void UiRobot::edp_create()
 {
-	wnd_command_and_status = new WndBirdHandCommandAndStatus(ui, *this);
-	wnd_configuration = new WndBirdHandConfiguration(ui, *this);
+	if (state.edp.state == 0) {
+		create_thread();
+
+		eb.command(boost::bind(&ui::bird_hand::UiRobot::edp_create_int, &(*this)));
+	}
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
+
+	try { // dla bledow robot :: ECP_error
+
+		// dla robota bird_hand
+		if (state.edp.state == 0) {
+			state.edp.state = 0;
+			state.edp.is_synchronised = false;
+
+			std::string tmp_string("/dev/name/global/");
+			tmp_string += state.edp.hardware_busy_attach_point;
+
+			std::string tmp2_string("/dev/name/global/");
+			tmp2_string += state.edp.network_resourceman_attach_point;
+
+			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
+			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_bird_hand already exists");
+			} else if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
+
+				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
+				{
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
+					ui_ecp_robot = new ui::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
+
+				}
+
+				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
+
+				if (state.edp.pid < 0) {
+
+					state.edp.state = 0;
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+					delete ui_ecp_robot;
+				} else { // jesli spawn sie powiodl
+
+					state.edp.state = 1;
+
+					connect_to_reader();
+
+					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+					lib::controller_state_t robot_controller_initial_state_tmp;
+
+					ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
+
+					//state.edp.state = 1; // edp wlaczone reader czeka na start
+
+					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+				}
+			}
+		}
+
+	} // end try
+
+	CATCH_SECTION_UI
+
+	interface.manage_interface();
+
+	return 1;
 
 }
 
-int UiRobotBirdHand::reload_configuration()
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
+
+UiRobot::UiRobot(common::Interface& _interface) :
+	common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME),
+			ui_ecp_robot(NULL)
+{
+	wnd_command_and_status = new WndCommandAndStatus(interface, *this);
+	wnd_configuration = new WndConfiguration(interface, *this);
+
+}
+
+int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = ui.config->value <int> ("is_bird_hand_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_bird_hand_active")) == 1) {
 		// ini_con->create_ecp_bird_hand (ini_con->ui->ecp_bird_hand_section);
 		//ui_state.is_any_edp_active = true;
-		if (ui.is_mp_and_ecps_active) {
+		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
-			state.ecp.trigger_fd = -1;
+			state.ecp.trigger_fd = lib::invalid_fd;
 		}
 
 		switch (state.edp.state)
@@ -50,24 +138,24 @@ int UiRobotBirdHand::reload_configuration()
 				// ini_con->create_edp_bird_hand (ini_con->ui->edp_bird_hand_section);
 
 				state.edp.pid = -1;
-				state.edp.reader_fd = -1;
+				state.edp.reader_fd = lib::invalid_fd;
 				state.edp.state = 0;
 
-				if (ui.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = ui.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point
-						= ui.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
 
 				state.edp.network_reader_attach_point
-						= ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-				state.edp.node_name = ui.config->value <std::string> ("node_name", state.edp.section_name);
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
 				break;
 			case 1:
 			case 2:
@@ -97,7 +185,7 @@ int UiRobotBirdHand::reload_configuration()
 	return 1;
 }
 
-int UiRobotBirdHand::manage_interface()
+int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
 	{
@@ -118,19 +206,19 @@ int UiRobotBirdHand::manage_interface()
 				ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-				switch (ui.mp.state)
+				switch (interface.mp.state)
 				{
-					case UI_MP_NOT_PERMITED_TO_RUN:
-					case UI_MP_PERMITED_TO_RUN:
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, NULL);
 						break;
-					case UI_MP_WAITING_FOR_START_PULSE:
+					case common::UI_MP_WAITING_FOR_START_PULSE:
 						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_edp_unload, NULL);
 						break;
-					case UI_MP_TASK_RUNNING:
-					case UI_MP_TASK_PAUSED:
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
 						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						break;
@@ -151,9 +239,8 @@ int UiRobotBirdHand::manage_interface()
 	return 1;
 }
 
-int UiRobotBirdHand::close_all_windows()
+void UiRobot::close_all_windows()
 {
-
 	int pt_res = PtEnter(0);
 
 	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
@@ -162,13 +249,13 @@ int UiRobotBirdHand::close_all_windows()
 	if (pt_res >= 0) {
 		PtLeave(0);
 	}
-	return 1;
-
 }
 
-int UiRobotBirdHand::delete_ui_ecp_robot()
+void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
-	return 1;
 }
 
+}
+} //namespace ui
+} //namespace mrrocpp

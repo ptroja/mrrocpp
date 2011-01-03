@@ -4,6 +4,8 @@
  *Author: Tomasz Bem
  */
 
+#include <cstdio>
+
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_sleep.h"
 

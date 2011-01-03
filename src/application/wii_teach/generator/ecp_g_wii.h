@@ -76,7 +76,7 @@ class wii : public common::generator::generator
 
         virtual void preset_position(void) = 0;
 
-        virtual void set_position(void) = 0;
+        virtual void set_position(bool changed) = 0;
 
         bool calculate_change(int axis, double value);
 

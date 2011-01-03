@@ -7,15 +7,12 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace common {
 namespace generator {
 
-std::string ECP_GEN_TFG = "ECP_GEN_TFG";
+const std::string ECP_GEN_TFG = "ECP_GEN_TFG";
 
 }// namespace generator
-} // namespace common
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

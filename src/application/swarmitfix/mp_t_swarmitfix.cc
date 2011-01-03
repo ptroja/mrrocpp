@@ -12,7 +12,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
@@ -58,9 +58,9 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::spkm::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::smb::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::shead::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::spkm::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::smb::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::shead::ROBOT_NAME.c_str());
 
 	double a = 2.88;
 
@@ -77,28 +77,27 @@ void swarmitfix::main_task_algorithm(void)
 
 	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
 
-	int int_port_data_input = 16;
-	int int_port_data_output;
+	int_port_from_manager->data = 16;
 
-	int_port_from_manager->set(int_port_data_input);
-	int_port_from_manager->get(int_port_data_output);
+	int_port_from_manager->set();
+	int_port_from_manager->get();
 
-	ss << " " << int_port_data_output;
+	ss << " " << int_port_from_manager->data;
 
 	sr_ecp_msg->message(ss.str().c_str());
 
 	send_end_motion_to_ecps(1, lib::spkm::ROBOT_NAME.c_str());
 	/*
 	 sr_ecp_msg->message("2");
-	 set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_SLEEP, (int) 5, "",  0,1,
+	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_SLEEP, (int) 5, "",  0,1,
 	 lib::spkm::ROBOT_NAME);
 	 sr_ecp_msg->message("3");
-	 run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(
+	 run_extended_empty_gen_and_wait(
 	 1, 1, lib::spkm::ROBOT_NAME, lib::spkm::ROBOT_NAME);
 	 */
 	sr_ecp_msg->message("4");
 
-	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_STRING_SIZE];
 
 	lib::epos::epos_cubic_command epos_params;
 
@@ -106,9 +105,9 @@ void swarmitfix::main_task_algorithm(void)
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state(ecp_mp::common::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
 	sr_ecp_msg->message("5");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, lib::spkm::ROBOT_NAME.c_str(), lib::spkm::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::spkm::ROBOT_NAME.c_str(), lib::spkm::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 

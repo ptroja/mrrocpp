@@ -1,31 +1,28 @@
-// -------------------------------------------------------------------------
-//                            ecp_st_go.cc
-//            Effector Control Process (lib::ECP) - methods
-// Funkcje do tworzenia procesow ECP
-//
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File contains tff_nose_run definition
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup subtasks
+ */
 
 #include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include "base/lib/sr/srlib.h"
 
-#include "base/lib/srlib.h"
-#include "generator/ecp/ecp_g_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_tff_nose_run::ecp_sub_task_tff_nose_run(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+tff_nose_run::tff_nose_run(task::task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	nrg = new generator::tff_nose_run(_ecp_t, 8);
 }
 
-void ecp_sub_task_tff_nose_run::conditional_execution()
+void tff_nose_run::conditional_execution()
 {
 
 	nrg->Move();

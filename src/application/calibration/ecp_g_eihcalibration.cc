@@ -5,10 +5,12 @@
  *      Author: jkosiore
  */
 
-#include "base/ecp/ecp_robot.h"
-#include "ecp_g_eihcalibration.h"
+#include <cstdio>
 
 #include <stdexcept>
+
+#include "base/ecp/ecp_robot.h"
+#include "ecp_g_eihcalibration.h"
 
 namespace mrrocpp {
 namespace ecp {

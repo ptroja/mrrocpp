@@ -12,13 +12,13 @@
 #include <boost/shared_ptr.hpp>
 #include "base/lib/logger.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "../simple_visual_servo_manager.h"
+#include "../single_visual_servo_manager.h"
 #include "../pb_sac_visual_servo.h"
 #include "../cubic_constraint.h"
 #include "../object_reached_termination_condition.h"
 #include "../visual_servo_regulator_p.h"
 
-using mrrocpp::ecp::common::generator::simple_visual_servo_manager;
+using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using boost::shared_ptr;
 using namespace mrrocpp::ecp::servovision;
 
@@ -30,6 +30,13 @@ namespace irp6ot_m {
 
 namespace task {
 
+/** @addtogroup servovision
+ *  @{
+ */
+
+/**
+ *
+ */
 class ecp_t_objectfollower_pb_sac : public mrrocpp::ecp::common::task::task
 {
 public:
@@ -38,9 +45,11 @@ public:
 	void main_task_algorithm();
 protected:
 	shared_ptr <visual_servo_regulator> reg;
-	shared_ptr <simple_visual_servo_manager> sm;
+	shared_ptr <single_visual_servo_manager> sm;
 	shared_ptr <visual_servo> vs;
 };
+
+/** @} */
 
 } // namespace task
 

@@ -22,10 +22,8 @@ private:
 	//	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
 
 	lib::single_thread_port <lib::epos::epos_cubic_command> * epos_cubic_command_data_port;
-	lib::epos::epos_cubic_command ecp_edp_cubic_command_structure;
 
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
-	lib::epos::epos_reply edp_ecp_epos_reply_structure;
 
 public:
 	void create_ecp_mp_reply();
@@ -44,10 +42,8 @@ private:
 	//	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
 
 	lib::single_thread_port <lib::epos::epos_trapezoidal_command> * epos_trapezoidal_command_data_port;
-	lib::epos::epos_cubic_command ecp_edp_trapezoidal_command_structure;
 
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
-	lib::epos::epos_reply edp_ecp_epos_reply_structure;
 
 public:
 	void create_ecp_mp_reply();
@@ -66,10 +62,8 @@ private:
 	//	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
 
 	lib::single_thread_port <lib::epos::epos_operational_command> * epos_operational_command_data_port;
-	lib::epos::epos_cubic_command ecp_edp_operational_command_structure;
 
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
-	lib::epos::epos_reply edp_ecp_epos_reply_structure;
 
 public:
 	void create_ecp_mp_reply();
@@ -88,7 +82,6 @@ private:
 	//	lib::epos_gen_parameters mp_ecp_epos_gen_parameters_structure;
 
 	lib::single_thread_port <bool> * epos_brake_command_data_port;
-	bool ecp_edp_brake_command_structure;
 
 public:
 	void create_ecp_mp_reply();

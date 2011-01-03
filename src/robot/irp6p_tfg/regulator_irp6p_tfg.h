@@ -28,7 +28,7 @@ const int IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE = 1000;
 const double AXIS_7_SYNCHRO_STEP_COARSE = -0.5;
 const double AXIS_7_SYNCHRO_STEP_FINE = -0.2;
 
-const int IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT = 1000;
+
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_irp6p : public common::NL_regulator

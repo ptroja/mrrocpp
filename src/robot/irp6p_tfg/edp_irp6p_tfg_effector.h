@@ -22,6 +22,8 @@ namespace mrrocpp {
 namespace edp {
 namespace irp6p_tfg {
 
+const double AXIS_7_INC_PER_REVOLUTION = 128;
+
 // Klasa reprezentujaca tasmociag.
 class effector : public common::motor_driven_effector
 {

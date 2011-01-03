@@ -1,5 +1,5 @@
 /* ! \file include/sensor/ati6284/ati/ftconfig.h
-    * \brief plik nag��wkowy ATI
+    * \brief plik naglowkowy ATI
     * Ostatnia modyfikacja: 04.2006
     * ATIDAQ F/T C Library
      * Copyright (c) ATI Industrial Automation

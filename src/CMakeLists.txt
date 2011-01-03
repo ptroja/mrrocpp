@@ -34,7 +34,9 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
 option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
 option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
+if(QNXNTO)
 option(ROBOT_SPEAKER "Build support for speaker robot" ON)
+endif(QNXNTO)
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
 CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
@@ -55,7 +57,9 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 	"Build support for sarkofag"
 	ON "ROBOTS_SWARMITFIX" OFF)
 
-option(USE_MESSIP "Use MESSIP TCP messaging protocol" OFF)
+option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
+
+option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
 
 # QNX is default MRROC++ target
 if (QNXNTO)
@@ -63,14 +67,14 @@ if (QNXNTO)
 	set(MRLIB "$ENV{QNX_TARGET}/mrlib")
 
 	# keep this flag until bug in QNX stack alignment is fixed
-	add_definitions (-DEIGEN_DONT_ALIGN)	
-	set(EIGEN2_INCLUDE_DIR "${MRLIB}/include/eigen2") 
+	add_definitions (-DEIGEN_DONT_ALIGN)
+	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
 	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.39 COMPONENTS thread serialization)
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	# include boost compatibility layer
 	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
@@ -79,15 +83,57 @@ if (QNXNTO)
 	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
 	
 	# QNX provides networking with separate library
+
 	set (COMPATIBILITY_LIBRARIES socket m)
+
+	# warn about almost everything except:
+	# -Wcast-qual
+	# -Wshadow
+	# -Wsign-compare
+	# optimization option -O1 is required for the compiler to find uninitialized local variables.
+	set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
+elseif (UBUNTU32BIT)
+	# QNX headers and libraries are kept in 'mrlib' repository
+	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.10-32bit")
+	set(MRLIB "${UBUNTU32BIT_ROOT}/usr")
+
+	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
+	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
+	#set(Boost_INCLUDE_DIR "${MRLIB}/include")
+
+	# Boost is provided by mrlib repository
+	set(BOOST_ROOT "${MRLIB}")
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
+
+	# FIXME: define libxml2 libraries to use
+	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
+	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
+
+	# clock_gettime() can be missing in -lc
+	INCLUDE(CheckLibraryExists)
+	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
+	if(HAVE_LIBRT)
+		set (COMPATIBILITY_LIBRARIES rt)
+	endif(HAVE_LIBRT)
+
+	# for non-QNX target messip is the only messaging protocol
+	set(USE_MESSIP ON)
+	
+	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
+	include_directories (${MRLIB}/include)
+	set(CMAKE_SKIP_RPATH ON)
+	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-	find_package(Boost 1.39 COMPONENTS thread serialization)
+    set(BOOST_ROOT "/opt/boost")
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 
-	# Eigen2 is not supported by CMake
-	set(EIGEN2_INCLUDE_DIR /usr/include/eigen2) 
+	# Eigen2 is not directly supported by CMake
+	pkg_check_modules(EIGEN2 REQUIRED eigen2)
 
 	# clock_gettime() can be missing in -lc
 	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
@@ -97,13 +143,17 @@ else (QNXNTO) # Linux, etc.
 
 	# for non-QNX target messip is the only messaging protocol
 	set(USE_MESSIP ON)
+
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif (QNXNTO)
+
+include(FindComedi)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
 include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
-include_directories (${EIGEN2_INCLUDE_DIR}) 
+include_directories (${EIGEN2_INCLUDE_DIRS})
 
 if(USE_MESSIP)
 	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)

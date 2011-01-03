@@ -18,10 +18,8 @@
 #include <process.h>
 #include <cmath>
 
-#include <boost/bind.hpp>
+#include "base/lib/sr/srlib.h"
 
-#include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
 #include "ui/src/ui_class.h"
 // #include "ui/src/ui.h"
 // Konfigurator.
@@ -34,7 +32,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern ui::common::Interface interface;
 
 int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -42,96 +40,11 @@ int EDP_smb_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (ui.smb->state.edp.state == 0) {
-		ui.smb->create_thread();
-
-		ui.smb->eb.command(boost::bind(EDP_smb_create_int, widget, apinfo, cbinfo));
-	}
+	interface.smb->edp_create();
 	return (Pt_CONTINUE);
 
 }
 
-int EDP_smb_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	//	sleep(10);
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	try { // dla bledow robot :: ECP_error
-
-		// dla robota smb
-		if (ui.smb->state.edp.state == 0) {
-
-			ui.smb->state.edp.state = 0;
-			ui.smb->state.edp.is_synchronised = false;
-
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += ui.smb->state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += ui.smb->state.edp.network_resourceman_attach_point;
-
-			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(ui.smb->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				ui.ui_msg->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
-			} else if (ui.check_node_existence(ui.smb->state.edp.node_name, std::string("edp_smb"))) {
-
-				ui.smb->state.edp.node_nr = ui.config->return_node_number(ui.smb->state.edp.node_name);
-
-				{
-					boost::unique_lock <boost::mutex> lock(ui.process_creation_mtx);
-
-					ui.smb->ui_ecp_robot = new ui_tfg_and_conv_robot(*ui.config, *ui.all_ecp_msg, lib::smb::ROBOT_NAME);
-				}
-				ui.smb->state.edp.pid = ui.smb->ui_ecp_robot->ecp->get_EDP_pid();
-
-				if (ui.smb->state.edp.pid < 0) {
-
-					ui.smb->state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete ui.smb->ui_ecp_robot;
-				} else { // jesli spawn sie powiodl
-
-					ui.smb->state.edp.state = 1;
-
-					short tmp = 0;
-					// kilka sekund  (~1) na otworzenie urzadzenia
-
-					while ((ui.smb->state.edp.reader_fd
-							= name_open(ui.smb->state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-							< 0)
-						if ((tmp++) < lib::CONNECT_RETRY) {
-							delay(lib::CONNECT_DELAY);
-						} else {
-							perror("blad odwolania do READER_OT");
-							break;
-						}
-
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
-
-					ui.smb->ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
-
-					//ui.smb->state.edp.state = 1; // edp wlaczone reader czeka na start
-
-					ui.smb->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
-				}
-			}
-		}
-
-	} // end try
-
-	CATCH_SECTION_UI
-
-	ui.manage_interface();
-
-	return 1;
-}
 
 int EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -140,7 +53,7 @@ int EDP_smb_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	ui.smb->EDP_slay_int();
+	interface.smb->EDP_slay_int();
 
 	return (Pt_CONTINUE);
 

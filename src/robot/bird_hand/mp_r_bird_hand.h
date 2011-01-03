@@ -15,10 +15,21 @@
 namespace mrrocpp {
 namespace mp {
 namespace robot {
+
+/*!
+ * @brief Bird Hand gripper mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup bird_hand
+ */
 class bird_hand : public robot
 {
 
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	bird_hand(task::task &mp_object_l);
 };
 } // namespace robot

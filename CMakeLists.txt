@@ -4,6 +4,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (MRROCPP)
 
+
+
 set(CMAKE_MODULE_PATH ${MRROCPP_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 
@@ -23,7 +25,7 @@ set (ECPDIR ${PROJECT_SOURCE_DIR}/src/ecp)
 # set default install prefix
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET(CMAKE_INSTALL_PREFIX
-      ${PROJECT_SOURCE_DIR} CACHE PATH "${CMAKE_PROJECT_NAME} install prefix" FORCE
+      ${PROJECT_BINARY_DIR} CACHE PATH "${CMAKE_PROJECT_NAME} install prefix" FORCE
   )
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
@@ -37,3 +39,4 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Recurse into the "src" subdirectories.
 add_subdirectory (src)
+add_subdirectory (doc)

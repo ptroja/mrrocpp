@@ -102,7 +102,7 @@ public:
 private:
 	motor_driven_effector &master;
 
-	boost::thread *thread_id;
+	boost::thread thread_id;
 
 	bool write_csv;
 

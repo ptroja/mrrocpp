@@ -11,7 +11,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "robot/irp6p_tfg/edp_irp6p_tfg_effector.h"
 
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "base/lib/typedefs.h"
@@ -80,16 +80,16 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	double current_measured;
 	static int low_measure_counter;
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_8_MAX_ACC, common::SG_REG_8_MAX_SPEED);
+	
+	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_tfg::AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
 
@@ -112,7 +112,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -155,7 +155,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -183,7 +183,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -196,7 +196,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -229,11 +229,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				set_value_new = MAX_PWM;
 			if (set_value_new < -MAX_PWM)
 				set_value_new = -MAX_PWM;
-
-			if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-			if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
 
 			set_value_old = set_value_new;
 
@@ -295,11 +290,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				set_value_new = MAX_PWM;
 			if (set_value_new < -MAX_PWM)
 				set_value_new = -MAX_PWM;
-
-			if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-			if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-				set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
 
 			set_value_old = set_value_new;
 
@@ -377,12 +367,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE8_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

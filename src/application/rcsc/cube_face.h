@@ -20,6 +20,16 @@ namespace task {
 typedef struct _cube_face
 {
 	char colors[9];
+
+    //! Give access to boost::serialization framework
+    friend class boost::serialization::access;
+
+    //! Serialization of the data structure
+    template <class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        ar & colors;
+    }
 } cube_face_t;
 
 } // namespace task

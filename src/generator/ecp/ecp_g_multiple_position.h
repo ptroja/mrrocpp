@@ -1,12 +1,14 @@
-/*
- * multiple_position.h
- *
- *  Created on: May 21, 2010
- *      Author: rtulwin
+/**
+ * @file
+ * @brief Contains declarations and definitions of the methods of multiple_position class.
+ * @author rtulwin
+ * @ingroup generators
  */
 
 #ifndef _MULTIPLE_POSITION_H_
 #define _MULTIPLE_POSITION_H_
+
+#include <cstdio>
 
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
@@ -24,7 +26,10 @@ namespace common {
 namespace generator {
 
 /**
- * Base class for the motion generators interpolating between fixed trajectory points.
+ * @brief Base class for the motion generators interpolating between fixed trajectory points.
+ *
+ * @author rtulwin
+ * @ingroup generators
  */
 template <class Pos, class Inter, class Calc>
 class multiple_position : public generator
@@ -91,6 +96,10 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
+	/**
+	 * Set to true if trajectory was specified in angle axis absolute coordinates and the interpolation is performed on poses transformed into relative vectors.
+	 */
+	bool angle_axis_absolute_transformed_into_relative;
 
 	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
@@ -177,7 +186,7 @@ protected:
 
 			if (debug) {
 				printf("actual position vector, size: %d\n", get_pos->get_position_vector().size());
-				for (int j = 0; j < get_pos->get_position_vector().size(); j++) {
+				for (std::size_t j = 0; j < get_pos->get_position_vector().size(); j++) {
 					printf("%f\t", get_pos->get_position_vector()[j]);
 				}
 				printf("\n");
@@ -217,7 +226,7 @@ protected:
 		coordinate_vector_iterator = coordinate_vector.begin();
 		pose_vector_iterator = pose_vector.begin();
 
-		int i; //loop counter
+		std::size_t i; //loop counter
 
 		bool trueFlag = true;//flag set to false if interpolation is not successful at some point
 
@@ -228,8 +237,16 @@ protected:
 				}
 				pose_vector_iterator++;
 			}
-		} else if (motion_type == lib::RELATIVE) {
+		} else if (motion_type == lib::RELATIVE && angle_axis_absolute_transformed_into_relative == true) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+				if (inter.interpolate_angle_axis_absolute_pose_transformed_into_relative(pose_vector_iterator, coordinate_vector, mc) == false) {
+					trueFlag = false;
+				}
+				pose_vector_iterator++;
+			}
+			set_absolute();
+		} else if (motion_type == lib::RELATIVE) {
+			for (std::size_t i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -258,7 +275,7 @@ protected:
 	{
 		coordinate_vector_iterator = coordinate_vector.begin();
 		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
-		for (int i = 0; i < coordinate_vector.size(); i++) {
+		for (std::size_t i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
 			printf("%d:\t", (i + 1));
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
@@ -278,6 +295,7 @@ public:
 		generator(_ecp_task)
 	{
 		debug = false;
+		angle_axis_absolute_transformed_into_relative = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
 		mc = nmc * lib::EDP_STEP;
@@ -309,6 +327,7 @@ public:
 		}
 
 		if (!calculated || !interpolated) {
+			sr_ecp_msg.message("Trajectory not inerpolated");
 			reset();
 			return false;
 		}
@@ -369,7 +388,7 @@ public:
 		return true;
 	}
 	/**
-	 * Implementation of the next_step method.
+	 * Definition of the next_step method.
 	 */
 	bool next_step()
 	{
@@ -377,6 +396,12 @@ public:
 		if (debug) {
 			//printf("\n##################################### next_step ####################################\n");
 			flushall();
+		}
+
+		if (coordinate_vector_iterator == coordinate_vector.end()) {
+			sr_ecp_msg.message("Motion finished");
+			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+			return false;
 		}
 
 		int i;//loop counter
@@ -480,13 +505,8 @@ public:
 		}// end:switch
 
 		coordinate_vector_iterator++;
-		if (coordinate_vector_iterator == coordinate_vector.end()) {
-			sr_ecp_msg.message("Motion finished");
-			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
-			return false;
-		} else {
-			return true;
-		}
+
+		return true;
 	}
 	/**
 	 * Performs calculation of the trajectory and interpolation. Fills in pose_vector and coordinate_vector.
@@ -530,13 +550,6 @@ public:
 		create_velocity_vectors(axes_num);
 	}
 	/**
-	 * Sets the chosen type of interpolation.
-	 */
-	void set_interpolation_type()
-	{
-
-	}
-	/**
 	 * Sets the relative type of motion.
 	 */
 	void set_relative(void)
@@ -559,7 +572,100 @@ public:
 		coordinate_vector.clear();
 		calculated = false;
 		interpolated = false;
+		angle_axis_absolute_transformed_into_relative = false;
 		sr_ecp_msg.message("Generator reset");
+	}
+	/**
+	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
+	 * @param max_acc maximal allowed acceleration
+	 * @return -1 if the trajectory was not interpolated before, 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
+	 */
+    virtual int detect_jerks(double max_acc)
+	{
+    	if (debug) {
+    		printf("##################################### detect_jerks #####################################\n");
+		}
+
+    	if (!interpolated) {
+    		return -1;
+    	}
+
+		coordinate_vector_iterator = coordinate_vector.begin();
+		std::vector<double> temp1 = pose_vector.begin()->start_position;
+		std::vector<double> temp2 = (*coordinate_vector_iterator);
+
+		std::size_t i, j;//loop counters
+
+		for (i = 0; i < axes_num; i++) {
+			if (motion_type == lib::ABSOLUTE) {
+				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
+						flushall();
+					}
+					return 1; //jerk in the first macrostep
+				}
+			} else if (motion_type == lib::RELATIVE) {
+				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
+					sr_ecp_msg.message("Possible jerk detected!");
+					if (debug) {
+						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
+						flushall();
+					}
+					return 1; //jerk in the first macrostep
+				}
+			} else {
+				sr_ecp_msg.message("Wrong motion type");
+				throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			}
+		}
+
+		coordinate_vector_iterator++;
+
+		for (i = 1; i < coordinate_vector.size(); i++) {
+
+			j = 0;
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				if (motion_type == lib::ABSOLUTE) {
+					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
+							flushall();
+						}
+						return i+1;
+					}
+				} else if (motion_type == lib::RELATIVE) {
+					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
+						sr_ecp_msg.message("Possible jerk detected!");
+						if (debug) {
+							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
+							flushall();
+						}
+						return i+1;
+					}
+				} else {
+					sr_ecp_msg.message("Wrong motion type");
+					throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+				}
+
+				j++;
+			}
+
+			temp1 = temp2;
+			temp2 = *coordinate_vector_iterator;
+
+			coordinate_vector_iterator++;
+		}
+
+		flushall();
+
+		return 0;
 	}
 };
 

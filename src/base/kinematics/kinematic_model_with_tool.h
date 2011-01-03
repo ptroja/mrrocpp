@@ -97,25 +97,25 @@ public:
 	 * @brief Computes robot base transformation to global reference frame.
 	 * @param[in,out] homog_matrix End-effector homogeneous matrix.
 	 */
-	inline void global_frame_transform(lib::Homog_matrix& homog_matrix);
+	void global_frame_transform(lib::Homog_matrix& homog_matrix);
 
 	/**
 	 * @brief Computes inverse base-global transformation - from global reference frame to robot base frame.
 	 * @param[in,out] homog_matrix End-effector homogeneous matrix.
 	 */
-	inline void global_frame_inverse_transform(lib::Homog_matrix& homog_matrix);
+	void global_frame_inverse_transform(lib::Homog_matrix& homog_matrix);
 
 	/**
 	 * @brief Computes transformation of end-effector frame to attached tool frame.
 	 * @param[in,out] homog_matrix End-effector homogeneous matrix.
 	 */
-	inline void attached_tool_transform(lib::Homog_matrix& homog_matrix);
+	void attached_tool_transform(lib::Homog_matrix& homog_matrix);
 
 	/**
 	 * @brief Computes inverse end-effector-tool transformation.
 	 * @param[in,out] homog_matrix End-effector homogeneous matrix.
 	 */
-	inline void attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix);
+	void attached_tool_inverse_transform(lib::Homog_matrix& homog_matrix);
 
 };//: kinematic_model
 

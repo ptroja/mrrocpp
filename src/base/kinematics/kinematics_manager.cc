@@ -18,6 +18,11 @@ namespace mrrocpp {
 namespace kinematics {
 namespace common {
 
+kinematics_manager::kinematics_manager()
+	: current_kinematic_model_no(-1), current_kinematic_model(NULL)
+{
+}
+
 kinematics_manager::~kinematics_manager(void)
 {
 	// Delete list of kinematics.

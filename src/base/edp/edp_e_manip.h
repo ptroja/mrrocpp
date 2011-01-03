@@ -10,10 +10,6 @@
 #ifndef __EDP_E_MANIP_H
 #define __EDP_E_MANIP_H
 
-#if defined(USE_MESSIP_SRR)
-#include "messip.h"
-#endif
-
 #include "base/edp/edp_e_motor_driven.h"
 
 // Konfigurator
@@ -181,7 +177,7 @@ public:
 	 *
 	 * This method synchronises motors of the robots.
 	 */
-	void synchronise();
+	virtual void synchronise();
 
 	/*!
 	 * \brief The method checks the initial state of the controller.
@@ -212,7 +208,9 @@ public:
 	 * calls the get_arm_position_get_arm_type_switch method of the motor_driven_effector class.
 	 */
 	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
-};
+
+public:
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
 
 } // namespace common
 } // namespace edp

@@ -25,7 +25,7 @@
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 // Konfigurator.
 #include "base/lib/configurator.h"
@@ -35,7 +35,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern Ui ui;
+extern ui::common::Interface interface;
 
 // Tryb debugowania.
 // #define MAMDEBUG
@@ -53,14 +53,16 @@ static int ECPfd;
 // Komenda wysylana z okna FileDialog po wcisnieciu accept.
 extern uint8_t FDCommand;
 
-int MAM_btn_start_measures(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_btn_start_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_start_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> start pomiarow.
 	ui_ecp_msg.command = lib::MAM_START;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -80,14 +82,16 @@ int MAM_btn_start_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 }//: MAM_btn_start_measures
 
 
-int MAM_btn_stop_measures(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_btn_stop_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_stop_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_STOP;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -107,14 +111,16 @@ int MAM_btn_stop_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 }//: MAM_btn_stop_measures
 
 
-int MAM_btn_clear_measures(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_btn_clear_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_clear_measures\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_CLEAR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -134,8 +140,8 @@ int MAM_btn_clear_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 }//: MAM_btn_clear_measures
 
 
-int MAM_btn_save_measures(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_btn_save_measures(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_save_measures\n");
 #endif
@@ -146,14 +152,16 @@ int MAM_btn_save_measures(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }//: MAM_btn_save_measures
 
-int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_calibrate\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::MAM_CALIBRATE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -172,13 +180,16 @@ int MAM_btn_calibrate(PtWidget_t *widget, ApInfo_t *apinfo,
 	return (Pt_CONTINUE);
 }//: MAM_btn_calibrate
 
-int MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo) {
+int MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_btn_exit\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::MAM_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -192,23 +203,21 @@ int MAM_btn_exit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 }//: MAM_btn_exit
 
 
-int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_tmr_connect: Create connection.\n");
 #endif
 	// Nazwa polacznia.
-	std::string attach_point = ui.config->return_attach_point_name(
-			lib::configurator::CONFIG_SERVER, "attach_point",
-			"[ecp_ui_channel]");
-	//    tmp_name =ui.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", lib::UI_SECTION);
+	std::string attach_point =
+			interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "attach_point", "[ecp_ui_channel]");
+	//    tmp_name =interface.config->return_attach_point_name	(CONFIG_SERVER, "ecp_chan_attach_point", lib::UI_SECTION);
 
 #ifdef MAMDEBUG
 	printf("MAM_tmr_connect: %s\n", tmp_name);
 #endif
 	// Otworzenie polaczenia.
-	if ((ECPfd = name_open(attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL))
-			== -1) {
+	if ((ECPfd = name_open(attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
 		perror("MAM_tmr_connect: Connect to ECP failed");
 		return EXIT_FAILURE;
 	}
@@ -216,8 +225,8 @@ int MAM_tmr_connect(PtWidget_t *widget, ApInfo_t *apinfo,
 } // end: MAM_tmr_connect
 
 
-int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
-		PtCallbackInfo_t *cbinfo) {
+int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+{
 #ifdef MAMDEBUG
 	printf("MAM_refresh_window\n");
 #endif
@@ -225,60 +234,46 @@ int MAM_refresh_window(PtWidget_t *widget, ApInfo_t *apinfo,
 	char tmp_buffer[20];
 	// Wypisanie pozycji robota w oknie.
 	// Zerowa os.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[0]);
 	PtSetResource(ABW_MAM_edt_arm0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[1]);
 	PtSetResource(ABW_MAM_edt_arm1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[2]);
 	PtSetResource(ABW_MAM_edt_arm2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[3]);
 	PtSetResource(ABW_MAM_edt_arm3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[4]);
 	PtSetResource(ABW_MAM_edt_arm4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[5]);
 	PtSetResource(ABW_MAM_edt_arm5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[6]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[6]);
 	PtSetResource(ABW_MAM_edt_arm6, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[7]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.robot_position[7]);
 	PtSetResource(ABW_MAM_edt_arm7, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	// Wypisanie odczytow czujnika zlozonego z linialow w oknie.
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[0]);
 	PtSetResource(ABW_MAM_edt_scale_reading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[1]);
 	PtSetResource(ABW_MAM_edt_scale_reading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[2]);
 	PtSetResource(ABW_MAM_edt_scale_reading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[3]);
 	PtSetResource(ABW_MAM_edt_scale_reading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[4]);
 	PtSetResource(ABW_MAM_edt_scale_reading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f",
-			ui.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.sensor_reading[5]);
 	PtSetResource(ABW_MAM_edt_scale_reading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 
 	// Wypisanie numeru makrokroku.
-	sprintf(tmp_buffer, "%i", ui.ui_ecp_obj->ecp_to_ui_msg.MAM.measure_number);
+	sprintf(tmp_buffer, "%i", interface.ui_ecp_obj->ecp_to_ui_msg.MAM.measure_number);
 	PtSetResource(ABW_MAM_edt_measure_point_number, Pt_ARG_TEXT_STRING,
 			tmp_buffer, 0);
 

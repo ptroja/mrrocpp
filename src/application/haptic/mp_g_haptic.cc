@@ -12,13 +12,13 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/mp/mp_g_common.h"
+#include "base/mp/generator/mp_g_empty.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
@@ -216,13 +216,16 @@ bool haptic::next_step()
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
 	}
 
-	if ((node_counter % 10) == 0) {
-		std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
-				<< time_interval << std::endl;
-		//	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
+	std::cout << time_interval << std::endl;
 
-	}
+	/*
+	 if ((node_counter % 10) == 0) {
+	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
+	 << time_interval << std::endl << irp6p_goal_frame << std::endl;
+	 //	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
+	 }
+	 */
 	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
 			== lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");

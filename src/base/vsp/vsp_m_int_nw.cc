@@ -27,12 +27,12 @@
 #include <sys/types.h>
 #include <sys/sched.h>
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/vsp/vsp_sensor_interface.h"
 #include "base/vsp/vsp_error.h"
 
@@ -412,9 +412,9 @@ int main(int argc, char *argv[])
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_nw_shell::catch_signal);
 	signal(SIGSEGV, &vsp::int_nw_shell::catch_signal);
-#if defined(PROCESS_SPAWN_RSH)
+
 	signal(SIGINT, SIG_IGN);
-#endif
+
 
 	// Check number of arguments.
 	if (argc <= 6) {

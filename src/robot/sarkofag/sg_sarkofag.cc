@@ -34,8 +34,8 @@ servo_buffer::servo_buffer(effector &_master) :
 	synchro_axis_order[0] = 0;
 
 	axe_inc_per_revolution[0] = INC_PER_REVOLUTION;
-	synchro_step_coarse[0] = SARKOFAG_SYNCHRO_STEP_COARSE;
-	synchro_step_fine[0] = SARKOFAG_SYNCHRO_STEP_FINE;
+	synchro_step_coarse[0] = SYNCHRO_STEP_COARSE;
+	synchro_step_fine[0] = SYNCHRO_STEP_FINE;
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
@@ -47,9 +47,11 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//	int max_current[NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
-	hi = new hi_moxa::HI_moxa(master);
+	const std::vector<std::string> ports_vector(mrrocpp::lib::sarkofag::ports_strings,
+				mrrocpp::lib::sarkofag::ports_strings+mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM+1);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM, ports_vector);
 	hi->init();
-
+	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::sarkofag::MAX_CURRENT_0);
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
 

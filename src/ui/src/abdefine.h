@@ -107,6 +107,14 @@ extern const int ABI_wnd_sarkofag_moves;
 #define ABM_wnd_sarkofag_moves               &AbInternalLinks[ABI_wnd_sarkofag_moves]
 extern const int ABI_wnd_sarkofag_servo_algorithm;
 #define ABM_wnd_sarkofag_servo_algorithm     &AbInternalLinks[ABI_wnd_sarkofag_servo_algorithm]
+extern const int ABI_wnd_spkm_inc;
+#define ABM_wnd_spkm_inc                     &AbInternalLinks[ABI_wnd_spkm_inc]
+extern const int ABI_wnd_polycrank_int;
+#define ABM_wnd_polycrank_int                &AbInternalLinks[ABI_wnd_polycrank_int]
+extern const int ABI_wnd_spkm_int;
+#define ABM_wnd_spkm_int                     &AbInternalLinks[ABI_wnd_spkm_int]
+extern const int ABI_wnd_spkm_external;
+#define ABM_wnd_spkm_external                &AbInternalLinks[ABI_wnd_spkm_external]
 
 /* 'task_config_window' Window link */
 extern const int ABN_task_config_window;
@@ -2584,6 +2592,398 @@ extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_alg_1;
 extern const int ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1;
 #define ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1 AbGetABW( ABN_PtNumericInteger_wnd_sarkofag_servo_algorithm_read_par_1 )
 
+/* 'wnd_polycrank_int' Window link */
+extern const int ABN_wnd_polycrank_int;
+#define ABW_wnd_polycrank_int                AbGetABW( ABN_wnd_polycrank_int )
+extern const int ABN_PtButton_wind_polycrank_int_1l;
+#define ABW_PtButton_wind_polycrank_int_1l   AbGetABW( ABN_PtButton_wind_polycrank_int_1l )
+extern const int ABN_PtButton_wind_polycrank_int_1r;
+#define ABW_PtButton_wind_polycrank_int_1r   AbGetABW( ABN_PtButton_wind_polycrank_int_1r )
+extern const int ABN_PtButton_wind_polycrank_int_2l;
+#define ABW_PtButton_wind_polycrank_int_2l   AbGetABW( ABN_PtButton_wind_polycrank_int_2l )
+extern const int ABN_PtButton_wind_polycrank_int_2r;
+#define ABW_PtButton_wind_polycrank_int_2r   AbGetABW( ABN_PtButton_wind_polycrank_int_2r )
+extern const int ABN_PtButton_wind_polycrank_int_3l;
+#define ABW_PtButton_wind_polycrank_int_3l   AbGetABW( ABN_PtButton_wind_polycrank_int_3l )
+extern const int ABN_PtButton_wind_polycrank_int_3r;
+#define ABW_PtButton_wind_polycrank_int_3r   AbGetABW( ABN_PtButton_wind_polycrank_int_3r )
+extern const int ABN_PtButton_wind_polycrank_int_4l;
+#define ABW_PtButton_wind_polycrank_int_4l   AbGetABW( ABN_PtButton_wind_polycrank_int_4l )
+extern const int ABN_PtButton_wind_polycrank_int_4r;
+#define ABW_PtButton_wind_polycrank_int_4r   AbGetABW( ABN_PtButton_wind_polycrank_int_4r )
+extern const int ABN_PtButton_wind_polycrank_int_5l;
+#define ABW_PtButton_wind_polycrank_int_5l   AbGetABW( ABN_PtButton_wind_polycrank_int_5l )
+extern const int ABN_PtButton_wind_polycrank_int_5r;
+#define ABW_PtButton_wind_polycrank_int_5r   AbGetABW( ABN_PtButton_wind_polycrank_int_5r )
+extern const int ABN_PtButton_wind_polycrank_int_6l;
+#define ABW_PtButton_wind_polycrank_int_6l   AbGetABW( ABN_PtButton_wind_polycrank_int_6l )
+extern const int ABN_PtButton_wind_polycrank_int_6r;
+#define ABW_PtButton_wind_polycrank_int_6r   AbGetABW( ABN_PtButton_wind_polycrank_int_6r )
+extern const int ABN_PtButton_wind_polycrank_int_7l;
+#define ABW_PtButton_wind_polycrank_int_7l   AbGetABW( ABN_PtButton_wind_polycrank_int_7l )
+extern const int ABN_PtButton_wind_polycrank_int_7r;
+#define ABW_PtButton_wind_polycrank_int_7r   AbGetABW( ABN_PtButton_wind_polycrank_int_7r )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_step;
+#define ABW_PtNumericFloat_wind_polycrank_int_step AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_step )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p1;
+#define ABW_PtNumericFloat_wind_polycrank_int_p1 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p1 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p2;
+#define ABW_PtNumericFloat_wind_polycrank_int_p2 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p2 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p3;
+#define ABW_PtNumericFloat_wind_polycrank_int_p3 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p3 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p4;
+#define ABW_PtNumericFloat_wind_polycrank_int_p4 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p4 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p5;
+#define ABW_PtNumericFloat_wind_polycrank_int_p5 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p5 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p6;
+#define ABW_PtNumericFloat_wind_polycrank_int_p6 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p6 )
+extern const int ABN_PtNumericFloat_wind_polycrank_int_p7;
+#define ABW_PtNumericFloat_wind_polycrank_int_p7 AbGetABW( ABN_PtNumericFloat_wind_polycrank_int_p7 )
+extern const int ABN_PtButton_wind_polycrank_int_exec_move;
+#define ABW_PtButton_wind_polycrank_int_exec_move AbGetABW( ABN_PtButton_wind_polycrank_int_exec_move )
+extern const int ABN_PtButton_wind_polycrank_int_import;
+#define ABW_PtButton_wind_polycrank_int_import AbGetABW( ABN_PtButton_wind_polycrank_int_import )
+extern const int ABN_PtButton_wind_polycrank_int_export;
+#define ABW_PtButton_wind_polycrank_int_export AbGetABW( ABN_PtButton_wind_polycrank_int_export )
+extern const int ABN_PtLabel10011;
+#define ABW_PtLabel10011                     AbGetABW( ABN_PtLabel10011 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p1;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p1 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p1 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p2;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p2 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p2 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p3;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p3 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p3 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p4;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p4 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p4 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p5;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p5 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p5 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p6;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p6 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p6 )
+extern const int ABN_PtNumericFloat_wind_polycrank_joints_cur_p7;
+#define ABW_PtNumericFloat_wind_polycrank_joints_cur_p7 AbGetABW( ABN_PtNumericFloat_wind_polycrank_joints_cur_p7 )
+extern const int ABN_PtButton_wind_polycrank_joints_read_pos;
+#define ABW_PtButton_wind_polycrank_joints_read_pos AbGetABW( ABN_PtButton_wind_polycrank_joints_read_pos )
+extern const int ABN_PtButton_wind_polycrank_joints_set_desired_as_current;
+#define ABW_PtButton_wind_polycrank_joints_set_desired_as_current AbGetABW( ABN_PtButton_wind_polycrank_joints_set_desired_as_current )
+
+/* 'wnd_spkm_inc' Window link */
+extern const int ABN_wnd_spkm_inc;
+#define ABW_wnd_spkm_inc                     AbGetABW( ABN_wnd_spkm_inc )
+extern const int ABN_PtPane_wind_spkm_inc_post_synchro_moves;
+#define ABW_PtPane_wind_spkm_inc_post_synchro_moves AbGetABW( ABN_PtPane_wind_spkm_inc_post_synchro_moves )
+extern const int ABN_PtButton_wind_spkm_motors_set_desired_as_current;
+#define ABW_PtButton_wind_spkm_motors_set_desired_as_current AbGetABW( ABN_PtButton_wind_spkm_motors_set_desired_as_current )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p0;
+#define ABW_PtNumericFloat_wind_spkm_inc_p0  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p1;
+#define ABW_PtNumericFloat_wind_spkm_inc_p1  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p2;
+#define ABW_PtNumericFloat_wind_spkm_inc_p2  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p3;
+#define ABW_PtNumericFloat_wind_spkm_inc_p3  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p4;
+#define ABW_PtNumericFloat_wind_spkm_inc_p4  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_p5;
+#define ABW_PtNumericFloat_wind_spkm_inc_p5  AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_p5 )
+extern const int ABN_PtButton_wind_spkm_inc_exec_move;
+#define ABW_PtButton_wind_spkm_inc_exec_move AbGetABW( ABN_PtButton_wind_spkm_inc_exec_move )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p0;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p0 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p1;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p1 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p2;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p2 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p3;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p3 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p4;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p4 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_cur_p5;
+#define ABW_PtNumericFloat_wind_spkm_motors_cur_p5 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_cur_p5 )
+extern const int ABN_PtButton_wind_spkm_inc_read_pos;
+#define ABW_PtButton_wind_spkm_inc_read_pos  AbGetABW( ABN_PtButton_wind_spkm_inc_read_pos )
+extern const int ABN_PtButton_wind_spkm_inc_export;
+#define ABW_PtButton_wind_spkm_inc_export    AbGetABW( ABN_PtButton_wind_spkm_inc_export )
+extern const int ABN_PtButton_wind_spkm_inc_import;
+#define ABW_PtButton_wind_spkm_inc_import    AbGetABW( ABN_PtButton_wind_spkm_inc_import )
+extern const int ABN_PtLabel12;
+#define ABW_PtLabel12                        AbGetABW( ABN_PtLabel12 )
+extern const int ABN_PtLabel21;
+#define ABW_PtLabel21                        AbGetABW( ABN_PtLabel21 )
+extern const int ABN_PtLabel31;
+#define ABW_PtLabel31                        AbGetABW( ABN_PtLabel31 )
+extern const int ABN_PtLabel41;
+#define ABW_PtLabel41                        AbGetABW( ABN_PtLabel41 )
+extern const int ABN_PtLabel51;
+#define ABW_PtLabel51                        AbGetABW( ABN_PtLabel51 )
+extern const int ABN_PtLabel62;
+#define ABW_PtLabel62                        AbGetABW( ABN_PtLabel62 )
+extern const int ABN_PtButton_wind_spkm_inc_0l;
+#define ABW_PtButton_wind_spkm_inc_0l        AbGetABW( ABN_PtButton_wind_spkm_inc_0l )
+extern const int ABN_PtButton_wind_spkm_inc_0r;
+#define ABW_PtButton_wind_spkm_inc_0r        AbGetABW( ABN_PtButton_wind_spkm_inc_0r )
+extern const int ABN_PtButton_wind_spkm_inc_1l;
+#define ABW_PtButton_wind_spkm_inc_1l        AbGetABW( ABN_PtButton_wind_spkm_inc_1l )
+extern const int ABN_PtButton_wind_spkm_inc_1r;
+#define ABW_PtButton_wind_spkm_inc_1r        AbGetABW( ABN_PtButton_wind_spkm_inc_1r )
+extern const int ABN_PtButton_wind_spkm_inc_2l;
+#define ABW_PtButton_wind_spkm_inc_2l        AbGetABW( ABN_PtButton_wind_spkm_inc_2l )
+extern const int ABN_PtButton_wind_spkm_inc_2r;
+#define ABW_PtButton_wind_spkm_inc_2r        AbGetABW( ABN_PtButton_wind_spkm_inc_2r )
+extern const int ABN_PtButton_wind_spkm_inc_3l;
+#define ABW_PtButton_wind_spkm_inc_3l        AbGetABW( ABN_PtButton_wind_spkm_inc_3l )
+extern const int ABN_PtButton_wind_spkm_inc_3r;
+#define ABW_PtButton_wind_spkm_inc_3r        AbGetABW( ABN_PtButton_wind_spkm_inc_3r )
+extern const int ABN_PtButton_wind_spkm_inc_4l;
+#define ABW_PtButton_wind_spkm_inc_4l        AbGetABW( ABN_PtButton_wind_spkm_inc_4l )
+extern const int ABN_PtButton_wind_spkm_inc_4r;
+#define ABW_PtButton_wind_spkm_inc_4r        AbGetABW( ABN_PtButton_wind_spkm_inc_4r )
+extern const int ABN_PtButton_wind_spkm_inc_5l;
+#define ABW_PtButton_wind_spkm_inc_5l        AbGetABW( ABN_PtButton_wind_spkm_inc_5l )
+extern const int ABN_PtButton_wind_spkm_inc_5r;
+#define ABW_PtButton_wind_spkm_inc_5r        AbGetABW( ABN_PtButton_wind_spkm_inc_5r )
+extern const int ABN_PtNumericFloat_wind_spkm_inc_step;
+#define ABW_PtNumericFloat_wind_spkm_inc_step AbGetABW( ABN_PtNumericFloat_wind_spkm_inc_step )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_0;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_0 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_0 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_1;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_1 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_1 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_2;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_2 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_2 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_3;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_3 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_3 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_4;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_4 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_4 )
+extern const int ABN_PtNumericFloat_wind_spkm_motors_mcur_5;
+#define ABW_PtNumericFloat_wind_spkm_motors_mcur_5 AbGetABW( ABN_PtNumericFloat_wind_spkm_motors_mcur_5 )
+extern const int ABN_thumb_wind_spkm_motors_mip_0;
+#define ABW_thumb_wind_spkm_motors_mip_0     AbGetABW( ABN_thumb_wind_spkm_motors_mip_0 )
+extern const int ABN_thumb_wind_spkm_motors_mip_1;
+#define ABW_thumb_wind_spkm_motors_mip_1     AbGetABW( ABN_thumb_wind_spkm_motors_mip_1 )
+extern const int ABN_thumb_wind_spkm_motors_mip_2;
+#define ABW_thumb_wind_spkm_motors_mip_2     AbGetABW( ABN_thumb_wind_spkm_motors_mip_2 )
+extern const int ABN_thumb_wind_spkm_motors_mip_3;
+#define ABW_thumb_wind_spkm_motors_mip_3     AbGetABW( ABN_thumb_wind_spkm_motors_mip_3 )
+extern const int ABN_thumb_wind_spkm_motors_mip_4;
+#define ABW_thumb_wind_spkm_motors_mip_4     AbGetABW( ABN_thumb_wind_spkm_motors_mip_4 )
+extern const int ABN_thumb_wind_spkm_motors_mip_5;
+#define ABW_thumb_wind_spkm_motors_mip_5     AbGetABW( ABN_thumb_wind_spkm_motors_mip_5 )
+
+/* 'wnd_spkm_int' Window link */
+extern const int ABN_wnd_spkm_int;
+#define ABW_wnd_spkm_int                     AbGetABW( ABN_wnd_spkm_int )
+extern const int ABN_PtPane_wind_spkm_int_post_synchro_moves;
+#define ABW_PtPane_wind_spkm_int_post_synchro_moves AbGetABW( ABN_PtPane_wind_spkm_int_post_synchro_moves )
+extern const int ABN_PtButton_wind_spkm_int_set_desired_as_current;
+#define ABW_PtButton_wind_spkm_int_set_desired_as_current AbGetABW( ABN_PtButton_wind_spkm_int_set_desired_as_current )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p0;
+#define ABW_PtNumericFloat_wind_spkm_int_p0  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p1;
+#define ABW_PtNumericFloat_wind_spkm_int_p1  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p2;
+#define ABW_PtNumericFloat_wind_spkm_int_p2  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p3;
+#define ABW_PtNumericFloat_wind_spkm_int_p3  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p4;
+#define ABW_PtNumericFloat_wind_spkm_int_p4  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_p5;
+#define ABW_PtNumericFloat_wind_spkm_int_p5  AbGetABW( ABN_PtNumericFloat_wind_spkm_int_p5 )
+extern const int ABN_PtButton_wind_spkm_int_exec_move;
+#define ABW_PtButton_wind_spkm_int_exec_move AbGetABW( ABN_PtButton_wind_spkm_int_exec_move )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p0;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p0 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p1;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p1 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p2;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p2 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p3;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p3 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p4;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p4 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_cur_p5;
+#define ABW_PtNumericFloat_wind_spkm_int_cur_p5 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_cur_p5 )
+extern const int ABN_PtButton_wind_spkm_int_read_pos;
+#define ABW_PtButton_wind_spkm_int_read_pos  AbGetABW( ABN_PtButton_wind_spkm_int_read_pos )
+extern const int ABN_PtButton_wind_spkm_int_export;
+#define ABW_PtButton_wind_spkm_int_export    AbGetABW( ABN_PtButton_wind_spkm_int_export )
+extern const int ABN_PtButton_wind_spkm_int_import;
+#define ABW_PtButton_wind_spkm_int_import    AbGetABW( ABN_PtButton_wind_spkm_int_import )
+extern const int ABN_PtLabel120;
+#define ABW_PtLabel120                       AbGetABW( ABN_PtLabel120 )
+extern const int ABN_PtLabel210;
+#define ABW_PtLabel210                       AbGetABW( ABN_PtLabel210 )
+extern const int ABN_PtLabel310;
+#define ABW_PtLabel310                       AbGetABW( ABN_PtLabel310 )
+extern const int ABN_PtLabel410;
+#define ABW_PtLabel410                       AbGetABW( ABN_PtLabel410 )
+extern const int ABN_PtLabel510;
+#define ABW_PtLabel510                       AbGetABW( ABN_PtLabel510 )
+extern const int ABN_PtLabel620;
+#define ABW_PtLabel620                       AbGetABW( ABN_PtLabel620 )
+extern const int ABN_PtButton_wind_spkm_int_0l;
+#define ABW_PtButton_wind_spkm_int_0l        AbGetABW( ABN_PtButton_wind_spkm_int_0l )
+extern const int ABN_PtButton_wind_spkm_int_0r;
+#define ABW_PtButton_wind_spkm_int_0r        AbGetABW( ABN_PtButton_wind_spkm_int_0r )
+extern const int ABN_PtButton_wind_spkm_int_1l;
+#define ABW_PtButton_wind_spkm_int_1l        AbGetABW( ABN_PtButton_wind_spkm_int_1l )
+extern const int ABN_PtButton_wind_spkm_int_1r;
+#define ABW_PtButton_wind_spkm_int_1r        AbGetABW( ABN_PtButton_wind_spkm_int_1r )
+extern const int ABN_PtButton_wind_spkm_int_2l;
+#define ABW_PtButton_wind_spkm_int_2l        AbGetABW( ABN_PtButton_wind_spkm_int_2l )
+extern const int ABN_PtButton_wind_spkm_int_2r;
+#define ABW_PtButton_wind_spkm_int_2r        AbGetABW( ABN_PtButton_wind_spkm_int_2r )
+extern const int ABN_PtButton_wind_spkm_int_3l;
+#define ABW_PtButton_wind_spkm_int_3l        AbGetABW( ABN_PtButton_wind_spkm_int_3l )
+extern const int ABN_PtButton_wind_spkm_int_3r;
+#define ABW_PtButton_wind_spkm_int_3r        AbGetABW( ABN_PtButton_wind_spkm_int_3r )
+extern const int ABN_PtButton_wind_spkm_int_4l;
+#define ABW_PtButton_wind_spkm_int_4l        AbGetABW( ABN_PtButton_wind_spkm_int_4l )
+extern const int ABN_PtButton_wind_spkm_int_4r;
+#define ABW_PtButton_wind_spkm_int_4r        AbGetABW( ABN_PtButton_wind_spkm_int_4r )
+extern const int ABN_PtButton_wind_spkm_int_5l;
+#define ABW_PtButton_wind_spkm_int_5l        AbGetABW( ABN_PtButton_wind_spkm_int_5l )
+extern const int ABN_PtButton_wind_spkm_int_5r;
+#define ABW_PtButton_wind_spkm_int_5r        AbGetABW( ABN_PtButton_wind_spkm_int_5r )
+extern const int ABN_PtNumericFloat_wind_spkm_int_step;
+#define ABW_PtNumericFloat_wind_spkm_int_step AbGetABW( ABN_PtNumericFloat_wind_spkm_int_step )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_0;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_0 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_0 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_1;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_1 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_1 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_2;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_2 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_2 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_3;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_3 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_3 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_4;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_4 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_4 )
+extern const int ABN_PtNumericFloat_wind_spkm_int_mcur_5;
+#define ABW_PtNumericFloat_wind_spkm_int_mcur_5 AbGetABW( ABN_PtNumericFloat_wind_spkm_int_mcur_5 )
+extern const int ABN_thumb_wind_spkm_int_mip_0;
+#define ABW_thumb_wind_spkm_int_mip_0        AbGetABW( ABN_thumb_wind_spkm_int_mip_0 )
+extern const int ABN_thumb_wind_spkm_int_mip_1;
+#define ABW_thumb_wind_spkm_int_mip_1        AbGetABW( ABN_thumb_wind_spkm_int_mip_1 )
+extern const int ABN_thumb_wind_spkm_int_mip_2;
+#define ABW_thumb_wind_spkm_int_mip_2        AbGetABW( ABN_thumb_wind_spkm_int_mip_2 )
+extern const int ABN_thumb_wind_spkm_int_mip_3;
+#define ABW_thumb_wind_spkm_int_mip_3        AbGetABW( ABN_thumb_wind_spkm_int_mip_3 )
+extern const int ABN_thumb_wind_spkm_int_mip_4;
+#define ABW_thumb_wind_spkm_int_mip_4        AbGetABW( ABN_thumb_wind_spkm_int_mip_4 )
+extern const int ABN_thumb_wind_spkm_int_mip_5;
+#define ABW_thumb_wind_spkm_int_mip_5        AbGetABW( ABN_thumb_wind_spkm_int_mip_5 )
+
+/* 'wnd_spkm_external' Window link */
+extern const int ABN_wnd_spkm_external;
+#define ABW_wnd_spkm_external                AbGetABW( ABN_wnd_spkm_external )
+extern const int ABN_PtPane_wind_spkm_int_post_synchro_moves0;
+#define ABW_PtPane_wind_spkm_int_post_synchro_moves0 AbGetABW( ABN_PtPane_wind_spkm_int_post_synchro_moves0 )
+extern const int ABN_PtButton_wind_spkm_external_set_desired_as_current;
+#define ABW_PtButton_wind_spkm_external_set_desired_as_current AbGetABW( ABN_PtButton_wind_spkm_external_set_desired_as_current )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p0;
+#define ABW_PtNumericFloat_wind_spkm_external_p0 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p1;
+#define ABW_PtNumericFloat_wind_spkm_external_p1 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p2;
+#define ABW_PtNumericFloat_wind_spkm_external_p2 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p3;
+#define ABW_PtNumericFloat_wind_spkm_external_p3 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p4;
+#define ABW_PtNumericFloat_wind_spkm_external_p4 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_p5;
+#define ABW_PtNumericFloat_wind_spkm_external_p5 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_p5 )
+extern const int ABN_PtButton_wind_spkm_external_exec_move;
+#define ABW_PtButton_wind_spkm_external_exec_move AbGetABW( ABN_PtButton_wind_spkm_external_exec_move )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p0;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p0 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p0 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p1;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p1 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p1 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p2;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p2 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p2 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p3;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p3 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p3 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p4;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p4 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p4 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_cur_p5;
+#define ABW_PtNumericFloat_wind_spkm_external_cur_p5 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_cur_p5 )
+extern const int ABN_PtButton_wind_spkm_external_read_pos;
+#define ABW_PtButton_wind_spkm_external_read_pos AbGetABW( ABN_PtButton_wind_spkm_external_read_pos )
+extern const int ABN_PtButton_wind_spkm_external_export;
+#define ABW_PtButton_wind_spkm_external_export AbGetABW( ABN_PtButton_wind_spkm_external_export )
+extern const int ABN_PtButton_wind_spkm_external_import;
+#define ABW_PtButton_wind_spkm_external_import AbGetABW( ABN_PtButton_wind_spkm_external_import )
+extern const int ABN_PtLabel1200;
+#define ABW_PtLabel1200                      AbGetABW( ABN_PtLabel1200 )
+extern const int ABN_PtLabel2100;
+#define ABW_PtLabel2100                      AbGetABW( ABN_PtLabel2100 )
+extern const int ABN_PtLabel3100;
+#define ABW_PtLabel3100                      AbGetABW( ABN_PtLabel3100 )
+extern const int ABN_PtLabel4100;
+#define ABW_PtLabel4100                      AbGetABW( ABN_PtLabel4100 )
+extern const int ABN_PtLabel5100;
+#define ABW_PtLabel5100                      AbGetABW( ABN_PtLabel5100 )
+extern const int ABN_PtLabel6200;
+#define ABW_PtLabel6200                      AbGetABW( ABN_PtLabel6200 )
+extern const int ABN_PtButton_wind_spkm_external_0l;
+#define ABW_PtButton_wind_spkm_external_0l   AbGetABW( ABN_PtButton_wind_spkm_external_0l )
+extern const int ABN_PtButton_wind_spkm_external_0r;
+#define ABW_PtButton_wind_spkm_external_0r   AbGetABW( ABN_PtButton_wind_spkm_external_0r )
+extern const int ABN_PtButton_wind_spkm_external_1l;
+#define ABW_PtButton_wind_spkm_external_1l   AbGetABW( ABN_PtButton_wind_spkm_external_1l )
+extern const int ABN_PtButton_wind_spkm_external_1r;
+#define ABW_PtButton_wind_spkm_external_1r   AbGetABW( ABN_PtButton_wind_spkm_external_1r )
+extern const int ABN_PtButton_wind_spkm_external_2l;
+#define ABW_PtButton_wind_spkm_external_2l   AbGetABW( ABN_PtButton_wind_spkm_external_2l )
+extern const int ABN_PtButton_wind_spkm_external_2r;
+#define ABW_PtButton_wind_spkm_external_2r   AbGetABW( ABN_PtButton_wind_spkm_external_2r )
+extern const int ABN_PtButton_wind_spkm_external_3l;
+#define ABW_PtButton_wind_spkm_external_3l   AbGetABW( ABN_PtButton_wind_spkm_external_3l )
+extern const int ABN_PtButton_wind_spkm_external_3r;
+#define ABW_PtButton_wind_spkm_external_3r   AbGetABW( ABN_PtButton_wind_spkm_external_3r )
+extern const int ABN_PtButton_wind_spkm_external_4l;
+#define ABW_PtButton_wind_spkm_external_4l   AbGetABW( ABN_PtButton_wind_spkm_external_4l )
+extern const int ABN_PtButton_wind_spkm_external_4r;
+#define ABW_PtButton_wind_spkm_external_4r   AbGetABW( ABN_PtButton_wind_spkm_external_4r )
+extern const int ABN_PtButton_wind_spkm_external_5l;
+#define ABW_PtButton_wind_spkm_external_5l   AbGetABW( ABN_PtButton_wind_spkm_external_5l )
+extern const int ABN_PtButton_wind_spkm_external_5r;
+#define ABW_PtButton_wind_spkm_external_5r   AbGetABW( ABN_PtButton_wind_spkm_external_5r )
+extern const int ABN_PtNumericFloat_wind_spkm_external_step;
+#define ABW_PtNumericFloat_wind_spkm_external_step AbGetABW( ABN_PtNumericFloat_wind_spkm_external_step )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_0;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_0 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_0 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_1;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_1 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_1 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_2;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_2 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_2 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_3;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_3 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_3 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_4;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_4 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_4 )
+extern const int ABN_PtNumericFloat_wind_spkm_external_mcur_5;
+#define ABW_PtNumericFloat_wind_spkm_external_mcur_5 AbGetABW( ABN_PtNumericFloat_wind_spkm_external_mcur_5 )
+extern const int ABN_thumb_wind_spkm_external_mip_0;
+#define ABW_thumb_wind_spkm_external_mip_0   AbGetABW( ABN_thumb_wind_spkm_external_mip_0 )
+extern const int ABN_thumb_wind_spkm_external_mip_1;
+#define ABW_thumb_wind_spkm_external_mip_1   AbGetABW( ABN_thumb_wind_spkm_external_mip_1 )
+extern const int ABN_thumb_wind_spkm_external_mip_2;
+#define ABW_thumb_wind_spkm_external_mip_2   AbGetABW( ABN_thumb_wind_spkm_external_mip_2 )
+extern const int ABN_thumb_wind_spkm_external_mip_3;
+#define ABW_thumb_wind_spkm_external_mip_3   AbGetABW( ABN_thumb_wind_spkm_external_mip_3 )
+extern const int ABN_thumb_wind_spkm_external_mip_4;
+#define ABW_thumb_wind_spkm_external_mip_4   AbGetABW( ABN_thumb_wind_spkm_external_mip_4 )
+extern const int ABN_thumb_wind_spkm_external_mip_5;
+#define ABW_thumb_wind_spkm_external_mip_5   AbGetABW( ABN_thumb_wind_spkm_external_mip_5 )
+extern const int ABN_PtLabel12000;
+#define ABW_PtLabel12000                     AbGetABW( ABN_PtLabel12000 )
+extern const int ABN_PtLabel21000;
+#define ABW_PtLabel21000                     AbGetABW( ABN_PtLabel21000 )
+extern const int ABN_PtLabel31000;
+#define ABW_PtLabel31000                     AbGetABW( ABN_PtLabel31000 )
+extern const int ABN_PtLabel41000;
+#define ABW_PtLabel41000                     AbGetABW( ABN_PtLabel41000 )
+extern const int ABN_PtLabel51000;
+#define ABW_PtLabel51000                     AbGetABW( ABN_PtLabel51000 )
+extern const int ABN_PtLabel62000;
+#define ABW_PtLabel62000                     AbGetABW( ABN_PtLabel62000 )
+
 #define AbGetABW( n ) ( AbWidgets[ n ].wgt )
 
 /* 'file_menu' Menu link */
@@ -2705,6 +3105,19 @@ extern const int ABN_mm_conveyor_servo_algorithm;
 extern const int ABN_mm_spkm;
 extern const int ABN_mm_spkm_edp_load;
 extern const int ABN_mm_spkm_edp_unload;
+extern const int ABN_mm_spkm_pre_synchro_moves;
+extern const int ABN_mm_spkm_synchronisation;
+extern const int ABN_mm_spkm_pre_synchro_moves_incremental;
+extern const int ABN_mm_spkm_absolute_moves;
+extern const int ABN_mm_spkm_post_synchro_moves_incremental;
+extern const int ABN_mm_spkm_internal;
+extern const int ABN_mm_spkm_xyz_angle_axis;
+extern const int ABN_mm_spkm_preset_positions;
+extern const int ABN_mm_spkm_preset_position_synchro;
+extern const int ABN_mm_spkm_preset_position_front;
+extern const int ABN_mm_spkm_preset_position_0;
+extern const int ABN_mm_spkm_preset_position_1;
+extern const int ABN_mm_spkm_preset_position_2;
 extern const int ABN_mm_smb;
 extern const int ABN_mm_smb_edp_load;
 extern const int ABN_mm_smb_edp_unload;
@@ -2756,6 +3169,10 @@ extern const int ABN_mm_irp6_mechatronika_xyz_euler_zyz_ts;
 extern const int ABN_mm_irp6_mechatonika_xyz_angle_axis_ts;
 extern const int ABN_mm_irp6_mechatronika_kinematic;
 extern const int ABN_mm_irp6_mechatronika_servo_algorithm;
+extern const int ABN_mm_polycrank;
+extern const int ABN_mm_polycrank_edp_load;
+extern const int ABN_mm_polycrank_edp_unload;
+extern const int ABN_mm_polycrank_internal;
 
 #define AB_OPTIONS "s:x:y:h:w:S:"
 

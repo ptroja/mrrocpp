@@ -15,9 +15,20 @@
 namespace mrrocpp {
 namespace mp {
 namespace robot {
+
+/*!
+ * @brief SwarmItFix parallel manipulator mp robot class
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup spkm
+ */
 class spkm : public robot
 {
 public:
+	/**
+	 * @brief constructor
+	 * @param mp_object_l mp task object reference
+	 */
 	spkm(task::task &mp_object_l);
 };
 

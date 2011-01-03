@@ -13,12 +13,11 @@
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"
-#include "base/lib/srlib.h"
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
+#include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 namespace mrrocpp {
@@ -47,13 +46,8 @@ private:
 	/** @brief VSP process id. */
 	pid_t pid;
 
-#if !defined(USE_MESSIP_SRR)
 	/** @brief Sensor descriptor. */
-	int sd;
-#else
-	/** @brief Sensor descriptor. */
-	messip_channel_t *sd;
-#endif /* USE_MESSIP_SRR */
+	lib::fd_client_t sd;
 
 	/** @brief Sensor (VSP process) name. */
 	std::string VSP_NAME;
@@ -73,6 +67,17 @@ private:
 
 		/** @brief Aggregated reading - communication image. */
 		SENSOR_IMAGE comm_image;
+
+		//! Give access to boost::serialization framework
+		friend class boost::serialization::access;
+
+		//! Serialization of the data structure
+		template <class Archive>
+		void serialize(Archive & ar, const unsigned int version)
+		{
+			ar & vsp_report;
+			ar & comm_image;
+		}
 	} from_vsp;
 
 public:
@@ -91,6 +96,17 @@ public:
 
 		/** @brief Additional command parameters - FEATURE NOT IMPLEMENTED. */
 		CONFIGURE_DATA command;
+
+		//! Give access to boost::serialization framework
+		friend class boost::serialization::access;
+
+		//! Serialization of the data structure
+		template <class Archive>
+		void serialize(Archive & ar, const unsigned int version)
+		{
+			ar & i_code;
+			ar & command;
+		}
 	} to_vsp;
 
 	/** @brief Sensor name. */
@@ -156,7 +172,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	while ((sd = open(VSP_NAME.c_str(), O_RDWR)) == -1) {
 		// 		cout<<tmp<<endl;
 		if ((tmp++) < lib::CONNECT_RETRY)
-			usleep(1000 * lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		else
 			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 	}
@@ -177,7 +193,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 
 	// Stworzenie nowego procesu.
 	if ((pid = config.process_spawn(_section_name)) == -1)
-	throw sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
+	throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
 
 	short tmp = 0;
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
@@ -185,10 +201,10 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	{
 		// 		cout<<tmp<<endl;
 		if((tmp++)<lib::CONNECT_RETRY)
-		usleep(1000*lib::CONNECT_DELAY);
+		usleep(lib::CONNECT_DELAY);
 		else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
-			throw sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
 		}
 	}// end: while
 #endif /* !USE_MESSIP_SRR */
@@ -203,7 +219,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::~sensor()
 	if (write(sd, &to_vsp, sizeof(to_vsp)) == -1)
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
-		close(sd);
+		close( sd);
 #else /* USE_MESSIP_SRR */
 	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 	sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
@@ -211,12 +227,8 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::~sensor()
 	messip::port_disconnect(sd);
 #endif /* !USE_MESSIP_SRR */
 
-#if defined(PROCESS_SPAWN_RSH)
 	kill(pid, SIGTERM);
-#else
-	SignalKill(lib::configurator::return_node_number(node_name),
-			pid, 0, SIGTERM, 0, 0);
-#endif
+
 }
 
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
@@ -246,7 +258,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::initiate_reading(void)
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
 void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(void)
 {
-	get_reading(image);
+	get_reading( image);
 }
 
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>

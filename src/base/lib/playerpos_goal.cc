@@ -1,3 +1,12 @@
+/*!
+ * @file playerpos_goal.cc
+ * @brief Routines for Player goal position
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include <cmath>
 
 #include "base/lib/com_buf.h"

@@ -13,6 +13,10 @@
 #include "../abimport.h"
 #include "../gcc_ntox86/proto.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace bird_hand {
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -20,23 +24,31 @@
 //
 
 
-WndBirdHandConfiguration::WndBirdHandConfiguration(Ui& _ui,
-		UiRobotBirdHand& _bird_hand) :
-	ui(_ui), bird_hand(_bird_hand), is_open(false) {
+WndConfiguration::WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand) :
+	common::WndBase(_interface, ABN_wnd_bird_hand_configuration, ABI_wnd_bird_hand_configuration),
+			bird_hand(_bird_hand)
+{
 
 }
 
-int WndBirdHandConfiguration::get_configuration() {
+int WndConfiguration::get_configuration()
+{
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::set_configuration() {
+int WndConfiguration::set_configuration()
+{
 
 	return 1;
 }
 
-int WndBirdHandConfiguration::copy_command() {
+int WndConfiguration::copy_command()
+{
 
 	return 1;
 }
+
+}
+} //namespace ui
+} //namespace mrrocpp

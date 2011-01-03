@@ -1,46 +1,44 @@
-// -------------------------------------------------------------------------
-// Proces: 	EFFECTOR CONTROL PROCESS (lib::ECP)
-// Plik:			configsrv.h
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera klase configsrv - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
-
+/*!
+ * @file configsrv.h
+ * @brief Class for configuration server - declarations
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
 
 #if !defined(_CONFIGSRV_H)
 #define _CONFIGSRV_H
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 class configsrv
 {
 private:
-	const std::string node, dir;
+	const std::string dir;
 	std::string ini_file, mrrocpp_network_path;
 	std::string file_location, common_file_location;
 
-	// do ochrony wylacznosci dostepu do pliku miedzy watkami jednego procesu
-	boost::mutex mtx;
-
-	// Zwraca wartosc dla klucza.
-	std::string return_string_value(const std::string & _key, const std::string & _section_name);
+	/**
+	 * Read property tree from configuration file
+	 * @param pt property tree
+	 * @param file configuration file
+	 */
+	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
 
 public:
-	// Konstruktor obiektu - konfiguratora.
-	configsrv(const std::string & _node, const std::string & _dir, const std::string & _ini_file);
+	//! Property trees of configuration files
+	boost::property_tree::ptree common_file_pt, file_pt;
 
-	void change_ini_file (const std::string & _ini_file);
+	//! Constructor
+	configsrv(const std::string & _dir, const std::string & _ini_file);
 
-	// Zwraca wartosc dla klucza.
-	template <class Type>
-	Type value(const std::string & _key, const std::string & _section_name) {
-		return boost::lexical_cast<Type>(return_string_value(_key, _section_name));
-	}
+	//! Get the config value at the path
+	std::string value(const std::string & path) const;
 
-	// Zwraca czy dany klucz istnieje
-	bool exists(const std::string & _key, const std::string & _section_name);
-};// : configsrv
+	void change_ini_file(const std::string & _ini_file);
+};
 
 #endif /* _CONFIGSRV_H */

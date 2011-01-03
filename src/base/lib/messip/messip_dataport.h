@@ -12,6 +12,9 @@
 
 #include "messip.h"
 
+#include "base/lib/xdr/xdr_iarchive.hpp"
+#include "base/lib/xdr/xdr_oarchive.hpp"
+
 namespace messip {
 
 template <class SendData, class ReceiveData>
@@ -22,8 +25,25 @@ int port_send( messip_channel_t * ch,
    ReceiveData & reply,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
+	xdr_oarchive<> oa;
+	oa << send;
+
 	int32_t answer;
-	return messip_send(ch, type, subtype, &send, sizeof(send), &answer, &reply, sizeof(reply), msec_timeout);
+	char reply_data[16384];
+
+	int r = messip_send(ch, type, subtype,
+			oa.get_buffer(), oa.getArchiveSize(),
+			&answer,
+			&reply_data, sizeof(reply_data),
+			msec_timeout);
+
+	if (r == 0) {
+		xdr_iarchive<> ia(reply_data, ch->datalenr);
+
+		ia >> reply;
+	}
+
+	return r;
 }
 
 template <class SendData>
@@ -33,8 +53,12 @@ int port_send_sync( messip_channel_t * ch,
    const SendData & send,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
+	xdr_oarchive<> oa;
+	oa << send;
+
 	int32_t answer;
-	return messip_send(ch, type, subtype, &send, sizeof(send), &answer, NULL, 0, msec_timeout);
+
+	return messip_send(ch, type, subtype, oa.get_buffer(), oa.getArchiveSize(), &answer, NULL, 0, msec_timeout);
 }
 
 template <class SendData>
@@ -44,7 +68,10 @@ int port_send_async( messip_channel_t * ch,
    const SendData & send,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_send(ch, type, subtype, &send, sizeof(send), NULL, NULL, -1, msec_timeout);
+	xdr_oarchive<> oa;
+	oa << send;
+
+	return messip_send(ch, type, subtype, oa.get_buffer(), oa.getArchiveSize(), NULL, NULL, -1, msec_timeout);
 }
 
 int port_send_pulse( messip_channel_t * ch,
@@ -59,7 +86,17 @@ int port_receive( messip_channel_t * ch,
    ReceiveData & data,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_receive(ch, &type, &subtype, &data, sizeof(data), msec_timeout);
+	char receive_data[16384];
+
+	int r = messip_receive(ch, &type, &subtype, &receive_data, sizeof(receive_data), msec_timeout);
+
+	if ((r >= 0 || r == MESSIP_MSG_NOREPLY) && ch->datalenr > 0) {
+		xdr_iarchive<> ia(receive_data, ch->datalenr);
+
+		ia >> data;
+	}
+
+	return r;
 }
 
 int port_receive_pulse( messip_channel_t * ch,
@@ -74,7 +111,10 @@ int port_reply( messip_channel_t * ch,
    const ReplyData & data,
    int32_t msec_timeout = MESSIP_NOTIMEOUT)
 {
-	return messip_reply(ch, index, status, &data, sizeof(data), msec_timeout);
+	xdr_oarchive<> oa;
+	oa << data;
+
+	return messip_reply(ch, index, status, oa.get_buffer(), oa.getArchiveSize(), msec_timeout);
 }
 
 int port_reply_ack( messip_channel_t * ch,

@@ -10,13 +10,13 @@
  */
 
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/single_thread_port.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 class ui_common_robot;
@@ -163,19 +163,10 @@ public:
 	 */
 	const std::string edp_section;
 
-#if !defined(USE_MESSIP_SRR)
-
 	/**
 	 * @brief file descriptor of EDP communication chanell
 	 */
-	int EDP_fd; // by Y&W
-#else
-
-	/**
-	 * @brief file descriptor of EDP communication chanell
-	 */
-	messip_channel_t *EDP_fd;
-#endif
+	lib::fd_client_t EDP_fd; // by Y&W
 
 	/**
 	 * @brief executed the communication sequence with EDP: set and query with error handling
@@ -201,7 +192,6 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-
 			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
 
 	/**

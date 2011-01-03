@@ -1,3 +1,4 @@
+if(QNXNTO)
 add_executable(vsp_time_int
 	vsp_time_sensor.cc
 	../../base/vsp/vsp_m_int.cc ../../base/vsp/vsp_sensor_interface.cc
@@ -32,3 +33,4 @@ add_executable(ecp_time
 target_link_libraries(ecp_time ecp_r_irp6ot_m ecp_r_irp6p_m ecp)
 
 install(TARGETS vsp_time_int DESTINATION bin)
+endif(QNXNTO)

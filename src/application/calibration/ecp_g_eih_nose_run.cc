@@ -30,7 +30,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_eih_nose_run.h"
 

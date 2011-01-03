@@ -1,3 +1,12 @@
+/*!
+ * @file pvt_test.cc
+ * @brief Position-Velocity-Time triples calculation for Maxon EPOS motino controller - test utility.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include "pvt.hpp"
 
 #include <Eigen/Core>

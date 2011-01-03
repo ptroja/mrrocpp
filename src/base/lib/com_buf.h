@@ -27,16 +27,27 @@
 #include "base/lib/impconst.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip.h"
+#include "base/lib/messip/messip.h"
 #endif
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/string.hpp>
 
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 1000
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 1000
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 200
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 200
+
+#if !defined(USE_MESSIP_SRR)
+typedef int fd_client_t;
+static const fd_client_t invalid_fd = -1;
+typedef name_attach_t * fd_server_t;
+#else
+typedef messip_channel_t * fd_client_t;
+static const fd_client_t invalid_fd = NULL;
+typedef messip_channel_t * fd_server_t;
+#endif
 
 //------------------------------------------------------------------------------
 /*!
@@ -176,8 +187,10 @@ struct ECP_message
 	uint8_t nr_of_options;
 
 	//----------------------------------------------------------
+#ifndef USE_MESSIP_SRR
 	union
 	{
+#endif
 		/*! A comment for the command. */
 		char string[MSG_LENGTH];
 
@@ -203,11 +216,38 @@ struct ECP_message
 		{
 			double robot_position[lib::MAX_SERVOS_NR];
 			double sensor_reading[6];
-			int measure_number;
+			int32_t measure_number;
 		}
 		/*! Robot positions + Sensor readings + Measure number. */
 		MAM;
+#ifndef USE_MESSIP_SRR
 	};
+#endif
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & ecp_message;
+		ar & robot_name;
+		ar & nr_of_options;
+
+		ar & string;
+
+		ar & RS.robot_position;
+		ar & RS.sensor_reading;
+
+		ar & R2S.robot_position;
+		ar & R2S.digital_scales_sensor_reading;
+		ar & R2S.force_sensor_reading;
+
+		ar & MAM.robot_position;
+		ar & MAM.sensor_reading;
+		ar & MAM.measure_number;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -220,11 +260,26 @@ struct UI_reply
 	msg_header_t hdr;
 #endif
 	UI_TO_ECP_COMMAND reply;
-	int integer_number;
+	int32_t integer_number;
 	double double_number;
 	double coordinates[lib::MAX_SERVOS_NR];
 	char path[80];
 	char filename[20];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply;
+		ar & integer_number;
+		ar & double_number;
+		ar & coordinates;
+		ar & path;
+		ar & filename;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -539,70 +594,17 @@ struct edp_error
 {
 	uint64_t error0;
 	uint64_t error1;
-};
 
-//------------------------------------------------------------------------------
-enum SERVO_COMMAND
-{
-	MOVE, READ, SYNCHRONISE, SERVO_ALGORITHM_AND_PARAMETERS
-};
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
-//------------------------------------------------------------------------------
-/*! Structure of a command from EDP_MASTER to SERVO_GROUP. */
-struct edp_master_command
-{
-	/*! Code for the instruction sent to SERVO_GROUP. */
-	SERVO_COMMAND instruction_code;
-	union
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
 	{
-		//------------------------------------------------------
-		struct
-		{
-			/*! Number of steps for a macrostep. */
-			uint16_t number_of_steps;
-			/*!
-			 *  Number of steps after which the information about the previously
-			 *  realized position is to be sent.
-			 *  Information is sent to EDP_MASTER using READING_BUFFER.
-			 *  After k steps SERVO has the position from the k-1 step.
-			 */
-			uint16_t return_value_in_step_no;
-			/*! Length of a macrostep (given value of a macrostep - increase). */
-			double macro_step[lib::MAX_SERVOS_NR];
-			/*! Given absolute position at the end of a macrostep. */
-			double abs_position[lib::MAX_SERVOS_NR];
-		} move;
-		//------------------------------------------------------
-		struct
-		{
-			/*! Servo algorithm numbers. */
-			uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
-			/*! Numbers fo servo algorithm parameters set. */
-			uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
-		} servo_alg_par;
-
-	} parameters;
-};
-
-//------------------------------------------------------------------------------
-/*! Structure of a reply from SERVO_GROUP to EDP_MASTER. */
-struct servo_group_reply
-{
-	/*! Error code. */
-	edp_error error;
-	/*! Position increment of the motor shaft reached since the last reading. */
-	double position[lib::MAX_SERVOS_NR];
-	/*! Absolute position of the joints (in radians). */
-	double abs_position[lib::MAX_SERVOS_NR];
-	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-	int16_t PWM_value[lib::MAX_SERVOS_NR];
-	/*! Control current - (usualy unnecessary). */
-	int16_t current[lib::MAX_SERVOS_NR];
-	/*! Numbers for the regulation algorithms in use. */
-	uint8_t algorithm_no[lib::MAX_SERVOS_NR];
-	uint8_t algorithm_parameters_no[lib::MAX_SERVOS_NR];
-	/*! Gripper regulator state. */
-	short gripper_reg_state;
+		ar & error0;
+		ar & error1;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -612,12 +614,18 @@ struct servo_group_reply
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union c_buffer_robot_model
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+c_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
 	{
-		/*! Tool trihedron ralative to the collar. */
+		/*! Tool trihedron relative to the collar. */
 		frame_tab tool_frame;
 	} tool_frame_def;
 	//----------------------------------------------------------
@@ -641,16 +649,36 @@ typedef union c_buffer_robot_model
 		double weight;
 	} force_tool;
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & tool_frame_def.tool_frame;
+		ar & kinematic_model.kinematic_model_no;
+		ar & servo_algorithm.servo_algorithm_no;
+		ar & servo_algorithm.servo_parameters_no;
+		ar & force_tool.position;
+		ar & force_tool.weight;
+	}
 } c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union c_buffer_arm
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+c_buffer_arm
 {
 	//----------------------------------------------------------
 	struct
 	{
-		/*!  End's trihedron ralative to the base system. */
+		/*!  End's trihedron relative to the base system. */
 		frame_tab arm_frame;
 		/*! XYZ + end's orientation relative to the base system. */
 		double arm_coordinates[lib::MAX_SERVOS_NR];
@@ -669,7 +697,29 @@ typedef union c_buffer_arm
 		char prosody[lib::MAX_PROSODY];
 	} text_def;
 	//----------------------------------------------------------
-	char serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
+	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pf_def.arm_frame;
+		ar & pf_def.arm_coordinates;
+		ar & pf_def.desired_torque;
+		ar & pf_def.inertia;
+		ar & pf_def.reciprocal_damping;
+		ar & pf_def.force_xyz_torque_xyz;
+		ar & pf_def.arm_frame;
+		ar & pf_def.behaviour;
+
+		//		ar & text_def.text;
+		//		ar & text_def.prosody;
+
+		ar & serialized_command;
+	}
 } c_buffer_arm_t;
 
 //------------------------------------------------------------------------------
@@ -748,6 +798,9 @@ struct c_buffer
 		ar & interpolation_type;
 		ar & motion_type;
 		ar & motion_steps;
+		ar & value_in_step_no;
+		ar & robot_model;
+		ar & arm;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -795,7 +848,13 @@ struct c_buffer
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef union r_buffer_robot_model
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+_r_buffer_robot_model
 {
 	//----------------------------------------------------------
 	struct
@@ -836,6 +895,21 @@ typedef union r_buffer_robot_model
 		double weight;
 	} force_tool;
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & tool_frame_def.tool_frame;
+		ar & kinematic_model.kinematic_model_no;
+		ar & servo_algorithm.servo_algorithm_no;
+		ar & servo_algorithm.servo_parameters_no;
+		ar & force_tool.position;
+		ar & force_tool.weight;
+	}
+
 } r_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
@@ -859,18 +933,33 @@ typedef struct _controller_state_t
 	 *  @todo Translate to English.
 	 */
 	bool is_robot_blocked;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & is_synchronised;
+		ar & is_power_on;
+		ar & is_wardrobe_on;
+		ar & is_robot_blocked;
+	}
 } controller_state_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef union r_buffer_arm
+typedef
+#ifndef USE_MESSIP_SRR
+union
+#else
+struct
+#endif
+r_buffer_arm
 {
 	struct
 	{
-		/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
-		int16_t PWM_value[lib::MAX_SERVOS_NR];
-		/*! Control current - (usualy unnecessary). */
-		int16_t current[lib::MAX_SERVOS_NR];
 		/*!
 		 *  Macierz reprezentujaca koncowke wzgledem bazy manipulatora.
 		 *  @todo Translate to English.
@@ -886,7 +975,7 @@ typedef union r_buffer_arm
 		 *  Stan w ktorym znajduje sie regulator chwytaka.
 		 *  @todo Translate to English.
 		 */
-		short gripper_reg_state;
+		int16_t gripper_reg_state;
 	} pf_def;
 	//----------------------------------------------------------
 	struct
@@ -898,8 +987,22 @@ typedef union r_buffer_arm
 		bool speaking;
 	} text_def;
 
-	char serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
+	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pf_def.arm_frame;
+		ar & pf_def.arm_coordinates;
+		ar & pf_def.force_xyz_torque_xyz;
+		ar & pf_def.gripper_reg_state;
+		ar & text_def.speaking;
+		ar & serialized_reply;
+	}
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
@@ -928,7 +1031,7 @@ struct r_buffer
 	uint8_t analog_input[8];
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
-	unsigned long servo_step;
+	uint32_t servo_step;
 	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
 	/*! Control current - (usualy unnecessary). */
@@ -940,8 +1043,33 @@ struct r_buffer
 	//                      METHODS
 	//-----------------------------------------------------
 	r_buffer(void); // W odkomentowane
-}__attribute__((__packed__));
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply_type;
+		ar & error_no;
+		ar & robot_model_type;
+		ar & arm_type;
+		ar & input_values;
+		ar & analog_input;
+		ar & controller_state;
+		ar & servo_step;
+		ar & PWM_value;
+		ar & current;
+		// The following are unions... probably have to handle with boost::variant
+		ar & robot_model;
+		ar & arm;
+	}
+}
+#ifndef USE_MESSIP_SRR
+__attribute__((__packed__))
+#endif
+;
 //------------------------------------------------------------------------------
 /*! Target position for the mobile robot. */
 class playerpos_goal_t
@@ -975,6 +1103,19 @@ struct ecp_next_state_t
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & mp_2_ecp_next_state;
+		ar & mp_2_ecp_next_state_variant;
+		ar & mp_2_ecp_next_state_string;
+		// ar & playerpos_goal; // this is not needed at this moment
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -985,6 +1126,16 @@ struct ecp_command_buffer
 	msg_header_t hdr;
 #endif
 	c_buffer instruction;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & instruction;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -998,6 +1149,19 @@ struct MP_COMMAND_PACKAGE
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
 	bool pulse_to_ecp_sent;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & command;
+		ar & ecp_next_state;
+		ar & instruction;
+		ar & pulse_to_ecp_sent;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -1008,7 +1172,19 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
-	char ecp_2_mp_string[ECP_2_MP_STRING_SIZE];
+	char recognized_command[ECP_2_MP_STRING_SIZE];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply;
+		ar & reply_package;
+		ar & recognized_command; // TODO: this should be handled in better way...
+	}
 };
 // ------------------------------------------------------------------------
 
@@ -1018,7 +1194,14 @@ struct ECP_REPLY_PACKAGE
  */
 typedef struct _empty
 {
-	//! This is empty data type
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+	}
 } empty_t;
 
 /*

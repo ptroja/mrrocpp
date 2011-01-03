@@ -12,6 +12,17 @@
 #include "ui/src/ui_robot.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+
+namespace tfg_and_conv {
+class EcpRobot;
+}
+namespace irp6ot_tfg {
+
 //
 //
 // KLASA UiRobotIrp6ot_tfg
@@ -19,33 +30,37 @@
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_tfg_and_conv_robot;
-
-class UiRobotIrp6ot_tfg : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
 public:
 
-	double irp6ot_tfg_current_pos[lib::irp6ot_tfg::NUM_OF_SERVOS];// pozycja biezaca
-	double irp6ot_tfg_desired_pos[lib::irp6ot_tfg::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::irp6ot_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::irp6ot_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6ot_tfg_moves_open; // informacja czy okno ruchow
 	bool is_wind_irp6ot_tfg_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
-	UiRobotIrp6ot_tfg(Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int close_all_windows();
-	int delete_ui_ecp_robot();
-
+	void close_all_windows();
+	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
+	int execute_motor_motion();
+	int execute_joint_motion();
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

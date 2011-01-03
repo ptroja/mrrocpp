@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "ecp_t_rcsc_speaker.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
@@ -37,7 +37,7 @@ rcsc::rcsc(lib::configurator &_config) :
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::speaker::generator::ECP_GEN_SPEAK) {

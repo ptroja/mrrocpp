@@ -3,6 +3,9 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
+#include <boost/bind.hpp>
+#include <boost/thread/thread.hpp>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -24,7 +27,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
-		axe_inc_per_revolution[j] = lib::conveyor::INC_PER_REVOLUTION;
+		axe_inc_per_revolution[j] = INC_PER_REVOLUTION;
 	}
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
@@ -35,12 +38,16 @@ servo_buffer::servo_buffer(effector &_master) :
 void servo_buffer::load_hardware_interface(void)
 {
 	// tablica pradow maksymalnych dla poszczegolnych osi
-	int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
+	//int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
-	hi
-			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
-
+	const std::vector<std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings,
+				mrrocpp::lib::conveyor::ports_strings+mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM+1);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector);
 	hi->init();
+
+	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika
+	hi->set_parameter(0, hi_moxa::PARAM_SYNCHRONIZED, 1);
+
 	// utworzenie tablicy regulatorow
 
 	// Serwomechanizm 1

@@ -24,10 +24,10 @@
 #include "base/lib/com_buf.h"
 
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 #include "generator/ecp/ecp_g_delta.h"
 
 namespace mrrocpp {

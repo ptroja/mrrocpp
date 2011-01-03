@@ -4,7 +4,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
@@ -38,7 +38,7 @@ tfg::tfg(lib::configurator &_config) :
 void tfg::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::common::generator::ECP_GEN_TFG) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFG) {
 
 		tfgg->Move();
 	}

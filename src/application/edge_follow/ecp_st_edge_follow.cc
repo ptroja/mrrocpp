@@ -12,15 +12,15 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace task {
+namespace sub_task {
 
-ecp_sub_task_edge_follow::ecp_sub_task_edge_follow(task &_ecp_t) :
-	ecp_sub_task(_ecp_t)
+edge_follow::edge_follow(task::task &_ecp_t) :
+	sub_task(_ecp_t)
 {
 	yefg = new generator::y_edge_follow_force(_ecp_t, 8);
 }
 
-void ecp_sub_task_edge_follow::conditional_execution()
+void edge_follow::conditional_execution()
 {
 
 	yefg->Move();

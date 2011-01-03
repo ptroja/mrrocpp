@@ -1,10 +1,11 @@
-// -------------------------------------------------------------------------
-// Plik:			configurator.cc
-// System:	QNX/MRROCPP  v. 6.3
-// Opis:		Plik zawiera definicje matod klasy lib::configurator - obsluga konfiguracji z pliku INI.
-// Autor:		tkornuta
-// Data:		10.11.2005
-// -------------------------------------------------------------------------
+/**
+ * \file configurator.cc
+ *
+ * \author Piotr Trojanek <piotr.trojanek@gmail.com>
+ * \author Tomasz Winiarski <tomrobotics@gmail.com>
+ *
+ * \brief Definitions of configurator.
+ */
 
 #include <cstdio>
 #include <cstdlib>
@@ -27,8 +28,15 @@
 #include <stdexcept>
 
 #include <string>
+
 #if defined(USE_MESSIP_SRR)
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
+#include "base/lib/config_types.h"
+#else
+#include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ini_parser.hpp>
 #endif
 
 #if defined(__QNXNTO__)
@@ -39,16 +47,10 @@
 
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
-#if defined(PROCESS_SPAWN_SPAWN)
-#include "base/lib/y_spawn.h"
-#endif
-#include "base/lib/config_types.h"
 #include "base/lib/typedefs.h"
 
 namespace mrrocpp {
 namespace lib {
-
-//typedef boost::tokenizer <boost::char_separator <char> > tokenizer;
 
 // Konstruktor obiektu - konfiguratora.
 configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name) :
@@ -67,49 +69,76 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	}
 	assert(ch);
 #else
-	file_location = return_ini_file_path();
-	common_file_location = return_common_ini_file_path();
-#endif /* USE_MESSIP_SRR */
-}// : configurator
+	file_location = get_config_file_path();
+	common_file_location = get_common_config_file_path();
 
-void configurator::change_ini_file(const std::string & _ini_file)
+	read_property_tree_from_file(file_pt, file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
+#endif /* USE_MESSIP_SRR */
+}
+
+#ifndef USE_MESSIP_SRR
+void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
+{
+	try {
+		if (boost::filesystem::extension(file) == ".ini") {
+			boost::property_tree::read_ini(file, pt);
+		} else if (boost::filesystem::extension(file) == ".xml") {
+			boost::property_tree::read_xml(file, pt);
+		} else {
+			throw std::logic_error("unknown config file extension");
+		}
+	} catch (boost::property_tree::ptree_error & e) {
+		std::cerr << e.what() << std::endl;
+	}
+}
+#endif
+
+void configurator::change_config_file(const std::string & _ini_file)
 {
 #ifdef USE_MESSIP_SRR
-	configfile_t configfile;
-	snprintf(configfile, sizeof(configfile), "%s", _ini_file.c_str());
+	config_query_t query, reply;
 
-	boost::mutex::scoped_lock l(file_mutex);
+	query.key = _ini_file;
+	query.flag = true;
 
-	messip::port_send_sync(this->ch,
-			CONFIG_CHANGE_INI_FILE, 0,
-			configfile);
+	{
+		boost::mutex::scoped_lock l(access_mutex);
+
+		messip::port_send(this->ch,
+				0, 0,
+				query, reply);
+	}
+
+	if(!reply.flag) {
+		// TODO: throw
+		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
+	}
 #else
-	boost::mutex::scoped_lock l(file_mutex);
+	boost::mutex::scoped_lock l(access_mutex);
 
 	ini_file = _ini_file;
 
-	file_location = return_ini_file_path();
-	common_file_location = return_common_ini_file_path();
+	file_location = get_config_file_path();
+	common_file_location = get_common_config_file_path();
+
+	read_property_tree_from_file(file_pt, file_location);
+	read_property_tree_from_file(common_file_pt, common_file_location);
 #endif /* USE_MESSIP_SRR */
 }
 
-bool configurator::check_config(const std::string & s)
+bool configurator::check_config(const std::string & key) const
 {
-	return (exists(s.c_str()) && value <int> (s.c_str()));
+	return (exists(key.c_str()) && value <int> (key));
 }
 
-// Zwraca numer wezla.
 int configurator::return_node_number(const std::string & node_name_l)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 	return ND_LOCAL_NODE;
-#else
-	return netmgr_strtond(node_name_l.c_str(), NULL);
-#endif
-}// : return_node_number
 
+}
 
-// Zwraca attach point'a dla serwerow.
 std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
@@ -138,134 +167,57 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 
 	// Zwrocenie atach_point'a.
 	return (name);
-}// : return_created_resourceman_attach_point_name
+}
 
 #ifndef USE_MESSIP_SRR
-// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
-std::string configurator::return_ini_file_path() const
+std::string configurator::get_config_file_path() const
 {
 	std::string value(mrrocpp_network_path);
 	//value += "configs/";
+	value += "../";
 	value += ini_file;
 
 	return value;
 }
 
-// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego z konfiguracja domyslna (common.ini)
-std::string configurator::return_common_ini_file_path() const
+std::string configurator::get_common_config_file_path() const
 {
 	std::string value(mrrocpp_network_path);
-	value += "configs/common.ini";
+	value += "../configs/common.ini";
 
 	return value;
 }
 #endif
 
-// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
-	path += "msr/";
+	path += "../msr/";
 
 	return path;
 }
 
-// Zwraca wartosc (char*) dla sciezki do pliku konfiguracyjnego.
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;
 }
 
-// Zwraca czy dany klucz istnieje
 bool configurator::exists(const char* _key, const char* __section_name) const
 {
-#ifdef USE_MESSIP_SRR
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
-	query_t query;
-	snprintf(query.key, sizeof(query.key), "%s", _key);
-	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-
-	bool value;
-
-	boost::mutex::scoped_lock l(file_mutex);
-
-	messip::port_send(this->ch,
-			CONFIG_EXISTS, 0,
-			query, value);
-
-	return value;
-#else
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	int value;
-	struct Config_Tag configs[] = {
-	// Pobierane pole.
-	{ (char *) _key, Int_Tag, &value },
-	// Pole konczace.
-	{ NULL, Error_Tag, NULL } };
-
-	boost::mutex::scoped_lock l(file_mutex);
-
-	if (input_config(file_location, configs, _section_name) < 1) {
-		if (input_config(common_file_location, configs, _section_name) < 1) {
-			// Zwolnienie pamieci.
-
-			return false;
-		}
+	try {
+		value <std::string> (_key, _section_name);
+	} catch (boost::property_tree::ptree_error & e) {
+		return false;
 	}
 
 	return true;
-#endif /* USE_MESSIP_SRR */
 }
-
-// Zwraca wartosc (char*) dla klucza.
-std::string configurator::return_string_value(const char* _key, const char*__section_name) const
-{
-#ifdef USE_MESSIP_SRR
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-
-	query_t query;
-
-	snprintf(query.key, sizeof(query.key), "%s", _key);
-	snprintf(query.section, sizeof(query.section), "%s", _section_name);
-
-	char value[255];
-
-	boost::mutex::scoped_lock l(file_mutex);
-
-	messip::port_send(this->ch, CONFIG_RETURN_STRING_VALUE, 0,
-			query, value);
-
-	// Zwrocenie wartosci.
-	return std::string(value);
-#else
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	// Zwracana zmienna.
-	char tmp[200];
-	struct Config_Tag configs[] = {
-	// Pobierane pole.
-	{ (char *) _key, String_Tag, tmp },
-	// Pole konczace.
-	{ NULL, Error_Tag, NULL } };
-
-	// Odczytanie zmiennej.
-	boost::mutex::scoped_lock l(file_mutex);
-	if (input_config(file_location, configs, _section_name) < 1) {
-		if (input_config(common_file_location, configs, _section_name) < 1) {
-			fprintf(stderr, "Blad input_config() w value<std::string> file_location:%s, _section_name:%s, _key:%s\n", file_location.c_str(), _section_name, _key);
-		}
-	}
-
-	// 	throw ERROR
-
-	// Zwrocenie wartosci.
-	return std::string(tmp);
-#endif /* USE_MESSIP_SRR */
-}// : value<std::string>
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 
 	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
 	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
@@ -282,9 +234,8 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		if (access(opendir_path.c_str(), R_OK) != 0) {
 			printf("spawned node absent: %s\n", opendir_path.c_str());
-			throw std::logic_error("spawned node absent: " + opendir_path);
+			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
-
 	}
 
 	// Sciezka do binariow.
@@ -323,7 +274,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 
@@ -363,119 +314,15 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	return child_pid;
-#endif
-#if defined(PROCESS_SPAWN_SPAWN)
-	// Identyfikator stworzonego procesu.
-	int child_pid;
-	// Deskryptor pliku.
-	int fd;
 
-	// printf("_section_name: %s,\n",_section_name);
+}
 
-	// Parametry stworzonego procesu.
-	struct inheritance inherit;
-	inherit.flags = SPAWN_SETGROUP;
-	inherit.pgroup = SPAWN_NEWPGROUP;
-
-	// Sciezka do binariow.
-	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
-	char * bin_path = new char[size];
-	strcpy(bin_path,"/net/");
-	strcat(bin_path, node);
-	strcat(bin_path, dir);
-	strcat(bin_path,"bin/");
-
-	// Zlozenie lokalizacji odpalanego y_spawn_process
-	size = 1 + strlen(bin_path) + strlen("y_spawn_process");
-	char* spawn_process = new char[size];
-	strcpy(spawn_process, bin_path);
-	strcat(spawn_process,"y_spawn_process");
-
-	// cout<<"spawn_process: "<<spawn_process<<endl;
-
-	const int fd_map[] = {0, 1, 2};
-	//printf("conf a\n");
-	// Argumenty wywolania procesu.
-	char *child_arg[3];
-	child_arg[0]=spawn_process;
-	child_arg[1]=(char*)"NET_SPAWN";
-	child_arg[2]=NULL;
-	//printf("conf b: %s, %s\n", child_arg[0], child_arg[1]);
-	// Odpalenie y_spawn_process.
-	if ((child_pid=spawn( child_arg[0], 3, fd_map, &inherit, child_arg, NULL)) ==-1)
-	{
-		fprintf( stderr, "Spawn of y_spawn_process failed (from PID %d): %s\n", getpid(), strerror(errno));
-		// sleep(1000);
-		return -1;
-	}
-	// Proba komunikacji z procesem odpalajacym inne procesy.
-	short tmp = 0;
-	// kilka sekund  (~1) na otworzenie urzadzenia
-	while((fd = name_open(child_arg[1], 0))<0)
-	if((tmp++)<lib::CONNECT_RETRY)
-	delay(lib::CONNECT_DELAY);
-	else {
-		fprintf( stderr, "Cannot open y_spawn_process.\n");
-		return -1;
-	}
-	//printf("conf 1\n");
-	// Wiadomosci odbierane i wysylane.
-	my_data_t input;
-	my_reply_data_t output;
-	// Parametry wywolania procesu.
-	input.hdr.type=0;
-	input.msg_type=1;
-	// Odczytanie nazwy odpalanego pliku.
-	char * spawned_program_name = value<std::string>("program_name", _section_name);
-	char * spawned_node_name = value<std::string>("node_name", _section_name);
-
-	// printf("spawned_node_name:%s\n", spawned_node_name);
-
-	strcpy(input.node_name, spawned_node_name);
-	strcpy(input.program_name_and_args, spawned_program_name);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, node.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, dir.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, ini_file.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, _section_name.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, session_name.c_str());
-	strcpy(input.binaries_path, bin_path);
-
-	// cout<<"config_spawn: "<<input.node_name<<endl;
-	// cout<<"config_spawn: "<<input.program_name_and_args<<endl;
-	// cout<<"config_spawn: "<<input.binaries_path<<endl;
-	// Wyslanie polecenia odpalenia procesu.
-	if (MsgSend(fd, &input, sizeof(input), &output, sizeof(output))<0)
-	{
-		fprintf(stderr, "Send to y_spawn_process failed.\n");
-		return -1;
-	}
-
-	//printf("conf 2\n");
-	// Zamkniecie pliku.
-	name_close(fd);
-	// Zwolnienie pamieci.
-	delete [] spawned_program_name;
-	delete [] spawned_node_name;
-	delete [] bin_path;
-	delete [] spawn_process;
-	// cout<<"Elo return"<<endl;
-	waitpid(child_pid, NULL, WEXITED);
-	// Zwrocenie wyniku.
-	return output.pid;
-#endif
-}// : spawn
-
+#ifdef USE_MESSIP_SRR
 configurator::~configurator()
 {
-#ifdef USE_MESSIP_SRR
 	messip::port_disconnect(ch);
-#endif /* USE_MESSIP_SRR */
 }
+#endif /* USE_MESSIP_SRR */
 
 } // namespace lib
 } // namespace mrrocpp

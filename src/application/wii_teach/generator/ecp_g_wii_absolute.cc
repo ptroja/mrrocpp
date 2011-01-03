@@ -25,7 +25,7 @@ wii_absolute::wii_absolute(common::task::task& _ecp_task, ecp_mp::sensor::wiimot
 	}
 }
 
-void wii_absolute::set_position(void)
+void wii_absolute::set_position(bool changed)
 {
 	double rotation[3][3];
 	double translation[3];
@@ -40,7 +40,7 @@ void wii_absolute::set_position(void)
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
 	homog_matrix.get_translation_vector(old_translation);
-
+	
 	translation[0] = nextChange[1];
 	translation[1] = nextChange[0];
 	translation[2] = nextChange[2];
@@ -68,11 +68,6 @@ void wii_absolute::set_position(void)
 	homog_matrix.set_translation_vector(old_translation);
 
 	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-	/*
-	 the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate
-	 = the_robot->reply_package.arm.pf_def.gripper_coordinate
-	 + nextChange[7];
-	 */
 }
 
 bool wii_absolute::first_step()
@@ -99,7 +94,6 @@ void wii_absolute::preset_position(void)
 	for (i = 0; i < MAX_NO_OF_DEGREES; ++i) {
 		requestedChange[i] = 0;
 	}
-	currentGripperValue = 0;//the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate;
 }
 
 }

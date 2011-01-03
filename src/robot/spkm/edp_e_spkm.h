@@ -48,6 +48,13 @@ public:
 	effector(lib::configurator &_config);
 
 	/*!
+	 * \brief motors synchronisation
+	 *
+	 * This method synchronises motors of the robots.
+	 */
+	void synchronise();
+
+	/*!
 	 * \brief method to create threads other then EDP master thread.
 	 *
 	 * Here there is only one extra thread - reader_thread.

@@ -29,8 +29,6 @@
 #include "base/edp/edp_force_sensor.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
 
-using std::cout;
-
 namespace mrrocpp {
 namespace edp {
 namespace common {
@@ -773,7 +771,6 @@ void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 		default:
 			break;
 	}
-
 }
 /*--------------------------------------------------------------------------*/
 

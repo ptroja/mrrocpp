@@ -1,0 +1,15 @@
+/** 
+
+@namespace mrrocpp::ecp::common::generator::velocity_profile_calculator
+@brief Namespace for velocity profile calculators.
+@author rtulwin
+@ingroup generators
+
+@namespace mrrocpp::ecp::common::generator::trajectory_interpolator
+@brief Namespace for trajectory interpolators.
+@author rtulwin
+@ingroup generators
+
+ @defgroup generators Generators
+   
+*/

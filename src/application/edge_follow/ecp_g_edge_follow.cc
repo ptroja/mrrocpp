@@ -36,6 +36,10 @@ y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step
 
 bool y_edge_follow_force::first_step()
 {
+
+	std::cout << "y_edge_follow_force" << node_counter << std::endl;
+
+	double delta[6];
 	for (int i = 0; i < 6; i++)
 		delta[i] = 0.0;
 
@@ -97,6 +101,8 @@ bool y_edge_follow_force::next_step()
 		return false;
 	}
 
+	std::cout << "y_edge_follow_force" << node_counter << std::endl;
+
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
 	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
 
@@ -123,7 +129,7 @@ bool y_edge_follow_force::next_step()
 
 	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0.0;
 	}
 
@@ -136,6 +142,9 @@ bool y_edge_follow_force::next_step()
 	double v = hypot(wx, wy);
 
 	if (v != 0.0) {
+
+		lib::Homog_matrix basic_rot_frame;
+		lib::Homog_matrix ex_rot_frame;
 		double s_alfa = wy / v;
 		double c_alfa = wx / v;
 
@@ -175,7 +184,7 @@ bool y_edge_follow_force::next_step()
 		 */
 
 		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx), lround(wy), lround(v), atan2(s_alfa, c_alfa)
-				* DEGREES_TO_RADIANS);
+				* (180.0 / M_PI));
 	}
 
 	return true;

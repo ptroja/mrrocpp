@@ -23,7 +23,7 @@
 
 #include "ui/src/ui.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "ui/src/ui_const.h"
+
 #include "ui/src/ui_class.h"
 #include "ui/src/ui_ecp.h"
 // Konfigurator.
@@ -36,7 +36,7 @@
 
 // Tryb debugowania.
 // #define TRDEBUG
-extern Ui ui;
+extern ui::common::Interface interface;
 // Wiadomosc wysylana do ECP.
 extern lib::UI_ECP_message ui_ecp_msg;
 // Rozkaz przeslany z ECP.
@@ -63,20 +63,20 @@ void SetButtonState(PtWidget_t *widget, short active)
 		PtSetResource(widget, Pt_ARG_FLAGS, Pt_TRUE, Pt_BLOCKED | Pt_GHOST);
 		PtSetResource(widget, Pt_ARG_FLAGS, Pt_FALSE, Pt_SELECTABLE);
 		PtDamageWidget(widget);
-	};
+	}
 	// Ustawienie stanu.
-
 }
-;
 
 int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 #ifdef TRDEBUG
 	printf("TRbtnStart\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_START_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -91,7 +91,7 @@ int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		SetButtonState(ABW_TRbtnFSCalibrate, false);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndTrajectoryReproduce);
-	};
+	}
 	return (Pt_CONTINUE);
 }
 
@@ -100,9 +100,11 @@ int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("TRbtnPause\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_PAUSE_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -115,7 +117,7 @@ int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		SetButtonState(ABW_TRbtnStop, true);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndTrajectoryReproduce);
-	};
+	}
 	return (Pt_CONTINUE);
 }
 
@@ -124,9 +126,11 @@ int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("TRbtnStop\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_STOP_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -143,7 +147,7 @@ int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		SetButtonState(ABW_TRbtnFSCalibrate, false);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndTrajectoryReproduce);
-	};
+	}
 	return (Pt_CONTINUE);
 }
 
@@ -152,14 +156,16 @@ int TRbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("btnExit\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::TR_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("btnExit: Send to ECP failed");
-	};
+	}
 	// Zamkniecie polaczenia.
 	name_close(ECPfd);
 	// Zamkniecie okna.
@@ -173,9 +179,11 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 #ifdef TRDEBUG
 	printf("TRbtnPositionZero\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// ustawienie typu wiadomosci
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> Osiagniecie zerowej pozycji.
 	ui_ecp_msg.command = lib::TR_ZERO_POSITION;
 	// printf("TRbtnPositionZero: sending %d \n", ui_ecp_msg.command);
@@ -218,10 +226,9 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 		SetButtonState(ABW_TRbtnFSCalibrate, true);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndTrajectoryReproduce);
-	};
+	}
 	return (Pt_CONTINUE);
 }
-;
 
 int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
@@ -234,7 +241,6 @@ int TRbtnLoadTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	ApCreateModule(ABM_wndFileLocation, widget, cbinfo);
 	return (Pt_CONTINUE);
 }
-;
 
 int TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
@@ -247,7 +253,6 @@ int TRbtnSaveAll(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	ApCreateModule(ABM_wndFileLocation, widget, cbinfo);
 	return (Pt_CONTINUE);
 }
-;
 
 int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
@@ -257,7 +262,7 @@ int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	// Nazwa polacznia.
 	std::string
 			tmp_name =
-					ui.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", lib::irp6ot_m::ECP_SECTION);
+					interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_third_chan_attach_point", lib::irp6ot_m::ECP_SECTION);
 
 #ifdef TRDEBUG
 	printf("TRConnect: %s\n", tmp_name.c_str());
@@ -266,7 +271,7 @@ int TRConnect(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	if ((ECPfd = name_open(tmp_name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == -1) {
 		perror("TRConnect: Connect to ECP failed");
 		return EXIT_FAILURE;
-	};
+	}
 	return (Pt_CONTINUE);
 } // end: TRConnect
 
@@ -279,48 +284,48 @@ int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	char tmp_buffer[20];
 	// Wypisanie pozycji robota w oknie.
 	// Zerowa os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[0]);
 	PtSetResource(ABW_TRedtArm0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Pierwsza os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[1]);
 	PtSetResource(ABW_TRedtArm1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Druga os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[2]);
 	PtSetResource(ABW_TRedtArm2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Trzecia os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[3]);
 	PtSetResource(ABW_TRedtArm3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Czwarta os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[4]);
 	PtSetResource(ABW_TRedtArm4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Piata os.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.robot_position[5]);
 	PtSetResource(ABW_TRedtArm5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wypisanie odczytow czujnika zlozonego z linialow w oknie.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[0]);
 	PtSetResource(ABW_TRedtScaleReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[1]);
 	PtSetResource(ABW_TRedtScaleReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[2]);
 	PtSetResource(ABW_TRedtScaleReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[3]);
 	PtSetResource(ABW_TRedtScaleReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[4]);
 	PtSetResource(ABW_TRedtScaleReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.digital_scales_sensor_reading[5]);
 	PtSetResource(ABW_TRedtScaleReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wypisanie odczytow czujnika sily w oknie.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
 	PtSetResource(ABW_TRedtForceReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
 	PtSetResource(ABW_TRedtForceReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
 	PtSetResource(ABW_TRedtForceReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
 	PtSetResource(ABW_TRedtForceReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
 	PtSetResource(ABW_TRedtForceReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
 	PtSetResource(ABW_TRedtForceReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Wykonano nastepny makrokrok.
 	current_macrostep_number++;
@@ -329,52 +334,53 @@ int TRRefreshWindow(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	PtSetResource(ABW_TRedtMacrostepNumber, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	return (Pt_CONTINUE);
 }
-;// end: TRRefreshWindow
 
 int TRbtnDSSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 #ifdef TRDEBUG
 	printf("TRbtnDSSCalibrate\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> Kalibracja czujnika zlozonego z linialow.
 	ui_ecp_msg.command = lib::TR_CALIBRATE_DIGITAL_SCALES_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("TRbtnDSSCalibrate: Send to ECP failed");
-	};
+	}
 	return (Pt_CONTINUE);
 }
-;// end: TRbtnDSSCalibrate
-
 
 int TRbtnFSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 #ifdef TRDEBUG
 	printf("TRbtnFSCalibrate\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> Kalibracja czujnika sily.
 	ui_ecp_msg.command = lib::TR_CALIBRATE_FORCE_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
 		perror("TRbtnFSCalibrate: Send to ECP failed");
-	};
+	}
 	return (Pt_CONTINUE);
 }
-;// end: TRbtnFSCalibrate
-
 
 int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 #ifdef TRDEBUG
 	printf("TRbtnTryAgain\n");
 #endif
+#if !defined(USE_MESSIP_SRR)
 	// Ustawienie typu wiadomosci.
 	ui_ecp_msg.hdr.type = 0x00;
 	ui_ecp_msg.hdr.subtype = 0x00;
+#endif
 	// Polecenie dla ECP -> Kalibracja czujnika sily.
 	ui_ecp_msg.command = lib::TR_TRY_MOVE_AGAIN;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -385,11 +391,9 @@ int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 		SetButtonState(ABW_TRbtnTryAgain, false);
 		// Odswiezenie okna.
 		PtDamageWidget(ABW_wndTrajectoryReproduce);
-	};
+	}
 	return (Pt_CONTINUE);
 }
-; // end: TRbtnTryAgain
-
 
 int TRDangerousForceDetected(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
@@ -399,17 +403,17 @@ int TRDangerousForceDetected(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	// Bufor uzywany do przetwarzania polozanie/odczytow do stringow.
 	char tmp_buffer[20];
 	// Wypisanie odczytow czujnika sily w oknie.
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[0]);
 	PtSetResource(ABW_TRedtForceReading0, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[1]);
 	PtSetResource(ABW_TRedtForceReading1, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[2]);
 	PtSetResource(ABW_TRedtForceReading2, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[3]);
 	PtSetResource(ABW_TRedtForceReading3, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[4]);
 	PtSetResource(ABW_TRedtForceReading4, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
-	sprintf(tmp_buffer, "%5.5f", ui.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
+	sprintf(tmp_buffer, "%5.5f", interface.ui_ecp_obj->ecp_to_ui_msg.R2S.force_sensor_reading[5]);
 	PtSetResource(ABW_TRedtForceReading5, Pt_ARG_TEXT_STRING, tmp_buffer, 0);
 	// Ustawienie stanu przyciskow.
 	SetButtonState(ABW_TRbtnPause, false);
@@ -418,4 +422,3 @@ int TRDangerousForceDetected(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	PtDamageWidget(ABW_wndTrajectoryReproduce);
 	return (Pt_CONTINUE);
 }
-; // end: TRDangerousForceDetected

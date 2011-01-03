@@ -21,7 +21,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/edp/edp_e_motor_driven.h"
+#include "robot/irp6p_m/edp_irp6p_m_effector.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -138,16 +138,14 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_2_MAX_ACC, common::SG_REG_2_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 2 reg:%f\n", step_new);
@@ -167,7 +165,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	// }
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -214,7 +212,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -241,7 +239,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -254,14 +252,14 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
 
 	a = 0.412429378531;
-	b0 = 2.594932; //stara z przelicz rezolwer/enkoder 15.219541375872
-	b1 = 2.504769; //
+	b0 = 2.594932 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //stara z przelicz rezolwer/enkoder 15.219541375872
+	b1 = 2.504769 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //
 
 	switch (algorithm_no)
 	{
@@ -315,13 +313,6 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE2_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -368,16 +359,14 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_3_MAX_ACC, common::SG_REG_3_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
@@ -400,7 +389,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -443,7 +432,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -470,7 +459,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -483,14 +472,14 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
 
 	a = 0.655629139073;
-	b0 = 1.030178; //6.042100283822;
-	b1 = 0.986142;
+	b0 = 1.030178 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO; //6.042100283822;
+	b1 = 0.986142 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
 
 	switch (algorithm_no)
 	{
@@ -541,13 +530,6 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE3_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -589,7 +571,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	uint8_t alg_par_status; // okresla prawidlowosc numeru algorytmu regulacji
 	// i zestawu jego parametrow
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	//
 	double current_error;
@@ -600,12 +582,12 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	// constraint_detector(common::SG_REG_4_MAX_ACC, common::SG_REG_4_MAX_SPEED);
+
+	// 
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
@@ -628,7 +610,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -671,7 +653,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -698,7 +680,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -710,14 +692,14 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
 
 	a = 0.315789473684;
-	b0 = 1.997464;
-	b1 = 1.904138;
+	b0 = 1.997464 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
+	b1 = 1.904138 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO;
 
 	switch (algorithm_no)
 	{
@@ -769,13 +751,6 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE4_MAX_PWM_INCREMENT;
-
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
 	delta_eint_old = delta_eint;
@@ -823,16 +798,14 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 	//
 
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_5_MAX_ACC, common::SG_REG_5_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 	/*
 	 if (!eee)
@@ -851,7 +824,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -894,7 +867,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -921,7 +894,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -933,14 +906,14 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
 
 	a = 0.548946716233;
-	b0 = 1.576266; //9.244959545156;
-	b1 = 1.468599; //8.613484947882;
+	b0 = 1.576266 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //9.244959545156;
+	b1 = 1.468599 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //8.613484947882;
 
 
 	switch (algorithm_no)
@@ -992,13 +965,6 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 		set_value_new = MAX_PWM;
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
-
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE5_MAX_PWM_INCREMENT;
 
 	// if (fabs(set_value_new) > 200.0 && first) {
 	// cprintf("PIN=%lf PIO=%lf DIN=%lf DIO=%lf SO=%lf SVVO=%lf SV0=%lf\n", position_increment_new,
@@ -1054,16 +1020,13 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	double root_position_increment_new = position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_6_MAX_ACC, common::SG_REG_6_MAX_SPEED);
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_0_TO_5_POSTUMENT_TO_TRACK_RATIO;
 
 	/*
@@ -1083,7 +1046,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -1126,7 +1089,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1153,7 +1116,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 						// => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1165,14 +1128,14 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
 
 	a = 0.391982182628;
-	b0 = 1.114648; //6.537527839644;
-	b1 = 1.021348; //5.990311804009;
+	b0 = 1.114648 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //6.537527839644;
+	b1 = 1.021348 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //5.990311804009;
 
 
 	switch (algorithm_no)
@@ -1213,13 +1176,6 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 		set_value_new = MAX_PWM;
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
-
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE6_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{
@@ -1281,16 +1237,14 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	double current_measured;
 	//
 
-	alg_par_status = ALGORITHM_AND_PARAMETERS_OK;
+	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
 
-	// BY Y i S - uwzglednie ograniczen na predkosc i przyspieszenie
-	constraint_detector(common::SG_REG_7_MAX_ACC, common::SG_REG_7_MAX_SPEED);
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * lib::irp6p_m::AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
+	step_new_pulse = step_new * AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
 	//position_increment_new= position_increment_new/AXE_6_POSTUMENT_TO_TRACK_RATIO;
 
 	// if (step_new!=0.0) printf(" 7 reg:%f\n", step_new);
@@ -1312,7 +1266,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
-	 if (fabs(position_increment_new) > MAX_INC)
+	 if (fabs(position_increment_new) > common::MAX_INC)
 	 position_increment_new = position_increment_old;
 	 */
 
@@ -1324,7 +1278,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	//pos_increment_new_sum += root_position_increment_new;
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
 
-	// Przyrost calki uchybu
+	// Przyrost calki uchybu, czyli cuhyb polozenia
 	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
 			- position_increment_old);
 
@@ -1355,7 +1309,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 					default: // blad => przywrocic stary algorytm i j stary zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				break;
@@ -1379,10 +1333,10 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 						k_feedforward = 0;
 						break;
 					default: // blad - nie ma takiego zestawu parametrow dla tego algorytmu
-						// => przywrocic stary algorytm i j stary zestaw parametrow
+						// => przywrocic stary algorytm i j stab0 =ry zestaw parametrow
 						algorithm_no = current_algorithm_no;
 						algorithm_parameters_no = current_algorithm_parameters_no;
-						alg_par_status = UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
+						alg_par_status = common::UNIDENTIFIED_ALGORITHM_PARAMETERS_NO;
 						break;
 				}
 				; // end: switch (algorithm_parameters_no)
@@ -1395,7 +1349,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 				// => przywrocic stary algorytm i j stary zestaw parametrow
 				algorithm_no = current_algorithm_no;
 				algorithm_parameters_no = current_algorithm_parameters_no;
-				alg_par_status = UNIDENTIFIED_ALGORITHM_NO;
+				alg_par_status = common::UNIDENTIFIED_ALGORITHM_NO;
 				break;
 		}
 	}
@@ -1407,8 +1361,8 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	 */
 
 	a = 0.3;
-	b0 = 1.364; //4
-	b1 = 1.264; //1.364//4
+	b0 = 1.364 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //4
+	b1 = 1.264 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //1.364//4
 
 	switch (algorithm_no)
 	{
@@ -1421,7 +1375,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
 					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
-		case 2: // algorytm nr 2 - sterowanie pradowe
+		case 2: // algorytm nr 2 - sterowanie pradoweb0 =
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[5] / 158);
 			current_measured = (meassured_current - 128 - 3) * 0.02;
@@ -1452,12 +1406,6 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 
 	// if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
-	// ograniczenie przyrostu PWM
-	// ma na celu zapobiegac osiaganiu zbyt duzych pradow we wzmacniaczach mocy
-	if (set_value_new - set_value_old > IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old + IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT;
-	if (set_value_new - set_value_old < -IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT)
-		set_value_new = set_value_old - IRP6_POSTUMENT_AXE7_MAX_PWM_INCREMENT;
 
 	// scope-locked reader data update
 	{

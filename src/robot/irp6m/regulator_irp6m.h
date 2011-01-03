@@ -19,12 +19,7 @@ namespace irp6m {
 class effector;
 // numeracja od 2 ze wzgledu na analogie irp6_postument
 
-// ograniczenia przyrostu PWM dla IRP6_MECHATRONIKA
-const int AXE2_MAX_PWM_INCREMENT = 1000;
-const int AXE3_MAX_PWM_INCREMENT = 1000;
-const int AXE4_MAX_PWM_INCREMENT = 1000;
-const int AXE5_MAX_PWM_INCREMENT = 1000;
-const int AXE6_MAX_PWM_INCREMENT = 1000;
+
 
 // Stale dla celow synchronizacji IRP6_MECHATRONIKA
 const double SYNCHRO_STEP_COARSE = -0.03;

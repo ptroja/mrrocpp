@@ -12,7 +12,17 @@
 #include "ui/src/ui_robot.h"
 #include "robot/conveyor/const_conveyor.h"
 
-class Ui;
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+
+}
+namespace tfg_and_conv {
+class EcpRobot;
+}
+
+namespace conveyor {
 
 //
 // KLASA UiRobotConveyor
@@ -20,34 +30,36 @@ class Ui;
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-
-class ui_tfg_and_conv_robot;
-
-class UiRobotConveyor : public UiRobot
+class UiRobot : public common::UiRobot
 {
 private:
 
 public:
 
-	double conveyor_current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
-	double conveyor_desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
 
-	ui_tfg_and_conv_robot *ui_ecp_robot;
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
-	UiRobotConveyor(Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
 	int
 			process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	int close_all_windows();
-	int delete_ui_ecp_robot();
-
+	void close_all_windows();
+	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

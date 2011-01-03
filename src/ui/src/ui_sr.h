@@ -9,7 +9,7 @@
 #define __UI_SR_H
 
 #include <boost/function.hpp>
-#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/circular_buffer.hpp>
 #include <stdexcept>
@@ -18,25 +18,28 @@
 #include <list>
 
 #include "base/lib/com_buf.h"
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui.h"
 
-#define UI_SR_BUFFER_LENGHT 50
+namespace mrrocpp {
+namespace ui {
+namespace common {
 
-class ui_sr_buffer: public boost::noncopyable {
+class sr_buffer : public boost::noncopyable
+{
 private:
+	Interface& interface;
+	boost::thread thread_id;
+	boost::circular_buffer <lib::sr_package_t> cb;
+	boost::mutex mtx;
 
-	Ui& ui;
-	boost::thread *thread_id;
-	boost::circular_buffer<lib::sr_package_t> cb;
-	boost::mutex mtx; // = PTHREAD_MUTEX_INITIALIZER ;
-
+	static const int UI_SR_BUFFER_LENGHT = 50;
 
 public:
+	sr_buffer(Interface& _interface);
 
-	ui_sr_buffer(Ui& _ui);
-	~ui_sr_buffer();
+	~sr_buffer();
 
 	//! main thread loop
 	void operator()();
@@ -46,5 +49,8 @@ public:
 	bool buffer_empty(); // czy bufor cykliczny jest pusty
 };
 
+}
+} //namespace ui
+} //namespace mrrocpp
 #endif
 

@@ -5,7 +5,7 @@ add_executable(edp_irp6ot_m
 	hi_irp6ot_m.cc
 	int_hand_irp6ot_m.cc
 	sg_irp6ot_m.cc
-	 regulator_irp6ot_m.cc 
+	regulator_irp6ot_m.cc 
 )
 
 target_link_libraries(
@@ -29,7 +29,7 @@ add_library(kinematicsirp6ot_m
 
 target_link_libraries(kinematicsirp6ot_m kinematics)
 	
-add_library(ecp_r_irp6ot_m ecp_r_irp6ot_m)	
+add_library(ecp_r_irp6ot_m ecp_r_irp6ot_m.cc)
 	
 target_link_libraries(ecp_r_irp6ot_m kinematicsirp6ot_m)
 

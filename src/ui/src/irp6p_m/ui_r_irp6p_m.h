@@ -12,6 +12,17 @@
 #include "ui/src/ui_robot.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+
+namespace irp6 {
+class EcpRobot;
+}
+namespace irp6p_m {
+
 //
 //
 // KLASA UiRobotIrp6p_m
@@ -19,18 +30,11 @@
 //
 
 
-// super klasa agregujaca porozrzucane struktury
-
-class Ui;
-class ui_irp6_common_robot;
-
-class UiRobotIrp6p_m: public UiRobot {
-private:
-
+class UiRobot : public common::UiRobot
+{
 public:
-
-	double irp6p_current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
-	double irp6p_desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
@@ -42,19 +46,26 @@ public:
 	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
+	irp6::EcpRobot *ui_ecp_robot;
 
-	ui_irp6_common_robot *ui_ecp_robot;
-
-	UiRobotIrp6p_m(Ui& _ui);
+	UiRobot(common::Interface& _interface);
 	int reload_configuration();
 	int manage_interface();
-	int process_control_window_irp6p_section_init(
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_start,
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_stop,
-			bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	int close_all_windows();
-	int delete_ui_ecp_robot();
+	void
+			process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	void close_all_windows();
+	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
+	int execute_motor_motion();
+	int execute_joint_motion();
 };
+
+}
+} //namespace ui
+} //namespace mrrocpp
 
 #endif
 

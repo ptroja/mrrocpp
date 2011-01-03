@@ -22,7 +22,7 @@
 #include <sys/dispatch.h>
 #include <sys/netmgr.h>
 #else
-#include "messip_dataport.h"
+#include "base/lib/messip/messip_dataport.h"
 #endif
 #include <cerrno>
 #include <pthread.h>
@@ -44,7 +44,7 @@ namespace common {
 reader_config::reader_config() :
 	step(false), measure_time(false), servo_mode(false)
 {
-	for (int i = 0; i < lib::MAX_SERVOS_NR; ++i) {
+	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; ++i) {
 		desired_inc[i] = false;
 		current_inc[i] = false;
 		pwm[i] = false;
@@ -67,7 +67,7 @@ reader_config::reader_config() :
 reader_buffer::reader_buffer(motor_driven_effector &_master) :
 	new_data(false), master(_master), write_csv(true)
 {
-	thread_id = new boost::thread(boost::bind(&reader_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&reader_buffer::operator(), this));
 }
 
 reader_buffer::~reader_buffer()
@@ -169,15 +169,15 @@ void reader_buffer::operator()()
 
 	// by Y komuniakicja pomiedzy ui i reader'em rozwiazalem poprzez pulsy
 	// powolanie kanalu komunikacyjnego do odbioru pulsow sterujacych
+
+	lib::fd_server_t my_attach;
+
 #if !defined(USE_MESSIP_SRR)
-	name_attach_t *my_attach; // nazwa kanalu komunikacyjnego
 
 	if ((my_attach
 			= name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL))
 			== NULL) {
 #else
-		messip_channel_t *my_attach;
-
 		if ((my_attach = messip::port_create(
 								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 				== NULL) {
@@ -243,7 +243,9 @@ void reader_buffer::operator()()
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype);
 
-			if (rcvid >= 0) {
+			//std::cerr << "pulse received: " << rcvid << " " << type << " " << subtype << std::endl;
+
+			if (rcvid == MESSIP_MSG_NOREPLY) {
 				if (type == READER_START) {
 					start = true;
 				}
@@ -330,9 +332,12 @@ void reader_buffer::operator()()
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype, 0);
 
-			if (rcvid >= 0) {
+			//std::cerr << "pulse received: " << rcvid << " " << type << " " << subtype << std::endl;
+
+			if (rcvid == MESSIP_MSG_NOREPLY) {
 				if (type == READER_STOP) {
 					stop = true;
+					master.onReaderStopped();
 				} else if (type == READER_TRIGGER) {
 					ui_trigger = true;
 				}
@@ -361,10 +366,9 @@ void reader_buffer::operator()()
 			// TODO: throw
 		} else { // jesli plik istnieje
 
-			if(write_csv){
+			if (write_csv) {
 				write_header_csv(outfile);
-			}
-			else{
+			} else {
 				write_header_old_format(outfile);
 			}
 
@@ -379,10 +383,9 @@ void reader_buffer::operator()()
 
 				reader_data & data = reader_buf.front();
 
-				if(write_csv){
+				if (write_csv) {
 					write_data_csv(outfile, data);
-				}
-				else{
+				} else {
 					write_data_old_format(outfile, data);
 				}
 

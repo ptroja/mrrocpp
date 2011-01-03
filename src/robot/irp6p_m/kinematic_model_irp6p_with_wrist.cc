@@ -69,19 +69,19 @@ void model_with_wrist::set_kinematic_parameters(void)
 	 ------------------------------------------------------------------------- */
 	lib::Homog_matrix tmp_global_base_m;
 	// Macierz rotacji.
-	tmp_global_base_m(0,0) = 0.999382684525334;
-	tmp_global_base_m(1,0) = -0.032112349151151;
-	tmp_global_base_m(2,0) = 0.014249452723906;
-	tmp_global_base_m(0,1) = 0.032121691496651;
-	tmp_global_base_m(1,1) = 0.999483874031384;
-	tmp_global_base_m(2,1) = -0.000427184516840;
-	tmp_global_base_m(0,2) = -0.014228380312960;
-	tmp_global_base_m(1,2) = 0.000884637222621;
-	tmp_global_base_m(2,2) = 0.999898380141931;
+	tmp_global_base_m(0, 0) = 0.999382684525334;
+	tmp_global_base_m(1, 0) = -0.032112349151151;
+	tmp_global_base_m(2, 0) = 0.014249452723906;
+	tmp_global_base_m(0, 1) = 0.032121691496651;
+	tmp_global_base_m(1, 1) = 0.999483874031384;
+	tmp_global_base_m(2, 1) = -0.000427184516840;
+	tmp_global_base_m(0, 2) = -0.014228380312960;
+	tmp_global_base_m(1, 2) = 0.000884637222621;
+	tmp_global_base_m(2, 2) = 0.999898380141931;
 	// Wektor przesuniecia.
-	tmp_global_base_m(0,3) = -0.072793938982293;
-	tmp_global_base_m(1,3) = 2.106338769845522;
-	tmp_global_base_m(2,3) = -0.030202915816185;
+	tmp_global_base_m(0, 3) = -0.072793938982293;
+	tmp_global_base_m(1, 3) = 2.106338769845522;
+	tmp_global_base_m(2, 3) = -0.030202915816185;
 	// Ustawienie macierzy.
 	global_base = tmp_global_base_m;
 
@@ -115,7 +115,7 @@ void model_with_wrist::set_kinematic_parameters(void)
 
 	double S_r = 5;
 	double K_1 = 1;
-	gear[1] = (2*M_PI / S_r) * K_1;
+	gear[1] = (2 * M_PI / S_r) * K_1;
 	theta[1] = 2.203374e+02; // l02
 
 	/* -----------------------------------------------------------------------
@@ -133,7 +133,7 @@ void model_with_wrist::set_kinematic_parameters(void)
 	ni2 = -5.124000e+04;
 
 	double K_2 = 1;
-	gear[2] = (2*M_PI / S_r) * K_2;
+	gear[2] = (2 * M_PI / S_r) * K_2;
 	theta[2] = 1.838348e+02; // l03
 
 	/* -----------------------------------------------------------------------
@@ -416,12 +416,19 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
 	// na kat obrotu kisci (wspolrzedna wewnetrzna) w radianach
 	local_current_joints[5] = (local_current_motor_pos[5] - synchro_motor_position[5]) / gear[5] + theta[5];
 
-	if (number_of_servos > 6) {
-		// Przelicznik polozenia walu silnika szczek na ich zacisniecie
-		local_current_joints[6] = dir_a_6 * (local_current_motor_pos[6] * local_current_motor_pos[6]) - dir_b_6
-				* local_current_motor_pos[6] + dir_c_6;
-	}
+	/*
+	 if (number_of_servos > 6) {
+	 // Przelicznik polozenia walu silnika szczek na ich zacisniecie
+	 local_current_joints[6] = dir_a_6 * (local_current_motor_pos[6] * local_current_motor_pos[6]) - dir_b_6
+	 * local_current_motor_pos[6] + dir_c_6;
+	 }
+	 */
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
+
+	// poprawka w celu dostosowania do konwencji DH
+	local_current_joints[2] -= local_current_joints[1] + M_PI_2;
+	local_current_joints[3] -= local_current_joints[2] + local_current_joints[1] + M_PI_2;
+
 	check_joints(local_current_joints);
 
 }//: mp2i_transform
@@ -432,31 +439,38 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 	// Niejednoznacznosc polozenia dla 3-tej osi (obrot kisci < 180).
 	double joint_3_revolution = M_PI;
 	// Niejednoznacznosc polozenia dla 4-tej osi (obrot kisci > 360).
-	double axis_4_revolution = 2*M_PI;
+	double axis_4_revolution = 2 * M_PI;
 
 	// Sprawdzenie wartosci wspolrzednych wewnetrznych.
 	check_joints(local_desired_joints);
 
+	// poprawka w celu uwzglednienia konwencji DH
+	lib::JointArray local_desired_joints_tmp(number_of_servos);
+	local_desired_joints_tmp = local_desired_joints;
+
+	local_desired_joints_tmp[2] += local_desired_joints_tmp[1] + M_PI_2;
+	local_desired_joints_tmp[3] += local_desired_joints_tmp[2];
+
 	// Obliczanie kata obrotu walu silnika napedowego kolumny
-	local_desired_motor_pos_new[0] = gear[0] * local_desired_joints[0] + synchro_joint_position[0];
+	local_desired_motor_pos_new[0] = gear[0] * local_desired_joints_tmp[0] + synchro_joint_position[0];
 
 	// Obliczanie kata obrotu walu silnika napedowego ramienia dolnego
-	local_desired_motor_pos_new[1] = gear[1] * sqrt(sl123 + mi1 * cos(local_desired_joints[1]) + ni1
-			* sin(-local_desired_joints[1])) + synchro_joint_position[1];
+	local_desired_motor_pos_new[1] = gear[1] * sqrt(sl123 + mi1 * cos(local_desired_joints_tmp[1]) + ni1
+			* sin(-local_desired_joints_tmp[1])) + synchro_joint_position[1];
 
 	// Obliczanie kata obrotu walu silnika napedowego ramienia gornego
-	local_desired_motor_pos_new[2] = gear[2] * sqrt(sl123 + mi2 * cos(local_desired_joints[2]) + ni2
-			* sin(-local_desired_joints[2])) + synchro_joint_position[2];
+	local_desired_motor_pos_new[2] = gear[2] * sqrt(sl123 + mi2 * cos(local_desired_joints_tmp[2]) + ni2
+			* sin(-local_desired_joints_tmp[2])) + synchro_joint_position[2];
 
 	// Obliczanie kata obrotu walu silnika napedowego obotu kisci T
 	// jesli jest mniejsze od -pi/2
-	double tmp_local_desired_joints3 = local_desired_joints[3];
-	if (tmp_local_desired_joints3 < lower_limit_joint[3])
-		tmp_local_desired_joints3 += joint_3_revolution;
-	local_desired_motor_pos_new[3] = gear[3] * (tmp_local_desired_joints3 + theta[3]) + synchro_joint_position[3];
+	double tmp_local_desired_joints_tmp3 = local_desired_joints_tmp[3];
+	if (tmp_local_desired_joints_tmp3 < lower_limit_joint[3])
+		tmp_local_desired_joints_tmp3 += joint_3_revolution;
+	local_desired_motor_pos_new[3] = gear[3] * (tmp_local_desired_joints_tmp3 + theta[3]) + synchro_joint_position[3];
 
 	// Obliczanie kata obrotu walu silnika napedowego obrotu kisci V
-	local_desired_motor_pos_new[4] = gear[4] * local_desired_joints[4] + synchro_joint_position[4]
+	local_desired_motor_pos_new[4] = gear[4] * local_desired_joints_tmp[4] + synchro_joint_position[4]
 			+ local_desired_motor_pos_new[3];
 
 	// Ograniczenie na obrot.
@@ -466,11 +480,11 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 		local_desired_motor_pos_new[4] -= axis_4_revolution;
 
 	// Obliczanie kata obrotu walu silnika napedowego obrotu kisci N
-	local_desired_motor_pos_new[5] = gear[5] * local_desired_joints[5] + synchro_joint_position[5];
+	local_desired_motor_pos_new[5] = gear[5] * local_desired_joints_tmp[5] + synchro_joint_position[5];
 
 	if (number_of_servos > 6) {
 		// Obliczenie kata obrotu walu silnika napedowego chwytaka.
-		local_desired_motor_pos_new[6] = inv_a_6 * sqrt(inv_b_6 + inv_c_6 * local_desired_joints[6]) + inv_d_6;
+		local_desired_motor_pos_new[6] = inv_a_6 * sqrt(inv_b_6 + inv_c_6 * local_desired_joints_tmp[6]) + inv_d_6;
 	}
 	// Sprawdzenie obliczonych wartosci.
 	check_motor_position(local_desired_motor_pos_new);
@@ -484,38 +498,52 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
 	check_joints(local_current_joints);
 
+	// poprawka w celu uwzglednienia konwencji DH
+	lib::JointArray local_current_joints_tmp(number_of_servos);
+	local_current_joints_tmp = local_current_joints;
+
+	local_current_joints_tmp[2] += local_current_joints_tmp[1] + M_PI_2;
+	local_current_joints_tmp[3] += local_current_joints_tmp[2];
+
 	// Parametry pomocnicze - przeliczenie zmiennych.
-	const double s1 = sin(local_current_joints[0]);
-	const double c1 = cos(local_current_joints[0]);
-	const double s2 = sin(local_current_joints[1]);
-	const double c2 = cos(local_current_joints[1]);
-	const double s3 = sin(local_current_joints[2]);
-	const double c3 = cos(local_current_joints[2]);
-	const double s4 = sin(local_current_joints[3]);
-	const double c4 = cos(local_current_joints[3]);
-	const double s5 = sin(local_current_joints[4]);
-	const double c5 = cos(local_current_joints[4]);
-	const double s6 = sin(local_current_joints[5]);
-	const double c6 = cos(local_current_joints[5]);
+	const double s1 = sin(local_current_joints_tmp[0]);
+	const double c1 = cos(local_current_joints_tmp[0]);
+	const double s2 = sin(local_current_joints_tmp[1]);
+	const double c2 = cos(local_current_joints_tmp[1]);
+	const double s3 = sin(local_current_joints_tmp[2]);
+	const double c3 = cos(local_current_joints_tmp[2]);
+	const double s4 = sin(local_current_joints_tmp[3]);
+	const double c4 = cos(local_current_joints_tmp[3]);
+	const double s5 = sin(local_current_joints_tmp[4]);
+	const double c5 = cos(local_current_joints_tmp[4]);
+	const double s6 = sin(local_current_joints_tmp[5]);
+	const double c6 = cos(local_current_joints_tmp[5]);
 
 	// Proste zadanie kinematyki.
-	local_current_end_effector_frame(0,0) = (c1 * s4 * c5 + s1 * s5) * c6 + c1 * c4 * s6; //NX
-	local_current_end_effector_frame(0,1) = -(c1 * s4 * c5 + s1 * s5) * s6 + c1 * c4 * c6; //OX
-	local_current_end_effector_frame(0,2) = c1 * s4 * s5 - s1 * c5; //AX
-	local_current_end_effector_frame(0,3) = c1 * (a2 * c2 + a3 * c3 + d5 * c4); //PX
-	local_current_end_effector_frame(1,0) = (s1 * s4 * c5 - c1 * s5) * c6 + s1 * c4 * s6; //NY
-	local_current_end_effector_frame(1,1) = -(s1 * s4 * c5 - c1 * s5) * s6 + s1 * c4 * c6; //OY
-	local_current_end_effector_frame(1,2) = s1 * s4 * s5 + c1 * c5; //AY
-	local_current_end_effector_frame(1,3) = s1 * (a2 * c2 + a3 * c3 + d5 * c4); //PY
-	local_current_end_effector_frame(2,0) = c4 * c5 * c6 - s4 * s6; //NZ
-	local_current_end_effector_frame(2,1) = -c4 * c5 * s6 - s4 * c6; //OZ
-	local_current_end_effector_frame(2,2) = c4 * s5; //AZ
-	local_current_end_effector_frame(2,3) = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
+	local_current_end_effector_frame(0, 0) = (c1 * s4 * c5 + s1 * s5) * c6 + c1 * c4 * s6; //NX
+	local_current_end_effector_frame(0, 1) = -(c1 * s4 * c5 + s1 * s5) * s6 + c1 * c4 * c6; //OX
+	local_current_end_effector_frame(0, 2) = c1 * s4 * s5 - s1 * c5; //AX
+	local_current_end_effector_frame(0, 3) = c1 * (a2 * c2 + a3 * c3 + d5 * c4); //PX
+	local_current_end_effector_frame(1, 0) = (s1 * s4 * c5 - c1 * s5) * c6 + s1 * c4 * s6; //NY
+	local_current_end_effector_frame(1, 1) = -(s1 * s4 * c5 - c1 * s5) * s6 + s1 * c4 * c6; //OY
+	local_current_end_effector_frame(1, 2) = s1 * s4 * s5 + c1 * c5; //AY
+	local_current_end_effector_frame(1, 3) = s1 * (a2 * c2 + a3 * c3 + d5 * c4); //PY
+	local_current_end_effector_frame(2, 0) = c4 * c5 * c6 - s4 * s6; //NZ
+	local_current_end_effector_frame(2, 1) = -c4 * c5 * s6 - s4 * c6; //OZ
+	local_current_end_effector_frame(2, 2) = c4 * s5; //AZ
+	local_current_end_effector_frame(2, 3) = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
 
 } //: direct_kinematics_transform()
 
 void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
+
+	// poprawka w celu uwzglednienia konwencji DH
+	lib::JointArray local_current_joints_tmp(number_of_servos);
+	local_current_joints_tmp = local_current_joints;
+
+	local_current_joints_tmp[2] += local_current_joints_tmp[1] + M_PI_2;
+	local_current_joints_tmp[3] += local_current_joints_tmp[2];
 
 	// Stale
 	const double EPS = 1e-10;
@@ -529,18 +557,18 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	double t5, t_ok;
 
 	// Przepisanie zmiennych.
-	Nx = local_desired_end_effector_frame(0,0);
-	Ny = local_desired_end_effector_frame(1,0);
-	Nz = local_desired_end_effector_frame(2,0);
-	Ox = local_desired_end_effector_frame(0,1);
-	Oy = local_desired_end_effector_frame(1,1);
-	Oz = local_desired_end_effector_frame(2,1);
-	Ax = local_desired_end_effector_frame(0,2);
-	Ay = local_desired_end_effector_frame(1,2);
-	Az = local_desired_end_effector_frame(2,2);
-	Px = local_desired_end_effector_frame(0,3);
-	Py = local_desired_end_effector_frame(1,3);
-	Pz = local_desired_end_effector_frame(2,3);
+	Nx = local_desired_end_effector_frame(0, 0);
+	Ny = local_desired_end_effector_frame(1, 0);
+	Nz = local_desired_end_effector_frame(2, 0);
+	Ox = local_desired_end_effector_frame(0, 1);
+	Oy = local_desired_end_effector_frame(1, 1);
+	Oz = local_desired_end_effector_frame(2, 1);
+	Ax = local_desired_end_effector_frame(0, 2);
+	Ay = local_desired_end_effector_frame(1, 2);
+	Az = local_desired_end_effector_frame(2, 2);
+	Px = local_desired_end_effector_frame(0, 3);
+	Py = local_desired_end_effector_frame(1, 3);
+	Pz = local_desired_end_effector_frame(2, 3);
 
 	//  Wyliczenie Theta1.
 	local_desired_joints[0] = (atan2(Py, Px));
@@ -558,14 +586,14 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	double cj_tmp;
 	double dj_translation;
 	// Sprawdzenie rozwiazania.
-	if (local_current_joints[4] > M_PI) {
-		cj_tmp = local_current_joints[4] - 2*M_PI;
-		dj_translation = 2*M_PI;
-	} else if (local_current_joints[4] < -M_PI) {
-		cj_tmp = local_current_joints[4] + 2*M_PI;
-		dj_translation = -2*M_PI;
+	if (local_current_joints_tmp[4] > M_PI) {
+		cj_tmp = local_current_joints_tmp[4] - 2 * M_PI;
+		dj_translation = 2 * M_PI;
+	} else if (local_current_joints_tmp[4] < -M_PI) {
+		cj_tmp = local_current_joints_tmp[4] + 2 * M_PI;
+		dj_translation = -2 * M_PI;
 	} else {
-		cj_tmp = local_current_joints[4];
+		cj_tmp = local_current_joints_tmp[4];
 		dj_translation = 0.0;
 	}
 
@@ -582,40 +610,41 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	if (fabs(s4) < EPS) {
 		printf("Osobliwosc\n");
 		// W przypadku osobliwosci katowi theta4 przypisywana wartosc poprzednia.
-		local_desired_joints[3] = local_current_joints[3];
+		local_desired_joints[3] = local_current_joints_tmp[3];
 		t5 = atan2(c0 * Nx + s0 * Ny, c0 * Ox + s0 * Oy);
 
 		// Sprawdzenie warunkow.
 		t_ok = t5 + local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5])
-				> fabs(t5 - M_PI + local_desired_joints[3] - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - M_PI + local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
 			t_ok = t5 - M_PI + local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5])
-				> fabs(t5 + M_PI + local_desired_joints[3] - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 + M_PI + local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
 			t_ok = t5 + M_PI + local_desired_joints[3];
 
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 - 2*M_PI + local_desired_joints[3]
-				- (local_current_joints[5])))
-			t_ok = t5 - 2*M_PI + local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 + 2*M_PI + local_desired_joints[3]
-				- (local_current_joints[5])))
-			t_ok = t5 + 2*M_PI + local_desired_joints[3];
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - 2 * M_PI + local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
+			t_ok = t5 - 2 * M_PI + local_desired_joints[3];
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 + 2 * M_PI + local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
+			t_ok = t5 + 2 * M_PI + local_desired_joints[3];
 
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 - local_desired_joints[3] - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
 			t_ok = t5 - local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5])
-				> fabs(t5 - M_PI - local_desired_joints[3] - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - M_PI - local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
 			t_ok = t5 - M_PI - local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5])
-				> fabs(t5 + M_PI - local_desired_joints[3] - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 + M_PI - local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
 			t_ok = t5 + M_PI - local_desired_joints[3];
 
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 - 2*M_PI - local_desired_joints[3]
-				- (local_current_joints[5])))
-			t_ok = t5 - 2*M_PI - local_desired_joints[3];
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 + 2*M_PI - local_desired_joints[3]
-				- (local_current_joints[5])))
-			t_ok = t5 + 2*M_PI - local_desired_joints[3];
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - 2 * M_PI - local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
+			t_ok = t5 - 2 * M_PI - local_desired_joints[3];
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 + 2 * M_PI - local_desired_joints[3]
+				- (local_current_joints_tmp[5])))
+			t_ok = t5 + 2 * M_PI - local_desired_joints[3];
 
 		local_desired_joints[5] = t_ok;
 	} else {
@@ -623,17 +652,17 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 		t_ok = t5;
 
 		// Sprawdzenie warunkow.
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 - M_PI - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 - M_PI - (local_current_joints_tmp[5])))
 			t_ok = t5 - M_PI;
-		if (fabs(t_ok - local_current_joints[5]) > fabs(t5 + M_PI - (local_current_joints[5])))
+		if (fabs(t_ok - local_current_joints_tmp[5]) > fabs(t5 + M_PI - (local_current_joints_tmp[5])))
 			t_ok = t5 + M_PI;
 
 		local_desired_joints[5] = t_ok;
 		t_ok = atan2(c0 * Ax + s0 * Ay, Az);
 
-		if (fabs(t_ok - local_current_joints[3]) > fabs(t_ok - M_PI - (local_current_joints[3])))
+		if (fabs(t_ok - local_current_joints_tmp[3]) > fabs(t_ok - M_PI - (local_current_joints_tmp[3])))
 			t_ok = t_ok - M_PI;
-		if (fabs(t_ok - local_current_joints[3]) > fabs(t_ok + M_PI - (local_current_joints[3])))
+		if (fabs(t_ok - local_current_joints_tmp[3]) > fabs(t_ok + M_PI - (local_current_joints_tmp[3])))
 			t_ok = t_ok + M_PI;
 		local_desired_joints[3] = t_ok;
 	}//: else
@@ -644,8 +673,8 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 
 	E = c0 * Px + s0 * Py - c3 * d5;
 	F = -Pz - s3 * d5;
-	G = 2* E * a2;
-	H = 2* F * a2;
+	G = 2 * E * a2;
+	H = 2 * F * a2;
 	K = E * E + F * F + a2 * a2 - a3 * a3;
 	ro = sqrt(G * G + H * H);
 
@@ -655,6 +684,10 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	s1 = sin(local_desired_joints[1]);
 	c1 = cos(local_desired_joints[1]);
 	local_desired_joints[2] = atan2(F - a2 * s1, E - a2 * c1);
+
+	// poprawka w celu dostosowania do konwencji DH
+	local_desired_joints[2] -= local_desired_joints[1] + M_PI_2;
+	local_desired_joints[3] -= local_desired_joints[2] + local_desired_joints[1] + M_PI_2;
 
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
 	check_joints(local_desired_joints);

@@ -21,10 +21,8 @@ private:
 	lib::shead::HEAD_SOLIDIFICATION mp_ecp_shead_head_soldification_structure;
 
 	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> * shead_head_soldification_data_port;
-	lib::shead::HEAD_SOLIDIFICATION ecp_edp_shead_head_soldification_structure;
 
 	lib::single_thread_request_port <lib::shead::reply> * shead_reply_data_request_port;
-	lib::shead::reply ecp_edp_shead_reply_structure;
 
 public:
 	head_soldify(common::task::task& _ecp_task); //constructor

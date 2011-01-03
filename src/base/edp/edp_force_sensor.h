@@ -16,6 +16,7 @@
 #include "base/lib/sensor_interface.h"				// klasa bazowa sensor
 #include "base/edp/edp_typedefs.h"				// klasa bazowa sensor
 #include "base/lib/condition_synchroniser.h"
+#include "base/lib/sr/sr_vsp.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -29,6 +30,8 @@ enum FORCE_ORDER
 
 }
 namespace sensor {
+
+const long COMMCYCLE_TIME_NS = 2000000;
 
 enum FORCE_SENSOR_ENUM
 {
@@ -54,13 +57,33 @@ class force : public lib::sensor::sensor_interface
 protected:
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
+	// nazwa czujnika
+	short force_sensor_name;
+
+	// is sensor_frame right turn
 	bool is_right_turn_frame;
+	// sensor_frame related to wrist frame
+	lib::Homog_matrix sensor_frame;
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+	virtual void disconnect_from_hardware(void) = 0;
+
+	void configure_sensor(void);
+
+	// particular force sensor configuration
+	virtual void configure_particular_sensor(void) = 0;
+
+	// particular force sensor get reading
+	virtual void get_particular_reading(void) = 0;
+
+	// ft_table used in get_reading and get_particualr_reading
+	lib::Ft_vector ft_table;
+
+	void get_reading(void);
 
 	struct _from_vsp
 	{
@@ -68,8 +91,10 @@ protected:
 		force_data_t force;
 	} from_vsp;
 
+	struct timespec wake_time;
+
 public:
-	void operator()(void);
+	void operator()();
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 
@@ -91,7 +116,8 @@ public:
 
 	virtual ~force();
 
-	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+	void wait_for_event(void); // oczekiwanie na zdarzenie
+	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
 }; // end: class edp_force_sensor

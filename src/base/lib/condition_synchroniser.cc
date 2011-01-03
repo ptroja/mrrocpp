@@ -1,3 +1,12 @@
+/*!
+ * @file condition_synchroniser.cc
+ * @brief Multi-thread synchronization on a condition.
+ *
+ * @author Piotr Trojanek <piotr.trojanek@gmail.com>
+ *
+ * @ingroup LIB
+ */
+
 #include "base/lib/condition_synchroniser.h"
 
 namespace mrrocpp {

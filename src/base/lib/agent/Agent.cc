@@ -194,27 +194,6 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 #endif /* USE_MESSIP_SRR */
 }
 
-void Agent::Store(const std::string & buffer_name, xdr_iarchive<> & ia)
-{
-	//	std::cout << "Message received for data buffer: "
-	//		<< msg_buffer_name << ", size "
-	//#if (USE_MESSIP_SRR)
-	//		<< channel->datalenr << std::endl;
-	//#else
-	//		<< info.msglen << std::endl;
-	//#endif
-
-	buffers_t::iterator result = buffers.find(buffer_name);
-	if (result != buffers.end()) {
-		result->second->Store(ia);
-	} else {
-		// TODO: exception?
-		std::cerr << "Message received for unknown buffer '"
-			<< buffer_name
-			<< "'" << std::endl;
-	}
-}
-
 void Agent::ReceiveDataLoop(void)
 {
 	// create object for real-time usage in the loop
@@ -226,7 +205,7 @@ void Agent::ReceiveDataLoop(void)
 
 	while(true) {
 		// buffer for the message to receive
-		char msg[4096];
+		char msg[16384];
 
 		int msglen = ReceiveMessage(msg, sizeof(msg), true);
 

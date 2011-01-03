@@ -34,38 +34,53 @@
 #include "ui/src/ui_sr.h"
 
 #include "base/lib/mis_fun.h"
-#include "base/lib/srlib.h"
-#include "ui/src/ui_const.h"
+#include "base/lib/sr/srlib.h"
+
 #include "base/lib/configurator.h"
 
-#include "base/lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
-#if !defined(USE_MESSIP_SRR)
+#if !defined(__QNXNTO__)
 /* Local headers */
 #include "ablibs.h"
 #include "abimport.h"
 #include "proto.h"
 #include <Pt.h>
 #include <Ph.h>
+#endif
 
-void ui_sr_buffer::operator()() {
+#if defined(USE_MESSIP_SRR)
+#include "base/lib/messip/messip_dataport.h"
+#endif
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
+void sr_buffer::operator()()
+{
 	lib::set_thread_name("sr");
 
-	name_attach_t *attach;
+	lib::fd_server_t ch;
 
-	if ((attach = name_attach(NULL, ui.sr_attach_point.c_str(),
-			NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
-		perror(
-				"BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
+#if !defined(USE_MESSIP_SRR)
+
+	if ((ch = name_attach(NULL, interface.sr_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+		perror("BLAD SR ATTACH, przypuszczalnie nie uruchomiono gns, albo blad wczytywania konfiguracji");
 		return;
 	}
+#else
+	ch = messip::port_create(interface.sr_attach_point);
+	assert(ch);
+#endif /* USE_MESSIP_SRR */
 
-	ui.is_sr_thread_loaded = true;
+	interface.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
-		//	printf("przed MsgReceive: \n");
-		int rcvid = MsgReceive_r(attach->chid, &sr_msg, sizeof(sr_msg), NULL);
-		//	printf("za MsgReceive: \n");
+
+#if !defined(USE_MESSIP_SRR)
+		int rcvid = MsgReceive_r(ch->chid, &sr_msg, sizeof(sr_msg), NULL);
+
 		if (rcvid < 0) /* Error condition, exit */
 		{
 			if (rcvid == -EINTR) {
@@ -74,21 +89,21 @@ void ui_sr_buffer::operator()() {
 			}
 
 			fprintf(stderr, "SR: Receive failed (%s)\n", strerror(-rcvid));
-			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+			// TODO: throw
 			break;
 		}
 
 		if (rcvid == 0) /* Pulse received */
 		{
-			// printf("sr puls\n");
-			switch (sr_msg.hdr.code) {
-			case _PULSE_CODE_DISCONNECT:
-				ConnectDetach(sr_msg.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				break;
-			default:
-				break;
+			switch (sr_msg.hdr.code)
+			{
+				case _PULSE_CODE_DISCONNECT:
+					ConnectDetach(sr_msg.hdr.scoid);
+					break;
+				case _PULSE_CODE_UNBLOCK:
+					break;
+				default:
+					break;
 			}
 			continue;
 		}
@@ -103,36 +118,40 @@ void ui_sr_buffer::operator()() {
 
 		int16_t status;
 		MsgReply(rcvid, EOK, &status, sizeof(status));
+#else
+		int32_t type, subtype;
+		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
+
+		if(rcvid != MESSIP_MSG_NOREPLY)
+		continue;
+#endif
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			// prrintf("srt: \n");
 			flushall();
 
 			put_one_msg(sr_msg);
-
 		} else {
 			printf("SR(%s:%d) unexpected message\n", __FILE__, __LINE__);
 		}
-
 	}
 }
 
-#endif /* USE_MESSIP_SRR */
-
-ui_sr_buffer::ui_sr_buffer(Ui& _ui) :
-	ui(_ui), cb(UI_SR_BUFFER_LENGHT) {
-	thread_id = new boost::thread(boost::bind(&ui_sr_buffer::operator(), this));
+sr_buffer::sr_buffer(Interface& _interface) :
+	interface(_interface), cb(UI_SR_BUFFER_LENGHT)
+{
+	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
 
-ui_sr_buffer::~ui_sr_buffer() {
-	//	printf("ui_sr_buffer\n");
-	//	thread_id->interrupt();
-	//	thread_id->join(); // join it
-	//	delete thread_id;
+sr_buffer::~sr_buffer()
+{
+	//	printf("sr_buffer\n");
+	//	thread_id.interrupt();
+	//	thread_id.join();
 }
 
-void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
+void sr_buffer::put_one_msg(const lib::sr_package_t& new_msg)
+{
 
 	boost::mutex::scoped_lock lock(mtx);
 	cb.push_back(new_msg);
@@ -140,7 +159,7 @@ void ui_sr_buffer::put_one_msg(const lib::sr_package_t& new_msg) {
 	return;
 }
 
-void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
+void sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
 {
 	boost::mutex::scoped_lock lock(mtx);
 	new_msg = cb.front();
@@ -149,8 +168,12 @@ void ui_sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
 	return;
 }
 
-bool ui_sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
+bool sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 {
 	boost::mutex::scoped_lock lock(mtx);
 	return cb.empty();
 }
+
+}
+} //namespace ui
+} //namespace mrrocpp

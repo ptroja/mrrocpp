@@ -26,7 +26,8 @@
 /**
  * Agent base class
  */
-class Agent : public AgentBase {
+class Agent : public AgentBase
+{
 private:
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrDataCondition &condition);
@@ -52,7 +53,25 @@ private:
 	void ReceiveDataLoop(void);
 
 	//! Store data from archive into a buffer
-	void Store(const std::string & buffer_name, xdr_iarchive<> & ia);
+	template <std::size_t size>
+	void Store(const std::string & buffer_name, xdr_iarchive <size> & ia)
+	{
+		//	std::cout << "Message received for data buffer: "
+		//		<< msg_buffer_name << ", size "
+		//#if (USE_MESSIP_SRR)
+		//		<< channel->datalenr << std::endl;
+		//#else
+		//		<< info.msglen << std::endl;
+		//#endif
+
+		buffers_t::iterator result = buffers.find(buffer_name);
+		if (result != buffers.end()) {
+			result->second->Store(ia);
+		} else {
+			// TODO: exception?
+			std::cerr << "Message received for unknown buffer '" << buffer_name << "'" << std::endl;
+		}
+	}
 
 	//! Receive single message
 	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
@@ -65,7 +84,7 @@ private:
 
 protected:
 	//! Datatype of buffers container
-	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
+	typedef boost::unordered_map <std::string, DataBufferBase *> buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;

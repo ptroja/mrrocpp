@@ -138,8 +138,8 @@ bool wii::next_step()
     bool changed = calculate_change(axis,value);
     if(!changed && stop) return false;
 
-    set_position();
-    
+    set_position(changed);
+
     return true;
 }
 
