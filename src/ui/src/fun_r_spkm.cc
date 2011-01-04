@@ -207,6 +207,8 @@ int clear_wnd_spkm_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_int->clear_flag();
+
 	return (Pt_CONTINUE);
 
 }
@@ -287,6 +289,8 @@ int clear_wnd_spkm_external_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->clear_flag();
 
 	return (Pt_CONTINUE);
 
