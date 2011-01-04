@@ -113,17 +113,6 @@ int start_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo,
 
 }
 
-int close_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	interface.bird_hand->wnd_command_and_status->close();
-
-	return (Pt_CONTINUE);
-}
-
 int clear_wnd_bird_hand_command_and_status(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -185,17 +174,6 @@ int start_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 
 	return (Pt_CONTINUE);
 
-}
-
-int close_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	interface.bird_hand->wnd_configuration->close();
-
-	return (Pt_CONTINUE);
 }
 
 int clear_wnd_bird_hand_configuration(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)

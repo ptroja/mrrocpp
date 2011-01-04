@@ -25,7 +25,7 @@ namespace spkm {
 
 
 WndInt::WndInt(common::Interface& _interface, UiRobot& _robot) :
-	common::WndBase(_interface, ABN_wnd_spkm_int, ABI_wnd_spkm_int), robot(_robot)
+	common::WndBase(WND_SPKM_INT, _interface, ABN_wnd_spkm_int, ABI_wnd_spkm_int), robot(_robot)
 {
 
 }

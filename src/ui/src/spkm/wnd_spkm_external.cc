@@ -25,7 +25,7 @@ namespace spkm {
 
 
 WndExternal::WndExternal(common::Interface& _interface, UiRobot& _robot) :
-	common::WndBase(_interface, ABN_wnd_spkm_external, ABI_wnd_spkm_external), robot(_robot)
+	common::WndBase(WND_SPKM_EXTERNAL, _interface, ABN_wnd_spkm_external, ABI_wnd_spkm_external), robot(_robot)
 {
 
 }
