@@ -62,7 +62,9 @@ extern ApWindowLink_t wnd_sarkofag_moves;
 extern ApWindowLink_t wnd_sarkofag_servo_algorithm;
 extern ApWindowLink_t wnd_polycrank_int;
 extern ApWindowLink_t wnd_spkm_inc;
-extern ApWidget_t AbWidgets[ 1272 ];
+extern ApWindowLink_t wnd_spkm_int;
+extern ApWindowLink_t wnd_spkm_external;
+extern ApWidget_t AbWidgets[ 1378 ];
 
 extern ApMenuLink_t file_menu;
 extern ApMenuLink_t task_menu;
@@ -443,4 +445,18 @@ int export_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo
 int EDP_polycrank_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_polycrank_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_polycrank_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wnd_spkm_int_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_spkm_int_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int spkm_int_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int import_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int export_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_spkm_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int start_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int init_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int clear_wnd_spkm_external_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int wnd_spkm_external_copy_current_to_desired( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int spkm_external_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int import_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int export_wnd_spkm_external( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 #endif

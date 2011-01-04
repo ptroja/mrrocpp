@@ -60,7 +60,8 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant) {
+		switch (variant)
+		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
 				ar & epos_motor_command_structure;
 				break;
@@ -80,35 +81,34 @@ struct cbuffer
 		}
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m) {
-		switch (m.variant) {
+	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m)
+	{
+		switch (m.variant)
+		{
+			case CBUFFER_EPOS_MOTOR_COMMAND:
+				os << "CBUFFER_EPOS_MOTOR_COMMAND:\n";
+				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_cubic_command_structure.aa[i] <<
-						"\t" << m.epos_cubic_command_structure.av[i] <<
-						"\t" << m.epos_cubic_command_structure.da[i] <<
-						"\t" << m.epos_cubic_command_structure.emdm[i] << "\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_cubic_command_structure.aa[i] << "\t" << m.epos_cubic_command_structure.av[i]
+							<< "\t" << m.epos_cubic_command_structure.da[i] << "\t"
+							<< m.epos_cubic_command_structure.emdm[i] << "\n";
 				}
 				break;
 			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
 				os << "CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_trapezoidal_command_structure.em[i] <<
-						"\t" << m.epos_trapezoidal_command_structure.emdm[i] <<
-						"\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_trapezoidal_command_structure.em[i] << "\t"
+							<< m.epos_trapezoidal_command_structure.emdm[i] << "\n";
 				}
 				os << "\t" << m.epos_trapezoidal_command_structure.tt << "\n";
 				break;
 			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
 				os << "CBUFFER_EPOS_OPERATIONAL_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_operational_command_structure.em[i] <<
-						"\t" << m.epos_operational_command_structure.v[i] <<
-						"\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_operational_command_structure.em[i] << "\t"
+							<< m.epos_operational_command_structure.v[i] << "\n";
 				}
 				os << "\t" << m.epos_operational_command_structure.tau << "\n";
 				break;

@@ -36,8 +36,8 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 500
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 500
+#define ECP_EDP_SERIALIZED_COMMAND_SIZE 200
+#define EDP_ECP_SERIALIZED_REPLY_SIZE 200
 
 #if !defined(USE_MESSIP_SRR)
 typedef int fd_client_t;
@@ -697,7 +697,7 @@ c_buffer_arm
 		char prosody[lib::MAX_PROSODY];
 	} text_def;
 	//----------------------------------------------------------
-	uint8_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
+	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -987,7 +987,7 @@ r_buffer_arm
 		bool speaking;
 	} text_def;
 
-	uint8_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
+	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;

@@ -5,6 +5,8 @@
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/spkm/ui_ecp_r_spkm.h"
 #include "ui/src/spkm/wnd_spkm_inc.h"
+#include "ui/src/spkm/wnd_spkm_int.h"
+#include "ui/src/spkm/wnd_spkm_external.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
@@ -142,6 +144,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 	wnd_inc = new WndInc(interface, *this);
+	wnd_int = new WndInt(interface, *this);
+	wnd_external = new WndExternal(interface, *this);
 
 }
 
