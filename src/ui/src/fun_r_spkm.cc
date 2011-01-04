@@ -196,6 +196,8 @@ int wnd_spkm_int_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, P
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_int->copy();
+
 	return (Pt_CONTINUE);
 
 }
@@ -231,6 +233,8 @@ int import_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_int->import();
+
 	return (Pt_CONTINUE);
 
 }
@@ -241,6 +245,8 @@ int export_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->exporto();
 
 	return (Pt_CONTINUE);
 
@@ -303,6 +309,8 @@ int wnd_spkm_external_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_external->copy();
+
 	return (Pt_CONTINUE);
 
 }
@@ -325,6 +333,8 @@ int import_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_external->import();
+
 	return (Pt_CONTINUE);
 
 }
@@ -335,6 +345,8 @@ int export_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->exporto();
 
 	return (Pt_CONTINUE);
 

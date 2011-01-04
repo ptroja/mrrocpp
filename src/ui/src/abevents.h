@@ -1278,7 +1278,7 @@ static const ApEventLink_t AbLinks_wnd_spkm_external[] = {
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_external", 1012, init_wnd_spkm_external, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_external", 1013, clear_wnd_spkm_external_flag, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "wnd_spkm_external", 1012, wnd_spkm_external_copy_current_to_desired, 0, 0, 0, 0, },
-	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_external_set_desired_as_current", 1012, wnd_spkm_external_copy_current_to_desired, 0, 0, 0, 0, },
+	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_external_set_desired_as_current", 2009, wnd_spkm_external_copy_current_to_desired, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_external_exec_move", 2009, spkm_external_motion, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_external_exec_move", 2009, init_wnd_spkm_external, 0, 0, 0, 0, },
 	{ 8, 0, 0L, 0L, 0L, NULL, NULL, "PtButton_wind_spkm_external_read_pos", 2009, init_wnd_spkm_external, 0, 0, 0, 0, },
