@@ -151,7 +151,9 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 void UiRobot::close_all_windows()
 {
-	close_wnd_spkm_inc(NULL, NULL, NULL);
+	wnd_inc->close();
+	wnd_int->close();
+	wnd_external->close();
 }
 
 int UiRobot::reload_configuration()
