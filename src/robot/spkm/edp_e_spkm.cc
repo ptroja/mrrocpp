@@ -116,13 +116,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 break;*/
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
-			lib::epos::epos_motor_command epos_motor_command_structure;
-			epos_motor_command_structure = ecp_edp_cbuffer.epos_motor_command_structure;
+			lib::epos::epos_simple_command epos_simple_command_structure;
+			epos_simple_command_structure = ecp_edp_cbuffer.epos_simple_command_structure;
 			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
-					<< epos_motor_command_structure.desired_position[4] << std::endl;
+					<< epos_simple_command_structure.desired_position[4] << std::endl;
 			if (robot_test_mode) {
 
-				desired_motor_pos_new[4] = epos_motor_command_structure.desired_position[4];
+				desired_motor_pos_new[4] = epos_simple_command_structure.desired_position[4];
 			}
 		}
 			break;

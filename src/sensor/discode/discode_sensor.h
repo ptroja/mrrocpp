@@ -156,7 +156,7 @@ READING_T discode_sensor::get_received_object()
 	// TODO: check if get_reading has been called and data has been read.
 	READING_T reading;
 
-	logger::log_dbg("discode_sensor::get_received_object(): iarchive->getArchiveSize()=%d\n", iarchive->getArchiveSize());
+	logger::log_dbg("discode_sensor::get_received_object(): iarchive->getArchiveSize()=%zd\n", iarchive->getArchiveSize());
 
 	*iarchive >> reading;
 
