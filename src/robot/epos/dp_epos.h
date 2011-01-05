@@ -32,10 +32,22 @@ enum EPOS_GEN_PROFILE
 };
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command data port
+ * @brief SwarmItFix Epos simple motor command data port
  * @ingroup epos
  */
 const std::string EPOS_MOTOR_COMMAND_DATA_PORT = "EPOS_MOTOR_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos simple joint command data port
+ * @ingroup epos
+ */
+const std::string EPOS_JOINT_COMMAND_DATA_PORT = "EPOS_JOINT_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup epos
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Epos cubic trajectory command data port

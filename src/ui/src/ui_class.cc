@@ -255,7 +255,7 @@ int Interface::MPup_int()
 #endif
 					)
 					if ((tmp++) < lib::CONNECT_RETRY)
-						delay(lib::CONNECT_DELAY);
+						usleep(lib::CONNECT_DELAY);
 					else {
 						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;

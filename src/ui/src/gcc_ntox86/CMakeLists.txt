@@ -41,6 +41,8 @@ add_executable(ui
 	../spkm/ui_ecp_r_spkm.cc
 	../spkm/ui_r_spkm.cc
 	../spkm/wnd_spkm_inc.cc
+	../spkm/wnd_spkm_int.cc
+	../spkm/wnd_spkm_external.cc
 	../smb/ui_r_smb.cc
 	../shead/ui_r_shead.cc
 	../ui_init.cc
@@ -96,6 +98,8 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	wnd_sarkofag_servo_algorithm.wgtw wnd_message.wgtw
 	wnd_bird_hand_command_and_status.wgtw wnd_bird_hand_configuration.wgtw
 	wnd_spkm_inc.wgtw
+	wnd_spkm_int.wgtw
+	wnd_spkm_external.wgtw
 	wnd_processes_control.wgtw wnd_speaker_play.wgtw yes_no_window.wgtw)
 
 ADD_CUSTOM_TARGET(ui_photon_application ALL

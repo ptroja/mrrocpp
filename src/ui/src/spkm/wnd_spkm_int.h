@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __WND_SPKM_INC_H
-#define __WND_SPKM_INC_H
+#ifndef __WND_SPKM_INT_H
+#define __WND_SPKM_INT_H
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
@@ -20,13 +20,11 @@ class Interface;
 
 namespace spkm {
 
-const std::string WND_SPKM_INC = "WND_SPKM_INC";
-
-
+const std::string WND_SPKM_INT = "WND_SPKM_INT";
 
 //
 //
-// KLASA WndInc
+// KLASA WndInt
 //
 //
 
@@ -36,7 +34,7 @@ const std::string WND_SPKM_INC = "WND_SPKM_INC";
 
 class UiRobot;
 
-class WndInc : public common::WndBase
+class WndInt : public common::WndBase
 {
 private:
 	UiRobot& robot;
@@ -51,7 +49,7 @@ public:
 
 	int set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb);
 
-	WndInc(common::Interface& _interface, UiRobot& _robot);
+	WndInt(common::Interface& _interface, UiRobot& _robot);
 
 };
 

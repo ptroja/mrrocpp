@@ -5,8 +5,12 @@
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/spkm/ui_ecp_r_spkm.h"
 #include "ui/src/spkm/wnd_spkm_inc.h"
+#include "ui/src/spkm/wnd_spkm_int.h"
+#include "ui/src/spkm/wnd_spkm_external.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
+
+
 
 /* Local headers */
 #include "../ablibs.h"
@@ -142,12 +146,12 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 	wnd_inc = new WndInc(interface, *this);
+	wndbase_m[wnd_inc->window_name] = wnd_inc;
+	wnd_int = new WndInt(interface, *this);
+	wndbase_m[wnd_int->window_name] = wnd_int;
+	wnd_external = new WndExternal(interface, *this);
+	wndbase_m[wnd_external->window_name] = wnd_external;
 
-}
-
-void UiRobot::close_all_windows()
-{
-	close_wnd_spkm_inc(NULL, NULL, NULL);
 }
 
 int UiRobot::reload_configuration()

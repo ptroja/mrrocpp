@@ -159,10 +159,13 @@ void robot::create_command()
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
 		ecp_command.instruction.instruction_type = lib::SET_GET;
+
 	} else if (is_new_data) {
 		ecp_command.instruction.instruction_type = lib::SET;
+
 	} else if (is_new_request) {
 		ecp_command.instruction.instruction_type = lib::GET;
+
 	} else {
 		communicate_with_edp = false;
 	}
@@ -173,9 +176,12 @@ void robot::create_command()
 
 	// message serialization
 	if (communicate_with_edp) {
-		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
-		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;
+		if ((ecp_command.instruction.instruction_type == lib::SET) || (ecp_command.instruction.instruction_type
+				== lib::SET_GET)) {
+			assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+			memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+			std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;
+		}
 	}
 }
 

@@ -4,7 +4,7 @@
 
 #include "ui/src/spkm/ui_ecp_r_spkm.h"
 #include "ui/src/spkm/ui_r_spkm.h"
-#include "ui/src/spkm/wnd_spkm_inc.h"
+#include "ui/src/spkm/wnd_spkm_int.h"
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
@@ -19,18 +19,18 @@ namespace spkm {
 
 //
 //
-// KLASA WndInc
+// KLASA WndInt
 //
 //
 
 
-WndInc::WndInc(common::Interface& _interface, UiRobot& _robot) :
-	common::WndBase(WND_SPKM_INC, _interface, ABN_wnd_spkm_inc, ABI_wnd_spkm_inc), robot(_robot)
+WndInt::WndInt(common::Interface& _interface, UiRobot& _robot) :
+	common::WndBase(WND_SPKM_INT, _interface, ABN_wnd_spkm_int, ABI_wnd_spkm_int), robot(_robot)
 {
 
 }
 
-int WndInc::init()
+int WndInt::init()
 {
 
 	try {
@@ -68,7 +68,7 @@ int WndInc::init()
 	return 1;
 }
 
-int WndInc::set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb)
+int WndInt::set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb)
 {
 
 	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
@@ -85,7 +85,7 @@ int WndInc::set_single_axis(int axis, PtWidget_t *ABW_current, PtWidget_t *ABW_p
 	return 1;
 }
 
-int WndInc::import()
+int WndInt::import()
 {
 
 	char *tmp_ptgr, *tmp;
@@ -96,43 +96,43 @@ int WndInc::import()
 	strcpy(tmp, tmp_ptgr);
 
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p0, Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p1, Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p2, Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p3, Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p4, Pt_ARG_NUMERIC_VALUE, &val, 0);
 	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &val, 0);
+	PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p5, Pt_ARG_NUMERIC_VALUE, &val, 0);
 
 	return 1;
 }
 
-int WndInc::exporto()
+int WndInt::exporto()
 {
 
 	char buffer[200];
 
 	double *wektor[lib::spkm::NUM_OF_SERVOS];
 
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
-	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
+	sprintf(buffer, "edp_spkm intREMENTAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
 
 	interface.ui_msg->message(buffer);
 
 	return 1;
 }
 
-int WndInc::copy()
+int WndInt::copy()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -142,29 +142,29 @@ int WndInc::copy()
 		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 
-			interface.unblock_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
+			interface.unblock_widget(ABW_PtPane_wind_spkm_int_post_synchro_moves);
 
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
-			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p0, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
+			PtGetResource(ABW_PtNumericFloat_wind_spkm_int_cur_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
 
 			for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_spkm_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			interface.block_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
+			interface.block_widget(ABW_PtPane_wind_spkm_int_post_synchro_moves);
 
 		}
 	}
@@ -172,7 +172,7 @@ int WndInc::copy()
 	return 1;
 }
 
-int WndInc::motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+int WndInt::motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
 	double *wektor[lib::spkm::NUM_OF_SERVOS];

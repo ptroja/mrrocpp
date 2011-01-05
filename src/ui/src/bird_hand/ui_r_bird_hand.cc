@@ -113,7 +113,9 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 	wnd_command_and_status = new WndCommandAndStatus(interface, *this);
+	wndbase_m[wnd_command_and_status->window_name] = wnd_command_and_status;
 	wnd_configuration = new WndConfiguration(interface, *this);
+	wndbase_m[wnd_configuration->window_name] = wnd_configuration;
 
 }
 
@@ -237,18 +239,6 @@ int UiRobot::manage_interface()
 	}
 
 	return 1;
-}
-
-void UiRobot::close_all_windows()
-{
-	int pt_res = PtEnter(0);
-
-	close_wnd_bird_hand_command_and_status(NULL, NULL, NULL);
-	close_wnd_bird_hand_configuration(NULL, NULL, NULL);
-
-	if (pt_res >= 0) {
-		PtLeave(0);
-	}
 }
 
 void UiRobot::delete_ui_ecp_robot()

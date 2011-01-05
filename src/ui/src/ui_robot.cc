@@ -3,10 +3,13 @@
 /*                                         Version 2.01  */
 #include "ui/src/ui_robot.h"
 #include "ui/src/ui_class.h"
+#include "ui/src/wnd_base.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
 #endif
+
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ui {
@@ -36,6 +39,16 @@ void UiRobot::create_thread()
 	tid = new feb_thread(eb);
 }
 
+void UiRobot::close_all_windows()
+{
+
+	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
+				{
+					window_node.second->close();
+				}
+
+}
+
 void UiRobot::abort_thread()
 {
 	assert(tid);
@@ -56,7 +69,7 @@ void UiRobot::connect_to_reader()
 #endif
 	) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do READER");
 			break;
@@ -129,7 +142,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do ECP_TRIGGER");
 		}
@@ -154,8 +167,6 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 		delay(1000);
 	}
 }
-
-
 
 void UiRobot::pulse_ecp()
 {
