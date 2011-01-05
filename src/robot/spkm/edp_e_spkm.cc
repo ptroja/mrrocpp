@@ -126,6 +126,18 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 		}
 			break;
+		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
+			lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
+
+			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
+		}
+			break;
+		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
+
+		}
+			break;
 
 		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
 			lib::epos::epos_cubic_command epos_cubic_command_structure;
@@ -164,34 +176,53 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf(" GET ARM\n");
 	//	flushall();
 	if (robot_test_mode) {
-		static int licznikaaa = (-11);
 
-		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "get_arm_position: " << licznikaaa;
-		msg->message(ss.str().c_str());
-		//	printf("%s\n", ss.str().c_str());
+		switch (instruction.get_arm_type)
+		{
+			case lib::MOTOR: {
+				msg->message("EDP get_arm_position MOTOR");
+				static int licznikaaa = (-11);
+
+				std::stringstream ss(std::stringstream::in | std::stringstream::out);
+				ss << "get_arm_position: " << licznikaaa;
+				msg->message(ss.str().c_str());
+				//	printf("%s\n", ss.str().c_str());
 
 
-		edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
-		edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
-		edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+				edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+				edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+				edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-		edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
+				edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-		edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
-		edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+				edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+				edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
-		if (licznikaaa < 10) {
-			for (int i = 0; i < number_of_servos; i++) {
-				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+				if (licznikaaa < 10) {
+					for (int i = 0; i < number_of_servos; i++) {
+						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+					}
+
+				} else {
+					for (int i = 0; i < number_of_servos; i++) {
+						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+					}
+				}
+				licznikaaa++;
 			}
-
-		} else {
-			for (int i = 0; i < number_of_servos; i++) {
-				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+				break;
+			case lib::JOINT: {
+				msg->message("EDP get_arm_position JOINT");
 			}
+				break;
+			case lib::FRAME: {
+				msg->message("EDP get_arm_position FRAME");
+			}
+				break;
+			default:
+				break;
+
 		}
-		licznikaaa++;
 	} else {
 
 	}
