@@ -48,6 +48,7 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 	union
 	{
+		lib::frame_tab desired_frame;
 		epos::epos_cubic_command epos_cubic_command_structure;
 		epos::epos_simple_command epos_simple_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
@@ -66,8 +67,10 @@ struct cbuffer
 		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
 			case CBUFFER_EPOS_JOINT_COMMAND:
-			case CBUFFER_EPOS_EXTERNAL_COMMAND:
 				ar & epos_simple_command_structure;
+				break;
+			case CBUFFER_EPOS_EXTERNAL_COMMAND:
+				ar & desired_frame;
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				ar & epos_cubic_command_structure;
@@ -138,6 +141,7 @@ struct cbuffer
  */
 struct rbuffer
 {
+	lib::frame_tab current_frame;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 
@@ -148,6 +152,7 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & current_frame;
 		ar & epos_controller;
 		ar & contact;
 	}

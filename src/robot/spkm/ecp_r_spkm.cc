@@ -98,7 +98,9 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND;
 
-		ecp_edp_cbuffer.epos_simple_command_structure = epos_external_command_data_port.data;
+		lib::Homog_matrix tmp_matrix(epos_external_command_data_port.data);
+		tmp_matrix.get_frame_tab(ecp_edp_cbuffer.desired_frame);
+		//ecp_edp_cbuffer.desired_frame = epos_external_command_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -172,7 +174,24 @@ void robot::create_command()
 	 }
 	 }
 	 */
-	is_new_request = epos_reply_data_request_port.is_new_request();
+
+	if (epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_arm_type = lib::MOTOR;
+
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_arm_type = lib::JOINT;
+
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_reply_data_request_port.is_new_request()) {
+		ecp_command.instruction.get_arm_type = lib::FRAME;
+
+		check_then_set_command_flag(is_new_request);
+	}
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
