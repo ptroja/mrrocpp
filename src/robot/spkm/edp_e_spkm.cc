@@ -128,7 +128,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			break;
 		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
+
+			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
+					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
+
 			lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
+
 
 			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
 		}

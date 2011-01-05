@@ -82,6 +82,18 @@ void EcpRobot::move_motors(const double final_position[])
 }
 // ---------------------------------------------------------------
 
+// ---------------------------------------------------------------
+void EcpRobot::move_joints(const double final_position[])
+{
+	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+		epos_joint_command_data_port->data.desired_position[i] = final_position[i];
+	}
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_joint_command_data_port->set();
+	execute_motion();
+
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

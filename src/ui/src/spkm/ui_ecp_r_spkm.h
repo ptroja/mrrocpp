@@ -42,6 +42,8 @@ public:
 	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
+	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
+
 
 };
 

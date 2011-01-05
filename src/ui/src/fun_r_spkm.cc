@@ -224,6 +224,8 @@ int spkm_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_int->motion(widget, apinfo, cbinfo);
+
 	return (Pt_CONTINUE);
 
 }
