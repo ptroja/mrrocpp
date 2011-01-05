@@ -68,6 +68,7 @@ void robot::create_command()
 	sr_ecp_msg.message("create_command");
 
 	is_new_data = false;
+	is_new_request = false;
 
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
