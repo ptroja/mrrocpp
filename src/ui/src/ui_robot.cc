@@ -3,10 +3,13 @@
 /*                                         Version 2.01  */
 #include "ui/src/ui_robot.h"
 #include "ui/src/ui_class.h"
+#include "ui/src/wnd_base.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
 #endif
+
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ui {
@@ -34,6 +37,16 @@ void UiRobot::create_thread()
 {
 	assert(tid == NULL);
 	tid = new feb_thread(eb);
+}
+
+void UiRobot::close_all_windows()
+{
+
+	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
+				{
+					window_node.second->close();
+				}
+
 }
 
 void UiRobot::abort_thread()
@@ -154,8 +167,6 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 		delay(1000);
 	}
 }
-
-
 
 void UiRobot::pulse_ecp()
 {

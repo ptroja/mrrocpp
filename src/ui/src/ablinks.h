@@ -339,7 +339,7 @@ ApWindowLink_t wnd_spkm_int = {
 ApWindowLink_t wnd_spkm_external = {
 	"wnd_spkm_external.wgtw",
 	&AbContext,
-	NULL, 1322, 0
+	AbLinks_wnd_spkm_external, 1322, 36
 	};
 
 static ApItem_t ApItems_file_menu[ 2 ] = {

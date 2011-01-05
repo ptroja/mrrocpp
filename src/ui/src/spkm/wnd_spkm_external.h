@@ -20,6 +20,8 @@ class Interface;
 
 namespace spkm {
 
+const std::string WND_SPKM_EXTERNAL = "WND_SPKM_EXTERNAL";
+
 //
 //
 // KLASA WndExternal

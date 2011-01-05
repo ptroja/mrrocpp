@@ -2873,8 +2873,8 @@ extern const int ABN_thumb_wind_spkm_int_mip_5;
 /* 'wnd_spkm_external' Window link */
 extern const int ABN_wnd_spkm_external;
 #define ABW_wnd_spkm_external                AbGetABW( ABN_wnd_spkm_external )
-extern const int ABN_PtPane_wind_spkm_int_post_synchro_moves0;
-#define ABW_PtPane_wind_spkm_int_post_synchro_moves0 AbGetABW( ABN_PtPane_wind_spkm_int_post_synchro_moves0 )
+extern const int ABN_PtPane_wind_spkm_external_post_synchro_moves;
+#define ABW_PtPane_wind_spkm_external_post_synchro_moves AbGetABW( ABN_PtPane_wind_spkm_external_post_synchro_moves )
 extern const int ABN_PtButton_wind_spkm_external_set_desired_as_current;
 #define ABW_PtButton_wind_spkm_external_set_desired_as_current AbGetABW( ABN_PtButton_wind_spkm_external_set_desired_as_current )
 extern const int ABN_PtNumericFloat_wind_spkm_external_p0;

@@ -88,7 +88,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -117,12 +116,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 break;*/
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
-			lib::epos::epos_motor_command epos_motor_command_structure;
-			epos_motor_command_structure = ecp_edp_cbuffer.epos_motor_command_structure;
-
+			lib::epos::epos_simple_command epos_simple_command_structure;
+			epos_simple_command_structure = ecp_edp_cbuffer.epos_simple_command_structure;
 			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
-					<< epos_motor_command_structure.desired_position[4] << std::endl;
-			desired_motor_pos_new[4] = epos_motor_command_structure.desired_position[4];
+					<< epos_simple_command_structure.desired_position[4] << std::endl;
+			if (robot_test_mode) {
+
+				desired_motor_pos_new[4] = epos_simple_command_structure.desired_position[4];
+			}
 		}
 			break;
 
@@ -162,34 +163,38 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
-	static int licznikaaa = (-11);
+	if (robot_test_mode) {
+		static int licznikaaa = (-11);
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		ss << "get_arm_position: " << licznikaaa;
+		msg->message(ss.str().c_str());
+		//	printf("%s\n", ss.str().c_str());
 
 
-	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
-	edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
-	edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+		edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+		edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+		edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-	edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
+		edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-	edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
-	edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+		edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+		edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
-	if (licznikaaa < 10) {
-		for (int i = 0; i < number_of_servos; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+		if (licznikaaa < 10) {
+			for (int i = 0; i < number_of_servos; i++) {
+				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+			}
+
+		} else {
+			for (int i = 0; i < number_of_servos; i++) {
+				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+			}
 		}
-
+		licznikaaa++;
 	} else {
-		for (int i = 0; i < number_of_servos; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-		}
+
 	}
-	licznikaaa++;
 
 	reply.servo_step = step_counter;
 }
@@ -222,6 +227,7 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
+
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
