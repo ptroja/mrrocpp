@@ -80,6 +80,20 @@ const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
 const std::string EPOS_REPLY_DATA_REQUEST_PORT = "EPOS_REPLY_DATA_REQUEST_PORT";
 
 /*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup epos
+ */
+const std::string EPOS_JOINT_REPLY_DATA_REQUEST_PORT = "EPOS_JOINT_REPLY_DATA_REQUEST_PORT";
+
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup epos
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+
+/*!
  * @brief SwarmItFix Epos controller mp to ecp command
  * @ingroup epos
  */
@@ -225,6 +239,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
+	lib::frame_tab current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 
@@ -235,6 +250,7 @@ struct epos_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & current_frame;
 		ar & epos_controller;
 		ar & contact;
 	}

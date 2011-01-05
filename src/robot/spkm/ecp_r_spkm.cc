@@ -23,7 +23,9 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
+			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -39,7 +41,9 @@ robot::robot(common::task::task& _ecp_object) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager)
+			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
+			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -181,13 +185,13 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_request);
 	}
 
-	if (epos_reply_data_request_port.is_new_request()) {
+	if (epos_joint_reply_data_request_port.is_new_request()) {
 		ecp_command.instruction.get_arm_type = lib::JOINT;
 
 		check_then_set_command_flag(is_new_request);
 	}
 
-	if (epos_reply_data_request_port.is_new_request()) {
+	if (epos_external_reply_data_request_port.is_new_request()) {
 		ecp_command.instruction.get_arm_type = lib::FRAME;
 
 		check_then_set_command_flag(is_new_request);
@@ -239,6 +243,39 @@ void robot::get_reply()
 
 		epos_reply_data_request_port.set();
 	}
+
+	if (epos_joint_reply_data_request_port.is_new_request()) {
+		// generator reply generation
+		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+			epos_joint_reply_data_request_port.data.epos_controller[i].position
+					= edp_ecp_rbuffer.epos_controller[i].position;
+			epos_joint_reply_data_request_port.data.epos_controller[i].current
+					= edp_ecp_rbuffer.epos_controller[i].current;
+			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress
+					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+
+		epos_joint_reply_data_request_port.set();
+	}
+
+	if (epos_external_reply_data_request_port.is_new_request()) {
+		// generator reply generation
+		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+			epos_external_reply_data_request_port.data.epos_controller[i].position
+					= edp_ecp_rbuffer.epos_controller[i].position;
+			epos_external_reply_data_request_port.data.epos_controller[i].current
+					= edp_ecp_rbuffer.epos_controller[i].current;
+			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress
+					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+		lib::Homog_matrix tmp(edp_ecp_rbuffer.current_frame);
+		tmp.get_frame_tab(epos_external_reply_data_request_port.data.current_frame);
+
+		epos_external_reply_data_request_port.set();
+	}
+
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
