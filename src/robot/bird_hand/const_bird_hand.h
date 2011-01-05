@@ -51,7 +51,7 @@ struct cbuffer
 	{
 		single_joint_configuration finger[NUM_OF_SERVOS];
 	} configuration_command_structure;
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief Bird Hand EDP reply buffer
