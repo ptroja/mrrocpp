@@ -44,7 +44,7 @@ struct cbuffer
 		lib::shead::HEAD_SOLIDIFICATION head_solidification;
 		lib::shead::VACUUM_ACTIVATION vacuum_activation;
 	};
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -53,7 +53,7 @@ struct cbuffer
 struct rbuffer
 {
 	reply shead_reply;
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief configuration file EDP SwarmItFix Head section string
