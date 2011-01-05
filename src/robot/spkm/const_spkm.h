@@ -31,6 +31,8 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 enum CBUFFER_VARIANT
 {
 	CBUFFER_EPOS_MOTOR_COMMAND,
+	CBUFFER_EPOS_JOINT_COMMAND,
+	CBUFFER_EPOS_EXTERNAL_COMMAND,
 	CBUFFER_EPOS_CUBIC_COMMAND,
 	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
 	CBUFFER_EPOS_OPERATIONAL_COMMAND,
@@ -47,7 +49,7 @@ struct cbuffer
 	union
 	{
 		epos::epos_cubic_command epos_cubic_command_structure;
-		epos::epos_motor_command epos_motor_command_structure;
+		epos::epos_simple_command epos_simple_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
 	};
@@ -63,7 +65,9 @@ struct cbuffer
 		switch (variant)
 		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
-				ar & epos_motor_command_structure;
+			case CBUFFER_EPOS_JOINT_COMMAND:
+			case CBUFFER_EPOS_EXTERNAL_COMMAND:
+				ar & epos_simple_command_structure;
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				ar & epos_cubic_command_structure;
@@ -87,6 +91,12 @@ struct cbuffer
 		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
 				os << "CBUFFER_EPOS_MOTOR_COMMAND:\n";
+				break;
+			case CBUFFER_EPOS_JOINT_COMMAND:
+				os << "CBUFFER_EPOS_JOINT_COMMAND:\n";
+				break;
+			case CBUFFER_EPOS_EXTERNAL_COMMAND:
+				os << "CBUFFER_EPOS_EXTERNAL_COMMAND:\n";
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";

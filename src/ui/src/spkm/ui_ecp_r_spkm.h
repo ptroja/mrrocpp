@@ -26,7 +26,7 @@ class EcpRobot : public common::EcpRobotDataPort
 
 public:
 
-	lib::single_thread_port <lib::epos::epos_motor_command> * epos_motor_command_data_port;
+	lib::single_thread_port <lib::epos::epos_simple_command> * epos_motor_command_data_port;
 	lib::single_thread_port <lib::epos::epos_cubic_command> * epos_cubic_command_data_port;
 	lib::single_thread_port <lib::epos::epos_trapezoidal_command> * epos_trapezoidal_command_data_port;
 	lib::single_thread_port <lib::epos::epos_operational_command> * epos_operational_command_data_port;

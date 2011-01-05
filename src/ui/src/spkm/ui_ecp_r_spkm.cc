@@ -37,7 +37,7 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
 	epos_motor_command_data_port
-			= the_robot->port_manager.get_port <lib::epos::epos_motor_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
 
 	epos_cubic_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);

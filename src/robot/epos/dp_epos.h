@@ -20,7 +20,7 @@ namespace epos {
  * @brief SwarmItFix Epos total number of servos
  * @ingroup epos
  */
-static const int EPOS_DATA_PORT_SERVOS_NUMBER = 7;
+static const int EPOS_DATA_PORT_SERVOS_NUMBER = 7; // nie moze byc mniej niz 6 bo wykorzystywane takze do external
 
 /*!
  * @brief SwarmItFix Epos generator possible profiles enum
@@ -155,10 +155,10 @@ struct epos_cubic_command
 };
 
 /*!
- * @brief SwarmItFix Epos trapezoid trajectory command, called fro UI
+ * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup epos
  */
-struct epos_motor_command
+struct epos_simple_command
 {
 	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
 
