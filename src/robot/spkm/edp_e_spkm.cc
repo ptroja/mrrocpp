@@ -213,6 +213,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				break;
 			case lib::JOINT: {
 				msg->message("EDP get_arm_position JOINT");
+				static int licznik_joint = (-11);
+				edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
+				licznik_joint++;
 			}
 				break;
 			case lib::FRAME: {

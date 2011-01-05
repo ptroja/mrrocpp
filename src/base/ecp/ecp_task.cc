@@ -302,17 +302,17 @@ void task::ecp_wait_for_stop(void)
 // Oczekiwanie na polecenie START od MP
 void task::ecp_wait_for_start(void)
 {
-	std::cerr << "ecp ecp_wait_for_start 1" << std::endl;
+	//std::cerr << "ecp ecp_wait_for_start 1" << std::endl;
 	bool ecp_stop = false;
 	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_START);
-	std::cerr << "ecp ecp_wait_for_start 2" << std::endl;
+	//	std::cerr << "ecp ecp_wait_for_start 2" << std::endl;
 	int caller = -2;
 
 	wait_for_randevous_with_mp(caller, mp_pulse_received);
 
-	std::cerr << "ecp ecp_wait_for_start 3" << std::endl;
+	//	std::cerr << "ecp ecp_wait_for_start 3" << std::endl;
 
 	switch (mp_command_type())
 	{

@@ -212,7 +212,7 @@ void robot::create_command()
 		communicate_with_edp = false;
 	}
 
-	if (epos_reply_data_request_port.is_new_request()) {
+	if (is_new_request) {
 		ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	}
 
@@ -247,6 +247,8 @@ void robot::get_reply()
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
 		// generator reply generation
+		//	sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
+
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_joint_reply_data_request_port.data.epos_controller[i].position
 					= edp_ecp_rbuffer.epos_controller[i].position;
