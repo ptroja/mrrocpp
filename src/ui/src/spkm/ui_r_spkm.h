@@ -46,7 +46,7 @@ public:
 	WndExternal *wnd_external;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 	void delete_ui_ecp_robot();
 	int synchronise();

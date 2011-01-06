@@ -46,7 +46,7 @@ public:
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 	void close_all_windows();
 	void delete_ui_ecp_robot();
