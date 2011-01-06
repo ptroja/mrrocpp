@@ -141,28 +141,28 @@ int irp6p_tfg_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_synchro) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
 				&& (my_data->key_cap == 0x73))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
-			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6p_tfg->number_of_servos; i++) {
 				interface.irp6p_tfg->desired_pos[i] = 0.0;
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_motor_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6p_tfg->number_of_servos; i++) {
 				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[0][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6p_tfg->number_of_servos; i++) {
 				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[1][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6p_tfg_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.irp6p_tfg->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6p_tfg->number_of_servos; i++) {
 				interface.irp6p_tfg->desired_pos[i] = interface.irp6p_tfg->state.edp.preset_position[2][i];
 			}
 			interface.irp6p_tfg->eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*interface.irp6p_tfg)));
@@ -203,8 +203,8 @@ int init_wnd_irp6p_tfg_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t servo_alg_no[lib::irp6p_tfg::NUM_OF_SERVOS];
-	uint8_t servo_par_no[lib::irp6p_tfg::NUM_OF_SERVOS];
+	uint8_t servo_alg_no[interface.irp6p_tfg->number_of_servos];
+	uint8_t servo_par_no[interface.irp6p_tfg->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -235,10 +235,10 @@ int irp6p_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t *servo_alg_no_tmp[lib::irp6p_tfg::NUM_OF_SERVOS];
-	uint8_t servo_alg_no_output[lib::irp6p_tfg::NUM_OF_SERVOS];
-	uint8_t *servo_par_no_tmp[lib::irp6p_tfg::NUM_OF_SERVOS];
-	uint8_t servo_par_no_output[lib::irp6p_tfg::NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp[interface.irp6p_tfg->number_of_servos];
+	uint8_t servo_alg_no_output[interface.irp6p_tfg->number_of_servos];
+	uint8_t *servo_par_no_tmp[interface.irp6p_tfg->number_of_servos];
+	uint8_t servo_par_no_output[interface.irp6p_tfg->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -248,7 +248,7 @@ int irp6p_tfg_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6p_tfg_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0);
 
-			for (int i = 0; i < lib::irp6p_tfg::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6p_tfg->number_of_servos; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 				servo_par_no_output[i] = *servo_par_no_tmp[i];
 			}

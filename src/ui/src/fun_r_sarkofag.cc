@@ -140,28 +140,28 @@ int sarkofag_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCal
 		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_synchro) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
 				&& (my_data->key_cap == 0x73))) && (interface.sarkofag->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
-			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
 				interface.sarkofag->desired_pos[i] = 0.0;
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_motor_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
 				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[0][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
 				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[1][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
 				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[2][i];
 			}
 			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
@@ -202,8 +202,8 @@ int init_wnd_sarkofag_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t servo_alg_no[lib::sarkofag::NUM_OF_SERVOS];
-	uint8_t servo_par_no[lib::sarkofag::NUM_OF_SERVOS];
+	uint8_t servo_alg_no[interface.sarkofag->number_of_servos];
+	uint8_t servo_par_no[interface.sarkofag->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -234,10 +234,10 @@ int sarkofag_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t *servo_alg_no_tmp[lib::sarkofag::NUM_OF_SERVOS];
-	uint8_t servo_alg_no_output[lib::sarkofag::NUM_OF_SERVOS];
-	uint8_t *servo_par_no_tmp[lib::sarkofag::NUM_OF_SERVOS];
-	uint8_t servo_par_no_output[lib::sarkofag::NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp[interface.sarkofag->number_of_servos];
+	uint8_t servo_alg_no_output[interface.sarkofag->number_of_servos];
+	uint8_t *servo_par_no_tmp[interface.sarkofag->number_of_servos];
+	uint8_t servo_par_no_output[interface.sarkofag->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -247,7 +247,7 @@ int sarkofag_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 			PtGetResource(ABW_PtNumericInteger_wnd_sarkofag_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0);
 
-			for (int i = 0; i < lib::sarkofag::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 				servo_par_no_output[i] = *servo_par_no_tmp[i];
 			}

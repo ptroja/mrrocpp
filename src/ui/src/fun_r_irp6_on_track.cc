@@ -641,7 +641,7 @@ int init_wnd_irp6_on_track_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[6], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[7], 0);
 				/*
-				 for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
+				 for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++)
 				 interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->current_pos[i];
 				 */
 			} else {
@@ -663,7 +663,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[lib::irp6ot_m::NUM_OF_SERVOS], wektor[lib::irp6ot_m::NUM_OF_SERVOS];
+	double *wektor_ptgr[interface.irp6ot_m->number_of_servos], wektor[interface.irp6ot_m->number_of_servos];
 
 	if (interface.irp6ot_m->state.edp.pid != -1) {
 		if (interface.irp6ot_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -679,7 +679,7 @@ int wnd_irp6ot_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_motors_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -711,7 +711,7 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[lib::irp6ot_m::NUM_OF_SERVOS], wektor[lib::irp6ot_m::NUM_OF_SERVOS];
+	double *wektor_ptgr[interface.irp6ot_m->number_of_servos], wektor[interface.irp6ot_m->number_of_servos];
 
 	if (interface.irp6ot_m->state.edp.pid != -1) {
 		if (interface.irp6ot_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -726,7 +726,7 @@ int wnd_irp6ot_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -765,35 +765,35 @@ int irp6ot_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_synchro) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
 				&& (my_data->key_cap == 0x73))) && (interface.irp6ot_m->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = 0.0;
 			}
 			interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_motor_motion, &(*interface.irp6ot_m)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_0) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x30))) && (interface.irp6ot_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->state.edp.preset_position[0][i];
 			}
 			interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*interface.irp6ot_m)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_1) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x31))) && (interface.irp6ot_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->state.edp.preset_position[1][i];
 			}
 			interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*interface.irp6ot_m)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_2) || (ApName(ApWidget(cbinfo))
 				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
 				== 0x32))) && (interface.irp6ot_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->state.edp.preset_position[2][i];
 			}
 			interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*interface.irp6ot_m)));
 		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_on_track_preset_position_front)
 				|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_front)) || ((cbinfo->event->type
 				== Ph_EV_KEY) && (my_data->key_cap == 0x66))) && (interface.irp6ot_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->state.edp.front_position[i];
 			}
 			interface.irp6ot_m->eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*interface.irp6ot_m)));
@@ -835,7 +835,7 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 {
 
-	double *wektor[lib::irp6ot_m::NUM_OF_SERVOS];
+	double *wektor[interface.irp6ot_m->number_of_servos];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -857,12 +857,12 @@ int irp6ot_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p6, Pt_ARG_NUMERIC_VALUE, &(wektor[6]), 0);
 				PtGetResource(ABW_PtNumericFloat_wind_irp6ot_inc_p7, Pt_ARG_NUMERIC_VALUE, &(wektor[7]), 0);
 
-				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+				for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 					interface.irp6ot_m->desired_pos[i] = *wektor[i];
 				}
 			} else {
 
-				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+				for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 					interface.irp6ot_m->desired_pos[i] = 0.0;
 				}
 			}
@@ -978,7 +978,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[6], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_joints_cur_p8, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[7], 0);
 
-				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
+				for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++)
 					interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->current_pos[i];
 			} else {
 				// 		interface.block_widget(ABW_PtPane_wind_irp6ot_int_post_synchro_moves);
@@ -993,7 +993,7 @@ int init_wnd_irp6_on_track_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
-	double *wektor[lib::irp6ot_m::NUM_OF_SERVOS];
+	double *wektor[interface.irp6ot_m->number_of_servos];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -1012,7 +1012,7 @@ int irp6ot_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_int_p8, Pt_ARG_NUMERIC_VALUE, &wektor[7], 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = *wektor[i];
 			}
 
@@ -1095,7 +1095,7 @@ int init_wnd_irp6_on_track_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, P
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p6, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[5], 0);
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_read_p7, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[6], 0);
 
-				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
+				for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++)
 					interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->current_pos[i];
 			} else {
 
@@ -1170,7 +1170,7 @@ int irp6ot_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++)
 				interface.irp6ot_m->desired_pos[i] = *wektor[i];
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_euler_zyz_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
@@ -1282,7 +1282,7 @@ int init_wnd_irp6_on_track_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, 
 
 				PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_read_p8, Pt_ARG_NUMERIC_VALUE, &interface.irp6ot_m->current_pos[6], 0);
 
-				for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; ++i)
+				for (int i = 0; i < interface.irp6ot_m->number_of_servos; ++i)
 					interface.irp6ot_m->desired_pos[i] = interface.irp6ot_m->current_pos[i];
 			} else {
 
@@ -1399,7 +1399,7 @@ int irp6ot_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 
 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				interface.irp6ot_m->desired_pos[i] = wektor[i];
 
 			}
@@ -1736,8 +1736,8 @@ int init_wnd_irp6_on_track_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo,
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t servo_alg_no[lib::irp6ot_m::NUM_OF_SERVOS];
-	uint8_t servo_par_no[lib::irp6ot_m::NUM_OF_SERVOS];
+	uint8_t servo_alg_no[interface.irp6ot_m->number_of_servos];
+	uint8_t servo_par_no[interface.irp6ot_m->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -1783,8 +1783,8 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
-	uint8_t *wektor_ptgr[lib::irp6ot_m::NUM_OF_SERVOS], *wektor2_ptgr[lib::irp6ot_m::NUM_OF_SERVOS],
-			wektor[lib::irp6ot_m::NUM_OF_SERVOS], wektor2[lib::irp6ot_m::NUM_OF_SERVOS];
+	uint8_t *wektor_ptgr[interface.irp6ot_m->number_of_servos], *wektor2_ptgr[interface.irp6ot_m->number_of_servos],
+			wektor[interface.irp6ot_m->number_of_servos], wektor2[interface.irp6ot_m->number_of_servos];
 
 	if (interface.irp6ot_m->state.edp.pid != -1) {
 		if (interface.irp6ot_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -1799,7 +1799,7 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_alg_8, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[7]), 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -1821,7 +1821,7 @@ int wnd_irp6ot_seralg_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apin
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_7, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[6]), 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_read_par_8, Pt_ARG_NUMERIC_VALUE, &(wektor2_ptgr[7]), 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				wektor2[i] = *wektor2_ptgr[i];
 			}
 
@@ -1852,10 +1852,10 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t *servo_alg_no_tmp[lib::irp6ot_m::NUM_OF_SERVOS];
-	uint8_t servo_alg_no_output[lib::irp6ot_m::NUM_OF_SERVOS];
-	uint8_t *servo_par_no_tmp[lib::irp6ot_m::NUM_OF_SERVOS];
-	uint8_t servo_par_no_output[lib::irp6ot_m::NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp[interface.irp6ot_m->number_of_servos];
+	uint8_t servo_alg_no_output[interface.irp6ot_m->number_of_servos];
+	uint8_t *servo_par_no_tmp[interface.irp6ot_m->number_of_servos];
+	uint8_t servo_par_no_output[interface.irp6ot_m->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -1879,7 +1879,7 @@ int irp6ot_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_7, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[6], 0);
 			PtGetResource(ABW_PtNumericInteger_wnd_irp6ot_servo_algorithm_par_8, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[7], 0);
 
-			for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.irp6ot_m->number_of_servos; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 				servo_par_no_output[i] = *servo_par_no_tmp[i];
 			}

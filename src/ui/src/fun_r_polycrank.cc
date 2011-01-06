@@ -138,7 +138,7 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 
 	// wychwytania ew. bledow ECP::robot
 	//double *wektor_ptgr[NUM_OF_SERVOS], wektor[NUM_OF_SERVOS];
-	double *wektor_ptgr[lib::polycrank::NUM_OF_SERVOS], wektor[lib::polycrank::NUM_OF_SERVOS];
+	double *wektor_ptgr[interface.polycrank->number_of_servos], wektor[interface.polycrank->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	//double *wektor_ptgr[lib::irp6m::NUM_OF_SERVOS], wektor[lib::irp6m::NUM_OF_SERVOS];
@@ -155,7 +155,7 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 			PtGetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
 			PtGetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 
-			for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.polycrank->number_of_servos; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -214,7 +214,7 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 int polycrank_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
-	double *wektor[lib::polycrank::NUM_OF_SERVOS];
+	double *wektor[interface.polycrank->number_of_servos];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -237,7 +237,7 @@ try {
 			interface.polycrank->desired_pos[i] = *wektor[i];
 		}
 */
-		for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++) {
+		for (int i = 0; i < interface.polycrank->number_of_servos; i++) {
 			interface.polycrank->desired_pos[i] = *wektor[i];
 		}
 
@@ -405,7 +405,7 @@ try {
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p6,Pt_ARG_NUMERIC_VALUE, &interface.polycrank->current_pos[5], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p7,Pt_ARG_NUMERIC_VALUE, &interface.polycrank->current_pos[6], 0);
 
-			for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++)
+			for (int i = 0; i < interface.polycrank->number_of_servos; i++)
 			interface.polycrank->desired_pos[i] = interface.polycrank->current_pos[i];
 		} else {
 			// 	interface.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);

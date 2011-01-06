@@ -202,14 +202,14 @@ int UiRobot::reload_configuration()
 								= tmp
 										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
 						char* toDel = tmp;
-						for (int j = 0; j < lib::irp6p_tfg::NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < number_of_servos; j++) {
 
 							state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
 
 						}
 						free(toDel);
 					} else {
-						for (int j = 0; j < lib::irp6p_tfg::NUM_OF_SERVOS; j++) {
+						for (int j = 0; j < number_of_servos; j++) {
 
 							state.edp.preset_position[i][j] = 0.074;
 
