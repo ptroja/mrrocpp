@@ -188,12 +188,14 @@ int clear_wind_speaker_play_flag( PtWidget_t *widget, ApInfo_t *data, PtCallback
 int speaker_play_exec( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int speaker_check_state( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_all_robots_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
-int all_robots_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int all_robots_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int pulse_trigger_mp( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int clear_console( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int slay_all( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_all_robots_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_all_robots_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int all_robots_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int all_robots_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int activate_file_menu( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int activate_all_robots_menu( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int activate_task_menu( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
@@ -280,7 +282,10 @@ int start_wnd_irp6_on_track_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *data
 int start_wnd_irp6_on_track_xyz_angle_axis( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6_on_track_xyz_euler_zyz( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6_on_track_int( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
-int irp6ot_move_to_preset_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int activate_robot_menu( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_irp6_postument_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
@@ -314,6 +319,7 @@ int start_wnd_irp6m_xyz_euler_zyz_ts( PtWidget_t *widget, ApInfo_t *data, PtCall
 int start_wnd_irp6m_xyz_angle_axis_ts( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6m_kinematic( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int start_wnd_irp6m_servo_algorithm( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int all_robots_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int pulse_reader_all_robots_stop( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int pulse_reader_all_robots_start( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int pulse_reader_irp6m_start( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
@@ -367,6 +373,8 @@ int clear_wnd_irp6ot_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, P
 int clear_wnd_irp6p_xyz_aa_relative_flag( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int irp6ot_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int irp6p_xyz_aa_relative_motion( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int irp6ot_move_to_front_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
+int all_robots_move_to_front_position( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_create( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_slay( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
 int EDP_irp6p_tfg_synchronise( PtWidget_t *widget, ApInfo_t *data, PtCallbackInfo_t *cbinfo );
