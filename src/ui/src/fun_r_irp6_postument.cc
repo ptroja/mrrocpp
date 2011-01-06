@@ -2444,68 +2444,58 @@ int export_wnd_irp6_postument_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinf
 
 }
 
+int irp6p_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-irp6p_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.irp6p_m->move_to_synchro_position();
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int irp6p_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-irp6p_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.irp6p_m->move_to_preset_position(0);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int irp6p_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-irp6p_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.irp6p_m->move_to_preset_position(1);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int irp6p_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-irp6p_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.irp6p_m->move_to_preset_position(2);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int irp6p_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-irp6p_move_to_front_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.irp6p_m->move_to_front_position();
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
-
-	}
+}
 
