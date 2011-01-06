@@ -109,7 +109,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, "is_bird_hand_active"),
 			ui_ecp_robot(NULL)
 {
 	wnd_command_and_status = new WndCommandAndStatus(interface, *this);
@@ -122,7 +122,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_bird_hand_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_bird_hand (ini_con->ui->ecp_bird_hand_section);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

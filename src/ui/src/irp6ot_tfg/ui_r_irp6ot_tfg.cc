@@ -140,7 +140,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, "is_irp6ot_tfg_active"),
 			is_wind_irp6ot_tfg_moves_open(false), is_wind_irp6ot_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
@@ -150,7 +150,7 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_irp6ot_tfg_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_irp6ot_tfg (ini_con->ui->ecp_irp6ot_tfg_section);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

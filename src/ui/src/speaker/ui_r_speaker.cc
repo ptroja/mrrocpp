@@ -99,7 +99,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION, lib::speaker::ROBOT_NAME, -1),
+			common::UiRobot(_interface, lib::speaker::EDP_SECTION, lib::speaker::ECP_SECTION, lib::speaker::ROBOT_NAME, -1, "is_speaker_active"),
 			is_wind_speaker_play_open(false), ui_ecp_robot(NULL)
 {
 
@@ -109,7 +109,7 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli speaker ma byc aktywny
-	if ((state.is_active = interface.config->value <int> ("is_speaker_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

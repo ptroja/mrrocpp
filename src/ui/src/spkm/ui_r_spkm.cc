@@ -140,7 +140,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, "is_spkm_active"),
 			ui_ecp_robot(NULL)
 {
 	wnd_inc = new WndInc(interface, *this);
@@ -155,7 +155,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_spkm_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_spkm (ini_con->ui->ecp_spkm_section);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

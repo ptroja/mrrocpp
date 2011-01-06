@@ -154,7 +154,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS, "is_irp6p_m_active"),
 			is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false), is_wind_irp6p_xyz_euler_zyz_open(false),
 			is_wind_irp6p_xyz_angle_axis_open(false), is_wind_irp6p_xyz_aa_relative_open(false),
 			is_wind_irp6p_xyz_angle_axis_ts_open(false), is_wind_irp6p_xyz_euler_zyz_ts_open(false),
@@ -167,7 +167,7 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 postument ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_irp6p_m_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_irp6_postument (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

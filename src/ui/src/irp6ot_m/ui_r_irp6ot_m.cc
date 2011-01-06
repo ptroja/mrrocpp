@@ -125,7 +125,7 @@ int UiRobot::execute_joint_motion()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS, "is_irp6ot_m_active"),
 			is_wind_irp6ot_int_open(false), is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(false),
 			is_wind_irp6ot_xyz_angle_axis_open(false), is_wind_irp6ot_xyz_aa_relative_open(false),
 			is_wind_irp6ot_xyz_angle_axis_ts_open(false), is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
@@ -137,7 +137,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 int UiRobot::reload_configuration()
 {
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_irp6ot_m_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

@@ -148,7 +148,7 @@ int UiRobot::synchronise()
  }*/
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS),
+			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, "is_polycrank_active"),
 			is_wind_polycrank_int_open(false), ui_ecp_robot(NULL)
 {
 }
@@ -170,7 +170,7 @@ void UiRobot::close_all_windows()
 int UiRobot::reload_configuration()
 {
 	// jesli Polycrank ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_polycrank_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {

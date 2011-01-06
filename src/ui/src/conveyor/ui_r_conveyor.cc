@@ -131,7 +131,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS),
+	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active"),
 			is_wind_conv_servo_algorithm_open(false), is_wind_conveyor_moves_open(false), ui_ecp_robot(NULL)
 {
 
@@ -141,7 +141,7 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli conveyor ma byc aktywny
-	if ((state.is_active = interface.config->value <int> ("is_conveyor_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 
 		//ui_state.is_any_edp_active = true;
 

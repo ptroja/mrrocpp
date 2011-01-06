@@ -132,7 +132,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME, lib::irp6m::NUM_OF_SERVOS),
+	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME, lib::irp6m::NUM_OF_SERVOS, "is_irp6m_active"),
 			is_wind_irp6m_int_open(false), is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
@@ -145,7 +145,7 @@ int UiRobot::reload_configuration()
 {
 
 	// jesli IRP6 mechatronika ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_irp6m_active")) == 1) {
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
 
 		// ui_state.is_any_edp_active = true;
 		// ini_con->create_ecp_irp6_mechatronika (ini_con->ui->ecp_irp6_mechatronika_section);
