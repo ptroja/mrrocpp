@@ -252,6 +252,20 @@ bool UiRobot::check_synchronised_and_loaded()
 
 }
 
+int UiRobot::move_to_synchro_position()
+{
+	return 1;
+}
+
+int UiRobot::move_to_front_position()
+{
+	return 1;
+}
+
+int UiRobot::move_to_preset_position(int variant)
+{
+	return 1;
+}
 
 int UiRobot::reload_configuration()
 {
@@ -355,7 +369,6 @@ int UiRobot::reload_configuration()
 
 	return 1;
 }
-
 
 }
 } //namespace ui
