@@ -146,6 +146,30 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
+
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.preset_position[variant][i];
+	}
+	eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_synchro_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = 0.0;
+	}
+	eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_motor_motion, &(*this)));
+
+	return 1;
+}
+
+
 int UiRobot::execute_motor_motion()
 {
 	try {

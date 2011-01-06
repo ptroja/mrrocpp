@@ -110,6 +110,28 @@ int UiRobot::synchronise()
 
 }
 
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.preset_position[variant][i];
+	}
+	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_synchro_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = 0.0;
+	}
+	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_motor_motion, &(*this)));
+
+	return 1;
+}
+
 int UiRobot::execute_motor_motion()
 {
 	try {
@@ -162,7 +184,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active"),
+			common::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active"),
 			is_wind_irp6p_tfg_moves_open(false), is_wind_irp6p_tfg_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
 
