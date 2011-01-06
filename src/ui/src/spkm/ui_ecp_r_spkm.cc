@@ -94,6 +94,21 @@ void EcpRobot::move_joints(const double final_position[])
 
 }
 
+void EcpRobot::move_external(const double final_position[])
+{
+	lib::Xyz_Angle_Axis_vector tmp_vector(final_position);
+	lib::Homog_matrix tmp_frame(tmp_vector);
+
+	tmp_frame.get_frame_tab(epos_external_command_data_port->data);
+
+	//	epos_external_command_data_port->data.desired_position[i] = final_position[i];
+
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_external_command_data_port->set();
+	execute_motion();
+
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

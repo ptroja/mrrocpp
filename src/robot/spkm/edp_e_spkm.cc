@@ -140,7 +140,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			break;
 		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
-
+			lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
+			std::cout << tmp_frame;
 		}
 			break;
 
@@ -225,6 +226,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				break;
 			case lib::FRAME: {
 				msg->message("EDP get_arm_position FRAME");
+
+				lib::Homog_matrix tmp_frame;
+
+				tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
+
+
 			}
 				break;
 			default:

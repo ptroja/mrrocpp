@@ -19,7 +19,7 @@ namespace spkm {
  * @brief SwarmItFix arallel Kinematic Machine total number of servos
  * @ingroup spkm
  */
-const int NUM_OF_SERVOS = 7;
+const int NUM_OF_SERVOS = 6;
 
 /*!
  * @brief SwarmItFix arallel Kinematic Machine mp to ecp command

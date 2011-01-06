@@ -254,7 +254,7 @@ int WndInt::motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 			//	std::cout << "UI desired_pos[4]" << desired_pos[4] << std::endl;
 
-			robot.ui_ecp_robot->move_joints(robot.desired_pos);
+			robot.ui_ecp_robot->move_external(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) && (is_open)) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 

@@ -278,6 +278,8 @@ int init_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_external->init();
+
 	return (Pt_CONTINUE);
 
 }
@@ -314,6 +316,8 @@ int spkm_external_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->motion(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
