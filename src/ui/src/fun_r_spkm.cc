@@ -345,68 +345,58 @@ int export_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 }
 
+int spkm_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-int
-spkm_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_synchro_position();
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int spkm_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-spkm_move_to_front_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_front_position();
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int spkm_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-spkm_move_to_position_0( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(0);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int spkm_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-spkm_move_to_position_1( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(1);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
+}
 
-	}
+int spkm_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
-
-int
-spkm_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
-
-	{
+{
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(2);
+	return (Pt_CONTINUE);
 
-	return( Pt_CONTINUE );
-
-	}
+}
 

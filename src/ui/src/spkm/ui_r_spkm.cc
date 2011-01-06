@@ -211,6 +211,63 @@ void UiRobot::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 }
 
+int UiRobot::move_to_synchro_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = 0.0;
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_front_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.front_position[i];
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.preset_position[variant][i];
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::execute_motor_motion()
+{
+	try {
+
+		ui_ecp_robot->move_motors(desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_joint_motion()
+{
+	try {
+
+		ui_ecp_robot->move_joints(desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp
