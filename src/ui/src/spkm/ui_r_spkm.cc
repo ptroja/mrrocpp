@@ -10,8 +10,6 @@
 #include "robot/spkm/const_spkm.h"
 #include "ui/src/ui_class.h"
 
-
-
 /* Local headers */
 #include "../ablibs.h"
 #include "../abimport.h"
@@ -142,7 +140,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
+			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS),
 			ui_ecp_robot(NULL)
 {
 	wnd_inc = new WndInc(interface, *this);

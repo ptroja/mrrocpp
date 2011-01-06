@@ -62,11 +62,12 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::polycrank::ROBOT_NAME);
-/*
 					ui_ecp_robot
-												= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
-*/
+							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::polycrank::ROBOT_NAME);
+					/*
+					 ui_ecp_robot
+					 = new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::irp6p_m::ROBOT_NAME);
+					 */
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -111,45 +112,43 @@ int UiRobot::synchronise()
 }
 
 /*
-int UiRobot::synchronise_int()
-{
+ int UiRobot::synchronise_int()
+ {
 
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
+ set_ui_state_notification(UI_N_SYNCHRONISATION);
 
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota irp6_on_track
+ // wychwytania ew. bledow ECP::robot
+ try {
+ // dla robota irp6_on_track
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
-			ui_ecp_robot->ecp->synchronise();
-			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
-		}
+ if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+ ui_ecp_robot->ecp->synchronise();
+ state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
+ } else {
+ // 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
+ }
 
-	} // end try
-	CATCH_SECTION_UI
+ } // end try
+ CATCH_SECTION_UI
 
-	// modyfikacje menu
-	interface.manage_interface();
+ // modyfikacje menu
+ interface.manage_interface();
 
-	return 1;
+ return 1;
 
-}
-*/
+ }
+ */
 
 /*
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
-			is_wind_polycrank_int_open(false)//, is_wind_polycrank_inc_open(false)
-{
+ UiRobot::UiRobot(common::Interface& _interface) :
+ common::UiRobot(_interface, lib::irp6::EDP_SECTION, ECP_SECTION), ui_ecp_robot(NULL),
+ is_wind_polycrank_int_open(false)//, is_wind_polycrank_inc_open(false)
+ {
 
-}*/
-
-
+ }*/
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME),
+			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS),
 			is_wind_polycrank_int_open(false), ui_ecp_robot(NULL)
 {
 }
@@ -158,16 +157,15 @@ void UiRobot::close_all_windows()
 {
 }
 
-
 /*
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME),
-			is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false), is_wind_irp6p_xyz_euler_zyz_open(false),
-			is_wind_irp6p_xyz_angle_axis_open(false), is_wind_irp6p_xyz_aa_relative_open(false),
-			is_wind_irp6p_xyz_angle_axis_ts_open(false), is_wind_irp6p_xyz_euler_zyz_ts_open(false),
-			is_wind_irp6p_kinematic_open(false), is_wind_irp6p_servo_algorithm_open(false), ui_ecp_robot(NULL)
-{
-}*/
+ UiRobot::UiRobot(common::Interface& _interface) :
+ common::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME),
+ is_wind_irp6p_int_open(false), is_wind_irp6p_inc_open(false), is_wind_irp6p_xyz_euler_zyz_open(false),
+ is_wind_irp6p_xyz_angle_axis_open(false), is_wind_irp6p_xyz_aa_relative_open(false),
+ is_wind_irp6p_xyz_angle_axis_ts_open(false), is_wind_irp6p_xyz_euler_zyz_ts_open(false),
+ is_wind_irp6p_kinematic_open(false), is_wind_irp6p_servo_algorithm_open(false), ui_ecp_robot(NULL)
+ {
+ }*/
 
 int UiRobot::reload_configuration()
 {
@@ -276,58 +274,57 @@ int UiRobot::reload_configuration()
 int UiRobot::manage_interface()
 {
 	switch (state.edp.state)
-		{
-			case -1:
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
-				break;
-			case 0:
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload,NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
+	{
+		case -1:
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
+			break;
+		case 0:
+			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload, NULL);
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
 
-				break;
-			case 1:
-			case 2:
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
+			break;
+		case 1:
+		case 2:
+			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
 
-				// jesli robot jest zsynchronizowany
-				if (state.edp.is_synchronised) {
-					ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
-					//ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+			// jesli robot jest zsynchronizowany
+			if (state.edp.is_synchronised) {
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
+				//ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 
-					switch (interface.mp.state)
-					{
-						case common::UI_MP_NOT_PERMITED_TO_RUN:
-						case common::UI_MP_PERMITED_TO_RUN:
-							ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
-							ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
-							break;
-						case common::UI_MP_WAITING_FOR_START_PULSE:
-							ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-							NULL);
-							ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
-							break;
-						case common::UI_MP_TASK_RUNNING:
-						case common::UI_MP_TASK_PAUSED:
-							ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
-							break;
-						default:
-							break;
-					}
-				} else // jesli robot jest niezsynchronizowany
+				switch (interface.mp.state)
 				{
-					ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
-					ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
-					//ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+					case common::UI_MP_NOT_PERMITED_TO_RUN:
+					case common::UI_MP_PERMITED_TO_RUN:
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
+						break;
+					case common::UI_MP_WAITING_FOR_START_PULSE:
+						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+
+						NULL);
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
+						break;
+					case common::UI_MP_TASK_RUNNING:
+					case common::UI_MP_TASK_PAUSED:
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
+						break;
+					default:
+						break;
 				}
-				break;
-			default:
-				break;
-		}
+			} else // jesli robot jest niezsynchronizowany
+			{
+				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
+				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
+				//ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+			}
+			break;
+		default:
+			break;
+	}
 
-		return 1;
+	return 1;
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {

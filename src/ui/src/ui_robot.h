@@ -46,10 +46,11 @@ public:
 	 * @brief Unique robot name
 	 */
 	const lib::robot_name_t robot_name; // by Y - nazwa robota (track, postument etc.)
+	int number_of_servos;
 
 	common::WndBase_t wndbase_m;
 
-			UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name);
+			UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos);
 	virtual int reload_configuration()= 0;
 	void create_thread();
 	void abort_thread();
