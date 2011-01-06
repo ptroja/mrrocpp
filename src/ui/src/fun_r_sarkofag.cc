@@ -122,60 +122,6 @@ int start_wind_sarkofag_moves(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 }
 
-int sarkofag_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	PhKeyEvent_t *my_data = NULL;
-
-	if (cbinfo->event->type == Ph_EV_KEY) {
-		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
-	}
-
-	if (interface.sarkofag->state.edp.pid != -1) {
-
-		if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_synchro) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
-				&& (my_data->key_cap == 0x73))) && (interface.sarkofag->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
-			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
-				interface.sarkofag->desired_pos[i] = 0.0;
-			}
-			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_motor_motion, &(*interface.sarkofag)));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_0) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x30))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
-				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[0][i];
-			}
-			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_1) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x31))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
-				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[1][i];
-			}
-			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
-		} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_sarkofag_preset_position_2) || (ApName(ApWidget(cbinfo))
-				== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap
-				== 0x32))) && (interface.sarkofag->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-			for (int i = 0; i < interface.sarkofag->number_of_servos; i++) {
-				interface.sarkofag->desired_pos[i] = interface.sarkofag->state.edp.preset_position[2][i];
-			}
-			interface.sarkofag->eb.command(boost::bind(&ui::sarkofag::UiRobot::execute_joint_motion, &(*interface.sarkofag)));
-		}
-
-		//	interface.sarkofag->ui_ecp_robot->move_motors(interface.sarkofag->desired_pos);
-
-	} // end if (interface.sarkofag->state.edp.pid!=-1)
-
-
-	return (Pt_CONTINUE);
-
-}
-
 int start_wnd_sarkofag_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -409,3 +355,55 @@ int clear_wnd_sarkofag_servo_algorithm_flag(PtWidget_t *widget, ApInfo_t *apinfo
 	return (Pt_CONTINUE);
 
 }
+
+int
+sarkofag_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+sarkofag_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+sarkofag_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+sarkofag_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+

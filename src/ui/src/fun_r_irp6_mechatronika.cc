@@ -219,62 +219,6 @@ int start_wnd_irp6m_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 
 }
 
-int irp6m_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	PhKeyEvent_t *my_data = NULL;
-
-	if (cbinfo->event->type == Ph_EV_KEY) {
-		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
-	}
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-
-		if (interface.irp6m_m->state.edp.pid != -1) {
-
-			if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_mechatronika_preset_position_synchro)
-					|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_synchro))
-					|| ((cbinfo->event->type == Ph_EV_KEY) && (my_data->key_cap == 0x73)))
-					&& (interface.irp6m_m->state.edp.is_synchronised)) {// powrot do pozycji synchronizacji
-				for (int i = 0; i < interface.irp6m_m->number_of_servos; i++) {
-					interface.irp6m_m->desired_pos[i] = 0;
-				}
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_mechatronika_preset_position_0)
-					|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type
-					== Ph_EV_KEY) && (my_data->key_cap == 0x30))) && (interface.irp6m_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < interface.irp6m_m->number_of_servos; i++) {
-					interface.irp6m_m->desired_pos[i] = interface.irp6m_m->state.edp.preset_position[0][i];
-				}
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_mechatronika_preset_position_1)
-					|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type
-					== Ph_EV_KEY) && (my_data->key_cap == 0x31))) && (interface.irp6m_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < interface.irp6m_m->number_of_servos; i++) {
-					interface.irp6m_m->desired_pos[i] = interface.irp6m_m->state.edp.preset_position[1][i];
-				}
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_irp6_mechatronika_preset_position_2)
-					|| (ApName(ApWidget(cbinfo)) == ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type
-					== Ph_EV_KEY) && (my_data->key_cap == 0x32))) && (interface.irp6m_m->state.edp.is_synchronised)) {// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < interface.irp6m_m->number_of_servos; i++) {
-					interface.irp6m_m->desired_pos[i] = interface.irp6m_m->state.edp.preset_position[2][i];
-				}
-			}
-
-			interface.irp6m_m->ui_ecp_robot->move_motors(interface.irp6m_m->desired_pos);
-
-		} // end if (interface.irp6m_m->state.edp.pid!=-1)
-	} // end try
-
-	CATCH_SECTION_UI
-
-	return (Pt_CONTINUE);
-
-}
-
 int start_wnd_irp6m_xyz_euler_zyz_ts(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1836,4 +1780,56 @@ int export_wnd_irp6m_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	return (Pt_CONTINUE);
 
 }
+
+
+int
+irp6m_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+irp6m_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+irp6m_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+irp6m_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
 

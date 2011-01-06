@@ -133,7 +133,6 @@ int UiRobot::move_to_preset_position(int variant)
 	return 1;
 }
 
-
 int UiRobot::execute_motor_motion()
 {
 	try {
@@ -155,7 +154,7 @@ int UiRobot::execute_joint_motion()
 	} // end try
 	CATCH_SECTION_UI
 
-return 1;
+	return 1;
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
