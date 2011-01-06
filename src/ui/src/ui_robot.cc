@@ -319,7 +319,7 @@ int UiRobot::reload_configuration()
 								state.edp.preset_position[i][j] = 0.0;
 							} else {
 								state.edp.front_position[j] = 0.0;
-								printf("nie zdefiniowano irp6ot front_postion w common.ini\n");
+								printf("nie zdefiniowano front_position w common.ini\n");
 							}
 
 						}
