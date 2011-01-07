@@ -64,13 +64,13 @@ SET(GUI_UI
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 
 # Create GUI executable
-ADD_EXECUTABLE(ui-qt ${GUI_CXX_SRCS})
+ADD_EXECUTABLE(ui-qt-yoyek ${GUI_CXX_SRCS})
 
 # Link executable with QT libraries
-TARGET_LINK_LIBRARIES(ui-qt ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(ui-qt-yoyek ${QT_LIBRARIES})
 
 install(
-  TARGETS ui-qt
+  TARGETS ui-qt-yoyek
   RUNTIME DESTINATION bin COMPONENT applications
 )
 
