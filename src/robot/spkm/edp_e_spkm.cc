@@ -141,7 +141,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
 			lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
-			std::cout << tmp_frame;
+			std::cout << tmp_frame << std::endl;
 		}
 			break;
 
@@ -181,65 +181,69 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
-	if (robot_test_mode) {
 
-		switch (instruction.get_arm_type)
-		{
-			case lib::MOTOR: {
-				msg->message("EDP get_arm_position MOTOR");
-				static int licznikaaa = (-11);
+	// we do not check the arm position when only lib::SET is set
+	if (instruction.instruction_type != lib::SET) {
 
-				std::stringstream ss(std::stringstream::in | std::stringstream::out);
-				ss << "get_arm_position: " << licznikaaa;
-				msg->message(ss.str().c_str());
-				//	printf("%s\n", ss.str().c_str());
+		if (robot_test_mode) {
+			msg->message("EDP get_arm_position");
+			switch (instruction.get_arm_type)
+			{
+				case lib::MOTOR: {
+					msg->message("EDP get_arm_position MOTOR");
+					static int licznikaaa = (-11);
+
+					std::stringstream ss(std::stringstream::in | std::stringstream::out);
+					ss << "get_arm_position: " << licznikaaa;
+					msg->message(ss.str().c_str());
+					//	printf("%s\n", ss.str().c_str());
 
 
-				edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
-				edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
-				edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+					edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-				edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
+					edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-				edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
-				edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+					edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+					edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
-				if (licznikaaa < 10) {
-					for (int i = 0; i < number_of_servos; i++) {
-						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+					if (licznikaaa < 10) {
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+						}
+
+					} else {
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+						}
 					}
-
-				} else {
-					for (int i = 0; i < number_of_servos; i++) {
-						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-					}
+					licznikaaa++;
 				}
-				licznikaaa++;
+					break;
+				case lib::JOINT: {
+					msg->message("EDP get_arm_position JOINT");
+					static int licznik_joint = (-11);
+					edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
+					licznik_joint++;
+				}
+					break;
+				case lib::FRAME: {
+					msg->message("EDP get_arm_position FRAME");
+
+					lib::Homog_matrix tmp_frame;
+
+					tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
+
+				}
+					break;
+				default:
+					break;
+
 			}
-				break;
-			case lib::JOINT: {
-				msg->message("EDP get_arm_position JOINT");
-				static int licznik_joint = (-11);
-				edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
-				licznik_joint++;
-			}
-				break;
-			case lib::FRAME: {
-				msg->message("EDP get_arm_position FRAME");
-
-				lib::Homog_matrix tmp_frame;
-
-				tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
-
-
-			}
-				break;
-			default:
-				break;
+		} else {
 
 		}
-	} else {
-
 	}
 
 	reply.servo_step = step_counter;

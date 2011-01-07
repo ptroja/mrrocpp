@@ -188,26 +188,26 @@ void robot::create_command()
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
 		ecp_command.instruction.get_arm_type = lib::JOINT;
-
+		sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 		ecp_command.instruction.get_arm_type = lib::FRAME;
-
+		sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
 		ecp_command.instruction.instruction_type = lib::SET_GET;
-
+		sr_ecp_msg.message("is_new_data is_new_request");
 	} else if (is_new_data) {
 		ecp_command.instruction.instruction_type = lib::SET;
-
+		sr_ecp_msg.message("is_new_data");
 	} else if (is_new_request) {
 		ecp_command.instruction.instruction_type = lib::GET;
-
+		sr_ecp_msg.message("is_new_request");
 	} else {
 		communicate_with_edp = false;
 	}
@@ -247,7 +247,7 @@ void robot::get_reply()
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
 		// generator reply generation
-		//	sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
+		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
 
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_joint_reply_data_request_port.data.epos_controller[i].position
@@ -263,6 +263,7 @@ void robot::get_reply()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
+		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
 		// generator reply generation
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_external_reply_data_request_port.data.epos_controller[i].position
