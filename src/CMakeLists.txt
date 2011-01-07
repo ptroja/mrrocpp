@@ -145,7 +145,7 @@ else (QNXNTO) # Linux, etc.
 	set(USE_MESSIP ON)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-	add_subdirectory (ui-qt)
+	add_subdirectory (ui-qt-yoyek)
 endif (QNXNTO)
 
 include(FindComedi)
