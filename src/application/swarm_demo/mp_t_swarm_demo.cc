@@ -19,7 +19,6 @@
 
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
-#include "ecp_mp_t_swarm_demo.h"
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 
@@ -101,7 +100,6 @@ void swarm_demo::main_task_algorithm(void)
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-
 	sr_ecp_msg->message("Track angle axis2");
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) 5, "../../src/application/swarm_demo/trajectory_track_angle_p2.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
@@ -111,7 +109,6 @@ void swarm_demo::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
-
 
 	sr_ecp_msg->message("Both angle axis");
 

@@ -1191,7 +1191,7 @@ int init_wnd_irp6_postument_xyz_euler_zyz(PtWidget_t *widget, ApInfo_t *apinfo, 
 						Pt_ARG_NUMERIC_VALUE,
 						&interface.irp6p_m->irp6p_current_pos[6], 0);
 
-				for (int i = 0; i < 7; i++)
+				for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
 					interface.irp6p_m->irp6p_desired_pos[i] = interface.irp6p_m->irp6p_current_pos[i];
 			} else {
 
@@ -1287,7 +1287,7 @@ int irp6p_xyz_euler_zyz_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_p7,
 					Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
 				interface.irp6p_m->irp6p_desired_pos[i] = *wektor[i];
 
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_euler_zyz_step,
@@ -1430,7 +1430,7 @@ int init_wnd_irp6_postument_xyz_angle_axis(PtWidget_t *widget, ApInfo_t *apinfo,
 						Pt_ARG_NUMERIC_VALUE,
 						&interface.irp6p_m->irp6p_current_pos[6], 0);
 
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
 					interface.irp6p_m->irp6p_desired_pos[i] = interface.irp6p_m->irp6p_current_pos[i];
 				}
 			} else {
@@ -1567,7 +1567,7 @@ int irp6p_xyz_angle_axis_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 
 			// przepisanie parametrow ruchu do postaci rozkazu w formie XYZ_ANGLE_AXIS
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
 				interface.irp6p_m->irp6p_desired_pos[i] = wektor[i];
 
 			}
@@ -2479,7 +2479,7 @@ int irp6p_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 			PtGetResource(ABW_PtNumericFloat_wind_irp6p_xyz_aa_relative_pg,
 					Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[6], 0);
 
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 				interface.irp6p_m->irp6p_desired_pos[i] = 0.0;
 			}
@@ -2530,12 +2530,12 @@ int irp6p_xyz_aa_relative_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 
 			// wszysktkie naraz
 			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_aa_l)
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
 					interface.irp6p_m->irp6p_desired_pos[i] = -wektor[i];
 				}
 
 			if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6p_xyz_aa_r)
-				for (int i = 0; i < 7; i++) {
+				for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
 					interface.irp6p_m->irp6p_desired_pos[i] = wektor[i];
 				}
 
