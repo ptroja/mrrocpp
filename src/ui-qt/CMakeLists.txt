@@ -64,7 +64,7 @@ SET(GUI_UI
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 
 # Create GUI executable
-ADD_EXECUTABLE(discode_gui ${GUI_CXX_SRCS})
+ADD_EXECUTABLE(ui-qt ${GUI_CXX_SRCS})
 
 # Link executable with QT libraries
 TARGET_LINK_LIBRARIES(ui-qt ${QT_LIBRARIES})
