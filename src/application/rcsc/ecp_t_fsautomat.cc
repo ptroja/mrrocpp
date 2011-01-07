@@ -225,7 +225,7 @@ void fsautomat::main_task_algorithm(void)
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
 	if (trjConf && ecpLevel) {
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name);
-		printf("Lista %s zawiera: %d elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
+		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");

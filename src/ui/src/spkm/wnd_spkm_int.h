@@ -20,6 +20,8 @@ class Interface;
 
 namespace spkm {
 
+const std::string WND_SPKM_INT = "WND_SPKM_INT";
+
 //
 //
 // KLASA WndInt

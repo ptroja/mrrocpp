@@ -20,7 +20,7 @@ class Interface;
 }
 
 namespace bird_hand {
-
+const std::string WND_BIRD_HAND_COMMAND_AND_STATUS = "WND_BIRD_HAND_COMMAND_AND_STATUS";
 //
 //
 // KLASA UiRobotBirdHand

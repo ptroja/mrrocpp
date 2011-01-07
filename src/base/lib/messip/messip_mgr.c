@@ -821,7 +821,7 @@ http_send_status( int sockfd,
 	sprintf( msg1,
 		"HTTP/%d.%d 200 OK\r\n"
 		"Content-type: text/html\r\n"
-		"Content-Length: %d\r\n"
+		"Content-Length: %zd\r\n"
 		"\r\n",
 			version, subversion,
 			strlen( msg2 ) );
@@ -898,7 +898,7 @@ thread_http_thread( void *arg )
 		}
 
 		request[ dcount ] = 0;
-		printf( "dcount=%d [%s]\n", dcount, request );
+		printf( "dcount=%zd [%s]\n", dcount, request );
 
 	}							// for (;;)
 
@@ -1031,7 +1031,7 @@ handle_client_connect( int sockfd,
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
+		fprintf( stderr, "%s %d\n\tread %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
@@ -1109,7 +1109,7 @@ client_channel_create( int sockfd,
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
@@ -1262,7 +1262,7 @@ client_channel_delete( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_channel_delete_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_delete_t ), strerror(errno) );
 		return -1;
 	}
@@ -1337,7 +1337,7 @@ client_channel_connect( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_channel_connect_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_connect_t ), strerror(errno) );
 		return -1;
 	}
@@ -1443,7 +1443,7 @@ client_channel_disconnect( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_channel_disconnect_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( messip_send_channel_disconnect_t ), strerror(errno) );
 		return -1;
 	}
@@ -1582,7 +1582,7 @@ thread_client_send_buffered_msg( void *arg )
 			dcount = do_writev( sockfd, iovec, 3 );
 			if ( dcount != (ssize_t) (sizeof( datasend ) + bmsg->datalen + sizeof( int32_t )) )
 			{
-				printf( "dcount=%d expected=%d datalen=%d\n",
+				printf( "dcount=%zd expected=%zd datalen=%d\n",
 				   dcount,
 				   sizeof( datasend ) + bmsg->datalen + sizeof( int32_t ),
 				   bmsg->datalen );
@@ -1667,7 +1667,7 @@ client_death_notify( int sockfd,
 	}
 	if ( dcount != sizeof( msgsend ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( msgsend ), strerror(errno) );
 		return -1;
 	}
@@ -1725,7 +1725,7 @@ client_buffered_send( int sockfd,
 	}
 	if ( dcount != sizeof( msg ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( msg ), strerror(errno) );
 		return -1;
 	}
@@ -1741,7 +1741,7 @@ client_buffered_send( int sockfd,
 		dcount = read( sockfd, data, msg.datalen );
 		if ( dcount != msg.datalen )
 		{
-			fprintf( stderr, "Should have read %d bytes - only %d have been read\n",
+			fprintf( stderr, "Should have read %d bytes - only %zd have been read\n",
 			   msg.datalen, dcount );
 			return -1;
 		}
@@ -1928,7 +1928,7 @@ thread_client_trigger_proxy( void *arg )
 			dcount = do_writev( sockfd, iovec, 3 );
 			tlen = sizeof( datasend ) + sizeof( int32_t ) + proxy->nbytes;
 			if ( dcount != tlen )
-				printf( "dcount=%d expected=%d nbytes=%d - %d - data=%p: %s\n",
+				printf( "dcount=%zd expected=%d nbytes=%d - %zd - data=%p: %s\n",
 				   dcount, tlen, proxy->nbytes,
 				   sizeof( datasend ), proxy->data, strerror(errno) );
 			assert( dcount == tlen );
@@ -1995,7 +1995,7 @@ client_proxy_attach( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_proxy_attach_t ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
+		fprintf( stderr, "%s %d\n\tread %zd of %zd: %s\n",
 		   __FILE__, __LINE__,
 		   dcount, sizeof( messip_send_proxy_attach_t ), strerror(errno) );
 		return -1;
@@ -2012,7 +2012,7 @@ client_proxy_attach( int sockfd,
 		dcount = read( sockfd, data, msgsent.nbytes );
 		if ( dcount != msgsent.nbytes )
 		{
-			fprintf( stderr, "%s %d\n\tShould have read %d bytes - only %d have been read\n",
+			fprintf( stderr, "%s %d\n\tShould have read %d bytes - only %zd have been read\n",
 			   __FILE__, __LINE__,
 			   msgsent.nbytes, dcount );
 			return -1;
@@ -2161,7 +2161,7 @@ client_proxy_detach( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_proxy_detach_t ) )
 	{
-		fprintf( stderr, "%s %d\n\tread %d of %d: %s\n",
+		fprintf( stderr, "%s %d\n\tread %zd of %zd: %s\n",
 		   __FILE__, __LINE__,
 		   dcount, sizeof( messip_send_proxy_detach_t ), strerror(errno) );
 		return -1;
@@ -2229,7 +2229,7 @@ client_proxy_trigger( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_proxy_trigger_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_trigger_t ), strerror(errno) );
 		return -1;
 	}
@@ -2310,7 +2310,7 @@ client_proxy_get_owner( int sockfd,
 	}
 	if ( dcount != sizeof( messip_send_proxy_get_owner_t ) )
 	{
-		fprintf( stderr, "%s %d: read %d of %d: %s\n",
+		fprintf( stderr, "%s %d: read %zd of %zd: %s\n",
 		   __FILE__, __LINE__, dcount, sizeof( messip_send_proxy_get_owner_t ), strerror(errno) );
 		return -1;
 	}
@@ -2603,7 +2603,7 @@ thread_client_thread( void *arg )
 
 		if ( dcount != sizeof( int32_t ) )
 		{
-			fprintf( stderr, "%s %d:\n\tread %d byte[%08X], should have read %d bytes\n",
+			fprintf( stderr, "%s %d:\n\tread %zd byte[%08X], should have read %zd bytes\n",
 			   __FILE__, __LINE__, dcount, op, sizeof( int32_t ) );
 			break;
 		}

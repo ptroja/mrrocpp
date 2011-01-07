@@ -140,86 +140,16 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME),
+			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, "is_spkm_active"),
 			ui_ecp_robot(NULL)
 {
 	wnd_inc = new WndInc(interface, *this);
+	wndbase_m[wnd_inc->window_name] = wnd_inc;
 	wnd_int = new WndInt(interface, *this);
+	wndbase_m[wnd_int->window_name] = wnd_int;
 	wnd_external = new WndExternal(interface, *this);
+	wndbase_m[wnd_external->window_name] = wnd_external;
 
-}
-
-void UiRobot::close_all_windows()
-{
-	close_wnd_spkm_inc(NULL, NULL, NULL);
-}
-
-int UiRobot::reload_configuration()
-{
-	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_spkm_active")) == 1) {
-		// ini_con->create_ecp_spkm (ini_con->ui->ecp_spkm_section);
-		//ui_state.is_any_edp_active = true;
-		if (interface.is_mp_and_ecps_active) {
-			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
-
-			state.ecp.pid = -1;
-			state.ecp.trigger_fd = lib::invalid_fd;
-		}
-
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-				// ini_con->create_edp_spkm (ini_con->ui->edp_spkm_section);
-
-				state.edp.pid = -1;
-				state.edp.reader_fd = lib::invalid_fd;
-				state.edp.state = 0;
-
-				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
-				else
-					state.edp.test_mode = 0;
-
-				state.edp.hardware_busy_attach_point
-						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
-
-				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
-
-				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
-
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-
-	} else // jesli  irp6 on_track ma byc nieaktywne
-	{
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-				state.edp.state = -1;
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-	} // end spkm
-
-	return 1;
 }
 
 int UiRobot::manage_interface()
@@ -279,6 +209,63 @@ int UiRobot::manage_interface()
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+}
+
+int UiRobot::move_to_synchro_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = 0.0;
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_front_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.front_position[i];
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.preset_position[variant][i];
+	}
+	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::execute_motor_motion()
+{
+	try {
+
+		ui_ecp_robot->move_motors(desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_joint_motion()
+{
+	try {
+
+		ui_ecp_robot->move_joints(desired_pos);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
 }
 
 }

@@ -77,7 +77,7 @@ struct reply
 {
 	STATE_OF_THE_HEAD head_state;
 	STATE_OF_THE_VACUUM vacuum_state;
-};
+}__attribute__((__packed__));
 
 } // namespace shead
 }

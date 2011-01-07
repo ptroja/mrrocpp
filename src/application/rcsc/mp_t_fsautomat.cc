@@ -686,7 +686,7 @@ if (s == 1) {
 }
 manipulation_sequence[str_size] = '\0';
 
-printf("\n%d %d\n", str_size, strlen(manipulation_sequence));
+printf("\n%d %zd\n", str_size, strlen(manipulation_sequence));
 printf("SEQ from win %s\n", rc_solver.from_va.sequence);
 printf("\nSEQ2 %s\n", manipulation_sequence);
 

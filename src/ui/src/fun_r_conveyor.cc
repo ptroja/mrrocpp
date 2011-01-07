@@ -177,63 +177,6 @@ int wind_conveyor_moves_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	return (Pt_CONTINUE);
 }
 
-int conveyor_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	PhKeyEvent_t *my_data = NULL;
-
-	if (cbinfo->event->type == Ph_EV_KEY) {
-		my_data = (PhKeyEvent_t *) PhGetData(cbinfo->event);
-	}
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-
-		if (interface.conveyor->state.edp.pid != -1) {
-
-			if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_synchro) || (ApName(ApWidget(cbinfo))
-					== ABN_mm_all_robots_preset_position_synchro)) || ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x73))) && (interface.conveyor->state.edp.is_synchronised)) {
-				// powrot do pozycji synchronizacji
-				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->desired_pos[i] = 0.0;
-				}
-
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_0) || (ApName(ApWidget(cbinfo))
-					== ABN_mm_all_robots_preset_position_0)) || ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x30))) && (interface.conveyor->state.edp.is_synchronised)) {
-				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[0][i];
-				}
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_1) || (ApName(ApWidget(cbinfo))
-					== ABN_mm_all_robots_preset_position_1)) || ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x31))) && (interface.conveyor->state.edp.is_synchronised)) {
-				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[1][i];
-				}
-			} else if ((((ApName(ApWidget(cbinfo)) == ABN_mm_conveyor_preset_position_2) || (ApName(ApWidget(cbinfo))
-					== ABN_mm_all_robots_preset_position_2)) || ((cbinfo->event->type == Ph_EV_KEY)
-					&& (my_data->key_cap == 0x32))) && (interface.conveyor->state.edp.is_synchronised)) {
-				// ruch do pozycji zadania (wspolrzedne przyjete arbitralnie)
-				for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
-					interface.conveyor->desired_pos[i] = interface.conveyor->state.edp.preset_position[2][i];
-				}
-			}
-
-			interface.conveyor->ui_ecp_robot->move_motors(interface.conveyor->desired_pos);
-
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return (Pt_CONTINUE);
-}
 
 int wind_conveyor_moves_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
@@ -326,8 +269,8 @@ int init_wnd_conveyor_servo_algorithm(PtWidget_t *widget, ApInfo_t *apinfo, PtCa
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t servo_alg_no[lib::conveyor::NUM_OF_SERVOS];
-	uint8_t servo_par_no[lib::conveyor::NUM_OF_SERVOS];
+	uint8_t servo_alg_no[interface.conveyor->number_of_servos];
+	uint8_t servo_par_no[interface.conveyor->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -358,10 +301,10 @@ int conv_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	uint8_t *servo_alg_no_tmp[lib::conveyor::NUM_OF_SERVOS];
-	uint8_t servo_alg_no_output[lib::conveyor::NUM_OF_SERVOS];
-	uint8_t *servo_par_no_tmp[lib::conveyor::NUM_OF_SERVOS];
-	uint8_t servo_par_no_output[lib::conveyor::NUM_OF_SERVOS];
+	uint8_t *servo_alg_no_tmp[interface.conveyor->number_of_servos];
+	uint8_t servo_alg_no_output[interface.conveyor->number_of_servos];
+	uint8_t *servo_par_no_tmp[interface.conveyor->number_of_servos];
+	uint8_t servo_par_no_output[interface.conveyor->number_of_servos];
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -371,7 +314,7 @@ int conv_servo_algorithm_set(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 			PtGetResource(ABW_PtNumericInteger_wnd_conv_servo_algorithm_par_1, Pt_ARG_NUMERIC_VALUE, &servo_par_no_tmp[0], 0);
 
-			for (int i = 0; i < lib::conveyor::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < interface.conveyor->number_of_servos; i++) {
 				servo_alg_no_output[i] = *servo_alg_no_tmp[i];
 				servo_par_no_output[i] = *servo_par_no_tmp[i];
 			}
@@ -467,4 +410,56 @@ int pulse_ecp_conveyor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	return (Pt_CONTINUE);
 
 }
+
+
+int
+conveyor_move_to_synchro_position( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+conveyor_move_to_preset_position_0( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+conveyor_move_to_preset_position_1( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
+
+
+int
+conveyor_move_to_preset_position_2( PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo )
+
+	{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	return( Pt_CONTINUE );
+
+	}
 

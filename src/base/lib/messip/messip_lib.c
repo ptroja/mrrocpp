@@ -181,7 +181,7 @@ messip_writev( int sockfd,
 		if ( (dcount == -1) && (errno == EINTR) )
 			continue;
 		if ( dcount == -1 )
-			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d (%s) fileno: %d %d\n",
+			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d (%s) fileno: %d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, strerror(errno), sockfd, cnt++ );
 		if ( errno == EPIPE )
 			return dcount;
@@ -213,7 +213,7 @@ messip_readv( int sockfd,
 		if ( (dcount == -1) && (errno == ECONNRESET) )
 			return -1;
 		if ( dcount == -1 )
-			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d %d\n",
+			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, cnt++ );
 		assert( dcount != -1 );
 		break;
@@ -1057,7 +1057,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	LIBTRACE( ( "@channel_connect: reply dcount=%d already_connected=%d\n", dcount,
 		  msgreply.f_already_connected ) );
 	if ( dcount != sizeof( messip_reply_channel_connect_t ) )
-		fprintf( stderr, "dcount=%d errno=%d\n", dcount, errno );
+		fprintf( stderr, "dcount=%zd errno=%d\n", dcount, errno );
 	assert( dcount == sizeof( messip_reply_channel_connect_t ) );
 
 	/*--- Locate channel has failed ? ---*/
@@ -1892,7 +1892,7 @@ messip_receive( messip_channel_t * ch,
 	}
 	if ( dcount == -1 && dcount != sizeof( datasend ))
 	{
-		fprintf( stderr, "(messip_receive) %s %d\n\tdcount=%d  errno=%d\n",
+		fprintf( stderr, "(messip_receive) %s %d\n\tdcount=%zd  errno=%d\n",
 		   __FILE__, __LINE__, dcount, errno );
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;
@@ -2013,7 +2013,7 @@ messip_receive( messip_channel_t * ch,
 #else
 		fprintf(stderr, "OTHER\n");
 #endif
-		fprintf(stderr, "MTU test: dcount %d =? header+data %d\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
+		fprintf(stderr, "MTU test: dcount %zd =? header+data %zd\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
 	}
 	assert( dcount >= sizeof( uint32_t ) );
 	ch->datalenr = dcount - sizeof(uint32_t);

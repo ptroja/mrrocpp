@@ -20,6 +20,10 @@ class Interface;
 
 namespace spkm {
 
+const std::string WND_SPKM_INC = "WND_SPKM_INC";
+
+
+
 //
 //
 // KLASA WndInc

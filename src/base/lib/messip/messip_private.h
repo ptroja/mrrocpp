@@ -394,10 +394,10 @@ typedef struct
 // Functions used by qmpw_lib
 // --------------------------
 
-int messip_writev( int sockfd,
+ssize_t messip_writev( int sockfd,
    const struct iovec *iov,
    int iovcnt );
-int messip_readv( int sockfd,
+ssize_t messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt );
 int messip_int_little_endian( const int v1 );
