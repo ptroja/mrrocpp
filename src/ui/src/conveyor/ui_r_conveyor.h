@@ -36,8 +36,8 @@ private:
 
 public:
 
-	double conveyor_current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
-	double conveyor_desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_conv_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_conveyor_moves_open; // informacja czy okno ruchow dla robota conveyor
@@ -45,13 +45,16 @@ public:
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 	int
 			process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
-
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
 };
 
 }

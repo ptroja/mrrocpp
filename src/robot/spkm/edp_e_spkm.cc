@@ -40,8 +40,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
-		controller_state_edp_buf.is_synchronised = true;
+	if (robot_test_mode) {
+		// correct
+		// controller_state_edp_buf.is_synchronised = true;
+		// debug
+		controller_state_edp_buf.is_synchronised = false;
+	}
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
@@ -84,7 +88,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
@@ -111,6 +114,37 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		 }
 		 break;*/
+		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
+			lib::epos::epos_simple_command epos_simple_command_structure;
+			epos_simple_command_structure = ecp_edp_cbuffer.epos_simple_command_structure;
+			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
+					<< epos_simple_command_structure.desired_position[4] << std::endl;
+			if (robot_test_mode) {
+
+				desired_motor_pos_new[4] = epos_simple_command_structure.desired_position[4];
+			}
+		}
+			break;
+		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
+
+			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
+					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
+
+			lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
+
+
+			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
+		}
+			break;
+		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
+			lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
+			std::cout << tmp_frame << std::endl;
+		}
+			break;
+
 		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
 			lib::epos::epos_cubic_command epos_cubic_command_structure;
 			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
@@ -147,27 +181,70 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
-	static int licznikaaa = (-11);
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
+	// we do not check the arm position when only lib::SET is set
+	if (instruction.instruction_type != lib::SET) {
+
+		if (robot_test_mode) {
+			msg->message("EDP get_arm_position");
+			switch (instruction.get_arm_type)
+			{
+				case lib::MOTOR: {
+					msg->message("EDP get_arm_position MOTOR");
+					static int licznikaaa = (-11);
+
+					std::stringstream ss(std::stringstream::in | std::stringstream::out);
+					ss << "get_arm_position: " << licznikaaa;
+					msg->message(ss.str().c_str());
+					//	printf("%s\n", ss.str().c_str());
 
 
-	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-	if (licznikaaa < 10) {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
-		}
+					edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-	} else {
-		for (int i = 0; i < 6; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+					edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+					edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+
+					if (licznikaaa < 10) {
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+						}
+
+					} else {
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+						}
+					}
+					licznikaaa++;
+				}
+					break;
+				case lib::JOINT: {
+					msg->message("EDP get_arm_position JOINT");
+					static int licznik_joint = (-11);
+					edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
+					licznik_joint++;
+				}
+					break;
+				case lib::FRAME: {
+					msg->message("EDP get_arm_position FRAME");
+
+					lib::Homog_matrix tmp_frame;
+
+					tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
+
+				}
+					break;
+				default:
+					break;
+
+			}
+		} else {
+
 		}
 	}
-	licznikaaa++;
 
 	reply.servo_step = step_counter;
 }
@@ -182,21 +259,34 @@ void effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
+void effector::synchronise(void)
+{
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+	}
+
+	std::cout << "EDP synchronisation" << std::endl;
+}
+
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
 {
+
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
+
+	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
 }
 
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 }

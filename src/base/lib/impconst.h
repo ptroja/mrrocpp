@@ -31,8 +31,8 @@ const int MAX_PROSODY = 20; // MAC7
 // Stale do komunikacji
 
 
-const int CONNECT_RETRY = 200;
-const int CONNECT_DELAY = 50;
+const unsigned int CONNECT_RETRY = 200;
+const unsigned int CONNECT_DELAY = 10000;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 typedef double frame_tab[3][4];
@@ -47,7 +47,7 @@ const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 
 // Other robots in dedicated robot consts files
 
-const int MAX_SERVOS_NR = 8;
+const std::size_t MAX_SERVOS_NR = 8;
 
 const double EDP_STEP = 0.002; // Krok sterowania w [s]
 

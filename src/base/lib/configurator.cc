@@ -47,9 +47,6 @@
 
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
-#if defined(PROCESS_SPAWN_SPAWN)
-#include "base/lib/y_spawn.h"
-#endif
 #include "base/lib/typedefs.h"
 
 namespace mrrocpp {
@@ -137,11 +134,9 @@ bool configurator::check_config(const std::string & key) const
 
 int configurator::return_node_number(const std::string & node_name_l)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 	return ND_LOCAL_NODE;
-#else
-	return netmgr_strtond(node_name_l.c_str(), NULL);
-#endif
+
 }
 
 std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
@@ -222,7 +217,7 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-#if defined(PROCESS_SPAWN_RSH)
+
 
 	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
 	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
@@ -319,111 +314,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	return child_pid;
-#endif
-#if defined(PROCESS_SPAWN_SPAWN)
-	// Identyfikator stworzonego procesu.
-	int child_pid;
-	// Deskryptor pliku.
-	int fd;
 
-	// printf("_section_name: %s,\n",_section_name);
-
-	// Parametry stworzonego procesu.
-	struct inheritance inherit;
-	inherit.flags = SPAWN_SETGROUP;
-	inherit.pgroup = SPAWN_NEWPGROUP;
-
-	// Sciezka do binariow.
-	int size = 1 + strlen("/net/") + strlen(node) +strlen(dir) + strlen("bin/");
-	char * bin_path = new char[size];
-	strcpy(bin_path,"/net/");
-	strcat(bin_path, node);
-	strcat(bin_path, dir);
-	strcat(bin_path,"bin/");
-
-	// Zlozenie lokalizacji odpalanego y_spawn_process
-	size = 1 + strlen(bin_path) + strlen("y_spawn_process");
-	char* spawn_process = new char[size];
-	strcpy(spawn_process, bin_path);
-	strcat(spawn_process,"y_spawn_process");
-
-	// cout<<"spawn_process: "<<spawn_process<<endl;
-
-	const int fd_map[] = {0, 1, 2};
-	//printf("conf a\n");
-	// Argumenty wywolania procesu.
-	char *child_arg[3];
-	child_arg[0]=spawn_process;
-	child_arg[1]=(char*)"NET_SPAWN";
-	child_arg[2]=NULL;
-	//printf("conf b: %s, %s\n", child_arg[0], child_arg[1]);
-	// Odpalenie y_spawn_process.
-	if ((child_pid=spawn( child_arg[0], 3, fd_map, &inherit, child_arg, NULL)) ==-1)
-	{
-		fprintf( stderr, "Spawn of y_spawn_process failed (from PID %d): %s\n", getpid(), strerror(errno));
-		// sleep(1000);
-		return -1;
-	}
-	// Proba komunikacji z procesem odpalajacym inne procesy.
-	short tmp = 0;
-	// kilka sekund  (~1) na otworzenie urzadzenia
-	while((fd = name_open(child_arg[1], 0))<0)
-	if((tmp++)<lib::CONNECT_RETRY)
-	delay(lib::CONNECT_DELAY);
-	else {
-		fprintf( stderr, "Cannot open y_spawn_process.\n");
-		return -1;
-	}
-	//printf("conf 1\n");
-	// Wiadomosci odbierane i wysylane.
-	my_data_t input;
-	my_reply_data_t output;
-	// Parametry wywolania procesu.
-	input.hdr.type=0;
-	input.msg_type=1;
-	// Odczytanie nazwy odpalanego pliku.
-	char * spawned_program_name = value<std::string>("program_name", _section_name);
-	char * spawned_node_name = value<std::string>("node_name", _section_name);
-
-	// printf("spawned_node_name:%s\n", spawned_node_name);
-
-	strcpy(input.node_name, spawned_node_name);
-	strcpy(input.program_name_and_args, spawned_program_name);
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, node.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, dir.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, ini_file.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, _section_name.c_str());
-	strcat(input.program_name_and_args, " ");
-	strcat(input.program_name_and_args, session_name.c_str());
-	strcpy(input.binaries_path, bin_path);
-
-	// cout<<"config_spawn: "<<input.node_name<<endl;
-	// cout<<"config_spawn: "<<input.program_name_and_args<<endl;
-	// cout<<"config_spawn: "<<input.binaries_path<<endl;
-	// Wyslanie polecenia odpalenia procesu.
-	if (MsgSend(fd, &input, sizeof(input), &output, sizeof(output))<0)
-	{
-		fprintf(stderr, "Send to y_spawn_process failed.\n");
-		return -1;
-	}
-
-	//printf("conf 2\n");
-	// Zamkniecie pliku.
-	name_close(fd);
-	// Zwolnienie pamieci.
-	delete [] spawned_program_name;
-	delete [] spawned_node_name;
-	delete [] bin_path;
-	delete [] spawn_process;
-	// cout<<"Elo return"<<endl;
-	waitpid(child_pid, NULL, WEXITED);
-	// Zwrocenie wyniku.
-	return output.pid;
-#endif
 }
 
 #ifdef USE_MESSIP_SRR

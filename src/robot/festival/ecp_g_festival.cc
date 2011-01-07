@@ -118,7 +118,7 @@ bool generator::first_step()
 		close(sock);
 		return false;
 	} else if (written < (int) command.length()) {
-		fprintf(stderr, "festival_generator::first_step(): write() %d of %d bytes written\n", written, command.length());
+		fprintf(stderr, "festival_generator::first_step(): write() %zd of %zd bytes written\n", written, command.length());
 		return false;
 	}
 
@@ -180,7 +180,7 @@ bool generator::next_step()
 
 		if (numread < (int) strlen(FESTIVAL_CODE_OK)) {
 			fprintf(stderr, "festival_generator::next_step(): something went wrong, "
-				"expected %d bytes of code, but got %d\n", (int) strlen(FESTIVAL_CODE_OK), numread);
+				"expected %d bytes of code, but got %zd\n", (int) strlen(FESTIVAL_CODE_OK), numread);
 			close(sock);
 			sock = -1;
 			return false;

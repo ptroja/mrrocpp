@@ -47,7 +47,7 @@ struct cbuffer
 		multi_pin_insertion_td multi_pin_insertion;
 		multi_pin_locking_td multi_pin_locking;
 	};
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
@@ -57,7 +57,7 @@ struct rbuffer
 {
 	multi_leg_reply_td multi_leg_reply;
 	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief configuration file EDP SwarmItFix Mobile Base section string

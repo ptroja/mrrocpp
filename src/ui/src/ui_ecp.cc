@@ -70,18 +70,19 @@ void ecp_buffer::operator()()
 
 	lib::set_thread_name("comm");
 	bool wyjscie;
+
+	lib::fd_server_t ch;
+
 #if !defined(USE_MESSIP_SRR)
 
-	name_attach_t *attach;
-
-	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+	if ((ch = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
 		// TODO: throw
 		// return EXIT_FAILURE;
 		// printf("NIE MA ATTACHA");
 	}
 
 #else
-	messip_channel_t *ch = messip::port_create(interface.ui_attach_point);
+	ch = messip::port_create(interface.ui_attach_point);
 	assert(ch);
 
 #endif
@@ -89,9 +90,9 @@ void ecp_buffer::operator()()
 		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
-		_msg_info info;
 #if !defined(USE_MESSIP_SRR)
-		int rcvid = MsgReceive(attach->chid, &ecp_to_ui_msg, sizeof(ecp_to_ui_msg), &info);
+		_msg_info info;
+		int rcvid = MsgReceive(ch->chid, &ecp_to_ui_msg, sizeof(ecp_to_ui_msg), &info);
 
 		communication_state = UI_ECP_AFTER_RECEIVE;
 		if (rcvid == -1) {/* Error condition, exit */
@@ -131,14 +132,14 @@ void ecp_buffer::operator()()
 			continue;
 		}
 #endif
-
+#if !defined(USE_MESSIP_SRR)
 		//! FIXME:
 		if (interface.irp6ot_m->state.ecp.pid <= 0) {
 
 			interface.irp6ot_m->state.ecp.pid = info.pid;
 
 		}
-
+#endif
 		switch (ecp_to_ui_msg.ecp_message)
 		{ // rodzaj polecenia z ECP
 			case lib::C_XYZ_ANGLE_AXIS:

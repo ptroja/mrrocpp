@@ -40,9 +40,9 @@ const int BAUD = B921600;
 const int BAUD = 921600;
 #endif
 
-const int WRITE_BYTES = 10;
-const int READ_BYTES = 8;
-const int MOXA_SERVOS_NR = 8;
+const std::size_t WRITE_BYTES = 10;
+const std::size_t READ_BYTES = 8;
+const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
 
 const long COMMCYCLE_TIME_NS = 2000000;
@@ -82,7 +82,7 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	int last_drive_number;
+	const std::size_t last_drive_number;
 	std::vector<std::string> port_names;
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];

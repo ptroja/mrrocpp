@@ -163,6 +163,7 @@ void robot::create_command()
 	// message serialization
 	if (communicate_with_edp) {
 		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 
@@ -176,6 +177,7 @@ void robot::get_reply()
 		// generator reply generation
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
 			epos_reply_data_request_port.data.epos_controller[i].position = edp_ecp_rbuffer.epos_controller[i].position;
+			epos_reply_data_request_port.data.epos_controller[i].current = edp_ecp_rbuffer.epos_controller[i].current;
 			epos_reply_data_request_port.data.epos_controller[i].motion_in_progress
 					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}

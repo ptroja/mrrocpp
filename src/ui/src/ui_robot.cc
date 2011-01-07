@@ -3,10 +3,13 @@
 /*                                         Version 2.01  */
 #include "ui/src/ui_robot.h"
 #include "ui/src/ui_class.h"
+#include "ui/src/wnd_base.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
 #endif
+
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ui {
@@ -19,14 +22,16 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name) :
-	interface(_interface), tid(NULL)
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
+	interface(_interface), tid(NULL), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
+	activation_string = _activation_string;
+
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -1; // edp nieaktywne
-	state.ecp.trigger_fd = common::invalid_fd;
+	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
 }
 
@@ -34,6 +39,16 @@ void UiRobot::create_thread()
 {
 	assert(tid == NULL);
 	tid = new feb_thread(eb);
+}
+
+void UiRobot::close_all_windows()
+{
+
+	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
+				{
+					window_node.second->close();
+				}
+
 }
 
 void UiRobot::abort_thread()
@@ -56,7 +71,7 @@ void UiRobot::connect_to_reader()
 #endif
 	) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do READER");
 			break;
@@ -129,7 +144,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			delay(lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do ECP_TRIGGER");
 		}
@@ -159,11 +174,11 @@ void UiRobot::pulse_ecp()
 {
 
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
-		if (state.ecp.trigger_fd == common::invalid_fd) {
+		if (state.ecp.trigger_fd == lib::invalid_fd) {
 			connect_to_ecp_pulse_chanell();
 		}
 
-		if (state.ecp.trigger_fd != common::invalid_fd) {
+		if (state.ecp.trigger_fd != lib::invalid_fd) {
 			pulse_ecp_execute(ECP_TRIGGER, 1);
 		} else {
 			printf("W PULS ECP:  BLAD name_open \n");
@@ -175,7 +190,7 @@ bool UiRobot::deactivate_ecp_trigger()
 {
 
 	if (state.is_active) {
-		if (state.ecp.trigger_fd != common::invalid_fd) {
+		if (state.ecp.trigger_fd != lib::invalid_fd) {
 
 #if !defined(USE_MESSIP_SRR)
 			if (name_close(state.ecp.trigger_fd) == -1) {
@@ -188,7 +203,7 @@ bool UiRobot::deactivate_ecp_trigger()
 #endif
 
 		}
-		state.ecp.trigger_fd = common::invalid_fd;
+		state.ecp.trigger_fd = lib::invalid_fd;
 		state.ecp.pid = -1;
 		return true;
 	}
@@ -196,15 +211,11 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
-void UiRobot::close_all_windows()
-{
-}
-
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
-		if (state.edp.reader_fd != common::invalid_fd) {
+		if (state.edp.reader_fd != lib::invalid_fd) {
 #if !defined(USE_MESSIP_SRR)
 			if (name_close(state.edp.reader_fd) == -1) {
 				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
@@ -215,7 +226,7 @@ void UiRobot::EDP_slay_int()
 			}
 #endif
 		}
-		state.edp.reader_fd = common::invalid_fd;
+		state.edp.reader_fd = lib::invalid_fd;
 
 		close_all_windows();
 
@@ -234,11 +245,6 @@ void UiRobot::EDP_slay_int()
 }
 
 // ustala stan wszytkich EDP
-bool UiRobot::check_synchronised_or_inactive()
-{
-	return (((state.is_active) && (state.edp.is_synchronised)) || (!(state.is_active)));
-
-}
 
 bool UiRobot::check_synchronised_and_loaded()
 {
@@ -246,15 +252,122 @@ bool UiRobot::check_synchronised_and_loaded()
 
 }
 
-bool UiRobot::check_loaded_or_inactive()
+int UiRobot::move_to_synchro_position()
 {
-	return (((state.is_active) && (state.edp.state > 0)) || (!(state.is_active)));
-
+	return 1;
 }
 
-bool UiRobot::check_loaded()
+int UiRobot::move_to_front_position()
 {
-	return ((state.is_active) && (state.edp.state > 0));
+	return 1;
+}
+
+int UiRobot::move_to_preset_position(int variant)
+{
+	return 1;
+}
+
+int UiRobot::reload_configuration()
+{
+	// jesli IRP6 on_track ma byc aktywne
+	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
+		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
+		//ui_state.is_any_edp_active = true;
+		if (interface.is_mp_and_ecps_active) {
+			state.ecp.network_trigger_attach_point
+					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+
+			state.ecp.pid = -1;
+			state.ecp.trigger_fd = lib::invalid_fd;
+		}
+
+		switch (state.edp.state)
+		{
+			case -1:
+			case 0:
+				// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_SECTION);
+
+				state.edp.pid = -1;
+				state.edp.reader_fd = lib::invalid_fd;
+				state.edp.state = 0;
+
+				for (int i = 0; i < 4; i++) {
+					char tmp_string[50];
+					if (i < 3) {
+						sprintf(tmp_string, "preset_position_%d", i);
+					} else {
+						sprintf(tmp_string, "front_position", i);
+					}
+
+					if (interface.config->exists(tmp_string, state.edp.section_name)) {
+						char* tmp, *tmp1;
+						tmp1
+								= tmp
+										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
+						char* toDel = tmp;
+						for (int j = 0; j < number_of_servos; j++) {
+							if (i < 3) {
+								state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
+							} else {
+								state.edp.front_position[j] = strtod(tmp1, &tmp1);
+							}
+						}
+						free(toDel);
+					} else {
+						for (int j = 0; j < number_of_servos; j++) {
+							if (i < 3) {
+								state.edp.preset_position[i][j] = 0.0;
+							} else {
+								state.edp.front_position[j] = 0.0;
+								printf("nie zdefiniowano front_position w common.ini\n");
+							}
+
+						}
+					}
+				}
+
+				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
+					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
+				else
+					state.edp.test_mode = 0;
+
+				state.edp.hardware_busy_attach_point
+						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+
+				state.edp.network_resourceman_attach_point
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+
+				state.edp.network_reader_attach_point
+						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+
+				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
+		}
+
+	} else // jesli  irp6 on_track ma byc nieaktywne
+	{
+		switch (state.edp.state)
+		{
+			case -1:
+			case 0:
+				state.edp.state = -1;
+				break;
+			case 1:
+			case 2:
+				// nie robi nic bo EDP pracuje
+				break;
+			default:
+				break;
+		}
+	} // end irp6_on_track
+
+	return 1;
 }
 
 }

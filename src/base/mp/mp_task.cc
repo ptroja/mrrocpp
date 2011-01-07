@@ -40,11 +40,9 @@ namespace task {
 
 using namespace std;
 
-#if !defined(USE_MESSIP_SRR)
-name_attach_t* task::mp_pulse_attach = NULL;
-#else
-messip_channel_t* task::mp_pulse_attach = NULL;
-#endif
+
+lib::fd_server_t task::mp_pulse_attach = NULL;
+
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
@@ -654,6 +652,12 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
 					robot_node.second->new_pulse = true;
 					robot_node.second->ecp_pulse_code = type;
+
+					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time))
+							== -1) {
+						perror("clock_gettime()");
+					}
+
 					if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 						if (!(robot_node.second->new_pulse_checked)) {
 							desired_pulse_found = true;

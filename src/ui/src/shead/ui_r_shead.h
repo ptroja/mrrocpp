@@ -36,11 +36,14 @@ private:
 public:
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
-
+	void close_all_windows();
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	void edp_create();
+	int edp_create_int();
 };
 
 }

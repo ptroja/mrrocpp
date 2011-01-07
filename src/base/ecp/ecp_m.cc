@@ -66,10 +66,10 @@ int main(int argc, char *argv[])
 
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
-#if defined(PROCESS_SPAWN_RSH)
+
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
-#endif
+
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)
 			exit(EXIT_FAILURE);
@@ -113,9 +113,9 @@ int main(int argc, char *argv[])
 
 		try {
 			ecp::common::ecp_t->sr_ecp_msg->message("Press START");
-			std::cerr << "ecp 1" << std::endl;
+		//	std::cerr << "ecp 1" << std::endl;
 			ecp::common::ecp_t->ecp_wait_for_start();
-			std::cerr << "ecp 2" << std::endl;
+		//	std::cerr << "ecp 2" << std::endl;
 			ecp::common::ecp_t->main_task_algorithm();
 
 			ecp::common::ecp_t->ecp_wait_for_stop();

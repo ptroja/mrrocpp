@@ -61,7 +61,7 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
 
 	// Uformowanie rozkazu odczytu dla SERVO_GROUP
-	sb->servo_command.instruction_code = lib::READ;
+	sb->servo_command.instruction_code = READ;
 	// Wyslanie rozkazu do SERVO_GROUP
 	// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 	//		printf("get_arm_position read_hardware\n");
@@ -497,14 +497,14 @@ void motor_driven_effector::synchronise()
 	flushall();
 #endif
 	/* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
-	sb->servo_command.instruction_code = lib::SYNCHRONISE;
+	sb->servo_command.instruction_code = SYNCHRONISE;
 	/* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
 	sb->send_to_SERVO_GROUP();
 	controller_state_edp_buf.is_synchronised = true; // Ustawienie flagi zsynchronizowania robota
 
 	// aktualizacja pozycji robota
 	// Uformowanie rozkazu odczytu dla SERVO_GROUP
-	sb->servo_command.instruction_code = lib::READ;
+	sb->servo_command.instruction_code = READ;
 	// Wyslanie rozkazu do SERVO_GROUP
 	// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 	//	printf("get_arm_position read_hardware\n");
@@ -547,7 +547,7 @@ void motor_driven_effector::get_algorithms()
 	// odczytanie numerow algorytmow i ich numerow zestawow parametrow
 
 	// Uformowanie rozkazu odczytu dla SERVO_GROUP
-	sb->servo_command.instruction_code = lib::READ;
+	sb->servo_command.instruction_code = READ;
 	// Wyslanie rozkazu do SERVO_GROUP
 	// Pobranie z SERVO_GROUP aktualnej pozycji silnikow i numerow algorytmow etc.
 	sb->send_to_SERVO_GROUP();
@@ -753,16 +753,15 @@ void motor_driven_effector::move_servos()
 {
 	/* Wyslanie polecenia ruchu do procesu SERVO_GROUP oraz odebranie wyniku
 	 realizacji pierwszej fazy ruchu */
-	int i;
 
 	/* Uformowanie rozkazu ruchu dla SERVO_GROUP */
-	sb->servo_command.instruction_code = lib::MOVE;
+	sb->servo_command.instruction_code = MOVE;
 	sb->servo_command.parameters.move.number_of_steps = motion_steps;
 	sb->servo_command.parameters.move.return_value_in_step_no = value_in_step_no;
 
 	//		printf("edp_irp6s_and_conv_effector::move_servos: %f, %f\n", desired_motor_pos_new[1], desired_motor_pos_old[1]);
 
-	for (i = 0; i < number_of_servos; i++) {
+	for (int i = 0; i < number_of_servos; i++) {
 		sb->servo_command.parameters.move.macro_step[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
 		sb->servo_command.parameters.move.abs_position[i] = desired_motor_pos_new[i]; // by Y
 		//    nowa wartosc zadana staje sie stara
@@ -777,7 +776,6 @@ void motor_driven_effector::move_servos()
 	/* Wyslanie makrokroku do realizacji procesowi SERVO_GROUP */
 	/* Odebranie od procesu SERVO_GROUP informacji o realizacji pierwszej fazy ruchu */
 	sb->send_to_SERVO_GROUP();
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -796,13 +794,12 @@ void motor_driven_effector::update_servo_current_motor_pos_abs(double abs_motor_
 
 void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 {
-
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
 	// aktualizacja pozycji robota
 	// Uformowanie rozkazu odczytu dla SERVO_GROUP
-	sb->servo_command.instruction_code = lib::READ;
+	sb->servo_command.instruction_code = READ;
 	// Wyslanie rozkazu do SERVO_GROUP
 	// Pobranie z SERVO_GROUP aktualnej pozycji silnikow
 	//	printf("get_arm_position read_hardware\n");

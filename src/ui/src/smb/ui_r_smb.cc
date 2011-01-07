@@ -22,80 +22,99 @@ namespace smb {
 //
 //
 
+void UiRobot::edp_create()
+{
+	if (state.edp.state == 0) {
+		create_thread();
+
+		eb.command(boost::bind(&ui::smb::UiRobot::edp_create_int, &(*this)));
+	}
+}
+
+int UiRobot::edp_create_int()
+
+{
+	set_ui_state_notification(UI_N_PROCESS_CREATION);
+
+	try { // dla bledow robot :: ECP_error
+
+		// dla robota smb
+		if (state.edp.state == 0) {
+
+			state.edp.state = 0;
+			state.edp.is_synchronised = false;
+
+			std::string tmp_string("/dev/name/global/");
+			tmp_string += state.edp.hardware_busy_attach_point;
+
+			std::string tmp2_string("/dev/name/global/");
+			tmp2_string += state.edp.network_resourceman_attach_point;
+
+			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
+			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
+					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
+			} else if (interface.check_node_existence(state.edp.node_name, "edp_smb")) {
+
+				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
+
+				{
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
+
+					ui_ecp_robot
+							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::smb::ROBOT_NAME);
+				}
+				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+
+				if (state.edp.pid < 0) {
+
+					state.edp.state = 0;
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+					delete ui_ecp_robot;
+				} else { // jesli spawn sie powiodl
+
+					state.edp.state = 1;
+
+					connect_to_reader();
+
+					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+					lib::controller_state_t robot_controller_initial_state_tmp;
+
+					ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
+
+					//state.edp.state = 1; // edp wlaczone reader czeka na start
+
+					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+				}
+			}
+		}
+
+	} // end try
+
+	CATCH_SECTION_UI
+
+	interface.manage_interface();
+	return 1;
+
+}
+
+int UiRobot::synchronise()
+
+{
+
+	return 1;
+
+}
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION), ui_ecp_robot(NULL)
+			common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, "is_smb_active"),
+			ui_ecp_robot(NULL)
 {
 
 }
 
-int UiRobot::reload_configuration()
+void UiRobot::close_all_windows()
 {
-
-	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_smb_active")) == 1) {
-		// ini_con->create_ecp_smb (ini_con->ui->ecp_smb_section);
-		//ui_state.is_any_edp_active = true;
-		if (interface.is_mp_and_ecps_active) {
-			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
-
-			state.ecp.pid = -1;
-			state.ecp.trigger_fd = common::invalid_fd;
-		}
-
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-				// ini_con->create_edp_smb (ini_con->ui->edp_smb_section);
-
-				state.edp.pid = -1;
-				state.edp.reader_fd = common::invalid_fd;
-				state.edp.state = 0;
-
-				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
-				else
-					state.edp.test_mode = 0;
-
-				state.edp.hardware_busy_attach_point
-						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
-
-				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
-
-				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
-
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-
-	} else // jesli  irp6 on_track ma byc nieaktywne
-	{
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-				state.edp.state = -1;
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-	} // end smb
-
-	return 1;
 }
 
 int UiRobot::manage_interface()
@@ -156,7 +175,6 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {

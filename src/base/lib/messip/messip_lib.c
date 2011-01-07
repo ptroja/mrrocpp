@@ -167,13 +167,13 @@ _init(  )
 #endif
 
 
-int
+ssize_t
 messip_writev( int sockfd,
    const struct iovec *iov,
    int iovcnt )
 {
-	int dcount;
-	int cnt = 0;
+	ssize_t dcount;
+	unsigned int cnt = 0;
 
 	for ( ;; )
 	{
@@ -181,7 +181,7 @@ messip_writev( int sockfd,
 		if ( (dcount == -1) && (errno == EINTR) )
 			continue;
 		if ( dcount == -1 )
-			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d (%s) fileno: %d %d\n",
+			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d (%s) fileno: %d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, strerror(errno), sockfd, cnt++ );
 		if ( errno == EPIPE )
 			return dcount;
@@ -197,13 +197,13 @@ messip_writev( int sockfd,
 }								// messip_writev
 
 
-int
+ssize_t
 messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt )
 {
-	int dcount;
-	int cnt = 0;
+	ssize_t dcount;
+	unsigned int cnt = 0;
 
 	for ( ;; )
 	{
@@ -213,7 +213,7 @@ messip_readv( int sockfd,
 		if ( (dcount == -1) && (errno == ECONNRESET) )
 			return -1;
 		if ( dcount == -1 )
-			fprintf( stderr, "%d: %s %d: dcount=%d errno=%d %d\n",
+			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, cnt++ );
 		assert( dcount != -1 );
 		break;
@@ -1057,7 +1057,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	LIBTRACE( ( "@channel_connect: reply dcount=%d already_connected=%d\n", dcount,
 		  msgreply.f_already_connected ) );
 	if ( dcount != sizeof( messip_reply_channel_connect_t ) )
-		fprintf( stderr, "dcount=%d errno=%d\n", dcount, errno );
+		fprintf( stderr, "dcount=%zd errno=%d\n", dcount, errno );
 	assert( dcount == sizeof( messip_reply_channel_connect_t ) );
 
 	/*--- Locate channel has failed ? ---*/
@@ -1890,9 +1890,9 @@ messip_receive( messip_channel_t * ch,
 //		goto restart;
 		return MESSIP_MSG_DISCONNECT;
 	}
-	if ( dcount == -1 )
+	if ( dcount == -1 && dcount != sizeof( datasend ))
 	{
-		fprintf( stderr, "messip_receive) %s %d\n\tdcount=%d  errno=%d\n",
+		fprintf( stderr, "(messip_receive) %s %d\n\tdcount=%zd  errno=%d\n",
 		   __FILE__, __LINE__, dcount, errno );
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;
@@ -2005,8 +2005,18 @@ messip_receive( messip_channel_t * ch,
 		ch->new_sockfd[index] = new_sockfd;
 		return -1;
 	}
-	assert( dcount == (ssize_t) (sizeof( uint32_t ) + len_to_read) );
-	ch->datalenr = len_to_read;
+	if(dcount != (ssize_t) (sizeof( uint32_t ) + len_to_read)) {
+#if defined(__linux__)
+		fprintf(stderr, "LINUX\n");
+#elif defined(__QNXNTO__)
+		fprintf(stderr, "QNX\n");
+#else
+		fprintf(stderr, "OTHER\n");
+#endif
+		fprintf(stderr, "MTU test: dcount %zd =? header+data %zd\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
+	}
+	assert( dcount >= sizeof( uint32_t ) );
+	ch->datalenr = dcount - sizeof(uint32_t);
 
 	/*
 		Allocate a temp buffer to hold the whole message - used by Msgread()
@@ -2026,12 +2036,38 @@ messip_receive( messip_channel_t * ch,
 	}
 
 	/*
+		Read more data? (if the packet if bigger than MTU)
+	*/
+	while(ch->datalenr < ch->datalen) {
+		FD_ZERO( &ready );
+		FD_SET( new_sockfd, &ready );
+		do {
+			status = select( new_sockfd+1, &ready, NULL, NULL, NULL );
+		} while ( (status == -1) && (errno == EINTR) );
+		assert(status != -1);
+		assert(FD_ISSET(new_sockfd, &ready));
+		iovec[0].iov_base = rec_buffer + ch->datalenr;
+		iovec[0].iov_len  = len_to_read - ch->datalenr;
+		dcount = messip_readv( new_sockfd, iovec, 1 );
+		if ( ( dcount == 0 ) || ( ( dcount == -1 ) && ( errno == ECONNRESET ) ) )
+		{
+			shutdown( ch->recv_sockfd[n], SHUT_RDWR );
+			close( ch->recv_sockfd[n] );
+			for ( k = n + 1; k < ch->recv_sockfd_sz; k++ )
+				ch->recv_sockfd[k - 1] = ch->recv_sockfd[k];
+			ch->recv_sockfd_sz--;
+			goto restart;
+		}
+		ch->datalenr += dcount;
+	}
+
+	/*
 		Read more data ? (provided buffer was too small)
 	*/
 //	logg( NULL, "+++ datalen=%d maxlen=%d\n", datasend.datalen, maxlen );
 	if ( (rec_buffer != NULL) && (maxlen != 0) && (maxlen < datasend.datalen) )
 	{
-
+		assert(0); // PT: I am not sure about this code.
 		/*--- Now read the message, unless if it's a timer ---*/
 		char *t = (char *)ch->receive_allmsg[ index ];
 		iovec[0].iov_base = &t[ len_to_read ];
@@ -2048,7 +2084,6 @@ messip_receive( messip_channel_t * ch,
 //			  dcount, len_to_read );
 		assert( dcount == len_to_read );
 		ch->datalenr += len_to_read;
-
 	}
 
 	/*--- Dynamic allocation ? ---*/
@@ -2115,7 +2150,8 @@ messip_send0( messip_channel_t *ch,
 	int status;
 	uint32_t len;
 	int len_to_read;
-	void *rbuff = NULL;
+	size_t datalenr;
+	void *rbuff;
 
 #ifdef MESSIP_INFORM_STATE
 printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
@@ -2224,6 +2260,8 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			fprintf( stderr, "%s %d:\n\terrno=%d\n", __FILE__, __LINE__, errno );
 		return -1;
 	}
+	// Check if complete header has been received
+	assert(dcount == sizeof( datareply ));
 	*answer = datareply.answer;
 
 	/*--- (S3) Read now the reply, if there is one ---*/
@@ -2232,18 +2270,29 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	{
 		len_to_read = datareply.datalen;
 		rbuff = malloc( datareply.datalen );
-		iovec[0].iov_base = rbuff;
-		iovec[0].iov_len  = len_to_read;
+		assert(rbuff);
 	}
 	else
 	{
 		len_to_read =
 		   ( datareply.datalen < reply_maxlen ) ? datareply.datalen : reply_maxlen;
-		iovec[0].iov_base = reply_buffer;
-		iovec[0].iov_len  = len_to_read;
+		rbuff = reply_buffer;
 	}
-	if ( len_to_read > 0 )
-	{
+
+	/*
+	 * Loop reading data; requred if packet bigger than MTU is fragmented
+	 */
+	datalenr = 0;
+	while(datalenr < len_to_read) {
+		FD_ZERO( &ready );
+		FD_SET( ch->send_sockfd, &ready );
+		status = select( ch->send_sockfd+1, &ready, NULL, NULL, NULL );
+		assert( status != -1 );
+		assert( FD_ISSET(ch->send_sockfd, &ready));
+
+		iovec[0].iov_base = rbuff+datalenr;
+		iovec[0].iov_len  = len_to_read-datalenr;
+
 		dcount = messip_readv( ch->send_sockfd, iovec, 1 );
 		LIBTRACE( ( "@messip_send: recvmsg dcount=%d local_fd=%d [errno=%d]\n",
 			  dcount, ch->send_sockfd, errno ) );
@@ -2258,7 +2307,8 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			fprintf( stderr, "%s %d:\n\terrno=%d\n", __FILE__, __LINE__, errno );
 			return -1;
 		}
-	}							// if
+		datalenr += dcount;
+	}
 
 	if ( len_to_read < datareply.datalen )
 	{
@@ -2289,7 +2339,6 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	ch->remote_pid = datareply.pid;
 	ch->remote_tid = datareply.tid;
 	return 0;
-
 }								// messip_send
 
 int
@@ -2403,7 +2452,7 @@ messip_reply( messip_channel_t * ch,
 	fd_set ready;
 	struct timeval tv;
 	int ret;
-	int status, sz;
+	int status;
 
 	if ( ( index < 0 ) || ( index > ch->nb_replies_pending ) )
 		return -1;
@@ -2447,15 +2496,14 @@ messip_reply( messip_channel_t * ch,
 			}
 
 			/*--- Now wait for an answer from the server ---*/
-			sz = 0;
-			iovec[sz].iov_base  = &datareply;
-			iovec[sz++].iov_len = sizeof( messip_datareply_t );
+			iovec[0].iov_base  = &datareply;
+			iovec[0].iov_len = sizeof( messip_datareply_t );
 			if ( reply_len > 0 )
 			{
-				iovec[sz].iov_base  = (void *) reply_buffer;
-				iovec[sz++].iov_len = reply_len;
+				iovec[1].iov_base  = (void *) reply_buffer;
+				iovec[1].iov_len = reply_len;
 			}
-			dcount = messip_writev( ch->new_sockfd[index], iovec, sz );
+			dcount = messip_writev( ch->new_sockfd[index], iovec, 2 );
 			LIBTRACE( ( "@messip_reply: sendmsg: dcount=%d  index=%d new_sockfd=%d errno=%d\n",
 				  dcount, index, ch->new_sockfd[index], errno ) );
 			assert( dcount == (ssize_t) ( sizeof( messip_datareply_t ) + reply_len ) );

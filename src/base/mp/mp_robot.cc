@@ -38,10 +38,6 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 
 	std::string node_name(mp_object.config.value <std::string> ("node_name", _section_name));
 
-#if !defined(PROCESS_SPAWN_RSH)
-	nd = mp_object.config.return_node_number(node_name.c_str());
-#endif
-
 	std::string
 			ecp_attach_point(mp_object.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
 
@@ -59,7 +55,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	ecp_opened = true;
 
 	// nawiazanie komunikacji z ECP
-	short tmp = 0;
+	unsigned int tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 #if !defined(USE_MESSIP_SRR)
 	while ((ECP_fd = name_open(ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
@@ -67,7 +63,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 		while ((ECP_fd = messip::port_connect(ecp_attach_point)) == NULL)
 #endif
 		if ((tmp++) < lib::CONNECT_RETRY)
-			usleep(1000 * lib::CONNECT_DELAY);
+			usleep(lib::CONNECT_DELAY);
 		else {
 			uint64_t e = errno; // kod bledu
 			fprintf(stderr, "Connect to ECP failed at channel '%s'\n", ecp_attach_point.c_str());
@@ -92,7 +88,6 @@ robot::~robot()
 	}
 #endif /* USE_MESSIP_SRR */
 
-#if defined(PROCESS_SPAWN_RSH)
 	if (kill(ECP_pid, SIGTERM) == -1) {
 		perror("kill()");
 		fprintf(stderr, "kill failed for robot %s pid %d\n", lib::toString(robot_name).c_str(), ECP_pid);
@@ -101,9 +96,7 @@ robot::~robot()
 			perror("waitpid()");
 		}
 	}
-#else
-	SignalKill(nd, ECP_pid, 0, SIGTERM, 0, 0);
-#endif
+
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
@@ -186,7 +179,7 @@ void robot::terminate_ecp(void)
 { // zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
 
-	std::cerr << "mp terminate_ecp 1" << std::endl;
+	//	std::cerr << "mp terminate_ecp 1" << std::endl;
 
 #if !defined(USE_MESSIP_SRR)
 	mp_command.hdr.type = 0;
@@ -200,7 +193,7 @@ void robot::terminate_ecp(void)
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "mp: Send() to ECP failed");
 		throw MP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
 	}
-	std::cerr << "mp terminate_ecp 2" << std::endl;
+	//	std::cerr << "mp terminate_ecp 2" << std::endl;
 	mp_command.pulse_to_ecp_sent = false;
 	if (ecp_reply_package.reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
