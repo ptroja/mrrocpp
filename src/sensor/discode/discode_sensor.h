@@ -11,6 +11,8 @@
 #include <string>
 #include <cstring>
 #include <boost/shared_ptr.hpp>
+#include <stdexcept>
+#include <time.h>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/lib/configurator.h"
@@ -20,7 +22,6 @@
 #include "base/lib/logger.h"
 #include "headers.h"
 
-
 namespace mrrocpp {
 
 namespace ecp_mp {
@@ -29,13 +30,41 @@ namespace sensor {
 
 namespace discode {
 
+class ds_exception : public std::runtime_error
+{
+public:
+	/** Takes a character string describing the error.  */
+	explicit ds_exception(const std::string& arg);
+};
+
+class ds_connection_exception : public ds_exception
+{
+public:
+	explicit ds_connection_exception(const std::string& arg);
+};
+
+class ds_timeout_exception : public ds_exception
+{
+public:
+	explicit ds_timeout_exception(const std::string& arg);
+};
+
+class ds_wrong_state_exception : public ds_exception
+{
+public:
+	explicit ds_wrong_state_exception(const std::string& arg);
+};
+
 class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
 {
 public:
-//	enum discode_sensor_state{
-//		NOT_CONFIGURED, INITIATE_SET, INITIATE_SENT, REA
-//	};
-
+	/**
+	 * DSS (short form of discode_sensor_state). State of the sensor.
+	 */
+	enum discode_sensor_state
+	{
+		DSS_NOT_CONNECTED, DSS_CONNECTED, DSS_INITIATE_SENT, DSS_READING_RECEIVED, DSS_ERROR
+	};
 
 	discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name);
 	virtual ~discode_sensor();
@@ -60,18 +89,7 @@ public:
 	 */
 	virtual void terminate();
 
-	/**
-	 * @brief Set object to be send by initiate_reading().
-	 * @param initiate_object this object will be serialized to buffer and send by initiate_reading().
-	 */
-//	template <typename INITIATE_T>
-//	void set_initiate_object(const INITIATE_T& initiate_object);
-
-	/**
-	 *
-	 * @return True, if get_reading() received data from discode. False otherwise.
-	 */
-	bool is_reading_ready();
+	discode_sensor_state get_state();
 
 	/**
 	 * @brief Get object received by get_reading().
@@ -89,6 +107,8 @@ public:
 	template <typename RECEIVED_T, typename TO_SEND_T>
 	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 private:
+	discode_sensor_state state;
+
 	mrrocpp::lib::configurator& config;
 	const std::string section_name;
 
@@ -122,7 +142,7 @@ private:
 	 * @param usec Timeout, if 0 is passed, method returns immediately.
 	 * @return
 	 */
-	bool is_data_available(int usec);
+	bool is_data_available(int usec = 0);
 
 	/**
 	 * @brief Receives data from discode and puts it to header_iarchive and iarchive.
@@ -133,6 +153,12 @@ private:
 	 * @brief Fills header_oarchive, then sends header_oarchive and oarchive to discode.
 	 */
 	void send_buffers_to_discode();
+
+	double reading_timeout;
+	double rpc_call_timeout;
+	struct timespec initiate_sent_time;
+
+	void check_reading_timeout();
 
 	// timer stuff, TODO: remove after discode_sensor is considered bug-free.
 	mrrocpp::lib::timer timer;
@@ -153,13 +179,18 @@ private:
 template <typename READING_T>
 READING_T discode_sensor::get_received_object()
 {
-	// TODO: check if get_reading has been called and data has been read.
+	if (state != DSS_READING_RECEIVED) {
+		state = DSS_ERROR;
+		throw ds_wrong_state_exception("discode_sensor::get_received_object(): state != DSS_READING_RECEIVED");
+	}
+
 	READING_T reading;
 
 	logger::log_dbg("discode_sensor::get_received_object(): iarchive->getArchiveSize()=%zd\n", iarchive->getArchiveSize());
 
 	*iarchive >> reading;
 
+	state = DSS_CONNECTED;
 	return reading;
 }
 
@@ -167,6 +198,11 @@ template <typename RECEIVED_T, typename TO_SEND_T>
 RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 {
 	logger::log("discode_sensor::call_remote_procedure() begin\n");
+
+	if (state != DSS_CONNECTED) {
+		throw ds_wrong_state_exception("discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
+	}
+
 	imh.is_rpc_call = true;
 	oarchive->clear_buffer();
 	*oarchive << to_send;
@@ -175,10 +211,10 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	send_buffers_to_discode();
 
 	logger::log("discode_sensor::call_remote_procedure() before loop\n");
-	do{
+	do {
 		logger::log("discode_sensor::call_remote_procedure() inside loop\n");
 		receive_buffers_from_discode();
-	}while(!rmh.is_rpc_call); // skip non-RPC messages
+	} while (!rmh.is_rpc_call); // skip non-RPC messages
 
 	RECEIVED_T received;
 

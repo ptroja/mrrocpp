@@ -9,17 +9,18 @@
 
 #include "base/lib/logger.h"
 
-using namespace logger;
-
 namespace mrrocpp {
 namespace ecp {
 namespace servovision {
+
+using namespace logger;
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor) :
 	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5), steps_without_reading(0)
 {
-	log_dbg("visual_servo::visual_servo() begin");
+	//log_dbg("visual_servo::visual_servo() begin\n");
 }
 
 visual_servo::~visual_servo()
@@ -37,7 +38,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	 }
 	 */
 
-	if (sensor->is_reading_ready()) {
+	if (sensor->get_state() == discode_sensor::DSS_READING_RECEIVED) {
 		// There's a reading, reset the counter.
 		steps_without_reading = 0;
 	} else {
