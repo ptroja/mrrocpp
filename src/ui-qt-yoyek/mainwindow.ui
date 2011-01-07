@@ -26,9 +26,52 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuRobot">
+    <property name="title">
+     <string>Robot</string>
+    </property>
+    <widget class="QMenu" name="menuSpkm">
+     <property name="title">
+      <string>spkm</string>
+     </property>
+     <widget class="QMenu" name="menuPre_synchro_moves">
+      <property name="title">
+       <string>pre synchro moves</string>
+      </property>
+      <addaction name="actionSynchronise"/>
+      <addaction name="actionMotors"/>
+     </widget>
+     <widget class="QMenu" name="menuPost_synchro_moves">
+      <property name="title">
+       <string>post synchro moves</string>
+      </property>
+      <addaction name="actionMotors_2"/>
+      <addaction name="actionJoints"/>
+      <addaction name="actionExternal"/>
+     </widget>
+     <widget class="QMenu" name="menuPreset_position">
+      <property name="title">
+       <string>preset position</string>
+      </property>
+      <addaction name="actionSynchro_position"/>
+      <addaction name="actionFront_position"/>
+      <addaction name="actionPosition_0"/>
+      <addaction name="actionPosition_1"/>
+      <addaction name="actionPosition_2"/>
+     </widget>
+     <addaction name="actionEDP_load"/>
+     <addaction name="actionEDP_unload"/>
+     <addaction name="separator"/>
+     <addaction name="menuPre_synchro_moves"/>
+     <addaction name="menuPost_synchro_moves"/>
+     <addaction name="menuPreset_position"/>
+    </widget>
+    <addaction name="menuSpkm"/>
+   </widget>
+   <addaction name="menuRobot"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -54,13 +97,6 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0" colspan="4">
       <widget class="QListWidget" name="listWidget"/>
      </item>
@@ -73,6 +109,13 @@
      </item>
      <item row="1" column="3">
       <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButton_2">
        <property name="text">
         <string>PushButton</string>
        </property>
@@ -96,15 +139,15 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3">
     <layout class="QGridLayout" name="gridLayout_4">
-     <item row="0" column="0" colspan="2">
-      <widget class="QDial" name="dial"/>
-     </item>
      <item row="1" column="0">
       <widget class="QProgressBar" name="progressBar">
        <property name="value">
         <number>24</number>
        </property>
       </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QDial" name="dial"/>
      </item>
     </layout>
    </widget>
@@ -184,8 +227,81 @@
     </layout>
    </widget>
   </widget>
+  <action name="actionEDP_load">
+   <property name="text">
+    <string>EDP load</string>
+   </property>
+  </action>
+  <action name="actionEDP_unload">
+   <property name="text">
+    <string>EDP unload</string>
+   </property>
+  </action>
+  <action name="actionSynchronise">
+   <property name="text">
+    <string>synchronise</string>
+   </property>
+  </action>
+  <action name="actionMotors">
+   <property name="text">
+    <string>motors</string>
+   </property>
+  </action>
+  <action name="actionMotors_2">
+   <property name="text">
+    <string>motors</string>
+   </property>
+  </action>
+  <action name="actionJoints">
+   <property name="text">
+    <string>joints</string>
+   </property>
+  </action>
+  <action name="actionExternal">
+   <property name="text">
+    <string>external</string>
+   </property>
+  </action>
+  <action name="actionSynchro_position">
+   <property name="text">
+    <string>synchro position</string>
+   </property>
+  </action>
+  <action name="actionFront_position">
+   <property name="text">
+    <string>front position</string>
+   </property>
+  </action>
+  <action name="actionPosition_0">
+   <property name="text">
+    <string>position 0</string>
+   </property>
+  </action>
+  <action name="actionPosition_1">
+   <property name="text">
+    <string>position 1</string>
+   </property>
+  </action>
+  <action name="actionPosition_2">
+   <property name="text">
+    <string>position 2</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>listWidget</tabstop>
+  <tabstop>plainTextEdit</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_4</tabstop>
+  <tabstop>dial</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton_3</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -195,12 +311,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>905</x>
-     <y>288</y>
+     <x>759</x>
+     <y>263</y>
     </hint>
     <hint type="destinationlabel">
-     <x>926</x>
-     <y>449</y>
+     <x>753</x>
+     <y>289</y>
     </hint>
    </hints>
   </connection>
@@ -211,8 +327,8 @@
    <slot>paste()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>570</x>
-     <y>438</y>
+     <x>390</x>
+     <y>289</y>
     </hint>
     <hint type="destinationlabel">
      <x>567</x>
@@ -227,12 +343,12 @@
    <slot>copy()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>113</y>
+     <x>1040</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
-     <x>227</x>
-     <y>105</y>
+     <x>1011</x>
+     <y>107</y>
     </hint>
    </hints>
   </connection>
