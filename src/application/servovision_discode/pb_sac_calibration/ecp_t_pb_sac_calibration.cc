@@ -36,8 +36,6 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 
 	ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
 
-	ds->configure_sensor();
-
 	vs = boost::shared_ptr <pb_sac_calibration>(new pb_sac_calibration(ds, config_section_name, config));
 
 	term_cond = boost::shared_ptr <termination_condition> (new timeout_termination_condition(10));
@@ -45,13 +43,13 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 	sm
 			= boost::shared_ptr <single_visual_servo_manager>(new single_visual_servo_manager(*this, config_section_name.c_str(), vs));
 	sm->add_termination_condition(term_cond);
+	sm->configure();
 
 	log_dbg("\necp_t_pb_sac_calibration::ecp_t_pb_sac_calibration() end\n");
 }
 
 ecp_t_pb_sac_calibration::~ecp_t_pb_sac_calibration()
 {
-	// TODO Auto-generated destructor stub
 }
 
 void ecp_t_pb_sac_calibration::main_task_algorithm()
@@ -63,6 +61,7 @@ void ecp_t_pb_sac_calibration::main_task_algorithm()
 	log("=======================================================\n");
 	log("=======================================================\n");
 	vector<lib::Homog_matrix> all_O_T_C = vs->get_all_O_T_C();
+	log("all_O_T_C.size() = %d\n", all_O_T_C.size());
 	int n = min((int)all_O_T_C.size(), 10);
 	for(int i=0; i<n; ++i){
 		//log(all_O_T_C[i]);

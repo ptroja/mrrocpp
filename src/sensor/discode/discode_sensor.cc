@@ -220,6 +220,7 @@ void discode_sensor::terminate()
 
 discode_sensor::discode_sensor_state discode_sensor::get_state()
 {
+	log_dbg("discode_sensor::get_state(): state = %d\n", state);
 	return state;
 }
 

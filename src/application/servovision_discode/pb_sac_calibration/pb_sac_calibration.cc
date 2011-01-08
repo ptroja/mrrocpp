@@ -38,6 +38,8 @@ lib::Homog_matrix pb_sac_calibration::compute_position_change(const lib::Homog_m
 {
 	lib::Homog_matrix C_T_G(reading.objectPosition.elements);
 
+	log_dbg("pb_sac_calibration::compute_position_change\n");
+
 	lib::Homog_matrix O_T_C = current_position * E_T_G * (!C_T_G);
 
 	all_O_T_C.push_back(O_T_C);
