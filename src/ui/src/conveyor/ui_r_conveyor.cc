@@ -131,92 +131,10 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME),
+	common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active"),
 			is_wind_conv_servo_algorithm_open(false), is_wind_conveyor_moves_open(false), ui_ecp_robot(NULL)
 {
 
-}
-
-int UiRobot::reload_configuration()
-{
-
-	// jesli conveyor ma byc aktywny
-	if ((state.is_active = interface.config->value <int> ("is_conveyor_active")) == 1) {
-
-		//ui_state.is_any_edp_active = true;
-
-		if (interface.is_mp_and_ecps_active) {
-			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name.c_str());
-
-			state.ecp.pid = -1;
-			state.ecp.trigger_fd = lib::invalid_fd;
-		}
-
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-
-				state.edp.pid = -1;
-				state.edp.reader_fd = lib::invalid_fd;
-				state.edp.state = 0;
-
-				if (interface.config->exists("preset_position_0", state.edp.section_name))
-					state.edp.preset_position[0][0]
-							= interface.config->value <double> ("preset_position_0", state.edp.section_name);
-				if (interface.config->exists("preset_position_1", state.edp.section_name))
-					state.edp.preset_position[1][0]
-							= interface.config->value <double> ("preset_position_1", state.edp.section_name);
-				if (interface.config->exists("preset_position_2", state.edp.section_name))
-					state.edp.preset_position[2][0]
-							= interface.config->value <double> ("preset_position_2", state.edp.section_name);
-
-				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
-				else
-					state.edp.test_mode = 0;
-
-				state.edp.hardware_busy_attach_point
-						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
-
-				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name.c_str());
-
-				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name.c_str());
-
-				state.edp.node_name
-						= interface.config->value <std::string> ("node_name", state.edp.section_name.c_str());
-
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-
-	} else // jesli  conveyor ma byc nieaktywny
-	{
-
-		switch (state.edp.state)
-		{
-			case -1:
-			case 0:
-				state.edp.state = -1;
-				break;
-			case 1:
-			case 2:
-				// nie robi nic bo EDP pracuje
-				break;
-			default:
-				break;
-		}
-	} // end conveyor
-
-	return 1;
 }
 
 int UiRobot::manage_interface()

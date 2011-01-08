@@ -37,7 +37,13 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
 
 	epos_motor_command_data_port
-			= the_robot->port_manager.get_port <lib::epos::epos_motor_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
+
+	epos_joint_command_data_port
+			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_JOINT_COMMAND_DATA_PORT);
+
+	epos_external_command_data_port
+			= the_robot->port_manager.get_port <lib::frame_tab> (lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT);
 
 	epos_cubic_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);
@@ -52,6 +58,12 @@ EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 
 	epos_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_REPLY_DATA_REQUEST_PORT);
+
+	epos_joint_reply_data_request_port
+			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT);
+
+	epos_external_reply_data_request_port
+			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
 
 	assert(the_robot);
 
@@ -69,6 +81,33 @@ void EcpRobot::move_motors(const double final_position[])
 
 }
 // ---------------------------------------------------------------
+
+// ---------------------------------------------------------------
+void EcpRobot::move_joints(const double final_position[])
+{
+	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+		epos_joint_command_data_port->data.desired_position[i] = final_position[i];
+	}
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_joint_command_data_port->set();
+	execute_motion();
+
+}
+
+void EcpRobot::move_external(const double final_position[])
+{
+	lib::Xyz_Angle_Axis_vector tmp_vector(final_position);
+	lib::Homog_matrix tmp_frame(tmp_vector);
+
+	tmp_frame.get_frame_tab(epos_external_command_data_port->data);
+
+	//	epos_external_command_data_port->data.desired_position[i] = final_position[i];
+
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_external_command_data_port->set();
+	execute_motion();
+
+}
 
 }
 } //namespace ui

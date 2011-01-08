@@ -185,7 +185,7 @@ protected:
 			//---------------- DEGUG --------------------
 
 			if (debug) {
-				printf("actual position vector, size: %d\n", get_pos->get_position_vector().size());
+				printf("actual position vector, size: %zd\n", get_pos->get_position_vector().size());
 				for (std::size_t j = 0; j < get_pos->get_position_vector().size(); j++) {
 					printf("%f\t", get_pos->get_position_vector()[j]);
 				}
@@ -274,10 +274,10 @@ protected:
 	virtual void print_coordinate_vector()
 	{
 		coordinate_vector_iterator = coordinate_vector.begin();
-		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
+		printf("coordinate_vector_size: %zd\n", coordinate_vector.size());
 		for (std::size_t i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
-			printf("%d:\t", (i + 1));
+			printf("%zd:\t", (i + 1));
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				printf(" %f\t", *tempIter);
 			}
@@ -601,7 +601,7 @@ public:
 				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
 						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
 						flushall();
 					}
@@ -611,7 +611,7 @@ public:
 				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
 						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
 						flushall();
 					}
@@ -633,7 +633,7 @@ public:
 					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
 							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
 							flushall();
 						}
@@ -643,7 +643,7 @@ public:
 					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
 							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
 							flushall();
 						}

@@ -46,14 +46,21 @@ public:
 	WndExternal *wnd_external;
 
 	UiRobot(common::Interface& _interface);
-	void close_all_windows();
-	int reload_configuration();
+
 	int manage_interface();
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
 	void edp_create();
 	int edp_create_int();
+
+	int move_to_synchro_position();
+	int move_to_front_position();
+	int move_to_preset_position(int variant);
+
+	int execute_motor_motion();
+	int execute_joint_motion();
+
 };
 
 }

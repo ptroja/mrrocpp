@@ -32,6 +32,7 @@ class WndBase
 private:
 
 public:
+	const std::string window_name;
 	common::Interface& interface;
 	bool is_open;
 
@@ -43,7 +44,7 @@ public:
 	PtWidget_t * ABW_window();
 	ApEventLink_t *ABM_window();
 
-	WndBase(common::Interface& _interface, int _ABN_window, int _ABI_window);
+	WndBase(const std::string _window_name, common::Interface& _interface, int _ABN_window, int _ABI_window);
 
 };
 

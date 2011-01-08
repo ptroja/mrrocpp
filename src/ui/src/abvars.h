@@ -1495,7 +1495,7 @@ const int ABN_thumb_wind_spkm_int_mip_5 = 1321;
 
 /* 'wnd_spkm_external' Window link */
 const int ABN_wnd_spkm_external = 1322;
-const int ABN_PtPane_wind_spkm_int_post_synchro_moves0 = 1323;
+const int ABN_PtPane_wind_spkm_external_post_synchro_moves = 1323;
 const int ABN_PtButton_wind_spkm_external_set_desired_as_current = 1324;
 const int ABN_PtNumericFloat_wind_spkm_external_p0 = 1325;
 const int ABN_PtNumericFloat_wind_spkm_external_p1 = 1326;

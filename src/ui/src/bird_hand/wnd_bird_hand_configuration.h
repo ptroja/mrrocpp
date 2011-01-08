@@ -20,6 +20,8 @@ class Interface;
 
 namespace bird_hand {
 
+const std::string WND_BIRD_HAND_CONFIGURATION = "WND_BIRD_HAND_CONFIGURATION";
+
 //
 //
 // KLASA UiRobotBirdHand
@@ -38,8 +40,6 @@ private:
 	UiRobot& bird_hand;
 
 public:
-
-
 
 	WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand);
 

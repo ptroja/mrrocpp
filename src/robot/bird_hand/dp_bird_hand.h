@@ -75,7 +75,7 @@ struct single_joint_command
 	double reciprocal_of_damping;
 	double desired_torque;
 	double desired_position;
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief Bird Hand single joint reply status
@@ -94,7 +94,7 @@ struct single_joint_status
 	bool lower_limit_of_absolute_value_of_desired_torque;
 	bool upper_limit_of_absolute_value_of_meassured_torque;
 	bool upper_limit_of_meassured_current;
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief Bird Hand configuration command for single joint
@@ -112,7 +112,7 @@ struct single_joint_configuration
 	int value_of_lower_limit_of_absolute_value_of_torque;
 	int value_of_lower_limit_of_absolute_value_of_meassured_torque;
 	int value_of_upper_limit_of_position_increment;
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief multi joint position/torque command for whole gripper
@@ -125,7 +125,7 @@ struct command
 	single_joint_command thumb_f[THUMB_F_NUM_OF_SERVOS];
 	single_joint_command index_f[INDEX_F_NUM_OF_SERVOS];
 	single_joint_command ring_f[RING_F_NUM_OF_SERVOS];
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief multi joint reply status for whole gripper
@@ -136,7 +136,7 @@ struct status
 	single_joint_status thumb_f[THUMB_F_NUM_OF_SERVOS];
 	single_joint_status index_f[INDEX_F_NUM_OF_SERVOS];
 	single_joint_status ring_f[RING_F_NUM_OF_SERVOS];
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief multi joint configuration command for whole gripper
@@ -147,7 +147,7 @@ struct configuration
 	single_joint_configuration thumb_f[THUMB_F_NUM_OF_SERVOS];
 	single_joint_configuration index_f[INDEX_F_NUM_OF_SERVOS];
 	single_joint_configuration ring_f[RING_F_NUM_OF_SERVOS];
-};
+}__attribute__((__packed__));
 
 } // namespace bird_hand
 } // namespace lib

@@ -21,8 +21,8 @@ namespace common {
 //
 
 
-WndBase::WndBase(common::Interface& _interface, int _ABN_window, int _ABI_window) :
-	interface(_interface), is_open(false), ABN_window(_ABN_window), ABI_window(_ABI_window)
+WndBase::WndBase(const std::string _window_name, common::Interface& _interface, int _ABN_window, int _ABI_window) :
+	window_name(_window_name), interface(_interface), is_open(false), ABN_window(_ABN_window), ABI_window(_ABI_window)
 {
 
 }

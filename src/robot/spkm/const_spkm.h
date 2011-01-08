@@ -31,6 +31,8 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 enum CBUFFER_VARIANT
 {
 	CBUFFER_EPOS_MOTOR_COMMAND,
+	CBUFFER_EPOS_JOINT_COMMAND,
+	CBUFFER_EPOS_EXTERNAL_COMMAND,
 	CBUFFER_EPOS_CUBIC_COMMAND,
 	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
 	CBUFFER_EPOS_OPERATIONAL_COMMAND,
@@ -46,8 +48,9 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 	union
 	{
+		lib::frame_tab desired_frame;
 		epos::epos_cubic_command epos_cubic_command_structure;
-		epos::epos_motor_command epos_motor_command_structure;
+		epos::epos_simple_command epos_simple_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
 	};
@@ -60,9 +63,14 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant) {
+		switch (variant)
+		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
-				ar & epos_motor_command_structure;
+			case CBUFFER_EPOS_JOINT_COMMAND:
+				ar & epos_simple_command_structure;
+				break;
+			case CBUFFER_EPOS_EXTERNAL_COMMAND:
+				ar & desired_frame;
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				ar & epos_cubic_command_structure;
@@ -80,35 +88,40 @@ struct cbuffer
 		}
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m) {
-		switch (m.variant) {
+	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m)
+	{
+		switch (m.variant)
+		{
+			case CBUFFER_EPOS_MOTOR_COMMAND:
+				os << "CBUFFER_EPOS_MOTOR_COMMAND:\n";
+				break;
+			case CBUFFER_EPOS_JOINT_COMMAND:
+				os << "CBUFFER_EPOS_JOINT_COMMAND:\n";
+				break;
+			case CBUFFER_EPOS_EXTERNAL_COMMAND:
+				os << "CBUFFER_EPOS_EXTERNAL_COMMAND:\n";
+				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_cubic_command_structure.aa[i] <<
-						"\t" << m.epos_cubic_command_structure.av[i] <<
-						"\t" << m.epos_cubic_command_structure.da[i] <<
-						"\t" << m.epos_cubic_command_structure.emdm[i] << "\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_cubic_command_structure.aa[i] << "\t" << m.epos_cubic_command_structure.av[i]
+							<< "\t" << m.epos_cubic_command_structure.da[i] << "\t"
+							<< m.epos_cubic_command_structure.emdm[i] << "\n";
 				}
 				break;
 			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
 				os << "CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_trapezoidal_command_structure.em[i] <<
-						"\t" << m.epos_trapezoidal_command_structure.emdm[i] <<
-						"\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_trapezoidal_command_structure.em[i] << "\t"
+							<< m.epos_trapezoidal_command_structure.emdm[i] << "\n";
 				}
 				os << "\t" << m.epos_trapezoidal_command_structure.tt << "\n";
 				break;
 			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
 				os << "CBUFFER_EPOS_OPERATIONAL_COMMAND:\n";
-				for(int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os <<
-						"\t" << m.epos_operational_command_structure.em[i] <<
-						"\t" << m.epos_operational_command_structure.v[i] <<
-						"\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_operational_command_structure.em[i] << "\t"
+							<< m.epos_operational_command_structure.v[i] << "\n";
 				}
 				os << "\t" << m.epos_operational_command_structure.tau << "\n";
 				break;
@@ -120,7 +133,7 @@ struct cbuffer
 		}
 		return os;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
@@ -128,6 +141,7 @@ struct cbuffer
  */
 struct rbuffer
 {
+	lib::frame_tab current_frame;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 
@@ -138,10 +152,11 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & current_frame;
 		ar & epos_controller;
 		ar & contact;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string

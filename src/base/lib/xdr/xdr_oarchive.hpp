@@ -116,21 +116,15 @@ public:
     }
 
     SAVE_A_TYPE(char, xdr_char)
+    SAVE_A_TYPE(unsigned char, xdr_u_char)
     SAVE_A_TYPE(double, xdr_double)
     SAVE_A_TYPE(float, xdr_float)
-//    SAVE_A_TYPE(int, xdr_int)
-//    SAVE_A_TYPE(long, xdr_long)
-//    SAVE_A_TYPE(short, xdr_short)
-    SAVE_A_TYPE(unsigned char, xdr_u_char)
-//    SAVE_A_TYPE(unsigned int, xdr_u_int)
-//    SAVE_A_TYPE(unsigned long, xdr_u_long)
-//    SAVE_A_TYPE(unsigned short, xdr_u_short)
 
     SAVE_A_TYPE(int, xdr_int)
     SAVE_A_TYPE(long, xdr_long)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    SAVE_A_TYPE(unsigned long, xdr_u_long)
+    //SAVE_A_TYPE(unsigned long, xdr_u_long)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
 
 #if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))

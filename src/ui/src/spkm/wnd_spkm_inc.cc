@@ -25,7 +25,7 @@ namespace spkm {
 
 
 WndInc::WndInc(common::Interface& _interface, UiRobot& _robot) :
-	common::WndBase(_interface, ABN_wnd_spkm_inc, ABI_wnd_spkm_inc), robot(_robot)
+	common::WndBase(WND_SPKM_INC, _interface, ABN_wnd_spkm_inc, ABI_wnd_spkm_inc), robot(_robot)
 {
 
 }
@@ -52,7 +52,7 @@ int WndInc::init()
 				set_single_axis(4, ABW_PtNumericFloat_wind_spkm_motors_mcur_4, ABW_PtNumericFloat_wind_spkm_motors_cur_p4, ABW_thumb_wind_spkm_motors_mip_4);
 				set_single_axis(5, ABW_PtNumericFloat_wind_spkm_motors_mcur_5, ABW_PtNumericFloat_wind_spkm_motors_cur_p5, ABW_thumb_wind_spkm_motors_mip_5);
 
-				for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = robot.current_pos[i];
 				}
 
@@ -116,7 +116,7 @@ int WndInc::exporto()
 
 	char buffer[200];
 
-	double *wektor[lib::spkm::NUM_OF_SERVOS];
+	double *wektor[robot.number_of_servos];
 
 	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
 	PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
@@ -136,7 +136,7 @@ int WndInc::copy()
 {
 
 	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[lib::spkm::NUM_OF_SERVOS], wektor[lib::spkm::NUM_OF_SERVOS];
+	double *wektor_ptgr[robot.number_of_servos], wektor[robot.number_of_servos];
 
 	if (robot.state.edp.pid != -1) {
 		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -151,7 +151,7 @@ int WndInc::copy()
 			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
 			PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
 
-			for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+			for (int i = 0; i < robot.number_of_servos; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -175,7 +175,7 @@ int WndInc::copy()
 int WndInc::motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
-	double *wektor[lib::spkm::NUM_OF_SERVOS];
+	double *wektor[robot.number_of_servos];
 	double *step1;
 
 	// wychwytania ew. bledow ECP::robot
@@ -192,12 +192,12 @@ int WndInc::motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 				PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
 				PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
-				for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = *wektor[i];
 				}
 			} else {
 
-				for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = 0.0;
 				}
 			}
