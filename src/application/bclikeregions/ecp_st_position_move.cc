@@ -15,12 +15,12 @@ namespace ecp {
 
 namespace common {
 
-namespace task {
+namespace sub_task {
 
 
-ecp_st_position_move::ecp_st_position_move(task & _ecp_t):
-	ecp_sub_task(_ecp_t),
-	bcl_ecp((bcl_t_switcher &)ecp_t){
+ecp_st_position_move::ecp_st_position_move(task::task & _ecp_t):
+	sub_task(_ecp_t),
+	bcl_ecp((task::bcl_t_switcher &)ecp_t){
 
 	std::cout << "ECP_ST_POSITION_MOVE" << std::endl;
 
@@ -61,6 +61,11 @@ void ecp_st_position_move::conditional_execution(){
 
 	std::vector<double>vec;
 	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+
+	std::cout << "RECIEVED size = "<< vec.size() << std::endl;
+	for(unsigned int j = 0; j < vec.size(); ++j)
+		std::cout << vec[j] << " ";
+	std::cout << std::endl;
 
 	smooth->reset();
 	smooth->set_absolute();

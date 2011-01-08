@@ -63,9 +63,9 @@ void bclike_mp_ui::main_task_algorithm(void){
 	vec.assign(ecp::common::task::left, ecp::common::task::left + VEC_SIZE);
 	tab = msg.robotPositionToString(vec);
 
-	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, 300, 1, actual_robot.c_str());
+	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 	sr_ecp_msg->message("MOVE left");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
 	//Setup end position
 	vec.clear();
@@ -73,20 +73,20 @@ void bclike_mp_ui::main_task_algorithm(void){
 	tab = msg.robotPositionToString(vec);
 
 	//Start moving
-	set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, 300, 1, actual_robot.c_str());
+	set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 	sr_ecp_msg->message("MOVE right");
-	run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
 
-	while(strcmp(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, "KONIEC") != 0){
+	while(strcmp(robot_m[actual_robot]->ecp_reply_package.recognized_command, "KONIEC") != 0){
 
-		msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.ecp_2_mp_string, regions);
+		msg.stringToECPOrder(robot_m[actual_robot]->ecp_reply_package.recognized_command, regions);
 
 //		std::cout << "ODCZYT: " << regions.size() << std::endl;
 
-		set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, 300, 1, actual_robot.c_str());
+		set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 		sr_ecp_msg->message("MOVE right");
-		run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+		run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
 	}
 	sr_ecp_msg->message("KONIEC RUCHU");
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
@@ -104,8 +104,8 @@ void bclike_mp_ui::main_task_algorithm(void){
 
 			//Move to code position
 			tmp = msg.robotPositionToString(vec);
-			set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, 300, 1, actual_robot.c_str());
-			run_extended_empty_generator_for_set_of_robots_and_wait_for_task_termination_message_of_another_set_of_robots(1, 1, actual_robot.c_str(), actual_robot.c_str());
+			set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+			run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
 
 			//TODO: przelaczyc zadanie FrDIA
 			//TODO: wywolac subtaks Marcina

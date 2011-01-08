@@ -9,6 +9,7 @@
 #define BCL_T_SWITCHER_H_
 
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include <boost/shared_ptr.hpp>
 #include "ecp_mp_bclike.h"
 #include "ecp_mp_message.h"
@@ -65,7 +66,7 @@ enum BCL_MOTION_DIR{
 	LEFT, RIGHT, START
 };
 
-class bcl_t_switcher: public mrrocpp::ecp::common::task::task {
+class bcl_t_switcher: public common::task::task {
 public:
 	/**
 	 * Class constructor, creating FraDIA sensor, smooth generator, insance

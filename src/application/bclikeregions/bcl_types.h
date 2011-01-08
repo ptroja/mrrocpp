@@ -11,6 +11,8 @@
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
 #include "../servovision/visual_servo_types.h"
+#include "../../base/lib/impconst.h"
+
 
 
 #define IRP6_OT
@@ -18,7 +20,7 @@
 //#define JOINT
 #define EULER
 
-#define MP_2_ECP_STRING_SIZE 300
+//#define MP_2_ECP_STRING_SIZE 300
 #define VEC_POS 27
 
 namespace mrrocpp {

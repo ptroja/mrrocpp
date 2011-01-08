@@ -15,17 +15,17 @@ namespace ecp {
 
 namespace common {
 
-namespace task {
+namespace sub_task {
 
 
-ecp_st_scan_move::ecp_st_scan_move(task & _ecp_t):
-	ecp_sub_task(_ecp_t),
-	bcl_ecp((bcl_t_switcher &)ecp_t){
+ecp_st_scan_move::ecp_st_scan_move(task::task & _ecp_t):
+	sub_task(_ecp_t),
+	bcl_ecp((task::bcl_t_switcher &)ecp_t){
 
 	std::cout << "ECP_ST_SMOOT_MOVE" << std::endl;
 
 	//Creating new smart pointer to generator object
-	bcl_gen = shared_ptr<generator::bclike_gen>(new generator::bclike_gen((bcl_t_switcher &)ecp_t, bcl_ecp.get_vsp_fradia()));
+	bcl_gen = shared_ptr<generator::bclike_gen>(new generator::bclike_gen((task::bcl_t_switcher &)ecp_t, bcl_ecp.get_vsp_fradia()));
 
 }
 

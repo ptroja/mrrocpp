@@ -9,6 +9,7 @@
 #define ECP_ST_SCAN_MOVE_H_
 
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "bcl_types.h"
 #include <boost/shared_ptr.hpp>
 #include "bclike_gen.h"
@@ -24,16 +25,19 @@ namespace common {
 
 namespace task {
 
-
 class bcl_t_switcher;
 
-class ecp_st_scan_move : public ecp_sub_task {
+}
+
+namespace sub_task {
+
+class ecp_st_scan_move : public sub_task {
 public:
 	/**
 	 * Subtask constructor
 	 * @param _ecp_t reference to parent task
 	 */
-	ecp_st_scan_move(task & _ecp_t);
+	ecp_st_scan_move(task::task & _ecp_t);
 	/**
 	 * Class destructor
 	 */
@@ -46,7 +50,7 @@ public:
 
 private:
 	shared_ptr<generator::bclike_gen> bcl_gen;
-	bcl_t_switcher & bcl_ecp;
+	task::bcl_t_switcher & bcl_ecp;
 
 	ecp_mp_message msg;
 };

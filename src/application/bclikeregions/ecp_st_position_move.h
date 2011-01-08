@@ -9,6 +9,7 @@
 #define ECP_ST_POSITION_MOVE_H_
 
 #include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_sub_task.h"
 #include "bcl_types.h"
 #include <boost/shared_ptr.hpp>
 #include "ecp_mp_message.h"
@@ -22,18 +23,23 @@ namespace ecp {
 
 namespace common {
 
-namespace task {
-
+namespace task{
 
 class bcl_t_switcher;
 
-class ecp_st_position_move : public ecp_sub_task {
+}
+
+namespace sub_task {
+
+
+
+class ecp_st_position_move : public sub_task {
 public:
 	/**
 	 * Subtask constructor
 	 * @param _ecp_t reference to parent task
 	 */
-	ecp_st_position_move(task & _ecp_t);
+	ecp_st_position_move(task::task & _ecp_t);
 	/**
 	 * Class destructor
 	 */
@@ -45,7 +51,7 @@ public:
 
 private:
 	shared_ptr<generator::newsmooth> smooth;
-	bcl_t_switcher & bcl_ecp;
+	task::bcl_t_switcher & bcl_ecp;
 
 	ecp_mp_message msg;
 };

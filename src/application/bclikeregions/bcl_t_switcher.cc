@@ -31,6 +31,7 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = vsp_fradia;
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
+
 #ifdef IRP6_OT
 	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
 #endif//IRP6_OT
@@ -40,13 +41,14 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 #endif//IRP6_P
 
 	//Adding additional subtasks
-	ecp_sub_task* ecpst;
-	ecpst = new ecp_st_scan_move(*this);
+	sub_task::sub_task* ecpst;
+	ecpst = new sub_task::ecp_st_scan_move(*this);
 	subtask_m[ecp_mp::task::ECP_ST_SCAN_MOVE] = ecpst;
 
-	ecpst = new ecp_st_position_move(*this);
+	ecpst = new sub_task::ecp_st_position_move(*this);
 	subtask_m[ecp_mp::task::ECP_ST_POSITION_MOVE] = ecpst;
 
+	std::cout << "KONIEC KONSTRUKTORA BCL SWITCHER" << std::endl;
 }
 
 bcl_t_switcher::~bcl_t_switcher() {
