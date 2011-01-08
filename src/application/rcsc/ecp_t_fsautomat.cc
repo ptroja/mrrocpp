@@ -235,9 +235,9 @@ void fsautomat::main_task_algorithm(void)
 		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
 
 		sr_ecp_msg->message("Order received");
-		std::cout<< "generator1: " << mp_command.ecp_next_state.mp_2_ecp_next_state_string <<std::endl;
-		std::cout<< "generator2: " << mp_command.ecp_next_state.mp_2_ecp_next_state<<std::endl;
-		std::cout<< "generator3: " << mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
+		std::cout<< "next state string: " << mp_command.ecp_next_state.mp_2_ecp_next_state_string <<std::endl;
+		std::cout<< "next state: " << mp_command.ecp_next_state.mp_2_ecp_next_state<<std::endl;
+		std::cout<< "state variant: " << mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 
 		subtasks_conditional_execution();
 

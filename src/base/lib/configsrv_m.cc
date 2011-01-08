@@ -68,7 +68,17 @@ main(int argc, char *argv[])
 					reply.key = config.value(query.key);
 					reply.flag = true;
 				} catch (boost::property_tree::ptree_error & e) {
-					std::cerr<<e.what()<<std::endl;
+					std::string err = e.what();
+					std::string tmp("No such node (");
+					bool print=false;
+					for (int i=0;i<tmp.size()-1;i++){
+						if(err[i]!=tmp[i]){
+							print=true;
+							break;
+						}
+					}
+					if(print)
+						std::cerr<<e.what()<<std::endl;
 					// Print the error to the standard error output
 				}
 			}
