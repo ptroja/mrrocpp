@@ -9,6 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
+}
+
+void MainWindow::init()
+{
+	is_sr_thread_loaded = false;
 }
 
 MainWindow::~MainWindow()

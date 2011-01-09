@@ -14,6 +14,10 @@ Q_OBJECT
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+	void init();
+
+	std::string sr_attach_point;
+	bool is_sr_thread_loaded;
 
 private:
 	Ui::MainWindow *ui;

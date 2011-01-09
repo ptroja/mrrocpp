@@ -66,6 +66,7 @@ QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 # Create GUI executable
 ADD_EXECUTABLE(ui-qt-yoyek 
 ${GUI_CXX_SRCS}
+ui_sr.cc
 )
 
 # Link executable with QT libraries
