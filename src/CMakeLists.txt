@@ -145,7 +145,7 @@ else (QNXNTO) # Linux, etc.
 	set(USE_MESSIP ON)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-	add_subdirectory (ui-qt-yoyek)
+
 endif (QNXNTO)
 
 include(FindComedi)
@@ -175,4 +175,13 @@ add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (ui)
 add_subdirectory (application)
+
+# QNX is default MRROC++ target
+if (QNXNTO)
+
+elseif (UBUNTU32BIT)
+
+else (QNXNTO) # Linux, etc.
+	add_subdirectory (ui-qt-yoyek)
+endif (QNXNTO)
 
