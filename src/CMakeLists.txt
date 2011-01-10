@@ -6,6 +6,8 @@ MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
 	endif(CONDITION_VALUE)
 ENDMACRO(TARGET_LINK_LIBRARY_IF)
 
+OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
+
 ## this is currently disabled
 ## as CMake option names duplicates _ROBOT_ENUM values
 # define both CMake option and -D flag for compiler
