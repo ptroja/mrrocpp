@@ -64,7 +64,8 @@ void ecp_t_pb_sac_calibration::main_task_algorithm()
 	log("all_O_T_C.size() = %d\n", all_O_T_C.size());
 	int n = min((int)all_O_T_C.size(), 10);
 	for(int i=0; i<n; ++i){
-		//log(all_O_T_C[i]);
+		log("%d: -------------------------------------------------------\n", i);
+		log(all_O_T_C[i]);
 		log("-------------------------------------------------------\n");
 	}
 	log("=======================================================\n");
