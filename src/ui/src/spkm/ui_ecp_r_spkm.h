@@ -18,6 +18,9 @@
 
 namespace mrrocpp {
 namespace ui {
+namespace common {
+class Interface;
+}
 namespace spkm {
 
 // ---------------------------------------------------------------
@@ -39,12 +42,11 @@ public:
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_external_reply_data_request_port;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_external(const double final_position[lib::MAX_SERVOS_NR]);
-
 
 };
 

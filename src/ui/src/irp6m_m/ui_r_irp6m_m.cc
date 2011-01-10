@@ -38,7 +38,7 @@ int UiRobot::edp_create_int()
 
 {
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
@@ -62,7 +62,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 					ui_ecp_robot
-							= new ui::irp6::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::conveyor::ROBOT_NAME);
+							= new ui::irp6::EcpRobot(interface, *interface.config, *interface.all_ecp_msg, lib::conveyor::ROBOT_NAME);
 
 				}
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -108,7 +108,7 @@ int UiRobot::synchronise_int()
 
 {
 
-	set_ui_state_notification(UI_N_SYNCHRONISATION);
+	interface.set_ui_state_notification(UI_N_SYNCHRONISATION);
 
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -132,7 +132,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME, lib::irp6m::NUM_OF_SERVOS, "is_irp6m_active"),
+			common::UiRobot(_interface, lib::irp6m::EDP_SECTION, lib::irp6m::ECP_SECTION, lib::irp6m::ROBOT_NAME, lib::irp6m::NUM_OF_SERVOS, "is_irp6m_active"),
 			is_wind_irp6m_int_open(false), is_wind_irp6m_inc_open(false), is_wind_irp6m_xyz_euler_zyz_open(false),
 			is_wind_irp6m_xyz_angle_axis_open(false), is_wind_irp6m_xyz_angle_axis_ts_open(false),
 			is_wind_irp6m_xyz_euler_zyz_ts_open(false), is_wind_irp6m_kinematic_open(false),
@@ -140,7 +140,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 {
 
 }
-
 
 int UiRobot::manage_interface()
 {

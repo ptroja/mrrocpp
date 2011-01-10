@@ -20,6 +20,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
 #include "base/lib/sr/srlib.h"
 
@@ -38,8 +39,8 @@ namespace ui {
 namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	common::EcpRobot(_config, _sr_ecp_msg, _robot_name)
+EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+	common::EcpRobot(_interface, _config, _sr_ecp_msg, _robot_name)
 {
 
 	if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {

@@ -145,6 +145,7 @@ public:
 	polycrank::UiRobot *polycrank;
 
 	Interface();
+	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
 	int manage_interface(void);

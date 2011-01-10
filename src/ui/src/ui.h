@@ -31,7 +31,7 @@ enum UI_NOTIFICATION_STATE_ENUM
 };
 
 // FIXME: moved from proto.h for linux compatibility
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
+
 
 namespace mrrocpp {
 namespace ui {

@@ -56,7 +56,7 @@ int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_BUSY);
+	interface.set_ui_state_notification(UI_N_BUSY);
 
 	return (Pt_CONTINUE);
 }
@@ -67,62 +67,9 @@ int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_READY);
+	interface.set_ui_state_notification(UI_N_READY);
 
 	return (Pt_CONTINUE);
-}
-
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
-{
-	if (new_notifacion != interface.notification_state) {
-		int pt_res = PtEnter(0);
-
-		interface.notification_state = new_notifacion;
-
-		switch (new_notifacion)
-		{
-			case UI_N_STARTING:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				break;
-			case UI_N_READY:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-				break;
-			case UI_N_BUSY:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_EXITING:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				break;
-			case UI_N_COMMUNICATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_SYNCHRONISATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_PROCESS_CREATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-		}
-
-		PtDamageWidget(ABW_PtLabel_ready_busy);
-		PtFlush();
-
-		if (pt_res >= 0)
-			PtLeave(0);
-
-		return 1;
-
-	}
-
-	return 0;
-
 }
 
 // zamyka okno proces control
