@@ -51,6 +51,8 @@ Interface::Interface() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
 {
 
+	main_eb = new function_execution_buffer(*this);
+
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.pid = -1;
@@ -296,9 +298,9 @@ int Interface::manage_interface(void)
 
 	// uruchmomienie manage interface dla wszystkich robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->manage_interface();
-	}
+				{
+					robot_node.second->manage_interface();
+				}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -428,9 +430,9 @@ void Interface::reload_whole_configuration()
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->reload_configuration();
-				}
+							{
+								robot_node.second->reload_configuration();
+							}
 				break;
 			default:
 				break;
@@ -662,11 +664,11 @@ bool Interface::is_any_robot_active()
 {
 	bool r_value = false;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if (robot_node.second->state.is_active) {
-			return true;
-		}
-	}
+				{
+					if (robot_node.second->state.is_active) {
+						return true;
+					}
+				}
 
 	return r_value;
 }
@@ -675,15 +677,15 @@ bool Interface::are_all_robots_synchronised_or_inactive()
 {
 	bool r_value = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		r_value = r_value && (((robot_node.second->state.is_active)
-						&& (robot_node.second->state.edp.is_synchronised))
-				|| (!(robot_node.second->state.is_active)));
+				{
+					r_value = r_value && (((robot_node.second->state.is_active)
+							&& (robot_node.second->state.edp.is_synchronised))
+							|| (!(robot_node.second->state.is_active)));
 
-		if (!r_value) {
-			return false;
-		}
-	}
+					if (!r_value) {
+						return false;
+					}
+				}
 
 	return r_value;
 }
@@ -692,14 +694,14 @@ bool Interface::are_all_robots_loaded_or_inactive()
 {
 	bool r_value = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
-								> 0)) || (!(robot_node.second->state.is_active)));
+				{
+					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+							> 0)) || (!(robot_node.second->state.is_active)));
 
-		if (!r_value) {
-			return false;
-		}
-	}
+					if (!r_value) {
+						return false;
+					}
+				}
 
 	return r_value;
 }
@@ -708,11 +710,11 @@ bool Interface::is_any_active_robot_loaded()
 {
 	bool r_value = false;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-			return true;
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						return true;
+					}
+				}
 
 	return r_value;
 }
@@ -1070,7 +1072,7 @@ void Interface::unblock_widget(PtWidget_t *widget)
 
 void Interface::create_threads()
 {
-	meb_tid = new feb_thread(main_eb);
+	meb_tid = new feb_thread(*main_eb);
 	ui_ecp_obj = new ecp_buffer(*this);
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);

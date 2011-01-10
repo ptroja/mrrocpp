@@ -37,6 +37,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+class Interface;
+
 enum TEACHING_STATE
 {
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
@@ -190,10 +192,10 @@ class function_execution_buffer
 {
 public:
 	typedef boost::function <int()> command_function_t;
-
+	Interface& interface;
 	int wait_and_execute();
 	void command(command_function_t _com_fun);
-	function_execution_buffer();
+	function_execution_buffer(Interface& _interface);
 private:
 	boost::condition_variable cond; //! active command condition
 	boost::mutex mtx; //! mutex related to condition variable
@@ -261,9 +263,6 @@ public:
 }
 }
 }
-
-// TODO: reimplement this as a singleton
-extern ui::common::busy_flag communication_flag;
 
 #endif
 

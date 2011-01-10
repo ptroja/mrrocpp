@@ -20,7 +20,7 @@
 #include "abimport.h"
 //#include "proto.h"
 
-ui::common::busy_flag communication_flag;
+
 
 extern ui::common::Interface interface;
 
@@ -168,7 +168,7 @@ int OnTimer(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 		interface.abort_threads();
 		PtExit(EXIT_SUCCESS);
 	} else {
-		if (!(communication_flag.is_busy())) {
+		if (!(interface.communication_flag.is_busy())) {
 			set_ui_state_notification(UI_N_READY);
 		}
 

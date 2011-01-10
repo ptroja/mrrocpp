@@ -1284,7 +1284,7 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.main_eb.command(boost::bind(&ui::common::Interface::MPup_int, &interface));
+	interface.main_eb->command(boost::bind(&ui::common::Interface::MPup_int, &interface));
 
 	return (Pt_CONTINUE);
 
