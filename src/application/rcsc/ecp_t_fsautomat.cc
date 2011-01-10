@@ -254,14 +254,15 @@ void fsautomat::main_task_algorithm(void)
 
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 std::cout<<"ECP GOT NEWSMOOTH"<<std::endl;
+if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 			if (trjConf) {
 
 				if (ecpLevel) {
-					//sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
-					//sg->load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					sg->load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				}
 			}//if
 			else //moj przypadekl -> z pliku
@@ -271,7 +272,7 @@ std::cout<<"ECP GOT NEWSMOOTH"<<std::endl;
 					//sg->get_type_for_smooth_xml(path.c_str());
 				//
 					//sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				//sg->load_file_with_path(path.c_str());
+				sg->load_file_with_path(path.c_str());
 			}//else
 			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {

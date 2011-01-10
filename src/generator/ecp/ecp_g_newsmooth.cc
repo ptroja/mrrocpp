@@ -508,6 +508,266 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	return true;
 }
 
+
+void newsmooth::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
+	bool first_time = true;
+	int numOfPoses = trajectory.getNumberOfPoses();
+	trajectory.showTime();
+
+	reset(); // Usuniecie listy pozycji, o ile istnieje
+	pose_vector = trajectory.getPoses();
+	pose_vector_iterator = pose_spec.end();
+}
+
+void newsmooth::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
+    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+
+	 bool first_time = true; // Znacznik
+
+	 xmlDocPtr doc = xmlParseFile(fileName);
+	 xmlXIncludeProcess(doc);
+	 if(doc == NULL)
+	 {
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	 }
+
+	 xmlNodePtr root = xmlDocGetRootElement(doc);
+	 if(!root || !root->name)
+	 {
+		 xmlFreeDoc(doc);
+		 throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+	 }
+
+	reset(); // Usuniecie listy pozycji, o ile istnieje
+
+   for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+      {
+   		for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+			{
+      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
+				{
+					xmlChar * stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					if(stateID && !strcmp((const char *)stateID, nodeName))
+					{
+						for(xmlNodePtr child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						{
+							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+							{
+								set_pose_from_xml(child_node, first_time);
+							}
+						}
+					}
+         		xmlFree(stateID);
+				}
+			}
+		}
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+      {
+         xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+         if(stateID && !strcmp((const char *)stateID, nodeName))
+			{
+	         for(xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+	         {
+	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+	            {
+						set_pose_from_xml(child_node, first_time);
+	            }
+	         }
+			}
+         xmlFree(stateID);
+		}
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+}
+
+void newsmooth::load_file_with_path(const char* file_name) {
+
+	reset();
+
+	sr_ecp_msg.message(file_name);
+    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+	//printf("load file with path\n");
+	//flushall();
+    char coordinate_type[80];  // Opis wspolrzednych: "MOTOR", "JOINT", ...
+    lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+    uint64_t e;       // Kod bledu systemowego
+    uint64_t number_of_poses; // Liczba zapamietanych pozycji
+    uint64_t i, j;    // Liczniki petli
+    bool first_time = true; // Znacznik
+    int extra_info;
+    double v[axes_num];
+    double a[axes_num];	// Wczytane wspolrzedne
+    double coordinates[axes_num];     // Wczytane wspolrzedne
+
+    std::ifstream from_file(file_name); // otworz plik do odczytu
+    if (!from_file.good())
+    {
+        perror(file_name);
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+    }
+
+    if ( !(from_file >> coordinate_type) )
+    {
+        throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+    }
+
+    // Usuwanie spacji i tabulacji
+    i = 0;
+    j = 0;
+    while ( coordinate_type[i] == ' ' || coordinate_type[i] == '\t')
+        i++;
+    while ( coordinate_type[i] != ' '   && coordinate_type[i] != '\t' &&
+            coordinate_type[i] != '\n'  && coordinate_type[i] != '\r' &&
+            coordinate_type[j] != '\0' )
+    {
+        coordinate_type[j] = toupper(coordinate_type[i]);
+        i++;
+        j++;
+    }
+    coordinate_type[j] = '\0';
+
+    if ( !strcmp(coordinate_type, "MOTOR") )
+    {
+        ps = lib::ECP_MOTOR;
+    }
+    else if ( !strcmp(coordinate_type, "JOINT") )
+    {
+        ps = lib::ECP_JOINT;
+    }
+    else if ( !strcmp(coordinate_type, "XYZ_EULER_ZYZ") )
+    {
+        ps = lib::ECP_XYZ_EULER_ZYZ;
+    }
+    else if ( !strcmp(coordinate_type, "XYZ_ANGLE_AXIS") )
+    {
+        ps = lib::ECP_XYZ_ANGLE_AXIS;
+    }
+
+    else
+    {
+        throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+    }
+
+    // printf("po coord type %d\n", ps);
+    if ( !(from_file >> number_of_poses) )
+    {
+        throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+    }
+
+    // printf("po number of poses %d\n", number_of_poses);
+    reset(); // Usuniecie listy pozycji, o ile istnieje
+    // printf("po flush pose list\n");
+
+
+    for ( i = 0; i < number_of_poses; i++)
+    {
+        //printf("w petli\n");
+        // printf("po vk\n");
+
+        for ( j = 0; j < axes_num; j++)
+        {
+            if ( !(from_file >> v[j]) )
+            { // Zabezpieczenie przed danymi nienumerycznymi
+                throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            }
+        }
+
+        // printf("po v\n");
+        for ( j = 0; j < axes_num; j++)
+        {
+            if ( !(from_file >> a[j]) )
+            { // Zabezpieczenie przed danymi nienumerycznymi
+                throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            }
+        }
+
+        // printf("po a\n");
+        for ( j = 0; j < axes_num; j++)
+        {
+            if ( !(from_file >> coordinates[j]) )
+            { // Zabezpieczenie przed danymi nienumerycznymi
+                throw ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+            }
+        }
+
+        if (first_time)
+        {
+            // Tworzymy glowe listy
+            first_time = false;
+            load_trajectory_pose(ps, v, a, coordinates);
+        }
+        else
+        {
+            // Wstaw do listy nowa pozycje
+            load_trajectory_pose(ps, v, a, coordinates);
+            // printf("Pose list element: %d, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0]);
+        }
+    } // end: for
+} // end: load_file_with_path()
+
+void newsmooth::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
+	char *dataLine, *value;
+	uint64_t number_of_poses; // Liczba zapamietanych pozycji
+	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	double v[axes_num];
+	double a[axes_num];	// Wczytane wspolrzedne
+	double coordinates[axes_num];     // Wczytane wspolrzedne
+
+	xmlNode *cchild_node, *ccchild_node;
+	xmlChar *coordinateType, *numOfPoses;
+	xmlChar *xmlDataLine;
+
+	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
+	ps = lib::returnProperPS((char *)coordinateType);
+	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+	{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+			{
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					lib::setValuesInArray(v, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					lib::setValuesInArray(a, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					lib::setValuesInArray(coordinates, (const char *)xmlDataLine);
+					xmlFree(xmlDataLine);
+				}
+			}
+			if (first_time)
+			{
+				// Tworzymy glowe listy
+				first_time = false;
+				load_trajectory_pose(ps, v, a, coordinates);
+				 //printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+			else
+			{
+				// Wstaw do listy nowa pozycje
+				load_trajectory_pose(ps, v, a, coordinates);
+				//printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
+			}
+		}
+	}
+	xmlFree(coordinateType);
+	xmlFree(numOfPoses);
+}
+
+
 //--------------- METHODS USED TO LOAD POSES END ----------------
 
 } // namespace generator
