@@ -39,30 +39,30 @@ namespace ui {
 namespace tfg_and_conv {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	common::EcpRobot(_interface, _config, _sr_ecp_msg, _robot_name)
+EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::EcpRobot(_interface, _robot_name)
 {
 
 	if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
-		ecp = new ecp::irp6ot_tfg::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
-		ecp = new ecp::irp6p_tfg::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::sarkofag::ROBOT_NAME) {
-		ecp = new ecp::sarkofag::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::sarkofag::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.001; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
-		ecp = new ecp::conveyor::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::conveyor::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
@@ -70,19 +70,19 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, li
 	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
 
 	} else if (_robot_name == lib::spkm::ROBOT_NAME) {
-		ecp = new ecp::spkm::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::smb::ROBOT_NAME) {
-		ecp = new ecp::smb::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::smb::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::shead::ROBOT_NAME) {
-		ecp = new ecp::shead::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::shead::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]

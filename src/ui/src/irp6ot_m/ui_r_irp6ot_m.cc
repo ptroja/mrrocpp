@@ -61,8 +61,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot
-							= new ui::irp6::EcpRobot(interface, *interface.config, *interface.all_ecp_msg, lib::irp6ot_m::ROBOT_NAME);
+					ui_ecp_robot = new ui::irp6::EcpRobot(interface, lib::irp6ot_m::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();

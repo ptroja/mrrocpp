@@ -40,20 +40,20 @@ namespace ui {
 namespace irp6 {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
-	common::EcpRobot(_interface, _config, _sr_ecp_msg, _robot_name)
+EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::EcpRobot(_interface, _robot_name)
 {
 
 	if (_robot_name == lib::irp6ot_m::ROBOT_NAME) {
 
-		ecp = new ecp::irp6ot_m::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6ot_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_GRIPPER_STEP = DBL_MAX;
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
 		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
 
 	} else if (_robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp = new ecp::irp6p_m::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6p_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_GRIPPER_STEP = DBL_MAX;
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
@@ -61,10 +61,10 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, li
 
 	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
 
-		ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 	} else if (_robot_name == lib::polycrank::ROBOT_NAME) {
 
-		ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::polycrank::robot(*(_interface.config), *(_interface.all_ecp_msg));
 	}
 
 	assert(ecp);
@@ -175,7 +175,7 @@ void EcpRobot::move_motors(const double final_position[])
 	if (ecp->is_synchronised()) { // Robot zsynchronizowany
 		// Odczyt aktualnego polozenia
 		//   	printf("is synchronised przed read motors\n");
-		read_motors( current_position);
+		read_motors(current_position);
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			temp = fabs(final_position[j] - current_position[j]);
@@ -248,7 +248,7 @@ void EcpRobot::move_joints(const double final_position[])
 	max_inc_ang = max_inc_lin = 0.0;
 
 	// Odczyt aktualnego polozenia
-	read_joints( current_position);
+	read_joints(current_position);
 
 	for (int j = 0; j < ecp->number_of_servos; j++) {
 		temp = fabs(final_position[j] - current_position[j]);
@@ -307,7 +307,7 @@ void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 
 	max_inc_ang = max_inc_lin = 0.0;
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz( current_position);
+	read_xyz_euler_zyz(current_position);
 
 	for (int j = 0; j < 3; j++) {
 		temp_lin = fabs(final_position[j] - current_position[j]);
@@ -376,7 +376,7 @@ void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 	A.get_xyz_euler_zyz(aa_eul); // zadane polecenie w formie XYZ_EULER_ZYZ
 
 	// Odczyt aktualnego polozenia we wsp. zewn. xyz i katy Euler'a Z-Y-Z
-	read_xyz_euler_zyz( current_position);
+	read_xyz_euler_zyz(current_position);
 
 	// Wyznaczenie liczby krokow
 

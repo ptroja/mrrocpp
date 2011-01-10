@@ -31,11 +31,11 @@ namespace ui {
 namespace spkm {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+EcpRobot::EcpRobot(common::Interface& _interface) :
 	common::EcpRobotDataPort(_interface)
 {
 
-	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
+	the_robot = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	epos_motor_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);

@@ -31,11 +31,11 @@ namespace ui {
 namespace bird_hand {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+EcpRobot::EcpRobot(common::Interface& _interface) :
 	common::EcpRobotDataPort(_interface)
 {
 
-	the_robot = new ecp::bird_hand::robot(_config, _sr_ecp_msg);
+	the_robot = new ecp::bird_hand::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	bird_hand_command_data_port
 			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);

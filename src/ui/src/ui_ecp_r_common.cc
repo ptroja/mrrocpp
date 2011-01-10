@@ -31,7 +31,7 @@ namespace ui {
 namespace common {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name) :
+EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 	interface(_interface), ecp(NULL)
 {
 

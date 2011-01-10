@@ -42,7 +42,7 @@ public:
 	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(common::Interface& _interface, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(common::Interface& _interface); // Konstruktor
 
 
 };
