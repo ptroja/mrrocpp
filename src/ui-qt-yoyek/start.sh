@@ -29,7 +29,7 @@ sleep 0.5
 echo CONFIGSRV_PID=${CONFIGSRV_PID}
 echo MESSIP_PID=${MESSIP_PID}
 
-./ui
+./ui-qt-yoyek
 
 kill ${MESSIP_PID}
 kill ${CONFIGSRV_PID}
