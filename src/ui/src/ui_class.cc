@@ -296,9 +296,9 @@ int Interface::manage_interface(void)
 
 	// uruchmomienie manage interface dla wszystkich robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->manage_interface();
-				}
+	{
+		robot_node.second->manage_interface();
+	}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -428,9 +428,9 @@ void Interface::reload_whole_configuration()
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-							{
-								robot_node.second->reload_configuration();
-							}
+				{
+					robot_node.second->reload_configuration();
+				}
 				break;
 			default:
 				break;
@@ -662,11 +662,11 @@ bool Interface::is_any_robot_active()
 {
 	bool r_value = false;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->state.is_active) {
-						return true;
-					}
-				}
+	{
+		if (robot_node.second->state.is_active) {
+			return true;
+		}
+	}
 
 	return r_value;
 }
@@ -675,15 +675,15 @@ bool Interface::are_all_robots_synchronised_or_inactive()
 {
 	bool r_value = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					r_value = r_value && (((robot_node.second->state.is_active)
-							&& (robot_node.second->state.edp.is_synchronised))
-							|| (!(robot_node.second->state.is_active)));
+	{
+		r_value = r_value && (((robot_node.second->state.is_active)
+						&& (robot_node.second->state.edp.is_synchronised))
+				|| (!(robot_node.second->state.is_active)));
 
-					if (!r_value) {
-						return false;
-					}
-				}
+		if (!r_value) {
+			return false;
+		}
+	}
 
 	return r_value;
 }
@@ -692,14 +692,14 @@ bool Interface::are_all_robots_loaded_or_inactive()
 {
 	bool r_value = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
-							> 0)) || (!(robot_node.second->state.is_active)));
+	{
+		r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+								> 0)) || (!(robot_node.second->state.is_active)));
 
-					if (!r_value) {
-						return false;
-					}
-				}
+		if (!r_value) {
+			return false;
+		}
+	}
 
 	return r_value;
 }
@@ -708,11 +708,11 @@ bool Interface::is_any_active_robot_loaded()
 {
 	bool r_value = false;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-						return true;
-					}
-				}
+	{
+		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+			return true;
+		}
+	}
 
 	return r_value;
 }

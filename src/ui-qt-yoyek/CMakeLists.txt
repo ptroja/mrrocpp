@@ -81,6 +81,7 @@ install(
   RUNTIME DESTINATION bin COMPONENT applications
 )
 
+install(PROGRAMS start.sh DESTINATION bin/ )
 
 ELSE(QT_FOUND)
 
