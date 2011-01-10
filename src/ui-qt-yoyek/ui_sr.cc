@@ -28,7 +28,7 @@
 #include <pthread.h>
 #include <cerrno>
 
-#include "mainwindow.h"
+#include "god.h"
 //#include "ui/src/ui.h"
 //#include "ui/src/ui_class.h"
 //#include "ui/src/ui_ecp.h"
@@ -55,10 +55,10 @@ void sr_buffer::operator()()
 
 	lib::fd_server_t ch;
 
-	ch = messip::port_create(mw.sr_attach_point);
+	ch = messip::port_create(gd.sr_attach_point);
 	assert(ch);
 
-	mw.is_sr_thread_loaded = true;
+	gd.is_sr_thread_loaded = true;
 	while (1) {
 		lib::sr_package_t sr_msg;
 
@@ -79,8 +79,8 @@ void sr_buffer::operator()()
 	}
 }
 
-sr_buffer::sr_buffer(MainWindow& _mw) :
-	mw(_mw), cb(UI_SR_BUFFER_LENGHT)
+sr_buffer::sr_buffer(God& _gd) :
+	gd(_gd), cb(UI_SR_BUFFER_LENGHT)
 {
 	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }

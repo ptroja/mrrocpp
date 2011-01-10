@@ -12,10 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
-void MainWindow::init()
-{
-	is_sr_thread_loaded = false;
-}
 
 MainWindow::~MainWindow()
 {

@@ -1,12 +1,13 @@
 #include <QtGui/QApplication>
-#include "mainwindow.h"
+
+#include "god.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
-	w.init();
-	w.show();
+
+	God gd;
+	gd.init();
 
 	return a.exec();
 }
