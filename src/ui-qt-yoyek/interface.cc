@@ -6,9 +6,9 @@
 #include <QtGui/QApplication>
 #include "mainwindow.h"
 
-#include "god.h"
+#include "interface.h"
 
-God::God()
+Interface::Interface()
 {
 	mw = new MainWindow();
 	//	printf("sr_buffer\n");
@@ -16,7 +16,7 @@ God::God()
 	//	thread_id.join();
 }
 
-void God::init()
+void Interface::init()
 {
 
 	is_sr_thread_loaded = false;
@@ -25,7 +25,7 @@ void God::init()
 
 }
 
-God::~God()
+Interface::~Interface()
 {
 	//	printf("sr_buffer\n");
 	//	thread_id.interrupt();

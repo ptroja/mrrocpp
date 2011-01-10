@@ -24,7 +24,7 @@ namespace common {
 class sr_buffer : public boost::noncopyable
 {
 private:
-	God& gd;
+	Interface& interface;
 	boost::thread thread_id;
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex mtx;
@@ -32,7 +32,7 @@ private:
 	static const int UI_SR_BUFFER_LENGHT = 50;
 
 public:
-	sr_buffer(God& _gd);
+	sr_buffer(Interface& _interface);
 
 	~sr_buffer();
 

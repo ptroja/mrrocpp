@@ -1,13 +1,13 @@
 #include <QtGui/QApplication>
 
-#include "god.h"
+#include "interface.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	God gd;
-	gd.init();
+	Interface interface;
+	interface.init();
 
 	return a.exec();
 }

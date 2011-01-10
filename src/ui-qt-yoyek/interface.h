@@ -1,17 +1,17 @@
-#ifndef __GOD_H
-#define __GOD_H
+#ifndef __INTERFACE_H
+#define __INTERFACE_H
 
 #include <QMainWindow>
 #include "mainwindow.h"
 
-class God
+class Interface
 {
 private:
 
 public:
-	God();
+	Interface();
 	void init();
-	~God();
+	~Interface();
 
 	std::string sr_attach_point;
 	bool is_sr_thread_loaded;
