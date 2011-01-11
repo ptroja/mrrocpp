@@ -42,12 +42,12 @@ void UiRobot::create_thread()
 
 void UiRobot::close_all_windows()
 {
-	/* TR
-	 BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
-	 {
-	 window_node.second->close();
-	 }
-	 */
+
+	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
+				{
+					window_node.second->close();
+				}
+
 }
 
 void UiRobot::abort_thread()
