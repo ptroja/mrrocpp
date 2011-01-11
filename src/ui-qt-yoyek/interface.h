@@ -14,13 +14,15 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+class sr_buffer;
+
 class Interface
 {
 private:
 
 public:
 	busy_flag communication_flag;
-//	sr_buffer* ui_sr_obj;
+	sr_buffer* ui_sr_obj;
 
 	Interface();
 	void init();
@@ -31,6 +33,10 @@ public:
 
 	std::string sr_attach_point;
 	bool is_sr_thread_loaded;
+
+
+	void create_threads();
+
 
 	MainWindow* mw;
 

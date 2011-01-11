@@ -7,6 +7,7 @@
 #include "mainwindow.h"
 
 #include "interface.h"
+#include "ui_sr.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -24,6 +25,8 @@ void Interface::init()
 {
 
 	is_sr_thread_loaded = false;
+
+	create_threads();
 
 	mw->show();
 
@@ -93,6 +96,22 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 	}
 
 	return 0;
+
+}
+
+void Interface::create_threads()
+{
+	/* Temporary
+	 meb_tid = new feb_thread(*main_eb);
+
+	 ui_ecp_obj = new ecp_buffer(*this);
+	 */
+	delay(1);
+	ui_sr_obj = new sr_buffer(*this);
+
+#if defined(__QNXNTO__)
+
+#endif
 
 }
 
