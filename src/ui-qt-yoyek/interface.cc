@@ -127,6 +127,15 @@ void Interface::init()
 		perror("Blad cwd w UI");
 	}
 	/* TR
+
+	 spkm = new spkm::UiRobot(*this);
+	 robot_m[spkm->robot_name] = spkm;
+
+	 smb = new smb::UiRobot(*this);
+	 robot_m[smb->robot_name] = smb;
+
+	 shead = new shead::UiRobot(*this);
+	 robot_m[shead->robot_name] = shead;
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
 
@@ -153,15 +162,6 @@ void Interface::init()
 
 	 speaker = new speaker::UiRobot(*this);
 	 robot_m[speaker->robot_name] = speaker;
-
-	 spkm = new spkm::UiRobot(*this);
-	 robot_m[spkm->robot_name] = spkm;
-
-	 smb = new smb::UiRobot(*this);
-	 robot_m[smb->robot_name] = smb;
-
-	 shead = new shead::UiRobot(*this);
-	 robot_m[shead->robot_name] = shead;
 
 	 polycrank = new polycrank::UiRobot(*this);
 	 robot_m[polycrank->robot_name] = polycrank;
