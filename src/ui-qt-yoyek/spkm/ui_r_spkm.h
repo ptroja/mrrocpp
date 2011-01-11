@@ -12,6 +12,8 @@
 #include "../ui_robot.h"
 #include "robot/spkm/const_spkm.h"
 
+class wnd_spkm_inc;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -26,11 +28,6 @@ namespace spkm {
 //
 
 class EcpRobot;
-/* TR
- class WndInc;
- class WndInt;
- class WndExternal;
- */
 
 class UiRobot : public common::UiRobot
 {
@@ -43,8 +40,8 @@ public:
 
 
 	EcpRobot *ui_ecp_robot;
+	wnd_spkm_inc *wnd_inc;
 	/* TR
-	 WndInc *wnd_inc;
 	 WndInt *wnd_int;
 	 WndExternal *wnd_external;
 	 */

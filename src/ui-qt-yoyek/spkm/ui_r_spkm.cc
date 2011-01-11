@@ -4,8 +4,8 @@
 
 #include "ui_r_spkm.h"
 #include "ui_ecp_r_spkm.h"
+#include "wnd_spkm_inc.h"
 /* TR
- #include "ui/src/spkm/wnd_spkm_inc.h"
  #include "ui/src/spkm/wnd_spkm_int.h"
  #include "ui/src/spkm/wnd_spkm_external.h"
  */
@@ -140,9 +140,11 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, "is_spkm_active"),
 			ui_ecp_robot(NULL)
 {
-	/* TR
-	 wnd_inc = new WndInc(interface, *this);
+
+	wnd_inc = new wnd_spkm_inc(interface, *this);
+	/*
 	 wndbase_m[wnd_inc->window_name] = wnd_inc;
+
 	 wnd_int = new WndInt(interface, *this);
 	 wndbase_m[wnd_int->window_name] = wnd_int;
 	 wnd_external = new WndExternal(interface, *this);
