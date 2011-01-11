@@ -10,6 +10,8 @@
 
 #include "ui.h"
 
+class QMainWindow;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
