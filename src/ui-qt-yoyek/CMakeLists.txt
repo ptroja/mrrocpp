@@ -45,11 +45,13 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 SET(GUI_CXX_SRCS
     main.cpp
     mainwindow.cpp
+    spkm/wnd_spkm_inc.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
     mainwindow.h
+    spkm/wnd_spkm_inc.h
 )
 
 # Generate MOC files
@@ -58,6 +60,7 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 # UI files
 SET(GUI_UI
     mainwindow.ui
+    spkm/wnd_spkm_inc.ui
 )
 
 # Generate UI include files
