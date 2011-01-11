@@ -262,6 +262,8 @@ void Interface::init()
 		perror("because of");
 	}
 
+	ui_msg->message("closing");
+
 	manage_interface();
 
 }
@@ -270,7 +272,6 @@ int Interface::MPup_int()
 
 {
 
-	int pt_res;
 	set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	if (mp.pid == -1) {
@@ -576,28 +577,17 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
-#if defined(USE_MESSIP_SRR)
-	return true;
-#else
-	std::string opendir_path("/net/");
-	opendir_path += _node;
 
-	if (access(opendir_path.c_str(), R_OK) != 0) {
-		std::string tmp(beginnig_of_message);
-		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-		ui_msg->message(lib::NON_FATAL_ERROR, tmp);
-
-		return false;
-	}
 	return true;
-#endif
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
 // uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
+// jesli dziala messip (np. pod linux) nieaktywne
 
 int Interface::check_gns()
 {
+
 	return 1;
 }
 
