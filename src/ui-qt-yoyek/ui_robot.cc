@@ -270,7 +270,7 @@ int UiRobot::reload_configuration()
 					if (i < 3) {
 						sprintf(tmp_string, "preset_position_%d", i);
 					} else {
-						sprintf(tmp_string, "front_position", i);
+						sprintf(tmp_string, "front_position");
 					}
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
