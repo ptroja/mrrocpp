@@ -7,16 +7,25 @@ namespace Ui {
 class MainWindow;
 }
 
+namespace mrrocpp {
+namespace ui {
+namespace common {
+class Interface;
+}
+}
+}
+
 class MainWindow : public QMainWindow
 {
 Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
 private:
 	Ui::MainWindow *ui;
+	mrrocpp::ui::common::Interface& interface;
 
 private slots:
 	void on_pushButton_l1_clicked();

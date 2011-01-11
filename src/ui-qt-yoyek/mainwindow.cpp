@@ -5,13 +5,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent), ui(new Ui::MainWindow)
+#include "interface.h"
+
+MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
+	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
 {
 	ui->setupUi(this);
 
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -26,7 +27,7 @@ void MainWindow::on_pushButton_l1_clicked()
 	format.setForeground(Qt::red);
 	ui->plainTextEdit_sr->setCurrentCharFormat(format);
 
-	ui->plainTextEdit_sr->appendPlainText("l1");
+	ui->plainTextEdit_sr->appendPlainText(interface.sr_attach_point.c_str());
 }
 
 void MainWindow::on_pushButton_l2_clicked()

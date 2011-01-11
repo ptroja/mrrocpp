@@ -22,7 +22,7 @@ Interface::Interface() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
 {
 
-	mw = new MainWindow();
+	mw = new MainWindow(*this);
 
 	main_eb = new function_execution_buffer(*this);
 
