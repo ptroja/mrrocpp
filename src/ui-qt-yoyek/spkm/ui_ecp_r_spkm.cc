@@ -20,7 +20,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "interface.h"
+#include "../interface.h"
 
 #include "base/lib/sr/srlib.h"
 

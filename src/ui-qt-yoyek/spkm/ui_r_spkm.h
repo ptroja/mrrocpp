@@ -8,8 +8,8 @@
 #ifndef __UI_R_SPKM_H
 #define __UI_R_SPKM_H
 
-#include "ui.h"
-#include "ui_robot.h"
+#include "../ui.h"
+#include "../ui_robot.h"
 #include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {

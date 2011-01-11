@@ -64,22 +64,24 @@ SET(GUI_UI
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 
 # Create GUI executable
-ADD_EXECUTABLE(ui-qt-yoyek 
-${GUI_CXX_SRCS}
-ui_sr.cc
-interface.cc
-ui_ecp_r_data_port.cc
-ui_ecp_r_spkm.cc
-ui_r_spkm.cc
-ui.cc
-ui_robot.cc
+ADD_EXECUTABLE(
+	ui-qt-yoyek 
+	${GUI_CXX_SRCS}
+	ui_sr.cc
+	interface.cc
+	ui_ecp_r_data_port.cc
+	spkm/ui_ecp_r_spkm.cc
+	spkm/ui_r_spkm.cc
+	ui.cc
+	ui_robot.cc
 )
 
 # Link executable with QT libraries
-TARGET_LINK_LIBRARIES(ui-qt-yoyek 
-ecp_robots ecp_mp
-${QT_LIBRARIES}
-${COMMON_LIBRARIES}
+TARGET_LINK_LIBRARIES(
+	ui-qt-yoyek 
+	ecp_robots ecp_mp
+	${QT_LIBRARIES}
+	${COMMON_LIBRARIES}
 )
 
 install(

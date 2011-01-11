@@ -8,13 +8,13 @@
 #ifndef _UI_ECP_R_SPKM_H
 #define _UI_ECP_R_SPKM_H
 
-#include "ui/src/ui.h"
+#include "../ui.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "robot/spkm/ecp_r_spkm.h"
-#include "ui_ecp_r_data_port.h"
+#include "../ui_ecp_r_data_port.h"
 
 namespace mrrocpp {
 namespace ui {
