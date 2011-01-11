@@ -11,6 +11,8 @@
 #include "interface.h"
 #include "ui_sr.h"
 
+#include "spkm/ui_r_spkm.h"
+
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
 {
@@ -52,6 +54,11 @@ void MainWindow::on_actionClear_Console_triggered()
 	ui->plainTextEdit_sr->clear();
 }
 
+void MainWindow::on_actionspkm_EDP_load_triggered()
+{
+	interface.spkm->edp_create();
+}
+
 void MainWindow::on_timer_slot()
 {
 
@@ -60,7 +67,7 @@ void MainWindow::on_timer_slot()
 	QTextCharFormat format;
 
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
-	static int Iteration_counter = 0; // licznik uruchomienia fukcji
+	static int Iteration_counter = 0; // licznik uruchomienia funkcji
 
 
 	Iteration_counter++;

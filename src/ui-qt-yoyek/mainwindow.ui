@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -98,8 +98,8 @@
       <addaction name="actionPosition_1"/>
       <addaction name="actionPosition_2"/>
      </widget>
-     <addaction name="actionEDP_load"/>
-     <addaction name="actionEDP_unload"/>
+     <addaction name="actionspkm_EDP_load"/>
+     <addaction name="actionspkm_EDP_unload"/>
      <addaction name="separator"/>
      <addaction name="menuPre_synchro_moves"/>
      <addaction name="menuPost_synchro_moves"/>
@@ -124,12 +124,12 @@
    <addaction name="menuSpecial"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionEDP_load">
+  <action name="actionspkm_EDP_load">
    <property name="text">
     <string>EDP load</string>
    </property>
   </action>
-  <action name="actionEDP_unload">
+  <action name="actionspkm_EDP_unload">
    <property name="text">
     <string>EDP unload</string>
    </property>
