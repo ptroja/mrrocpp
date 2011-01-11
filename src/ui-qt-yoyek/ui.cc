@@ -79,10 +79,11 @@ int function_execution_buffer::wait_and_execute()
 		has_command = false;
 		popped_command = com_fun;
 	}
-	/* TEMPORARY REMOVAL
-	 busy_flagger flagger(interface.communication_flag);
-	 interface.set_ui_state_notification(UI_N_BUSY);
-	 */
+
+	busy_flagger flagger(interface.communication_flag);
+
+	interface.set_ui_state_notification(UI_N_BUSY);
+
 	return popped_command();
 }
 
