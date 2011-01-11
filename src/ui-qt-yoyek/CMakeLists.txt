@@ -69,6 +69,7 @@ ${GUI_CXX_SRCS}
 ui_sr.cc
 interface.cc
 ui.cc
+ui_robot.cc
 )
 
 # Link executable with QT libraries
