@@ -6,7 +6,7 @@ add_executable(ecp_haar
 
 target_link_libraries(ecp_haar
 	ecp_r_irp6ot_m
-	ecp
+	ecp_generators
 )
 
 install(TARGETS ecp_haar DESTINATION bin)
