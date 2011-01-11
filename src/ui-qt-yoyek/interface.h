@@ -16,6 +16,9 @@
 
 namespace mrrocpp {
 namespace ui {
+namespace spkm {
+class UiRobot;
+}
 namespace common {
 
 class UiRobot;
@@ -106,7 +109,10 @@ public:
 
 	common::robots_t robot_m;
 
+	spkm::UiRobot *spkm;
 	/*TR
+	 smb::UiRobot *smb;
+	 shead::UiRobot *shead;
 	 bird_hand::UiRobot *bird_hand;
 	 //robot_m[lib::] = bird_hand;
 
@@ -118,9 +124,7 @@ public:
 	 irp6m::UiRobot *irp6m_m;
 	 conveyor::UiRobot *conveyor;
 	 speaker::UiRobot *speaker;
-	 spkm::UiRobot *spkm;
-	 smb::UiRobot *smb;
-	 shead::UiRobot *shead;
+
 	 polycrank::UiRobot *polycrank;
 	 */
 	Interface();

@@ -13,6 +13,7 @@
 
 #include "interface.h"
 #include "ui_sr.h"
+#include "spkm/ui_r_spkm.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -43,7 +44,6 @@ Interface::Interface() :
 int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
 	if (new_notifacion != notification_state) {
-		//	int pt_res = PtEnter(0);
 
 		notification_state = new_notifacion;
 
@@ -92,13 +92,7 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 				 */
 				break;
 		}
-		/* TR
-		 PtDamageWidget( ABW_PtLabel_ready_busy);
-		 PtFlush();
 
-		 if (pt_res >= 0)
-		 PtLeave(0);
-		 */
 		return 1;
 
 	}
@@ -126,16 +120,17 @@ void Interface::init()
 	if (cwd == NULL) {
 		perror("Blad cwd w UI");
 	}
+
+	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
 	/* TR
-
-	 spkm = new spkm::UiRobot(*this);
-	 robot_m[spkm->robot_name] = spkm;
-
 	 smb = new smb::UiRobot(*this);
 	 robot_m[smb->robot_name] = smb;
 
 	 shead = new shead::UiRobot(*this);
 	 robot_m[shead->robot_name] = shead;
+
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
 
@@ -332,10 +327,7 @@ int Interface::MPup_int()
 
 int Interface::manage_interface(void)
 {
-	/* TR
-	 int pt_res;
-	 pt_res = PtEnter(0);
-	 */
+
 	check_edps_state_and_modify_mp_state();
 	/*TR
 	 // na wstepie wylaczamy przyciski EDP z all robots menu. Sa one ewentualnie wlaczane dalej
@@ -344,13 +336,13 @@ int Interface::manage_interface(void)
 	 // menu file
 	 // ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
 
-
-	 // uruchmomienie manage interface dla wszystkich robotow
-	 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	 {
-	 robot_node.second->manage_interface();
-	 }
 	 */
+	// uruchmomienie manage interface dla wszystkich robotow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->manage_interface();
+				}
+
 	// wlasciwosci menu  ABW_base_all_robots
 
 
@@ -489,13 +481,13 @@ void Interface::reload_whole_configuration()
 		{
 			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
 			case UI_ALL_EDPS_NONE_EDP_LOADED:
-				/* TR
-				 // uruchmomienie manage interface dla wszystkich robotow
-				 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				 {
-				 robot_node.second->reload_configuration();
-				 }
-				 */
+
+				// uruchmomienie manage interface dla wszystkich robotow
+				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+							{
+								robot_node.second->reload_configuration();
+							}
+
 				break;
 			default:
 				break;
@@ -731,63 +723,63 @@ int Interface::check_gns()
 bool Interface::is_any_robot_active()
 {
 	bool r_value = false;
-	/* TR
-	 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	 {
-	 if (robot_node.second->state.is_active) {
-	 return true;
-	 }
-	 }
-	 */
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->state.is_active) {
+						return true;
+					}
+				}
+
 	return r_value;
 }
 
 bool Interface::are_all_robots_synchronised_or_inactive()
 {
 	bool r_value = true;
-	/* TR
-	 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	 {
-	 r_value = r_value && (((robot_node.second->state.is_active)
-	 && (robot_node.second->state.edp.is_synchronised))
-	 || (!(robot_node.second->state.is_active)));
 
-	 if (!r_value) {
-	 return false;
-	 }
-	 }
-	 */
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active)
+							&& (robot_node.second->state.edp.is_synchronised))
+							|| (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
 	return r_value;
 }
 
 bool Interface::are_all_robots_loaded_or_inactive()
 {
 	bool r_value = true;
-	/* TR
-	 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	 {
-	 r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
-	 > 0)) || (!(robot_node.second->state.is_active)));
 
-	 if (!r_value) {
-	 return false;
-	 }
-	 }
-	 */
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+							> 0)) || (!(robot_node.second->state.is_active)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
 	return r_value;
 }
 
 bool Interface::is_any_active_robot_loaded()
 {
 	bool r_value = false;
-	/* TR
-	 BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	 {
-	 if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-	 return true;
-	 }
-	 }
-	 */
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						return true;
+					}
+				}
+
 	return r_value;
 }
 
