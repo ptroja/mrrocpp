@@ -57,6 +57,7 @@ void MainWindow::on_timer_slot()
 
 	//fprintf(stderr, "OnTimer()\n");
 
+	QTextCharFormat format;
 
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
 	static int Iteration_counter = 0; // licznik uruchomienia fukcji
@@ -131,6 +132,7 @@ void MainWindow::on_timer_slot()
 			{
 				case lib::FATAL_ERROR:
 					strcat(current_line, "FATAL_ERROR:     ");
+					format.setForeground(Qt::red);
 					/* TR
 					 attr.text_color = Pg_RED;
 					 */
@@ -138,6 +140,7 @@ void MainWindow::on_timer_slot()
 				case lib::NON_FATAL_ERROR:
 
 					strcat(current_line, "NON_FATAL_ERROR: ");
+					format.setForeground(Qt::blue);
 					/* TR
 					 attr.text_color = Pg_BLUE;
 					 */
@@ -146,25 +149,28 @@ void MainWindow::on_timer_slot()
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
 					strcat(current_line, "SYSTEM_ERROR:    ");
+					format.setForeground(Qt::magenta);
 					/* TR
 					 attr.text_color = Pg_PURPLE;
 					 */
 					break;
 				case lib::NEW_MESSAGE:
 					strcat(current_line, "MESSAGE:         ");
+					format.setForeground(Qt::black);
 					/* TR
 					 attr.text_color = Pg_BLACK;
 					 */
 					break;
 				default:
 					strcat(current_line, "UNKNOWN ERROR:   ");
+					format.setForeground(Qt::yellow);
 					/* TR
 					 attr.text_color = Pg_YELLOW;
 					 */
 			}; // end: switch (message.message_type)
 
 			strcat(current_line, sr_msg.description);
-			strcat(current_line, "\n");
+			//	strcat(current_line, "\n");
 			// 	printf("c_l W ONT: %s\n",current_line);
 			// delay(1000);
 			// 	attr.text_color=Pg_DBLUE;
@@ -175,6 +181,8 @@ void MainWindow::on_timer_slot()
 			 PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
 			 */
 
+			ui->plainTextEdit_sr->setCurrentCharFormat(format);
+			ui->plainTextEdit_sr->appendPlainText(current_line);
 			(*interface.log_file_outfile) << current_line;
 		}
 
