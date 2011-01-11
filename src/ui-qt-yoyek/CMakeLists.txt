@@ -68,6 +68,7 @@ ADD_EXECUTABLE(ui-qt-yoyek
 ${GUI_CXX_SRCS}
 ui_sr.cc
 interface.cc
+ui.cc
 )
 
 # Link executable with QT libraries

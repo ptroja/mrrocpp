@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 #include "mainwindow.h"
+#include "ui.h"
+
+namespace mrrocpp {
+namespace ui {
+namespace common {
 
 class Interface
 {
@@ -19,6 +24,10 @@ public:
 	MainWindow* mw;
 
 };
+
+}
+}
+}
 
 #endif
 

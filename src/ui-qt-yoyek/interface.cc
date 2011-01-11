@@ -8,6 +8,10 @@
 
 #include "interface.h"
 
+namespace mrrocpp {
+namespace ui {
+namespace common {
+
 Interface::Interface()
 {
 	mw = new MainWindow();
@@ -30,4 +34,7 @@ Interface::~Interface()
 	//	printf("sr_buffer\n");
 	//	thread_id.interrupt();
 	//	thread_id.join();
+}
+}
+}
 }
