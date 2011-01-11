@@ -10,14 +10,15 @@
 
 #include "ui/src/ui.h"
 
+class QMainWindow;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 class Interface;
-class WndBase;
 
-typedef std::map <std::string, WndBase*> WndBase_t;
+typedef std::map <std::string, QMainWindow*> WndBase_t;
 typedef WndBase_t::value_type WndBase_pair_t;
 
 //
