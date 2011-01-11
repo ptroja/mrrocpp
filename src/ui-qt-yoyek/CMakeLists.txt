@@ -70,6 +70,7 @@ ui_sr.cc
 interface.cc
 ui.cc
 ui_robot.cc
+ui_ecp_r_data_port.cc
 )
 
 # Link executable with QT libraries
