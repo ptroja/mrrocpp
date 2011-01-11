@@ -328,6 +328,8 @@ int Interface::MPup_int()
 int Interface::manage_interface(void)
 {
 
+	// UWAGA ta funkcja powinna byc odporna na odpalaenie z dowolnego watku !!!
+
 	check_edps_state_and_modify_mp_state();
 	/*TR
 	 // na wstepie wylaczamy przyciski EDP z all robots menu. Sa one ewentualnie wlaczane dalej
@@ -596,128 +598,7 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 
 int Interface::check_gns()
 {
-	if (access("/etc/system/config/useqnet", R_OK)) {
-		printf("UI: There is no /etc/system/config/useqnet file; the qnet will not work properly.\n");
-		/* TR
-		 PtExit(EXIT_SUCCESS);
-		 */
-	}
-
-	unsigned short number_of_gns_servers = 0;
-	std::string gns_server_node;
-
-	// poszukiwanie serwerow gns
-	for (std::list <Interface::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
-			!= all_node_list.end(); node_list_iterator++) {
-		std::string opendir_path("/net/");
-
-		opendir_path += *node_list_iterator;
-		opendir_path += "/proc/mount/dev/name/gns_server";
-
-		// sprawdzenie czy dziala serwer gns
-
-		if (access(opendir_path.c_str(), R_OK) == 0) {
-			number_of_gns_servers++;
-			gns_server_node = *node_list_iterator;
-		}
-	}
-
-	// there is more than one gns server in the QNX network
-	if (number_of_gns_servers > 1) {
-		printf("UI: There is more than one gns server in the QNX network; the qnet will not work properly.\n");
-		// printing of gns server nodes
-		for (std::list <Interface::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
-				!= all_node_list.end(); node_list_iterator++) {
-			std::string opendir_path("/net/");
-
-			opendir_path += *node_list_iterator;
-			opendir_path += "/proc/mount/dev/name/gns_server";
-
-			// sprawdzenie czy dziala serwer gns
-			if (access(opendir_path.c_str(), R_OK) == 0) {
-				printf("There is gns server on %s node\n", (*node_list_iterator).c_str());
-			}
-		}
-		/* TR
-		 PtExit(EXIT_SUCCESS);
-		 */
-	}
-	// gns server was not found in the QNX network
-	else if (!number_of_gns_servers) {
-		printf("UI: gns server was not found in the QNX network, it will be automatically run on local node\n");
-
-		// ew. zabicie klienta gns
-
-		if (access("/dev/name", R_OK) == 0) {
-			system("slay gns");
-		}
-
-		// uruchomienie serwera
-		system("gns -s");
-
-		// poszukiwanie serwerow gns
-		for (std::list <Interface::list_t>::iterator node_list_iterator = all_node_list.begin(); node_list_iterator
-				!= all_node_list.end(); ++node_list_iterator) {
-			std::string opendir_path("/net/");
-
-			opendir_path += *node_list_iterator;
-			opendir_path += "/proc/mount/dev/name/gns_server";
-			//	strcat(opendir_path, "/dev/name/gns_server");
-
-			// sprawdzenie czy dziala serwer gns
-			if (access(opendir_path.c_str(), R_OK) == 0) {
-				number_of_gns_servers++;
-				gns_server_node = *node_list_iterator;
-			}
-		}
-	}
-
-	// sprawdzanie lokalne
-
-	if (access("/proc/mount/dev/name", R_OK) != 0) {
-		std::string system_command("gns -c ");
-		system_command += gns_server_node;
-		system(system_command.c_str());
-	}
-
-	// sprawdzenie czy wezly w konfiuracji sa uruchomione i ew. uruchomienie na nich brakujacych klientow gns
-	for (std::list <Interface::list_t>::iterator node_list_iterator = config_node_list.begin(); node_list_iterator
-			!= config_node_list.end(); node_list_iterator++) {
-		std::string opendir_path("/net/");
-
-		opendir_path += *node_list_iterator;
-
-		// sprawdzenie czy istnieje wezel
-		if (access(opendir_path.c_str(), R_OK) == 0) {
-			opendir_path += "/proc/mount/dev/name";
-
-			// sprawdzenie czy dziala gns
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				std::string system_command("on -f ");
-
-				system_command += *node_list_iterator;
-				system_command += " gns -c ";
-				system_command += gns_server_node;
-
-				std::cerr << "SYSTEM(" << system_command << ")" << std::endl;
-				system(system_command.c_str());
-			}
-
-		} else {
-			fprintf(stderr, "check_gns - Nie wykryto wezla: %s, ktory wystepuje w pliku konfiguracyjnym\n", (*node_list_iterator).c_str());
-
-			if ((is_sr_thread_loaded) && (ui_msg != NULL)) {
-				std::string tmp;
-				tmp = std::string("check_gns - Nie wykryto wezla: ") + (*node_list_iterator)
-						+ std::string(", ktory wystepuje w pliku konfiguracyjnym");
-				ui_msg->message(lib::NON_FATAL_ERROR, tmp);
-			}
-
-		}
-	}
-	/* TR
-	 return (Pt_CONTINUE);
-	 */
+	return 1;
 }
 
 bool Interface::is_any_robot_active()
