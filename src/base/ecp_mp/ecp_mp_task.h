@@ -17,6 +17,7 @@
 
 #include <libxml/tree.h>
 
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/ecp_mp/Trajectory.h"
 
 /**
@@ -49,7 +50,7 @@ public:
 	/**
 	 * @brief Container type for storing trajectory objects.
 	 */
-	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
+	typedef std::map <const char *, ecp_mp::common::trajectory_pose::trajectory_pose /*, str_cmp */> trajectories_t;
 
 	/**
 	 * @brief Constructor
@@ -172,7 +173,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	ecp_mp::common::Trajectory * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID);
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory
@@ -180,7 +181,7 @@ public:
 	 * @param robot_name_t robot associated with trajectory
 	 * @return trajectories_t pointer
 	 */
-	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
+	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
 };
 
 /*!

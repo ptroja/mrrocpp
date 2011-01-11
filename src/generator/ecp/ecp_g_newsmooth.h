@@ -8,18 +8,14 @@
 #if !defined(_ECP_GEN_NEWSMOOTH_H)
 # define _ECP_GEN_NEWSMOOTH_H
 
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xinclude.h>
+
 
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
 #include "generator/ecp/trajectory_interpolator/bang_bang_interpolator.h"
 
-#include "../../base/ecp_mp/Trajectory.h"
-#include "../../base/lib/datastr.h"
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -130,10 +126,7 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		bool load_trajectory_from_file(const char* file_name);
 
 
-		void load_trajectory_from_xml(mrrocpp::ecp_mp::common::Trajectory &trajectory);
-		void load_trajectory_from_xml(const char* fileName, const char* nodeName);
-		void load_file_with_path(const char* file_name);
-		void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
+
 
 };
 

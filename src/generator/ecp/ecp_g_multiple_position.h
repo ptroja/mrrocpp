@@ -667,6 +667,13 @@ public:
 
 		return 0;
 	}
+    /**
+     * Method load the trajectory_pose object to the pose_vector.
+     * @param trajectory_pose pose to load
+     */
+    void load_pose(Pos trajectory_pose) {
+    	pose_vector.push_back(trajectory_pose);
+    }
 };
 
 } // namespace generator

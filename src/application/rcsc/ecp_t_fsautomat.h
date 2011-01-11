@@ -9,6 +9,11 @@
 #if !defined(_ECP_TASK_FSAUTOMAT_H)
 #define _ECP_TASK_FSAUTOMAT_H
 
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
+
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_st_go.h"
 #include "base/ecp/ecp_g_transparent.h"
@@ -17,7 +22,8 @@
 #include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
-#include "base/ecp_mp/Trajectory.h"
+#include "base/lib/trajectory_pose/trajectory_pose.h"
+#include "base/lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -43,6 +49,12 @@ protected:
 	common::sub_task::gripper_opening* go_st;
 
 	trajectories_t * trjMap;
+	int axes_num;
+
+	void load_trajectory_from_xml(mrrocpp::ecp_mp::common::Trajectory &trajectory);
+	void load_trajectory_from_xml(const char* fileName, const char* nodeName);
+	void load_file_with_path(const char* file_name);
+	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);
 
 public:
 	// KONSTRUKTORY
@@ -50,6 +62,8 @@ public:
 
 	// methods for ECP template to redefine in concrete classes
 	void main_task_algorithm(void);
+
+
 };
 
 } // namespace task
