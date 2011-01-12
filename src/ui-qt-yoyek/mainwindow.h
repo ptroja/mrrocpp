@@ -42,9 +42,21 @@ private slots:
 	// robot menu
 
 	// spkm menu
-	void on_actionspkm_EDP_load_triggered();
-	void on_actionspkm_EDP_unload_triggered();
+	void on_actionspkm_EDP_Load_triggered();
+	void on_actionspkm_EDP_Unload_triggered();
+
+	void on_actionspkm_Synchronise_triggered();
 	void on_actionspkm_Motors_triggered();
+
+	void on_actionspkm_Motors_post_triggered();
+	void on_actionspkm_Joints_triggered();
+	void on_actionspkm_External_triggered();
+
+	void on_actionspkm_Synchro_Position_triggered();
+	void on_actionspkm_Front_Position_triggered();
+	void on_actionspkm_Position_0_triggered();
+	void on_actionspkm_Position_1_triggered();
+	void on_actionspkm_Position_2_triggered();
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();

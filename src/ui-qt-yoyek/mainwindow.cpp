@@ -216,19 +216,64 @@ void MainWindow::on_actionQuit_triggered()
 
 // spkm menu
 
-void MainWindow::on_actionspkm_EDP_load_triggered()
+void MainWindow::on_actionspkm_EDP_Load_triggered()
 {
 	interface.spkm->edp_create();
 }
 
-void MainWindow::on_actionspkm_EDP_unload_triggered()
+void MainWindow::on_actionspkm_EDP_Unload_triggered()
 {
 	interface.spkm->EDP_slay_int();
+}
+
+void MainWindow::on_actionspkm_Synchronise_triggered()
+{
+	interface.spkm->synchronise();
 }
 
 void MainWindow::on_actionspkm_Motors_triggered()
 {
 	interface.spkm->wnd_inc->show();
+}
+
+void MainWindow::on_actionspkm_Motors_post_triggered()
+{
+	interface.spkm->wnd_inc->show();
+}
+
+void MainWindow::on_actionspkm_Joints_triggered()
+{
+	//	interface.spkm->wnd_int->show();
+}
+
+void MainWindow::on_actionspkm_External_triggered()
+{
+	//	interface.spkm->wnd_ext->show();
+}
+
+void MainWindow::on_actionspkm_Synchro_Position_triggered()
+{
+	interface.spkm->move_to_synchro_position();
+}
+
+void MainWindow::on_actionspkm_Front_Position_triggered()
+{
+	interface.spkm->move_to_front_position();
+}
+
+void MainWindow::on_actionspkm_Position_0_triggered()
+{
+	interface.spkm->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionspkm_Position_1_triggered()
+{
+	interface.spkm->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionspkm_Position_2_triggered()
+{
+	interface.spkm->move_to_preset_position(2);
 }
 
 // all robots menu
