@@ -60,6 +60,11 @@ void MainWindow::on_actionspkm_EDP_load_triggered()
 	interface.spkm->edp_create();
 }
 
+void MainWindow::on_actionspkm_EDP_unload_triggered()
+{
+	interface.spkm->EDP_slay_int();
+}
+
 void MainWindow::on_actionspkm_Motors_triggered()
 {
 	interface.spkm->wnd_inc->show();

@@ -60,7 +60,7 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 
 	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
 
-		ecp = new ecp::irp6m::robot(_config, _sr_ecp_msg);
+		ecp = new ecp::irp6m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	}
 
