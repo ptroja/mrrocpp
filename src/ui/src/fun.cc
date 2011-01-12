@@ -1545,6 +1545,7 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1568,6 +1569,7 @@ int all_robots_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1592,6 +1594,7 @@ int all_robots_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1615,6 +1618,7 @@ int all_robots_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1639,6 +1643,7 @@ int all_robots_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {

@@ -163,6 +163,12 @@ public:
 	int unload_all();
 	int slay_all();
 
+	int all_robots_move_to_synchro_position();
+	int all_robots_move_to_front_position();
+	int all_robots_move_to_preset_position_0();
+	int all_robots_move_to_preset_position_1();
+	int all_robots_move_to_preset_position_2();
+
 	bool is_any_robot_active();
 	bool are_all_robots_synchronised_or_inactive();
 	bool are_all_robots_loaded_or_inactive();
