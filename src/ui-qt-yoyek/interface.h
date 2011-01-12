@@ -150,6 +150,7 @@ public:
 	//! TODO: throw an exception (assumed inheritance from std::exception)
 
 	void create_threads();
+	int EDP_all_robots_slay();
 
 	bool is_any_robot_active();
 	bool are_all_robots_synchronised_or_inactive();

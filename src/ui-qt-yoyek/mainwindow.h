@@ -36,6 +36,8 @@ private slots:
 	void on_actionspkm_EDP_load_triggered();
 	void on_actionspkm_EDP_unload_triggered();
 	void on_actionspkm_Motors_triggered();
+	void on_actionQuit_triggered();
+
 
 	void on_timer_slot();
 

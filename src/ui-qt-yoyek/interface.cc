@@ -994,6 +994,19 @@ void Interface::create_threads()
 
 }
 
+int Interface::EDP_all_robots_slay()
+
+{
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->EDP_slay_int();
+				}
+
+	return 1;
+
+}
+
 }
 }
 }

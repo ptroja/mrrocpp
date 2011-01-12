@@ -70,6 +70,13 @@ void MainWindow::on_actionspkm_Motors_triggered()
 	interface.spkm->wnd_inc->show();
 }
 
+void MainWindow::on_actionQuit_triggered()
+{
+
+	interface.UI_close();
+
+}
+
 void MainWindow::on_timer_slot()
 {
 
@@ -95,11 +102,6 @@ void MainWindow::on_timer_slot()
 
 		// 	printf("timer\n");
 		int attributes_mask;
-		/* TR
-		 PtMultiTextAttributes_t attr;
-		 */
-
-		// char buffer[ 80 ];
 
 		char current_line[400];
 		lib::sr_package_t sr_msg;
@@ -151,53 +153,33 @@ void MainWindow::on_timer_slot()
 				case lib::FATAL_ERROR:
 					strcat(current_line, "FATAL_ERROR:     ");
 					format.setForeground(Qt::red);
-					/* TR
-					 attr.text_color = Pg_RED;
-					 */
+
 					break;
 				case lib::NON_FATAL_ERROR:
 
 					strcat(current_line, "NON_FATAL_ERROR: ");
 					format.setForeground(Qt::blue);
-					/* TR
-					 attr.text_color = Pg_BLUE;
-					 */
+
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
 					strcat(current_line, "SYSTEM_ERROR:    ");
 					format.setForeground(Qt::magenta);
-					/* TR
-					 attr.text_color = Pg_PURPLE;
-					 */
+
 					break;
 				case lib::NEW_MESSAGE:
 					strcat(current_line, "MESSAGE:         ");
 					format.setForeground(Qt::black);
-					/* TR
-					 attr.text_color = Pg_BLACK;
-					 */
+
 					break;
 				default:
 					strcat(current_line, "UNKNOWN ERROR:   ");
 					format.setForeground(Qt::yellow);
-					/* TR
-					 attr.text_color = Pg_YELLOW;
-					 */
+
 			}; // end: switch (message.message_type)
 
 			strcat(current_line, sr_msg.description);
-			//	strcat(current_line, "\n");
-			// 	printf("c_l W ONT: %s\n",current_line);
-			// delay(1000);
-			// 	attr.text_color=Pg_DBLUE;
-
-			/* TR
-			 attributes_mask = Pt_MT_TEXT_COLOR;
-
-			 PtMultiTextModifyText(ABW_PtMultiText_sr_window, NULL, NULL, -1, current_line, strlen(current_line), &attr, attributes_mask);
-			 */
 
 			ui->plainTextEdit_sr->setCurrentCharFormat(format);
 			ui->plainTextEdit_sr->appendPlainText(current_line);
@@ -226,9 +208,8 @@ void MainWindow::on_timer_slot()
 		//	printf("w ontimer 4\n");
 		closing_delay_counter = 20;// opoznienie zamykania
 		interface.ui_state = 5;
-		/* TR
-		 EDP_all_robots_slay(widget, apinfo, cbinfo);
-		 */
+
+		interface.EDP_all_robots_slay();
 
 	} else if (interface.ui_state == 5) {// odlcizanie do zamnkiecia
 		//	printf("w ontimer 5\n");
@@ -239,9 +220,7 @@ void MainWindow::on_timer_slot()
 		delete interface.log_file_outfile;
 		printf("UI CLOSED\n");
 		interface.abort_threads();
-		/* TR
-		 PtExit(EXIT_SUCCESS);
-		 */
+		interface.mw->close();
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
