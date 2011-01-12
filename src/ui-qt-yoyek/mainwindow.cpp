@@ -231,6 +231,49 @@ void MainWindow::on_actionspkm_Motors_triggered()
 	interface.spkm->wnd_inc->show();
 }
 
+// all robots menu
+
+
+void MainWindow::on_actionall_EDP_Load_triggered()
+{
+	interface.EDP_all_robots_create();
+}
+
+void MainWindow::on_actionall_EDP_Uload_triggered()
+{
+	interface.EDP_all_robots_slay();
+}
+
+void MainWindow::on_actionall_Synchronisation_triggered()
+{
+	interface.EDP_all_robots_synchronise();
+}
+
+void MainWindow::on_actionall_Synchro_Position_triggered()
+{
+	interface.all_robots_move_to_synchro_position();
+}
+
+void MainWindow::on_actionall_Front_Position_triggered()
+{
+	interface.all_robots_move_to_front_position();
+}
+
+void MainWindow::on_actionall_Position_0_triggered()
+{
+	interface.all_robots_move_to_preset_position_0();
+}
+
+void MainWindow::on_actionall_Position_1_triggered()
+{
+	interface.all_robots_move_to_preset_position_1();
+}
+
+void MainWindow::on_actionall_Position_2_triggered()
+{
+	interface.all_robots_move_to_preset_position_2();
+}
+
 // special menu
 
 
