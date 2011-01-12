@@ -1121,7 +1121,7 @@ int Interface::slay_all()
 				program_node_list_iterator->program_name.c_str()
 		);
 #else
-		sprintf(system_command, "slay -9 -v -f -n %s %s", program_node_list_iterator->node_name.c_str(), program_node_list_iterator->program_name.c_str());
+		sprintf(system_command, "killall -e -q -v %s", program_node_list_iterator->program_name.c_str());
 #endif
 		printf("bbb: %s\n", system_command);
 		system(system_command);
