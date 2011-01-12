@@ -1007,6 +1007,68 @@ int Interface::EDP_all_robots_slay()
 
 }
 
+int Interface::MPslay()
+
+{
+
+	if (mp.pid != -1) {
+
+		if ((mp.state == ui::common::UI_MP_TASK_RUNNING) || (mp.state == ui::common::UI_MP_TASK_PAUSED)) {
+
+			pulse_stop_mp();
+		}
+
+		messip::port_disconnect(mp.pulse_fd);
+
+		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
+		// 	printf("mp slay\n");
+		/* TR
+		 SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
+		 */
+		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
+
+	}
+	// delay(1000);
+	// 	kill(mp_pid,SIGTERM);
+	// 	printf("mp pupa po kill\n");
+	mp.pid = -1;
+	mp.pulse_fd = lib::invalid_fd;
+
+	/* TR
+	 irp6ot_m->deactivate_ecp_trigger();
+	 irp6p_m->deactivate_ecp_trigger();
+	 conveyor->deactivate_ecp_trigger();
+	 speaker->deactivate_ecp_trigger();
+	 irp6m_m->deactivate_ecp_trigger();
+	 */
+	// modyfikacja menu
+	manage_interface();
+	/* TR
+	 process_control_window_init(widget, apinfo, cbinfo);
+	 */
+	return 1;
+
+}
+
+int Interface::pulse_stop_mp()
+
+{
+
+	if ((mp.state == ui::common::UI_MP_TASK_RUNNING) || (mp.state == ui::common::UI_MP_TASK_PAUSED)) {
+
+		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
+
+		execute_mp_pulse(MP_STOP);
+		/* TR
+		 process_control_window_init(widget, apinfo, cbinfo);
+		 */
+		manage_interface();
+	}
+
+	return 1;
+
+}
+
 }
 }
 }

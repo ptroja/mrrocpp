@@ -151,6 +151,8 @@ public:
 
 	void create_threads();
 	int EDP_all_robots_slay();
+	int MPslay();
+	int pulse_stop_mp();
 
 	bool is_any_robot_active();
 	bool are_all_robots_synchronised_or_inactive();

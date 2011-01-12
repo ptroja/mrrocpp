@@ -196,9 +196,9 @@ void MainWindow::on_timer_slot()
 		closing_delay_counter = 20;// opoznienie zamykania
 		interface.ui_state = 3;
 		// 		delay(5000);
-		/* TR
-		 MPslay(widget, apinfo, cbinfo);
-		 */
+
+		interface.MPslay();
+
 		interface.ui_msg->message("closing");
 	} else if (interface.ui_state == 3) {// odliczanie
 		// 	printf("w ontimer 3\n");
