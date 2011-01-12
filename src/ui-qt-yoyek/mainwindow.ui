@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -126,21 +126,21 @@
     <property name="title">
      <string>All robots</string>
     </property>
-    <widget class="QMenu" name="menuPreset_Positions">
+    <widget class="QMenu" name="menuall_Preset_Positions">
      <property name="title">
       <string>Preset Positions</string>
      </property>
-     <addaction name="actionSynchro_Position"/>
-     <addaction name="actionFront_Position"/>
-     <addaction name="actionPosition_3"/>
-     <addaction name="actionPosition_4"/>
-     <addaction name="actionPosition_5"/>
+     <addaction name="actionall_Synchro_Position"/>
+     <addaction name="actionall_Front_Position"/>
+     <addaction name="actionall_Position_0"/>
+     <addaction name="actionall_Position_1"/>
+     <addaction name="actionall_Position_2"/>
     </widget>
-    <addaction name="actionEDP_Load"/>
-    <addaction name="actionEDP_Uload"/>
+    <addaction name="actionall_EDP_Load"/>
+    <addaction name="actionall_EDP_Uload"/>
     <addaction name="separator"/>
-    <addaction name="actionSynchronisation"/>
-    <addaction name="menuPreset_Positions"/>
+    <addaction name="actionall_Synchronisation"/>
+    <addaction name="menuall_Preset_Positions"/>
    </widget>
    <widget class="QMenu" name="menuTask">
     <property name="title">
@@ -256,44 +256,44 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionEDP_Load">
+  <action name="actionall_EDP_Load">
    <property name="text">
     <string>EDP Load</string>
    </property>
   </action>
-  <action name="actionEDP_Uload">
+  <action name="actionall_EDP_Uload">
    <property name="text">
     <string>EDP Unload</string>
    </property>
   </action>
-  <action name="actionSynchronisation">
+  <action name="actionall_Synchronisation">
    <property name="text">
     <string>Synchronisation</string>
    </property>
   </action>
-  <action name="actionSynchro_Position">
+  <action name="actionall_Synchro_Position">
    <property name="text">
     <string>Synchro Position</string>
    </property>
   </action>
-  <action name="actionFront_Position">
+  <action name="actionall_Front_Position">
    <property name="text">
     <string>Front Position</string>
    </property>
   </action>
-  <action name="actionPosition_3">
+  <action name="actionall_Position_0">
    <property name="text">
     <string>Position 0</string>
    </property>
   </action>
-  <action name="actionPosition_4">
+  <action name="actionall_Position_1">
    <property name="text">
     <string>Position 1</string>
    </property>
   </action>
-  <action name="actionPosition_5">
+  <action name="actionall_Position_2">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position 2</string>
    </property>
   </action>
   <action name="actionMP_Load">

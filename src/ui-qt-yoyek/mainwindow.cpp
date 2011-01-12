@@ -50,43 +50,6 @@ void MainWindow::on_pushButton_l2_clicked()
 	ui->plainTextEdit_sr->appendPlainText("l2");
 }
 
-void MainWindow::on_actionClear_Console_triggered()
-{
-	ui->plainTextEdit_sr->clear();
-}
-
-void MainWindow::on_actionspkm_EDP_load_triggered()
-{
-	interface.spkm->edp_create();
-}
-
-void MainWindow::on_actionspkm_EDP_unload_triggered()
-{
-	interface.spkm->EDP_slay_int();
-}
-
-void MainWindow::on_actionspkm_Motors_triggered()
-{
-	interface.spkm->wnd_inc->show();
-}
-
-void MainWindow::on_actionQuit_triggered()
-{
-
-	interface.UI_close();
-
-}
-
-void MainWindow::on_actionUnload_All_triggered()
-{
-	interface.unload_all();
-}
-
-void MainWindow::on_actionSlay_All_triggered()
-{
-	interface.slay_all();
-}
-
 void MainWindow::on_timer_slot()
 {
 
@@ -237,3 +200,52 @@ void MainWindow::on_timer_slot()
 	}
 
 }
+
+// menus
+
+// file menu
+
+void MainWindow::on_actionQuit_triggered()
+{
+
+	interface.UI_close();
+
+}
+
+// robot menu
+
+// spkm menu
+
+void MainWindow::on_actionspkm_EDP_load_triggered()
+{
+	interface.spkm->edp_create();
+}
+
+void MainWindow::on_actionspkm_EDP_unload_triggered()
+{
+	interface.spkm->EDP_slay_int();
+}
+
+void MainWindow::on_actionspkm_Motors_triggered()
+{
+	interface.spkm->wnd_inc->show();
+}
+
+// special menu
+
+
+void MainWindow::on_actionClear_Console_triggered()
+{
+	ui->plainTextEdit_sr->clear();
+}
+
+void MainWindow::on_actionUnload_All_triggered()
+{
+	interface.unload_all();
+}
+
+void MainWindow::on_actionSlay_All_triggered()
+{
+	interface.slay_all();
+}
+
