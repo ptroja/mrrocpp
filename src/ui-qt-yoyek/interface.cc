@@ -262,7 +262,7 @@ void Interface::init()
 		perror("because of");
 	}
 
-	ui_msg->message("closing");
+	//ui_msg->message("closing");
 
 	manage_interface();
 

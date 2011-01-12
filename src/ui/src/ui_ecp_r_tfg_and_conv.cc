@@ -33,6 +33,7 @@
 #include "robot/spkm/ecp_r_spkm.h"
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/shead/ecp_r_shead.h"
+#include "robot/polycrank/ecp_r_polycrank.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -87,7 +88,13 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
+	}else if (_robot_name == lib::polycrank::ROBOT_NAME) {
+		ecp = new ecp::polycrank::robot(_config, _sr_ecp_msg);
+
+		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
+		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 	}
+
 
 	assert(ecp);
 
