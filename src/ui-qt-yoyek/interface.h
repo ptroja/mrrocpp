@@ -150,9 +150,16 @@ public:
 	//! TODO: throw an exception (assumed inheritance from std::exception)
 
 	void create_threads();
+	int EDP_all_robots_create();
 	int EDP_all_robots_slay();
+	int EDP_all_robots_synchronise();
+	int MPup();
 	int MPslay();
+	int pulse_start_mp();
 	int pulse_stop_mp();
+	int pulse_pause_mp();
+	int pulse_resume_mp();
+	int pulse_trigger_mp();
 	int unload_all();
 	int slay_all();
 

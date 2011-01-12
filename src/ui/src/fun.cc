@@ -619,6 +619,7 @@ int close_base_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 }
 
+// Moved to qt Mainwindow
 int quit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1150,6 +1151,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1195,6 +1197,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	return (Pt_CONTINUE);
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1228,6 +1231,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 }
 
+// moved to ui-qt interface
 int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1288,6 +1292,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
+// moved to ui-qt interface
 int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1340,6 +1345,7 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
+// moved to ui-qt interface
 int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1362,6 +1368,7 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 }
 
+// moved to ui-qt interface
 int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1384,6 +1391,7 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 }
 
+// moved to ui-qt interface
 int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {

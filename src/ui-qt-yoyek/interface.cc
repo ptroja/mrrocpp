@@ -994,6 +994,19 @@ void Interface::create_threads()
 
 }
 
+int Interface::EDP_all_robots_create()
+
+{
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->edp_create();
+				}
+
+	return 1;
+
+}
+
 int Interface::EDP_all_robots_slay()
 
 {
@@ -1002,6 +1015,29 @@ int Interface::EDP_all_robots_slay()
 				{
 					robot_node.second->EDP_slay_int();
 				}
+
+	return 1;
+
+}
+
+int Interface::EDP_all_robots_synchronise()
+
+{
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->synchronise();
+				}
+
+	return 1;
+
+}
+
+int Interface::MPup()
+
+{
+	//eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
+	main_eb->command(boost::bind(&ui::common::Interface::MPup_int, &(*this)));
 
 	return 1;
 
@@ -1050,6 +1086,33 @@ int Interface::MPslay()
 
 }
 
+int Interface::pulse_start_mp()
+
+{
+
+	if (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE) {
+
+		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
+
+		// close_all_windows
+
+		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+					{
+						robot_node.second->close_all_windows();
+					}
+
+		execute_mp_pulse(MP_START);
+
+		/* TR
+		 process_control_window_init(widget, apinfo, cbinfo);
+		 */
+		manage_interface();
+	}
+
+	return 1;
+
+}
+
 int Interface::pulse_stop_mp()
 
 {
@@ -1059,6 +1122,61 @@ int Interface::pulse_stop_mp()
 		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		execute_mp_pulse(MP_STOP);
+		/* TR
+		 process_control_window_init(widget, apinfo, cbinfo);
+		 */
+		manage_interface();
+	}
+
+	return 1;
+
+}
+
+int Interface::pulse_pause_mp()
+
+{
+
+	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
+
+		mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
+
+		execute_mp_pulse(MP_PAUSE);
+		/* TR
+		 process_control_window_init(widget, apinfo, cbinfo);
+		 */
+		manage_interface();
+	}
+
+	return 1;
+
+}
+
+int Interface::pulse_resume_mp()
+
+{
+
+	if (mp.state == ui::common::UI_MP_TASK_PAUSED) {
+
+		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
+
+		execute_mp_pulse(MP_RESUME);
+		/* TR
+		 process_control_window_init(widget, apinfo, cbinfo);
+		 */
+		manage_interface();
+	}
+
+	return 1;
+
+}
+
+int Interface::pulse_trigger_mp()
+
+{
+
+	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
+
+		execute_mp_pulse(MP_TRIGGER);
 		/* TR
 		 process_control_window_init(widget, apinfo, cbinfo);
 		 */
