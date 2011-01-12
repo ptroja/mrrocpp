@@ -118,6 +118,9 @@
      <string>Special</string>
     </property>
     <addaction name="actionClear_Console"/>
+    <addaction name="separator"/>
+    <addaction name="actionUnload_All"/>
+    <addaction name="actionSlay_All"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRobot"/>
@@ -197,6 +200,16 @@
   <action name="actionEDP_load_smb">
    <property name="text">
     <string>EDP load</string>
+   </property>
+  </action>
+  <action name="actionUnload_All">
+   <property name="text">
+    <string>Unload All</string>
+   </property>
+  </action>
+  <action name="actionSlay_All">
+   <property name="text">
+    <string>Slay All</string>
    </property>
   </action>
  </widget>

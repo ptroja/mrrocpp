@@ -77,6 +77,16 @@ void MainWindow::on_actionQuit_triggered()
 
 }
 
+void MainWindow::on_actionUnload_All_triggered()
+{
+	interface.unload_all();
+}
+
+void MainWindow::on_actionSlay_All_triggered()
+{
+	interface.slay_all();
+}
+
 void MainWindow::on_timer_slot()
 {
 

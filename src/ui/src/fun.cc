@@ -884,6 +884,7 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	return (Pt_CONTINUE);
 }
 
+// moved to ui-qt interface
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
@@ -908,6 +909,7 @@ int clear_console(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
+// moved to ui-qt interface
 // zatrzymuje zadanie, zabija procesy
 int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -925,6 +927,7 @@ int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
+// moved to ui-qt interface
 // najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
 
 int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -1208,6 +1211,7 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1237,6 +1241,7 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
+// moved to ui-qt interface
 int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1312,6 +1317,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 }
 
+// moved to ui-qt interface
 int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {

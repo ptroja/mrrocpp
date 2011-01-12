@@ -1069,6 +1069,70 @@ int Interface::pulse_stop_mp()
 
 }
 
+// zatrzymuje zadanie, zabija procesy
+int Interface::unload_all()
+
+{
+
+	MPslay();
+	delay(200);
+	EDP_all_robots_slay();
+	/* TR
+	 close_process_control_window(widget, apinfo, cbinfo);
+	 */
+	return 1;
+
+}
+
+// najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
+
+int Interface::slay_all()
+{
+
+	// program unload
+
+	unload_all();
+
+	// brutal overkilling
+
+	for (std::list <ui::common::program_node_def>::iterator program_node_list_iterator = program_node_list.begin(); program_node_list_iterator
+			!= program_node_list.end(); program_node_list_iterator++) {
+		char system_command[100];
+		/*
+		 #if 0
+		 sprintf(system_command, "rsh %s killall -e -q -v %s",
+		 program_node_list_iterator->node_name,
+		 program_node_list_iterator->program_name
+		 );
+		 #else
+		 sprintf(system_command, "slay -v -f -n %s %s",
+		 program_node_list_iterator->node_name,
+		 program_node_list_iterator->program_name
+		 );
+		 #endif
+		 printf("aaa: %s\n", system_command);
+		 system(system_command);
+		 */
+		delay(10);
+
+#if 0
+		sprintf(system_command, "rsh %s killall -e -q -v %s",
+				program_node_list_iterator->node_name.c_str(),
+				program_node_list_iterator->program_name.c_str()
+		);
+#else
+		sprintf(system_command, "slay -9 -v -f -n %s %s", program_node_list_iterator->node_name.c_str(), program_node_list_iterator->program_name.c_str());
+#endif
+		printf("bbb: %s\n", system_command);
+		system(system_command);
+	}
+
+	manage_interface();
+
+	return 1;
+
+}
+
 }
 }
 }
