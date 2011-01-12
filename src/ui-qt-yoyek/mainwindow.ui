@@ -122,9 +122,48 @@
     <addaction name="actionUnload_All"/>
     <addaction name="actionSlay_All"/>
    </widget>
+   <widget class="QMenu" name="menuAll_Robots">
+    <property name="title">
+     <string>All robots</string>
+    </property>
+    <widget class="QMenu" name="menuPreset_Positions">
+     <property name="title">
+      <string>Preset Positions</string>
+     </property>
+     <addaction name="actionSynchro_Position"/>
+     <addaction name="actionFront_Position"/>
+     <addaction name="actionPosition_3"/>
+     <addaction name="actionPosition_4"/>
+     <addaction name="actionPosition_5"/>
+    </widget>
+    <addaction name="actionEDP_Load"/>
+    <addaction name="actionEDP_Uload"/>
+    <addaction name="separator"/>
+    <addaction name="actionSynchronisation"/>
+    <addaction name="menuPreset_Positions"/>
+   </widget>
+   <widget class="QMenu" name="menuTask">
+    <property name="title">
+     <string>Task</string>
+    </property>
+    <addaction name="actionMP_Load"/>
+    <addaction name="actionMP_Unload"/>
+    <addaction name="separator"/>
+    <addaction name="actionProcess_Control"/>
+    <addaction name="actionConfiguration"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRobot"/>
+   <addaction name="menuAll_Robots"/>
+   <addaction name="menuTask"/>
    <addaction name="menuSpecial"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionspkm_EDP_load">
@@ -210,6 +249,71 @@
   <action name="actionSlay_All">
    <property name="text">
     <string>Slay All</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load">
+   <property name="text">
+    <string>EDP Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Uload">
+   <property name="text">
+    <string>EDP Unload</string>
+   </property>
+  </action>
+  <action name="actionSynchronisation">
+   <property name="text">
+    <string>Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionSynchro_Position">
+   <property name="text">
+    <string>Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionFront_Position">
+   <property name="text">
+    <string>Front Position</string>
+   </property>
+  </action>
+  <action name="actionPosition_3">
+   <property name="text">
+    <string>Position 0</string>
+   </property>
+  </action>
+  <action name="actionPosition_4">
+   <property name="text">
+    <string>Position 1</string>
+   </property>
+  </action>
+  <action name="actionPosition_5">
+   <property name="text">
+    <string>Position 1</string>
+   </property>
+  </action>
+  <action name="actionMP_Load">
+   <property name="text">
+    <string>MP Load</string>
+   </property>
+  </action>
+  <action name="actionMP_Unload">
+   <property name="text">
+    <string>MP Unload</string>
+   </property>
+  </action>
+  <action name="actionProcess_Control">
+   <property name="text">
+    <string>Process Control</string>
+   </property>
+  </action>
+  <action name="actionConfiguration">
+   <property name="text">
+    <string>Configuration</string>
    </property>
   </action>
  </widget>
