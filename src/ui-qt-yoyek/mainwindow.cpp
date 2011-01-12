@@ -111,13 +111,11 @@ void MainWindow::on_timer_slot()
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
-		int attributes_mask;
 
 		char current_line[400];
 		lib::sr_package_t sr_msg;
 
 		while (!(interface.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
-
 
 			interface.ui_sr_obj->get_one_msg(sr_msg);
 
@@ -125,7 +123,7 @@ void MainWindow::on_timer_slot()
 			strcat(current_line, "  ");
 			time_t time = sr_msg.time / 1000000000;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03d   ", (sr_msg.time % 1000000000) / 1000000);
+			sprintf(current_line + 20, ".%03ld   ", (sr_msg.time % 1000000000) / 1000000);
 
 			switch (sr_msg.process_type)
 			{
