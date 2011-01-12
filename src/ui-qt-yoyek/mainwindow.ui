@@ -78,7 +78,7 @@
        <string>pre synchro moves</string>
       </property>
       <addaction name="actionSynchronise"/>
-      <addaction name="actionMotors"/>
+      <addaction name="actionspkm_Motors"/>
      </widget>
      <widget class="QMenu" name="menuPost_synchro_moves">
       <property name="title">
@@ -139,7 +139,7 @@
     <string>synchronise</string>
    </property>
   </action>
-  <action name="actionMotors">
+  <action name="actionspkm_Motors">
    <property name="text">
     <string>motors</string>
    </property>

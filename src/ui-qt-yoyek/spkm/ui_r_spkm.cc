@@ -143,7 +143,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 	wnd_inc = new wnd_spkm_inc(interface, *this, interface.mw);
 	wndbase_m["wnd_spkm_inc"] = wnd_inc;
-	wnd_inc->show();
 
 	/* TR
 	 wnd_int = new WndInt(interface, *this);

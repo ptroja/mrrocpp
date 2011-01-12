@@ -12,6 +12,7 @@
 #include "ui_sr.h"
 
 #include "spkm/ui_r_spkm.h"
+#include "spkm/wnd_spkm_inc.h"
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
@@ -57,6 +58,11 @@ void MainWindow::on_actionClear_Console_triggered()
 void MainWindow::on_actionspkm_EDP_load_triggered()
 {
 	interface.spkm->edp_create();
+}
+
+void MainWindow::on_actionspkm_Motors_triggered()
+{
+	interface.spkm->wnd_inc->show();
 }
 
 void MainWindow::on_timer_slot()
