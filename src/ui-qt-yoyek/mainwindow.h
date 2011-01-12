@@ -56,6 +56,12 @@ private slots:
 	void on_actionall_Position_1_triggered();
 	void on_actionall_Position_2_triggered();
 
+	// task menu
+	void on_actionMP_Load_triggered();
+	void on_actionMP_Unload_triggered();
+	void on_actionProcess_Control_triggered();
+	void on_actionConfiguration_triggered();
+
 	// special menu
 	void on_actionClear_Console_triggered();
 	void on_actionUnload_All_triggered();

@@ -274,6 +274,27 @@ void MainWindow::on_actionall_Position_2_triggered()
 	interface.all_robots_move_to_preset_position_2();
 }
 
+// task menu
+
+void MainWindow::on_actionMP_Load_triggered()
+{
+	interface.MPup();
+}
+
+void MainWindow::on_actionMP_Unload_triggered()
+{
+	interface.MPslay();
+}
+
+void MainWindow::on_actionProcess_Control_triggered()
+{
+
+}
+void MainWindow::on_actionConfiguration_triggered()
+{
+
+}
+
 // special menu
 
 
