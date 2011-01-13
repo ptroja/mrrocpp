@@ -1376,9 +1376,13 @@ client_channel_connect( int sockfd,
 		reply.tid = ch->tid;
 		reply.sin_port = ch->sin_port;
 		reply.sin_addr = ch->sin_addr;
-		memmove( reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
 		reply.mgr_sockfd = ch->sockfd;
-		strcpy(reply.qnxnode_name, ch->qnxnode_name);
+
+		assert(strlen(ch->sin_addr_str) < sizeof(reply.sin_addr_str));
+		strncpy(reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
+
+		assert(strlen(ch->qnxnode_name) < sizeof(reply.qnxnode_name));
+		strncpy(reply.qnxnode_name, ch->qnxnode_name, sizeof(reply.qnxnode_name));
 	}
 	iovec[0].iov_base = &reply;
 	iovec[0].iov_len  = sizeof( reply );

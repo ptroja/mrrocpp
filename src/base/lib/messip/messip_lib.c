@@ -246,7 +246,7 @@ messip_select( int fd,
 
 
 int
-messip_int_little_endian( const int v1 )
+messip_int_little_endian( int v1 )
 {
 #if BYTE_ORDER == BIG_ENDIAN
 	unsigned char *p,
@@ -1136,8 +1136,8 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->remote_tid = msgreply.tid;
 		info->sin_port = msgreply.sin_port;
 		info->sin_addr = msgreply.sin_addr;
-		strcpy( info->sin_addr_str, msgreply.sin_addr_str );
-		strcpy( info->name, name );
+		strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
+		strncpy( info->name, name, sizeof(info->name) );
 
 		/*--- Create socket ---*/
 		info->send_sockfd = socket( MESSIP_SOCK_DOMAIN, MESSIP_SOCK_TYPE, MESSIP_SOCK_PROTO );
@@ -1175,7 +1175,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		list_connect = (list_connect_t *)
 		   realloc( list_connect, sizeof( list_connect_t ) * ( nb_list_connect + 1 ) );
 		nb_list_connect++;
-		strcpy( list_connect[nb_list_connect - 1].name, name );
+		strncpy( list_connect[nb_list_connect - 1].name, name , sizeof(list_connect[nb_list_connect - 1].name));
 		list_connect[nb_list_connect - 1].info = info;
 	}							// else
 
