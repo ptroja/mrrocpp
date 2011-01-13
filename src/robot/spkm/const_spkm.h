@@ -133,7 +133,7 @@ struct cbuffer
 		}
 		return os;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
@@ -156,7 +156,7 @@ struct rbuffer
 		ar & epos_controller;
 		ar & contact;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string

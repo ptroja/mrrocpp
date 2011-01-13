@@ -19,6 +19,4 @@ add_library(ecp_generators
 	vision/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
 )
 
-# @bug cyclic dependency between ecp<->ecp_generators prevents building as
-# shared libraries // ptroja
 target_link_libraries(ecp_generators ecp_generators_force mrrocpp ecp)

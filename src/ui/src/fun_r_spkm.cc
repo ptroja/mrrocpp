@@ -89,17 +89,6 @@ int start_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 }
 
-int spkm_move_to_preset_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	return (Pt_CONTINUE);
-
-}
-
 int init_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -185,6 +174,8 @@ int init_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_int->init();
+
 	return (Pt_CONTINUE);
 
 }
@@ -221,6 +212,8 @@ int spkm_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->motion(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 
@@ -285,6 +278,8 @@ int init_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_external->init();
+
 	return (Pt_CONTINUE);
 
 }
@@ -322,6 +317,8 @@ int spkm_external_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
+	interface.spkm->wnd_external->motion(widget, apinfo, cbinfo);
+
 	return (Pt_CONTINUE);
 
 }
@@ -348,6 +345,61 @@ int export_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 	interface.spkm->wnd_external->exporto();
 
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_synchro_position();
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_front_position();
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(0);
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(1);
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(2);
 	return (Pt_CONTINUE);
 
 }

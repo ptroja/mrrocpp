@@ -10,11 +10,14 @@
 
 #include "ui/src/ui.h"
 
+
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 class Interface;
+
 class WndBase;
 
 typedef std::map <std::string, WndBase*> WndBase_t;
@@ -46,11 +49,13 @@ public:
 	 * @brief Unique robot name
 	 */
 	const lib::robot_name_t robot_name; // by Y - nazwa robota (track, postument etc.)
+	int number_of_servos;
+	std::string activation_string;
 
 	common::WndBase_t wndbase_m;
 
-			UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name);
-	virtual int reload_configuration()= 0;
+			UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string);
+
 	void create_thread();
 	void abort_thread();
 	void pulse_reader_execute(int code, int value);
@@ -74,6 +79,12 @@ public:
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
+	int reload_configuration();
+
+	virtual int move_to_synchro_position();
+	virtual int move_to_front_position();
+	virtual int move_to_preset_position(int variant);
+
 };
 
 }

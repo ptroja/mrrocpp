@@ -85,13 +85,11 @@ const std::string EPOS_REPLY_DATA_REQUEST_PORT = "EPOS_REPLY_DATA_REQUEST_PORT";
  */
 const std::string EPOS_JOINT_REPLY_DATA_REQUEST_PORT = "EPOS_JOINT_REPLY_DATA_REQUEST_PORT";
 
-
 /*!
  * @brief SwarmItFix Epos status data request port
  * @ingroup epos
  */
 const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
-
 
 /*!
  * @brief SwarmItFix Epos controller mp to ecp command
@@ -116,7 +114,7 @@ struct mp_to_ecp_cubic_trapezoidal_parameters
 		ar & da;
 		ar & mv;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos single controller status
@@ -141,7 +139,7 @@ struct single_controller_epos_reply
 		ar & motion_in_progress;
 		ar & buffer_full;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos cubic trajectory command
@@ -166,7 +164,7 @@ struct epos_cubic_command
 		ar & da;
 		ar & av;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
@@ -185,7 +183,7 @@ struct epos_simple_command
 	{
 		ar & desired_position;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos trapezoidal trajectory command
@@ -208,7 +206,7 @@ struct epos_trapezoidal_command
 		ar & emdm;
 		ar & tt;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos operational trajectory command data port
@@ -231,7 +229,7 @@ struct epos_operational_command
 		ar & v;
 		ar & tau;
 	}
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Epos all controllers status
@@ -254,7 +252,7 @@ struct epos_reply
 		ar & epos_controller;
 		ar & contact;
 	}
-};
+}__attribute__((__packed__));
 
 } // namespace epos
 } // namespace lib

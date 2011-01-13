@@ -20,6 +20,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
 #include "base/lib/sr/srlib.h"
 
@@ -30,11 +31,11 @@ namespace ui {
 namespace spkm {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-	common::EcpRobotDataPort()
+EcpRobot::EcpRobot(common::Interface& _interface) :
+	common::EcpRobotDataPort(_interface)
 {
 
-	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
+	the_robot = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	epos_motor_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);
@@ -81,6 +82,33 @@ void EcpRobot::move_motors(const double final_position[])
 
 }
 // ---------------------------------------------------------------
+
+// ---------------------------------------------------------------
+void EcpRobot::move_joints(const double final_position[])
+{
+	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+		epos_joint_command_data_port->data.desired_position[i] = final_position[i];
+	}
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_joint_command_data_port->set();
+	execute_motion();
+
+}
+
+void EcpRobot::move_external(const double final_position[])
+{
+	lib::Xyz_Angle_Axis_vector tmp_vector(final_position);
+	lib::Homog_matrix tmp_frame(tmp_vector);
+
+	tmp_frame.get_frame_tab(epos_external_command_data_port->data);
+
+	//	epos_external_command_data_port->data.desired_position[i] = final_position[i];
+
+	//	std::cout << "UI final_position[4]" << final_position[4] << std::endl;
+	epos_external_command_data_port->set();
+	execute_motion();
+
+}
 
 }
 } //namespace ui
