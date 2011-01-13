@@ -73,6 +73,8 @@ ADD_EXECUTABLE(
 	ui_sr.cc
 	ui_ecp.cc
 	interface.cc
+	ui_ecp_r_common.cc
+	ui_ecp_r_irp6_common.cc
 	ui_ecp_r_data_port.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_r_spkm.cc
