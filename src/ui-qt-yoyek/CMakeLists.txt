@@ -75,6 +75,10 @@ ADD_EXECUTABLE(
 	ui_ecp_r_data_port.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_r_spkm.cc
+	smb/ui_ecp_r_smb.cc
+	smb/ui_r_smb.cc
+	shead/ui_ecp_r_shead.cc
+	shead/ui_r_shead.cc
 	ui.cc
 	ui_robot.cc
 )
