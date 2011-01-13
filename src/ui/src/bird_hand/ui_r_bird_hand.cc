@@ -37,7 +37,7 @@ int UiRobot::edp_create_int()
 
 {
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
@@ -61,7 +61,7 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot = new ui::bird_hand::EcpRobot(*interface.config, *interface.all_ecp_msg);
+					ui_ecp_robot = new ui::bird_hand::EcpRobot(interface);
 
 				}
 
@@ -118,7 +118,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	wndbase_m[wnd_configuration->window_name] = wnd_configuration;
 
 }
-
 
 int UiRobot::manage_interface()
 {

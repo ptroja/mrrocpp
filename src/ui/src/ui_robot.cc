@@ -23,7 +23,7 @@ namespace common {
 
 
 UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
-	interface(_interface), tid(NULL), robot_name(_robot_name), number_of_servos(_number_of_servos)
+	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	activation_string = _activation_string;
 
@@ -296,7 +296,7 @@ int UiRobot::reload_configuration()
 					if (i < 3) {
 						sprintf(tmp_string, "preset_position_%d", i);
 					} else {
-						sprintf(tmp_string, "front_position", i);
+						sprintf(tmp_string, "front_position");
 					}
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {

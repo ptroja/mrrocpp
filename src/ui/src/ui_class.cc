@@ -51,6 +51,8 @@ Interface::Interface() :
 	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
 {
 
+	main_eb = new function_execution_buffer(*this);
+
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.pid = -1;
@@ -62,6 +64,59 @@ Interface::Interface() :
 	is_file_selection_window_open = false;
 	is_teaching_window_open = false;
 	mrrocpp_bin_to_root_path = "../../";
+
+}
+
+int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
+{
+	if (new_notifacion != notification_state) {
+		int pt_res = PtEnter(0);
+
+		notification_state = new_notifacion;
+
+		switch (new_notifacion)
+		{
+			case UI_N_STARTING:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+				break;
+			case UI_N_READY:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
+				break;
+			case UI_N_BUSY:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_EXITING:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
+				break;
+			case UI_N_COMMUNICATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_SYNCHRONISATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+			case UI_N_PROCESS_CREATION:
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
+				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
+				break;
+		}
+
+		PtDamageWidget(ABW_PtLabel_ready_busy);
+		PtFlush();
+
+		if (pt_res >= 0)
+			PtLeave(0);
+
+		return 1;
+
+	}
+
+	return 0;
 
 }
 
@@ -1070,7 +1125,7 @@ void Interface::unblock_widget(PtWidget_t *widget)
 
 void Interface::create_threads()
 {
-	meb_tid = new feb_thread(main_eb);
+	meb_tid = new feb_thread(*main_eb);
 	ui_ecp_obj = new ecp_buffer(*this);
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);
