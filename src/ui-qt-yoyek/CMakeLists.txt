@@ -71,6 +71,7 @@ ADD_EXECUTABLE(
 	ui-qt-yoyek 
 	${GUI_CXX_SRCS}
 	ui_sr.cc
+	ui_ecp.cc
 	interface.cc
 	ui_ecp_r_data_port.cc
 	spkm/ui_ecp_r_spkm.cc
