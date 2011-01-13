@@ -256,9 +256,6 @@ messip_connect0(const char *mgr_ref,
 	struct iovec iovec[2];
 	const int flag = 1;
 
-	pid = htonl( pid );
-	tid = htonl( tid );
-
 	/*--- NULL and /etc/messip does not exist ? ---*/
 	port = MESSIP_DEFAULT_PORT;
 	if ( !mgr_ref && ( access( MESSIP_ETC, F_OK ) == -1 ) )
@@ -382,8 +379,8 @@ messip_connect0(const char *mgr_ref,
 	memset(&msgsend, 0, sizeof(msgsend));
 	op = htonl( MESSIP_OP_CONNECT );
 	msgsend.little_endian = (htonl(0x1234) == 0x1234) ? 0 : 1;
-	msgsend.pid = pid;
-	msgsend.tid = tid;
+	msgsend.pid = htonl(pid);
+	msgsend.tid = htonl(tid);
 	get_taskname( pid, msgsend.process_name );
 	iovec[1].iov_base = &msgsend;
 	iovec[1].iov_len  = sizeof( msgsend );
