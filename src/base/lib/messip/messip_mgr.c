@@ -1072,9 +1072,11 @@ client_channel_create( int sockfd,
 		return -1;
 	}
 #if 1
-	logg( LOG_MESSIP_INFORMATIVE, "channel_create: pid=%d tid=%d ip=%s port=%d name=%s\n",
-		  ntohl( msg.pid ), ntohl( msg.tid ),
-		  inet_ntoa( client_addr->sin_addr ), client_addr->sin_port, msg.channel_name );
+	logg( LOG_MESSIP_INFORMATIVE, "channel_create: pid=%d ip=%s port=%d hostname=%s name=%s\n",
+		  ntohl( msg.pid ), // ntohl( msg.tid ),
+		  inet_ntoa( client_addr->sin_addr ), client_addr->sin_port,
+		  msg.hostname,
+		  msg.channel_name );
 #endif
 
 	/*--- Is there any channel with this name ? ---*/

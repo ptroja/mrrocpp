@@ -641,6 +641,9 @@ messip_channel_create0( messip_cnx_t * cnx,
 #endif
 	msgsend.sin_port = server_addr.sin_port;
 	strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
+	if(gethostname(msgsend.hostname, sizeof(msgsend.hostname)) == -1) {
+		perror("gethostname()");
+	}
 	iovec[1].iov_base = &msgsend;
 	iovec[1].iov_len  = sizeof( msgsend );
 	status = messip_writev( cnx->sockfd, iovec, 2 );

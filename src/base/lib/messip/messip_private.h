@@ -133,6 +133,7 @@ typedef struct
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 	uint16_t sin_port;
 	char sin_addr_str[48];
+	char hostname[48];
 } __attribute__ ((packed)) messip_send_channel_create_t;
 
 typedef struct
