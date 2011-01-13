@@ -20,6 +20,8 @@ if(NOT USE_DISCODE)
     add_subdirectory (servovision)
 endif(NOT USE_DISCODE)
 
+add_subdirectory (trapezoid_trajectory_generator)
+
 add_subdirectory (edge_follow)
 add_subdirectory (swarmitfix)
 add_subdirectory (teach)
