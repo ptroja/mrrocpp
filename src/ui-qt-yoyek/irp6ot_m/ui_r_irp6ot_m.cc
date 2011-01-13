@@ -3,7 +3,8 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6ot_m.h"
-#include "../robot/irp6ot_m/const_irp6ot_m.h"
+#include "../ui_ecp_r_irp6_common.h"
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "../interface.h"
 
 namespace mrrocpp {
@@ -204,37 +205,50 @@ int UiRobot::manage_interface()
 	{
 
 		case -1:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
+			 */
 			break;
 		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
-
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
+			 */
 			break;
 		case 1:
 		case 2:
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, NULL);
-			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, NULL);
+			 //ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+			 */
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-
+				/* TR
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+				 */
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
+						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
+						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						 ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						 */
 						break;
 					default:
 						break;
@@ -242,9 +256,11 @@ int UiRobot::manage_interface()
 
 			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+				/* TR
+				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+				 */
 			}
 			break;
 		default:
@@ -260,21 +276,27 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
-		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		/* TR
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		 */
 	} else {
 		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			/* TR
+			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			 */
 		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
 			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			/* TR
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+			 */
 		}
 	}
 
@@ -286,21 +308,23 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 
 void UiRobot::close_all_windows()
 {
-	int pt_res = PtEnter(0);
+	/* TR
+	 int pt_res = PtEnter(0);
 
-	close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_int(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_angle_axis(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_angle_axis_ts(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_aa_relative(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_euler_zyz(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_kinematic(NULL, NULL, NULL);
-	close_wnd_irp6_on_track_servo_algorithm(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_int(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_xyz_angle_axis(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_xyz_angle_axis_ts(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_xyz_aa_relative(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_xyz_euler_zyz(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_xyz_euler_zyz_ts(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_kinematic(NULL, NULL, NULL);
+	 close_wnd_irp6_on_track_servo_algorithm(NULL, NULL, NULL);
 
-	if (pt_res >= 0) {
-		PtLeave(0);
-	}
+	 if (pt_res >= 0) {
+	 PtLeave(0);
+	 }
+	 */
 }
 
 void UiRobot::delete_ui_ecp_robot()

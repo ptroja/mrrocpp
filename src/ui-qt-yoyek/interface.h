@@ -25,6 +25,13 @@ class UiRobot;
 namespace shead {
 class UiRobot;
 }
+namespace irp6ot_m {
+class UiRobot;
+}
+namespace irp6p_m {
+class UiRobot;
+}
+
 namespace common {
 
 class UiRobot;
@@ -114,16 +121,15 @@ public:
 	common::robots_t robot_m;
 
 	spkm::UiRobot *spkm;
-
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
+
+	irp6ot_m::UiRobot *irp6ot_m;
+	irp6p_m::UiRobot *irp6p_m;
+
 	/*TR
 	 bird_hand::UiRobot *bird_hand;
-	 //robot_m[lib::] = bird_hand;
-
-	 irp6ot_m::UiRobot *irp6ot_m;
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
-	 irp6p_m::UiRobot *irp6p_m;
 	 irp6p_tfg::UiRobot *irp6p_tfg;
 	 sarkofag::UiRobot *sarkofag;
 	 irp6m::UiRobot *irp6m_m;
@@ -132,6 +138,7 @@ public:
 
 	 polycrank::UiRobot *polycrank;
 	 */
+
 	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);

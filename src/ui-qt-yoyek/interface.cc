@@ -17,6 +17,8 @@
 #include "spkm/ui_r_spkm.h"
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
+#include "irp6ot_m/ui_r_irp6ot_m.h"
+#include "irp6p_m/ui_r_irp6p_m.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -119,18 +121,18 @@ void Interface::init()
 	shead = new shead::UiRobot(*this);
 	robot_m[shead->robot_name] = shead;
 
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
+	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
 	/* TR
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
 
-	 irp6ot_m = new irp6ot_m::UiRobot(*this);
-	 robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-
-	 irp6p_m = new irp6p_m::UiRobot(*this);
-	 robot_m[irp6p_m->robot_name] = irp6p_m;
 
 	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
@@ -150,6 +152,7 @@ void Interface::init()
 	 polycrank = new polycrank::UiRobot(*this);
 	 robot_m[polycrank->robot_name] = polycrank;
 	 */
+
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
 
