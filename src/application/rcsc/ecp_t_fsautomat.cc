@@ -262,23 +262,33 @@ if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 			if (trjConf) {
 
 				if (ecpLevel) {
+					std::cout<<"map"<<std::endl;
 					load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					std::cout<<"map after load"<<std::endl;
 				} else {
+					std::cout<<"from file: "<<mrrocpp_network_path << fileName <<std::endl;
 					std::string path(mrrocpp_network_path);
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< " after load " <<std::endl;
 				}
 			}//if
 			else //moj przypadekl -> z pliku
 			{
+				std::cout<<"normal"<<std::endl;
 				std::string path(mrrocpp_network_path);
-				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 					//sg->get_type_for_smooth_xml(path.c_str());
 				//
 					//sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				sg->load_trajectory_from_file(path.c_str());
+				std::cout<<"normal after load"<<std::endl;
 			}//else
+			//sg->calculate();
+			//sg->interpolate();
+			std::cout<<"move"<<std::endl;
 			sg->Move();//changed askubis
+			std::cout<<"after move"<<std::endl;
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
@@ -323,11 +333,11 @@ task* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(ecp_mp::common::bang_bang_trajectory_pose::trajectory_pose &trajectory) {
+void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose &trajectory) {
 	//bool first_time = true;
 	//int numOfPoses = trajectory.getNumberOfPoses();
 	//trajectory.showTime();
-	sg->reset(); // Usuniecie listy pozycji, o ile istnieje
+	//sg->reset(); // Usuniecie listy pozycji, o ile istnieje
 	sg->load_pose(trajectory);
 }
 
@@ -350,7 +360,7 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 	 }
 
-	sg->reset(); // Usuniecie listy pozycji, o ile istnieje
+	//sg->reset(); // Usuniecie listy pozycji, o ile istnieje
 
    for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
    {
@@ -401,18 +411,36 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
-	double v[axes_num];
+	/*double v[axes_num];
 	double a[axes_num];	// Wczytane wspolrzedne
-	double coordinates[axes_num];     // Wczytane wspolrzedne
+	double coordinates[axes_num];     // Wczytane wspolrzedne*/
+
 
 	xmlNode *cchild_node, *ccchild_node;
 	xmlChar *coordinateType, *numOfPoses;
 	xmlChar *xmlDataLine;
 
+	int num_v=0;
+	int num_a=0;
+	int num_c=0;
+	int num=0;
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+
+
+
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+
+	actTrajectory->arm_type =ps;
+	actTrajectory->pos_num = number_of_poses;
+
+	double tmp[actTrajectory->pos_num*axes_num];
+
+
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
@@ -421,35 +449,29 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					lib::setValuesInArray(v, (const char *)xmlDataLine);
+					num =lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->v.insert(actTrajectory->v.begin()+num_v,tmp,tmp+num);
+					num_v+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					lib::setValuesInArray(a, (const char *)xmlDataLine);
+					num=lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->a.insert(actTrajectory->a.begin()+num_a,tmp,tmp+num);
+					num_a+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					lib::setValuesInArray(coordinates, (const char *)xmlDataLine);
+					num = lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->coordinates.insert(actTrajectory->coordinates.begin()+num_c,tmp,tmp+num);
+					num_c+=num;
 					xmlFree(xmlDataLine);
 				}
 			}
-			if (first_time)
-			{
-				// Tworzymy glowe listy
-				first_time = false;
-				load_trajectory_pose(ps, v, a, coordinates);
-				 //printf("Pose list head: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-			}
-			else
-			{
-				// Wstaw do listy nowa pozycje
-				load_trajectory_pose(ps, v, a, coordinates);
-				//printf("Pose list element: %d, %f, %f, %f, %f, %f\n", ps, vp[0], vk[0], v[0], a[0], coordinates[0]);
-			}
+			sg->load_pose((*actTrajectory));
 		}
 	}
 	xmlFree(coordinateType);

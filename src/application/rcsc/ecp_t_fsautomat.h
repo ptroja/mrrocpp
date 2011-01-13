@@ -23,6 +23,7 @@
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/lib/datastr.h"
 
 namespace mrrocpp {
@@ -51,7 +52,7 @@ protected:
 	bang_trajectories_map * trjMap;
 	int axes_num;
 
-	void load_trajectory_from_xml(ecp_mp::common::bang_bang_trajectory_pose::trajectory_pose &trajectory);
+	void load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose &trajectory);
 	void load_trajectory_from_xml(const char* fileName, const char* nodeName);
 	void load_file_with_path(const char* file_name);
 	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);

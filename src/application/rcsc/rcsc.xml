@@ -6,7 +6,7 @@
 	<State id="INIT" type="systemInitialization">
 		<taskInit>
 			<ecp name="ROBOT_IRP6P_M">
-				<ecp_smooth_gen>1</ecp_smooth_gen>
+				<ecp_smooth_gen>8</ecp_smooth_gen>
 			</ecp>
 		</taskInit>
 		<transition condition="true" target="approach_13"/>
