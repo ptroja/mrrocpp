@@ -24,7 +24,7 @@ public:
 	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
-	void ui_notification();
+	void ui_notification(QString _string);
 
 private:
 	Ui::MainWindow *ui;

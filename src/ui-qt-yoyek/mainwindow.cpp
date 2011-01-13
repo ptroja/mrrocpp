@@ -53,10 +53,10 @@ void MainWindow::on_pushButton_l2_clicked()
 	ui->plainTextEdit_sr->appendPlainText("l2");
 }
 
-void MainWindow::ui_notification()
+void MainWindow::ui_notification(QString _string)
 {
 	//ui->notification_label->setText("GUGUGU");
-	emit ui_notification_signal("LALALA");
+	emit ui_notification_signal(_string);
 }
 
 void MainWindow::on_timer_slot()

@@ -50,7 +50,7 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 		switch (new_notifacion)
 		{
 			case UI_N_STARTING:
-				mw->ui_notification();
+				mw->ui_notification("STARTING");
 				/* TR
 				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
 				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
