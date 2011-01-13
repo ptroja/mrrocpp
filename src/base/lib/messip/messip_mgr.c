@@ -45,19 +45,6 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <netinet/tcp.h>
-#if defined(__linux__)
-#include <endian.h>
-#elif defined(__FreeBSD__)
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
-#include <sys/endian.h>
-#elif defined(__QNX__)
-#include <sys/param.h>
-#elif defined(sun)
-#else
-#error Unsupported platform!
-#endif
 
 #include "messip.h"
 #include "messip_private.h"
@@ -180,30 +167,6 @@ enum
 	KEY_CONNEXION_SOCKET,
 	KEY_CONNEXION_SINCE
 };
-
-
-static int
-int_little_endian( const int v1 )
-{
-#if BYTE_ORDER == BIG_ENDIAN
-	unsigned char *p,
-	 *q;
-	int v2;
-
-	p = ( unsigned char * ) &v1;
-	q = ( unsigned char * ) &v2;
-	q[3] = p[0];
-	q[2] = p[1];
-	q[1] = p[2];
-	q[0] = p[3];
-	return v2;
-#elif BYTE_ORDER == LITTLE_ENDIAN
-	return v1;
-#else
-#error
-#endif
-}								// int_little_endian
-
 
 static int
 qsort_channels( const void *c1,
@@ -1040,15 +1003,10 @@ handle_client_connect( int sockfd,
 	cnx = (connexion_t *) malloc( sizeof( connexion_t ) );
 	cnx->little_endian = msg.little_endian;
 	time( &cnx->when );
-#if BYTE_ORDER == BIG_ENDIAN
-	cnx->pid = int_little_endian( msg.pid );
-	cnx->tid = int_little_endian( msg.tid );
-#elif BYTE_ORDER == LITTLE_ENDIAN
-	cnx->pid = msg.pid;
-	cnx->tid = msg.tid;
-#else
-#error
-#endif
+
+	cnx->pid = ntohl( msg.pid );
+	cnx->tid = ntohl( msg.tid );
+
 	strncpy( cnx->process_name, msg.process_name, MESSIP_MAXLEN_TASKNAME );
 	cnx->process_name[ MESSIP_MAXLEN_TASKNAME ] = 0;
 	printf("cnx->process_name = %s\n", cnx->process_name);
@@ -1114,9 +1072,11 @@ client_channel_create( int sockfd,
 		return -1;
 	}
 #if 1
-	logg( LOG_MESSIP_INFORMATIVE, "channel_create: pid=%d tid=%d ip=%s port=%d name=%s\n",
-		  int_little_endian( msg.pid ), int_little_endian( msg.tid ),
-		  inet_ntoa( client_addr->sin_addr ), client_addr->sin_port, msg.channel_name );
+	logg( LOG_MESSIP_INFORMATIVE, "channel_create: pid=%d ip=%s port=%d hostname=%s name=%s\n",
+		  ntohl( msg.pid ), // ntohl( msg.tid ),
+		  inet_ntoa( client_addr->sin_addr ), client_addr->sin_port,
+		  msg.hostname,
+		  msg.channel_name );
 #endif
 
 	/*--- Is there any channel with this name ? ---*/
@@ -1145,17 +1105,11 @@ client_channel_create( int sockfd,
 		/*--- Create a new channel ---*/
 		ch->cnx = *cnx;
 		ch->when = time( NULL );
-#if BYTE_ORDER == BIG_ENDIAN
-		ch->pid = int_little_endian( msg.pid );
-		ch->tid = int_little_endian( msg.tid );
-		ch->maxnb_msg_buffered = int_little_endian( msg.maxnb_msg_buffered );
-#elif BYTE_ORDER == LITTLE_ENDIAN
-		ch->pid = msg.pid;
-		ch->tid = msg.tid;
-		ch->maxnb_msg_buffered = msg.maxnb_msg_buffered;
-#else
-#error
-#endif
+
+		ch->pid = ntohl( msg.pid );
+		ch->tid = ntohl( msg.tid );
+		ch->maxnb_msg_buffered = ntohl( msg.maxnb_msg_buffered );
+
 		ch->sockfd = sockfd;
 		ch->tid_client_send_buffered_msg = 0;
 		ch->bufferedsend_sockfd = 0;
@@ -1376,9 +1330,13 @@ client_channel_connect( int sockfd,
 		reply.tid = ch->tid;
 		reply.sin_port = ch->sin_port;
 		reply.sin_addr = ch->sin_addr;
-		memmove( reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
 		reply.mgr_sockfd = ch->sockfd;
-		strcpy(reply.qnxnode_name, ch->qnxnode_name);
+
+		assert(strlen(ch->sin_addr_str) < sizeof(reply.sin_addr_str));
+		strncpy(reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
+
+		assert(strlen(ch->qnxnode_name) < sizeof(reply.qnxnode_name));
+		strncpy(reply.qnxnode_name, ch->qnxnode_name, sizeof(reply.qnxnode_name));
 	}
 	iovec[0].iov_base = &reply;
 	iovec[0].iov_len  = sizeof( reply );
@@ -2609,9 +2567,7 @@ thread_client_thread( void *arg )
 		}
 
 		// Operation code is always sent as big endian (JAVA do so!)
-#if BYTE_ORDER == LITTLE_ENDIAN
-		op = int_little_endian( op );
-#endif
+		op = ntohl( op );
 
 		search_socket = handle_client_msg( descr->sockfd_accept,
 			&descr->client_addr, op, &new_cnx );

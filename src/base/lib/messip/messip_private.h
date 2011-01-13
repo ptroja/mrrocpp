@@ -133,6 +133,7 @@ typedef struct
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 	uint16_t sin_port;
 	char sin_addr_str[48];
+	char hostname[48];
 } __attribute__ ((packed)) messip_send_channel_create_t;
 
 typedef struct
@@ -400,4 +401,3 @@ ssize_t messip_writev( int sockfd,
 ssize_t messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt );
-int messip_int_little_endian( const int v1 );
