@@ -92,7 +92,7 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		ecp = new ecp::polycrank::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+		JOINT_LINEAR_STEP = 0.0004; // Eksperymentalnie dobrana wartosc, przy ktorej ruch jest płynny
 	}
 
 	assert(ecp);

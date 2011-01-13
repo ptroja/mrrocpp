@@ -39,7 +39,7 @@ extern ui::common::Interface interface;
 // zamykanie okien ruchow recznych dla robota irp6_postument
 int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("EDP_polycrank_create\n");
+	//printf("EDP_polycrank_create\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -51,7 +51,7 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 int EDP_polycrank_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("EDP_polycrank_slay\n");
+	//printf("EDP_polycrank_slay\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -64,7 +64,7 @@ int EDP_polycrank_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 
 int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("EDP_polycrank_synchronise\n");
+	//printf("EDP_polycrank_synchronise\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -77,7 +77,7 @@ int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 
 int start_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("start_wnd_polycrank_int\n");
+	//printf("start_wnd_polycrank_int\n");
 
 	// eliminate 'unreferenced' warnings
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -95,7 +95,7 @@ int start_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 
 int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("wnd_polycrank_joints_copy_current_to_desired\n");
+	//printf("wnd_polycrank_joints_copy_current_to_desired\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -138,7 +138,7 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 
 int polycrank_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("polycrank_int_motion\n");
+	//printf("polycrank_int_motion\n");
 
 	double *wektor[lib::polycrank::NUM_OF_SERVOS];
 	double *step1;
@@ -246,12 +246,11 @@ try {
 CATCH_SECTION_UI
 
 return (Pt_CONTINUE);
-
 }
 
 int init_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("init_wnd_polycrank_int\n");
+	//printf("init_wnd_polycrank_int\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -286,12 +285,11 @@ try {
 CATCH_SECTION_UI
 
 return (Pt_CONTINUE);
-
 }
 
 int import_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("import_wnd_polycrank_int\n");
+	//printf("import_wnd_polycrank_int\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -325,8 +323,7 @@ int import_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-
-	printf("export_wnd_polycrank_int\n");
+	//printf("export_wnd_polycrank_int\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -353,7 +350,7 @@ int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 
 int clear_wnd_polycrank_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("clear_wnd_polycrank_int_flag\n");
+	//printf("clear_wnd_polycrank_int_flag\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -362,13 +359,12 @@ int clear_wnd_polycrank_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	//interface.irp6m_m->is_wind_irp6m_int_open = false;
 
 	return (Pt_CONTINUE);
-
 }
 
 
 int close_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
-	printf("close_wnd_polycrank_int\n");
+	//printf("close_wnd_polycrank_int\n");
 
 	// eliminate 'unreferenced' warnings
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;

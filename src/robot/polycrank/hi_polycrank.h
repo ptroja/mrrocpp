@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
-//                            hi_rydz.h
+//                            hi_polycrank.h
 // Definicje struktur danych i metod dla interfejsu sprzetowego dla robota polycrank
 //
-// Ostatnia modyfikacja: 2005
+// Ostatnia modyfikacja: 13.01.2011
 // -------------------------------------------------------------------------
 
 #ifndef __HI_LOCAL_CONV_H

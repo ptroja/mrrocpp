@@ -1,13 +1,13 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6m_effector.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- definicja metod klasy edp_irp6m_effector
+// Plik:		edp_e_polycrank.cc
+// System:		QNX/MRROC++  v. 6.5
+// Opis:		Robot polycrank
+//				- definicja metod klasy edp_e_polycrank
 //				- definicja funkcji return_created_efector()
 //
-// Autor:		tkornuta
-// Data:		14.02.2007
+// Autor:		Mariusz Zbikowski
+// Data:		13.01.2011
 // ------------------------------------------------------------------------
 
 //#include <boost/thread/thread.hpp>
@@ -21,7 +21,7 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "base/edp/reader.h"
 
-// Klasa edp_irp6ot_effector.
+// Klasa edp_e_polycrank.
 #include "base/edp/edp_typedefs.h"
 #include "base/edp/manip_trans_t.h"
 #include "robot/polycrank/edp_e_polycrank.h"
@@ -65,7 +65,7 @@ effector::effector(lib::configurator &_config) :
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
-	printf("master_order\n"); //MUSI BYC SINGLE
+	//printf("master_order\n");
 	//motor_driven_effector::multi_thread_master_order(nm_task, nm_tryb);
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
@@ -99,8 +99,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 // Odczytanie pozycji tasmociagu - conveyor
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	printf("get_arm_position \n");
-
+	//printf("get_arm_position \n");
 	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 
 	if (read_hardware) {
@@ -115,7 +114,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	printf("create_kinematic_models_for_given_robot \n");
+	//printf("create_kinematic_models_for_given_robot \n");
 
 	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::polycrank::model());

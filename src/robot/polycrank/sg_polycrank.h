@@ -1,8 +1,8 @@
 // -------------------------------------------------------------------------
 //                            sg_local.h
-// Definicje struktur danych i metod dla procesu EDP conveyor
+// Definicje struktur danych i metod dla procesu EDP polycrank
 //
-// Ostatnia modyfikacja: 2006
+// Ostatnia modyfikacja: 13.01.2011
 // -------------------------------------------------------------------------
 
 #ifndef __SG_POLYCRANK_H
