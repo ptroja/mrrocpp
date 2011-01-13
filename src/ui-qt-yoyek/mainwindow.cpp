@@ -12,6 +12,8 @@
 #include "ui_sr.h"
 
 #include "spkm/ui_r_spkm.h"
+#include "smb/ui_r_smb.h"
+#include "shead/ui_r_shead.h"
 #include "spkm/wnd_spkm_inc.h"
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
@@ -294,6 +296,30 @@ void MainWindow::on_actionspkm_Position_1_triggered()
 void MainWindow::on_actionspkm_Position_2_triggered()
 {
 	interface.spkm->move_to_preset_position(2);
+}
+
+// smb menu
+
+void MainWindow::on_actionsmb_EDP_Load_triggered()
+{
+	interface.smb->edp_create();
+}
+
+void MainWindow::on_actionsmb_EDP_Unload_triggered()
+{
+	interface.smb->EDP_slay_int();
+}
+
+// shead menu
+
+void MainWindow::on_actionshead_EDP_Load_triggered()
+{
+	interface.shead->edp_create();
+}
+
+void MainWindow::on_actionshead_EDP_Unload_triggered()
+{
+	interface.shead->EDP_slay_int();
 }
 
 // all robots menu

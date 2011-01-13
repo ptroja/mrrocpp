@@ -65,6 +65,14 @@ private slots:
 	void on_actionspkm_Position_1_triggered();
 	void on_actionspkm_Position_2_triggered();
 
+	// smb menu
+	void on_actionsmb_EDP_Load_triggered();
+	void on_actionsmb_EDP_Unload_triggered();
+
+	// shead menu
+	void on_actionshead_EDP_Load_triggered();
+	void on_actionshead_EDP_Unload_triggered();
+
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
 	void on_actionall_EDP_Uload_triggered();
