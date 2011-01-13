@@ -14,6 +14,8 @@
 #include "interface.h"
 #include "ui_sr.h"
 #include "spkm/ui_r_spkm.h"
+#include "smb/ui_r_smb.h"
+#include "shead/ui_r_shead.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -110,13 +112,13 @@ void Interface::init()
 	spkm = new spkm::UiRobot(*this);
 	robot_m[spkm->robot_name] = spkm;
 
+	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
+	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
+
 	/* TR
-	 smb = new smb::UiRobot(*this);
-	 robot_m[smb->robot_name] = smb;
-
-	 shead = new shead::UiRobot(*this);
-	 robot_m[shead->robot_name] = shead;
-
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
 

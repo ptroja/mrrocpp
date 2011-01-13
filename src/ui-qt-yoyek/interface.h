@@ -19,6 +19,12 @@ namespace ui {
 namespace spkm {
 class UiRobot;
 }
+namespace smb {
+class UiRobot;
+}
+namespace shead {
+class UiRobot;
+}
 namespace common {
 
 class UiRobot;
@@ -110,9 +116,10 @@ public:
 	common::robots_t robot_m;
 
 	spkm::UiRobot *spkm;
+
+	smb::UiRobot *smb;
+	shead::UiRobot *shead;
 	/*TR
-	 smb::UiRobot *smb;
-	 shead::UiRobot *shead;
 	 bird_hand::UiRobot *bird_hand;
 	 //robot_m[lib::] = bird_hand;
 
