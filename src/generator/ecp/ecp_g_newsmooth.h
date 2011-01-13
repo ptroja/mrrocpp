@@ -128,6 +128,8 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 
 
 
+
+
 };
 
 } // namespace generator

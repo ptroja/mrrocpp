@@ -323,14 +323,12 @@ task* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(ecp_mp::common::Trajectory &trajectory) {
-	bool first_time = true;
-	int numOfPoses = trajectory.getNumberOfPoses();
-	trajectory.showTime();
-
+void fsautomat::load_trajectory_from_xml(ecp_mp::common::bang_bang_trajectory_pose::trajectory_pose &trajectory) {
+	//bool first_time = true;
+	//int numOfPoses = trajectory.getNumberOfPoses();
+	//trajectory.showTime();
 	sg->reset(); // Usuniecie listy pozycji, o ile istnieje
-	pose_vector = trajectory.getPoses();
-	pose_vector_iterator = pose_spec.end();
+	sg->load_pose(trajectory);
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {

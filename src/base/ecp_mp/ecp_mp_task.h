@@ -52,6 +52,9 @@ public:
 	 */
 	typedef std::map <const char *, ecp_mp::common::trajectory_pose::trajectory_pose /*, str_cmp */> trajectories_t;
 
+
+	typedef std::map <const char *, ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose /*, str_cmp */> bang_trajectories_map;
+
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
@@ -181,7 +184,7 @@ public:
 	 * @param robot_name_t robot associated with trajectory
 	 * @return trajectories_t pointer
 	 */
-	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
+	bang_trajectories_map * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
 };
 
 /*!
