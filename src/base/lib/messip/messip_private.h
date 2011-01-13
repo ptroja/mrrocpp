@@ -400,4 +400,3 @@ ssize_t messip_writev( int sockfd,
 ssize_t messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt );
-int messip_int_little_endian( const int v1 );
