@@ -11,6 +11,8 @@
 #include "interface.h"
 #include "ui_sr.h"
 
+#include "irp6ot_m/ui_r_irp6ot_m.h"
+#include "irp6p_m/ui_r_irp6p_m.h"
 #include "spkm/ui_r_spkm.h"
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
@@ -235,6 +237,91 @@ void MainWindow::on_actionQuit_triggered()
 }
 
 // robot menu
+
+
+// irp6ot_m menu
+
+void MainWindow::on_actionirp6ot_m_EDP_Load_triggered()
+{
+	interface.irp6ot_m->edp_create();
+}
+
+void MainWindow::on_actionirp6ot_m_EDP_Unload_triggered()
+{
+	interface.irp6ot_m->EDP_slay_int();
+}
+
+void MainWindow::on_actionirp6ot_m_Synchronise_triggered()
+{
+	interface.irp6ot_m->synchronise();
+}
+
+void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
+{
+	interface.irp6ot_m->move_to_synchro_position();
+}
+
+void MainWindow::on_actionirp6ot_m_Front_Position_triggered()
+{
+	interface.irp6ot_m->move_to_front_position();
+}
+
+void MainWindow::on_actionirp6ot_m_Position_0_triggered()
+{
+	interface.irp6ot_m->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionirp6ot_m_Position_1_triggered()
+{
+	interface.irp6ot_m->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionirp6ot_m_Position_2_triggered()
+{
+	interface.irp6ot_m->move_to_preset_position(2);
+}
+
+// irp6p_m menu
+
+void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
+{
+	interface.irp6p_m->edp_create();
+}
+
+void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
+{
+	interface.irp6p_m->EDP_slay_int();
+}
+
+void MainWindow::on_actionirp6p_m_Synchronise_triggered()
+{
+	interface.irp6p_m->synchronise();
+}
+
+void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
+{
+	interface.irp6p_m->move_to_synchro_position();
+}
+
+void MainWindow::on_actionirp6p_m_Front_Position_triggered()
+{
+	interface.irp6p_m->move_to_front_position();
+}
+
+void MainWindow::on_actionirp6p_m_Position_0_triggered()
+{
+	interface.irp6p_m->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionirp6p_m_Position_1_triggered()
+{
+	interface.irp6p_m->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionirp6p_m_Position_2_triggered()
+{
+	interface.irp6p_m->move_to_preset_position(2);
+}
 
 // spkm menu
 

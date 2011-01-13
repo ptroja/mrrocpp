@@ -48,6 +48,30 @@ private slots:
 
 	// robot menu
 
+	//irp6ot_m menu
+	void on_actionirp6ot_m_EDP_Load_triggered();
+	void on_actionirp6ot_m_EDP_Unload_triggered();
+
+	void on_actionirp6ot_m_Synchronise_triggered();
+
+	void on_actionirp6ot_m_Synchro_Position_triggered();
+	void on_actionirp6ot_m_Front_Position_triggered();
+	void on_actionirp6ot_m_Position_0_triggered();
+	void on_actionirp6ot_m_Position_1_triggered();
+	void on_actionirp6ot_m_Position_2_triggered();
+
+	//irp6p_m menu
+	void on_actionirp6p_m_EDP_Load_triggered();
+	void on_actionirp6p_m_EDP_Unload_triggered();
+
+	void on_actionirp6p_m_Synchronise_triggered();
+
+	void on_actionirp6p_m_Synchro_Position_triggered();
+	void on_actionirp6p_m_Front_Position_triggered();
+	void on_actionirp6p_m_Position_0_triggered();
+	void on_actionirp6p_m_Position_1_triggered();
+	void on_actionirp6p_m_Position_2_triggered();
+
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
 	void on_actionspkm_EDP_Unload_triggered();
