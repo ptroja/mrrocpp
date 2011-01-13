@@ -20,6 +20,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
 #include "base/lib/sr/srlib.h"
 
@@ -30,8 +31,8 @@ namespace ui {
 namespace common {
 
 // ---------------------------------------------------------------
-EcpRobotDataPort::EcpRobotDataPort() :
-	the_robot(NULL)
+EcpRobotDataPort::EcpRobotDataPort(Interface& _interface) :
+	interface(_interface), the_robot(NULL)
 {
 
 }
@@ -61,7 +62,7 @@ void EcpRobotDataPort::execute_motion(void)
 
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 
-	set_ui_state_notification( UI_N_COMMUNICATION);
+	interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
 	the_robot->create_command();
 

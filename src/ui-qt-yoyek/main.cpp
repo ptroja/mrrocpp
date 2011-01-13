@@ -1,11 +1,13 @@
 #include <QtGui/QApplication>
-#include "mainwindow.h"
+
+#include "interface.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+	QApplication a(argc, argv);
 
-    return a.exec();
+	mrrocpp::ui::common::Interface interface;
+	interface.init();
+
+	return a.exec();
 }

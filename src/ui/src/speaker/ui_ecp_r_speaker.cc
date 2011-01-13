@@ -19,6 +19,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
 #include "base/lib/sr/srlib.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -29,8 +30,8 @@ namespace mrrocpp {
 namespace ui {
 namespace speaker {
 
-EcpRobot::EcpRobot(common::edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-	robot(_config, sr_ecp_msg)
+EcpRobot::EcpRobot(common::Interface& _interface, common::edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+	robot(_config, sr_ecp_msg), interface(_interface)
 {
 	// This has to be set in constructor since it is a field in a base class
 	synchronised = true;
@@ -39,7 +40,7 @@ EcpRobot::EcpRobot(common::edp_state_def* _edp_state, lib::configurator &_config
 void EcpRobot::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	set_ui_state_notification(UI_N_COMMUNICATION);
+	interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
 	robot::ecp_robot::execute_motion();
 }

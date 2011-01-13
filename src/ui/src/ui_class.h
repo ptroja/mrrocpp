@@ -60,12 +60,14 @@ private:
 
 public:
 
+	busy_flag communication_flag;
+
 	sr_buffer* ui_sr_obj;
 	ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 
-	function_execution_buffer main_eb;
+	function_execution_buffer *main_eb;
 
 	typedef std::string list_t;
 
@@ -143,6 +145,7 @@ public:
 	polycrank::UiRobot *polycrank;
 
 	Interface();
+	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
