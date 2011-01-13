@@ -33,9 +33,8 @@ typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
 typedef robots_t::value_type robot_pair_t;
 
 class sr_buffer;
-/* TR
- class ecp_buffer;
- */
+class ecp_buffer;
+
 // super klasa agregujaca porozrzucane struktury
 
 
@@ -48,9 +47,8 @@ public:
 	busy_flag communication_flag;
 
 	sr_buffer* ui_sr_obj;
-	/*TR
-	 ecp_buffer* ui_ecp_obj;
-	 */
+	ecp_buffer* ui_ecp_obj;
+
 	feb_thread* meb_tid;
 
 	function_execution_buffer *main_eb;

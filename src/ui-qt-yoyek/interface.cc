@@ -13,6 +13,7 @@
 
 #include "interface.h"
 #include "ui_sr.h"
+#include "ui_ecp.h"
 #include "spkm/ui_r_spkm.h"
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
@@ -970,15 +971,11 @@ int Interface::execute_mp_pulse(char pulse_code)
 void Interface::create_threads()
 {
 	meb_tid = new feb_thread(*main_eb);
-	/* TR
-	 ui_ecp_obj = new ecp_buffer(*this);
-	 */
+
+	ui_ecp_obj = new ecp_buffer(*this);
+
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);
-
-#if defined(__QNXNTO__)
-
-#endif
 
 }
 
