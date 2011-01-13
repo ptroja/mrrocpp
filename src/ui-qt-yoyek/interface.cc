@@ -972,7 +972,7 @@ void Interface::create_threads()
 {
 	meb_tid = new feb_thread(*main_eb);
 
-		ui_ecp_obj = new ecp_buffer(*this);
+	ui_ecp_obj = new ecp_buffer(*this);
 
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);
@@ -1043,9 +1043,18 @@ int Interface::MPslay()
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
-		/* TR
-		 SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
-		 */
+
+		//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
+
+		if (kill(mp.pid, SIGTERM) == -1) {
+			perror("kill()");
+		} else {
+			//    		int status;
+			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
+			//    			perror("waitpid()");
+			//    		}
+		}
+
 		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
