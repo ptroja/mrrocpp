@@ -284,12 +284,10 @@ int Interface::MPup_int()
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
 				while ((mp.pulse_fd =
-#if !defined(USE_MESSIP_SRR)
-						name_open(mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
-					messip::port_connect(mp.network_pulse_attach_point)) == NULL
-#endif
-					)
+
+				messip::port_connect(mp.network_pulse_attach_point)) == NULL
+
+				)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						usleep(lib::CONNECT_DELAY);
 					else {
