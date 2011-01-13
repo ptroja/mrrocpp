@@ -1,7 +1,6 @@
 /* ../fun.cc */
 int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 int close_process_control_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_teaching_window_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);
 int clear_file_selection_window_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo);

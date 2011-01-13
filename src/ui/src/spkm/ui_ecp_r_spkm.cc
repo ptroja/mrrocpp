@@ -20,6 +20,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
 #include "base/lib/sr/srlib.h"
 
@@ -30,11 +31,11 @@ namespace ui {
 namespace spkm {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-	common::EcpRobotDataPort()
+EcpRobot::EcpRobot(common::Interface& _interface) :
+	common::EcpRobotDataPort(_interface)
 {
 
-	the_robot = new ecp::spkm::robot(_config, _sr_ecp_msg);
+	the_robot = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	epos_motor_command_data_port
 			= the_robot->port_manager.get_port <lib::epos::epos_simple_command> (lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT);

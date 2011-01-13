@@ -18,11 +18,12 @@
 namespace mrrocpp {
 namespace ui {
 namespace common {
-
+class Interface;
 // ---------------------------------------------------------------
 class EcpRobot
 {
 protected:
+
 	// Klasa do obslugi robotow irp6 z poziomu UI
 
 	// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach
@@ -40,10 +41,11 @@ protected:
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
+	Interface& interface;
 	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::robot_name_t _robot_name); // Konstruktor
+	EcpRobot(Interface& _interface, lib::robot_name_t _robot_name); // Konstruktor
 
 	virtual ~EcpRobot();
 

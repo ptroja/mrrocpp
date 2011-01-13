@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
-//                            ecp_local.h dla QNX6
+//                            ecp_local.h dla QNX6.5
 // Definicje struktur danych i metod dla procesow ECP
-// robot - irp6_mechatronika
+// robot - polycrank
 //
 // -------------------------------------------------------------------------
 
@@ -10,6 +10,8 @@
 
 #include "base/ecp/ecp_robot.h"
 #include "robot/polycrank/const_polycrank.h"
+//#include "base/ecp/ecp_robot.h"
+//#include "robot/conveyor/const_conveyor.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,8 +26,6 @@ class robot: public common::robot::ecp_robot
 	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 	robot (common::task::task& _ecp_object);
 
-
-
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
 
@@ -34,3 +34,4 @@ class robot: public common::robot::ecp_robot
 } // namespace mrrocpp
 
 #endif
+

@@ -6,9 +6,8 @@ add_executable(ecp_gen_test
 
 target_link_libraries(ecp_gen_test
 	ecp_r_irp6p_m ecp_r_irp6ot_m
-	ecp
+	ecp_generators
 )
-
 
 add_executable(mp_gen_test
 	mp_t_gen_test.cc
