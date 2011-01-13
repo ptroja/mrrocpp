@@ -22,7 +22,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(50);
 
-	connect(this, SIGNAL(ui_notification_signal), this, SLOT(ui_notification_slot), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_notification_signal(QString)), this, SLOT(ui_notification_slot(QString)), Qt::QueuedConnection);
 
 }
 
@@ -55,7 +55,8 @@ void MainWindow::on_pushButton_l2_clicked()
 
 void MainWindow::ui_notification()
 {
-	emit ui_notification_signal();
+	//ui->notification_label->setText("GUGUGU");
+	emit ui_notification_signal("LALALA");
 }
 
 void MainWindow::on_timer_slot()
@@ -209,9 +210,9 @@ void MainWindow::on_timer_slot()
 
 }
 
-void MainWindow::ui_notification_slot()
+void MainWindow::ui_notification_slot(QString _string)
 {
-	ui->notification_label->setText("GUGUGU");
+	ui->notification_label->setText(_string);
 }
 
 // menus

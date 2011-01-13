@@ -32,14 +32,14 @@ private:
 	QTimer *timer;
 
 	signals:
-	void ui_notification_signal();
+	void ui_notification_signal(QString _string);
 
 private slots:
 	void on_pushButton_l1_clicked();
 	void on_pushButton_l2_clicked();
 	void on_timer_slot();
 
-	void ui_notification_slot();
+	void ui_notification_slot(QString _string);
 
 	// menus
 
