@@ -22,7 +22,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(50);
 
-	connect(this, SIGNAL(ui_notification_signal(QString)), this, SLOT(ui_notification_slot(QString)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 
 }
 
@@ -53,10 +53,21 @@ void MainWindow::on_pushButton_l2_clicked()
 	ui->plainTextEdit_sr->appendPlainText("l2");
 }
 
-void MainWindow::ui_notification(QString _string)
+void MainWindow::ui_notification(QString _string, QColor _color)
 {
 	//ui->notification_label->setText("GUGUGU");
-	emit ui_notification_signal(_string);
+	emit ui_notification_signal(_string, _color);
+}
+
+void MainWindow::ui_notification_slot(QString _string, QColor _color)
+{
+	QPalette pal;
+	pal.setColor(QPalette::Text, _color);
+	pal.setColor(QPalette::Foreground, _color);
+
+	ui->notification_label->setPalette(pal);
+
+	ui->notification_label->setText(_string);
 }
 
 void MainWindow::on_timer_slot()
@@ -208,11 +219,6 @@ void MainWindow::on_timer_slot()
 
 	}
 
-}
-
-void MainWindow::ui_notification_slot(QString _string)
-{
-	ui->notification_label->setText(_string);
 }
 
 // menus

@@ -50,47 +50,32 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 		switch (new_notifacion)
 		{
 			case UI_N_STARTING:
-				mw->ui_notification("STARTING");
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				 */
+				mw->ui_notification("STARTING", Qt::magenta);
+
 				break;
 			case UI_N_READY:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-				 */
+				mw->ui_notification("READY", Qt::blue);
+
 				break;
 			case UI_N_BUSY:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("BUSY", Qt::red);
+
 				break;
 			case UI_N_EXITING:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				 */
+				mw->ui_notification("EXITING", Qt::magenta);
+
 				break;
 			case UI_N_COMMUNICATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("COMMUNICATION", Qt::red);
+
 				break;
 			case UI_N_SYNCHRONISATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("SYNCHRONISATION", Qt::red);
+
 				break;
 			case UI_N_PROCESS_CREATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("PROCESS CREATION", Qt::red);
+
 				break;
 		}
 

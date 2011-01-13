@@ -24,7 +24,7 @@ public:
 	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
-	void ui_notification(QString _string);
+	void ui_notification(QString _string, QColor _color);
 
 private:
 	Ui::MainWindow *ui;
@@ -32,14 +32,14 @@ private:
 	QTimer *timer;
 
 	signals:
-	void ui_notification_signal(QString _string);
+	void ui_notification_signal(QString _string, QColor _color);
 
 private slots:
 	void on_pushButton_l1_clicked();
 	void on_pushButton_l2_clicked();
 	void on_timer_slot();
 
-	void ui_notification_slot(QString _string);
+	void ui_notification_slot(QString _string, QColor _color);
 
 	// menus
 
