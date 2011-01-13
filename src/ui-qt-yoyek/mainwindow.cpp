@@ -21,6 +21,9 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(50);
+
+	connect(this, SIGNAL(ui_notification_signal), this, SLOT(ui_notification_slot), Qt::QueuedConnection);
+
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +51,11 @@ void MainWindow::on_pushButton_l2_clicked()
 	ui->plainTextEdit_sr->setCurrentCharFormat(format);
 
 	ui->plainTextEdit_sr->appendPlainText("l2");
+}
+
+void MainWindow::ui_notification()
+{
+	emit ui_notification_signal();
 }
 
 void MainWindow::on_timer_slot()
@@ -199,6 +207,11 @@ void MainWindow::on_timer_slot()
 
 	}
 
+}
+
+void MainWindow::ui_notification_slot()
+{
+	ui->notification_label->setText("GUGUGU");
 }
 
 // menus
