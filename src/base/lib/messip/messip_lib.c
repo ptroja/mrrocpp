@@ -628,6 +628,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	msgsend.pid = htonl(cnx->remote_pid);
 	msgsend.tid = htonl(cnx->remote_tid);
 	msgsend.maxnb_msg_buffered = htonl(maxnb_msg_buffered);
+	assert(strlen(name) < MESSIP_CHANNEL_NAME_MAXLEN);
 	strncpy( msgsend.channel_name, name, MESSIP_CHANNEL_NAME_MAXLEN );
 	msgsend.channel_name[ MESSIP_CHANNEL_NAME_MAXLEN ] = 0;
 #if USE_QNXMSG
