@@ -111,6 +111,9 @@ int UiRobot::move_to_front_position()
 	for (int i = 0; i < number_of_servos; i++) {
 		desired_pos[i] = state.edp.front_position[i];
 	}
+
+	//	printf(" move_to_front_position state.edp.front_position: %lf, %lf, %lf, %lf, %lf, %lf\n ", state.edp.front_position[0], state.edp.front_position[1], state.edp.front_position[2], state.edp.front_position[3], state.edp.front_position[4], state.edp.front_position[5]);
+
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*this)));
 
 	return 1;
