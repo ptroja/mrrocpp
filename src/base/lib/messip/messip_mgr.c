@@ -1011,7 +1011,7 @@ handle_client_connect( int sockfd,
 	strncpy( cnx->process_name, msg.process_name, MESSIP_MAXLEN_TASKNAME );
 	cnx->process_name[ MESSIP_MAXLEN_TASKNAME ] = 0;
 	printf("cnx->process_name = %s\n", cnx->process_name);
-	memmove( &cnx->xclient_addr, client_addr, sizeof( struct sockaddr_in ) );
+	cnx->xclient_addr = *client_addr;
 	cnx->nb_cnx_channels = 0;
 	cnx->sockfd_cnx_channels = NULL;
 	cnx->sockfd = sockfd;
