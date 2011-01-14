@@ -457,7 +457,6 @@ messip_sin( char *mgr_ref )
 	}
 
 	/*--- Connect socket using name specified ---*/
-	server.sin_family = AF_INET;
 	hp = gethostbyname( hostname );
 	if ( hp == NULL )
 	{
@@ -480,6 +479,7 @@ messip_sin( char *mgr_ref )
 	}
 
 	/*--- Connect to the port ---*/
+	server.sin_family = AF_INET;
 	memcpy( &server.sin_addr, hp->h_addr, hp->h_length );
 	server.sin_port = htons( port );
 	status = connect( sockfd, ( const struct sockaddr * ) &server, sizeof( server ) );
@@ -936,6 +936,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	messip_reply_channel_connect_t msgreply;
 	struct iovec iovec[2];
 	struct sockaddr_in sockaddr;
+	struct hostent *hp;
 	const int flag = 1;
 #ifdef USE_QNXMSG
 	char namepath[PATH_MAX + NAME_MAX + 1];
@@ -1102,9 +1103,11 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		if ( info->send_sockfd < 0 )
 		{
 			perror("socket()");
+			pthread_mutex_destroy(&info->send_mutex);
 			free(info);
 			return NULL;
 		}
+
 		fcntl( info->send_sockfd, F_SETFL, FD_CLOEXEC );
 
 		/* Disable the Nagle (TCP No Delay) algorithm */
@@ -1116,7 +1119,25 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		memset( &sockaddr, 0, sizeof( sockaddr ) );
 		sockaddr.sin_family = AF_INET;
 		sockaddr.sin_port = htons( info->sin_port );
+
+#if 0
+		// Connect to IP address as returned by messip_mgr
 		sockaddr.sin_addr.s_addr = info->sin_addr;
+#else
+		// Connect to hostname as resolved by name
+		hp = gethostbyname( info->hostname );
+		if ( hp == NULL )
+		{
+			fprintf( stderr, "*** %s : unknown host!***\n", info->hostname );
+			close( info->send_sockfd );
+			pthread_mutex_destroy(&info->send_mutex);
+			free(info);
+			return NULL;
+		}
+
+		memcpy( &sockaddr.sin_addr, hp->h_addr, hp->h_length );
+#endif
+
 		if ( connect( info->send_sockfd,
 			  ( const struct sockaddr * ) &sockaddr, sizeof( sockaddr ) ) < 0 )
 		{
@@ -1124,6 +1145,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 			fprintf( stderr, "%s %d:\n\tUnable to connect to host %s, port %d (name=%s)\n",
 			   __FILE__, __LINE__, inet_ntoa( sockaddr.sin_addr ), info->sin_port, name );
 			close( info->send_sockfd );
+			pthread_mutex_destroy(&info->send_mutex);
 			free(info);
 			return NULL;
 		}
