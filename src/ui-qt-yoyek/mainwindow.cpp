@@ -36,28 +36,6 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::on_pushButton_l1_clicked()
-{
-	QTextCharFormat format;
-	format.setFontItalic(true);
-
-	format.setForeground(Qt::red);
-	ui->plainTextEdit_sr->setCurrentCharFormat(format);
-
-	ui->plainTextEdit_sr->appendPlainText(interface.sr_attach_point.c_str());
-}
-
-void MainWindow::on_pushButton_l2_clicked()
-{
-	QTextCharFormat format;
-	format.setFontItalic(false);
-
-	format.setForeground(Qt::blue);
-	ui->plainTextEdit_sr->setCurrentCharFormat(format);
-
-	ui->plainTextEdit_sr->appendPlainText("l2");
-}
-
 void MainWindow::ui_notification(QString _string, QColor _color)
 {
 	//ui->notification_label->setText("GUGUGU");

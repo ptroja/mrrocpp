@@ -30,32 +30,6 @@
      </font>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_l1">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>230</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>l1 text</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_l2">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>230</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>l2 text</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="notification_label">
     <property name="geometry">
      <rect>
@@ -76,7 +50,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
