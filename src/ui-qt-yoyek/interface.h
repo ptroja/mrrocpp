@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "mainwindow.h"
+#include "wnd_process_control.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -186,8 +187,9 @@ public:
 	bool are_all_robots_loaded_or_inactive();
 	bool is_any_active_robot_loaded();
 
+	// windows
 	MainWindow* mw;
-
+	wnd_process_control* wpc;
 };
 
 }

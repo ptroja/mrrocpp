@@ -10,6 +10,7 @@
 
 #include "interface.h"
 #include "ui_sr.h"
+#include "wnd_process_control.h"
 
 #include "irp6ot_m/ui_r_irp6ot_m.h"
 #include "irp6p_m/ui_r_irp6p_m.h"
@@ -466,7 +467,7 @@ void MainWindow::on_actionMP_Unload_triggered()
 
 void MainWindow::on_actionProcess_Control_triggered()
 {
-
+	interface.wpc->show();
 }
 void MainWindow::on_actionConfiguration_triggered()
 {
