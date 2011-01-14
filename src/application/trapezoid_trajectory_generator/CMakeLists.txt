@@ -1,4 +1,3 @@
-# object follower - PB - SAC
 add_executable(ecp_trapezoid
     ecp_t_trapezoid_task.cc
     ecp_g_trapezoid_generator.cc

@@ -9,6 +9,8 @@
 #define ECP_G_TRAPEZOID_GENERATOR_H_
 
 #include "base/ecp/ecp_generator.h"
+#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 
@@ -24,6 +26,18 @@ public:
 
 	bool first_step();
 	bool next_step();
+
+	void set_params(int axis_idx, double accel1, double accel2, double v_max, double time_v_max);
+private:
+	int motion_steps;
+	bool current_theta_saved;
+	double current_arm_coordinates[lib::MAX_SERVOS_NR];
+
+	int axis_idx;
+	double accel1;
+	double accel2;
+	double v_max;
+	double time_v_max;
 };
 
 }

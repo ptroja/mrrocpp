@@ -8,7 +8,9 @@
 #ifndef ECP_T_TRAPEZOID_TASK_H_
 #define ECP_T_TRAPEZOID_TASK_H_
 
+#include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
+#include "ecp_g_trapezoid_generator.h"
 
 namespace mrrocpp {
 
@@ -22,6 +24,9 @@ public:
 	trapezoid_task(lib::configurator &config);
 	virtual ~trapezoid_task();
 	void main_task_algorithm();
+
+private:
+	boost::shared_ptr<trapezoid_generator> trapezoid_gen;
 };
 
 }
