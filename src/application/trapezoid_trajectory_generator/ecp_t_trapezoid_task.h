@@ -8,7 +8,7 @@
 #ifndef ECP_T_TRAPEZOID_TASK_H_
 #define ECP_T_TRAPEZOID_TASK_H_
 
-#include "ecp_task.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 
@@ -19,8 +19,9 @@ namespace trapezoid {
 class trapezoid_task : public mrrocpp::ecp::common::task::task
 {
 public:
-	trapezoid_task();
+	trapezoid_task(lib::configurator &config);
 	virtual ~trapezoid_task();
+	void main_task_algorithm();
 };
 
 }
