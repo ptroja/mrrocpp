@@ -640,7 +640,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	}
 #endif
 	msgsend.sin_port = htons(server_addr.sin_port);
-	strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
+	//strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
 	if(gethostname(msgsend.hostname, sizeof(msgsend.hostname)) == -1) {
 		perror("gethostname()");
 	}
@@ -692,7 +692,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	get_taskname( cnx->remote_pid, ch->remote_taskname );
 	ch->sin_port = ntohs(reply.sin_port);
 	ch->sin_addr = ntohl(reply.sin_addr);
-	strncpy( ch->sin_addr_str, reply.sin_addr_str, sizeof(ch->sin_addr_str) );
+	//strncpy( ch->sin_addr_str, reply.sin_addr_str, sizeof(ch->sin_addr_str) );
 	ch->recv_sockfd_sz = 0;
 	ch->recv_sockfd[ch->recv_sockfd_sz++] = sockfd;
 	ch->send_sockfd = -1;
@@ -1090,7 +1090,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->remote_tid = msgreply.tid;
 		info->sin_port = msgreply.sin_port;
 		info->sin_addr = msgreply.sin_addr;
-		strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
+		//strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
 		strncpy( info->name, name, sizeof(info->name) );
 
 		/*--- Create socket ---*/
