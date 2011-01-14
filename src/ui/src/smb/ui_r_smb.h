@@ -17,11 +17,9 @@ namespace common {
 class Interface;
 }
 
-namespace tfg_and_conv {
-class EcpRobot;
-}
 namespace smb {
 
+class EcpRobot;
 //
 //
 // KLASA UiRobot
@@ -35,7 +33,7 @@ private:
 
 public:
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 	void close_all_windows();
