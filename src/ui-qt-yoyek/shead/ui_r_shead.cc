@@ -2,19 +2,14 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "ui/src/smb/ui_r_smb.h"
-#include "ui/src/smb/ui_ecp_r_smb.h"
-#include "robot/smb/const_smb.h"
-#include "ui/src/ui_class.h"
-
-/* Local headers */
-#include "../ablibs.h"
-#include "../abimport.h"
-#include "../gcc_ntox86/proto.h"
+#include "ui_r_shead.h"
+#include "ui_ecp_r_shead.h"
+#include "robot/shead/const_shead.h"
+#include "../interface.h"
 
 namespace mrrocpp {
 namespace ui {
-namespace smb {
+namespace shead {
 
 //
 //
@@ -27,7 +22,7 @@ void UiRobot::edp_create()
 	if (state.edp.state == 0) {
 		create_thread();
 
-		eb.command(boost::bind(&ui::smb::UiRobot::edp_create_int, &(*this)));
+		eb.command(boost::bind(&ui::shead::UiRobot::edp_create_int, &(*this)));
 	}
 }
 
@@ -38,7 +33,7 @@ int UiRobot::edp_create_int()
 
 	try { // dla bledow robot :: ECP_error
 
-		// dla robota smb
+		// dla robota shead
 		if (state.edp.state == 0) {
 
 			state.edp.state = 0;
@@ -53,15 +48,14 @@ int UiRobot::edp_create_int()
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_smb already exists");
-			} else if (interface.check_node_existence(state.edp.node_name, "edp_smb")) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_shead already exists");
+			} else if (interface.check_node_existence(state.edp.node_name, "edp_shead")) {
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-
-					ui_ecp_robot = new ui::smb::EcpRobot(interface);
+					ui_ecp_robot = new ui::shead::EcpRobot(interface);
 				}
 				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
 
@@ -71,9 +65,7 @@ int UiRobot::edp_create_int()
 					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 					delete ui_ecp_robot;
 				} else { // jesli spawn sie powiodl
-
 					state.edp.state = 1;
-
 					connect_to_reader();
 
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
@@ -106,7 +98,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, "is_smb_active"),
+			common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, "is_shead_active"),
 			ui_ecp_robot(NULL)
 {
 
@@ -122,50 +114,63 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb, NULL);
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead, NULL);
+			 */
 			break;
 		case 0:
-			ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_unload,
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_unload,
 
-			NULL);
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, ABN_mm_smb_edp_load, NULL);
-
+			 NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, ABN_mm_shead_edp_load, NULL);
+			 */
 			break;
 		case 1:
 		case 2:
-			ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, NULL);
-
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, NULL);
+			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-
+				/* TR
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+				 */
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, NULL);
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
+						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
 
-						NULL);
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, ABN_mm_smb_edp_unload, NULL);
+						 NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, ABN_mm_shead_edp_unload, NULL);
+						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						NULL);
+						/* TR
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+						 NULL);
+						 */
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
-				ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, NULL);
-				ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+				/* TR
+				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+				 */
 			}
 			break;
 		default:
@@ -183,5 +188,4 @@ void UiRobot::delete_ui_ecp_robot()
 }
 } //namespace ui
 } //namespace mrrocpp
-
 

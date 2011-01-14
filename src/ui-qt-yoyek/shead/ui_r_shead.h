@@ -8,8 +8,8 @@
 #ifndef __UI_R_SHEAD_H
 #define __UI_R_SHEAD_H
 
-#include "ui/src/ui.h"
-#include "ui/src/ui_robot.h"
+#include "../ui.h"
+#include "../ui_robot.h"
 
 namespace mrrocpp {
 namespace ui {

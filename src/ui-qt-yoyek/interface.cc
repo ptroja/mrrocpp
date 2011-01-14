@@ -10,10 +10,16 @@
 
 #include <QtGui/QApplication>
 #include "mainwindow.h"
+#include "wnd_process_control.h"
 
 #include "interface.h"
 #include "ui_sr.h"
+#include "ui_ecp.h"
 #include "spkm/ui_r_spkm.h"
+#include "smb/ui_r_smb.h"
+#include "shead/ui_r_shead.h"
+#include "irp6ot_m/ui_r_irp6ot_m.h"
+#include "irp6p_m/ui_r_irp6p_m.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -24,6 +30,7 @@ Interface::Interface() :
 {
 
 	mw = new MainWindow(*this);
+	wpc = new wnd_process_control(*this, mw);
 
 	main_eb = new function_execution_buffer(*this);
 
@@ -50,46 +57,32 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 		switch (new_notifacion)
 		{
 			case UI_N_STARTING:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				 */
+				mw->ui_notification("STARTING", Qt::magenta);
+
 				break;
 			case UI_N_READY:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-				 */
+				mw->ui_notification("READY", Qt::blue);
+
 				break;
 			case UI_N_BUSY:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("BUSY", Qt::red);
+
 				break;
 			case UI_N_EXITING:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				 */
+				mw->ui_notification("EXITING", Qt::magenta);
+
 				break;
 			case UI_N_COMMUNICATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("COMMUNICATION", Qt::red);
+
 				break;
 			case UI_N_SYNCHRONISATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("SYNCHRONISATION", Qt::red);
+
 				break;
 			case UI_N_PROCESS_CREATION:
-				/* TR
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
-				 PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				 */
+				mw->ui_notification("PROCESS CREATION", Qt::red);
+
 				break;
 		}
 
@@ -124,24 +117,24 @@ void Interface::init()
 	spkm = new spkm::UiRobot(*this);
 	robot_m[spkm->robot_name] = spkm;
 
+	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
+	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
+
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
+	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
 	/* TR
-	 smb = new smb::UiRobot(*this);
-	 robot_m[smb->robot_name] = smb;
-
-	 shead = new shead::UiRobot(*this);
-	 robot_m[shead->robot_name] = shead;
-
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
 
-	 irp6ot_m = new irp6ot_m::UiRobot(*this);
-	 robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-
-	 irp6p_m = new irp6p_m::UiRobot(*this);
-	 robot_m[irp6p_m->robot_name] = irp6p_m;
 
 	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
@@ -161,6 +154,7 @@ void Interface::init()
 	 polycrank = new polycrank::UiRobot(*this);
 	 robot_m[polycrank->robot_name] = polycrank;
 	 */
+
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;
 
@@ -292,12 +286,10 @@ int Interface::MPup_int()
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
 				while ((mp.pulse_fd =
-#if !defined(USE_MESSIP_SRR)
-						name_open(mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
-					messip::port_connect(mp.network_pulse_attach_point)) == NULL
-#endif
-					)
+
+				messip::port_connect(mp.network_pulse_attach_point)) == NULL
+
+				)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						usleep(lib::CONNECT_DELAY);
 					else {
@@ -982,15 +974,11 @@ int Interface::execute_mp_pulse(char pulse_code)
 void Interface::create_threads()
 {
 	meb_tid = new feb_thread(*main_eb);
-	/* TR
-	 ui_ecp_obj = new ecp_buffer(*this);
-	 */
+
+	ui_ecp_obj = new ecp_buffer(*this);
+
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);
-
-#if defined(__QNXNTO__)
-
-#endif
 
 }
 
@@ -1058,9 +1046,18 @@ int Interface::MPslay()
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
-		/* TR
-		 SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
-		 */
+
+		//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
+
+		if (kill(mp.pid, SIGTERM) == -1) {
+			perror("kill()");
+		} else {
+			//    		int status;
+			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
+			//    			perror("waitpid()");
+			//    		}
+		}
+
 		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}
