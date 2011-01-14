@@ -135,6 +135,7 @@ typedef struct /* channel_t */
 	in_port_t			sin_port;
 	in_addr_t			sin_addr;
 	char				sin_addr_str[48];
+	char				hostname[48];
 	int					f_notify_deaths;				// Send a Msg on the death of each process
 
 	// Buffered Messages
@@ -1122,16 +1123,17 @@ client_channel_create( int sockfd,
 		ch->channel_name[ MESSIP_CHANNEL_NAME_MAXLEN ] = 0;
 		strncpy( ch->qnxnode_name, msg.qnxnode_name, MESSIP_QNXNODE_NAME_MAXLEN );
 		ch->qnxnode_name[ MESSIP_QNXNODE_NAME_MAXLEN ] = 0;
-		ch->sin_port = msg.sin_port;
+		ch->sin_port = ntohs(msg.sin_port);
 		ch->sin_addr = client_addr->sin_addr.s_addr;
-		strcpy( ch->sin_addr_str, inet_ntoa( client_addr->sin_addr ) );
+		strncpy( ch->sin_addr_str, inet_ntoa( client_addr->sin_addr ), sizeof(ch->sin_addr_str) );
+		strncpy( ch->hostname, msg.hostname, sizeof(ch->hostname) );
 
 		/*--- Keep the channels sorted ---*/
 		qsort( channels, nb_channels, sizeof( channel_t * ), qsort_channels );
 		reply.ok = MESSIP_OK;
-		reply.sin_port = ch->sin_port;
-		reply.sin_addr = ch->sin_addr;
-		strcpy( reply.sin_addr_str, ch->sin_addr_str );
+		reply.sin_port = htons(ch->sin_port);
+		reply.sin_addr = htonl(ch->sin_addr);
+		strncpy( reply.sin_addr_str, ch->sin_addr_str, sizeof(reply.sin_addr_str) );
 
 		UNLOCK;
 	}							// else

@@ -138,7 +138,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;
+	int8_t ok;
 	in_port_t sin_port;
 	in_addr_t sin_addr;
 	char sin_addr_str[48];
@@ -215,7 +215,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
 } messip_reply_channel_ping_t;
 
 
@@ -234,7 +234,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;									// MESSIP_OK or MESSIP_NOK
+	int8_t ok;									// MESSIP_OK or MESSIP_NOK
 	int32_t nb_msg_buffered;
 } __attribute__ ((packed)) messip_reply_buffered_send_t;
 
@@ -326,7 +326,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
 } __attribute__ ((packed)) messip_reply_death_notify_t;
 
 

@@ -639,7 +639,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 		msgsend.qnxnode_name[ MESSIP_QNXNODE_NAME_MAXLEN ] = 0;
 	}
 #endif
-	msgsend.sin_port = server_addr.sin_port;
+	msgsend.sin_port = htons(server_addr.sin_port);
 	strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
 	if(gethostname(msgsend.hostname, sizeof(msgsend.hostname)) == -1) {
 		perror("gethostname()");
@@ -676,7 +676,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	assert( dcount == sizeof( messip_reply_channel_create_t ) );
 
 	/*--- Channel creation failed ? ---*/
-	if ( reply.ok == MESSIP_NOK )
+	if ( reply.ok =! MESSIP_OK )
 	{
 		close( sockfd );
 		errno = EEXIST;
@@ -690,9 +690,9 @@ messip_channel_create0( messip_cnx_t * cnx,
 	ch->remote_pid = cnx->remote_pid;
 	ch->remote_tid = cnx->remote_tid;
 	get_taskname( cnx->remote_pid, ch->remote_taskname );
-	ch->sin_port = reply.sin_port;
-	ch->sin_addr = reply.sin_addr;
-	strcpy( ch->sin_addr_str, reply.sin_addr_str );
+	ch->sin_port = ntohs(reply.sin_port);
+	ch->sin_addr = ntohl(reply.sin_addr);
+	strncpy( ch->sin_addr_str, reply.sin_addr_str, sizeof(ch->sin_addr_str) );
 	ch->recv_sockfd_sz = 0;
 	ch->recv_sockfd[ch->recv_sockfd_sz++] = sockfd;
 	ch->send_sockfd = -1;
