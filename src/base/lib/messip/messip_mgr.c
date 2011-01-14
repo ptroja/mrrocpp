@@ -135,6 +135,7 @@ typedef struct /* channel_t */
 	in_port_t			sin_port;
 	in_addr_t			sin_addr;
 	char				sin_addr_str[48];
+	char				hostname[48];
 	int					f_notify_deaths;				// Send a Msg on the death of each process
 
 	// Buffered Messages
@@ -1010,7 +1011,7 @@ handle_client_connect( int sockfd,
 	strncpy( cnx->process_name, msg.process_name, MESSIP_MAXLEN_TASKNAME );
 	cnx->process_name[ MESSIP_MAXLEN_TASKNAME ] = 0;
 	printf("cnx->process_name = %s\n", cnx->process_name);
-	memmove( &cnx->xclient_addr, client_addr, sizeof( struct sockaddr_in ) );
+	cnx->xclient_addr = *client_addr;
 	cnx->nb_cnx_channels = 0;
 	cnx->sockfd_cnx_channels = NULL;
 	cnx->sockfd = sockfd;
@@ -1122,16 +1123,17 @@ client_channel_create( int sockfd,
 		ch->channel_name[ MESSIP_CHANNEL_NAME_MAXLEN ] = 0;
 		strncpy( ch->qnxnode_name, msg.qnxnode_name, MESSIP_QNXNODE_NAME_MAXLEN );
 		ch->qnxnode_name[ MESSIP_QNXNODE_NAME_MAXLEN ] = 0;
-		ch->sin_port = msg.sin_port;
+		ch->sin_port = ntohs(msg.sin_port);
 		ch->sin_addr = client_addr->sin_addr.s_addr;
-		strcpy( ch->sin_addr_str, inet_ntoa( client_addr->sin_addr ) );
+		strncpy( ch->sin_addr_str, inet_ntoa( client_addr->sin_addr ), sizeof(ch->sin_addr_str) );
+		strncpy( ch->hostname, msg.hostname, sizeof(ch->hostname) );
 
 		/*--- Keep the channels sorted ---*/
 		qsort( channels, nb_channels, sizeof( channel_t * ), qsort_channels );
 		reply.ok = MESSIP_OK;
-		reply.sin_port = ch->sin_port;
-		reply.sin_addr = ch->sin_addr;
-		strcpy( reply.sin_addr_str, ch->sin_addr_str );
+		reply.sin_port = htons(ch->sin_port);
+		reply.sin_addr = htonl(ch->sin_addr);
+		//strncpy( reply.sin_addr_str, ch->sin_addr_str, sizeof(reply.sin_addr_str) );
 
 		UNLOCK;
 	}							// else
@@ -1332,11 +1334,13 @@ client_channel_connect( int sockfd,
 		reply.sin_addr = ch->sin_addr;
 		reply.mgr_sockfd = ch->sockfd;
 
-		assert(strlen(ch->sin_addr_str) < sizeof(reply.sin_addr_str));
-		strncpy(reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
+		//assert(strlen(ch->sin_addr_str) < sizeof(reply.sin_addr_str));
+		//strncpy(reply.sin_addr_str, ch->sin_addr_str, sizeof( reply.sin_addr_str ) );
 
 		assert(strlen(ch->qnxnode_name) < sizeof(reply.qnxnode_name));
 		strncpy(reply.qnxnode_name, ch->qnxnode_name, sizeof(reply.qnxnode_name));
+
+		strncpy(reply.hostname, ch->hostname, sizeof(reply.hostname));
 	}
 	iovec[0].iov_base = &reply;
 	iovec[0].iov_len  = sizeof( reply );

@@ -639,8 +639,8 @@ messip_channel_create0( messip_cnx_t * cnx,
 		msgsend.qnxnode_name[ MESSIP_QNXNODE_NAME_MAXLEN ] = 0;
 	}
 #endif
-	msgsend.sin_port = server_addr.sin_port;
-	strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
+	msgsend.sin_port = htons(server_addr.sin_port);
+	//strncpy( msgsend.sin_addr_str, inet_ntoa( server_addr.sin_addr ), sizeof(msgsend.sin_addr_str) );
 	if(gethostname(msgsend.hostname, sizeof(msgsend.hostname)) == -1) {
 		perror("gethostname()");
 	}
@@ -676,7 +676,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	assert( dcount == sizeof( messip_reply_channel_create_t ) );
 
 	/*--- Channel creation failed ? ---*/
-	if ( reply.ok == MESSIP_NOK )
+	if ( reply.ok =! MESSIP_OK )
 	{
 		close( sockfd );
 		errno = EEXIST;
@@ -685,14 +685,14 @@ messip_channel_create0( messip_cnx_t * cnx,
 
 	/*--- Ok ---*/
 	ch = (messip_channel_t *)malloc( sizeof( messip_channel_t ) );
-	strcpy( ch->name, name );
+	strncpy( ch->name, name, sizeof(ch->name) );
 	ch->cnx = cnx;
 	ch->remote_pid = cnx->remote_pid;
 	ch->remote_tid = cnx->remote_tid;
 	get_taskname( cnx->remote_pid, ch->remote_taskname );
-	ch->sin_port = reply.sin_port;
-	ch->sin_addr = reply.sin_addr;
-	strcpy( ch->sin_addr_str, reply.sin_addr_str );
+	ch->sin_port = ntohs(reply.sin_port);
+	ch->sin_addr = ntohl(reply.sin_addr);
+	//strncpy( ch->sin_addr_str, reply.sin_addr_str, sizeof(ch->sin_addr_str) );
 	ch->recv_sockfd_sz = 0;
 	ch->recv_sockfd[ch->recv_sockfd_sz++] = sockfd;
 	ch->send_sockfd = -1;
@@ -820,7 +820,7 @@ messip_channel_delete0( messip_channel_t * ch,
 	memset(&msgsend, 0, sizeof(msgsend));
 	msgsend.pid = getpid(  );
 	msgsend.tid = pthread_self(  );
-	strcpy( msgsend.name, ch->name );
+	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;
 	iovec[1].iov_len  = sizeof( msgsend );
 	status = messip_writev( ch->cnx->sockfd, iovec, 2 );
@@ -1065,7 +1065,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 				info->sin_port = htons(0);
 				info->sin_addr = htonl( INADDR_LOOPBACK );
 				//strcpy( info->sin_addr_str, inet_ntoa(info->sin_addr) );
-				strcpy( info->name, name );
+				strncpy( info->name, name, sizeof(info->name) );
 				return info;
 			}
 		}
@@ -1081,7 +1081,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 			info->sin_port = htons(0);
 			info->sin_addr = htonl( INADDR_LOOPBACK );
 			//strcpy( info->sin_addr_str, inet_ntoa(info->sin_addr) );
-			strcpy( info->name, name );
+			strncpy( info->name, name, sizeof(info->name) );
 			return info;
 		}
 #endif /* USE_QNXMSG */
@@ -1090,7 +1090,10 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->remote_tid = msgreply.tid;
 		info->sin_port = msgreply.sin_port;
 		info->sin_addr = msgreply.sin_addr;
-		strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
+		//strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
+		strncpy( info->hostname, msgreply.hostname, sizeof(info->hostname));
+		info->hostname[sizeof(info->hostname)] = 0;
+		assert(strlen(info->hostname) < sizeof(info->hostname));
 		strncpy( info->name, name, sizeof(info->name) );
 
 		/*--- Create socket ---*/
@@ -1233,7 +1236,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	memset(&msgsend, 0, sizeof(msgsend));
 	msgsend.pid = getpid(  );
 	msgsend.tid = pthread_self(  );
-	strcpy( msgsend.name, ch->name );
+	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;
 	iovec[1].iov_len  = sizeof( msgsend );
 	status = messip_writev( ch->cnx->sockfd, iovec, 2 );

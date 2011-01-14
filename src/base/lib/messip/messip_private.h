@@ -132,16 +132,16 @@ typedef struct
 	char channel_name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 	uint16_t sin_port;
-	char sin_addr_str[48];
+	//char sin_addr_str[48];
 	char hostname[48];
 } __attribute__ ((packed)) messip_send_channel_create_t;
 
 typedef struct
 {
-	int32_t ok;
+	int8_t ok;
 	in_port_t sin_port;
 	in_addr_t sin_addr;
-	char sin_addr_str[48];
+	//char sin_addr_str[48];
 } __attribute__ ((packed)) messip_reply_channel_create_t;
 
 
@@ -180,7 +180,8 @@ typedef struct
 	uint64_t tid;
 	in_port_t sin_port;						// 2 bytes
 	in_addr_t sin_addr;						// 4 bytes
-	char sin_addr_str[48];
+	//char sin_addr_str[48];
+	char hostname[48];
 	int mgr_sockfd;							// Socket in the messip_mgr
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 } __attribute__ ((packed)) messip_reply_channel_connect_t;
@@ -215,7 +216,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
 } messip_reply_channel_ping_t;
 
 
@@ -234,7 +235,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;									// MESSIP_OK or MESSIP_NOK
+	int8_t ok;									// MESSIP_OK or MESSIP_NOK
 	int32_t nb_msg_buffered;
 } __attribute__ ((packed)) messip_reply_buffered_send_t;
 
@@ -326,7 +327,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
 } __attribute__ ((packed)) messip_reply_death_notify_t;
 
 
