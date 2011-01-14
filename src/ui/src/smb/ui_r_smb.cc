@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/smb/ui_r_smb.h"
-#include "ui/src/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/smb/ui_ecp_r_smb.h"
 #include "robot/smb/const_smb.h"
 #include "ui/src/ui_class.h"
 
@@ -61,9 +61,9 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::smb::ROBOT_NAME);
+					ui_ecp_robot = new ui::smb::EcpRobot(interface);
 				}
-				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (state.edp.pid < 0) {
 
