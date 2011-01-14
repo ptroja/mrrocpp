@@ -252,7 +252,7 @@ void MainWindow::on_actionirp6ot_m_EDP_Unload_triggered()
 	interface.irp6ot_m->EDP_slay_int();
 }
 
-void MainWindow::on_actionirp6ot_m_Synchronise_triggered()
+void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 {
 	interface.irp6ot_m->synchronise();
 }
@@ -294,7 +294,7 @@ void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
 	interface.irp6p_m->EDP_slay_int();
 }
 
-void MainWindow::on_actionirp6p_m_Synchronise_triggered()
+void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 {
 	interface.irp6p_m->synchronise();
 }
@@ -336,7 +336,7 @@ void MainWindow::on_actionspkm_EDP_Unload_triggered()
 	interface.spkm->EDP_slay_int();
 }
 
-void MainWindow::on_actionspkm_Synchronise_triggered()
+void MainWindow::on_actionspkm_Synchronisation_triggered()
 {
 	interface.spkm->synchronise();
 }

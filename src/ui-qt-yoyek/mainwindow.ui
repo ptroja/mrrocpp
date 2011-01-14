@@ -91,7 +91,7 @@
       <property name="title">
        <string>Pre Synchro Moves</string>
       </property>
-      <addaction name="actionspkm_Synchronise"/>
+      <addaction name="actionspkm_Synchronisation"/>
       <addaction name="actionspkm_Motors"/>
      </widget>
      <widget class="QMenu" name="menuspkm_Post_synchro_moves">
@@ -261,9 +261,9 @@
     <string>EDP Unload</string>
    </property>
   </action>
-  <action name="actionspkm_Synchronise">
+  <action name="actionspkm_Synchronisation">
    <property name="text">
-    <string>Synchronise</string>
+    <string>Synchronisation</string>
    </property>
   </action>
   <action name="actionspkm_Motors">

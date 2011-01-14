@@ -30,7 +30,7 @@ Interface::Interface() :
 {
 
 	mw = new MainWindow(*this);
-	wpc = new wnd_process_control(*this);
+	wpc = new wnd_process_control(*this, mw);
 
 	main_eb = new function_execution_buffer(*this);
 
