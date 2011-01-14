@@ -1339,6 +1339,8 @@ client_channel_connect( int sockfd,
 
 		assert(strlen(ch->qnxnode_name) < sizeof(reply.qnxnode_name));
 		strncpy(reply.qnxnode_name, ch->qnxnode_name, sizeof(reply.qnxnode_name));
+
+		strncpy(reply.hostname, ch->hostname, sizeof(reply.hostname));
 	}
 	iovec[0].iov_base = &reply;
 	iovec[0].iov_len  = sizeof( reply );

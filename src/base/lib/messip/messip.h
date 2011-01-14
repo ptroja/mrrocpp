@@ -114,6 +114,7 @@ typedef struct messip_channel
 	in_port_t sin_port;
 	in_addr_t sin_addr;
 	//char sin_addr_str[48];
+	char hostname[48];
 	int send_sockfd;
 	int *new_sockfd;
 	int *channel_type;

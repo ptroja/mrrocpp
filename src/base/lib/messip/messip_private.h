@@ -181,6 +181,7 @@ typedef struct
 	in_port_t sin_port;						// 2 bytes
 	in_addr_t sin_addr;						// 4 bytes
 	//char sin_addr_str[48];
+	char hostname[48];
 	int mgr_sockfd;							// Socket in the messip_mgr
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 } __attribute__ ((packed)) messip_reply_channel_connect_t;
