@@ -672,6 +672,7 @@ public:
      * @param trajectory_pose pose to load
      */
     void load_pose(Pos trajectory_pose) {
+    	bool first_time = true;
     	pose_vector.push_back(trajectory_pose);
     }
 };
