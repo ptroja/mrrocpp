@@ -25,6 +25,7 @@ private:
 
 	bool track;
 	bool postument;
+	bool polycrank;
 
 public:
 	sub_task_const_vel_gen_test(task::task & _ecp_t);
