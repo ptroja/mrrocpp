@@ -9,7 +9,6 @@
  * @ingroup ecp
  */
 
-//#include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/single_thread_port.h"
 
