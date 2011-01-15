@@ -38,13 +38,13 @@ bool ecp_g_rotate_gripper::first_step()
 
 	sr_ecp_msg.message("first_step");
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
 
 	return true;
 }
@@ -96,22 +96,22 @@ bool ecp_g_rotate_gripper::next_step()
 		sr_ecp_msg.message("Weszlo do NOT VSP_REP_OK\n");
 	}
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
-	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_type = NOTHING_DEFINITION;
+	the_robot->ecp_command.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.get_arm_type = lib::JOINT;
 	//  td.internode_step_no = (2000*angle)/0.55;
-	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no - 1;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[2] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[3] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[4] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[5] = 0.0;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6] = angle;
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[7] = 0.0;
+	the_robot->ecp_command.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.value_in_step_no = td.value_in_step_no - 1;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[0] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[1] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[2] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[3] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[4] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[5] = 0.0;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[6] = angle;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[7] = 0.0;
 
 	return true;
 }

@@ -62,7 +62,7 @@ void robot::create_command()
 	is_new_data = false;
 
 	if (epos_cubic_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -78,7 +78,7 @@ void robot::create_command()
 	}
 
 	if (epos_trapezoidal_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -95,7 +95,7 @@ void robot::create_command()
 
 	/*
 	 if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
-	 ecp_command.instruction.set_type = ARM_DEFINITION;
+	 ecp_command.set_type = ARM_DEFINITION;
 	 // generator command interpretation
 	 // narazie proste przepisanie
 
@@ -111,7 +111,7 @@ void robot::create_command()
 	 }
 	 */
 	if (smb_multi_pin_insertion_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -127,7 +127,7 @@ void robot::create_command()
 	}
 
 	if (smb_multi_pin_locking_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -148,23 +148,23 @@ void robot::create_command()
 	communicate_with_edp = true;
 
 	if (is_new_data && is_new_request) {
-		ecp_command.instruction.instruction_type = lib::SET_GET;
+		ecp_command.instruction_type = lib::SET_GET;
 	} else if (is_new_data) {
-		ecp_command.instruction.instruction_type = lib::SET;
+		ecp_command.instruction_type = lib::SET;
 	} else if (is_new_request) {
-		ecp_command.instruction.instruction_type = lib::GET;
+		ecp_command.instruction_type = lib::GET;
 	} else {
 		communicate_with_edp = false;
 	}
 
 	if (is_new_request) {
-		ecp_command.instruction.get_type = ARM_DEFINITION;
+		ecp_command.get_type = ARM_DEFINITION;
 	}
 
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 

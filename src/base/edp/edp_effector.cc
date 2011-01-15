@@ -139,12 +139,12 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 	// bufory:
 	// - polecen przysylanych z ECP
 	// - polecen przysylanych z ECP dla watku trans_t
-	lib::ecp_command_buffer new_ecp_command;
+	lib::c_buffer new_ecp_command;
 
 	/* Do your MsgReceive's here now with the chid */
 	while (1) {
 #if !defined(USE_MESSIP_SRR)
-		rcvid = MsgReceive(server_attach->chid, &new_ecp_command, sizeof(lib::ecp_command_buffer), NULL);
+		rcvid = MsgReceive(server_attach->chid, &new_ecp_command, sizeof(new_ecp_command), NULL);
 
 		if (rcvid == -1) {/* Error condition, exit */
 			perror("MsgReceive()");
@@ -214,7 +214,7 @@ lib::INSTRUCTION_TYPE effector::receive_instruction(void)
 
 	caller = rcvid;
 
-	instruction = new_ecp_command.instruction;
+	instruction = new_ecp_command;
 	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
 
 		//	std::cout << "edp effector: " << instruction.instruction_type << "\n";

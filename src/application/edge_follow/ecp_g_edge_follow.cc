@@ -55,37 +55,37 @@ bool y_edge_follow_force::first_step()
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	//	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
-	the_robot->ecp_command.instruction.set_arm_type = lib::PF_VELOCITY;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
+	//	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.set_arm_type = lib::PF_VELOCITY;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
-		the_robot->ecp_command.instruction.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
+		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
+		the_robot->ecp_command.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
 	}
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = 0;
+		the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		//	the_robot->EDP_data.ECPtoEDP_reciprocal_damping[i] = 0.0;
-		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.instruction.arm.pf_def.reciprocal_damping[0] = lib::FORCE_RECIPROCAL_DAMPING;
-	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::CONTACT;
+	the_robot->ecp_command.arm.pf_def.reciprocal_damping[0] = lib::FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.arm.pf_def.behaviour[0] = lib::CONTACT;
 	// Sila dosciku do rawedzi
-	the_robot->ecp_command.instruction.arm.pf_def.force_xyz_torque_xyz[0] = 4;
+	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[0] = 4;
 
 	return true;
 }
@@ -127,10 +127,10 @@ bool y_edge_follow_force::next_step()
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = 0.0;
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = 0.0;
 	}
 
 	// sprowadzenie sil do ukladu kisci
@@ -148,8 +148,8 @@ bool y_edge_follow_force::next_step()
 		double s_alfa = wy / v;
 		double c_alfa = wx / v;
 
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = 0.002 * v;
-		//     the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[1] = -0.00;
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[1] = 0.002 * v;
+		//     the_robot->ecp_command.arm.pf_def.arm_coordinates[1] = -0.00;
 		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
 
 		// basic_rot_frame = lib::Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
@@ -171,7 +171,7 @@ bool y_edge_follow_force::next_step()
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
 
-		tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
+		tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
 
 		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 

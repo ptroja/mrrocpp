@@ -42,9 +42,9 @@ bool bias_edp_force::first_step()
 
 	std::cout << "bias_edp_force" << node_counter << std::endl;
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_BIAS;
+	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;
+	the_robot->ecp_command.set_robot_model_type = lib::FORCE_BIAS;
 
 	return true;
 }

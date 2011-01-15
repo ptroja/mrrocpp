@@ -22,7 +22,6 @@
 #include <iostream>
 #endif /* __gnu_linux__ */
 
-#include "base/lib/mis_fun.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
@@ -38,7 +37,7 @@ namespace common {
 namespace robot {
 
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	robot(_robot_name), spawn_and_kill(true), communicate_with_edp(true), sr_ecp_msg(_sr_ecp_msg),
 			number_of_servos(_number_of_servos), edp_section(_edp_section)
 {
@@ -46,7 +45,7 @@ ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servo
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object) :
+ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object) :
 	robot(_robot_name), spawn_and_kill(false), communicate_with_edp(true), sr_ecp_msg(*_ecp_object.sr_ecp_msg),
 			number_of_servos(_number_of_servos), edp_section(_edp_section)
 {
@@ -54,7 +53,7 @@ ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servo
 }
 
 // -------------------------------------------------------------------
-ecp_robot::~ecp_robot(void)
+ecp_robot_base::~ecp_robot_base(void)
 {
 #if !defined(USE_MESSIP_SRR)
 	if (EDP_fd > 0) {
@@ -79,55 +78,7 @@ ecp_robot::~ecp_robot(void)
 	}
 }
 
-pid_t ecp_robot::get_EDP_pid(void) const
-{
-	return EDP_MASTER_Pid;
-}
-
-ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
-	error_class(err_cl), error_no(err_no)
-{
-	error.error0 = err0;
-	error.error1 = err1;
-#ifdef __gnu_linux__
-	void * array[25];
-	int nSize = backtrace(array, 25);
-	char ** symbols = backtrace_symbols(array, nSize);
-
-	for (int i = 0; i < nSize; i++) {
-		std::cerr << symbols[i] << std::endl;
-	}
-
-	free(symbols);
-#endif /* __gnu_linux__ */
-}
-
-ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
-	error_class(err_cl), error_no(err_no)
-{
-}
-
-bool ecp_robot::is_synchronised(void) const
-{
-	// Czy robot zsynchronizowany?
-	return synchronised;
-}
-
-// Kopiowanie bufora przesylanego z MP do bufora wysylanego do EDP
-void ecp_robot::copy_mp_to_edp_buffer(const lib::c_buffer& mp_buffer)
-{
-	ecp_command.instruction = mp_buffer;
-}
-
-// by Y - o dziwo tego nie bylo !!!
-// Kopiowanie bufora przesylanego z EDP do bufora wysylanego do MP
-void ecp_robot::copy_edp_to_mp_buffer(lib::r_buffer& mp_buffer)
-{
-	mp_buffer = reply_package;
-}
-
-// ---------------------------------------------------------------
-void ecp_robot::connect_to_edp(lib::configurator &config)
+void ecp_robot_base::connect_to_edp(lib::configurator &config)
 {
 	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
 
@@ -158,70 +109,38 @@ void ecp_robot::connect_to_edp(lib::configurator &config)
 	printf(".done\n");
 }
 
-void ecp_robot::synchronise(void)
+pid_t ecp_robot_base::get_EDP_pid(void) const
 {
-	// komunikacja wlasciwa
-	ecp_command.instruction.instruction_type = lib::SYNCHRO;
-
-	send(); // Wyslanie zlecenia synchronizacji
-	query(); // Odebranie wyniku zlecenia
-
-	synchronised = (reply_package.reply_type == lib::SYNCHRO_OK);
+	return EDP_MASTER_Pid;
 }
 
-void ecp_robot::send()
+bool ecp_robot_base::is_synchronised(void) const
 {
-	// minimal check for command correctness
-	if (ecp_command.instruction.instruction_type == lib::INVALID) {
-		sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+	// Czy robot zsynchronizowany?
+	return synchronised;
+}
+
+ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
+	error_class(err_cl), error_no(err_no)
+{
+	error.error0 = err0;
+	error.error1 = err1;
+#ifdef __gnu_linux__
+	void * array[25];
+	int nSize = backtrace(array, 25);
+	char ** symbols = backtrace_symbols(array, nSize);
+
+	for (int i = 0; i < nSize; i++) {
+		std::cerr << symbols[i] << std::endl;
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(reply_package)) == -1)
-#else
-	if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
-#endif
-	{
-		int e = errno; // kod bledu systemowego
-		perror("ecp: Send to EDP_MASTER error");
-		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send to EDP_MASTER error");
-		throw ECP_error(lib::SYSTEM_ERROR, 0);
-	}
-
-	// TODO: this is called much too often (?!)
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
+	free(symbols);
+#endif /* __gnu_linux__ */
 }
 
-void ecp_robot::create_command()
+ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
+	error_class(err_cl), error_no(err_no)
 {
-}
-
-void ecp_robot::get_reply()
-{
-}
-
-void ecp_robot::query()
-{
-	ecp_command.instruction.instruction_type = lib::QUERY;
-	send(); // czyli wywolanie funkcji ecp_buffer::send, ktora jest powyzej :)
-}
-
-void ecp_robot::execute_motion(void)
-{
-	send();
-
-	if (reply_package.reply_type == lib::ERROR) {
-		query();
-		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
-	}
-
-	query();
-
-	if (reply_package.reply_type == lib::ERROR) {
-
-		throw ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
-	}
 }
 
 }

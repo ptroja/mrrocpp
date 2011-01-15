@@ -76,10 +76,10 @@ void robot::create_command()
 	ecp_edp_cbuffer.variant = (lib::spkm::CBUFFER_VARIANT) -1;
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
-			ecp_command.instruction.motion_type = lib::RELATIVE;
-			ecp_command.instruction.set_arm_type = lib::MOTOR;
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
 		}
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND;
@@ -90,7 +90,7 @@ void robot::create_command()
 	}
 
 	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_JOINT_COMMAND;
 
@@ -100,7 +100,7 @@ void robot::create_command()
 	}
 
 	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND;
 
@@ -112,10 +112,10 @@ void robot::create_command()
 	}
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
-			ecp_command.instruction.motion_type = lib::RELATIVE;
-			ecp_command.instruction.set_arm_type = lib::MOTOR;
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
 		}
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND;
@@ -126,7 +126,7 @@ void robot::create_command()
 	}
 
 	if (epos_cubic_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND;
 
@@ -136,7 +136,7 @@ void robot::create_command()
 	}
 
 	if (epos_trapezoidal_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
 
@@ -146,7 +146,7 @@ void robot::create_command()
 	}
 
 	if (epos_operational_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND;
 
@@ -155,7 +155,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -165,7 +165,7 @@ void robot::create_command()
 	}
 	/*
 	 if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
-	 ecp_command.instruction.set_type = ARM_DEFINITION;
+	 ecp_command.set_type = ARM_DEFINITION;
 	 // generator command interpretation
 	 // narazie proste przepisanie
 
@@ -182,47 +182,47 @@ void robot::create_command()
 	 */
 
 	if (epos_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_arm_type = lib::MOTOR;
+		ecp_command.get_arm_type = lib::MOTOR;
 
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_arm_type = lib::JOINT;
+		ecp_command.get_arm_type = lib::JOINT;
 		sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_arm_type = lib::FRAME;
+		ecp_command.get_arm_type = lib::FRAME;
 		sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
-		ecp_command.instruction.instruction_type = lib::SET_GET;
+		ecp_command.instruction_type = lib::SET_GET;
 		sr_ecp_msg.message("is_new_data is_new_request");
 	} else if (is_new_data) {
-		ecp_command.instruction.instruction_type = lib::SET;
+		ecp_command.instruction_type = lib::SET;
 		sr_ecp_msg.message("is_new_data");
 	} else if (is_new_request) {
-		ecp_command.instruction.instruction_type = lib::GET;
+		ecp_command.instruction_type = lib::GET;
 		sr_ecp_msg.message("is_new_request");
 	} else {
 		communicate_with_edp = false;
 	}
 
 	if (is_new_request) {
-		ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
+		ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	}
 
 	// message serialization
 	if (communicate_with_edp) {
-		if ((ecp_command.instruction.instruction_type == lib::SET) || (ecp_command.instruction.instruction_type
+		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type
 				== lib::SET_GET)) {
-			assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
-			memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+			assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+			memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
 			std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;
 		}
 	}

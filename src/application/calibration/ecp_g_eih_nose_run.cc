@@ -63,7 +63,7 @@ bool eih_nose_run::next_step()
 	}
 
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 

@@ -29,24 +29,24 @@ void wii_relative::set_position(bool changed)
 {
 	//   char buffer[200];
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(nextChange[2], nextChange[0], nextChange[1], nextChange[4], nextChange[6], nextChange[5]));
 
-	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 }
 
 bool wii_relative::first_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 25;
-	the_robot->ecp_command.instruction.value_in_step_no = 22;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = 25;
+	the_robot->ecp_command.value_in_step_no = 22;
 
 	releasedA = false;
 	stop = false;

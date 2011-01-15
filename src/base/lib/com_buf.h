@@ -725,6 +725,11 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
+#ifndef USE_MESSIP_SRR
+	/*! This is a message buffer, so it needs a message header */
+	msg_header_t hdr;
+#endif
+
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */
@@ -1138,26 +1143,6 @@ struct ecp_next_state_t
 		ar & mp_2_ecp_next_state_variant;
 		ar & mp_2_ecp_next_state_string;
 		// ar & playerpos_goal; // this is not needed at this moment
-	}
-};
-
-//------------------------------------------------------------------------------
-struct ecp_command_buffer
-{
-#ifndef USE_MESSIP_SRR
-	/*! This is a message buffer, so it needs a message header */
-	msg_header_t hdr;
-#endif
-	c_buffer instruction;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & instruction;
 	}
 };
 

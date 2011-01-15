@@ -332,15 +332,15 @@ public:
 			return false;
 		}
 
-		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-		the_robot->ecp_command.instruction.motion_steps = nmc;
-		the_robot->ecp_command.instruction.value_in_step_no = nmc - 2;
+		the_robot->ecp_command.set_type = ARM_DEFINITION;
+		the_robot->ecp_command.motion_steps = nmc;
+		the_robot->ecp_command.value_in_step_no = nmc - 2;
 		the_robot->communicate_with_edp = false;
 
 		if (motion_type == lib::RELATIVE) {
-			the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+			the_robot->ecp_command.motion_type = lib::RELATIVE;
 		} else if (motion_type == lib::ABSOLUTE) {
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
@@ -349,34 +349,34 @@ public:
 		switch (pose_spec)
 		{
 			case lib::ECP_XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				the_robot->ecp_command.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
-					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					the_robot->ecp_command.interpolation_type = lib::TCIM;
 					for (int i = 0; i < axes_num; i++) {
-						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+						the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
-					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+					the_robot->ecp_command.interpolation_type = lib::MIM;
 				}
 				break;
 			case lib::ECP_XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				the_robot->ecp_command.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
-					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					the_robot->ecp_command.interpolation_type = lib::TCIM;
 					for (int i = 0; i < axes_num; i++) {
-						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+						the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
-					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+					the_robot->ecp_command.interpolation_type = lib::MIM;
 				}
 				break;
 			case lib::ECP_MOTOR:
-				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				the_robot->ecp_command.set_arm_type = lib::MOTOR;
+				the_robot->ecp_command.interpolation_type = lib::MIM;
 				break;
 			case lib::ECP_JOINT:
-				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				the_robot->ecp_command.set_arm_type = lib::JOINT;
+				the_robot->ecp_command.interpolation_type = lib::MIM;
 				break;
 			default:
 				reset();
@@ -414,7 +414,7 @@ public:
 		}
 
 		the_robot->communicate_with_edp = true;//turn on the communication with EDP
-		the_robot->ecp_command.instruction.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction_type = lib::SET;
 
 		double coordinates[axes_num];
 
@@ -425,7 +425,7 @@ public:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
+					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -442,7 +442,7 @@ public:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
+					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -473,7 +473,7 @@ public:
 				}
 
 				homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
-				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+				homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 				break;
 
@@ -495,7 +495,7 @@ public:
 				}
 
 				homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
-				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+				homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 				break;
 

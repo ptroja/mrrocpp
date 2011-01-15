@@ -39,9 +39,9 @@ bool eihgenerator::first_step()
 	}
 
 	//proste zadanie kinematyki
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
 
 	//sensor->to_vsp.i_code = lib::VSP_INITIATE_READING;
 

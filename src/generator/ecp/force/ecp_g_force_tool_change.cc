@@ -39,13 +39,13 @@ force_tool_change::force_tool_change(common::task::task& _ecp_task) :
 
 bool force_tool_change::first_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_TOOL;
+	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;
+	the_robot->ecp_command.set_robot_model_type = lib::FORCE_TOOL;
 
 	for (int i = 0; i < 3; i++)
-		the_robot->ecp_command.instruction.robot_model.force_tool.position[i] = tool_parameters[i];
-	the_robot->ecp_command.instruction.robot_model.force_tool.weight = weight;
+		the_robot->ecp_command.robot_model.force_tool.position[i] = tool_parameters[i];
+	the_robot->ecp_command.robot_model.force_tool.weight = weight;
 
 	return true;
 }
