@@ -12,7 +12,7 @@
 namespace mrrocpp {
 namespace ecp_mp {
 
-robot::robot(lib::robot_name_t _robot_name) :
+robot::robot(const lib::robot_name_t & _robot_name) :
 	robot_name(_robot_name)
 {
 }

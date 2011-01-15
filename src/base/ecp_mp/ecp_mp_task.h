@@ -10,12 +10,11 @@
  */
 
 #include <boost/any.hpp>
+#include <libxml/tree.h>
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
-
-#include <libxml/tree.h>
 
 #include "base/ecp_mp/Trajectory.h"
 

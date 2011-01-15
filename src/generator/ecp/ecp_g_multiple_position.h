@@ -9,6 +9,7 @@
 #define _MULTIPLE_POSITION_H_
 
 #include <cstdio>
+#include <vector>
 
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
@@ -17,8 +18,6 @@
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
 #include "base/lib/mrmath/mrmath.h"
-
-#include <vector>
 
 namespace mrrocpp {
 namespace ecp {

@@ -9,6 +9,7 @@
 #include "base/lib/impconst.h"
 
 #include "robot/smb/ecp_r_smb.h"
+#include "base/lib/sr/sr_ecp.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -10,11 +10,12 @@
 #if !defined(__CONFIGURATOR_H)
 #define __CONFIGURATOR_H
 
-#include <sys/utsname.h>
-
 #include <iostream>
 #include <string>
 #include <stdexcept>
+
+#include <sys/utsname.h>
+#include <sched.h>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/lexical_cast.hpp>
@@ -32,12 +33,8 @@
 #include <boost/property_tree/ptree.hpp>
 #endif
 
-#include <sched.h>
-
 namespace mrrocpp {
 namespace lib {
-
-
 
 class configurator
 {

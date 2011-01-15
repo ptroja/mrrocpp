@@ -9,8 +9,6 @@
  * @ingroup ecp
  */
 
-#include "base/lib/com_buf.h"
-#include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/single_thread_port.h"
@@ -22,6 +20,14 @@
 class ui_common_robot;
 
 namespace mrrocpp {
+
+namespace lib {
+class sr_ecp;
+class c_buffer;
+class r_buffer;
+//class configurator;
+}
+
 namespace ecp {
 namespace common {
 namespace generator {
@@ -164,7 +170,7 @@ public:
 	const std::string edp_section;
 
 	/**
-	 * @brief file descriptor of EDP communication chanell
+	 * @brief file descriptor of EDP communication channel
 	 */
 	lib::fd_client_t EDP_fd; // by Y&W
 
@@ -183,7 +189,7 @@ public:
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 
 	/**
 	 * @brief constructor called from ECP
@@ -192,7 +198,7 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-			ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
+	ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
 
 	/**
 	 * @brief returns EDP_MASTER_Pid - EDP pid
@@ -217,7 +223,6 @@ public:
 	 * @brief returns synchronised flag - synchronisation status
 	 */
 	bool is_synchronised(void) const; // Czy robot zsynchronizowany?
-
 };
 
 /*!

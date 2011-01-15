@@ -24,6 +24,7 @@
 
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
@@ -37,7 +38,7 @@ namespace common {
 namespace robot {
 
 // konstruktor wywolywany z UI
-ecp_robot::ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 	robot(_robot_name), spawn_and_kill(true), communicate_with_edp(true), sr_ecp_msg(_sr_ecp_msg),
 			number_of_servos(_number_of_servos), edp_section(_edp_section)
 {
@@ -45,7 +46,7 @@ ecp_robot::ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot::ecp_robot(lib::robot_name_t _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object) :
+ecp_robot::ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object) :
 	robot(_robot_name), spawn_and_kill(false), communicate_with_edp(true), sr_ecp_msg(*_ecp_object.sr_ecp_msg),
 			number_of_servos(_number_of_servos), edp_section(_edp_section)
 {

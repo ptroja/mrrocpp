@@ -3,8 +3,10 @@
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "ecp_st_acq_eih.h"
 #include "base/ecp/ecp_task.h"
+#include "base/lib/sr/sr_ecp.h"
+
+#include "ecp_st_acq_eih.h"
 
 namespace mrrocpp {
 namespace ecp {

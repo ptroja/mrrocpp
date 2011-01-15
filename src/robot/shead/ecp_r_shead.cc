@@ -7,6 +7,7 @@
  */
 
 #include "base/lib/impconst.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "robot/shead/ecp_r_shead.h"
 
