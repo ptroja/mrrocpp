@@ -287,7 +287,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		if (exists("username", _section_name)) {
 			std::string username = value <std::string> ("username", _section_name);
 
-						fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+						//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
 				execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
@@ -312,7 +312,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			//					session_name.length() ? session_name.c_str() : "\"\"",
 			//					asa.c_str()
 			//			);
-			fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
+			//fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
 				execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
