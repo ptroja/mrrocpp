@@ -288,7 +288,7 @@ void effector::main_loop(void)
 			switch (next_state)
 			{
 				case common::GET_INSTRUCTION:
-					switch (receive_instruction())
+					switch (receive_instruction(instruction))
 					{
 						case lib::SET:
 							// printf("jestesmy w set\n"); // MAC7
@@ -324,9 +324,9 @@ void effector::main_loop(void)
 				case common::WAIT:
 					//  	printf("jestesmy w wait\n");
 
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction();
+						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_3(QUERY_EXPECTED);
 					}
@@ -344,7 +344,7 @@ void effector::main_loop(void)
 			establish_error(nfe.error, OK);
 			// printf("ERROR w EDP 1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
@@ -375,7 +375,7 @@ void effector::main_loop(void)
 
 			establish_error(nfe.error, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);

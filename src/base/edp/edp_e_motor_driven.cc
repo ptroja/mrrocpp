@@ -829,7 +829,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			{
 				case GET_STATE:
 					// wstepna interpretacja nadeslanego polecenia w celu wykrycia nieprawidlowosci
-					switch (receive_instruction())
+					switch (receive_instruction(instruction))
 					{
 						case lib::GET:
 							// potwierdzenie przyjecia polecenia (dla ECP)
@@ -856,7 +856,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
 						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
@@ -960,7 +960,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			{
 				case GET_SYNCHRO:
 					/* Oczekiwanie na zlecenie synchronizacji robota */
-					switch (receive_instruction())
+					switch (receive_instruction(instruction))
 					{
 						case lib::SYNCHRO:
 							// instrukcja wlasciwa => zle jej wykonanie
@@ -1003,7 +1003,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					break;
 				case SYNCHRO_TERMINATED:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						reply.reply_type = lib::SYNCHRO_OK;
 						reply_to_instruction(reply);
@@ -1015,7 +1015,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					break;
 				case WAIT_Q:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						reply_to_instruction(reply);
 						next_state = GET_SYNCHRO;
@@ -1093,12 +1093,12 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skadowych error0 lub error1 obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			if (receive_instruction() != lib::QUERY) {
+			if (receive_instruction(instruction) != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
 				establish_error(QUERY_EXPECTED, OK);
 				reply_to_instruction(reply);
 				printf("QQQ\n");
-				receive_instruction();
+				receive_instruction(instruction);
 			}
 			reply.reply_type = lib::ERROR;
 			establish_error(fe.error0, fe.error1);
@@ -1120,7 +1120,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			{
 				case GET_INSTRUCTION:
 					// wstepna interpretacja nadesanego polecenia w celu wykrycia nieprawidlowosci
-					switch (receive_instruction())
+					switch (receive_instruction(instruction))
 					{
 						case lib::SET:
 						case lib::GET:
@@ -1148,7 +1148,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
 						// zlec jej wykonanie, czyli wyslij odpowiedz
 						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
