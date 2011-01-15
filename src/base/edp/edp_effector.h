@@ -58,7 +58,7 @@ protected:
 	 *
 	 * It is stored for a further reply purpose.
 	 */
-	int caller; // by 7&Y
+	int caller;
 
 	/*!
 	 * \brief descriptor of EDP server attach point
