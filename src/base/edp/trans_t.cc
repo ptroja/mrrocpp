@@ -2,14 +2,7 @@
 // transformation thread by Y
 // ------------------------------------------------------------------------
 
-/********************************* INCLUDES *********************************/
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-
 #include "base/edp/trans_t.h"
-
-/********************************* GLOBALS **********************************/
 
 namespace mrrocpp {
 namespace edp {
@@ -66,4 +59,3 @@ void trans_t::master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-
