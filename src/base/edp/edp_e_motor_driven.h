@@ -418,14 +418,14 @@ public:
 	 *
 	 * It is used by the servo_buffer
 	 */
-	void update_servo_current_motor_pos(double motor_position_increment, int i);
+	void update_servo_current_motor_pos(double motor_position_increment, size_t i);
 
 	/*!
 	 * \brief method to set servo_current_motor_pos as its argument
 	 *
 	 * It is used by the servo_buffer
 	 */
-	void update_servo_current_motor_pos_abs(double abs_motor_position, int i);
+	void update_servo_current_motor_pos_abs(double abs_motor_position, size_t i);
 
 	/*!
 	 * \brief method that generates type of reply commanded by the ECP.

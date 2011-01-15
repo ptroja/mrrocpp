@@ -779,12 +779,12 @@ void motor_driven_effector::move_servos()
 }
 /*--------------------------------------------------------------------------*/
 
-void motor_driven_effector::update_servo_current_motor_pos(double motor_position_increment, int i)
+void motor_driven_effector::update_servo_current_motor_pos(double motor_position_increment, size_t i)
 {
 	servo_current_motor_pos[i] += motor_position_increment;
 }
 
-void motor_driven_effector::update_servo_current_motor_pos_abs(double abs_motor_position, int i)
+void motor_driven_effector::update_servo_current_motor_pos_abs(double abs_motor_position, size_t i)
 {
 	servo_current_motor_pos[i] = abs_motor_position;
 }
@@ -813,7 +813,7 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-		for (int i = 0; i < number_of_servos; i++) {
+		for (size_t i = 0; i < number_of_servos; i++) {
 			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 			desired_joints[i] = current_joints[i];
 		}
