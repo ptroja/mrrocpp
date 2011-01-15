@@ -8,6 +8,8 @@
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
+#include "robot/irp6p_m/const_irp6p_m.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {

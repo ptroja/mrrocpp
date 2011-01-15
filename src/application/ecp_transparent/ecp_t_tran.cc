@@ -21,6 +21,8 @@
 #include "robot/speaker/ecp_r_speaker.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 
+#include "robot/irp6p_m/const_irp6p_m.h"
+
 #include "ecp_t_tran.h"
 #include "base/ecp/ecp_g_transparent.h"
 

@@ -47,6 +47,7 @@ namespace robot {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
+//template<typename robot_command_t = lib::c_buffer, typename robot_reply_t = lib::r_buffer>
 class ecp_robot : public ecp_mp::robot
 {
 	// friend classes
@@ -223,6 +224,8 @@ public:
 	 */
 	bool is_synchronised(void) const; // Czy robot zsynchronizowany?
 };
+
+//typedef _ecp_robot<> ecp_robot;
 
 /*!
  * @brief ECP robot error handling class

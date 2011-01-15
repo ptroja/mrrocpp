@@ -14,6 +14,8 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
+#include "robot/irp6p_m/const_irp6p_m.h"
+
 #include "ecp_t_edge_follow_mr.h"
 
 #include "ecp_st_edge_follow.h"
@@ -31,7 +33,7 @@ namespace task {
 edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 	task(_config)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
+	// the robot is choose depending on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
 		ecp_m_robot = new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {

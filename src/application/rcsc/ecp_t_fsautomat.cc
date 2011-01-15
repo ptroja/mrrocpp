@@ -26,6 +26,7 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"

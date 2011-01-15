@@ -11,6 +11,8 @@
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_gen_test.h"
 
+#include "robot/irp6p_m/const_irp6p_m.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {

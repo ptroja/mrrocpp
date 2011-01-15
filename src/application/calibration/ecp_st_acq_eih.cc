@@ -5,6 +5,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/lib/sr/sr_ecp.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "ecp_st_acq_eih.h"
 
