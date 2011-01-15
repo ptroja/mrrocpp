@@ -20,7 +20,7 @@ namespace mrrocpp {
 namespace lib {
 
 //! Forward declaration
-typedef class sr_package sr_package_t;
+typedef struct sr_package sr_package_t;
 
 //! Base class for senders of system report messages
 class SenderBase
