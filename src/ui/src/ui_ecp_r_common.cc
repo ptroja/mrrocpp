@@ -47,7 +47,7 @@ EcpRobot::~EcpRobot()
 /* // by Y - zdefiniowane w irp6_on_track_robot - przemyslec czy nie trzeba wstawic warunku na poprawnosc synchronizacji
  void EcpRobot::synchronise ( void ) {
  // Zlecenie synchronizacji robota
- ecp->ecp_command.instruction.instruction_type = lib::SYNCHRO;
+ ecp->ecp_command.instruction_type = lib::SYNCHRO;
  ecp->EDP_buffer.send(EDP_fd);  // Wyslanie zlecenia synchronizacji
  ecp->EDP_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
  if (ecp->reply_package.reply_type == lib::SYNCHRO_OK)
@@ -99,9 +99,9 @@ void EcpRobot::get_current_position(double c_position[])
 void EcpRobot::get_kinematic(uint8_t* kinematic_model_no)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
-	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 	execute_motion();
 
 	*kinematic_model_no = ecp->reply_package.robot_model.kinematic_model.kinematic_model_no;
@@ -111,9 +111,9 @@ void EcpRobot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 {
 
 	// Zlecenie odczytu numerow algorytmow i zestawow parametrow
-	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.get_robot_model_type = lib::SERVO_ALGORITHM; //
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.get_robot_model_type = lib::SERVO_ALGORITHM; //
 	execute_motion();
 
 	// Przepisanie aktualnych numerow algorytmow i zestawow parametrow
@@ -127,8 +127,8 @@ void EcpRobot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 void EcpRobot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
-	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = CONTROLLER_STATE_DEFINITION;
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
 
 	execute_motion();
 
@@ -143,12 +143,12 @@ void EcpRobot::set_kinematic(uint8_t kinematic_model_no)
 	// algorytmow serwo i numerow zestawow parametrow algorytmow
 
 	// Zlecenie zapisu numeru modelu i korektora kinematyki
-	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.set_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
-	ecp->ecp_command.instruction.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.instruction_type = lib::SET;
+	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.set_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 
-	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no = kinematic_model_no;
+	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = kinematic_model_no;
 
 	execute_motion();
 }
@@ -161,14 +161,14 @@ void EcpRobot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 
 	// Zlecenie zapisu numerow algorytmow i zestawow parametrow
 	// Przepisanie zadanych numerow algorytmow i zestawow parametrow
-	memcpy(ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_algorithm_no, algorithm_no, ecp->number_of_servos
+	memcpy(ecp->ecp_command.robot_model.servo_algorithm.servo_algorithm_no, algorithm_no, ecp->number_of_servos
 			* sizeof(uint8_t));
-	memcpy(ecp->ecp_command.instruction.robot_model.servo_algorithm.servo_parameters_no, parameters_no, ecp->number_of_servos
+	memcpy(ecp->ecp_command.robot_model.servo_algorithm.servo_parameters_no, parameters_no, ecp->number_of_servos
 			* sizeof(uint8_t));
-	ecp->ecp_command.instruction.instruction_type = lib::SET;
-	ecp->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.instruction.set_robot_model_type = lib::SERVO_ALGORITHM; //
-	ecp->ecp_command.instruction.get_robot_model_type = lib::SERVO_ALGORITHM; //
+	ecp->ecp_command.instruction_type = lib::SET;
+	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
+	ecp->ecp_command.set_robot_model_type = lib::SERVO_ALGORITHM; //
+	ecp->ecp_command.get_robot_model_type = lib::SERVO_ALGORITHM; //
 	execute_motion();
 }
 // ---------------------------------------------------------------
@@ -180,10 +180,10 @@ void EcpRobot::read_motors(double current_position[])
 
 	// printf("poczatek read motors\n");
 	// Parametry zlecenia ruchu i odczytu polozenia
-	ecp->ecp_command.instruction.get_type = ARM_DEFINITION;
-	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
-	ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+	ecp->ecp_command.get_type = ARM_DEFINITION;
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_arm_type = lib::MOTOR;
+	ecp->ecp_command.interpolation_type = lib::MIM;
 
 	execute_motion();
 	// printf("dalej za query read motors\n");
@@ -202,10 +202,10 @@ void EcpRobot::read_joints(double current_position[])
 	// Zlecenie odczytu polozenia
 
 	// Parametry zlecenia ruchu i odczytu polozenia
-	ecp->ecp_command.instruction.instruction_type = lib::GET;
-	ecp->ecp_command.instruction.get_type = ARM_DEFINITION;
-	ecp->ecp_command.instruction.get_arm_type = lib::JOINT;
-	ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_type = ARM_DEFINITION;
+	ecp->ecp_command.get_arm_type = lib::JOINT;
+	ecp->ecp_command.interpolation_type = lib::MIM;
 
 	execute_motion();
 
