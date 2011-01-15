@@ -13,13 +13,14 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/sr/sr_edp.h"
+
 #include "base/edp/edp_typedefs.h"
 
-// Konfigurator
+#include "base/lib/sr/sr_edp.h"
 #include "base/lib/configurator.h"
 
 #include "base/lib/exception.h"
+
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -30,7 +31,7 @@ namespace common {
  * \class effector
  * \brief Base class of all EDP effectors.
  *
- * It implements mainly inter process communication and EDP configuration managment
+ * It implements mainly inter-process communication and EDP configuration management
  *
  * \author yoyek
  */
@@ -53,14 +54,14 @@ protected:
 	lib::r_buffer reply;
 
 	/*!
-	 * \brief indentificator of ECP process sending a command.
+	 * \brief id of ECP process sending a command.
 	 *
 	 * It is stored for a further reply purpose.
 	 */
 	int caller; // by 7&Y
 
 	/*!
-	 * \brief indentificator of EDP server attach point
+	 * \brief descriptor of EDP server attach point
 	 *
 	 * It is stored for a communication with ECP purpose.
 	 */
