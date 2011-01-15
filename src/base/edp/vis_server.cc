@@ -66,7 +66,7 @@ void vis_server::operator()(void)
 	addr_len = sizeof their_addr;
 
 	while (1) {
-		int numbytes;
+		ssize_t numbytes;
 		char buf[MAXBUFLEN];
 
 		if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0, (struct sockaddr *) &their_addr, &addr_len)) == -1) {
@@ -96,7 +96,7 @@ void vis_server::operator()(void)
 			perror("sendto()");
 			break;
 		} else if (numbytes < (ssize_t) sizeof(reply)) {
-			fprintf(stderr, "send only %d of %lu bytes\n", numbytes, sizeof(reply));
+			fprintf(stderr, "send only %zd of %zd bytes\n", numbytes, sizeof(reply));
 			break;
 		}
 
