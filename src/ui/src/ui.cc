@@ -7,12 +7,11 @@
 #include <boost/bind.hpp>
 
 #include "ui/src/ui.h"
+#include "ui/src/ui_class.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
-
-
 
 busy_flagger::busy_flagger(busy_flag & _flag) :
 	flag(_flag)
@@ -48,8 +47,8 @@ bool busy_flag::is_busy() const
 	return (counter);
 }
 
-function_execution_buffer::function_execution_buffer() :
-	has_command(false)
+function_execution_buffer::function_execution_buffer(Interface& _interface) :
+	interface(_interface), has_command(false)
 {
 }
 
@@ -81,8 +80,8 @@ int function_execution_buffer::wait_and_execute()
 		popped_command = com_fun;
 	}
 
-	busy_flagger flagger(communication_flag);
-	set_ui_state_notification(UI_N_BUSY);
+	busy_flagger flagger(interface.communication_flag);
+	interface.set_ui_state_notification(UI_N_BUSY);
 	return popped_command();
 }
 

@@ -15,8 +15,6 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-//#include "ui/src/ui.h"
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -24,7 +22,7 @@ namespace common {
 class sr_buffer : public boost::noncopyable
 {
 private:
-	MainWindow& mw;
+	Interface& interface;
 	boost::thread thread_id;
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex mtx;
@@ -32,7 +30,7 @@ private:
 	static const int UI_SR_BUFFER_LENGHT = 50;
 
 public:
-	sr_buffer(MainWindow& _mw);
+	sr_buffer(Interface& _interface);
 
 	~sr_buffer();
 

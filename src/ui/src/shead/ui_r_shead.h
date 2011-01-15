@@ -16,12 +16,10 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace tfg_and_conv {
-class EcpRobot;
-}
 
 namespace shead {
 
+class EcpRobot;
 //
 //
 // KLASA UiRobot
@@ -35,7 +33,7 @@ private:
 
 public:
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	EcpRobot *ui_ecp_robot;
 	void close_all_windows();
 	UiRobot(common::Interface& _interface);
 

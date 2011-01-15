@@ -1,1 +1,1 @@
-directory to store new Mateusz Wroblewski ui qt files
+directory to store new Tomasz Winiarski ui qt files
