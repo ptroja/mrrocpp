@@ -29,7 +29,7 @@ namespace speaker {
 speak_t::speak_t(effector& _master):
 	trans_t(_master), master (_master)
 {
-	thread_id = new boost::thread(boost::bind(&speak_t::operator(), this));
+	thread_id = boost::thread(boost::bind(&speak_t::operator(), this));
 }
 
 void speak_t::operator()()
