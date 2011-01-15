@@ -298,7 +298,7 @@ void effector::main_loop(void)
 							// printf("jestesmy w set_get\n");
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction();
+							reply_to_instruction(reply);
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 							// okreslenie numeru bledu

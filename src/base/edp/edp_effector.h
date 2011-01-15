@@ -79,7 +79,32 @@ protected:
 	 *
 	 * Basing on the previous computation.
 	 */
-	void reply_to_instruction(void);
+	template<typename ROBOT_REPLY_T>
+	void reply_to_instruction(ROBOT_REPLY_T & reply)
+	{
+		// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
+		// adekwatnej odpowiedzi na zapytanie lub
+		// informacji o tym, ze przyslane polecenie nie moze byc przyjte
+		// do wykonania w aktualnym stanie EDP
+		// int reply_size;     // liczba bajtw wysyanej odpowiedzi
+
+		reply_serialization();
+
+		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
+			reply.reply_type = real_reply_type;
+
+	#if !defined(USE_MESSIP_SRR)
+		if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
+	#else /* USE_MESSIP_SRR */
+			if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
+	#endif /* USE_MESSIP_SRR */
+			uint64_t e = errno;
+			perror("Reply() to ECP failed");
+			msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
+			throw System_error();
+		}
+		real_reply_type = lib::ACKNOWLEDGE;
+	}
 
 	/*!
 	 * \brief method to deserialize part of the reply

@@ -836,7 +836,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 							//            printf("SET_GET\n");
 							reply.reply_type = lib::ACKNOWLEDGE;
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction();
+							reply_to_instruction(reply);
 
 							if ((rep_type(instruction)) == lib::CONTROLLER_STATE) {
 								// master_order(MT_GET_CONTROLLER_STATE, 0);
@@ -858,7 +858,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 				case WAIT:
 					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction();
+						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_3(QUERY_EXPECTED);
 					}
@@ -895,7 +895,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			establish_error(nfe.error, OK);
 			//  printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
@@ -925,7 +925,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 
 			establish_error(nfe.error, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);
@@ -966,7 +966,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							// instrukcja wlasciwa => zle jej wykonanie
 							/* Potwierdzenie przyjecia instrukcji synchronizacji do wykonania */
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction();
+							reply_to_instruction(reply);
 							/* Zlecenie wykonania synchronizacji */
 							master_order(MT_SYNCHRONISE, 0); // by Y przejscie przez watek transfor w celu ujednolicenia
 							// synchronise();
@@ -979,7 +979,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							if (pre_synchro_motion(instruction)) {
 								/* Potwierdzenie przyjecia instrukcji ruchow presynchronizacyjnych do wykonania */
 								reply.reply_type = lib::ACKNOWLEDGE;
-								reply_to_instruction();
+								reply_to_instruction(reply);
 								/* Zlecenie wykonania ruchow presynchronizacyjnych */
 								interpret_instruction(instruction);
 								// Jezeli wystapil blad w trakcie realizacji ruchow presynchronizacyjnych,
@@ -1006,7 +1006,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						reply.reply_type = lib::SYNCHRO_OK;
-						reply_to_instruction();
+						reply_to_instruction(reply);
 						next_state = GET_INSTRUCTION;
 						msg->message("Robot is synchronised");
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
@@ -1017,7 +1017,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
 					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
-						reply_to_instruction();
+						reply_to_instruction(reply);
 						next_state = GET_SYNCHRO;
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_3(QUERY_EXPECTED);
@@ -1035,7 +1035,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			establish_error(nfe1.error, OK);
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe1.error, 0);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
@@ -1048,7 +1048,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// zapamietanie poprzedniej odpowiedzi
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(nfe2.error, OK);
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe2.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
@@ -1064,7 +1064,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 			establish_error(nfe3.error, OK);
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe3.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
@@ -1081,7 +1081,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// zapamietanie poprzedniej odpowiedzi
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(nfe4.error, OK);
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
@@ -1096,13 +1096,13 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			if (receive_instruction() != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
 				establish_error(QUERY_EXPECTED, OK);
-				reply_to_instruction();
+				reply_to_instruction(reply);
 				printf("QQQ\n");
 				receive_instruction();
 			}
 			reply.reply_type = lib::ERROR;
 			establish_error(fe.error0, fe.error1);
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
@@ -1128,7 +1128,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							// printf("SET_GET\n");
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction();
+							reply_to_instruction(reply);
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 							// okreslenie numeru bledu
@@ -1150,7 +1150,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 				case WAIT:
 					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zlec jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction();
+						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_3(QUERY_EXPECTED);
 					}
@@ -1168,7 +1168,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			establish_error(nfe.error, OK);
 			// printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
@@ -1198,7 +1198,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 
 			establish_error(nfe.error, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(err_no_0, err_no_1);
