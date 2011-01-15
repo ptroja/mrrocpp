@@ -13,6 +13,8 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_sub_task.h"
 #include "base/ecp/ecp_robot.h"

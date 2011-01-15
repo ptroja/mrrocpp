@@ -5,6 +5,9 @@
 //#include "subtask/ecp_st_tff_nose_run.h"
 //
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_gen_test.h"
 

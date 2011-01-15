@@ -5,10 +5,13 @@
  *      Author: mboryn
  */
 
+#include <cmath>
+
+#include "base/lib/configurator.h"
+
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_sinus.h"
-#include <cmath>
 
 #include "base/lib/logger.h"
 

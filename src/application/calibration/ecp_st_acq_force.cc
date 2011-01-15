@@ -1,18 +1,20 @@
 #include <cstdio>
 #include <cstring>
-#include <unistd.h>
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
 
+#include <unistd.h>
+
+#include "sensor/pcbird/ecp_mp_s_pcbird.h"
 #include "base/ecp/ecp_task.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_st_acq_force.h"
 #include "ecp_st_acquisition.h"
-#include "sensor/pcbird/ecp_mp_s_pcbird.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_matrix.h"
+
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
 
 namespace mrrocpp {
 namespace ecp {

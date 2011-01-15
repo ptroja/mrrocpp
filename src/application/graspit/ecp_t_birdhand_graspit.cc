@@ -1,10 +1,8 @@
 #include <cstdio>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 
-#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_graspit.h"
 #include "ecp_mp_g_birdhand.h"
 

@@ -16,7 +16,7 @@
 
 #include "base/lib/typedefs.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
 

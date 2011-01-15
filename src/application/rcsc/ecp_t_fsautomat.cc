@@ -13,13 +13,15 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
 #include "base/ecp_mp/Trajectory.h"
 
-#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"

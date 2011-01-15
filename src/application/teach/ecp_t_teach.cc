@@ -8,10 +8,9 @@
 #include <cstdio>
 #include <cstring>
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "robot/irp6m/ecp_r_irp6m.h"

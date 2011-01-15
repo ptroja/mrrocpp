@@ -7,14 +7,14 @@
  * @ingroup LIB
  */
 
+#ifndef SENDERBASE_H_
+#define SENDERBASE_H_
+
 #include <string>
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
 #endif
-
-#ifndef SENDERBASE_H_
-#define SENDERBASE_H_
 
 namespace mrrocpp {
 namespace lib {

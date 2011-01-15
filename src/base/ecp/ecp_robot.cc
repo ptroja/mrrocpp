@@ -7,14 +7,14 @@
  */
 
 #include <cstring>
-#include <unistd.h>
 #include <cstdio>
 #include <cerrno>
+#include <csignal>
 #include <stdint.h>
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <csignal>
 
 #ifdef __gnu_linux__
 #include <execinfo.h>
@@ -22,15 +22,15 @@
 #include <iostream>
 #endif /* __gnu_linux__ */
 
+#include "base/lib/mis_fun.h"
+#include "base/lib/sr/sr_ecp.h"
+#include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
-#include "base/lib/sr/sr_ecp.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
 #endif
-
-#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace ecp {

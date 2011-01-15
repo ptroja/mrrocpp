@@ -5,11 +5,13 @@
  *      Author: mboryn
  */
 
+#include <cmath>
+#include <stdexcept>
+
+#include "base/lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_uniform_acceleration.h"
-#include <cmath>
-#include <stdexcept>
 
 #include "base/lib/logger.h"
 

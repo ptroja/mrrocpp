@@ -9,7 +9,7 @@
  * @ingroup ecp
  */
 
-#include "base/lib/configurator.h"
+//#include "base/lib/configurator.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/single_thread_port.h"
 
@@ -25,7 +25,7 @@ namespace lib {
 class sr_ecp;
 class c_buffer;
 class r_buffer;
-//class configurator;
+class configurator;
 }
 
 namespace ecp {

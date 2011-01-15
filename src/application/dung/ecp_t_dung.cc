@@ -15,7 +15,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_dung.h"

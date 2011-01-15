@@ -2,6 +2,8 @@
 #include <cstring>
 #include <unistd.h>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "robot/festival/ecp_g_festival.h"
 #include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/festival/ecp_t_festival.h"

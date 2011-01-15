@@ -27,7 +27,7 @@
 #include "base/lib/messip/messip_dataport.h"
 #endif
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_jarosz.h"

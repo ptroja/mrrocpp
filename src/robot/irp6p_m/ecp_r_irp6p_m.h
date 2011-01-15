@@ -19,6 +19,12 @@
 #include "robot/irp6p_m/kinematic_model_irp6p_jacobian_transpose_with_wrist.h"
 
 namespace mrrocpp {
+
+namespace lib {
+class sr_ecp;
+class configurator;
+}
+
 namespace ecp {
 namespace irp6p_m {
 

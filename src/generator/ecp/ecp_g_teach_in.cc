@@ -14,6 +14,7 @@
 #include <fstream>
 #include <unistd.h>
 
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_teach_in.h"

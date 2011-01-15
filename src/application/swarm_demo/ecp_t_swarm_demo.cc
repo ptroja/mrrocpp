@@ -1,3 +1,6 @@
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_swarm_demo.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"

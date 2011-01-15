@@ -14,12 +14,20 @@
 #ifndef __ECP_PCBIRD_H
 #define __ECP_PCBIRD_H
 
+#include <string>
+
 #include <netdb.h>
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "sensor/pcbird/birdclient.h"
 
 namespace mrrocpp {
+
+namespace lib {
+	class configurator;
+	class sr_ecp;
+}
+
 namespace ecp_mp {
 namespace sensor {
 

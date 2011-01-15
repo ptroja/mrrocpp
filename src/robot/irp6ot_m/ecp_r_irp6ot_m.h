@@ -17,6 +17,12 @@
 #include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
+
+namespace lib {
+class sr_ecp;
+class configurator;
+}
+
 namespace ecp {
 namespace irp6ot_m {
 
@@ -46,7 +52,6 @@ public:
 	 * @param _ecp_object ecp tak object reference
 	 */
 	robot(common::task::task& _ecp_object);
-
 };
 
 } // namespace irp6ot

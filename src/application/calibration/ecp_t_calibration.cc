@@ -1,3 +1,6 @@
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "ecp_t_calibration.h"
 
 namespace mrrocpp {

@@ -12,8 +12,6 @@
 #include <boost/any.hpp>
 #include <libxml/tree.h>
 
-#include "base/lib/configurator.h"
-#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
 #include "base/ecp_mp/Trajectory.h"
@@ -33,6 +31,12 @@ typedef std::map <std::string, boost::any> cc_t;
 typedef cc_t::value_type cc_item_t;
 
 namespace mrrocpp {
+
+namespace lib {
+	class configurator;
+	class sr_ecp;
+}
+
 namespace ecp_mp {
 namespace task {
 

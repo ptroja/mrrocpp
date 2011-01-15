@@ -4,6 +4,7 @@
  *Author: yoyek
  */
 
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_epos.h"

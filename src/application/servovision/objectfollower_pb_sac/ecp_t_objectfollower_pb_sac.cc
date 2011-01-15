@@ -5,6 +5,8 @@
  *      Author: mboryn
  */
 
+#include "base/lib/configurator.h"
+
 #include "ecp_t_objectfollower_pb_sac.h"
 
 #include "../ecp_mp_g_visual_servo_tester.h"
