@@ -10,14 +10,6 @@
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
-#include <stdint.h>
-#if !defined(USE_MESSIP_SRR)
-#include <sys/dispatch.h>
-#else
-#include "base/lib/messip/messip.h"
-#endif /* !USE_MESSIP_SRR */
-#include <string>
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
