@@ -623,7 +623,7 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.robot_model_type = lib::TOOL_FRAME;
+			reply.robot_model.type = lib::TOOL_FRAME;
 
 			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.robot_model.tool_frame_def.tool_frame);
 

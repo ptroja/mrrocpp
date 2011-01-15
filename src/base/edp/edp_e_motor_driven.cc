@@ -100,13 +100,13 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 			// Przepisanie definicji koncowki danej w postaci
 			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
-			reply.arm_type = lib::JOINT;
+			reply.arm.type = lib::JOINT;
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
 			}
 			break;
 		case lib::MOTOR:
-			reply.arm_type = lib::MOTOR;
+			reply.arm.type = lib::MOTOR;
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
 			}
@@ -690,12 +690,12 @@ void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 	switch (instruction.get_robot_model_type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
-			reply.robot_model_type = lib::ARM_KINEMATIC_MODEL;
+			reply.robot_model.type = lib::ARM_KINEMATIC_MODEL;
 			// okreslenie numeru zestawu parametrow przelicznika kinematycznego oraz jego korektora
 			reply.robot_model.kinematic_model.kinematic_model_no = get_current_kinematic_model_no();
 			break;
 		case lib::SERVO_ALGORITHM:
-			reply.robot_model_type = lib::SERVO_ALGORITHM;
+			reply.robot_model.type = lib::SERVO_ALGORITHM;
 			// ustawienie numeru algorytmu serworegulatora oraz numeru jego zestawu parametrow
 
 			break;

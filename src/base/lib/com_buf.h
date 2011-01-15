@@ -856,6 +856,12 @@ struct
 #endif
 _r_buffer_robot_model
 {
+	/*!
+	 *  Sposob zdefiniowania narzedzia przy jego odczycie.
+	 *  @todo Translate to English.
+	 */
+	ROBOT_MODEL_SPECIFICATION type;
+
 	//----------------------------------------------------------
 	struct
 	{
@@ -902,12 +908,26 @@ _r_buffer_robot_model
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & tool_frame_def.tool_frame;
-		ar & kinematic_model.kinematic_model_no;
-		ar & servo_algorithm.servo_algorithm_no;
-		ar & servo_algorithm.servo_parameters_no;
-		ar & force_tool.position;
-		ar & force_tool.weight;
+		ar & type;
+		switch(type) {
+			case TOOL_FRAME:
+				ar & tool_frame_def.tool_frame;
+				break;
+			case ARM_KINEMATIC_MODEL:
+				ar & kinematic_model.kinematic_model_no;
+				break;
+			case SERVO_ALGORITHM:
+				ar & servo_algorithm.servo_algorithm_no;
+				ar & servo_algorithm.servo_parameters_no;
+				break;
+			case FORCE_TOOL:
+				ar & force_tool.position;
+				ar & force_tool.weight;
+				break;
+			default:
+				// No parameters are not required
+				break;
+		}
 	}
 
 } r_buffer_robot_model_t;
@@ -958,6 +978,12 @@ struct
 #endif
 r_buffer_arm
 {
+	/*!
+	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
+	 *  @todo Translate to English.
+	 */
+	POSE_SPECIFICATION type;
+
 	struct
 	{
 		/*!
@@ -996,6 +1022,7 @@ r_buffer_arm
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & type;
 		ar & pf_def.arm_frame;
 		ar & pf_def.arm_coordinates;
 		ar & pf_def.force_xyz_torque_xyz;
@@ -1010,32 +1037,30 @@ struct r_buffer
 {
 	/*! Type of the reply. */
 	REPLY_TYPE reply_type;
+
 	/*! Number of the error (if it occured). */
 	edp_error error_no;
-	/*!
-	 *  Sposob zdefiniowania narzedzia przy jego odczycie.
-	 *  @todo Translate to English.
-	 */
-	ROBOT_MODEL_SPECIFICATION robot_model_type;
-	/*!
-	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
-	 *  @todo Translate to English.
-	 */
-	POSE_SPECIFICATION arm_type;
+
 	/*!
 	 *  Wartosci wejsc binarnych.
 	 *  @todo Translate to English.
 	 */
 	uint16_t input_values;
+
 	/*! Analog inputs. */
 	uint8_t analog_input[8];
+
 	controller_state_t controller_state;
+
 	/*! Number of the servo step. */
 	uint32_t servo_step;
+
 	/*! Given values for PWM (Pulse-width modulation), usually unnecessary. */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
+
 	/*! Control currents, usually unnecessary. */
 	int16_t current[lib::MAX_SERVOS_NR];
+
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
 
@@ -1053,8 +1078,6 @@ struct r_buffer
 	{
 		ar & reply_type;
 		ar & error_no;
-		ar & robot_model_type;
-		ar & arm_type;
 		ar & input_values;
 		ar & analog_input;
 		ar & controller_state;
