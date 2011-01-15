@@ -1027,14 +1027,14 @@ struct r_buffer
 	 *  @todo Translate to English.
 	 */
 	uint16_t input_values;
-	/*! Analog input. */
+	/*! Analog inputs. */
 	uint8_t analog_input[8];
 	controller_state_t controller_state;
 	/*! Number of the servo step. */
 	uint32_t servo_step;
-	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
+	/*! Given values for PWM (Pulse-width modulation), usually unnecessary. */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
-	/*! Control current - (usualy unnecessary). */
+	/*! Control currents, usually unnecessary. */
 	int16_t current[lib::MAX_SERVOS_NR];
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
