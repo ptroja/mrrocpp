@@ -34,11 +34,10 @@ class effector;
 class trans_t : public boost::noncopyable
 {
 private:
-
 	effector &master;
 
 protected:
-	boost::thread *thread_id;
+	boost::thread thread_id;
 	lib::c_buffer instruction;
 
 public:
