@@ -13,8 +13,6 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/irp6ot_m/kinematic_model_irp6ot_with_track.h"
-#include "robot/irp6ot_m/kinematic_model_calibrated_irp6ot_with_wrist.h"
 
 namespace mrrocpp {
 

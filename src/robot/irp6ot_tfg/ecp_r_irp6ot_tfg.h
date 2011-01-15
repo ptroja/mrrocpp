@@ -13,7 +13,6 @@
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {

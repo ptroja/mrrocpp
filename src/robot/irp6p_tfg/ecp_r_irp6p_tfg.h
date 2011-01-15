@@ -14,8 +14,6 @@
 
 #include "base/kinematics/kinematics_manager.h"
 
-#include "robot/irp6p_tfg/kinematic_model_irp6p_tfg.h"
-
 namespace mrrocpp {
 namespace ecp {
 namespace irp6p_tfg {

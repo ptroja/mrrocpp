@@ -7,21 +7,22 @@
  */
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
+#include "robot/irp6ot_tfg/kinematic_model_irp6ot_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_tfg {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _config, _sr_ecp),
-			kinematics_manager()
+	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _config, _sr_ecp),
+	kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task& _ecp_object) :
-	robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _ecp_object),
+	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _ecp_object),
 			kinematics_manager()
 {
 	//  Stworzenie listy dostepnych kinematyk.
