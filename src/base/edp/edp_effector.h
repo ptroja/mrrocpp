@@ -77,14 +77,14 @@ protected:
 	/*!
 	 * \brief method to receive instruction from ECP
 	 *
-	 * IT also makes initial ECP command interpretation..
+	 * IT also makes initial ECP command interpretation.
 	 */
-	lib::INSTRUCTION_TYPE receive_instruction(void); // by YW
+	lib::INSTRUCTION_TYPE receive_instruction(void);
 
 	/*!
 	 * \brief method to reply to ECP
 	 *
-	 * Basing on the previous computation..
+	 * Basing on the previous computation.
 	 */
 	void reply_to_instruction(void);
 
@@ -183,10 +183,9 @@ public:
 	/*!
 	 * \brief Pure virtual method to create effector specific threads.
 	 *
-	 * For the purpose of visualization, measurement registration, force control, etc..
+	 * For the purpose of visualization, measurement registration, force control, etc.
 	 */
 	virtual void create_threads() = 0;
-
 };
 /************************ EDP_EFFECTOR ****************************/
 
