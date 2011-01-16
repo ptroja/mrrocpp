@@ -177,11 +177,9 @@ int effector::init()
 
 	return 0;
 }
-;
 
 effector::~effector()
 {
-	;
 	free(piBuffSpeechOut);
 	rtn = snd_mixer_close(mixer_handle);
 	rtn = snd_pcm_close(pcm_handle);
@@ -233,7 +231,7 @@ void effector::interpret_instruction(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE effector::rep_type(lib::c_buffer & instruction)
+lib::REPLY_TYPE effector::rep_type(const lib::c_buffer & instruction)
 {
 	// ustalenie formatu odpowiedzi
 	reply.reply_type = lib::ACKNOWLEDGE;
@@ -242,16 +240,16 @@ lib::REPLY_TYPE effector::rep_type(lib::c_buffer & instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-void effector::get_spoken(bool read_hardware, lib::c_buffer *instruction)
+void effector::get_spoken(bool read_hardware, lib::c_buffer & instruction)
 { // MAC7
 	return;
 }
 
-int effector::speak(lib::c_buffer *instruction)
+int effector::speak(const lib::c_buffer & instruction)
 { // add by MAC7
 
-	strcpy(text2speak, (*instruction).arm.text_def.text);
-	strcpy(prosody, (*instruction).arm.text_def.prosody);
+	strcpy(text2speak, instruction.arm.text_def.text);
+	strcpy(prosody, instruction.arm.text_def.prosody);
 
 	speaking = 1;
 
@@ -413,7 +411,6 @@ effector* return_created_efector(lib::configurator &_config)
 {
 	return new speaker::effector(_config);
 }
-;
 
 } // namespace common
 } // namespace edp

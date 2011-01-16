@@ -59,13 +59,13 @@ void speak_t::operator()()
             {
             case common::MT_GET_ARM_POSITION:
                 // master.get_arm_position(trans_t_tryb, &(master.current_instruction));
-            	master.get_spoken(trans_t_tryb, &(instruction)); // MAC7
+            	master.get_spoken(trans_t_tryb, instruction); // MAC7
                 trans_t_to_master_synchroniser.command();
                 break;
             case common::MT_MOVE_ARM:
                 // master.move_arm(&(master.current_instruction)); 	 // wariant dla watku edp_trans_t
                 trans_t_to_master_synchroniser.command();
-                master.speak(&(instruction)); // MAC7
+                master.speak(instruction); // MAC7
                 break;
             default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
                 break;
