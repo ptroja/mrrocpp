@@ -27,8 +27,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-class effector;
-
 /**************************** trans_t *****************************/
 
 class trans_t : public boost::noncopyable
@@ -36,19 +34,17 @@ class trans_t : public boost::noncopyable
 protected:
 	boost::thread thread_id;
 
+	MT_ORDER trans_t_task;
+	int trans_t_tryb;
 	lib::c_buffer instruction;
 
 public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
-
-	MT_ORDER trans_t_task;
-
-	int trans_t_tryb;
 	
-	ERROR_TYPE error;
-
 	virtual void operator()() = 0;
+
+	ERROR_TYPE error;
 
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
