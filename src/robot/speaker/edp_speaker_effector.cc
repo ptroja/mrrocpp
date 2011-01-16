@@ -268,7 +268,7 @@ int effector::speak(const lib::c_buffer & instruction)
 		if (FD_ISSET (snd_pcm_file_descriptor (pcm_handle, SND_PCM_CHANNEL_PLAYBACK), &wfds)) {
 			snd_pcm_plugin_write(pcm_handle, piBuffSpeechOut, mSamples);
 		}
-		n = snd_pcm_plugin_flush(pcm_handle, SND_PCM_CHANNEL_PLAYBACK);
+		snd_pcm_plugin_flush(pcm_handle, SND_PCM_CHANNEL_PLAYBACK);
 	}
 	speaking = 0;
 
