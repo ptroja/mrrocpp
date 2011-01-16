@@ -57,12 +57,9 @@ namespace speaker {
 effector::effector(lib::configurator &_config) :
 	common::effector(_config, lib::speaker::ROBOT_NAME)
 {
-
 	real_reply_type = lib::ACKNOWLEDGE;
-	// inicjacja deskryptora pliku by 7&Y
-	// servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
-	speaking = 0;
+	speaking = false;
 
 	/* Ustawienie priorytetu procesu */
 
@@ -191,13 +188,14 @@ void effector::create_threads()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::interpret_instruction(lib::c_buffer &instruction)
+void effector::interpret_instruction(c_buffer &instruction)
 {
 	// interpretuje otrzyman z ECP instrukcj;
 	// wypenaia struktury danych TRANSFORMATORa;
 	// przygotowuje odpowied dla ECP
 	// 	printf("interpret instruction poczatek\n");
 	// wstpne przygotowanie bufora odpowiedzi
+
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
@@ -226,12 +224,11 @@ void effector::interpret_instruction(lib::c_buffer &instruction)
 	}
 
 	// printf("interpret instruction koniec\n");
-
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE effector::rep_type(const lib::c_buffer & instruction)
+lib::REPLY_TYPE effector::rep_type(const c_buffer & instruction)
 {
 	// ustalenie formatu odpowiedzi
 	reply.reply_type = lib::ACKNOWLEDGE;
@@ -240,18 +237,18 @@ lib::REPLY_TYPE effector::rep_type(const lib::c_buffer & instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-void effector::get_spoken(bool read_hardware, lib::c_buffer & instruction)
+void effector::get_spoken(bool read_hardware, c_buffer & instruction)
 { // MAC7
 	return;
 }
 
-int effector::speak(const lib::c_buffer & instruction)
+int effector::speak(const c_buffer & instruction)
 { // add by MAC7
 
 	strcpy(text2speak, instruction.arm.text_def.text);
 	strcpy(prosody, instruction.arm.text_def.prosody);
 
-	speaking = 1;
+	speaking = true;
 
 	if (!initialize_incorrect) {
 		lib::set_thread_priority(pthread_self(), 2);
@@ -270,7 +267,7 @@ int effector::speak(const lib::c_buffer & instruction)
 		}
 		snd_pcm_plugin_flush(pcm_handle, SND_PCM_CHANNEL_PLAYBACK);
 	}
-	speaking = 0;
+	speaking = false;
 
 	return 1;
 }

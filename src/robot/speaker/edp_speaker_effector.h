@@ -13,7 +13,9 @@
 #define __EDP_SPEAKER_H
 
 #include <sys/asoundlib.h>
+
 #include "base/edp/edp_e_manip.h"
+#include "robot/speaker/robot_buffers_speaker.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -25,6 +27,11 @@ class speak_t;
 class effector : public common::effector
 {
 public:
+	typedef lib::speaker::c_buffer c_buffer;
+	typedef lib::speaker::r_buffer r_buffer ;
+
+	c_buffer instruction;
+
 	speak_t *mt_tt_obj;
 
 	char text2speak[lib::MAX_TEXT]; // MAC 7
@@ -59,10 +66,10 @@ public:
 	virtual ~effector();
 
 	// Interpretuje otrzymana z ECP instrukcje, przygotowuje odpowiedz dla ECP.
-	void interpret_instruction(lib::c_buffer &instruction);
+	void interpret_instruction(c_buffer &instruction);
 
 	// Ustalenie formatu odpowiedzi.
-	lib::REPLY_TYPE rep_type(const lib::c_buffer & instruction);
+	lib::REPLY_TYPE rep_type(const c_buffer & instruction);
 
 	// Glowna petla.
 	void main_loop();
@@ -71,12 +78,12 @@ public:
 	void create_threads();
 
 	// Wypowiedzenie tresci.
-	void get_spoken(bool read_hardware, lib::c_buffer & instruction);
+	void get_spoken(bool read_hardware, c_buffer & instruction);
 
-	int speak(const lib::c_buffer & instruction);
+	int speak(const c_buffer & instruction);
 };
 
-} // namespace common
+} // namespace speaker
 } // namespace edp
 } // namespace mrrocpp
 
