@@ -3,6 +3,8 @@
 // ostatnia modyfikacja: styczen 2005
 // ------------------------------------------------------------------------
 
+#include <iostream>
+
 #include "base/lib/com_buf.h"
 #include "base/lib/mis_fun.h"
 
@@ -36,16 +38,14 @@ void speak_t::operator()()
 			switch (trans_t_task)
 			{
 				case common::MT_GET_ARM_POSITION:
-					// master.get_arm_position(trans_t_tryb, &(master.current_instruction));
-					master.get_spoken(trans_t_tryb, instruction); // MAC7
+					master.get_spoken(trans_t_tryb, instruction);
 					trans_t_to_master_synchroniser.command();
 					break;
 				case common::MT_MOVE_ARM:
-					// master.move_arm(&(master.current_instruction)); 	 // wariant dla watku edp_trans_t
 					trans_t_to_master_synchroniser.command();
-					master.speak(instruction); // MAC7
+					master.speak(instruction);
 					break;
-				default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
+				default:
 					break;
 			}
 		}
@@ -97,11 +97,10 @@ void speak_t::operator()()
 		} // end: catch(System_error fe)
 
 		catch (...) { // Dla zewnetrznej petli try
-			printf("transformation thread uneidentified_error\n");
+			std::cerr << "transformation thread: unidentified_error" << std::endl;
 
 			trans_t_to_master_synchroniser.command();
 			// Wylapywanie niezdefiniowanych bledow
-			// printf("zlapane cos");// by Y&W
 		}
 
 	} // end while
