@@ -18,7 +18,7 @@ namespace edp {
 namespace speaker {
 
 speak_t::speak_t(effector& _master) :
-	trans_t(_master), master(_master)
+	master(_master)
 {
 	thread_id = boost::thread(boost::bind(&speak_t::operator(), this));
 }
