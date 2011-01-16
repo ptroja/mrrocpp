@@ -8,11 +8,6 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-trans_t::trans_t(effector& _master) :
-	master(_master), master_to_trans_synchroniser(), trans_t_to_master_synchroniser()
-{
-}
-
 trans_t::~trans_t()
 {
 }

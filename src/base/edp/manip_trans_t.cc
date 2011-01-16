@@ -23,13 +23,9 @@ namespace common {
 
 
 manip_trans_t::manip_trans_t(motor_driven_effector& _master):
-	trans_t(_master), master (_master)
+	master (_master)
 {
 	thread_id = boost::thread(boost::bind(&manip_trans_t::operator(), this));
-}
-
-manip_trans_t::~manip_trans_t()
-{
 }
 
 void manip_trans_t::operator()()

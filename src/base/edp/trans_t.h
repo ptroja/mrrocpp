@@ -33,9 +33,6 @@ class effector;
 
 class trans_t : public boost::noncopyable
 {
-private:
-	effector &master;
-
 protected:
 	boost::thread thread_id;
 
@@ -55,8 +52,6 @@ public:
 
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
-
-	trans_t(effector & _master);
 
 	virtual ~trans_t();
 
