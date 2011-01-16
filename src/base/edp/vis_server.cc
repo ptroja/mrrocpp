@@ -7,16 +7,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <cassert>
 
-#include <boost/bind.hpp>
-
-#include "base/lib/impconst.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
 #include "base/lib/mis_fun.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace edp {
