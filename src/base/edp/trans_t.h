@@ -38,11 +38,11 @@ protected:
 	int trans_t_tryb;
 	lib::c_buffer instruction;
 
+	virtual void operator()() = 0;
+
 public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
-	
-	virtual void operator()() = 0;
 
 	ERROR_TYPE error;
 

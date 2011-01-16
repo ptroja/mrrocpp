@@ -20,9 +20,9 @@ class manip_trans_t : public trans_t
 private:
     motor_driven_effector &master;
 
-public:
     void operator()();
 
+public:
     manip_trans_t(motor_driven_effector& _master);
 };
 

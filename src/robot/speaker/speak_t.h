@@ -14,9 +14,9 @@ class speak_t : public common::trans_t
 private:
 	effector &master;
 
-public:
-    void operator()();
+	void operator()();
 
+public:
     speak_t(effector& _master);
 };
 
