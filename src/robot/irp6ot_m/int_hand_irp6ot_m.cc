@@ -265,7 +265,6 @@ int_handler (void *arg, int int_id)
 	// INT_SINGLE_COMMAND do synchronizacji, inicjacji, etc.
 	else if (md.interrupt_mode == edp::common::INT_SINGLE_COMMAND)
 	{
-
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -288,7 +287,6 @@ int_handler (void *arg, int int_id)
 	// INT_CHECK_STATE do odczytu stanu z adresu 0x220
 	else if (md.interrupt_mode == edp::common::INT_CHECK_STATE)
 	{
-
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
