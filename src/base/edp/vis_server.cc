@@ -9,6 +9,8 @@
 #include <arpa/inet.h>
 #include <cassert>
 
+#include <boost/bind.hpp>
+
 #include "base/lib/impconst.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
@@ -23,14 +25,9 @@ namespace common {
 static const int MAXBUFLEN = 100;
 
 vis_server::vis_server(motor_driven_effector &_master) :
-	master(_master), thread_id(NULL)
+	master(_master)
 {
-	thread_id = new boost::thread(boost::bind(&vis_server::operator(), this));
-}
-
-vis_server::~vis_server(void)
-{
-	delete thread_id;
+	thread_id = boost::thread(boost::bind(&vis_server::operator(), this));
 }
 
 void vis_server::operator()(void)
