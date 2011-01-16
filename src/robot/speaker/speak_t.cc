@@ -3,12 +3,6 @@
 // ostatnia modyfikacja: styczen 2005
 // ------------------------------------------------------------------------
 
-/********************************* INCLUDES *********************************/
-#include <cstdio>
-#include <cstring>
-#include <csignal>
-#include <cstdlib>
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
