@@ -17,6 +17,7 @@
 #include "spkm/ui_r_spkm.h"
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
+#include "polycrank/ui_r_polycrank.h"
 #include "spkm/wnd_spkm_inc.h"
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
@@ -386,6 +387,23 @@ void MainWindow::on_actionshead_EDP_Load_triggered()
 void MainWindow::on_actionshead_EDP_Unload_triggered()
 {
 	interface.shead->EDP_slay_int();
+}
+
+// polycrank menu
+
+void MainWindow::on_actionpolycrank_EDP_Load_triggered()
+{
+	interface.polycrank->edp_create();
+}
+
+void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
+{
+	interface.polycrank->EDP_slay_int();
+}
+
+void MainWindow::on_actionpolycrank_Move_Joints_triggered()
+{
+
 }
 
 // all robots menu
