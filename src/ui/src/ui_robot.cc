@@ -9,6 +9,7 @@
 #include "base/lib/messip/messip_dataport.h"
 #endif
 
+#include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 
 namespace mrrocpp {
@@ -300,19 +301,28 @@ int UiRobot::reload_configuration()
 					}
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
-						char* tmp, *tmp1;
-						tmp1
-								= tmp
-										= strdup(interface.config->value <std::string> (tmp_string, state.edp.section_name).c_str());
-						char* toDel = tmp;
-						for (int j = 0; j < number_of_servos; j++) {
-							if (i < 3) {
-								state.edp.preset_position[i][j] = strtod(tmp1, &tmp1);
-							} else {
-								state.edp.front_position[j] = strtod(tmp1, &tmp1);
-							}
-						}
-						free(toDel);
+						std::string text(interface.config->value <std::string> (tmp_string, state.edp.section_name));
+
+						boost::char_separator <char> sep(" ");
+						boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+
+						int j = 0;
+						BOOST_FOREACH(std::string t, tokens)
+									{
+
+										if (i < 3) {
+											//value = boost::lexical_cast<double>(my_string);
+
+											state.edp.preset_position[i][j] = boost::lexical_cast <double>(t);
+										} else {
+											state.edp.front_position[j] = boost::lexical_cast <double>(t);
+										}
+
+										if (j == number_of_servos) {
+											break;
+										}
+										j++;
+									}
 					} else {
 						for (int j = 0; j < number_of_servos; j++) {
 							if (i < 3) {

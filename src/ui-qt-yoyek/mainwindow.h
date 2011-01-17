@@ -24,15 +24,21 @@ public:
 	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
+	void ui_notification(QString _string, QColor _color);
+
 private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
 	QTimer *timer;
 
+	signals:
+	void ui_notification_signal(QString _string, QColor _color);
+
 private slots:
-	void on_pushButton_l1_clicked();
-	void on_pushButton_l2_clicked();
+
 	void on_timer_slot();
+
+	void ui_notification_slot(QString _string, QColor _color);
 
 	// menus
 
@@ -41,11 +47,35 @@ private slots:
 
 	// robot menu
 
+	//irp6ot_m menu
+	void on_actionirp6ot_m_EDP_Load_triggered();
+	void on_actionirp6ot_m_EDP_Unload_triggered();
+
+	void on_actionirp6ot_m_Synchronisation_triggered();
+
+	void on_actionirp6ot_m_Synchro_Position_triggered();
+	void on_actionirp6ot_m_Front_Position_triggered();
+	void on_actionirp6ot_m_Position_0_triggered();
+	void on_actionirp6ot_m_Position_1_triggered();
+	void on_actionirp6ot_m_Position_2_triggered();
+
+	//irp6p_m menu
+	void on_actionirp6p_m_EDP_Load_triggered();
+	void on_actionirp6p_m_EDP_Unload_triggered();
+
+	void on_actionirp6p_m_Synchronisation_triggered();
+
+	void on_actionirp6p_m_Synchro_Position_triggered();
+	void on_actionirp6p_m_Front_Position_triggered();
+	void on_actionirp6p_m_Position_0_triggered();
+	void on_actionirp6p_m_Position_1_triggered();
+	void on_actionirp6p_m_Position_2_triggered();
+
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
 	void on_actionspkm_EDP_Unload_triggered();
 
-	void on_actionspkm_Synchronise_triggered();
+	void on_actionspkm_Synchronisation_triggered();
 	void on_actionspkm_Motors_triggered();
 
 	void on_actionspkm_Motors_post_triggered();
@@ -57,6 +87,14 @@ private slots:
 	void on_actionspkm_Position_0_triggered();
 	void on_actionspkm_Position_1_triggered();
 	void on_actionspkm_Position_2_triggered();
+
+	// smb menu
+	void on_actionsmb_EDP_Load_triggered();
+	void on_actionsmb_EDP_Unload_triggered();
+
+	// shead menu
+	void on_actionshead_EDP_Load_triggered();
+	void on_actionshead_EDP_Unload_triggered();
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();

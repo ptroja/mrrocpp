@@ -30,8 +30,6 @@
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "robot/sarkofag/ecp_r_sarkofag.h"
 #include "robot/conveyor/ecp_r_conv.h"
-#include "robot/spkm/ecp_r_spkm.h"
-#include "robot/smb/ecp_r_smb.h"
 #include "robot/shead/ecp_r_shead.h"
 #include "robot/polycrank/ecp_r_polycrank.h"
 
@@ -68,20 +66,6 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
 
-	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
-
-	} else if (_robot_name == lib::spkm::ROBOT_NAME) {
-		ecp = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-
-	} else if (_robot_name == lib::smb::ROBOT_NAME) {
-		ecp = new ecp::smb::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-
 	} else if (_robot_name == lib::shead::ROBOT_NAME) {
 		ecp = new ecp::shead::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
@@ -92,7 +76,7 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		ecp = new ecp::polycrank::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		MOTOR_STEP = 0.1; // Przyrost kata obrotu walu silnika [rad]
-		JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
+		JOINT_LINEAR_STEP = 0.0004; // Eksperymentalnie dobrana wartosc, przy ktorej ruch jest płynny
 	}
 
 	assert(ecp);

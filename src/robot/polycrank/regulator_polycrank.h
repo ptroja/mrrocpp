@@ -2,7 +2,7 @@
 //                            servo_gr.h
 // Definicje struktur danych i metod dla procesu SERVO_GROUP
 //
-// Ostatnia modyfikacja: 16.04.98
+// Ostatnia modyfikacja: 13.01.2011
 // -------------------------------------------------------------------------
 
 

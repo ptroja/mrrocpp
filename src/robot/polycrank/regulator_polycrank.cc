@@ -2,9 +2,9 @@
 //                                       edp.cc
 //
 // EDP_MASTER Effector Driver Master Process
-// Driver dla robota IRp-6 na torze - metody: class edp_irp6s_and_polycrank_robot
+// Driver dla robota polycrank
 //
-// Ostatnia modyfikacja: styczen 2005
+// Ostatnia modyfikacja: 13.01.2011
 // -------------------------------------------------------------------------
 
 #include <cstdio>

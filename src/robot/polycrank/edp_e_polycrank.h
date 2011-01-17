@@ -1,12 +1,12 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6p_effector.h
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- deklaracja klasy edp_irp6p_effector
+// Plik:		edp_e_polycrank.h
+// System:		QNX/MRROC++  v. 6.5
+// Opis:		Robot polycrank
+//				- deklaracja klasy edp_e_polycrank
 //
-// Autor:		tkornuta
-// Data:		17.01.2007
+// Autor:		Mariusz Zbikowski
+// Data:		13.01.2011
 // ------------------------------------------------------------------------
 
 

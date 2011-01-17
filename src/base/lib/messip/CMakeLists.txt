@@ -15,3 +15,8 @@ install(TARGETS messip_sin DESTINATION bin)
 if(QNXNTO)
 target_link_libraries (messip socket rpc)
 endif(QNXNTO)
+
+#add_executable(server server.c)
+#target_link_libraries (server messip ${COMPATIBILITY_LIBRARIES})
+#add_executable(client client.c)
+#target_link_libraries (client messip ${COMPATIBILITY_LIBRARIES})

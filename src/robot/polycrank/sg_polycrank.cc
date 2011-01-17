@@ -1,6 +1,6 @@
 /* --------------------------------------------------------------------- */
 /*                          SERVO_GROUP Process                          */
-// ostatnia modyfikacja - styczen 2005
+// ostatnia modyfikacja - 13.01.2011
 /* --------------------------------------------------------------------- */
 
 #include <boost/bind.hpp>
@@ -32,7 +32,7 @@ servo_buffer::servo_buffer(effector &_master) :
 		axe_inc_per_revolution[j] = INC_PER_REVOLUTION;
 	}
 
-	printf("servo_buffer\n");
+	//printf("servo_buffer\n");
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
 /*
@@ -46,8 +46,6 @@ servo_buffer::servo_buffer(effector &_master) :
 
 	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
 }*/
-
-/*-----------------------------------------------------------------------*/
 
 void servo_buffer::load_hardware_interface(void)
 {
@@ -128,14 +126,6 @@ servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
 	return new polycrank::servo_buffer((polycrank::effector &) (_master));
 }
 
-/*
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new irp6ot_m::servo_buffer((irp6ot_m::effector &) (_master));
-}
-*/
 
 } // namespace common
 } // namespace edp

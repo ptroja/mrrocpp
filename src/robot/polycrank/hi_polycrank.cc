@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------
-//                            hi_rydz.cc
+//                            hi_polycrank.cc
 //
 // Funkcje do obslugi sprzetu (serwomechanizmow cyfrowych) dla robota polycrank
 //
