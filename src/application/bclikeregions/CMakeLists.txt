@@ -25,6 +25,7 @@ add_executable(ecp_bcl_t_switcher
 target_link_libraries(ecp_bcl_t_switcher
     ecp_r_irp6ot_m
     ecp_r_irp6p_m
+    ecp_generators
     ecp ${COMMON_LIBRARIES}
 )
 

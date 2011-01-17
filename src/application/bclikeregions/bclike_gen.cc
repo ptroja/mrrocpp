@@ -48,7 +48,7 @@ const lib::POSE_SPECIFICATION return_pos_type = lib::FRAME;
 
 
 bclike_gen::bclike_gen(mrrocpp::ecp::common::task::task & ecp_task) :
-		common::generator::constant_velocity(ecp_task, move_type, joint_num),
+		mrrocpp::ecp::common::generator::constant_velocity(ecp_task, move_type, joint_num),
 		bcl_ecp((task::bcl_t_switcher &)ecp_t), num_send(0){
 
 	vsp_fradia = NULL;
