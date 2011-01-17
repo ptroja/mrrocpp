@@ -91,8 +91,9 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	}
 
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
-
-	std::string filePath(mrrocpp_network_path);
+std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
+//TODO: askubis change mrrocpp network path to some path form /build/bin
+	std::string filePath("../../");
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	filePath += fileName;
 
@@ -224,6 +225,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 
 void fsautomat::main_task_algorithm(void)
 {
+	std::cout<<"START FSAUTOMAT ECP"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
@@ -246,7 +248,8 @@ void fsautomat::main_task_algorithm(void)
 		subtasks_conditional_execution();
 
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
-			std::string path(mrrocpp_network_path);
+			//std::string path(mrrocpp_network_path);
+			std::string path("../../");
 			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
@@ -267,7 +270,8 @@ if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 					std::cout<<"map after load"<<std::endl;
 				} else {
 					std::cout<<"from file: "<<mrrocpp_network_path << fileName <<std::endl;
-					std::string path(mrrocpp_network_path);
+					//std::string path(mrrocpp_network_path);
+					std::string path("../../");
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< " after load " <<std::endl;
@@ -276,7 +280,8 @@ if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 			else //moj przypadekl -> z pliku
 			{
 				std::cout<<"normal"<<std::endl;
-				std::string path(mrrocpp_network_path);
+				//std::string path(mrrocpp_network_path);
+				std::string path("../");
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 					//sg->get_type_for_smooth_xml(path.c_str());
 				//
