@@ -26,10 +26,8 @@
 // Konfigurator.
 // #include "base/lib/configurator.h"
 #include "robot/polycrank/const_polycrank.h"
+#include "ui/src/ui_ecp_r_tfg_and_conv.h"
 
-   #include "ui/src/ui_ecp_r_tfg_and_conv.h"
-
-   #include "ui/src/ui_ecp_r_irp6_common.h"
 
 /* Local headers */
 #include "ablibs.h"
@@ -41,6 +39,8 @@ extern ui::common::Interface interface;
 // zamykanie okien ruchow recznych dla robota irp6_postument
 int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("EDP_polycrank_create\n");
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -51,6 +51,8 @@ int EDP_polycrank_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 int EDP_polycrank_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("EDP_polycrank_slay\n");
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -59,23 +61,11 @@ int EDP_polycrank_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 	return (Pt_CONTINUE);
 }
 
-/*
-int EDP_irp6_on_track_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-{
-
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	//	EDP_irp6_on_track_create_int(widget, apinfo, cbinfo);
-
-	interface.irp6ot_m->EDP_slay_int();
-
-	return (Pt_CONTINUE);
-}
-*/
 
 int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("EDP_polycrank_synchronise\n");
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -84,24 +74,12 @@ int EDP_polycrank_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	return (Pt_CONTINUE);
 }
 
-/*
-int EDP_irp6_on_track_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	 eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	interface.irp6ot_m->synchronise();
-	return (Pt_CONTINUE);
-
-}*/
-
 
 int start_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("start_wnd_polycrank_int\n");
 
-	/* eliminate 'unreferenced' warnings */
+	// eliminate 'unreferenced' warnings
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	if (!interface.polycrank->is_wind_polycrank_int_open) // otworz okno
@@ -113,35 +91,18 @@ int start_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	}
 
 	return (Pt_CONTINUE);
-/*
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	if (!interface.irp6m_m->is_wind_irp6m_int_open) // otworz okno
-	{
-		ApCreateModule(ABM_wnd_irp6_mechatronika_int, widget, cbinfo);
-		interface.irp6m_m->is_wind_irp6m_int_open = true;
-	} else { // przelacz na okno
-		PtWindowToFront(ABW_wnd_irp6_mechatronika_int);
-	}
-
-	return (Pt_CONTINUE);
-*/
 }
 
-//int wnd_irp6p_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("wnd_polycrank_joints_copy_current_to_desired\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	// wychwytania ew. bledow ECP::robot
 	//double *wektor_ptgr[NUM_OF_SERVOS], wektor[NUM_OF_SERVOS];
-	double *wektor_ptgr[interface.polycrank->number_of_servos], wektor[interface.polycrank->number_of_servos];
-
-	// wychwytania ew. bledow ECP::robot
-	//double *wektor_ptgr[lib::irp6m::NUM_OF_SERVOS], wektor[lib::irp6m::NUM_OF_SERVOS];
+	double *wektor_ptgr[lib::polycrank::NUM_OF_SERVOS], wektor[lib::polycrank::NUM_OF_SERVOS];
 
 	if (interface.polycrank->state.edp.pid != -1)
 	{
@@ -155,7 +116,7 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 			PtGetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
 			PtGetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
 
-			for (int i = 0; i < interface.polycrank->number_of_servos; i++) {
+			for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++) {
 				wektor[i] = *wektor_ptgr[i];
 			}
 
@@ -164,8 +125,8 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
 
 		} else
 		{
@@ -173,48 +134,13 @@ int wnd_polycrank_joints_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *a
 	}
 
 	return (Pt_CONTINUE);
-/*
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	// wychwytania ew. bledow ECP::robot
-	double *wektor_ptgr[lib::irp6p_m::NUM_OF_SERVOS], wektor[lib::irp6p_m::NUM_OF_SERVOS];
-
-	if (interface.irp6p_m->state.edp.pid != -1) {
-		if (interface.irp6p_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-		{
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p1, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[0]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p2, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[1]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p3, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[2]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p4, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[3]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p5, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[4]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p6, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[5]), 0);
-			PtGetResource(ABW_PtNumericFloat_wind_irp6p_joints_cur_p7, Pt_ARG_NUMERIC_VALUE, &(wektor_ptgr[6]), 0);
-
-			for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++) {
-				wektor[i] = *wektor_ptgr[i];
-			}
-
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
-		} else
-		{
-		}
-	}
-
-	return (Pt_CONTINUE);
-*/
 }
 
 int polycrank_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("polycrank_int_motion\n");
 
-	double *wektor[interface.polycrank->number_of_servos];
+	double *wektor[lib::polycrank::NUM_OF_SERVOS];
 	double *step1;
 
 	/* eliminate 'unreferenced' warnings */
@@ -232,29 +158,12 @@ try {
 		PtGetResource(ABW_PtNumericFloat_wind_polycrank_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
 		PtGetResource(ABW_PtNumericFloat_wind_polycrank_int_p6, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 		PtGetResource(ABW_PtNumericFloat_wind_polycrank_int_p7, Pt_ARG_NUMERIC_VALUE, &wektor[6], 0);
-/*
-		for (int i = 0; i < NUM_OF_SERVOS; i++) {
+
+		for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++) {
 			interface.polycrank->desired_pos[i] = *wektor[i];
 		}
-*/
-		for (int i = 0; i < interface.polycrank->number_of_servos; i++) {
-			interface.polycrank->desired_pos[i] = *wektor[i];
-		}
-
-/*
-		PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p1, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-		PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p2, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-		PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p3, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-		PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-		PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-
-		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++) {
-			interface.irp6m_m->desired_pos[i] = *wektor[i];
-		}
-*/
 
 		PtGetResource(ABW_PtNumericFloat_wind_polycrank_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
-		//PtGetResource(ABW_PtNumericFloat_wind_irp6m_int_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
 
 		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_polycrank_int_1l)
 		{
@@ -312,40 +221,13 @@ try {
 		{
 			interface.polycrank->desired_pos[6] += *step1;
 		}
-/*
-		if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_1l)
-		{
-				interface.irp6m_m->desired_pos[0] -= (*step1);
+
+		double desired_pos_int[7];
+
+		for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++) {
+			desired_pos_int[i] =  0.5;
 		}
-		else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_2l)
-		{
-				interface.irp6m_m->desired_pos[1] -= (*step1);
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_3l)
-		{
-				interface.irp6m_m->desired_pos[2] -= (*step1);
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_4l)
-		{
-				interface.irp6m_m->desired_pos[3] -= (*step1);
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_5l)
-		{
-				interface.irp6m_m->desired_pos[4] -= (*step1);
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_1r)
-		{
-				interface.irp6m_m->desired_pos[0] += *step1;
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_2r)
-		{
-				interface.irp6m_m->desired_pos[1] += *step1;
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_3r)
-		{
-				interface.irp6m_m->desired_pos[2] += *step1;
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_4r)
-		{
-				interface.irp6m_m->desired_pos[3] += *step1;
-		} else if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_irp6m_int_5r)
-		{
-				interface.irp6m_m->desired_pos[4] += *step1;
-		}
- */
+
 		interface.polycrank->ui_ecp_robot->move_joints(interface.polycrank->desired_pos);
 
 		if (interface.polycrank->is_wind_polycrank_int_open) // Czy robot jest zsynchronizowany?
@@ -358,29 +240,17 @@ try {
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p6, Pt_ARG_NUMERIC_VALUE, &interface.polycrank->desired_pos[5], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_int_p7, Pt_ARG_NUMERIC_VALUE, &interface.polycrank->desired_pos[6], 0);
 		}
-/*
-		interface.irp6m_m->ui_ecp_robot->move_joints(interface.irp6m_m->desired_pos);
-		if (interface.irp6m_m->is_wind_irp6m_int_open) // Czy robot jest zsynchronizowany?
-		{
-
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_int_p1, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->desired_pos[0], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_int_p2, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->desired_pos[1], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_int_p3, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->desired_pos[2], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_int_p4, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->desired_pos[3], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_int_p5, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->desired_pos[4], 0);
-		}
-*/
 
 	} // end if (interface.irp6m_m->state.edp.pid!=-1)
 } // end try
 CATCH_SECTION_UI
 
 return (Pt_CONTINUE);
-
 }
 
 int init_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("init_wnd_polycrank_int\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -405,7 +275,7 @@ try {
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p6,Pt_ARG_NUMERIC_VALUE, &interface.polycrank->current_pos[5], 0);
 			PtSetResource(ABW_PtNumericFloat_wind_polycrank_joints_cur_p7,Pt_ARG_NUMERIC_VALUE, &interface.polycrank->current_pos[6], 0);
 
-			for (int i = 0; i < interface.polycrank->number_of_servos; i++)
+			for (int i = 0; i < lib::polycrank::NUM_OF_SERVOS; i++)
 			interface.polycrank->desired_pos[i] = interface.polycrank->current_pos[i];
 		} else {
 			// 	interface.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
@@ -415,41 +285,12 @@ try {
 CATCH_SECTION_UI
 
 return (Pt_CONTINUE);
-
-/*
-// eliminate 'unreferenced' warnings
-widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-// wychwytania ew. bledow ECP::robot
-try {
-	if (interface.irp6m_m->state.edp.pid != -1) {
-		if (interface.irp6m_m->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-		{
-			interface.irp6m_m->ui_ecp_robot->read_joints(interface.irp6m_m->current_pos); // Odczyt polozenia walow silnikow
-
-			// 	interface.unblock_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
-
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p1, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[0], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p2, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[1], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p3, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[2], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p4, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[3], 0);
-			PtSetResource(ABW_PtNumericFloat_wind_irp6m_joints_cur_p5, Pt_ARG_NUMERIC_VALUE, &interface.irp6m_m->current_pos[4], 0);
-
-			for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)
-				interface.irp6m_m->desired_pos[i] = interface.irp6m_m->current_pos[i];
-		} else {
-			// 	interface.block_widget(ABW_PtPane_wind_irp6m_int_post_synchro_moves);
-		}
-	}
-} // end try
-CATCH_SECTION_UI
-
-return (Pt_CONTINUE);
-*/
 }
 
 int import_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("import_wnd_polycrank_int\n");
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -478,40 +319,11 @@ int import_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	delete[] tmp;
 
 	return (Pt_CONTINUE);
-/*
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	char* tmp_ptgr, *tmp;
-	double val;
-
-	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
-	tmp = new char[strlen(tmp_ptgr)];
-	strcpy(tmp, tmp_ptgr);
-
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p1, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p2, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p3, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p4, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p5, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p6, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	val = strtod(tmp, &tmp);
-	PtSetResource(ABW_PtNumericFloat_wind_irp6ot_xyz_angle_axis_p8, Pt_ARG_NUMERIC_VALUE, &val, 0);
-
-	delete[] tmp;
-
-	return (Pt_CONTINUE);
-*/
 }
 
 int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("export_wnd_polycrank_int\n");
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
@@ -534,40 +346,12 @@ int export_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInf
 	interface.ui_msg->message(buffer);
 
 	return (Pt_CONTINUE);
-/*
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	char buffer[200];
-
-	double *wektor[7];
-
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p1, Pt_ARG_NUMERIC_VALUE,
-			&wektor[0], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p2, Pt_ARG_NUMERIC_VALUE,
-			&wektor[1], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p3, Pt_ARG_NUMERIC_VALUE,
-			&wektor[2], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p4, Pt_ARG_NUMERIC_VALUE,
-			&wektor[3], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p5, Pt_ARG_NUMERIC_VALUE,
-			&wektor[4], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p6, Pt_ARG_NUMERIC_VALUE,
-			&wektor[5], 0);
-	PtGetResource(ABW_PtNumericFloat_wind_irp6p_int_p7, Pt_ARG_NUMERIC_VALUE,
-			&wektor[6], 0);
-
-	sprintf(buffer, "edp_IRP6_P INTERNAL POSITION\n %f %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5], *wektor[6]);
-
-	interface.ui_msg->message(buffer);
-
-	return (Pt_CONTINUE);
-*/
 }
 
 int clear_wnd_polycrank_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
 {
+	//printf("clear_wnd_polycrank_int_flag\n");
+
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -575,12 +359,13 @@ int clear_wnd_polycrank_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	//interface.irp6m_m->is_wind_irp6m_int_open = false;
 
 	return (Pt_CONTINUE);
-
 }
 
 
 int close_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
+	//printf("close_wnd_polycrank_int\n");
+
 	// eliminate 'unreferenced' warnings
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
@@ -590,16 +375,5 @@ int close_wnd_polycrank_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo
 	}
 
 	return (Pt_CONTINUE);
-
-/*
-	// eliminate 'unreferenced' warnings
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	if (interface.irp6m_m->is_wind_irp6m_int_open) {
-		PtDestroyWidget(ABW_wnd_irp6_mechatronika_int);
-	}
-
-	return (Pt_CONTINUE);
-*/
 }
 

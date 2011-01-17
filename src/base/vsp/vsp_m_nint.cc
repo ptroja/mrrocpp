@@ -33,7 +33,6 @@
 #include <sys/sched.h>
 #include <fstream>
 
-
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -59,7 +58,6 @@ static bool TERMINATED = false;
 
 /** @brief Mutex utilized for read/write sensor image synchronization. */
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
 
 /**
  * @brief Function responsible for handling errors.
@@ -121,6 +119,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
+		case SIGHUP:
 			TERMINATED = true;
 			break;
 		case SIGSEGV:
@@ -129,7 +128,6 @@ void catch_signal(int sig)
 			break;
 	} //: switch
 }
-
 
 /**
  * @brief Body of the thread responsible for cyclic readings initialization.
@@ -165,7 +163,6 @@ void* cyclic_read(void* arg)
 	return (0);
 }
 
-
 /**
  * @brief Function responsible for parsing the command send by the ECP/MP and - in case of GET_READING - copies current reading to returned message buffer.
  * @author tkornuta
@@ -191,7 +188,6 @@ void parse_command()
 			throw vsp::common::vsp_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_VSP);
 	}
 }
-
 
 /**
  * @brief The io_read handler is responsible for returning data bytes to the client after receiving an _IO_READ message.
@@ -371,10 +367,10 @@ int main(int argc, char *argv[])
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::nint_shell::catch_signal);
+	signal(SIGHUP, &vsp::nint_shell::catch_signal);
 	signal(SIGSEGV, &vsp::nint_shell::catch_signal);
 
 	signal(SIGINT, SIG_IGN);
-
 
 	// Check number of arguments.
 	if (argc <= 6) {
@@ -385,7 +381,8 @@ int main(int argc, char *argv[])
 	// Read system configuration.
 	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	resourceman_attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
+	resourceman_attach_point
+			= _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 
 	try {
 		// Create sensor - abstract factory pattern.
@@ -433,8 +430,8 @@ int main(int argc, char *argv[])
 		// Run second thread.
 		pthread_attr_t tattr;
 		pthread_attr_init(&tattr);
-		pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED );
-		pthread_create(NULL, &tattr, &vsp::nint_shell::cyclic_read, NULL );
+		pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED);
+		pthread_create(NULL, &tattr, &vsp::nint_shell::cyclic_read, NULL);
 
 		// Start the resource manager message loop.
 		while (!vsp::nint_shell::TERMINATED) {

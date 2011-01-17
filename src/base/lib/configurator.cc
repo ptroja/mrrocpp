@@ -218,11 +218,12 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
 
-
 	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
 	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
 
 	std::string rsh_spawn_node;
+
+	bool use_ssh = false;
 
 	if (spawned_node_name == sysinfo.nodename) {
 		rsh_spawn_node = "localhost";
@@ -236,6 +237,11 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
+	}
+
+	// Use SSH ?
+	if (exists("use_ssh", _section_name)) {
+		use_ssh = value <bool> ("use_ssh", _section_name);
 	}
 
 	// Sciezka do binariow.
@@ -281,9 +287,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		if (exists("username", _section_name)) {
 			std::string username = value <std::string> ("username", _section_name);
 
-			//			fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
-
-			execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+			if (!use_ssh) {
+				execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+			} else {
+				execlp("ssh", "ssh", "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+			}
 		} else {
 			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 
@@ -303,8 +312,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			//					session_name.length() ? session_name.c_str() : "\"\"",
 			//					asa.c_str()
 			//			);
-
-			execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
+			//fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
+			if (!use_ssh) {
+				execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
+			} else {
+				execlp("ssh", "ssh", "-t", rsh_spawn_node.c_str(), process_path, NULL);
+			}
 		}
 
 	} else if (child_pid > 0) {

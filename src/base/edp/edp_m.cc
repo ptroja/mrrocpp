@@ -44,6 +44,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
+		case SIGHUP:
 #ifdef __QNXNTO__
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
@@ -84,12 +85,12 @@ int main(int argc, char *argv[])
 
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);
+		signal(SIGHUP, &edp::common::catch_signal);
 		signal(SIGSEGV, &edp::common::catch_signal);
 
 		// avoid transporting Ctrl-C signal from UI console
 
 		signal(SIGINT, SIG_IGN);
-
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
@@ -136,7 +137,7 @@ int main(int argc, char *argv[])
 		 */
 	} // end: catch(System_error fe)
 
-	catch(std::exception & e) {
+	catch (std::exception & e) {
 		std::cerr << "EDP: " << e.what() << std::endl;
 	}
 

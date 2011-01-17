@@ -45,11 +45,15 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 SET(GUI_CXX_SRCS
     main.cpp
     mainwindow.cpp
+    wnd_process_control.cpp
+    spkm/wnd_spkm_inc.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
     mainwindow.h
+    wnd_process_control.h
+    spkm/wnd_spkm_inc.h
 )
 
 # Generate MOC files
@@ -58,22 +62,50 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 # UI files
 SET(GUI_UI
     mainwindow.ui
+    wnd_process_control.ui
+    spkm/wnd_spkm_inc.ui
 )
 
 # Generate UI include files
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 
 # Create GUI executable
-ADD_EXECUTABLE(ui-qt-yoyek ${GUI_CXX_SRCS})
+ADD_EXECUTABLE(
+	ui-qt-yoyek 
+	${GUI_CXX_SRCS}
+	ui_sr.cc
+	ui_ecp.cc
+	interface.cc
+	ui_ecp_r_common.cc
+	ui_ecp_r_irp6_common.cc
+	ui_ecp_r_data_port.cc
+	ui_ecp_r_tfg_and_conv.cc
+	irp6ot_m/ui_r_irp6ot_m.cc
+	irp6p_m/ui_r_irp6p_m.cc
+	spkm/ui_ecp_r_spkm.cc
+	spkm/ui_r_spkm.cc
+	smb/ui_ecp_r_smb.cc
+	smb/ui_r_smb.cc
+	shead/ui_ecp_r_shead.cc
+	shead/ui_r_shead.cc
+	ui.cc
+	ui_robot.cc
+)
 
 # Link executable with QT libraries
-TARGET_LINK_LIBRARIES(ui-qt-yoyek ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(
+	ui-qt-yoyek 
+	ecp_robots ecp_mp
+	${QT_LIBRARIES}
+	${COMMON_LIBRARIES}
+)
 
 install(
   TARGETS ui-qt-yoyek
   RUNTIME DESTINATION bin COMPONENT applications
 )
 
+install(PROGRAMS start.sh DESTINATION bin/ )
 
 ELSE(QT_FOUND)
 

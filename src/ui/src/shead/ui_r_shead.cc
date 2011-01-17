@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui/src/shead/ui_r_shead.h"
-#include "ui/src/ui_ecp_r_tfg_and_conv.h"
+#include "ui/src/shead/ui_ecp_r_shead.h"
 #include "robot/shead/const_shead.h"
 #include "ui/src/ui_class.h"
 
@@ -34,7 +34,7 @@ void UiRobot::edp_create()
 int UiRobot::edp_create_int()
 
 {
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
 
@@ -60,10 +60,9 @@ int UiRobot::edp_create_int()
 
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot
-							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::shead::ROBOT_NAME);
+					ui_ecp_robot = new ui::shead::EcpRobot(interface);
 				}
-				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
+				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
 
 				if (state.edp.pid < 0) {
 

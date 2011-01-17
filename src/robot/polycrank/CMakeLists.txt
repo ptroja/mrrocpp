@@ -2,10 +2,14 @@ if(ROBOT_POLYCRANK)
 
 add_executable(edp_polycrank
 	edp_e_polycrank.cc
+	hi_polycrank.cc
+	regulator_polycrank.cc
+	sg_polycrank.cc
 )
 
-target_link_libraries(edp_polycrank kinematicspolycrank edp
-	${COMMON_LIBRARIES})
+target_link_libraries(edp_polycrank kinematicspolycrank edp hi_moxa
+	${COMMON_LIBRARIES}
+	)
 	
 add_library(kinematicspolycrank
 	kinematic_model_polycrank.cc
