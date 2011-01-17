@@ -33,7 +33,7 @@ void set_next_ecps_state::configure(std::string l_mp_2_ecp_next_state, int l_mp_
 	ecp_next_state.mp_2_ecp_next_state_variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
 		if (str_len == 0) {
-			strcpy(ecp_next_state.mp_2_ecp_next_state_string, l_mp_2_ecp_next_state_string);
+			strcpy(reinterpret_cast<char*>(ecp_next_state.mp_2_ecp_next_state_string), l_mp_2_ecp_next_state_string);
 		} else {
 			memcpy(ecp_next_state.mp_2_ecp_next_state_string, l_mp_2_ecp_next_state_string, str_len);
 		}
