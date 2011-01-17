@@ -34,7 +34,7 @@ void task::main_task_algorithm(void)
 				sr_ecp_msg->message(reinterpret_cast<char*>(mp_command.ecp_next_state.mp_2_ecp_next_state_string));
 			else {
 				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-				fg.set_phrase(reinterpret_cast<char*>(mp_command.ecp_next_state.mp_2_ecp_next_state_string));
+				fg.set_phrase(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 				fg.Move();
 			}
 

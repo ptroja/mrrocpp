@@ -242,7 +242,7 @@ void fsautomat::main_task_algorithm(void)
 
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
-			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+			path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
 			//tig->initiate_pose_list();
@@ -266,7 +266,7 @@ void fsautomat::main_task_algorithm(void)
 			else //moj przypadekl -> z pliku
 			{
 				std::string path(mrrocpp_network_path);
-				path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 				//	sg->get_type_for_smooth_xml(path.c_str());
 				//
 				//	sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
@@ -283,7 +283,7 @@ void fsautomat::main_task_algorithm(void)
 			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 			if (size > 3)
 				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
 			else
@@ -291,17 +291,17 @@ void fsautomat::main_task_algorithm(void)
 			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 			gag->configure(gen_args[0], (unsigned int) gen_args[1], -10);
 			gag->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 			go_st->configure(gen_args[0], (int) gen_args[1]);
 			go_st->execute();
 		}

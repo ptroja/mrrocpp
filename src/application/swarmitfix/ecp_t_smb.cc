@@ -53,7 +53,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 
 		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{

@@ -60,7 +60,7 @@ char* ecp_mp_message::robotPositionToString(double& par0, double& par1, double& 
 }
 
 
-std::vector<double> ecp_mp_message::stringToRobotPosition(uint8_t* str){
+std::vector<double> ecp_mp_message::stringToRobotPosition(uint32_t* str){
 
 	std::cout << "STRING TO DOUBLE TRANSFORM" << std::endl;
 
