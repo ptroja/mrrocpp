@@ -287,6 +287,7 @@ if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 			//sg->calculate();
 			//sg->interpolate();
 			std::cout<<"move"<<std::endl;
+			sg->calculate_interpolate();
 			sg->Move();//changed askubis
 			std::cout<<"after move"<<std::endl;
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {

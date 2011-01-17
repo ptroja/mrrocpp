@@ -67,7 +67,7 @@ void generator::Move()
 	move_init();
 
 	if (!first_step() || (!ecp_t.mp_buffer_receive_and_send())) {
-		std::cout<<first_step()<<" "<<ecp_t.mp_buffer_receive_and_send()<<std::endl;
+		std::cout<<"wynikfirststepa"<<first_step()<<" "<<ecp_t.mp_buffer_receive_and_send()<<std::endl;
 		return; // Warunek koncowy spelniony w pierwszym kroku
 	}
 
