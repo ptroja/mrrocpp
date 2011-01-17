@@ -56,7 +56,7 @@ int set_ui_busy_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCallb
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_BUSY);
+	interface.set_ui_state_notification(UI_N_BUSY);
 
 	return (Pt_CONTINUE);
 }
@@ -67,62 +67,9 @@ int set_ui_ready_state_notification(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	set_ui_state_notification(UI_N_READY);
+	interface.set_ui_state_notification(UI_N_READY);
 
 	return (Pt_CONTINUE);
-}
-
-int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
-{
-	if (new_notifacion != interface.notification_state) {
-		int pt_res = PtEnter(0);
-
-		interface.notification_state = new_notifacion;
-
-		switch (new_notifacion)
-		{
-			case UI_N_STARTING:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "STARTING", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				break;
-			case UI_N_READY:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "READY", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_BLUE, 0);
-				break;
-			case UI_N_BUSY:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "BUSY", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_EXITING:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "EXITING", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_MAGENTA, 0);
-				break;
-			case UI_N_COMMUNICATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "COMMUNICATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_SYNCHRONISATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "SYNCHRONISATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-			case UI_N_PROCESS_CREATION:
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_TEXT_STRING, "PROCESS CREATION", 0);
-				PtSetResource(ABW_PtLabel_ready_busy, Pt_ARG_COLOR, Pg_RED, 0);
-				break;
-		}
-
-		PtDamageWidget(ABW_PtLabel_ready_busy);
-		PtFlush();
-
-		if (pt_res >= 0)
-			PtLeave(0);
-
-		return 1;
-
-	}
-
-	return 0;
-
 }
 
 // zamyka okno proces control
@@ -672,6 +619,7 @@ int close_base_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 
 }
 
+// Moved to qt Mainwindow
 int quit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -937,6 +885,7 @@ int start_file_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 	return (Pt_CONTINUE);
 }
 
+// moved to ui-qt interface
 int clear_console(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 {
 
@@ -961,6 +910,7 @@ int clear_console(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
+// moved to ui-qt interface
 // zatrzymuje zadanie, zabija procesy
 int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
@@ -978,6 +928,7 @@ int unload_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
+// moved to ui-qt interface
 // najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
 
 int slay_all(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -1200,6 +1151,7 @@ int close_choose_option_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackI
 
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1245,6 +1197,7 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	return (Pt_CONTINUE);
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1261,6 +1214,7 @@ int EDP_all_robots_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t
 
 }
 
+// moved to ui-qt interface
 int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1277,6 +1231,7 @@ int EDP_all_robots_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *
 
 }
 
+// moved to ui-qt interface
 int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1284,12 +1239,13 @@ int MPup(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
-	interface.main_eb.command(boost::bind(&ui::common::Interface::MPup_int, &interface));
+	interface.main_eb->command(boost::bind(&ui::common::Interface::MPup_int, &interface));
 
 	return (Pt_CONTINUE);
 
 }
 
+// moved to ui-qt interface
 int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1336,6 +1292,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 }
 
+// moved to ui-qt interface
 int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1365,6 +1322,7 @@ int pulse_start_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 }
 
+// moved to ui-qt interface
 int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1387,6 +1345,7 @@ int pulse_stop_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 
 }
 
+// moved to ui-qt interface
 int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1409,6 +1368,7 @@ int pulse_pause_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinf
 
 }
 
+// moved to ui-qt interface
 int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1431,6 +1391,7 @@ int pulse_resume_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 }
 
+// moved to ui-qt interface
 int pulse_trigger_mp(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1584,6 +1545,7 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1607,6 +1569,7 @@ int all_robots_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, Pt
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1631,6 +1594,7 @@ int all_robots_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1654,6 +1618,7 @@ int all_robots_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {
@@ -1678,6 +1643,7 @@ int all_robots_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, P
 
 }
 
+// moved to ui-qt interface
 int all_robots_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 
 {

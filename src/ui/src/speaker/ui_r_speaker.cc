@@ -35,7 +35,7 @@ int UiRobot::edp_create_int()
 
 {
 
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
+	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	//char tmp_string[100];
 	//char tmp2_string[100];
@@ -62,7 +62,8 @@ int UiRobot::edp_create_int()
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 
-				ui_ecp_robot = new ui::speaker::EcpRobot(&state.edp, *interface.config, *interface.all_ecp_msg);
+				ui_ecp_robot
+						= new ui::speaker::EcpRobot(interface, &state.edp, *interface.config, *interface.all_ecp_msg);
 				state.edp.pid = ui_ecp_robot->get_EDP_pid();
 
 				if (state.edp.pid < 0) {

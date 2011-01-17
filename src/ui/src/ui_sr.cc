@@ -30,7 +30,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_class.h"
-#include "ui/src/ui_ecp.h"
+//#include "ui/src/ui_ecp.h"
 #include "ui/src/ui_sr.h"
 
 #include "base/lib/mis_fun.h"
@@ -39,15 +39,6 @@
 #include "base/lib/configurator.h"
 
 #include "base/lib/sr/srlib.h"
-
-#if !defined(__QNXNTO__)
-/* Local headers */
-#include "ablibs.h"
-#include "abimport.h"
-#include "proto.h"
-#include <Pt.h>
-#include <Ph.h>
-#endif
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"

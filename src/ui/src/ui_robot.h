@@ -10,11 +10,14 @@
 
 #include "ui/src/ui.h"
 
+
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 class Interface;
+
 class WndBase;
 
 typedef std::map <std::string, WndBase*> WndBase_t;

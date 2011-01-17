@@ -17,13 +17,13 @@
 namespace mrrocpp {
 namespace ui {
 namespace common {
-
+class Interface;
 // ---------------------------------------------------------------
 class EcpRobotDataPort
 {
 
 public:
-
+	Interface& interface;
 	ecp::common::robot::ecp_robot *the_robot;
 
 	// by Y - do odczytu stanu poczatkowego robota
@@ -31,7 +31,7 @@ public:
 	virtual void execute_motion(void);
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobotDataPort(); // Konstruktor
+	EcpRobotDataPort(Interface& _interface); // Konstruktor
 
 	virtual ~EcpRobotDataPort();
 
