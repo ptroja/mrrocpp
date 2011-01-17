@@ -676,7 +676,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	assert( dcount == sizeof( messip_reply_channel_create_t ) );
 
 	/*--- Channel creation failed ? ---*/
-	if ( reply.ok =! MESSIP_OK )
+	if ( reply.ok != MESSIP_OK )
 	{
 		close( sockfd );
 		errno = EEXIST;
