@@ -16,7 +16,7 @@ namespace generator {
 using namespace std;
 
 get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	position = vector <double> ();
 	this->axes_num = axes_num;

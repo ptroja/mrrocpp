@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_rubik_grab::tff_rubik_grab(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step)
+	common::generator::generator(_ecp_task), step_no(step)
 {
 }
 

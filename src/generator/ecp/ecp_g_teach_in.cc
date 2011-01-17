@@ -37,7 +37,7 @@ namespace generator {
 // ####################################################################################################
 
 teach_in::teach_in(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();

@@ -33,7 +33,7 @@ namespace generator {
 
 
 weight_measure::weight_measure(common::task::task& _ecp_task, double _weight_difference, double _catch_time) :
-	generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
+	common::generator::generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false), catch_time(_catch_time), terminate_state_recognized(false)
 {
 	clear_buffer();

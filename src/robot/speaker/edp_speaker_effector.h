@@ -31,6 +31,7 @@ public:
 	typedef lib::speaker::r_buffer r_buffer ;
 
 	c_buffer instruction;
+	r_buffer reply;
 
 	speak_t *mt_tt_obj;
 

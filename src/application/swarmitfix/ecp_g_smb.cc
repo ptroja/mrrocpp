@@ -15,7 +15,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 pin_lock::pin_lock(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 
 	smb_multi_pin_locking_data_port
@@ -70,7 +70,7 @@ void pin_lock::get_mp_ecp_command()
 
 //constructor with parameters: task and time to sleep [s]
 pin_unlock::pin_unlock(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	smb_multi_pin_locking_data_port
 			= the_robot->port_manager.get_port <lib::smb::multi_pin_locking_td> (lib::smb::MULTI_PIN_LOCKING_DATA_PORT);
@@ -122,7 +122,7 @@ void pin_unlock::get_mp_ecp_command()
 
 //constructor with parameters: task and time to sleep [s]
 pin_rise::pin_rise(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	smb_multi_pin_insertion_data_port
 			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);
@@ -177,7 +177,7 @@ void pin_rise::get_mp_ecp_command()
 
 //constructor with parameters: task and time to sleep [s]
 pin_lower::pin_lower(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	smb_multi_pin_insertion_data_port
 			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);

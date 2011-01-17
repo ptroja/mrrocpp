@@ -16,6 +16,7 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
+#include "base/ecp/ecp_task.h"
 #include "robot/speaker/ecp_r_speaker.h"
 #include "robot/speaker/ecp_t_s.h"
 
@@ -26,11 +27,11 @@ namespace task {
 
 // KONSTRUKTORY
 speaking::speaking(lib::configurator &_config) :
-	task(_config)
+	common::task::_task<ecp::speaker::robot>(_config)
 {
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
-	speak = new generator::speaking(*this, 8);
+	speak = new generator::speaking(*this);
 	speak->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ecp loaded");
@@ -52,7 +53,7 @@ void speaking::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new speaker::task::speaking(_config);
 }

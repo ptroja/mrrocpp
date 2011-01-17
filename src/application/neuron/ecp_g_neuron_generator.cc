@@ -24,7 +24,7 @@ namespace generator {
  * @param _ecp_taks Reference to task configurator.
  */
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	reset();
 }

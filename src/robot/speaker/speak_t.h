@@ -9,7 +9,7 @@ namespace speaker {
 
 class effector;
 
-class speak_t : public common::trans_t
+class speak_t : public common::trans_t<effector::c_buffer>
 {
 private:
 	effector &master;

@@ -44,7 +44,6 @@ public:
 	common::servo_buffer *return_created_servo_buffer();
 
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
-
 };
 
 } // namespace irp6ot

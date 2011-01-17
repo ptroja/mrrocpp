@@ -26,22 +26,21 @@ namespace mrrocpp {
 
 namespace lib {
 class sr_ecp;
-class c_buffer;
-class r_buffer;
+struct c_buffer;
+struct r_buffer;
 class configurator;
 }
 
 namespace ecp {
 namespace common {
+
 namespace generator {
-
 class transparent;
-
 }
 
 namespace task {
-class task;
-} // namespace task
+class task_base;
+}
 
 namespace robot {
 
@@ -221,7 +220,7 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object);
+	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief returns EDP_MASTER_Pid - EDP pid
@@ -248,8 +247,8 @@ public:
 	bool is_synchronised(void) const;
 };
 
-//template<int N = 0>
-class ecp_robot : public ecp_robot_base {
+template<typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
+class _ecp_robot : public ecp_robot_base {
 public:
 	friend class ecp::common::generator::transparent;
 
@@ -260,7 +259,7 @@ private:
 	 * used e.g. in transparent generator in strict coordination
 	 * @param[in] mp_buffer buffer including mp command
 	 */
-	void copy_mp_to_edp_buffer(const lib::c_buffer & mp_buffer)
+	void copy_mp_to_edp_buffer(const ROBOT_COMMAND_T & mp_buffer)
 	{
 		ecp_command = mp_buffer;
 	}
@@ -271,7 +270,7 @@ private:
 	 * used e.g. in transparent generator in strict coordination
 	 * @param[out] mp_buffer buffer including mp reply
 	 */
-	void copy_edp_to_mp_buffer(lib::r_buffer & mp_buffer)
+	void copy_edp_to_mp_buffer(ROBOT_REPLY_T & mp_buffer)
 	{
 		mp_buffer = reply_package;
 	}
@@ -285,7 +284,7 @@ public:
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-	ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
+	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 		ecp_robot_base(_robot_name, _number_of_servos, _edp_section, _config, _sr_ecp)
 	{}
 
@@ -296,7 +295,7 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-	ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task& _ecp_object) :
+	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task_base& _ecp_object) :
 		ecp_robot_base(_robot_name, _number_of_servos, _edp_section, _ecp_object)
 	{}
 
@@ -305,18 +304,28 @@ public:
 	 *
 	 * Calls base class destructor
 	 */
-	virtual ~ecp_robot()
+	virtual ~_ecp_robot()
 	{}
 
 	/**
 	 * @brief command to EDP
 	 */
-	lib::c_buffer ecp_command;
+	ROBOT_COMMAND_T ecp_command;
 
 	/**
-	 * @brief reply from EDP
+	 * @brief Type of the command to be sent to a robot
 	 */
-	lib::r_buffer reply_package;
+	typedef ROBOT_COMMAND_T robot_command_t;
+
+	/**
+	 * @brief Reply from EDP
+	 */
+	ROBOT_REPLY_T reply_package;
+
+	/**
+	 * @brief Type of the reply from a robot
+	 */
+	typedef ROBOT_REPLY_T robot_reply_t;
 
 	/**
 	 * @brief set the EDP command buffer from data_port structures
@@ -391,13 +400,23 @@ public:
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send to EDP_MASTER error");
 			throw ECP_error(lib::SYSTEM_ERROR, 0);
 		}
+	}
 
-		// TODO: this is called much too often (?!)
-		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
+	/**
+	 * @brief checks robot reply_package and detects edp_error
+	 * @return edp_error occurred
+	 */
+	bool is_EDP_error() const
+	{
+		if (reply_package.error_no.error0 || reply_package.error_no.error1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 };
 
-//typedef _ecp_robot<> ecp_robot;
+typedef _ecp_robot<> ecp_robot;
 
 } // namespace robot
 } // namespace common

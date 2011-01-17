@@ -11,12 +11,13 @@
 #define __EDP_E_MOTOR_DRIVEN_H
 
 #include <stdint.h>
+
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "base/kinematics/kinematics_manager.h"
-
+#include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
 
 //#ifdef DOCENT_SENSOR
@@ -36,7 +37,6 @@ class edp_vsp;
 class manip_trans_t;
 class reader_buffer;
 class vis_server;
-class in_out_buffer;
 
 enum STATE
 {
@@ -202,10 +202,10 @@ public:
 	/*!
 	 * \brief object to store output and input data
 	 *
-	 * It is used for the purpose of govering of input data form the hardware
+	 * It is used for the purpose of governing of input data form the hardware
 	 * and transmission of output data to the hardware
 	 */
-	boost::shared_ptr<in_out_buffer> in_out_obj;
+	in_out_buffer in_out_obj;
 
 	/*!
 	 * \brief object to handle measurements
@@ -380,7 +380,7 @@ public:
 	/*!
 	 * \brief method to create threads other then EDP master thread.
 	 *
-	 * It implemented for the puropose of the specific EDP effector, choosing the suitable components (e.g. servo_buffer, transformation etc.)
+	 * It implemented for the purpose of the specific EDP effector, choosing the suitable components (e.g. servo_buffer, transformation etc.)
 	 */
 	void hi_create_threads();
 
@@ -475,6 +475,9 @@ public:
 	 * It does not use extra transformation thread
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	lib::c_buffer instruction;
+	lib::r_buffer reply;
 };
 
 } // namespace common

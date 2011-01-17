@@ -42,7 +42,7 @@ public:
 	 * @brief constructor called from ECP
 	 * @param _ecp_object ecp tak object reference
 	 */
-	robot(common::task::task& _ecp_object);
+	robot(common::task::task_base& _ecp_object);
 
 };
 

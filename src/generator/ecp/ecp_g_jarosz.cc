@@ -155,7 +155,7 @@ bool linear::first_step()
 
 bool linear::next_step()
 {
-	int i; // licznik kolejnych wspolrzednych wektora [0..5]
+	size_t i; // licznik kolejnych wspolrzednych wektora [0..5]
 
 	// Kontakt z MP
 	if (node_counter == td.interpolation_node_no + 1) { // Koniec odcinka
@@ -244,19 +244,19 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 {
 	td = tr_des;
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		ta[i] = time_a[i];
 		if ((ta[i] = time_a[i]) <= 0 || ta[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		tb[i] = time_b[i];
 		if ((tb[i] = time_b[i]) <= 0 || tb[i] > 1)
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_TIME_SPECIFICATION);
 	}
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -266,7 +266,7 @@ linear_parabolic::linear_parabolic(common::task::task& _ecp_task, lib::trajector
 		v_max_joint[i] = 1.5;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
-	for (int i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -386,8 +386,6 @@ bool linear_parabolic::first_step()
 
 bool linear_parabolic::next_step()
 {
-	int i; // licznik kolejnych wspolrzednych wektora [0..5]
-
 	char messg[128]; // komunikat do SR
 
 	// ---------------------------------   FIRST INTERVAL    ---------------------------------------
@@ -400,13 +398,13 @@ bool linear_parabolic::next_step()
 		switch (td.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					prev_s[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
@@ -458,7 +456,7 @@ bool linear_parabolic::next_step()
 			the_robot->ecp_command.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.interpolation_type = lib::MIM;
-			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+			for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
@@ -490,7 +488,7 @@ bool linear_parabolic::next_step()
 			the_robot->ecp_command.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.interpolation_type = lib::MIM;
-			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+			for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				double s = calculate_s((double) node_counter / td.interpolation_node_no, ta[i], tb[i]);
 				the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 						= the_robot->reply_package.arm.pf_def.arm_coordinates[i] + s * td.coordinate_delta[i];
@@ -699,13 +697,13 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 	td = tr_des;
 	int tf = td.interpolation_node_no;
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		A1[i] = vp[i];
 		A2[i] = ((3.0 * td.coordinate_delta[i]) / (tf * tf)) - (2.0 * vp[i]) / tf - (vk[i] / tf);
 		A3[i] = (((-2.0) * td.coordinate_delta[i]) / (tf * tf * tf)) + ((vk[i] + vp[i]) / (tf * tf));
 	} // end:for
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -715,7 +713,7 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 		v_max_joint[i] = 1.5;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
-	for (int i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 3; i++) {
 		a_max_zyz[i] = 100.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i + 3] = 100.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
@@ -742,8 +740,6 @@ cubic::cubic(common::task::task& _ecp_task, lib::trajectory_description tr_des, 
 
 bool cubic::next_step()
 {
-	int i; // licznik kolejnych wsp�lrzednych wektora [0..lib::MAX_SERVOS_NR]
-
 	char messg[128]; // komunikat do SR
 
 
@@ -756,13 +752,13 @@ bool cubic::next_step()
 		switch (td.arm_type)
 		{
 			case lib::MOTOR:
-				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
 
 			case lib::JOINT:
-				for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+				for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 					A0[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 				} // end:for
 				break;
@@ -813,7 +809,7 @@ bool cubic::next_step()
 			the_robot->ecp_command.set_arm_type = lib::MOTOR;
 			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.interpolation_type = lib::MIM;
-			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+			for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (lib::EDP_STEP
 						* the_robot->ecp_command.motion_steps * lib::EDP_STEP
 						* the_robot->ecp_command.motion_steps));
@@ -844,7 +840,7 @@ bool cubic::next_step()
 			the_robot->ecp_command.set_arm_type = lib::JOINT;
 			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 			the_robot->ecp_command.interpolation_type = lib::MIM;
-			for (i = 0; i < lib::MAX_SERVOS_NR; i++) {
+			for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 				acc[i] = (2.0 * A2[i] + 6.0 * A3[i] * (node_counter)) * (1.0 / (lib::EDP_STEP
 						* (the_robot->ecp_command.motion_steps) * lib::EDP_STEP
 						* (the_robot->ecp_command.motion_steps)));
@@ -954,7 +950,7 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 	td = tr_des;
 	int tf = td.interpolation_node_no;
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		A1[i] = vp[i];
 		A2[i] = (ap[i]) / 2.0;
 		A3[i] = ((20.0 * td.coordinate_delta[i]) - (((8.0 * vk[i]) + (12.0 * vp[i])) * tf) - ((3.0 * ap[i]) - (ak[i])
@@ -966,7 +962,7 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 						* tf)) / (2.0 * (tf * tf * tf * tf * tf));
 	} // end:for
 
-	for (int i = 0; i < lib::MAX_SERVOS_NR; i++) {
+	for (size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
 		a_max_motor[i] = 100.0;
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych
 		v_max_motor[i] = 120.0;
@@ -976,7 +972,7 @@ quintic::quintic(common::task::task& _ecp_task, lib::trajectory_description tr_d
 		v_max_joint[i] = 1.5;
 		// tablica dopuszczalnych predkosci dla kolejnych osi/wspolrzednych
 	}
-	for (int i = 0; i < 3; i++) {
+	for (size_t i = 0; i < 3; i++) {
 		a_max_zyz[i] = 5.0; // przyspieszenie liniowe koncowki 0.1G
 		a_max_zyz[i + 3] = 5.0; // przyspieszenie katowe koncowki 1rad/s^2
 		// tablica dopuszczalnych przyspieszen dla kolejnych osi/wspolrzednych

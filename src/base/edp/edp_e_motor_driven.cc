@@ -247,7 +247,6 @@ void motor_driven_effector::hi_create_threads()
 {
 	rb_obj = (boost::shared_ptr<reader_buffer>) new reader_buffer(*this);
 	mt_tt_obj = (boost::shared_ptr<manip_trans_t>) new manip_trans_t(*this);
-	in_out_obj = (boost::shared_ptr<in_out_buffer>) new in_out_buffer();
 	vis_obj = (boost::shared_ptr<vis_server>) new vis_server(*this);
 	sb = (boost::shared_ptr<servo_buffer>) return_created_servo_buffer();
 
@@ -525,7 +524,7 @@ void motor_driven_effector::synchronise()
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 {
 	// ustawienie wyjsc binarnych
-	in_out_obj->set_output(instruction.output_values);
+	in_out_obj.set_output(instruction.output_values);
 	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
 	// printf(" OUTPUTS SET\n");
 }
@@ -535,7 +534,7 @@ void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 void motor_driven_effector::get_inputs(lib::r_buffer & local_reply)
 {
 	// odczytanie wejsc binarnych
-	in_out_obj->get_input(&local_reply.input_values, local_reply.analog_input);
+	in_out_obj.get_input(&local_reply.input_values, local_reply.analog_input);
 	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
 	// printf(" INPUTS GET\n");
 }
@@ -892,7 +891,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			//  printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
@@ -906,7 +905,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			//  printf ("catch master thread NonFatal_error_2\n");
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
@@ -923,12 +922,12 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
-			establish_error(err_no_0, err_no_1);
+			establish_error(reply, err_no_0, err_no_1);
 			//     printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
@@ -941,7 +940,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
+			establish_error(reply, fe.error0, fe.error1);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;
@@ -1034,7 +1033,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(nfe1.error, OK);
+			establish_error(reply, nfe1.error, OK);
 			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe1.error, 0);
 			// powrot do stanu: GET_SYNCHRO
@@ -1047,7 +1046,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
 			lib::REPLY_TYPE rep_type = reply.reply_type;
-			establish_error(nfe2.error, OK);
+			establish_error(reply, nfe2.error, OK);
 			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe2.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
@@ -1063,12 +1062,12 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
-			establish_error(nfe3.error, OK);
+			establish_error(reply, nfe3.error, OK);
 			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe3.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
-			establish_error(err_no_0, err_no_1);
+			establish_error(reply, err_no_0, err_no_1);
 			msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
@@ -1080,7 +1079,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
 			lib::REPLY_TYPE rep_type = reply.reply_type;
-			establish_error(nfe4.error, OK);
+			establish_error(reply, nfe4.error, OK);
 			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
 			// przywrocenie poprzedniej odpowiedzi
@@ -1095,13 +1094,13 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
 			if (receive_instruction(instruction) != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
-				establish_error(QUERY_EXPECTED, OK);
+				establish_error(reply, QUERY_EXPECTED, OK);
 				reply_to_instruction(reply);
 				printf("QQQ\n");
 				receive_instruction(instruction);
 			}
 			reply.reply_type = lib::ERROR;
-			establish_error(fe.error0, fe.error1);
+			establish_error(reply, fe.error0, fe.error1);
 			reply_to_instruction(reply);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: GET_SYNCHRO
@@ -1165,7 +1164,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
@@ -1179,7 +1178,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// printf ("catch master thread NonFatal_error_2\n");
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
@@ -1196,12 +1195,12 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
-			establish_error(err_no_0, err_no_1);
+			establish_error(reply, err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
@@ -1213,7 +1212,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
+			establish_error(reply, fe.error0, fe.error1);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;

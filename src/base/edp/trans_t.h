@@ -28,7 +28,7 @@ namespace edp {
 namespace common {
 
 /**************************** trans_t *****************************/
-
+template<typename COMMAND_T = lib::c_buffer>
 class trans_t : public boost::noncopyable
 {
 protected:
@@ -36,7 +36,7 @@ protected:
 
 	MT_ORDER trans_t_task;
 	int trans_t_tryb;
-	lib::c_buffer instruction;
+	COMMAND_T instruction;
 
 	virtual void operator()() = 0;
 
@@ -49,9 +49,47 @@ public:
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
 
-	virtual ~trans_t();
+	virtual ~trans_t()
+	{}
 
-	void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const lib::c_buffer& _instruction);
+	void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const COMMAND_T& _instruction)
+	{
+		trans_t_task = nm_task; // force, arm etc.
+		trans_t_tryb = nm_tryb; // tryb dla zadania
+		instruction = _instruction;
+
+		// odwieszenie watku transformation
+		master_to_trans_synchroniser.command();
+
+		// oczekiwanie na zwolniene samafora przez watek trans_t
+		trans_t_to_master_synchroniser.wait();
+
+		// sekcja sprawdzajaca czy byl blad w watku transforamation i ew. rzucajaca go w watku master
+
+		switch (error)
+		{
+			case NonFatal_erroR_1:
+				throw *(NonFatal_error_1*) (error_pointer);
+				break;
+			case NonFatal_erroR_2:
+				throw *(NonFatal_error_2*) (error_pointer);
+				break;
+			case NonFatal_erroR_3:
+				throw *(NonFatal_error_3*) (error_pointer);
+				break;
+			case NonFatal_erroR_4:
+				throw *(NonFatal_error_4*) (error_pointer);
+				break;
+			case Fatal_erroR:
+				throw *(Fatal_error*) (error_pointer);
+				break;
+			case System_erroR:
+				throw *(System_error*) (error_pointer);
+				break;
+			default:
+				break;
+		}
+	}
 };
 /**************************** trans_t *****************************/
 

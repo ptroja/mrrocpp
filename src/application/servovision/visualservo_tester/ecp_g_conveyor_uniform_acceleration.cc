@@ -27,7 +27,7 @@ namespace common {
 namespace generator {
 
 ecp_g_conveyor_uniform_acceleration::ecp_g_conveyor_uniform_acceleration(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
-	generator(ecp_task)
+	common::generator::generator(ecp_task)
 {
 	motion_steps = 30;
 	dt = motion_steps * 0.002;

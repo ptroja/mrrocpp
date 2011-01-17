@@ -689,14 +689,6 @@ c_buffer_arm
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
-		/*! text to speak */
-		char text[lib::MAX_TEXT];
-		/*! prosody of the text to speak */
-		char prosody[lib::MAX_PROSODY];
-	} text_def;
-	//----------------------------------------------------------
 	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//! Give access to boost::serialization framework
@@ -714,9 +706,6 @@ c_buffer_arm
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.arm_frame;
 		ar & pf_def.behaviour;
-
-		//		ar & text_def.text;
-		//		ar & text_def.prosody;
 
 		ar & serialized_command;
 	}
@@ -1009,14 +998,6 @@ r_buffer_arm
 		int16_t gripper_reg_state;
 	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Czy mowi?
-		 *  @todo Translate to English.
-		 */
-		bool speaking;
-	} text_def;
 
 	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
@@ -1032,20 +1013,32 @@ r_buffer_arm
 		ar & pf_def.arm_coordinates;
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.gripper_reg_state;
-		ar & text_def.speaking;
 		ar & serialized_reply;
 	}
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
-struct r_buffer
-{
+struct r_buffer_base {
 	/*! Type of the reply. */
 	REPLY_TYPE reply_type;
 
 	/*! Number of the error (if it occured). */
 	edp_error error_no;
 
+	//! Set default values
+	r_buffer_base();
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply_type;
+		ar & error_no;
+	}
+};
+
+struct r_buffer : r_buffer_base
+{
 	/*!
 	 *  Wartosci wejsc binarnych.
 	 *  @todo Translate to English.
@@ -1081,7 +1074,8 @@ struct r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & reply_type;
+		// serialize base class information
+		ar & boost::serialization::base_object<r_buffer_base>(*this);
 		ar & error_no;
 		ar & input_values;
 		ar & analog_input;

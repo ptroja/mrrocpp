@@ -34,7 +34,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task& _ecp_object) :
+robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
 			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),

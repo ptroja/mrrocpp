@@ -48,7 +48,7 @@ namespace generator {
 
 
 tfg::tfg(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step)
+	common::generator::generator(_ecp_task), step_no(step)
 {
 }
 

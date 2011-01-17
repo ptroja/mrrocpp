@@ -15,7 +15,7 @@ namespace common {
 
 class motor_driven_effector;
 
-class manip_trans_t : public trans_t
+class manip_trans_t : public trans_t<>
 {
 private:
     motor_driven_effector &master;

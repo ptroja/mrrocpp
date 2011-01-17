@@ -22,8 +22,7 @@ namespace common {
 namespace generator {
 
 ecp_visual_servo::ecp_visual_servo(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task) {
-
+	common::generator::generator(_ecp_task) {
 }
 
 ecp_visual_servo::~ecp_visual_servo() {

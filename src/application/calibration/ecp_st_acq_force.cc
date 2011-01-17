@@ -27,10 +27,10 @@ acq_force::acq_force(task::task &_ecp_t) :
 	acquisition(_ecp_t)
 {
 	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
+		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6ot loaded");
 	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
-		sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
+		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6p loaded");
 	}
 
@@ -178,7 +178,7 @@ void acq_force::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-//task* return_created_ecp_task(lib::configurator &_config){
+//task_base* return_created_ecp_task(lib::configurator &_config){
 //	return new kcz_force(_config);
 //}
 

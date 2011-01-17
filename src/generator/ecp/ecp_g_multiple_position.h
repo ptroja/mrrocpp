@@ -32,7 +32,7 @@ namespace generator {
  * @ingroup generators
  */
 template <class Pos, class Inter, class Calc>
-class multiple_position : public generator
+class multiple_position : public common::generator::generator
 {
 protected:
 
@@ -292,7 +292,7 @@ public:
 	 * Constructor.
 	 */
 	multiple_position(common::task::task& _ecp_task) :
-		generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 	{
 		debug = false;
 		angle_axis_absolute_transformed_into_relative = false;

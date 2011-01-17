@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step)
+	common::generator::generator(_ecp_task), step_no(step)
 {
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);

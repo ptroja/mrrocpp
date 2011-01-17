@@ -26,10 +26,10 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	//sg = new common::generator::smooth(*this, true);
@@ -94,7 +94,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new smb::task::swarmitfix(_config);
 }

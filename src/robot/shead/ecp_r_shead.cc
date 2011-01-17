@@ -28,7 +28,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task& _ecp_object) :
+robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _ecp_object),
 			kinematics_manager(),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),

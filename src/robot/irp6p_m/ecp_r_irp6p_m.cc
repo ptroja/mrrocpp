@@ -27,7 +27,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task& _ecp_object) :
+robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS, lib::irp6p_m::EDP_SECTION, _ecp_object),
 			kinematics_manager()
 {

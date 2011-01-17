@@ -84,7 +84,7 @@ void axzb_eih::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new axzb_eih(_config);
 }

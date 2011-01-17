@@ -32,7 +32,7 @@ namespace generator {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 force_tool_change::force_tool_change(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	set_tool_parameters(-0.18, 0.0, 0.25, 0);
 }

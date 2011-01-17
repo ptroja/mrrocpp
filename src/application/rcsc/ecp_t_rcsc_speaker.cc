@@ -26,7 +26,7 @@ namespace task {
 rcsc::rcsc(lib::configurator &_config) :
 	task(_config)
 {
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	speak = new generator::speaking(*this, 8);
@@ -54,7 +54,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new speaker::task::rcsc(_config);
 }

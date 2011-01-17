@@ -28,7 +28,7 @@ using namespace std;
 using namespace logger;
 
 ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds) :
-	generator(ecp_task), ds(ds)
+	common::generator::generator(ecp_task), ds(ds)
 {
 	// TODO Auto-generated constructor stub
 	sensor_m["my_discode_sensor"] = ds;

@@ -20,15 +20,15 @@ namespace task {
 
 // KONSTRUKTORY
 gen_test::gen_test(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	} else if (config.section_name == lib::polycrank::ECP_SECTION) {
-		ecp_m_robot = new polycrank::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new polycrank::robot(*this);
 	} else {
 		// TODO: throw
 	}
@@ -46,7 +46,7 @@ gen_test::gen_test(lib::configurator &_config) :
 	sr_ecp_msg->message("ecp GEN_TEST loaded");
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new common::task::gen_test(_config);
 }

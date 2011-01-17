@@ -36,7 +36,7 @@ namespace common {
 namespace generator {
 
 delta::delta(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 }
 

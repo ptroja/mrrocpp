@@ -38,15 +38,15 @@ teach::teach(lib::configurator &_config) : task(_config)
 {
     if (config.section_name == ECP_SECTION)
     {
-        ecp_m_robot = new irp6ot_m::robot (*this);
+        ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot (*this);
     }
     else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
-        ecp_m_robot = new irp6p_m::robot (*this);
+        ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot (*this);
     }
     else if (config.section_name == ECP_SECTION)
     {
-        ecp_m_robot = new irp6m::robot (*this);
+        ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6m::robot (*this);
     }
     else {
     	fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
@@ -86,8 +86,6 @@ teach::teach(lib::configurator &_config) : task(_config)
 
 void teach::main_task_algorithm(void)
 {
-
-
     switch (ecp_m_robot->robot_name)
     {
     case lib::irp6ot_m::ROBOT_NAME:
@@ -126,7 +124,7 @@ void teach::main_task_algorithm(void)
     ecp_termination_notice();
 }
 
-task* return_created_ecp_task (lib::configurator &_config)
+task_base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new teach(_config);
 }

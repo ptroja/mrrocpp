@@ -38,7 +38,6 @@ namespace common {
 class effector
 {
 protected:
-
 	/*!
 	 * \brief real reply type of EDP process send to ECP process.
 	 *
@@ -51,7 +50,7 @@ protected:
 	 *
 	 * It is used a union of structures for all EDP's
 	 */
-	lib::r_buffer reply;
+	//lib::r_buffer reply;
 
 	/*!
 	 * \brief id of ECP process sending a command.
@@ -180,7 +179,6 @@ protected:
 		// adekwatnej odpowiedzi na zapytanie lub
 		// informacji o tym, ze przyslane polecenie nie moze byc przyjte
 		// do wykonania w aktualnym stanie EDP
-		// int reply_size;     // liczba bajtw wysyanej odpowiedzi
 
 		reply_serialization();
 
@@ -219,13 +217,13 @@ protected:
 	 *
 	 * The error is stored in reply_buffer.
 	 */
-	void establish_error(uint64_t err0, uint64_t err1);
+	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
 public:
 	/*!
 	 * \brief Name of the robot
 	 *
-	 * TFor the identification purpose
+	 * For the identification purpose
 	 */
 	const lib::robot_name_t robot_name;
 
@@ -279,13 +277,6 @@ public:
 	virtual ~effector();
 
 	/*!
-	 * \brief ECP command union.
-	 *
-	 * Command sent by ECP.
-	 */
-	lib::c_buffer instruction;
-
-	/*!
 	 * \brief Pure virtual method (main loop of the the process) to be implemented in child classes.
 	 *
 	 * Typically it is finite state automaton.
@@ -298,6 +289,13 @@ public:
 	 * For the purpose of visualization, measurement registration, force control, etc.
 	 */
 	virtual void create_threads() = 0;
+
+	/*!
+	 * \brief ECP command union.
+	 *
+	 * Command sent by ECP.
+	 */
+	//lib::c_buffer instruction;
 };
 /************************ EDP_EFFECTOR ****************************/
 

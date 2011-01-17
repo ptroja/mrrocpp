@@ -52,7 +52,7 @@ void task::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new festival::task::task(_config);
 }

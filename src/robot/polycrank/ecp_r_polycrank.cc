@@ -22,7 +22,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 {
 }
 
-robot::robot(common::task::task& _ecp_object) :
+robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, lib::polycrank::EDP_SECTION, _ecp_object)
 {
 }

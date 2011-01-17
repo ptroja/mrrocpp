@@ -17,13 +17,13 @@ namespace task {
 
 // KONSTRUKTORY
 swarm_demo::swarm_demo(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
@@ -64,7 +64,7 @@ void swarm_demo::mp_2_ecp_next_state_string_handler(void)
 
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new common::task::swarm_demo(_config);
 }

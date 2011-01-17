@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_gripper_approach::tff_gripper_approach(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
+	common::generator::generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
 {
 }
 

@@ -29,8 +29,9 @@ namespace task {
 
 // KONSTRUKTORY
 dung::dung(lib::configurator &_config) :
-	task(_config) {
-	ecp_m_robot = new irp6p_m::robot(*this);
+	common::task::task(_config)
+{
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 }
 
 void dung::main_task_algorithm(void) {
@@ -49,7 +50,7 @@ void dung::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task_base* return_created_ecp_task(lib::configurator &_config) {
 	return new irp6p_m::task::dung(_config);
 }
 

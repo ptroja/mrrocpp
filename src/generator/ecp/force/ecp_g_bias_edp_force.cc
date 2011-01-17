@@ -33,7 +33,7 @@ namespace generator {
 
 
 bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 }
 

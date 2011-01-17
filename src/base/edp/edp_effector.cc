@@ -123,7 +123,7 @@ bool effector::initialize_communication()
 	return true;
 }
 
-void effector::establish_error(uint64_t err0, uint64_t err1)
+void effector::establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1)
 {
 	reply.reply_type = lib::ERROR;
 	reply.error_no.error0 = err0;

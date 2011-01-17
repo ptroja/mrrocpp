@@ -204,17 +204,17 @@ void effector::interpret_instruction(c_buffer &instruction)
 	switch (instruction.instruction_type)
 	{
 		case lib::SET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			if (!speaking) {
 				mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 			}
 			break;
 		case lib::GET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 			break;
 		case lib::SET_GET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 			// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 			break;
@@ -245,8 +245,8 @@ void effector::get_spoken(bool read_hardware, c_buffer & instruction)
 int effector::speak(const c_buffer & instruction)
 { // add by MAC7
 
-	strcpy(text2speak, instruction.arm.text_def.text);
-	strcpy(prosody, instruction.arm.text_def.prosody);
+	strcpy(text2speak, instruction.text_def.text);
+	strcpy(prosody, instruction.text_def.prosody);
 
 	speaking = true;
 
@@ -336,7 +336,7 @@ void effector::main_loop(void)
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// S to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// printf("ERROR w EDP 1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
@@ -351,7 +351,7 @@ void effector::main_loop(void)
 			// S to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 
 			// printf("ERROR w EDP 2\n");
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
@@ -368,12 +368,12 @@ void effector::main_loop(void)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
-			establish_error(err_no_0, err_no_1);
+			establish_error(reply, err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
@@ -385,7 +385,7 @@ void effector::main_loop(void)
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// S to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
+			establish_error(reply, fe.error0, fe.error1);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
