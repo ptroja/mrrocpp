@@ -280,18 +280,18 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 
 		if (exists("username", _section_name)) {
 			std::string username = value <std::string> ("username", _section_name);
 
-						//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
 				execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
-				execlp("ssh", "ssh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+				execlp("ssh", "ssh", "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		} else {
 			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
@@ -316,7 +316,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			if (!use_ssh) {
 				execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
-				execlp("ssh", "ssh", rsh_spawn_node.c_str(), process_path, NULL);
+				execlp("ssh", "ssh", "-t", rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		}
 
