@@ -32,6 +32,9 @@ class UiRobot;
 namespace irp6p_m {
 class UiRobot;
 }
+namespace polycrank {
+class UiRobot;
+}
 
 namespace common {
 
@@ -127,6 +130,7 @@ public:
 
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6p_m::UiRobot *irp6p_m;
+	polycrank::UiRobot *polycrank;
 
 	/*TR
 	 bird_hand::UiRobot *bird_hand;
@@ -136,8 +140,6 @@ public:
 	 irp6m::UiRobot *irp6m_m;
 	 conveyor::UiRobot *conveyor;
 	 speaker::UiRobot *speaker;
-
-	 polycrank::UiRobot *polycrank;
 	 */
 
 	Interface();

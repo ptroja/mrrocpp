@@ -96,6 +96,11 @@ private slots:
 	void on_actionshead_EDP_Load_triggered();
 	void on_actionshead_EDP_Unload_triggered();
 
+	// polycrank menu
+	void on_actionpolycrank_EDP_Load_triggered();
+	void on_actionpolycrank_EDP_Unload_triggered();
+	void on_actionpolycrank_Move_Joints_triggered();
+
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
 	void on_actionall_EDP_Uload_triggered();

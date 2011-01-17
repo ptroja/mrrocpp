@@ -90,7 +90,7 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 // Przemieszczenie tasmociagu-conveyor MOZE BYC SINGLE LUB MULTI
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-	printf("move arm \n");
+	//printf("move arm \n");
 	//manip_effector::multi_thread_move_arm(instruction);
 	//motor_driven_effector::single_thread_move_arm(instruction);
 	motor_driven_effector::multi_thread_move_arm(instruction);
