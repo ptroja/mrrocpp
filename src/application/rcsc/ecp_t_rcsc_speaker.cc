@@ -41,7 +41,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::speaker::generator::ECP_GEN_SPEAK) {
-		speak->configure(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		speak->configure(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 		speak->Move();
 
 	}

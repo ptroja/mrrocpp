@@ -85,7 +85,8 @@ public:
 	 * @param[in] local_current_joints Current (in fact previous) internal values.
 	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
 	 */
-	void inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
+	void
+			inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 	/*! Computes platform pose on the base of given _O_S_P.
 	 * @param _O_S_P Position of the middle of the spherical wrist (S) in the O (lower PM platform) reference frame.
@@ -110,6 +111,7 @@ public:
 	 * @return Joints in the form of vector <q1,q2,q3>.
 	 */
 	Vector3d SW_inverse(const Homog4d & _P_W_T);
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace spkm

@@ -1,4 +1,6 @@
 # Recurse into subdirectories.
+
+add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (bird_hand_test)
 add_subdirectory (calibration)
