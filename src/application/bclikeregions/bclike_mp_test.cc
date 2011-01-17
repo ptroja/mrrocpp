@@ -61,10 +61,6 @@ void bclike_mp_test::main_task_algorithm(void){
 //	Set robot to start position (center)
 	vec.clear();
 	vec.assign(ecp::common::task::left, ecp::common::task::left + VEC_SIZE);
-	std::cout << std::endl;
-	for(unsigned int j = 0; j < vec.size(); ++j)
-		std::cout << vec[j] << " ";
-	std::cout << std::endl;
 	tab = msg.robotPositionToString(vec);
 
 	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
@@ -81,27 +77,18 @@ void bclike_mp_test::main_task_algorithm(void){
 			case 0:
 				vec.clear();
 				vec.assign(ecp::common::task::left, ecp::common::task::left + VEC_SIZE);
-				for(unsigned int j = 0; j < vec.size(); ++j)
-					std::cout << vec[j] << " ";
-				std::cout << std::endl;
 				tab = msg.robotPositionToString(vec);
 				sr_ecp_msg->message("RIGHT send");
 				break;
 			case 1:
 				vec.clear();
 				vec.assign(ecp::common::task::right, ecp::common::task::right + VEC_SIZE);
-				for(unsigned int j = 0; j < vec.size(); ++j)
-					std::cout << vec[j] << " ";
-				std::cout << std::endl;
 				tab = msg.robotPositionToString(vec);
 				sr_ecp_msg->message("LEFT send");
 				break;
 			case 2:
 				vec.clear();
 				vec.assign(ecp::common::task::start, ecp::common::task::start + VEC_SIZE);
-				for(unsigned int j = 0; j < vec.size(); ++j)
-					std::cout << vec[j] << " ";
-				std::cout << std::endl;
 				tab = msg.robotPositionToString(vec);
 				sr_ecp_msg->message("START send");
 				break;

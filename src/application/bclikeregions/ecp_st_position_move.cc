@@ -62,11 +62,6 @@ void ecp_st_position_move::conditional_execution(){
 	std::vector<double>vec;
 	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 
-	std::cout << "RECIEVED size = "<< vec.size() << std::endl;
-	for(unsigned int j = 0; j < vec.size(); ++j)
-		std::cout << vec[j] << " ";
-	std::cout << std::endl;
-
 	smooth->reset();
 	smooth->set_absolute();
 

@@ -60,12 +60,12 @@ char* ecp_mp_message::robotPositionToString(double& par0, double& par1, double& 
 }
 
 
-std::vector<double> ecp_mp_message::stringToRobotPosition(char* str){
+std::vector<double> ecp_mp_message::stringToRobotPosition(uint8_t* str){
 
 	std::cout << "STRING TO DOUBLE TRANSFORM" << std::endl;
 
 	for(int i = 0; i < lib::ECP_2_MP_STRING_SIZE; ++i)
-		std::cout << str[i] << ":";
+		std::cout << (char)str[i] << ":";
 	std::cout << std::endl;
 
 	std::vector<double> ret;

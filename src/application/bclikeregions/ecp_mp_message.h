@@ -51,7 +51,7 @@ public:
 	 * @param str pointer to matrix first element
 	 * @return vector with read position
 	 */
-	std::vector<double> stringToRobotPosition(char *str);
+	std::vector<double> stringToRobotPosition(uint8_t* str);
 	/**
 	 * Method converting MRROC++<->FraDIA communication structure and
 	 * actual robot position to matrix of char
