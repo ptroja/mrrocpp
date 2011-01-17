@@ -9,6 +9,7 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/polycrank/const_polycrank.h"
+#include "robot/conveyor/const_conveyor.h"
 
 #include "base/ecp/ecp_task.h"
 
@@ -30,7 +31,14 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = false;
 		postument = true;
-		polycrank = false;
+		poly = false;
+		conv = false;
+
+		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+		sgeneuler->set_debug(true);
+
+		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+		sgenangle->set_debug(true);
 
 	} else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 7);
@@ -41,7 +49,15 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = true;
 		postument = false;
-		polycrank = false;
+		poly = false;
+		conv = false;
+
+		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+		sgeneuler->set_debug(true);
+
+		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+		sgenangle->set_debug(true);
+
 	} else if (_ecp_t.ecp_m_robot->robot_name == lib::polycrank::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 7);
 		sgenjoint->set_debug(true);
@@ -51,14 +67,34 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = false;
 		postument = false;
-		polycrank = true;
+		poly = true;
+		conv = false;
+
+		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+		sgeneuler->set_debug(true);
+
+		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+		sgenangle->set_debug(true);
+
+	} else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
+		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 1);
+		sgenjoint->set_debug(true);
+
+		sgenmotor = new generator::newsmooth(ecp_t, lib::ECP_MOTOR, 1);
+		sgenmotor->set_debug(true);
+
+		track = false;
+		postument = false;
+		poly = false;
+		conv = true;
+
+		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+		sgeneuler->set_debug(true);
+
+		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+		sgenangle->set_debug(true);
+
 	}
-
-	sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-	sgeneuler->set_debug(true);
-
-	sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-	sgenangle->set_debug(true);
 
 	network_path = std::string(ecp_t.mrrocpp_network_path);
 }
@@ -75,7 +111,8 @@ void sub_task_smooth_gen_test::conditional_execution()
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
-		network_path += "src/application/generator_tester/trajectory.trj";
+		//network_path += "src/application/generator_tester/trajectory.trj";
+		network_path = "/root/najnowszy/mrrocpp/src/application/generator_tester/trajectory.trj";
 		sgenjoint->load_trajectory_from_file(network_path.c_str());
 
 		coordinates2[0] = 0.1;
@@ -94,8 +131,9 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.358;
 		coordinates1[5] = -2.538;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (polycrank) {
-		network_path += "src/application/generator_tester/polycrank.trj";
+	} else if (poly) {
+		//network_path += "src/application/generator_tester/polycrank.trj";
+		network_path = "/root/najnowszy/mrrocpp/src/application/generator_tester/polycrank.trj";
 		sgenjoint->load_trajectory_from_file(network_path.c_str());
 
 		coordinates3[0] = 3.500;
@@ -107,6 +145,10 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates3[6] = 3.500;
 
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
+	} else if (conv) {
+		//network_path += "src/application/generator_tester/conveyor.trj";
+		network_path = "/root/najnowszy/mrrocpp/src/application/generator_tester/conveyor.trj";
+		sgenjoint->load_trajectory_from_file(network_path.c_str());
 	}
 
 	if (track) {
@@ -126,7 +168,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.458;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (polycrank) {
+	} else if (poly) {
 		coordinates3[0] = 3.000;
 		coordinates3[1] = 3.000;
 		coordinates3[2] = 3.000;
@@ -155,7 +197,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.658;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (postument) {
+	} else if (poly) {
 		coordinates3[0] = 2.500;
 		coordinates3[1] = 2.500;
 		coordinates3[2] = 2.500;
