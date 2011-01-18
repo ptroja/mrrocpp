@@ -4,7 +4,7 @@
 
 #include "epos.h"
 
-using namespace mrrocpp::edp;
+using namespace mrrocpp::edp::epos;
 
 int main(int argc, char *argv[])
 {
