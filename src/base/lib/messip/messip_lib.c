@@ -1993,7 +1993,7 @@ messip_receive( messip_channel_t * ch,
 #else
 		fprintf(stderr, "OTHER: ");
 #endif
-		fprintf(stderr, "IP packet fragmented: %zd of %zd bytes\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
+		fprintf(stderr, "received IP packet fragmented: %zd of %zd bytes\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
 	}
 	assert( dcount >= sizeof( uint32_t ) );
 	ch->datalenr = dcount - sizeof(uint32_t);
@@ -2288,6 +2288,9 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			return -1;
 		}
 		datalenr += dcount;
+		if(datalenr < len_to_read) {
+			fprintf(stderr, "replied IP packet fragmented: %zd of %zd bytes\n", datalenr, (ssize_t) (sizeof( datareply ) + len_to_read));
+		}
 	}
 
 	if ( len_to_read < datareply.datalen )
