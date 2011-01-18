@@ -18,7 +18,7 @@
 #include "base/lib/sr/srlib.h"
 #include "base/ecp/ecp_task.h"
 #include "robot/speaker/ecp_r_speaker.h"
-#include "robot/speaker/ecp_t_s.h"
+#include "robot/speaker/ecp_t_speak.h"
 
 namespace mrrocpp {
 namespace ecp {
