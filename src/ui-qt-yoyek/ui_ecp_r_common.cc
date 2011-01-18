@@ -145,7 +145,7 @@ void EcpRobot::set_kinematic(uint8_t kinematic_model_no)
 	// Zlecenie zapisu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction_type = lib::SET;
 	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
+	ecp->ecp_command.robot_model.type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 	ecp->ecp_command.get_robot_model_type = lib::ARM_KINEMATIC_MODEL; // ROBOT_MODEL
 
 	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = kinematic_model_no;
@@ -167,7 +167,7 @@ void EcpRobot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 			* sizeof(uint8_t));
 	ecp->ecp_command.instruction_type = lib::SET;
 	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::SERVO_ALGORITHM; //
+	ecp->ecp_command.robot_model.type = lib::SERVO_ALGORITHM; //
 	ecp->ecp_command.get_robot_model_type = lib::SERVO_ALGORITHM; //
 	execute_motion();
 }

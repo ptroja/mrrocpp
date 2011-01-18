@@ -245,7 +245,7 @@ bool vis_sac_lx::first_step()
 
 	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
 	//FRAME; //XYZ_EULER_ZYZ; //POSE_FORCE_TORQUE_AT_FRAME;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	//the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE; //RELATIVE;
 	the_robot->ecp_command.instruction.interpolation_type= lib::MIM; //TCIM

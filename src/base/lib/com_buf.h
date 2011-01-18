@@ -622,6 +622,14 @@ struct
 #endif
 c_buffer_robot_model
 {
+	//! Constructor set default discriminant type
+	c_buffer_robot_model() :
+		type(TOOL_FRAME)
+	{}
+
+	/*! Tool definition type - setting. */
+	ROBOT_MODEL_SPECIFICATION type;
+
 	//----------------------------------------------------------
 	struct
 	{
@@ -656,12 +664,25 @@ c_buffer_robot_model
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & tool_frame_def.tool_frame;
-		ar & kinematic_model.kinematic_model_no;
-		ar & servo_algorithm.servo_algorithm_no;
-		ar & servo_algorithm.servo_parameters_no;
-		ar & force_tool.position;
-		ar & force_tool.weight;
+		ar & type;
+		switch (type) {
+			case TOOL_FRAME:
+				ar & tool_frame_def.tool_frame;
+				break;
+			case ARM_KINEMATIC_MODEL:
+				ar & kinematic_model.kinematic_model_no;
+				break;
+			case SERVO_ALGORITHM:
+				ar & servo_algorithm.servo_algorithm_no;
+				ar & servo_algorithm.servo_parameters_no;
+				break;
+			case FORCE_TOOL:
+				ar & force_tool.position;
+				ar & force_tool.weight;
+				break;
+			default:
+				break;
+		}
 	}
 } c_buffer_robot_model_t;
 
@@ -725,8 +746,6 @@ struct c_buffer
 	uint8_t set_type;
 	/*! Type of the GET instruction. */
 	uint8_t get_type;
-	/*! Tool definition type - setting. */
-	ROBOT_MODEL_SPECIFICATION set_robot_model_type;
 	/*! Tool definition type - reading. */
 	ROBOT_MODEL_SPECIFICATION get_robot_model_type;
 	/*! Definition type of the end-effector's given position. */
@@ -784,7 +803,6 @@ struct c_buffer
 		ar & instruction_type;
 		ar & set_type;
 		ar & get_type;
-		ar & set_robot_model_type;
 		ar & get_robot_model_type;
 		ar & set_arm_type;
 		ar & get_arm_type;
@@ -1076,7 +1094,6 @@ struct r_buffer : r_buffer_base
 	{
 		// serialize base class information
 		ar & boost::serialization::base_object<r_buffer_base>(*this);
-		ar & error_no;
 		ar & input_values;
 		ar & analog_input;
 		ar & controller_state;

@@ -90,7 +90,7 @@ void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_ve
 {
 	ecp->ecp_command.instruction_type = lib::SET;
 	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
 	lib::Homog_matrix tmp;
@@ -108,7 +108,7 @@ void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vect
 {
 	ecp->ecp_command.instruction_type = lib::SET;
 	ecp->ecp_command.set_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
 	lib::Homog_matrix tmp;
@@ -127,7 +127,7 @@ void EcpRobot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction_type = lib::GET;
 	ecp->ecp_command.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
 	execute_motion();
@@ -145,7 +145,7 @@ void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 	ecp->ecp_command.instruction_type = lib::GET;
 	ecp->ecp_command.get_type = ROBOT_MODEL_DEFINITION; // ROBOT_MODEL
-	ecp->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
 	execute_motion();

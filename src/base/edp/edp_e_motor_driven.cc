@@ -345,7 +345,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	//	fprintf(stderr, "\tget_type: %d\n", instruction.get_type);
 	//	fprintf(stderr, "\tget_robot_model_type: %d\n", instruction.get_robot_model_type);
 	//	fprintf(stderr, "\tset_type: %d\n", instruction.set_type);
-	//	fprintf(stderr, "\tset_robot_model_type: %d\n", instruction.set_robot_model_type);
+	//	fprintf(stderr, "\trobot_model.type: %d\n", instruction.set_robot_model_type);
 
 	// interpretuje otrzymana z ECP instrukcje;
 	// wypelnaia struktury danych TRANSFORMATORa;
@@ -668,7 +668,7 @@ void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::ARM_KINEMATIC_MODEL:
 			//printf("ARM_KINEMATIC_MODEL\n");

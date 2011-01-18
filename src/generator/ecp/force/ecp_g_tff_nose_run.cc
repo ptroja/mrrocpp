@@ -123,7 +123,7 @@ bool tff_nose_run::first_step()
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
 	//	the_robot->ecp_command.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.set_robot_model_type = lib::TOOL_FRAME;
+	the_robot->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	the_robot->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.set_arm_type = lib::PF_VELOCITY;
 	the_robot->ecp_command.get_arm_type = lib::FRAME;

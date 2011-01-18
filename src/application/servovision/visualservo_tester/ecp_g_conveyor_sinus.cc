@@ -52,7 +52,7 @@ bool ecp_g_conveyor_sinus::first_step()
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = motion_steps;
 	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
-	//the_robot->ecp_command.set_robot_model_type = lib::ARM_KINEMATIC_MODEL;
+	//the_robot->ecp_command.robot_model.type = lib::ARM_KINEMATIC_MODEL;
 
 	//	for (int i = 0; i < 6; i++) {
 	the_robot->ecp_command.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;

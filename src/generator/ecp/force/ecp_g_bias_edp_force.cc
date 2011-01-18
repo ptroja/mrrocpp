@@ -44,7 +44,7 @@ bool bias_edp_force::first_step()
 
 	the_robot->ecp_command.instruction_type = lib::SET;
 	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.set_robot_model_type = lib::FORCE_BIAS;
+	the_robot->ecp_command.robot_model.type = lib::FORCE_BIAS;
 
 	return true;
 }
