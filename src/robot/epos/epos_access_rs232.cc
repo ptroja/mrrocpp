@@ -167,6 +167,59 @@ unsigned int epos_access_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 	return framelen;
 }
 
+void epos_access_rs232::sendCommand(WORD *frame)
+{
+	// RS232 connection version
+	if (ep >=0) {
+		// need LSB of header WORD, contains (len-1). Complete Frame is
+		// (len-1) +3 WORDS long
+		unsigned short len = ((frame[0] & 0x00FF)) + 3;
+		/*
+		 printf("frame[0] = %#x; shifted = %#x; framelength = %d\n",
+		 frame[0], (frame[0] & 0x00FF),  len);
+		 */
+
+		// add checksum to frame
+		frame[len - 1] = CalcFieldCRC(frame, len);
+
+	#ifdef DEBUG
+		printf(">> ");
+		for (int i=0; i<len; ++i) {
+			printf( "%#06x ", frame[i] );
+		}
+		printf("\n");
+	#endif
+
+		/* sending to EPOS */
+		BYTE c;
+
+		//send header:
+		c = (frame[0] & 0xFF00) >> 8; //LSB
+		writeBYTE(c);
+
+		// wait for "Ready Ack 'O'"
+		c = readBYTE();
+
+		if (c != E_OK) {
+			throw epos_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
+		}
+
+		c = (frame[0] & 0x00FF); //MSB
+		writeBYTE(c);
+
+		// header done, data + CRC will follow
+		for (int i = 1; i < len; i++) {
+			writeWORD(frame[i]);
+		}
+
+		// wait for "End Ack 'O'"
+		c = readBYTE();
+		if (c != E_OK) {
+			throw epos_error() << reason("EPOS says: CRCerror!");
+		}
+	}
+}
+
 /*
  *************************************************************
  basic I/O functions

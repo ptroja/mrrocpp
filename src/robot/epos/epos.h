@@ -169,7 +169,7 @@ private:
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
 	 */
-	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex, uint8_t nodeId = 0);
+	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex);
 
 	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 	 *
@@ -178,10 +178,10 @@ private:
 	 * @return object value
 	 */
 	template <class T>
-	T ReadObjectValue(WORD index, BYTE subindex, uint8_t nodeId = 0)
+	T ReadObjectValue(WORD index, BYTE subindex)
 	{
 		WORD answer[8];
-		ReadObject(answer, 8, index, subindex, nodeId);
+		ReadObject(answer, 8, index, subindex);
 
 		// check error code
 		checkEPOSerror(device.E_error);
@@ -223,7 +223,7 @@ private:
 	 * @param subindex object entry subindex of in a dictionary
 	 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
 	 */
-	void WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId = 0);
+	void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
 
 	/*! \brief write object value to EPOS
 	 *

@@ -1232,8 +1232,7 @@ WORD epos_base::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 	return CRC;
 }
 
-unsigned int epos::ReadObject(WORD *ans, unsigned int ans_len,
-		WORD index, BYTE subindex, uint8_t nodeId)
+unsigned int epos::ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex)
 {
 	WORD frame[4];
 
@@ -1292,7 +1291,7 @@ static int SegmentRead(WORD **ptr) {
 
 /* Low-level function to write an object to EPOS memory. Is called by
  writing libEPOS functions. */
-void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId)
+void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 {
 	WORD frame[6];
 

@@ -200,6 +200,70 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 	return framelen;
 }
 
+void epos_access_usb::sendCommand(WORD *frame)
+{
+	// USB connection version
+
+	// need LSB of header WORD, contains (len-1). Complete Frame is
+	// (len-1) + 3 WORDS long
+	unsigned short len = (frame[0] >> 8) + 2;
+
+	// add checksum to frame
+	frame[len - 1] = CalcFieldCRC(frame, len);
+
+	// calculate number of 'DLE' characters
+	unsigned int stuffed = 0;
+	for(int i = 1; i < len-1; i++) {
+		if ((frame[i] & 0x00FF) == 0x90) {
+			stuffed++;
+		}
+		if (((frame[i] & 0xFF00) >> 8) == 0x90) {
+			stuffed++;
+		}
+	}
+
+	// message datagram to write
+	uint8_t datagram[2+2+len*2+stuffed+2]; // DLE,STX,OpCode,Len,len*2+stuffed,CRC
+	unsigned int idx = 0; // current datagram byte index
+
+	datagram[idx++] = 0x90;	// DLE: Data Link Escape
+	datagram[idx++] = 0x02; // STX: Start of Text
+
+	for(int i = 0; i < len; ++i) {
+		// characeter to write
+		uint8_t c;
+
+		// LSB
+		c = frame[i] & 0x00FF;
+		if (c == DLE) {
+			datagram[idx++] = DLE;
+		}
+		datagram[idx++] = c;
+
+		// MSB
+		c = (frame[i] >> 8);
+		if (c == DLE) {
+			datagram[idx++] = DLE;
+		}
+		datagram[idx++] = c;
+	}
+
+#if 0
+	printf(">> ");
+	for (unsigned int i=0; i<idx; ++i) {
+		printf( "0x%02x,", datagram[i] );
+	}
+	printf("\n");
+#endif
+
+	int w = ftdi_write_data(&ftdic, datagram, idx);
+
+	if (w != (int) idx) {
+		fprintf(stderr, "ftdi device write failed (%d/%d chars written): (%s)\n", w, idx, ftdi_get_error_string(&ftdic));
+		throw epos_error() << reason(ftdi_get_error_string(&ftdic));
+	}
+}
+
 } /* namespace epos */
 } /* namespace edp */
 } /* namespace mrrocpp */

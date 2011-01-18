@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	epos_access_usb gateway;
 
 	epos node1(gateway, 1);
-	epos node2(gateway, 2);
+	epos node2(gateway, 6);
 
 	try {
 		gateway.open();
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
 			gettimeofday(&tv1, NULL);
 			int32_t homepos = 0;// e.readHomePosition();
-			uint16_t sw = node1.readSWversion();
+			uint16_t sw = node2.readSWversion();
 			gettimeofday(&tv2, NULL);
 
 			const double delta = (tv2.tv_sec + tv2.tv_usec / 1e6) - (tv1.tv_sec + tv1.tv_usec / 1e6);
