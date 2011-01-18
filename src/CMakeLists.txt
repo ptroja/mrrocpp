@@ -132,10 +132,14 @@ elseif (UBUNTU32BIT)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-        set(BOOST_ROOT "/opt/boost")
+	set(BOOST_ROOT "/opt/boost")
+
 	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
+
+	include(FindPkgConfig)
+	pkg_check_modules(LibFTDI libftdi)
 
 	# Eigen2 is not directly supported by CMake
 	pkg_check_modules(EIGEN2 REQUIRED eigen2)
