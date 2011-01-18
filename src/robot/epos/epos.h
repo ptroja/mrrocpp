@@ -147,12 +147,12 @@ private:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param lenght of answer buffer
+	 * @param length of answer buffer
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
 	 */
-	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex, uint8_t nodeId = 1);
+	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex, uint8_t nodeId = 0);
 
 	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 	 *
@@ -206,7 +206,7 @@ private:
 	 * @param subindex object entry subindex of in a dictionary
 	 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
 	 */
-	void WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId = 1);
+	void WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId = 0);
 
 	/*! \brief write object value to EPOS
 	 *
@@ -243,7 +243,7 @@ private:
 	 */
 	WORD readWORD();
 
-	/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and checksum tests
+	/*! \brief  send command to EPOS, taking care of all necessary 'ack' and checksum tests
 	 *
 	 * @param frame array of WORDs to write
 	 */
@@ -262,17 +262,17 @@ private:
 	 *
 	 * Copied from EPOS Communication Guide, p.8
 	 *
-	 * @param pDataArray pointer to data for checksum calculcation
-	 * @param numberOfWords lenght of the data
+	 * @param pDataArray pointer to data for checksum calculation
+	 * @param numberOfWords length of the data
 	 */
 	WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords) const;
 
 	/*! \brief compare two 16bit bitmasks
 	 *
-	 * @return result of comparision */
+	 * @return result of comparison */
 	bool bitcmp(WORD a, WORD b) const;
 
-	//! USB device indentifiers
+	//! USB device identifiers
 	const int vendor, product, index;
 
 public:
@@ -409,7 +409,7 @@ public:
 	//! write position profile deceleration
 	void writePositionProfileDeceleration(UNSIGNED32 dec);
 
-	//! write position profile quict stop deceleration
+	//! write position profile quick stop deceleration
 	void writePositionProfileQuickStopDeceleration(UNSIGNED32 qsdec);
 
 	//! write position profile max velocity
@@ -430,7 +430,7 @@ public:
 	//! \brief read position profile deceleration
 	UNSIGNED32 readPositionProfileDeceleration();
 
-	//! \brief read position profile quick stop decelration
+	//! \brief read position profile quick stop deceleration
 	UNSIGNED32 readPositionProfileQuickStopDeceleration();
 
 	//! \brief read position profile max velocity
@@ -486,46 +486,46 @@ public:
 	//! \brief write RS232 baudrate
 	void writeRS232Baudrate(UNSIGNED16 val);
 
-	//! \brief read P value of the PID regularor
+	//! \brief read P value of the PID regulator
 	INTEGER16 readP();
 
-	//! \brief read I value of the PID regularor
+	//! \brief read I value of the PID regulator
 	INTEGER16 readI();
 
-	//! \brief read V value of the PID regularor
+	//! \brief read V value of the PID regulator
 	INTEGER16 readD();
 
-	//! \brief read Velocity Feed Forward value of the PID regularor
+	//! \brief read Velocity Feed Forward value of the PID regulator
 	UNSIGNED16 readVFF();
 
 	//! \brief read Acceleration Feed Forward value of the PID regulator
 	UNSIGNED16 readAFF();
 
-	//! \brief write P value of the PID regularor
+	//! \brief write P value of the PID regulator
 	void writeP(INTEGER16 val);
 
-	//! \brief write I value of the PID regularor
+	//! \brief write I value of the PID regulator
 	void writeI(INTEGER16 val);
 
-	//! \brief write D value of the PID regularor
+	//! \brief write D value of the PID regulator
 	void writeD(INTEGER16 val);
 
 	//! \brief write Velocity Feed Forward value of the PID regularor
 	void writeVFF(UNSIGNED16 val);
 
-	//! \brief write Acceleration Feed Forward value of the PID regularor
+	//! \brief write Acceleration Feed Forward value of the PID regulator
 	void writeAFF(UNSIGNED16 val);
 
-	//! \brief read P value of the PI current regularor
+	//! \brief read P value of the PI current regulator
 	INTEGER16 readPcurrent();
 
-	//! \brief read I value of the PI current regularor
+	//! \brief read I value of the PI current regulator
 	INTEGER16 readIcurrent();
 
-	//! \brief write P value of the PI current regularor
+	//! \brief write P value of the PI current regulator
 	void writePcurrent(INTEGER16 val);
 
-	//! \brief write I value of the PI current regularor
+	//! \brief write I value of the PI current regulator
 	void writeIcurrent(INTEGER16 val);
 
 	//! \brief save actual parameters in non-volatile memory
@@ -537,10 +537,10 @@ public:
 	//! \brief write home position
 	void writeHomePosition(INTEGER32 val);
 
-	//! \brief read motor continous current limit
+	//! \brief read motor continuous current limit
 	UNSIGNED16 readMotorContinousCurrentLimit();
 
-	//! \brief write motor continous current limit
+	//! \brief write motor continuous current limit
 	void writeMotorContinousCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor output current limit
@@ -615,7 +615,7 @@ public:
 	/*! \brief as monitorStatus(), but also waits for Homing Attained' signal */
 	void monitorHomingStatus();
 
-	/*! \brief waits for positoning to finish, argument is timeout in
+	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 };
