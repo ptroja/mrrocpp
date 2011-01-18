@@ -608,11 +608,6 @@ struct edp_error
 };
 
 //------------------------------------------------------------------------------
-//                                  c_buffer
-//------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------
 /*! robot_model */
 typedef
 #ifndef USE_MESSIP_SRR
@@ -620,11 +615,11 @@ union
 #else
 struct
 #endif
-c_buffer_robot_model
+_robot_model
 {
 	//! Constructor set default discriminant type
-	c_buffer_robot_model() :
-		type(TOOL_FRAME)
+	_robot_model() :
+		type(INVALID_ROBOT_MODEL)
 	{}
 
 	/*! Tool definition type - setting. */
@@ -684,7 +679,13 @@ c_buffer_robot_model
 				break;
 		}
 	}
-} c_buffer_robot_model_t;
+} robot_model_t;
+
+//------------------------------------------------------------------------------
+//                                  c_buffer
+//------------------------------------------------------------------------------
+
+typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
@@ -860,89 +861,7 @@ struct c_buffer
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef
-#ifndef USE_MESSIP_SRR
-union
-#else
-struct
-#endif
-_r_buffer_robot_model
-{
-	/*!
-	 *  Sposob zdefiniowania narzedzia przy jego odczycie.
-	 *  @todo Translate to English.
-	 */
-	ROBOT_MODEL_SPECIFICATION type;
-
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Macierz reprezentujaca narzedzie wzgledem konca lancucha kinematycznego.
-		 *  @todo Translate to English.
-		 */
-		frame_tab tool_frame;
-	} tool_frame_def;
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Numer modelu kinematyki.
-		 *  @todo Translate to English.
-		 */
-		uint8_t kinematic_model_no;
-	} kinematic_model;
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Numery algorytmow serworegulacji.
-		 *  @todo Translate to English.
-		 */
-		uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
-		/*!
-		 *  Numery zestawu parametrow algorytmow serworegulacji.
-		 *  @todo Translate to English.
-		 */
-		uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
-	} servo_algorithm;
-	//----------------------------------------------------------
-	struct
-	{
-		double position[3];
-		double weight;
-	} force_tool;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & type;
-		switch(type) {
-			case TOOL_FRAME:
-				ar & tool_frame_def.tool_frame;
-				break;
-			case ARM_KINEMATIC_MODEL:
-				ar & kinematic_model.kinematic_model_no;
-				break;
-			case SERVO_ALGORITHM:
-				ar & servo_algorithm.servo_algorithm_no;
-				ar & servo_algorithm.servo_parameters_no;
-				break;
-			case FORCE_TOOL:
-				ar & force_tool.position;
-				ar & force_tool.weight;
-				break;
-			default:
-				// No parameters are not required
-				break;
-		}
-	}
-
-} r_buffer_robot_model_t;
+typedef robot_model_t r_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 typedef struct _controller_state_t
