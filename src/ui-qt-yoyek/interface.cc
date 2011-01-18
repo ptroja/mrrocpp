@@ -20,6 +20,9 @@
 #include "shead/ui_r_shead.h"
 #include "irp6ot_m/ui_r_irp6ot_m.h"
 #include "irp6p_m/ui_r_irp6p_m.h"
+#include "polycrank/ui_r_polycrank.h"
+
+extern void catch_signal(int sig);
 
 namespace mrrocpp {
 namespace ui {
@@ -129,6 +132,9 @@ void Interface::init()
 	irp6p_m = new irp6p_m::UiRobot(*this);
 	robot_m[irp6p_m->robot_name] = irp6p_m;
 
+	polycrank = new polycrank::UiRobot(*this);
+	robot_m[polycrank->robot_name] = polycrank;
+
 	/* TR
 	 bird_hand = new bird_hand::UiRobot(*this);
 	 robot_m[bird_hand->robot_name] = bird_hand;
@@ -150,9 +156,6 @@ void Interface::init()
 
 	 speaker = new speaker::UiRobot(*this);
 	 robot_m[speaker->robot_name] = speaker;
-
-	 polycrank = new polycrank::UiRobot(*this);
-	 robot_m[polycrank->robot_name] = polycrank;
 	 */
 
 	ui_node_name = sysinfo.nodename;
@@ -185,13 +188,13 @@ void Interface::init()
 
 
 	set_ui_state_notification(UI_N_STARTING);
-	/*TR
-	 signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
-	 signal(SIGALRM, &catch_signal);
-	 signal(SIGSEGV, &catch_signal);
 
-	 signal(SIGCHLD, &catch_signal);
+	signal(SIGINT, &catch_signal);// by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
+	signal(SIGALRM, &catch_signal);
+	signal(SIGSEGV, &catch_signal);
 
+	signal(SIGCHLD, &catch_signal);
+	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)

@@ -41,7 +41,7 @@ void sub_task_smooth_file_from_mp::conditional_execution()
 
 	path = std::string("");
 	sgen->reset();
-	path += ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+	path += ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 	sgen->load_trajectory_from_file(path.c_str());
 
 	if (detect_jerks) {

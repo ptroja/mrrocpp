@@ -35,8 +35,7 @@ private:
 	void ui_notification_signal(QString _string, QColor _color);
 
 private slots:
-	void on_pushButton_l1_clicked();
-	void on_pushButton_l2_clicked();
+
 	void on_timer_slot();
 
 	void ui_notification_slot(QString _string, QColor _color);
@@ -96,6 +95,11 @@ private slots:
 	// shead menu
 	void on_actionshead_EDP_Load_triggered();
 	void on_actionshead_EDP_Unload_triggered();
+
+	// polycrank menu
+	void on_actionpolycrank_EDP_Load_triggered();
+	void on_actionpolycrank_EDP_Unload_triggered();
+	void on_actionpolycrank_Move_Joints_triggered();
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
