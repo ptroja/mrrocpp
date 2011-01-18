@@ -25,6 +25,7 @@ public:
 	~MainWindow();
 
 	void ui_notification(QString _string, QColor _color);
+	void raise_process_control_window();
 
 private:
 	Ui::MainWindow *ui;
@@ -33,12 +34,14 @@ private:
 
 	signals:
 	void ui_notification_signal(QString _string, QColor _color);
+	void raise_process_control_window_signal();
 
 private slots:
 
 	void on_timer_slot();
 
 	void ui_notification_slot(QString _string, QColor _color);
+	void raise_process_control_window_slot();
 
 	// menus
 
