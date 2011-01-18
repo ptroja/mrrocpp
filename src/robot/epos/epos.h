@@ -45,7 +45,7 @@
 #include <stdint.h>  /* int types with given size */
 #include <cmath>
 
-#include <boost/exception.hpp>
+#include <boost/exception/all.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 #include <string>
@@ -106,7 +106,6 @@ struct epos_error : virtual public std::exception, virtual public boost::excepti
 	~epos_error() throw ()
 	{
 	}
-	;
 };
 
 //! reason of an exception
