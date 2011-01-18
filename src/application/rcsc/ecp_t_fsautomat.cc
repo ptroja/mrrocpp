@@ -93,7 +93,8 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
 //TODO: askubis change mrrocpp network path to some path form /build/bin
-	std::string filePath("../../");
+	std::string filePath("../");
+	std::cout<<"opened first time"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	filePath += fileName;
 
@@ -194,6 +195,7 @@ std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 										{
 												axes_num=atoi((char *)argument);
+												std::cout<<"UWAGA!!!! liczba przegubow: !!!! "<<axes_num<<std::endl;
 												sg = new common::generator::newsmooth(*this,lib::ECP_JOINT, axes_num);//changed askubis
 										}
 											xmlFree(argument);
@@ -222,7 +224,7 @@ std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 }
-
+//TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
 	std::cout<<"START FSAUTOMAT ECP"<<std::endl;
@@ -249,7 +251,7 @@ void fsautomat::main_task_algorithm(void)
 
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			//std::string path(mrrocpp_network_path);
-			std::string path("../../");
+			std::string path("../");
 			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
@@ -262,6 +264,7 @@ void fsautomat::main_task_algorithm(void)
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 std::cout<<"ECP GOT NEWSMOOTH"<<std::endl;
 if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
+sg->set_debug(true);
 			if (trjConf) {
 
 				if (ecpLevel) {
@@ -269,12 +272,12 @@ if(sg) std::cout<<"SMOOTH ACTIVE"<<std::endl;
 					load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 					std::cout<<"map after load"<<std::endl;
 				} else {
-					std::cout<<"from file: "<<mrrocpp_network_path << fileName <<std::endl;
+					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< "loading..." <<std::endl;
 					//std::string path(mrrocpp_network_path);
-					std::string path("../../");
+					std::string path("../");
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< " after load " <<std::endl;
+					std::cout<<"from file: "<<path<< " after load " <<std::endl;
 				}
 			}//if
 			else //moj przypadekl -> z pliku
@@ -344,7 +347,7 @@ void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_b
 	//int numOfPoses = trajectory.getNumberOfPoses();
 	//trajectory.showTime();
 	//sg->reset(); // Usuniecie listy pozycji, o ile istnieje
-	sg->load_pose(trajectory);
+	sg->load_absolute_pose(trajectory);
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
@@ -438,6 +441,7 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
+	std::cout<<"askubis ps: "<<ps<<std::endl;
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 
@@ -477,7 +481,7 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					xmlFree(xmlDataLine);
 				}
 			}
-			sg->load_pose((*actTrajectory));
+			sg->load_absolute_pose((*actTrajectory));
 		}
 	}
 	xmlFree(coordinateType);

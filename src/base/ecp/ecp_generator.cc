@@ -62,12 +62,12 @@ void generator::move_init()
 void generator::Move()
 {
 	// Funkcja ruchu dla ECP
-	std::cout<< "in function move" << std::endl;
+	//std::cout<< "in function move" << std::endl;
 
 	move_init();
 
 	if (!first_step() || (!ecp_t.mp_buffer_receive_and_send())) {
-		std::cout<<"wynikfirststepa"<<first_step()<<" "<<ecp_t.mp_buffer_receive_and_send()<<std::endl;
+		//std::cout<<"wynikfirststepa"<<first_step()<<" "<<ecp_t.mp_buffer_receive_and_send()<<std::endl;
 		return; // Warunek koncowy spelniony w pierwszym kroku
 	}
 
@@ -77,7 +77,7 @@ void generator::Move()
 		ecp_t.all_sensors_initiate_reading(sensor_m);
 
 		if (the_robot) {
-			std::cout<< "robot" << std::endl;
+			//std::cout<< "robot" << std::endl;
 			// zlecenie ruchu SET oraz odczyt stanu robota GET
 			if (!(ecp_t.continuous_coordination)) {
 				the_robot->create_command();
@@ -85,7 +85,7 @@ void generator::Move()
 
 			// wykonanie kroku ruchu
 			if (the_robot->communicate_with_edp) {
-				std::cout<< "tuz przed motion" << std::endl;
+				//std::cout<< "tuz przed motion" << std::endl;
 
 				execute_motion();
 

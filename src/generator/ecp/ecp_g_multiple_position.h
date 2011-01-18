@@ -668,13 +668,15 @@ public:
 		return 0;
 	}
     /**
-     * Method load the trajectory_pose object to the pose_vector.
+     * Method load the relative trajectory_pose object to the pose_vector.
      * @param trajectory_pose pose to load
      */
-    void load_pose(Pos trajectory_pose) {
-    	bool first_time = true;
-    	pose_vector.push_back(trajectory_pose);
-    }
+    virtual bool load_relative_pose(Pos & trajectory_pose) = 0;
+    /**
+     * Method load the absolute trajectory_pose object to the pose_vector.
+     * @param trajectory_pose pose to load
+     */
+    virtual bool load_absolute_pose(Pos & trajectory_pose) = 0;
 };
 
 } // namespace generator

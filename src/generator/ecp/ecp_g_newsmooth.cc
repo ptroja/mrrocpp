@@ -348,6 +348,36 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_acceleration, angle_axis_max_velocity, angle_axis_max_acceleration);
 }
 
+bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
+	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  motor_max_velocity, motor_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  angle_axis_max_velocity, angle_axis_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
+	} else {
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}
+	return true;
+}
+
+bool newsmooth::load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
+	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  motor_max_velocity, motor_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  angle_axis_max_velocity, angle_axis_max_acceleration);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
+	} else {
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}
+	return true;
+}
+
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
