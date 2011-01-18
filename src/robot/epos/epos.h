@@ -187,6 +187,7 @@ private:
 		checkEPOSerror(device.E_error);
 
 #ifdef DEBUG
+		T val;
 		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
 #endif
 
@@ -461,7 +462,7 @@ public:
 	//! \brief write D value of the PID regulator
 	void writeD(INTEGER16 val);
 
-	//! \brief write Velocity Feed Forward value of the PID regularor
+	//! \brief write Velocity Feed Forward value of the PID regulator
 	void writeVFF(UNSIGNED16 val);
 
 	//! \brief write Acceleration Feed Forward value of the PID regulator

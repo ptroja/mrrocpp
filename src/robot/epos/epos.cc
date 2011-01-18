@@ -912,7 +912,18 @@ INTEGER32 epos::readTargetPosition()
 std::string epos::readDeviceName()
 {
 	WORD answer[8];
-	ReadObject(answer, 8, 0x1008, 0x00);
+	unsigned int r = ReadObject(answer, 8, 0x1008, 0x00);
+
+	char name[16];
+
+	for (int i = 0; i < 8; ++i) {
+		name[i*2]   = (answer[3+i] & 0xFF);
+		name[i*2+1] = ((answer[3+i] >> 8) & 0xFF);
+	}
+
+	printf("%d: %c%c%c%c%c%c%c%c\n", r,
+			name[0], name[1], name[2], name[3],
+			name[4], name[5], name[6], name[7]);
 
 	std::string str;
 

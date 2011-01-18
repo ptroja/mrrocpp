@@ -12,12 +12,12 @@ int main(int argc, char *argv[])
 	epos_access_usb gateway;
 
 	epos node1(gateway, 1);
-	epos node2(gateway, 6);
+	epos node2(gateway, 2);
 
 	try {
 		gateway.open();
 
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; ; ++i) {
 			struct timeval tv1, tv2;
 
 			gettimeofday(&tv1, NULL);
@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
 			const double delta = (tv2.tv_sec + tv2.tv_usec / 1e6) - (tv1.tv_sec + tv1.tv_usec / 1e6);
 
 			printf("%.6f sec: home %d sw %04x\n", delta, homepos, sw);
+
+			//node2.readDeviceName();
+			std::cout << node2.readActualPosition() << std::endl;
 		}
 
 		gateway.close();
