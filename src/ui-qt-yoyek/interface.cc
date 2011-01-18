@@ -552,9 +552,11 @@ void Interface::reload_whole_configuration()
 
 void Interface::UI_close(void)
 {
-	printf("UI CLOSING\n");
-	delay(100);// czas na ustabilizowanie sie edp
-	ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+	if (ui_state < 2) {
+		printf("UI CLOSING\n");
+		delay(100);// czas na ustabilizowanie sie edp
+		ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+	}
 }
 
 void Interface::abort_threads()

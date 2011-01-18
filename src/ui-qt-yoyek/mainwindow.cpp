@@ -31,6 +31,11 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 
+	// wyłączenie przycisku zamykania okna
+	Qt::WindowFlags flags;
+	flags |= Qt::WindowMaximizeButtonHint;
+	flags |= Qt::WindowMinimizeButtonHint;
+	setWindowFlags(flags);
 }
 
 MainWindow::~MainWindow()
