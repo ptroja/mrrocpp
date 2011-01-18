@@ -303,12 +303,10 @@ int Interface::MPup_int()
 				teachingstate = ui::common::MP_RUNNING;
 
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-				/* TR
-				 pt_res = PtEnter(0);
-				 start_process_control_window(NULL, NULL, NULL);
-				 if (pt_res >= 0)
-				 PtLeave(0);
-				 */
+
+
+				mw->raise_process_control_window();
+
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
 			}
