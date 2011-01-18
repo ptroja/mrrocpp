@@ -23,7 +23,7 @@ namespace common {
 namespace generator {
 
 time::time(common::task::task& _ecp_task, int step):
-	generator (_ecp_task)
+	common::generator::generator (_ecp_task)
 {
     step_no = step;
 }

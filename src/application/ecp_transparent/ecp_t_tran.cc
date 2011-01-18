@@ -47,8 +47,10 @@ tran::tran(lib::configurator &_config) :
 	} else if (config.section_name == lib::conveyor::ECP_SECTION) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new conveyor::robot(*this);
 #if defined(__QNXNTO__)
+	/* TODO: transparent speaker generator not yet supported
 	} else if (config.section_name == lib::speaker::ECP_SECTION) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new speaker::robot(*this);
+	*/
 #endif
 	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6m::robot(*this);

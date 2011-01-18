@@ -28,7 +28,7 @@ namespace task {
 
 
 // Initilization
-time::time(lib::configurator &_config) : task(_config)
+time::time(lib::configurator &_config) : common::task::task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION)

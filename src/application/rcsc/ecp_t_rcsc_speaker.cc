@@ -24,28 +24,25 @@ namespace task {
 
 // KONSTRUKTORY
 rcsc::rcsc(lib::configurator &_config) :
-	task(_config)
+	common::task::_task<ecp::speaker::robot>(_config)
 {
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
-	gt = new common::generator::transparent(*this);
-	speak = new generator::speaking(*this, 8);
+	//gt = new common::generator::transparent(*this);
+	speak = new generator::speaking(*this);
 
 	sr_ecp_msg->message("ecp loaded");
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
-
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->Move();
+		//gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::speaker::generator::ECP_GEN_SPEAK) {
 		speak->configure(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 		speak->Move();
-
 	}
-
 }
 
 }
