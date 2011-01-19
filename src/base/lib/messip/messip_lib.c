@@ -2529,7 +2529,7 @@ messip_reply( messip_channel_t * ch,
 }								// messip_reply
 
 
-#if !defined(__FreeBSD__) && !defined(__APPLE__) && !defined(__MACH__)
+#if !defined(__FreeBSD__) && !(__APPLE__ & __MACH__)
 
 typedef struct
 {
