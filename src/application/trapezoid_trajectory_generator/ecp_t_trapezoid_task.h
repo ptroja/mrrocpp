@@ -11,6 +11,7 @@
 #include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
 #include "ecp_g_trapezoid_generator.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 
@@ -26,7 +27,8 @@ public:
 	void main_task_algorithm();
 
 private:
-	boost::shared_ptr<trapezoid_generator> trapezoid_gen;
+	mrrocpp::ecp::common::generator::newsmooth* cvgenjoint;
+//	boost::shared_ptr<trapezoid_generator> trapezoid_gen;
 };
 
 }

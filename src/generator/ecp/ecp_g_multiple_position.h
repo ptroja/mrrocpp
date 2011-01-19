@@ -315,6 +315,17 @@ public:
 	{
 		this->debug = debug;
 	}
+
+	void set_joint_velocity(const std::vector <double>& joint_velocity)
+	{
+		this->joint_velocity = joint_velocity;
+	}
+
+	void set_joint_acceleration(const std::vector <double>& joint_acceleration)
+	{
+		this->joint_acceleration = joint_acceleration;
+	}
+
 	/**
 	 * Implementation of the first_step method.
 	 */

@@ -38,6 +38,14 @@ private:
 	double accel2;
 	double v_max;
 	double time_v_max;
+	enum {
+		S_INIT, S_ACCEL, S_CONST_SPEED, S_SLOWDOWN, S_STOP
+	}state;
+	int steps_count;
+	static const int STEPS_NUMBER_INIT_STOP=20;
+	double s0;
+	double s;
+
 };
 
 }

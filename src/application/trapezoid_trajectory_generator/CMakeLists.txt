@@ -6,6 +6,7 @@ add_executable(ecp_trapezoid
 target_link_libraries(ecp_trapezoid
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
+	ecp_generators
 	ecp ${COMMON_LIBRARIES}
 )
 

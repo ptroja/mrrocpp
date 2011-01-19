@@ -43,6 +43,8 @@ bool trapezoid_generator::first_step()
 	}
 
 	current_theta_saved = false;
+	state = S_INIT;
+	steps_count = 0;
 
 	log_dbg("trapezoid_generator::first_step() end\n");
 
@@ -56,6 +58,28 @@ bool trapezoid_generator::next_step()
 			current_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		}
 		current_theta_saved = true;
+	}
+
+//	double s =
+
+	if (state == S_INIT) {
+		steps_count++;
+		if(steps_count >= STEPS_NUMBER_INIT_STOP){
+			steps_count=0;
+			state = S_ACCEL;
+		}
+	} else if (state == S_ACCEL) {
+
+	} else if (state == S_CONST_SPEED) {
+
+	} else if (state == S_SLOWDOWN) {
+
+	} else if (state == S_ACCEL) {
+		steps_count++;
+		if(steps_count >= STEPS_NUMBER_INIT_STOP){
+			steps_count=0;
+			state = S_ACCEL;
+		}
 	}
 
 	current_arm_coordinates[axis_idx] += 0.01;
