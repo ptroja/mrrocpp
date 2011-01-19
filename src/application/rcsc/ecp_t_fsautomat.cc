@@ -91,16 +91,15 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	}
 
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
-std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
+
 //TODO: askubis change mrrocpp network path to some path form /build/bin
 	std::string filePath("../");
-	std::cout<<"opened first time"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	filePath += fileName;
+	std::cout<<"path: "<<filePath<<" opened first time"<<std::cout;
 
 	// open xml document
 	xmlDocPtr doc = xmlParseFile(filePath.c_str());
-	;
 	if (doc == NULL) {
 		fprintf(stderr, "ERROR in ecp initialization: could not parse file: %s\n", fileName.c_str());
 		return;
@@ -250,7 +249,6 @@ void fsautomat::main_task_algorithm(void)
 		subtasks_conditional_execution();
 
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
-			//std::string path(mrrocpp_network_path);
 			std::string path("../");
 			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 			tig->flush_pose_list();
@@ -272,8 +270,6 @@ sg->set_debug(true);
 					load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 					std::cout<<"map after load"<<std::endl;
 				} else {
-					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< "loading..." <<std::endl;
-					//std::string path(mrrocpp_network_path);
 					std::string path("../");
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
@@ -283,7 +279,6 @@ sg->set_debug(true);
 			else //moj przypadekl -> z pliku
 			{
 				std::cout<<"normal"<<std::endl;
-				//std::string path(mrrocpp_network_path);
 				std::string path("../");
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 					//sg->get_type_for_smooth_xml(path.c_str());
@@ -417,7 +412,7 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 
 void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
-	char *dataLine, *value;
+	//char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 	/*double v[axes_num];

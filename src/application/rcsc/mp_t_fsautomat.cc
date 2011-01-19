@@ -279,7 +279,7 @@ std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat:
 			common::State, ecp_mp::task::task::str_cmp>();
 
 	std::string fileName(config.value <std::string> ("xml_file", "[xml_settings]"));
-	std::string filePath(mrrocpp_network_path);
+	std::string filePath("../");
 	filePath += fileName;
 
 	std::cout << "XML FilePath: " << filePath << std::endl;
