@@ -51,6 +51,17 @@ namespace common {
 
 void sr_buffer::operator()()
 {
+
+	sigset_t set;
+
+	sigemptyset(&set);
+	sigaddset(&set, SIGINT);
+	sigaddset(&set, SIGALRM);
+
+	if (sigprocmask(SIG_BLOCK, &set, NULL) == -1) {
+		perror("SignalProcmask(edp_irp6p_tid)");
+	}
+
 	lib::set_thread_name("sr");
 
 	lib::fd_server_t ch;

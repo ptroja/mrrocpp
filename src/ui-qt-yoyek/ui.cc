@@ -89,17 +89,16 @@ int function_execution_buffer::wait_and_execute()
 
 void feb_thread::operator()()
 {
-#if defined(__QNXNTO__)
+
 	sigset_t set;
 
 	sigemptyset(&set);
 	sigaddset(&set, SIGINT);
 	sigaddset(&set, SIGALRM);
 
-	if (SignalProcmask(0, 0, SIG_BLOCK, &set, NULL) == -1) {
+	if (sigprocmask(SIG_BLOCK, &set, NULL) == -1) {
 		perror("SignalProcmask(edp_irp6p_tid)");
 	}
-#endif
 
 	while (true) {
 		feb.wait_and_execute();

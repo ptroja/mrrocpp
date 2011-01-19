@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>280</y>
+      <y>290</y>
       <width>981</width>
       <height>211</height>
      </rect>
@@ -33,14 +33,27 @@
    <widget class="QLabel" name="notification_label">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>520</y>
+      <x>840</x>
+      <y>540</y>
       <width>141</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>UI_NOTIFICATION</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Position_lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>981</width>
+      <height>27</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -235,7 +248,6 @@
    <addaction name="menuSpecial"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionspkm_EDP_Load">
    <property name="text">
     <string>EDP Load</string>
