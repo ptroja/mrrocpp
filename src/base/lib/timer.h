@@ -10,7 +10,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include <sys/time.h>
+#include <ctime>
 
 namespace mrrocpp {
 namespace lib {
@@ -37,7 +37,7 @@ public:
 
 private:
 	//! Last and current timestamps
-	struct timeval t1, t2;
+	struct timespec t1, t2;
 
 	//! Flag indicating initialization status
 	bool initialized;

@@ -8,7 +8,7 @@
  */
 
 #include <cstdio>
-#include <sys/time.h>
+#include <ctime>
 
 #include "base/lib/timer.h"
 
@@ -23,8 +23,8 @@ timer::timer() :
 timer::timer_status_t timer::start()
 {
 	if (initialized) {
-		if (gettimeofday(&t1, NULL) == -1) {
-			perror("gettimeofday()");
+		if (clock_gettime(CLOCK_REALTIME, &t1) == -1) {
+			perror("clock_gettime()");
 		}
 		started = true;
 		stopped = false;
@@ -40,8 +40,8 @@ timer::timer_status_t timer::stop()
 {
 	if (initialized) {
 		if (started) {
-			if (gettimeofday(&t2, NULL) == -1) {
-				perror("gettimeofday()");
+			if (clock_gettime(CLOCK_REALTIME, &t2) == -1) {
+				perror("clock_gettime()");
 			}
 			// timer_started = false; // by Y
 			stopped = true;
@@ -61,7 +61,7 @@ timer::timer_status_t timer::stop()
 timer::timer_status_t timer::get_time(float & sec)
 {
 	if (stopped) {
-		sec = (t2.tv_sec + t2.tv_usec / 1e6) - (t1.tv_sec + t1.tv_usec / 1e6);
+		sec = (t2.tv_sec + t2.tv_nsec / 1e9) - (t1.tv_sec + t1.tv_nsec / 1e9);
 		last_status = TIME_RETRIVED;
 		return TIME_RETRIVED;
 	} else {
