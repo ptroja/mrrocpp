@@ -35,18 +35,18 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step()
 
 	//vsp_fradia = dynamic_cast<ecp_mp::sensor:fradia_sensor<tracker> *> (sensor_m[ecp_mp::sensor::SENSOR_CVFRADIA]);
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
-	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 2;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = MOTION_STEPS;
+	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 2;
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	// TODO: fix this
@@ -70,7 +70,7 @@ bool ecp_vis_ib_eih_follower_irp6ot::first_step()
 bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints()
 {
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	double t = MOTION_STEPS * 0.002;//TODO 0.002 trzeba zamienic na STEP z odpowiedniej biblioteki
 
@@ -246,9 +246,9 @@ bool ecp_vis_ib_eih_follower_irp6ot::next_step_without_constraints()
 	next_position[6] = 0.0;
 
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(next_position));
-	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
-	//memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, next_position,
+	//memcpy(the_robot->ecp_command.arm.pf_def.arm_coordinates, next_position,
 	//		6 * sizeof(double));
 
 

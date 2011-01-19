@@ -22,10 +22,10 @@ namespace task {
 using namespace std;
 
 ecp_t_discode_sensor_test::ecp_t_discode_sensor_test(mrrocpp::lib::configurator& config) :
-	task(config)
+	common::task::task(config)
 {
 	// TODO Auto-generated constructor stub
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 	logger::log_dbg_enabled = logger::log_enabled = true;
 }
 
@@ -64,7 +64,7 @@ namespace common {
 
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new mrrocpp::ecp::discode_sensor_test::task::ecp_t_discode_sensor_test(config);
 }

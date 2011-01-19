@@ -23,7 +23,8 @@ namespace common {
 namespace task {
 
 bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
-		task(_config){
+	common::task::task(_config)
+{
 	std::cout << "TWORZE BCL SWITCHER" << std::endl;
 
 	//Creating new fradia sensor
@@ -33,11 +34,11 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 
 #ifdef IRP6_OT
-	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
 #endif//IRP6_OT
 
 #ifdef IRP6_P
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t) new ecp::irp6p_m::robot(*this);
 #endif//IRP6_P
 
 	//Adding additional subtasks
@@ -53,7 +54,6 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 
 bcl_t_switcher::~bcl_t_switcher() {
 	std::cout << "ZABIJAM BCL SWITCHER" << std::endl;
-	delete ecp_m_robot;
 }
 
 void bcl_t_switcher::mp_2_ecp_next_state_string_handler(void){
@@ -63,7 +63,7 @@ bcl_fradia_sensor*  bcl_t_switcher::get_vsp_fradia(){
 	return vsp_fradia;
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new bcl_t_switcher(_config);
 }

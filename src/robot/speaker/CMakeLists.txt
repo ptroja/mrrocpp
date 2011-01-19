@@ -13,7 +13,7 @@ if(ROBOT_SPEAKER AND QNXNTO)
 	add_library(ecp_r_speaker ecp_r_speaker.cc)
 
 	add_executable(ecp_speaker
-		ecp_t_s.cc
+		ecp_t_speak.cc
 		ecp_g_speak.cc
 	)
 

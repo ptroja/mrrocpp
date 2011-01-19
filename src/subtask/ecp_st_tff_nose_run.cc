@@ -7,7 +7,7 @@
  */
 
 #include "base/lib/typedefs.h"
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "subtask/ecp_st_tff_nose_run.h"
 

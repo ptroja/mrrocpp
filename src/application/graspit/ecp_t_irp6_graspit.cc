@@ -3,8 +3,11 @@
 #include <unistd.h>
 #include <iostream>
 
+#include "base/lib/configurator.h"
+
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "generator/ecp/ecp_g_constant_velocity.h"
 #include "ecp_t_irp6_graspit.h"
 #include "ecp_mp_t_graspit.h"
@@ -16,13 +19,12 @@ namespace task {
 
 //Constructors
 irp6_grasp::irp6_grasp(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
-
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	}
 
 	cvgenjoint = new generator::constant_velocity(*this, lib::ECP_JOINT, 6);
@@ -82,7 +84,7 @@ void irp6_grasp::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new common::task::irp6_grasp(_config);
 }

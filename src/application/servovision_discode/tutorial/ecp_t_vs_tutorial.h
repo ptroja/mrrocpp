@@ -42,7 +42,7 @@ class ecp_t_vs_tutorial: public mrrocpp::ecp::common::task::task
 {
 public:
 	ecp_t_vs_tutorial(mrrocpp::lib::configurator& configurator);
-	virtual ~ecp_t_vs_tutorial();
+
 	void main_task_algorithm(void);
 
 protected:

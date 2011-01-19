@@ -16,7 +16,7 @@
 
 #include "base/lib/typedefs.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/force/ecp_g_weight_measure.h"
 
@@ -33,7 +33,7 @@ namespace generator {
 
 
 weight_measure::weight_measure(common::task::task& _ecp_task, double _weight_difference, double _catch_time) :
-	generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
+	common::generator::generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
 			initial_weight_counted(false), catch_time(_catch_time), terminate_state_recognized(false)
 {
 	clear_buffer();
@@ -84,10 +84,10 @@ bool weight_measure::first_step()
 {
 	clear_buffer();
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
 
 	return true;
 }

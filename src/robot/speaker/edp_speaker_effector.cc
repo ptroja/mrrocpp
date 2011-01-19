@@ -57,12 +57,9 @@ namespace speaker {
 effector::effector(lib::configurator &_config) :
 	common::effector(_config, lib::speaker::ROBOT_NAME)
 {
-
 	real_reply_type = lib::ACKNOWLEDGE;
-	// inicjacja deskryptora pliku by 7&Y
-	// servo_fd = name_open(lib::EDP_ATTACH_POINT, 0);
 
-	speaking = 0;
+	speaking = false;
 
 	/* Ustawienie priorytetu procesu */
 
@@ -177,11 +174,9 @@ int effector::init()
 
 	return 0;
 }
-;
 
 effector::~effector()
 {
-	;
 	free(piBuffSpeechOut);
 	rtn = snd_mixer_close(mixer_handle);
 	rtn = snd_pcm_close(pcm_handle);
@@ -193,13 +188,14 @@ void effector::create_threads()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::interpret_instruction(lib::c_buffer &instruction)
+void effector::interpret_instruction(c_buffer &instruction)
 {
 	// interpretuje otrzyman z ECP instrukcj;
 	// wypenaia struktury danych TRANSFORMATORa;
 	// przygotowuje odpowied dla ECP
 	// 	printf("interpret instruction poczatek\n");
 	// wstpne przygotowanie bufora odpowiedzi
+
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
@@ -208,17 +204,17 @@ void effector::interpret_instruction(lib::c_buffer &instruction)
 	switch (instruction.instruction_type)
 	{
 		case lib::SET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			if (!speaking) {
 				mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 			}
 			break;
 		case lib::GET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 			break;
 		case lib::SET_GET:
-			reply.arm.text_def.speaking = speaking;
+			reply.speaking = speaking;
 			mt_tt_obj->master_to_trans_t_order(common::MT_MOVE_ARM, 0, instruction);
 			// mt_tt_obj->master_to_trans_t_order(MT_GET_ARM_POSITION, true);
 			break;
@@ -228,12 +224,11 @@ void effector::interpret_instruction(lib::c_buffer &instruction)
 	}
 
 	// printf("interpret instruction koniec\n");
-
 }
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
-lib::REPLY_TYPE effector::rep_type(lib::c_buffer & instruction)
+lib::REPLY_TYPE effector::rep_type(const c_buffer & instruction)
 {
 	// ustalenie formatu odpowiedzi
 	reply.reply_type = lib::ACKNOWLEDGE;
@@ -242,18 +237,18 @@ lib::REPLY_TYPE effector::rep_type(lib::c_buffer & instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-void effector::get_spoken(bool read_hardware, lib::c_buffer *instruction)
+void effector::get_spoken(bool read_hardware, c_buffer & instruction)
 { // MAC7
 	return;
 }
 
-int effector::speak(lib::c_buffer *instruction)
+int effector::speak(const c_buffer & instruction)
 { // add by MAC7
 
-	strcpy(text2speak, (*instruction).arm.text_def.text);
-	strcpy(prosody, (*instruction).arm.text_def.prosody);
+	strcpy(text2speak, instruction.text_def.text);
+	strcpy(prosody, instruction.text_def.prosody);
 
-	speaking = 1;
+	speaking = true;
 
 	if (!initialize_incorrect) {
 		lib::set_thread_priority(pthread_self(), 2);
@@ -270,9 +265,9 @@ int effector::speak(lib::c_buffer *instruction)
 		if (FD_ISSET (snd_pcm_file_descriptor (pcm_handle, SND_PCM_CHANNEL_PLAYBACK), &wfds)) {
 			snd_pcm_plugin_write(pcm_handle, piBuffSpeechOut, mSamples);
 		}
-		n = snd_pcm_plugin_flush(pcm_handle, SND_PCM_CHANNEL_PLAYBACK);
+		snd_pcm_plugin_flush(pcm_handle, SND_PCM_CHANNEL_PLAYBACK);
 	}
-	speaking = 0;
+	speaking = false;
 
 	return 1;
 }
@@ -288,7 +283,7 @@ void effector::main_loop(void)
 			switch (next_state)
 			{
 				case common::GET_INSTRUCTION:
-					switch (receive_instruction())
+					switch (receive_instruction(instruction))
 					{
 						case lib::SET:
 							// printf("jestesmy w set\n"); // MAC7
@@ -298,7 +293,7 @@ void effector::main_loop(void)
 							// printf("jestesmy w set_get\n");
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction();
+							reply_to_instruction(reply);
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 							// okreslenie numeru bledu
@@ -324,9 +319,9 @@ void effector::main_loop(void)
 				case common::WAIT:
 					//  	printf("jestesmy w wait\n");
 
-					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction();
+						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_3(QUERY_EXPECTED);
 					}
@@ -341,10 +336,10 @@ void effector::main_loop(void)
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// S to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// printf("ERROR w EDP 1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
@@ -356,7 +351,7 @@ void effector::main_loop(void)
 			// S to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 
 			// printf("ERROR w EDP 2\n");
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
@@ -373,12 +368,12 @@ void effector::main_loop(void)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(nfe.error, OK);
+			establish_error(reply, nfe.error, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction();
+			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
-			establish_error(err_no_0, err_no_1);
+			establish_error(reply, err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
 			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
@@ -390,7 +385,7 @@ void effector::main_loop(void)
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// S to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(fe.error0, fe.error1);
+			establish_error(reply, fe.error0, fe.error1);
 			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
@@ -413,7 +408,6 @@ effector* return_created_efector(lib::configurator &_config)
 {
 	return new speaker::effector(_config);
 }
-;
 
 } // namespace common
 } // namespace edp

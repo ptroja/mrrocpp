@@ -4,6 +4,9 @@
  *Author: yoyek
  */
 
+#include <iostream>
+
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_bird_hand_test.h"
@@ -15,7 +18,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 bird_hand::bird_hand(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	bird_hand_command_data_port
 			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);

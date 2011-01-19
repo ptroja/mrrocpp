@@ -34,11 +34,11 @@ namespace task {
  *  @{
  */
 
-class ecp_t_objectfollower_pb_eih: public mrrocpp::ecp::common::task::task
+class ecp_t_objectfollower_pb_eih : public mrrocpp::ecp::common::task::task
 {
 public:
 	ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config);
-	virtual ~ecp_t_objectfollower_pb_eih();
+
 	void main_task_algorithm(void);
 
 protected:

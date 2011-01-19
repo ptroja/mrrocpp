@@ -29,7 +29,7 @@ namespace task {
 // KONSTRUKTORY
 playerjoy::playerjoy(lib::configurator &_config) : task(_config)
 {
-    ecp_m_robot = new robot (*this);
+    ecp_m_robot = (boost::shared_ptr<robot_t>) new robot (*this);
 
     sr_ecp_msg->message("ecp loaded");
 

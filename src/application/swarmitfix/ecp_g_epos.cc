@@ -4,6 +4,7 @@
  *Author: yoyek
  */
 
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_epos.h"
@@ -24,7 +25,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 epos_cubic::epos_cubic(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
@@ -103,7 +104,7 @@ bool epos_cubic::next_step()
 
 
 epos_trapezoidal::epos_trapezoidal(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
@@ -182,7 +183,7 @@ bool epos_trapezoidal::next_step()
 
 
 epos_operational::epos_operational(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 
@@ -261,7 +262,7 @@ bool epos_operational::next_step()
 
 
 epos_brake::epos_brake(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 

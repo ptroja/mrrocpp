@@ -12,7 +12,6 @@
 #include "base/ecp/ecp_robot.h"
 #include "robot/spkm/const_spkm.h"
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -103,7 +102,7 @@ public:
 	 * @brief constructor called from ECP
 	 * @param _ecp_object ecp tak object reference
 	 */
-	robot(common::task::task& _ecp_object);
+	robot(common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief set the edp command buffer

@@ -4,6 +4,8 @@
  *Author: yoyek
  */
 
+#include <iostream>
+
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_birdhand_graspit.h"
@@ -15,7 +17,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 bird_hand::bird_hand(common::task::task& _ecp_task) :
-	generator(_ecp_task), MAX_V(8000.0 / (275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI) / 2.0), STEP_NO(1000)
+	common::generator::generator(_ecp_task), MAX_V(8000.0 / (275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI) / 2.0), STEP_NO(1000)
 {
 	bird_hand_command_data_port
 			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);

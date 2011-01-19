@@ -16,7 +16,7 @@ namespace common {
 namespace generator {
 
 transparent::transparent(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	throw_kinematics_exceptions = true;
 }

@@ -15,7 +15,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_dung.h"
@@ -28,8 +29,9 @@ namespace task {
 
 // KONSTRUKTORY
 dung::dung(lib::configurator &_config) :
-	task(_config) {
-	ecp_m_robot = new irp6p_m::robot(*this);
+	common::task::task(_config)
+{
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 }
 
 void dung::main_task_algorithm(void) {
@@ -48,7 +50,7 @@ void dung::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task_base* return_created_ecp_task(lib::configurator &_config) {
 	return new irp6p_m::task::dung(_config);
 }
 
