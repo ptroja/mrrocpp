@@ -1099,13 +1099,15 @@ struct ecp_next_state_t
 {
 	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
 	int mp_2_ecp_next_state_variant;
-	char mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE];
+	uint32_t mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
+
+	char* get_mp_2_ecp_next_state_string();
 
 	//! Serialization of the data structure
 	template <class Archive>

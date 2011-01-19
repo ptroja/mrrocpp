@@ -31,7 +31,7 @@
 #include "base/lib/messip/messip_dataport.h"
 #endif
 
-extern ui::common::busy_flag communication_flag;
+
 
 namespace mrrocpp {
 

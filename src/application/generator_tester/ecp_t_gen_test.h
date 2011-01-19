@@ -11,6 +11,8 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/polycrank/ecp_r_polycrank.h"
+#include "robot/conveyor/ecp_r_conv.h"
 
 #include "ecp_mp_t_gen_test.h"
 #include "ecp_st_smooth_gen_test.h"

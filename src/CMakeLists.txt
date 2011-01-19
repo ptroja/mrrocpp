@@ -6,6 +6,11 @@ MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
 	endif(CONDITION_VALUE)
 ENDMACRO(TARGET_LINK_LIBRARY_IF)
 
+OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
+
+# the RPATH to be used when installing
+# SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
 ## this is currently disabled
 ## as CMake option names duplicates _ROBOT_ENUM values
 # define both CMake option and -D flag for compiler
@@ -127,7 +132,7 @@ elseif (UBUNTU32BIT)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-    set(BOOST_ROOT "/opt/boost")
+        set(BOOST_ROOT "/opt/boost")
 	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
@@ -145,6 +150,7 @@ else (QNXNTO) # Linux, etc.
 	set(USE_MESSIP ON)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
 endif (QNXNTO)
 
 include(FindComedi)
@@ -174,4 +180,13 @@ add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (ui)
 add_subdirectory (application)
+
+# QNX is default MRROC++ target
+if (QNXNTO)
+
+elseif (UBUNTU32BIT)
+
+else (QNXNTO) # Linux, etc.
+	add_subdirectory (ui-qt-yoyek)
+endif (QNXNTO)
 

@@ -108,6 +108,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
+		case SIGHUP:
 			TERMINATED = true;
 			break;
 		case SIGSEGV:
@@ -317,6 +318,7 @@ int main(int argc, char *argv[])
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_shell::catch_signal);
+	signal(SIGHUP, &vsp::int_shell::catch_signal);
 	signal(SIGSEGV, &vsp::int_shell::catch_signal);
 
 	signal(SIGINT, SIG_IGN);

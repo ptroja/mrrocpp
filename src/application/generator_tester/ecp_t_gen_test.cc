@@ -22,6 +22,10 @@ gen_test::gen_test(lib::configurator &_config) :
 		ecp_m_robot = new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
 		ecp_m_robot = new irp6p_m::robot(*this);
+	} else if (config.section_name == lib::polycrank::ECP_SECTION) {
+		ecp_m_robot = new polycrank::robot(*this);
+	} else if (config.section_name == lib::conveyor::ECP_SECTION) {
+		ecp_m_robot = new conveyor::robot(*this);
 	} else {
 		// TODO: throw
 	}

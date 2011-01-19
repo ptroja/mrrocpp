@@ -31,10 +31,10 @@ void task::main_task_algorithm(void)
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_FESTIVAL) {
 
 			if (isTest)
-				sr_ecp_msg->message(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				sr_ecp_msg->message(reinterpret_cast<char*>(mp_command.ecp_next_state.mp_2_ecp_next_state_string));
 			else {
 				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-				fg.set_phrase(mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				fg.set_phrase(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 				fg.Move();
 			}
 

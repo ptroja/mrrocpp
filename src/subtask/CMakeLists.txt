@@ -5,4 +5,3 @@ add_library(ecp_subtasks
 )
 
 target_link_libraries(ecp_subtasks ecp)
-
