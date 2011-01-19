@@ -57,9 +57,7 @@ class velocity_profile {
 		 * @return true if the distance covered in the given pose and axis is equal to 0.
 		 */
 		bool check_if_no_movement(typename std::vector<Pos>::iterator & it, int i) {
-			std::cout<<it->s[i]<<std::endl;
 			if (eq(it->s[i],0.0)) {
-				std::cout<<"ASKUBIS OK"<<std::endl;
 				return true;
 			} else {
 				return false;

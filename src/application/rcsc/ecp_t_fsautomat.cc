@@ -41,6 +41,7 @@
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
+#include "../../base/ecp_mp/ecp_mp_task.h"
 
 #include "base/lib/datastr.h"
 
@@ -90,8 +91,10 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	}
 
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
-
+std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
+//TODO: askubis change mrrocpp network path to some path form /build/bin
 	std::string filePath(mrrocpp_network_path);
+	std::cout<<"opened first time"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	filePath += fileName;
 
@@ -122,7 +125,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 				for (xmlNode *child_node = cur_node->children->children; child_node != NULL; child_node
 						= child_node->next) {
 					if (child_node->type == XML_ELEMENT_NODE
-							&& !xmlStrcmp(child_node->name, (const xmlChar *) "base/ecp")) {
+							&& !xmlStrcmp(child_node->name, (const xmlChar *) "ecp")) {
 						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *) "name");
 						if (robot && !xmlStrcmp(robot, (const xmlChar *) whichECP.c_str())) {
 							for (; child_node->children; child_node->children = child_node->children->next) {
@@ -130,7 +133,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_gen_t")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
 										gt = new common::generator::transparent(*this);
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_gen")) {
@@ -190,7 +192,11 @@ fsautomat::fsautomat(lib::configurator &_config) :
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											//	sg = new common::generator::smooth(*this, (bool) atoi((char *) argument));
+										{
+												axes_num=atoi((char *)argument);
+												std::cout<<"UWAGA!!!! liczba przegubow: !!!! "<<axes_num<<std::endl;
+												sg = new common::generator::newsmooth(*this,lib::ECP_JOINT, axes_num);//changed askubis
+										}
 											xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -217,24 +223,22 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 }
-
+//TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
-
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
-
 	if (trjConf && ecpLevel) {
-		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name);
+		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-
 	for (;;) {
-
 		sr_ecp_msg->message("Waiting for MP order");
 
 		get_next_state();
+
+		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
 
 		sr_ecp_msg->message("Order received");
 
@@ -242,7 +246,7 @@ void fsautomat::main_task_algorithm(void)
 
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
 			//tig->initiate_pose_list();
@@ -252,27 +256,35 @@ void fsautomat::main_task_algorithm(void)
 			//tig->Move();
 
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-
 			if (trjConf) {
 
-				if (ecpLevel) {
-					//sg->load_trajectory_from_xml((*trjMap)[mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+				if (ecpLevel) {//some error!
+					std::cout<<"map"<<std::endl;
+					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					std::cout<<"map after load"<<std::endl;
 				} else {
+					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< "loading..." <<std::endl;
+					//std::string path(mrrocpp_network_path);
 					std::string path(mrrocpp_network_path);
 					path += fileName;
-					//sg->load_trajectory_from_xml(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					std::cout<<"from file: "<<path<< " after load " <<std::endl;
 				}
 			}//if
 			else //moj przypadekl -> z pliku
 			{
+				std::cout<<"normal"<<std::endl;
+				//std::string path(mrrocpp_network_path);
 				std::string path(mrrocpp_network_path);
-				path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-				//	sg->get_type_for_smooth_xml(path.c_str());
+				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+					//sg->get_type_for_smooth_xml(path.c_str());
 				//
-				//	sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				//sg->load_file_with_path(path.c_str());
+					//sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				sg->load_trajectory_from_file(path.c_str());
+				std::cout<<"normal after load"<<std::endl;
 			}//else
-			//sg->Move();
+			sg->calculate_interpolate();
+			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
@@ -283,7 +295,7 @@ void fsautomat::main_task_algorithm(void)
 			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			if (size > 3)
 				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
 			else
@@ -291,29 +303,179 @@ void fsautomat::main_task_algorithm(void)
 			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
-			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			gag->configure(gen_args[0], (unsigned int) gen_args[1], -10);
 			gag->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 			go_st->configure(gen_args[0], (int) gen_args[1]);
 			go_st->execute();
 		}
 
-		ecp_termination_notice();
+
 	} //end for
+	ecp_termination_notice();
 }
 
 task* return_created_ecp_task(lib::configurator &_config)
 {
 	return new fsautomat(_config);
 }
+
+
+
+void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose &trajectory) {
+//TODO:askubis cos zle z pose specification, wypisac
+	sg->load_absolute_pose(trajectory);
+}
+
+void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
+    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+
+	 bool first_time = true; // Znacznik
+
+	 xmlDocPtr doc = xmlParseFile(fileName);
+	 xmlXIncludeProcess(doc);
+	 if(doc == NULL)
+	 {
+        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+	 }
+
+	 xmlNodePtr root = xmlDocGetRootElement(doc);
+	 if(!root || !root->name)
+	 {
+		 xmlFreeDoc(doc);
+		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+	 }
+
+	//sg->reset(); // Usuniecie listy pozycji, o ile istnieje
+
+   for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
+   {
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
+      {
+   		for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
+			{
+      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
+				{
+					xmlChar * stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
+					if(stateID && !strcmp((const char *)stateID, nodeName)  )
+					{
+						for(xmlNodePtr child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
+						{
+							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+							{
+								set_pose_from_xml(child_node, first_time);
+							}
+						}
+					}
+         		xmlFree(stateID);
+				}
+			}
+		}
+      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
+      {
+         xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+         if(stateID && !strcmp((const char *)stateID, nodeName))
+			{
+	         for(xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
+	         {
+	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
+	            {
+						set_pose_from_xml(child_node, first_time);
+	            }
+	         }
+			}
+         xmlFree(stateID);
+		}
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+}
+
+
+
+void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
+	//char *dataLine, *value;
+	uint64_t number_of_poses; // Liczba zapamietanych pozycji
+	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
+	/*double v[axes_num];
+	double a[axes_num];	// Wczytane wspolrzedne
+	double coordinates[axes_num];     // Wczytane wspolrzedne*/
+
+
+	xmlNode *cchild_node, *ccchild_node;
+	xmlChar *coordinateType, *numOfPoses;
+	xmlChar *xmlDataLine;
+
+	int num_v=0;
+	int num_a=0;
+	int num_c=0;
+	int num=0;
+
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+
+
+
+	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
+	ps = lib::returnProperPS((char *)coordinateType);
+	std::cout<<"askubis ps: "<<ps<<std::endl;
+	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+
+	actTrajectory->arm_type =ps;
+	actTrajectory->pos_num = number_of_poses;
+
+	double tmp[actTrajectory->pos_num*axes_num];
+
+
+	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
+	{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
+			{
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					num =lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->v.insert(actTrajectory->v.begin()+num_v,tmp,tmp+num);
+					num_v+=num;
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					num=lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->a.insert(actTrajectory->a.begin()+num_a,tmp,tmp+num);
+					num_a+=num;
+					xmlFree(xmlDataLine);
+				}
+				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
+				{
+					xmlDataLine = xmlNodeGetContent(ccchild_node);
+					num = lib::setValuesInArray(tmp,(char *) xmlDataLine);
+					actTrajectory->coordinates.insert(actTrajectory->coordinates.begin()+num_c,tmp,tmp+num);
+					num_c+=num;
+					xmlFree(xmlDataLine);
+				}
+			}
+			sg->load_absolute_pose((*actTrajectory));
+			/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
+			std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
+			exit(0);*/
+		}
+	}
+	xmlFree(coordinateType);
+	xmlFree(numOfPoses);
+}
+
 
 } // namespace task
 } // namespace common

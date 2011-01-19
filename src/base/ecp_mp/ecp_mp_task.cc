@@ -267,6 +267,7 @@ ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTraject
 				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
 	//coordinateType wrzucic do
 	actTrajectory->arm_type =lib::returnProperPS((char *) coordinateType);
+	std::cout<<"ARMTYPE!!! "<<actTrajectory->arm_type<<std::endl;
 	actTrajectory->pos_num = atoi((char *) numOfPoses);
 	//actTrajectory->
 
@@ -278,7 +279,6 @@ ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTraject
 
 	for (xmlNodePtr cchild_node = actNode->children; cchild_node != NULL; cchild_node = cchild_node->next) {
 		if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "Pose")) {
-			//actTrajectory->createNewPose();
 			for (xmlNodePtr ccchild_node = cchild_node->children; ccchild_node != NULL; ccchild_node
 					= ccchild_node->next) {
 				if (ccchild_node->type == XML_ELEMENT_NODE) {
@@ -303,7 +303,6 @@ ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTraject
 					}
 				}
 			}
-			//actTrajectory->addPoseToTrajectory();
 		}
 
 	}
