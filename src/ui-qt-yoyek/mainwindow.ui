@@ -10,52 +10,60 @@
     <height>603</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>250</width>
+    <height>300</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit_sr">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>290</y>
-      <width>981</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Monospace</family>
-      <pointsize>9</pointsize>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLabel" name="notification_label">
-    <property name="geometry">
-     <rect>
-      <x>840</x>
-      <y>540</y>
-      <width>141</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>UI_NOTIFICATION</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="Position_lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>510</y>
-      <width>981</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPlainTextEdit" name="plainTextEdit_sr">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Monospace</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="Position_lineEdit">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>27</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="notification_label">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>17</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>UI_NOTIFICATION</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
