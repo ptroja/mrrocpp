@@ -29,6 +29,7 @@ visual_servo::~visual_servo()
 
 lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
+	//	log_dbg("visual_servo::get_position_change(): begin\n");
 	lib::Homog_matrix delta_position;
 
 	/* TODO:
@@ -39,6 +40,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	 */
 
 	if (sensor->get_state() == discode_sensor::DSS_READING_RECEIVED) {
+//		log_dbg("visual_servo::get_position_change(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED\n");
 		// There's a reading, reset the counter.
 		steps_without_reading = 0;
 	} else {
@@ -46,9 +48,10 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		if (steps_without_reading > max_steps_without_reading) {
 			// The object is no longer visible
 			object_visible = false;
-			//log_dbg("visual_servo::get_position_change(): object considered no longer visible\n");
+//			log_dbg("visual_servo::get_position_change(): object considered no longer visible\n");
 			return delta_position;
 		} else {
+//			log_dbg("visual_servo::get_position_change(): steps_without_reading++\n");
 			steps_without_reading++;
 		}
 	}
@@ -58,6 +61,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	object_visible = is_object_visible_in_latest_reading();
 
 	if (object_visible) {
+//		log_dbg("visual_servo::get_position_change(): object_visible\n");
 		return compute_position_change(current_position, dt);
 	}
 

@@ -59,7 +59,7 @@ ds_wrong_state_exception::ds_wrong_state_exception(const string& arg) :
 }
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	state(DSS_NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(true)
+	state(DSS_NOT_CONNECTED), config(config), section_name(section_name), timer_print_enabled(false)
 {
 	base_period = current_period = 1;
 
@@ -145,7 +145,7 @@ void discode_sensor::configure_sensor()
 void discode_sensor::initiate_reading()
 {
 	timer_show("discode_sensor::initiate_reading() begin");
-	log_dbg("discode_sensor::initiate_reading(): state = %d\n", (int)state);
+//	log_dbg("discode_sensor::initiate_reading(): state = %d\n", (int)state);
 	if (!(state == DSS_CONNECTED || state == DSS_READING_RECEIVED || state == DSS_INITIATE_SENT)) {
 		stringstream ss;
 		ss
@@ -220,6 +220,7 @@ void discode_sensor::terminate()
 
 discode_sensor::discode_sensor_state discode_sensor::get_state()
 {
+//	log_dbg("discode_sensor::get_state(): state = %d\n", state);
 	return state;
 }
 
@@ -250,7 +251,7 @@ bool discode_sensor::is_data_available(int usec)
 
 void discode_sensor::receive_buffers_from_discode()
 {
-	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
+//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
 
 	header_iarchive->clear_buffer();
 	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
@@ -274,7 +275,7 @@ void discode_sensor::receive_buffers_from_discode()
 	//	if (rmh.is_rpc_call) {
 	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
 	//	}
-	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
+//	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
 
 	if (rmh.data_size > 0) {
 		state = DSS_READING_RECEIVED;

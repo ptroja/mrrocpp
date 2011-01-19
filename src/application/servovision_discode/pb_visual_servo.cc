@@ -34,7 +34,9 @@ pb_visual_servo::~pb_visual_servo()
 void pb_visual_servo::retrieve_reading()
 {
 	try{
+//		log_dbg("pb_visual_servo::retrieve_reading()\n");
 		if(sensor->get_state() == discode_sensor::DSS_READING_RECEIVED){
+//			log_dbg("pb_visual_servo::retrieve_reading(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED.\n");
 			reading = sensor->get_received_object <Processors::VisualServoPB::PBReading> ();
 		}
 	} catch(exception &ex) {
@@ -44,6 +46,7 @@ void pb_visual_servo::retrieve_reading()
 
 bool pb_visual_servo::is_object_visible_in_latest_reading()
 {
+//	log_dbg("pb_visual_servo::is_object_visible_in_latest_reading(): reading.objectVisible = %d\n", (int)reading.objectVisible);
 	return reading.objectVisible;
 }
 
