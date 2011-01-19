@@ -37,6 +37,7 @@ void catch_signal_in_mp(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
+		case SIGHUP:
 			mp_t->sh_msg->message("mp terminated");
 			// restore default (none) handler for SIGCHLD
 			signal(SIGCHLD, SIG_DFL);
@@ -112,6 +113,8 @@ int main(int argc, char *argv[], char **arge)
 			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
+			signal(SIGHUP, &(mp::common::catch_signal_in_mp));
+
 			//signal(SIGINT,  &(catch_signal_in_mp));
 			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
 			signal(SIGCHLD, &(mp::common::catch_signal_in_mp));

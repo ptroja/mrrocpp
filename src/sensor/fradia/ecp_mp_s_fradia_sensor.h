@@ -140,7 +140,7 @@ private:
 	 * @return Received message.
 	 */
 	template <typename MESSAGE_T>
-	MESSAGE_T receive_from_fradia();
+	MESSAGE_T receive_from_fradia(int timeout_us=0);
 
 public:
 
@@ -272,10 +272,32 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::send_to_fradia(const ME
 
 template <typename CONFIGURE_T, typename READING_T, typename INITIATE_T>
 template <typename MESSAGE_T>
-MESSAGE_T fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::receive_from_fradia()
+MESSAGE_T fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::receive_from_fradia(int timeout_us)
 {
 	//	logger::log_dbg("fradia_sensor::receive_from_fradia(): sizeof(MESSAGE_T): %d\n", sizeof(MESSAGE_T));
 	MESSAGE_T message;
+
+	if(timeout_us > 0){
+		fd_set rfds;
+	   struct timeval tv;
+	   int retval;
+
+	   /* Watch stdin (fd 0) to see when it has input. */
+	   FD_ZERO(&rfds);
+	   FD_SET(sockfd, &rfds);
+
+	   /* Wait up to five seconds. */
+	   tv.tv_sec = 0;
+	   tv.tv_usec = timeout_us;
+
+	   retval = select(sockfd+1, &rfds, NULL, NULL, &tv);
+	   /* Don't rely on the value of tv now! */
+
+	   if (retval == -1)
+		   throw std::runtime_error("fradia_sensor::receive_from_fradia: select()\n");
+	   else if (retval == 0)
+		   throw std::runtime_error("fradia_sensor::receive_from_fradia: select(): timeout\n");
+	}
 
 	int result = read(sockfd, &message, sizeof(MESSAGE_T));
 	if (result < 0) {
@@ -304,7 +326,7 @@ void fradia_sensor <CONFIGURE_T, READING_T, INITIATE_T>::configure_sensor()
 	send_to_fradia(command);
 
 	//	logger::log_dbg("fradia_sensor::configure_sensor() 2\n");
-	FRADIA_LOAD_TASK_REPLY status = receive_from_fradia <FRADIA_LOAD_TASK_REPLY> ();
+	FRADIA_LOAD_TASK_REPLY status = receive_from_fradia <FRADIA_LOAD_TASK_REPLY> (1000000);
 	status.task_name[task_name_size - 1] = 0;
 	if (fradia_task != status.task_name) {
 		throw std::runtime_error("FraDIA reply not recognized");

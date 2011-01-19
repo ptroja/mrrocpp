@@ -159,12 +159,23 @@
      <addaction name="menuirp6p_m_Pre_Synchro_Moves"/>
      <addaction name="menuirp6p_m_Preset_Positions"/>
     </widget>
+    <widget class="QMenu" name="menuPolycrank">
+     <property name="title">
+      <string>Polycrank</string>
+     </property>
+     <addaction name="actionpolycrank_EDP_Load"/>
+     <addaction name="actionpolycrank_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionpolycrank_Move_Joints"/>
+    </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuIrp6p_m"/>
     <addaction name="separator"/>
     <addaction name="menuSpkm"/>
     <addaction name="menuSmb"/>
     <addaction name="menuShead"/>
+    <addaction name="separator"/>
+    <addaction name="menuPolycrank"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -473,6 +484,21 @@
   <action name="actionirp6p_m_Position_2">
    <property name="text">
     <string>Position 2</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Load">
+   <property name="text">
+    <string>EDP Load</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Unload">
+   <property name="text">
+    <string>EDP Unload</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_Move_Joints">
+   <property name="text">
+    <string>Move Joints</string>
    </property>
   </action>
  </widget>
