@@ -29,7 +29,13 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	timer->start(50);
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 
+	// wyłączenie przycisku zamykania okna
+	Qt::WindowFlags flags;
+	flags |= Qt::WindowMaximizeButtonHint;
+	flags |= Qt::WindowMinimizeButtonHint;
+	setWindowFlags(flags);
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +47,18 @@ void MainWindow::ui_notification(QString _string, QColor _color)
 {
 	//ui->notification_label->setText("GUGUGU");
 	emit ui_notification_signal(_string, _color);
+}
+
+void MainWindow::raise_process_control_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_process_control_window_signal();
+}
+
+void MainWindow::raise_process_control_window_slot()
+{
+	interface.wpc->show();
+	interface.wpc->raise();
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)
@@ -463,7 +481,7 @@ void MainWindow::on_actionMP_Unload_triggered()
 
 void MainWindow::on_actionProcess_Control_triggered()
 {
-	interface.wpc->show();
+	raise_process_control_window();
 }
 void MainWindow::on_actionConfiguration_triggered()
 {

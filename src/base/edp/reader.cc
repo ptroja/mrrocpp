@@ -73,9 +73,8 @@ reader_buffer::reader_buffer(motor_driven_effector &_master) :
 reader_buffer::~reader_buffer()
 {
 	// TODO: stop (interrupt?) the thread
-	//thread_id->interrupt();
-	//thread_id->join(); // join it
-	//delete thread_id; // delete a pointer
+	//thread_id.interrupt();
+	//thread_id.join(); // join it
 }
 
 void reader_buffer::operator()()

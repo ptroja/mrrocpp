@@ -303,12 +303,10 @@ int Interface::MPup_int()
 				teachingstate = ui::common::MP_RUNNING;
 
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-				/* TR
-				 pt_res = PtEnter(0);
-				 start_process_control_window(NULL, NULL, NULL);
-				 if (pt_res >= 0)
-				 PtLeave(0);
-				 */
+
+
+				mw->raise_process_control_window();
+
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
 			}
@@ -554,9 +552,11 @@ void Interface::reload_whole_configuration()
 
 void Interface::UI_close(void)
 {
-	printf("UI CLOSING\n");
-	delay(100);// czas na ustabilizowanie sie edp
-	ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+	if (ui_state < 2) {
+		printf("UI CLOSING\n");
+		delay(100);// czas na ustabilizowanie sie edp
+		ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
+	}
 }
 
 void Interface::abort_threads()

@@ -9,8 +9,9 @@
  * @ingroup irp6p_m
  */
 
-#include "base/lib/impconst.h"
 #include<string>
+
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {

@@ -42,7 +42,7 @@ class ecp_t_objectfollower_pb_sac : public mrrocpp::ecp::common::task::task
 {
 public:
 	ecp_t_objectfollower_pb_sac(mrrocpp::lib::configurator& config);
-	virtual ~ecp_t_objectfollower_pb_sac();
+
 	void main_task_algorithm();
 protected:
 	boost::shared_ptr <visual_servo_regulator> reg;

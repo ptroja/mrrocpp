@@ -13,6 +13,8 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_sub_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -28,13 +30,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false)
+task_base::task_base(lib::configurator &_config) :
+	ecp_mp::task::task(_config), continuous_coordination(false)
 {
 	initialize_communication();
 }
 
-void task::main_task_algorithm(void)
+void task_base::main_task_algorithm(void)
 {
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -51,15 +53,15 @@ void task::main_task_algorithm(void)
 	} //end for
 }
 
-void task::mp_2_ecp_next_state_string_handler(void)
+void task_base::mp_2_ecp_next_state_string_handler(void)
 {
 }
 
-void task::ecp_stop_accepted_handler(void)
+void task_base::ecp_stop_accepted_handler(void)
 {
 }
 
-task::~task()
+task_base::~task_base()
 {
 	// TODO: error check
 #if !defined(USE_MESSIP_SRR)
@@ -73,7 +75,7 @@ task::~task()
 #endif
 }
 
-bool task::pulse_check()
+bool task_base::pulse_check()
 {
 #if !defined(USE_MESSIP_SRR)
 	_pulse_msg ui_msg; // wiadomosc z ui
@@ -145,7 +147,7 @@ bool task::pulse_check()
 }
 
 // ---------------------------------------------------------------
-void task::initialize_communication()
+void task_base::initialize_communication()
 {
 	std::string mp_pulse_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
@@ -204,19 +206,19 @@ void task::initialize_communication()
 // -------------------------------------------------------------------
 
 // Badanie typu polecenia z MP
-lib::MP_COMMAND task::mp_command_type(void) const
+lib::MP_COMMAND task_base::mp_command_type(void) const
 {
 	return mp_command.command;
 }
 
 // Ustawienie typu odpowiedzi z ECP do MP
-void task::set_ecp_reply(lib::ECP_REPLY ecp_r)
+void task_base::set_ecp_reply(lib::ECP_REPLY ecp_r)
 {
 	ecp_reply.reply = ecp_r;
 }
 
 // Informacja dla MP o zakonczeniu zadania uzytkownika
-void task::ecp_termination_notice(void)
+void task_base::ecp_termination_notice(void)
 {
 	if (mp_command_type() != lib::END_MOTION) {
 
@@ -226,7 +228,7 @@ void task::ecp_termination_notice(void)
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
-void task::send_pulse_to_mp(int pulse_code, int pulse_value)
+void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
 #if !defined(USE_MESSIP_SRR)
 	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
@@ -238,23 +240,20 @@ void task::send_pulse_to_mp(int pulse_code, int pulse_value)
 	}
 }
 
-void task::subtasks_conditional_execution()
+void task_base::subtasks_conditional_execution()
 {
-
 	subtasks_t subtasks_m_tmp = subtask_m;
 
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
-				{
-					if (mp_2_ecp_next_state_string == subtask_node.first) {
-
-						subtask_node.second->conditional_execution();
-					}
-				}
-
+	{
+		if (mp_2_ecp_next_state_string == subtask_node.first) {
+			subtask_node.second->conditional_execution();
+		}
+	}
 }
 
 // Petla odbierania wiadomosci.
-void task::ecp_wait_for_stop(void)
+void task_base::ecp_wait_for_stop(void)
 {
 	// Wyslanie pulsu do MP
 
@@ -300,7 +299,7 @@ void task::ecp_wait_for_stop(void)
 }
 
 // Oczekiwanie na polecenie START od MP
-void task::ecp_wait_for_start(void)
+void task_base::ecp_wait_for_start(void)
 {
 	//std::cerr << "ecp ecp_wait_for_start 1" << std::endl;
 	bool ecp_stop = false;
@@ -360,7 +359,7 @@ void task::ecp_wait_for_start(void)
 }
 
 // Oczekiwanie na kolejne zlecenie od MP
-void task::get_next_state(void)
+void task_base::get_next_state(void)
 {
 
 	bool mp_pulse_received = false;
@@ -418,7 +417,7 @@ void task::get_next_state(void)
 }
 
 // Oczekiwanie na polecenie od MP
-bool task::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
+bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 {
 #if !defined(USE_MESSIP_SRR)
 	while (caller <= 0) {
@@ -448,7 +447,7 @@ bool task::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 }
 
 // Oczekiwanie na polecenie od MP
-bool task::mp_buffer_receive_and_send(void)
+bool task_base::mp_buffer_receive_and_send(void)
 {
 
 	//std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
@@ -494,7 +493,7 @@ bool task::mp_buffer_receive_and_send(void)
 }
 
 // Receive of mp message
-bool task::reply_to_mp(int &caller, bool &mp_pulse_received)
+bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
 {
 
 	bool returned_value = true;
@@ -551,7 +550,7 @@ bool task::reply_to_mp(int &caller, bool &mp_pulse_received)
 }
 
 // Receive of mp message
-int task::receive_mp_message(bool block)
+int task_base::receive_mp_message(bool block)
 {
 
 	//std::cerr << "ecp receive_mp_message 1" << std::endl;

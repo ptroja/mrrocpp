@@ -23,7 +23,7 @@ namespace common {
 namespace generator {
 
 time::time(common::task::task& _ecp_task, int step):
-	generator (_ecp_task)
+	common::generator::generator (_ecp_task)
 {
     step_no = step;
 }
@@ -38,17 +38,17 @@ bool time::first_step ( )
     td.internode_step_no = step_no;
     td.value_in_step_no = td.internode_step_no - 2;
 
-    the_robot->ecp_command.instruction.instruction_type = lib::GET;
-    the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
-    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
+    the_robot->ecp_command.instruction_type = lib::GET;
+    the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+    the_robot->ecp_command.set_type = ARM_DEFINITION;
 
-    the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-    the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
+    the_robot->ecp_command.set_arm_type = lib::JOINT;
+    the_robot->ecp_command.get_arm_type = lib::JOINT;
 
-    the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-    the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-    the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-    the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+    the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+    the_robot->ecp_command.interpolation_type = lib::MIM;
+    the_robot->ecp_command.motion_steps = td.internode_step_no;
+    the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
 
     return true;
 }
@@ -65,10 +65,10 @@ bool time::next_step ( )
     }
 
     // Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
-    the_robot->ecp_command.instruction.instruction_type = lib::SET;
-    the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-    the_robot->ecp_command.instruction.get_type = NOTHING_DEFINITION;
-    the_robot->ecp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+    the_robot->ecp_command.instruction_type = lib::SET;
+    the_robot->ecp_command.set_type = ARM_DEFINITION;
+    the_robot->ecp_command.get_type = NOTHING_DEFINITION;
+    the_robot->ecp_command.get_arm_type = lib::INVALID_END_EFFECTOR;
 
 
     //transmitter_m[TRANSMITTER_PLAYER]->t_read(0);
@@ -95,7 +95,7 @@ bool time::next_step ( )
 
     for (int i = 0; i < 8; i++)
     {
-        the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = start_joint_arm_coordinates[i];
+        the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = start_joint_arm_coordinates[i];
     }
 
     //printf("\n");

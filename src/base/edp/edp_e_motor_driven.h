@@ -11,12 +11,13 @@
 #define __EDP_E_MOTOR_DRIVEN_H
 
 #include <stdint.h>
+
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "base/kinematics/kinematics_manager.h"
-
+#include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
 
 //#ifdef DOCENT_SENSOR
@@ -36,7 +37,6 @@ class edp_vsp;
 class manip_trans_t;
 class reader_buffer;
 class vis_server;
-class in_out_buffer;
 
 enum STATE
 {
@@ -202,10 +202,10 @@ public:
 	/*!
 	 * \brief object to store output and input data
 	 *
-	 * It is used for the purpose of govering of input data form the hardware
+	 * It is used for the purpose of governing of input data form the hardware
 	 * and transmission of output data to the hardware
 	 */
-	boost::shared_ptr <in_out_buffer> in_out_obj;
+	in_out_buffer in_out_obj;
 
 	/*!
 	 * \brief object to handle measurements
@@ -380,7 +380,7 @@ public:
 	/*!
 	 * \brief method to create threads other then EDP master thread.
 	 *
-	 * It implemented for the puropose of the specific EDP effector, choosing the suitable components (e.g. servo_buffer, transformation etc.)
+	 * It implemented for the purpose of the specific EDP effector, choosing the suitable components (e.g. servo_buffer, transformation etc.)
 	 */
 	void hi_create_threads();
 
@@ -418,14 +418,14 @@ public:
 	 *
 	 * It is used by the servo_buffer
 	 */
-	void update_servo_current_motor_pos(double motor_position_increment, int i);
+	void update_servo_current_motor_pos(double motor_position_increment, size_t i);
 
 	/*!
 	 * \brief method to set servo_current_motor_pos as its argument
 	 *
 	 * It is used by the servo_buffer
 	 */
-	void update_servo_current_motor_pos_abs(double abs_motor_position, int i);
+	void update_servo_current_motor_pos_abs(double abs_motor_position, size_t i);
 
 	/*!
 	 * \brief method that generates type of reply commanded by the ECP.
@@ -476,7 +476,11 @@ public:
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
+	lib::c_buffer instruction;
+	lib::r_buffer reply;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+};
 
 } // namespace common
 } // namespace edp

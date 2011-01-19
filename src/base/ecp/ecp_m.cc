@@ -12,6 +12,7 @@
 
 #include "base/ecp_mp/transmitter.h"
 
+#include "base/lib/configurator.h"
 #include "base/lib/mis_fun.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -22,7 +23,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-common::task::task *ecp_t;
+common::task::task_base *ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {

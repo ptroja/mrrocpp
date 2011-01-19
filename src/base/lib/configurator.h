@@ -10,34 +10,31 @@
 #if !defined(__CONFIGURATOR_H)
 #define __CONFIGURATOR_H
 
-#include <sys/utsname.h>
-
 #include <iostream>
 #include <string>
 #include <stdexcept>
 
-#include <boost/thread/mutex.hpp>
+#include <sys/utsname.h>
+#include <sched.h>
+
+#include <Eigen/Core>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
-
-#include <Eigen/Core>
+#include <boost/thread/mutex.hpp>
 
 #if defined(USE_MESSIP_SRR)
+#include <boost/property_tree/exceptions.hpp>
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
-#include <boost/property_tree/exceptions.hpp>
 #else
 #include <boost/property_tree/ptree.hpp>
 #endif
 
-#include <sched.h>
-
 namespace mrrocpp {
 namespace lib {
-
-
 
 class configurator
 {

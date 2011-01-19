@@ -34,13 +34,13 @@ namespace common {
 namespace task {
 
 ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
-	task(configurator)
+	common::task::task(configurator)
 {
 #ifdef ROBOT_P
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 #endif
 #ifdef ROBOT_OT
-	ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
 #endif
 	char config_section_name[] = { "[object_follower_ib]" };
 
@@ -69,11 +69,6 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 6\n");
 }
 
-ecp_t_objectfollower_ib::~ecp_t_objectfollower_ib()
-{
-	delete ecp_m_robot;
-}
-
 void ecp_t_objectfollower_ib::main_task_algorithm(void)
 {
 	while (1) {
@@ -88,7 +83,7 @@ void ecp_t_objectfollower_ib::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new ecp_t_objectfollower_ib(config);
 }

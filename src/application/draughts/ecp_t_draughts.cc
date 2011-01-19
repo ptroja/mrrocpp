@@ -33,12 +33,12 @@ const double
 /*==============================Constructor==================================*/
 //Constructors
 Draughts::Draughts(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA] = new fradia_sensor_board_and_draughts(this->config, "[vsp_fradia_sensor]");
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
-	ecp_m_robot = new irp6ot_m::robot(*this); //initialization of robot
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this); //initialization of robot
 
 	//sgen=new common::generator::smooth(*this, true);
 	//sgen2 = new common::generator::smooth(*this, true);
@@ -51,12 +51,10 @@ Draughts::Draughts(lib::configurator &_config) :
 	follower_vis = new generator::ecp_vis_ib_eih_follower_irp6ot(*this); //follower servomechanism generator
 	follower_vis->sensor_m = sensor_m;
 }
-;
 
 /*============================Destructor=====================================*/
 Draughts::~Draughts()
 {
-	delete ecp_m_robot;
 	//delete sgen;
 	//delete sgen2;
 	delete befgen;
@@ -65,7 +63,6 @@ Draughts::~Draughts()
 	delete aitrans;
 	delete follower_vis;
 }
-;
 
 /*=============================bPawn2bKing===================================*/
 void Draughts::bPawn2bKing(int from, int to)
@@ -218,7 +215,6 @@ void Draughts::main_task_algorithm(void)
 	fradiaControl(NONE);
 	ecp_termination_notice();
 }
-;
 
 /*===============================makeAIMove========================================*/
 int Draughts::makeAIMove(int player)
@@ -470,7 +466,7 @@ void Draughts::wPawn2wKing(int from, int to)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot_m::task::Draughts(_config);
 

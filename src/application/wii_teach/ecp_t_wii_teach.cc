@@ -25,9 +25,10 @@ namespace ecp {
 namespace irp6ot_m {
 namespace task {
 
-wii_teach::wii_teach(lib::configurator &_config) : task(_config)
+wii_teach::wii_teach(lib::configurator &_config) :
+	common::task::task(_config)
 {
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 	trajectory.count = trajectory.position = 0;
 	trajectory.head = trajectory.tail = trajectory.current = NULL;
 
@@ -677,7 +678,7 @@ void wii_teach::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot_m::task::wii_teach(_config);
 }

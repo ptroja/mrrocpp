@@ -82,13 +82,13 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 	assert(ecp);
 
 	// Konstruktor klasy
-	ecp->ecp_command.instruction.robot_model.kinematic_model.kinematic_model_no = 0;
-	ecp->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
-	ecp->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.set_arm_type = lib::MOTOR;
-	ecp->ecp_command.instruction.motion_steps = 0;
-	ecp->ecp_command.instruction.value_in_step_no = 0;
+	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = 0;
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::MOTOR;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::MOTOR;
+	ecp->ecp_command.motion_steps = 0;
+	ecp->ecp_command.value_in_step_no = 0;
 
 	ecp->synchronised = false;
 }
@@ -119,9 +119,9 @@ void EcpRobot::move_motors(const double final_position[])
 
 		//  printf("is synchronised za read motors: nr of steps %d\n", nr_of_steps);
 		// Parametry zlecenia ruchu i odczytu polozenia
-		ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-		ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-		ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+		ecp->ecp_command.instruction_type = lib::SET_GET;
+		ecp->ecp_command.motion_type = lib::ABSOLUTE;
+		ecp->ecp_command.interpolation_type = lib::MIM;
 	} else {
 		// printf("!is_synchronised: %f \n",MOTOR_STEP);
 		// Robot niezsynchroniozowany
@@ -131,23 +131,23 @@ void EcpRobot::move_motors(const double final_position[])
 		}
 		nr_of_steps = (int) ceil(max_inc / MOTOR_STEP);
 
-		ecp->ecp_command.instruction.instruction_type = lib::SET;
-		ecp->ecp_command.instruction.motion_type = lib::RELATIVE;
-		ecp->ecp_command.instruction.interpolation_type = lib::MIM;
+		ecp->ecp_command.instruction_type = lib::SET;
+		ecp->ecp_command.motion_type = lib::RELATIVE;
+		ecp->ecp_command.interpolation_type = lib::MIM;
 	}
-	ecp->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.get_arm_type = lib::MOTOR;
-	ecp->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.set_arm_type = lib::MOTOR;
-	ecp->ecp_command.instruction.motion_steps = nr_of_steps;
-	ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::MOTOR;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::MOTOR;
+	ecp->ecp_command.motion_steps = nr_of_steps;
+	ecp->ecp_command.value_in_step_no = nr_of_steps;
 
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
 	for (int j = 0; j < ecp->number_of_servos; j++)
-		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
+		ecp->ecp_command.arm.pf_def.arm_coordinates[j] = final_position[j];
 
-	// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",ecp_command.instruction.motion_steps, ecp_command.instruction.value_in_step_no, ecp_command.instruction.arm.pf_def.arm_coordinates[1]);
+	// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",ecp_command.motion_steps, ecp_command.value_in_step_no, ecp_command.arm.pf_def.arm_coordinates[1]);
 
 	execute_motion();
 
@@ -176,23 +176,23 @@ void EcpRobot::move_joints(const double final_position[])
 	const int nr_of_steps = (int) ceil(max_inc_lin / JOINT_LINEAR_STEP);
 
 	// Parametry zlecenia ruchu i odczytu polozenia
-	ecp->ecp_command.instruction.instruction_type = lib::SET_GET;
-	ecp->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.get_arm_type = lib::JOINT;
-	ecp->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.instruction.set_arm_type = lib::JOINT;
-	ecp->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	ecp->ecp_command.instruction.interpolation_type = lib::MIM;
-	ecp->ecp_command.instruction.motion_steps = nr_of_steps;
-	ecp->ecp_command.instruction.value_in_step_no = nr_of_steps;
+	ecp->ecp_command.instruction_type = lib::SET_GET;
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::JOINT;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::JOINT;
+	ecp->ecp_command.motion_type = lib::ABSOLUTE;
+	ecp->ecp_command.interpolation_type = lib::MIM;
+	ecp->ecp_command.motion_steps = nr_of_steps;
+	ecp->ecp_command.value_in_step_no = nr_of_steps;
 
-	// cprintf("NOS=%u\n",ecp_command.instruction.motion_steps);
+	// cprintf("NOS=%u\n",ecp_command.motion_steps);
 
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
 
 	for (int j = 0; j < ecp->number_of_servos; j++)
-		ecp->ecp_command.instruction.arm.pf_def.arm_coordinates[j] = final_position[j];
+		ecp->ecp_command.arm.pf_def.arm_coordinates[j] = final_position[j];
 
 	execute_motion();
 

@@ -19,7 +19,8 @@ namespace task {
 
 //Konstruktory
 haar::haar(lib::configurator &_config) :
-	task(_config) {
+	common::task::task(_config)
+{
 	//Wczytanie parametrow konfiguracyjnych.
 	rotation = config.value<int> ("rotation"); //Czy bedzie wyznaczana rotacja?
 	smooth_path = config.value<std::string> ("smooth_path");//Sciezka z opisem punktu startowego podawanego smooth_generatorowi
@@ -47,7 +48,7 @@ haar::haar(lib::configurator &_config) :
 	//Configure sensor.
 	sensor_m[ecp_mp::sensor::SENSOR_FRADIA]->configure_sensor();
 
-	ecp_m_robot = new robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
 	planar_vis = new generator::ecp_vis_ib_eih_planar_irp6ot(*this);
 	planar_vis->sensor_m = sensor_m;
@@ -157,7 +158,7 @@ void haar::init_td(lib::ECP_POSE_SPECIFICATION pspec, int internode_no) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task_base* return_created_ecp_task(lib::configurator &_config) {
 	return new irp6ot_m::task::haar(_config);
 
 }

@@ -53,7 +53,7 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::SERVO_ALGORITHM:
 			sb->set_robot_model_servo_algorithm(instruction);

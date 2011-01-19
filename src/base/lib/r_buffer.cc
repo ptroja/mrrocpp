@@ -3,12 +3,16 @@
 namespace mrrocpp {
 namespace lib {
 
+r_buffer_base::r_buffer_base(void) :
+  reply_type(lib::ERROR)
+{
+}
+
 r_buffer::r_buffer (void) :
-  reply_type(lib::ERROR),
-  robot_model_type(TOOL_FRAME),
-  arm_type(FRAME),
   input_values(0)
 {
+  robot_model.type = TOOL_FRAME;
+  arm.type = FRAME;
   error_no.error0 = OK;
   error_no.error1 = OK;
 

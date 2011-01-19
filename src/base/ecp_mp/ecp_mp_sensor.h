@@ -10,6 +10,8 @@
 #if !defined(_ECP_MP_SENSOR_H)
 #define _ECP_MP_SENSOR_H
 
+#include <string>
+
 #include <fcntl.h>
 
 #include "base/ecp_mp/ecp_mp_sensor_interface.h"

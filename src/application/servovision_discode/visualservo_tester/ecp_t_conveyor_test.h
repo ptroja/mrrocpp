@@ -35,7 +35,7 @@ class ecp_t_conveyor_test : public mrrocpp::ecp::common::task::task
 {
 public:
 	ecp_t_conveyor_test(mrrocpp::lib::configurator& config);
-	virtual ~ecp_t_conveyor_test();
+
 	void main_task_algorithm(void);
 private:
 	boost::shared_ptr<ecp_g_conveyor_sinus> sinus_gen;

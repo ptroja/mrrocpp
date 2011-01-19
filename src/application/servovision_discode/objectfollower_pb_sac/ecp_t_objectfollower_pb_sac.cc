@@ -28,7 +28,7 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 	log_dbg_enabled = true;
 	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() begin\n");
 
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 
 	char config_section_name[] = { "[object_follower_sac_1]" };
 
@@ -63,11 +63,6 @@ ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configura
 	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() end\n");
 }
 
-ecp_t_objectfollower_pb_sac::~ecp_t_objectfollower_pb_sac()
-{
-	delete ecp_m_robot;
-}
-
 void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 {
 	log_dbg("ecp_t_objectfollower_pb_sac::main_task_algorithm() begin\n");
@@ -89,7 +84,7 @@ void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 
 namespace common {
 namespace task {
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new irp6ot_m::task::ecp_t_objectfollower_pb_sac(config);
 }

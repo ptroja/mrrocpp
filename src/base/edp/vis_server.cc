@@ -7,14 +7,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <cassert>
 
-#include "base/lib/impconst.h"
 #include "base/edp/edp_e_motor_driven.h"
 #include "base/edp/vis_server.h"
 #include "base/lib/mis_fun.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -23,14 +19,9 @@ namespace common {
 static const int MAXBUFLEN = 100;
 
 vis_server::vis_server(motor_driven_effector &_master) :
-	master(_master), thread_id(NULL)
+	master(_master)
 {
-	thread_id = new boost::thread(boost::bind(&vis_server::operator(), this));
-}
-
-vis_server::~vis_server(void)
-{
-	delete thread_id;
+	thread_id = boost::thread(boost::bind(&vis_server::operator(), this));
 }
 
 void vis_server::operator()(void)
@@ -66,7 +57,7 @@ void vis_server::operator()(void)
 	addr_len = sizeof their_addr;
 
 	while (1) {
-		int numbytes;
+		ssize_t numbytes;
 		char buf[MAXBUFLEN];
 
 		if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0, (struct sockaddr *) &their_addr, &addr_len)) == -1) {
@@ -96,7 +87,7 @@ void vis_server::operator()(void)
 			perror("sendto()");
 			break;
 		} else if (numbytes < (ssize_t) sizeof(reply)) {
-			fprintf(stderr, "send only %d of %lu bytes\n", numbytes, sizeof(reply));
+			fprintf(stderr, "send only %zd of %zd bytes\n", numbytes, sizeof(reply));
 			break;
 		}
 
