@@ -30,32 +30,6 @@
      </font>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_l1">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>230</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>l1 text</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_l2">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>230</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>l2 text</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="notification_label">
     <property name="geometry">
      <rect>
@@ -76,7 +50,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -185,12 +159,23 @@
      <addaction name="menuirp6p_m_Pre_Synchro_Moves"/>
      <addaction name="menuirp6p_m_Preset_Positions"/>
     </widget>
+    <widget class="QMenu" name="menuPolycrank">
+     <property name="title">
+      <string>Polycrank</string>
+     </property>
+     <addaction name="actionpolycrank_EDP_Load"/>
+     <addaction name="actionpolycrank_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionpolycrank_Move_Joints"/>
+    </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuIrp6p_m"/>
     <addaction name="separator"/>
     <addaction name="menuSpkm"/>
     <addaction name="menuSmb"/>
     <addaction name="menuShead"/>
+    <addaction name="separator"/>
+    <addaction name="menuPolycrank"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -499,6 +484,21 @@
   <action name="actionirp6p_m_Position_2">
    <property name="text">
     <string>Position 2</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Load">
+   <property name="text">
+    <string>EDP Load</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Unload">
+   <property name="text">
+    <string>EDP Unload</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_Move_Joints">
+   <property name="text">
+    <string>Move Joints</string>
    </property>
   </action>
  </widget>

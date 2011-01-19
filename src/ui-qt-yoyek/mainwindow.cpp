@@ -17,6 +17,7 @@
 #include "spkm/ui_r_spkm.h"
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
+#include "polycrank/ui_r_polycrank.h"
 #include "spkm/wnd_spkm_inc.h"
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
@@ -28,7 +29,13 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	timer->start(50);
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 
+	// wyłączenie przycisku zamykania okna
+	Qt::WindowFlags flags;
+	flags |= Qt::WindowMaximizeButtonHint;
+	flags |= Qt::WindowMinimizeButtonHint;
+	setWindowFlags(flags);
 }
 
 MainWindow::~MainWindow()
@@ -36,32 +43,22 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::on_pushButton_l1_clicked()
-{
-	QTextCharFormat format;
-	format.setFontItalic(true);
-
-	format.setForeground(Qt::red);
-	ui->plainTextEdit_sr->setCurrentCharFormat(format);
-
-	ui->plainTextEdit_sr->appendPlainText(interface.sr_attach_point.c_str());
-}
-
-void MainWindow::on_pushButton_l2_clicked()
-{
-	QTextCharFormat format;
-	format.setFontItalic(false);
-
-	format.setForeground(Qt::blue);
-	ui->plainTextEdit_sr->setCurrentCharFormat(format);
-
-	ui->plainTextEdit_sr->appendPlainText("l2");
-}
-
 void MainWindow::ui_notification(QString _string, QColor _color)
 {
 	//ui->notification_label->setText("GUGUGU");
 	emit ui_notification_signal(_string, _color);
+}
+
+void MainWindow::raise_process_control_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_process_control_window_signal();
+}
+
+void MainWindow::raise_process_control_window_slot()
+{
+	interface.wpc->show();
+	interface.wpc->raise();
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)
@@ -410,6 +407,23 @@ void MainWindow::on_actionshead_EDP_Unload_triggered()
 	interface.shead->EDP_slay_int();
 }
 
+// polycrank menu
+
+void MainWindow::on_actionpolycrank_EDP_Load_triggered()
+{
+	interface.polycrank->edp_create();
+}
+
+void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
+{
+	interface.polycrank->EDP_slay_int();
+}
+
+void MainWindow::on_actionpolycrank_Move_Joints_triggered()
+{
+
+}
+
 // all robots menu
 
 
@@ -467,7 +481,7 @@ void MainWindow::on_actionMP_Unload_triggered()
 
 void MainWindow::on_actionProcess_Control_triggered()
 {
-	interface.wpc->show();
+	raise_process_control_window();
 }
 void MainWindow::on_actionConfiguration_triggered()
 {
