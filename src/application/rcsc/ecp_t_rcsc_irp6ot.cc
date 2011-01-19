@@ -183,7 +183,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
-		std::string path("../");
+		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		tig->flush_pose_list();
@@ -194,7 +194,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		tig->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		std::string path("../");
+		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)

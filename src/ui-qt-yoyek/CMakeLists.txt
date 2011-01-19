@@ -88,6 +88,7 @@ ADD_EXECUTABLE(
 	smb/ui_r_smb.cc
 	shead/ui_ecp_r_shead.cc
 	shead/ui_r_shead.cc
+	polycrank/ui_r_polycrank.cc
 	ui.cc
 	ui_robot.cc
 )

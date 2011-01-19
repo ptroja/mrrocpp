@@ -25,7 +25,8 @@ private:
 
 	bool track;
 	bool postument;
-	bool polycrank;
+	bool poly;
+	bool conv;
 	std::string network_path;
 
 public:

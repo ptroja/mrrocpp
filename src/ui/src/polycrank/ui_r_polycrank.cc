@@ -174,8 +174,8 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
-						//ApModifyItemState(&robot_menu, ABN_mm_polycrank_internal, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
+						//ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
+						ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_internal, NULL);// modyfikacja menu - ruchy reczne zakazane
 						break;
 					default:
 						break;
