@@ -31,6 +31,7 @@
 #endif
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
 
 namespace mrrocpp {
