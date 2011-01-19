@@ -60,15 +60,7 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-	sigset_t set;
 
-	sigemptyset(&set);
-	sigaddset(&set, SIGINT);
-	sigaddset(&set, SIGALRM);
-
-	if (sigprocmask(SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6p_tid)");
-	}
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 

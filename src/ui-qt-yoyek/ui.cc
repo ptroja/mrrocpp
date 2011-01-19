@@ -90,16 +90,6 @@ int function_execution_buffer::wait_and_execute()
 void feb_thread::operator()()
 {
 
-	sigset_t set;
-
-	sigemptyset(&set);
-	sigaddset(&set, SIGINT);
-	sigaddset(&set, SIGALRM);
-
-	if (sigprocmask(SIG_BLOCK, &set, NULL) == -1) {
-		perror("SignalProcmask(edp_irp6p_tid)");
-	}
-
 	while (true) {
 		feb.wait_and_execute();
 	}
