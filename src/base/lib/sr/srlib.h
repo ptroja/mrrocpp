@@ -49,7 +49,7 @@ typedef struct sr_package
 	//! @bug probably this is not needed
 	msg_header_t hdr;
 #endif
-	//! Message timestamp
+	//! Message timestamp in nanoseconds since epoch
 	uint64_t time;
 
 	//! Sender process type
