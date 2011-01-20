@@ -94,6 +94,11 @@ int clock_nanosleep(clockid_t clock_id, int flags,
 
 #define SIGRTMIN		-1	/* real-time signals not supported */
 
+#define	out8(port,val)	(void) 0
+#define	out16(port,val)	(void) 0
+#define	in8(port)		0
+#define	in16(port)		0
+
 #endif
 
 #endif /* ! __QNXNTO__ */
