@@ -144,7 +144,7 @@ else (QNXNTO) # Linux, etc.
 	
 	# Check for libftdi with pkg-config
 	include(FindPkgConfig)
-	pkg_check_modules(LibFTDI REQUIRED libftdi)
+	pkg_check_modules(LibFTDI libftdi)
 	
 	# Eigen2 is not directly supported by CMake
 	pkg_check_modules(EIGEN2 REQUIRED eigen2)
