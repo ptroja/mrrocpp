@@ -526,9 +526,7 @@ public:
 		}
 
 		get_initial_position();
-		std::cout<<"calculated0"<<std::endl;
 		calculated = calculate();
-		std::cout<<"calculated1"<<std::endl;
 
 		if (debug) {
 			print_pose_vector();

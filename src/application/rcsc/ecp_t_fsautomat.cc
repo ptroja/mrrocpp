@@ -238,8 +238,11 @@ void fsautomat::main_task_algorithm(void)
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose traj = (*trjMap)[(char*)"approach_1"];
+	std::cout<<"armtype in map "<<traj.arm_type<<std::endl;
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
+
 
 		get_next_state();
 
@@ -263,30 +266,20 @@ void fsautomat::main_task_algorithm(void)
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
 
-				if (ecpLevel) {//some error!
-					std::cout<<"map"<<std::endl;
+				if (ecpLevel) {
+					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
-					std::cout<<"map after load"<<std::endl;
 				} else {
-					std::cout<<"from file: "<<mrrocpp_network_path << fileName<< "loading..." <<std::endl;
-					//std::string path(mrrocpp_network_path);
 					std::string path(mrrocpp_network_path);
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-					std::cout<<"from file: "<<path<< " after load " <<std::endl;
 				}
 			}//if
 			else //moj przypadekl -> z pliku
 			{
-				std::cout<<"normal"<<std::endl;
-				//std::string path(mrrocpp_network_path);
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-					//sg->get_type_for_smooth_xml(path.c_str());
-				//
-					//sg->get_type_for_smooth_xml2(path.c_str(), mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				sg->load_trajectory_from_file(path.c_str());
-				std::cout<<"normal after load"<<std::endl;
 			}//else
 			sg->calculate_interpolate();
 			sg->Move();//changed askubis
@@ -323,9 +316,9 @@ void fsautomat::main_task_algorithm(void)
 			go_st->execute();
 		}
 
-
+		ecp_termination_notice();
 	} //end for
-	ecp_termination_notice();
+
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)
@@ -337,6 +330,7 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 
 void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose &trajectory) {
 //TODO:askubis cos zle z pose specification, wypisac
+std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
 	sg->load_absolute_pose(trajectory);
 }
 
@@ -407,12 +401,8 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 
 void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
-	//char *dataLine, *value;
 	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
-	/*double v[axes_num];
-	double a[axes_num];	// Wczytane wspolrzedne
-	double coordinates[axes_num];     // Wczytane wspolrzedne*/
 
 
 	xmlNode *cchild_node, *ccchild_node;
@@ -431,7 +421,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
-	std::cout<<"askubis ps: "<<ps<<std::endl;
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 

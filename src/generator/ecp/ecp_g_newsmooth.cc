@@ -100,7 +100,6 @@ bool newsmooth::calculate() {
 	}
 
 	pose_vector_iterator = pose_vector.begin();
-	std::cout<<"in calculation 3"<<std::endl;
 	vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator tempIter = pose_vector.end();
 	vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator tempIter2 = pose_vector.begin();
 
@@ -118,12 +117,10 @@ bool newsmooth::calculate() {
 
 		//printf("\n------------ second print pose %d --------------\n", pose_vector_iterator->pos_num);
 		//print_pose(pose_vector_iterator);
-		std::cout<<"in calculation 4"<<std::endl;
 		for(j = 0; j < axes_num; j++) { //for each axis
 			if (vpc.check_if_no_movement(pose_vector_iterator, j)) {
 				continue;
 			}
-			std::cout<<"in calculation 5"<<std::endl;
 			if (vpc.check_s_acc_s_decc(pose_vector_iterator, j)) {//check if s_acc && s_dec < s
 				vpc.calculate_s_uni(pose_vector_iterator, j);//calculate s_uni
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
@@ -358,6 +355,7 @@ bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
 	} else {
+		std::cout<<"ARMTYPE IN MOVE "<<trajectory_pose.arm_type<<std::endl;
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 	return true;

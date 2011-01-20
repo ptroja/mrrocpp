@@ -372,16 +372,13 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
-	std::cout<< "Ruch w stanie: " << state.getStateID() << " generator: "<<state.getGeneratorType()<<" argumenty "<<state.getNumArgument() <<" robot: "<<state.getRobot() <<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
-	std::cout<<"test1"<<std::endl;
 } else {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
-	std::cout<<"test2"<<std::endl;
 }
 }
 
@@ -780,11 +777,10 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 	s.second->configure_sensor();
 }
 
-for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {//TODO: askubis imo zmienic koniec na END
+for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {//TODO: askubis zmienione ze _STOP_
 	if (!strcmp(nextState, (const char *) "_END_"))
 	strcpy(nextState, sh.popTargetName());
 
-	std::cout << "KOPYTKO STAN HEJ TEST 1" << (*stateMap)[nextState].getType() << std::endl;
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
 	break;
@@ -796,12 +792,12 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "emptyGenForSet") == 0) {
 		runEmptyGenForSet((*stateMap)[nextState]);
-		std::cout << nextState << " -> zakonczony emptyGenForSet" << std::endl;
+		std::cout << nextState << " -> zakonczony" << std::endl;
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "emptyGen") == 0) {
 		runEmptyGen((*stateMap)[nextState]);
-		std::cout << nextState << " -> zakonczony empty gen pojedynczy" << std::endl;
+		std::cout << nextState << " -> zakonczony" << std::endl;
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "wait") == 0) {
@@ -856,7 +852,6 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 
 	}
 }
-std::cout << "KOPYTKO STAN HEJ TEST 2" << (*stateMap)[nextState].getType() << std::endl;
 }
 
 } // namespace task
