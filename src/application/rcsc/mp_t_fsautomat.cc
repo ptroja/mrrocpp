@@ -307,14 +307,12 @@ std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * fsautomat:
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
 					common::State * actState = createState(child_node);
 					statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
-					std::cout << "INSERTED A STATE from subtask: " << actState->getStateID() <<"            "<< actState->getGeneratorType()<<"A"<< std::endl;
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
 			common::State * actState = createState(cur_node);
 			statesMap->insert(std::map <const char *, common::State>::value_type(actState->getStateID(), *actState));
-			std::cout << "INSERTED A STATE (normal): " << actState->getStateID() <<"            "<< actState->getGeneratorType() <<"A"<< std::endl;
 		}
 	}
 	// free the document

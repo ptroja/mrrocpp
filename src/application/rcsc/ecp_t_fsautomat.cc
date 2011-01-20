@@ -96,10 +96,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	}
 
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
-std::cout<<"path:"<<mrrocpp_network_path<<std::cout;
-//TODO: askubis change mrrocpp network path to some path form /build/bin
 	std::string filePath(mrrocpp_network_path);
-	std::cout<<"opened first time"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	filePath += fileName;
 
