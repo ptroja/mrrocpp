@@ -10,7 +10,6 @@
 
 #include <QtGui/QApplication>
 #include "mainwindow.h"
-#include "wnd_process_control.h"
 
 #include "interface.h"
 #include "ui_sr.h"
@@ -33,7 +32,8 @@ Interface::Interface() :
 {
 
 	mw = new MainWindow(*this);
-	wpc = new wnd_process_control(*this, mw);
+	win_pc = new QMainWindow(mw);
+	wgt_pc = new wgt_process_control(*this, win_pc);
 
 	main_eb = new function_execution_buffer(*this);
 

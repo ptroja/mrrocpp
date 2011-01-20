@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wgt_process_controlClass</class>
+ <widget class="QWidget" name="wgt_process_controlClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>195</width>
+    <height>109</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>wgt_process_control</string>
+  </property>
+  <widget class="QPushButton" name="mp_resume_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>74</y>
+     <width>85</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>RESUME</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mp_pause_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>74</y>
+     <width>85</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PAUSE</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>10</y>
+     <width>81</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>MP pulse</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mp_stop_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>41</y>
+     <width>85</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>STOP</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="mp_start_pushButton">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>41</y>
+     <width>85</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>START</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
