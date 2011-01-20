@@ -119,7 +119,7 @@ double ppm(
 
 	// total time
 	double tt = maxTime.col(2).maxCoeff();
-	// acceleration iterval
+	// acceleration interval
 	const double ta = maxTime.col(0).maxCoeff();
 	// deceleration interval
 	const double td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
