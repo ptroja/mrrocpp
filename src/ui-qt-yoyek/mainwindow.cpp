@@ -56,8 +56,10 @@ void MainWindow::raise_process_control_window()
 
 void MainWindow::raise_process_control_window_slot()
 {
-	interface.win_pc->show();
-	interface.win_pc->raise();
+	interface.dwgt_pc->show();
+	interface.dwgt_pc->setFloating(false);
+	//interface.win_pc->show();
+	//interface.win_pc->raise();
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)

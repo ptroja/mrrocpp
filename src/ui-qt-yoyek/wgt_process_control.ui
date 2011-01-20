@@ -10,6 +10,12 @@
     <height>109</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>195</width>
+    <height>109</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>wgt_process_control</string>
   </property>

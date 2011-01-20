@@ -9,6 +9,7 @@
 #include <dirent.h>
 
 #include <QtGui/QApplication>
+#include <QDockWidget>
 #include "mainwindow.h"
 
 #include "interface.h"
@@ -32,8 +33,6 @@ Interface::Interface() :
 {
 
 	mw = new MainWindow(*this);
-	win_pc = new QMainWindow(mw);
-	wgt_pc = new wgt_process_control(*this, win_pc);
 
 	main_eb = new function_execution_buffer(*this);
 
@@ -103,6 +102,18 @@ void Interface::init()
 	// ustalenie katalogow UI
 
 	mw->show();
+
+	win_pc = new QMainWindow(mw);
+	dwgt_pc = new QDockWidget(mw);
+	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
+	dwgt_pc->setWindowTitle("Process control");
+
+	dwgt_pc->setMinimumWidth(195);
+	dwgt_pc->setMinimumHeight(109);
+	//	dwgt_pc->setFloating(false);
+	wgt_pc = new wgt_process_control(*this, dwgt_pc);
+	dwgt_pc->hide();
+	mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt_pc);
 
 	struct utsname sysinfo;
 	char* cwd;
