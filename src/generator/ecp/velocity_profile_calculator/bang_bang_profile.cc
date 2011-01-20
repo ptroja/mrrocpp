@@ -475,7 +475,7 @@ bool bang_bang_profile::set_model(vector<ecp_mp::common::trajectory_pose::bang_b
 		it-> model[i] = 4;
 	} else {
 		printf("###################### undetermined model #######################\n");
-		flushall();
+		fflush(stdout);
 		it->model[i] = -1;
 		return false;
 	}
