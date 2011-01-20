@@ -2,6 +2,8 @@
 #define WGT_PROCESS_CONTROL_H
 
 #include <QtGui/QWidget>
+#include <QVBoxLayout>
+#include <QDockWidget>
 #include "ui_wgt_process_control.h"
 
 namespace mrrocpp {
@@ -19,6 +21,9 @@ Q_OBJECT
 public:
 	wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_process_control();
+
+	QDockWidget* dwgt_pc;
+	QVBoxLayout* vl_pc;
 
 private:
 	Ui::wgt_process_controlClass ui;

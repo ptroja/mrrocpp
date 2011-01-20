@@ -194,11 +194,8 @@ public:
 
 	// windows
 	MainWindow* mw;
-
 	wgt_process_control* wgt_pc;
 
-	QDockWidget* dwgt_pc;
-	QVBoxLayout* vl_pc;
 };
 
 }
