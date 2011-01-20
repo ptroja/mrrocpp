@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "mainwindow.h"
-#include "wnd_process_control.h"
 #include "wgt_process_control.h"
 
 #include "base/lib/sr/sr_ecp.h"
@@ -192,11 +191,10 @@ public:
 
 	// windows
 	MainWindow* mw;
-	wnd_process_control* wpc;
 
-	wgt_process_control* wgtpc;
+	wgt_process_control* wgt_pc;
 
-	QMainWindow* rw;
+	QMainWindow* win_pc;
 };
 
 }
