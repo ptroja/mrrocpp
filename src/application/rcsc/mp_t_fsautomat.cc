@@ -780,7 +780,7 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 	s.second->configure_sensor();
 }
 
-for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {
+for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {//TODO: askubis imo zmienic koniec na END
 	if (!strcmp(nextState, (const char *) "_END_"))
 	strcpy(nextState, sh.popTargetName());
 
@@ -796,12 +796,12 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "emptyGenForSet") == 0) {
 		runEmptyGenForSet((*stateMap)[nextState]);
-		std::cout << nextState << " -> zakonczony" << std::endl;
+		std::cout << nextState << " -> zakonczony emptyGenForSet" << std::endl;
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "emptyGen") == 0) {
 		runEmptyGen((*stateMap)[nextState]);
-		std::cout << nextState << " -> zakonczony" << std::endl;
+		std::cout << nextState << " -> zakonczony empty gen pojedynczy" << std::endl;
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "wait") == 0) {
