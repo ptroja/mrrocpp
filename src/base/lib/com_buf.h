@@ -23,7 +23,6 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
-#include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 
 #if defined(USE_MESSIP_SRR)

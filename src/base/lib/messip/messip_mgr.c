@@ -309,7 +309,7 @@ do_readv( int sockfd,
 
 #if defined(__linux__) || defined(sun)
 #	define TID_DISPLAY	"%10lu"
-#elif defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || (__APPLE__ & __MACH__)
 #	define TID_DISPLAY	"%010X"
 #elif defined(__QNX__)
 #	define TID_DISPLAY	"%10d"
