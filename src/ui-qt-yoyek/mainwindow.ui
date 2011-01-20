@@ -76,11 +76,11 @@
    </property>
    <widget class="QMenu" name="menuRobot">
     <property name="title">
-     <string>Robot</string>
+     <string>&amp;Robot</string>
     </property>
     <widget class="QMenu" name="menuSpkm">
      <property name="title">
-      <string>Spkm</string>
+      <string>Sp&amp;km</string>
      </property>
      <widget class="QMenu" name="menuspkm_Pre_synchro_moves">
       <property name="title">
@@ -116,21 +116,21 @@
     </widget>
     <widget class="QMenu" name="menuSmb">
      <property name="title">
-      <string>Smb</string>
+      <string>S&amp;mb</string>
      </property>
      <addaction name="actionsmb_EDP_Load"/>
      <addaction name="actionsmb_EDP_Unload"/>
     </widget>
     <widget class="QMenu" name="menuShead">
      <property name="title">
-      <string>Shead</string>
+      <string>S&amp;head</string>
      </property>
      <addaction name="actionshead_EDP_Load"/>
      <addaction name="actionshead_EDP_Unload"/>
     </widget>
     <widget class="QMenu" name="menuIrp6ot_m">
      <property name="title">
-      <string>Irp6ot_m</string>
+      <string>Irp6&amp;ot_m</string>
      </property>
      <widget class="QMenu" name="menuirp6ot_m_Pre_Synchro_Moves">
       <property name="title">
@@ -156,7 +156,7 @@
     </widget>
     <widget class="QMenu" name="menuIrp6p_m">
      <property name="title">
-      <string>Irp6p_m</string>
+      <string>Irp6&amp;p_m</string>
      </property>
      <widget class="QMenu" name="menuirp6p_m_Pre_Synchro_Moves">
       <property name="title">
@@ -182,7 +182,7 @@
     </widget>
     <widget class="QMenu" name="menuPolycrank">
      <property name="title">
-      <string>Polycrank</string>
+      <string>Polyc&amp;rank</string>
      </property>
      <addaction name="actionpolycrank_EDP_Load"/>
      <addaction name="actionpolycrank_EDP_Unload"/>
@@ -191,22 +191,29 @@
     </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuIrp6p_m"/>
+    <addaction name="actionIrp6ot_t_Fg"/>
+    <addaction name="action_Conveyor"/>
+    <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="menuSpkm"/>
     <addaction name="menuSmb"/>
     <addaction name="menuShead"/>
     <addaction name="separator"/>
     <addaction name="menuPolycrank"/>
+    <addaction name="actionB_ird_hand"/>
+    <addaction name="actionS_arkofag"/>
+    <addaction name="action_Speaker"/>
+    <addaction name="actionIrpt6_mechatronika"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuSpecial">
     <property name="title">
-     <string>Special</string>
+     <string>&amp;Special</string>
     </property>
     <addaction name="actionClear_Console"/>
     <addaction name="separator"/>
@@ -215,7 +222,7 @@
    </widget>
    <widget class="QMenu" name="menuAll_Robots">
     <property name="title">
-     <string>All robots</string>
+     <string>&amp;All robots</string>
     </property>
     <widget class="QMenu" name="menuall_Preset_Positions">
      <property name="title">
@@ -235,7 +242,7 @@
    </widget>
    <widget class="QMenu" name="menuTask">
     <property name="title">
-     <string>Task</string>
+     <string>&amp;Task</string>
     </property>
     <addaction name="actionMP_Load"/>
     <addaction name="actionMP_Unload"/>
@@ -245,7 +252,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
@@ -318,12 +325,12 @@
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
   </action>
   <action name="actionClear_Console">
    <property name="text">
-    <string>Clear Console</string>
+    <string>&amp;Clear Console</string>
    </property>
   </action>
   <action name="actionEDP_load_smb">
@@ -333,17 +340,17 @@
   </action>
   <action name="actionUnload_All">
    <property name="text">
-    <string>Unload All</string>
+    <string>&amp;Unload All</string>
    </property>
   </action>
   <action name="actionSlay_All">
    <property name="text">
-    <string>Slay All</string>
+    <string>&amp;Slay All</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionall_EDP_Load">
@@ -388,22 +395,22 @@
   </action>
   <action name="actionMP_Load">
    <property name="text">
-    <string>MP Load</string>
+    <string>MP &amp;Load</string>
    </property>
   </action>
   <action name="actionMP_Unload">
    <property name="text">
-    <string>MP Unload</string>
+    <string>MP &amp;Unload</string>
    </property>
   </action>
   <action name="actionProcess_Control">
    <property name="text">
-    <string>Process Control</string>
+    <string>&amp;Process Control</string>
    </property>
   </action>
   <action name="actionConfiguration">
    <property name="text">
-    <string>Configuration</string>
+    <string>&amp;Configuration</string>
    </property>
   </action>
   <action name="actionsmb_EDP_Load">
@@ -519,6 +526,36 @@
   <action name="actionpolycrank_Move_Joints">
    <property name="text">
     <string>Move Joints</string>
+   </property>
+  </action>
+  <action name="actionIrp6ot_t_Fg">
+   <property name="text">
+    <string>Irp6ot-t&amp;Fg</string>
+   </property>
+  </action>
+  <action name="action_Conveyor">
+   <property name="text">
+    <string>&amp;Conveyor</string>
+   </property>
+  </action>
+  <action name="actionB_ird_hand">
+   <property name="text">
+    <string>B&amp;ird hand</string>
+   </property>
+  </action>
+  <action name="actionS_arkofag">
+   <property name="text">
+    <string>S&amp;arkofag</string>
+   </property>
+  </action>
+  <action name="action_Speaker">
+   <property name="text">
+    <string>&amp;Speaker</string>
+   </property>
+  </action>
+  <action name="actionIrpt6_mechatronika">
+   <property name="text">
+    <string>Irpt6-&amp;mechatronika</string>
    </property>
   </action>
  </widget>
