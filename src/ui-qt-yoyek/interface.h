@@ -194,7 +194,6 @@ public:
 
 	wgt_process_control* wgt_pc;
 
-	QMainWindow* win_pc;
 	QDockWidget* dwgt_pc;
 };
 

@@ -103,13 +103,12 @@ void Interface::init()
 
 	mw->show();
 
-	win_pc = new QMainWindow(mw);
 	dwgt_pc = new QDockWidget(mw);
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
 	dwgt_pc->setWindowTitle("Process control");
 
-	dwgt_pc->setMinimumWidth(195);
-	dwgt_pc->setMinimumHeight(109);
+	dwgt_pc->setMinimumWidth(210);
+	dwgt_pc->setMinimumHeight(120);
 	//	dwgt_pc->setFloating(false);
 	wgt_pc = new wgt_process_control(*this, dwgt_pc);
 	dwgt_pc->hide();
