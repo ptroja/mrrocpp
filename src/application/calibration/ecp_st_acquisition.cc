@@ -18,7 +18,7 @@ void acquisition::main_task_algorithm(void)
 {
 }
 
-//task* return_created_ecp_task (lib::configurator &_config)
+//task_base* return_created_ecp_task (lib::configurator &_config)
 //{
 //	return new acquisition(_config);
 //}

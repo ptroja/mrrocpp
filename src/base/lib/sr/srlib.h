@@ -12,9 +12,11 @@
 
 #include <ctime>
 #include <string>
+#include <stdint.h>
 
-#include <boost/thread/mutex.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/serialization/serialization.hpp>
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
@@ -48,7 +50,7 @@ typedef struct sr_package
 	msg_header_t hdr;
 #endif
 	//! Message timestamp
-        uint64_t time;
+	uint64_t time;
 
 	//! Sender process type
 	process_type_t process_type;

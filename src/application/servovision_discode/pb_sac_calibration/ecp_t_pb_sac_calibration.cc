@@ -30,7 +30,7 @@ ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& c
 {
 	log_enabled = true;
 	log_dbg_enabled = true;
-	ecp_m_robot = new ecp::irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 
 	string config_section_name = "[sac_calibration]";
 
@@ -80,7 +80,7 @@ void ecp_t_pb_sac_calibration::main_task_algorithm()
 
 namespace common {
 namespace task {
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new irp6p_m::task::ecp_t_pb_sac_calibration(config);
 }

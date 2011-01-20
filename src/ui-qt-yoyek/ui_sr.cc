@@ -51,6 +51,9 @@ namespace common {
 
 void sr_buffer::operator()()
 {
+
+
+
 	lib::set_thread_name("sr");
 
 	lib::fd_server_t ch;

@@ -10,10 +10,10 @@ namespace ecp {
 namespace speaker {
 namespace task {
 
-class rcsc : public common::task::task
+class rcsc : public common::task::_task<ecp::speaker::robot>
 {
 protected:
-	common::generator::transparent* gt;
+	//common::generator::transparent* gt;
 	generator::speaking* speak;
 
 public:

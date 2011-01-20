@@ -22,25 +22,20 @@ namespace common {
 namespace task {
 
 ecp_t_vs_tutorial::ecp_t_vs_tutorial(mrrocpp::lib::configurator& configurator) :
-	task(configurator)
+	common::task::task(configurator)
 {
 	vs_config_section_name = "[object_follower_ib]";
 
 	std::string robot_name = configurator.value <std::string> ("robot_name", vs_config_section_name);
 	if (robot_name == "irp6ot") {
-		ecp_m_robot = new ecp::irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
 	} else if (robot_name == "irp6p") {
-		ecp_m_robot = new ecp::irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 	} else {
 		throw std::logic_error("Unknown robot: " + robot_name);
 	}
 
 	log_dbg_enabled = true;
-}
-
-ecp_t_vs_tutorial::~ecp_t_vs_tutorial()
-{
-	delete ecp_m_robot;
 }
 
 void ecp_t_vs_tutorial::main_task_algorithm(void)
@@ -89,7 +84,7 @@ void ecp_t_vs_tutorial::move_visual_servo()
 	}
 }
 
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new ecp_t_vs_tutorial(config);
 }

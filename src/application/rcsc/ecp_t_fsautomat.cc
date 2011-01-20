@@ -13,17 +13,20 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
 #include "base/ecp_mp/Trajectory.h"
 
-#include "base/lib/sr/srlib.h"
 #include "ecp_mp_t_fsautomat.h"
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
@@ -78,13 +81,15 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 #endif
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) :
-	task(_config), gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
+	common::task::task(_config),
+	gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL),
+	tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw, robot unsupported
 		return;
@@ -323,7 +328,7 @@ void fsautomat::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new fsautomat(_config);
 }

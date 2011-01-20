@@ -50,7 +50,7 @@ void ball::setup_command(robot::robot & robot)
 	robot.mp_command.instruction.instruction_type = lib::GET;
 	robot.mp_command.instruction.get_type = ARM_DEFINITION;
 	robot.mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	robot.mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	robot.mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.set_arm_type = lib::FRAME;
 	robot.mp_command.instruction.get_arm_type = lib::FRAME;

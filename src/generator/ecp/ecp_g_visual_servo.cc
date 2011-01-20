@@ -22,8 +22,7 @@ namespace common {
 namespace generator {
 
 ecp_visual_servo::ecp_visual_servo(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task) {
-
+	common::generator::generator(_ecp_task) {
 }
 
 ecp_visual_servo::~ecp_visual_servo() {
@@ -110,7 +109,7 @@ void ecp_visual_servo::limit_step() {
 	//std::cout << "ecp Ep: ";
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 				= O_r_Ep[0][i];
 		//	std::cout << O_r_Ep[0][i] << " ";
 	}
@@ -126,12 +125,12 @@ void ecp_visual_servo::limit_step() {
 	 std::cout << std::endl;
 	 */
 	for (int i = 0; i < 1; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 				= O_r_E1[i];
 	}
 
 	for (int i = 2; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 				= O_r_E1[i];
 	}
 

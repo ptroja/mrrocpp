@@ -5,6 +5,11 @@
 #include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
+
+namespace lib {
+	class configurator;
+}
+
 namespace ecp {
 namespace common {
 namespace task {

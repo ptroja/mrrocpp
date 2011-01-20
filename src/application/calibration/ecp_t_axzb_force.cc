@@ -1,3 +1,7 @@
+#include <string>
+
+#include "base/lib/configurator.h"
+
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
@@ -59,7 +63,7 @@ void axzb_force::main_task_algorithm(void)
 	ecp_termination_notice();
 }
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new axzb_force(_config);
 }

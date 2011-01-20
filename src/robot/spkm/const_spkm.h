@@ -84,7 +84,7 @@ struct cbuffer
 			case CBUFFER_EPOS_BRAKE_COMMAND:
 				break;
 			default:
-				throw std::bad_cast("unknown SPKM CBUFFER_VARIANT");
+				throw std::logic_error("unknown SPKM CBUFFER_VARIANT");
 		}
 	}
 

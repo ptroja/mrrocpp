@@ -9,7 +9,7 @@ namespace ecp {
 namespace common {
 
 operator_reaction_condition::operator_reaction_condition(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -117,10 +117,10 @@ bool operator_reaction_condition::next_step()
 	// Przy spelnieniu warunku wczytuje stan robota w zaleznosci od rozkazu przygotowanego w EDP_data
 
 	// Stworzenie rozkazu odczytu wspolrzednych kartezjanskich
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
-	//  the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;// W.S.
-	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION; // ARM
+	//  the_robot->ecp_command.get_arm_type = lib::XYZ_EULER_ZYZ;// W.S.
+	the_robot->ecp_command.get_arm_type = lib::MOTOR;
 
 	// Sprawdzenie warunku poczatkowego - reakcji operatora
 	if (ecp_t.operator_reaction("Next motion?")) {

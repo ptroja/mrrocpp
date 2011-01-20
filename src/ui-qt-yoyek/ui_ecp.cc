@@ -33,7 +33,7 @@ namespace common {
 namespace task {
 
 //! Dummy task required for dynamic linking
-mrrocpp::ecp::common::task::task * return_created_ecp_task(mrrocpp::lib::configurator&)
+mrrocpp::ecp::common::task::task_base * return_created_ecp_task(mrrocpp::lib::configurator&)
 {
 	return NULL;
 }
@@ -59,6 +59,9 @@ ecp_buffer::~ecp_buffer()
 
 void ecp_buffer::operator()()
 {
+
+
+
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");

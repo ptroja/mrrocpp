@@ -23,7 +23,6 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
-#include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 
 #if defined(USE_MESSIP_SRR)
@@ -31,6 +30,7 @@
 #endif
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
 
 namespace mrrocpp {
@@ -608,11 +608,6 @@ struct edp_error
 };
 
 //------------------------------------------------------------------------------
-//                                  c_buffer
-//------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------
 /*! robot_model */
 typedef
 #ifndef USE_MESSIP_SRR
@@ -620,8 +615,16 @@ union
 #else
 struct
 #endif
-c_buffer_robot_model
+_robot_model
 {
+	//! Constructor set default discriminant type
+	_robot_model() :
+		type(INVALID_ROBOT_MODEL)
+	{}
+
+	/*! Tool definition type - setting. */
+	ROBOT_MODEL_SPECIFICATION type;
+
 	//----------------------------------------------------------
 	struct
 	{
@@ -656,14 +659,33 @@ c_buffer_robot_model
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & tool_frame_def.tool_frame;
-		ar & kinematic_model.kinematic_model_no;
-		ar & servo_algorithm.servo_algorithm_no;
-		ar & servo_algorithm.servo_parameters_no;
-		ar & force_tool.position;
-		ar & force_tool.weight;
+		ar & type;
+		switch (type) {
+			case TOOL_FRAME:
+				ar & tool_frame_def.tool_frame;
+				break;
+			case ARM_KINEMATIC_MODEL:
+				ar & kinematic_model.kinematic_model_no;
+				break;
+			case SERVO_ALGORITHM:
+				ar & servo_algorithm.servo_algorithm_no;
+				ar & servo_algorithm.servo_parameters_no;
+				break;
+			case FORCE_TOOL:
+				ar & force_tool.position;
+				ar & force_tool.weight;
+				break;
+			default:
+				break;
+		}
 	}
-} c_buffer_robot_model_t;
+} robot_model_t;
+
+//------------------------------------------------------------------------------
+//                                  c_buffer
+//------------------------------------------------------------------------------
+
+typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
@@ -689,14 +711,6 @@ c_buffer_arm
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
-		/*! text to speak */
-		char text[lib::MAX_TEXT];
-		/*! prosody of the text to speak */
-		char prosody[lib::MAX_PROSODY];
-	} text_def;
-	//----------------------------------------------------------
 	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//! Give access to boost::serialization framework
@@ -715,9 +729,6 @@ c_buffer_arm
 		ar & pf_def.arm_frame;
 		ar & pf_def.behaviour;
 
-		//		ar & text_def.text;
-		//		ar & text_def.prosody;
-
 		ar & serialized_command;
 	}
 } c_buffer_arm_t;
@@ -725,14 +736,17 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
+#ifndef USE_MESSIP_SRR
+	/*! This is a message buffer, so it needs a message header */
+	msg_header_t hdr;
+#endif
+
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */
 	uint8_t set_type;
 	/*! Type of the GET instruction. */
 	uint8_t get_type;
-	/*! Tool definition type - setting. */
-	ROBOT_MODEL_SPECIFICATION set_robot_model_type;
 	/*! Tool definition type - reading. */
 	ROBOT_MODEL_SPECIFICATION get_robot_model_type;
 	/*! Definition type of the end-effector's given position. */
@@ -790,7 +804,6 @@ struct c_buffer
 		ar & instruction_type;
 		ar & set_type;
 		ar & get_type;
-		ar & set_robot_model_type;
 		ar & get_robot_model_type;
 		ar & set_arm_type;
 		ar & get_arm_type;
@@ -848,69 +861,7 @@ struct c_buffer
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef
-#ifndef USE_MESSIP_SRR
-union
-#else
-struct
-#endif
-_r_buffer_robot_model
-{
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Macierz reprezentujaca narzedzie wzgledem konca lancucha kinematycznego.
-		 *  @todo Translate to English.
-		 */
-		frame_tab tool_frame;
-	} tool_frame_def;
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Numer modelu kinematyki.
-		 *  @todo Translate to English.
-		 */
-		uint8_t kinematic_model_no;
-	} kinematic_model;
-	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Numery algorytmow serworegulacji.
-		 *  @todo Translate to English.
-		 */
-		uint8_t servo_algorithm_no[lib::MAX_SERVOS_NR];
-		/*!
-		 *  Numery zestawu parametrow algorytmow serworegulacji.
-		 *  @todo Translate to English.
-		 */
-		uint8_t servo_parameters_no[lib::MAX_SERVOS_NR];
-	} servo_algorithm;
-	//----------------------------------------------------------
-	struct
-	{
-		double position[3];
-		double weight;
-	} force_tool;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & tool_frame_def.tool_frame;
-		ar & kinematic_model.kinematic_model_no;
-		ar & servo_algorithm.servo_algorithm_no;
-		ar & servo_algorithm.servo_parameters_no;
-		ar & force_tool.position;
-		ar & force_tool.weight;
-	}
-
-} r_buffer_robot_model_t;
+typedef robot_model_t r_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 typedef struct _controller_state_t
@@ -958,6 +909,12 @@ struct
 #endif
 r_buffer_arm
 {
+	/*!
+	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
+	 *  @todo Translate to English.
+	 */
+	POSE_SPECIFICATION type;
+
 	struct
 	{
 		/*!
@@ -978,14 +935,6 @@ r_buffer_arm
 		int16_t gripper_reg_state;
 	} pf_def;
 	//----------------------------------------------------------
-	struct
-	{
-		/*!
-		 *  Czy mowi?
-		 *  @todo Translate to English.
-		 */
-		bool speaking;
-	} text_def;
 
 	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
@@ -996,46 +945,57 @@ r_buffer_arm
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & type;
 		ar & pf_def.arm_frame;
 		ar & pf_def.arm_coordinates;
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.gripper_reg_state;
-		ar & text_def.speaking;
 		ar & serialized_reply;
 	}
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
-struct r_buffer
-{
+struct r_buffer_base {
 	/*! Type of the reply. */
 	REPLY_TYPE reply_type;
+
 	/*! Number of the error (if it occured). */
 	edp_error error_no;
-	/*!
-	 *  Sposob zdefiniowania narzedzia przy jego odczycie.
-	 *  @todo Translate to English.
-	 */
-	ROBOT_MODEL_SPECIFICATION robot_model_type;
-	/*!
-	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
-	 *  @todo Translate to English.
-	 */
-	POSE_SPECIFICATION arm_type;
+
+	//! Set default values
+	r_buffer_base();
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & reply_type;
+		ar & error_no;
+	}
+};
+
+struct r_buffer : r_buffer_base
+{
 	/*!
 	 *  Wartosci wejsc binarnych.
 	 *  @todo Translate to English.
 	 */
 	uint16_t input_values;
-	/*! Analog input. */
+
+	/*! Analog inputs. */
 	uint8_t analog_input[8];
+
 	controller_state_t controller_state;
+
 	/*! Number of the servo step. */
 	uint32_t servo_step;
-	/*! Given values for PWM fill (Phase Wave Modulation) - (usualy unnecessary). */
+
+	/*! Given values for PWM (Pulse-width modulation), usually unnecessary. */
 	int16_t PWM_value[lib::MAX_SERVOS_NR];
-	/*! Control current - (usualy unnecessary). */
+
+	/*! Control currents, usually unnecessary. */
 	int16_t current[lib::MAX_SERVOS_NR];
+
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
 
@@ -1051,10 +1011,8 @@ struct r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & reply_type;
-		ar & error_no;
-		ar & robot_model_type;
-		ar & arm_type;
+		// serialize base class information
+		ar & boost::serialization::base_object<r_buffer_base>(*this);
 		ar & input_values;
 		ar & analog_input;
 		ar & controller_state;
@@ -1117,26 +1075,6 @@ struct ecp_next_state_t
 		ar & mp_2_ecp_next_state_variant;
 		ar & mp_2_ecp_next_state_string;
 		// ar & playerpos_goal; // this is not needed at this moment
-	}
-};
-
-//------------------------------------------------------------------------------
-struct ecp_command_buffer
-{
-#ifndef USE_MESSIP_SRR
-	/*! This is a message buffer, so it needs a message header */
-	msg_header_t hdr;
-#endif
-	c_buffer instruction;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & instruction;
 	}
 };
 

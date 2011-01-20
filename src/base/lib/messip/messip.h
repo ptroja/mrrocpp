@@ -203,7 +203,7 @@ int
 		messip_send(messip_channel_t * ch, int32_t type, int32_t subtype, const void *send_buffer, int send_len, int32_t * answer, void *reply_buffer, int reply_maxlen, int32_t msec_timeout);
 int32_t
 		messip_buffered_send(messip_channel_t * ch, int32_t type, int32_t subtype, void *send_buffer, int send_len, int32_t msec_timeout);
-#if !defined(__FreeBSD__) && !defined(__APPLE__) && !defined(__MACH__)
+#if !defined(__FreeBSD__) && !(__APPLE__ & __MACH__)
 timer_t
 	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int32_t msec_timeout);
 		

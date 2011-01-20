@@ -114,6 +114,11 @@ elseif (UBUNTU32BIT)
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
 	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
 
+	# Check for libftdi without pkg-config
+	find_library(LibFTDI_LIBRARY ftdi "${MRLIB}/lib")
+	set(LibFTDI_LIBRARIES ${LibFTDI_LIBRARY})
+	set(LibFTDI_FOUND 1)
+
 	# clock_gettime() can be missing in -lc
 	INCLUDE(CheckLibraryExists)
 	CHECK_LIBRARY_EXISTS (rt clock_gettime "" HAVE_LIBRT)
@@ -132,11 +137,15 @@ elseif (UBUNTU32BIT)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, etc.
 	# find dependency packages
-        set(BOOST_ROOT "/opt/boost")
+	set(BOOST_ROOT "/opt/boost")
 	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
-
+	
+	# Check for libftdi with pkg-config
+	include(FindPkgConfig)
+	pkg_check_modules(LibFTDI REQUIRED libftdi)
+	
 	# Eigen2 is not directly supported by CMake
 	pkg_check_modules(EIGEN2 REQUIRED eigen2)
 
@@ -189,4 +198,3 @@ elseif (UBUNTU32BIT)
 else (QNXNTO) # Linux, etc.
 	add_subdirectory (ui-qt-yoyek)
 endif (QNXNTO)
-

@@ -5,11 +5,13 @@
  *      Author: mboryn
  */
 
+#include <cmath>
+#include <stdexcept>
+
+#include "base/lib/configurator.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_uniform_acceleration.h"
-#include <cmath>
-#include <stdexcept>
 
 #include "base/lib/logger.h"
 
@@ -25,7 +27,7 @@ namespace common {
 namespace generator {
 
 ecp_g_conveyor_uniform_acceleration::ecp_g_conveyor_uniform_acceleration(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
-	generator(ecp_task)
+	common::generator::generator(ecp_task)
 {
 	motion_steps = 30;
 	dt = motion_steps * 0.002;
@@ -46,19 +48,19 @@ ecp_g_conveyor_uniform_acceleration::~ecp_g_conveyor_uniform_acceleration()
 
 bool ecp_g_conveyor_uniform_acceleration::first_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = motion_steps;
-	the_robot->ecp_command.instruction.value_in_step_no = motion_steps - 3;
-	//the_robot->ecp_command.instruction.set_robot_model_type = lib::ARM_KINEMATIC_MODEL;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::JOINT;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = motion_steps;
+	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
+	//the_robot->ecp_command.robot_model.type = lib::ARM_KINEMATIC_MODEL;
 
 	//	for (int i = 0; i < 6; i++) {
-	the_robot->ecp_command.instruction.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
+	the_robot->ecp_command.arm.pf_def.behaviour[0] = lib::UNGUARDED_MOTION;
 	//	}
 
 	initial_position_saved = false;
@@ -71,7 +73,7 @@ bool ecp_g_conveyor_uniform_acceleration::first_step()
 }
 bool ecp_g_conveyor_uniform_acceleration::next_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	if (!initial_position_saved) {
 		current_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
@@ -90,7 +92,7 @@ bool ecp_g_conveyor_uniform_acceleration::next_step()
 
 	current_position = current_position + ds;
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = current_position;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[0] = current_position;
 
 	t += dt;
 	return true;
