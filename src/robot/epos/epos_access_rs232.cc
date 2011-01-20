@@ -10,6 +10,7 @@
 #include <fcntl.h>   /* File control definitions */
 #include <cerrno>   /* Error number definitions */
 #include <termios.h> /* POSIX terminal control definitions */
+#include <sys/select.h>
 
 #include "epos.h"
 #include "epos_access_rs232.h"
