@@ -57,8 +57,10 @@ void MainWindow::raise_process_control_window()
 
 void MainWindow::raise_process_control_window_slot()
 {
-	interface.wpc->show();
-	interface.wpc->raise();
+	//interface.wpc->show();
+	//interface.wpc->raise();
+	interface.rw->show();
+	interface.rw->raise();
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)

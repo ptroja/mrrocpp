@@ -34,6 +34,8 @@ Interface::Interface() :
 
 	mw = new MainWindow(*this);
 	wpc = new wnd_process_control(*this, mw);
+	rw = new QMainWindow(mw);
+	wgtpc = new wgt_process_control(*this, rw);
 
 	main_eb = new function_execution_buffer(*this);
 

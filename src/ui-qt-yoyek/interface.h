@@ -4,13 +4,13 @@
 #include <QMainWindow>
 #include "mainwindow.h"
 #include "wnd_process_control.h"
+#include "wgt_process_control.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
 
 #include "ui.h"
-
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
@@ -193,6 +193,10 @@ public:
 	// windows
 	MainWindow* mw;
 	wnd_process_control* wpc;
+
+	wgt_process_control* wgtpc;
+
+	QMainWindow* rw;
 };
 
 }

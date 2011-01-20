@@ -24,6 +24,12 @@ private:
 	Ui::wgt_process_controlClass ui;
 	mrrocpp::ui::common::Interface& interface;
 
+private slots:
+	void on_mp_start_pushButton_clicked();
+	void on_mp_stop_pushButton_clicked();
+	void on_mp_pause_pushButton_clicked();
+	void on_mp_resume_pushButton_clicked();
+
 };
 
 #endif // WGT_PROCESS_CONTROL_H
