@@ -2383,6 +2383,8 @@ static void sigint_sighandler(int signum)
 	channel_t *ch;
 	int index;
 
+	fprintf(stderr, "sigint_sighandler(%d)\n", signum);
+
 	LOCK;
 
 	for (index = 0; index < nb_channels; index++) {
@@ -2405,7 +2407,6 @@ static void sigint_sighandler(int signum)
 
 int main(int argc, char *argv[])
 {
-
 	int sockfd;
 	struct sockaddr_in server_addr;
 	int status;
@@ -2418,6 +2419,7 @@ int main(int argc, char *argv[])
 	int port, port_http;
 	const int flag = 1;
 	int c;
+	int r;	/* return code of POSIX calls */
 	/*
 	 int option_index, c;
 	 static struct option long_options[] = {
@@ -2427,11 +2429,6 @@ int main(int argc, char *argv[])
 	 };
 	 */
 
-	/*
-	 printf("sizeof(pthread_t) = %d\n", sizeof(pthread_t));
-	 */
-
-	fprintf(stdout, "To stop It:    kill -s SIGINT  %d\n", getpid());
 	f_bye = 0; // Set to 1 when SIGINT has been applied
 
 	/*--- Read /erx/messip if exist ---*/
@@ -2472,17 +2469,32 @@ int main(int argc, char *argv[])
 	channels = NULL;
 
 	/*--- Register a function that clean-up opened sockets when exiting ---*/
+#if 0
 	sa.sa_handler = sigint_sighandler;
 	sa.sa_flags = 0;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
+	if(sigemptyset(&sa.sa_mask) == -1) {
+		perror("sigemptyset()");
+	}
+	if(sigaction(SIGINT, &sa, NULL) == -1) {
+		perror("sigaction()");
+	}
 
-	sigemptyset(&set);
-	sigaddset(&set, SIGUSR2);
-	pthread_sigmask(SIG_BLOCK, &set, NULL);
+	fprintf(stdout, "To stop It:    kill -s SIGINT  %d\n", getpid());
+#else
+	if(signal(SIGINT, SIG_IGN) == SIG_ERR) {
+		perror("signal()");
+	}
+#endif
 
-	// by Yoyek - too corectly handle ctrl->c send to console with ui-qt
-	signal(SIGINT, SIG_IGN);
+	if(sigemptyset(&set) == -1) {
+		perror("sigemptyset()");
+	}
+	if(sigaddset(&set, SIGUSR2) == -1) {
+		perror("sigaddset()");
+	}
+	if(pthread_sigmask(SIG_BLOCK, &set, NULL) == -1) {
+		perror("pthread_sigmask()");
+	}
 
 	/*--- Create a mutex, in order to protect shared table of data ---*/
 	if (pthread_mutex_init(&mutex, NULL) == -1) {
@@ -2532,14 +2544,26 @@ int main(int argc, char *argv[])
 	}
 
 	/*--- Create a specific thread to debug information (apply SIGUSR1) ---*/
-	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	pthread_create(&tid, &attr, &debug_thread, NULL);
+	if((r = pthread_attr_init(&attr)) != 0) {
+		fprintf(stderr, "pthread_attr_init() failed\n");
+	}
+	if((r = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) != 0){
+		fprintf(stderr, "pthread_attr_setdetachstate() failed\n");
+	}
+	if((r = pthread_create(&tid, &attr, &debug_thread, NULL)) != 0) {
+		fprintf(stderr, "pthread_create() failed");
+	}
 
 	/*--- Create a specific thread to debug information (HTTP server) ---*/
-	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	pthread_create(&tid, &attr, &http_thread, &port_http);
+	if((r = pthread_attr_init(&attr)) != 0) {
+		fprintf(stderr, "pthread_attr_init() failed\n");
+	}
+	if((r = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) != 0) {
+		fprintf(stderr, "pthread_attr_setdetachstate() failed\n");
+	}
+	if((r = pthread_create(&tid, &attr, &http_thread, &port_http)) != 0) {
+		fprintf(stderr, "pthread_create() failed");
+	}
 
 	for (; !f_bye;) {
 		clientdescr_t *descr;
@@ -2562,9 +2586,15 @@ int main(int argc, char *argv[])
 				inet_ntoa( descr->client_addr.sin_addr ),
 				descr->client_addr.sin_port, descr->sockfd_accept );
 #endif
-		pthread_attr_init(&attr);
-		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-		pthread_create(&tid, &attr, &thread_client_thread, descr);
+		if((r = pthread_attr_init(&attr)) != 0) {
+			fprintf(stderr, "pthread_attr_init() failed\n");
+		}
+		if((r = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) != 0) {
+			fprintf(stderr, "pthread_attr_setdetachstate() failed\n");
+		}
+		if((r = pthread_create(&tid, &attr, &thread_client_thread, descr)) != 0) {
+			fprintf(stderr, "pthread_create() failed");
+		}
 	} // for (;;)
 
 	if (close(sockfd) == -1)
