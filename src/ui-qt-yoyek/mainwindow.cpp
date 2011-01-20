@@ -57,7 +57,7 @@ void MainWindow::raise_process_control_window()
 void MainWindow::raise_process_control_window_slot()
 {
 	interface.dwgt_pc->show();
-	interface.dwgt_pc->setFloating(false);
+	//	interface.dwgt_pc->setFloating(false);
 	//interface.win_pc->show();
 	//interface.win_pc->raise();
 }
