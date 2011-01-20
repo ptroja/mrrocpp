@@ -3,10 +3,13 @@ if(LibFTDI_FOUND)
     	epos.cc
     	epos_access_rs232.cc epos_access_usb.cc)
     	
-    #add_executable(test test.cc)
-    #target_link_libraries (test epos ftdi) 
+    target_link_libraries(epos ${LibFTDI_LIBRARIES})
 else(LibFTDI_FOUND)
-add_library(epos
-    	epos.cc
-    	epos_access_rs232.cc)    	
+    add_library(epos
+        	epos.cc
+        	epos_access_rs232.cc)    	
 endif(LibFTDI_FOUND)	
+
+# Test utility
+#add_executable(test test.cc)
+#target_link_libraries (test epos) 
