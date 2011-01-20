@@ -46,6 +46,7 @@ SET(GUI_CXX_SRCS
     main.cpp
     mainwindow.cpp
     wnd_process_control.cpp
+    wgt_process_control.cpp
     spkm/wnd_spkm_inc.cpp
 )
 
@@ -53,6 +54,7 @@ SET(GUI_CXX_SRCS
 SET(GUI_MOC_SRCS
     mainwindow.h
     wnd_process_control.h
+    wgt_process_control.h
     spkm/wnd_spkm_inc.h
 )
 
@@ -63,6 +65,7 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 SET(GUI_UI
     mainwindow.ui
     wnd_process_control.ui
+    wgt_process_control.ui
     spkm/wnd_spkm_inc.ui
 )
 
