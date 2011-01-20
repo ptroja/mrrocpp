@@ -223,8 +223,6 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 	std::string rsh_spawn_node;
 
-	bool use_ssh = false;
-
 	if (spawned_node_name == sysinfo.nodename) {
 		rsh_spawn_node = "localhost";
 	} else {
@@ -239,10 +237,16 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		}
 	}
 
+	bool use_ssh;
+
 	// Use SSH ?
 	if (exists("use_ssh", _section_name)) {
 		use_ssh = value <bool> ("use_ssh", _section_name);
+	} else {
+		use_ssh = false;
 	}
+
+	const char * rsh_cmd = (use_ssh) ? "ssh" : "rsh";
 
 	// Sciezka do binariow.
 	char bin_path[PATH_MAX];
@@ -289,9 +293,9 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
-				execlp("rsh", "rsh", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
-				execlp("ssh", "ssh", "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
+				execlp(rsh_cmd, rsh_cmd, "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		} else {
 			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
@@ -314,9 +318,9 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			//			);
 			//fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
-				execlp("rsh", "rsh", rsh_spawn_node.c_str(), process_path, NULL);
+				execlp(rsh_cmd, rsh_cmd, rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
-				execlp("ssh", "ssh", "-t", rsh_spawn_node.c_str(), process_path, NULL);
+				execlp(rsh_cmd, rsh_cmd, "-t", rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		}
 

@@ -292,7 +292,7 @@ void model_with_wrist::check_motor_position(const lib::MotorArray & motor_positi
 void model_with_wrist::check_joints(const lib::JointArray & q)
 {
 
-	if (std::isnan(q[0]))
+	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);
 
 	if (q[0] < lower_limit_joint[0]) // kat q1 mniejszy od minimalnego
@@ -300,7 +300,7 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
 	else if (q[0] > upper_limit_joint[0]) // kat q1 wiekszy od maksymalnego
 		throw NonFatal_error_2(BEYOND_UPPER_THETA1_LIMIT);
 
-	if (std::isnan(q[1]))
+	if (isnan(q[1]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA2);
 	if (q[1] < lower_limit_joint[1]) // dlugosc silownika mniejsza od minimalnej
 		throw NonFatal_error_2(BEYOND_LOWER_THETA2_LIMIT);
@@ -308,7 +308,7 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
 	if (q[1] > upper_limit_joint[1]) // dlugosc silownika wieksza od maksymalnej
 		throw NonFatal_error_2(BEYOND_UPPER_THETA2_LIMIT);
 
-	if (std::isnan(q[2]))
+	if (isnan(q[2]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA3);
 	if (q[2] < lower_limit_joint[2]) // dlugosc silownika mniejsza od minimalnej
 		throw NonFatal_error_2(BEYOND_LOWER_THETA3_LIMIT);
@@ -316,7 +316,7 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
 	if (q[2] > upper_limit_joint[2]) // dlugosc silownika wieksza od maksymalnej
 		throw NonFatal_error_2(BEYOND_UPPER_THETA3_LIMIT);
 
-	if (std::isnan(q[3]))
+	if (isnan(q[3]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA4);
 	if (q[3] < lower_limit_joint[3]) // kat q3 mniejszy od minimalnego
 		throw NonFatal_error_2(BEYOND_LOWER_THETA4_LIMIT);
@@ -324,7 +324,7 @@ void model_with_wrist::check_joints(const lib::JointArray & q)
 	if (q[3] > upper_limit_joint[3])
 		throw NonFatal_error_2(BEYOND_UPPER_THETA4_LIMIT);
 
-	/*if (std::isnan(q[4])) throw NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA5);
+	/*if (isnan(q[4])) throw NonFatal_error_2 (NOT_A_NUMBER_JOINT_VALUE_THETA5);
 	 if(q[4] < lower_limit_joint[4])  // kat q4 mniejszy od minimalnego
 	 throw NonFatal_error_2 (BEYOND_LOWER_THETA5_LIMIT);
 
