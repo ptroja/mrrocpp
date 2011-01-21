@@ -1,0 +1,5 @@
+// does the platform provide individual system calls
+
+#cmakedefine HAVE_TIMER_CREATE
+
+#cmakedefine HAVE_KQUEUE
