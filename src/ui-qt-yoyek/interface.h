@@ -2,6 +2,9 @@
 #define __INTERFACE_H
 
 #include <QMainWindow>
+#include <QVBoxLayout>
+#include <QDockWidget>
+
 #include "mainwindow.h"
 #include "wgt_process_control.h"
 
@@ -191,10 +194,8 @@ public:
 
 	// windows
 	MainWindow* mw;
-
 	wgt_process_control* wgt_pc;
 
-	QMainWindow* win_pc;
 };
 
 }
