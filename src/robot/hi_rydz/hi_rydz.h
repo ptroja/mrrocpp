@@ -8,7 +8,16 @@
 #ifndef __HI_RYDZ_H
 #define __HI_RYDZ_H
 
-#include <stdint.h>
+#include "config.h"
+
+#if defined(HAVE_TIMER_CREATE)
+#include <sys/types.h>
+#include <signal.h>
+#elif defined(HAVE_KQUEUE)
+#include <sys/event.h>
+#else
+#warning platform does not provide test mode timeout implementation
+#endif
 
 #include "base/edp/HardwareInterface.h"
 
@@ -101,11 +110,19 @@ private:
 	const unsigned int hi_isa_card_offset;
 	const unsigned int hi_intr_generator_servo_ptr;
 
+#if defined(HAVE_TIMER_CREATE)
 	//! periodic timer
 	timer_t timerid;
 
 	//! periodic timer signal mask
 	sigset_t mask;
+#elif defined(HAVE_KQUEUE)
+	//! Kqueue descriptot
+	int kq;
+
+	//! event we want to monitor
+	struct kevent change;
+#endif
 
 protected:
 

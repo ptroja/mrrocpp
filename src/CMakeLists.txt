@@ -72,6 +72,8 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/src/config.h.in"
   "${PROJECT_BINARY_DIR}/src/config.h"
 )
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 # QNX is default MRROC++ target
 if (QNXNTO)
