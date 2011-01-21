@@ -47,6 +47,7 @@ SET(GUI_CXX_SRCS
     mainwindow.cpp
     wgt_process_control.cpp
     spkm/wnd_spkm_inc.cpp
+    spkm/wgt_spkm_inc.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -54,6 +55,7 @@ SET(GUI_MOC_SRCS
     mainwindow.h
     wgt_process_control.h
     spkm/wnd_spkm_inc.h
+    spkm/wgt_spkm_inc.h
 )
 
 # Generate MOC files
@@ -64,6 +66,7 @@ SET(GUI_UI
     mainwindow.ui
     wgt_process_control.ui
     spkm/wnd_spkm_inc.ui
+    spkm/wgt_spkm_inc.ui
 )
 
 # Generate UI include files
