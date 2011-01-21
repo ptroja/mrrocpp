@@ -19,13 +19,11 @@
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 //#include "base/edp/edp_e_motor_driven.h"
 
-//#include "edp_e_sarkofag.h"
-
-#include <stdint.h>
 #include <termios.h>
 #include <ctime>
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 namespace mrrocpp {
 namespace edp {
@@ -33,12 +31,6 @@ namespace common {
 class motor_driven_effector;
 }
 namespace hi_moxa {
-
-#ifndef __QNXNTO__
-const int BAUD = B921600;
-#else
-const int BAUD = 921600;
-#endif
 
 const std::size_t WRITE_BYTES = 10;
 const std::size_t READ_BYTES = 8;
@@ -56,8 +48,8 @@ class HI_moxa : public common::HardwareInterface
 {
 
 public:
-
 	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports); // Konstruktor
+
 	~HI_moxa();
 
 	virtual void init();
@@ -77,8 +69,12 @@ public:
 	virtual bool is_impulse_zero(int drive_offset);
 	virtual void reset_position(int drive_offset);
 
-protected:
 private:
+	#if defined(B921600)
+	static const speed_t BAUD = B921600;
+	#else
+	static const speed_t BAUD = 921600;
+	#endif
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 

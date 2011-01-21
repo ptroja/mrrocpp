@@ -23,11 +23,13 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
-#include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
+#include "base/lib/typedefs.h"
 
 #if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
+#else
+#include "base/lib/typedefs.h"
 #endif
 
 #include <boost/serialization/serialization.hpp>
@@ -1024,11 +1026,8 @@ struct r_buffer : r_buffer_base
 		ar & robot_model;
 		ar & arm;
 	}
-}
-#ifndef USE_MESSIP_SRR
-__attribute__((__packed__))
-#endif
-;
+};
+
 //------------------------------------------------------------------------------
 /*! Target position for the mobile robot. */
 class playerpos_goal_t

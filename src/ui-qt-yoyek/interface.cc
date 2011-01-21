@@ -9,8 +9,8 @@
 #include <dirent.h>
 
 #include <QtGui/QApplication>
+
 #include "mainwindow.h"
-#include "wnd_process_control.h"
 
 #include "interface.h"
 #include "ui_sr.h"
@@ -33,7 +33,6 @@ Interface::Interface() :
 {
 
 	mw = new MainWindow(*this);
-	wpc = new wnd_process_control(*this, mw);
 
 	main_eb = new function_execution_buffer(*this);
 
@@ -100,10 +99,26 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 void Interface::init()
 {
 
+	// dodanie innych okien w dock widgetach
+	wgt_pc = new wgt_process_control(*this);
+
 	// ustalenie katalogow UI
 
 	mw->show();
 
+	/*
+	 dwgt_pc = new QDockWidget(mw);
+	 //dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
+	 dwgt_pc->setWindowTitle("Process control");
+
+	 vl_pc = new QVBoxLayout();
+	 dwgt_pc->setLayout(vl_pc);
+
+	 vl_pc->addWidget(wgt_pc);
+	 dwgt_pc->setWidget(wgt_pc);
+	 dwgt_pc->hide();
+	 mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt_pc);
+	 */
 	struct utsname sysinfo;
 	char* cwd;
 	char buff[PATH_MAX + 1];

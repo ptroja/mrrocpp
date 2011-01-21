@@ -1,7 +1,11 @@
+#include <cstdio>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 #include <QtGui/QApplication>
 
 #include "interface.h"
-#include "wait.h"
 
 mrrocpp::ui::common::Interface* interface;
 

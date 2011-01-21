@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <ctime>
 
+#include "base/lib/typedefs.h" // For MacOS workaround
 #include "base/lib/timer.h"
 
 namespace mrrocpp {

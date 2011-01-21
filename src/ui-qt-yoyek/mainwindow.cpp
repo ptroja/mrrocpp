@@ -10,7 +10,6 @@
 
 #include "interface.h"
 #include "ui_sr.h"
-#include "wnd_process_control.h"
 
 #include "irp6ot_m/ui_r_irp6ot_m.h"
 #include "irp6p_m/ui_r_irp6p_m.h"
@@ -63,8 +62,10 @@ void MainWindow::raise_process_control_window()
 
 void MainWindow::raise_process_control_window_slot()
 {
-	interface.wpc->show();
-	interface.wpc->raise();
+	interface.wgt_pc->dwgt_pc->show();
+	//	interface.dwgt_pc->setFloating(false);
+	//interface.win_pc->show();
+	//interface.win_pc->raise();
 }
 
 void MainWindow::ui_menu_coloring_slot(QWidget *_menu_item, bool _disabled)

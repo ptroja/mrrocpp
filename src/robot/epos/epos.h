@@ -36,11 +36,6 @@
 #define _EPOS_H
 
 #include <cstdio>   /* Standard input/output definitions */
-#include <cstring>  /* String function definitions */
-#include <unistd.h>  /* UNIX standard function definitions */
-#include <fcntl.h>   /* File control definitions */
-#include <cerrno>   /* Error number definitions */
-#include <termios.h> /* POSIX terminal control definitions */
 #include <cstdlib>
 #include <stdint.h>  /* int types with given size */
 #include <cmath>
@@ -51,8 +46,6 @@
 #include <string>
 #include <exception>
 #include <vector>
-
-#include <ftdi.h>
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -117,6 +110,50 @@ typedef boost::error_info <struct tag_errno_code, int> errno_code;
 //! failed system call
 typedef boost::error_info <struct tag_errno_code, std::string> errno_call;
 
+class epos_base {
+protected:
+	//! Flag indicating connection status
+	bool device_opened;
+
+public:
+	//! EPOS error status
+	DWORD E_error;
+
+public:
+	//! Constructor
+	epos_base();
+
+	//! Destructor
+	virtual ~epos_base();
+
+	/*! \brief  send command to EPOS, taking care of all necessary 'ack' and checksum tests
+	 *
+	 * @param frame array of WORDs to write
+	 */
+	virtual void sendCommand(WORD *frame) = 0;
+
+	/*! \brief  read an answer frame from EPOS
+	 *
+	 * @return answer array from the controller
+	 */
+	virtual unsigned int readAnswer(WORD *ans, unsigned int ans_len) = 0;
+
+	//! Open device
+	virtual void open() = 0;
+
+	//! Close device
+	virtual void close() = 0;
+
+	/*! \brief Checksum calculation
+	 *
+	 * Copied from EPOS Communication Guide, p.8
+	 *
+	 * @param pDataArray pointer to data for checksum calculation
+	 * @param numberOfWords length of the data
+	 */
+	static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+};
+
 //! \brief interface to EPOS MAXON controller
 class epos
 {
@@ -124,35 +161,15 @@ private:
 	/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
 	/* [ one simplification: Node-ID is always 0] */
 
-	//! device name of EPOS port
-	const std::string device;
-
-	//! serial port settings
-	struct termios options;
-
-	//! USB FTDI context
-	struct ftdi_context ftdic;
-
-	bool device_opened;
-
-	//! EPOS global error status
-	DWORD E_error;
-
-	//! EPOS file descriptor
-	int ep;
-
-	//! for internal progress character handling
-	char gMarker;
-
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param lenght of answer buffer
+	 * @param length of answer buffer
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
 	 */
-	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex, uint8_t nodeId = 1);
+	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex);
 
 	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 	 *
@@ -161,15 +178,16 @@ private:
 	 * @return object value
 	 */
 	template <class T>
-	T ReadObjectValue(WORD index, BYTE subindex, uint8_t nodeId = 0)
+	T ReadObjectValue(WORD index, BYTE subindex)
 	{
 		WORD answer[8];
-		ReadObject(answer, 8, index, subindex, nodeId);
+		ReadObject(answer, 8, index, subindex);
 
 		// check error code
-		checkEPOSerror();
+		checkEPOSerror(device.E_error);
 
 #ifdef DEBUG
+		T val;
 		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
 #endif
 
@@ -206,7 +224,7 @@ private:
 	 * @param subindex object entry subindex of in a dictionary
 	 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
 	 */
-	void WriteObject(WORD index, BYTE subindex, const WORD data[2], uint8_t nodeId = 1);
+	void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
 
 	/*! \brief write object value to EPOS
 	 *
@@ -217,93 +235,27 @@ private:
 	 */
 	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
 
-	/* helper functions below */
-
-	/*! \brief write a single BYTE to EPOS
-	 *
-	 * @param c BYTE to write
-	 */
-	void writeBYTE(BYTE c);
-
-	/*! \brief  write a single WORD to EPOS
-	 *
-	 * @param w WORD to write
-	 */
-	void writeWORD(WORD w);
-
-	/*! \brief  read a single BYTE from EPOS, timeout implemented
-	 *
-	 * @return readed data BYTE
-	 */
-	BYTE readBYTE();
-
-	/*! \brief  read a single WORD from EPOS, timeout implemented
-	 *
-	 * @return readed data BYTE
-	 */
-	WORD readWORD();
-
-	/*! \brief  send command to EPOS, taking care of all neccessary 'ack' and checksum tests
-	 *
-	 * @param frame array of WORDs to write
-	 */
-	void sendCommand(WORD *frame);
-
-	/*! \brief  read an answer frame from EPOS
-	 *
-	 * @return answer array from the controller
-	 */
-	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
-
 	/*! \brief check global variable E_error for EPOS error code */
-	int checkEPOSerror();
-
-	/*! \brief Checksum calculation
-	 *
-	 * Copied from EPOS Communication Guide, p.8
-	 *
-	 * @param pDataArray pointer to data for checksum calculcation
-	 * @param numberOfWords lenght of the data
-	 */
-	WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords) const;
+	int checkEPOSerror(DWORD E_error);
 
 	/*! \brief compare two 16bit bitmasks
 	 *
-	 * @return result of comparision */
-	bool bitcmp(WORD a, WORD b) const;
+	 * @return result of comparison */
+	static bool bitcmp(WORD a, WORD b);
 
-	//! USB device indentifiers
-	const int vendor, product, index;
+	//! Object to access the device
+	epos_base & device;
+
+	//! ID of the EPOS device on the CAN bus
+	const uint8_t nodeId;
 
 public:
-	/*! \brief create new EPOS object
-	 *
-	 * @param _device device string describing the device on which the EPOS is connected to, e.g. "/dev/ttyS0"
-	 */
-	epos(const std::string & _device);
-
 	/*! \brief create new USB EPOS object
 	 *
-	 * @param vendor USB device vendor ID
-	 * @param product USB device vendor ID
-	 * @param index USB device vendor ID
+	 * @param _device object to access the device
+	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
-	epos(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
-
-	/*! \brief delete EPOS object */
-	~epos();
-
-	/*! \brief establish serial connection to EPOS
-	 */
-	void openEPOS(speed_t speed);
-
-	/*! \brief establish USB connection to EPOS2
-	 */
-	void openEPOS();
-
-	/*! \brief close the connection to EPOS
-	 */
-	void closeEPOS();
+	epos(epos_base & _device, uint8_t _nodeId);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
@@ -409,7 +361,7 @@ public:
 	//! write position profile deceleration
 	void writePositionProfileDeceleration(UNSIGNED32 dec);
 
-	//! write position profile quict stop deceleration
+	//! write position profile quick stop deceleration
 	void writePositionProfileQuickStopDeceleration(UNSIGNED32 qsdec);
 
 	//! write position profile max velocity
@@ -430,7 +382,7 @@ public:
 	//! \brief read position profile deceleration
 	UNSIGNED32 readPositionProfileDeceleration();
 
-	//! \brief read position profile quick stop decelration
+	//! \brief read position profile quick stop deceleration
 	UNSIGNED32 readPositionProfileQuickStopDeceleration();
 
 	//! \brief read position profile max velocity
@@ -486,46 +438,46 @@ public:
 	//! \brief write RS232 baudrate
 	void writeRS232Baudrate(UNSIGNED16 val);
 
-	//! \brief read P value of the PID regularor
+	//! \brief read P value of the PID regulator
 	INTEGER16 readP();
 
-	//! \brief read I value of the PID regularor
+	//! \brief read I value of the PID regulator
 	INTEGER16 readI();
 
-	//! \brief read V value of the PID regularor
+	//! \brief read V value of the PID regulator
 	INTEGER16 readD();
 
-	//! \brief read Velocity Feed Forward value of the PID regularor
+	//! \brief read Velocity Feed Forward value of the PID regulator
 	UNSIGNED16 readVFF();
 
 	//! \brief read Acceleration Feed Forward value of the PID regulator
 	UNSIGNED16 readAFF();
 
-	//! \brief write P value of the PID regularor
+	//! \brief write P value of the PID regulator
 	void writeP(INTEGER16 val);
 
-	//! \brief write I value of the PID regularor
+	//! \brief write I value of the PID regulator
 	void writeI(INTEGER16 val);
 
-	//! \brief write D value of the PID regularor
+	//! \brief write D value of the PID regulator
 	void writeD(INTEGER16 val);
 
-	//! \brief write Velocity Feed Forward value of the PID regularor
+	//! \brief write Velocity Feed Forward value of the PID regulator
 	void writeVFF(UNSIGNED16 val);
 
-	//! \brief write Acceleration Feed Forward value of the PID regularor
+	//! \brief write Acceleration Feed Forward value of the PID regulator
 	void writeAFF(UNSIGNED16 val);
 
-	//! \brief read P value of the PI current regularor
+	//! \brief read P value of the PI current regulator
 	INTEGER16 readPcurrent();
 
-	//! \brief read I value of the PI current regularor
+	//! \brief read I value of the PI current regulator
 	INTEGER16 readIcurrent();
 
-	//! \brief write P value of the PI current regularor
+	//! \brief write P value of the PI current regulator
 	void writePcurrent(INTEGER16 val);
 
-	//! \brief write I value of the PI current regularor
+	//! \brief write I value of the PI current regulator
 	void writeIcurrent(INTEGER16 val);
 
 	//! \brief save actual parameters in non-volatile memory
@@ -537,10 +489,10 @@ public:
 	//! \brief write home position
 	void writeHomePosition(INTEGER32 val);
 
-	//! \brief read motor continous current limit
+	//! \brief read motor continuous current limit
 	UNSIGNED16 readMotorContinousCurrentLimit();
 
-	//! \brief write motor continous current limit
+	//! \brief write motor continuous current limit
 	void writeMotorContinousCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor output current limit
@@ -615,12 +567,12 @@ public:
 	/*! \brief as monitorStatus(), but also waits for Homing Attained' signal */
 	void monitorHomingStatus();
 
-	/*! \brief waits for positoning to finish, argument is timeout in
+	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 };
 
-}
+} /* namespace epos */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

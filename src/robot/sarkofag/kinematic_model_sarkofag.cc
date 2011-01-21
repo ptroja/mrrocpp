@@ -7,6 +7,8 @@
  * @ingroup KINEMATICS sarkofag
  */
 
+#include <cmath>
+
 #include "base/lib/com_buf.h"
 
 // Klasa kinematic_model_conveyor.
@@ -81,6 +83,8 @@ void model::check_motor_position(const lib::MotorArray & motor_position)
  ------------------------------------------------------------------------ */
 void model::check_joints(const lib::JointArray & q)
 {
+	using ::isnan;
+
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
 	if (q[0] < lower_limit_joint) // 7 st. swobody

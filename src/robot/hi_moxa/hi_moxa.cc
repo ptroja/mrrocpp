@@ -1,15 +1,14 @@
-#include "robot/hi_moxa/hi_moxa.h"
+#include <exception>
+#include <stdexcept>
+#include <cstring>
+#include <iostream>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/select.h>
 #include <fcntl.h>
 
-#include <exception>
-#include <stdexcept>
-#include <cstring>
-#include <iostream>
-
+#include "robot/hi_moxa/hi_moxa.h"
 #include "base/edp/edp_e_motor_driven.h"
 
 namespace mrrocpp {
