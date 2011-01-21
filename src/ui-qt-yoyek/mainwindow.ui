@@ -129,6 +129,9 @@
      <addaction name="actionshead_EDP_Unload"/>
     </widget>
     <widget class="QMenu" name="menuIrp6ot_m">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>Irp6&amp;ot_m</string>
      </property>

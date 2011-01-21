@@ -30,6 +30,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_menu_coloring_signal(Widget*, bool)), this, SLOT(ui_menu_coloring_slot(Widget *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
 	Qt::WindowFlags flags;
@@ -41,6 +42,11 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::ui_menu_coloring(QWidget *_menu_item, bool _active)
+{
+	emit ui_menu_coloring_signal(_menu_item, !_active);
 }
 
 void MainWindow::ui_notification(QString _string, QColor _color)
@@ -59,6 +65,11 @@ void MainWindow::raise_process_control_window_slot()
 {
 	interface.wpc->show();
 	interface.wpc->raise();
+}
+
+void MainWindow::ui_menu_coloring_slot(QWidget *_menu_item, bool _disabled)
+{
+	_menu_item->setDisabled(_disabled);
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)

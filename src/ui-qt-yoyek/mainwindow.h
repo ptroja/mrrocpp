@@ -25,6 +25,7 @@ public:
 	~MainWindow();
 
 	void ui_notification(QString _string, QColor _color);
+	void ui_menu_coloring(QWidget *widget, bool active);
 	void raise_process_control_window();
 
 private:
@@ -34,6 +35,7 @@ private:
 
 	signals:
 	void ui_notification_signal(QString _string, QColor _color);
+	void ui_menu_coloring_signal(QWidget *menu_item, bool active);
 	void raise_process_control_window_signal();
 
 private slots:
@@ -42,6 +44,7 @@ private slots:
 
 	void ui_notification_slot(QString _string, QColor _color);
 	void raise_process_control_window_slot();
+	void ui_menu_coloring_slot(QWidget *widget, bool active);
 
 	// menus
 
