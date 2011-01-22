@@ -43,8 +43,6 @@ const int AXIS_7_MAX_CURRENT = 0x2420;// ustawienie pradu maksymalnego dla zacis
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-#define SIG	SIGRTMIN
-
 class hardware_interface : public hi_rydz::HI_rydz
 {
 public:
