@@ -168,9 +168,6 @@ else (QNXNTO) # Linux, MacOS, etc.
 	INCLUDE (CheckSymbolExists)
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
 
-	INCLUDE (CheckFunctionExists)
-	CHECK_FUNCTION_EXISTS(timer_create HAVE_TIMER_CREATE) 
-
 	# for non-QNX target messip is the only messaging protocol
 	set(USE_MESSIP ON)
 

@@ -1,5 +1,9 @@
 // does the platform provide individual system calls
 
-#cmakedefine HAVE_TIMER_CREATE
+#include <unistd.h>
+
+#     if (defined(_POSIX_TIMERS) && (_POSIX_TIMERS+0 >= 0))
+#	define HAVE_POSIX_TIMERS
+#     endif
 
 #cmakedefine HAVE_KQUEUE
