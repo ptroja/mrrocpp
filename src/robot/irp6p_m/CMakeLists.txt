@@ -21,6 +21,11 @@ target_link_libraries(
         edp_irp6p_m
         ati6284KB
 )
+else(QNXNTO) # MacOS workaround
+target_link_libraries(
+        edp_irp6p_m
+        ati3084MK
+)
 endif(QNXNTO)
 
 add_library(kinematicsirp6p_m
