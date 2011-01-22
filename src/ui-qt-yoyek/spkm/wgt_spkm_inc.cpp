@@ -70,14 +70,8 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 
 	if (er.epos_controller[axis].motion_in_progress) {
 		qab_mip->setChecked(true);
-		/* TR
-		 interface.set_toggle_button(ABW_thumb);
-		 */
 	} else {
 		qab_mip->setChecked(false);
-		/* TR
-		 interface.unset_toggle_button(ABW_thumb);
-		 */
 	}
 
 	return 1;
@@ -110,25 +104,24 @@ int wgt_spkm_inc::import()
 	return 1;
 }
 
-int wgt_spkm_inc::exporto()
+void wgt_spkm_inc::on_pushButton_export_clicked()
 {
 
 	char buffer[200];
-	/* TR
-	 double *wektor[robot.number_of_servos];
 
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-	 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
+	double wektor[robot.number_of_servos];
 
-	 sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
-	 */
+	wektor[0] = ui.doubleSpinBox_des_p0->value();
+	wektor[1] = ui.doubleSpinBox_des_p1->value();
+	wektor[2] = ui.doubleSpinBox_des_p2->value();
+	wektor[3] = ui.doubleSpinBox_des_p3->value();
+	wektor[4] = ui.doubleSpinBox_des_p4->value();
+	wektor[5] = ui.doubleSpinBox_des_p5->value();
+
+	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", wektor[0], wektor[1], wektor[2], wektor[3], wektor[4], wektor[5]);
+
 	interface.ui_msg->message(buffer);
 
-	return 1;
 }
 
 int wgt_spkm_inc::copy()

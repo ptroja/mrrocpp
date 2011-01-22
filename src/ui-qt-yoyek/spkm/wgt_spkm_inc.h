@@ -33,7 +33,6 @@ private:
 
 	int init();
 	int import();
-	int exporto();
 	int copy();
 	int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);
 
@@ -41,6 +40,7 @@ private:
 
 private slots:
 	void on_pushButton_read_clicked();
+	void on_pushButton_export_clicked();
 
 };
 
