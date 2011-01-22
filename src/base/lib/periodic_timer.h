@@ -55,6 +55,11 @@ public:
 
 	//! Wait until next firing
 	void sleep();
+
+#if defined(HAVE_KQUEUE)
+	//! Destructor
+	~periodic_timer();
+#endif
 };
 
 #endif /* PERIODIC_TIMER_H_ */

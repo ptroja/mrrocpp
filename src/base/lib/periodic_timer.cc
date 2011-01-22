@@ -58,6 +58,13 @@ periodic_timer::periodic_timer(unsigned int ms) :
 #endif
 }
 
+#if defined(HAVE_KQUEUE)
+periodic_timer::~periodic_timer()
+{
+	close(kq);
+}
+#endif
+
 void periodic_timer::sleep()
 {
 #if defined(HAVE_POSIX_TIMERS)
