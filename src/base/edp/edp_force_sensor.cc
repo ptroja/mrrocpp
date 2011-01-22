@@ -49,7 +49,9 @@ void force::operator()()
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
 	//sr_msg->message("dupa 1");
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+		perror("clock_gettime()");
+	}
 
 	while (!TERMINATE) //!< for (;;)
 	{

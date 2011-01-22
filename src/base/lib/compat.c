@@ -5,12 +5,14 @@
 #if (__APPLE__ & __MACH__)
 
 #include <sys/time.h>
+#include <errno.h>
 
 #include "typedefs.h"
 
 int clock_nanosleep(clockid_t clock_id, int flags,
        const struct timespec *rqtp, struct timespec *rmtp)
 {
+	errno = EINVAL;
 	return -1;
 }
 
@@ -20,6 +22,7 @@ int clock_gettime( clockid_t clock_id, struct timespec * tp )
 
 	/* Only CLOCK_REALTIME is emulated */
 	if(clock_id != CLOCK_REALTIME) {
+		errno = EINVAL;
 		return -1;
 	}
 

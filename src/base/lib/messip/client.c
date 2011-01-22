@@ -67,7 +67,9 @@ do {
 #if defined(__QNXNTO__)
 		cycle1=ClockCycles();
 #else /*!__QNXNTO__ */
-		clock_gettime(CLOCK_REALTIME, &before);
+		if(clock_gettime(CLOCK_REALTIME, &before) == -1) {
+			perror("clock_gettime()");
+		}
 #endif /* __QNXNTO__ */
 
 #if defined(ONEWAY_MESSAGE)
@@ -84,7 +86,9 @@ do {
 		d=(double)ncycles/cps;
 		usleep(1000);
 #else /*!__QNXNTO__ */
-		clock_gettime(CLOCK_REALTIME, &after);
+		if(clock_gettime(CLOCK_REALTIME, &after) == -1) {
+			perror("clock_gettime()");
+		}
 		d = 
 			(after.tv_sec+after.tv_nsec/1e9)
 			-(before.tv_sec+before.tv_nsec/1e9);
