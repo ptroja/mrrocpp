@@ -14,7 +14,6 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()()
 {
-
 	//	sr_msg->message("operator");
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);

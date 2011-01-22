@@ -28,6 +28,8 @@
 #include <boost/thread/thread_time.hpp>
 #endif
 
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 
@@ -44,6 +46,7 @@ const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
 
 const long COMMCYCLE_TIME_NS = 2000000;
+const boost::posix_time::time_duration COMMCYCLE_TIME = boost::posix_time::millisec(2);
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
@@ -92,7 +95,7 @@ private:
 #ifdef HAVE_POSIX_TIMERS
 	struct timespec wake_time;
 #else
-	boost::system_time wake_time;
+	boost::posix_time::ptime wake_time;
 #endif
 
 }; // koniec: class hardware_interface

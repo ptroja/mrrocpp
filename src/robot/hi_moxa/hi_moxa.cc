@@ -192,11 +192,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		wake_time.tv_nsec -= 1000000000;
 	}
 #else
-#if defined(BOOST_DATE_TIME_HAS_NANOSECONDS)
-	wake_time += boost::posix_time::nanoseconds(COMMCYCLE_TIME_NS);
-#else
-	wake_time += boost::posix_time::microseconds(COMMCYCLE_TIME_NS/1000);
-#endif /* BOOST_DATE_TIME_HAS_NANOSECONDS */
+	wake_time += COMMCYCLE_TIME;
 #endif /* HAVE_POSIX_TIMERS */
 
 	// test mode
