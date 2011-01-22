@@ -25,6 +25,9 @@
 
 #include "base/lib/periodic_timer.h"
 
+namespace mrrocpp {
+namespace lib {
+
 #if defined(HAVE_POSIX_TIMERS)
 void periodic_timer::timespec_increment_ns(struct timespec * ts, unsigned long increment)
 {
@@ -105,3 +108,6 @@ void periodic_timer::sleep()
 	boost::thread::sleep(wakeup);
 #endif
 }
+
+} // namespace lib
+} // namespace mrrocpp

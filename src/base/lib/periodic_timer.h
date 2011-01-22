@@ -22,6 +22,9 @@
 	#include <boost/thread/thread_time.hpp>
 #endif
 
+namespace mrrocpp {
+namespace lib {
+
 //! Class implementing a high-resolution portable periodic timer
 //! @note monotonic time is preferred over a system time
 class periodic_timer : boost::noncopyable {
@@ -61,5 +64,8 @@ public:
 	~periodic_timer();
 #endif
 };
+
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* PERIODIC_TIMER_H_ */
