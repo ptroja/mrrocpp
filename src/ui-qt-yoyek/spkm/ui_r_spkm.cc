@@ -4,7 +4,6 @@
 
 #include "ui_r_spkm.h"
 #include "ui_ecp_r_spkm.h"
-#include "wnd_spkm_inc.h"
 #include "wgt_spkm_inc.h"
 /* TR
  #include "ui/src/spkm/wnd_spkm_int.h"
@@ -142,9 +141,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 
-	wnd_inc = new wnd_spkm_inc(interface, *this, interface.mw);
 	wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
-	wndbase_m["wnd_spkm_inc"] = wnd_inc;
+	wndbase_m["wgt_spkm_inc"] = wgt_inc->dwgt;
 
 	/* TR
 	 wnd_int = new WndInt(interface, *this);
