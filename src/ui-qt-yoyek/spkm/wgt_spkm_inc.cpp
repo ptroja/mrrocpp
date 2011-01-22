@@ -1,8 +1,12 @@
+#include "ui_ecp_r_spkm.h"
+#include "ui_r_spkm.h"
+#include "robot/spkm/const_spkm.h"
+
 #include "wgt_spkm_inc.h"
 #include "../interface.h"
 
-wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	QWidget(parent), interface(_interface)
+wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
+	QWidget(parent), interface(_interface), robot(_robot)
 {
 	ui.setupUi(this);
 
