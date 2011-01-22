@@ -45,8 +45,7 @@ const std::size_t READ_BYTES = 8;
 const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
 
-const long COMMCYCLE_TIME_NS = 2000000;
-const boost::posix_time::time_duration COMMCYCLE_TIME = boost::posix_time::millisec(2);
+const unsigned long COMMCYCLE_TIME_NS = 2000000;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class

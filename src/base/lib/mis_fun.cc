@@ -68,5 +68,18 @@ int set_thread_name(const char * newname)
 	return -1;
 }
 
+#ifndef TIMESPEC_VALID
+# define TIMESPEC_VALID(__ts) ((__ts)->tv_nsec >= 0 && (__ts)->tv_nsec < 1000000000L)
+#endif
+
+void timespec_increment_ns(struct timespec * ts, unsigned long increment)
+{
+	ts->tv_nsec += increment;
+	while (ts->tv_nsec >= 1000000000) {
+		  ts->tv_sec  += 1;
+		  ts->tv_nsec -= 1000000000;
+	}
+}
+
 } // namespace lib
 } // namespace mrrocpp
