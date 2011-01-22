@@ -227,7 +227,8 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		rsh_spawn_node = "localhost";
 	} else {
 		rsh_spawn_node = spawned_node_name;
-
+#if defined(__QNXNTO__)
+		/* This check works only with QNX and Qnet */
 		std::string opendir_path("/net/");
 		opendir_path += rsh_spawn_node;
 
@@ -235,6 +236,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
+#endif /* __QNXNTO__ */
 	}
 
 	bool use_ssh;
