@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>603</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,52 +19,7 @@
   <property name="windowTitle">
    <string>MRROC++; The best robotic framework ever ...</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QPlainTextEdit" name="plainTextEdit_sr">
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>100</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Monospace</family>
-        <pointsize>9</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLineEdit" name="Position_lineEdit">
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>27</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="notification_label">
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>17</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>UI_NOTIFICATION</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
@@ -255,6 +210,69 @@
    <addaction name="menuTask"/>
    <addaction name="menuSpecial"/>
    <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QDockWidget" name="sr_dockWidget">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>konsola sr</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPlainTextEdit" name="plainTextEdit_sr">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Monospace</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="Position_lineEdit">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>27</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="notification_label">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>17</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>UI_NOTIFICATION</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="actionspkm_EDP_Load">
    <property name="text">
