@@ -6,17 +6,17 @@ wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interf
 {
 	ui.setupUi(this);
 
-	dwgt_pc = new QDockWidget(interface.mw);
+	dwgt = new QDockWidget(interface.mw);
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
-	dwgt_pc->setWindowTitle("Process control");
+	dwgt->setWindowTitle("Process control");
 
-	vl_pc = new QVBoxLayout();
-	dwgt_pc->setLayout(vl_pc);
+	vl = new QVBoxLayout();
+	dwgt->setLayout(vl);
 
-	vl_pc->addWidget(this);
-	dwgt_pc->setWidget(this);
-	dwgt_pc->hide();
-	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt_pc);
+	vl->addWidget(this);
+	dwgt->setWidget(this);
+	dwgt->hide();
+	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
 wgt_process_control::~wgt_process_control()

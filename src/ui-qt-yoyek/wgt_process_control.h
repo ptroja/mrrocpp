@@ -22,8 +22,8 @@ public:
 	wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_process_control();
 
-	QDockWidget* dwgt_pc;
-	QVBoxLayout* vl_pc;
+	QDockWidget* dwgt;
+	QVBoxLayout* vl;
 
 private:
 	Ui::wgt_process_controlClass ui;
