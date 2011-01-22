@@ -13,6 +13,7 @@ class Interface;
 }
 namespace spkm {
 class UiRobot;
+const std::string WGT_SPKM_INC = "WGT_SPKM_INC";
 }
 }
 }

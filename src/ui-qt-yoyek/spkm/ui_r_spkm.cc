@@ -22,6 +22,24 @@ namespace spkm {
 //
 //
 
+
+UiRobot::UiRobot(common::Interface& _interface) :
+			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, "is_spkm_active"),
+			ui_ecp_robot(NULL)
+{
+
+	wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
+	wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
+
+	/* TR
+	 wnd_int = new WndInt(interface, *this);
+	 wndbase_m[wnd_int->window_name] = wnd_int;
+	 wnd_external = new WndExternal(interface, *this);
+	 wndbase_m[wnd_external->window_name] = wnd_external;
+	 */
+
+}
+
 void UiRobot::edp_create()
 {
 	if (state.edp.state == 0) {
@@ -133,23 +151,6 @@ int UiRobot::synchronise_int()
 	interface.manage_interface();
 
 	return 1;
-
-}
-
-UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, "is_spkm_active"),
-			ui_ecp_robot(NULL)
-{
-
-	wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
-	wndbase_m["wgt_spkm_inc"] = wgt_inc->dwgt;
-
-	/* TR
-	 wnd_int = new WndInt(interface, *this);
-	 wndbase_m[wnd_int->window_name] = wnd_int;
-	 wnd_external = new WndExternal(interface, *this);
-	 wndbase_m[wnd_external->window_name] = wnd_external;
-	 */
 
 }
 
