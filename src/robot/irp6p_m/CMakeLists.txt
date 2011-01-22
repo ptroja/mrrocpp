@@ -2,7 +2,7 @@ if(ROBOT_IRP6_POSTUMENT_M)
 add_executable(edp_irp6p_m
 	edp_irp6p_m_effector.cc
 	sg_irp6p_m.cc
-	 regulator_irp6p_m.cc 
+	regulator_irp6p_m.cc 
 )
 
 target_link_libraries(
