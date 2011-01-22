@@ -106,60 +106,38 @@ int wgt_spkm_inc::import()
 
 void wgt_spkm_inc::on_pushButton_export_clicked()
 {
-
+	// przejsc na std::string
 	char buffer[200];
 
-	double wektor[robot.number_of_servos];
-
-	wektor[0] = ui.doubleSpinBox_des_p0->value();
-	wektor[1] = ui.doubleSpinBox_des_p1->value();
-	wektor[2] = ui.doubleSpinBox_des_p2->value();
-	wektor[3] = ui.doubleSpinBox_des_p3->value();
-	wektor[4] = ui.doubleSpinBox_des_p4->value();
-	wektor[5] = ui.doubleSpinBox_des_p5->value();
-
-	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", wektor[0], wektor[1], wektor[2], wektor[3], wektor[4], wektor[5]);
+	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", ui.doubleSpinBox_des_p0->value(), ui.doubleSpinBox_des_p1->value(), ui.doubleSpinBox_des_p2->value(), ui.doubleSpinBox_des_p3->value(), ui.doubleSpinBox_des_p4->value(), ui.doubleSpinBox_des_p5->value());
 
 	interface.ui_msg->message(buffer);
 
 }
 
+void wgt_spkm_inc::on_pushButton_copy_clicked()
+{
+	copy();
+}
+
 int wgt_spkm_inc::copy()
 {
 
-	// wychwytania ew. bledow ECP::robot
-	/* TR
-	 double *wektor_ptgr[robot.number_of_servos], wektor[robot.number_of_servos];
-	 */
 	if (robot.state.edp.pid != -1) {
 		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
-			/* TR
-			 interface.unblock_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
+			ui.pushButton_execute->setDisabled(false);
 
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p0, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[0], 0);
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p1, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[1], 0);
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p2, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[2], 0);
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p3, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[3], 0);
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p4, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[4], 0);
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_motors_cur_p5, Pt_ARG_NUMERIC_VALUE, &wektor_ptgr[5], 0);
+			ui.doubleSpinBox_des_p0->setValue(ui.doubleSpinBox_cur_p0->value());
+			ui.doubleSpinBox_des_p1->setValue(ui.doubleSpinBox_cur_p1->value());
+			ui.doubleSpinBox_des_p2->setValue(ui.doubleSpinBox_cur_p2->value());
+			ui.doubleSpinBox_des_p3->setValue(ui.doubleSpinBox_cur_p3->value());
+			ui.doubleSpinBox_des_p4->setValue(ui.doubleSpinBox_cur_p4->value());
+			ui.doubleSpinBox_des_p5->setValue(ui.doubleSpinBox_cur_p5->value());
 
-			 for (int i = 0; i < robot.number_of_servos; i++) {
-			 wektor[i] = *wektor_ptgr[i];
-			 }
-
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-			 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
-			 */
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			/* TR
-			 interface.block_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
-			 */
+			ui.pushButton_execute->setDisabled(true);
 		}
 
 	}
