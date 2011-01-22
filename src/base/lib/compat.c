@@ -31,8 +31,7 @@ int clock_nanosleep(clockid_t clock_id, int flags,
 	free(strs);
 #endif /* _ENABLE_DEBUG_BACKTRACE */
 											 
-	errno = EINVAL;
-	return -1;
+	return EINVAL;
 }
 
 int clock_gettime( clockid_t clock_id, struct timespec * tp )

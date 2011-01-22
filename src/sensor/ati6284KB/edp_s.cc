@@ -95,7 +95,10 @@ void ATI6284_force::wait_for_particular_event()
 		wake_time.tv_nsec -= 1000000000;
 	}
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+	}
 
 	for (int i = 0; i < 6; i++) {
 		comedi_data_read(device, 0, i, 0, AREF_DIFF, &adc_data[i]);

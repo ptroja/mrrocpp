@@ -396,7 +396,10 @@ void ATI6284_force::wait_for_particular_event()
 			wake_time.tv_nsec -= 1000000000;
 		}
 
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		if(err != 0) {
+			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+		}
 
 		local_timer.stop();
 		local_timer.get_time(sec);
