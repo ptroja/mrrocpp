@@ -117,10 +117,10 @@ private:
 	//! periodic timer signal mask
 	sigset_t mask;
 #elif defined(HAVE_KQUEUE)
-	//! Kqueue descriptot
+	//! Kqueue descriptor
 	int kq;
 
-	//! event we want to monitor
+	//! Event we want to monitor
 	struct kevent change;
 #endif
 
