@@ -39,6 +39,9 @@ private:
 
 	int set_single_axis(int axis/* TR, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb*/);
 
+private slots:
+	void on_pushButton_read_clicked();
+
 };
 
 #endif // WGT_SPKM_INC_H

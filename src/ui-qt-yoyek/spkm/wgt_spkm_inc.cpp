@@ -17,6 +17,13 @@ wgt_spkm_inc::~wgt_spkm_inc()
 
 }
 
+// slots
+
+void wgt_spkm_inc::on_pushButton_read_clicked()
+{
+	init();
+}
+
 int wgt_spkm_inc::init()
 {
 
@@ -25,9 +32,7 @@ int wgt_spkm_inc::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				/* TR
-				 interface.unblock_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
-				 */
+				ui.pushButton_execute->setDisabled(false);
 
 				robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
@@ -46,9 +51,7 @@ int wgt_spkm_inc::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				/* TR
-				 interface.block_widget(ABW_PtPane_wind_spkm_inc_post_synchro_moves);
-				 */
+				ui.pushButton_execute->setDisabled(true);
 			}
 		}
 
