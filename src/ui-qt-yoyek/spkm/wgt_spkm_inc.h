@@ -37,7 +37,7 @@ private:
 	int copy();
 	int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);
 
-	int set_single_axis(int axis/* TR, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb*/);
+	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
 
 private slots:
 	void on_pushButton_read_clicked();

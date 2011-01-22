@@ -38,12 +38,12 @@ int wgt_spkm_inc::init()
 				robot.ui_ecp_robot->execute_motion();
 				robot.ui_ecp_robot->epos_reply_data_request_port->get();
 
-				set_single_axis(0/* TR, ABW_PtNumericFloat_wind_spkm_motors_mcur_0, ABW_PtNumericFloat_wind_spkm_motors_cur_p0, ABW_thumb_wind_spkm_motors_mip_0*/);
-				set_single_axis(1/* TR , ABW_PtNumericFloat_wind_spkm_motors_mcur_1, ABW_PtNumericFloat_wind_spkm_motors_cur_p1, ABW_thumb_wind_spkm_motors_mip_1*/);
-				set_single_axis(2/* TR, ABW_PtNumericFloat_wind_spkm_motors_mcur_2, ABW_PtNumericFloat_wind_spkm_motors_cur_p2, ABW_thumb_wind_spkm_motors_mip_2*/);
-				set_single_axis(3/* TR, ABW_PtNumericFloat_wind_spkm_motors_mcur_3, ABW_PtNumericFloat_wind_spkm_motors_cur_p3, ABW_thumb_wind_spkm_motors_mip_3*/);
-				set_single_axis(4/* TR, ABW_PtNumericFloat_wind_spkm_motors_mcur_4, ABW_PtNumericFloat_wind_spkm_motors_cur_p4, ABW_thumb_wind_spkm_motors_mip_4*/);
-				set_single_axis(5/* TR, ABW_PtNumericFloat_wind_spkm_motors_mcur_5, ABW_PtNumericFloat_wind_spkm_motors_cur_p5, ABW_thumb_wind_spkm_motors_mip_5*/);
+				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
+				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
+				set_single_axis(2, ui.doubleSpinBox_mcur_2, ui.doubleSpinBox_cur_p2, ui.radioButton_mip_2);
+				set_single_axis(3, ui.doubleSpinBox_mcur_3, ui.doubleSpinBox_cur_p3, ui.radioButton_mip_3);
+				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.doubleSpinBox_cur_p4, ui.radioButton_mip_4);
+				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.doubleSpinBox_cur_p5, ui.radioButton_mip_5);
 
 				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = robot.current_pos[i];
@@ -61,7 +61,7 @@ int wgt_spkm_inc::init()
 	return 1;
 }
 
-int wgt_spkm_inc::set_single_axis(int axis/* TR, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb*/)
+int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
 	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
