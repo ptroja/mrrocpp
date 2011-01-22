@@ -52,6 +52,8 @@
 
 #include "logg_messip.h"
 
+#define IGNORE_CTRLC_SIGNAL	1
+
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 #define	LOCK \
@@ -818,7 +820,6 @@ http_thread(void *arg)
 		clientdescr_t *descr;
 		pthread_t tid;
 		pthread_attr_t attr;
-		int flag = 0;
 
 		descr = (clientdescr_t *) malloc(sizeof(clientdescr_t));
 		descr->client_addr_len = sizeof(struct sockaddr_in);
@@ -2377,6 +2378,7 @@ thread_client_thread(void *arg)
 } // thread_client_thread
 
 
+#ifndef IGNORE_CTRLC_SIGNAL
 static void sigint_sighandler(int signum)
 {
 	connexion_t *cnx;
@@ -2403,6 +2405,7 @@ static void sigint_sighandler(int signum)
 	exit(1);
 
 } // sigint_sighandler
+#endif /* IGNORE_CTRLC_SIGNAL */
 
 
 int main(int argc, char *argv[])
@@ -2414,7 +2417,9 @@ int main(int argc, char *argv[])
 	pthread_t tid;
 	pthread_attr_t attr;
 	char hostname[64] = "localhost";
+#ifndef IGNORE_CTRLC_SIGNAL
 	struct sigaction sa;
+#endif
 	sigset_t set;
 	int port, port_http;
 	const int flag = 1;
@@ -2469,7 +2474,11 @@ int main(int argc, char *argv[])
 	channels = NULL;
 
 	/*--- Register a function that clean-up opened sockets when exiting ---*/
-#if 0
+#ifdef IGNORE_CTRLC_SIGNAL
+	if(signal(SIGINT, SIG_IGN) == SIG_ERR) {
+		perror("signal()");
+	}
+#else /* IGNORE_CTRLC_SIGNAL */
 	sa.sa_handler = sigint_sighandler;
 	sa.sa_flags = 0;
 	if(sigemptyset(&sa.sa_mask) == -1) {
@@ -2480,11 +2489,7 @@ int main(int argc, char *argv[])
 	}
 
 	fprintf(stdout, "To stop It:    kill -s SIGINT  %d\n", getpid());
-#else
-	if(signal(SIGINT, SIG_IGN) == SIG_ERR) {
-		perror("signal()");
-	}
-#endif
+#endif /* IGNORE_CTRLC_SIGNAL */
 
 	if(sigemptyset(&set) == -1) {
 		perror("sigemptyset()");
