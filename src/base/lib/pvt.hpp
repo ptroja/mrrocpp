@@ -62,6 +62,7 @@ double pvt(
 
 /**
  * Determine maximal time to execute a motion in Profile Position Mode
+ * with a trapezoidal velocity profile.
  * @param N number of axes
  * @param Delta destination position delta vector
  * @param Vmax velocity limit vector
@@ -84,12 +85,14 @@ double ppm(
 {
 	Matrix<double,N,3> Time;
 
+	// Iterate over axes
 	for(unsigned int l = 0; l < N; ++l) {
-		const double delta = Delta(l,0),
-			vmax = Vmax(l,0),
-			amax = Amax(l,0),
-			dmax = -Amax(l,0);
+		const double delta = Delta(l,0),	// motor position delta
+			vmax = Vmax(l,0),				// maximal velocity
+			amax = Amax(l,0),				// maximal acceleration
+			dmax = -Amax(l,0);				// maximal deceleration
 
+		// Velocity value, when the velocity profile is triangular
 		const double VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
 
 		std::cout << "VLimit: " << VTriangle << std::endl;

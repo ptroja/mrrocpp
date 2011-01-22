@@ -10,6 +10,9 @@
 
 #include <cmath>
 
+// for MacOS compatibility, where isnan() is implemented as a function in the std:: namespace
+using std::isnan;
+
 #include "base/lib/com_buf.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
 

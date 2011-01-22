@@ -8,6 +8,8 @@
 // ze wzgledu na drugi proces korzystajacy z tego samego przerwania - tasmociag
 // ------------------------------------------------------------------------
 
+#include "config.h"
+
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -32,6 +34,7 @@
 
 #include "robot/hi_rydz/hi_rydz.h"
 #include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace hi_rydz {
@@ -49,6 +52,7 @@ void HI_rydz::init()
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
+#if defined(HAVE_POSIX_TIMERS)
 		// Initliaze mask to waiting for a signal
 		//fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 		if (sigemptyset(&mask) == -1) {
@@ -79,6 +83,15 @@ void HI_rydz::init()
 		if (timer_settime(timerid, 0, &its, NULL) == -1) {
 			perror("timer_settime()");
 		}
+#elif defined(HAVE_KQUEUE)
+		/* create a new kernel event queue */
+		if ((kq = kqueue()) == -1) {
+			perror("kqueue()");
+		}
+
+		/* initalise kevent structure */
+		EV_SET(&change, 1, EVFILT_TIMER, EV_ADD | EV_ENABLE, NOTE_NSECONDS, 1000000000 * lib::EDP_STEP, 0);
+#endif
 	} else {
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
@@ -229,10 +242,17 @@ HI_rydz::~HI_rydz(void) // destruktor
 
 		// TODO: InterruptDetach(), munmap_device_io()
 	} else {
+#if defined(HAVE_POSIX_TIMERS)
 		/* delete interval timer */
 		if (timer_delete(timerid) == -1) {
 			perror("timer_delete()");
 		}
+#elif defined(HAVE_KQUEUE)
+		/* clocke the kqueue */
+		if (close(kq) == -1) {
+			perror("close(kq)");
+		}
+#endif
 	}
 } // end: hardware_interface::~hardware_interface()
 // ------------------------------------------------------------------------
@@ -396,12 +416,34 @@ int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 		return -1;
 #endif
 	} else {
+#if defined(HAVE_POSIX_TIMERS)
 		int sig;
 		int s = sigwait(&mask, &sig);
 		if (s != 0) {
 			perror("sigwait()");
 			return -1;
 		}
+#elif defined(HAVE_KQUEUE)
+		/* event that was triggered */
+		struct kevent event;
+
+		/* wait for new event */
+		int nev = kevent(kq, &change, 1, &event, 1, NULL);
+
+		if (nev < 0) {
+			perror("kevent()");
+		}
+		else if (nev > 0) {
+			if (event.flags & EV_ERROR) {   /* report any error */
+				fprintf(stderr, "EV_ERROR: %s\n", strerror(event.data));
+				return -1;
+			}
+		}
+		else {
+			fprintf(stderr, "kevent(): unexpected timeout\n");
+			return -1;
+		}
+#endif
 		return 0;
 	}
 }

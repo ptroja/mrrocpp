@@ -269,7 +269,9 @@ bool seven_eye_run_linear::next_step (  ) {
    // Kontakt z MP
 // if ((mp_comm_counter++)==100) {// by Y - lekka manianka
 // mp_comm_counter=0; // 2004.02.25
-clock_gettime( CLOCK_REALTIME , &s_time);
+if(clock_gettime( CLOCK_REALTIME , &s_time) == -1) {
+	perror("clock_gettime()");
+}
    if (check_and_null_trigger()) { // Koniec odcinka
 //    ecp_t.set_ecp_reply (lib::TASK_TERMINATED);
 
@@ -756,12 +758,16 @@ else
 #endif
 
 }
-clock_gettime( CLOCK_REALTIME , &crr_time);
+if(clock_gettime( CLOCK_REALTIME , &crr_time) == -1) {
+	perror("clock_gettime()");
+}
 
 
 
 
-clock_gettime( CLOCK_REALTIME , &e_time);
+if(clock_gettime( CLOCK_REALTIME , &e_time) == -1) {
+	perror("clock_gettime()");
+}
 // printf( "base/ecp= %f %f %f\n",(double)(e_time.tv_nsec), (double)(crr_time.tv_nsec), (double)(s_time.tv_nsec));
 
    // skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego

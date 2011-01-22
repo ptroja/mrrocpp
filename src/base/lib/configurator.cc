@@ -227,7 +227,8 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		rsh_spawn_node = "localhost";
 	} else {
 		rsh_spawn_node = spawned_node_name;
-
+#if defined(__QNXNTO__)
+		/* This check works only with QNX and Qnet */
 		std::string opendir_path("/net/");
 		opendir_path += rsh_spawn_node;
 
@@ -235,6 +236,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
+#endif /* __QNXNTO__ */
 	}
 
 	bool use_ssh;
@@ -284,7 +286,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) - 1) {
+		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 

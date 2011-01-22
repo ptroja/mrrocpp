@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <exception>
 #include <stdexcept>
 #include <cstring>
@@ -7,6 +9,13 @@
 #include <sys/stat.h>
 #include <sys/select.h>
 #include <fcntl.h>
+
+#ifdef HAVE_POSIX_TIMERS
+#include <ctime>
+#else
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/posix_time/posix_time_duration.hpp>
+#endif
 
 #include "robot/hi_moxa/hi_moxa.h"
 #include "base/edp/edp_e_motor_driven.h"
@@ -60,52 +69,54 @@ void HI_moxa::init()
 		// informacja o stanie robota
 		master.controller_state_edp_buf.is_power_on = true;
 		master.controller_state_edp_buf.is_robot_blocked = false;
-
-		clock_gettime(CLOCK_MONOTONIC, &wake_time);
-		reset_counters();
-		return;
 	} // end test mode
-
-	// domyslnie robot nie jest zsynchronizowany
-	master.controller_state_edp_buf.is_synchronised = false;
-
-
-
-	fd_max = 0;
-	for (unsigned int i = 0; i <= last_drive_number; i++) {
-		std::cout << "[info] opening port : " << port_names[i].c_str();
-		fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-		if (fd[i] < 0) {
-			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
-			//throw(std::runtime_error("unable to open device!!!"));
-		} else {
-			std::cout << "...OK" << std::endl;
-			if (fd[i] > fd_max)
-				fd_max = fd[i];
+	else
+	{
+		// domyslnie robot nie jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = false;
+	
+		fd_max = 0;
+		for (unsigned int i = 0; i <= last_drive_number; i++) {
+			std::cout << "[info] opening port : " << port_names[i].c_str();
+			fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+			if (fd[i] < 0) {
+				std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
+				//throw(std::runtime_error("unable to open device!!!"));
+			} else {
+				std::cout << "...OK" << std::endl;
+				if (fd[i] > fd_max) {
+					fd_max = fd[i];
+				}
+			}
+			tcgetattr(fd[i], &oldtio[i]);
+	
+			// set up new settings
+			struct termios newtio;
+			memset(&newtio, 0, sizeof(newtio));
+			newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
+			newtio.c_iflag = INPCK; //IGNPAR;
+			newtio.c_oflag = 0;
+			newtio.c_lflag = 0;
+			if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
+				tcsetattr(fd[i], TCSANOW, &oldtio[i]);
+				close(fd[i]);
+				fd[i] = -1;
+				throw(std::runtime_error("unable to set baudrate !!!"));
+				return;
+			}
+			// activate new settings
+			tcflush(fd[i], TCIFLUSH);
+			tcsetattr(fd[i], TCSANOW, &newtio);
 		}
-		tcgetattr(fd[i], &oldtio[i]);
-
-		// set up new settings
-		struct termios newtio;
-		memset(&newtio, 0, sizeof(newtio));
-		newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
-		newtio.c_iflag = INPCK; //IGNPAR;
-		newtio.c_oflag = 0;
-		newtio.c_lflag = 0;
-		if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
-			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
-			close(fd[i]);
-			fd[i] = -1;
-			throw(std::runtime_error("unable to set baudrate !!!"));
-			return;
-		}
-		// activate new settings
-		tcflush(fd[i], TCIFLUSH);
-		tcsetattr(fd[i], TCSANOW, &newtio);
 	}
 
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
-
+#ifdef HAVE_POSIX_TIMERS
+	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+		perror("clock_gettime()");
+	}
+#else
+	wake_time = boost::get_system_time();
+#endif
 	reset_counters();
 }
 
@@ -175,13 +186,29 @@ uint64_t HI_moxa::read_write_hardware(void)
 	uint8_t drive_number;
 	static int status_disp_cnt = 0;
 
+#ifdef HAVE_POSIX_TIMERS	
+	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
+		wake_time.tv_sec += 1;
+		wake_time.tv_nsec -= 1000000000;
+	}
+#else
+#if defined(BOOST_DATE_TIME_HAS_NANOSECONDS)
+	wake_time += boost::posix_time::nanoseconds(COMMCYCLE_TIME_NS);
+#else
+	wake_time += boost::posix_time::microseconds(COMMCYCLE_TIME_NS/1000);
+#endif /* BOOST_DATE_TIME_HAS_NANOSECONDS */
+#endif /* HAVE_POSIX_TIMERS */
+
 	// test mode
 	if (master.robot_test_mode) {
-		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-			wake_time.tv_sec += 1;
-			wake_time.tv_nsec -= 1000000000;
+#ifdef HAVE_POSIX_TIMERS	
+		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		if(err != 0) {
+			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 		}
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+#else
+		boost::thread::sleep(wake_time);
+#endif
 		return ret;
 	}// end test mode
 
@@ -295,12 +322,14 @@ uint64_t HI_moxa::read_write_hardware(void)
 		status_disp_cnt = 0;
 	}
 
-	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-		wake_time.tv_sec += 1;
-		wake_time.tv_nsec -= 1000000000;
+#ifdef HAVE_POSIX_TIMERS	
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 	}
-
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+#else
+	boost::thread::sleep(wake_time);
+#endif
 
 	return ret;
 }

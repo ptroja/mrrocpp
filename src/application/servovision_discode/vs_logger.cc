@@ -81,7 +81,9 @@ void vs_logger::log(const lib::Homog_matrix &O_T_G_desired, const lib::Homog_mat
 	}
 
 	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
+	if(clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+		perror("clock_gettime()");
+	}
 
 	fprintf(fp, "%ld;%ld", ts.tv_sec, ts.tv_nsec);
 	for (int i = 0; i < 3; ++i)
