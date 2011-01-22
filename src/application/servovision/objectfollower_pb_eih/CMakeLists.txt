@@ -16,7 +16,7 @@ add_executable(ecp_objectfollower_pb_eih
 target_link_libraries(ecp_objectfollower_pb_eih
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
-	ecp ${COMMON_LIBRARIES}
+	ecp ${COMMON_LIBRARIES} ${Boost_DATE_TIME_LIBRARY}
 )
 
 ####################################3
