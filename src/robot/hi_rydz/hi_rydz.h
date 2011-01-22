@@ -10,7 +10,7 @@
 
 #include "config.h"
 
-#if defined(HAVE_TIMER_CREATE)
+#if defined(HAVE_POSIX_TIMERS)
 #include <sys/types.h>
 #include <signal.h>
 #elif defined(HAVE_KQUEUE)
@@ -110,7 +110,7 @@ private:
 	const unsigned int hi_isa_card_offset;
 	const unsigned int hi_intr_generator_servo_ptr;
 
-#if defined(HAVE_TIMER_CREATE)
+#if defined(HAVE_POSIX_TIMERS)
 	//! periodic timer
 	timer_t timerid;
 

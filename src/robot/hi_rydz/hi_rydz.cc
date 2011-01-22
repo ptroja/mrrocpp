@@ -52,7 +52,7 @@ void HI_rydz::init()
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
-#if defined(HAVE_TIMER_CREATE)
+#if defined(HAVE_POSIX_TIMERS)
 		// Initliaze mask to waiting for a signal
 		//fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
 		if (sigemptyset(&mask) == -1) {
@@ -242,7 +242,7 @@ HI_rydz::~HI_rydz(void) // destruktor
 
 		// TODO: InterruptDetach(), munmap_device_io()
 	} else {
-#if defined(HAVE_TIMER_CREATE)
+#if defined(HAVE_POSIX_TIMERS)
 		/* delete interval timer */
 		if (timer_delete(timerid) == -1) {
 			perror("timer_delete()");
@@ -416,7 +416,7 @@ int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 		return -1;
 #endif
 	} else {
-#if defined(HAVE_TIMER_CREATE)
+#if defined(HAVE_POSIX_TIMERS)
 		int sig;
 		int s = sigwait(&mask, &sig);
 		if (s != 0) {
