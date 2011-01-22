@@ -17,7 +17,7 @@
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
 #include "polycrank/ui_r_polycrank.h"
-#include "spkm/wnd_spkm_inc.h"
+#include "spkm/wgt_spkm_inc.h"
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
@@ -56,7 +56,8 @@ void MainWindow::raise_process_control_window()
 
 void MainWindow::raise_process_control_window_slot()
 {
-	interface.wgt_pc->dwgt_pc->show();
+	interface.wgt_pc->dwgt->show();
+	interface.wgt_pc->dwgt->raise();
 	//	interface.dwgt_pc->setFloating(false);
 	//interface.win_pc->show();
 	//interface.win_pc->raise();
@@ -341,12 +342,14 @@ void MainWindow::on_actionspkm_Synchronisation_triggered()
 
 void MainWindow::on_actionspkm_Motors_triggered()
 {
-	interface.spkm->wnd_inc->show();
+	interface.spkm->wgt_inc->dwgt->show();
+	interface.spkm->wgt_inc->dwgt->raise();
 }
 
 void MainWindow::on_actionspkm_Motors_post_triggered()
 {
-	interface.spkm->wnd_inc->show();
+	interface.spkm->wgt_inc->dwgt->show();
+	interface.spkm->wgt_inc->dwgt->raise();
 }
 
 void MainWindow::on_actionspkm_Joints_triggered()

@@ -10,7 +10,7 @@
 
 #include "ui.h"
 
-class QMainWindow;
+class QDockWidget;
 
 namespace mrrocpp {
 namespace ui {
@@ -18,7 +18,7 @@ namespace common {
 
 class Interface;
 
-typedef std::map <std::string, QMainWindow*> WndBase_t;
+typedef std::map <std::string, QDockWidget*> WndBase_t;
 typedef WndBase_t::value_type WndBase_pair_t;
 
 //
