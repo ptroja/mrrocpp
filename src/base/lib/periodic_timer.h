@@ -45,7 +45,7 @@ private:
 	int kq;
 
 	//! Event we want to monitor
-	const struct kevent change;
+	struct kevent change;
 #else
 	//! Wakeup time
 	boost::posix_time::ptime wakeup;
