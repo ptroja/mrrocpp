@@ -86,8 +86,6 @@ void wgt_spkm_inc::on_pushButton_import_clicked()
 
 	tmp_ptgr = ((interface.mw->get_lineEdit_position_string()).toStdString()).c_str();
 
-	//	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
-
 	tmp = new char[strlen(tmp_ptgr)];
 
 	strcpy(tmp, tmp_ptgr);
