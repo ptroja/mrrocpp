@@ -27,12 +27,21 @@ public:
 	~wgt_spkm_inc();
 
 	QDockWidget* dwgt;
-	QVBoxLayout* vl;
 
 private:
 	Ui::wgt_spkm_incClass ui;
 	mrrocpp::ui::common::Interface& interface;
 	mrrocpp::ui::spkm::UiRobot& robot;
+	QVBoxLayout* vl;
+
+	int init();
+	int import();
+	int exporto();
+	int copy();
+	int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);
+
+	int set_single_axis(int axis/* TR, PtWidget_t *ABW_current, PtWidget_t *ABW_position, PtWidget_t *ABW_thumb*/);
+
 };
 
 #endif // WGT_SPKM_INC_H
