@@ -65,15 +65,16 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 {
 
 	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
-	/* TR
-	 PtSetResource(ABW_current, Pt_ARG_NUMERIC_VALUE, &er.epos_controller[axis].current, 0);
-	 PtSetResource(ABW_position, Pt_ARG_NUMERIC_VALUE, &er.epos_controller[axis].position, 0);
-	 */
+	qdsb_mcur->setValue(er.epos_controller[axis].current);
+	qdsb_cur_p->setValue(er.epos_controller[axis].position);
+
 	if (er.epos_controller[axis].motion_in_progress) {
+		qab_mip->setChecked(true);
 		/* TR
 		 interface.set_toggle_button(ABW_thumb);
 		 */
 	} else {
+		qab_mip->setChecked(false);
 		/* TR
 		 interface.unset_toggle_button(ABW_thumb);
 		 */

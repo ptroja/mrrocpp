@@ -133,11 +133,14 @@
    </item>
    <item row="1" column="3">
     <widget class="QRadioButton" name="radioButton_mip_0">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="autoExclusive">
       <bool>false</bool>
@@ -289,11 +292,14 @@
    </item>
    <item row="2" column="3">
     <widget class="QRadioButton" name="radioButton_mip_1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="autoExclusive">
       <bool>false</bool>
@@ -420,11 +426,14 @@
    </item>
    <item row="3" column="3">
     <widget class="QRadioButton" name="radioButton_mip_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="autoExclusive">
       <bool>false</bool>
@@ -551,11 +560,14 @@
    </item>
    <item row="4" column="3">
     <widget class="QRadioButton" name="radioButton_mip_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="autoExclusive">
       <bool>false</bool>
@@ -682,11 +694,14 @@
    </item>
    <item row="5" column="3">
     <widget class="QRadioButton" name="radioButton_mip_4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="autoExclusive">
       <bool>false</bool>
@@ -813,10 +828,16 @@
    </item>
    <item row="6" column="3">
     <widget class="QRadioButton" name="radioButton_mip_5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string/>
      </property>
      <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
       <bool>false</bool>
      </property>
      <property name="autoExclusive">
