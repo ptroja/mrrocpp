@@ -107,6 +107,7 @@ public:
 
 	//! dostep do nowej wiadomosci dla vsp
 	lib::condition_synchroniser new_command_synchroniser;
+
 	common::FORCE_ORDER command;
 
 	//! zakonczenie obydwu watkow
@@ -114,6 +115,7 @@ public:
 
 	//! czy czujnik skonfigurowany?
 	bool is_sensor_configured;
+
 	void set_command_execution_finish();
 
 	Eigen::Vector3d next_force_tool_position, current_force_tool_position;
