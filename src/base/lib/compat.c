@@ -7,11 +7,30 @@
 #include <sys/time.h>
 #include <errno.h>
 
+// uncomment to show where the call originates from
+//#define _ENABLE_DEBUG_BACKTRACE
+
+#if defined(_ENABLE_DEBUG_BACKTRACE)
+#include <execinfo.h>
+#include <stdlib.h>
+#include <stdio.h>
+#endif /* _ENABLE_DEBUG_BACKTRACE */
+
 #include "typedefs.h"
 
 int clock_nanosleep(clockid_t clock_id, int flags,
        const struct timespec *rqtp, struct timespec *rmtp)
 {
+#if defined(_ENABLE_DEBUG_BACKTRACE)
+	void* callstack[128];
+	int i, frames = backtrace(callstack, 128);
+	char** strs = backtrace_symbols(callstack, frames);
+	for (i = 0; i < frames; ++i) {
+		printf("%s\n", strs[i]);
+	}
+	free(strs);
+#endif /* _ENABLE_DEBUG_BACKTRACE */
+											 
 	errno = EINVAL;
 	return -1;
 }
