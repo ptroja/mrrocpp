@@ -4,6 +4,7 @@
 
 #include "wgt_spkm_inc.h"
 #include "../interface.h"
+#include "../mainwindow.h"
 
 wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
 	wgt_base("Spkm incremental motion", _interface, parent), robot(_robot)
@@ -77,41 +78,45 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 	return 1;
 }
 
-int wgt_spkm_inc::import()
+void wgt_spkm_inc::on_pushButton_import_clicked()
 {
-	/* TR
-	 char *tmp_ptgr, *tmp;
-	 double val;
+	const char *tmp_ptgr;
+	char *tmp;
+	double val;
 
-	 PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
+	tmp_ptgr = ((interface.mw->get_lineEdit_position_string()).toStdString()).c_str();
 
-	 tmp = new char[strlen(tmp_ptgr)];
-	 strcpy(tmp, tmp_ptgr);
+	//	PtGetResource(ABW_PtText_input_console, Pt_ARG_TEXT_STRING, &tmp_ptgr, 0);
 
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 val = strtod(tmp, &tmp);
-	 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &val, 0);
-	 */
-	return 1;
+	tmp = new char[strlen(tmp_ptgr)];
+
+	strcpy(tmp, tmp_ptgr);
+
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p0->setValue(val);
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p1->setValue(val);
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p2->setValue(val);
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p3->setValue(val);
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p4->setValue(val);
+	val = strtod(tmp, &tmp);
+	ui.doubleSpinBox_des_p5->setValue(val);
+
 }
 
 void wgt_spkm_inc::on_pushButton_export_clicked()
 {
-	// przejsc na std::string
-	char buffer[200];
+	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	sprintf(buffer, "edp_spkm INCREMENTAL POSITION\n %f %f %f %f %f %f", ui.doubleSpinBox_des_p0->value(), ui.doubleSpinBox_des_p1->value(), ui.doubleSpinBox_des_p2->value(), ui.doubleSpinBox_des_p3->value(), ui.doubleSpinBox_des_p4->value(), ui.doubleSpinBox_des_p5->value());
+	buffer << "edp_spkm INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
+			<< ui.doubleSpinBox_des_p1->value() << " " << ui.doubleSpinBox_des_p2->value() << " "
+			<< ui.doubleSpinBox_des_p3->value() << " " << ui.doubleSpinBox_des_p4->value() << " "
+			<< ui.doubleSpinBox_des_p5->value();
 
-	interface.ui_msg->message(buffer);
+	interface.ui_msg->message(buffer.str());
 
 }
 

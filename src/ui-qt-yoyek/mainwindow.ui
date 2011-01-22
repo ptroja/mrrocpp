@@ -246,12 +246,18 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="Position_lineEdit">
+      <widget class="QLineEdit" name="lineEdit_position">
        <property name="minimumSize">
         <size>
          <width>200</width>
          <height>27</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Monospace</family>
+         <pointsize>9</pointsize>
+        </font>
        </property>
       </widget>
      </item>

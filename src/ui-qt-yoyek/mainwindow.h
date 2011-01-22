@@ -26,6 +26,7 @@ public:
 
 	void ui_notification(QString _string, QColor _color);
 	void raise_process_control_window();
+	QString get_lineEdit_position_string();
 
 private:
 	Ui::MainWindow *ui;

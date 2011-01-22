@@ -54,6 +54,11 @@ void MainWindow::raise_process_control_window()
 	emit raise_process_control_window_signal();
 }
 
+QString MainWindow::get_lineEdit_position_string()
+{
+	return ui->lineEdit_position->text();
+}
+
 void MainWindow::raise_process_control_window_slot()
 {
 	interface.wgt_pc->dwgt->show();
