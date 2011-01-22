@@ -185,7 +185,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 			wake_time.tv_sec += 1;
 			wake_time.tv_nsec -= 1000000000;
 		}
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		
+		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		if(err != 0) {
+			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+		}
 		return ret;
 	}// end test mode
 
@@ -304,7 +308,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 		wake_time.tv_nsec -= 1000000000;
 	}
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+	}
 
 	return ret;
 }
