@@ -61,7 +61,9 @@ void HI_moxa::init()
 		master.controller_state_edp_buf.is_power_on = true;
 		master.controller_state_edp_buf.is_robot_blocked = false;
 
-		clock_gettime(CLOCK_MONOTONIC, &wake_time);
+		if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+			perror("clock_gettime()");
+		}
 		reset_counters();
 		return;
 	} // end test mode
@@ -104,7 +106,9 @@ void HI_moxa::init()
 		tcsetattr(fd[i], TCSANOW, &newtio);
 	}
 
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+		perror("clock_gettime()");
+	}
 
 	reset_counters();
 }
