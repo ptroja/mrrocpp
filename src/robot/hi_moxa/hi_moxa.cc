@@ -13,7 +13,8 @@
 #ifdef HAVE_POSIX_TIMERS
 #include <ctime>
 #else
-#include <boost/thread/thread_time.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/posix_time/posix_time_duration.hpp>
 #endif
 
 #include "robot/hi_moxa/hi_moxa.h"
@@ -191,8 +192,12 @@ uint64_t HI_moxa::read_write_hardware(void)
 		wake_time.tv_nsec -= 1000000000;
 	}
 #else
+#if defined(BOOST_DATE_TIME_HAS_NANOSECONDS)
 	wake_time += boost::posix_time::nanoseconds(COMMCYCLE_TIME_NS);
-#endif
+#else
+	wake_time += boost::posix_time::microseconds(COMMCYCLE_TIME_NS/1000);
+#endif /* BOOST_DATE_TIME_HAS_NANOSECONDS */
+#endif /* HAVE_POSIX_TIMERS */
 
 	// test mode
 	if (master.robot_test_mode) {
