@@ -33,9 +33,7 @@ void kinematic_model_irp6_tfg::check_motor_position(const lib::MotorArray & moto
 
 void kinematic_model_irp6_tfg::check_joints(const lib::JointArray & q)
 {
-	using ::isnan; // hack for different OS compatibility...
-
-	if (isnan(q[0]))
+	if (std::isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);
 	if (q[0] < lower_limit_joint)
 		throw NonFatal_error_2(BEYOND_LOWER_THETA1_LIMIT);
