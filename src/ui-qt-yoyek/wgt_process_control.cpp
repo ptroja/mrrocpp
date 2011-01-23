@@ -2,21 +2,10 @@
 #include "interface.h"
 
 wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	QWidget(parent), interface(_interface)
+	wgt_base("Process control", _interface, parent)
 {
 	ui.setupUi(this);
 
-	dwgt = new QDockWidget(interface.mw);
-	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
-	dwgt->setWindowTitle("Process control");
-
-	vl = new QVBoxLayout();
-	dwgt->setLayout(vl);
-
-	vl->addWidget(this);
-	dwgt->setWidget(this);
-	dwgt->hide();
-	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
 wgt_process_control::~wgt_process_control()

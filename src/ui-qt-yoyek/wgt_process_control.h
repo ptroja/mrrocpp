@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_process_control.h"
+#include "wgt_base.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -14,7 +15,7 @@ class Interface;
 }
 }
 
-class wgt_process_control : public QWidget
+class wgt_process_control : public wgt_base
 {
 Q_OBJECT
 
@@ -22,12 +23,8 @@ public:
 	wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_process_control();
 
-	QDockWidget* dwgt;
-	QVBoxLayout* vl;
-
 private:
 	Ui::wgt_process_controlClass ui;
-	mrrocpp::ui::common::Interface& interface;
 
 private slots:
 	void on_mp_start_pushButton_clicked();

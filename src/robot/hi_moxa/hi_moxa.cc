@@ -1,5 +1,3 @@
-#include "config.h"
-
 #include <exception>
 #include <stdexcept>
 #include <cstring>
@@ -10,14 +8,7 @@
 #include <sys/select.h>
 #include <fcntl.h>
 
-#ifdef HAVE_POSIX_TIMERS
-#include "base/lib/mis_fun.h"
-#include <ctime>
-#else
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time_duration.hpp>
-#endif
-
+#include "base/lib/periodic_timer.h"
 #include "robot/hi_moxa/hi_moxa.h"
 #include "base/edp/edp_e_motor_driven.h"
 
@@ -26,7 +17,8 @@ namespace edp {
 namespace hi_moxa {
 
 HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports) :
-	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports)
+	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports),
+	ptimer(COMMCYCLE_TIME_NS/1000000)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
@@ -111,13 +103,6 @@ void HI_moxa::init()
 		}
 	}
 
-#ifdef HAVE_POSIX_TIMERS
-	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
-		perror("clock_gettime()");
-	}
-#else
-	wake_time = boost::get_system_time();
-#endif
 	reset_counters();
 }
 
@@ -187,22 +172,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 	uint8_t drive_number;
 	static int status_disp_cnt = 0;
 
-#ifdef HAVE_POSIX_TIMERS	
-	lib::timespec_increment_ns(&wake_time, COMMCYCLE_TIME_NS);
-#else
-	wake_time += boost::posix_time::microsec(COMMCYCLE_TIME_NS/1000);
-#endif /* HAVE_POSIX_TIMERS */
-
 	// test mode
 	if (master.robot_test_mode) {
-#ifdef HAVE_POSIX_TIMERS	
-		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
-		if(err != 0) {
-			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
-		}
-#else
-		boost::thread::sleep(wake_time);
-#endif
+		ptimer.sleep();
+
 		return ret;
 	}// end test mode
 
@@ -316,14 +289,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		status_disp_cnt = 0;
 	}
 
-#ifdef HAVE_POSIX_TIMERS	
-	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
-	if(err != 0) {
-		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
-	}
-#else
-	boost::thread::sleep(wake_time);
-#endif
+	ptimer.sleep();
 
 	return ret;
 }

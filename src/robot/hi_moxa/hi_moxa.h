@@ -17,19 +17,9 @@
 //#define T_INFO_FUNC
 //#define T_INFO_CALC
 
-#define USLEEP_US 500000
 #define STATUS_DISP_T 100
 
-#include "config.h"
-
-#ifdef HAVE_POSIX_TIMERS
-#include <ctime>
-#else
-#include <boost/thread/thread_time.hpp>
-#endif
-
-#include <boost/date_time/posix_time/posix_time_types.hpp>
-
+#include "base/lib/periodic_timer.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
 
@@ -91,12 +81,9 @@ private:
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];
-#ifdef HAVE_POSIX_TIMERS
-	struct timespec wake_time;
-#else
-	boost::posix_time::ptime wake_time;
-#endif
 
+	//! Periodic timer
+	lib::periodic_timer ptimer;
 }; // koniec: class hardware_interface
 
 } // namespace hi_moxa

@@ -95,22 +95,6 @@ int main(int argc, char *argv[])
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
-		// block test-mode timer signal for all the threads
-		if (_config.value <int> (lib::ROBOT_TEST_MODE)) {
-			/* Block timer signal from test mode timer for all threads */
-			//		    fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
-			sigset_t mask;
-			if (sigemptyset(&mask) == -1) {
-				perror("sigemptyset()");
-			}
-			if (sigaddset(&mask, SIGRTMIN) == -1) {
-				perror("sigaddset()");
-			}
-			if (sigprocmask(SIG_BLOCK, &mask, NULL)) {
-				perror("sigprocmask()");
-			}
-		}
-
 		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->create_threads();

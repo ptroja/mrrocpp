@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_spkm_inc.h"
+#include "../wgt_base.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -18,7 +19,7 @@ const std::string WGT_SPKM_INC = "WGT_SPKM_INC";
 }
 }
 
-class wgt_spkm_inc : public QWidget
+class wgt_spkm_inc : public wgt_base
 {
 Q_OBJECT
 
@@ -26,13 +27,9 @@ public:
 	wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent = 0);
 	~wgt_spkm_inc();
 
-	QDockWidget* dwgt;
-
 private:
 	Ui::wgt_spkm_incClass ui;
-	mrrocpp::ui::common::Interface& interface;
 	mrrocpp::ui::spkm::UiRobot& robot;
-	QVBoxLayout* vl;
 
 	int init();
 	int import();

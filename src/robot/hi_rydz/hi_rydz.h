@@ -8,20 +8,13 @@
 #ifndef __HI_RYDZ_H
 #define __HI_RYDZ_H
 
-#include "config.h"
-
-#if defined(HAVE_POSIX_TIMERS)
-#include <sys/types.h>
-#include <signal.h>
-#elif defined(HAVE_KQUEUE)
-#include <sys/event.h>
-#else
-#warning platform does not provide test mode timeout implementation
-#endif
-
+#include <boost/shared_ptr.hpp>
 #include "base/edp/HardwareInterface.h"
 
 namespace mrrocpp {
+namespace lib {
+class periodic_timer;
+}
 namespace edp {
 namespace common {
 class motor_driven_effector;
@@ -63,7 +56,6 @@ const int SERVO_REPLY_REG_1_ADR = 0x208;
 class HI_rydz : public common::HardwareInterface
 {
 public:
-
 	int max_current[lib::MAX_SERVOS_NR];
 
 	HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
@@ -110,19 +102,7 @@ private:
 	const unsigned int hi_isa_card_offset;
 	const unsigned int hi_intr_generator_servo_ptr;
 
-#if defined(HAVE_POSIX_TIMERS)
-	//! periodic timer
-	timer_t timerid;
-
-	//! periodic timer signal mask
-	sigset_t mask;
-#elif defined(HAVE_KQUEUE)
-	//! Kqueue descriptot
-	int kq;
-
-	//! event we want to monitor
-	struct kevent change;
-#endif
+	boost::shared_ptr<lib::periodic_timer> ptimer;
 
 protected:
 

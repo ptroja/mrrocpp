@@ -45,6 +45,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 SET(GUI_CXX_SRCS
     main.cpp
     mainwindow.cpp
+    wgt_base.cpp
     wgt_process_control.cpp
     spkm/wgt_spkm_inc.cpp
 )
@@ -52,6 +53,7 @@ SET(GUI_CXX_SRCS
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
     mainwindow.h
+    wgt_base.h
     wgt_process_control.h
     spkm/wgt_spkm_inc.h
 )

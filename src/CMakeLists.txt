@@ -84,13 +84,9 @@ if (QNXNTO)
 	add_definitions (-DEIGEN_DONT_ALIGN)
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
-	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
-	# include boost compatibility layer
-	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -117,7 +113,7 @@ elseif (UBUNTU32BIT)
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -147,7 +143,6 @@ elseif (UBUNTU32BIT)
 else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 	
@@ -173,6 +168,13 @@ else (QNXNTO) # Linux, MacOS, etc.
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+endif (QNXNTO)
+
+find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
+
+if (QNXNTO)
+	# include boost compatibility layer
+	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 endif (QNXNTO)
 
 include(FindComedi)
