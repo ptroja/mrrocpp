@@ -136,6 +136,71 @@ int wgt_spkm_inc::copy()
 	return 1;
 }
 
+void wgt_spkm_inc::on_pushButton_execute_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_0l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_1l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_2l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_3l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_4l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_5l_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_0r_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_1r_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_2r_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_3r_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_4r_clicked()
+{
+
+}
+
+void wgt_spkm_inc::on_pushButton_5r_clicked()
+{
+
+}
+
 int wgt_spkm_inc::motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/)
 {
 	/* TR
