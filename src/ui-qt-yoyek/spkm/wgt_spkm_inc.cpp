@@ -138,163 +138,135 @@ int wgt_spkm_inc::copy()
 
 void wgt_spkm_inc::on_pushButton_execute_clicked()
 {
-
+	get_desired_position();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_0l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[0] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_1l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[1] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_2l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[2] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_3l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[3] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_4l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[4] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_5l_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[5] -= ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_0r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[0] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_1r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[1] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_2r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[2] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_3r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[3] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_4r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[4] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_5r_clicked()
 {
-
+	get_desired_position();
+	robot.desired_pos[5] += ui.doubleSpinBox_step->value();
+	move_it();
 }
 
-int wgt_spkm_inc::motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/)
+int wgt_spkm_inc::get_desired_position()
 {
-	/* TR
-	 double *wektor[robot.number_of_servos];
-	 double *step1;
-	 */
+
+	if (robot.state.edp.pid != -1) {
+
+		if (robot.state.edp.is_synchronised) {
+
+			robot.desired_pos[0] = ui.doubleSpinBox_des_p0->value();
+			robot.desired_pos[1] = ui.doubleSpinBox_des_p1->value();
+			robot.desired_pos[2] = ui.doubleSpinBox_des_p2->value();
+			robot.desired_pos[3] = ui.doubleSpinBox_des_p3->value();
+			robot.desired_pos[4] = ui.doubleSpinBox_des_p4->value();
+			robot.desired_pos[5] = ui.doubleSpinBox_des_p5->value();
+
+		} else {
+
+			for (int i = 0; i < robot.number_of_servos; i++) {
+				robot.desired_pos[i] = 0.0;
+			}
+		}
+	}
+	return 1;
+}
+
+int wgt_spkm_inc::move_it()
+{
+
 	// wychwytania ew. bledow ECP::robot
 	try {
 
 		if (robot.state.edp.pid != -1) {
 
-			if (robot.state.edp.is_synchronised) {
-				/* TR
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &wektor[0], 0);
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &wektor[1], 0);
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &wektor[2], 0);
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &wektor[3], 0);
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
-				 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
-
-				 for (int i = 0; i < robot.number_of_servos; i++) {
-				 robot.desired_pos[i] = *wektor[i];
-				 }
-				 */
-			} else {
-
-				for (int i = 0; i < robot.number_of_servos; i++) {
-					robot.desired_pos[i] = 0.0;
-				}
-			}
-			/* TR
-			 PtGetResource(ABW_PtNumericFloat_wind_spkm_inc_step, Pt_ARG_NUMERIC_VALUE, &step1, 0);
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_0l) {
-			 robot.desired_pos[0] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_1l) {
-			 robot.desired_pos[1] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_2l) {
-			 robot.desired_pos[2] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_3l) {
-			 robot.desired_pos[3] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_4l) {
-			 robot.desired_pos[4] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_5l) {
-			 robot.desired_pos[5] -= (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_0r) {
-			 robot.desired_pos[0] += (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_1r) {
-			 robot.desired_pos[1] += (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_2r) {
-			 robot.desired_pos[2] += (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_3r) {
-			 robot.desired_pos[3] += (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_4r) {
-			 robot.desired_pos[4] += (*step1);
-			 } else
-
-			 if (ApName(ApWidget(cbinfo)) == ABN_PtButton_wind_spkm_inc_5r) {
-			 robot.desired_pos[5] += (*step1);
-			 }
-
-			 //	std::cout << "UI desired_pos[4]" << desired_pos[4] << std::endl;
-			 */
 			robot.ui_ecp_robot->move_motors(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				/* TR
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p0, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[0], 0);
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p1, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[1], 0);
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p2, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[2], 0);
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p3, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[3], 0);
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p4, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[4], 0);
-				 PtSetResource(ABW_PtNumericFloat_wind_spkm_inc_p5, Pt_ARG_NUMERIC_VALUE, &robot.desired_pos[5], 0);
-				 */
+				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
+				ui.doubleSpinBox_des_p1->setValue(robot.desired_pos[1]);
+				ui.doubleSpinBox_des_p2->setValue(robot.desired_pos[2]);
+				ui.doubleSpinBox_des_p3->setValue(robot.desired_pos[3]);
+				ui.doubleSpinBox_des_p4->setValue(robot.desired_pos[4]);
+				ui.doubleSpinBox_des_p5->setValue(robot.desired_pos[5]);
 
 			}
 		} // end if (robot.state.edp.pid!=-1)
