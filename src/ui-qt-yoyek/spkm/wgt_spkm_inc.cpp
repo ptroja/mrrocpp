@@ -6,9 +6,6 @@
 #include "../interface.h"
 #include "../mainwindow.h"
 
-#include <boost/tokenizer.hpp>
-#include <boost/foreach.hpp>
-
 wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
 	wgt_base("Spkm incremental motion", _interface, parent), robot(_robot)
 {
@@ -83,25 +80,9 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 
 void wgt_spkm_inc::on_pushButton_import_clicked()
 {
-
-	std::string text((interface.mw->get_lineEdit_position_string()).toStdString());
-
-	boost::char_separator <char> sep(" ");
-	boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
-
 	double val[robot.number_of_servos];
 
-	int j = 0;
-	BOOST_FOREACH(std::string t, tokens)
-				{
-
-					val[j] = boost::lexical_cast <double>(t);
-
-					if (j == robot.number_of_servos) {
-						break;
-					}
-					j++;
-				}
+	interface.mw->get_lineEdit_position(val, robot.number_of_servos);
 
 	ui.doubleSpinBox_des_p0->setValue(val[0]);
 	ui.doubleSpinBox_des_p1->setValue(val[1]);

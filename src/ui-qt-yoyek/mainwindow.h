@@ -26,14 +26,14 @@ public:
 
 	void ui_notification(QString _string, QColor _color);
 	void raise_process_control_window();
-	QString get_lineEdit_position_string();
+	void get_lineEdit_position(double* val, int number_of_servos);
 
 private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
 	QTimer *timer;
 
-	signals:
+signals:
 	void ui_notification_signal(QString _string, QColor _color);
 	void raise_process_control_window_signal();
 
