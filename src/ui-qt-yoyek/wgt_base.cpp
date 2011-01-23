@@ -8,10 +8,10 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
 	dwgt->setWindowTitle(_string);
 
-	vl = new QVBoxLayout();
-	dwgt->setLayout(vl);
+	//vl = new QVBoxLayout();
+	//dwgt->setLayout(vl);
 
-	vl->addWidget(this);
+	//	vl->addWidget(this);
 	dwgt->setWidget(this);
 	dwgt->hide();
 	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
