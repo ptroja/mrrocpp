@@ -150,7 +150,7 @@ class velocity_profile {
 			if (it->times.size() == it->axes_num) {
 				double t_max = *max_element(it->times.begin(), it->times.end());
 
-				if (t_max == 0) {
+				if (eq(t_max, 0.0)) {
 					it->t = 0;
 					return true;
 				}

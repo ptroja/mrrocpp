@@ -35,6 +35,11 @@ void constant_velocity::print_pose_vector() {
 	pose_vector_iterator = pose_vector.begin();
 	int z;
 	for (int k = 0; k < pose_vector.size(); k++) {
+                printf("coord:\t");
+		for (z = 0; z < pose_vector_iterator->coordinates.size(); z++) {
+			printf("%f\t", pose_vector_iterator->coordinates[z]);
+		}
+		printf("\n");
 		printf("s:\t");
 		for (z = 0; z < pose_vector_iterator->s.size(); z++) {
 			printf("%f\t", pose_vector_iterator->s[z]);
