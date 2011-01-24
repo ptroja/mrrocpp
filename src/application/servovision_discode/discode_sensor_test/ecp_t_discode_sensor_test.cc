@@ -22,7 +22,7 @@ namespace task {
 using namespace std;
 
 ecp_t_discode_sensor_test::ecp_t_discode_sensor_test(mrrocpp::lib::configurator& config) :
-	task(config)
+	mrrocpp::ecp::common::task::task(config)
 {
 	// TODO Auto-generated constructor stub
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);

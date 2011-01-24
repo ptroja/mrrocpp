@@ -23,7 +23,7 @@ namespace irp6ot_m {
 namespace task {
 
 ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac(mrrocpp::lib::configurator& config) :
-	task(config)
+	mrrocpp::ecp::common::task::task(config)
 {
 	log_dbg_enabled = true;
 	log_dbg("ecp_t_objectfollower_pb_sac::ecp_t_objectfollower_pb_sac() begin\n");

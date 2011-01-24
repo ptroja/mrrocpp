@@ -22,7 +22,7 @@ namespace common {
 namespace generator {
 
 visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
-	generator(ecp_task), current_position_saved(false), motion_steps(30), max_speed(0), max_angular_speed(0),
+		common::generator::generator(ecp_task), current_position_saved(false), motion_steps(30), max_speed(0), max_angular_speed(0),
 			max_acceleration(0), max_angular_acceleration(0)
 {
 	// 2 ms per one step
@@ -45,18 +45,18 @@ bool visual_servo_manager::first_step()
 {
 	log_dbg("visual_servo_manager::first_step() begin\n");
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = motion_steps;
-	the_robot->ecp_command.instruction.value_in_step_no = motion_steps - 3;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = motion_steps;
+	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	current_position_saved = false;
@@ -121,8 +121,8 @@ bool visual_servo_manager::next_step()
 	next_position = current_position * position_change;
 
 	// prepare command to EDP
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-	next_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
+	next_position.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 	// save next position
 	current_position = next_position;

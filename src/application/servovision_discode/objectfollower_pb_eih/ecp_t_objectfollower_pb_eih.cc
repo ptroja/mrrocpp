@@ -32,7 +32,7 @@ namespace common {
 namespace task {
 
 ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config) :
-	task(config)
+	common::task::task(config)
 {
 #ifdef ROBOT_P
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);

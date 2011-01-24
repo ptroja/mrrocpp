@@ -26,7 +26,7 @@ using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using boost::shared_ptr;
 
 ecp_t_pb_sac_calibration::ecp_t_pb_sac_calibration(mrrocpp::lib::configurator& config) :
-	task(config)
+	mrrocpp::ecp::common::task::task(config)
 {
 	log_enabled = true;
 	log_dbg_enabled = true;

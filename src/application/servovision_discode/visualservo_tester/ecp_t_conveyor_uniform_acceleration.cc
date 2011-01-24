@@ -25,7 +25,7 @@ namespace conveyor {
 namespace task {
 
 ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration(mrrocpp::lib::configurator& config) :
-	task(config)
+	mrrocpp::ecp::common::task::task(config)
 {
 	log_dbg_enabled = true;
 	log_enabled = true;
