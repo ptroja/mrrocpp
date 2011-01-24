@@ -37,7 +37,7 @@ void pb_visual_servo::retrieve_reading()
 //		log_dbg("pb_visual_servo::retrieve_reading()\n");
 		if(sensor->get_state() == discode_sensor::DSS_READING_RECEIVED){
 //			log_dbg("pb_visual_servo::retrieve_reading(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED.\n");
-			reading = sensor->get_received_object <Processors::VisualServoPB::PBReading> ();
+			reading = sensor->retreive_reading <Processors::VisualServoPB::PBReading> ();
 		}
 	} catch(exception &ex) {
 		log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());

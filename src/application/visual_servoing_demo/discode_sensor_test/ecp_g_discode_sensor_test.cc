@@ -85,7 +85,7 @@ bool ecp_g_discode_sensor_test::next_step()
 	//		ds.get_oarchive()->clear_buffer();
 	//	}
 	if (ds->get_state() == discode_sensor::DSS_READING_RECEIVED) {
-		Processors::VisualServoPB::PBReading r = ds->get_received_object <Processors::VisualServoPB::PBReading> ();
+		Processors::VisualServoPB::PBReading r = ds->retreive_reading <Processors::VisualServoPB::PBReading> ();
 		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int)r.objectVisible);
 		if(r.objectVisible){
 			lib::Homog_matrix hm(r.objectPosition.elements);
