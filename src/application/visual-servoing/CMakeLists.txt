@@ -1,5 +1,5 @@
 # add library for visual servoing
-add_library(visual_servoing
+add_library(visual-servoing
     cubic_constraint.cc
     ib_eih_visual_servo.cc
     object_reached_termination_condition.cc
@@ -13,14 +13,9 @@ add_library(visual_servoing
     visual_servo_manager.cc
     visual_servo_regulator_pid.cc
     visual_servo.cc
-    
-    
-    
-    
-    
 )
 
 # link with discode_sensor
-target_link_libraries(visual_servoing
+target_link_libraries(visual-servoing
 	discode_sensor
 )
