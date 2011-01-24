@@ -1,6 +1,8 @@
 #ifndef __INTERFACE_H
 #define __INTERFACE_H
 
+#include <iostream>
+
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QDockWidget>
