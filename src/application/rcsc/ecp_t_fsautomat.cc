@@ -235,8 +235,8 @@ void fsautomat::main_task_algorithm(void)
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose traj = (*trjMap)[(char*)"approach_1"];
-	std::cout<<"armtype in map "<<traj.arm_type<<std::endl;
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * traj = (*trjMap)[(char*)"approach_1"];
+	std::cout<<"armtype in map "<<traj->arm_type<<std::endl;
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
@@ -265,7 +265,7 @@ void fsautomat::main_task_algorithm(void)
 
 				if (ecpLevel) {
 					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					load_trajectory_from_xml(*((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]));
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;

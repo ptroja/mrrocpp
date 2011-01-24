@@ -359,7 +359,7 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 									&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
 								actTrajectory = createTrajectory2(child_node, stateID, axes_num);
 								std::cout<<"returned for "<<(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-								trajectoriesMap->insert(bang_trajectories_map::value_type((char *) stateID, (*actTrajectory)));
+								trajectoriesMap->insert(bang_trajectories_map::value_type((char *) stateID, (actTrajectory)));
 							}
 						}
 						xmlFree(robot);
@@ -380,7 +380,7 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
 						actTrajectory = createTrajectory2(child_node, stateID, axes_num);
 						std::cout<<"returned for "<<(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-						trajectoriesMap->insert(bang_trajectories_map::value_type((char *)stateID, (*actTrajectory)));
+						trajectoriesMap->insert(bang_trajectories_map::value_type((char *)stateID, (actTrajectory)));
 					}
 				}
 				xmlFree(robot);
@@ -392,15 +392,15 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	//	for(trajectories_t::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 	//		(*ii).second.showTime();
 int iii=1;
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose actTraj;
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTraj;
 	actTraj = (*trajectoriesMap)[(char*)"approach_1"];
-	std::cout<<"returned for approach_1 NOW is: "<<actTraj.arm_type<<std::endl;
+	std::cout<<"returned for approach_1 NOW is: "<<actTraj->arm_type<<std::endl;
 
 	actTraj = (*trajectoriesMap)[(char*)"approach_2"];
-	std::cout<<"returned for approach_2 NOW is: "<<actTraj.arm_type<<std::endl;
+	std::cout<<"returned for approach_2 NOW is: "<<actTraj->arm_type<<std::endl;
 
 	actTraj = (*trajectoriesMap)[(char*)"approach_5"];
-	std::cout<<"returned for approach_5 NOW is: "<<actTraj.arm_type<<std::endl;
+	std::cout<<"returned for approach_5 NOW is: "<<actTraj->arm_type<<std::endl;
 	return trajectoriesMap;
 }
 
