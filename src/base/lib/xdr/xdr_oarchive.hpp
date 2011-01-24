@@ -121,7 +121,7 @@ public:
     SAVE_A_TYPE(float, xdr_float)
 
     SAVE_A_TYPE(int, xdr_int)
-    SAVE_A_TYPE(long, xdr_long)
+    //SAVE_A_TYPE(long, xdr_long)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
     //SAVE_A_TYPE(unsigned long, xdr_u_long)

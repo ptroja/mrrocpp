@@ -2,6 +2,13 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+/*W SPKM tez to jest
+#include "ui_r_spkm.h"
+#include "ui_ecp_r_spkm.h"
+#include "wgt_spkm_inc.h"
+*/
+
+#include "wgt_polycrank_int.h"
 #include "../ui_ecp_r_tfg_and_conv.h"
 #include "ui_r_polycrank.h"
 #include "robot/polycrank/const_polycrank.h"
@@ -16,6 +23,37 @@ namespace polycrank {
 // KLASA UiRobot
 //
 //
+
+/* W wersji dla okien Photon Builder'a
+UiRobot::UiRobot(common::Interface& _interface) :
+			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, "is_polycrank_active"),
+			is_wind_polycrank_int_open(false), ui_ecp_robot(NULL)
+{
+}
+*/
+
+UiRobot::UiRobot(common::Interface& _interface) :
+			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, "is_polycrank_active"),
+			ui_ecp_robot(NULL)
+{
+
+	wgt_int = new wgt_polycrank_int(interface, *this, interface.mw);
+	wndbase_m[WGT_POLYCRANK_INT] = wgt_int->dwgt;
+
+	//wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
+	//wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
+
+
+	/* TR
+	 wnd_int = new WndInt(interface, *this);
+	 wndbase_m[wnd_int->window_name] = wnd_int;
+	 wnd_external = new WndExternal(interface, *this);
+	 wndbase_m[wnd_external->window_name] = wnd_external;
+	 */
+
+}
+
+
 
 void UiRobot::edp_create()
 {
@@ -129,11 +167,6 @@ int UiRobot::synchronise_int()
 
 }
 
-UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, "is_polycrank_active"),
-			is_wind_polycrank_int_open(false), ui_ecp_robot(NULL)
-{
-}
 
 int UiRobot::manage_interface()
 {

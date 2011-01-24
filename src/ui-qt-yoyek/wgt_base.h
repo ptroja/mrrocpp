@@ -2,7 +2,7 @@
 #define WGT_BASE_H
 
 #include <QtGui/QWidget>
-#include <QVBoxLayout>
+//#include <QVBoxLayout>
 #include <QDockWidget>
 
 namespace mrrocpp {
@@ -22,7 +22,7 @@ public:
 	~wgt_base();
 
 	QDockWidget* dwgt;
-	QVBoxLayout* vl;
+	//QVBoxLayout* vl;
 
 protected:
 	mrrocpp::ui::common::Interface& interface;
