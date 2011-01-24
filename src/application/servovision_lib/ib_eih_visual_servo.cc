@@ -9,7 +9,6 @@
 
 #include <stdexcept>
 
-using ecp_mp::sensor::fradia_sensor;
 using namespace logger;
 using namespace visual_servo_types;
 using namespace std;
@@ -21,8 +20,8 @@ namespace ecp {
 
 namespace servovision {
 
-ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator)
+ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
+	visual_servo(regulator, sensor)
 {
 	Eigen::Matrix <double, 1, 3> desired_translation;
 	Eigen::Matrix <double, 3, 3> intrinsics;
@@ -65,8 +64,6 @@ ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 	}
 
 	e_T_c_position.set_rotation_matrix(rot);
-
-	vsp_fradia = shared_ptr <ib_fradia_sensor> (new ib_fradia_sensor(configurator, section_name, ib_config));
 }
 
 ib_eih_visual_servo::~ib_eih_visual_servo()
@@ -82,10 +79,10 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	e.setZero();
 
-	e(0, 0) = vsp_fradia->get_reading_message().error.x;
-	e(1, 0) = vsp_fradia->get_reading_message().error.y;
-	e(2, 0) = vsp_fradia->get_reading_message().error.z;
-	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
+//	e(0, 0) = vsp_fradia->get_reading_message().error.x;
+//	e(1, 0) = vsp_fradia->get_reading_message().error.y;
+//	e(2, 0) = vsp_fradia->get_reading_message().error.z;
+//	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
 
 	error = e;
 
@@ -117,19 +114,10 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	return delta_position;
 }
 
-boost::shared_ptr <ecp_mp::sensor::sensor_interface> ib_eih_visual_servo::get_vsp_fradia()
-{
-	return boost::dynamic_pointer_cast <ecp_mp::sensor::sensor_interface>(vsp_fradia);
-}
-
 bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 {
-	return vsp_fradia->get_reading_message().tracking;
-}
-
-lib::sensor::VSP_REPORT_t ib_eih_visual_servo::get_sensor_report()
-{
-	return vsp_fradia->get_report();
+//	return vsp_fradia->get_reading_message().tracking;
+	return false;
 }
 
 }//namespace generator

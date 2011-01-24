@@ -10,8 +10,6 @@
 
 #include "pb_visual_servo.h"
 
-#include "vs_logger.h"
-
 namespace mrrocpp {
 
 namespace ecp {
