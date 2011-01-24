@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xi="http://www.w3.org/2003/XInclude">
+
+	<xi:include href="common_ms.xml" xpointer="xpointer(/config/*)"/>
+
+	<mp name="mp_c" active="false">
+		<program_name>mp_c</program_name>
+		<node_name>qnx632</node_name>
+	</mp>
+
+	<effectors>
+		<effector name="irp6_ontrack" active="true">
+			<ecp>
+				<program_name>ecp_irp6o_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_irp6o" active="true" ui_def="edp_irp6o.xml">
+				<program_name>edp_irp6o</program_name>
+				<node_name>robot1</node_name>
+			</edp>
+		</effector>
+	</effectors>
+</config>

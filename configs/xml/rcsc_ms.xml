@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<config xmlns:xi="http://www.w3.org/2003/XInclude">
+
+	<xi:include href="common_ms.xml" xpointer="xpointer(/config/*)"/>
+
+	<mp name="rcsc" active="true">
+		<program_name>mp_rcsc</program_name>
+		<node_name>qnx632</node_name>
+		<cube_initial_state>BGROWY</cube_initial_state>
+		<manipulation_sequence>B2G2R2O2Y2W2</manipulation_sequence>
+		<vis_servoing>0</vis_servoing>
+		<irp6p_compliant>0</irp6p_compliant>
+	</mp>
+
+	<transmitters>
+		<transmitter name="rc_windows">
+			<solver_hostname>qnx632</solver_hostname>
+			<solver_port>8081</solver_port>
+		</transmitter>
+	</transmitters>
+
+	<sensors>
+	    <sensor name="vis_eih" active="true">
+			<vsp>
+				<program_name>vsp_vis_pbeoleih</program_name>
+				<node_name>qnx632</node_name>
+				<resourceman_attach_point>VSP_VIS_EIH</resourceman_attach_point>
+			</vsp>
+		</sensor>
+	    <sensor name="vis_sac" active="true">
+			<vsp>
+				<program_name>vsp_vis_pbeolsac</program_name>
+				<node_name>qnx632</node_name>
+				<resourceman_attach_point>VSP_VIS_SAC</resourceman_attach_point>
+			</vsp>
+		</sensor>
+	</sensors>
+
+	<effectors>
+
+		<effector name="irp6_ontrack" active="true">
+			<ecp>
+				<program_name>ecp_irp6o_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_irp6o" active="true" ui_def="edp_irp6o.xml">
+
+				<program_name>edp_irp6o</program_name>
+				<node_name>robot1</node_name>
+
+			</edp>
+
+			<edp name="edp_irp6o_axis_xyz" active="true" ui_def="irp6o_axis_xyz.xml">
+
+				<program_name>edp_irp6o_axis_xyz</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+			<edp name="edp_irp6o_axis_ts" active="true" ui_def="irp6o_axis_ts.xml">
+
+				<program_name>edp_irp6o_axis_ts</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_euler_xyz" active="true" ui_def="irp6o_euler_xyz.xml">
+
+				<program_name>edp_irp6o_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_inc" active="true" ui_def="irp6o_inc.xml">
+
+				<program_name>edp_irp6o_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_int" active="true" ui_def="irp6o_int.xml">
+
+				<program_name>edp_irp6o_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6o_servo" active="true" ui_def="irp6o_servo_algorithm.xml">
+
+				<program_name>edp_irp6o_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
+		</effector>
+
+		<effector name="irp6_postument" active="false">
+			<ecp>
+				<program_name>ecp_irp6p_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_irp6p" active="true" ui_def="edp_irp6p.xml">
+
+				<program_name>edp_irp6p</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+
+			<edp name="edp_irp6p_axis_xyz" active="true" ui_def="irp6p_axis_xyz.xml">
+
+				<program_name>edp_irp6p_axis_xyz</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+			<edp name="edp_irp6p_euler_ts" active="true" ui_def="irp6p_euler_ts.xml">
+
+				<program_name>edp_irp6p_euler_ts</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_euler_xyz" active="true" ui_def="irp6p_euler_xyz.xml">
+
+				<program_name>edp_irp6p_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_inc" active="true" ui_def="irp6p_inc.xml">
+
+				<program_name>edp_irp6p_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_int" active="true" ui_def="irp6p_int.xml">
+
+				<program_name>edp_irp6p_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6p_servo" active="true" ui_def="irp6p_servo_algorithm.xml">
+
+				<program_name>edp_irp6p_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
+		</effector>
+
+		<effector name="irp6_mechatronika" active="false">
+			<ecp>
+				<program_name>ecp_irp6m_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_irp6m" active="true" ui_def="edp_irp6m.xml">
+
+				<program_name>edp_irp6m</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+
+			<edp name="edp_irp6m_axis_xyz" active="true" ui_def="irp6m_axis_xyz.xml">
+
+				<program_name>edp_irp6m_axis_xyz</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+			<edp name="edp_irp6m_axis_ts" active="true" ui_def="irp6m_axis_ts.xml">
+
+				<program_name>edp_irp6m_axis_ts</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_euler_xyz" active="true" ui_def="irp6m_euler_xyz.xml">
+
+				<program_name>edp_irp6m_euler_xyz</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_inc" active="true" ui_def="irp6m_inc.xml">
+
+				<program_name>edp_irp6m_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_int" active="true" ui_def="irp6m_int.xml">
+
+				<program_name>edp_irp6m_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_irp6m_servo" active="true" ui_def="irp6m_servo_algorithm.xml">
+
+				<program_name>edp_irp6m_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
+		</effector>
+
+		<effector name="conveyor" active="false">
+			<ecp>
+				<program_name>ecp_conveyor_rcsc</program_name>
+				<node_name>qnx632</node_name>
+			</ecp>
+
+			<edp name="edp_conveyor" active="true" ui_def="edp_conveyor.xml">
+
+				<program_name>edp_conveyor</program_name>
+				<node_name>qnx632</node_name>
+
+			</edp>
+			<edp name="edp_conveyor_inc" active="true" ui_def="conveyor_inc.xml">
+
+				<program_name>edp_conveyor_inc</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_conveyor_int" active="true" ui_def="conveyor_int.xml">
+
+				<program_name>edp_conveyor_int</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+			<edp name="edp_conveyor_servo" active="true" ui_def="conveyor_servo_algorithm.xml">
+
+				<program_name>edp_conveyor_servo</program_name>
+				<node_name>qnx632</node_name>
+			</edp>
+
+		</effector>
+
+		<effector name="festival" active="false" ui_def="festival.xml">
+			<ecp>
+				<test_mode>1</test_mode>
+				<node_name>qnx632</node_name>
+			</ecp>
+		</effector>
+	</effectors>
+</config>

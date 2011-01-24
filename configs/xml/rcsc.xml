@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xi="http://www.w3.org/2003/XInclude">
+
+	<xi:include href="common.xml" xpointer="xpointer(/config/*)"/>
+
+	<effectors>
+
+		<effector name="irp6_postument" active="true">
+			<ecp>
+				<program_name>ecp_irp6p_rcsc</program_name>
+				<node_name>soplica</node_name>
+			</ecp>
+
+			<edp>
+				<test_mode>1</test_mode>
+				<node_name>soplica</node_name>
+				<force_tryb>2</force_tryb>
+				<force>
+					<value>1</value>
+					<value>1</value>
+					<value>1</value>
+					<value>1</value>
+					<value>1</value>
+					<value>1</value>
+				</force>
+				<servo_tryb>1</servo_tryb>
+				<preset_position id="1">
+					<value>2.166128</value>
+					<value>14.341370</value>
+					<value>-3.702367</value>
+					<value>-5.034402</value>
+					<value>35.661789</value>
+					<value>343.950988</value>
+					<value>0.000000</value>
+				</preset_position>
+			</edp>
+		</effector>
+
+	</effectors>
+</config>
