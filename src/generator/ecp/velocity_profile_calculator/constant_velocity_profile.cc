@@ -26,7 +26,7 @@ constant_velocity_profile::~constant_velocity_profile() {
 
 bool constant_velocity_profile::calculate_constant_velocity(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	if (it->s[i] == 0 || it->t == 0) {//if the distance to be covered equals to 0 or pose time equal to 0 (no motion in a pose)
+	if (eq(it->s[i], 0.0) || eq(it->t, 0.0)) {//if the distance to be covered equals to 0 or pose time equal to 0 (no motion in a pose)
 		it->v_r[i] = 0;
 	} else {//normal calculation
 		it->v_r[i] = it->s[i] / it->t;
@@ -49,7 +49,7 @@ bool constant_velocity_profile::calculate_constant_velocity_pose(vector<ecp_mp::
 
 bool constant_velocity_profile::calculate_time(vector<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose>::iterator & it, int i) {
 
-	if (it->s[i] == 0 || it->v_r[i] == 0) {//if distance to be covered or maximal velocity equal to 0
+	if (eq(it->s[i], 0.0) || eq(it->v_r[i], 0.0)) {//if distance to be covered or maximal velocity equal to 0
 		it->times[i] = 0;
 	} else {//normal calculation
 		it->times[i] = it->s[i] / it->v_r[i];
