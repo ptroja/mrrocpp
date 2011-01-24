@@ -107,7 +107,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	std::vector <double> coordinates3(7);//polycrank
 
 	// JOINT ABSOLUTE
-	sr_ecp_msg.message("Joint absolute");
+	/*sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
@@ -282,7 +282,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT RELATIVE END*/
+	// JOINT RELATIVE END
 
 
 	// MOTOR ABSOLUTE
@@ -541,9 +541,9 @@ void sub_task_smooth_gen_test::conditional_execution()
 		sgeneuler->Move();
 	}
 	// EULER RELATIVE END
+*/
 
-
-	// ANGLE AXIS ABSOLUTE
+	/*// ANGLE AXIS ABSOLUTE
 	sr_ecp_msg.message("Angle axis absolute");
 	sgenangle->reset();
 	sgenangle->set_absolute();
@@ -599,11 +599,10 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate() && sgeneuler->detect_jerks(0.3) == 0) {
-		sgenangle->detect_jerks(0.3);
+	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
 		sgenangle->Move();
 	}
-	// ANGLE AXIS ABSOLUTE END
+	// ANGLE AXIS ABSOLUTE END*/
 
 
 	// ANGLE AXIS RELATIVE
