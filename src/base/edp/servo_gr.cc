@@ -368,6 +368,8 @@ uint8_t servo_buffer::Move_1_step(void)
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		if (clock_gettime(CLOCK_REALTIME, &master.rb_obj->step_data.measure_time) == -1) {
+			perror("clock_gettime()");
+
 			/*
 			 BOOST_THROW_EXCEPTION(
 			 System_error() <<
@@ -375,7 +377,6 @@ uint8_t servo_buffer::Move_1_step(void)
 			 boost::errinfo_api_function("clock_gettime")
 			 );
 			 */
-
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;

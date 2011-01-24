@@ -9,7 +9,10 @@
 #define __SERVO_GR_H
 
 #include <boost/utility.hpp>
-#ifndef __QNXNTO__
+#ifdef __QNXNTO__
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
+#else
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 #endif

@@ -9,19 +9,13 @@
 #define VS_LOGGER_H_
 
 #include <cstdio>
-#include <ctime>
 #include <string>
 
-#include <boost/thread/thread.hpp>
-#include <boost/utility.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/condition_variable.hpp>
-#include <boost/circular_buffer.hpp>
-
-#include "base/lib/mrmath/mrmath.h"
-#include "base/lib/configurator.h"
-
 namespace mrrocpp {
+namespace lib {
+class Homog_matrix;
+class configurator;
+}
 
 namespace ecp {
 
@@ -30,14 +24,6 @@ namespace servovision {
 /** @addtogroup servovision
  *  @{
  */
-
-/**
- *
- */
-struct data{
-	struct timespec measure_time;
-	lib::Homog_matrix error;
-};
 
 /**
  *

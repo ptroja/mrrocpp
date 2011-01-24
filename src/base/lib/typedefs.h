@@ -24,9 +24,6 @@ typedef struct
 } _pulse_msg;
 
 #else
-#include <stdint.h>
-#include <csignal>
-
 /* --- Symbolic names of the error return conditions --- */
 
 #define EOK              0  /* No error */
@@ -35,7 +32,7 @@ typedef struct
 
 #define ND_LOCAL_NODE			0
 
-#define delay(ms)	::usleep(1000*(ms))
+#define delay(ms)	usleep(1000*(ms))
 
 #define flushall()	do { fflush(stdout); fflush(stderr); } while (0)
 
@@ -65,6 +62,41 @@ typedef struct
 #define	out16(port,val)	(void) 0
 #define	in8(port)		0
 #define	in16(port)		0
+#elif (__APPLE__ & __MACH__)
+
+/* MacOS X does not provide a clock_gettime(), but it is easy to replace */
+typedef int clockid_t;
+/* Identifier for system-wide realtime clock.  */
+#   define CLOCK_REALTIME       0
+/* Monotonic system-wide clock.  */
+#   define CLOCK_MONOTONIC      1
+/* High-resolution timer from the CPU.  */
+#   define CLOCK_PROCESS_CPUTIME_ID 2
+/* Thread-specific CPU-time clock.  */
+#   define CLOCK_THREAD_CPUTIME_ID  3
+
+/* Flag to indicate time is absolute.  */
+#   define TIMER_ABSTIME        1
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+int clock_gettime( clockid_t clock_id, struct timespec * tp );
+
+/* declaration only; not replaced yet, but this is used only for robot hardware drivers */
+int clock_nanosleep(clockid_t clock_id, int flags,
+       const struct timespec *rqtp, struct timespec *rmtp);
+
+#ifdef __cplusplus
+ }
+#endif
+
+#define	out8(port,val)	(void) 0
+#define	out16(port,val)	(void) 0
+#define	in8(port)		0
+#define	in16(port)		0
+
 #endif
 
 #endif /* ! __QNXNTO__ */

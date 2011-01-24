@@ -30,8 +30,12 @@
 #include <machine/cpufunc.h>
 #endif
 
+#include <boost/shared_ptr.hpp>
+
+#include "base/lib/periodic_timer.h"
 #include "robot/hi_rydz/hi_rydz.h"
 #include "base/edp/edp_e_motor_driven.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace hi_rydz {
@@ -49,36 +53,7 @@ void HI_rydz::init()
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
-		// Initliaze mask to waiting for a signal
-		//fprintf(stderr, "Blocking signal %d\n", SIGRTMIN);
-		if (sigemptyset(&mask) == -1) {
-			perror("sigemptyset()");
-		}
-		if (sigaddset(&mask, SIGRTMIN) == -1) {
-			perror("sigaddset()");
-		}
-
-		/* Create the timer */
-		struct sigevent sev;
-		// clear the structure to avaoid valgrind's warning
-		memset(&sev, 0, sizeof(sev));
-		sev.sigev_notify = SIGEV_SIGNAL;
-		sev.sigev_signo = SIGRTMIN;
-		sev.sigev_value.sival_ptr = &timerid;
-		if (timer_create(CLOCK_REALTIME, &sev, &timerid) == -1) {
-			perror("timer_create()");
-		}
-
-		/* Start the timer */
-		struct itimerspec its;
-		its.it_value.tv_sec = 0;
-		its.it_value.tv_nsec = 1000000000 * lib::EDP_STEP;
-		its.it_interval.tv_sec = its.it_value.tv_sec;
-		its.it_interval.tv_nsec = its.it_value.tv_nsec;
-
-		if (timer_settime(timerid, 0, &its, NULL) == -1) {
-			perror("timer_settime()");
-		}
+		ptimer = (boost::shared_ptr<lib::periodic_timer>) new lib::periodic_timer(1000 * lib::EDP_STEP);
 	} else {
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
@@ -228,11 +203,6 @@ HI_rydz::~HI_rydz(void) // destruktor
 		}
 
 		// TODO: InterruptDetach(), munmap_device_io()
-	} else {
-		/* delete interval timer */
-		if (timer_delete(timerid) == -1) {
-			perror("timer_delete()");
-		}
 	}
 } // end: hardware_interface::~hardware_interface()
 // ------------------------------------------------------------------------
@@ -240,7 +210,6 @@ HI_rydz::~HI_rydz(void) // destruktor
 // ------------------------------------------------------------------------
 uint64_t HI_rydz::read_write_hardware(void)
 {
-
 	// ------------------------------------------------------------------------
 	// Obsluga sprzetu: odczyt aktualnych wartosci polozenia i zapis wartosci
 	// wypelnienia PWM
@@ -284,7 +253,6 @@ uint64_t HI_rydz::read_write_hardware(void)
 // Zerowanie licznikow polozenia wszystkich osi
 void HI_rydz::reset_counters(void)
 {
-
 	for (int i = 0; i < master.number_of_servos; i++) {
 		irq_data.md.card_adress = hi_first_servo_ptr + (uint8_t) i;
 		irq_data.md.register_adress = (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset);
@@ -396,12 +364,8 @@ int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 		return -1;
 #endif
 	} else {
-		int sig;
-		int s = sigwait(&mask, &sig);
-		if (s != 0) {
-			perror("sigwait()");
-			return -1;
-		}
+		ptimer->sleep();
+
 		return 0;
 	}
 }

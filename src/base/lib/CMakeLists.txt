@@ -34,6 +34,8 @@ add_library(mrrocpp
 	trajectory_pose/bang_bang_trajectory_pose.cc
 	trajectory_pose/trajectory_pose.cc
 	trajectory_pose/constant_velocity_trajectory_pose.cc
+	periodic_timer.cc
+	compat.c
 )
 
 target_link_libraries (mrrocpp sr)

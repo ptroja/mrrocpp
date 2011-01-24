@@ -66,6 +66,15 @@ option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
 option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
 
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
+
 # QNX is default MRROC++ target
 if (QNXNTO)
 	# QNX headers and libraries are kept in 'mrlib' repository
@@ -75,13 +84,9 @@ if (QNXNTO)
 	add_definitions (-DEIGEN_DONT_ALIGN)
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
-	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
-	# include boost compatibility layer
-	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -108,11 +113,16 @@ elseif (UBUNTU32BIT)
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
 	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
+
+	# Check for libftdi without pkg-config
+	find_library(LibFTDI_LIBRARY ftdi "${MRLIB}/lib")
+	set(LibFTDI_LIBRARIES ${LibFTDI_LIBRARY})
+	set(LibFTDI_FOUND 1)
 
 	# clock_gettime() can be missing in -lc
 	INCLUDE(CheckLibraryExists)
@@ -130,17 +140,17 @@ elseif (UBUNTU32BIT)
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
 	set(COMEDI_INSTALL "${MRLIB}")
-else (QNXNTO) # Linux, etc.
+else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
 
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
-
+	
+	# Check for libftdi with pkg-config
 	include(FindPkgConfig)
 	pkg_check_modules(LibFTDI libftdi)
-
+	
 	# Eigen2 is not directly supported by CMake
 	pkg_check_modules(EIGEN2 REQUIRED eigen2)
 
@@ -150,11 +160,22 @@ else (QNXNTO) # Linux, etc.
 		set (COMPATIBILITY_LIBRARIES rt)
 	endif(HAVE_LIBRT)
 
+	# check for kqueue()
+	INCLUDE (CheckSymbolExists)
+	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
+
 	# for non-QNX target messip is the only messaging protocol
 	set(USE_MESSIP ON)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+endif (QNXNTO)
+
+find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
+
+if (QNXNTO)
+	# include boost compatibility layer
+	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 endif (QNXNTO)
 
 include(FindComedi)
@@ -193,4 +214,3 @@ elseif (UBUNTU32BIT)
 else (QNXNTO) # Linux, etc.
 	add_subdirectory (ui-qt-yoyek)
 endif (QNXNTO)
-

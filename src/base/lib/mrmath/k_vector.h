@@ -60,6 +60,8 @@ public:
 	 * Export values to C-style array
 	 */
 	void to_table(double tablica[3]) const;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace lib

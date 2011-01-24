@@ -5,9 +5,17 @@
  *      Author: mboryn
  */
 
-#include "vs_logger.h"
-
 #include <stdexcept>
+#include <cstdio>
+#include <ctime>
+
+#include <boost/date_time/posix_time/posix_time.hpp> //include all types plus i/o
+#include <boost/thread/thread_time.hpp>
+
+#include "base/lib/configurator.h"
+#include "base/lib/mrmath/mrmath.h"
+
+#include "vs_logger.h"
 
 using namespace std;
 
@@ -75,10 +83,16 @@ void vs_logger::log(const lib::Homog_matrix &O_T_G_desired, const lib::Homog_mat
 		return;
 	}
 
-	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
+//	struct timespec ts;
+//	if(clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+//		perror("clock_gettime()");
+//	}
+//
+//	fprintf(fp, "%ld;%ld", ts.tv_sec, ts.tv_nsec);
 
-	fprintf(fp, "%ld;%ld", ts.tv_sec, ts.tv_nsec);
+	boost::posix_time::ptime now = boost::get_system_time();
+
+	fprintf(fp, "%s", boost::posix_time::to_simple_string(now).c_str());
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 4; ++j)
 			fprintf(fp, ";%lg", O_T_G_desired(i, j));

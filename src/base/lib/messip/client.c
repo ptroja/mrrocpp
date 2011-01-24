@@ -13,6 +13,9 @@
 #include <sys/neutrino.h>
 #include <stdint.h>
 #include <sys/syspage.h>
+#elif (__APPLE__ & __MACH__)
+#include "base/lib/typedefs.h"
+#include "base/lib/compat.c"
 #endif /* __QNXNTO__ */
 
 #include "messip.h"
@@ -38,7 +41,7 @@ main(int argc, char *argv[])
 #endif /* __QNXNTO__ */
 	int q = 0;
 
-#if 1
+#if !(__APPLE__ & __MACH__)
     struct sched_param param;
     if ((param.sched_priority=sched_get_priority_max(SCHED_FIFO)) == -1)
         fprintf (stderr, "sched_get_priority_max(): %s\n", strerror (errno));
@@ -64,7 +67,9 @@ do {
 #if defined(__QNXNTO__)
 		cycle1=ClockCycles();
 #else /*!__QNXNTO__ */
-		clock_gettime(CLOCK_REALTIME, &before);
+		if(clock_gettime(CLOCK_REALTIME, &before) == -1) {
+			perror("clock_gettime()");
+		}
 #endif /* __QNXNTO__ */
 
 #if defined(ONEWAY_MESSAGE)
@@ -81,7 +86,9 @@ do {
 		d=(double)ncycles/cps;
 		usleep(1000);
 #else /*!__QNXNTO__ */
-		clock_gettime(CLOCK_REALTIME, &after);
+		if(clock_gettime(CLOCK_REALTIME, &after) == -1) {
+			perror("clock_gettime()");
+		}
 		d = 
 			(after.tv_sec+after.tv_nsec/1e9)
 			-(before.tv_sec+before.tv_nsec/1e9);

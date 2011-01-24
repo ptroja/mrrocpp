@@ -20,12 +20,6 @@
 #include "base/lib/configsrv.h"
 #include "base/lib/config_types.h"
 
-void
-sigint_handler(int signum)
-{
-	exit(-1);
-}
-
 int
 main(int argc, char *argv[])
 {
@@ -34,7 +28,7 @@ main(int argc, char *argv[])
 	messip_channel_t *ch = messip::port_create(CONFIGSRV_CHANNEL_NAME);
 	assert(ch);
 
-	if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR) {
 		perror("signal()");
 	}
 

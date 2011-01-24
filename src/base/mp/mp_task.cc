@@ -812,7 +812,7 @@ void task::initialize_communication()
 
 	ui_scoid = wait_for_name_open();
 	// unexepected possible resolution of bug 1526
-	delay(100);
+	usleep(100*1000);
 	ui_opened = true;
 	std::cerr << "mp 3z" << std::endl;
 }
