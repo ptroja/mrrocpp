@@ -160,6 +160,9 @@ else (QNXNTO) # Linux, etc.
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+    if(DEFINE_EIGEN_DONT_ALIGN)
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_ALIGN")
+    endif(DEFINE_EIGEN_DONT_ALIGN)
 endif (QNXNTO)
 
 include(FindComedi)
