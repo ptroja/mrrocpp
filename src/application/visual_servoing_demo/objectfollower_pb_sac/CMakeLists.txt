@@ -6,7 +6,7 @@ add_executable(ecp_vsdemo_objectfollower_pb_sac
 target_link_libraries(ecp_vsdemo_objectfollower_pb_sac
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
-	
+	visual_servoing
 	ecp ${COMMON_LIBRARIES}
 )
 

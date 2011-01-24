@@ -11,11 +11,7 @@
 #include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
 #include "base/lib/logger.h"
-#include "../single_visual_servo_manager.h"
-#include "../pb_eih_visual_servo.h"
-#include "../cubic_constraint.h"
-#include "../object_reached_termination_condition.h"
-#include "../visual_servo_regulator_p.h"
+#include "application/visual_servoing/visual_servoing.h"
 
 using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;

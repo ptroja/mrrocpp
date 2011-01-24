@@ -8,7 +8,6 @@
 #include <iostream>
 
 #include "pb_sac_calibration.h"
-#include "../visual_servo_regulator_p.h"
 
 #include "base/lib/logger.h"
 

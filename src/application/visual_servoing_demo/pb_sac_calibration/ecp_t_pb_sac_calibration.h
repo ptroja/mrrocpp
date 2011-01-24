@@ -11,8 +11,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "sensor/discode/discode_sensor.h"
-#include "../single_visual_servo_manager.h"
-#include "../timeout_termination_condition.h"
+#include "application/visual_servoing/visual_servoing.h"
 #include "pb_sac_calibration.h"
 
 #include "base/ecp/ecp_task.h"

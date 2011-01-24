@@ -6,6 +6,7 @@ add_executable(ecp_vsdemo_vs_tutorial
 target_link_libraries(ecp_vsdemo_vs_tutorial
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
+	visual_servoing
 	ecp ${COMMON_LIBRARIES}
 )
 

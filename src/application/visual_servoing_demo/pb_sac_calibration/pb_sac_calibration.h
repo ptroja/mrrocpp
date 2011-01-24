@@ -8,7 +8,7 @@
 #ifndef PB_SAC_CALIBRATION_H_
 #define PB_SAC_CALIBRATION_H_
 
-#include "../pb_visual_servo.h"
+#include "application/visual_servoing/visual_servoing.h"
 
 namespace mrrocpp {
 

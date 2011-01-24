@@ -12,8 +12,7 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/logger.h"
-
-#include "../PBReading.h"
+#include "application/visual_servoing/visual_servoing.h"
 
 namespace mrrocpp {
 

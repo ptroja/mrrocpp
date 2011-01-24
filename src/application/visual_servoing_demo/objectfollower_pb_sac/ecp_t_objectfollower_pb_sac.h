@@ -11,11 +11,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "base/lib/logger.h"
-#include "../single_visual_servo_manager.h"
-#include "../pb_sac_visual_servo.h"
-#include "../cubic_constraint.h"
-#include "../object_reached_termination_condition.h"
-#include "../visual_servo_regulator_p.h"
+#include "application/visual_servoing/visual_servoing.h"
 
 #include "base/ecp/ecp_task.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
