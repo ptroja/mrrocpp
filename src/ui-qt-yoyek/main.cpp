@@ -1,5 +1,5 @@
 #include <signal.h>
-
+#include <wait.h>
 #include <QtGui/QApplication>
 
 #include "interface.h"
