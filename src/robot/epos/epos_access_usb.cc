@@ -24,6 +24,7 @@ epos_access_usb::epos_access_usb(int _vendor, int _product, unsigned int _index)
 
 epos_access_usb::~epos_access_usb()
 {
+	if (device_opened) close();
 	ftdi_deinit(&ftdic);
 }
 
