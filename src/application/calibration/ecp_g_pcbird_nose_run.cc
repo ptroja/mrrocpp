@@ -27,9 +27,9 @@ pcbird_nose_run::pcbird_nose_run(common::task::task& _ecp_task, int step) :
 bool pcbird_nose_run::first_step()
 {
 	//bedziemy pobierali dane o robocie
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
 
 	return tff_nose_run::first_step();
 }

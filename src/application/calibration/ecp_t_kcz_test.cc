@@ -3,8 +3,11 @@
 #include <unistd.h>
 #include <iostream>
 
+#include "base/lib/configurator.h"
+
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "ecp_t_kcz_test.h"
 #include "sensor/pcbird/ecp_mp_s_pcbird.h"
 
@@ -14,15 +17,15 @@ namespace common {
 namespace task {
 
 //Constructors
-kcz_test::kcz_test(lib::configurator &_config): task(_config)
+kcz_test::kcz_test(lib::configurator &_config): common::task::task(_config)
 {
     if (config.section_name == lib::irp6ot_m::ECP_SECTION)
     {
-        ecp_m_robot = new irp6ot_m::robot (*this);
+        ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot (*this);
     }
     else if (config.section_name == lib::irp6p_m::ECP_SECTION)
     {
-        ecp_m_robot = new irp6p_m::robot (*this);
+        ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot (*this);
     }
 
 	sensor_m[ecp_mp::sensor::SENSOR_PCBIRD] = new ecp_mp::sensor::pcbird("[vsp_pcbird]", *this->sr_ecp_msg, this->config);
@@ -32,7 +35,7 @@ kcz_test::kcz_test(lib::configurator &_config): task(_config)
 	smoothgen2->sensor_m = sensor_m;
 
 	sr_ecp_msg->message("ecp loaded kcz_test");
-};
+}
 
 void kcz_test::main_task_algorithm(void ) {
 	sr_ecp_msg->message("ecp kcz_test ready");
@@ -159,7 +162,7 @@ void kcz_test::main_task_algorithm(void ) {
 	smoothgen2->reset();
 
 	ecp_termination_notice();
-};
+}
 
 }
 } // namespace common
@@ -167,7 +170,7 @@ void kcz_test::main_task_algorithm(void ) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config){
+task_base* return_created_ecp_task(lib::configurator &_config){
 	return new common::task::kcz_test(_config);
 }
 

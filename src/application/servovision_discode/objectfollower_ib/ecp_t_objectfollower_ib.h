@@ -41,7 +41,7 @@ class ecp_t_objectfollower_ib: public mrrocpp::ecp::common::task::task
 {
 public:
 	ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator);
-	virtual ~ecp_t_objectfollower_ib();
+
 	void main_task_algorithm(void);
 
 protected:

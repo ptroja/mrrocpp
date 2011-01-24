@@ -20,14 +20,13 @@ class vis_server : boost::noncopyable
 private:
 	motor_driven_effector &master;
 
-	boost::thread *thread_id;
+	boost::thread thread_id;
 
-public:
 	//! main loop
 	void operator()();
 
+public:
     vis_server(motor_driven_effector &_master);
-    ~vis_server();
 };
 
 } // namespace common

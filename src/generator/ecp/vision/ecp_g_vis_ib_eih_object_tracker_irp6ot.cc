@@ -31,18 +31,18 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step()
 	flushall();
 	vsp_fradia = dynamic_cast <fradia_sensor_tracker *> (sensor_m[ecp_mp::sensor::SENSOR_FRADIA]);
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = MOTION_STEPS;
-	the_robot->ecp_command.instruction.value_in_step_no = MOTION_STEPS - 2;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::RELATIVE;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = MOTION_STEPS;
+	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 2;
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	for (int i = 0; i < 7; i++) {//ustawianie next_position dla wszystkich osi (lacznie z chwytakiem) na 0
@@ -78,7 +78,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::first_step()
 bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints()
 {
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
+	the_robot->ecp_command.instruction_type = lib::SET_GET;//TODO sprawdzic czy to moze byc robione tylko raz
 
 	lib::sensor::VSP_REPORT_t vsp_report = vsp_fradia->get_report();
 	if (vsp_report == lib::sensor::VSP_REPLY_OK) {
@@ -169,9 +169,9 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints()
 	}
 
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(next_position));
-	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
-	//memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_frame, next_position,
+	//memcpy(the_robot->ecp_command.arm.pf_def.arm_frame, next_position,
 	//		6 * sizeof(double)); //zapisanie pozycji w angle axes
 
 

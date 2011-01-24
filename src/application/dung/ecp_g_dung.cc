@@ -26,7 +26,7 @@ namespace irp6p_m {
 namespace generator {
 
 dung::dung(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	step_no = step;
 	oq1 = oq2 = oq3 = oq4 = oq5 = oq6 = 200.0;
@@ -39,17 +39,17 @@ bool dung::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // arm - ORYGINAL
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.instruction.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::JOINT;
+	the_robot->ecp_command.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = td.internode_step_no;
+	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
 
 	return true;
 }
@@ -85,7 +85,7 @@ bool dung::next_step()
 	if (check_and_null_trigger()) {
 		return false;
 	}
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	// DUNG START
 	q1 = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
@@ -285,17 +285,17 @@ bool dung::next_step()
 	 t[5] = t[5] + g[5];*/
 	// output the torque to the controller
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.desired_torque[i] = t[i];
+		the_robot->ecp_command.arm.pf_def.desired_torque[i] = t[i];
 	} // end:for
 
 	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i]
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
 				= the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	} // end:for
 
 	// DUNG STOP
 
-	//	else the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate-0.0001;
+	//	else the_robot->ecp_command.arm.pf_def.gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate-0.0001;
 
 
 	return true;

@@ -67,7 +67,7 @@ void pcbird_pos::main_task_algorithm(void)
 /*!
  * Returns created task object (Factory Method design pattern).
  */
-task* return_created_ecp_task (lib::configurator &_config)
+task_base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new pcbird_pos(_config);
 }

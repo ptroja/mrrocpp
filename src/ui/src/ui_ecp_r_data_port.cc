@@ -48,8 +48,8 @@ void EcpRobotDataPort::get_controller_state(lib::controller_state_t & robot_cont
 	// Zlecenie odczytu numeru modelu i korektora kinematyki
 
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = CONTROLLER_STATE_DEFINITION;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
 
 	the_robot->execute_motion();
 

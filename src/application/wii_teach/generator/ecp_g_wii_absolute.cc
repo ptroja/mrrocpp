@@ -31,13 +31,13 @@ void wii_absolute::set_position(bool changed)
 	double translation[3];
 	double old_translation[3];
 
-	if (the_robot->ecp_command.instruction.instruction_type == lib::GET) {
-		homog_matrix.set_from_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	if (the_robot->ecp_command.instruction_type == lib::GET) {
+		homog_matrix.set_from_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	} else {
 		homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
 	}
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	homog_matrix.get_translation_vector(old_translation);
 	
@@ -67,20 +67,20 @@ void wii_absolute::set_position(bool changed)
 	old_translation[2] += translation[2];
 	homog_matrix.set_translation_vector(old_translation);
 
-	homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 }
 
 bool wii_absolute::first_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 25;
-	the_robot->ecp_command.instruction.value_in_step_no = 22;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = 25;
+	the_robot->ecp_command.value_in_step_no = 22;
 
 	releasedA = false;
 	stop = false;

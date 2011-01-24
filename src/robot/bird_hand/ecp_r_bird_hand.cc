@@ -13,7 +13,7 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _config, _sr_ecp),
+			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
@@ -26,8 +26,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 }
 
-robot::robot(common::task::task& _ecp_object) :
-			robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _ecp_object),
+robot::robot(common::task::task_base& _ecp_object) :
+			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _ecp_object),
 			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
@@ -45,22 +45,22 @@ void robot::create_command()
 	bool is_new_request;
 
 	// NOWE PORTY
-	ecp_command.instruction.get_type = NOTHING_DEFINITION;
+	ecp_command.get_type = NOTHING_DEFINITION;
 
 	if (bird_hand_status_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_type |= ARM_DEFINITION;
+		ecp_command.get_type |= ARM_DEFINITION;
 		is_new_request = true;
 	}
 
 	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
-		ecp_command.instruction.get_type |= ROBOT_MODEL_DEFINITION;
+		ecp_command.get_type |= ROBOT_MODEL_DEFINITION;
 		is_new_request = true;
 	}
 
-	ecp_command.instruction.set_type = NOTHING_DEFINITION;
+	ecp_command.set_type = NOTHING_DEFINITION;
 
 	if (bird_hand_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type |= ARM_DEFINITION;
+		ecp_command.set_type |= ARM_DEFINITION;
 
 		ecp_edp_cbuffer.command_structure.motion_steps = bird_hand_command_data_port.data.motion_steps;
 		ecp_edp_cbuffer.command_structure.ecp_query_step = bird_hand_command_data_port.data.ecp_query_step;
@@ -78,7 +78,7 @@ void robot::create_command()
 	}
 
 	if (bird_hand_configuration_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type |= ROBOT_MODEL_DEFINITION;
+		ecp_command.set_type |= ROBOT_MODEL_DEFINITION;
 
 		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
 			ecp_edp_cbuffer.configuration_command_structure.finger[i]
@@ -100,19 +100,19 @@ void robot::create_command()
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
-		ecp_command.instruction.instruction_type = lib::SET_GET;
+		ecp_command.instruction_type = lib::SET_GET;
 	} else if (is_new_data) {
-		ecp_command.instruction.instruction_type = lib::SET;
+		ecp_command.instruction_type = lib::SET;
 	} else if (is_new_request) {
-		ecp_command.instruction.instruction_type = lib::GET;
+		ecp_command.instruction_type = lib::GET;
 	} else {
 		communicate_with_edp = false;
 	}
 
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.instruction.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 

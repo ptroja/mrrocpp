@@ -122,7 +122,7 @@ void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 	// uint8_t previous_corrector;
 
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::SERVO_ALGORITHM:
 			sb->set_robot_model_servo_algorithm(instruction);
@@ -532,7 +532,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
@@ -623,7 +623,7 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.robot_model_type = lib::TOOL_FRAME;
+			reply.robot_model.type = lib::TOOL_FRAME;
 
 			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.robot_model.tool_frame_def.tool_frame);
 

@@ -28,7 +28,7 @@ class ecp_t_conveyor_uniform_acceleration : public mrrocpp::ecp::common::task::t
 {
 public:
 	ecp_t_conveyor_uniform_acceleration(mrrocpp::lib::configurator& config);
-	virtual ~ecp_t_conveyor_uniform_acceleration();
+
 	void main_task_algorithm(void);
 private:
 	boost::shared_ptr<ecp_g_conveyor_uniform_acceleration> uniform_acceleration_gen;

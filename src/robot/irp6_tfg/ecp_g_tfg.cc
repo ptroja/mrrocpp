@@ -30,7 +30,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "robot/irp6_tfg/ecp_g_tfg.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -48,7 +48,7 @@ namespace generator {
 
 
 tfg::tfg(common::task::task& _ecp_task, int step) :
-	generator(_ecp_task), step_no(step)
+	common::generator::generator(_ecp_task), step_no(step)
 {
 }
 
@@ -59,15 +59,15 @@ bool tfg::first_step()
 	get_mp_ecp_command();
 
 	sr_ecp_msg.message("tfg first step");
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.get_arm_type = lib::JOINT;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = step_no;
-	the_robot->ecp_command.instruction.value_in_step_no = step_no - 2;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::JOINT;
+	the_robot->ecp_command.get_arm_type = lib::JOINT;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = step_no;
+	the_robot->ecp_command.value_in_step_no = step_no - 2;
 
 	return true;
 }
@@ -84,11 +84,11 @@ bool tfg::next_step()
 		return false;
 	}
 
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction_type = lib::SET;
 
-	the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[0] = mp_ecp_command.desired_position;
-	the_robot->ecp_command.instruction.motion_steps = 1000;
-	the_robot->ecp_command.instruction.value_in_step_no = 998;
+	the_robot->ecp_command.arm.pf_def.arm_coordinates[0] = mp_ecp_command.desired_position;
+	the_robot->ecp_command.motion_steps = 1000;
+	the_robot->ecp_command.value_in_step_no = 998;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	ss << "position: " << the_robot->reply_package.arm.pf_def.arm_coordinates[0] << ", node_counter:  " << node_counter;

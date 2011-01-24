@@ -21,8 +21,8 @@
 #include "ecp_g_eih_nose_run.h"
 #include "ecp_st_acquisition.h"
 #include "ecp_g_eihcalibration.h"
-#include "gsl/gsl_vector.h"
-#include "gsl/gsl_matrix.h"
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
 
 #define POSTUMENT 0
 #define TRACK 1

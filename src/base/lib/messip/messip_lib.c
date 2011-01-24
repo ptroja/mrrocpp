@@ -1985,14 +1985,15 @@ messip_receive( messip_channel_t * ch,
 		return -1;
 	}
 	if(dcount != (ssize_t) (sizeof( uint32_t ) + len_to_read)) {
+		// Warn if the packet has been fragmented by the TCP/IP stack
 #if defined(__linux__)
-		fprintf(stderr, "LINUX\n");
+		fprintf(stderr, "LINUX: ");
 #elif defined(__QNXNTO__)
-		fprintf(stderr, "QNX\n");
+		fprintf(stderr, "QNX: ");
 #else
-		fprintf(stderr, "OTHER\n");
+		fprintf(stderr, "OTHER: ");
 #endif
-		fprintf(stderr, "MTU test: dcount %zd =? header+data %zd\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
+		fprintf(stderr, "received IP packet fragmented: %zd of %zd bytes\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
 	}
 	assert( dcount >= sizeof( uint32_t ) );
 	ch->datalenr = dcount - sizeof(uint32_t);
@@ -2287,6 +2288,9 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 			return -1;
 		}
 		datalenr += dcount;
+		if(datalenr < len_to_read) {
+			fprintf(stderr, "replied IP packet fragmented: %zd of %zd bytes\n", datalenr, (ssize_t) (sizeof( datareply ) + len_to_read));
+		}
 	}
 
 	if ( len_to_read < datareply.datalen )
@@ -2525,7 +2529,7 @@ messip_reply( messip_channel_t * ch,
 }								// messip_reply
 
 
-#if !defined(__FreeBSD__) && !defined(__APPLE__) && !defined(__MACH__)
+#if !defined(__FreeBSD__) && !(__APPLE__ & __MACH__)
 
 typedef struct
 {

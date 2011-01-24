@@ -66,7 +66,7 @@ bool haptic_stiffness::first_step()
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DEFINITION;
 	irp6ot->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	irp6ot->mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	irp6ot->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
 	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
@@ -107,7 +107,7 @@ bool haptic_stiffness::first_step()
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
 	irp6p->mp_command.instruction.get_type = ARM_DEFINITION;
 	irp6p->mp_command.instruction.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
-	irp6p->mp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+	irp6p->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;

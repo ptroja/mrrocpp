@@ -41,7 +41,7 @@ bool delay_ms_condition::next_step()
 	local_timer.get_time(sec);
 	if (1000 * sec > (float) ms_delay)
 		return false;
-	delay (20);
+	usleep (20*1000);
 	local_timer.stop();
 	local_timer.get_time(sec);
 	if (1000 * sec > (float) ms_delay)

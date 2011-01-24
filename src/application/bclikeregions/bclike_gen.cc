@@ -97,9 +97,9 @@ bclike_gen::~bclike_gen() {
 
 bool bclike_gen::first_step(){
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = return_pos_type;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = return_pos_type;
 
 	if(no_fradia){
 		std::cout << "ERROR: no fradia == TRUE" << std::endl;

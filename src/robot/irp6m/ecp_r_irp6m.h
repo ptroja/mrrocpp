@@ -20,12 +20,9 @@ class robot: public common::robot::ecp_robot
 {
 	// Klasa dla robota irp6_postument (sztywnego)
 
-	public:
+public:
 	robot (lib::configurator &_config, lib::sr_ecp &_sr_ecp);
-	robot (common::task::task& _ecp_object);
-
-
-
+	robot (common::task::task_base& _ecp_object);
 }; // end: class ecp_irp6_mechatronika_robot
 // ---------------------------------------------------------------
 

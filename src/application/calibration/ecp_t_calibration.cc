@@ -1,3 +1,6 @@
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
+
 #include "ecp_t_calibration.h"
 
 namespace mrrocpp {
@@ -6,7 +9,8 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-calibration::calibration(lib::configurator &_config) : task(_config)
+calibration::calibration(lib::configurator &_config) :
+	common::task::task(_config)
 {
 }
 
@@ -585,7 +589,7 @@ bool calibration::transposed_vector_matrix_multiply( gsl_vector * vector, const 
 	return true;
 }
 
-//task* calibration::return_created_ecp_task (lib::configurator &_config)
+//task_base* calibration::return_created_ecp_task (lib::configurator &_config)
 //{
 //	return new calibration(_config);
 //}

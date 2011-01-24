@@ -29,7 +29,15 @@ sleep 0.5
 echo CONFIGSRV_PID=${CONFIGSRV_PID}
 echo MESSIP_PID=${MESSIP_PID}
 
-./ui-qt-yoyek
+case `uname -s` in
+		QNX)
+				./ui;;
+		Linux)
+				./ui-qt-yoyek;;
+		*)
+				echo "OS not fully supported; defaults to UNIX"
+				./ui-qt-yoyek;;
+esac
 
 kill ${MESSIP_PID}
 kill ${CONFIGSRV_PID}

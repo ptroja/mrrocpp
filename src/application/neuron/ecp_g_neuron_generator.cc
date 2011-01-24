@@ -24,7 +24,7 @@ namespace generator {
  * @param _ecp_taks Reference to task configurator.
  */
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	reset();
 }
@@ -46,15 +46,15 @@ bool neuron_generator::first_step()
 {
 	sr_ecp_msg.message("neuron generator first step");
 	printf("neuron generator first step\n");
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 10;
-	the_robot->ecp_command.instruction.value_in_step_no = 10 - 2;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = 10;
+	the_robot->ecp_command.value_in_step_no = 10 - 2;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 
 	//get neuron sensor and send information about starting new trajectory.
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
@@ -70,7 +70,7 @@ bool neuron_generator::first_step()
  */
 bool neuron_generator::next_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction_type = lib::SET;
 	flushall();
 
 	//Check if stop button in VSP was pressed
@@ -271,7 +271,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	//send new position to the robot
-	position_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (neuron_sensor->current_period == 1) {

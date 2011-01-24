@@ -4,7 +4,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
@@ -19,13 +20,13 @@ namespace task {
 
 // KONSTRUKTORY
 tfg::tfg(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
-		ecp_m_robot = new irp6ot_tfg::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_tfg::robot(*this);
 	} else if (config.section_name == lib::irp6p_tfg::ECP_SECTION) {
-		ecp_m_robot = new irp6p_tfg::robot(*this);
+		ecp_m_robot = (boost::shared_ptr<ecp::common::robot::ecp_robot>) new irp6p_tfg::robot(*this);
 	} else {
 		// TODO: throw
 	}
@@ -51,7 +52,7 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6_tfg::task::tfg(_config);
 }

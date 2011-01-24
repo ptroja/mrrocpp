@@ -5,9 +5,15 @@
  *      Author: mboryn
  */
 
-#include "vs_logger.h"
-
 #include <stdexcept>
+
+#include <cstdio>
+
+#if (__APPLE__ & __MACH__)
+#include "base/lib/typedefs.h"		// Fot clock_gettime() compatibility workaround
+#endif
+
+#include "vs_logger.h"
 
 using namespace std;
 
