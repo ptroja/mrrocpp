@@ -64,8 +64,6 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 
 option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
-option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
-
 # QNX is default MRROC++ target
 if (QNXNTO)
 	# QNX headers and libraries are kept in 'mrlib' repository
@@ -130,7 +128,9 @@ elseif (UBUNTU32BIT)
 	set(USE_MESSIP ON)
 	
 	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=return-type")
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
@@ -159,7 +159,7 @@ else (QNXNTO) # Linux, etc.
 	set(USE_MESSIP ON)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 endif (QNXNTO)
 
 include(FindComedi)
