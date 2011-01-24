@@ -2,13 +2,6 @@
 add_executable(ecp_pb_sac_calibration
     ecp_t_pb_sac_calibration.cc
     pb_sac_calibration.cc
-    ../pb_visual_servo.cc
-    ../visual_servo.cc
-    ../visual_servo_manager.cc
-    ../single_visual_servo_manager.cc
-    ../termination_condition.cc
-    ../timeout_termination_condition.cc
-    ../../../sensor/discode/discode_sensor.cc
 )
 
 target_link_libraries(ecp_pb_sac_calibration
