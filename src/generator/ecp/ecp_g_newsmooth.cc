@@ -129,19 +129,21 @@ bool newsmooth::calculate() {
 				vpc.calculate_time(pose_vector_iterator, j);//calculate and set time
 			} else{//if not
 
-				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
-				//print_pose(pose_vector_iterator);
+				
 
 				if(!vpc.optimize_time_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
 
-				//printf("\n------------ second print pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
-				//print_pose(pose_vector_iterator);
+				printf("\n------------ after optimize time pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				print_pose(pose_vector_iterator);
 
 				if(!vpc.reduction_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
+
+                                printf("\n------------ after reduction axis pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				print_pose(pose_vector_iterator);
 			}
 		}
 
@@ -154,6 +156,9 @@ bool newsmooth::calculate() {
 			return false;
 		}
 
+                printf("\n------------ after calculate_pose_time pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
+
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 
 		for(j = 0; j < axes_num; j++) {//for each axis call reduction methods
@@ -162,12 +167,15 @@ bool newsmooth::calculate() {
 			}
 		}
 
+                printf("\n------------ after second reduction_axis pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
+
 		if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, mc)) {//set uni and acc
 			return false;
 		}
 
-		//printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
-		//print_pose(pose_vector_iterator);
+		printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
+		print_pose(pose_vector_iterator);
 
 		pose_vector_iterator++;
 	}

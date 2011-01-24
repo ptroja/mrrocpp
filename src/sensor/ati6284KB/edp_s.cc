@@ -17,6 +17,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "base/lib/mis_fun.h"
 
 #include "base/lib/sr/srlib.h"
 #include "edp_s.h"
@@ -90,12 +91,12 @@ void ATI6284_force::configure_particular_sensor(void)
 void ATI6284_force::wait_for_particular_event()
 {
 	//!< odczekaj
-	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-		wake_time.tv_sec += 1;
-		wake_time.tv_nsec -= 1000000000;
-	}
+	lib::timespec_increment_ns(&wake_time, COMMCYCLE_TIME_NS);
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+	}
 
 	for (int i = 0; i < 6; i++) {
 		comedi_data_read(device, 0, i, 0, AREF_DIFF, &adc_data[i]);

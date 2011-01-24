@@ -205,7 +205,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	// zawieszenie do query_time
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+	}
 
 	if (robot_test_mode) {
 		for (int i = 0; i < number_of_servos; i++) {

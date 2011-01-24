@@ -59,6 +59,8 @@ public:
 	 * Assignment operator to reuse from a base class
 	 */
 	using BaseClass::operator=;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }

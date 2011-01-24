@@ -17,7 +17,9 @@
 #include "smb/ui_r_smb.h"
 #include "shead/ui_r_shead.h"
 #include "polycrank/ui_r_polycrank.h"
+
 #include "spkm/wgt_spkm_inc.h"
+#include "polycrank/wgt_polycrank_int.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -452,6 +454,8 @@ void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
 void MainWindow::on_actionpolycrank_Move_Joints_triggered()
 {
 
+	interface.polycrank->wgt_int->dwgt->show();
+	interface.polycrank->wgt_int->dwgt->raise();
 }
 
 // all robots menu

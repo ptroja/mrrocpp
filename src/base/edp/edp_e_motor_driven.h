@@ -478,8 +478,6 @@ public:
 
 	lib::c_buffer instruction;
 	lib::r_buffer reply;
-
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace common

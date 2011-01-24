@@ -56,6 +56,8 @@ public:
 	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
@@ -74,6 +76,8 @@ public:
 	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
 	//! @author Sibi
 	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
@@ -108,6 +112,8 @@ public:
 	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
 	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace lib
