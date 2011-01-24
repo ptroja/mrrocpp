@@ -232,11 +232,12 @@ void fsautomat::main_task_algorithm(void)
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
 	if (trjConf && ecpLevel) {
+		std::cout<< "!!!"<<std::endl;
+		std::cout<< "trajectorymap"<<std::endl;
+		std::cout<< "!!!"<<std::endl;
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * traj = (*trjMap)[(char*)"approach_1"];
-	std::cout<<"armtype in map "<<traj->arm_type<<std::endl;
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
@@ -264,8 +265,9 @@ void fsautomat::main_task_algorithm(void)
 			if (trjConf) {
 
 				if (ecpLevel) {
-					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml(*((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]));
+					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
@@ -278,7 +280,9 @@ void fsautomat::main_task_algorithm(void)
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 				sg->load_trajectory_from_file(path.c_str());
 			}//else
+			std::cout<<"interpolating"<<std::endl;
 			sg->calculate_interpolate();
+			std::cout<<"interpolated, moving"<<std::endl;
 			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
@@ -303,9 +307,15 @@ void fsautomat::main_task_algorithm(void)
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			double gen_args[2];
+			std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+			std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+
 			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			std::cout<<"gag"<<std::endl;
 			gag->configure(gen_args[0], (unsigned int) gen_args[1], -10);
+			std::cout<<"gag_configured"<<std::endl;
 			gag->Move();
+			std::cout<<"gag_configured moved"<<std::endl;
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
 			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
@@ -325,10 +335,14 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose &trajectory) {
+void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * trajectory) {
 //TODO:askubis cos zle z pose specification, wypisac
-std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
-	sg->load_absolute_pose(trajectory);
+//std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
+
+	std::cout<<"ASKUBIS!!!! loading traj"<<std::endl;
+	if (trajectory==NULL)std::cout<<"brak trajektorii, BLAD????????????????"<<std::endl;
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trajectory);
+	sg->load_absolute_pose(trj);
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {

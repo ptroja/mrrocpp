@@ -346,13 +346,18 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 }
 
 bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
+	std::cout<<"armtype: " << trajectory_pose.arm_type<<std::endl;
 	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
+		std::cout<<"JOINT"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
+		std::cout<<"MOTOR"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  motor_max_velocity, motor_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
+		std::cout<<"ANGLE_AXIS"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  angle_axis_max_velocity, angle_axis_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
+		std::cout<<"EULER7"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
 	} else {
 		std::cout<<"ARMTYPE IN MOVE "<<trajectory_pose.arm_type<<std::endl;

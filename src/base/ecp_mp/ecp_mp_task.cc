@@ -391,16 +391,7 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	xmlCleanupParser();
 	//	for(trajectories_t::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 	//		(*ii).second.showTime();
-int iii=1;
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTraj;
-	actTraj = (*trajectoriesMap)[(char*)"approach_1"];
-	std::cout<<"returned for approach_1 NOW is: "<<actTraj->arm_type<<std::endl;
 
-	actTraj = (*trajectoriesMap)[(char*)"approach_2"];
-	std::cout<<"returned for approach_2 NOW is: "<<actTraj->arm_type<<std::endl;
-
-	actTraj = (*trajectoriesMap)[(char*)"approach_5"];
-	std::cout<<"returned for approach_5 NOW is: "<<actTraj->arm_type<<std::endl;
 	return trajectoriesMap;
 }
 
