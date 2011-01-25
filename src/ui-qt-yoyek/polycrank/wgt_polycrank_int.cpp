@@ -34,12 +34,15 @@ int wgt_polycrank_int::init()
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				ui.pushButton_execute->setDisabled(false);
-				//interface.polycrank->ui_ecp_robot->read_joints(interface.polycrank->current_pos);
-				//robot.ui_ecp_robot->execute_motion();
-				//robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
-				//robot. tfg_and_conv  ui_ecp_robot->ecp->execute_motion();//   execute_motion();
-				//robot.ui_ecp_robot->epos_reply_data_request_port->get();
-				//robot.ui_ecp_robot->read_joints(robot.current_pos);
+				robot.ui_ecp_robot->read_joints(robot.current_pos);
+
+				ui.doubleSpinBox_cur_p1->setValue(robot.current_pos[0]);
+				ui.doubleSpinBox_cur_p2->setValue(robot.current_pos[1]);
+				ui.doubleSpinBox_cur_p3->setValue(robot.current_pos[2]);
+				ui.doubleSpinBox_cur_p4->setValue(robot.current_pos[3]);
+				ui.doubleSpinBox_cur_p5->setValue(robot.current_pos[4]);
+				ui.doubleSpinBox_cur_p6->setValue(robot.current_pos[5]);
+				ui.doubleSpinBox_cur_p7->setValue(robot.current_pos[6]);
 
 				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = robot.current_pos[i];
