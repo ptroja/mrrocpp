@@ -61,7 +61,7 @@ void ecp_t_pb_sac_calibration::main_task_algorithm()
 	log("=======================================================\n");
 	log("=======================================================\n");
 	vector<lib::Homog_matrix> all_O_T_C = vs->get_all_O_T_C();
-	log("all_O_T_C.size() = %d\n", all_O_T_C.size());
+	log("all_O_T_C.size() = %d\n", (int)all_O_T_C.size());
 	int n = min((int)all_O_T_C.size(), 10);
 	for(int i=0; i<n; ++i){
 		log("%d: -------------------------------------------------------\n", i);

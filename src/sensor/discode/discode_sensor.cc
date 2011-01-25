@@ -217,7 +217,7 @@ bool discode_sensor::is_data_available(double sec)
 	tv.tv_sec = floor(sec);
 	tv.tv_usec = round(fmod(sec, 1) * 1e6);
 
-	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
+//	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
 
 	retval = select(sockfd + 1, &rfds, NULL, NULL, &tv);
 
