@@ -180,7 +180,7 @@ if os.path.exists(mrlib_target_dir):
     info("Updating mrlib")
     os.system("cd \"%s\"" % (mrlib_target_dir))
     os.system("git pull \"%s\" master" % (mrlib_svn_url))
-    os.system("cd ~")
+    #os.system("cd ~")
 else:
     info("Checking out mrlib")
     os.system("git clone \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
