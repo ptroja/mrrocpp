@@ -8,6 +8,7 @@
 #include <sys/select.h>
 #include <fcntl.h>
 
+#include "base/lib/periodic_timer.h"
 #include "robot/hi_moxa/hi_moxa.h"
 #include "base/edp/edp_e_motor_driven.h"
 
@@ -16,7 +17,8 @@ namespace edp {
 namespace hi_moxa {
 
 HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports) :
-	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports)
+	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports),
+	ptimer(COMMCYCLE_TIME_NS/1000000)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
@@ -60,51 +62,46 @@ void HI_moxa::init()
 		// informacja o stanie robota
 		master.controller_state_edp_buf.is_power_on = true;
 		master.controller_state_edp_buf.is_robot_blocked = false;
-
-		clock_gettime(CLOCK_MONOTONIC, &wake_time);
-		reset_counters();
-		return;
 	} // end test mode
-
-	// domyslnie robot nie jest zsynchronizowany
-	master.controller_state_edp_buf.is_synchronised = false;
-
-
-
-	fd_max = 0;
-	for (unsigned int i = 0; i <= last_drive_number; i++) {
-		std::cout << "[info] opening port : " << port_names[i].c_str();
-		fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-		if (fd[i] < 0) {
-			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
-			//throw(std::runtime_error("unable to open device!!!"));
-		} else {
-			std::cout << "...OK" << std::endl;
-			if (fd[i] > fd_max)
-				fd_max = fd[i];
+	else
+	{
+		// domyslnie robot nie jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = false;
+	
+		fd_max = 0;
+		for (unsigned int i = 0; i <= last_drive_number; i++) {
+			std::cout << "[info] opening port : " << port_names[i].c_str();
+			fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+			if (fd[i] < 0) {
+				std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
+				//throw(std::runtime_error("unable to open device!!!"));
+			} else {
+				std::cout << "...OK" << std::endl;
+				if (fd[i] > fd_max) {
+					fd_max = fd[i];
+				}
+			}
+			tcgetattr(fd[i], &oldtio[i]);
+	
+			// set up new settings
+			struct termios newtio;
+			memset(&newtio, 0, sizeof(newtio));
+			newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
+			newtio.c_iflag = INPCK; //IGNPAR;
+			newtio.c_oflag = 0;
+			newtio.c_lflag = 0;
+			if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
+				tcsetattr(fd[i], TCSANOW, &oldtio[i]);
+				close(fd[i]);
+				fd[i] = -1;
+				throw(std::runtime_error("unable to set baudrate !!!"));
+				return;
+			}
+			// activate new settings
+			tcflush(fd[i], TCIFLUSH);
+			tcsetattr(fd[i], TCSANOW, &newtio);
 		}
-		tcgetattr(fd[i], &oldtio[i]);
-
-		// set up new settings
-		struct termios newtio;
-		memset(&newtio, 0, sizeof(newtio));
-		newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
-		newtio.c_iflag = INPCK; //IGNPAR;
-		newtio.c_oflag = 0;
-		newtio.c_lflag = 0;
-		if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
-			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
-			close(fd[i]);
-			fd[i] = -1;
-			throw(std::runtime_error("unable to set baudrate !!!"));
-			return;
-		}
-		// activate new settings
-		tcflush(fd[i], TCIFLUSH);
-		tcsetattr(fd[i], TCSANOW, &newtio);
 	}
-
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
 
 	reset_counters();
 }
@@ -177,11 +174,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	// test mode
 	if (master.robot_test_mode) {
-		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-			wake_time.tv_sec += 1;
-			wake_time.tv_nsec -= 1000000000;
-		}
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		ptimer.sleep();
+
 		return ret;
 	}// end test mode
 
@@ -295,12 +289,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		status_disp_cnt = 0;
 	}
 
-	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-		wake_time.tv_sec += 1;
-		wake_time.tv_nsec -= 1000000000;
-	}
-
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	ptimer.sleep();
 
 	return ret;
 }

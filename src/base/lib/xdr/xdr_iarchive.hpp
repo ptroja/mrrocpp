@@ -70,7 +70,7 @@ public:
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_iarchive &load_a_type(boost::serialization::collection_size_type &t, boost::mpl::true_) {
         uint64_t b;
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
         if(!xdr_u_int64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
 #else
         if(!xdr_uint64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
@@ -119,13 +119,13 @@ public:
     LOAD_A_TYPE(float, xdr_float)
 
     LOAD_A_TYPE(int, xdr_int)
-    LOAD_A_TYPE(long, xdr_long)
+    //LOAD_A_TYPE(long, xdr_long)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
     //LOAD_A_TYPE(unsigned long, xdr_u_long)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
 
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
+#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
     //LOAD_A_TYPE(int, xdr_int)
     //LOAD_A_TYPE(long, xdr_long)
     //LOAD_A_TYPE(short, xdr_short)

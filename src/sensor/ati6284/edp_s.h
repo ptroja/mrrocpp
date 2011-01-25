@@ -13,7 +13,6 @@ namespace sensor {
 
 class ATI6284_force : public force
 {
-
 private:
 	unsigned uCount; //!<  zmienna indeksuj�ca
 	unsigned uStatus; //!< wskazanie zape�nienia kolejki

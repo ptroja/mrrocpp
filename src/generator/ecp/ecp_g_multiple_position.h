@@ -526,6 +526,7 @@ public:
 		}
 
 		get_initial_position();
+
 		calculated = calculate();
 
 		if (debug) {

@@ -14,7 +14,6 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()()
 {
-
 	//	sr_msg->message("operator");
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
@@ -49,7 +48,9 @@ void force::operator()()
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
 	//sr_msg->message("dupa 1");
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+		perror("clock_gettime()");
+	}
 
 	while (!TERMINATE) //!< for (;;)
 	{
@@ -133,9 +134,9 @@ force::force(common::manip_effector &_master) :
 			is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
 			is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
 {
-	/*!Lokalizacja procesu wywietlania komunikatow SR */
+	/*! Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg
-			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true);
+			= boost::shared_ptr<lib::sr_vsp> (new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true));
 
 	sr_msg->message("force");
 
@@ -146,7 +147,6 @@ force::force(common::manip_effector &_master) :
 	for (int i = 0; i < 6; ++i) {
 		ft_table[i] = 0.0;
 	}
-
 }
 
 void force::wait_for_event()
@@ -182,7 +182,6 @@ void force::get_reading(void)
 
 	} else {
 		master.force_msr_upload(ft_table);
-
 	}
 
 }
@@ -238,8 +237,6 @@ void force::configure_sensor(void)
 
 force::~force()
 {
-	delete sr_msg;
-
 }
 
 void force::set_force_tool(void)

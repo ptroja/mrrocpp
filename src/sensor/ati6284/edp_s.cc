@@ -391,12 +391,12 @@ void ATI6284_force::wait_for_particular_event()
 
 	do {
 		//!< odczekaj
-		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-			wake_time.tv_sec += 1;
-			wake_time.tv_nsec -= 1000000000;
-		}
+		lib::timespec_increment_ns(wake_time, COMMCYCLE_TIME_NS);
 
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		if(err != 0) {
+			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+		}
 
 		local_timer.stop();
 		local_timer.get_time(sec);

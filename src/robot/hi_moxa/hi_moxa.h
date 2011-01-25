@@ -7,23 +7,21 @@
 #ifndef __HI_MOXA_H
 #define __HI_MOXA_H
 
+#include <termios.h>
+#include <string>
+#include <vector>
+#include <stdint.h>
+
 // // // // // // // //
 // TERMINAL INFO
 //#define T_INFO_FUNC
 //#define T_INFO_CALC
 
-#define USLEEP_US 500000
 #define STATUS_DISP_T 100
 
+#include "base/lib/periodic_timer.h"
 #include "base/edp/HardwareInterface.h"
 #include "robot/hi_moxa/hi_moxa_combuf.h"
-//#include "base/edp/edp_e_motor_driven.h"
-
-#include <termios.h>
-#include <ctime>
-#include <string>
-#include <vector>
-#include <stdint.h>
 
 namespace mrrocpp {
 namespace edp {
@@ -37,7 +35,7 @@ const std::size_t READ_BYTES = 8;
 const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
 
-const long COMMCYCLE_TIME_NS = 2000000;
+const unsigned long COMMCYCLE_TIME_NS = 2000000;
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
@@ -83,8 +81,9 @@ private:
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];
-	struct timespec wake_time;
 
+	//! Periodic timer
+	lib::periodic_timer ptimer;
 }; // koniec: class hardware_interface
 
 } // namespace hi_moxa
