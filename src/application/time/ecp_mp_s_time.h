@@ -21,7 +21,7 @@ template<class Archive>
 void serialize(Archive & ar, struct timespec & ts, const unsigned int version)
 {
     ar & ts.tv_sec;
-    //ar & ts.tv_nsec);
+    ar & ts.tv_nsec;
 }
 
 } // namespace serialization

@@ -122,7 +122,7 @@ public:
     LOAD_A_TYPE(long, xdr_long)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
-    //LOAD_A_TYPE(unsigned long, xdr_u_long)
+    LOAD_A_TYPE(unsigned long, xdr_u_long)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
 
 #if defined(__QNXNTO__) || (__APPLE__ && __MACH__)

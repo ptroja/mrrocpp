@@ -124,7 +124,7 @@ public:
     SAVE_A_TYPE(long, xdr_long)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    //SAVE_A_TYPE(unsigned long, xdr_u_long)
+    SAVE_A_TYPE(unsigned long, xdr_u_long)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
 
 #if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
