@@ -1093,7 +1093,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->sin_addr = msgreply.sin_addr;
 		//strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
 		strncpy( info->hostname, msgreply.hostname, sizeof(info->hostname));
-		info->hostname[sizeof(info->hostname)] = 0;
+		info->hostname[sizeof(info->hostname)-1] = 0;
 		assert(strlen(info->hostname) < sizeof(info->hostname));
 		strncpy( info->name, name, sizeof(info->name) );
 
