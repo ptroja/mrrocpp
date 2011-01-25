@@ -114,7 +114,6 @@ void task::set_next_ecps_state(std::string l_state, int l_variant, const char* l
 	va_end(arguments); // Cleans up the list
 
 	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
-	std::cout << "ROBOT: " << robot_l << std::endl;
 	mp_snes_gen.Move();
 }
 

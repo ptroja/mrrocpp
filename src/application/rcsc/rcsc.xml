@@ -111,6 +111,10 @@
 	<State id="wait_post" type="emptyGen">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>	
 		<AddArg>1</AddArg>
+		<transition condition="true" target="wait_"/>
+	</State>
+	<State id="wait_" type="wait">
+		<TimeSpan>1000</TimeSpan>
 		<transition condition="true" target="_STOP_"/>
 	</State>
 	

@@ -37,6 +37,7 @@
 
 #include "base/lib/datastr.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "cube_face.h"
 #include "CubeState.h"
 
@@ -375,8 +376,17 @@ if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {
+	if(state.getGeneratorType() == "ECP_GEN_TFF_GRIPPER_APPROACH")
+	{
+		std::cout<<"TEST2"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
+		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	}
+	else
+	{
+	std::cout<<"TEST"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
+	}
 }
 }
 
