@@ -178,9 +178,10 @@ mrlib_svn_url=r"http://github.com/wut-rcprg/mrlib.git"
 mrlib_target_dir=os.environ["QNX_TARGET"] + "/mrlib"
 if os.path.exists(mrlib_target_dir):
     info("Updating mrlib")
+    current_cwd = os.getcwd()
     os.chdir(mrlib_target_dir)
     os.system("git pull \"%s\" master" % (mrlib_svn_url))
-    os.chdir("~")
+    os.chdir(current_cwd)
 else:
     info("Checking out mrlib")
     os.system("git clone \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
