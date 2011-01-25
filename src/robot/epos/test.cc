@@ -11,27 +11,27 @@ int main(int argc, char *argv[])
 {
 	epos_access_usb gateway;
 
-	epos node1(gateway, 1);
-	epos node2(gateway, 2);
+	epos node4(gateway, 5);
 
 	try {
 		gateway.open();
 
-		for (int i = 0; ; ++i) {
-			struct timeval tv1, tv2;
+		node4.printEPOSstate();
 
-			gettimeofday(&tv1, NULL);
-			int32_t homepos = 0;// e.readHomePosition();
-			uint16_t sw = node2.readSWversion();
-			gettimeofday(&tv2, NULL);
+		node4.reset();
 
-			const double delta = (tv2.tv_sec + tv2.tv_usec / 1e6) - (tv1.tv_sec + tv1.tv_usec / 1e6);
+		node4.printEPOSstate();
 
-			printf("%.6f sec: home %d sw %04x\n", delta, homepos, sw);
+		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
 
-			//node2.readDeviceName();
-			std::cout << node2.readActualPosition() << std::endl;
-		}
+		// Do homing
+		node4.doHoming(epos::HM_CURRENT_THRESHOLD_POSITIVE_SPEED, -10000);
+
+		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
+
+		// Move back
+		//node4.moveRelative(-50000);
+		//node4.monitorStatus();
 
 		gateway.close();
 	} catch (epos_error & error) {

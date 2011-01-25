@@ -1,5 +1,6 @@
+#include <cstdio>
 #include <signal.h>
-//#include <wait.h>
+#include <sys/wait.h>
 #include <QtGui/QApplication>
 
 #include "interface.h"
