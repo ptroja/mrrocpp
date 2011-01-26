@@ -22,7 +22,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/version.hpp>
 
-#include <rpc/rpc.h>
+#include <rpc/xdr.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_OARCHIVE_EXCEPTION output_stream_error
@@ -111,17 +111,18 @@ public:
         return *this;
     }
 
-    SAVE_A_TYPE(char, xdr_char)
-    SAVE_A_TYPE(unsigned char, xdr_u_char)
-    SAVE_A_TYPE(double, xdr_double)
     SAVE_A_TYPE(float, xdr_float)
+    SAVE_A_TYPE(double, xdr_double)
 
-    SAVE_A_TYPE(int, xdr_int)
+    SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)
+    SAVE_A_TYPE(int, xdr_int)
     SAVE_A_TYPE(long, xdr_long)
     SAVE_A_TYPE(long long, xdr_longlong_t)
-    SAVE_A_TYPE(unsigned int, xdr_u_int)
+
+    SAVE_A_TYPE(unsigned char, xdr_u_char)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
+    SAVE_A_TYPE(unsigned int, xdr_u_int)
     SAVE_A_TYPE(unsigned long, xdr_u_long)
     SAVE_A_TYPE(unsigned long long, xdr_u_longlong_t)
 

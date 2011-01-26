@@ -24,7 +24,7 @@
 
 #include <cstring>
 
-#include <rpc/rpc.h>
+#include <rpc/xdr.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_IARCHIVE_EXCEPTION input_stream_error
@@ -109,17 +109,18 @@ public:
         return *this;
     }
 
-    LOAD_A_TYPE(char, xdr_char)
-    LOAD_A_TYPE(unsigned char, xdr_u_char)
-    LOAD_A_TYPE(double, xdr_double)
     LOAD_A_TYPE(float, xdr_float)
+    LOAD_A_TYPE(double, xdr_double)
 
-    LOAD_A_TYPE(int, xdr_int)
+    LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
+    LOAD_A_TYPE(int, xdr_int)
     LOAD_A_TYPE(long, xdr_long)
     LOAD_A_TYPE(long long, xdr_longlong_t)
-    LOAD_A_TYPE(unsigned int, xdr_u_int)
+
+    LOAD_A_TYPE(unsigned char, xdr_u_char)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
+    LOAD_A_TYPE(unsigned int, xdr_u_int)
     LOAD_A_TYPE(unsigned long, xdr_u_long)
     LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
