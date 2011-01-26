@@ -17,6 +17,7 @@
 #include "base/edp/edp_e_manip.h"
 
 #include "base/lib/configurator.h"
+#include "base/lib/mis_fun.h"
 #include "base/lib/timer.h"
 #include "tSTC.h"
 #include "tESeries.h"
