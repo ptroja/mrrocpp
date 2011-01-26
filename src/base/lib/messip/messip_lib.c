@@ -743,7 +743,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	/* Attach a callback (handler) for two message types */
 	if (message_attach( ch->dpp, &ch->message_attr,
                                  _IO_MAX + 1, _IO_MAX + 2, message_handler, ch )) {
-        perror("message_attach()");
+	perror("message_attach()");
 	}
 
 	if (pulse_attach( ch->dpp, 0, _PULSE_CODE_DISCONNECT,
@@ -2673,11 +2673,11 @@ timer_t messip_timer_create( messip_channel_t * ch,
 	sigaddset( &sig_act.sa_mask, SIGHUP );
 	sigaddset( &sig_act.sa_mask, SIGCHLD );
 	sigaddset( &sig_act.sa_mask, SIGRTMIN+1 );
-    sig_act.sa_flags = SA_SIGINFO;
-    sig_act.sa_sigaction = sig_action;
-    sigaction( SIGRTMIN, 		  		/* Set action for SIGRTMIN      */
-        &sig_act,                 		/* Action to take on signal     */
-        0 );                      		/* Don't care about old actions */
+	sig_act.sa_flags = SA_SIGINFO;
+	sig_act.sa_sigaction = sig_action;
+	sigaction( SIGRTMIN, 		  		/* Set action for SIGRTMIN      */
+		&sig_act,                 		/* Action to take on signal     */
+		0 );                      		/* Don't care about old actions */
 #endif
 
 	itime.it_value.tv_sec = msec_1st_shot / 1000;
