@@ -69,12 +69,8 @@ public:
 
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_iarchive &load_a_type(boost::serialization::collection_size_type &t, boost::mpl::true_) {
-        uint64_t b;
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-        if(!xdr_u_int64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
-#else
-        if(!xdr_uint64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
-#endif
+        unsigned long long b;
+        if(!xdr_u_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (std::size_t) b;
         return *this;
     }
@@ -120,27 +116,12 @@ public:
 
     LOAD_A_TYPE(int, xdr_int)
     LOAD_A_TYPE(short, xdr_short)
-    LOAD_A_TYPE(long, xdr_hyper)
+    LOAD_A_TYPE(long, xdr_long)
+    LOAD_A_TYPE(long long, xdr_longlong_t)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
-    LOAD_A_TYPE(unsigned long, xdr_u_hyper)
-
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-    //LOAD_A_TYPE(int, xdr_int)
-    //LOAD_A_TYPE(short, xdr_short)
-    //LOAD_A_TYPE(long, xdr_long)
-    //LOAD_A_TYPE(unsigned int, xdr_u_int)
-    //LOAD_A_TYPE(unsigned long, xdr_u_long)
-    //LOAD_A_TYPE(unsigned short, xdr_u_short)
-    LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
-#else
-    //LOAD_A_TYPE(int16_t, xdr_int16_t)
-    //LOAD_A_TYPE(int32_t, xdr_int32_t)
-    //LOAD_A_TYPE(int64_t, xdr_int64_t)
-    //LOAD_A_TYPE(uint16_t, xdr_uint16_t)
-    //LOAD_A_TYPE(uint32_t, xdr_uint32_t)
-    LOAD_A_TYPE(uint64_t, xdr_uint64_t)
-#endif
+    LOAD_A_TYPE(unsigned long, xdr_u_long)
+    LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
     /**
      * Saving Archive Concept::is_loading

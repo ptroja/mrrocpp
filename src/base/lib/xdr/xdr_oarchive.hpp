@@ -68,12 +68,8 @@ public:
 
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_oarchive &save_a_type(boost::serialization::collection_size_type const &t, boost::mpl::true_) {
-        uint64_t b = (uint64_t) t;
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-        if(!xdr_u_int64_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
-#else
-        if(!xdr_uint64_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
-#endif
+        unsigned long long b = (uint64_t) t;
+        if(!xdr_u_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -122,27 +118,12 @@ public:
 
     SAVE_A_TYPE(int, xdr_int)
     SAVE_A_TYPE(short, xdr_short)
-    SAVE_A_TYPE(long, xdr_hyper)
+    SAVE_A_TYPE(long, xdr_long)
+    SAVE_A_TYPE(long long, xdr_longlong_t)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    SAVE_A_TYPE(unsigned long, xdr_u_hyper)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
-
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-    //SAVE_A_TYPE(int, xdr_int)
-    //SAVE_A_TYPE(short, xdr_short)
-    //SAVE_A_TYPE(long, xdr_long)
-    //SAVE_A_TYPE(unsigned int, xdr_u_int)
-    //SAVE_A_TYPE(unsigned long, xdr_u_long)
-    //SAVE_A_TYPE(unsigned short, xdr_u_short)
-    SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
-#else
-    //SAVE_A_TYPE(int16_t, xdr_int16_t)
-    //SAVE_A_TYPE(int32_t, xdr_int32_t)
-    //SAVE_A_TYPE(int64_t, xdr_int64_t)
-    //SAVE_A_TYPE(uint16_t, xdr_uint16_t)
-    //SAVE_A_TYPE(uint32_t, xdr_uint32_t)
-    SAVE_A_TYPE(uint64_t, xdr_uint64_t)
-#endif
+    SAVE_A_TYPE(unsigned long, xdr_u_long)
+    SAVE_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
     /**
      * Saving Archive Concept::is_loading
