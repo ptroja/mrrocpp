@@ -24,6 +24,7 @@
 
 #include <cstring>
 
+#include <rpc/types.h>
 #include <rpc/xdr.h>
 
 #if BOOST_VERSION >104200

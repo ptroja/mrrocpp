@@ -22,6 +22,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/version.hpp>
 
+#include <rpc/types.h>
 #include <rpc/xdr.h>
 
 #if BOOST_VERSION >104200
