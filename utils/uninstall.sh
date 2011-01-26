@@ -28,7 +28,7 @@ for p in $PACKAGES; do
 done
 
 
-ftp http://github.com/ptroja/mrrocpp/raw/master/utils/setupqnx.py
+ftp http://github.com/wut-rcprg/mrrocpp/raw/master/utils/setupqnx.py
 python setupqnx.py
 
 echo "Koniec"
