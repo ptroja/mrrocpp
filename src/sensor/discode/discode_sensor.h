@@ -106,10 +106,10 @@ private:
 	uint16_t discode_port;
 	std::string discode_node_name;
 
-	boost::shared_ptr<xdr_iarchive<> > header_iarchive;
-	boost::shared_ptr<xdr_iarchive<> > iarchive;
-	boost::shared_ptr<xdr_oarchive<> > header_oarchive;
-	boost::shared_ptr<xdr_oarchive<> > oarchive;
+	xdr_iarchive<> header_iarchive;
+	xdr_iarchive<> iarchive;
+	xdr_oarchive<> header_oarchive;
+	xdr_oarchive<> oarchive;
 
 	/** @brief Socket file descriptor.  */
 	int sockfd;
@@ -170,7 +170,7 @@ READING_T discode_sensor::retreive_reading()
 
 	//	logger::log_dbg("discode_sensor::retreive_reading(): iarchive->getArchiveSize()=%zd\n", iarchive->getArchiveSize());
 
-	*iarchive >> reading;
+	iarchive >> reading;
 
 	state = DSS_CONNECTED;
 	return reading;
@@ -187,8 +187,8 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	}
 
 	imh.is_rpc_call = true;
-	oarchive->clear_buffer();
-	*oarchive << to_send;
+	oarchive.clear_buffer();
+	oarchive << to_send;
 
 //	logger::log("discode_sensor::call_remote_procedure() before send_buffers\n");
 	send_buffers_to_discode();
@@ -196,7 +196,7 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	if(is_data_available(rpc_call_timeout)){
 		receive_buffers_from_discode();
 		RECEIVED_T received;
-		*iarchive >> received;
+		iarchive >> received;
 		if(!rmh.is_rpc_call){
 			state = DSS_ERROR;
 			throw ds_connection_exception("Received non-RPC reply to RPC call.");

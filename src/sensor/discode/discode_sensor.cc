@@ -71,15 +71,10 @@ discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::st
 	reading_timeout = config.value<double> ("discode_reading_timeout", section_name);
 	rpc_call_timeout = config.value<double> ("discode_rpc_call_timeout", section_name);
 
-	header_iarchive = shared_ptr<xdr_iarchive<> > (new xdr_iarchive<> );
-	iarchive = shared_ptr<xdr_iarchive<> > (new xdr_iarchive<> );
-	header_oarchive = shared_ptr<xdr_oarchive<> > (new xdr_oarchive<> );
-	oarchive = shared_ptr<xdr_oarchive<> > (new xdr_oarchive<> );
-
 	// determine size of rmh after serialization
-	*header_oarchive << rmh;
-	reading_message_header_size = header_oarchive->getArchiveSize();
-	header_oarchive->clear_buffer();
+	header_oarchive << rmh;
+	reading_message_header_size = header_oarchive.getArchiveSize();
+	header_oarchive.clear_buffer();
 
 	state = DSS_NOT_CONNECTED;
 	timer_init();
@@ -168,7 +163,7 @@ void discode_sensor::get_reading()
 		// send request to DisCODe.
 		imh.data_size = 0;
 		imh.is_rpc_call = false;
-		oarchive->clear_buffer();
+		oarchive.clear_buffer();
 		send_buffers_to_discode();
 		if (is_data_available(reading_timeout)) {
 			// reading has just been received
@@ -232,8 +227,8 @@ void discode_sensor::receive_buffers_from_discode()
 {
 	//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
 
-	header_iarchive->clear_buffer();
-	int nread = read(sockfd, header_iarchive->get_buffer(), reading_message_header_size);
+	header_iarchive.clear_buffer();
+	int nread = read(sockfd, header_iarchive.get_buffer(), reading_message_header_size);
 	if (nread == -1) {
 		throw ds_connection_exception(string("read() failed: ") + strerror(errno));
 	}
@@ -241,10 +236,10 @@ void discode_sensor::receive_buffers_from_discode()
 		throw ds_connection_exception("read() failed: nread != reading_message_header_size");
 	}
 
-	*header_iarchive >> rmh;
+	header_iarchive >> rmh;
 
-	iarchive->clear_buffer();
-	nread = read(sockfd, iarchive->get_buffer(), rmh.data_size);
+	iarchive.clear_buffer();
+	nread = read(sockfd, iarchive.get_buffer(), rmh.data_size);
 	if (nread == -1) {
 		throw ds_connection_exception(string("read() failed: ") + strerror(errno));
 	}
@@ -266,31 +261,29 @@ void discode_sensor::receive_buffers_from_discode()
 
 void discode_sensor::send_buffers_to_discode()
 {
-	//	log_dbg("oarchive.getArchiveSize(): %d\n", oarchive->getArchiveSize());
+	imh.data_size = oarchive.getArchiveSize();
 
-	imh.data_size = oarchive->getArchiveSize();
-
-	header_oarchive->clear_buffer();
-	*header_oarchive << imh;
+	header_oarchive.clear_buffer();
+	header_oarchive << imh;
 
 	struct iovec iov[2];
 	ssize_t nwritten;
 
-	iov[0].iov_base = (void*) header_oarchive->get_buffer();
-	iov[0].iov_len = header_oarchive->getArchiveSize();
-	iov[1].iov_base = (void*) oarchive->get_buffer();
-	iov[1].iov_len = oarchive->getArchiveSize();
+	iov[0].iov_base = (void*) header_oarchive.get_buffer();
+	iov[0].iov_len = header_oarchive.getArchiveSize();
+	iov[1].iov_base = (void*) oarchive.get_buffer();
+	iov[1].iov_len = oarchive.getArchiveSize();
 
 	nwritten = writev(sockfd, iov, 2);
 	if (nwritten == -1) {
 		throw ds_connection_exception("writev(sockfd, iov, 2) == -1");
 	}
-	if (nwritten != (int) (header_oarchive->getArchiveSize() + oarchive->getArchiveSize())) {
+	if (nwritten != (int) (header_oarchive.getArchiveSize() + oarchive.getArchiveSize())) {
 		throw ds_connection_exception(
-				"writev(sockfd, iov, 2) != header_oarchive->getArchiveSize() + oarchive->getArchiveSize()");
+				"writev(sockfd, iov, 2) != header_oarchive.getArchiveSize() + oarchive.getArchiveSize()");
 	}
 
-	oarchive->clear_buffer();
+	oarchive.clear_buffer();
 }
 
 void discode_sensor::timer_init()
