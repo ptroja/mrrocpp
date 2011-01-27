@@ -254,12 +254,12 @@ public:
         return buffer;
     }
 
-	void clear_buffer()
-	{
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_SAVE_EXCEPTION;
-		}
-	}
+    void clear_buffer()
+    {
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_SAVE_EXCEPTION;
+        }
+    }
 };
 
 // required by export
