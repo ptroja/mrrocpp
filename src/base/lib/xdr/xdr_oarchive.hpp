@@ -118,14 +118,28 @@ public:
     SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(int, xdr_int)
-    SAVE_A_TYPE(long, xdr_int)
     SAVE_A_TYPE(long long, xdr_longlong_t)
 
     SAVE_A_TYPE(unsigned char, xdr_u_char)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    SAVE_A_TYPE(unsigned long, xdr_u_int)
     SAVE_A_TYPE(unsigned long long, xdr_u_longlong_t)
+
+    // Downcast long to int for 32/64-bit compatibility
+    xdr_oarchive &save_a_type(long const &t, boost::mpl::true_)
+    {
+        int b = (int) t;
+        if (!xdr_int(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+    xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
+    {
+        int b = (unsigned int) t;
+        if (!xdr_u_int(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
 
     /**
      * Saving Archive Concept::is_loading

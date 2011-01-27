@@ -116,14 +116,26 @@ public:
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(int, xdr_int)
-    LOAD_A_TYPE(long, xdr_int)
     LOAD_A_TYPE(long long, xdr_longlong_t)
 
     LOAD_A_TYPE(unsigned char, xdr_u_char)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
-    LOAD_A_TYPE(unsigned long, xdr_u_int)
     LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
+
+    // Downcast long to int for 32/64-bit compatibility
+    xdr_iarchive &load_a_type(long &t, boost::mpl::true_) {
+        int b;
+        if(!xdr_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (long) b;
+        return *this;
+    }
+    xdr_iarchive &load_a_type(unsigned long &t, boost::mpl::true_) {
+        unsigned int b;
+        if(!xdr_u_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (unsigned long) b;
+        return *this;
+    }
 
     /**
      * Saving Archive Concept::is_loading
