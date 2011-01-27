@@ -135,7 +135,7 @@ public:
     }
     xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
     {
-        int b = (unsigned int) t;
+        unsigned int b = (unsigned int) t;
         if (!xdr_u_int(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
