@@ -116,43 +116,13 @@ public:
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(int, xdr_int)
-#if defined(__LP64__) && (__APPLE__ & __MACH__)
-    xdr_iarchive &load_a_type(long &t,boost::mpl::true_) {
-        int i;
-        if(!xdr_long(&xdrs, &i)) THROW_LOAD_EXCEPTION;
-        t = (long) i;
-        return *this;
-    }
-    /* conversion for T[] */
-    //template<int N>
-    //xdr_iarchive &save_a_type(T const (&t)[N],boost::mpl::false_) {
-    //    if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_SAVE_EXCEPTION;
-    //    return *this;
-    //}
-#else
-    LOAD_A_TYPE(long, xdr_long)
-#endif
+    LOAD_A_TYPE(long, xdr_int)
     LOAD_A_TYPE(long long, xdr_longlong_t)
 
     LOAD_A_TYPE(unsigned char, xdr_u_char)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
-#if defined(__LP64__) && (__APPLE__ & __MACH__)
-    xdr_iarchive &load_a_type(unsigned long &t,boost::mpl::true_) {
-        unsigned int i;
-        if(!xdr_u_long(&xdrs, &i)) THROW_LOAD_EXCEPTION;
-        t = (unsigned long) i;
-        return *this;
-    }
-    /* conversion for T[] */
-    //template<int N>
-    //xdr_iarchive &save_a_type(T const (&t)[N],boost::mpl::false_) {
-    //    if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_SAVE_EXCEPTION;
-    //    return *this;
-    //}
-#else
-    LOAD_A_TYPE(unsigned long, xdr_u_long)
-#endif
+    LOAD_A_TYPE(unsigned long, xdr_u_int)
     LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
     /**
