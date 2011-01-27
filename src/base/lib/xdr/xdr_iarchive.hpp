@@ -43,13 +43,6 @@
     xdr_iarchive &load_a_type(T &t,boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_LOAD_EXCEPTION; \
         return *this; \
-    } \
-    \
-    /** conversion for T[] */ \
-    template<int N> \
-    xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_) { \
-        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_LOAD_EXCEPTION; \
-        return *this; \
     }
 
 template <std::size_t size = 16384>
@@ -75,15 +68,6 @@ public:
         t = (std::size_t) b;
         return *this;
     }
-
-    //! conversion for bool[], special since bool != bool_t
-    /* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
-    template<int N>
-    xdr_iarchive &load_a_type(bool (&t)[N],boost::mpl::false_) {
-        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(bool), (xdrproc_t) xdr_bool)) THROW_LOAD_EXCEPTION;
-        return *this;
-    }
-    */
 
     //! conversion for an enum
     template <class T>
