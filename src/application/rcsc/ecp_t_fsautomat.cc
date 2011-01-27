@@ -307,15 +307,15 @@ void fsautomat::main_task_algorithm(void)
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 			//double gen_args[2];
-			std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-			std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 
 			//lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			std::cout<<"gag"<<std::endl;
+			//std::cout<<"gag"<<std::endl;
 			gag->configure(0.02, 300, 3);
-			std::cout<<"gag_configured"<<std::endl;
+			//std::cout<<"gag_configured"<<std::endl;
 			gag->Move();
-			std::cout<<"gag_configured moved"<<std::endl;
+			//std::cout<<"gag_configured moved"<<std::endl;
 			//lib::STOP czyli 2 powinien byc a jest 4...
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
@@ -451,7 +451,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					num =lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					actTrajectory->v.insert(actTrajectory->v.begin()+num_v,tmp,tmp+num);
+					for (int i=0; i<num;i++){
+						actTrajectory->v.push_back(tmp[i]);
+					}
 					num_v+=num;
 					xmlFree(xmlDataLine);
 				}
@@ -459,7 +461,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					num=lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					actTrajectory->a.insert(actTrajectory->a.begin()+num_a,tmp,tmp+num);
+					for (int i=0; i<num;i++){
+						actTrajectory->a.push_back(tmp[i]);
+					}
 					num_a+=num;
 					xmlFree(xmlDataLine);
 				}
@@ -467,7 +471,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
 					num = lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					actTrajectory->coordinates.insert(actTrajectory->coordinates.begin()+num_c,tmp,tmp+num);
+					for (int i=0; i<num;i++){
+						actTrajectory->coordinates.push_back(tmp[i]);
+					}
 					num_c+=num;
 					xmlFree(xmlDataLine);
 				}

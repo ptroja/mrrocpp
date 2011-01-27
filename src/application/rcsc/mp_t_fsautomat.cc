@@ -376,17 +376,9 @@ if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {
-	if(state.getGeneratorType() == "ECP_GEN_TFF_GRIPPER_APPROACH")
-	{
-		std::cout<<"TEST2"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
-		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	}
-	else
-	{
 	std::cout<<"TEST"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
-	}
 }
 }
 
@@ -785,7 +777,7 @@ BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m) {
 	s.second->configure_sensor();
 }
 
-for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {//TODO: askubis zmienione ze _STOP_
+for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)[nextState].returnNextStateID(sh))) {
 	if (!strcmp(nextState, (const char *) "_END_"))
 	strcpy(nextState, sh.popTargetName());
 
