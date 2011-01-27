@@ -116,13 +116,13 @@ public:
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
     LOAD_A_TYPE(int, xdr_int)
-    LOAD_A_TYPE(long, xdr_long)
+    LOAD_A_TYPE(long, xdr_int)
     LOAD_A_TYPE(long long, xdr_longlong_t)
 
     LOAD_A_TYPE(unsigned char, xdr_u_char)
     LOAD_A_TYPE(unsigned short, xdr_u_short)
     LOAD_A_TYPE(unsigned int, xdr_u_int)
-    LOAD_A_TYPE(unsigned long, xdr_u_long)
+    LOAD_A_TYPE(unsigned long, xdr_u_int)
     LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
     /**
@@ -149,9 +149,9 @@ public:
     }
 
     xdr_iarchive()
-	{
-		xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
-	}
+    {
+        xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
+    }
 
     /**
      * Destructor
@@ -275,23 +275,23 @@ public:
 
     void set_buffer(const char * _buffer, std::size_t _buffer_size)
     {
-		assert(_buffer_size <= size);
-		std::memcpy(buffer, _buffer, _buffer_size);
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_LOAD_EXCEPTION;
-		}
+        assert(_buffer_size <= size);
+        std::memcpy(buffer, _buffer, _buffer_size);
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_LOAD_EXCEPTION;
+        }
     }
 
     char *get_buffer(){
-    	return buffer;
+        return buffer;
     }
 
     void clear_buffer()
-	{
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_LOAD_EXCEPTION;
-		}
-	}
+    {
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_LOAD_EXCEPTION;
+        }
+    }
 };
 
 // required by export

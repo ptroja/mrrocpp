@@ -118,13 +118,13 @@ public:
     SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(int, xdr_int)
-    SAVE_A_TYPE(long, xdr_long)
+    SAVE_A_TYPE(long, xdr_int)
     SAVE_A_TYPE(long long, xdr_longlong_t)
 
     SAVE_A_TYPE(unsigned char, xdr_u_char)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    SAVE_A_TYPE(unsigned long, xdr_u_long)
+    SAVE_A_TYPE(unsigned long, xdr_u_int)
     SAVE_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
     /**
@@ -254,12 +254,12 @@ public:
         return buffer;
     }
 
-	void clear_buffer()
-	{
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_SAVE_EXCEPTION;
-		}
-	}
+    void clear_buffer()
+    {
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_SAVE_EXCEPTION;
+        }
+    }
 };
 
 // required by export
