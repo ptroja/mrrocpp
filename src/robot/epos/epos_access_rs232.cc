@@ -25,6 +25,11 @@ epos_access_rs232::epos_access_rs232(const std::string & _device) :
 {
 }
 
+epos_access_rs232::~epos_access_rs232()
+{
+	if (device_opened) close();
+}
+
 void epos_access_rs232::open()
 {
 	/* EPOS transfer format is:

@@ -65,6 +65,9 @@ public:
 	 */
 	epos_access_rs232(const std::string & _device);
 
+	//! Destructor
+	~epos_access_rs232();
+
 	//! Send data to device
 	void sendCommand(WORD *frame);
 

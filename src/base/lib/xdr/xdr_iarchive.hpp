@@ -24,7 +24,8 @@
 
 #include <cstring>
 
-#include <rpc/rpc.h>
+#include <rpc/types.h>
+#include <rpc/xdr.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_IARCHIVE_EXCEPTION input_stream_error
@@ -41,13 +42,6 @@
     /** conversion for T */ \
     xdr_iarchive &load_a_type(T &t,boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_LOAD_EXCEPTION; \
-        return *this; \
-    } \
-    \
-    /** conversion for T[] */ \
-    template<int N> \
-    xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_) { \
-        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_LOAD_EXCEPTION; \
         return *this; \
     }
 
@@ -69,24 +63,11 @@ public:
 
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_iarchive &load_a_type(boost::serialization::collection_size_type &t, boost::mpl::true_) {
-        uint64_t b;
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-        if(!xdr_u_int64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
-#else
-        if(!xdr_uint64_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
-#endif
+        unsigned long long b;
+        if(!xdr_u_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (std::size_t) b;
         return *this;
     }
-
-    //! conversion for bool[], special since bool != bool_t
-    /* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
-    template<int N>
-    xdr_iarchive &load_a_type(bool (&t)[N],boost::mpl::false_) {
-        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(bool), (xdrproc_t) xdr_bool)) THROW_LOAD_EXCEPTION;
-        return *this;
-    }
-    */
 
     //! conversion for an enum
     template <class T>
@@ -113,34 +94,32 @@ public:
         return *this;
     }
 
-    LOAD_A_TYPE(char, xdr_char)
-    LOAD_A_TYPE(unsigned char, xdr_u_char)
-    LOAD_A_TYPE(double, xdr_double)
     LOAD_A_TYPE(float, xdr_float)
+    LOAD_A_TYPE(double, xdr_double)
 
-    LOAD_A_TYPE(int, xdr_int)
-    //LOAD_A_TYPE(long, xdr_long)
+    LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
-    LOAD_A_TYPE(unsigned int, xdr_u_int)
-    //LOAD_A_TYPE(unsigned long, xdr_u_long)
-    LOAD_A_TYPE(unsigned short, xdr_u_short)
+    LOAD_A_TYPE(int, xdr_int)
+    LOAD_A_TYPE(long long, xdr_longlong_t)
 
-#if defined(__QNXNTO__) || (__APPLE__ && __MACH__)
-    //LOAD_A_TYPE(int, xdr_int)
-    //LOAD_A_TYPE(long, xdr_long)
-    //LOAD_A_TYPE(short, xdr_short)
-    //LOAD_A_TYPE(unsigned int, xdr_u_int)
-    //LOAD_A_TYPE(unsigned long, xdr_u_long)
-    //LOAD_A_TYPE(unsigned short, xdr_u_short)
-    LOAD_A_TYPE(uint64_t, xdr_u_int64_t)
-#else
-    //LOAD_A_TYPE(int16_t, xdr_int16_t)
-    //LOAD_A_TYPE(int32_t, xdr_int32_t)
-    //LOAD_A_TYPE(int64_t, xdr_int64_t)
-    //LOAD_A_TYPE(uint16_t, xdr_uint16_t)
-    //LOAD_A_TYPE(uint32_t, xdr_uint32_t)
-    LOAD_A_TYPE(uint64_t, xdr_uint64_t)
-#endif
+    LOAD_A_TYPE(unsigned char, xdr_u_char)
+    LOAD_A_TYPE(unsigned short, xdr_u_short)
+    LOAD_A_TYPE(unsigned int, xdr_u_int)
+    LOAD_A_TYPE(unsigned long long, xdr_u_longlong_t)
+
+    // Downcast long to int for 32/64-bit compatibility
+    xdr_iarchive &load_a_type(long &t, boost::mpl::true_) {
+        int b;
+        if(!xdr_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (long) b;
+        return *this;
+    }
+    xdr_iarchive &load_a_type(unsigned long &t, boost::mpl::true_) {
+        unsigned int b;
+        if(!xdr_u_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (unsigned long) b;
+        return *this;
+    }
 
     /**
      * Saving Archive Concept::is_loading
@@ -166,9 +145,9 @@ public:
     }
 
     xdr_iarchive()
-	{
-		xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
-	}
+    {
+        xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_DECODE);
+    }
 
     /**
      * Destructor
@@ -292,23 +271,23 @@ public:
 
     void set_buffer(const char * _buffer, std::size_t _buffer_size)
     {
-		assert(_buffer_size <= size);
-		std::memcpy(buffer, _buffer, _buffer_size);
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_LOAD_EXCEPTION;
-		}
+        assert(_buffer_size <= size);
+        std::memcpy(buffer, _buffer, _buffer_size);
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_LOAD_EXCEPTION;
+        }
     }
 
     char *get_buffer(){
-    	return buffer;
+        return buffer;
     }
 
     void clear_buffer()
-	{
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_LOAD_EXCEPTION;
-		}
-	}
+    {
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_LOAD_EXCEPTION;
+        }
+    }
 };
 
 // required by export

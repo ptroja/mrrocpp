@@ -143,6 +143,7 @@ elseif (UBUNTU32BIT)
 else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
+
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 	
