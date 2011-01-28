@@ -1349,6 +1349,30 @@ bool epos::isReferenced()
 	return (E_BIT15 & status);
 }
 
+bool epos::isTargetReached()
+{
+	UNSIGNED16 status = readStatusWord();
+
+	return (E_BIT10 & status);
+}
+
+void epos::startHoming()
+{
+	writeControlword(0x001f);
+}
+
+bool epos::isHomingFinished()
+{
+	UNSIGNED16 status = readStatusWord();
+
+	if ((status & E_BIT13) == E_BIT13) {
+		throw epos_error() << reason("HOMING ERROR!");
+	}
+
+	// bit 10 says: target reached!, bit 12: homing attained
+	return (((status & E_BIT10) == E_BIT10) && ((status & E_BIT12) == E_BIT12));
+}
+
 void epos::monitorHomingStatus()
 {
 	INTEGER32 posactual, velactual;
@@ -1368,8 +1392,6 @@ void epos::monitorHomingStatus()
 		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
-
-		status = readStatusWord();
 
 		if ((status & E_BIT13) == E_BIT13) {
 			throw epos_error() << reason("HOMING ERROR!");

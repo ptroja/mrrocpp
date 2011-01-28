@@ -612,6 +612,15 @@ public:
 	//! Is the actual position referenced to home position
 	bool isReferenced();
 
+	//! Is the movement target reached
+	bool isTargetReached();
+
+	//! Start homing according to preset parameters
+	void startHoming();
+
+	//! Check if both homing target is reached and homing is attained
+	bool isHomingFinished();
+
 	/*! read Homing Method */
 	homing_method_t readHomingMethod();
 

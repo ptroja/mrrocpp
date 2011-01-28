@@ -7,8 +7,8 @@ if(LibFTDI_FOUND)
     target_link_libraries(epos ${LibFTDI_LIBRARIES})
 
 	# Test utility
-	#add_executable(test test.cc)
-	#target_link_libraries (test epos) 
+	add_executable(test test.cc)
+	target_link_libraries (test epos) 
 else(LibFTDI_FOUND)
     add_library(epos
         	epos.cc

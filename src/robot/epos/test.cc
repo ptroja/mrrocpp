@@ -11,7 +11,9 @@ int main(int argc, char *argv[])
 {
 	epos_access_usb gateway;
 
-	epos node4(gateway, 5);
+	epos node4(gateway, 4);
+	epos node5(gateway, 5);
+	epos node6(gateway, 6);
 
 	try {
 		gateway.open();
@@ -19,15 +21,32 @@ int main(int argc, char *argv[])
 		node4.printEPOSstate();
 
 		node4.reset();
+		node5.reset();
+		node6.reset();
 
 		node4.printEPOSstate();
 
 		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
 
-		// Do homing
-		node4.doHoming(epos::HM_CURRENT_THRESHOLD_POSITIVE_SPEED, -10000);
+		// switch to homing mode
+		node4.setOpMode(epos::OMD_HOMING_MODE);
+		node5.setOpMode(epos::OMD_HOMING_MODE);
+		node6.setOpMode(epos::OMD_HOMING_MODE);
 
-		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
+		// Do homing
+		node4.startHoming();
+		node5.startHoming();
+		node6.startHoming();
+
+		for(;;) {
+			bool node4ok = node4.isHomingFinished();
+			bool node5ok = node5.isHomingFinished();
+			bool node6ok = node6.isHomingFinished();
+
+			if(node4ok && node5ok && node6ok) {
+				break;
+			}
+		};
 
 		// Move back
 		//node4.moveRelative(-50000);
