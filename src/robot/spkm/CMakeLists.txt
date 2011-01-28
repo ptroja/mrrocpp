@@ -1,10 +1,15 @@
 if(ROBOT_SPKM)
+
+if(LibFTDI_FOUND)
 add_executable(edp_spkm
 	edp_e_spkm.cc
 )
 
 target_link_libraries(edp_spkm kinematicsspkm edp
 	${COMMON_LIBRARIES})
+
+install(TARGETS edp_spkm DESTINATION bin)
+endif(LibFTDI_FOUND)
 	
 		
 add_library(kinematicsspkm
@@ -18,5 +23,4 @@ add_library(ecp_r_spkm ecp_r_spkm.cc)
 	
 target_link_libraries(ecp_r_spkm kinematicsspkm)
 
-install(TARGETS edp_spkm DESTINATION bin)
 endif(ROBOT_SPKM)
