@@ -24,6 +24,7 @@
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+#include <stdint.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_OARCHIVE_EXCEPTION output_stream_error
@@ -108,14 +109,14 @@ public:
     // Up-cast long to long long for 32/64-bit compatibility
     xdr_oarchive &save_a_type(long const &t, boost::mpl::true_)
     {
-        quad_t b = (quad_t) t;
+        int64_t b = (int64_t) t;
         if (!xdr_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
     }
     xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
     {
-    	u_quad_t b = (u_quad_t) t;
+    	uint64_t b = (uint64_t) t;
         if (!xdr_u_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
@@ -124,14 +125,14 @@ public:
     // long long types requires explicit casting on the 64-bit platforms
     xdr_oarchive &save_a_type(long long const &t, boost::mpl::true_)
     {
-        quad_t b = (quad_t) t;
+        int64_t b = (int64_t) t;
         if (!xdr_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
     }
     xdr_oarchive &save_a_type(unsigned long long const &t, boost::mpl::true_)
     {
-    	u_quad_t b = (u_quad_t) t;
+    	uint64_t b = (uint64_t) t;
         if (!xdr_u_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
