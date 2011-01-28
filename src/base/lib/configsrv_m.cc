@@ -65,7 +65,7 @@ main(int argc, char *argv[])
 					std::string err = e.what();
 					std::string tmp("No such node (");
 					bool print=false;
-					for (int i=0;i<tmp.size()-1;i++){
+					for (std::size_t i=0;i<tmp.size()-1;++i){
 						if(err[i]!=tmp[i]){
 							print=true;
 							break;
