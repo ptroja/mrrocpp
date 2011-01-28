@@ -26,6 +26,7 @@
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+#include <stdint.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_IARCHIVE_EXCEPTION input_stream_error
@@ -107,13 +108,13 @@ public:
 
     // Up-cast long to long long for 32/64-bit compatibility
     xdr_iarchive &load_a_type(long &t, boost::mpl::true_) {
-        quad_t b;
+        int64_t b;
         if(!xdr_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (long) b;
         return *this;
     }
     xdr_iarchive &load_a_type(unsigned long &t, boost::mpl::true_) {
-        u_quad_t b;
+        uint64_t b;
         if(!xdr_u_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (unsigned long) b;
         return *this;
@@ -121,13 +122,13 @@ public:
 
     // long long types requires explicit casting on the 64-bit platforms
     xdr_iarchive &load_a_type(long long &t, boost::mpl::true_) {
-        quad_t b;
+    	int64_t b;
         if(!xdr_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (long long) b;
         return *this;
     }
     xdr_iarchive &load_a_type(unsigned long long &t, boost::mpl::true_) {
-        u_quad_t b;
+        uint64_t b;
         if(!xdr_u_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (unsigned long long) b;
         return *this;
