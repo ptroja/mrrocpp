@@ -5,13 +5,12 @@ add_executable(edp_spkm
 	edp_e_spkm.cc
 )
 
-target_link_libraries(edp_spkm kinematicsspkm edp
+target_link_libraries(edp_spkm kinematicsspkm epos edp
 	${COMMON_LIBRARIES})
 
 install(TARGETS edp_spkm DESTINATION bin)
 endif(LibFTDI_FOUND)
-	
-		
+
 add_library(kinematicsspkm
 	kinematic_model_spkm.cc
 	kinematic_parameters_spkm.cc

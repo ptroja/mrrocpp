@@ -10,7 +10,10 @@
 // Data:		14.02.2007
 // ------------------------------------------------------------------------
 
+#include <iostream>
 #include <cstdio>
+
+#include <boost/foreach.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -19,14 +22,15 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/spkm/edp_e_spkm.h"
-#include "base/edp/reader.h"
+//#include "base/edp/reader.h"
+//#include "base/edp/vis_server.h"
 // Kinematyki.
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
-#include "base/edp/vis_server.h"
 #include "robot/epos/epos_gen.h"
 
-using namespace mrrocpp::lib::exception;
+#include "robot/epos/epos.h"
+#include "robot/epos/epos_access_usb.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -39,7 +43,6 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-
 	if (robot_test_mode) {
 		// correct
 		// controller_state_edp_buf.is_synchronised = true;
@@ -83,59 +86,58 @@ effector::effector(lib::configurator &_config) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	if(!robot_test_mode) {
+		// Create gateway object
+		gateway = (boost::shared_ptr<epos::epos_base>) new epos::epos_access_usb();
+
+		// Connect to the gateway
+		gateway->open();
+
+		// Create epos objects according to CAN ID-mapping
+		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 6);
+		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 5);
+		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 4);
+
+		axes[0] = &(*axis1);
+		axes[1] = &(*axis2);
+		axes[2] = &(*axis3);
+	}
 }
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
 	switch (ecp_edp_cbuffer.variant)
 	{
-		/*
-		 case lib::spkm::CBUFFER_EPOS_GEN_PARAMETERS: {
-		 // epos parameters computation basing on trajectory parameters
-		 lib::epos_gen_parameters epos_gen_parameters_structure;
-		 lib::epos_low_level_command epos_low_level_command_structure;
-
-		 memcpy(&epos_gen_parameters_structure, &(ecp_edp_cbuffer.epos_gen_parameters_structure), sizeof(epos_gen_parameters_structure));
-
-		 compute_epos_command(epos_gen_parameters_structure, epos_low_level_command_structure);
-
-		 ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
-
-		 msg->message(ss.str().c_str());
-
-		 // previously computed parameters send to epos2 controllers
-
-
-		 // start the trajectory execution
-
-		 }
-		 break;*/
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
-			lib::epos::epos_simple_command epos_simple_command_structure;
-			epos_simple_command_structure = ecp_edp_cbuffer.epos_simple_command_structure;
-			std::cout << "CBUFFER_EPOS_MOTOR_COMMAND: desired_position[4]: "
-					<< epos_simple_command_structure.desired_position[4] << std::endl;
-			if (robot_test_mode) {
 
-				desired_motor_pos_new[4] = epos_simple_command_structure.desired_position[4];
+			// Copy data directly from buffer to local data
+			for(int i = 0; i < number_of_servos; ++i) {
+				desired_motor_pos_new[i] =  ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
+			}
+
+			// Execute command
+			if (!robot_test_mode) {
 			}
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
 
-			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
-					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
+//			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
+//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
 
-			lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
+			// Transform data from buffer to local variable
+			lib::JointArray desired_joints_tmp(ecp_edp_cbuffer.epos_simple_command_structure.desired_position, number_of_servos);
 
-
+			// Transform from joint to motors
 			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
+
+			// Execute command
+			if (!robot_test_mode) {
+			}
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
@@ -164,7 +166,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
-
+			// Execute command
+			if (!robot_test_mode) {
+			}
 		}
 			break;
 		default:
@@ -191,41 +195,71 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			{
 				case lib::MOTOR: {
 					msg->message("EDP get_arm_position MOTOR");
-					static int licznikaaa = (-11);
+					if(robot_test_mode) {
+						static int licznikaaa = (-11);
 
-					std::stringstream ss(std::stringstream::in | std::stringstream::out);
-					ss << "get_arm_position: " << licznikaaa;
-					msg->message(ss.str().c_str());
-					//	printf("%s\n", ss.str().c_str());
+						std::stringstream ss(std::stringstream::in | std::stringstream::out);
+						ss << "get_arm_position: " << licznikaaa;
+						msg->message(ss.str().c_str());
+						//	printf("%s\n", ss.str().c_str());
 
 
-					edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
-					edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
-					edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+						edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+						edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+						edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-					edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
+						edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-					edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
-					edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+						edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+						edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
-					if (licznikaaa < 10) {
-						for (int i = 0; i < number_of_servos; i++) {
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+						if (licznikaaa < 10) {
+							for (int i = 0; i < number_of_servos; i++) {
+								edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+							}
+
+						} else {
+							for (int i = 0; i < number_of_servos; i++) {
+								edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+							}
 						}
-
+						licznikaaa++;
 					} else {
-						for (int i = 0; i < number_of_servos; i++) {
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+						for(std::size_t i = 0; i < axes.size(); ++i) {
+							edp_ecp_rbuffer.epos_controller[i].position = axes[i]->readActualPosition();
+							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+							//edp_ecp_rbuffer.epos_controller[i].buffer_full = ...
 						}
 					}
-					licznikaaa++;
 				}
 					break;
 				case lib::JOINT: {
 					msg->message("EDP get_arm_position JOINT");
-					static int licznik_joint = (-11);
-					edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
-					licznik_joint++;
+					if(robot_test_mode) {
+						static int licznik_joint = (-11);
+						edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
+						licznik_joint++;
+					} else {
+						// Position in motor units
+						lib::MotorArray motors(number_of_servos);
+
+						// Read actual values from hardware
+						for(std::size_t i = 0; i < axes.size(); ++i) {
+							motors[i] = axes[i]->readActualPosition();
+						}
+
+						// Position in joint units
+						lib::JointArray joints(number_of_servos);
+
+						// Do the calculation
+						get_current_kinematic_model()->mp2i_transform(motors, joints);
+
+						// Fill the values into a buffer
+						for(int i = 0; i < number_of_servos; ++i) {
+							edp_ecp_rbuffer.epos_controller[i].position = joints[i];
+						}
+					}
 				}
 					break;
 				case lib::FRAME: {
@@ -263,21 +297,47 @@ void effector::synchronise(void)
 {
 	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
+		return;
 	}
 
-	std::cout << "EDP synchronisation" << std::endl;
+	// reset controller
+	BOOST_FOREACH(epos::epos * node, axes) {
+		node->reset();
+	}
+
+	// switch to homing mode
+	BOOST_FOREACH(epos::epos * node, axes) {
+		node->setOpMode(epos::epos::OMD_HOMING_MODE);
+	}
+
+	// Do homing
+	BOOST_FOREACH(epos::epos * node, axes) {
+		node->startHoming();
+	}
+
+	// Loop until homing is finished
+	bool finished;
+	do {
+		finished = true;
+		BOOST_FOREACH(epos::epos * node, axes) {
+			if(!node->isHomingFinished()) {
+				finished = false;
+			}
+		}
+	} while(!finished);
+
+	controller_state_edp_buf.is_synchronised = true;
 }
 
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
 {
-
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
 
 	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
