@@ -100,25 +100,39 @@ public:
     SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)
     SAVE_A_TYPE(int, xdr_int)
-    SAVE_A_TYPE(long long, xdr_longlong_t)
 
     SAVE_A_TYPE(unsigned char, xdr_u_char)
     SAVE_A_TYPE(unsigned short, xdr_u_short)
     SAVE_A_TYPE(unsigned int, xdr_u_int)
-    SAVE_A_TYPE(unsigned long long, xdr_u_longlong_t)
 
-    // Downcast long to int for 32/64-bit compatibility
+    // Up-cast long to long long for 32/64-bit compatibility
     xdr_oarchive &save_a_type(long const &t, boost::mpl::true_)
     {
-        int b = (int) t;
-        if (!xdr_int(&xdrs, &b))
+        quad_t b = (quad_t) t;
+        if (!xdr_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
     }
     xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
     {
-        unsigned int b = (unsigned int) t;
-        if (!xdr_u_int(&xdrs, &b))
+    	u_quad_t b = (u_quad_t) t;
+        if (!xdr_u_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+
+    // long long types requires explicit casting on the 64-bit platforms
+    xdr_oarchive &save_a_type(long long const &t, boost::mpl::true_)
+    {
+        quad_t b = (quad_t) t;
+        if (!xdr_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+    xdr_oarchive &save_a_type(unsigned long long const &t, boost::mpl::true_)
+    {
+    	u_quad_t b = (u_quad_t) t;
+        if (!xdr_u_longlong_t(&xdrs, &b))
             THROW_SAVE_EXCEPTION;
         return *this;
     }
