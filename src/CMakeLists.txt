@@ -122,6 +122,7 @@ elseif (UBUNTU32BIT)
 	# Check for libftdi without pkg-config
 	find_library(LibFTDI_LIBRARY ftdi "${MRLIB}/lib")
 	set(LibFTDI_LIBRARIES ${LibFTDI_LIBRARY})
+	set(LibFTDI_LDFLAGS "-L ${MRLIB}/lib -lftdi")
 	set(LibFTDI_FOUND 1)
 
 	# clock_gettime() can be missing in -lc
