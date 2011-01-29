@@ -19,6 +19,8 @@
 #include "polycrank/ui_r_polycrank.h"
 
 #include "spkm/wgt_spkm_inc.h"
+#include "spkm/wgt_spkm_int.h"
+#include "spkm/wgt_spkm_ext.h"
 #include "polycrank/wgt_polycrank_int.h"
 
 #include <boost/tokenizer.hpp>
@@ -84,11 +86,7 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 
 void MainWindow::raise_process_control_window_slot()
 {
-	interface.wgt_pc->dwgt->show();
-	interface.wgt_pc->dwgt->raise();
-	//	interface.dwgt_pc->setFloating(false);
-	//interface.win_pc->show();
-	//interface.win_pc->raise();
+	interface.wgt_pc->my_open();
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)
@@ -380,12 +378,12 @@ void MainWindow::on_actionspkm_Motors_post_triggered()
 
 void MainWindow::on_actionspkm_Joints_triggered()
 {
-	//	interface.spkm->wnd_int->show();
+	interface.spkm->wgt_int->my_open();
 }
 
 void MainWindow::on_actionspkm_External_triggered()
 {
-	//	interface.spkm->wnd_ext->show();
+	interface.spkm->wgt_ext->my_open();
 }
 
 void MainWindow::on_actionspkm_Synchro_Position_triggered()

@@ -14,6 +14,7 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 	//	vl->addWidget(this);
 	dwgt->setWidget(this);
 	dwgt->hide();
+	dwgt->setFloating(true);
 	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 

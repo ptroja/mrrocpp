@@ -7,7 +7,7 @@
 #include "../mainwindow.h"
 
 wgt_spkm_ext::wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
-	wgt_base("Spkm incremental motion", _interface, parent), robot(_robot)
+	wgt_base("Spkm external motion", _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 

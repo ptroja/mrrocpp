@@ -1114,7 +1114,7 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="5">
+   <item row="7" column="5" colspan="2">
     <widget class="QPushButton" name="pushButton_read">
      <property name="text">
       <string>Read</string>
