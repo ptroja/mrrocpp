@@ -370,14 +370,12 @@ void MainWindow::on_actionspkm_Synchronisation_triggered()
 
 void MainWindow::on_actionspkm_Motors_triggered()
 {
-	interface.spkm->wgt_inc->dwgt->show();
-	interface.spkm->wgt_inc->dwgt->raise();
+	interface.spkm->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionspkm_Motors_post_triggered()
 {
-	interface.spkm->wgt_inc->dwgt->show();
-	interface.spkm->wgt_inc->dwgt->raise();
+	interface.spkm->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionspkm_Joints_triggered()
@@ -454,8 +452,7 @@ void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
 void MainWindow::on_actionpolycrank_Move_Joints_triggered()
 {
 
-	interface.polycrank->wgt_int->dwgt->show();
-	interface.polycrank->wgt_int->dwgt->raise();
+	interface.polycrank->wgt_int->my_open();
 }
 
 // all robots menu

@@ -17,6 +17,12 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
+void wgt_base::my_open()
+{
+	dwgt->show();
+	dwgt->raise();
+}
+
 wgt_base::~wgt_base()
 {
 
