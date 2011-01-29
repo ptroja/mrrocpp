@@ -35,9 +35,9 @@ int wgt_spkm_int::init()
 			{
 				ui.pushButton_execute->setDisabled(false);
 
-				robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
+				robot.ui_ecp_robot->epos_joint_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
-				robot.ui_ecp_robot->epos_reply_data_request_port->get();
+				robot.ui_ecp_robot->epos_joint_reply_data_request_port->get();
 
 				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
@@ -65,7 +65,7 @@ int wgt_spkm_int::init()
 int wgt_spkm_int::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
+	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_joint_reply_data_request_port->data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 
@@ -97,7 +97,7 @@ void wgt_spkm_int::on_pushButton_export_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_spkm INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
+	buffer << "edp_spkm INTERNAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
 			<< ui.doubleSpinBox_des_p1->value() << " " << ui.doubleSpinBox_des_p2->value() << " "
 			<< ui.doubleSpinBox_des_p3->value() << " " << ui.doubleSpinBox_des_p4->value() << " "
 			<< ui.doubleSpinBox_des_p5->value();
@@ -258,7 +258,7 @@ int wgt_spkm_int::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_motors(robot.desired_pos);
+			robot.ui_ecp_robot->move_joints(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
