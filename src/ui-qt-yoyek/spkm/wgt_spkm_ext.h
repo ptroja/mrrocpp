@@ -1,5 +1,5 @@
-#ifndef WGT_SPKM_INC_H
-#define WGT_SPKM_INC_H
+#ifndef WGT_SPKM_EXT_H
+#define WGT_SPKM_EXT_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
@@ -14,7 +14,7 @@ class Interface;
 }
 namespace spkm {
 class UiRobot;
-const std::string WGT_SPKM_INC = "WGT_SPKM_INC";
+const std::string WGT_SPKM_EXT = "WGT_SPKM_EXT";
 }
 }
 }
@@ -60,4 +60,4 @@ private slots:
 
 };
 
-#endif // WGT_SPKM_INC_H
+#endif // WGT_SPKM_EXT_H
