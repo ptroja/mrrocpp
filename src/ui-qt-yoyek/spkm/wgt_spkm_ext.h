@@ -34,7 +34,7 @@ private:
 	int init();
 	int copy();
 
-	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
+	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
 

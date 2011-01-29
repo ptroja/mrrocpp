@@ -35,16 +35,31 @@ int wgt_spkm_ext::init()
 			{
 				ui.pushButton_execute->setDisabled(false);
 
-				robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
+				robot.ui_ecp_robot->epos_external_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
-				robot.ui_ecp_robot->epos_reply_data_request_port->get();
+				robot.ui_ecp_robot->epos_external_reply_data_request_port->get();
 
-				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
-				set_single_axis(2, ui.doubleSpinBox_mcur_2, ui.doubleSpinBox_cur_p2, ui.radioButton_mip_2);
-				set_single_axis(3, ui.doubleSpinBox_mcur_3, ui.doubleSpinBox_cur_p3, ui.radioButton_mip_3);
-				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.doubleSpinBox_cur_p4, ui.radioButton_mip_4);
-				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.doubleSpinBox_cur_p5, ui.radioButton_mip_5);
+				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.radioButton_mip_0);
+				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.radioButton_mip_1);
+				set_single_axis(2, ui.doubleSpinBox_mcur_2, ui.radioButton_mip_2);
+				set_single_axis(3, ui.doubleSpinBox_mcur_3, ui.radioButton_mip_3);
+				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.radioButton_mip_4);
+				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.radioButton_mip_5);
+
+				lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_external_reply_data_request_port->data;
+
+				lib::Homog_matrix tmp_frame(er.current_frame);
+				lib::Xyz_Angle_Axis_vector tmp_vector;
+				double current_position[6];
+				tmp_frame.get_xyz_angle_axis(tmp_vector);
+				tmp_vector.to_table(current_position);
+
+				ui.doubleSpinBox_cur_p0->setValue(current_position[0]);
+				ui.doubleSpinBox_cur_p1->setValue(current_position[1]);
+				ui.doubleSpinBox_cur_p2->setValue(current_position[2]);
+				ui.doubleSpinBox_cur_p3->setValue(current_position[3]);
+				ui.doubleSpinBox_cur_p4->setValue(current_position[4]);
+				ui.doubleSpinBox_cur_p5->setValue(current_position[5]);
 
 				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = robot.current_pos[i];
@@ -62,12 +77,11 @@ int wgt_spkm_ext::init()
 	return 1;
 }
 
-int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
+int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip)
 {
 
 	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
-	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 
 	if (er.epos_controller[axis].motion_in_progress) {
 		qab_mip->setChecked(true);
@@ -97,7 +111,7 @@ void wgt_spkm_ext::on_pushButton_export_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_spkm INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
+	buffer << "edp_spkm EXTERNAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
 			<< ui.doubleSpinBox_des_p1->value() << " " << ui.doubleSpinBox_des_p2->value() << " "
 			<< ui.doubleSpinBox_des_p3->value() << " " << ui.doubleSpinBox_des_p4->value() << " "
 			<< ui.doubleSpinBox_des_p5->value();
@@ -258,7 +272,7 @@ int wgt_spkm_ext::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_motors(robot.desired_pos);
+			robot.ui_ecp_robot->move_external(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
