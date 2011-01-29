@@ -34,7 +34,7 @@ private:
 	boost::shared_ptr<epos::epos_base> gateway;
 
 	//! PKM axes
-	boost::shared_ptr<epos::epos> axis1, axis2, axis3;
+	boost::shared_ptr<epos::epos> axis1, axis2, axis3, axis4, axis5, axis6;
 
 	//! Axes container
 	boost::array<epos::epos *, 3> axes;

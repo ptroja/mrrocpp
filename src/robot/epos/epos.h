@@ -539,6 +539,9 @@ public:
 	/*! \brief read target position; 14.1.70 */
 	INTEGER32 readTargetPosition();
 
+	/*! \brief read target position; 14.1.70 */
+	void writeTargetPosition(INTEGER32 val);
+
 	/*! read Maximal Following Error */
 	UNSIGNED32 readMaxFollowingError();
 
