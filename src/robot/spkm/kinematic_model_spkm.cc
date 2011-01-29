@@ -33,6 +33,16 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 
 void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
+	for (int i = 0; i < local_current_motor_pos.size(); ++i) {
+		local_desired_motor_pos_new[i] = local_desired_joints[i] * 4 * 500 * 9 / 5;
+	}
+}
+
+void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
+{
+	for (int i = 0; i < local_current_motor_pos.size(); ++i) {
+		local_current_joints[i] = (local_current_motor_pos[i] / (4 * 500) / 9) * 5;
+	}
 }
 
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
