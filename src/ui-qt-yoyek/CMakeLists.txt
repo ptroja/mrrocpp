@@ -48,6 +48,8 @@ SET(GUI_CXX_SRCS
     wgt_base.cpp
     wgt_process_control.cpp
     spkm/wgt_spkm_inc.cpp
+    spkm/wgt_spkm_int.cpp
+    spkm/wgt_spkm_ext.cpp
     polycrank/wgt_polycrank_int.cpp
 )
 
@@ -57,6 +59,8 @@ SET(GUI_MOC_SRCS
     wgt_base.h
     wgt_process_control.h
     spkm/wgt_spkm_inc.h
+    spkm/wgt_spkm_int.h
+    spkm/wgt_spkm_ext.h
     polycrank/wgt_polycrank_int.h
 )
 
@@ -68,6 +72,8 @@ SET(GUI_UI
     mainwindow.ui
     wgt_process_control.ui
     spkm/wgt_spkm_inc.ui
+    spkm/wgt_spkm_int.ui
+    spkm/wgt_spkm_ext.ui
     polycrank/wgt_polycrank_int.ui
 )
 
