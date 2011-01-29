@@ -526,79 +526,59 @@ void epos::changeEPOSstate(state_t state)
 	//cw = readControlword();
 
 	switch (state) {
-		case ST_DISABLED: //shutdown, controlword: 0xxx x110
-			cw &= ~E_BIT15;
+		case SHUTDOWN: // Shutdown: 0xxx x110
+			cw &= ~E_BIT07;
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw &= ~E_BIT00;
-
 			writeControlword(cw);
 			break;
-
-		case ST_ENABLED: // switch on, controllword: 0xxx x111
-			cw &= ~E_BIT15;
-			cw |= E_BIT03; // WARNING; this has been changed from original API!
+		case SWITCH_ON: // Switch On: 0xxx x111
+			cw &= ~E_BIT07;
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-
 			writeControlword(cw);
 			break;
-
-		case ST_QUICKSTOP: // disable voltage, controllword: 0xxx xx0x
-			cw &= ~E_BIT15;
-			cw &= ~E_BIT02;
-
-			writeControlword(cw);
-			break;
-
-		case ST_FAULT: // quick stop, controllword: 0xxx x01x
-			cw &= ~E_BIT15;
-			cw &= ~E_BIT02;
-			cw |= E_BIT02;
-
-			writeControlword(cw);
-			break;
-#if 0
-		case 4: // disable operation, controllword: 0xxx 0111
-			cw &= ~E_BIT15;
-			cw &= ~E_BIT03;
-			cw |= E_BIT02;
-			cw |= E_BIT01;
-			cw |= E_BIT00;
-
-			writeControlword(cw);
-			break;
-
-		case 5: // enable operation, controllword: 0xxx 1111
-			cw &= ~E_BIT15;
+		case SWITCH_ON_AND_ENABLE: // Switch On & Enable Operation: 0xxx 1111
+			cw &= ~E_BIT07;
 			cw |= E_BIT03;
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-
 			writeControlword(cw);
 			break;
-#endif
-		case ST_CLR_FAULT: // fault reset, controllword: 1xxx xxxx
-
-			//cw |= E_BIT15; this is according to firmware spec 8.1.3,
-			//but does not work!
-			cw |= E_BIT07; // this is according to firmware spec 14.1.57
-			// and IS working!
-
-
-			/*       WORD estatus = 0x0; */
-			/*       if ( ( n = readStatusWord(&estatus) ) < 0) checkEPOSerror(); */
-			/*       printEPOSstatusword(estatus); */
-
+		case DISABLE_VOLTAGE: // Disable Voltage: 0xxx xx0x
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT01;
 			writeControlword(cw);
-
-			/*       if ( ( n = readStatusWord(&estatus) ) < 0) checkEPOSerror(); */
-			/*       printEPOSstatusword(estatus); */
-
 			break;
-
+		case QUICKSTOP: // Quickstop: 0xxx x01x
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT02;
+			cw |= E_BIT01;
+			writeControlword(cw);
+			break;
+		case DISABLE_OPERATION: // Disable Operation: 0xxx 0111
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT03;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
+			break;
+		case ENABLE_OPERATION: // Enable Operation: 0xxx 1111
+			cw &= ~E_BIT07;
+			cw |= E_BIT03;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
+			break;
+		case FAULT_RESET: // Fault Reset 0xxx xxxx -> 1xxx xxxx
+			cw |= E_BIT07;
+			writeControlword(cw);
+			break;
 		default:
 			throw epos_error() << reason("ERROR: demanded state is UNKNOWN!"); // TODO: state
 	}

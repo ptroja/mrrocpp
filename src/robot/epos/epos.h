@@ -277,7 +277,8 @@ public:
 	//! \brief States of the EPOS controller
 	typedef enum _state
 	{
-		ST_DISABLED, ST_ENABLED, ST_QUICKSTOP, ST_FAULT, ST_CLR_FAULT
+		SHUTDOWN, SWITCH_ON, SWITCH_ON_AND_ENABLE, DISABLE_VOLTAGE,
+		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} state_t;
 
 	//! Reset the device by issuing a shutdown command followed by power-on
