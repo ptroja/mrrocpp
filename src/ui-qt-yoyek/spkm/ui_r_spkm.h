@@ -13,6 +13,8 @@
 #include "robot/spkm/const_spkm.h"
 
 class wgt_spkm_inc;
+class wgt_spkm_int;
+class wgt_spkm_ext;
 
 namespace mrrocpp {
 namespace ui {
@@ -41,6 +43,8 @@ public:
 
 	EcpRobot *ui_ecp_robot;
 	wgt_spkm_inc *wgt_inc;
+	wgt_spkm_int *wgt_int;
+	wgt_spkm_ext *wgt_ext;
 
 	/* TR
 	 WndInt *wnd_int;

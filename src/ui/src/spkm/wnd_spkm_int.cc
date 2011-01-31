@@ -125,7 +125,7 @@ int WndInt::exporto()
 	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p4, Pt_ARG_NUMERIC_VALUE, &wektor[4], 0);
 	PtGetResource(ABW_PtNumericFloat_wind_spkm_int_p5, Pt_ARG_NUMERIC_VALUE, &wektor[5], 0);
 
-	sprintf(buffer, "edp_spkm intREMENTAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
+	sprintf(buffer, "edp_spkm INTERNAL POSITION\n %f %f %f %f %f %f", *wektor[0], *wektor[1], *wektor[2], *wektor[3], *wektor[4], *wektor[5]);
 
 	interface.ui_msg->message(buffer);
 

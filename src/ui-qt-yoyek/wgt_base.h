@@ -20,6 +20,7 @@ Q_OBJECT
 public:
 	wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_base();
+	void my_open();
 
 	QDockWidget* dwgt;
 	//QVBoxLayout* vl;
