@@ -22,8 +22,8 @@
 
 // Klasa edp_irp6ot_effector.
 #include "robot/spkm/edp_e_spkm.h"
-//#include "base/edp/reader.h"
-//#include "base/edp/vis_server.h"
+#include "base/edp/reader.h"
+#include "base/edp/vis_server.h"
 // Kinematyki.
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
@@ -49,7 +49,18 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// controller_state_edp_buf.is_synchronised = true;
 		// debug
 		controller_state_edp_buf.is_synchronised = false;
+	} else {
+		// Loop until homing is finished
+		bool all_axes_synchronised = true;
+		BOOST_FOREACH(epos::epos * node, axes) {
+			if(!node->isReferenced()) {
+				// Do not leave this loop so this is a also a preliminary axis error check
+				all_axes_synchronised = false;
+			}
+		}
+		controller_state_edp_buf.is_synchronised = all_axes_synchronised;
 	}
+
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
@@ -65,7 +76,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	 */
 	// dla pierwszego wypelnienia current_joints
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
 	{
 		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
 
@@ -123,14 +133,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			// Copy data directly from buffer to local data
 			for(int i = 0; i < number_of_servos; ++i) {
 				desired_motor_pos_new[i] =  ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
+				std::cout << "MOTOR[ " << i << "]: " << ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i] << std::endl;
 			}
 
 			// Execute command
 			if (!robot_test_mode) {
 				for(std::size_t i = 0; i < axes.size(); ++i) {
 					if(is_synchronised()) {
+						std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
+						std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					}
 				}
@@ -153,8 +166,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			if (!robot_test_mode) {
 				for(std::size_t i = 0; i < axes.size(); ++i) {
 					if(is_synchronised()) {
+						std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
+						std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					}
 				}
@@ -190,8 +205,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				Amax[i] = 2000;
 			}
 
-			// Calculate time of trapezoidal profile motion acoring to commanded acceleration and velocity limits
-			double t = ppm<3>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
+			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
+			double t = ppm<3>(Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
 
 			// Setup motion parameters
 			for(std::size_t i = 0; i < axes.size(); ++i) {
@@ -219,6 +234,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
 			// Execute command
 			if (!robot_test_mode) {
+				for(std::size_t i = 0; i < axes.size(); ++i) {
+					axes[i]->changeEPOSstate(epos::epos::ST_QUICKSTOP);
+				}
 			}
 		}
 			break;
@@ -237,6 +255,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf(" GET ARM\n");
 	//	flushall();
 
+	msg->message("EDP get_arm_position");
+
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
 
@@ -246,7 +266,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			{
 				case lib::MOTOR: {
 					msg->message("EDP get_arm_position MOTOR");
-					if(robot_test_mode) {
+					if(1 || robot_test_mode) {
 						static int licznikaaa = (-11);
 
 						std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -383,8 +403,8 @@ void effector::synchronise(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	//rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
