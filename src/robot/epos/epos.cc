@@ -1346,6 +1346,28 @@ void epos::monitorStatus()
 	printf("target reached\n");
 }
 
+void epos::Store()
+{
+	WORD dw[2];
+
+	// *save* data
+	dw[0] = ('s') | ('a' << 8);
+	dw[1] = ('v') | ('e' << 8);
+
+	WriteObject(0x1010, 0x01, dw);
+}
+
+void epos::Restore()
+{
+	WORD dw[2];
+
+	// *load* data
+	dw[0] = ('l') | ('o' << 8);
+	dw[1] = ('a') | ('d' << 8);
+
+	WriteObject(0x1011, 0x01, dw);
+}
+
 bool epos::isReferenced()
 {
 	UNSIGNED16 status = readStatusWord();

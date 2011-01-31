@@ -590,6 +590,12 @@ public:
 	/*! clear Error register */
 	void clearNumberOfErrors();
 
+	/*! Store all device parameters in a non-volatile memory */
+	void Store();
+
+	/*! All device parameters will be restored with default values */
+	void Restore();
+
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
