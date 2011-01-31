@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wgt_spkm_incClass</class>
- <widget class="QWidget" name="wgt_spkm_incClass">
+ <class>wgt_spkm_intClass</class>
+ <widget class="QWidget" name="wgt_spkm_intClass">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
+    <width>663</width>
     <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>wgt_spkm_inc</string>
+   <string>wgt_spkm_int</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="11" colspan="4">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Step</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
@@ -92,7 +82,7 @@
    <item row="0" column="10" colspan="5">
     <widget class="QLabel" name="label_9">
      <property name="text">
-      <string>incremental move</string>
+      <string>internal move</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -1146,6 +1136,16 @@
     <widget class="QPushButton" name="pushButton_export">
      <property name="text">
       <string>Export</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="11" colspan="4">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Step</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

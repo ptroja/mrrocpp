@@ -64,7 +64,7 @@ void ATI6284_force::connect_to_hardware(void)
 
 ATI6284_force::~ATI6284_force(void)
 {
-	if (!(master.force_sensor_test_mode)) {
+	if (!force_sensor_test_mode) {
 		disconnect_from_hardware();
 	}
 	printf("Destruktor edp_ATI6284_force_sensor\n");
