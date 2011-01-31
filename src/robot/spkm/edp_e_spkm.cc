@@ -31,6 +31,7 @@
 
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
+#include "base/lib/pvt.hpp"
 
 namespace mrrocpp {
 namespace edp {
@@ -98,10 +99,16 @@ effector::effector(lib::configurator &_config) :
 		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 6);
 		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 5);
 		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 4);
+//		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
+//		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
+//		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
 
 		axes[0] = &(*axis1);
 		axes[1] = &(*axis2);
 		axes[2] = &(*axis3);
+//		axes[3] = &(*axis4);
+//		axes[4] = &(*axis5);
+//		axes[5] = &(*axis6);
 	}
 }
 
@@ -120,6 +127,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 			// Execute command
 			if (!robot_test_mode) {
+				for(std::size_t i = 0; i < axes.size(); ++i) {
+					if(is_synchronised()) {
+						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
+					} else {
+						axes[i]->moveRelative(desired_motor_pos_new[i]);
+					}
+				}
 			}
 		}
 			break;
@@ -137,6 +151,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 			// Execute command
 			if (!robot_test_mode) {
+				for(std::size_t i = 0; i < axes.size(); ++i) {
+					if(is_synchronised()) {
+						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
+					} else {
+						axes[i]->moveRelative(desired_motor_pos_new[i]);
+					}
+				}
 			}
 		}
 			break;
@@ -154,9 +175,39 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
-			lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
-			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
 
+			if(!is_synchronised()) {
+				std::cerr << "Robot is not synchronized for TRAPEZOIDAL profile motion" << std::endl;
+				return;
+			}
+
+			//ecp_edp_cbuffer.epos_trapezoidal_command_structure
+			Matrix<double,3,1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
+
+			for(int i = 0; i < 3; ++i) {
+				Delta[i] = 0;
+				Vmax[i] = 5000;
+				Amax[i] = 2000;
+			}
+
+			// Calculate time of trapezoidal profile motion acoring to commanded acceleration and velocity limits
+			double t = ppm<3>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
+
+			// Setup motion parameters
+			for(std::size_t i = 0; i < axes.size(); ++i) {
+				axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
+				axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
+				axes[i]->writePositionProfileVelocity(Vnew[i]);
+				axes[i]->writePositionProfileAcceleration(Anew[i]);
+				axes[i]->writePositionProfileDeceleration(Dnew[i]);
+				axes[i]->writeTargetPosition(Delta[i]);
+			}
+
+			// Start motion
+			for(std::size_t i = 0; i < axes.size(); ++i) {
+				// switch to absolute positioning, cancel possible ongoing operation first!
+				axes[i]->writeControlword(0x3f);
+			}
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND: {

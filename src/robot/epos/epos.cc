@@ -1063,6 +1063,11 @@ INTEGER32 epos::readTargetPosition()
 	return ReadObjectValue<INTEGER32> (0x607a, 0x00);
 }
 
+void epos::writeTargetPosition(INTEGER32 val)
+{
+	return WriteObjectValue(0x607a, 0x00, val);
+}
+
 /* read manufacturer device name string firmware */
 std::string epos::readDeviceName()
 {
@@ -1274,12 +1279,11 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// write intended target position
 	// firmware 14.1.70
-	WriteObjectValue(0x607A, 0x00, steps);
+	writeTargetPosition(steps);
 
-	// switch to relative positioning BY WRITING TO CONTROLWORD, finish
-	// possible ongoing operation first!  ->maxon applicattion note:
-	// device programming 2.1
-	WriteObjectValue(0x6040, 0x00, 0x005f);
+	// switch to relative positioning BY WRITING TO CONTROLWORD, finish	possible ongoing operation first!
+	// see ->maxon applicattion note: device programming 2.1
+	writeControlword(0x005f);
 }
 
 void epos::moveAbsolute(INTEGER32 steps)
@@ -1298,11 +1302,11 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
-	WriteObjectValue(0x607A, 0x00, steps);
+	writeTargetPosition(steps);
 
-	// switch to absolute positioning, cancel possible ongoing operation
-	// first!  ->maxon application note: device programming 2.1
-	WriteObjectValue(0x6040, 0x00, 0x3f);
+	// switch to absolute positioning, cancel possible ongoing operation first!
+	// see maxon application note: device programming 2.1
+	writeControlword(0x3f);
 }
 
 // monitor device status

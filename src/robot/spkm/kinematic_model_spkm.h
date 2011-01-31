@@ -55,13 +55,11 @@ public:
 	kinematic_model_spkm(void);
 
 	/**
-	 * @brief Computes internal coordinates for given the motor increments (position) values - currently not implemented.
+	 * @brief Computes internal coordinates for given the motor increments (position) values.
 	 * @param[in] local_current_motor_pos Motor increments.
 	 * @param[out] local_current_joints Computed joints.
 	 */
-	void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
-	{
-	}
+	void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);
 
 	/**
 	 * @brief Computes motor increments from internal coordinates.
@@ -111,6 +109,8 @@ public:
 	 * @return Joints in the form of vector <q1,q2,q3>.
 	 */
 	Vector3d SW_inverse(const Homog4d & _P_W_T);
+
+	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
