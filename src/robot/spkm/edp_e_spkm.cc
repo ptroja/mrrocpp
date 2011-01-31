@@ -44,21 +44,31 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-	if (robot_test_mode) {
-		// correct
-		// controller_state_edp_buf.is_synchronised = true;
-		// debug
-		controller_state_edp_buf.is_synchronised = false;
-	} else {
+	// False is the initial value
+	controller_state_edp_buf.is_synchronised = false;
+	controller_state_edp_buf.is_power_on = false;
+	controller_state_edp_buf.is_robot_blocked = false;
+
+	if (!robot_test_mode) {
 		// Loop until homing is finished
-		bool all_axes_synchronised = true;
-		BOOST_FOREACH(epos::epos * node, axes) {
-			if(!node->isReferenced()) {
-				// Do not leave this loop so this is a also a preliminary axis error check
-				all_axes_synchronised = false;
+		try {
+			unsigned int referenced = 0;
+			for(std::size_t i = 0; i < axes.size(); ++i) {
+				try {
+					if(axes[i]->isReferenced()) {
+						// Do not leave this loop so this is a also a preliminary axis error check
+						referenced++;
+					}
+				} catch (...) {
+					///
+				}
 			}
+			// Robot is synchronised if all axes are referenced
+			controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+			controller_state_edp_buf.is_power_on = (referenced == axes.size());
+		} catch (...) {
+			std::cerr << "isReferenced() failed" << std::endl;
 		}
-		controller_state_edp_buf.is_synchronised = all_axes_synchronised;
 	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
