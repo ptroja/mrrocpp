@@ -117,8 +117,14 @@
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_0">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -149,8 +155,14 @@
    </item>
    <item row="1" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p0">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -266,8 +278,14 @@
    </item>
    <item row="2" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -298,8 +316,14 @@
    </item>
    <item row="2" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -390,8 +414,14 @@
    </item>
    <item row="3" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -422,8 +452,14 @@
    </item>
    <item row="3" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -514,8 +550,14 @@
    </item>
    <item row="4" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -546,8 +588,14 @@
    </item>
    <item row="4" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -635,8 +683,14 @@
    </item>
    <item row="5" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -667,8 +721,14 @@
    </item>
    <item row="5" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -756,8 +816,14 @@
    </item>
    <item row="6" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
@@ -791,8 +857,14 @@
    </item>
    <item row="6" column="5" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
       <number>0</number>
