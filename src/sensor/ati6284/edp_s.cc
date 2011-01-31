@@ -195,7 +195,7 @@ void ATI6284_force::connect_to_hardware(void)
 
 ATI6284_force::~ATI6284_force(void)
 {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(force_sensor_test_mode)) {
 		disconnect_from_hardware();
 	}
 }
@@ -397,7 +397,7 @@ void ATI6284_force::wait_for_particular_event()
 		lib::timespec_increment_ns(&wake_time, COMMCYCLE_TIME_NS);
 
 		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
-		if(err != 0) {
+		if (err != 0) {
 			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 		}
 
