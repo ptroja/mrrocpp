@@ -102,8 +102,17 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_config, l_robot_name)
+	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true)
 {
+
+	if (config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
+		force_sensor_test_mode = config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
+	}
+
+	if (force_sensor_test_mode) {
+		msg->message("Force sensor test mode activated");
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
