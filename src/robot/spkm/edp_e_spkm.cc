@@ -50,25 +50,23 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	controller_state_edp_buf.is_robot_blocked = false;
 
 	if (!robot_test_mode) {
-		// Loop until homing is finished
-		try {
-			unsigned int referenced = 0;
-			for(std::size_t i = 0; i < axes.size(); ++i) {
-				try {
-					if(axes[i]->isReferenced()) {
-						// Do not leave this loop so this is a also a preliminary axis error check
-						referenced++;
-					}
-				} catch (...) {
-					///
+		// Try to get state of each axis
+		unsigned int referenced = 0;
+		unsigned int powerOn = 0;
+		for(std::size_t i = 0; i < axes.size(); ++i) {
+			try {
+				if(axes[i]->isReferenced()) {
+					// Do not break from this loop so this is a also a preliminary axis error check
+					referenced++;
 				}
+				powerOn++;
+			} catch (...) {
+				// Probably the axis is not powered on, do nothing.
 			}
-			// Robot is synchronised if all axes are referenced
-			controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-			controller_state_edp_buf.is_power_on = (referenced == axes.size());
-		} catch (...) {
-			std::cerr << "isReferenced() failed" << std::endl;
 		}
+		// Robot is synchronised if all axes are referenced
+		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
