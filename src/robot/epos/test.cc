@@ -18,7 +18,17 @@ int main(int argc, char *argv[])
 	try {
 		gateway.open();
 
-		node4.printEPOSstate();
+		// Check if in a FAULT state
+		if(node4.checkEPOSstate() == 11) {
+			UNSIGNED8 errNum = node4.readNumberOfErrors();
+			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
+			for(UNSIGNED8 i = 1; i <= errNum; ++i) {
+
+				UNSIGNED32 errCode = node4.readErrorHistory(i);
+
+				std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+			}
+		}
 
 		gateway.close();
 	} catch (epos_error & error) {
@@ -32,6 +42,8 @@ int main(int argc, char *argv[])
 
 		if ( int const * errno_value = boost::get_error_info<errno_code>(error) )
 			std::cerr << "Errno value: " << *errno_value << std::endl;
+	} catch (...) {
+		std::cerr << "Unhandled exception" << std::endl;
 	}
 
 	return 0;

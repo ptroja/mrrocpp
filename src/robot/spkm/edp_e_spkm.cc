@@ -53,8 +53,22 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Try to get state of each axis
 		unsigned int referenced = 0;
 		unsigned int powerOn = 0;
+		unsigned int notInFaultState = 0;
 		BOOST_FOREACH(epos::epos * node, axes) {
 			try {
+				// Check if in the FAULT state
+				if(node->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = node->readNumberOfErrors();
+					for(int i = 1; i <= errNum; ++i) {
+						// Get the detailed error
+						uint32_t errCode = node->readErrorHistory(i);
+
+						msg->message(epos::epos::ErrorCodeMessage(errCode));
+					}
+				} else {
+					notInFaultState++;
+				}
 				if(node->isReferenced()) {
 					// Do not break from this loop so this is a also a preliminary axis error check
 					referenced++;
@@ -67,6 +81,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Robot is synchronised if all axes are referenced
 		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
 	}
 
 	// Copy data to reply buffer
@@ -393,16 +408,17 @@ void effector::synchronise(void)
 
 	// Hardcoded safety values
 	// TODO: move to configuration file
-//	axisA->writeMinimalPositionLimit(-195000);
+	axisA->writeMinimalPositionLimit(-195000);
 	axisA->writeMaximalPositionLimit(11500);
-//	axisB->writeMinimalPositionLimit(-282500);
+	axisB->writeMinimalPositionLimit(-282500);
 	axisB->writeMaximalPositionLimit(11500);
-//	axisC->writeMinimalPositionLimit(-175000);
+	axisC->writeMinimalPositionLimit(-175000);
 	axisC->writeMaximalPositionLimit(11000);
 
-	axisA->writeMinimalPositionLimit(-100000);
-	axisB->writeMinimalPositionLimit(-100000);
-	axisC->writeMinimalPositionLimit(-100000);
+	// Just for testing
+//	axisA->writeMinimalPositionLimit(-100000);
+//	axisB->writeMinimalPositionLimit(-100000);
+//	axisC->writeMinimalPositionLimit(-100000);
 
 	controller_state_edp_buf.is_synchronised = true;
 }

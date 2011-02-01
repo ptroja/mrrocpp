@@ -597,6 +597,21 @@ public:
 	/*! All device parameters will be restored with default values */
 	void Restore();
 
+	/*! \brief Read the Mininal Position Limit
+	 * If the desired or the actual position is lower then the negative position
+	 * limit a software position limit Error will be launched.
+	 */
+	INTEGER32 readMinimalPositionLimit();
+
+	/*! Write the Minimal Position Limit */
+	void writeMinimalPositionLimit(INTEGER32 val);
+
+    /*! Read the Maximal Position Limit */
+	INTEGER32 readMaximalPositionLimit();
+
+	/*! Write the Maximal Position Limit */
+	void writeMaximalPositionLimit(INTEGER32 val);
+
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
