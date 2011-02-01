@@ -53,9 +53,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Try to get state of each axis
 		unsigned int referenced = 0;
 		unsigned int powerOn = 0;
-		for(std::size_t i = 0; i < axes.size(); ++i) {
+		BOOST_FOREACH(epos::epos * node, axes) {
 			try {
-				if(axes[i]->isReferenced()) {
+				if(node->isReferenced()) {
 					// Do not break from this loop so this is a also a preliminary axis error check
 					referenced++;
 				}
