@@ -63,8 +63,6 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 	ON "ROBOTS_SWARMITFIX" OFF)
 
 
-option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
-
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
@@ -134,7 +132,9 @@ elseif (UBUNTU32BIT)
 	# for non-QNX target messip is the only messaging protocol
 	
 	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=return-type")
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
@@ -167,7 +167,10 @@ else (QNXNTO) # Linux, MacOS, etc.
 	
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+    if(DEFINE_EIGEN_DONT_ALIGN)
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_ALIGN")
+    endif(DEFINE_EIGEN_DONT_ALIGN)
 endif (QNXNTO)
 
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
