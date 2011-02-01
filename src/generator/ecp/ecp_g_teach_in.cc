@@ -19,9 +19,9 @@
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_teach_in.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -66,12 +66,9 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 	strncpy(ecp_to_ui_msg.string, msg, MSG_LENGTH); // Komunikat przesylany do UI podczas uczenia
 	for (;;) {
 		// Polecenie uczenia do UI
-#if !defined(USE_MESSIP_SRR)
-		ecp_to_ui_msg.hdr.type = 0;
-		if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 		if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 		{ // Y&W
 
 			e = errno;
@@ -110,12 +107,9 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 	{// by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");
@@ -186,12 +180,9 @@ bool teach_in::load_file_from_ui()
 
 	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 	{// by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");

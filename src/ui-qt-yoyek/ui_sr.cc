@@ -41,9 +41,9 @@
 
 #include "base/lib/sr/srlib.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ui {

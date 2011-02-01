@@ -12,12 +12,9 @@
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-#if !defined(USE_MESSIP_SRR)
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#else
+
 #include "base/lib/messip/messip.h"
-#endif
+
 
 namespace mrrocpp {
 namespace mp {

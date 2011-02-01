@@ -21,9 +21,7 @@
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
-#endif
 
 namespace mrrocpp {
 namespace ecp {
@@ -64,73 +62,15 @@ void task_base::ecp_stop_accepted_handler(void)
 task_base::~task_base()
 {
 	// TODO: error check
-#if !defined(USE_MESSIP_SRR)
-	name_detach(trigger_attach, 0);
-	name_detach(ecp_attach, 0);
-	name_close(MP_fd);
-#else
+
 	messip::port_delete(trigger_attach);
 	messip::port_delete(ecp_attach);
 	messip::port_delete(MP_fd);
-#endif
+
 }
 
 bool task_base::pulse_check()
 {
-#if !defined(USE_MESSIP_SRR)
-	_pulse_msg ui_msg; // wiadomosc z ui
-
-	// by Y zamiast creceive
-	if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-		perror("ecp_task: TimerTimeout()");
-	}
-	int rcvid = MsgReceive(trigger_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-
-	if (rcvid == -1) {/* Error condition, exit */
-		// perror("blad receive w reader");
-	}
-
-	if (rcvid == 0) {/* Pulse received */
-		switch (ui_msg.hdr.code)
-		{
-			case _PULSE_CODE_DISCONNECT:
-				/*
-				 * A client disconnected all its connections (called
-				 * name_close() for each name_open() of our name) or
-				 * terminated
-				 */
-				ConnectDetach(ui_msg.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				/*
-				 * REPLY blocked client wants to unblock (was hit by a signal or timed out).  It's up to you if you
-				 * reply now or later.
-				 */
-				break;
-			default:
-				if (ui_msg.hdr.code == ECP_TRIGGER) { // odebrano puls ECP_TRIGGER
-					return true;
-				}
-				/*
-				 * A pulse sent by one of your processes or a _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-				 * from the kernel?
-				 */
-		}
-	}
-
-	if (rcvid > 0) {
-		/* A QNX IO message received, reject */
-		if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
-			MsgReply(rcvid, EOK, 0, 0);
-		} else {
-			/* A message (presumable ours) received, handle */
-			printf("ecp trigger server receive strange message of type: %d\n", ui_msg.data);
-			MsgReply(rcvid, EOK, 0, 0);
-		}
-	}
-
-	return false;
-#else
 	int32_t type, subtype;
 	int recvid;
 	if ((recvid = messip::port_receive_pulse(trigger_attach, type, subtype, 0)) == -1) {
@@ -143,7 +83,7 @@ bool task_base::pulse_check()
 	}
 
 	return false;
-#endif
+
 }
 
 // ---------------------------------------------------------------
@@ -163,11 +103,9 @@ void task_base::initialize_communication()
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
-#if !defined(USE_MESSIP_SRR)
-	if ((MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
-#else
-	if ( (MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
-#endif
+
+	if ((MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
+
 	{
 		int e = errno; // kod bledu systemowego
 		fprintf(stderr, "ecp: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
@@ -176,12 +114,8 @@ void task_base::initialize_communication()
 	}
 
 	// Rejestracja procesu ECP
-#if !defined(USE_MESSIP_SRR)
-	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
-	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL)
-#endif
-	{
+
+	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL) {
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach Effector Control Process");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
@@ -191,11 +125,8 @@ void task_base::initialize_communication()
 	std::string trigger_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
-#if !defined(USE_MESSIP_SRR)
-	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
-#endif
+
 	{
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
@@ -230,11 +161,9 @@ void task_base::ecp_termination_notice(void)
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
-#else
+
 	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
-#endif
+
 	{
 		perror("MsgSendPulse()");
 	}
@@ -245,11 +174,11 @@ void task_base::subtasks_conditional_execution()
 	subtasks_t subtasks_m_tmp = subtask_m;
 
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
-	{
-		if (mp_2_ecp_next_state_string == subtask_node.first) {
-			subtask_node.second->conditional_execution();
-		}
-	}
+				{
+					if (mp_2_ecp_next_state_string == subtask_node.first) {
+						subtask_node.second->conditional_execution();
+					}
+				}
 }
 
 // Petla odbierania wiadomosci.
@@ -274,11 +203,9 @@ void task_base::ecp_wait_for_stop(void)
 	}
 
 	// Wyslanie odpowiedzi.
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
-#else
+
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -329,11 +256,9 @@ void task_base::ecp_wait_for_start(void)
 	}
 
 	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
+
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -386,11 +311,8 @@ void task_base::get_next_state(void)
 			break;
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -419,18 +341,7 @@ void task_base::get_next_state(void)
 // Oczekiwanie na polecenie od MP
 bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 {
-#if !defined(USE_MESSIP_SRR)
-	while (caller <= 0) {
 
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
-#else
 	while (caller < 0) {
 
 		caller = receive_mp_message(true);
@@ -441,7 +352,6 @@ bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
-#endif
 
 	return true;
 }
@@ -471,11 +381,8 @@ bool task_base::mp_buffer_receive_and_send(void)
 		// czy
 		caller = receive_mp_message(false);
 
-#if !defined(USE_MESSIP_SRR)
-		if (caller == 0)
-#else
 		if (caller == MESSIP_MSG_NOREPLY)
-#endif
+
 		{
 
 			// przyszedl puls od mp, ktore chce sie komunikowac
@@ -519,11 +426,8 @@ bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
 			break;
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
-#else
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -557,76 +461,6 @@ int task_base::receive_mp_message(bool block)
 	while (1) {
 		int caller = -100;
 
-#if !defined(USE_MESSIP_SRR)
-
-		//	std::cerr << "ecp receive_mp_message 2" << std::endl;
-		if (!block) {
-			// by Y zamiast creceive i flagi z EDP_MASTER
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("ecp_task: TimerTimeout()");
-			}
-		}
-
-		caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
-		//	std::cerr << "ecp receive_mp_message 3" << std::endl;
-
-
-		if (caller < 0) {/* Error condition, exit */
-
-			//	std::cerr << "ecp receive_mp_message 4" << std::endl;
-			if (caller == -ETIMEDOUT) {
-				return caller;
-			}
-
-			uint64_t e = errno; // kod bledu systemowego
-			std::cerr << "ecp 1b1" << caller << std::endl;
-			perror("ecp: Receive from MP failed");
-			std::cerr << "ecp 1b2" << std::endl;
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
-			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
-
-		if (caller == 0) {/* Pulse received */
-			//		std::cerr << "ecp receive_mp_message 5" << std::endl;
-			switch (mp_command.hdr.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					/*
-					 * A client disconnected all its connections (called
-					 * name_close() for each name_open() of our name) or
-					 * terminated
-					 */
-					ConnectDetach(mp_command.hdr.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					/*
-					 * REPLY blocked client wants to unblock (was hit by
-					 * a signal or timed out).  It's up to you if you
-					 * reply now or later.
-					 */
-					break;
-				case MP_TO_ECP_COMMUNICATION_REQUEST:
-					return caller;
-					break;
-				default:
-					/*
-					 * A pulse sent by one of your processes or a
-					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-					 * from the kernel?
-					 */
-					break;
-			}
-			continue;
-		}
-		//	std::cerr << "ecp receive_mp_message 6" << std::endl;
-		/* A QNX IO message received, reject */
-		if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
-			MsgReply(caller, EOK, 0, 0);
-			continue;
-		}
-
-#else
-
 		int32_t type, subtype;
 		//	std::cerr << "ecp receive_mp_message messip 2" << std::endl;
 		if (block) {
@@ -646,8 +480,7 @@ int task_base::receive_mp_message(bool block)
 				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
 				return MESSIP_MSG_TIMEOUT;
 			} else if (caller == MESSIP_MSG_NOREPLY) {
-				if (type==MP_TO_ECP_COMMUNICATION_REQUEST)
-				{
+				if (type == MP_TO_ECP_COMMUNICATION_REQUEST) {
 					return caller;
 				} else {
 					continue;
@@ -671,7 +504,6 @@ int task_base::receive_mp_message(bool block)
 			continue;
 		}
 
-#endif
 		//	std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
 		return caller;
 	}

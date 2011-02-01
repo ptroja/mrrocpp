@@ -30,9 +30,9 @@
 #include "base/mp/generator/mp_g_extended_empty.h"
 #include "base/mp/mp_robot.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace mp {
@@ -63,11 +63,9 @@ task::~task()
 
 	// TODO: check for error
 	if (mp_pulse_attach) {
-#if !defined(USE_MESSIP_SRR)
-		name_detach(mp_pulse_attach, 0);
-#else
+
 		messip::port_delete(mp_pulse_attach);
-#endif
+
 		mp_pulse_attach = NULL;
 	}
 }
@@ -384,84 +382,6 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 
 int task::wait_for_name_open(void)
 {
-#if !defined(USE_MESSIP_SRR)
-	/* Do your MsgReceive's here now with the chid */
-	while (1) {
-		struct _pulse msg;
-		struct _msg_info info;
-
-		int rcvid = MsgReceive(mp_pulse_attach->chid, &msg, sizeof(msg), &info);
-
-		if (rcvid == -1) {/* Error condition, exit */
-			int e = errno;
-			perror("mp: MsgReceivePulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-		}
-
-		if (rcvid == 0) {/* Pulse received */
-			switch (msg.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					/*
-					 * A client disconnected all its connections (called
-					 * name_close() for each name_open() of our name) or
-					 * terminated
-					 */
-					ConnectDetach(msg.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					/*
-					 * REPLY blocked client wants to unblock (was hit by
-					 * a signal or timed out).  It's up to you if you
-					 * reply now or later.
-					 */
-					break;
-				default:
-					/*
-					 * A pulse sent by one of your processes or a
-					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-					 * from the kernel?
-					 */
-
-					if (ui_opened && ui_scoid == msg.scoid) {
-						ui_new_pulse = true;
-						ui_pulse_code = msg.code;
-						// continue; ?
-					}
-
-					BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-								{
-									if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
-										robot_node.second->new_pulse = true;
-										robot_node.second->ecp_pulse_code = msg.code;
-										//						fprintf(stderr, "robot %s pulse %d\n", lib::toString(robot_node.second->robot_name).c_str(), robot_node.second->ecp_pulse_code);
-									}
-								}
-
-					break;
-			}
-			continue;
-		}
-
-		/* name_open() sends a connect message, must EOK this */
-		if (msg.type == _IO_CONNECT) {
-			MsgReply(rcvid, EOK, NULL, 0);
-			return info.scoid;
-		}
-
-		/* Some other QNX IO message was received; reject it */
-		if (msg.type > _IO_BASE && msg.type <= _IO_MAX) {
-			MsgError(rcvid, ENOSYS);
-			continue;
-		}
-
-		/* A message (presumable ours) received, handle */
-		fprintf(stderr, "mp: unexpected message received\n");
-		MsgReply(rcvid, ENOSYS, 0, 0);
-
-		throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-	}
-#else
 	while(1) {
 		int32_t type, subtype;
 		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
@@ -490,7 +410,7 @@ int task::wait_for_name_open(void)
 			return mp_pulse_attach->lastmsg_sockfd;
 		}
 	}
-#endif
+
 }
 
 bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
@@ -518,102 +438,6 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 	bool exit_from_while = false;
 
 	while (!exit_from_while) {
-#if !defined(USE_MESSIP_SRR)
-		if (current_wait_mode == NONBLOCK) {
-			// like creceive in QNX4
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				int e = errno;
-				perror("mp: TimerTimeout()");
-				throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-			}
-		}
-
-		/* Do your MsgReceive's here now with the chid */
-		struct _pulse msg;
-
-		int rcvid = MsgReceivePulse(mp_pulse_attach->chid, &msg, sizeof(msg), NULL);
-
-		if (rcvid == -1) {/* Error condition, exit */
-			if (errno == ETIMEDOUT) {
-				if (desired_wait_mode == BLOCK && !desired_pulse_found) {
-					current_wait_mode = BLOCK;
-					continue;
-				} else {
-					exit_from_while = true;
-				}
-				continue;
-			}
-			int e = errno;
-			perror("mp: MsgReceivePulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-		} else if (rcvid == 0) {/* Pulse received */
-			switch (msg.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					/*
-					 * A client disconnected all its connections (called
-					 * name_close() for each name_open() of our name) or
-					 * terminated
-					 */
-					ConnectDetach(msg.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					/*
-					 * REPLY blocked client wants to unblock (was hit by
-					 * a signal or timed out).  It's up to you if you
-					 * reply now or later.
-					 */
-					break;
-				default:
-					/*
-					 * A pulse sent by one of your processes or a
-					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-					 * from the kernel?
-					 */
-
-					if (ui_opened && ui_scoid == msg.scoid) {
-						ui_new_pulse = true;
-						ui_pulse_code = msg.code;
-						if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-							desired_pulse_found = true;
-							if (current_wait_mode == BLOCK) {
-								exit_from_while = true;
-							}
-						}
-						continue;
-					}
-
-					BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-								{
-									if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == msg.scoid) {
-										robot_node.second->new_pulse = true;
-										robot_node.second->ecp_pulse_code = msg.code;
-										if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time))
-												== -1) {
-											perror("clock_gettime()");
-										}
-
-										if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-											if (!(robot_node.second->new_pulse_checked)) {
-												desired_pulse_found = true;
-												if (current_wait_mode == BLOCK) {
-													exit_from_while = true;
-												}
-											}
-										}
-										// can we get out of this loop?
-									}
-								}
-			}
-		} else {
-			/* message was not expected here;
-			 * this should not happend if using MsgReceivePulse, but we want to be sure
-			 */
-			MsgError(rcvid, ENOSYS);
-			fprintf(stderr, "mp: unexpected message received\n");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		}
-#else
 		int32_t type, subtype;
 		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype,
 				(current_wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
@@ -670,7 +494,7 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 				}
 			}
 		}
-#endif
+
 	}
 
 	return desired_pulse_found;
@@ -795,11 +619,9 @@ void task::initialize_communication()
 
 	// Rejestracja kanalu dla pulsow z procesu UI
 	if (!mp_pulse_attach) {
-#if !defined(USE_MESSIP_SRR)
-		if ((mp_pulse_attach = name_attach(NULL, mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
+
 		if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL)
-#endif
+
 		{
 			uint64_t e = errno; // kod bledu systemowego
 			perror("Failed to attach UI Pulse chanel for Master Process");

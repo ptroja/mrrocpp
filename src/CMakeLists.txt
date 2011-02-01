@@ -62,7 +62,6 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 	"Build support for sarkofag"
 	ON "ROBOTS_SWARMITFIX" OFF)
 
-option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
 option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
 
@@ -133,7 +132,6 @@ elseif (UBUNTU32BIT)
 	endif(HAVE_LIBRT)
 
 	# for non-QNX target messip is the only messaging protocol
-	set(USE_MESSIP ON)
 	
 	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
 	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
@@ -166,7 +164,7 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
 
 	# for non-QNX target messip is the only messaging protocol
-	set(USE_MESSIP ON)
+	
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
@@ -187,11 +185,10 @@ include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
 include_directories (${EIGEN2_INCLUDE_DIRS})
 
-if(USE_MESSIP)
+
 	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
-	add_definitions (-DUSE_MESSIP_SRR)
 	set(COMMON_LIBRARIES messip)
-endif(USE_MESSIP)
+
 
 set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_THREAD_LIBRARY}

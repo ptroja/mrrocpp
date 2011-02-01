@@ -2,9 +2,9 @@ add_library(agent DataBufferBase.cc AndDataCondition.cc OrDataCondition.cc Agent
 
 target_link_libraries(agent ${Boost_SERIALIZATION_LIBRARY})
 
-if(USE_MESSIP)
+
 target_link_libraries(agent messip)
-endif(USE_MESSIP)
+
 
 if(QNXNTO)
 target_link_libraries(agent rpc)

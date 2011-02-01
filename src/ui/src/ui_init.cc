@@ -41,9 +41,7 @@
 
 #include "base/lib/sr/srlib.h"
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
-#endif
 
 /* Local headers */
 #include "ablibs.h"

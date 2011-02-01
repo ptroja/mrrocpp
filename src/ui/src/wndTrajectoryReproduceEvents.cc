@@ -72,11 +72,7 @@ int TRbtnStart(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("TRbtnStart\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_START_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -100,11 +96,7 @@ int TRbtnPause(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("TRbtnPause\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_PAUSE_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -126,11 +118,7 @@ int TRbtnStop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("TRbtnStop\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> kalibracja czujnika.
 	ui_ecp_msg.command = lib::TR_STOP_MOVE;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -156,11 +144,7 @@ int TRbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef TRDEBUG
 	printf("btnExit\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::TR_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -179,11 +163,7 @@ int TRbtnPositionZero(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 #ifdef TRDEBUG
 	printf("TRbtnPositionZero\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// ustawienie typu wiadomosci
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> Osiagniecie zerowej pozycji.
 	ui_ecp_msg.command = lib::TR_ZERO_POSITION;
 	// printf("TRbtnPositionZero: sending %d \n", ui_ecp_msg.command);
@@ -340,11 +320,7 @@ int TRbtnDSSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 #ifdef TRDEBUG
 	printf("TRbtnDSSCalibrate\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> Kalibracja czujnika zlozonego z linialow.
 	ui_ecp_msg.command = lib::TR_CALIBRATE_DIGITAL_SCALES_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -358,11 +334,7 @@ int TRbtnFSCalibrate(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbi
 #ifdef TRDEBUG
 	printf("TRbtnFSCalibrate\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> Kalibracja czujnika sily.
 	ui_ecp_msg.command = lib::TR_CALIBRATE_FORCE_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -376,11 +348,7 @@ int TRbtnTryAgain(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 #ifdef TRDEBUG
 	printf("TRbtnTryAgain\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP -> Kalibracja czujnika sily.
 	ui_ecp_msg.command = lib::TR_TRY_MOVE_AGAIN;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {

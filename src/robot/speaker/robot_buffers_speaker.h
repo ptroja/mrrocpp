@@ -17,10 +17,7 @@ namespace speaker {
 
 struct c_buffer
 {
-#ifndef USE_MESSIP_SRR
-	/*! This is a message buffer, so it needs a message header */
-	msg_header_t hdr;
-#endif
+
 
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;

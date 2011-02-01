@@ -26,11 +26,9 @@
 #include "base/lib/impconst.h"
 #include "base/lib/typedefs.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip.h"
-#else
-#include "base/lib/typedefs.h"
-#endif
+
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -42,15 +40,9 @@ namespace lib {
 #define ECP_EDP_SERIALIZED_COMMAND_SIZE 200
 #define EDP_ECP_SERIALIZED_REPLY_SIZE 200
 
-#if !defined(USE_MESSIP_SRR)
-typedef int fd_client_t;
-static const fd_client_t invalid_fd = -1;
-typedef name_attach_t * fd_server_t;
-#else
 typedef messip_channel_t * fd_client_t;
 static const fd_client_t invalid_fd = NULL;
 typedef messip_channel_t * fd_server_t;
-#endif
 
 //------------------------------------------------------------------------------
 /*!
@@ -179,9 +171,7 @@ enum ECP_TO_UI_COMMAND
  */
 struct ECP_message
 {
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
+
 	/*! Type of message. */
 	ECP_TO_UI_COMMAND ecp_message;
 	/*! Robot name. */
@@ -190,10 +180,7 @@ struct ECP_message
 	uint8_t nr_of_options;
 
 	//----------------------------------------------------------
-#ifndef USE_MESSIP_SRR
-	union
-	{
-#endif
+
 		/*! A comment for the command. */
 		char string[MSG_LENGTH];
 
@@ -223,9 +210,7 @@ struct ECP_message
 		}
 		/*! Robot positions + Sensor readings + Measure number. */
 		MAM;
-#ifndef USE_MESSIP_SRR
-	};
-#endif
+
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -259,9 +244,7 @@ struct ECP_message
  */
 struct UI_reply
 {
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
+
 	UI_TO_ECP_COMMAND reply;
 	int32_t integer_number;
 	double double_number;
@@ -291,9 +274,7 @@ struct UI_reply
  */
 struct UI_ECP_message
 {
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
+
 
 	UI_TO_ECP_COMMAND command;
 
@@ -612,18 +593,15 @@ struct edp_error
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef
-#ifndef USE_MESSIP_SRR
-union
-#else
-struct
-#endif
+typedef struct
+
 _robot_model
 {
 	//! Constructor set default discriminant type
 	_robot_model() :
 		type(INVALID_ROBOT_MODEL)
-	{}
+	{
+	}
 
 	/*! Tool definition type - setting. */
 	ROBOT_MODEL_SPECIFICATION type;
@@ -663,7 +641,8 @@ _robot_model
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & type;
-		switch (type) {
+		switch (type)
+		{
 			case TOOL_FRAME:
 				ar & tool_frame_def.tool_frame;
 				break;
@@ -692,12 +671,8 @@ typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef
-#ifndef USE_MESSIP_SRR
-union
-#else
-struct
-#endif
+typedef struct
+
 c_buffer_arm
 {
 	//----------------------------------------------------------
@@ -739,10 +714,7 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
-#ifndef USE_MESSIP_SRR
-	/*! This is a message buffer, so it needs a message header */
-	msg_header_t hdr;
-#endif
+
 
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
@@ -905,11 +877,9 @@ typedef struct _controller_state_t
 //------------------------------------------------------------------------------
 /*! arm */
 typedef
-#ifndef USE_MESSIP_SRR
-union
-#else
+
 struct
-#endif
+
 r_buffer_arm
 {
 	/*!
@@ -958,7 +928,8 @@ r_buffer_arm
 } r_buffer_arm_t;
 
 //------------------------------------------------------------------------------
-struct r_buffer_base {
+struct r_buffer_base
+{
 	/*! Type of the reply. */
 	REPLY_TYPE reply_type;
 
@@ -1015,7 +986,7 @@ struct r_buffer : r_buffer_base
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		// serialize base class information
-		ar & boost::serialization::base_object<r_buffer_base>(*this);
+		ar & boost::serialization::base_object <r_buffer_base>(*this);
 		ar & input_values;
 		ar & analog_input;
 		ar & controller_state;
@@ -1082,9 +1053,7 @@ struct ecp_next_state_t
 /*! MP to ECP command. */
 struct MP_COMMAND_PACKAGE
 {
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
+
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;

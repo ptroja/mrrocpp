@@ -15,15 +15,9 @@
 #include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
-#if !defined(USE_MESSIP_SRR)
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/netmgr.h>
-#else
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 #include <cerrno>
 #include <pthread.h>
 #include <ctime>
@@ -171,16 +165,11 @@ void reader_buffer::operator()()
 
 	lib::fd_server_t my_attach;
 
-#if !defined(USE_MESSIP_SRR)
 
-	if ((my_attach
-			= name_attach(NULL, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point").c_str(), NAME_FLAG_ATTACH_GLOBAL))
-			== NULL) {
-#else
 		if ((my_attach = messip::port_create(
 								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
 				== NULL) {
-#endif
+
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
 		//  throw MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
@@ -198,47 +187,6 @@ void reader_buffer::operator()()
 
 		// dopoki nie przyjdzie puls startu
 		while (!start) {
-#if !defined(USE_MESSIP_SRR)
-			_pulse_msg ui_msg;// wiadomosc z ui
-
-			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-
-			if (rcvid == -1) {/* Error condition, exit */
-				perror("blad receive w reader");
-				break;
-			}
-
-			if (rcvid == 0) {/* Pulse received */
-				//  printf("reader puls\n");
-				switch (ui_msg.hdr.code)
-				{
-					case _PULSE_CODE_DISCONNECT:
-						ConnectDetach(ui_msg.hdr.scoid);
-						break;
-					case _PULSE_CODE_UNBLOCK:
-						break;
-					default:
-						if (ui_msg.hdr.code == READER_START) { // odebrano puls start
-							start = true;
-							//#ifdef DOCENT_SENSOR
-							master.onReaderStarted();
-							//#endif
-						}
-				}
-				continue;
-			}
-
-			/* A QNX IO message received, reject */
-			if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
-				MsgReply(rcvid, EOK, 0, 0);
-				continue;
-			}
-
-			/* A message (presumable ours) received, handle */
-			fprintf(stderr, "reader server receive strange message of type: %d\n", ui_msg.data);
-			MsgReply(rcvid, EOK, 0, 0);
-			rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-#else
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype);
 
@@ -249,7 +197,7 @@ void reader_buffer::operator()()
 					start = true;
 				}
 			}
-#endif
+
 		}
 
 		master.msg->message("measures started");
@@ -281,53 +229,6 @@ void reader_buffer::operator()()
 			stop = false;
 			ui_trigger = false;
 
-#if !defined(USE_MESSIP_SRR)
-			_pulse_msg ui_msg;// wiadomosc z ui
-
-			// sprawdzamy pulsu stopu
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("TimerTimeout()");
-			}
-
-			int rcvid = MsgReceive(my_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-
-			if (rcvid == -1 && errno != ETIMEDOUT) {/* Error condition, exit */
-				perror("reader::MsgReceive()");
-			}
-
-			if (rcvid == 0) {/* Pulse received */
-				// printf("reader puls\n");
-				switch (ui_msg.hdr.code)
-				{
-					case _PULSE_CODE_DISCONNECT:
-						ConnectDetach(ui_msg.hdr.scoid);
-						break;
-					case _PULSE_CODE_UNBLOCK:
-						break;
-					default:
-						if (ui_msg.hdr.code == READER_STOP) {
-							stop = true; // dostalismy puls STOP
-							//#ifdef DOCENT_SENSOR
-							master.onReaderStopped();
-							//#endif
-						} else if (ui_msg.hdr.code == READER_TRIGGER) {
-							ui_trigger = true; // dostalismy puls TRIGGER
-						}
-
-				}
-			}
-
-			if (rcvid > 0) {
-				/* A QNX IO message received, reject */
-				if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
-					MsgReply(rcvid, EOK, 0, 0);
-				} else {
-					/* A message (presumable ours) received, handle */
-					printf("reader server receive strange message of type: %d\n", ui_msg.data);
-					MsgReply(rcvid, EOK, 0, 0);
-				}
-			}
-#else
 			int32_t type, subtype;
 			int rcvid = messip::port_receive_pulse(my_attach, type, subtype, 0);
 
@@ -341,7 +242,7 @@ void reader_buffer::operator()()
 					ui_trigger = true;
 				}
 			}
-#endif
+
 		} while (!stop); // dopoki nie przyjdzie puls stopu
 
 		lib::set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku

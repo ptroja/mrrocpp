@@ -22,16 +22,16 @@ void Agent::Join(void)
 
 void Agent::registerBuffer(DataBufferBase & buf)
 {
-	std::pair<buffers_t::iterator, bool> result;
+	std::pair <buffers_t::iterator, bool> result;
 
 	{
 		// lock access to the data buffers
-		boost::unique_lock<boost::mutex> lock(mtx);
+		boost::unique_lock <boost::mutex> lock(mtx);
 
 		result = buffers.insert(buffer_item_t(buf.getName(), &buf));
 	}
 
-	if(!result.second) {
+	if (!result.second) {
 		std::cerr << "Duplicated buffer ('" << buf.getName() << "')" << std::endl;
 		throw;
 	}
@@ -40,26 +40,23 @@ void Agent::registerBuffer(DataBufferBase & buf)
 void Agent::listBuffers() const
 {
 	// lock access to the data buffers
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 
 	std::cout << "Buffer list of \"" << getName() << "\"[" << buffers.size() << "]:" << std::endl;
 
-	BOOST_FOREACH(const buffer_item_t item, buffers) {
-		std::cout << "\t" << item.first << std::endl;
-	}
+	BOOST_FOREACH(const buffer_item_t item, buffers)
+				{
+					std::cout << "\t" << item.first << std::endl;
+				}
 }
 
-Agent::Agent(const std::string & _name)
-	: AgentBase(_name)
+Agent::Agent(const std::string & _name) :
+	AgentBase(_name)
 {
-#if defined(USE_MESSIP_SRR)
-	channel = messip_channel_create(NULL, getName().c_str(), MESSIP_NOTIMEOUT, 0);
-#else /* USE_MESSIP_SRR  */
-	channel = name_attach(NULL, getName().c_str(), 0 /*NAME_FLAG_ATTACH_GLOBAL*/);
-#endif /* USE_MESSIP_SRR */
 
-	if(channel == NULL)
-	{
+	channel = messip_channel_create(NULL, getName().c_str(), MESSIP_NOTIMEOUT, 0);
+
+	if (channel == NULL) {
 		// TODO:
 		std::cerr << "server channel create for '" << getName() << "' failed" << std::endl;
 		throw;
@@ -90,11 +87,8 @@ Agent::~Agent()
 	}
 #endif
 
-#if defined(USE_MESSIP_SRR)
-	if(messip_channel_delete(channel, MESSIP_NOTIMEOUT) == -1)
-#else /* USE_MESSIP_SRR  */
-	if(name_detach(channel, 0) == -1)
-#endif /* USE_MESSIP_SRR */
+	if (messip_channel_delete(channel, MESSIP_NOTIMEOUT) == -1)
+
 	{
 		// TODO:
 		std::cerr << "server channel create for for '" << getName() << "' failed" << std::endl;
@@ -110,9 +104,9 @@ void Agent::operator ()()
 
 int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 {
-#if defined(USE_MESSIP_SRR)
+
 	// receive loop
-	while(true) {
+	while (true) {
 		// additional message type/subtype information
 		int32_t type, subtype;
 
@@ -121,77 +115,15 @@ int Agent::ReceiveMessage(void * msg, std::size_t msglen, bool block)
 		if (ret == -1) {
 			std::cerr << "messip_receive() failed" << std::endl;
 			throw;
-		}
-		else if (!block && ret == MESSIP_MSG_TIMEOUT) {
+		} else if (!block && ret == MESSIP_MSG_TIMEOUT) {
 			return -1;
-		}
-		else if (ret != MESSIP_MSG_NOREPLY) {
-//			std::cerr << "Unknown message received (" << ret << ")" << std::endl;
+		} else if (ret != MESSIP_MSG_NOREPLY) {
+			//			std::cerr << "Unknown message received (" << ret << ")" << std::endl;
 			continue;
 		}
 
 		return channel->datalenr;
 	}
-#else /* USE_MESSIP_SRR */
-	while(true) {
-		if(!block) {
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("TimerTimeout()");
-				// TODO: exception
-				throw;
-			}
-		}
-
-		// data structure with additional message info
-		_msg_info info;
-
-		int rcvid = MsgReceive(channel->chid, msg, msglen, &info);
-
-		/* MsgReceive failed */
-		if (rcvid == -1) {
-			if(!block && errno == ETIMEDOUT) {
-				return -1;
-			} else {
-				perror("MsgReceive()");
-				// TODO:
-				throw;
-			}
-		}
-
-		/* We specify the header as being at least a pulse */
-		typedef struct _pulse msg_header_t;
-
-		msg_header_t * hdr = (msg_header_t *) msg;
-
-		/* Pulse received */
-		if (rcvid == 0) {
-			std::cerr << "Pulse received" << std::endl;
-			switch (hdr->code) {
-				case _PULSE_CODE_DISCONNECT:
-					ConnectDetach(hdr->scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					break;
-				default:
-					break;
-				}
-			continue;
-		}
-
-		/* A QNX IO message received, reject */
-		if (hdr->type >= _IO_BASE && hdr->type <= _IO_MAX) {
-			std::cerr << "A QNX IO message received, reject" << std::endl;
-
-			MsgReply(rcvid, EOK, 0, 0);
-			continue;
-		}
-
-		// Unblock the sender
-		MsgReply(rcvid, EOK, 0, 0);
-
-		return info.msglen;
-	}
-#endif /* USE_MESSIP_SRR */
 }
 
 void Agent::ReceiveDataLoop(void)
@@ -203,14 +135,14 @@ void Agent::ReceiveDataLoop(void)
 	// TODO: this size should be #defined for the whole library
 	msg_buffer_name.reserve(100);
 
-	while(true) {
+	while (true) {
 		// buffer for the message to receive
 		char msg[16384];
 
 		int msglen = ReceiveMessage(msg, sizeof(msg), true);
 
 		// initialize the archive with the data received
-		xdr_iarchive<sizeof(msg)> ia(msg,msglen);
+		xdr_iarchive <sizeof(msg)> ia(msg, msglen);
 
 		ia >> msg_buffer_name;
 
@@ -221,16 +153,16 @@ void Agent::ReceiveDataLoop(void)
 
 		do {
 			// try to receive the message
-			if((msglen = ReceiveMessage(msg, sizeof(msg), false)) == -1)
+			if ((msglen = ReceiveMessage(msg, sizeof(msg), false)) == -1)
 				break;
 
 			// initialize the archive with the data received
-			xdr_iarchive<sizeof(msg)> ia(msg,msglen);
+			xdr_iarchive <sizeof(msg)> ia(msg, msglen);
 
 			ia >> msg_buffer_name;
 
 			Store(msg_buffer_name, ia);
-		} while(true);
+		} while (true);
 
 		cond.notify_all();
 	}
@@ -238,21 +170,23 @@ void Agent::ReceiveDataLoop(void)
 
 void Agent::Wait(DataCondition & condition)
 {
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 
-	while(!condition.isNewData())
+	while (!condition.isNewData())
 		cond.wait(lock);
 
-	BOOST_FOREACH(const buffer_item_t item, buffers) {
-		item.second->Update();
-	}
+	BOOST_FOREACH(const buffer_item_t item, buffers)
+				{
+					item.second->Update();
+				}
 }
 
 void Agent::Wait(void)
 {
-	boost::unique_lock<boost::mutex> lock(mtx);
+	boost::unique_lock <boost::mutex> lock(mtx);
 
-	BOOST_FOREACH(const buffer_item_t item, buffers) {
-		item.second->Update();
-	}
+	BOOST_FOREACH(const buffer_item_t item, buffers)
+				{
+					item.second->Update();
+				}
 }
