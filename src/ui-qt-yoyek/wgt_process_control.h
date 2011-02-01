@@ -31,6 +31,7 @@ private slots:
 	void on_mp_stop_pushButton_clicked();
 	void on_mp_pause_pushButton_clicked();
 	void on_mp_resume_pushButton_clicked();
+	void on_mp_trigger_pushButton_clicked();
 
 };
 
