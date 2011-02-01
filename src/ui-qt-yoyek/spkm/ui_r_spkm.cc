@@ -5,11 +5,9 @@
 #include "ui_r_spkm.h"
 #include "ui_ecp_r_spkm.h"
 #include "wgt_spkm_inc.h"
-/* TR
- #include "ui/src/spkm/wnd_spkm_int.h"
- #include "ui/src/spkm/wnd_spkm_external.h"
+#include "wgt_spkm_int.h"
+#include "wgt_spkm_ext.h"
 
- */
 #include "robot/spkm/const_spkm.h"
 #include "../interface.h"
 
@@ -32,12 +30,11 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
 	wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
 
-	/* TR
-	 wnd_int = new WndInt(interface, *this);
-	 wndbase_m[wnd_int->window_name] = wnd_int;
-	 wnd_external = new WndExternal(interface, *this);
-	 wndbase_m[wnd_external->window_name] = wnd_external;
-	 */
+	wgt_int = new wgt_spkm_int(interface, *this, interface.mw);
+	wndbase_m[WGT_SPKM_INT] = wgt_int->dwgt;
+
+	wgt_ext = new wgt_spkm_ext(interface, *this, interface.mw);
+	wndbase_m[WGT_SPKM_EXT] = wgt_ext->dwgt;
 
 }
 

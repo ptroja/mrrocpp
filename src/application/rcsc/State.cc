@@ -152,7 +152,7 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN;
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TEACH_IN;
-	else if (genType == "ECP_GEN_SMOOTH")
+	else if (genType == "ECP_GEN_NEWSMOOTH")
 		this->generatorType = ecp_mp::generator::ECP_GEN_NEWSMOOTH;
 	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB;

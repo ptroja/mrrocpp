@@ -19,5 +19,3 @@ add_library(ecp
 
 target_link_libraries(ecp
 	ecp_robots ecp_mp)
-
-install(TARGETS ecp DESTINATION bin) 

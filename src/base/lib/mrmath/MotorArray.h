@@ -47,7 +47,7 @@ public:
 	 * \param[in] ptr pointer to the C-array of initialization elements
 	 * \param[in] n number of elements in the array
 	 */
-	MotorArray(const double *ptr, size_t n) :
+	MotorArray(const double *ptr, std::size_t n) :
 		BaseClass(n)
 	{
 		for (unsigned int i = 0; i < n; i++) {

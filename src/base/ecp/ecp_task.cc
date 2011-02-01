@@ -498,7 +498,6 @@ bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
 
 	bool returned_value = true;
 	bool ecp_stop = false;
-
 	switch (mp_command_type())
 	{
 		case lib::NEXT_POSE:

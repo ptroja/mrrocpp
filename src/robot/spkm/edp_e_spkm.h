@@ -10,8 +10,12 @@
 #ifndef __EDP_E_SPKM_H
 #define __EDP_E_SPKM_H
 
+#include <boost/shared_ptr.hpp>
+#include <boost/array.hpp>
+
 #include "base/edp/edp_e_manip.h"
 #include "robot/spkm/const_spkm.h"
+#include "robot/epos/epos.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -25,8 +29,17 @@ namespace spkm {
  */
 class effector : public common::manip_effector
 {
-protected:
+private:
+	//! Access to the CAN gateway unit
+	boost::shared_ptr<epos::epos_base> gateway;
 
+	//! PKM axes
+	boost::shared_ptr<epos::epos> axis1, axis2, axis3, axis4, axis5, axis6;
+
+	//! Axes container
+	boost::array<epos::epos *, 3> axes;
+
+protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
 	lib::spkm::rbuffer edp_ecp_rbuffer;
 
@@ -97,7 +110,6 @@ public:
 	 * Currently simple memcpy implementation
 	 */
 	void reply_serialization();
-
 };
 
 } // namespace spkm

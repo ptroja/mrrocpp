@@ -10,11 +10,14 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
+#include "base/lib/mis_fun.h"
+
 #include "base/lib/sr/srlib.h"
 #include "sensor/ati6284/edp_s.h"
 #include "base/edp/edp_e_manip.h"
 
 #include "base/lib/configurator.h"
+#include "base/lib/mis_fun.h"
 #include "base/lib/timer.h"
 #include "tSTC.h"
 #include "tESeries.h"
@@ -192,7 +195,7 @@ void ATI6284_force::connect_to_hardware(void)
 
 ATI6284_force::~ATI6284_force(void)
 {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(force_sensor_test_mode)) {
 		disconnect_from_hardware();
 	}
 }
@@ -391,10 +394,10 @@ void ATI6284_force::wait_for_particular_event()
 
 	do {
 		//!< odczekaj
-		lib::timespec_increment_ns(wake_time, COMMCYCLE_TIME_NS);
+		lib::timespec_increment_ns(&wake_time, COMMCYCLE_TIME_NS);
 
 		int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
-		if(err != 0) {
+		if (err != 0) {
 			fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 		}
 

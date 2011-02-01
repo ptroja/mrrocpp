@@ -120,6 +120,7 @@ elseif (UBUNTU32BIT)
 	# Check for libftdi without pkg-config
 	find_library(LibFTDI_LIBRARY ftdi "${MRLIB}/lib")
 	set(LibFTDI_LIBRARIES ${LibFTDI_LIBRARY})
+	set(LibFTDI_LDFLAGS "${MRLIB}/lib/libftdi.so")
 	set(LibFTDI_FOUND 1)
 
 	# clock_gettime() can be missing in -lc
@@ -143,6 +144,7 @@ elseif (UBUNTU32BIT)
 else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
+
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 	

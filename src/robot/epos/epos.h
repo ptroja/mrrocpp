@@ -261,7 +261,6 @@ public:
 	//		int checkEPOS();
 
 	/*! \brief check EPOS status
-	 *
 	 * @return state according to firmware spec */
 	int checkEPOSstate();
 
@@ -272,11 +271,18 @@ public:
 	 */
 	int printEPOSstate();
 
+	/*! pretty-print EPOS Error Register */
+	static void printErrorRegister(UNSIGNED8 reg);
+
 	//! \brief States of the EPOS controller
 	typedef enum _state
 	{
-		ST_DISABLED = 0, ST_ENABLED = 1, ST_QUICKSTOP = 2, ST_FAULT = 3
+		SHUTDOWN, SWITCH_ON, SWITCH_ON_AND_ENABLE, DISABLE_VOLTAGE,
+		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} state_t;
+
+	//! Reset the device by issuing a shutdown command followed by power-on
+	void reset();
 
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
 	void changeEPOSstate(state_t state);
@@ -303,10 +309,13 @@ public:
 	 *
 	 * \param statusword WORD variable holding the statusword
 	 */
-	void printEPOSstatusword(WORD statusword);
+	static void printEPOSstatusword(WORD statusword);
 
 	/*! \brief read EPOS control word (firmware spec 14.1.57) */
 	UNSIGNED16 readControlword();
+
+	//! write EPOS control word
+	void writeControlword(UNSIGNED16 val);
 
 	/*! \brief pretty-print controlword */
 	void printEPOScontrolword(WORD controlword);
@@ -531,6 +540,65 @@ public:
 	/*! \brief read target position; 14.1.70 */
 	INTEGER32 readTargetPosition();
 
+	/*! \brief read target position; 14.1.70 */
+	void writeTargetPosition(INTEGER32 val);
+
+	/*! read Maximal Following Error */
+	UNSIGNED32 readMaxFollowingError();
+
+	/*! write Maximal Following Error */
+	void writeMaxFollowingError(UNSIGNED32 val);
+
+	/*! read Home Offset */
+	INTEGER32 readHomeOffset();
+
+	/*! write Home Offset */
+	void writeHomeOffset(INTEGER32 val);
+
+	/*! read Speed for Switch Search */
+	UNSIGNED32 readSpeedForSwitchSearch();
+
+	/*! write Speed for Switch Search */
+	void writeSpeedForSwitchSearch(UNSIGNED32 val);
+
+	/*! read Speed for Zero Search */
+	UNSIGNED32 readSpeedForZeroSearch();
+
+	/*! write Speed for Zero Search */
+	void writeSpeedForZeroSearch(UNSIGNED32 val);
+
+	/*! read Homing Acceleration */
+	UNSIGNED32 readHomingAcceleration();
+
+	/*! write Homing Acceleration  */
+	void writeHomingAcceleration(UNSIGNED32 val);
+
+	/*! read Current Threshold for Homing Mode */
+	UNSIGNED16 readCurrentThresholdForHomingMode();
+
+	/*! write Current Threshold for Homing Mode  */
+	void writeCurrentThresholdForHomingMode(UNSIGNED16 val);
+
+	/*! read Error register */
+	UNSIGNED8 readErrorRegister();
+
+	/*! read number of Errors is Error History register */
+	UNSIGNED8 readNumberOfErrors();
+
+	/*! read Error History at index */
+	UNSIGNED32 readErrorHistory(unsigned int num);
+
+	/*! clear Error register */
+	void clearNumberOfErrors();
+
+	/*! Store all device parameters in a non-volatile memory */
+	void Store();
+
+	/*! All device parameters will be restored with default values */
+	void Restore();
+
+	static const char * ErrorCodeMessage(UNSIGNED32 code);
+
 	//! Homing method
 	typedef enum _homing_method
 	{
@@ -551,8 +619,26 @@ public:
 		HM_INDEX_NEGATIVE_SPEED = 33
 	} homing_method_t;
 
+	//! Is the actual position referenced to home position
+	bool isReferenced();
+
+	//! Is the movement target reached
+	bool isTargetReached();
+
+	//! Start homing according to preset parameters
+	void startHoming();
+
+	//! Check if both homing target is reached and homing is attained
+	bool isHomingFinished();
+
+	/*! read Homing Method */
+	homing_method_t readHomingMethod();
+
+	/*! write Homing Method */
+	void writeHomingMethod(homing_method_t method);
+
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
-	int doHoming(homing_method_t method, INTEGER32 start);
+	int doHoming(homing_method_t method, INTEGER32 offset = 0);
 
 	/*! \brief set OpMode to ProfilePosition and make relative movement */
 	void moveRelative(INTEGER32 steps);

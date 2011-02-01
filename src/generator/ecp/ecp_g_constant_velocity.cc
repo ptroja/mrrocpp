@@ -194,6 +194,36 @@ bool constant_velocity::load_relative_angle_axis_trajectory_pose(const vector<do
 	return load_trajectory_pose(coordinates, lib::RELATIVE, lib::ECP_XYZ_ANGLE_AXIS, angle_axis_velocity, angle_axis_max_velocity);
 }
 
+bool constant_velocity::load_absolute_pose(ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose & trajectory_pose) {
+	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, joint_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, motor_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, angle_axis_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, euler_zyz_max_velocity);
+	} else {
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}
+	return true;
+}
+
+bool constant_velocity::load_relative_pose(ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose & trajectory_pose) {
+	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, joint_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, motor_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, angle_axis_max_velocity);
+	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
+		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, euler_zyz_max_velocity);
+	} else {
+		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+	}
+	return true;
+}
+
 bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & v_max) {
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in joint representation

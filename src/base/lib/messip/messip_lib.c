@@ -743,7 +743,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 	/* Attach a callback (handler) for two message types */
 	if (message_attach( ch->dpp, &ch->message_attr,
                                  _IO_MAX + 1, _IO_MAX + 2, message_handler, ch )) {
-        perror("message_attach()");
+	perror("message_attach()");
 	}
 
 	if (pulse_attach( ch->dpp, 0, _PULSE_CODE_DISCONNECT,
@@ -1093,7 +1093,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 		info->sin_addr = msgreply.sin_addr;
 		//strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
 		strncpy( info->hostname, msgreply.hostname, sizeof(info->hostname));
-		info->hostname[sizeof(info->hostname)] = 0;
+		info->hostname[sizeof(info->hostname)-1] = 0;
 		assert(strlen(info->hostname) < sizeof(info->hostname));
 		strncpy( info->name, name, sizeof(info->name) );
 
@@ -2673,11 +2673,11 @@ timer_t messip_timer_create( messip_channel_t * ch,
 	sigaddset( &sig_act.sa_mask, SIGHUP );
 	sigaddset( &sig_act.sa_mask, SIGCHLD );
 	sigaddset( &sig_act.sa_mask, SIGRTMIN+1 );
-    sig_act.sa_flags = SA_SIGINFO;
-    sig_act.sa_sigaction = sig_action;
-    sigaction( SIGRTMIN, 		  		/* Set action for SIGRTMIN      */
-        &sig_act,                 		/* Action to take on signal     */
-        0 );                      		/* Don't care about old actions */
+	sig_act.sa_flags = SA_SIGINFO;
+	sig_act.sa_sigaction = sig_action;
+	sigaction( SIGRTMIN, 		  		/* Set action for SIGRTMIN      */
+		&sig_act,                 		/* Action to take on signal     */
+		0 );                      		/* Don't care about old actions */
 #endif
 
 	itime.it_value.tv_sec = msec_1st_shot / 1000;

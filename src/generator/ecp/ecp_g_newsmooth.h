@@ -8,8 +8,6 @@
 #if !defined(_ECP_GEN_NEWSMOOTH_H)
 # define _ECP_GEN_NEWSMOOTH_H
 
-#include <vector>
-
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
@@ -122,6 +120,16 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * @param file_name name of the file with the trajectory
 		 */
 		bool load_trajectory_from_file(const char* file_name);
+		/**
+		 * Loads the whole absolute trajectory pose.
+		 * @param trajectory to load
+		 */
+		bool load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose);
+		/**
+		 * Loads the whole relative trajectory pose.
+		 * @param trajectory to load
+		 */
+		bool load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose);
 
 };
 

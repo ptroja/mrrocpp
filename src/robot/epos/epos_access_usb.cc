@@ -24,6 +24,7 @@ epos_access_usb::epos_access_usb(int _vendor, int _product, unsigned int _index)
 
 epos_access_usb::~epos_access_usb()
 {
+	if (device_opened) close();
 	ftdi_deinit(&ftdic);
 }
 
@@ -103,7 +104,7 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 	E_error = 0x00;
 
 	// FTDI return code
-	int wait_cnt = 20;
+	int wait_cnt = 500; // for Store() command the 352 was fine
 	int ret = 0;
 
 	while ((ret == 0) && (wait_cnt > 0)) {

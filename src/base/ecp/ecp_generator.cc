@@ -6,6 +6,8 @@
  * @ingroup ecp
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
@@ -24,3 +26,5 @@ ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, 
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
+
+

@@ -60,9 +60,10 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 		perror("uname");
 	}
 
-	mrrocpp_network_path = "/net/";
+	/*mrrocpp_network_path = "/net/";
 	mrrocpp_network_path += node;
-	mrrocpp_network_path += dir;
+	mrrocpp_network_path += dir;*/
+	mrrocpp_network_path = "../";
 
 #ifdef USE_MESSIP_SRR
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {

@@ -210,7 +210,7 @@ void ATI3084_force::connect_to_hardware(void)
 
 ATI3084_force::~ATI3084_force(void)
 {
-	if (!(master.force_sensor_test_mode)) {
+	if (!(force_sensor_test_mode)) {
 		disconnect_from_hardware();
 	}
 

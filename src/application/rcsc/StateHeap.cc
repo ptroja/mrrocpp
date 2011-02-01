@@ -51,6 +51,7 @@ const char * StateHeap::popTargetName()
 
 void StateHeap::showHeapContent()
 {
+	if(targetsHeap != NULL )
 	for(std::list<const char *>::iterator it = targetsHeap->begin(); it != targetsHeap->end(); ++it)
 	{
 		printf("### on heap: #%s#\n", (*it));

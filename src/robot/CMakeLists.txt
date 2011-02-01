@@ -19,8 +19,7 @@ add_subdirectory (irp6p_m)
 add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
 
-
-add_library(mprobots
+add_library(mp_robots
 	conveyor/mp_r_conveyor.cc
 	irp6ot_m/mp_r_irp6ot_m.cc
 	irp6p_m/mp_r_irp6p_m.cc
