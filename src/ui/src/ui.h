@@ -21,9 +21,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 enum UI_NOTIFICATION_STATE_ENUM
 {

@@ -107,11 +107,7 @@ int FCRefreshPosition(void)
 {
 	// Wiadomosc odbierana z ECP.
 	lib::ECP_message from_ecp;
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_GET_DATA;
 	// Wyslanie polecenia i odebranie polozenia robota.
@@ -181,11 +177,7 @@ int FCbtnCalibrateSensor(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 #ifdef FCDEBUG
 	printf("FCbtnCalibrateSensor\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// polecenie dla ECP -> kalibracja czujnika
 	ui_ecp_msg.command = lib::FC_CALIBRATE_SENSOR;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -199,11 +191,7 @@ int FCbtnAddMacrostep(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cb
 #ifdef FCDEBUG
 	printf("FCbtnAddMacrostep\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_ADD_MACROSTEP;
 
@@ -239,11 +227,7 @@ int FCbtnNewTrajectory(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *c
 #ifdef FCDEBUG
 	printf("FCbtnNewTrajectory\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_NEW_TRAJECTORY;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -282,11 +266,7 @@ int FCbtnExit(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 #ifdef FCDEBUG
 	printf("FCbtnExit\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_EXIT;
 	if (MsgSend(ECPfd, &ui_ecp_msg, sizeof(lib::UI_ECP_message), NULL, 0) == -1) {
@@ -344,11 +324,7 @@ int FCbtnChangeExternalMotorControl(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 #ifdef FCDEBUG
 	printf("FCbtnChangeExternalMotorControl\n");
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_CHANGE_CONTROL;
 	// Zmiana sterowania.
@@ -417,11 +393,7 @@ void SendMoveCommand(int move_type)
 #ifdef FCDEBUG
 	printf("SendMoveCommand: %i\n",move_type);
 #endif
-#if !defined(USE_MESSIP_SRR)
-	// Ustawienie typu wiadomosci.
-	ui_ecp_msg.hdr.type = 0x00;
-	ui_ecp_msg.hdr.subtype = 0x00;
-#endif
+
 	// Polecenie dla ECP.
 	ui_ecp_msg.command = lib::FC_MOVE_ROBOT;
 	// Rodzaj ruchu -> (okreslenie osi 1..6) && (+/- lewo/prawo).

@@ -16,9 +16,9 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "ecp_t_wii_teach.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -139,12 +139,9 @@ bool wii_teach::get_filenames(void)
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
 	
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(this->UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) // by Y&W
-#endif
+
 	{
 		e = errno;
 		perror("ecp: Send() to UI failed");

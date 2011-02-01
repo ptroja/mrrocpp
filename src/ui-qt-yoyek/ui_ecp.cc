@@ -22,9 +22,9 @@
 #include "ui_sr.h"
 #include "ui_ecp.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 

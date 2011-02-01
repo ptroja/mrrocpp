@@ -1261,11 +1261,9 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
-#if !defined(USE_MESSIP_SRR)
-		name_close(interface.mp.pulse_fd);
-#else
+
 		messip::port_disconnect(interface.mp.pulse_fd);
-#endif
+
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
