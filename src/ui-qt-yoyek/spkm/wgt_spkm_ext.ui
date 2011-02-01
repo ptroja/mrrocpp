@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>wgt_spkm_ext</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1,0,1,0,0,0,0,0,1,0,0,1">
    <item row="0" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
@@ -30,7 +30,7 @@
    <item row="0" column="1">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>measured current</string>
+      <string>measured current [mA]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -120,8 +120,17 @@
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_0">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -130,19 +139,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="1" column="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="1" column="3">
     <widget class="QRadioButton" name="radioButton_mip_0">
@@ -160,19 +156,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="1" column="5">
     <widget class="QLabel" name="label_19">
      <property name="text">
@@ -188,6 +171,15 @@
    </item>
    <item row="1" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p0">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -226,6 +218,9 @@
    </item>
    <item row="1" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p0">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -236,19 +231,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="1" column="10">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="1" column="11">
     <widget class="QPushButton" name="pushButton_0l">
@@ -294,19 +276,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="13">
-    <spacer name="horizontalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
@@ -322,8 +291,17 @@
    </item>
    <item row="2" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -332,19 +310,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="2" column="2">
-    <spacer name="horizontalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="2" column="3">
     <widget class="QRadioButton" name="radioButton_mip_1">
@@ -362,19 +327,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="4">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="2" column="5">
     <widget class="QLabel" name="label_15">
      <property name="text">
@@ -390,6 +342,15 @@
    </item>
    <item row="2" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p1">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -403,6 +364,9 @@
    </item>
    <item row="2" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p1">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -413,19 +377,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="2" column="10">
-    <spacer name="horizontalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="2" column="11">
     <widget class="QPushButton" name="pushButton_1l">
@@ -471,19 +422,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="13">
-    <spacer name="horizontalSpacer_8">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_11">
      <property name="text">
@@ -499,8 +437,17 @@
    </item>
    <item row="3" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -509,19 +456,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="3" column="2">
-    <spacer name="horizontalSpacer_9">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="3" column="3">
     <widget class="QRadioButton" name="radioButton_mip_2">
@@ -539,19 +473,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="4">
-    <spacer name="horizontalSpacer_12">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="3" column="5">
     <widget class="QLabel" name="label_16">
      <property name="text">
@@ -567,6 +488,15 @@
    </item>
    <item row="3" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -580,6 +510,9 @@
    </item>
    <item row="3" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p2">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -590,19 +523,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="3" column="10">
-    <spacer name="horizontalSpacer_10">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>3</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="3" column="11">
     <widget class="QPushButton" name="pushButton_2l">
@@ -648,19 +568,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="13">
-    <spacer name="horizontalSpacer_11">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_12">
      <property name="text">
@@ -676,8 +583,17 @@
    </item>
    <item row="4" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -686,19 +602,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="4" column="2">
-    <spacer name="horizontalSpacer_16">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="4" column="3">
     <widget class="QRadioButton" name="radioButton_mip_3">
@@ -716,19 +619,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="4">
-    <spacer name="horizontalSpacer_13">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="4" column="5">
     <widget class="QLabel" name="label_20">
      <property name="text">
@@ -744,6 +634,15 @@
    </item>
    <item row="4" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -757,6 +656,9 @@
    </item>
    <item row="4" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p3">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -767,19 +669,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="4" column="10">
-    <spacer name="horizontalSpacer_15">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>3</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="4" column="11">
     <widget class="QPushButton" name="pushButton_3l">
@@ -825,19 +714,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="13">
-    <spacer name="horizontalSpacer_14">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_13">
      <property name="text">
@@ -853,8 +729,17 @@
    </item>
    <item row="5" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -863,19 +748,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="5" column="2">
-    <spacer name="horizontalSpacer_20">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="5" column="3">
     <widget class="QRadioButton" name="radioButton_mip_4">
@@ -893,19 +765,6 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="4">
-    <spacer name="horizontalSpacer_17">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="5" column="5">
     <widget class="QLabel" name="label_21">
      <property name="text">
@@ -921,6 +780,15 @@
    </item>
    <item row="5" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -934,6 +802,9 @@
    </item>
    <item row="5" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p4">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -944,19 +815,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="5" column="10">
-    <spacer name="horizontalSpacer_19">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>3</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="5" column="11">
     <widget class="QPushButton" name="pushButton_4l">
@@ -1002,19 +860,6 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="13">
-    <spacer name="horizontalSpacer_18">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_14">
      <property name="text">
@@ -1030,8 +875,17 @@
    </item>
    <item row="6" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
-      <number>4</number>
+      <number>0</number>
      </property>
      <property name="minimum">
       <double>-10000.000000000000000</double>
@@ -1040,19 +894,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="6" column="2">
-    <spacer name="horizontalSpacer_24">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="6" column="3">
     <widget class="QRadioButton" name="radioButton_mip_5">
@@ -1073,19 +914,6 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="4">
-    <spacer name="horizontalSpacer_21">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>24</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="6" column="5">
     <widget class="QLabel" name="label_17">
      <property name="text">
@@ -1101,6 +929,15 @@
    </item>
    <item row="6" column="6">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p5">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -1114,6 +951,9 @@
    </item>
    <item row="6" column="8" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p5">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>
@@ -1124,19 +964,6 @@
       <double>10000.000000000000000</double>
      </property>
     </widget>
-   </item>
-   <item row="6" column="10">
-    <spacer name="horizontalSpacer_23">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>3</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="6" column="11">
     <widget class="QPushButton" name="pushButton_5l">
@@ -1182,19 +1009,6 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="13">
-    <spacer name="horizontalSpacer_22">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>15</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="7" column="6">
     <widget class="QPushButton" name="pushButton_read">
      <property name="text">
@@ -1211,6 +1025,9 @@
    </item>
    <item row="7" column="10" colspan="4">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="decimals">
       <number>4</number>
      </property>

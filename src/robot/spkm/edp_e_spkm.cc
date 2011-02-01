@@ -242,10 +242,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
-			// Execute command
 			if (!robot_test_mode) {
+				// Execute command
 				for(std::size_t i = 0; i < axes.size(); ++i) {
-					axes[i]->changeEPOSstate(epos::epos::ST_QUICKSTOP);
+					// Brake with Quickstop command
+					axes[i]->changeEPOSstate(epos::epos::QUICKSTOP);
 				}
 			}
 		}
@@ -276,7 +277,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			{
 				case lib::MOTOR: {
 					msg->message("EDP get_arm_position MOTOR");
-					if(1 || robot_test_mode) {
+					if(robot_test_mode) {
 						static int licznikaaa = (-11);
 
 						std::stringstream ss(std::stringstream::in | std::stringstream::out);
