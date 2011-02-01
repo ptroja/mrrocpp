@@ -79,7 +79,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 	// Lock data structure during update
 	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		boost::mutex::scoped_lock lock(effector_mutex);
 
 		// Initialize internal data
 		for (int i = 0; i < number_of_servos; i++) {

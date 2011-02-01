@@ -145,9 +145,9 @@ protected:
 	/*!
 	 * \brief mutex to handle data set and get of the motor and joint position
 	 *
-	 * It is also used for the frame in chil manip_effector_class
+	 * It is also used for the frame in child manip_effector_class
 	 */
-	boost::mutex edp_irp6s_effector_mutex;
+	boost::mutex effector_mutex;
 
 	/*!
 	 * \brief desired joints position

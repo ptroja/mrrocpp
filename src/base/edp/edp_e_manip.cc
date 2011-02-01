@@ -672,7 +672,7 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 
 lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
 {// by Y
-	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+	boost::mutex::scoped_lock lock(effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
 	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
 	lib::Homog_matrix return_frame(servo_current_frame_wo_tool);

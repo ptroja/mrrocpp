@@ -234,7 +234,7 @@ motor_driven_effector::~motor_driven_effector()
 
 void motor_driven_effector::master_joints_read(double output[])
 {
-	boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+	boost::mutex::scoped_lock lock(effector_mutex);
 
 	// przepisanie danych na zestaw lokalny dla edp_master
 	for (int i = 0; i < number_of_servos; i++) {
@@ -282,7 +282,7 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
 	try {
 		{
-			boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+			boost::mutex::scoped_lock lock(effector_mutex);
 			get_current_kinematic_model()->mp2i_transform(servo_current_motor_pos, servo_current_joints);
 		}
 
@@ -303,7 +303,7 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 	}//: catch
 
 	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		boost::mutex::scoped_lock lock(effector_mutex);
 
 		// przepisnie danych na zestaw globalny
 		for (int i = 0; i < number_of_servos; i++) {
@@ -809,7 +809,7 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		boost::mutex::scoped_lock lock(effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (size_t i = 0; i < number_of_servos; i++) {
