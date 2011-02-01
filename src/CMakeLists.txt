@@ -66,15 +66,6 @@ option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
 option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
 
-# configure a header file to pass some of the CMake settings
-# to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/config.h.in"
-  "${PROJECT_BINARY_DIR}/src/config.h"
-)
-# add include path to the generated config file
-include_directories (${MRROCPP_BINARY_DIR}/src) 
-
 # QNX is default MRROC++ target
 if (QNXNTO)
 	# QNX headers and libraries are kept in 'mrlib' repository
@@ -164,6 +155,7 @@ else (QNXNTO) # Linux, MacOS, etc.
 	# check for kqueue()
 	INCLUDE (CheckSymbolExists)
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
+	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
 	# for non-QNX target messip is the only messaging protocol
 	set(USE_MESSIP ON)
@@ -172,6 +164,16 @@ else (QNXNTO) # Linux, MacOS, etc.
 
 endif (QNXNTO)
 
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
+
+# Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 if (QNXNTO)
@@ -206,12 +208,4 @@ add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (ui)
 add_subdirectory (application)
-
-# QNX is default MRROC++ target
-if (QNXNTO)
-
-elseif (UBUNTU32BIT)
-
-else (QNXNTO) # Linux, etc.
-	add_subdirectory (ui-qt-yoyek)
-endif (QNXNTO)
+add_subdirectory (ui-qt-yoyek)

@@ -20,38 +20,6 @@ int main(int argc, char *argv[])
 
 		node4.printEPOSstate();
 
-		node4.reset();
-		node5.reset();
-		node6.reset();
-
-		node4.printEPOSstate();
-
-		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
-
-		// switch to homing mode
-		node4.setOpMode(epos::OMD_HOMING_MODE);
-		node5.setOpMode(epos::OMD_HOMING_MODE);
-		node6.setOpMode(epos::OMD_HOMING_MODE);
-
-		// Do homing
-		node4.startHoming();
-		node5.startHoming();
-		node6.startHoming();
-
-		for(;;) {
-			bool node4ok = node4.isHomingFinished();
-			bool node5ok = node5.isHomingFinished();
-			bool node6ok = node6.isHomingFinished();
-
-			if(node4ok && node5ok && node6ok) {
-				break;
-			}
-		};
-
-		// Move back
-		//node4.moveRelative(-50000);
-		//node4.monitorStatus();
-
 		gateway.close();
 	} catch (epos_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
