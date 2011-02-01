@@ -1150,6 +1150,30 @@ void epos::writeHomingMethod(homing_method_t method) {
 	WriteObjectValue(0x6098, 0x00, val);
 }
 
+/*! Read the Minimal Position Limit */
+INTEGER32 epos::readMinimalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x01);
+}
+
+/*! Write the Minimal Position Limit */
+void epos::writeMinimalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x01, val);
+}
+
+/*! Read the Maximal Position Limit */
+INTEGER32 epos::readMaximalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x02);
+}
+
+/*! Write the Maximal Position Limit */
+void epos::writeMaximalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x02, val);
+}
+
 /*! read Error register */
 UNSIGNED8 epos::readErrorRegister() {
 	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
@@ -1162,7 +1186,7 @@ UNSIGNED8 epos::readNumberOfErrors() {
 
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
-	if(num < 1 && num > 5) {
+	if(num < 1 || num > 5) {
 		throw epos_error() << reason("Error History index out of range <1..5>");
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
