@@ -11,7 +11,8 @@ namespace ecp {
 namespace irp6ot_m {
 namespace generator {
 
-wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) : generator(_ecp_task), _wiimote(_wiimote)
+wii::wii (common::task::task& _ecp_task,ecp_mp::sensor::wiimote* _wiimote) :
+	common::generator::generator(_ecp_task), _wiimote(_wiimote)
 {
     for(int i  = 0;i < MAX_NO_OF_DEGREES;++i)
     {
@@ -140,10 +141,6 @@ bool wii::next_step()
 
     set_position(changed);
 
-    char buffer[500];
-	sprintf(buffer,"SET: %.4f %.4f %.4f %.4f %.4f %.4f", nextChange[0], nextChange[1], nextChange[2], nextChange[3], nextChange[4], nextChange[5]);
-	sr_ecp_msg.message(buffer);
-    
     return true;
 }
 

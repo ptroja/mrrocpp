@@ -91,14 +91,6 @@ protected:
 	void multi_thread_move_arm(const lib::c_buffer &instruction);
 
 public:
-
-	/*!
-	 * \brief Info if the force sensor test mode is active.
-	 *
-	 * It is taken from configuration data.
-	 */
-	bool force_sensor_test_mode;
-
 	/*!
 	 * \brief geat_arm_position methos with servo_buffer and force measurement
 	 *
@@ -177,7 +169,7 @@ public:
 	 *
 	 * This method synchronises motors of the robots.
 	 */
-	void synchronise();
+	virtual void synchronise();
 
 	/*!
 	 * \brief The method checks the initial state of the controller.
@@ -210,8 +202,7 @@ public:
 	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 
 public:
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
 
 } // namespace common
 } // namespace edp

@@ -13,28 +13,28 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_sub_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
 #include "base/ecp/ecp_generator.h"
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
-#endif
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace task {
 
-task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ecp_m_robot(NULL), continuous_coordination(false)
+task_base::task_base(lib::configurator &_config) :
+	ecp_mp::task::task(_config), continuous_coordination(false)
 {
 	initialize_communication();
 }
 
-void task::main_task_algorithm(void)
+void task_base::main_task_algorithm(void)
 {
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -51,84 +51,26 @@ void task::main_task_algorithm(void)
 	} //end for
 }
 
-void task::mp_2_ecp_next_state_string_handler(void)
+void task_base::mp_2_ecp_next_state_string_handler(void)
 {
 }
 
-void task::ecp_stop_accepted_handler(void)
+void task_base::ecp_stop_accepted_handler(void)
 {
 }
 
-task::~task()
+task_base::~task_base()
 {
 	// TODO: error check
-#if !defined(USE_MESSIP_SRR)
-	name_detach(trigger_attach, 0);
-	name_detach(ecp_attach, 0);
-	name_close(MP_fd);
-#else
+
 	messip::port_delete(trigger_attach);
 	messip::port_delete(ecp_attach);
 	messip::port_delete(MP_fd);
-#endif
+
 }
 
-bool task::pulse_check()
+bool task_base::pulse_check()
 {
-#if !defined(USE_MESSIP_SRR)
-	_pulse_msg ui_msg; // wiadomosc z ui
-
-	// by Y zamiast creceive
-	if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-		perror("ecp_task: TimerTimeout()");
-	}
-	int rcvid = MsgReceive(trigger_attach->chid, &ui_msg, sizeof(ui_msg), NULL);
-
-	if (rcvid == -1) {/* Error condition, exit */
-		// perror("blad receive w reader");
-	}
-
-	if (rcvid == 0) {/* Pulse received */
-		switch (ui_msg.hdr.code)
-		{
-			case _PULSE_CODE_DISCONNECT:
-				/*
-				 * A client disconnected all its connections (called
-				 * name_close() for each name_open() of our name) or
-				 * terminated
-				 */
-				ConnectDetach(ui_msg.hdr.scoid);
-				break;
-			case _PULSE_CODE_UNBLOCK:
-				/*
-				 * REPLY blocked client wants to unblock (was hit by a signal or timed out).  It's up to you if you
-				 * reply now or later.
-				 */
-				break;
-			default:
-				if (ui_msg.hdr.code == ECP_TRIGGER) { // odebrano puls ECP_TRIGGER
-					return true;
-				}
-				/*
-				 * A pulse sent by one of your processes or a _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-				 * from the kernel?
-				 */
-		}
-	}
-
-	if (rcvid > 0) {
-		/* A QNX IO message received, reject */
-		if (ui_msg.hdr.type >= _IO_BASE && ui_msg.hdr.type <= _IO_MAX) {
-			MsgReply(rcvid, EOK, 0, 0);
-		} else {
-			/* A message (presumable ours) received, handle */
-			printf("ecp trigger server receive strange message of type: %d\n", ui_msg.data);
-			MsgReply(rcvid, EOK, 0, 0);
-		}
-	}
-
-	return false;
-#else
 	int32_t type, subtype;
 	int recvid;
 	if ((recvid = messip::port_receive_pulse(trigger_attach, type, subtype, 0)) == -1) {
@@ -141,11 +83,11 @@ bool task::pulse_check()
 	}
 
 	return false;
-#endif
+
 }
 
 // ---------------------------------------------------------------
-void task::initialize_communication()
+void task_base::initialize_communication()
 {
 	std::string mp_pulse_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
@@ -161,11 +103,9 @@ void task::initialize_communication()
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
-#if !defined(USE_MESSIP_SRR)
-	if ((MP_fd = name_open(mp_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
-#else
-	if ( (MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
-#endif
+
+	if ((MP_fd = messip::port_connect(mp_pulse_attach_point)) == NULL)
+
 	{
 		int e = errno; // kod bledu systemowego
 		fprintf(stderr, "ecp: Unable to locate MP_MASTER process at '%s'\n", mp_pulse_attach_point.c_str());
@@ -173,13 +113,9 @@ void task::initialize_communication()
 		throw ECP_main_error(lib::SYSTEM_ERROR, e);
 	}
 
-	// Rejstracja procesu ECP
-#if !defined(USE_MESSIP_SRR)
-	if ((ecp_attach = name_attach(NULL, ecp_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
-	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL)
-#endif
-	{
+	// Rejestracja procesu ECP
+
+	if ((ecp_attach = messip::port_create(ecp_attach_point)) == NULL) {
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach Effector Control Process");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed to attach Effector Control Process");
@@ -189,11 +125,8 @@ void task::initialize_communication()
 	std::string trigger_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
-#if !defined(USE_MESSIP_SRR)
-	if ((trigger_attach = name_attach(NULL, trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL)
-#else
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
-#endif
+
 	{
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
@@ -204,19 +137,19 @@ void task::initialize_communication()
 // -------------------------------------------------------------------
 
 // Badanie typu polecenia z MP
-lib::MP_COMMAND task::mp_command_type(void) const
+lib::MP_COMMAND task_base::mp_command_type(void) const
 {
 	return mp_command.command;
 }
 
 // Ustawienie typu odpowiedzi z ECP do MP
-void task::set_ecp_reply(lib::ECP_REPLY ecp_r)
+void task_base::set_ecp_reply(lib::ECP_REPLY ecp_r)
 {
 	ecp_reply.reply = ecp_r;
 }
 
 // Informacja dla MP o zakonczeniu zadania uzytkownika
-void task::ecp_termination_notice(void)
+void task_base::ecp_termination_notice(void)
 {
 	if (mp_command_type() != lib::END_MOTION) {
 
@@ -226,35 +159,30 @@ void task::ecp_termination_notice(void)
 }
 
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
-void task::send_pulse_to_mp(int pulse_code, int pulse_value)
+void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(MP_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
-#else
+
 	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
-#endif
+
 	{
 		perror("MsgSendPulse()");
 	}
 }
 
-void task::subtasks_conditional_execution()
+void task_base::subtasks_conditional_execution()
 {
-
 	subtasks_t subtasks_m_tmp = subtask_m;
 
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
 				{
 					if (mp_2_ecp_next_state_string == subtask_node.first) {
-
 						subtask_node.second->conditional_execution();
 					}
 				}
-
 }
 
 // Petla odbierania wiadomosci.
-void task::ecp_wait_for_stop(void)
+void task_base::ecp_wait_for_stop(void)
 {
 	// Wyslanie pulsu do MP
 
@@ -265,16 +193,7 @@ void task::ecp_wait_for_stop(void)
 	// Oczekiwanie na wiadomosc.
 	int caller = -2;
 
-	while (caller <= 0) {
-
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
+	wait_for_randevous_with_mp(caller, mp_pulse_received);
 	bool ecp_stop = false;
 	if (mp_command_type() == lib::STOP) {
 		set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -284,11 +203,9 @@ void task::ecp_wait_for_stop(void)
 	}
 
 	// Wyslanie odpowiedzi.
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
-#else
+
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -309,25 +226,19 @@ void task::ecp_wait_for_stop(void)
 }
 
 // Oczekiwanie na polecenie START od MP
-void task::ecp_wait_for_start(void)
+void task_base::ecp_wait_for_start(void)
 {
+	//std::cerr << "ecp ecp_wait_for_start 1" << std::endl;
 	bool ecp_stop = false;
 	bool mp_pulse_received = false;
 	// Wyslanie pulsu do MP
 	send_pulse_to_mp(ECP_WAIT_FOR_START);
-
+	//	std::cerr << "ecp ecp_wait_for_start 2" << std::endl;
 	int caller = -2;
 
-	while (caller <= 0) {
+	wait_for_randevous_with_mp(caller, mp_pulse_received);
 
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
+	//	std::cerr << "ecp ecp_wait_for_start 3" << std::endl;
 
 	switch (mp_command_type())
 	{
@@ -345,11 +256,9 @@ void task::ecp_wait_for_start(void)
 	}
 
 	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
+
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -375,7 +284,7 @@ void task::ecp_wait_for_start(void)
 }
 
 // Oczekiwanie na kolejne zlecenie od MP
-void task::get_next_state(void)
+void task_base::get_next_state(void)
 {
 
 	bool mp_pulse_received = false;
@@ -384,16 +293,7 @@ void task::get_next_state(void)
 
 	int caller = -2;
 
-	while (caller <= 0) {
-
-		caller = receive_mp_message(true);
-		if (caller == 0) {
-			mp_pulse_received = true;
-			// przyszedl puls
-
-		}
-		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-	}
+	wait_for_randevous_with_mp(caller, mp_pulse_received);
 
 	bool ecp_stop = false;
 
@@ -411,11 +311,8 @@ void task::get_next_state(void)
 			break;
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	if (MsgReply(caller, EOK, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1)
-#else
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
+
 	{// by Y&W{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
@@ -442,191 +339,172 @@ void task::get_next_state(void)
 }
 
 // Oczekiwanie na polecenie od MP
-bool task::mp_buffer_receive_and_send(void)
+bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 {
+
+	while (caller < 0) {
+
+		caller = receive_mp_message(true);
+		if (caller == MESSIP_MSG_NOREPLY) {
+			mp_pulse_received = true;
+			// przyszedl puls
+
+		}
+		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
+	}
+
+	return true;
+}
+
+// Oczekiwanie na polecenie od MP
+bool task_base::mp_buffer_receive_and_send(void)
+{
+
+	//std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
 
 	int caller = -2;
 
-	bool ecp_communication_request;
 	bool mp_pulse_received = false;
-
-	bool mp_ecp_randevouz = false;
-
+	// ECP communication request
 	if ((ecp_reply.reply == lib::TASK_TERMINATED) || (ecp_reply.reply == lib::ERROR_IN_ECP)
 			|| (continuous_coordination)) {
 		// wariant pierwszy ECP chce sie skomunikowac
-		ecp_communication_request = true;
-
-	} else {
-		// czy
-		ecp_communication_request = false;
-
-	}
-
-	if (ecp_communication_request) {
 		// Wyslanie pulsu do MP
 		// zglaszamy chec i mozliwosc komunikacji
 		send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
 
-		while (caller <= 0) {
+		wait_for_randevous_with_mp(caller, mp_pulse_received);
 
-			caller = receive_mp_message(true);
-			if (caller == 0) {
-				mp_pulse_received = true;
-				// przyszedl puls
-
-			}
-			//printf("mp_buffer_receive_and_send caller: %d\n", caller);
-		}
-
-		mp_ecp_randevouz = true;
-
-		// jesli nie odebralismy pulsu od mp to sprawdzamy czy czasem nie pownninsmy go odebrac na podstawie komunikatu z mp
+		return reply_to_mp(caller, mp_pulse_received);
+		// MP communication request
 	} else {
-
+		// czy
 		caller = receive_mp_message(false);
 
-		if (caller == 0) {
+		if (caller == MESSIP_MSG_NOREPLY)
+
+		{
+
 			// przyszedl puls od mp, ktore chce sie komunikowac
 			mp_pulse_received = true;
 			send_pulse_to_mp(ECP_WAIT_FOR_COMMAND);
-			mp_ecp_randevouz = true;
 			caller = receive_mp_message(true);
+			return reply_to_mp(caller, mp_pulse_received);
 		}
 
 	}
 
 	//printf("mp_buffer_receive_and_send caller za: %d\n", caller);
 
+	return true;
+}
+
+// Receive of mp message
+bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
+{
+
 	bool returned_value = true;
 	bool ecp_stop = false;
-
-	if (mp_ecp_randevouz) {
-
-		switch (mp_command_type())
-		{
-			case lib::NEXT_POSE:
-				if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
-					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				break;
-			case lib::STOP:
+	switch (mp_command_type())
+	{
+		case lib::NEXT_POSE:
+			if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				ecp_stop = true;
-				break;
-			case lib::END_MOTION:
-				// dla ulatwienia programowania aplikacji wielorobotowych
-				if (ecp_reply.reply != lib::ERROR_IN_ECP)
-					set_ecp_reply(lib::TASK_TERMINATED);
-				returned_value = false;
-				break;
-			default:
-				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-				break;
-		}
+			break;
+		case lib::STOP:
+			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+			ecp_stop = true;
+			break;
+		case lib::END_MOTION:
+			// dla ulatwienia programowania aplikacji wielorobotowych
+			if (ecp_reply.reply != lib::ERROR_IN_ECP)
+				set_ecp_reply(lib::TASK_TERMINATED);
+			returned_value = false;
+			break;
+		default:
+			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+			break;
+	}
 
-#if !defined(USE_MESSIP_SRR)
-		if (MsgReply(caller, EOK, &ecp_reply, sizeof(ecp_reply)) == -1)
-#else
-		if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-#endif
-		{// by Y&W
-			uint64_t e = errno; // kod bledu systemowego
-			perror("ecp: Reply to MP failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
-			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
-		}
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
 
-		// ew. odebranie pulsu z MP
-		// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
-		if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
-			caller = receive_mp_message(true);
-		}
+	{// by Y&W
+		uint64_t e = errno; // kod bledu systemowego
+		perror("ecp: Reply to MP failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
+		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
+	}
 
-		if (ecp_stop)
-			throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+	// ew. odebranie pulsu z MP
+	// sprawdzeniem czy MP wyslalo puls przed spotkaniem z ECP
+	if ((!mp_pulse_received) && (mp_command.pulse_to_ecp_sent)) {
+		caller = receive_mp_message(true);
+	}
 
-		if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-			fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-			throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-		}
+	if (ecp_stop)
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+
+	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
+		fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
+		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 	}
 
 	return returned_value;
 }
 
 // Receive of mp message
-int task::receive_mp_message(bool block)
+int task_base::receive_mp_message(bool block)
 {
+
+	//std::cerr << "ecp receive_mp_message 1" << std::endl;
+
 	while (1) {
-#if !defined(USE_MESSIP_SRR)
-		if (!block) {
-			// by Y zamiast creceive i flagi z EDP_MASTER
-			if (TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-				perror("ecp_task: TimerTimeout()");
-			}
-		}
-		int caller = MsgReceive_r(ecp_attach->chid, &mp_command, sizeof(mp_command), NULL);
-#else
+		int caller = -100;
+
 		int32_t type, subtype;
-		int caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
-#endif
+		//	std::cerr << "ecp receive_mp_message messip 2" << std::endl;
+		if (block) {
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command);
+		} else {
+			caller = messip::port_receive(ecp_attach, type, subtype, mp_command, 0);
+		}
+		//	std::cerr << "ecp receive_mp_message messip 3" << std::endl;
+
 
 		if (caller < 0) {/* Error condition, exit */
 
-			if (caller == -ETIMEDOUT) {
-				return caller;
+			if (caller == MESSIP_MSG_CONNECTING) {
+				//			std::cerr << "ecp receive_mp_message messip 4a" << std::endl;
+				continue;
+			} else if (caller == MESSIP_MSG_TIMEOUT) {
+				//		std::cerr << "ecp receive_mp_message messip 4b" << std::endl;
+				return MESSIP_MSG_TIMEOUT;
+			} else if (caller == MESSIP_MSG_NOREPLY) {
+				if (type == MP_TO_ECP_COMMUNICATION_REQUEST) {
+					return caller;
+				} else {
+					continue;
+				}
+			} else if (caller == MESSIP_MSG_DISCONNECT) {
+
+				return MESSIP_MSG_DISCONNECT;
 			}
 
 			uint64_t e = errno; // kod bledu systemowego
+			std::cerr << "ecp 1b1" << caller << std::endl;
 			perror("ecp: Receive from MP failed");
+			std::cerr << "ecp 1b2" << std::endl;
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Receive from MP failed");
 			throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
 		}
-#if !defined(USE_MESSIP_SRR)
-		if (caller == 0) {/* Pulse received */
-			switch (mp_command.hdr.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					/*
-					 * A client disconnected all its connections (called
-					 * name_close() for each name_open() of our name) or
-					 * terminated
-					 */
-					ConnectDetach(mp_command.hdr.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					/*
-					 * REPLY blocked client wants to unblock (was hit by
-					 * a signal or timed out).  It's up to you if you
-					 * reply now or later.
-					 */
-					break;
-				case MP_TO_ECP_COMMUNICATION_REQUEST:
-					return caller;
-					break;
-				default:
-					/*
-					 * A pulse sent by one of your processes or a
-					 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-					 * from the kernel?
-					 */
-					break;
-			}
-			continue;
-		}
-
-		/* A QNX IO message received, reject */
-		if (mp_command.hdr.type >= _IO_BASE && mp_command.hdr.type <= _IO_MAX) {
-			MsgReply(caller, EOK, 0, 0);
-			continue;
-		}
-#else
+		//		std::cerr << "ecp receive_mp_message messip 5" << std::endl;
 		if (caller < -1) {
 			// ie. MESSIP_MSG_DISCONNECT
 			fprintf(stderr, "mp: messip::port_receive() -> %d, ie. MESSIP_MSG_DISCONNECT\n", caller);
 			continue;
 		}
-#endif
+
+		//	std::cerr << "ecp receive_mp_message 7:" << caller << std::endl;
 		return caller;
 	}
 }

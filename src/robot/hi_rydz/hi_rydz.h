@@ -8,11 +8,13 @@
 #ifndef __HI_RYDZ_H
 #define __HI_RYDZ_H
 
-#include <stdint.h>
-
+#include <boost/shared_ptr.hpp>
 #include "base/edp/HardwareInterface.h"
 
 namespace mrrocpp {
+namespace lib {
+class periodic_timer;
+}
 namespace edp {
 namespace common {
 class motor_driven_effector;
@@ -54,9 +56,9 @@ const int SERVO_REPLY_REG_1_ADR = 0x208;
 class HI_rydz : public common::HardwareInterface
 {
 public:
-
 	int max_current[lib::MAX_SERVOS_NR];
-			HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
+
+	HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
 
 	virtual ~HI_rydz(void); // Destruktor
 
@@ -100,11 +102,7 @@ private:
 	const unsigned int hi_isa_card_offset;
 	const unsigned int hi_intr_generator_servo_ptr;
 
-	//! periodic timer
-	timer_t timerid;
-
-	//! periodic timer signal mask
-	sigset_t mask;
+	boost::shared_ptr<lib::periodic_timer> ptimer;
 
 protected:
 

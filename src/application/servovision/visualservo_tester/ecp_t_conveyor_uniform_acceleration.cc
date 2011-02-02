@@ -25,24 +25,19 @@ namespace conveyor {
 namespace task {
 
 ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration(mrrocpp::lib::configurator& config) :
-	task(config)
+	common::task::task(config)
 {
 	log_dbg_enabled = true;
 	log_enabled = true;
 
 	log_dbg("ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration() 1\n");
-	ecp_m_robot = new ecp::conveyor::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::conveyor::robot(*this);
 
 	log_dbg("ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration() 2\n");
 
 	uniform_acceleration_gen
 			= shared_ptr <ecp_g_conveyor_uniform_acceleration> (new ecp_g_conveyor_uniform_acceleration(*this, "[uniform_acceleration_generator]"));
 	log_dbg("ecp_t_conveyor_uniform_acceleration::ecp_t_conveyor_uniform_acceleration() 3\n");
-}
-
-ecp_t_conveyor_uniform_acceleration::~ecp_t_conveyor_uniform_acceleration()
-{
-	delete ecp_m_robot;
 }
 
 void ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void)
@@ -67,7 +62,7 @@ namespace common {
 
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &config)
+task_base* return_created_ecp_task(lib::configurator &config)
 {
 	return new mrrocpp::ecp::conveyor::task::ecp_t_conveyor_uniform_acceleration(config);
 }

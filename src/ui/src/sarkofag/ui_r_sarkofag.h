@@ -39,8 +39,8 @@ private:
 
 public:
 
-	double sarkofag_current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
-	double sarkofag_desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 
 	bool is_wind_sarkofag_moves_open; // informacja czy okno ruchow
@@ -49,10 +49,16 @@ public:
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 	void close_all_windows();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+	void edp_create();
+	int edp_create_int();
+	int execute_motor_motion();
+	int execute_joint_motion();
 };
 
 }

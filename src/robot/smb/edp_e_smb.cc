@@ -157,7 +157,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf("%s\n", ss.str().c_str());
 
 
-	edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+	edp_ecp_rbuffer.epos_controller[2].position = licznikaaa;
 
 	if (licznikaaa < 10) {
 		for (int i = 0; i < 6; i++) {
@@ -186,8 +186,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
@@ -199,6 +199,7 @@ void effector::instruction_deserialization()
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 }

@@ -18,11 +18,13 @@
 #include <process.h>
 #include <cmath>
 
-#include <boost/bind.hpp>
-
 #include "base/lib/sr/srlib.h"
 
 #include "ui/src/ui_class.h"
+#include "ui/src/spkm/wnd_spkm_inc.h"
+#include "ui/src/spkm/wnd_spkm_int.h"
+#include "ui/src/spkm/wnd_spkm_external.h"
+
 // #include "ui/src/ui.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
@@ -42,85 +44,11 @@ int EDP_spkm_create(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbin
 
 	/* eliminate 'unreferenced' warnings */
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-	if (interface.spkm->state.edp.state == 0) {
-		interface.spkm->create_thread();
-		interface.spkm->eb.command(boost::bind(EDP_spkm_create_int, widget, apinfo, cbinfo));
-	}
+
+	interface.spkm->edp_create();
+
 	return (Pt_CONTINUE);
 
-}
-
-int EDP_spkm_create_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
-
-{
-
-	//	sleep(10);
-	/* eliminate 'unreferenced' warnings */
-	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
-
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	try { // dla bledow robot :: ECP_error
-
-		// dla robota spkm
-		if (interface.spkm->state.edp.state == 0) {
-
-			interface.spkm->state.edp.state = 0;
-			interface.spkm->state.edp.is_synchronised = false;
-
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += interface.spkm->state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += interface.spkm->state.edp.network_resourceman_attach_point;
-
-			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(interface.spkm->state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_spkm already exists");
-			} else if (interface.check_node_existence(interface.spkm->state.edp.node_name, "edp_spkm")) {
-
-				interface.spkm->state.edp.node_nr
-						= interface.config->return_node_number(interface.spkm->state.edp.node_name);
-				{
-					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					interface.spkm->ui_ecp_robot
-							= new ui::tfg_and_conv::EcpRobot(*interface.config, *interface.all_ecp_msg, lib::spkm::ROBOT_NAME);
-
-				}
-
-				interface.spkm->state.edp.pid = interface.spkm->ui_ecp_robot->ecp->get_EDP_pid();
-
-				if (interface.spkm->state.edp.pid < 0) {
-
-					interface.spkm->state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete interface.spkm->ui_ecp_robot;
-				} else { // jesli spawn sie powiodl
-
-					interface.spkm->state.edp.state = 1;
-
-					interface.spkm->connect_to_reader();
-
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
-
-					interface.spkm->ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
-
-					//interface.spkm->state.edp.state = 1; // edp wlaczone reader czeka na start
-
-					interface.spkm->state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
-				}
-			}
-		}
-
-	} // end try
-
-	CATCH_SECTION_UI
-
-	interface.manage_interface();
-
-	return 1;
 }
 
 int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
@@ -131,6 +59,347 @@ int EDP_spkm_slay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo
 	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
 
 	interface.spkm->EDP_slay_int();
+	return (Pt_CONTINUE);
+
+}
+
+int EDP_spkm_synchronise(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->synchronise();
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->start(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->init();
+
+	return (Pt_CONTINUE);
+
+}
+
+int wnd_spkm_motors_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->copy();
+
+	return (Pt_CONTINUE);
+
+}
+
+int clear_wnd_spkm_inc_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->clear_flag();
+
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_inc_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->motion(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int import_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->import();
+
+	return (Pt_CONTINUE);
+
+}
+
+int export_wnd_spkm_inc(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_inc->exporto();
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->init();
+
+	return (Pt_CONTINUE);
+
+}
+
+int wnd_spkm_int_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->copy();
+
+	return (Pt_CONTINUE);
+
+}
+
+int clear_wnd_spkm_int_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->clear_flag();
+
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_int_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->motion(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int import_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->import();
+
+	return (Pt_CONTINUE);
+
+}
+
+int export_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->exporto();
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_spkm_int(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_int->start(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int start_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->start(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int init_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->init();
+
+	return (Pt_CONTINUE);
+
+}
+
+int clear_wnd_spkm_external_flag(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->clear_flag();
+
+	return (Pt_CONTINUE);
+
+}
+
+int wnd_spkm_external_copy_current_to_desired(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->copy();
+
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_external_motion(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->motion(widget, apinfo, cbinfo);
+
+	return (Pt_CONTINUE);
+
+}
+
+int import_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->import();
+
+	return (Pt_CONTINUE);
+
+}
+
+int export_wnd_spkm_external(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+
+	interface.spkm->wnd_external->exporto();
+
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_synchro_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_synchro_position();
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_front_position(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_front_position();
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_0(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(0);
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_1(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(1);
+	return (Pt_CONTINUE);
+
+}
+
+int spkm_move_to_preset_position_2(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
+
+{
+
+	/* eliminate 'unreferenced' warnings */
+	widget = widget, apinfo = apinfo, cbinfo = cbinfo;
+	interface.spkm->move_to_preset_position(2);
 	return (Pt_CONTINUE);
 
 }

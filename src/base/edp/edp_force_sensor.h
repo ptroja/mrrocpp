@@ -10,6 +10,7 @@
 
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/shared_ptr.hpp>
 #include <Eigen/Core>
 
 #include "base/lib/mrmath/ForceTrans.h"
@@ -55,15 +56,42 @@ typedef struct _force_data
 class force : public lib::sensor::sensor_interface
 {
 protected:
+	/*!
+	 * \brief Info if the force sensor test mode is active.
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool force_sensor_test_mode;
+
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
+	// nazwa czujnika
+	short force_sensor_name;
+
+	// is sensor_frame right turn
 	bool is_right_turn_frame;
+	// sensor_frame related to wrist frame
+	lib::Homog_matrix sensor_frame;
 
 	lib::ForceTrans *gravity_transformation; // klasa likwidujaca wplyw grawitacji na czujnik
 
 	common::manip_effector &master;
 
 	virtual void connect_to_hardware(void) = 0;
+	virtual void disconnect_from_hardware(void) = 0;
+
+	void configure_sensor(void);
+
+	// particular force sensor configuration
+	virtual void configure_particular_sensor(void) = 0;
+
+	// particular force sensor get reading
+	virtual void get_particular_reading(void) = 0;
+
+	// ft_table used in get_reading and get_particualr_reading
+	lib::Ft_vector ft_table;
+
+	void get_reading(void);
 
 	struct _from_vsp
 	{
@@ -78,13 +106,23 @@ public:
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 
-	lib::sr_vsp *sr_msg; //!< komunikacja z SR
-	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
-	lib::condition_synchroniser new_command_synchroniser;//!< dostep do nowej wiadomosci dla vsp
+	//! komunikacja z SR
+	boost::shared_ptr<lib::sr_vsp> sr_msg;
+
+	//! dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser edp_vsp_synchroniser;
+
+	//! dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser new_command_synchroniser;
+
 	common::FORCE_ORDER command;
 
-	bool TERMINATE; //!< zakonczenie obydwu watkow
-	bool is_sensor_configured; // czy czujnik skonfigurowany?
+	//! zakonczenie obydwu watkow
+	bool TERMINATE;
+
+	//! czy czujnik skonfigurowany?
+	bool is_sensor_configured;
+
 	void set_command_execution_finish();
 
 	Eigen::Vector3d next_force_tool_position, current_force_tool_position;
@@ -96,7 +134,8 @@ public:
 
 	virtual ~force();
 
-	virtual void wait_for_event(void) = 0; // oczekiwanie na zdarzenie
+	void wait_for_event(void); // oczekiwanie na zdarzenie
+	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
 }; // end: class edp_force_sensor

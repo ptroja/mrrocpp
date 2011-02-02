@@ -10,6 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "ui/src/wnd_base.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -18,6 +19,8 @@ class Interface;
 }
 
 namespace bird_hand {
+
+const std::string WND_BIRD_HAND_CONFIGURATION = "WND_BIRD_HAND_CONFIGURATION";
 
 //
 //
@@ -31,14 +34,12 @@ namespace bird_hand {
 
 class UiRobot;
 
-class WndConfiguration
+class WndConfiguration : public common::WndBase
 {
 private:
-	common::Interface& interface;
 	UiRobot& bird_hand;
 
 public:
-	bool is_open;
 
 	WndConfiguration(common::Interface& _interface, UiRobot& _bird_hand);
 

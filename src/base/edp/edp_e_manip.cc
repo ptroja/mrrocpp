@@ -102,17 +102,8 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_config, l_robot_name), force_sensor_test_mode(true)
+	motor_driven_effector(_config, l_robot_name)
 {
-
-	if (config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
-		force_sensor_test_mode = config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
-	}
-
-	if (force_sensor_test_mode) {
-		msg->message("Force sensor test mode activated");
-	}
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -122,7 +113,7 @@ void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 	// uint8_t previous_corrector;
 
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::SERVO_ALGORITHM:
 			sb->set_robot_model_servo_algorithm(instruction);
@@ -532,7 +523,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 	// uint8_t previous_model;
 	// uint8_t previous_corrector;
 	//printf(" SET ROBOT_MODEL: ");
-	switch (instruction.set_robot_model_type)
+	switch (instruction.robot_model.type)
 	{
 		case lib::FORCE_TOOL:
 			if (vs == NULL) {
@@ -623,7 +614,7 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction)
 			// z wewntrznych struktur danych TRANSFORMATORa
 			// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.robot_model_type = lib::TOOL_FRAME;
+			reply.robot_model.type = lib::TOOL_FRAME;
 
 			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool.get_frame_tab(reply.robot_model.tool_frame_def.tool_frame);
 

@@ -122,8 +122,6 @@ effector::effector(lib::configurator &_config) :
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-
-	struct timespec current_timespec;
 	lib::JointArray desired_joints_tmp_abs(number_of_servos); // Wspolrzedne wewnetrzne
 	lib::JointArray desired_joints_tmp_rel(number_of_servos);
 	lib::MotorArray desired_motor_pos_new_tmp_abs(number_of_servos);
@@ -164,6 +162,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
+	struct timespec current_timespec;
 	if (clock_gettime(CLOCK_MONOTONIC, &current_timespec) == -1) {
 		perror("clock gettime");
 	}
@@ -206,7 +205,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	// zawieszenie do query_time
 
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
+	if(err != 0) {
+		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
+	}
 
 	if (robot_test_mode) {
 		for (int i = 0; i < number_of_servos; i++) {
@@ -317,7 +319,7 @@ void effector::instruction_deserialization()
 void effector::reply_serialization(void)
 {
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-
+	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 }

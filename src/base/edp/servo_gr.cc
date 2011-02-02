@@ -67,7 +67,7 @@ void servo_buffer::set_robot_model_servo_algorithm(const lib::c_buffer &instruct
 	// ustawienie algorytmw serworegulacji oraz ich parametrow
 	// zmiana algorytmu regulacji
 	/* Uformowanie rozkazu zmiany algorytmw serworegulacji oraz ich parametrow dla procesu SERVO_GROUP */
-	servo_command.instruction_code = lib::SERVO_ALGORITHM_AND_PARAMETERS;
+	servo_command.instruction_code = SERVO_ALGORITHM_AND_PARAMETERS;
 	for (int i = 0; i < master.number_of_servos; i++) {
 		servo_command.parameters.servo_alg_par.servo_algorithm_no[i]
 				= instruction.robot_model.servo_algorithm.servo_algorithm_no[i];
@@ -205,16 +205,16 @@ void servo_buffer::operator()()
 
 			switch (command_type())
 			{
-				case lib::SYNCHRONISE:
+				case SYNCHRONISE:
 					synchronise(); // synchronizacja
 					break;
-				case lib::MOVE:
+				case MOVE:
 					Move(); // realizacja makrokroku ruchu
 					break;
-				case lib::READ:
+				case READ:
 					Read(); // Odczyt polozen
 					break;
-				case lib::SERVO_ALGORITHM_AND_PARAMETERS:
+				case SERVO_ALGORITHM_AND_PARAMETERS:
 					Change_algorithm(); // Zmiana algorytmu serworegulacji lub jego parametrow
 					break;
 				default:
@@ -261,7 +261,7 @@ void servo_buffer::clear_reply_status_tmp(void)
 }
 
 // input_buffer
-lib::SERVO_COMMAND servo_buffer::command_type() const
+SERVO_COMMAND servo_buffer::command_type() const
 {
 	return command.instruction_code;
 }
@@ -322,13 +322,13 @@ bool servo_buffer::get_command(void)
 		// Uprzednio nie bylo bledu => wstepna analiza polecenia
 		switch (command_type())
 		{
-			case lib::SYNCHRONISE:
+			case SYNCHRONISE:
 				return true; // wyjscie bez kontaktu z EDP_MASTER
-			case lib::MOVE:
+			case MOVE:
 				return true; // wyjscie bez kontaktu z EDP_MASTER
-			case lib::READ:
+			case READ:
 				return true; // wyjscie bez kontaktu z EDP_MASTER
-			case lib::SERVO_ALGORITHM_AND_PARAMETERS:
+			case SERVO_ALGORITHM_AND_PARAMETERS:
 				return true; // wyjscie bez kontaktu z EDP_MASTER
 			default: // otrzymano niezidentyfikowane polecenie => blad
 				reply_status.error0 = UNIDENTIFIED_SERVO_COMMAND;
@@ -368,6 +368,8 @@ uint8_t servo_buffer::Move_1_step(void)
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
 		if (clock_gettime(CLOCK_REALTIME, &master.rb_obj->step_data.measure_time) == -1) {
+			perror("clock_gettime()");
+
 			/*
 			 BOOST_THROW_EXCEPTION(
 			 System_error() <<
@@ -375,7 +377,6 @@ uint8_t servo_buffer::Move_1_step(void)
 			 boost::errinfo_api_function("clock_gettime")
 			 );
 			 */
-
 		}
 
 		master.rb_obj->step_data.step = master.step_counter;
@@ -535,7 +536,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 
 	// Wyslac informacje do EDP_MASTER
 #ifdef __QNXNTO__
-	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(lib::servo_group_reply)) < 0)
+	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(servo_group_reply)) < 0)
 	perror(" Reply to EDP_MASTER error");
 #else
 	{
@@ -829,7 +830,7 @@ void servo_buffer::move_from_synchro_area(common::regulator* &crp, int j)
 		switch ((reply_status_tmp.error0 >> (5 * j)) & 0x000000000000001FULL)
 		{
 			case SYNCHRO_SWITCH_ON:
-				//    	printf("bcbb:�SYNCHRO_SWITCH_ON\n");
+				//    	printf("bcbb:���SYNCHRO_SWITCH_ON\n");
 			case SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO:
 				//     	printf("bfbb: SYNCHRO_SWITCH_ON_AND_SYNCHRO_ZERO\n");
 				continue;

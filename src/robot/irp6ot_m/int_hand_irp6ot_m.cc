@@ -246,13 +246,13 @@ int_handler (void *arg, int int_id)
 		analog_input[6]=0x00ff & tmp_buf;
 		analog_input[7]=((0xff00 & tmp_buf)>>8);
 
-		common::master->in_out_obj->set_input(binary_input, analog_input);
+		common::master->in_out_obj.set_input(binary_input, analog_input);
 
 		// ustawienie wyjscia o ile bylo takie zlecenie
-		if (common::master->in_out_obj->set_output_flag)
+		if (common::master->in_out_obj.set_output_flag)
 		{
-			common::master->in_out_obj->set_output_flag=false;
-			common::master->in_out_obj->get_output(&binary_output);
+			common::master->in_out_obj.set_output_flag=false;
+			common::master->in_out_obj.get_output(&binary_output);
 
 			out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), IN_OUT_PACKET);
 			// (hi_rydz::SERVO_COMMAND2_ADR + ISA_CARD_OFFSET)       0x212
@@ -265,7 +265,6 @@ int_handler (void *arg, int int_id)
 	// INT_SINGLE_COMMAND do synchronizacji, inicjacji, etc.
 	else if (md.interrupt_mode == edp::common::INT_SINGLE_COMMAND)
 	{
-
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow
@@ -288,7 +287,6 @@ int_handler (void *arg, int int_id)
 	// INT_CHECK_STATE do odczytu stanu z adresu 0x220
 	else if (md.interrupt_mode == edp::common::INT_CHECK_STATE)
 	{
-
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + ISA_CARD_OFFSET), INTERRUPT_GENERATOR_SERVO_PTR);
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR+ ISA_CARD_OFFSET)); // Odczyt stanu wylacznikow

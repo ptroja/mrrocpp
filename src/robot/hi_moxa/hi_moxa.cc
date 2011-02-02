@@ -1,15 +1,15 @@
-#include "robot/hi_moxa/hi_moxa.h"
+#include <exception>
+#include <stdexcept>
+#include <cstring>
+#include <iostream>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/select.h>
 #include <fcntl.h>
 
-#include <exception>
-#include <stdexcept>
-#include <cstring>
-#include <iostream>
-
+#include "base/lib/periodic_timer.h"
+#include "robot/hi_moxa/hi_moxa.h"
 #include "base/edp/edp_e_motor_driven.h"
 
 namespace mrrocpp {
@@ -17,7 +17,8 @@ namespace edp {
 namespace hi_moxa {
 
 HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports) :
-	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports)
+	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports),
+	ptimer(COMMCYCLE_TIME_NS/1000000)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
@@ -61,51 +62,46 @@ void HI_moxa::init()
 		// informacja o stanie robota
 		master.controller_state_edp_buf.is_power_on = true;
 		master.controller_state_edp_buf.is_robot_blocked = false;
-
-		clock_gettime(CLOCK_MONOTONIC, &wake_time);
-		reset_counters();
-		return;
 	} // end test mode
-
-	// domyslnie robot nie jest zsynchronizowany
-	master.controller_state_edp_buf.is_synchronised = false;
-
-
-
-	fd_max = 0;
-	for (unsigned int i = 0; i <= last_drive_number; i++) {
-		std::cout << "[info] opening port : " << port_names[i].c_str();
-		fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-		if (fd[i] < 0) {
-			std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
-			//throw(std::runtime_error("unable to open device!!!"));
-		} else {
-			std::cout << "...OK" << std::endl;
-			if (fd[i] > fd_max)
-				fd_max = fd[i];
+	else
+	{
+		// domyslnie robot nie jest zsynchronizowany
+		master.controller_state_edp_buf.is_synchronised = false;
+	
+		fd_max = 0;
+		for (unsigned int i = 0; i <= last_drive_number; i++) {
+			std::cout << "[info] opening port : " << port_names[i].c_str();
+			fd[i] = open(port_names[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+			if (fd[i] < 0) {
+				std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
+				//throw(std::runtime_error("unable to open device!!!"));
+			} else {
+				std::cout << "...OK" << std::endl;
+				if (fd[i] > fd_max) {
+					fd_max = fd[i];
+				}
+			}
+			tcgetattr(fd[i], &oldtio[i]);
+	
+			// set up new settings
+			struct termios newtio;
+			memset(&newtio, 0, sizeof(newtio));
+			newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
+			newtio.c_iflag = INPCK; //IGNPAR;
+			newtio.c_oflag = 0;
+			newtio.c_lflag = 0;
+			if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
+				tcsetattr(fd[i], TCSANOW, &oldtio[i]);
+				close(fd[i]);
+				fd[i] = -1;
+				throw(std::runtime_error("unable to set baudrate !!!"));
+				return;
+			}
+			// activate new settings
+			tcflush(fd[i], TCIFLUSH);
+			tcsetattr(fd[i], TCSANOW, &newtio);
 		}
-		tcgetattr(fd[i], &oldtio[i]);
-
-		// set up new settings
-		struct termios newtio;
-		memset(&newtio, 0, sizeof(newtio));
-		newtio.c_cflag = CS8 | CLOCAL | CREAD | CSTOPB;
-		newtio.c_iflag = INPCK; //IGNPAR;
-		newtio.c_oflag = 0;
-		newtio.c_lflag = 0;
-		if (cfsetispeed(&newtio, BAUD) < 0 || cfsetospeed(&newtio, BAUD) < 0) {
-			tcsetattr(fd[i], TCSANOW, &oldtio[i]);
-			close(fd[i]);
-			fd[i] = -1;
-			throw(std::runtime_error("unable to set baudrate !!!"));
-			return;
-		}
-		// activate new settings
-		tcflush(fd[i], TCIFLUSH);
-		tcsetattr(fd[i], TCSANOW, &newtio);
 	}
-
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
 
 	reset_counters();
 }
@@ -170,7 +166,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
-	unsigned int bytes_received[MOXA_SERVOS_NR];
+	std::size_t bytes_received[MOXA_SERVOS_NR];
 	fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
@@ -178,11 +174,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	// test mode
 	if (master.robot_test_mode) {
-		while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-			wake_time.tv_sec += 1;
-			wake_time.tv_nsec -= 1000000000;
-		}
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+		ptimer.sleep();
+
 		return ret;
 	}// end test mode
 
@@ -296,12 +289,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		status_disp_cnt = 0;
 	}
 
-	while ((wake_time.tv_nsec += COMMCYCLE_TIME_NS) > 1000000000) {
-		wake_time.tv_sec += 1;
-		wake_time.tv_nsec -= 1000000000;
-	}
-
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wake_time, NULL);
+	ptimer.sleep();
 
 	return ret;
 }
@@ -310,9 +298,6 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 {
 	char tx_buf[SERVO_ST_BUF_LEN];
 	char rx_buf[SERVO_ST_BUF_LEN];
-	fd_set rfds;
-	int bytes_received=0;
-
 
 	tx_buf[0] = 0x00;
 	tx_buf[1] = 0x00;
@@ -352,10 +337,13 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 	for(int param_set_attempt = 0; param_set_attempt < MAX_PARAM_SET_ATTEMPTS; param_set_attempt++)
 	{
 		write(fd[drive_number], tx_buf, WRITE_BYTES);
-		bytes_received = 0;
+
+		fd_set rfds;
 
 		FD_ZERO(&rfds);
 		FD_SET(fd[drive_number], &rfds);
+
+		std::size_t bytes_received = 0;
 
 		for(int i=0; i<3; i++)
 		{
@@ -418,7 +406,7 @@ bool HI_moxa::in_synchro_area(int drive_number)
 bool HI_moxa::robot_synchronized()
 {
 	bool ret = true;
-	for (int i = 0; i <= last_drive_number; i++) {
+	for (std::size_t i = 0; i <= last_drive_number; i++) {
 		if (servo_data[i].drive_status.isSynchronized == 0) {
 			ret = false;
 		}

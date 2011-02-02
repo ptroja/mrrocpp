@@ -174,14 +174,17 @@ for package in our_packages:
     os.system(r"/usr/pkg/sbin/pkg_add " + pkgsrc_our_url_prefix + "All/" + package + ".tgz")
 
 # Add MRROC++ libraries
-mrlib_svn_url=r"http://segomo.elka.pw.edu.pl/svn/mrrocpp/mrlib/"
+mrlib_svn_url=r"http://github.com/wut-rcprg/mrlib.git"
 mrlib_target_dir=os.environ["QNX_TARGET"] + "/mrlib"
 if os.path.exists(mrlib_target_dir):
     info("Updating mrlib")
-    os.system("svn update \"%s\"" % (mrlib_target_dir))
+    current_cwd = os.getcwd()
+    os.chdir(mrlib_target_dir)
+    os.system("git pull \"%s\" master" % (mrlib_svn_url))
+    os.chdir(current_cwd)
 else:
     info("Checking out mrlib")
-    os.system("svn checkout \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
+    os.system("git clone \"%s\" \"%s\"" % (mrlib_svn_url, mrlib_target_dir))
 
 # Disable storing passwords in svn
 enable_cfg_file_entry(r"/root/.subversion/config", "store_passwords=no", "store-passwords\s*=\s*no")

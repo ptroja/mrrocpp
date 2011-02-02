@@ -43,7 +43,7 @@ public:
 	}
 	/**
 	 * Method interpolates the relative type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
-	 * @param it iterator to the list of positions
+	 * @param pose_vector_iterator iterator to the list of positions
 	 * @param coordinate_vector list of coordinates
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
@@ -51,7 +51,7 @@ public:
 	virtual bool interpolate_relative_pose(typename std::vector<Pos>::iterator & pose_vector_iterator, std::vector<std::vector<double> > & coordinate_vector, const double mc) = 0;
 	/**
 	 * Method interpolates the absolute type trajectory basing on the list of poses of stored in objects of types derived from %trajectory_pose.
-	 * @param it iterator to the list of positions
+	 * @param pose_vector_iterator iterator to the list of positions
 	 * @param coordinate_vector list of coordinates
 	 * @param mc time of a single macrostep
 	 * @return true if the interpolation was successful
@@ -87,18 +87,18 @@ public:
 		goal_frame.set_from_xyz_angle_axis(start_position_array);
 
 		for (int i = 0; i < it->interpolation_node_no; i++) {
-			//std::printf("coord %d:\t", i+1);
+			std::printf("coord %d:\t", i+1);
 			for (int j = 0; j < it->axes_num; j++) {
 				if (fabs(it->s[j]) < 0.0000001) {
 					coordinates[j] = 0;
-					//std::printf("%f\t", coordinates[j]);
+					std::printf("%f\t", coordinates[j]);
 				} else {
 					coordinates[j] = generate_relative_coordinate(i, it, j, mc);
-					//std::printf("%f\t", coordinates[j]);
+					std::printf("%f\t", coordinates[j]);
 				}
 			}
 
-			//std::printf("\n");
+			std::printf("\n");
 			for (z = 0; z < 6; z++) {
 				total_angle_axis_increment_vector[z] += coordinates[z];
 			}

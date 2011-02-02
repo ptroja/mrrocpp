@@ -22,10 +22,10 @@ namespace kinematics {
 namespace spkm {
 
 //! Type used for representation of e = <s_alpha,c_alpha,s_beta,c_beta, h>.
-typedef Matrix<double, 5, 1> Vector5d;
+typedef Eigen::Matrix<double, 5, 1> Vector5d;
 
 //! Type used for representation of 3-dimensional homogeneous matrices (4x4 doubles).
-typedef Transform<double, 3> Homog4d;
+typedef Eigen::Transform<double, 3> Homog4d;
 
 /*!
  * @struct kinematic_parameters_spkm
@@ -91,6 +91,9 @@ public:
 
 	//! Distance between P4C and pi_h, according to e_h.
 	double hC;
+
+	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace spkm

@@ -48,7 +48,7 @@ public:
   constant_velocity_trajectory_pose (void);
   /**
    * Constructor which initiates some variables (those which can be found in the file containing trajectory).
-   * @param at representation used in the given pose
+   * @param arm_type representation used in the given pose
    * @param coordinates desired position for all of the axes
    * @param v maximal velocities for the trajectory segment for all of the axes
    */

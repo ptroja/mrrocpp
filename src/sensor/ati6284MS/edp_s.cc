@@ -89,112 +89,74 @@ ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 		bias_data[i] = 0;
 	}
 
+	sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
+	force_sensor_name = edp::sensor::FORCE_SENSOR_ATI6284;
 }
 
 void ATI6284_force::connect_to_hardware(void)
 {
-	if (!(master.test_mode)) {
-		// 	printf("Konstruktor VSP!\n");
 
-		ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
+	// 	printf("Konstruktor VSP!\n");
 
-		tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
-		int_timeout = new (uint64_t);
+	ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
 
-		delay(100);
+	tim_event.sigev_notify = SIGEV_UNBLOCK;// by Y
+	int_timeout = new (uint64_t);
 
-		//inicjalizacja
-		try {
-			//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
-			//recvSocket = new RawSocket("en1");
+	delay(100);
 
-		} catch (std::exception & e) {
-			throw runtime_error("Could not open device");
-		}
+	//inicjalizacja
+	try {
+		//sendSocket = new RawSocket("en1", TARGET_ETHERNET_ADDRESS);
+		//recvSocket = new RawSocket("en1");
 
+	} catch (std::exception & e) {
+		throw runtime_error("Could not open device");
 	}
 
 }
 
 ATI6284_force::~ATI6284_force(void)
 {
-	if (!(master.test_mode)) {
-		//delete recvSocket;
-		//delete sendSocket;
+	if (!(force_sensor_test_mode)) {
+		disconnect_from_hardware();
 	}
-	if (gravity_transformation)
-		delete gravity_transformation;
+
 	printf("Destruktor edp_ATI6284_force_sensor\n");
 }
 
-/**************************** inicjacja czujnika ****************************/
-void ATI6284_force::configure_sensor(void)
-{// by Y
-	is_sensor_configured = true;
-	//  printf("edp Sensor configured\n");
-	sr_msg->message("edp Sensor configured");
+void ATI6284_force::disconnect_from_hardware(void)
+{
 
-	if (!(master.test_mode)) {
-
-		// synchronize gravity transformation
-
-		// polozenie kisci bez narzedzia wzgledem bazy
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION); // FORCE Transformation by Slawomir Bazant
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
-
-
-		//send_request(frame_counter, sendSocket); //send request for data
-
-		usleep(250); //250us
-
-
-		wait_for_event();
-		wait_for_event();
-		wait_for_event();
-		wait_for_event();
-
-		for (int i = 0; i < 6; ++i) {
-			bias_data[i] = adc_data[i];
-		}
-
-		if (!gravity_transformation) // nie powolano jeszcze obiektu
-		{
-
-			lib::Xyz_Angle_Axis_vector tab;
-			lib::Homog_matrix sensor_frame;
-			if (master.config.exists("sensor_in_wrist")) {
-				char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
-				char* toDel = tmp;
-				for (int i = 0; i < 6; i++)
-					tab[i] = strtod(tmp, &tmp);
-				sensor_frame = lib::Homog_matrix(tab);
-				free(toDel);
-				// std::cout<<sensor_frame<<std::endl;
-			} else
-				sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-			// lib::Homog_matrix sensor_frame = lib::Homog_matrix(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0.09);
-
-			double weight = master.config.value <double> ("weight");
-
-			double point[3];
-			char *tmp = strdup(master.config.value <std::string> ("default_mass_center_in_wrist").c_str());
-			char* toDel = tmp;
-			for (int i = 0; i < 3; i++)
-				point[i] = strtod(tmp, &tmp);
-			free(toDel);
-			// double point[3] = { master.config.value<double>("x_axis_arm"),
-			//		master.config.value<double>("y_axis_arm"), master.config.return_double_value("z_axis_arm") };
-			lib::K_vector pointofgravity(point);
-			gravity_transformation
-					= new lib::ForceTrans(edp::sensor::FORCE_SENSOR_ATI6284, frame, sensor_frame, weight, pointofgravity);
-
-		} else {
-			gravity_transformation->synchro(frame);
-		}
-	}
 }
 
-void ATI6284_force::wait_for_event()
+/**************************** inicjacja czujnika ****************************/
+void ATI6284_force::configure_particular_sensor(void)
+{// by Y
+
+
+	// synchronize gravity transformation
+
+	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
+
+
+	//send_request(frame_counter, sendSocket); //send request for data
+
+	usleep(250); //250us
+
+
+	wait_for_particular_event();
+	wait_for_particular_event();
+	wait_for_particular_event();
+	wait_for_particular_event();
+
+	for (int i = 0; i < 6; ++i) {
+		bias_data[i] = adc_data[i];
+	}
+
+}
+
+void ATI6284_force::wait_for_particular_event()
 {
 	int iw_ret;
 	int iter_counter = 0; // okresla ile razy pod rzad zostala uruchomiona ta metoda
@@ -218,18 +180,12 @@ void ATI6284_force::wait_for_event()
 	rpcController.reset();
 }
 
-/*************************** inicjacja odczytu ******************************/
-void ATI6284_force::initiate_reading(void)
+/***************************** odczyt z czujnika *****************************/
+void ATI6284_force::get_reading(void)
 {
 	lib::Ft_vector kartez_force;
 	double force_fresh[6] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 	short measure_report;
-
-	if (!is_sensor_configured) {
-		throw sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
-	}
-
-	lib::Ft_vector ft_table;
 
 	convert_data(adc_data, bias_data, force_fresh);
 
@@ -237,22 +193,6 @@ void ATI6284_force::initiate_reading(void)
 		ft_table[i] = force_fresh[i];
 	}
 
-	is_reading_ready = true;
-
-	// jesli ma byc wykorzytstywana biblioteka transformacji sil
-	if (gravity_transformation) {
-
-		lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
-		// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-		lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-		master.force_msr_upload(output);
-
-	}
-}
-
-/***************************** odczyt z czujnika *****************************/
-void ATI6284_force::get_reading(void)
-{
 }
 /*******************************************************************/
 force* return_created_edp_force_sensor(common::manip_effector &_master)

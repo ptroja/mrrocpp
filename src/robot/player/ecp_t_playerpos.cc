@@ -49,7 +49,7 @@ void playerpos::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new player::task::playerpos(_config);
 }

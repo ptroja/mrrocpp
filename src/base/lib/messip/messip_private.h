@@ -56,7 +56,7 @@ struct itimerspec
 
 #if defined(__linux__) || defined(__QNX__) || defined(sun)
 #	define SIGVAL_PTR sival_ptr
-#elif defined(__FreeBSD__) || (defined(__APPLE__) && defined(__MACH__))
+#elif defined(__FreeBSD__) || (__APPLE__ & __MACH__)
 #	define SIGVAL_PTR sigval_ptr
 #else
 #error Unsupported platform!
@@ -73,8 +73,7 @@ typedef struct messip_mgr
 	int port;
 	char path[80];
 	struct messip_mgr *next;
-}
-messip_mgr_t;
+} messip_mgr_t;
 
 
 // op : int32_t
@@ -111,16 +110,14 @@ typedef struct
 {
 	int32_t little_endian;
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	char process_name[MESSIP_MAXLEN_TASKNAME+1];	// Process name (read from /proc/pid/stat
-}
-messip_send_connect_t;
+} __attribute__ ((packed)) messip_send_connect_t;
 
 typedef struct
 {
 	int32_t ok;
-}
-messip_reply_connect_t;
+} messip_reply_connect_t;
 
 
 // ---------------------------------------
@@ -130,21 +127,22 @@ messip_reply_connect_t;
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	int32_t maxnb_msg_buffered;
 	char channel_name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
 	uint16_t sin_port;
-	char sin_addr_str[48];
-} messip_send_channel_create_t;
+	//char sin_addr_str[48];
+	char hostname[48];
+} __attribute__ ((packed)) messip_send_channel_create_t;
 
 typedef struct
 {
-	int32_t ok;
+	int8_t ok;
 	in_port_t sin_port;
 	in_addr_t sin_addr;
-	char sin_addr_str[48];
-} messip_reply_channel_create_t;
+	//char sin_addr_str[48];
+} __attribute__ ((packed)) messip_reply_channel_create_t;
 
 
 // ----------------------------------------
@@ -154,14 +152,14 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
-} messip_send_channel_delete_t;
+} __attribute__ ((packed)) messip_send_channel_delete_t;
 
 typedef struct
 {
 	int32_t nb_clients;
-} messip_reply_channel_delete_t;
+} __attribute__ ((packed)) messip_reply_channel_delete_t;
 
 // ----------------------------------------
 // MESSIP_OP_CHANNEL_CONNECT channel_connect
@@ -170,22 +168,23 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+    uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
-} messip_send_channel_connect_t;
+} __attribute__ ((packed)) messip_send_channel_connect_t;
 
 typedef struct
 {
 	int32_t ok;
 	int32_t f_already_connected;
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	in_port_t sin_port;						// 2 bytes
 	in_addr_t sin_addr;						// 4 bytes
-	char sin_addr_str[48];
+	//char sin_addr_str[48];
+	char hostname[48];
 	int mgr_sockfd;							// Socket in the messip_mgr
 	char qnxnode_name[MESSIP_QNXNODE_NAME_MAXLEN + 1];
-} messip_reply_channel_connect_t;
+} __attribute__ ((packed)) messip_reply_channel_connect_t;
 
 
 // -----------------------------------------------
@@ -195,16 +194,14 @@ typedef struct
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	char name[MESSIP_CHANNEL_NAME_MAXLEN + 1];
-}
-messip_send_channel_disconnect_t;
+} __attribute__ ((packed)) messip_send_channel_disconnect_t;
 
 typedef struct
 {
 	int32_t ok;
-}
-messip_reply_channel_disconnect_t;
+} messip_reply_channel_disconnect_t;
 
 
 // -----------------------------------
@@ -214,15 +211,13 @@ messip_reply_channel_disconnect_t;
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
-}
-messip_send_channel_ping_t;
+	uint64_t tid;
+} __attribute__ ((packed)) messip_send_channel_ping_t;
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
-}
-messip_reply_channel_ping_t;
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
+} messip_reply_channel_ping_t;
 
 
 // -------------------------------------
@@ -232,20 +227,17 @@ messip_reply_channel_ping_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
-	int32_t type,
-	  subtype;
+	uint64_t tid_from;
+	int32_t type, subtype;
 	int32_t datalen;
 	int mgr_sockfd;								// Socket in the messip_mgr
-}
-messip_send_buffered_send_t;
+} __attribute__ ((packed)) messip_send_buffered_send_t;
 
 typedef struct
 {
-	int32_t ok;									// MESSIP_OK or MESSIP_NOK
+	int8_t ok;									// MESSIP_OK or MESSIP_NOK
 	int32_t nb_msg_buffered;
-}
-messip_reply_buffered_send_t;
+} __attribute__ ((packed)) messip_reply_buffered_send_t;
 
 
 // -----------------------------------
@@ -255,20 +247,18 @@ messip_reply_buffered_send_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
+	uint64_t tid_from;
 	pid_t pid_to;
 	char *data;
 	int nbytes;
 	int priority;
-}
-messip_send_proxy_attach_t;
+} __attribute__ ((packed)) messip_send_proxy_attach_t;
 
 typedef struct
 {
 	int32_t ok;									// MESSIP_OK or MESSIP_NOK
 	pid_t proxy;								// Index into proxies[] table
-}
-messip_reply_proxy_attach_t;
+} __attribute__ ((packed)) messip_reply_proxy_attach_t;
 
 
 // -----------------------------------
@@ -278,16 +268,14 @@ messip_reply_proxy_attach_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
+	uint64_t tid_from;
 	pid_t proxy;								// Index into proxies[] table
-}
-messip_send_proxy_detach_t;
+} __attribute__ ((packed)) messip_send_proxy_detach_t;
 
 typedef struct
 {
 	int32_t ok;									// MESSIP_OK or MESSIP_NOK
-}
-messip_reply_proxy_detach_t;
+} messip_reply_proxy_detach_t;
 
 
 /// -----------------------------------
@@ -297,17 +285,15 @@ messip_reply_proxy_detach_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
+	uint64_t tid_from;
 	pid_t pid_to;
-}
-messip_send_proxy_trigger_t;
+} __attribute__ ((packed)) messip_send_proxy_trigger_t;
 
 typedef struct
 {
 	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
 	pid_t pid_owner;						   // PID of process owning the proxy
-}
-messip_reply_proxy_trigger_t;
+} __attribute__ ((packed)) messip_reply_proxy_trigger_t;
 
 
 /// -----------------------------------
@@ -317,17 +303,15 @@ messip_reply_proxy_trigger_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
+	uint64_t tid_from;
 	pid_t pid_to;
-}
-messip_send_proxy_get_owner_t;
+} __attribute__ ((packed)) messip_send_proxy_get_owner_t;
 
 typedef struct
 {
 	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
 	pid_t pid_owner;						   // PID of process owning the proxy
-}
-messip_reply_proxy_get_owner_t;
+} __attribute__ ((packed)) messip_reply_proxy_get_owner_t;
 
 
 // ----------------------
@@ -337,16 +321,14 @@ messip_reply_proxy_get_owner_t;
 typedef struct
 {
 	pid_t pid_from;
-        uint64_t tid_from;
+	uint64_t tid_from;
 	int32_t status;
-}
-messip_send_death_notify_t;
+} __attribute__ ((packed)) messip_send_death_notify_t;
 
 typedef struct
 {
-	int32_t ok;								   // MESSIP_OK or MESSIP_NOK
-}
-messip_reply_death_notify_t;
+	int8_t ok;								   // MESSIP_OK or MESSIP_NOK
+} __attribute__ ((packed)) messip_reply_death_notify_t;
 
 
 // ----------------------------------------------
@@ -367,21 +349,18 @@ typedef struct
 {
 	int32_t flag;
 	pid_t pid;
-        uint64_t tid;
-	int32_t type,
-	  subtype;
+	uint64_t tid;
+	int32_t type, subtype;
 	int32_t datalen;
-}
-messip_datasend_t;
+} __attribute__ ((packed)) messip_datasend_t;
 
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	int32_t answer;
 	int32_t datalen;
-}
-messip_datareply_t;
+} __attribute__ ((packed)) messip_datareply_t;
 
 
 #ifdef MESSIP_INFORM_STATE
@@ -398,19 +377,17 @@ messip_datareply_t;
 typedef struct
 {
 	pid_t pid;
-        uint64_t tid;
+	uint64_t tid;
 	int32_t status;
 	pid_t pid_blocked_on;
-        uint64_t tid_blocked_on;
+	uint64_t tid_blocked_on;
 	time_t when_blocked_on;
-}
-messip_send_inform_messipmgr_t;
+} __attribute__ ((packed)) messip_send_inform_messipmgr_t;
 
 typedef struct
 {
 	int32_t ok;
-}
-messip_reply_inform_messipmgr_t;
+} messip_reply_inform_messipmgr_t;
 
 #endif
 
@@ -419,16 +396,9 @@ messip_reply_inform_messipmgr_t;
 // Functions used by qmpw_lib
 // --------------------------
 
-int messip_writev( int sockfd,
+ssize_t messip_writev( int sockfd,
    const struct iovec *iov,
    int iovcnt );
-int messip_readv( int sockfd,
+ssize_t messip_readv( int sockfd,
    const struct iovec *iov,
    int iovcnt );
-int messip_int_little_endian( const int v1 );
-
-enum
-{
-	STATE1 = 101,
-	STATE2 = 202,
-};

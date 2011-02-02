@@ -1,11 +1,11 @@
-if(USE_MESSIP)
+
 	add_subdirectory (messip)
 
 	# configsrv is needed only for non-QNX platforms and then messip is used
 	add_executable(configsrv configsrv.cc configsrv_m.cc)
 	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 	install(TARGETS configsrv DESTINATION bin)
-endif(USE_MESSIP)
+
 
 add_subdirectory (agent)
 add_subdirectory (sr)
@@ -34,14 +34,14 @@ add_library(mrrocpp
 	trajectory_pose/bang_bang_trajectory_pose.cc
 	trajectory_pose/trajectory_pose.cc
 	trajectory_pose/constant_velocity_trajectory_pose.cc
+	periodic_timer.cc
+	compat.c
 )
 
 target_link_libraries (mrrocpp sr)
 
-if(NOT USE_MESSIP)
-	target_link_libraries (mrrocpp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
-endif(NOT USE_MESSIP)
 
-if(USE_MESSIP)
+
+
     target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
-endif(USE_MESSIP)
+

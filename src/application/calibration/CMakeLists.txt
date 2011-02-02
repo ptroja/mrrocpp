@@ -51,7 +51,7 @@ SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axxb_eih ecp_t_axzb_force ecp_t_kcz_test)
 FOREACH(executable ${EXECUTABLES})
 	target_link_libraries(${executable}
 		ecp_r_irp6ot_m ecp_r_irp6p_m
-		ecp
+		ecp_generators
 		${GSL_LIBRARIES}
 	)
 ENDFOREACH(executable)

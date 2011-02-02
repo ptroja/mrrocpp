@@ -16,6 +16,9 @@
 
 namespace mrrocpp {
 namespace ui {
+namespace common {
+class Interface;
+}
 namespace speaker {
 
 // ---------------------------------------------------------------
@@ -24,9 +27,10 @@ class EcpRobot : public ecp::speaker::robot
 	// Klasa do obslugi robota irp6_on_track (sztywnego) z poziomu UI
 
 public:
+	common::Interface& interface;
 	bool speaking_state; // stan EDP
 
-	EcpRobot(common::edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(common::Interface& _interface, common::edp_state_def* edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
 
 	virtual void execute_motion(void);
 
@@ -35,8 +39,7 @@ public:
 
 	// Odczyt stanu EDP
 	void read_state(bool* local_state);
-
-}; // end: class ui_speaker_robot
+};
 
 }
 } //namespace ui

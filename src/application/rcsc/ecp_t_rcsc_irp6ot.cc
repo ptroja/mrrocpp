@@ -34,10 +34,10 @@ namespace irp6ot_m {
 namespace task {
 
 rcsc::rcsc(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = new irp6ot_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
@@ -144,7 +144,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		rgg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.01, 1000);
+		gag->configure(0.01, 1000,-10);
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
@@ -184,7 +184,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		tig->flush_pose_list();
 		tig->load_file_with_path(path.c_str());
@@ -195,7 +195,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
 		{
@@ -225,7 +225,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot_m::task::rcsc(_config);
 }

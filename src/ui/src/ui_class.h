@@ -29,6 +29,7 @@
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
+#include "ui/src/polycrank/ui_r_polycrank.h"
 
 //
 //
@@ -36,13 +37,16 @@
 //
 //
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
+
+typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
+typedef robots_t::value_type robot_pair_t;
 
 class sr_buffer;
 class ecp_buffer;
@@ -56,12 +60,14 @@ private:
 
 public:
 
+	busy_flag communication_flag;
+
 	sr_buffer* ui_sr_obj;
 	ecp_buffer* ui_ecp_obj;
 
 	feb_thread* meb_tid;
 
-	function_execution_buffer main_eb;
+	function_execution_buffer *main_eb;
 
 	typedef std::string list_t;
 
@@ -116,7 +122,15 @@ public:
 	std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
+
+	/**
+	 * @brief map of all robots used in the task
+	 */
+	common::robots_t robot_m;
+
 	bird_hand::UiRobot *bird_hand;
+	//robot_m[lib::] = bird_hand;
+
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6ot_tfg::UiRobot *irp6ot_tfg;
 	irp6p_m::UiRobot *irp6p_m;
@@ -128,11 +142,14 @@ public:
 	spkm::UiRobot *spkm;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
+	polycrank::UiRobot *polycrank;
 
 	Interface();
+	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();
 	void fill_node_list(void);
@@ -142,23 +159,24 @@ public:
 	int fill_program_node_list(void);
 	int get_default_configuration_file_name(void);
 	int set_default_configuration_file_name(void);
-	bool check_synchronised_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_synchronised_and_loaded(ecp_edp_ui_robot_def &robot);
-	bool check_loaded_or_inactive(ecp_edp_ui_robot_def &robot);
-	bool check_loaded(ecp_edp_ui_robot_def &robot);
 	int check_edps_state_and_modify_mp_state(void);
 	int check_gns(void);
 	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
-	bool deactivate_ecp_trigger(ecp_edp_ui_robot_def &robot_l);
 	int execute_mp_pulse(char pulse_code);
 
 	//! TODO: throw an exception (assumed inheritance from std::exception)
-	void pulse_reader_execute(edp_state_def::reader_fd_t coid, int code, int value);
-	int set_toggle_button(PtWidget_t *widget);
-	int unset_toggle_button(PtWidget_t *widget);
-	int block_widget(PtWidget_t *widget);
-	int unblock_widget(PtWidget_t *widget);
+
+	void set_toggle_button(PtWidget_t *widget);
+	void unset_toggle_button(PtWidget_t *widget);
+	void block_widget(PtWidget_t *widget);
+	void unblock_widget(PtWidget_t *widget);
 	void create_threads();
+
+	bool is_any_robot_active();
+	bool are_all_robots_synchronised_or_inactive();
+	bool are_all_robots_loaded_or_inactive();
+	bool is_any_active_robot_loaded();
+
 };
 
 }

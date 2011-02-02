@@ -19,10 +19,10 @@ namespace lib {
  *
  * @bug This should be template, parameterized with the array size, for real-time usage. Keep as a header-only class.
  */
-class JointArray : public Eigen::VectorXd
+class JointArray : public Eigen::Matrix<double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8>
 {
 	//! Typedef for base numerical class
-	typedef Eigen::VectorXd BaseClass;
+	typedef Eigen::Matrix<double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8> BaseClass;
 
 public:
 	/**
@@ -47,8 +47,8 @@ public:
 	 * \param[in] ptr pointer to the C-array of initialization elements
 	 * \param[in] n number of elements in the array
 	 */
-	JointArray(const double *ptr, size_t n) :
-		Eigen::VectorXd(n)
+	JointArray(const double *ptr, std::size_t n) :
+		BaseClass(n)
 	{
 		for (unsigned int i = 0; i < n; i++) {
 			this->operator[](i) = ptr[i];
@@ -59,6 +59,8 @@ public:
 	 * Assignment operator to reuse from a base class
 	 */
 	using BaseClass::operator=;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }

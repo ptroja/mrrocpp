@@ -25,7 +25,9 @@ private:
 
 	bool track;
 	bool postument;
-	std::string network_path;;
+	bool poly;
+	bool conv;
+	std::string network_path;
 
 public:
 	sub_task_smooth_gen_test(task::task & _ecp_t);

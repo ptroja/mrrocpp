@@ -19,9 +19,9 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
+#include "ui/src/ui_class.h"
 
-#include "base/lib/sr/srlib.h"
-#include "base/lib/mrmath/mrmath.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "ui/src/speaker/ui_ecp_r_speaker.h"
 
@@ -29,8 +29,8 @@ namespace mrrocpp {
 namespace ui {
 namespace speaker {
 
-EcpRobot::EcpRobot(common::edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-	robot(_config, sr_ecp_msg)
+EcpRobot::EcpRobot(common::Interface& _interface, common::edp_state_def* _edp_state, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+	robot(_config, sr_ecp_msg), interface(_interface)
 {
 	// This has to be set in constructor since it is a field in a base class
 	synchronised = true;
@@ -39,18 +39,18 @@ EcpRobot::EcpRobot(common::edp_state_def* _edp_state, lib::configurator &_config
 void EcpRobot::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-	set_ui_state_notification(UI_N_COMMUNICATION);
+	interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
-	robot::ecp_robot::execute_motion();
+	ecp::speaker::robot::execute_motion();
 }
 
 bool EcpRobot::send_command(const char* local_text, const char* local_prosody)
 {
-	ecp_command.instruction.instruction_type = lib::SET;
+	ecp_command.instruction_type = lib::SET;
 
 	if ((local_text) && (local_prosody)) {
-		strncpy(ecp_command.instruction.arm.text_def.text, local_text, lib::MAX_TEXT);
-		strncpy(ecp_command.instruction.arm.text_def.prosody, local_prosody, lib::MAX_PROSODY);
+		strncpy(ecp_command.text_def.text, local_text, lib::MAX_TEXT);
+		strncpy(ecp_command.text_def.prosody, local_prosody, lib::MAX_PROSODY);
 	}
 
 	execute_motion();
@@ -60,12 +60,12 @@ bool EcpRobot::send_command(const char* local_text, const char* local_prosody)
 
 void EcpRobot::read_state(bool* local_state)
 {
-	ecp_command.instruction.instruction_type = lib::GET;
+	ecp_command.instruction_type = lib::GET;
 
 	execute_motion();
 
 	if (local_state) {
-		*local_state = reply_package.arm.text_def.speaking;
+		*local_state = reply_package.speaking;
 	}
 	// printf("UI SPEAKING: %d\n", reply_package.arm.text_def.speaking);
 }

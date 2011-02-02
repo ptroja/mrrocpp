@@ -3,8 +3,11 @@
 /// \author 2009 Jakub Kosiorek
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "ecp_st_acq_eih.h"
 #include "base/ecp/ecp_task.h"
+#include "base/lib/sr/sr_ecp.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
+
+#include "ecp_st_acq_eih.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -19,11 +22,11 @@ acq_eih::acq_eih(task::task &_ecp_t) :
 	fflush(stdout);
 	// Create an adequate robot. - depending on the ini section name.
 	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		sub_task::ecp_t.ecp_m_robot = new irp6ot_m::robot(_ecp_t);
+		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6ot loaded");
 		robot = TRACK;
 	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
-		sub_task::ecp_t.ecp_m_robot = new irp6p_m::robot(_ecp_t);
+		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6p loaded");
 		robot = POSTUMENT;
 	}
@@ -446,7 +449,7 @@ void acq_eih::write_data(const std::string & _K_fp, const std::string & _kk_fp, 
 	acq_eih::main_task_algorithm();
 }
 
-//task* return_created_ecp_task(lib::configurator &_config){
+//task_base* return_created_ecp_task(lib::configurator &_config){
 //	return new eihacquisition(_config);
 //}
 

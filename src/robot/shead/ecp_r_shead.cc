@@ -7,15 +7,17 @@
  */
 
 #include "base/lib/impconst.h"
+#include "base/lib/sr/sr_ecp.h"
 
 #include "robot/shead/ecp_r_shead.h"
+#include "robot/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _config, _sr_ecp),
+	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager(),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
@@ -26,8 +28,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task& _ecp_object) :
-	robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _ecp_object),
+robot::robot(common::task::task_base& _ecp_object) :
+	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _ecp_object),
 			kinematics_manager(),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
@@ -59,7 +61,7 @@ void robot::create_command()
 	is_new_data = false;
 
 	if (shead_head_soldification_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -76,7 +78,7 @@ void robot::create_command()
 	}
 
 	if (shead_vacuum_activation_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -98,22 +100,23 @@ void robot::create_command()
 	communicate_with_edp = true;
 
 	if (is_new_data && is_new_request) {
-		ecp_command.instruction.instruction_type = lib::SET_GET;
+		ecp_command.instruction_type = lib::SET_GET;
 	} else if (is_new_data) {
-		ecp_command.instruction.instruction_type = lib::SET;
+		ecp_command.instruction_type = lib::SET;
 	} else if (is_new_request) {
-		ecp_command.instruction.instruction_type = lib::GET;
+		ecp_command.instruction_type = lib::GET;
 	} else {
 		communicate_with_edp = false;
 	}
 
 	if (is_new_request) {
-		ecp_command.instruction.get_type = ARM_DEFINITION;
+		ecp_command.get_type = ARM_DEFINITION;
 	}
 
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 

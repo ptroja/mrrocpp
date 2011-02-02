@@ -16,7 +16,7 @@
 
 #include "base/lib/typedefs.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 
@@ -33,15 +33,18 @@ namespace generator {
 
 
 bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 }
 
 bool bias_edp_force::first_step()
 {
-	the_robot->ecp_command.instruction.instruction_type = lib::SET;
-	the_robot->ecp_command.instruction.set_type = ROBOT_MODEL_DEFINITION;
-	the_robot->ecp_command.instruction.set_robot_model_type = lib::FORCE_BIAS;
+
+	std::cout << "bias_edp_force" << node_counter << std::endl;
+
+	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;
+	the_robot->ecp_command.robot_model.type = lib::FORCE_BIAS;
 
 	return true;
 }
@@ -52,6 +55,8 @@ bool bias_edp_force::first_step()
 // --------------------------------------------------------------------------
 bool bias_edp_force::next_step()
 {
+	std::cout << "bias_edp_force" << node_counter << std::endl;
+
 	return false;
 }
 

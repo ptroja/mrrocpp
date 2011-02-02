@@ -7,10 +7,10 @@
  * @ingroup LIB
  */
 
-#include "base/lib/sr/srlib.h"
-
 #ifndef SR_EDP_H_
 #define SR_EDP_H_
+
+#include "base/lib/sr/srlib.h"
 
 namespace mrrocpp {
 namespace lib {

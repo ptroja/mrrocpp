@@ -9,7 +9,9 @@
 #define _MULTIPLE_POSITION_H_
 
 #include <cstdio>
+#include <vector>
 
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
@@ -17,8 +19,6 @@
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
 #include "base/lib/mrmath/mrmath.h"
-
-#include <vector>
 
 namespace mrrocpp {
 namespace ecp {
@@ -32,7 +32,7 @@ namespace generator {
  * @ingroup generators
  */
 template <class Pos, class Inter, class Calc>
-class multiple_position : public generator
+class multiple_position : public common::generator::generator
 {
 protected:
 
@@ -185,8 +185,8 @@ protected:
 			//---------------- DEGUG --------------------
 
 			if (debug) {
-				printf("actual position vector, size: %d\n", get_pos->get_position_vector().size());
-				for (int j = 0; j < get_pos->get_position_vector().size(); j++) {
+				printf("actual position vector, size: %zd\n", get_pos->get_position_vector().size());
+				for (std::size_t j = 0; j < get_pos->get_position_vector().size(); j++) {
 					printf("%f\t", get_pos->get_position_vector()[j]);
 				}
 				printf("\n");
@@ -226,7 +226,7 @@ protected:
 		coordinate_vector_iterator = coordinate_vector.begin();
 		pose_vector_iterator = pose_vector.begin();
 
-		int i; //loop counter
+		std::size_t i; //loop counter
 
 		bool trueFlag = true;//flag set to false if interpolation is not successful at some point
 
@@ -246,7 +246,7 @@ protected:
 			}
 			set_absolute();
 		} else if (motion_type == lib::RELATIVE) {
-			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			for (std::size_t i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -274,10 +274,10 @@ protected:
 	virtual void print_coordinate_vector()
 	{
 		coordinate_vector_iterator = coordinate_vector.begin();
-		printf("coordinate_vector_size: %d\n", coordinate_vector.size());
-		for (int i = 0; i < coordinate_vector.size(); i++) {
+		printf("coordinate_vector_size: %zd\n", coordinate_vector.size());
+		for (std::size_t i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
-			printf("%d:\t", (i + 1));
+			printf("%zd:\t", (i + 1));
 			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
 				printf(" %f\t", *tempIter);
 			}
@@ -292,7 +292,7 @@ public:
 	 * Constructor.
 	 */
 	multiple_position(common::task::task& _ecp_task) :
-		generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 	{
 		debug = false;
 		angle_axis_absolute_transformed_into_relative = false;
@@ -332,15 +332,15 @@ public:
 			return false;
 		}
 
-		the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-		the_robot->ecp_command.instruction.motion_steps = nmc;
-		the_robot->ecp_command.instruction.value_in_step_no = nmc - 2;
+		the_robot->ecp_command.set_type = ARM_DEFINITION;
+		the_robot->ecp_command.motion_steps = nmc;
+		the_robot->ecp_command.value_in_step_no = nmc - 2;
 		the_robot->communicate_with_edp = false;
 
 		if (motion_type == lib::RELATIVE) {
-			the_robot->ecp_command.instruction.motion_type = lib::RELATIVE;
+			the_robot->ecp_command.motion_type = lib::RELATIVE;
 		} else if (motion_type == lib::ABSOLUTE) {
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
+			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
 			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
@@ -349,34 +349,34 @@ public:
 		switch (pose_spec)
 		{
 			case lib::ECP_XYZ_EULER_ZYZ:
-				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				the_robot->ecp_command.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
-					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					the_robot->ecp_command.interpolation_type = lib::TCIM;
 					for (int i = 0; i < axes_num; i++) {
-						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+						the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
-					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+					the_robot->ecp_command.interpolation_type = lib::MIM;
 				}
 				break;
 			case lib::ECP_XYZ_ANGLE_AXIS:
-				the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
+				the_robot->ecp_command.set_arm_type = lib::FRAME;
 				if (motion_type == lib::RELATIVE) {
-					the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
+					the_robot->ecp_command.interpolation_type = lib::TCIM;
 					for (int i = 0; i < axes_num; i++) {
-						the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+						the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 					}
 				} else {
-					the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+					the_robot->ecp_command.interpolation_type = lib::MIM;
 				}
 				break;
 			case lib::ECP_MOTOR:
-				the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				the_robot->ecp_command.set_arm_type = lib::MOTOR;
+				the_robot->ecp_command.interpolation_type = lib::MIM;
 				break;
 			case lib::ECP_JOINT:
-				the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-				the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
+				the_robot->ecp_command.set_arm_type = lib::JOINT;
+				the_robot->ecp_command.interpolation_type = lib::MIM;
 				break;
 			default:
 				reset();
@@ -414,7 +414,7 @@ public:
 		}
 
 		the_robot->communicate_with_edp = true;//turn on the communication with EDP
-		the_robot->ecp_command.instruction.instruction_type = lib::SET;
+		the_robot->ecp_command.instruction_type = lib::SET;
 
 		double coordinates[axes_num];
 
@@ -425,7 +425,7 @@ public:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
+					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -442,7 +442,7 @@ public:
 
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
-					the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[i] = *tempIter;
+					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
 					}
@@ -473,7 +473,7 @@ public:
 				}
 
 				homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
-				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+				homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 				break;
 
@@ -495,7 +495,7 @@ public:
 				}
 
 				homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
-				homog_matrix.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
+				homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 				break;
 
@@ -594,14 +594,14 @@ public:
 		std::vector<double> temp1 = pose_vector.begin()->start_position;
 		std::vector<double> temp2 = (*coordinate_vector_iterator);
 
-		int i, j;//loop counters
+		std::size_t i, j;//loop counters
 
 		for (i = 0; i < axes_num; i++) {
 			if (motion_type == lib::ABSOLUTE) {
 				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
 						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
 						flushall();
 					}
@@ -611,7 +611,7 @@ public:
 				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
 					sr_ecp_msg.message("Possible jerk detected!");
 					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %d\n",i);
+						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
 						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
 						flushall();
 					}
@@ -633,7 +633,7 @@ public:
 					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
 							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
 							flushall();
 						}
@@ -643,7 +643,7 @@ public:
 					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %d\t axis: %d\n", i+1, j);
+							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
 							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
 							flushall();
 						}
@@ -667,6 +667,16 @@ public:
 
 		return 0;
 	}
+    /**
+     * Method load the relative trajectory_pose object to the pose_vector.
+     * @param trajectory_pose pose to load
+     */
+    virtual bool load_relative_pose(Pos & trajectory_pose) = 0;
+    /**
+     * Method load the absolute trajectory_pose object to the pose_vector.
+     * @param trajectory_pose pose to load
+     */
+    virtual bool load_absolute_pose(Pos & trajectory_pose) = 0;
 };
 
 } // namespace generator

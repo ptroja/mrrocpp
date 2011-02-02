@@ -10,36 +10,29 @@
 #if !defined(__CONFIGURATOR_H)
 #define __CONFIGURATOR_H
 
-#include <sys/utsname.h>
-
 #include <iostream>
 #include <string>
 #include <stdexcept>
 
-#include <boost/thread/mutex.hpp>
+#include <sys/utsname.h>
+#include <sched.h>
+
+#include <Eigen/Core>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/thread/mutex.hpp>
 
-#include <Eigen/Core>
 
-#if defined(USE_MESSIP_SRR)
+#include <boost/property_tree/exceptions.hpp>
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
-#include <boost/property_tree/exceptions.hpp>
-#else
-#include <boost/property_tree/ptree.hpp>
-#endif
 
-#include <sched.h>
 
 namespace mrrocpp {
 namespace lib {
-
-#define PROCESS_SPAWN_RSH
-// by Y - jesli usuna buga to mozna powrocic do tego rozwiazania ale sadze ze nie warto
-//#define PROCESS_SPAWN_SPAWN
 
 class configurator
 {
@@ -65,38 +58,10 @@ private:
 	//! Mutex to protect exclusive access
 	mutable boost::mutex access_mutex;
 
-#ifdef USE_MESSIP_SRR
+
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
-#else
-	//! Property trees of configuration files
-	boost::property_tree::ptree common_file_pt, file_pt;
 
-	//! Configuration file location
-	std::string file_location;
-
-	//! Common configuration file location
-	std::string common_file_location;
-
-	/**
-	 * Get the path to the configuration file
-	 * @return path to the configuration file
-	 */
-	std::string get_config_file_path() const;
-
-	/**
-	 * Get the path to the common configuration file
-	 * @return path to the configuration file
-	 */
-	std::string get_common_config_file_path() const;
-
-	/**
-	 * Read property tree from configuration file
-	 * @param pt property tree
-	 * @param file configuration file
-	 */
-	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
-#endif /* USE_MESSIP_SRR */
 
 public:
 	/**
@@ -132,7 +97,7 @@ public:
 	 * @param _section_name configuration section name
 	 * @param _session_name session ID
 	 */
-	configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
+			configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
 
 	/**
 	 * Change configuration file
@@ -167,7 +132,8 @@ public:
 	 * @param __section_name section name
 	 * @return network path
 	 */
-	std::string	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	std::string
+			return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
 
 	/**
 	 * Return network attach point
@@ -195,15 +161,15 @@ public:
 		std::string pt_path = __section_name;
 
 		// trim leading '[' char
-		pt_path.erase(0,1);
+		pt_path.erase(0, 1);
 		// trim trailing '[' char
-		pt_path.erase(pt_path.length()-1,1);
+		pt_path.erase(pt_path.length() - 1, 1);
 
 		pt_path += ".";
 		pt_path += _key;
 
 		boost::mutex::scoped_lock l(access_mutex);
-#ifdef USE_MESSIP_SRR
+
 		config_query_t query, reply;
 
 		query.key = pt_path;
@@ -216,15 +182,9 @@ public:
 		if(reply.flag) {
 			return boost::lexical_cast<Type>(reply.key);
 		} else {
-			throw boost::property_tree::ptree_error("remote config query failed");
+			throw boost::property_tree::ptree_error("remote config query failed: probably missing key \"" + __section_name + "." + _key + "\" in config file. pt_path=\"" + pt_path + "\".");
 		}
-#else
-		try {
-			return file_pt.get<Type>(pt_path);
-		} catch (boost::property_tree::ptree_error & e) {
-			return common_file_pt.get<Type>(pt_path);
-		}
-#endif
+
 	}
 
 	/**
@@ -236,7 +196,7 @@ public:
 	template <class Type>
 	Type value(const std::string & _key) const
 	{
-		return value<Type>(_key, section_name);
+		return value <Type> (_key, section_name);
 	}
 
 	/**
@@ -268,10 +228,10 @@ public:
 		return exists(_key.c_str(), __section_name.c_str());
 	}
 
-#if defined(USE_MESSIP_SRR)
+
 	//! Destructor
 	~configurator();
-#endif
+
 
 protected:
 	/**
@@ -321,7 +281,7 @@ Eigen::Matrix <double, ROWS, COLS> configurator::value(const std::string & key, 
 	Eigen::Matrix <double, ROWS, COLS> matrix_value;
 
 	// get string value and remove leading and trailing spaces
-	std::string text_value = value<std::string>(key, section_name);
+	std::string text_value = value <std::string> (key, section_name);
 	boost::algorithm::trim(text_value);
 
 	//std::cout << "visual_servo_regulator::get_matrix_value() Processing value: "<<text_value<<"\n";

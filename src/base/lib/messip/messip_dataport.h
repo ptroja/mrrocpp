@@ -90,7 +90,7 @@ int port_receive( messip_channel_t * ch,
 
 	int r = messip_receive(ch, &type, &subtype, &receive_data, sizeof(receive_data), msec_timeout);
 
-	if (r >= 0 || r == MESSIP_MSG_NOREPLY) {
+	if ((r >= 0 || r == MESSIP_MSG_NOREPLY) && ch->datalenr > 0) {
 		xdr_iarchive<> ia(receive_data, ch->datalenr);
 
 		ia >> data;

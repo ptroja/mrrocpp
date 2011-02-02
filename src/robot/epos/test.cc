@@ -2,31 +2,57 @@
 #include <boost/exception/get_error_info.hpp>
 #include <sys/time.h>
 
+#include "epos_access_usb.h"
 #include "epos.h"
 
-using namespace mrrocpp::edp;
+using namespace mrrocpp::edp::epos;
 
 int main(int argc, char *argv[])
 {
-	epos e;
+	epos_access_usb gateway;
+
+	epos node4(gateway, 4);
+	epos node5(gateway, 5);
+	epos node6(gateway, 6);
 
 	try {
-		e.openEPOS();
+		gateway.open();
 
-		for (int i = 0; i < 1000; ++i) {
-			struct timeval tv1, tv2;
+		node4.printEPOSstate();
 
-			gettimeofday(&tv1, NULL);
-			int32_t homepos = 0;// e.readHomePosition();
-			uint16_t sw = e.readSWversion();
-			gettimeofday(&tv2, NULL);
+		node4.reset();
+		node5.reset();
+		node6.reset();
 
-			const double delta = (tv2.tv_sec + tv2.tv_usec / 1e6) - (tv1.tv_sec + tv1.tv_usec / 1e6);
+		node4.printEPOSstate();
 
-			printf("%.6f sec: home %d sw %04x\n", delta, homepos, sw);
-		}
+		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
 
-		e.closeEPOS();
+		// switch to homing mode
+		node4.setOpMode(epos::OMD_HOMING_MODE);
+		node5.setOpMode(epos::OMD_HOMING_MODE);
+		node6.setOpMode(epos::OMD_HOMING_MODE);
+
+		// Do homing
+		node4.startHoming();
+		node5.startHoming();
+		node6.startHoming();
+
+		for(;;) {
+			bool node4ok = node4.isHomingFinished();
+			bool node5ok = node5.isHomingFinished();
+			bool node6ok = node6.isHomingFinished();
+
+			if(node4ok && node5ok && node6ok) {
+				break;
+			}
+		};
+
+		// Move back
+		//node4.moveRelative(-50000);
+		//node4.monitorStatus();
+
+		gateway.close();
 	} catch (epos_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 

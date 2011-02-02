@@ -8,12 +8,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
-#else /* USE_MESSIP_SRR */
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#endif /* USE_MESSIP_SRR */
 
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "AgentBase.h"
@@ -26,18 +21,14 @@
 /**
  * Agent base class
  */
-class Agent : public AgentBase {
+class Agent : public AgentBase
+{
 private:
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrDataCondition &condition);
 
-#if defined(USE_MESSIP_SRR)
 	//! server channel id
 	messip_channel_t * channel;
-#else
-	//! server channel id
-	name_attach_t * channel;
-#endif
 
 	//! thread id of the of the non-blocking receive implementation
 	boost::thread tid;
@@ -53,7 +44,7 @@ private:
 
 	//! Store data from archive into a buffer
 	template <std::size_t size>
-	void Store(const std::string & buffer_name, xdr_iarchive<size> & ia)
+	void Store(const std::string & buffer_name, xdr_iarchive <size> & ia)
 	{
 		//	std::cout << "Message received for data buffer: "
 		//		<< msg_buffer_name << ", size "
@@ -68,9 +59,7 @@ private:
 			result->second->Store(ia);
 		} else {
 			// TODO: exception?
-			std::cerr << "Message received for unknown buffer '"
-				<< buffer_name
-				<< "'" << std::endl;
+			std::cerr << "Message received for unknown buffer '" << buffer_name << "'" << std::endl;
 		}
 	}
 
@@ -85,7 +74,7 @@ private:
 
 protected:
 	//! Datatype of buffers container
-	typedef boost::unordered_map<std::string, DataBufferBase * > buffers_t;
+	typedef boost::unordered_map <std::string, DataBufferBase *> buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;

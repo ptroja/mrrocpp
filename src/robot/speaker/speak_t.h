@@ -1,11 +1,3 @@
-
-// -------------------------------------------------------------------------
-//                                   edp.h
-// Definicje struktur danych i metod dla procesu EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #ifndef __SPEAK_T_H
 #define __SPEAK_T_H
 
@@ -15,21 +7,18 @@ namespace mrrocpp {
 namespace edp {
 namespace speaker {
 
-/**************************** trans_t *****************************/
-
 class effector;
 
-class speak_t : public common::trans_t
+class speak_t : public common::trans_t<effector::c_buffer>
 {
 private:
 	effector &master;
 
-public:
-    void operator()();
+	void operator()();
 
+public:
     speak_t(effector& _master);
 };
-/**************************** trans_t *****************************/
 
 } // namespace speaker
 } // namespace edp

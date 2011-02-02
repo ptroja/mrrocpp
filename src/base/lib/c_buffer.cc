@@ -7,7 +7,6 @@ c_buffer::c_buffer (void) :
   instruction_type(SYNCHRO),
   set_type(0),
   get_type(0),
-  set_robot_model_type(TOOL_FRAME),
   get_robot_model_type(TOOL_FRAME),
   set_arm_type(FRAME),
   get_arm_type(FRAME),

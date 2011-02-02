@@ -19,9 +19,10 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"				// numery bledow
+
+#include "base/lib/configurator.h"
 #include "base/ecp_mp/transmitter.h"
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "base/lib/sr/srlib.h"					// klasy bledow
 #include "ecp_mp_tr_rc_windows.h"
 
 namespace mrrocpp {
@@ -172,7 +173,7 @@ bool rc_windows::t_read(bool wait)
 
 		boost::mutex::scoped_lock lock(rc_win_buf->mtx);
 
-		printf("W SEMAFORZE 1 %d\n", strlen(rc_win_buf->response) - 33);
+		printf("W SEMAFORZE 1 %zd\n", strlen(rc_win_buf->response) - 33);
 
 		int l = strlen(rc_win_buf->response) - 33 - 16;
 		if (l < 0)
@@ -183,7 +184,7 @@ bool rc_windows::t_read(bool wait)
 
 	} else {
 
-		printf("W SEMAFORZE2 %d\n", strlen(rc_win_buf->response) - 33);
+		printf("W SEMAFORZE2 %zd\n", strlen(rc_win_buf->response) - 33);
 		int l = strlen(rc_win_buf->response) - 33 - 16;
 		if (l < 0)
 			l = 0;

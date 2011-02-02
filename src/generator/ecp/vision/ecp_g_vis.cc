@@ -14,7 +14,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "base/ecp/irp6_on_track/generator/ecp_g_vis.h"
 
@@ -228,7 +228,7 @@ the_robot->ecp_command.instruction.robot_model.tool_frame_def.tool_frame[2][2]=1
       the_robot->ecp_command.instruction.set_type =  ROBOT_MODEL_DEFINITION;
       the_robot->ecp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
       the_robot->ecp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-       the_robot->ecp_command.instruction.set_robot_model_type = lib::TOOL_FRAME;
+       the_robot->ecp_command.instruction.robot_model.type = lib::TOOL_FRAME;
       the_robot->ecp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
       the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
        the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
@@ -269,7 +269,9 @@ bool seven_eye_run_linear::next_step (  ) {
    // Kontakt z MP
 // if ((mp_comm_counter++)==100) {// by Y - lekka manianka
 // mp_comm_counter=0; // 2004.02.25
-clock_gettime( CLOCK_REALTIME , &s_time);
+if(clock_gettime( CLOCK_REALTIME , &s_time) == -1) {
+	perror("clock_gettime()");
+}
    if (check_and_null_trigger()) { // Koniec odcinka
 //    ecp_t.set_ecp_reply (lib::TASK_TERMINATED);
 
@@ -756,12 +758,16 @@ else
 #endif
 
 }
-clock_gettime( CLOCK_REALTIME , &crr_time);
+if(clock_gettime( CLOCK_REALTIME , &crr_time) == -1) {
+	perror("clock_gettime()");
+}
 
 
 
 
-clock_gettime( CLOCK_REALTIME , &e_time);
+if(clock_gettime( CLOCK_REALTIME , &e_time) == -1) {
+	perror("clock_gettime()");
+}
 // printf( "base/ecp= %f %f %f\n",(double)(e_time.tv_nsec), (double)(crr_time.tv_nsec), (double)(s_time.tv_nsec));
 
    // skopiowac przygotowany rozkaz dla EDP do bufora wysylkowego

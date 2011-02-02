@@ -21,21 +21,22 @@ namespace task {
  * @brief Constructor along with appropriate configuration.
  * @param _config Configuration object reference.
  */
-Neuron::Neuron(lib::configurator &_config): task(_config){
-	ecp_m_robot=new irp6ot_m::robot(*this);				//initialization of robot
+Neuron::Neuron(lib::configurator &_config) :
+	common::task::task(_config)
+{
+	ecp_m_robot= (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this); //initialization of robot
 	smoothGenerator=new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sr_ecp_msg->message("ECP loaded Neuron");
-};
+}
 
 /*============================Destructor==================================*//**
  * @brief Destructor.
  * @details Cleans it own shit.
  */
 Neuron::~Neuron(){
-	delete ecp_m_robot;
 	delete neuronGenerator;
 	delete smoothGenerator;
-};
+}
 
 /*====================mp_2_ecp_next_state_string_handler==================*//**
  * @brief Method called from main_task_algorithm to handle next_state command.
@@ -131,7 +132,7 @@ namespace task {
 * @param _config configurator object reference.
 * @return inherited task pointer.
 */
-task* return_created_ecp_task(lib::configurator &_config){
+task_base* return_created_ecp_task(lib::configurator &_config){
 	return new irp6ot::task::Neuron(_config);
 }
 

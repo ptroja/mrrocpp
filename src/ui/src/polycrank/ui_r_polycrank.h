@@ -10,6 +10,7 @@
 
 #include "ui/src/ui.h"
 #include "ui/src/ui_robot.h"
+#include "robot/polycrank/const_polycrank.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -17,14 +18,14 @@ namespace common {
 class Interface;
 }
 
-namespace irp6 {
+namespace tfg_and_conv {
 class EcpRobot;
 }
 namespace polycrank {
 
 //
 //
-// KLASA UiRobotIrp6ot_m
+// KLASA UiRobotPolycrank
 //
 //
 
@@ -34,17 +35,24 @@ class UiRobot : public common::UiRobot
 private:
 
 public:
+	double current_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja zadana
 
 	bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
-	bool is_wind_polycrank_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
 
-
-	irp6::EcpRobot *ui_ecp_robot;
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+	void close_all_windows();
+
 	int manage_interface();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	int synchronise_int();
+
+	void edp_create();
+	int edp_create_int();
+
 };
 
 }

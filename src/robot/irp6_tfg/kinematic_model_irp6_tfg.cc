@@ -11,6 +11,9 @@
 
 #include <cmath>
 
+// for MacOS compatibility, where isnan() is implemented as a function in the std:: namespace
+using std::isnan;
+
 #include "base/lib/com_buf.h"
 #include "robot/irp6_tfg/kinematic_model_irp6_tfg.h"
 
@@ -33,9 +36,6 @@ void kinematic_model_irp6_tfg::check_motor_position(const lib::MotorArray & moto
 
 void kinematic_model_irp6_tfg::check_joints(const lib::JointArray & q)
 {
-	// hack for different OS compatibility...
-	using std::isnan;
-
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);
 	if (q[0] < lower_limit_joint)

@@ -14,13 +14,14 @@
 #include <fstream>
 #include <unistd.h>
 
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "generator/ecp/ecp_g_teach_in.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -36,7 +37,7 @@ namespace generator {
 // ####################################################################################################
 
 teach_in::teach_in(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -65,12 +66,9 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 	strncpy(ecp_to_ui_msg.string, msg, MSG_LENGTH); // Komunikat przesylany do UI podczas uczenia
 	for (;;) {
 		// Polecenie uczenia do UI
-#if !defined(USE_MESSIP_SRR)
-		ecp_to_ui_msg.hdr.type = 0;
-		if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 		if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 		{ // Y&W
 
 			e = errno;
@@ -109,12 +107,9 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 	{// by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");
@@ -185,12 +180,9 @@ bool teach_in::load_file_from_ui()
 
 	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
-#if !defined(USE_MESSIP_SRR)
-	ecp_to_ui_msg.hdr.type = 0;
-	if (MsgSend(ecp_t.UI_fd, &ecp_to_ui_msg, sizeof(lib::ECP_message), &ui_to_ecp_rep, sizeof(lib::UI_reply)) < 0)
-#else
+
 	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-#endif
+
 	{// by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");
@@ -389,17 +381,17 @@ bool teach_in::first_step()
 	//	 printf("w irp6ot_teach_in_generator::first_step\n");
 	//printf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
 	initiate_pose_list();
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION; // ARM
+	the_robot->ecp_command.get_type = ARM_DEFINITION; // ARM
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-	the_robot->ecp_command.instruction.get_arm_type = lib::MOTOR;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-	the_robot->ecp_command.instruction.motion_steps = 8;
-	the_robot->ecp_command.instruction.value_in_step_no = 6;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::MOTOR;
+	the_robot->ecp_command.get_arm_type = lib::MOTOR;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = 8;
+	the_robot->ecp_command.value_in_step_no = 6;
 
 	//	 printf("w irp6ot_teach_in_generator::first_step za initiate_pose_list\n");
 	// return next_step ();
@@ -427,28 +419,28 @@ bool teach_in::next_step()
 	{
 		case lib::ECP_MOTOR:
 			//  	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::MOTOR;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
-			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
+			the_robot->ecp_command.instruction_type = lib::SET;
+			the_robot->ecp_command.set_type = ARM_DEFINITION; // ARM
+			the_robot->ecp_command.set_arm_type = lib::MOTOR;
+			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+			the_robot->ecp_command.interpolation_type = lib::MIM;
+			the_robot->ecp_command.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
+			the_robot->ecp_command.value_in_step_no = the_robot->ecp_command.motion_steps;
+			memcpy(the_robot->ecp_command.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
 			break;
 		case lib::ECP_JOINT:
 			//   	fprintf(stderr, "DEBUG@%s:%d\n", __FILE__, __LINE__);
-			the_robot->ecp_command.instruction.instruction_type = lib::SET;
-			the_robot->ecp_command.instruction.set_type = ARM_DEFINITION; // ARM
-			the_robot->ecp_command.instruction.set_arm_type = lib::JOINT;
-			the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-			the_robot->ecp_command.instruction.interpolation_type = lib::MIM;
-			the_robot->ecp_command.instruction.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
-			the_robot->ecp_command.instruction.value_in_step_no = the_robot->ecp_command.instruction.motion_steps;
-			memcpy(the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
+			the_robot->ecp_command.instruction_type = lib::SET;
+			the_robot->ecp_command.set_type = ARM_DEFINITION; // ARM
+			the_robot->ecp_command.set_arm_type = lib::JOINT;
+			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+			the_robot->ecp_command.interpolation_type = lib::MIM;
+			the_robot->ecp_command.motion_steps = (uint16_t) ceil(tip.motion_time / lib::EDP_STEP);
+			the_robot->ecp_command.value_in_step_no = the_robot->ecp_command.motion_steps;
+			memcpy(the_robot->ecp_command.arm.pf_def.arm_coordinates, tip.coordinates, lib::MAX_SERVOS_NR
 					* sizeof(double));
-			// printf("lumpu: %f\n", the_robot->ecp_command.instruction.arm.pf_def.arm_coordinates[6]);
+			// printf("lumpu: %f\n", the_robot->ecp_command.arm.pf_def.arm_coordinates[6]);
 			break;
 		default:
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);

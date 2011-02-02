@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <sys/sched.h>
 
-// niezbedny naglowek z definiacja PROCESS_SPAWN_RSH
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -130,6 +129,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
+		case SIGHUP:
 			TERMINATED = true;
 			synchroniser.command();
 			break;
@@ -139,7 +139,6 @@ void catch_signal(int sig)
 			break;
 	} // end: switch
 }
-
 
 /**
  * @brief Body of the thread responsible for commands execution.
@@ -411,10 +410,10 @@ int main(int argc, char *argv[])
 
 	// Attach signal handlers.
 	signal(SIGTERM, &vsp::int_nw_shell::catch_signal);
+	signal(SIGHUP, &vsp::int_nw_shell::catch_signal);
 	signal(SIGSEGV, &vsp::int_nw_shell::catch_signal);
-#if defined(PROCESS_SPAWN_RSH)
+
 	signal(SIGINT, SIG_IGN);
-#endif
 
 	// Check number of arguments.
 	if (argc <= 6) {
@@ -425,7 +424,8 @@ int main(int argc, char *argv[])
 	// Read system configuration.
 	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-	resourceman_attach_point = _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
+	resourceman_attach_point
+			= _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");
 
 	try {
 		// Create sensor - abstract factory pattern.

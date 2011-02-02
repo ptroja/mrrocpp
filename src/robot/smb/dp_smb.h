@@ -93,7 +93,7 @@ enum PIN_LOCKING
 struct multi_pin_insertion_td
 {
 	PIN_INSERTION leg[LEG_CLAMP_NUMBER];
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin locking command
@@ -102,7 +102,7 @@ struct multi_pin_insertion_td
 struct multi_pin_locking_td
 {
 	PIN_LOCKING leg[LEG_CLAMP_NUMBER];
-};
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Mobile Base multi leg reply
@@ -111,7 +111,7 @@ struct multi_pin_locking_td
 struct multi_leg_reply_td
 {
 	leg_reply leg[LEG_CLAMP_NUMBER];
-};
+}__attribute__((__packed__));
 
 } // namespace smb
 }

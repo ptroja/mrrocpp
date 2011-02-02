@@ -12,7 +12,7 @@ add_executable(ui
 	../fun_r_irp6p_tfg.cc
 	../fun_r_sarkofag.cc
 	../fun_r_bird_hand.cc
-	#../fun_r_polycrank.cc
+	../fun_r_polycrank.cc
 	../fun_r_shead.cc
 	../fun_r_smb.cc
 	../fun_r_speaker.cc
@@ -23,6 +23,7 @@ add_executable(ui
 	../ui_ecp_r_irp6_common.cc
 	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
+	../ui_ecp_r_data_port.cc
 	../bird_hand/ui_ecp_r_bird_hand.cc
 	../bird_hand/wnd_bird_hand_command_and_status.cc
 	../bird_hand/wnd_bird_hand_configuration.cc
@@ -34,15 +35,22 @@ add_executable(ui
 	../irp6p_tfg/ui_r_irp6p_tfg.cc
 	../sarkofag/ui_r_sarkofag.cc
 	../irp6m_m/ui_r_irp6m_m.cc
-	#../polycrank/ui_r_polycrank.cc
+	../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
 	../speaker/ui_r_speaker.cc
+	../spkm/ui_ecp_r_spkm.cc
 	../spkm/ui_r_spkm.cc
+	../spkm/wnd_spkm_inc.cc
+	../spkm/wnd_spkm_int.cc
+	../spkm/wnd_spkm_external.cc
+	../smb/ui_ecp_r_smb.cc
 	../smb/ui_r_smb.cc
+	../shead/ui_ecp_r_shead.cc
 	../shead/ui_r_shead.cc
 	../ui_init.cc
 	../ui_class.cc
 	../ui_ecp.cc
+	../wnd_base.cc
 	../ui_sr.cc
 	../wndFileLocationEvents.cc
 	../wndForceControlEvents.cc
@@ -55,7 +63,7 @@ find_library(PH_LIBRARY ph $ENV{QNX_TARGET}/x86/usr/lib)
 set(PHOTON_LIBRARIES ${PHEX_LIBRARY} ${AP_LIBRARY} ${PH_LIBRARY})
 
 target_link_libraries(ui
-	ecp
+	ecp_robots ecp_mp
 	${PHOTON_LIBRARIES}
 	${COMMON_LIBRARIES}
 )
@@ -91,6 +99,10 @@ set(ABMOD Icon.wgti MAM_wnd_manual_moves_automatic_measures.wgtw base.wgtw
 	wnd_irp6p_tfg_servo_algorithm.wgtw wnd_sarkofag_moves.wgtw
 	wnd_sarkofag_servo_algorithm.wgtw wnd_message.wgtw
 	wnd_bird_hand_command_and_status.wgtw wnd_bird_hand_configuration.wgtw
+	wnd_spkm_inc.wgtw
+	wnd_spkm_int.wgtw
+	wnd_spkm_external.wgtw
+	wnd_polycrank_int.wgtw
 	wnd_processes_control.wgtw wnd_speaker_play.wgtw yes_no_window.wgtw)
 
 ADD_CUSTOM_TARGET(ui_photon_application ALL

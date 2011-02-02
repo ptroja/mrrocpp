@@ -23,11 +23,11 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#if defined(USE_MESSIP_SRR)
-#include "base/lib/messip/messip_dataport.h"
-#endif
 
-#include "base/lib/sr/srlib.h"
+#include "base/lib/messip/messip_dataport.h"
+
+
+#include "base/lib/sr/sr_ecp.h"
 #include "generator/ecp/ecp_g_delta.h"
 
 namespace mrrocpp {
@@ -36,7 +36,7 @@ namespace common {
 namespace generator {
 
 delta::delta(common::task::task& _ecp_task) :
-	generator(_ecp_task)
+	common::generator::generator(_ecp_task)
 {
 }
 

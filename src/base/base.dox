@@ -4,6 +4,10 @@
 @brief Main, base namespace for MRROC++
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
 
+@namespace mrrocpp::ecp_mp::common::trajectory_pose
+@brief Namespace for trajectory poses.
+@author rtulwin
+@ingroup trajectory_pose
 
  @defgroup base Foundation
  @defgroup trajectory_pose Trajectory poses

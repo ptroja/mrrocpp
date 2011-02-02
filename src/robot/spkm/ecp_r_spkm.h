@@ -12,7 +12,6 @@
 #include "base/ecp/ecp_robot.h"
 #include "robot/spkm/const_spkm.h"
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,6 +27,21 @@ class robot : public common::robot::ecp_robot, public kinematics::common::kinema
 {
 protected:
 	//bufory wejsciowe z generatora
+
+	/**
+	 * @brief epos motor motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_motor_command_data_port;
+
+	/**
+	 * @brief epos joint motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_joint_command_data_port;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::frame_tab> epos_external_command_data_port;
 
 	/**
 	 * @brief epos cubic motion command data port
@@ -55,6 +69,16 @@ protected:
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;
 
 	/**
+	 * @brief epos motion status with joint reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_joint_reply_data_request_port;
+
+	/**
+	 * @brief epos motion status with external reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
+
+	/**
 	 * @brief EDP command buffer
 	 */
 	lib::spkm::cbuffer ecp_edp_cbuffer;
@@ -78,13 +102,19 @@ public:
 	 * @brief constructor called from ECP
 	 * @param _ecp_object ecp tak object reference
 	 */
-	robot(common::task::task& _ecp_object);
+	robot(common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief set the edp command buffer
 	 * basing on data_ports
 	 */
 	void create_command();
+
+	/**
+	 * @brief checks the flag
+	 * then sets the flag or throw exception. Called from create_command() method.
+	 */
+	void check_then_set_command_flag(bool& flag);
 
 	/**
 	 * @brief set the data_request_ports

@@ -17,6 +17,5 @@ add_library(ecp
 	ecp_g_transparent.cc
 )
 
-target_link_libraries(ecp ecp_subtasks ecp_generators ecp_robots ecp_mp)
-
-install(TARGETS ecp DESTINATION bin) 
+target_link_libraries(ecp
+	ecp_robots ecp_mp)

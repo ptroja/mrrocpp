@@ -9,13 +9,15 @@
 #include "base/lib/impconst.h"
 
 #include "robot/smb/ecp_r_smb.h"
+#include "base/lib/sr/sr_ecp.h"
+#include "robot/smb/kinematic_model_smb.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace smb {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _config, _sr_ecp),
+	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
@@ -27,8 +29,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task& _ecp_object) :
-	robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _ecp_object),
+robot::robot(common::task::task_base& _ecp_object) :
+	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _ecp_object),
 			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
@@ -61,7 +63,7 @@ void robot::create_command()
 	is_new_data = false;
 
 	if (epos_cubic_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -77,7 +79,7 @@ void robot::create_command()
 	}
 
 	if (epos_trapezoidal_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -94,7 +96,7 @@ void robot::create_command()
 
 	/*
 	 if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
-	 ecp_command.instruction.set_type = ARM_DEFINITION;
+	 ecp_command.set_type = ARM_DEFINITION;
 	 // generator command interpretation
 	 // narazie proste przepisanie
 
@@ -110,7 +112,7 @@ void robot::create_command()
 	 }
 	 */
 	if (smb_multi_pin_insertion_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -126,7 +128,7 @@ void robot::create_command()
 	}
 
 	if (smb_multi_pin_locking_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.instruction.set_type = ARM_DEFINITION;
+		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -147,22 +149,23 @@ void robot::create_command()
 	communicate_with_edp = true;
 
 	if (is_new_data && is_new_request) {
-		ecp_command.instruction.instruction_type = lib::SET_GET;
+		ecp_command.instruction_type = lib::SET_GET;
 	} else if (is_new_data) {
-		ecp_command.instruction.instruction_type = lib::SET;
+		ecp_command.instruction_type = lib::SET;
 	} else if (is_new_request) {
-		ecp_command.instruction.instruction_type = lib::GET;
+		ecp_command.instruction_type = lib::GET;
 	} else {
 		communicate_with_edp = false;
 	}
 
 	if (is_new_request) {
-		ecp_command.instruction.get_type = ARM_DEFINITION;
+		ecp_command.get_type = ARM_DEFINITION;
 	}
 
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.instruction.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 
@@ -176,6 +179,7 @@ void robot::get_reply()
 		// generator reply generation
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
 			epos_reply_data_request_port.data.epos_controller[i].position = edp_ecp_rbuffer.epos_controller[i].position;
+			epos_reply_data_request_port.data.epos_controller[i].current = edp_ecp_rbuffer.epos_controller[i].current;
 			epos_reply_data_request_port.data.epos_controller[i].motion_in_progress
 					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}

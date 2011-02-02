@@ -27,7 +27,7 @@
 #include "abimport.h"
 #include "proto.h"
 
-extern ui::common::busy_flag communication_flag;
+#include "base/lib/messip/messip_dataport.h"
 
 namespace mrrocpp {
 
@@ -36,7 +36,7 @@ namespace common {
 namespace task {
 
 //! Dummy task required for dynamic linking
-mrrocpp::ecp::common::task::task * return_created_ecp_task(mrrocpp::lib::configurator&)
+mrrocpp::ecp::common::task::task_base * return_created_ecp_task(mrrocpp::lib::configurator&)
 {
 	return NULL;
 }
@@ -65,61 +65,32 @@ void ecp_buffer::operator()()
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
-#if !defined(USE_MESSIP_SRR)
 	bool wyjscie;
 
-	name_attach_t *attach;
+	lib::fd_server_t ch;
 
-	if ((attach = name_attach(NULL, interface.ui_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
-		// TODO: throw
-		// return EXIT_FAILURE;
-		// printf("NIE MA ATTACHA");
-	}
+	ch = messip::port_create(interface.ui_attach_point);
+	assert(ch);
 
 	while (1) {
 		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
-		_msg_info info;
+		int32_t type, subtype;
+		int rcvid = messip::port_receive(ch, type, subtype, ecp_to_ui_msg);
 
-		int rcvid = MsgReceive(attach->chid, &ecp_to_ui_msg, sizeof(ecp_to_ui_msg), &info);
-
-		communication_state = UI_ECP_AFTER_RECEIVE;
-		if (rcvid == -1) {/* Error condition, exit */
-			perror("UI: Receive failed");
-			// 	  throw ECP_error(lib::SYSTEM_ERROR, (uint64_t) 0);
+		if ((rcvid != MESSIP_MSG_NOREPLY) && (rcvid != 0)) {
 			continue;
 		}
 
-		if (rcvid == 0) {/* Pulse received */
-			// printf("sr puls\n");
-			switch (ecp_to_ui_msg.hdr.code)
-			{
-				case _PULSE_CODE_DISCONNECT:
-					ConnectDetach(ecp_to_ui_msg.hdr.scoid);
-					break;
-				case _PULSE_CODE_UNBLOCK:
-					break;
-				default:
-					break;
-			}
-			continue;
-		}
+		/*
+		 //! FIXME:
+		 if (interface.irp6ot_m->state.ecp.pid <= 0) {
 
-		/* A QNX IO message received, reject */
-		if (ecp_to_ui_msg.hdr.type >= _IO_BASE && ecp_to_ui_msg.hdr.type <= _IO_MAX) {
+		 interface.irp6ot_m->state.ecp.pid = info.pid;
 
-			MsgReply(rcvid, EOK, 0, 0);
-			continue;
-		}
-
-		//! FIXME:
-		if (interface.irp6ot_m->state.ecp.pid <= 0) {
-
-			interface.irp6ot_m->state.ecp.pid = info.pid;
-
-		}
-
+		 }
+		 */
 		switch (ecp_to_ui_msg.ecp_message)
 		{ // rodzaj polecenia z ECP
 			case lib::C_XYZ_ANGLE_AXIS:
@@ -141,9 +112,8 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+
 				break;
 			case lib::YES_NO:
 				synchroniser.null_command();
@@ -154,9 +124,7 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::MESSAGE:
@@ -168,9 +136,8 @@ void ecp_buffer::operator()()
 
 				ui_rep.reply = lib::ANSWER_YES;
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+
 				break;
 			case lib::DOUBLE_NUMBER:
 				synchroniser.null_command();
@@ -181,9 +148,8 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+
 				break;
 			case lib::INTEGER_NUMBER:
 				synchroniser.null_command();
@@ -194,9 +160,8 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
+
 				break;
 			case lib::CHOOSE_OPTION:
 				synchroniser.null_command();
@@ -221,9 +186,7 @@ void ecp_buffer::operator()()
 				PtLeave(0);
 				synchroniser.wait();
 
-				if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-					printf("Blad w UI reply\n");
-				}
+				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
@@ -248,9 +211,7 @@ void ecp_buffer::operator()()
 					ui_rep.reply = lib::FILE_LOADED;
 					synchroniser.wait();
 
-					if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-						printf("Blad w UI reply\n");
-					}
+					messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				}
 				break;
@@ -275,9 +236,8 @@ void ecp_buffer::operator()()
 					ui_rep.reply = lib::FILE_SAVED;
 					synchroniser.wait();
 
-					if (MsgReply(rcvid, EOK, &ui_rep, sizeof(ui_rep)) < 0) {
-						printf("Blad w UI reply\n");
-					}
+					messip::port_reply(ch, rcvid, 0, ui_rep);
+
 				}
 				break;
 			case lib::OPEN_FORCE_SENSOR_MOVE_WINDOW:
@@ -290,9 +250,9 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 			case lib::OPEN_TRAJECTORY_REPRODUCE_WINDOW:
 				// obsluga odtwarzania trajektorii
@@ -303,9 +263,9 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 			case lib::TR_REFRESH_WINDOW:
 				// przejecie kontroli nad Fotonen
@@ -315,9 +275,9 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 			case lib::TR_DANGEROUS_FORCE_DETECTED:
 				// przejecie kontroli nad Fotonen
@@ -327,9 +287,9 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// odeslanie -> odwieszenie ECP
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 
 			case lib::MAM_OPEN_WINDOW:
@@ -342,9 +302,9 @@ void ecp_buffer::operator()()
 				// Oddanie kontroli.
 				PtLeave(0);
 				// Odeslanie -> odwieszenie ECP.
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 			case lib::MAM_REFRESH_WINDOW:
 				// Przejecie kontroli nad Photonen.
@@ -354,16 +314,16 @@ void ecp_buffer::operator()()
 				// 	oddanie kontroli
 				PtLeave(0);
 				// Odeslanie -> odwieszenie ECP.
-				if (MsgReply(rcvid, EOK, NULL, 0) < 0) {
-					printf("Blad w UI reply\n");
-				}
+
+				messip::port_reply_ack(ch, rcvid);
+
 				break;
 
 			default:
 				perror("Strange ECP message");
 		}
 	}
-#endif
+
 }
 
 }

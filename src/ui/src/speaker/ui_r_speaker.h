@@ -38,11 +38,14 @@ public:
 	EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
-	int reload_configuration();
+
 	int manage_interface();
 
 	void close_all_windows();
 	void delete_ui_ecp_robot();
+	int synchronise();
+	void edp_create();
+	int edp_create_int();
 };
 
 }

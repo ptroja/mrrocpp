@@ -14,13 +14,17 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "robot/bird_hand/ecp_r_bird_hand.h"
+#include "ui/src/ui_ecp_r_data_port.h"
 
 namespace mrrocpp {
 namespace ui {
+namespace common {
+class Interface;
+}
 namespace bird_hand {
 
 // ---------------------------------------------------------------
-class EcpRobot
+class EcpRobot : public common::EcpRobotDataPort
 {
 
 public:
@@ -37,16 +41,9 @@ public:
 	// odczytanie parametrow konfiguracji
 	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
 
-	ecp::bird_hand::robot *the_robot;
-
-	// by Y - do odczytu stanu poczatkowego robota
-	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
-	virtual void execute_motion(void);
-
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg); // Konstruktor
+	EcpRobot(common::Interface& _interface); // Konstruktor
 
-	virtual ~EcpRobot();
 
 };
 

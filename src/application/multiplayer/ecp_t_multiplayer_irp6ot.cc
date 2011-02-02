@@ -23,9 +23,9 @@ namespace irp6ot {
 namespace task {
 
 multiplayer::multiplayer(lib::configurator &_config) :
-	task(_config)
+	common::task::task(_config)
 {
-	ecp_m_robot = new irp6ot_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
 
 	//powolanie generatorow
 
@@ -73,7 +73,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 		}
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 		//sg->load_file_with_path(path.c_str());
 		//printf("\nTRACK ECP_GEN_SMOOTH :%s\n\n", path1);
 		//sg->Move();
@@ -96,7 +96,7 @@ void multiplayer::mp_2_ecp_next_state_string_handler(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config)
+task_base* return_created_ecp_task(lib::configurator &_config)
 {
 	return new irp6ot::task::multiplayer(_config);
 }
