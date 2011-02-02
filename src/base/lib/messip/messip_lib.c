@@ -1221,7 +1221,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 
 		/*--- Message to send ---*/
 		datasend.flag = MESSIP_FLAG_DISCONNECTING;
-		datasend.pid = getpid(  );
+		datasend.pid = htonl(getpid(  ));
 		datasend.tid = pthread_self(  );
 		datasend.type = htonl(-1);
 		datasend.subtype = htonl(-1);
@@ -1398,7 +1398,7 @@ messip_channel_ping( messip_channel_t * ch,
 
 	/*--- Message to send ---*/
 	datasend.flag = MESSIP_FLAG_PING;
-	datasend.pid = getpid(  );
+	datasend.pid = htonl(getpid(  ));
 	datasend.tid = pthread_self(  );
 	datasend.type = htonl(-1);
 	datasend.subtype = htonl(-1);
@@ -1893,7 +1893,7 @@ messip_receive( messip_channel_t * ch,
 //		  dcount, datasend.state, datasend.datalen, datasend.flag );
 
 	/*--- If message was a channel-disconnect, nothing additional to read ---*/
-	ch->remote_pid = datasend.pid;
+	ch->remote_pid = ntohl(datasend.pid);
 	ch->remote_tid = datasend.tid;
 	if ( datasend.flag == MESSIP_FLAG_DISCONNECTING )
 	{
@@ -1914,7 +1914,7 @@ messip_receive( messip_channel_t * ch,
 	}							// if
 	if ( datasend.flag == MESSIP_FLAG_DEATH_PROCESS )
 	{
-		*type    = datasend.pid;
+		*type    = ntohl(datasend.pid);
 		*subtype = (int)datasend.tid;
 		ch->new_sockfd[index] = -1;
 		return MESSIP_MSG_DEATH_PROCESS;
@@ -2187,7 +2187,7 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	/*--- Message to send ---*/
 	memset(&datasend, 0, sizeof(datasend));
 	datasend.flag = (reply_maxlen < 0) ? MESSIP_FLAG_1WAY_MESSAGE : 0;
-	datasend.pid = getpid(  );
+	datasend.pid = htonl(getpid(  ));
 	datasend.tid = pthread_self(  );
 	datasend.type = htonl(type);
 	datasend.subtype = htonl(subtype);
