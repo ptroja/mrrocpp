@@ -48,7 +48,13 @@ Sender::~Sender() {
 void Sender::send_package(const sr_package_t& package)
 {
 	// TODO: error check and throw an exception
-	messip::port_send_async(ch, 0, 0, package);
+	int status = messip::port_send_async(ch, 0, 0, package, 0);
+
+	if(status == MESSIP_MSG_TIMEOUT) {
+		std::cerr << "SR: send would block, aborted" << std::endl;
+	} else if (status < 0) {
+		std::cerr << "SR: send failed" << std::endl;
+	}
 }
 
 } // namespace lib
