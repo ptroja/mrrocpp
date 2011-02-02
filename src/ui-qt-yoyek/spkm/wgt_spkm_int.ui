@@ -966,6 +966,13 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="5">
+    <widget class="QRadioButton" name="radioButton_cyclic_read">
+     <property name="text">
+      <string>Cyclic Read</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
