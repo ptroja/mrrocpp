@@ -1328,7 +1328,7 @@ thread_client_send_buffered_msg(void *arg)
 
 			/*--- Message to send ---*/
 			datasend.flag = MESSIP_FLAG_BUFFERED;
-			datasend.pid = bmsg->pid_from;
+			datasend.pid = htonl(bmsg->pid_from);
 			datasend.tid = bmsg->tid_from;
 			datasend.type = htonl(bmsg->type);
 			datasend.subtype = htonl(bmsg->subtype);
@@ -1636,7 +1636,7 @@ thread_client_trigger_proxy(void *arg)
 
 			/*--- Message to send ---*/
 			datasend.flag = MESSIP_FLAG_PROXY;
-			datasend.pid = -1; // Unknown
+			datasend.pid = htonl(-1); // Unknown
 			datasend.tid = -1; // Unknown
 			datasend.type = htonl(proxy->proxy_index);
 			datasend.subtype = htonl(10000 + (int) (9999.0 * rand() / (RAND_MAX + 1.0)));
@@ -2196,7 +2196,7 @@ static int notify_server_death_client(channel_t * ch, pid_t pid, pthread_t tid, 
 
 	/*--- Message to send ---*/
 	datasend.flag = code;
-	datasend.pid = pid;
+	datasend.pid = htonl(pid);
 	datasend.tid = tid;
 	datasend.type = htonl(-1);
 	datasend.subtype = htonl(-1);
