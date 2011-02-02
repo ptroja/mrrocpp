@@ -245,7 +245,7 @@ messip_select( int fd,
 
 messip_cnx_t *
 messip_connect0(const char *mgr_ref,
-   int32_t msec_timeout,
+   int msec_timeout,
    pid_t pid,
    pthread_t tid )
 {
@@ -430,7 +430,7 @@ messip_connect0(const char *mgr_ref,
 
 messip_cnx_t *
 messip_connect(const char *mgr_ref,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	return messip_connect0( mgr_ref, msec_timeout, getpid(  ), pthread_self(  ) );
 }								// messip_connect
@@ -542,7 +542,7 @@ select_handler( select_context_t *ctp, int fd,
 static messip_channel_t *
 messip_channel_create0( messip_cnx_t * cnx,
    const char *name,
-   int32_t msec_timeout,
+   int msec_timeout,
    int32_t maxnb_msg_buffered )
 {
 	int status;
@@ -781,7 +781,7 @@ messip_channel_create0( messip_cnx_t * cnx,
 messip_channel_t *
 messip_channel_create( messip_cnx_t * cnx,
    const char *name,
-   int32_t msec_timeout,
+   int msec_timeout,
    int32_t maxnb_msg_buffered )
 {
 	messip_channel_t *ret;
@@ -794,7 +794,7 @@ messip_channel_create( messip_cnx_t * cnx,
 
 static int
 messip_channel_delete0( messip_channel_t * ch,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int status;
 	ssize_t dcount;
@@ -919,7 +919,7 @@ messip_channel_delete0( messip_channel_t * ch,
 
 int
 messip_channel_delete( messip_channel_t * ch,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int ret;
 	pthread_mutex_lock(&messip_cnx_mutex);
@@ -931,7 +931,7 @@ messip_channel_delete( messip_channel_t * ch,
 static messip_channel_t *
 messip_channel_connect0( messip_cnx_t * cnx,
    const char *name,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int status;
 	messip_channel_t *info = NULL;
@@ -1181,7 +1181,7 @@ messip_channel_connect0( messip_cnx_t * cnx,
 messip_channel_t *
 messip_channel_connect( messip_cnx_t * cnx,
    const char *name,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	messip_channel_t *ret;
 	pthread_mutex_lock(&messip_cnx_mutex);
@@ -1192,7 +1192,7 @@ messip_channel_connect( messip_cnx_t * cnx,
 
 static int
 messip_channel_disconnect0( messip_channel_t * ch,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int status;
 	fd_set ready;
@@ -1361,7 +1361,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 
 int
 messip_channel_disconnect( messip_channel_t * ch,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int ret;
 	pthread_mutex_lock(&messip_cnx_mutex);
@@ -1373,7 +1373,7 @@ messip_channel_disconnect( messip_channel_t * ch,
 
 int
 messip_channel_ping( messip_channel_t * ch,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	messip_datasend_t datasend;
@@ -1453,7 +1453,7 @@ messip_channel_ping( messip_channel_t * ch,
 static int
 ping_reply( messip_channel_t * ch,
    int index,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	struct iovec iovec[1];
@@ -1497,7 +1497,7 @@ ping_reply( messip_channel_t * ch,
 
 static int
 reply_to_thread_client_send_buffered_msg( int sockfd,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	struct iovec iovec[1];
@@ -1606,7 +1606,7 @@ messip_receive( messip_channel_t * ch,
    int32_t * subtype,
    void *rec_buffer,
    int32_t maxlen,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	struct iovec iovec[2];
@@ -2127,7 +2127,7 @@ messip_send0( messip_channel_t *ch,
    int32_t * answer,
    void *reply_buffer,
    int reply_maxlen,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	messip_datasend_t datasend;
@@ -2343,7 +2343,7 @@ messip_send( messip_channel_t *ch,
    int32_t * answer,
    void *reply_buffer,
    int reply_maxlen,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	int ret;
 	pthread_mutex_lock(&ch->send_mutex);
@@ -2358,7 +2358,7 @@ messip_buffered_send( messip_channel_t * ch,
    int32_t subtype,
    void *send_buffer,
    int send_len,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	fd_set ready;
@@ -2437,7 +2437,7 @@ messip_reply( messip_channel_t * ch,
    int32_t answer,
    const void *reply_buffer,
    int reply_len,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	struct iovec iovec[2];
@@ -2557,7 +2557,7 @@ static int
 messip_timer_send( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	messip_datasend_t datasend;
@@ -2649,7 +2649,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
    int32_t subtype,
    int32_t msec_1st_shot,
    int32_t msec_rep_shot,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	messip_timer_t *timer_info;
 	struct sigevent event;
@@ -2706,7 +2706,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
 int32_t
 messip_death_notify( messip_cnx_t *cnx,
    int status,
-   int32_t msec_timeout )
+   int msec_timeout )
 {
 	ssize_t dcount;
 	fd_set ready;
@@ -2822,7 +2822,7 @@ int messip_dispatch_attach(messip_dispatch_t *dpp,
 	return dpp->nb_handlers++;
 }
 
-int messip_dispatch_block(messip_dispatch_t *dpp, int32_t msec_timeout) {
+int messip_dispatch_block(messip_dispatch_t *dpp, int msec_timeout) {
 	int i, n; // iterators
 	int maxfd = 0; // maximum filedescriptor number
 

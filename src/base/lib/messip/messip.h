@@ -185,31 +185,31 @@ float get_cpu_clock_speed(void);
 
 void messip_init(void);
 void qmpw_init();
-messip_cnx_t *messip_connect(const char *mgr_ref, int32_t msec_timeout);
-messip_cnx_t *messip_connect0(const char *mgr_ref, int32_t msec_timeout, pid_t pid, pthread_t tid);
+messip_cnx_t *messip_connect(const char *mgr_ref, int msec_timeout);
+messip_cnx_t *messip_connect0(const char *mgr_ref, int msec_timeout, pid_t pid, pthread_t tid);
 int
 messip_sin(char *mgr_ref);
 messip_channel_t
-		*messip_channel_create(messip_cnx_t * cnx, const char *name, int32_t msec_timeout, int32_t maxnb_msg_buffered);
-int messip_channel_delete(messip_channel_t * ch, int32_t msec_timeout);
-messip_channel_t *messip_channel_connect(messip_cnx_t * cnx, const char *name, int32_t msec_timeout);
-int messip_channel_disconnect(messip_channel_t * ch, int32_t msec_timeout);
-int messip_channel_ping(messip_channel_t * ch, int32_t msec_timeout);
+		*messip_channel_create(messip_cnx_t * cnx, const char *name, int msec_timeout, int32_t maxnb_msg_buffered);
+int messip_channel_delete(messip_channel_t * ch, int msec_timeout);
+messip_channel_t *messip_channel_connect(messip_cnx_t * cnx, const char *name, int msec_timeout);
+int messip_channel_disconnect(messip_channel_t * ch, int msec_timeout);
+int messip_channel_ping(messip_channel_t * ch, int msec_timeout);
 int
-		messip_receive(messip_channel_t * ch, int32_t * type, int32_t * subtype, void *buffer, int32_t maxlen, int32_t msec_timeout);
+		messip_receive(messip_channel_t * ch, int32_t * type, int32_t * subtype, void *buffer, int32_t maxlen, int msec_timeout);
 int
-		messip_reply(messip_channel_t * ch, int index, int32_t answer, const void *reply_buffer, int reply_len, int32_t msec_timeout);
+		messip_reply(messip_channel_t * ch, int index, int32_t answer, const void *reply_buffer, int reply_len, int msec_timeout);
 int
-		messip_send(messip_channel_t * ch, int32_t type, int32_t subtype, const void *send_buffer, int send_len, int32_t * answer, void *reply_buffer, int reply_maxlen, int32_t msec_timeout);
+		messip_send(messip_channel_t * ch, int32_t type, int32_t subtype, const void *send_buffer, int send_len, int32_t * answer, void *reply_buffer, int reply_maxlen, int msec_timeout);
 int32_t
-		messip_buffered_send(messip_channel_t * ch, int32_t type, int32_t subtype, void *send_buffer, int send_len, int32_t msec_timeout);
+		messip_buffered_send(messip_channel_t * ch, int32_t type, int32_t subtype, void *send_buffer, int send_len, int msec_timeout);
 #if !defined(__FreeBSD__) && !(__APPLE__ & __MACH__)
 timer_t
-	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int32_t msec_timeout);
+	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int msec_timeout);
 		
 int messip_timer_delete(messip_channel_t * ch, timer_t timer_id);
 #endif
-int messip_death_notify(messip_cnx_t * cnx, int32_t msec_timeout, int status);
+int messip_death_notify(messip_cnx_t * cnx, int msec_timeout, int status);
 
 typedef int (*messip_callback_t)(messip_channel_t * ch, void * arg);
 
@@ -219,7 +219,7 @@ int messip_dispatch_attach(messip_dispatch_t *dpp, messip_channel_t * ch,
 //		int (*func) (messip_channel_t * ch, void * arg),
 messip_callback_t func, void * arg);
 //int messip_dispatch_dettach(messip_dispatch_t *dispatch, messip_channel_t * ch);
-int messip_dispatch_block(messip_dispatch_t *dpp, int32_t msec_timeout);
+int messip_dispatch_block(messip_dispatch_t *dpp, int msec_timeout);
 int messip_dispatch_handler(messip_dispatch_t *dpp);
 
 #ifdef __cplusplus
