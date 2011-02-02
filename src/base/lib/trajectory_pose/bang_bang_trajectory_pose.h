@@ -9,6 +9,7 @@
 #define  _ECP_BANG_BANG_TRAJECTORY_POSE_H
 
 #include "base/lib/trajectory_pose/trajectory_pose.h"
+#include <base/lib/mrmath/mrmath.h>
 #include <vector>
 
 namespace mrrocpp {
@@ -88,6 +89,11 @@ public:
   std::vector<int> model;
 
   /**
+   * Matrix used in the angle axis relative vector calculations.
+   */
+  lib::Ft_tr xsi_star_matrix;
+
+  /**
    * Empty constructor.
    */
   bang_bang_trajectory_pose (void);
@@ -107,6 +113,10 @@ public:
    */
   ~bang_bang_trajectory_pose();
 
+  /**
+   * Copy constructor.
+   * @param trj
+   */
   bang_bang_trajectory_pose(const bang_bang_trajectory_pose &trj);
 
 };
