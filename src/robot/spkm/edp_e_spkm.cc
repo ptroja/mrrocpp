@@ -53,8 +53,22 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Try to get state of each axis
 		unsigned int referenced = 0;
 		unsigned int powerOn = 0;
+		unsigned int notInFaultState = 0;
 		BOOST_FOREACH(epos::epos * node, axes) {
 			try {
+				// Check if in the FAULT state
+				if(node->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = node->readNumberOfErrors();
+					for(int i = 1; i <= errNum; ++i) {
+						// Get the detailed error
+						uint32_t errCode = node->readErrorHistory(i);
+
+						msg->message(epos::epos::ErrorCodeMessage(errCode));
+					}
+				} else {
+					notInFaultState++;
+				}
 				if(node->isReferenced()) {
 					// Do not break from this loop so this is a also a preliminary axis error check
 					referenced++;
@@ -67,6 +81,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Robot is synchronised if all axes are referenced
 		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
 	}
 
 	// Copy data to reply buffer
@@ -108,16 +123,16 @@ effector::effector(lib::configurator &_config) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping
-		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 6);
-		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 5);
-		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 4);
+		axisA = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 5);
+		axisB = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 4);
+		axisC = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 6);
 //		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
 //		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
 //		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
 
-		axes[0] = &(*axis1);
-		axes[1] = &(*axis2);
-		axes[2] = &(*axis3);
+		axes[0] = &(*axisA);
+		axes[1] = &(*axisB);
+		axes[2] = &(*axisC);
 //		axes[3] = &(*axis4);
 //		axes[4] = &(*axis5);
 //		axes[5] = &(*axis6);
@@ -254,102 +269,93 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//	printf(" GET ARM\n");
-	//	flushall();
-
-	msg->message("EDP get_arm_position");
-
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
 
-		if (robot_test_mode) {
-			msg->message("EDP get_arm_position");
-			switch (instruction.get_arm_type)
-			{
-				case lib::MOTOR: {
-					msg->message("EDP get_arm_position MOTOR");
-					if(robot_test_mode) {
-						static int licznikaaa = (-11);
+		msg->message("EDP get_arm_position");
 
-						std::stringstream ss(std::stringstream::in | std::stringstream::out);
-						ss << "get_arm_position: " << licznikaaa;
-						msg->message(ss.str().c_str());
-						//	printf("%s\n", ss.str().c_str());
+		switch (instruction.get_arm_type)
+		{
+			case lib::MOTOR: {
+				msg->message("EDP get_arm_position MOTOR");
+				if(robot_test_mode) {
+					static int licznikaaa = (-11);
+
+					std::stringstream ss(std::stringstream::in | std::stringstream::out);
+					ss << "get_arm_position: " << licznikaaa;
+					msg->message(ss.str().c_str());
+					//	printf("%s\n", ss.str().c_str());
 
 
-						edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
-						edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
-						edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
+					edp_ecp_rbuffer.epos_controller[3].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].position = licznikaaa;
+					edp_ecp_rbuffer.epos_controller[0].current = licznikaaa - 2;
 
-						edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
+					edp_ecp_rbuffer.epos_controller[4].position = desired_motor_pos_new[4];
 
-						edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
-						edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
+					edp_ecp_rbuffer.epos_controller[5].position = licznikaaa + 5;
+					edp_ecp_rbuffer.epos_controller[5].current = licznikaaa + 3;
 
-						if (licznikaaa < 10) {
-							for (int i = 0; i < number_of_servos; i++) {
-								edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
-							}
-
-						} else {
-							for (int i = 0; i < number_of_servos; i++) {
-								edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-							}
+					if (licznikaaa < 10) {
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
 						}
-						licznikaaa++;
+
 					} else {
-						for(std::size_t i = 0; i < axes.size(); ++i) {
-							edp_ecp_rbuffer.epos_controller[i].position = axes[i]->readActualPosition();
-							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
-							//edp_ecp_rbuffer.epos_controller[i].buffer_full = ...
+						for (int i = 0; i < number_of_servos; i++) {
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 						}
 					}
-				}
-					break;
-				case lib::JOINT: {
-					msg->message("EDP get_arm_position JOINT");
-					if(robot_test_mode) {
-						static int licznik_joint = (-11);
-						edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
-						licznik_joint++;
-					} else {
-						// Position in motor units
-						lib::MotorArray motors(number_of_servos);
-
-						// Read actual values from hardware
-						for(std::size_t i = 0; i < axes.size(); ++i) {
-							motors[i] = axes[i]->readActualPosition();
-						}
-
-						// Position in joint units
-						lib::JointArray joints(number_of_servos);
-
-						// Do the calculation
-						get_current_kinematic_model()->mp2i_transform(motors, joints);
-
-						// Fill the values into a buffer
-						for(int i = 0; i < number_of_servos; ++i) {
-							edp_ecp_rbuffer.epos_controller[i].position = joints[i];
-						}
+					licznikaaa++;
+				} else {
+					for(std::size_t i = 0; i < axes.size(); ++i) {
+						edp_ecp_rbuffer.epos_controller[i].position = axes[i]->readActualPosition();
+						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
+						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+						//edp_ecp_rbuffer.epos_controller[i].buffer_full = ...
 					}
 				}
-					break;
-				case lib::FRAME: {
-					msg->message("EDP get_arm_position FRAME");
+			}
+				break;
+			case lib::JOINT: {
+				msg->message("EDP get_arm_position JOINT");
+				if(robot_test_mode) {
+					static int licznik_joint = (-11);
+					edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
+					licznik_joint++;
+				} else {
+					// Position in motor units
+					lib::MotorArray motors(number_of_servos);
 
-					lib::Homog_matrix tmp_frame;
+					// Read actual values from hardware
+					for(std::size_t i = 0; i < axes.size(); ++i) {
+						motors[i] = axes[i]->readActualPosition();
+					}
 
-					tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
+					// Position in joint units
+					lib::JointArray joints(number_of_servos);
 
+					// Do the calculation
+					get_current_kinematic_model()->mp2i_transform(motors, joints);
+
+					// Fill the values into a buffer
+					for(int i = 0; i < number_of_servos; ++i) {
+						edp_ecp_rbuffer.epos_controller[i].position = joints[i];
+					}
 				}
-					break;
-				default:
-					break;
+			}
+				break;
+			case lib::FRAME: {
+				msg->message("EDP get_arm_position FRAME");
+
+				lib::Homog_matrix tmp_frame;
+
+				tmp_frame.get_frame_tab(edp_ecp_rbuffer.current_frame);
 
 			}
-		} else {
+				break;
+			default:
+				break;
 
 		}
 	}
@@ -399,6 +405,20 @@ void effector::synchronise(void)
 			}
 		}
 	} while(!finished);
+
+	// Hardcoded safety values
+	// TODO: move to configuration file
+	axisA->writeMinimalPositionLimit(-195000);
+	axisA->writeMaximalPositionLimit(11500);
+	axisB->writeMinimalPositionLimit(-282500);
+	axisB->writeMaximalPositionLimit(11500);
+	axisC->writeMinimalPositionLimit(-175000);
+	axisC->writeMaximalPositionLimit(11000);
+
+	// Just for testing
+//	axisA->writeMinimalPositionLimit(-100000);
+//	axisB->writeMinimalPositionLimit(-100000);
+//	axisC->writeMinimalPositionLimit(-100000);
 
 	controller_state_edp_buf.is_synchronised = true;
 }

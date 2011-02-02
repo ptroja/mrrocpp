@@ -18,39 +18,17 @@ int main(int argc, char *argv[])
 	try {
 		gateway.open();
 
-		node4.printEPOSstate();
+		// Check if in a FAULT state
+		if(node4.checkEPOSstate() == 11) {
+			UNSIGNED8 errNum = node4.readNumberOfErrors();
+			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
+			for(UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-		node4.reset();
-		node5.reset();
-		node6.reset();
+				UNSIGNED32 errCode = node4.readErrorHistory(i);
 
-		node4.printEPOSstate();
-
-		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
-
-		// switch to homing mode
-		node4.setOpMode(epos::OMD_HOMING_MODE);
-		node5.setOpMode(epos::OMD_HOMING_MODE);
-		node6.setOpMode(epos::OMD_HOMING_MODE);
-
-		// Do homing
-		node4.startHoming();
-		node5.startHoming();
-		node6.startHoming();
-
-		for(;;) {
-			bool node4ok = node4.isHomingFinished();
-			bool node5ok = node5.isHomingFinished();
-			bool node6ok = node6.isHomingFinished();
-
-			if(node4ok && node5ok && node6ok) {
-				break;
+				std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
 			}
-		};
-
-		// Move back
-		//node4.moveRelative(-50000);
-		//node4.monitorStatus();
+		}
 
 		gateway.close();
 	} catch (epos_error & error) {
@@ -64,6 +42,8 @@ int main(int argc, char *argv[])
 
 		if ( int const * errno_value = boost::get_error_info<errno_code>(error) )
 			std::cerr << "Errno value: " << *errno_value << std::endl;
+	} catch (...) {
+		std::cerr << "Unhandled exception" << std::endl;
 	}
 
 	return 0;

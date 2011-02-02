@@ -19,6 +19,12 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
+#include "config.h"
+
+#if defined(HAVE_MLOCKALL)
+#	include <sys/mman.h>
+#endif /* HAVE_MLOCKALL */
+
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -94,6 +100,13 @@ int main(int argc, char *argv[])
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
+
+#if defined(HAVE_MLOCKALL)
+		// Try to lock memory to avoid swapping whlie executing in real-time
+		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
+			perror("mlockall()");
+		}
+#endif /* HAVE_MLOCKALL */
 
 		edp::common::master = edp::common::return_created_efector(_config);
 
