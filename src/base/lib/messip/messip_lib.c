@@ -1089,8 +1089,8 @@ messip_channel_connect0( messip_cnx_t * cnx,
 
 		info->remote_pid = msgreply.pid;
 		info->remote_tid = msgreply.tid;
-		info->sin_port = msgreply.sin_port;
-		info->sin_addr = msgreply.sin_addr;
+		info->sin_port = ntohs(msgreply.sin_port);
+		info->sin_addr = ntohl(msgreply.sin_addr);
 		//strncpy( info->sin_addr_str, msgreply.sin_addr_str, sizeof(info->sin_addr_str));
 		strncpy( info->hostname, msgreply.hostname, sizeof(info->hostname));
 		info->hostname[sizeof(info->hostname)-1] = 0;
@@ -1215,8 +1215,8 @@ messip_channel_disconnect0( messip_channel_t * ch,
 		datasend.flag = MESSIP_FLAG_DISCONNECTING;
 		datasend.pid = getpid(  );
 		datasend.tid = pthread_self(  );
-		datasend.type = -1;
-		datasend.subtype = -1;
+		datasend.type = htonl(-1);
+		datasend.subtype = htonl(-1);
 		datasend.datalen = 0;
 
 		/*--- Send a message to the 'server' ---*/
@@ -1392,8 +1392,8 @@ messip_channel_ping( messip_channel_t * ch,
 	datasend.flag = MESSIP_FLAG_PING;
 	datasend.pid = getpid(  );
 	datasend.tid = pthread_self(  );
-	datasend.type = -1;
-	datasend.subtype = -1;
+	datasend.type = htonl(-1);
+	datasend.subtype = htonl(-1);
 	datasend.datalen = 0;
 
 	/*--- Send a message to the 'server' ---*/
@@ -1458,7 +1458,7 @@ ping_reply( messip_channel_t * ch,
 	datareply.pid = getpid(  );
 	datareply.tid = pthread_self(  );
 	datareply.datalen = 0;
-	datareply.answer = -1;
+	datareply.answer = htonl(-1);
 
 	/*--- Timeout to write ? ---*/
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
@@ -1501,8 +1501,8 @@ reply_to_thread_client_send_buffered_msg( int sockfd,
 	/*--- Message to reply back ---*/
 	datareply.pid = getpid(  );
 	datareply.tid = pthread_self(  );
-	datareply.datalen = -1;
-	datareply.answer  = -1;
+	datareply.datalen = htonl(-1);
+	datareply.answer  = htonl(-1);
 
 	/*--- Timeout to write ? ---*/
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
@@ -1912,8 +1912,8 @@ messip_receive( messip_channel_t * ch,
 		return MESSIP_MSG_DEATH_PROCESS;
 	}							// if
 
-	*type = datasend.type;
-	*subtype = datasend.subtype;
+	*type = ntohl(datasend.type);
+	*subtype = ntohl(datasend.subtype);
 
 	/*--- If message was a timer, nothing additional to read ---*/
 	if ( datasend.flag == MESSIP_FLAG_TIMER )
@@ -1932,26 +1932,26 @@ messip_receive( messip_channel_t * ch,
 	}
 
 	/*--- Dynamic allocation asked ? ---*/
-	ch->datalen  = datasend.datalen;
+	ch->datalen  = ntohl(datasend.datalen);
 	ch->datalenr = 0;
 	iovec[0].iov_base = &len;
 	iovec[0].iov_len  = sizeof( uint32_t );
 	if ( ( rec_buffer != NULL ) && ( maxlen == 0 ) )
 	{
-		rbuff = malloc( datasend.datalen );
+		rbuff = malloc( ch->datalen );
 		if ( rbuff == NULL )
 		{
 			ch->new_sockfd[index] = -1;
 			errno = ENOMEM;
 			return MESSIP_NOK;
 		}
-		len_to_read = datasend.datalen;
+		len_to_read = ch->datalen;
 		iovec[1].iov_base = rbuff;
 		iovec[1].iov_len  = len_to_read;
 	}
 	else
 	{
-		len_to_read = ( maxlen < datasend.datalen ) ? maxlen : datasend.datalen;
+		len_to_read = ( maxlen < ch->datalen ) ? maxlen : ch->datalen;
 		iovec[1].iov_base = rec_buffer;
 		iovec[1].iov_len  = len_to_read;
 	}
@@ -2004,9 +2004,9 @@ messip_receive( messip_channel_t * ch,
 	*/
 	if ( datasend.flag == MESSIP_FLAG_BUFFERED )
 	{
-		ch->receive_allmsg[ index ] = malloc( datasend.datalen );
-		ch->receive_allmsg_sz[ index ] = datasend.datalen;
-		assert( len_to_read <= datasend.datalen );
+		ch->receive_allmsg[ index ] = malloc( ch->datalen );
+		ch->receive_allmsg_sz[ index ] = ch->datalen;
+		assert( len_to_read <= ch->datalen );
 		memmove( ch->receive_allmsg[ index ], rec_buffer, len_to_read );
 	}
 	else
@@ -2045,7 +2045,7 @@ messip_receive( messip_channel_t * ch,
 		Read more data ? (provided buffer was too small)
 	*/
 //	logg( NULL, "+++ datalen=%d maxlen=%d\n", datasend.datalen, maxlen );
-	if ( (rec_buffer != NULL) && (maxlen != 0) && (maxlen < datasend.datalen) )
+	if ( (rec_buffer != NULL) && (maxlen != 0) && (maxlen < ch->datalen) )
 	{
 		assert(0); // PT: I am not sure about this code.
 		/*--- Now read the message, unless if it's a timer ---*/
@@ -2181,9 +2181,9 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	datasend.flag = (reply_maxlen < 0) ? MESSIP_FLAG_1WAY_MESSAGE : 0;
 	datasend.pid = getpid(  );
 	datasend.tid = pthread_self(  );
-	datasend.type = type;
-	datasend.subtype = subtype;
-	datasend.datalen = send_len;
+	datasend.type = htonl(type);
+	datasend.subtype = htonl(subtype);
+	datasend.datalen = htonl(send_len);
 
 	/*--- (S1) Send a message to the 'server' ---*/
 	iovec[0].iov_base = &datasend;
@@ -2242,8 +2242,10 @@ printf( " 2) %d\n", MESSIP_STATE_SEND_BLOCKED );
 	}
 	// Check if complete header has been received
 	assert(dcount == sizeof( datareply ));
-	*answer = datareply.answer;
+	*answer = ntohl(datareply.answer);
 
+	// Convert inplace from network-byte order
+	datareply.datalen = ntohl(datareply.datalen);
 	/*--- (S3) Read now the reply, if there is one ---*/
 //	logg( NULL, "--- datalen=%d maxlen=%d\n", datareply.datalen, reply_maxlen );
 	if ( (reply_buffer != NULL) && (reply_maxlen == 0) && (datareply.datalen > 0) )
@@ -2462,8 +2464,8 @@ messip_reply( messip_channel_t * ch,
 			//	logg( NULL, "messip_reply:  pthread_self=%d\n", pthread_self() );
 			datareply.pid = getpid(  );
 			datareply.tid = pthread_self(  );
-			datareply.datalen = reply_len;
-			datareply.answer  = answer;
+			datareply.datalen = htonl(reply_len);
+			datareply.answer  = htonl(answer);
 
 			/*--- Timeout to write ? ---*/
 			if ( msec_timeout != MESSIP_NOTIMEOUT )
