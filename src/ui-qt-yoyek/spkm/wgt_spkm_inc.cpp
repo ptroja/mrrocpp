@@ -17,7 +17,7 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 void wgt_spkm_inc::on_timer_slot()
 {
-	if (dwgt->isVisible()) {
+	if ((dwgt->isVisible()) && (ui.radioButton_cyclic_read->isChecked())) {
 		init();
 	}
 
