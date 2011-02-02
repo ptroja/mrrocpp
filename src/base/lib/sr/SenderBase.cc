@@ -13,9 +13,7 @@
 #include <cstring>
 #include <string>
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 #include "base/lib/sr/SenderBase.h"
 #include "base/lib/sr/srlib.h"
@@ -23,7 +21,6 @@
 
 namespace mrrocpp {
 namespace lib {
-
 
 SenderBase::SenderBase(const std::string & sr_name)
 {
@@ -53,7 +50,6 @@ void SenderBase::Send(const sr_package_t & sr_mess)
 	// TODO: error check and throw an exception
 	messip::port_send_async(ch, 0, 0, sr_mess);
 }
-
 
 } // namespace lib
 } // namespace mrrocpp
