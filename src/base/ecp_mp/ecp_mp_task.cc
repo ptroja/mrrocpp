@@ -42,7 +42,6 @@ namespace ecp_mp {
 namespace task {
 
 lib::sr_ecp* task::sr_ecp_msg = NULL;
-lib::sr_ecp* task::sh_msg = NULL;
 
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())

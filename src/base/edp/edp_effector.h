@@ -10,6 +10,8 @@
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -184,14 +186,7 @@ public:
 	 *
 	 * For the usage in asynchronous communication.
 	 */
-	lib::sr_edp *msg;
-
-	/*!
-	 * \brief Pointer to object to communicate with UI SR thread in signal handlers.
-	 *
-	 * For the usage in synchronous communication.
-	 */
-	lib::sr_edp *sh_msg;
+	boost::shared_ptr<lib::sr_edp> msg;
 
 	/*!
 	 * \brief Info if the robot test mode is active.

@@ -14,7 +14,6 @@
 #include <string>
 #include <stdint.h>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/serialization/serialization.hpp>
 
@@ -22,7 +21,7 @@
 
 #include "base/lib/typedefs.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/sr/SenderBase.h"
+#include "base/lib/sr/Sender.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -93,8 +92,8 @@ private:
 	//! Interpret the status code into a text message
 	virtual void interpret() = 0;
 
-	//! Shared pointer to sender class
-	boost::shared_ptr<SenderBase> sender;
+	//! Sender class
+	Sender sender;
 
 protected:
 	//! Error codes
@@ -111,7 +110,7 @@ public:
 	 * @param sr_channel_name name of the SR communication channel
 	 * @param _multi_thread flag for selecting multi-threaded variant
 	 */
-	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name, bool _multi_thread);
+	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name);
 
 	/**
 	 * Destructor

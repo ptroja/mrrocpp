@@ -13,8 +13,8 @@
 namespace mrrocpp {
 namespace lib {
 
-sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread) :
-	sr(process_type, process_name, sr_name, _multi_thread)
+sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, const std::string & sr_name) :
+	sr(process_type, process_name, sr_name)
 {
 }
 

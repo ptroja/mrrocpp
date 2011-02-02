@@ -1,5 +1,5 @@
 /*!
- * @file SenderBase.cc
+ * @file Sender.cc
  * @brief System reporting sender base class - definitions.
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
@@ -15,14 +15,14 @@
 
 #include "base/lib/messip/messip_dataport.h"
 
-#include "base/lib/sr/SenderBase.h"
+#include "base/lib/sr/Sender.h"
 #include "base/lib/sr/srlib.h"
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
 
-SenderBase::SenderBase(const std::string & sr_name)
+Sender::Sender(const std::string & sr_name)
 {
 	unsigned int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
@@ -39,16 +39,16 @@ SenderBase::SenderBase(const std::string & sr_name)
 	assert(ch);
 }
 
-SenderBase::~SenderBase() {
+Sender::~Sender() {
 	if(messip::port_disconnect(ch) == -1) {
 		perror("messip::port_disconnect()");
 	}
 }
 
-void SenderBase::Send(const sr_package_t & sr_mess)
+void Sender::send_package(const sr_package_t& package)
 {
 	// TODO: error check and throw an exception
-	messip::port_send_async(ch, 0, 0, sr_mess);
+	messip::port_send_async(ch, 0, 0, package);
 }
 
 } // namespace lib

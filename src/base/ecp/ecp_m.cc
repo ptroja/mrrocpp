@@ -33,7 +33,7 @@ void catch_signal_in_ecp(int sig)
 		// print info message
 		case SIGTERM:
 		case SIGHUP:
-			ecp_t->sh_msg->message("ecp terminated");
+			ecp_t->sr_ecp_msg->message("ecp terminated");
 			delete ecp_t;
 			exit(EXIT_SUCCESS);
 			break;

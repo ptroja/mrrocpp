@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
+
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -15,7 +17,6 @@
 #include "base/lib/configurator.h"
 
 #include "ui.h"
-
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -53,13 +54,9 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-
 class Interface
 {
-private:
-
 public:
-
 	busy_flag communication_flag;
 
 	sr_buffer* ui_sr_obj;
@@ -95,8 +92,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr<lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr<lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;
@@ -197,7 +194,6 @@ public:
 	// windows
 	MainWindow* mw;
 	wgt_process_control* wgt_pc;
-
 };
 
 }
