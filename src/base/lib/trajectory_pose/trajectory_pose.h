@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <base/lib/com_buf.h>
-#include <base/lib/mrmath/ft_v_tr.h>
+#include <base/lib/mrmath/mrmath.h>
 
 namespace mrrocpp {
 namespace ecp_mp {
