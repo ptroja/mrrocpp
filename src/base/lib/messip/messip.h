@@ -89,7 +89,7 @@
 #define	MESSIP_QNXNODE_NAME_MAXLEN	47
 
 /*
- * This is a linked list, as we can have connexion to mutiple servers
+ * This is a linked list, as we can have connection to multiple servers
  */
 typedef struct messip_cnx
 {
