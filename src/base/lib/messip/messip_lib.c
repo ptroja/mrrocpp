@@ -169,16 +169,19 @@ messip_writev( int sockfd,
 	for ( ;; )
 	{
 		dcount = writev( sockfd, iov, iovcnt );
-		if ( (dcount == -1) && (errno == EINTR) )
-			continue;
-		if ( dcount == -1 )
+		if(dcount == -1) {
+			if(errno == EINTR)
+				continue;
+
 			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d (%s) fileno: %d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, strerror(errno), sockfd, cnt++ );
-		if ( errno == EPIPE )
-			return dcount;
-		//assert( dcount != -1 );
-		if (!(dcount != -1)) {
-			fprintf(stderr, "assert( dcount != -1 ) failed at %s:%d\n", __FILE__, __LINE__);
+
+			// Reading end has been closed
+			if ( errno == EPIPE )
+				return dcount;
+
+			// Another errors are not expected
+			assert(0);
 		}
 		break;
 	}							// for (;;)
@@ -199,14 +202,19 @@ messip_readv( int sockfd,
 	for ( ;; )
 	{
 		dcount = readv( sockfd, iov, iovcnt );
-		if ( (dcount == -1) && (errno == EINTR) )
-			continue;
-		if ( (dcount == -1) && (errno == ECONNRESET) )
-			return -1;
-		if ( dcount == -1 )
+		if(dcount == -1) {
+			if(errno == EINTR)
+				continue;
+			if (errno == ECONNRESET)
+				return -1;
+
 			fprintf( stderr, "%d: %s %d: dcount=%zd errno=%d %d\n",
 			   getpid(), __FILE__, __LINE__, dcount, errno, cnt++ );
-		assert( dcount != -1 );
+
+			// Another errors are not expected
+			assert(0);
+		}
+
 		break;
 	}							// for (;;)
 
