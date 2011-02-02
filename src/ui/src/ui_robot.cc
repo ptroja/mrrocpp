@@ -5,9 +5,7 @@
 #include "ui/src/ui_class.h"
 #include "ui/src/wnd_base.h"
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip_dataport.h"
-#endif
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -65,11 +63,9 @@ void UiRobot::connect_to_reader()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 
 	while ((state.edp.reader_fd =
-#if !defined(USE_MESSIP_SRR)
-			name_open(state.edp.network_reader_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
+
 	messip::port_connect(state.edp.network_reader_attach_point)) == NULL
-#endif
+
 	) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
@@ -115,11 +111,9 @@ bool UiRobot::pulse_reader_trigger_exec_pulse()
 
 void UiRobot::pulse_reader_execute(int code, int value)
 {
-#if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(state.edp.reader_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
-#else
-	if(messip::port_send_pulse(state.edp.reader_fd, code, value))
-#endif
+
+	if (messip::port_send_pulse(state.edp.reader_fd, code, value))
+
 	{
 		perror("Blad w wysylaniu pulsu do redera");
 	}
@@ -131,16 +125,14 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-#if !defined(USE_MESSIP_SRR)
-	ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-#endif
+	/*
+	 ualarm(ui::common::SIGALRM_TIMEOUT, 0);
+	 */
 
 	while ((state.ecp.trigger_fd =
-#if !defined(USE_MESSIP_SRR)
-			name_open(state.ecp.network_trigger_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
+
 	messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
-#endif
+
 	) {
 		if (errno == EINTR)
 			break;
@@ -151,20 +143,17 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		}
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	// odwolanie alarmu
-	ualarm((useconds_t)(0), 0);
-#endif
+	/*
+	 // odwolanie alarmu
+	 ualarm((useconds_t)(0), 0);
+	 */
 }
 
 void UiRobot::pulse_ecp_execute(int code, int value)
 {
 
-#if !defined(USE_MESSIP_SRR)
-	if (MsgSendPulse(state.ecp.trigger_fd, sched_get_priority_min(SCHED_FIFO), code, value) == -1)
-#else
-	if(messip::port_send_pulse(state.ecp.trigger_fd, code, value))
-#endif
+	if (messip::port_send_pulse(state.ecp.trigger_fd, code, value))
+
 	{
 		fprintf(stderr, "Blad w wysylaniu pulsu do ecp error: %s \n", strerror(errno));
 		delay(1000);
@@ -193,15 +182,9 @@ bool UiRobot::deactivate_ecp_trigger()
 	if (state.is_active) {
 		if (state.ecp.trigger_fd != lib::invalid_fd) {
 
-#if !defined(USE_MESSIP_SRR)
-			if (name_close(state.ecp.trigger_fd) == -1) {
-				fprintf(stderr, "UI: ECP trigger, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
-#else
 			if (messip::port_disconnect(state.ecp.trigger_fd) != 0) {
 				fprintf(stderr, "UIRobot::ECP trigger @%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
 			}
-#endif
 
 		}
 		state.ecp.trigger_fd = lib::invalid_fd;
@@ -217,15 +200,11 @@ void UiRobot::EDP_slay_int()
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
 		if (state.edp.reader_fd != lib::invalid_fd) {
-#if !defined(USE_MESSIP_SRR)
-			if (name_close(state.edp.reader_fd) == -1) {
-				fprintf(stderr, "UI: EDP_irp6ot, %s:%d, name_close(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
-#else
+
 			if (messip::port_disconnect(state.edp.reader_fd) != 0) {
 				fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
 			}
-#endif
+
 		}
 		state.edp.reader_fd = lib::invalid_fd;
 

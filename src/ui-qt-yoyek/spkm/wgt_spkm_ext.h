@@ -6,6 +6,7 @@
 #include <QDockWidget>
 #include "ui_wgt_spkm_ext.h"
 #include "../wgt_base.h"
+#include <QTimer>
 
 namespace mrrocpp {
 namespace ui {
@@ -37,8 +38,10 @@ private:
 	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
+	QTimer *timer;
 
 private slots:
+	void on_timer_slot();
 	void on_pushButton_read_clicked();
 	void on_pushButton_export_clicked();
 	void on_pushButton_import_clicked();

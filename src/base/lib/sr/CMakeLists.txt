@@ -9,6 +9,6 @@ add_library(sr
 	srlib.cc
 )
 
-if(USE_MESSIP)
+
     target_link_libraries(sr messip)
-endif(USE_MESSIP)
+

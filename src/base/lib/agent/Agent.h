@@ -8,12 +8,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
-#else /* USE_MESSIP_SRR */
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#endif /* USE_MESSIP_SRR */
 
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "AgentBase.h"
@@ -32,13 +27,8 @@ private:
 	//! check if given data availability condition is satisfied
 	bool checkCondition(const OrDataCondition &condition);
 
-#if defined(USE_MESSIP_SRR)
 	//! server channel id
 	messip_channel_t * channel;
-#else
-	//! server channel id
-	name_attach_t * channel;
-#endif
 
 	//! thread id of the of the non-blocking receive implementation
 	boost::thread tid;

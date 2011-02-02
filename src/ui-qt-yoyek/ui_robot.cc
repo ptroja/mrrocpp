@@ -122,9 +122,9 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-#if !defined(USE_MESSIP_SRR)
-	ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-#endif
+	/*
+	 ualarm(ui::common::SIGALRM_TIMEOUT, 0);
+	 */
 
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
@@ -138,10 +138,10 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		}
 	}
 
-#if !defined(USE_MESSIP_SRR)
-	// odwolanie alarmu
-	ualarm((useconds_t)(0), 0);
-#endif
+	/*
+	 // odwolanie alarmu
+	 ualarm((useconds_t)(0), 0);
+	 */
 }
 
 void UiRobot::pulse_ecp_execute(int code, int value)

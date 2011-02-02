@@ -11,6 +11,17 @@ wgt_spkm_ext::wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 {
 	ui.setupUi(this);
 
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	timer->start(1000);
+}
+
+void wgt_spkm_ext::on_timer_slot()
+{
+	if ((dwgt->isVisible()) && (ui.radioButton_cyclic_read->isChecked())) {
+		init();
+	}
+
 }
 
 wgt_spkm_ext::~wgt_spkm_ext()

@@ -32,3 +32,9 @@ void wgt_process_control::on_mp_resume_pushButton_clicked()
 {
 	interface.pulse_resume_mp();
 }
+
+void wgt_process_control::on_mp_trigger_pushButton_clicked()
+{
+	interface.pulse_trigger_mp();
+}
+

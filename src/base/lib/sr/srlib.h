@@ -18,9 +18,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/serialization/serialization.hpp>
 
-#if defined(USE_MESSIP_SRR)
 #include "base/lib/messip/messip.h"
-#endif
 
 #include "base/lib/typedefs.h"
 #include "base/lib/com_buf.h"
@@ -44,11 +42,7 @@ static const unsigned int TEXT_LENGTH = 256;
 /* -------------------------------------------------------------------- */
 typedef struct sr_package
 {
-#if !defined(USE_MESSIP_SRR)
-	//! QNET header
-	//! @bug probably this is not needed
-	msg_header_t hdr;
-#endif
+
 	//! Message timestamp
 	uint64_t time;
 

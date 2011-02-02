@@ -25,13 +25,11 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/thread/mutex.hpp>
 
-#if defined(USE_MESSIP_SRR)
+
 #include <boost/property_tree/exceptions.hpp>
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
-#else
-#include <boost/property_tree/ptree.hpp>
-#endif
+
 
 namespace mrrocpp {
 namespace lib {
@@ -60,38 +58,10 @@ private:
 	//! Mutex to protect exclusive access
 	mutable boost::mutex access_mutex;
 
-#ifdef USE_MESSIP_SRR
+
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
-#else
-	//! Property trees of configuration files
-	boost::property_tree::ptree common_file_pt, file_pt;
 
-	//! Configuration file location
-	std::string file_location;
-
-	//! Common configuration file location
-	std::string common_file_location;
-
-	/**
-	 * Get the path to the configuration file
-	 * @return path to the configuration file
-	 */
-	std::string get_config_file_path() const;
-
-	/**
-	 * Get the path to the common configuration file
-	 * @return path to the configuration file
-	 */
-	std::string get_common_config_file_path() const;
-
-	/**
-	 * Read property tree from configuration file
-	 * @param pt property tree
-	 * @param file configuration file
-	 */
-	void read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file);
-#endif /* USE_MESSIP_SRR */
 
 public:
 	/**
@@ -199,7 +169,7 @@ public:
 		pt_path += _key;
 
 		boost::mutex::scoped_lock l(access_mutex);
-#ifdef USE_MESSIP_SRR
+
 		config_query_t query, reply;
 
 		query.key = pt_path;
@@ -214,13 +184,7 @@ public:
 		} else {
 			throw boost::property_tree::ptree_error("remote config query failed: probably missing key \"" + __section_name + "." + _key + "\" in config file. pt_path=\"" + pt_path + "\".");
 		}
-#else
-		try {
-			return file_pt.get <Type> (pt_path);
-		} catch (boost::property_tree::ptree_error & e) {
-			return common_file_pt.get <Type> (pt_path);
-		}
-#endif
+
 	}
 
 	/**
@@ -264,10 +228,10 @@ public:
 		return exists(_key.c_str(), __section_name.c_str());
 	}
 
-#if defined(USE_MESSIP_SRR)
+
 	//! Destructor
 	~configurator();
-#endif
+
 
 protected:
 	/**

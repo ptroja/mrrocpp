@@ -14,15 +14,9 @@
 #include <csignal>
 #include <sys/wait.h>
 #include <sys/types.h>
-#if !defined(USE_MESSIP_SRR)
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
 
-#else
 #include "base/lib/messip/messip_dataport.h"
-#endif /* !USE_MESSIP_SRR */
+
 #include <pthread.h>
 #include <cerrno>
 
@@ -66,32 +60,6 @@ bool effector::initialize_communication()
 	const std::string
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
-#if !defined(USE_MESSIP_SRR)
-	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(robot_test_mode)) {
-
-		const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
-
-		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
-		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
-
-		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-		if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK) == 0) {
-			fprintf(stderr, "edp: hardware busy\n");
-			return false;
-		}
-
-		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-
-		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno, "edp: hardware_busy_attach_point failed to attach");
-			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
-			// TODO: throw
-			return false;
-		}
-	}
-#endif /* !defined(USE_MESSIP_SRR */
-
 	std::string full_path_to_server_attach_point("/dev/name/global/");
 	full_path_to_server_attach_point += server_attach_point;
 
@@ -106,11 +74,8 @@ bool effector::initialize_communication()
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 
 	server_attach =
-#if !defined(USE_MESSIP_SRR)
-			name_attach(NULL, server_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-#else /* USE_MESSIP_SRR */
+
 	messip::port_create(server_attach_point);
-#endif /* USE_MESSIP_SRR */
 
 	if (server_attach == NULL) {
 		msg->message(lib::SYSTEM_ERROR, errno, "edp: resmg failed to attach");

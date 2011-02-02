@@ -27,9 +27,9 @@
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ecp {
@@ -55,16 +55,12 @@ ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _numbe
 // -------------------------------------------------------------------
 ecp_robot_base::~ecp_robot_base(void)
 {
-#if !defined(USE_MESSIP_SRR)
-	if (EDP_fd > 0) {
-		name_close(EDP_fd);
-	}
-#else /* USE_MESSIP_SRR */
+
 	if (EDP_fd)
 	{
 		messip::port_disconnect(EDP_fd);
 	}
-#endif /* USE_MESSIP_SRR */
+
 
 	if (spawn_and_kill) {
 		if (kill(EDP_MASTER_Pid, SIGTERM) == -1) {
@@ -89,11 +85,9 @@ void ecp_robot_base::connect_to_edp(lib::configurator &config)
 	fflush(stdout);
 
 	unsigned int tmp = 0;
-#if !defined(USE_MESSIP_SRR)
-	while ((EDP_fd = name_open(edp_net_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0)
-#else
+
 	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL )
-#endif
+
 	{
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);

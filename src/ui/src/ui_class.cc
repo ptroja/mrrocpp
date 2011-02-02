@@ -39,9 +39,9 @@
 //
 //
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace ui {
@@ -303,11 +303,9 @@ int Interface::MPup_int()
 				short tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
 				while ((mp.pulse_fd =
-#if !defined(USE_MESSIP_SRR)
-						name_open(mp.network_pulse_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL)) < 0
-#else
+
 					messip::port_connect(mp.network_pulse_attach_point)) == NULL
-#endif
+
 					)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						usleep(lib::CONNECT_DELAY);
@@ -469,10 +467,10 @@ void Interface::reload_whole_configuration()
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
 
-#if !defined(USE_MESSIP_SRR)
+
 		// funkcja dziala niepoprawnie z config serwerem
-		config->change_config_file(config_file);
-#endif
+		// config->change_config_file(config_file);
+
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -572,9 +570,9 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
-#if defined(USE_MESSIP_SRR)
+
 	return true;
-#else
+/*
 	std::string opendir_path("/net/");
 	opendir_path += _node;
 
@@ -586,7 +584,7 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 		return false;
 	}
 	return true;
-#endif
+*/
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
@@ -1080,11 +1078,9 @@ int Interface::execute_mp_pulse(char pulse_code)
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
 
-#if !defined(USE_MESSIP_SRR)
-		if (MsgSendPulse(mp.pulse_fd, sched_get_priority_min(SCHED_FIFO), pulse_code, pulse_value) == -1)
-#else
+
 		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
-#endif
+
 		{
 			perror("Blad w wysylaniu pulsu do mp");
 			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
