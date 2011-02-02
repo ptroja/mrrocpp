@@ -15,10 +15,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <csignal>
-#if defined(__QNXNTO__)
-#include <sys/neutrino.h>
-#include <sys/netmgr.h>
-#endif /* __QNXNTO__ */
 
 #include "base/lib/datastr.h"
 
@@ -26,9 +22,7 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/ecp/ECP_main_error.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

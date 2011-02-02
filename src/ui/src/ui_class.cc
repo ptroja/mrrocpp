@@ -559,12 +559,10 @@ void Interface::UI_close(void)
 void Interface::abort_threads()
 
 {
-#if defined(__QNXNTO__)
 	delete ui_sr_obj;
 	delete ui_ecp_obj;
 
 	delete meb_tid;
-#endif
 }
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
@@ -1124,11 +1122,6 @@ void Interface::create_threads()
 	ui_ecp_obj = new ecp_buffer(*this);
 	delay(1);
 	ui_sr_obj = new sr_buffer(*this);
-
-#if defined(__QNXNTO__)
-
-#endif
-
 }
 
 }

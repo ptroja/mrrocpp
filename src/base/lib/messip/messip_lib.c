@@ -1994,13 +1994,6 @@ messip_receive( messip_channel_t * ch,
 	}
 	if(dcount != (ssize_t) (sizeof( uint32_t ) + len_to_read)) {
 		// Warn if the packet has been fragmented by the TCP/IP stack
-#if defined(__linux__)
-		fprintf(stderr, "LINUX: ");
-#elif defined(__QNXNTO__)
-		fprintf(stderr, "QNX: ");
-#else
-		fprintf(stderr, "OTHER: ");
-#endif
 		fprintf(stderr, "received IP packet fragmented: %zd of %zd bytes\n", dcount, (ssize_t) (sizeof( uint32_t ) + len_to_read));
 	}
 	assert( dcount >= sizeof( uint32_t ) );
