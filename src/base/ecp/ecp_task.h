@@ -54,7 +54,7 @@ private:
 	/**
 	 * @brief communication channels descriptors
 	 */
-	lib::fd_server_t ecp_attach, trigger_attach; // by Y
+	lib::fd_server_t ecp_attach, trigger_attach;
 
 	/**
 	 * @brief MP server communication channel descriptor to send pulses
@@ -64,12 +64,12 @@ private:
 	/**
 	 * @brief replies to MP message
 	 * @param caller calling MP id
-	 * @param mp_pulse_received mp pulse received flag
+	 * @param mp_pulse_received MP pulse received flag
 	 */
 	bool reply_to_mp(int &caller, bool &mp_pulse_received);
 
 	/**
-	 * @brief sends pulse to MP to signalize communication readiness
+	 * @brief sends pulse to MP to signal communication readiness
 	 */
 	void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
 
