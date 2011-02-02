@@ -46,9 +46,9 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 		// TODO: throw
 		perror("uname");
 	}
-	strcpy(sr_message.host_name, sysinfo.nodename);
 
-
+	strncpy(sr_message.host_name, sysinfo.nodename, sizeof(sr_message.host_name));
+	sr_message.host_name[sizeof(sr_message.host_name)] = 0;
 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
