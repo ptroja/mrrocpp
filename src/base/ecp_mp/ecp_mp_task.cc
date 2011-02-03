@@ -40,8 +40,6 @@ lib::sr_ecp* task::sr_ecp_msg = NULL;
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
-	std::cerr << "mp 3a1" << std::endl;
-
 	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	//	// Obiekt do komuniacji z SR
@@ -67,7 +65,6 @@ task::task(lib::configurator &_config) :
 			throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, e );
 		}
 	}
-	std::cerr << "mp 3a9" << std::endl;
 }
 
 task::~task()
