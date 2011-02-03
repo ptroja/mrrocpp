@@ -1194,6 +1194,48 @@ int Interface::pulse_trigger_mp()
 
 }
 
+//ECP pulse
+int Interface::pulse_trigger_ecp()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_ecp();
+				}
+
+	return 1;
+}
+
+//Reader pulse
+int Interface::pulse_start_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_start_exec_pulse();
+				}
+
+	return 1;
+}
+
+int Interface::pulse_stop_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_stop_exec_pulse();
+				}
+
+	return 1;
+}
+
+int Interface::pulse_trigger_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_trigger_exec_pulse();
+				}
+
+	return 1;
+}
+
 // zatrzymuje zadanie, zabija procesy
 int Interface::unload_all()
 

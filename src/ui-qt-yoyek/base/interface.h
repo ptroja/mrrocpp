@@ -16,9 +16,7 @@
 
 #include "ui.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ui {
@@ -175,11 +173,22 @@ public:
 	int EDP_all_robots_synchronise();
 	int MPup();
 	int MPslay();
+
+	// MP pulse
 	int pulse_start_mp();
 	int pulse_stop_mp();
 	int pulse_pause_mp();
 	int pulse_resume_mp();
 	int pulse_trigger_mp();
+
+	//ECP pulse
+	int pulse_trigger_ecp();
+
+	//Reader pulse
+	int pulse_start_all_reader();
+	int pulse_stop_all_reader();
+	int pulse_trigger_all_reader();
+
 	int unload_all();
 	int slay_all();
 
