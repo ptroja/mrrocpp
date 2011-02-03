@@ -125,7 +125,7 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="1">
-     <widget class="QPushButton" name="ecp_trigger_pushButton">
+     <widget class="QPushButton" name="all_ecp_trigger_pushButton">
       <property name="text">
        <string>TRIGGER</string>
       </property>
@@ -174,14 +174,14 @@
    </property>
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="1">
-     <widget class="QPushButton" name="reader_trigger_pushButton">
+     <widget class="QPushButton" name="all_reader_trigger_pushButton">
       <property name="text">
        <string>TRIGGER</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QPushButton" name="reader_stop_pushButton">
+     <widget class="QPushButton" name="all_reader_stop_pushButton">
       <property name="text">
        <string>STOP</string>
       </property>
@@ -206,7 +206,7 @@
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="reader_start_pushButton">
+     <widget class="QPushButton" name="all_reader_start_pushButton">
       <property name="text">
        <string>START</string>
       </property>
