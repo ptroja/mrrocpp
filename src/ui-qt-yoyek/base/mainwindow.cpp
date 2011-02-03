@@ -11,17 +11,17 @@
 #include "interface.h"
 #include "ui_sr.h"
 
-#include "irp6ot_m/ui_r_irp6ot_m.h"
-#include "irp6p_m/ui_r_irp6p_m.h"
-#include "spkm/ui_r_spkm.h"
-#include "smb/ui_r_smb.h"
-#include "shead/ui_r_shead.h"
-#include "polycrank/ui_r_polycrank.h"
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../spkm/ui_r_spkm.h"
+#include "../smb/ui_r_smb.h"
+#include "../shead/ui_r_shead.h"
+#include "../polycrank/ui_r_polycrank.h"
 
-#include "spkm/wgt_spkm_inc.h"
-#include "spkm/wgt_spkm_int.h"
-#include "spkm/wgt_spkm_ext.h"
-#include "polycrank/wgt_polycrank_int.h"
+#include "../spkm/wgt_spkm_inc.h"
+#include "../spkm/wgt_spkm_int.h"
+#include "../spkm/wgt_spkm_ext.h"
+#include "../polycrank/wgt_polycrank_int.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>

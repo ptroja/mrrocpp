@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_spkm_ext.h"
-#include "../wgt_base.h"
+#include "../base/wgt_base.h"
 #include <QTimer>
 
 namespace mrrocpp {

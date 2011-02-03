@@ -8,8 +8,8 @@
 #ifndef __UI_R_SPKM_H
 #define __UI_R_SPKM_H
 
-#include "../ui.h"
-#include "../ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
 #include "robot/spkm/const_spkm.h"
 
 class wgt_spkm_inc;

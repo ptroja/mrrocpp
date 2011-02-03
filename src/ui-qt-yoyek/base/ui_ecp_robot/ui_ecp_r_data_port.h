@@ -5,38 +5,41 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef _UI_ECP_R_TFG_H
-#define _UI_ECP_R_TFG_H
+#ifndef _UI_ECP_R_DATA_PORT_H
+#define _UI_ECP_R_DATA_PORT_H
 
-#include "ui.h"
+#include "../ui.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
-#include "ui_ecp_r_common.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
-}
-namespace tfg_and_conv {
-
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobot
+class EcpRobotDataPort
 {
 
 public:
+	Interface& interface;
+	ecp::common::robot::ecp_robot *the_robot;
+
+	// by Y - do odczytu stanu poczatkowego robota
+	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
+	virtual void execute_motion(void);
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name); // Konstruktor
+	EcpRobotDataPort(Interface& _interface); // Konstruktor
 
-	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
-	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
+	virtual ~EcpRobotDataPort();
 
 };
 
 }
 } //namespace ui
 } //namespace mrrocpp
+
 #endif
+

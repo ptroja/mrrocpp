@@ -21,7 +21,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "interface.h"
+#include "../interface.h"
 #include "ui_ecp_r_irp6_common.h"
 
 #include "ui_ecp_r_irp6_common.h"

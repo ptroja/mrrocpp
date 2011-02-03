@@ -15,12 +15,12 @@
 #include "interface.h"
 #include "ui_sr.h"
 #include "ui_ecp.h"
-#include "spkm/ui_r_spkm.h"
-#include "smb/ui_r_smb.h"
-#include "shead/ui_r_shead.h"
-#include "irp6ot_m/ui_r_irp6ot_m.h"
-#include "irp6p_m/ui_r_irp6p_m.h"
-#include "polycrank/ui_r_polycrank.h"
+#include "../spkm/ui_r_spkm.h"
+#include "../smb/ui_r_smb.h"
+#include "../shead/ui_r_shead.h"
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../polycrank/ui_r_polycrank.h"
 
 extern void catch_signal(int sig);
 
@@ -479,8 +479,6 @@ void Interface::reload_whole_configuration()
 	}
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
-
-
 
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
@@ -971,8 +969,7 @@ int Interface::execute_mp_pulse(char pulse_code)
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
 
-
-		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
+		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
 
 		{
 			perror("Blad w wysylaniu pulsu do mp");

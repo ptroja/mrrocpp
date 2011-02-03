@@ -8,8 +8,8 @@
 #ifndef __UI_R_IRP6P_M_H
 #define __UI_R_IRP6P_M_H
 
-#include "../ui.h"
-#include "../ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 namespace mrrocpp {
