@@ -74,9 +74,9 @@ task::~task()
 {
 	// Zabicie wszystkich procesow VSP
 	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m)
-				{
-					delete sensor_item.second;
-				}
+	{
+		delete sensor_item.second;
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -203,28 +203,28 @@ bool task::show_message(const char* message)
 void task::all_sensors_initiate_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-				{
-					if (sensor_item.second->base_period > 0) {
-						if (sensor_item.second->current_period == sensor_item.second->base_period) {
-							sensor_item.second->initiate_reading();
-						}
-						sensor_item.second->current_period--;
-					}
-				}
+	{
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == sensor_item.second->base_period) {
+				sensor_item.second->initiate_reading();
+			}
+			sensor_item.second->current_period--;
+		}
+	}
 }
 
 void task::all_sensors_get_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-				{
-					// jesli wogole mamy robic pomiar
-					if (sensor_item.second->base_period > 0) {
-						if (sensor_item.second->current_period == 0) {
-							sensor_item.second->get_reading();
-							sensor_item.second->current_period = sensor_item.second->base_period;
-						}
-					}
-				}
+	{
+		// jesli wogole mamy robic pomiar
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == 0) {
+				sensor_item.second->get_reading();
+				sensor_item.second->current_period = sensor_item.second->base_period;
+			}
+		}
+	}
 }
 
 bool task::str_cmp::operator()(char const *a, char const *b) const
