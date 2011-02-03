@@ -383,15 +383,7 @@ public:
 
 	void send()
 	{
-		// minimal check for command correctness
-		if (ecp_command.instruction_type == lib::INVALID) {
-			sr_ecp_msg.message(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-		}
-
-
 		if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
-
 		{
 			int e = errno; // kod bledu systemowego
 			perror("ecp: Send to EDP_MASTER error");
