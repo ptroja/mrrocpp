@@ -418,6 +418,11 @@ void MainWindow::on_actionsarkofag_Position_2_triggered()
 	interface.sarkofag->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionsarkofag_Servo_Agortihm_triggered()
+{
+
+}
+
 // spkm menu
 
 void MainWindow::on_actionspkm_EDP_Load_triggered()

@@ -95,6 +95,9 @@ private slots:
 	void on_actionsarkofag_Position_1_triggered();
 	void on_actionsarkofag_Position_2_triggered();
 
+	void on_actionsarkofag_Servo_Agortihm_triggered();
+
+
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
 	void on_actionspkm_EDP_Unload_triggered();
