@@ -15,8 +15,6 @@
 
 #include "DataBufferBase.h"
 #include "DataBuffer.h"
-#include "OrDataCondition.h"
-#include "AndDataCondition.h"
 
 /**
  * Agent base class
@@ -24,20 +22,8 @@
 class Agent : public AgentBase
 {
 private:
-	//! check if given data availability condition is satisfied
-	bool checkCondition(const OrDataCondition &condition);
-
 	//! server channel id
 	messip_channel_t * channel;
-
-	//! thread id of the of the non-blocking receive implementation
-	boost::thread tid;
-
-	//! condition variable for synchronization wake-up after receiving data
-	boost::condition_variable cond;
-
-	//! mutex for protection data between receiver and readers
-	mutable boost::mutex mtx;
 
 	//! Data receiver thread loop
 	void ReceiveDataLoop(void);
@@ -66,12 +52,6 @@ private:
 	//! Receive single message
 	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
 
-	//! thread id of the of the non-blocking receive implementation
-	boost::thread loop_tid;
-
-	//! Main loop of the agent
-	void operator ()();
-
 protected:
 	//! Datatype of buffers container
 	typedef boost::unordered_map <std::string, DataBufferBase *> buffers_t;
@@ -88,33 +68,17 @@ protected:
 	//! List buffers of the agent
 	void listBuffers() const;
 
-protected:
-	/**
-	 * Wait for given data availability condition to be satisfied
-	 * @param condition condition to wait for
-	 */
-	void Wait(DataCondition & condition);
-
-	/**
-	 * Wait for null data availability condition to be satisfied
-	 */
-	void Wait(void);
-
 public:
 	//! Constructor
 	Agent(const std::string & _name);
 
+	//! Receive single message
+	//! @param block true for blocking mode
+	//! @return true if a message has been received
+	bool ReceiveSingleMessage(bool block);
+
 	//! Destructor
 	virtual ~Agent();
-
-	//! Single step of agent's transition function
-	virtual bool step() = 0;
-
-	//! Start the agent
-	void Start(void);
-
-	//! Join the agent
-	void Join(void);
 };
 
 #endif /* __AGENT_H */
