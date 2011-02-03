@@ -273,7 +273,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	if (instruction.instruction_type != lib::SET) {
 
 		msg->message("EDP get_arm_position");
-
 		switch (instruction.get_arm_type)
 		{
 			case lib::MOTOR: {
