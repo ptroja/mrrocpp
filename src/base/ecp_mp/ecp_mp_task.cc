@@ -16,6 +16,13 @@
 #include <sys/stat.h>
 #include <csignal>
 
+#include <boost/foreach.hpp>
+
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
+
 #include "base/lib/datastr.h"
 
 #include "base/ecp_mp/ecp_mp_task.h"
@@ -23,13 +30,6 @@
 #include "base/ecp/ECP_main_error.h"
 
 #include "base/lib/messip/messip_dataport.h"
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xinclude.h>
-
-#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ecp_mp {
