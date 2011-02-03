@@ -112,15 +112,14 @@ uint8_t task::choose_option(const char* question, uint8_t nr_of_options_input)
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	return ui_to_ecp_rep.reply; // by Y
+	return ui_to_ecp_rep.reply;
 }
 // --------------------------------------------------------------------------
 
@@ -136,8 +135,7 @@ int task::input_integer(const char* question)
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -159,15 +157,14 @@ double task::input_double(const char* question)
 	ecp_to_ui_msg.ecp_message = lib::DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
-
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
-	return ui_to_ecp_rep.double_number; // by Y
+	return ui_to_ecp_rep.double_number;
 }
 // --------------------------------------------------------------------------
 
@@ -183,8 +180,7 @@ bool task::show_message(const char* message)
 	strcpy(ecp_to_ui_msg.string, message);
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -241,7 +237,6 @@ ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTraject
 	//coordinateType wrzucic do
 	actTrajectory->arm_type =lib::returnProperPS((char *) coordinateType);
 	actTrajectory->pos_num = atoi((char *) numOfPoses);
-
 
 	double tmp[actTrajectory->pos_num*axes_num];
 	int num_v=0;
