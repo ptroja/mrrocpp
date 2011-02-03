@@ -330,7 +330,7 @@ public:
 	/**
 	 * @brief set the EDP command buffer from data_port structures
 	 *
-	 * currently it is executed only in sporadicly coordinated robots using data_ports
+	 * currently it is executed only in sporadically coordinated robots using data_ports
 	 */
 	virtual void create_command()
 	{}
@@ -338,7 +338,7 @@ public:
 	/**
 	 * @brief set the data_port structures from EDP reply buffer
 	 *
-	 * currently it is executed only in sporadicly coordinated robots using data_ports
+	 * currently it is executed only in sporadically coordinated robots using data_ports
 	 */
 	virtual void get_reply()
 	{}
