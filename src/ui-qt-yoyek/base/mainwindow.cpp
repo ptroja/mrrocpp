@@ -17,6 +17,8 @@
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
 #include "../polycrank/ui_r_polycrank.h"
+#include "../bird_hand/ui_r_bird_hand.h"
+#include "../sarkofag/ui_r_sarkofag.h"
 
 #include "../spkm/wgt_spkm_inc.h"
 #include "../spkm/wgt_spkm_int.h"
@@ -352,17 +354,19 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 // birdhand menu
 void MainWindow::on_actionbirdhand_EDP_Load_triggered()
 {
-
+	interface.bird_hand->edp_create();
 }
+
 void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 {
-
+	interface.bird_hand->EDP_slay_int();
 }
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
 
 }
+
 void MainWindow::on_actionbirdhand_Configuration_triggered()
 {
 
@@ -371,17 +375,19 @@ void MainWindow::on_actionbirdhand_Configuration_triggered()
 // sarkofag menu
 void MainWindow::on_actionsarkofag_EDP_Load_triggered()
 {
-
+	interface.sarkofag->edp_create();
 }
+
 void MainWindow::on_actionsarkofag_EDP_Unload_triggered()
 {
-
+	interface.sarkofag->EDP_slay_int();
 }
 
 void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 {
-
+	interface.sarkofag->synchronise();
 }
+
 void MainWindow::on_actionsarkofag_Move_triggered()
 {
 
@@ -389,23 +395,27 @@ void MainWindow::on_actionsarkofag_Move_triggered()
 
 void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
 {
-
+	interface.sarkofag->move_to_synchro_position();
 }
+
 void MainWindow::on_actionsarkofag_Front_Position_triggered()
 {
-
+	interface.sarkofag->move_to_front_position();
 }
+
 void MainWindow::on_actionsarkofag_Position_0_triggered()
 {
-
+	interface.sarkofag->move_to_preset_position(0);
 }
+
 void MainWindow::on_actionsarkofag_Position_1_triggered()
 {
-
+	interface.sarkofag->move_to_preset_position(1);
 }
+
 void MainWindow::on_actionsarkofag_Position_2_triggered()
 {
-
+	interface.sarkofag->move_to_preset_position(2);
 }
 
 // spkm menu

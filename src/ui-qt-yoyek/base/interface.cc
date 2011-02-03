@@ -21,6 +21,8 @@
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../polycrank/ui_r_polycrank.h"
+#include "../bird_hand/ui_r_bird_hand.h"
+#include "../sarkofag/ui_r_sarkofag.h"
 
 extern void catch_signal(int sig);
 
@@ -150,18 +152,19 @@ void Interface::init()
 	polycrank = new polycrank::UiRobot(*this);
 	robot_m[polycrank->robot_name] = polycrank;
 
-	/* TR
-	 bird_hand = new bird_hand::UiRobot(*this);
-	 robot_m[bird_hand->robot_name] = bird_hand;
+	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
 
+	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
+	/* TR
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
 	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
 
-	 sarkofag = new sarkofag::UiRobot(*this);
-	 robot_m[sarkofag->robot_name] = sarkofag;
 
 	 irp6m_m = new irp6m::UiRobot(*this);
 	 robot_m[irp6m_m->robot_name] = irp6m_m;

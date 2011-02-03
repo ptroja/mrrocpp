@@ -38,7 +38,12 @@ class UiRobot;
 namespace polycrank {
 class UiRobot;
 }
-
+namespace bird_hand {
+class UiRobot;
+}
+namespace sarkofag {
+class UiRobot;
+}
 namespace common {
 
 class UiRobot;
@@ -134,12 +139,13 @@ public:
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6p_m::UiRobot *irp6p_m;
 	polycrank::UiRobot *polycrank;
-
+	bird_hand::UiRobot *bird_hand;
+	sarkofag::UiRobot *sarkofag;
 	/*TR
-	 bird_hand::UiRobot *bird_hand;
+
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
 	 irp6p_tfg::UiRobot *irp6p_tfg;
-	 sarkofag::UiRobot *sarkofag;
+
 	 irp6m::UiRobot *irp6m_m;
 	 conveyor::UiRobot *conveyor;
 	 speaker::UiRobot *speaker;
