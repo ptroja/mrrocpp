@@ -151,6 +151,8 @@ public:
 	 speaker::UiRobot *speaker;
 	 */
 
+	int position_refresh_interval;
+
 	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
