@@ -144,8 +144,42 @@
      <addaction name="separator"/>
      <addaction name="actionpolycrank_Move_Joints"/>
     </widget>
+    <widget class="QMenu" name="menuBirdhand">
+     <property name="title">
+      <string>Birdhand</string>
+     </property>
+     <addaction name="actionbirdhand_EDP_Load"/>
+     <addaction name="actionbirdhand_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionbirdhand_Command"/>
+     <addaction name="actionbirdhand_Configuration"/>
+    </widget>
+    <widget class="QMenu" name="menuSarkofag">
+     <property name="title">
+      <string>Sarkofag</string>
+     </property>
+     <widget class="QMenu" name="menusarkofag_Preset_Positions">
+      <property name="title">
+       <string>Preset Positions</string>
+      </property>
+      <addaction name="actionsarkofag_Synchro_Position"/>
+      <addaction name="actionsarkofag_Front_Position"/>
+      <addaction name="actionsarkofag_Position_0"/>
+      <addaction name="actionsarkofag_Position_1"/>
+      <addaction name="actionsarkofag_Position_2"/>
+     </widget>
+     <addaction name="actionsarkofag_EDP_Load"/>
+     <addaction name="actionsarkofag_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionsarkofag_Synchronisation"/>
+     <addaction name="actionsarkofag_Move"/>
+     <addaction name="menusarkofag_Preset_Positions"/>
+    </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuIrp6p_m"/>
+    <addaction name="separator"/>
+    <addaction name="menuBirdhand"/>
+    <addaction name="menuSarkofag"/>
     <addaction name="separator"/>
     <addaction name="menuSpkm"/>
     <addaction name="menuSmb"/>
@@ -317,7 +351,7 @@
   </action>
   <action name="actionspkm_Synchro_Position">
    <property name="text">
-    <string>synchro position</string>
+    <string>Synchro Position</string>
    </property>
   </action>
   <action name="actionspkm_Front_Position">
@@ -543,6 +577,71 @@
   <action name="actionpolycrank_Move_Joints">
    <property name="text">
     <string>Move Joints</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_EDP_Load">
+   <property name="text">
+    <string>EDP Load</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_EDP_Unload">
+   <property name="text">
+    <string>EDP Unload</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_Command">
+   <property name="text">
+    <string>Command</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_Configuration">
+   <property name="text">
+    <string>Configuration</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_EDP_Load">
+   <property name="text">
+    <string>EDP Load</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_EDP_Unload">
+   <property name="text">
+    <string>EDP Unload</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Synchronisation">
+   <property name="text">
+    <string>Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Move">
+   <property name="text">
+    <string>Move</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Synchro_Position">
+   <property name="text">
+    <string>Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Front_Position">
+   <property name="text">
+    <string>Front Position</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_0">
+   <property name="text">
+    <string>Position 0</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_1">
+   <property name="text">
+    <string>Position 1</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_2">
+   <property name="text">
+    <string>Position 2</string>
    </property>
   </action>
  </widget>

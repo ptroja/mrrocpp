@@ -349,6 +349,65 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 	interface.irp6p_m->move_to_preset_position(2);
 }
 
+// birdhand menu
+void MainWindow::on_actionbirdhand_EDP_Load_triggered()
+{
+
+}
+void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionbirdhand_Command_triggered()
+{
+
+}
+void MainWindow::on_actionbirdhand_Configuration_triggered()
+{
+
+}
+
+// sarkofag menu
+void MainWindow::on_actionsarkofag_EDP_Load_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionsarkofag_Synchronisation_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_Front_Position_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_Position_0_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_Position_1_triggered()
+{
+
+}
+void MainWindow::on_actionsarkofag_Position_2_triggered()
+{
+
+}
+
 // spkm menu
 
 void MainWindow::on_actionspkm_EDP_Load_triggered()
