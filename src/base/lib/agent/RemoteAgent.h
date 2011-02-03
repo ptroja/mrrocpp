@@ -12,7 +12,6 @@
 
 class RemoteAgent : public AgentBase {
 private:
-
 	//! remote server channel id
 	messip_channel_t * channel;
 
@@ -36,22 +35,19 @@ public:
 	RemoteAgent(const std::string & _name) :
 		AgentBase(_name)
 	{
-
 		channel = messip_channel_connect(NULL, getName().c_str(), MESSIP_NOTIMEOUT);
 		if(channel == NULL) {
 			// TODO: check for results
 			throw;
 		}
-
 	}
 
-	virtual ~RemoteAgent() {
-
+	virtual ~RemoteAgent()
+	{
 		if(messip_channel_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
 			// TODO: check for results
 			throw;
 		}
-
 	}
 };
 
