@@ -1197,6 +1197,7 @@ int Interface::pulse_trigger_mp()
 //ECP pulse
 int Interface::pulse_trigger_ecp()
 {
+
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->pulse_ecp();
