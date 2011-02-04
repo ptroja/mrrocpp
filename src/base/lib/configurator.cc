@@ -241,7 +241,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		if (exists("username", _section_name)) {
 			std::string username = value <std::string> ("username", _section_name);
+			if (username == std::string("current")) {
 
+				username = getenv("USER");
+
+			}
+			std::cerr << "username: " << username << std::endl;
 			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
 			if (!use_ssh) {
 				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
