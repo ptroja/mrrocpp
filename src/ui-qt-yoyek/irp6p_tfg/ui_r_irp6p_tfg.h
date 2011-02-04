@@ -12,6 +12,8 @@
 #include "../base/ui_robot.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
+class wgt_irp6p_tfg_inc;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -40,6 +42,7 @@ public:
 	double desired_pos[lib::irp6p_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	wgt_irp6p_tfg_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 

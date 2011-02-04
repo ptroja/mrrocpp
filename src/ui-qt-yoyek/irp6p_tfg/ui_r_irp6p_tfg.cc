@@ -7,6 +7,8 @@
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../base/interface.h"
 
+#include "wgt_irp6p_tfg_inc.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace irp6p_tfg {
@@ -181,6 +183,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active"),
 			ui_ecp_robot(NULL)
 {
+	wgt_inc = new wgt_irp6p_tfg_inc(interface, *this, interface.get_main_window());
+	wndbase_m[WGT_IRP6P_TFG_INC] = wgt_inc->dwgt;
 
 }
 
