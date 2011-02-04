@@ -40,12 +40,14 @@
 #include <stdint.h>  /* int types with given size */
 #include <cmath>
 
-#include <boost/exception/all.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 #include <string>
 #include <exception>
 #include <vector>
+
+// Include for BYTE/WORD/DWORD typedefs
+#include "epos_access.h"
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -59,13 +61,9 @@ namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-/* all EPOS data exchange is based on 16bit words, but other types are
- also used...*/
-typedef uint32_t DWORD; ///< \brief 32bit type for EPOS data exchange
-typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
-#ifndef CPP
-typedef char BYTE; ///< \brief 8bit type for EPOS data exchange
-#endif
+/*!
+ * Data types used for object dictionary (Firmware Specification reference)
+ */
 
 //! signed 8-bit integer
 typedef int8_t INTEGER8;
@@ -84,75 +82,6 @@ typedef uint16_t UNSIGNED16;
 
 //! unsigned 32-bit integer
 typedef uint32_t UNSIGNED32;
-
-/* EPOS will reset communication after 500ms of inactivity */
-
-/*! \brief try NTRY times to read one byte from EPOS, then give up */
-#define NTRY      5
-
-/*! \brief wait TRYSLEEP usec between read() from EPOS, if no data available */
-#define TRYSLEEP  (unsigned int)1e5
-
-//! all high-level methods throws this exception in case of error
-struct epos_error : virtual public std::exception, virtual public boost::exception
-{
-	~epos_error() throw ()
-	{
-	}
-};
-
-//! reason of an exception
-typedef boost::error_info <struct tag_reason, std::string> reason;
-
-//! errno code of a failed system call
-typedef boost::error_info <struct tag_errno_code, int> errno_code;
-
-//! failed system call
-typedef boost::error_info <struct tag_errno_code, std::string> errno_call;
-
-class epos_base {
-protected:
-	//! Flag indicating connection status
-	bool device_opened;
-
-public:
-	//! EPOS error status
-	DWORD E_error;
-
-public:
-	//! Constructor
-	epos_base();
-
-	//! Destructor
-	virtual ~epos_base();
-
-	/*! \brief  send command to EPOS, taking care of all necessary 'ack' and checksum tests
-	 *
-	 * @param frame array of WORDs to write
-	 */
-	virtual void sendCommand(WORD *frame) = 0;
-
-	/*! \brief  read an answer frame from EPOS
-	 *
-	 * @return answer array from the controller
-	 */
-	virtual unsigned int readAnswer(WORD *ans, unsigned int ans_len) = 0;
-
-	//! Open device
-	virtual void open() = 0;
-
-	//! Close device
-	virtual void close() = 0;
-
-	/*! \brief Checksum calculation
-	 *
-	 * Copied from EPOS Communication Guide, p.8
-	 *
-	 * @param pDataArray pointer to data for checksum calculation
-	 * @param numberOfWords length of the data
-	 */
-	static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
-};
 
 //! \brief interface to EPOS MAXON controller
 class epos
@@ -244,7 +173,7 @@ private:
 	static bool bitcmp(WORD a, WORD b);
 
 	//! Object to access the device
-	epos_base & device;
+	epos_access & device;
 
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
@@ -255,7 +184,7 @@ public:
 	 * @param _device object to access the device
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
-	epos(epos_base & _device, uint8_t _nodeId);
+	epos(epos_access & _device, uint8_t _nodeId);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
@@ -597,7 +526,7 @@ public:
 	/*! All device parameters will be restored with default values */
 	void Restore();
 
-	/*! \brief Read the Mininal Position Limit
+	/*! \brief Read the Minimal Position Limit
 	 * If the desired or the actual position is lower then the negative position
 	 * limit a software position limit Error will be launched.
 	 */
@@ -611,6 +540,16 @@ public:
 
 	/*! Write the Maximal Position Limit */
 	void writeMaximalPositionLimit(INTEGER32 val);
+
+	/*!
+	 * Interpolated Profile Motion mode commands
+	 */
+
+	/*! Provides the actual free buffer size and is given in interpolation data records */
+	UNSIGNED32 readActualBufferSize();
+
+	/*! Clear a buffer and reenable access to it */
+	void clearPvtBuffer();
 
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 

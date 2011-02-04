@@ -12,8 +12,13 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <sys/select.h>
 
-#include "epos.h"
 #include "epos_access_rs232.h"
+
+/*! \brief try NTRY times to read one byte from EPOS, then give up */
+#define NTRY	5
+
+/*! \brief wait TRYSLEEP usec between read() from EPOS, if no data available */
+#define TRYSLEEP  ((unsigned int) 1e5)
 
 namespace mrrocpp {
 namespace edp {

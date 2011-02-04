@@ -1,12 +1,8 @@
 // ------------------------------------------------------------------------
 // Proces:		EDP
-// Plik:			edp_irp6s_and_conv.cc
-// System:	QNX/MRROC++  v. 6.3
 // Opis:		Metody wspolne dla robotow IRp-6 oraz tasmociagu
 // 				- definicja metod klasy edp_irp6s_and_conv_effector
 //
-// Autor:		tkornuta
-// Data:		14.01.2007
 // -------------------------------------------------------------------------
 
 #include <cstdio>
@@ -24,11 +20,11 @@
 #include <pthread.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
-#include <sys/netmgr.h>
 #endif
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -53,7 +49,6 @@ servo_buffer * motor_driven_effector::return_created_servo_buffer()
 	return NULL;
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_arm_position_read_hardware_sb()
 { // odczytanie pozycji ramienia
 
@@ -87,7 +82,6 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 	 */
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
@@ -118,7 +112,6 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
@@ -140,14 +133,11 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 	}
 
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
 
 	switch (instruction.set_arm_type)
 	{
@@ -166,7 +156,6 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 	}
 
 }
-/*--------------------------------------------------------------------------*/
 
 void motor_driven_effector::single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -202,7 +191,6 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
-/*--------------------------------------------------------------------------*/
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
 	servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
@@ -242,7 +230,6 @@ void motor_driven_effector::master_joints_read(double output[])
 	}
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::hi_create_threads()
 {
 	rb_obj = (boost::shared_ptr<reader_buffer>) new reader_buffer(*this);
@@ -337,7 +324,6 @@ bool motor_driven_effector::is_synchronised(void) const
 	return controller_state_edp_buf.is_synchronised;
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 {
 	//	fprintf(stderr, "instruction:\n");
@@ -491,10 +477,6 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 // Synchronizacja robota.
 void motor_driven_effector::synchronise()
 {
-
-#ifdef __QNXNTO__
-	flushall();
-#endif
 	/* Uformowanie rozkazu synchronizacji dla procesu SERVO_GROUP */
 	sb->servo_command.instruction_code = SYNCHRONISE;
 	/* Wyslanie rozkazu synchronizacji do realizacji procesowi SERVO_GROUP */
@@ -520,27 +502,18 @@ void motor_driven_effector::synchronise()
 	}
 }
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
 {
 	// ustawienie wyjsc binarnych
 	in_out_obj.set_output(instruction.output_values);
-	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
-	// printf(" OUTPUTS SET\n");
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_inputs(lib::r_buffer & local_reply)
 {
 	// odczytanie wejsc binarnych
 	in_out_obj.get_input(&local_reply.input_values, local_reply.analog_input);
-	// throw NonFatal_error_2(NOT_IMPLEMENTED_YET);
-	// printf(" INPUTS GET\n");
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_algorithms()
 {
 	// odczytanie numerow algorytmow i ich numerow zestawow parametrow
@@ -552,9 +525,7 @@ void motor_driven_effector::get_algorithms()
 	sb->send_to_SERVO_GROUP();
 
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction)
 {
 	// ustalenie formatu odpowiedzi
@@ -602,9 +573,7 @@ lib::REPLY_TYPE motor_driven_effector::rep_type(const lib::c_buffer &instruction
 
 	return reply.reply_type;
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 {
 
@@ -660,9 +629,7 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 
 	// printf("P=%lf\n",desired_motor_pos_new[0]);
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 {
 	// uint8_t previous_model;
@@ -680,9 +647,7 @@ void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 			throw NonFatal_error_2(INVALID_SET_ROBOT_MODEL_TYPE);
 	}
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 {
 	//printf(" GET ROBOT_MODEL: ");
@@ -703,9 +668,7 @@ void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 			throw NonFatal_error_2(INVALID_GET_ROBOT_MODEL_TYPE);
 	}
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 {
 	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
@@ -745,9 +708,7 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 	}
 
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void motor_driven_effector::move_servos()
 {
 	/* Wyslanie polecenia ruchu do procesu SERVO_GROUP oraz odebranie wyniku
@@ -776,7 +737,6 @@ void motor_driven_effector::move_servos()
 	/* Odebranie od procesu SERVO_GROUP informacji o realizacji pierwszej fazy ruchu */
 	sb->send_to_SERVO_GROUP();
 }
-/*--------------------------------------------------------------------------*/
 
 void motor_driven_effector::update_servo_current_motor_pos(double motor_position_increment, size_t i)
 {
@@ -787,9 +747,6 @@ void motor_driven_effector::update_servo_current_motor_pos_abs(double abs_motor_
 {
 	servo_current_motor_pos[i] = abs_motor_position;
 }
-
-// sprawdza stan EDP zaraz po jego uruchomieniu
-
 
 void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 {

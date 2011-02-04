@@ -88,6 +88,68 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
+	// Transform Homog_matrix to Matrix4d.
+	Homog4d O_W_T;
+	O_W_T.matrix() << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
+    std::cout <<"Required pose of the end-effector:\n" << O_W_T.matrix();
+
+
+    // Compute the required O_S_T - pose of the spherical wrist middle (S) in global reference frame (O).
+	Homog4d  O_S_T_desired;
+	O_S_T_desired = O_W_T * params.S_W_T.inverse(Isometry);
+	std::cout <<"Required pose of the wrist:\n" << O_S_T_desired.matrix();
+
+/*    [O_W_T(1:3,4)',zyz_euler_inverse(O_W_T)]
+
+    O_S_T_prim = O_W_T*inv(obj.params.S_W_T);
+
+    disp('Required pose of the spherical wrist center');
+    [O_S_T_prim(1:3,4)',zyz_euler_inverse(O_S_T_prim)]
+    // Extract translation.
+    O_S_P = O_S_T_prim(1:3,4);
+
+    // Compute all possible solutions.
+    solutions(1,:) = obj.inverse_kinematics_for_deltas(O_S_P, 1, 1);
+
+    // Transformation between the upper platform P and middle of the
+    // spherical wrist S.
+    //P_S_T = [[1,0,0; 0,1,0; 0,0,1], obj.params.P_S_P; 0,0,0,1];
+//            obj.params.P_S_T;
+
+    // Compute solutions.
+	e = solutions(i,:);
+	// Compute O_P_T = He_inv.
+	O_P_T = obj.PKM_O_P_T_from_e(e);
+
+	disp('Upper platform pose');
+	[O_P_T(1:3,4)',zyz_euler_inverse(O_P_T)]
+	upp_plat_orient = zyz_euler_inverse(O_P_T);
+
+
+	// Computations verification
+	//He = obj.PKM_He_from_e(e)
+	//he_multi_inv_he = He*O_P_T
+
+	// Compute the pose of the S on the base of orientation of
+	// upper platform P.
+	O_S_T = O_P_T*obj.params.P_S_T;
+
+	disp('Computed spherical wrist pose');
+	[O_S_T(1:3,4)',zyz_euler_inverse(O_S_T)]
+
+	// Compute "twist" of the spherical wrist.
+	O_S_R_prim = O_S_T_prim(1:3,1:3);
+	O_S_R = O_S_T(1:3,1:3);
+	S_S_prim_R = inv(O_S_R)*O_S_R_prim;
+
+	// Compute the inverse transform of the spherical wrist
+	// basing on its "twist".
+	thetas = SW_inverse(obj, S_S_prim_R);
+
+	 // Return the whole vector.
+	 joints(i,:) = [solutions(i,6), solutions(i,7), solutions(i,8), thetas, upp_plat_orient];
+
+*/
 /*	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
 	O_W_T.matrix() << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
