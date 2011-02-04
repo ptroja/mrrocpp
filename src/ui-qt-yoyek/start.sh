@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+function quitSig() {
+    echo "***BASH*** Received SIGINT, going down"
+}
+trap 'quitSig' INT
 
 if [ -x /usr/bin/color ]; then
 		COLOR=/usr/bin/color;
