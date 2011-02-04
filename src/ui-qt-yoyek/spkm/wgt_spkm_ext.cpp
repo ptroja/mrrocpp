@@ -45,7 +45,7 @@ int wgt_spkm_ext::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui.pushButton_execute->setDisabled(false);
+				//ui.pushButton_execute->setDisabled(false);
 
 				robot.ui_ecp_robot->epos_external_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
@@ -79,7 +79,7 @@ int wgt_spkm_ext::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				ui.pushButton_execute->setDisabled(true);
+				//ui.pushButton_execute->setDisabled(true);
 			}
 		}
 

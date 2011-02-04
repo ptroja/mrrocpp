@@ -14,6 +14,14 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(interface.position_refresh_interval);
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
+
+	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+
+}
+
+void wgt_spkm_inc::synchro_depended_init()
+{
+	emit synchro_depended_init_signal();
 }
 
 void wgt_spkm_inc::on_timer_slot()
@@ -36,7 +44,7 @@ void wgt_spkm_inc::on_pushButton_read_clicked()
 	init();
 }
 
-int wgt_spkm_inc::synchro_depended_widgets_enable(bool _set_disabled)
+int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p0->setDisabled(_set_disabled);
@@ -49,7 +57,7 @@ int wgt_spkm_inc::synchro_depended_widgets_enable(bool _set_disabled)
 	return 1;
 }
 
-int wgt_spkm_inc::synchro_depended_init()
+void wgt_spkm_inc::synchro_depended_init_slot()
 {
 
 	try {
@@ -57,18 +65,17 @@ int wgt_spkm_inc::synchro_depended_init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				synchro_depended_widgets_enable(false);
+				synchro_depended_widgets_disable(false);
 
+			} else {
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
+				synchro_depended_widgets_disable(true);
 			}
-		} else {
-			// Wygaszanie elementow przy niezsynchronizowanym robocie
-			synchro_depended_widgets_enable(true);
 		}
 
 	} // end try
 	CATCH_SECTION_UI
 
-	return 1;
 }
 
 int wgt_spkm_inc::init()
@@ -79,7 +86,7 @@ int wgt_spkm_inc::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				synchro_depended_widgets_enable(false);
+				//synchro_depended_widgets_disable(false);
 
 				robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
@@ -98,7 +105,7 @@ int wgt_spkm_inc::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				synchro_depended_widgets_enable(true);
+				//synchro_depended_widgets_disable(true);
 			}
 		}
 
