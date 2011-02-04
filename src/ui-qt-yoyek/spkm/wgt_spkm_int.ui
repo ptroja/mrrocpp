@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
+    <width>807</width>
     <height>357</height>
    </rect>
   </property>
@@ -53,23 +53,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>current position</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="6" colspan="2">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>desired position</string>
+      <string>desired position [SI]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -241,7 +228,7 @@
     <widget class="QFrame" name="frame">
      <property name="minimumSize">
       <size>
-       <width>180</width>
+       <width>185</width>
        <height>160</height>
       </size>
      </property>
@@ -1022,16 +1009,6 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="8" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Step</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="8" colspan="2">
     <widget class="QLabel" name="label_9">
      <property name="text">
@@ -1042,6 +1019,29 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>current position [SI]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="8" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Step [SI]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

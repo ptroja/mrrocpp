@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
+    <width>805</width>
     <height>357</height>
    </rect>
   </property>
@@ -56,7 +56,7 @@
    <item row="0" column="3">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>current position</string>
+      <string>current position [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -69,7 +69,7 @@
    <item row="0" column="5" colspan="2">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>desired position</string>
+      <string>desired position [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -251,99 +251,6 @@
        <height>12</height>
       </size>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="9" rowspan="5">
-    <widget class="QFrame" name="frame">
-     <property name="minimumSize">
-      <size>
-       <width>180</width>
-       <height>160</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>161</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>non sync trapezoidal</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="radioButton_sync_trapezoidal">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>141</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>sync trapezoidal</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="radioButton_sync_polynomal">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>131</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>sync polynomal</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="radioButton_operational">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
-        <width>108</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>operational</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_15">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>10</y>
-        <width>105</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Motion Variant</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
     </widget>
    </item>
    <item row="2" column="0">
@@ -1074,7 +981,7 @@
    <item row="8" column="7" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Step</string>
+      <string>Step [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1086,6 +993,99 @@
      <property name="text">
       <string>Stop</string>
      </property>
+    </widget>
+   </item>
+   <item row="1" column="9" rowspan="5">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>185</width>
+       <height>160</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>171</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>non sync trapezoidal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_sync_trapezoidal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sync trapezoidal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_sync_polynomal">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>131</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sync polynomal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_operational">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>108</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>operational</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Motion Variant</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>

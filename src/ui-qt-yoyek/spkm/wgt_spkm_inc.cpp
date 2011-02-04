@@ -13,7 +13,7 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(interface.position_refresh_interval);
-
+	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 }
 
 void wgt_spkm_inc::on_timer_slot()
