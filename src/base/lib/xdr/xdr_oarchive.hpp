@@ -22,7 +22,9 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/version.hpp>
 
-#include <rpc/rpc.h>
+#include <rpc/types.h>
+#include <rpc/xdr.h>
+#include <stdint.h>
 
 #if BOOST_VERSION >104200
 #define BOOST_OARCHIVE_EXCEPTION output_stream_error
@@ -39,13 +41,6 @@
     /** conversion for T */ \
     xdr_oarchive &save_a_type(T const &t,boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_SAVE_EXCEPTION; \
-        return *this; \
-    } \
-    \
-    /** conversion for T[] */ \
-    template<int N> \
-    xdr_oarchive &save_a_type(T const (&t)[N],boost::mpl::false_) { \
-        if(!xdr_vector(&xdrs, (char *)t, N, sizeof(T), (xdrproc_t) P)) THROW_SAVE_EXCEPTION; \
         return *this; \
     }
 
@@ -68,25 +63,10 @@ public:
 
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_oarchive &save_a_type(boost::serialization::collection_size_type const &t, boost::mpl::true_) {
-        uint64_t b = (uint64_t) t;
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
-        if(!xdr_u_int64_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
-#else
-        if(!xdr_uint64_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
-#endif
+        unsigned long long b = (uint64_t) t;
+        if(!xdr_u_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
-
-    //! conversion for bool[], special since bool != bool_t
-    /* @bug: this is probably buggy becasuse xdr_bool works with C-style booleans (integers), see above method
-    template <int N>
-    xdr_oarchive &save_a_type(bool const(&t)[N], boost::mpl::false_)
-    {
-        if (!xdr_vector(&xdrs, (char *) t, N, sizeof(bool), (xdrproc_t) xdr_bool))
-            THROW_SAVE_EXCEPTION;
-        return *this;
-    }
-    */
 
     //! conversion for an enum
     template <class T>
@@ -115,34 +95,48 @@ public:
         return *this;
     }
 
-    SAVE_A_TYPE(char, xdr_char)
-    SAVE_A_TYPE(unsigned char, xdr_u_char)
-    SAVE_A_TYPE(double, xdr_double)
     SAVE_A_TYPE(float, xdr_float)
+    SAVE_A_TYPE(double, xdr_double)
 
-    SAVE_A_TYPE(int, xdr_int)
-    SAVE_A_TYPE(long, xdr_long)
+    SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)
-    SAVE_A_TYPE(unsigned int, xdr_u_int)
-    //SAVE_A_TYPE(unsigned long, xdr_u_long)
-    SAVE_A_TYPE(unsigned short, xdr_u_short)
+    SAVE_A_TYPE(int, xdr_int)
 
-#if defined(__QNXNTO__) || (defined(__APPLE__) && defined(__MACH__))
-    //SAVE_A_TYPE(int, xdr_int)
-    //SAVE_A_TYPE(long, xdr_long)
-    //SAVE_A_TYPE(short, xdr_short)
-    //SAVE_A_TYPE(unsigned int, xdr_u_int)
-    //SAVE_A_TYPE(unsigned long, xdr_u_long)
-    //SAVE_A_TYPE(unsigned short, xdr_u_short)
-    SAVE_A_TYPE(uint64_t, xdr_u_int64_t)
-#else
-    //SAVE_A_TYPE(int16_t, xdr_int16_t)
-    //SAVE_A_TYPE(int32_t, xdr_int32_t)
-    //SAVE_A_TYPE(int64_t, xdr_int64_t)
-    //SAVE_A_TYPE(uint16_t, xdr_uint16_t)
-    //SAVE_A_TYPE(uint32_t, xdr_uint32_t)
-    SAVE_A_TYPE(uint64_t, xdr_uint64_t)
-#endif
+    SAVE_A_TYPE(unsigned char, xdr_u_char)
+    SAVE_A_TYPE(unsigned short, xdr_u_short)
+    SAVE_A_TYPE(unsigned int, xdr_u_int)
+
+    // Up-cast long to long long for 32/64-bit compatibility
+    xdr_oarchive &save_a_type(long const &t, boost::mpl::true_)
+    {
+        int64_t b = (int64_t) t;
+        if (!xdr_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+    xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
+    {
+    	uint64_t b = (uint64_t) t;
+        if (!xdr_u_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+
+    // long long types requires explicit casting on the 64-bit platforms
+    xdr_oarchive &save_a_type(long long const &t, boost::mpl::true_)
+    {
+        int64_t b = (int64_t) t;
+        if (!xdr_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
+    xdr_oarchive &save_a_type(unsigned long long const &t, boost::mpl::true_)
+    {
+    	uint64_t b = (uint64_t) t;
+        if (!xdr_u_longlong_t(&xdrs, &b))
+            THROW_SAVE_EXCEPTION;
+        return *this;
+    }
 
     /**
      * Saving Archive Concept::is_loading
@@ -271,12 +265,12 @@ public:
         return buffer;
     }
 
-	void clear_buffer()
-	{
-		if( !xdr_setpos(&xdrs, 0) ){
-			THROW_SAVE_EXCEPTION;
-		}
-	}
+    void clear_buffer()
+    {
+        if( !xdr_setpos(&xdrs, 0) ){
+            THROW_SAVE_EXCEPTION;
+        }
+    }
 };
 
 // required by export

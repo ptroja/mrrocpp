@@ -47,7 +47,7 @@ public:
 	 * \param[in] ptr pointer to the C-array of initialization elements
 	 * \param[in] n number of elements in the array
 	 */
-	JointArray(const double *ptr, size_t n) :
+	JointArray(const double *ptr, std::size_t n) :
 		BaseClass(n)
 	{
 		for (unsigned int i = 0; i < n; i++) {
@@ -59,6 +59,8 @@ public:
 	 * Assignment operator to reuse from a base class
 	 */
 	using BaseClass::operator=;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }

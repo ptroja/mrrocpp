@@ -12,9 +12,9 @@
 
 #include <string>
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 namespace mrrocpp {
 namespace lib {
@@ -25,13 +25,10 @@ typedef struct sr_package sr_package_t;
 //! Base class for senders of system report messages
 class SenderBase
 {
-#if !defined(USE_MESSIP_SRR)
-	//! Descriptor of SR communication channel
-	int fd;
-#else
+
 	//! Descriptor of SR communication channel
 	messip_channel_t *ch;
-#endif /* !USE_MESSIP_SRR */
+
 
 protected:
 	//! Send default message package to the SR using underlying transport

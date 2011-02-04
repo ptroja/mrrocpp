@@ -8,6 +8,7 @@
  */
 
 #include <cstdio>   /* Standard input/output definitions */
+#include <iostream>
 #include <cstring>  /* String function definitions */
 #include <unistd.h>  /* UNIX standard function definitions */
 #include <fcntl.h>   /* File control definitions */
@@ -45,13 +46,13 @@ namespace epos {
 #define E_PARAMINCOMP   0x06040043   ///< Error code: general parameter incompatibility
 #define E_INTINCOMP     0x06040047   ///< Error code: general internal incompatibility in the device
 #define E_HWERR         0x06060000   ///< Error code: access failed due to an hardware error
-#define E_PRAGNEX       0x06090030   ///< Error code: value range of parameter exeeded
+#define E_PRAGNEX       0x06090030   ///< Error code: value range of parameter exceeded
 #define E_PARHIGH       0x06090031   ///< Error code: value of parameter written is too high
 #define E_PARLOW        0x06090032   ///< Error code: value of parameter written is too low
 #define E_PARREL        0x06090036   ///< Error code: maximum value is less than minimum value
 /* maxon specific error codes */
 #define E_NMTSTATE      0x0f00ffc0   ///< Error code: wrong NMT state
-#define E_RS232         0x0f00ffbf   ///< Error code: rs232 command illegeal
+#define E_RS232         0x0f00ffbf   ///< Error code: rs232 command illegal
 #define E_PASSWD        0x0f00ffbe   ///< Error code: password incorrect
 #define E_NSERV         0x0f00ffbc   ///< Error code: device not in service mode
 #define E_NODEID        0x0f00fb9    ///< Error code: error in Node-ID
@@ -111,6 +112,56 @@ epos::epos(epos_base & _device, uint8_t _nodeId) :
 UNSIGNED16 epos::readStatusWord()
 {
 	return ReadObjectValue<UNSIGNED16>(0x6041, 0x00);
+}
+
+void epos::printErrorRegister(UNSIGNED8 reg) {
+	if (E_BIT07 & reg) printf("\tMotion error\n");
+	if (E_BIT06 & reg) printf("\treserved (always 0)\n");
+	if (E_BIT05 & reg) printf("\tDevice profile-specific\n");
+	if (E_BIT04 & reg) printf("\tCommunication error\n");
+	if (E_BIT03 & reg) printf("\tTemperature error\n");
+	if (E_BIT02 & reg) printf("\tVoltage error\n");
+	if (E_BIT01 & reg) printf("\tCurrent error\n");
+	if (E_BIT00 & reg) printf("\tGeneric error\n");
+}
+
+const char * epos::ErrorCodeMessage(UNSIGNED32 code) {
+	switch (code) {
+		case 0x0000: return "No Error";
+		case 0x1000: return "Generic Error";
+		case 0x2310: return "Overcurrent Error";
+		case 0x3210: return "Overvoltage";
+		case 0x3220: return "Undervoltage";
+		case 0x4210: return "Overtemperature";
+		case 0x5113: return "Supply Voltage (+5V) Too Low";
+		case 0x5114: return "Supply Voltage Output Stage Too Low";
+		case 0x6100: return "Internal Software Error";
+		case 0x6320: return "Software Parameter Error";
+		case 0x7320: return "Sensor Position Error";
+		case 0x8110: return "CAN Overrun Error (Objects lost)";
+		case 0x8111: return "CAN Overrun Error";
+		case 0x8120: return "CAN Passive Mode Error";
+		case 0x8130: return "CAN Life Guard Error";
+		case 0x8150: return "CAN Transmit COB-ID Collision";
+		case 0x81FD: return "CAN Bus Off";
+		case 0x81FE: return "CAN Rx Queue Overrun";
+		case 0x81FF: return "CAN Tx Queue Overrun";
+		case 0x8210: return "CAN PDO Length Error";
+		case 0x8611: return "Following Error";
+		case 0xFF01: return "Hall Sensor Error";
+		case 0xFF02: return "Index Processing Error";
+		case 0xFF03: return "Encoder Resolution Error";
+		case 0xFF04: return "Hall Sensor not found Error";
+		case 0xFF06: return "Negative Limit Error";
+		case 0xFF07: return "Positive Limit Error";
+		case 0xFF08: return "Hall Angle Detection Error";
+		case 0xFF09: return "Software Position Limit Error";
+		case 0xFF0A: return "Position Sensor Breach";
+		case 0xFF0B: return "System Overloaded";
+		case 0xFF0C: return "Interpolated Position Mode Error";
+		case 0xFF0D: return "Auto Tuning Identification Error";
+		default: return "Unknown error";
+	}
 }
 
 void epos::printEPOSstatusword(WORD s)
@@ -223,6 +274,8 @@ int epos::checkEPOSstate()
 {
 	WORD w = readStatusWord();
 
+	//printEPOSstatusword(w);
+
 	/* state 'start' (0)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx0  x000 0000 */
@@ -317,44 +370,69 @@ int epos::checkEPOSstate()
 /* pretty-print EPOS state */
 int epos::printEPOSstate()
 {
-	printf("\nEPOS is in state ");
+	int state = checkEPOSstate();
 
-	switch (checkEPOSstate()) {
+	printf("\nEPOS is in state: ");
+
+	switch (state) {
 		case 0:
-			printf("start\n");
+			printf("Start\n");
+			printf("\tBootup\n");
 			break;
 		case 1:
-			printf("Not ready to switch on.\n");
+			printf("Not Ready to Switch On\n");
+			printf("\tCurrent offset will be measured\n");
+			printf("\tDrive function is disabled\n");
 			break;
 		case 2:
-			printf("Switch on disabled.\n");
+			printf("Switch On Disabled\n");
+			printf("\tDrive initialization is complete\n");
+			printf("\tDrive parameters may be changed\n");
+			printf("\tDrive function is disabled\n");
 			break;
 		case 3:
-			printf("Ready to switch on.\n");
+			printf("Ready to Switch On\n");
+			printf("\tDrive parameters may be changed\n");
+			printf("\tDrive function is disabled\n");
 			break;
 		case 4:
-			printf("Switched on.\n");
+			printf("Switched On\n");
+			printf("\tDrive function is disabled\n");
 			break;
 		case 5:
-			printf("Refresh.\n");
+			printf("Refresh\n");
+			printf("\tRefresh of power stage\n");
 			break;
 		case 6:
-			printf("Measure init.\n");
+			printf("Measure Init\n");
+			printf("\tPower is applied to the motor\n");
+			printf("\tMotor resistance or commutation delay is measured\n");
 			break;
 		case 7:
-			printf("Operation enable.\n");
+			printf("Operation Enable\n");
+			printf("\tNo faults have been detected\n");
+			printf("\tDrive function is enabled and power is applied to the motor\n");
 			break;
 		case 8:
-			printf("Quick stop active\n");
+			printf("Quickstop Active\n");
+			printf("\tQuickstop function is being executed\n");
+			printf("\tDrive function is enabled and power is applied to the motor\n");
 			break;
 		case 9:
-			printf("Fault reaction active (disabled)\n");
+			printf("Fault Reaction Active (disabled)\n");
+			printf("\tA fault has occurred in the drive\n");
+			printf("\tDrive function is disabled\n");
 			break;
 		case 10:
-			printf("Fault reaction active (enabled)\n");
+			printf("Fault Reaction Active (enabled)\n");
+			printf("\tA fault has occurred in the drive\n");
+			printf("\tSelected fault reaction is being executed\n");
 			break;
 		case 11:
 			printf("FAULT\n");
+			printf("\tA fault has occurred in the drive\n");
+			printf("\tDrive parameters may be changed\n");
+			printf("\tDrive function is disabled\n");
 			break;
 
 		default:
@@ -364,92 +442,143 @@ int epos::printEPOSstate()
 	return (0);
 }
 
+void epos::reset()
+{
+	int state, timeout;
+
+	// TODO: handle initial error conditions
+	state = checkEPOSstate();
+
+	// FAULT
+	if(state == 11) {
+		UNSIGNED8 errReg = readErrorRegister();
+		if(errReg) {
+			printf("printErrorRegister() = 0x%02x\n", errReg);
+			printErrorRegister(errReg);
+
+			UNSIGNED8 errNum = readNumberOfErrors();
+			printf("Number of Errors = %d\n", errNum);
+
+			for(int i = 1; i < errNum+1; ++i) {
+				UNSIGNED32 errCode = readErrorHistory(i);
+				printf("Error at index %d is 0x%08x: %s\n", i, errCode, ErrorCodeMessage(errCode));
+			}
+		}
+
+		throw epos_error() << reason("Device is in the fault state");
+	}
+
+	// Shutdown
+	writeControlword(0x0006);
+
+	// TODO: handle error conditions
+	state = checkEPOSstate();
+
+	// Ready-to-switch-On expected
+	if (state != 3) {
+		throw epos_error() << reason("Ready-to-switch-On expected");
+	}
+
+	// Enable
+	writeControlword(0x000f);
+
+	timeout = 10;
+	do {
+		state = checkEPOSstate();
+
+		std::cerr << "state " << state << " timeout " << timeout << std::endl;
+
+		if(state == 6) { // Measure in progress...
+			continue;
+		} else if(state == 7) { // Operation enable
+			break;
+		} else if(state == 11) {
+			throw epos_error() << reason("Device is in the fault state");
+		} else {
+			std::cerr << "Unexpected state during initialization" << std::endl;
+		}
+
+	} while(timeout--);
+
+	if(timeout == 0) {
+		throw epos_error() << reason("Timeout enabling device");
+	}
+
+	// Enable+Halt
+	writeControlword(0x010f);
+
+	state = checkEPOSstate();
+
+	// Operation Enabled expected
+	if (state != 7) {
+		throw epos_error() << reason("Ready-to-switch-On expected");
+	}
+}
+
 /* change EPOS state according to firmware spec 8.1.3 */
 void epos::changeEPOSstate(state_t state)
 {
-	WORD dw[2];
-
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
+	UNSIGNED16 cw = 0x0000;
 
 	/* ! DO NOT READ OLD CONTROLWORD BACK, JUST SET THE BITS. It works
 	 this way, but does NOT work otherways! -- mh, 07.07.06
 	 */
-
-	dw[0] = 0x0000;
+	//cw = readControlword();
 
 	switch (state) {
-		case ST_DISABLED: //shutdown, controlword: 0xxx x110
-			dw[0] &= ~E_BIT15; // bit 15 ->0
-			dw[0] |= E_BIT02; // bit 02 ->1
-			dw[0] |= E_BIT01;
-			dw[0] &= ~E_BIT00;
-
-			WriteObject(0x6040, 0x00, dw);
+		case SHUTDOWN: // Shutdown: 0xxx x110
+			cw &= ~E_BIT07;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw &= ~E_BIT00;
+			writeControlword(cw);
 			break;
-
-		case ST_ENABLED: // switch on, controllword: 0xxx x111
-			dw[0] &= ~E_BIT15;
-			dw[0] |= E_BIT02;
-			dw[0] |= E_BIT01;
-			dw[0] |= E_BIT00;
-
-			WriteObject(0x6040, 0x00, dw);
+		case SWITCH_ON: // Switch On: 0xxx x111
+			cw &= ~E_BIT07;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
 			break;
-
-		case ST_QUICKSTOP: // disable voltage, controllword: 0xxx xx0x
-			dw[0] &= ~E_BIT15;
-			dw[0] &= ~E_BIT02;
-
-			WriteObject(0x6040, 0x00, dw);
+		case SWITCH_ON_AND_ENABLE: // Switch On & Enable Operation: 0xxx 1111
+			cw &= ~E_BIT07;
+			cw |= E_BIT03;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
 			break;
-
-		case ST_FAULT: // quick stop, controllword: 0xxx x01x
-			dw[0] &= ~E_BIT15;
-			dw[0] &= ~E_BIT02;
-			dw[0] |= E_BIT02;
-
-			WriteObject(0x6040, 0x00, dw);
+		case DISABLE_VOLTAGE: // Disable Voltage: 0xxx xx0x
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT01;
+			writeControlword(cw);
 			break;
-#if 0
-		case 4: // disable operation, controllword: 0xxx 0111
-			dw[0] &= ~E_BIT15;
-			dw[0] &= ~E_BIT03;
-			dw[0] |= E_BIT02;
-			dw[0] |= E_BIT01;
-			dw[0] |= E_BIT00;
-
-			WriteObject(0x6040, 0x00, dw);
+		case QUICKSTOP: // Quickstop: 0xxx x01x
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT02;
+			cw |= E_BIT01;
+			writeControlword(cw);
 			break;
-
-		case 5: // enable operation, controllword: 0xxx 1111
-			dw[0] &= ~E_BIT15;
-			dw[0] |= E_BIT03;
-			dw[0] |= E_BIT02;
-			dw[0] |= E_BIT01;
-			dw[0] |= E_BIT00;
-
-			WriteObject(0x6040, 0x00, dw);
+		case DISABLE_OPERATION: // Disable Operation: 0xxx 0111
+			cw &= ~E_BIT07;
+			cw &= ~E_BIT03;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
 			break;
-
-		case 6: // fault reset, controllword: 1xxx xxxx
-
-			//dw[0] |= E_BIT15; this is according to firmware spec 8.1.3,
-			//but does not work!
-			dw[0] |= E_BIT07; // this is according to firmware spec 14.1.57
-			// and IS working!
-
-
-			/*       WORD estatus = 0x0; */
-			/*       if ( ( n = readStatusWord(&estatus) ) < 0) checkEPOSerror(); */
-			/*       printEPOSstatusword(estatus); */
-
-			WriteObject(0x6040, 0x00, dw);
-
-			/*       if ( ( n = readStatusWord(&estatus) ) < 0) checkEPOSerror(); */
-			/*       printEPOSstatusword(estatus); */
-
+		case ENABLE_OPERATION: // Enable Operation: 0xxx 1111
+			cw &= ~E_BIT07;
+			cw |= E_BIT03;
+			cw |= E_BIT02;
+			cw |= E_BIT01;
+			cw |= E_BIT00;
+			writeControlword(cw);
 			break;
-#endif
+		case FAULT_RESET: // Fault Reset 0xxx xxxx -> 1xxx xxxx
+			cw |= E_BIT07;
+			writeControlword(cw);
+			break;
 		default:
 			throw epos_error() << reason("ERROR: demanded state is UNKNOWN!"); // TODO: state
 	}
@@ -490,6 +619,12 @@ void epos::setHomePolarity(int pol)
 UNSIGNED16 epos::readControlword()
 {
 	return ReadObjectValue<UNSIGNED16>(0x6040, 0x00);
+}
+
+/* write EPOS control word (firmware spec 14.1.57) */
+void epos::writeControlword(UNSIGNED16 val)
+{
+	WriteObjectValue(0x6040, 0x00, val);
 }
 
 /* pretty-print Controlword */
@@ -908,6 +1043,11 @@ INTEGER32 epos::readTargetPosition()
 	return ReadObjectValue<INTEGER32> (0x607a, 0x00);
 }
 
+void epos::writeTargetPosition(INTEGER32 val)
+{
+	return WriteObjectValue(0x607a, 0x00, val);
+}
+
 /* read manufacturer device name string firmware */
 std::string epos::readDeviceName()
 {
@@ -936,6 +1076,103 @@ std::string epos::readDeviceName()
 	return str;
 }
 
+/*! read Maximal Following Error */
+UNSIGNED32 epos::readMaxFollowingError() {
+	return ReadObjectValue<UNSIGNED32> (0x6065, 0x00);
+}
+
+/*! write Maximal Following Error */
+void epos::writeMaxFollowingError(UNSIGNED32 val) {
+	WriteObjectValue(0x6065, 0x00, val);
+}
+
+/*! read Home Offset */
+INTEGER32 epos::readHomeOffset() {
+	return ReadObjectValue<INTEGER32> (0x607C, 0x00);
+}
+
+/*! write Home Offset */
+void epos::writeHomeOffset(INTEGER32 val) {
+	WriteObjectValue(0x607C, 0x00, val);
+}
+
+/*! read Speed for Switch Search */
+UNSIGNED32 epos::readSpeedForSwitchSearch() {
+	return ReadObjectValue<UNSIGNED32> (0x6099, 0x01);
+}
+
+/*! write Speed for Switch Search */
+void epos::writeSpeedForSwitchSearch(UNSIGNED32 val) {
+	WriteObjectValue(0x6099, 0x01, val);
+}
+
+/*! read Speed for Zero Search */
+UNSIGNED32 epos::readSpeedForZeroSearch() {
+	return ReadObjectValue<UNSIGNED32> (0x6099, 0x02);
+}
+
+/*! write Speed for Zero Search */
+void epos::writeSpeedForZeroSearch(UNSIGNED32 val) {
+	WriteObjectValue(0x6099, 0x02, val);
+}
+
+/*! read Homing Acceleration */
+UNSIGNED32 epos::readHomingAcceleration() {
+	return ReadObjectValue<UNSIGNED32> (0x609A, 0x00);
+}
+
+/*! write Homing Acceleration  */
+void epos::writeHomingAcceleration(UNSIGNED32 val) {
+	WriteObjectValue(0x609A, 0x00, val);
+}
+
+/*! read Current Threshold for Homing Mode */
+UNSIGNED16 epos::readCurrentThresholdForHomingMode() {
+	return ReadObjectValue<UNSIGNED16> (0x2080, 0x00);
+}
+
+/*! write Current Threshold for Homing Mode  */
+void epos::writeCurrentThresholdForHomingMode(UNSIGNED16 val) {
+	WriteObjectValue(0x2080, 0x00, val);
+}
+
+/*! read Homing Method */
+epos::homing_method_t epos::readHomingMethod() {
+	INTEGER8 val;
+	val = ReadObjectValue<INTEGER8> (0x6098, 0x00);
+
+	return (homing_method_t) val;
+}
+
+/*! write Homing Method */
+void epos::writeHomingMethod(homing_method_t method) {
+	INTEGER8 val = (INTEGER8) (method);
+	WriteObjectValue(0x6098, 0x00, val);
+}
+
+/*! read Error register */
+UNSIGNED8 epos::readErrorRegister() {
+	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
+}
+
+/*! read number of Errors is Error History register */
+UNSIGNED8 epos::readNumberOfErrors() {
+	return ReadObjectValue<UNSIGNED8> (0x1003, 0x00);
+}
+
+/*! read Error History at index */
+UNSIGNED32 epos::readErrorHistory(unsigned int num) {
+	if(num < 1 && num > 5) {
+		throw epos_error() << reason("Error History index out of range <1..5>");
+	}
+	return ReadObjectValue<UNSIGNED32> (0x1003, num);
+}
+
+/*! clear Error register */
+void epos::clearNumberOfErrors() {
+	WriteObjectValue(0x1003, 0x00, (UNSIGNED8) 0x00);
+}
+
 /* firmware spec 14.1.35 */
 UNSIGNED16 epos::readRS232timeout()
 {
@@ -948,39 +1185,51 @@ UNSIGNED16 epos::readRS232timeout()
  3: Homing Mode"
 
  */
-int epos::doHoming(homing_method_t method, INTEGER32 start)
+int epos::doHoming(homing_method_t method, INTEGER32 offset)
 {
 	//move motor to a pre-defined position before the reference
 	//point. This will speed-up things if the coordinates are not too
 	//wrong.
 
-	moveAbsolute(start);
+	//moveAbsolute(start);
 
 	// wait for positioning to finish, set timeout to approx. 30sec
 	// CAUSES BIG PROBLEMS IF WE DO NOT WAIT!
-	waitForTarget(30);
+	//waitForTarget(30);
 	//monitorStatus();
 
 	// switch to homing mode
 	setOpMode(OMD_HOMING_MODE);
 
-	// homing speeds are left at default values.. (firmware 14.1.86)
+	// Set homing parameters
+	writeHomeOffset(offset);
+	writeSpeedForZeroSearch(100);
+	writeCurrentThresholdForHomingMode(1500);
+
+	// Display current homing parameters
+	std::cout << "Max. Following Error: " << readMaxFollowingError() << std::endl;
+	std::cout << "Home Offset: " << readHomeOffset() << std::endl;
+	std::cout << "Max. Profile Velocity: " << readPositionProfileMaxVelocity() << std::endl;
+	std::cout << "Quick Stop Deceleration: " << readPositionProfileQuickStopDeceleration() << std::endl;
+	std::cout << "Speed for Switch Search: " << readSpeedForSwitchSearch() << std::endl;
+	std::cout << "Speed for Zero Search: " << readSpeedForZeroSearch() << std::endl;
+	std::cout << "Homing Acceleration: " << readHomingAcceleration() << std::endl;
+	std::cout << "Current Threshold Homing Mode: " << readCurrentThresholdForHomingMode() << std::endl;
+	std::cout << "Home Position: " << readHomePosition() << std::endl;
 
 	// set homing method
-	WORD dw[2];
-	dw[0] = method; // NO hex number here!
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	WriteObject(0x6098, 0x00, dw);
+	writeHomingMethod(method);
+
+	//std::cout << "Shutdown" << std::endl;
+	//writeControlword(0x0006);
 
 	// switch on
-	dw[0] = 0x000f;
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	WriteObject(0x6040, 0x00, dw);
+	std::cout << "Switch-on" << std::endl;
+	writeControlword(0x000f);
 
 	// start homing mode
-	dw[0] = 0x001f;
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	WriteObject(0x6040, 0x00, dw);
+	std::cout << "Start homing" << std::endl;
+	writeControlword(0x001f);
 
 	//read/print status
 	monitorHomingStatus();
@@ -1010,12 +1259,11 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// write intended target position
 	// firmware 14.1.70
-	WriteObjectValue(0x607A, 0x00, steps);
+	writeTargetPosition(steps);
 
-	// switch to relative positioning BY WRITING TO CONTROLWORD, finish
-	// possible ongoing operation first!  ->maxon applicattion note:
-	// device programming 2.1
-	WriteObjectValue(0x6040, 0x00, 0x005f);
+	// switch to relative positioning BY WRITING TO CONTROLWORD, finish	possible ongoing operation first!
+	// see ->maxon applicattion note: device programming 2.1
+	writeControlword(0x005f);
 }
 
 void epos::moveAbsolute(INTEGER32 steps)
@@ -1034,11 +1282,11 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
-	WriteObjectValue(0x607A, 0x00, steps);
+	writeTargetPosition(steps);
 
-	// switch to absolute positioning, cancel possible ongoing operation
-	// first!  ->maxon application note: device programming 2.1
-	WriteObjectValue(0x6040, 0x00, 0x3f);
+	// switch to absolute positioning, cancel possible ongoing operation first!
+	// see maxon application note: device programming 2.1
+	writeControlword(0x3f);
 }
 
 // monitor device status
@@ -1078,10 +1326,63 @@ void epos::monitorStatus()
 	printf("target reached\n");
 }
 
+void epos::Store()
+{
+	WORD dw[2];
+
+	// *save* data
+	dw[0] = ('s') | ('a' << 8);
+	dw[1] = ('v') | ('e' << 8);
+
+	WriteObject(0x1010, 0x01, dw);
+}
+
+void epos::Restore()
+{
+	WORD dw[2];
+
+	// *load* data
+	dw[0] = ('l') | ('o' << 8);
+	dw[1] = ('a') | ('d' << 8);
+
+	WriteObject(0x1011, 0x01, dw);
+}
+
+bool epos::isReferenced()
+{
+	UNSIGNED16 status = readStatusWord();
+
+	return (E_BIT15 & status);
+}
+
+bool epos::isTargetReached()
+{
+	UNSIGNED16 status = readStatusWord();
+
+	return (E_BIT10 & status);
+}
+
+void epos::startHoming()
+{
+	writeControlword(0x001f);
+}
+
+bool epos::isHomingFinished()
+{
+	UNSIGNED16 status = readStatusWord();
+
+	if ((status & E_BIT13) == E_BIT13) {
+		throw epos_error() << reason("HOMING ERROR!");
+	}
+
+	// bit 10 says: target reached!, bit 12: homing attained
+	return (((status & E_BIT10) == E_BIT10) && ((status & E_BIT12) == E_BIT12));
+}
+
 void epos::monitorHomingStatus()
 {
-	long int posactual, velactual;
-	short curactual;
+	INTEGER32 posactual, velactual;
+	INTEGER16 curactual;
 	UNSIGNED16 status;
 
 	printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
@@ -1094,11 +1395,9 @@ void epos::monitorHomingStatus()
 
 		status = readStatusWord();
 
-		printf("\r%d EPOS: pos=%+10ld; v =  %+4ldrpm I=%+3dmA status = %#06x ", i, posactual, velactual, curactual, status);
+		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
-
-		status = readStatusWord();
 
 		if ((status & E_BIT13) == E_BIT13) {
 			throw epos_error() << reason("HOMING ERROR!");
@@ -1115,7 +1414,7 @@ void epos::monitorHomingStatus()
 
 	status = readStatusWord();
 
-	printf("\r%d EPOS: pos=%+10ld; v =  %+4ldrpm I=%+3dmA status = %#06x\n", i, posactual, velactual, curactual, status);
+	printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x\n", i, posactual, velactual, curactual, status);
 	printf("homing finished! Position should now be '0'\n");
 }
 

@@ -29,15 +29,10 @@
 
 #include <string>
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
-#else
-#include <boost/filesystem.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#endif
+
 
 #if defined(__QNXNTO__)
 #include <process.h>
@@ -60,43 +55,23 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 		perror("uname");
 	}
 
-	mrrocpp_network_path = "/net/";
+	/*mrrocpp_network_path = "/net/";
 	mrrocpp_network_path += node;
-	mrrocpp_network_path += dir;
+	mrrocpp_network_path += dir;*/
+	mrrocpp_network_path = "../";
 
-#ifdef USE_MESSIP_SRR
+
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
-#else
-	file_location = get_config_file_path();
-	common_file_location = get_common_config_file_path();
 
-	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
-#endif /* USE_MESSIP_SRR */
 }
 
-#ifndef USE_MESSIP_SRR
-void configurator::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
-{
-	try {
-		if (boost::filesystem::extension(file) == ".ini") {
-			boost::property_tree::read_ini(file, pt);
-		} else if (boost::filesystem::extension(file) == ".xml") {
-			boost::property_tree::read_xml(file, pt);
-		} else {
-			throw std::logic_error("unknown config file extension");
-		}
-	} catch (boost::property_tree::ptree_error & e) {
-		std::cerr << e.what() << std::endl;
-	}
-}
-#endif
+
 
 void configurator::change_config_file(const std::string & _ini_file)
 {
-#ifdef USE_MESSIP_SRR
+
 	config_query_t query, reply;
 
 	query.key = _ini_file;
@@ -114,17 +89,7 @@ void configurator::change_config_file(const std::string & _ini_file)
 		// TODO: throw
 		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
 	}
-#else
-	boost::mutex::scoped_lock l(access_mutex);
 
-	ini_file = _ini_file;
-
-	file_location = get_config_file_path();
-	common_file_location = get_common_config_file_path();
-
-	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
-#endif /* USE_MESSIP_SRR */
 }
 
 bool configurator::check_config(const std::string & key) const
@@ -169,25 +134,7 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 	return (name);
 }
 
-#ifndef USE_MESSIP_SRR
-std::string configurator::get_config_file_path() const
-{
-	std::string value(mrrocpp_network_path);
-	//value += "configs/";
-	value += "../";
-	value += ini_file;
 
-	return value;
-}
-
-std::string configurator::get_common_config_file_path() const
-{
-	std::string value(mrrocpp_network_path);
-	value += "../configs/common.ini";
-
-	return value;
-}
-#endif
 
 std::string configurator::return_default_reader_measures_path() const
 {
@@ -227,7 +174,8 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		rsh_spawn_node = "localhost";
 	} else {
 		rsh_spawn_node = spawned_node_name;
-
+#if defined(__QNXNTO__)
+		/* This check works only with QNX and Qnet */
 		std::string opendir_path("/net/");
 		opendir_path += rsh_spawn_node;
 
@@ -235,6 +183,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			printf("spawned node absent: %s\n", opendir_path.c_str());
 			//throw std::logic_error("spawned node absent: " + opendir_path);
 		}
+#endif /* __QNXNTO__ */
 	}
 
 	bool use_ssh;
@@ -284,7 +233,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) - 1) {
+		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 
@@ -334,12 +283,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 }
 
-#ifdef USE_MESSIP_SRR
+
 configurator::~configurator()
 {
 	messip::port_disconnect(ch);
 }
-#endif /* USE_MESSIP_SRR */
+
 
 } // namespace lib
 } // namespace mrrocpp

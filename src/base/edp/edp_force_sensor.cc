@@ -14,12 +14,11 @@ namespace sensor {
 //!< watek do komunikacji ze sprzetem
 void force::operator()()
 {
-
 	//	sr_msg->message("operator");
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!force_sensor_test_mode) {
 		connect_to_hardware();
 	}
 
@@ -49,7 +48,9 @@ void force::operator()()
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
 	//sr_msg->message("dupa 1");
-	clock_gettime(CLOCK_MONOTONIC, &wake_time);
+	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+		perror("clock_gettime()");
+	}
 
 	while (!TERMINATE) //!< for (;;)
 	{
@@ -129,15 +130,27 @@ void force::operator()()
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
-			is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-			is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
-			is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
+		force_sensor_test_mode(true),
+		is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
+		is_right_turn_frame(true), gravity_transformation(NULL),
+		master(_master),
+		TERMINATE(false),
+		is_sensor_configured(false),
+		new_edp_command(false) //!< czujnik niezainicjowany
 {
-	/*!Lokalizacja procesu wywietlania komunikatow SR */
+	/*! Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg
-			= new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true);
+			= boost::shared_ptr<lib::sr_vsp> (new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION), true));
 
 	sr_msg->message("force");
+
+	if (master.config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
+		force_sensor_test_mode = master.config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
+	}
+
+	if (force_sensor_test_mode) {
+		sr_msg->message("Force sensor test mode activated");
+	}
 
 	if (master.config.exists("is_right_turn_frame")) {
 		is_right_turn_frame = master.config.value <bool> ("is_right_turn_frame");
@@ -146,12 +159,11 @@ force::force(common::manip_effector &_master) :
 	for (int i = 0; i < 6; ++i) {
 		ft_table[i] = 0.0;
 	}
-
 }
 
 void force::wait_for_event()
 {
-	if (!master.force_sensor_test_mode) {
+	if (!force_sensor_test_mode) {
 
 		wait_for_particular_event();
 
@@ -170,7 +182,7 @@ void force::get_reading(void)
 
 	is_reading_ready = true;
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!force_sensor_test_mode) {
 		get_particular_reading();
 		// jesli ma byc wykorzytstywana biblioteka transformacji sil
 		if (gravity_transformation) {
@@ -182,7 +194,6 @@ void force::get_reading(void)
 
 	} else {
 		master.force_msr_upload(ft_table);
-
 	}
 
 }
@@ -195,7 +206,7 @@ void force::configure_sensor(void)
 	//  printf("edp Sensor configured\n");
 	sr_msg->message("edp Sensor configured");
 
-	if (!(master.force_sensor_test_mode)) {
+	if (!force_sensor_test_mode) {
 		configure_particular_sensor();
 	}
 
@@ -238,8 +249,6 @@ void force::configure_sensor(void)
 
 force::~force()
 {
-	delete sr_msg;
-
 }
 
 void force::set_force_tool(void)

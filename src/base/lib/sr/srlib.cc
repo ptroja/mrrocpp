@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <sys/utsname.h>
+#include <sys/time.h>
 
 #include <boost/thread/mutex.hpp>
 
@@ -47,9 +48,7 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 	}
 	strcpy(sr_message.host_name, sysinfo.nodename);
 
-#if !defined(USE_MESSIP_SRR)
-	sr_message.hdr.type = 0;
-#endif
+
 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
@@ -67,11 +66,12 @@ sr::sr(process_type_t process_type, const std::string & process_name, const std:
 
 void sr::send_package(void)
 {
-        struct timespec ts;
-        if(clock_gettime(CLOCK_REALTIME, &ts) == -1) {
-		perror("clock_gettime()");
+	struct timeval tv;
+	if(gettimeofday(&tv, NULL) == -1) {
+		perror("gettimeofday()");
 	}
-        sr_message.time = ts.tv_nsec + ts.tv_sec * 1000000000;
+
+	sr_message.time = ((uint64_t) tv.tv_usec) * 1000 + ((uint64_t) tv.tv_sec) * 1000000000;
 	sender->send_package(sr_message);
 }
 

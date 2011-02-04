@@ -21,9 +21,9 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
@@ -43,10 +43,10 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	{
 		sub_task::sub_task_smooth_file_from_mp* ecpst;
 
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, false);
+		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
 		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = ecpst;
 
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, false);
+		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = ecpst;
 	}
 

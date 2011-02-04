@@ -10,7 +10,8 @@
 
 #include <vector>
 
-#include "base/lib/com_buf.h"
+#include <base/lib/com_buf.h>
+#include <base/lib/mrmath/mrmath.h>
 
 namespace mrrocpp {
 namespace ecp_mp {
@@ -58,11 +59,16 @@ public:
   /**
    * Number of axes in which we want the robot to move in the given representation
    */
-  int axes_num;
+  unsigned int axes_num;
   /**
    * Vector of distances to be covered in all axes.
    */
   std::vector<double> s;
+  /**
+   * Matrix used in the angle axis relative vector calculations.
+   */
+  lib::Ft_tr xsi_star_matrix;
+
   /**
    * Empty constructor.
    */

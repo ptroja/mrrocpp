@@ -62,9 +62,15 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
 	"Build support for sarkofag"
 	ON "ROBOTS_SWARMITFIX" OFF)
 
-option(USE_MESSIP "Use MESSIP TCP messaging protocol" ON)
 
-option(USE_DISCODE "Use Discode instead of Fradia for visual servoing" OFF)
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 # QNX is default MRROC++ target
 if (QNXNTO)
@@ -75,13 +81,9 @@ if (QNXNTO)
 	add_definitions (-DEIGEN_DONT_ALIGN)
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
 	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
-	set(Boost_INCLUDE_DIR "${MRLIB}/include")
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
-	# include boost compatibility layer
-	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -108,7 +110,7 @@ elseif (UBUNTU32BIT)
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
+	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -117,6 +119,7 @@ elseif (UBUNTU32BIT)
 	# Check for libftdi without pkg-config
 	find_library(LibFTDI_LIBRARY ftdi "${MRLIB}/lib")
 	set(LibFTDI_LIBRARIES ${LibFTDI_LIBRARY})
+	set(LibFTDI_LDFLAGS "${MRLIB}/lib/libftdi.so")
 	set(LibFTDI_FOUND 1)
 
 	# clock_gettime() can be missing in -lc
@@ -127,18 +130,19 @@ elseif (UBUNTU32BIT)
 	endif(HAVE_LIBRT)
 
 	# for non-QNX target messip is the only messaging protocol
-	set(USE_MESSIP ON)
 	
 	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
 	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=return-type")
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
 	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
 	set(COMEDI_INSTALL "${MRLIB}")
-else (QNXNTO) # Linux, etc.
+else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system)
+
 	find_package(Threads REQUIRED)
 	find_package(LibXml2 REQUIRED)
 	
@@ -155,11 +159,25 @@ else (QNXNTO) # Linux, etc.
 		set (COMPATIBILITY_LIBRARIES rt)
 	endif(HAVE_LIBRT)
 
+	# check for kqueue()
+	INCLUDE (CheckSymbolExists)
+	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
+
 	# for non-QNX target messip is the only messaging protocol
-	set(USE_MESSIP ON)
+	
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
+    if(DEFINE_EIGEN_DONT_ALIGN)
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_ALIGN")
+    endif(DEFINE_EIGEN_DONT_ALIGN)
+endif (QNXNTO)
 
+find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
+
+if (QNXNTO)
+	# include boost compatibility layer
+	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
 endif (QNXNTO)
 
 include(FindComedi)
@@ -170,11 +188,10 @@ include_directories (${LIBXML2_INCLUDE_DIR})
 include_directories (${Boost_INCLUDE_DIR})
 include_directories (${EIGEN2_INCLUDE_DIRS})
 
-if(USE_MESSIP)
+
 	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
-	add_definitions (-DUSE_MESSIP_SRR)
 	set(COMMON_LIBRARIES messip)
-endif(USE_MESSIP)
+
 
 set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_THREAD_LIBRARY}

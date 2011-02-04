@@ -10,6 +10,7 @@
 
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/shared_ptr.hpp>
 #include <Eigen/Core>
 
 #include "base/lib/mrmath/ForceTrans.h"
@@ -55,6 +56,13 @@ typedef struct _force_data
 class force : public lib::sensor::sensor_interface
 {
 protected:
+	/*!
+	 * \brief Info if the force sensor test mode is active.
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool force_sensor_test_mode;
+
 	bool is_reading_ready; // czy jakikolwiek odczyt jest gotowy?
 
 	// nazwa czujnika
@@ -98,13 +106,23 @@ public:
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 
-	lib::sr_vsp *sr_msg; //!< komunikacja z SR
-	lib::condition_synchroniser edp_vsp_synchroniser;//!< dostep do nowej wiadomosci dla vsp
-	lib::condition_synchroniser new_command_synchroniser;//!< dostep do nowej wiadomosci dla vsp
+	//! komunikacja z SR
+	boost::shared_ptr<lib::sr_vsp> sr_msg;
+
+	//! dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser edp_vsp_synchroniser;
+
+	//! dostep do nowej wiadomosci dla vsp
+	lib::condition_synchroniser new_command_synchroniser;
+
 	common::FORCE_ORDER command;
 
-	bool TERMINATE; //!< zakonczenie obydwu watkow
-	bool is_sensor_configured; // czy czujnik skonfigurowany?
+	//! zakonczenie obydwu watkow
+	bool TERMINATE;
+
+	//! czy czujnik skonfigurowany?
+	bool is_sensor_configured;
+
 	void set_command_execution_finish();
 
 	Eigen::Vector3d next_force_tool_position, current_force_tool_position;

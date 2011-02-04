@@ -53,7 +53,9 @@ void time::get_reading(void)
 	// Odczyt w porzadku.
 	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
 
-	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image);
+	if(clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image) == -1) {
+		perror("clock_gettime()");
+	}
 
 	// Obacny odczyt nie jest "nowy".
 	is_reading_ready = false;

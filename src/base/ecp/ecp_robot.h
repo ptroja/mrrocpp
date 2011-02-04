@@ -16,9 +16,9 @@
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mis_fun.h"
 
-#if defined(USE_MESSIP_SRR)
+
 #include "base/lib/messip/messip_dataport.h"
-#endif
+
 
 class ui_common_robot;
 
@@ -389,11 +389,9 @@ public:
 			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
 		}
 
-	#if !defined(USE_MESSIP_SRR)
-		if (MsgSend(EDP_fd, &ecp_command, sizeof(ecp_command), &reply_package, sizeof(reply_package)) == -1)
-	#else
+
 		if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
-	#endif
+
 		{
 			int e = errno; // kod bledu systemowego
 			perror("ecp: Send to EDP_MASTER error");

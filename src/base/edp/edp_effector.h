@@ -71,7 +71,7 @@ protected:
 	 *
 	 * IT also makes initial ECP command interpretation.
 	 */
-	template<typename ROBOT_COMMAND_T>
+	template <typename ROBOT_COMMAND_T>
 	lib::INSTRUCTION_TYPE receive_instruction(ROBOT_COMMAND_T & instruction)
 	{
 		// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
@@ -85,70 +85,17 @@ protected:
 
 		/* Do your MsgReceive's here now with the chid */
 		while (1) {
-	#if !defined(USE_MESSIP_SRR)
-			rcvid = MsgReceive(server_attach->chid, &new_ecp_command, sizeof(new_ecp_command), NULL);
 
-			if (rcvid == -1) {/* Error condition, exit */
-				perror("MsgReceive()");
-				break;
-			}
-
-			if (rcvid == 0) {/* Pulse received */
-				switch (new_ecp_command.hdr.code)
-				{
-					case _PULSE_CODE_DISCONNECT:
-						/*
-						 * A client disconnected all its connections (called
-						 * name_close() for each name_open() of our name) or
-						 * terminated
-						 */
-						ConnectDetach(new_ecp_command.hdr.scoid);
-						break;
-					case _PULSE_CODE_UNBLOCK:
-						/*
-						 * REPLY blocked client wants to unblock (was hit by
-						 * a signal or timed out).  It's up to you if you
-						 * reply now or later.
-						 */
-						break;
-					default:
-						/*
-						 * A pulse sent by one of your processes or a
-						 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
-						 * from the kernel?
-						 */
-						break;
-
-				}
-				continue;
-			}
-
-			/* name_open() sends a connect message, must EOK this */
-			if (new_ecp_command.hdr.type == _IO_CONNECT) {
-				MsgReply(rcvid, EOK, NULL, 0);
-				continue;
-			}
-
-			/* Some other QNX IO message was received; reject it */
-			if (new_ecp_command.hdr.type > _IO_BASE && new_ecp_command.hdr.type <= _IO_MAX) {
-				MsgError(rcvid, ENOSYS);
-				continue;
-			}
-	#else /* USE_MESSIP_SRR */
 			int32_t type, subtype;
 			rcvid = messip::port_receive(server_attach, type, subtype, new_ecp_command);
 
-			if (rcvid == -1)
-			{/* Error condition, exit */
+			if (rcvid == -1) {/* Error condition, exit */
 				perror("messip::port_receive()");
 				break;
-			}
-			else if (rcvid < -1)
-			{
+			} else if (rcvid < -1) {
 				fprintf(stderr, "ie. MESSIP_MSG_DISCONNECT\n");
 				continue;
 			}
-	#endif /* USE_MESSIP_SRR */
 
 			/* A message (presumable ours) received, handle */
 			break;
@@ -172,7 +119,7 @@ protected:
 	 *
 	 * Basing on the previous computation.
 	 */
-	template<typename ROBOT_REPLY_T>
+	template <typename ROBOT_REPLY_T>
 	void reply_to_instruction(ROBOT_REPLY_T & reply)
 	{
 		// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
@@ -185,11 +132,9 @@ protected:
 		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 			reply.reply_type = real_reply_type;
 
-	#if !defined(USE_MESSIP_SRR)
-		if (MsgReply(caller, 0, &reply, sizeof(reply)) == -1) { // Odpowiedz dla procesu ECP badz UI by Y
-	#else /* USE_MESSIP_SRR */
+
 			if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
-	#endif /* USE_MESSIP_SRR */
+
 			uint64_t e = errno;
 			perror("Reply() to ECP failed");
 			msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");

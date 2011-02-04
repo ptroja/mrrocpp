@@ -10,8 +10,6 @@
 #if !defined(_CONFIGSRV_H)
 #define _CONFIGSRV_H
 
-#include <boost/thread/mutex.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 class configsrv

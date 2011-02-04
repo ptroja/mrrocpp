@@ -8,11 +8,13 @@
 #ifndef __UI_R_SPKM_H
 #define __UI_R_SPKM_H
 
-#include "../ui.h"
-#include "../ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
 #include "robot/spkm/const_spkm.h"
 
-class wnd_spkm_inc;
+class wgt_spkm_inc;
+class wgt_spkm_int;
+class wgt_spkm_ext;
 
 namespace mrrocpp {
 namespace ui {
@@ -40,7 +42,10 @@ public:
 
 
 	EcpRobot *ui_ecp_robot;
-	wnd_spkm_inc *wnd_inc;
+	wgt_spkm_inc *wgt_inc;
+	wgt_spkm_int *wgt_int;
+	wgt_spkm_ext *wgt_ext;
+
 	/* TR
 	 WndInt *wnd_int;
 	 WndExternal *wnd_external;

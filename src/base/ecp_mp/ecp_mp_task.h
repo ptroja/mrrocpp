@@ -10,10 +10,15 @@
  */
 
 #include <boost/any.hpp>
-#include <libxml/tree.h>
 
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
+#include <libxml/tree.h>
+
+#include "base/lib/trajectory_pose/trajectory_pose.h"
+#include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/ecp_mp/Trajectory.h"
 
 /**
@@ -31,12 +36,6 @@ typedef std::map <std::string, boost::any> cc_t;
 typedef cc_t::value_type cc_item_t;
 
 namespace mrrocpp {
-
-namespace lib {
-	class configurator;
-	class sr_ecp;
-}
-
 namespace ecp_mp {
 namespace task {
 
@@ -54,6 +53,8 @@ public:
 	 */
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
+
+	typedef std::map <const char *, ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * /*, str_cmp */> bang_trajectories_map;
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
@@ -175,7 +176,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	ecp_mp::common::Trajectory * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID);
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory
@@ -183,7 +184,7 @@ public:
 	 * @param robot_name_t robot associated with trajectory
 	 * @return trajectories_t pointer
 	 */
-	trajectories_t * loadTrajectories(const char * fileName, lib::robot_name_t propRobot);
+	bang_trajectories_map * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
 };
 
 /*!

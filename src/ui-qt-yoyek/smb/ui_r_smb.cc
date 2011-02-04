@@ -1,7 +1,7 @@
 #include "ui_r_smb.h"
 #include "ui_ecp_r_smb.h"
 #include "robot/smb/const_smb.h"
-#include "../interface.h"
+#include "../base/interface.h"
 
 namespace mrrocpp {
 namespace ui {

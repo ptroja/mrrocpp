@@ -62,7 +62,18 @@ main(int argc, char *argv[])
 					reply.key = config.value(query.key);
 					reply.flag = true;
 				} catch (boost::property_tree::ptree_error & e) {
-					// Do nothing. Reply will send the error flag.
+					std::string err = e.what();
+					std::string tmp("No such node (");
+					bool print=false;
+					for (std::size_t i=0;i<tmp.size()-1;++i){
+						if(err[i]!=tmp[i]){
+							print=true;
+							break;
+						}
+					}
+					if(print)
+						std::cerr<<e.what()<<std::endl;
+					// Print the error to the standard error output
 				}
 			}
 			messip::port_reply(ch, rcvid, 0, reply);

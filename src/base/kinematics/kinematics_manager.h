@@ -31,10 +31,10 @@ class kinematics_manager
 {
 protected:
 	//! List of available kinematic models for given effector.
-	std::map <unsigned int, kinematic_model*> kinematic_models_list;
+	std::map <int, kinematic_model*> kinematic_models_list;
 
 	//! Number of currently selected model.
-	unsigned int current_kinematic_model_no;
+	int current_kinematic_model_no;
 
 	//! Pointer to currently selected kinematic model.
 	kinematic_model* current_kinematic_model;
@@ -58,13 +58,13 @@ public:
 	 * @brief Sets current kinematic model.
 	 * @param _desired_kinematic_model_nr Number of kinematic model  to be set.
 	 */
-	void set_kinematic_model(unsigned int _desired_kinematic_model_nr);
+	void set_kinematic_model(int _desired_kinematic_model_nr);
 
 	//! Returns pointer to current kinematic model.
 	kinematic_model* get_current_kinematic_model(void);
 
 	//! Returns number of given kinematic model.
-	unsigned int get_current_kinematic_model_no(void);
+	int get_current_kinematic_model_no(void);
 };
 
 } // namespace common
