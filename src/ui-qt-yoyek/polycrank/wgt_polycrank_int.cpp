@@ -2,10 +2,10 @@
 #include "ui_r_polycrank.h"
 #include "robot/polycrank/const_polycrank.h"
 //#include "ui/src/ui_ecp_r_tfg_and_conv.h"
-#include "../ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
 #include "wgt_polycrank_int.h"
-#include "../interface.h"
-#include "../mainwindow.h"
+#include "../base/interface.h"
+#include "../base/mainwindow.h"
 
 wgt_polycrank_int::wgt_polycrank_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::polycrank::UiRobot& _robot, QWidget *parent) :
 	wgt_base("Polycrank incremental motion", _interface, parent), robot(_robot)
@@ -65,8 +65,8 @@ void wgt_polycrank_int::on_pushButton_import_clicked()
 	double val[robot.number_of_servos];
 
 	for (int i = 0; i < robot.number_of_servos; i++) {
-						val[i] = 0.0;
-					}
+		val[i] = 0.0;
+	}
 
 	interface.mw->get_lineEdit_position(val, robot.number_of_servos);
 
@@ -79,7 +79,6 @@ void wgt_polycrank_int::on_pushButton_import_clicked()
 	ui.doubleSpinBox_des_p7->setValue(val[6]);
 
 }
-
 
 void wgt_polycrank_int::on_pushButton_export_clicked()
 {

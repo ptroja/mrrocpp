@@ -38,3 +38,25 @@ void wgt_process_control::on_mp_trigger_pushButton_clicked()
 	interface.pulse_trigger_mp();
 }
 
+//ECP
+void wgt_process_control::on_all_ecp_trigger_pushButton_clicked()
+{
+	interface.pulse_trigger_ecp();
+}
+
+// Reader
+void wgt_process_control::on_all_reader_start_pushButton_clicked()
+{
+	interface.pulse_start_all_reader();
+}
+
+void wgt_process_control::on_all_reader_stop_pushButton_clicked()
+{
+	interface.pulse_stop_all_reader();
+}
+
+void wgt_process_control::on_all_reader_trigger_pushButton_clicked()
+{
+	interface.pulse_trigger_all_reader();
+}
+

@@ -3,8 +3,8 @@
 #include "robot/spkm/const_spkm.h"
 
 #include "wgt_spkm_inc.h"
-#include "../interface.h"
-#include "../mainwindow.h"
+#include "../base/interface.h"
+#include "../base/mainwindow.h"
 
 wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
 	wgt_base("Spkm incremental motion", _interface, parent), robot(_robot)

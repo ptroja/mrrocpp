@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_polycrank_int.h"
-#include "../wgt_base.h"
+#include "../base/wgt_base.h"
 
 namespace mrrocpp {
 namespace ui {

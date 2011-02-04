@@ -5,31 +5,33 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __UI_R_SPKM_H
-#define __UI_R_SPKM_H
+#ifndef __UI_R_SARKOFAG_H
+#define __UI_R_SARKOFAG_H
 
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
-#include "robot/spkm/const_spkm.h"
-
-class wgt_spkm_inc;
-class wgt_spkm_int;
-class wgt_spkm_ext;
+#include "robot/sarkofag/const_sarkofag.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
 }
-namespace spkm {
 
-//
-//
-// KLASA UiRobot
-//
-//
-
+namespace tfg_and_conv {
 class EcpRobot;
+}
+namespace sarkofag {
+
+//
+//
+// KLASA UiRobotSarkofag
+//
+//
+
+
+// super klasa agregujaca porozrzucane struktury
+
 
 class UiRobot : public common::UiRobot
 {
@@ -37,36 +39,26 @@ private:
 
 public:
 
-	double current_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja biezaca
-	double desired_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja zadana
+	double current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 
-	EcpRobot *ui_ecp_robot;
-	wgt_spkm_inc *wgt_inc;
-	wgt_spkm_int *wgt_int;
-	wgt_spkm_ext *wgt_ext;
+	bool is_wind_sarkofag_moves_open; // informacja czy okno ruchow
+	bool is_wind_sarkofag_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	/* TR
-	 WndInt *wnd_int;
-	 WndExternal *wnd_external;
-	 */
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
+	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
 	void edp_create();
 	int edp_create_int();
-
-	int move_to_synchro_position();
-	int move_to_front_position();
-	int move_to_preset_position(int variant);
-
 	int execute_motor_motion();
 	int execute_joint_motion();
-
 };
 
 }

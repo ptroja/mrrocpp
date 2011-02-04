@@ -15,12 +15,14 @@
 #include "interface.h"
 #include "ui_sr.h"
 #include "ui_ecp.h"
-#include "spkm/ui_r_spkm.h"
-#include "smb/ui_r_smb.h"
-#include "shead/ui_r_shead.h"
-#include "irp6ot_m/ui_r_irp6ot_m.h"
-#include "irp6p_m/ui_r_irp6p_m.h"
-#include "polycrank/ui_r_polycrank.h"
+#include "../spkm/ui_r_spkm.h"
+#include "../smb/ui_r_smb.h"
+#include "../shead/ui_r_shead.h"
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../polycrank/ui_r_polycrank.h"
+#include "../bird_hand/ui_r_bird_hand.h"
+#include "../sarkofag/ui_r_sarkofag.h"
 
 extern void catch_signal(int sig);
 
@@ -150,18 +152,19 @@ void Interface::init()
 	polycrank = new polycrank::UiRobot(*this);
 	robot_m[polycrank->robot_name] = polycrank;
 
-	/* TR
-	 bird_hand = new bird_hand::UiRobot(*this);
-	 robot_m[bird_hand->robot_name] = bird_hand;
+	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
 
+	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
+	/* TR
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
 	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
 
-	 sarkofag = new sarkofag::UiRobot(*this);
-	 robot_m[sarkofag->robot_name] = sarkofag;
 
 	 irp6m_m = new irp6m::UiRobot(*this);
 	 robot_m[irp6m_m->robot_name] = irp6m_m;
@@ -479,8 +482,6 @@ void Interface::reload_whole_configuration()
 	}
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
-
-
 
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
@@ -968,8 +969,7 @@ int Interface::execute_mp_pulse(char pulse_code)
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
 
-
-		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
+		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
 
 		{
 			perror("Blad w wysylaniu pulsu do mp");
@@ -1192,6 +1192,49 @@ int Interface::pulse_trigger_mp()
 
 	return 1;
 
+}
+
+//ECP pulse
+int Interface::pulse_trigger_ecp()
+{
+
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_ecp();
+				}
+
+	return 1;
+}
+
+//Reader pulse
+int Interface::pulse_start_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_start_exec_pulse();
+				}
+
+	return 1;
+}
+
+int Interface::pulse_stop_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_stop_exec_pulse();
+				}
+
+	return 1;
+}
+
+int Interface::pulse_trigger_all_reader()
+{
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->pulse_reader_trigger_exec_pulse();
+				}
+
+	return 1;
 }
 
 // zatrzymuje zadanie, zabija procesy

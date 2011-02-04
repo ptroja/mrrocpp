@@ -27,11 +27,20 @@ private:
 	Ui::wgt_process_controlClass ui;
 
 private slots:
+	// MP
 	void on_mp_start_pushButton_clicked();
 	void on_mp_stop_pushButton_clicked();
 	void on_mp_pause_pushButton_clicked();
 	void on_mp_resume_pushButton_clicked();
 	void on_mp_trigger_pushButton_clicked();
+
+	// ECP
+	void on_all_ecp_trigger_pushButton_clicked();
+
+	// Reader
+	void on_all_reader_start_pushButton_clicked();
+	void on_all_reader_stop_pushButton_clicked();
+	void on_all_reader_trigger_pushButton_clicked();
 
 };
 

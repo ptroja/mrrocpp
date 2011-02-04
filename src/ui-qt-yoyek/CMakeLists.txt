@@ -43,10 +43,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Source files
 SET(GUI_CXX_SRCS
-    main.cpp
-    mainwindow.cpp
-    wgt_base.cpp
-    wgt_process_control.cpp
+    base/main.cpp
+    base/mainwindow.cpp
+    base/wgt_base.cpp
+    base/wgt_process_control.cpp
     spkm/wgt_spkm_inc.cpp
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
@@ -55,9 +55,9 @@ SET(GUI_CXX_SRCS
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
-    mainwindow.h
-    wgt_base.h
-    wgt_process_control.h
+    base/mainwindow.h
+    base/wgt_base.h
+    base/wgt_process_control.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -69,8 +69,8 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 
 # UI files
 SET(GUI_UI
-    mainwindow.ui
-    wgt_process_control.ui
+    base/mainwindow.ui
+    base/wgt_process_control.ui
     spkm/wgt_spkm_inc.ui
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui
@@ -84,15 +84,18 @@ QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 ADD_EXECUTABLE(
 	ui-qt-yoyek 
 	${GUI_CXX_SRCS}
-	ui_sr.cc
-	ui_ecp.cc
-	interface.cc
-	ui_ecp_r_common.cc
-	ui_ecp_r_irp6_common.cc
-	ui_ecp_r_data_port.cc
-	ui_ecp_r_tfg_and_conv.cc
+	base/ui_sr.cc
+	base/ui_ecp.cc
+	base/interface.cc
+	base/ui_ecp_robot/ui_ecp_r_common.cc
+	base/ui_ecp_robot/ui_ecp_r_irp6_common.cc
+	base/ui_ecp_robot/ui_ecp_r_data_port.cc
+	base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
+	bird_hand/ui_ecp_r_bird_hand.cc
+	bird_hand/ui_r_bird_hand.cc
+	sarkofag/ui_r_sarkofag.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_r_spkm.cc
 	smb/ui_ecp_r_smb.cc
@@ -100,8 +103,8 @@ ADD_EXECUTABLE(
 	shead/ui_ecp_r_shead.cc
 	shead/ui_r_shead.cc
 	polycrank/ui_r_polycrank.cc
-	ui.cc
-	ui_robot.cc
+	base/ui.cc
+	base/ui_robot.cc
 )
 
 # Link executable with QT libraries

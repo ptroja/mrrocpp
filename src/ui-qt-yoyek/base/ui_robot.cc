@@ -157,7 +157,6 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 
 void UiRobot::pulse_ecp()
 {
-
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
 		if (state.ecp.trigger_fd == lib::invalid_fd) {
 			connect_to_ecp_pulse_chanell();

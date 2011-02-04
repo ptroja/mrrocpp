@@ -9,7 +9,7 @@
 #include "wgt_spkm_ext.h"
 
 #include "robot/spkm/const_spkm.h"
-#include "../interface.h"
+#include "../base/interface.h"
 
 namespace mrrocpp {
 namespace ui {
