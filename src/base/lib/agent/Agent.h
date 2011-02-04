@@ -25,9 +25,6 @@ private:
 	//! server channel id
 	messip_channel_t * channel;
 
-	//! Data receiver thread loop
-	void ReceiveDataLoop(void);
-
 	//! Store data from archive into a buffer
 	template <std::size_t size>
 	void Store(const std::string & buffer_name, xdr_iarchive <size> & ia)
