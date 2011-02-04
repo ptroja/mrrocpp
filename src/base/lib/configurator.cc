@@ -190,7 +190,20 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	char bin_path[PATH_MAX];
 	if (exists("binpath", _section_name)) {
 		std::string _bin_path = value <std::string> ("binpath", _section_name);
-		strcpy(bin_path, _bin_path.c_str());
+
+		if (_bin_path == std::string("current")) {
+			char* cwd;
+			char buff[PATH_MAX + 1];
+
+			cwd = getcwd(buff, PATH_MAX + 1);
+			if (cwd == NULL) {
+				perror("Blad cwd w configurator");
+			}
+			strcpy(bin_path, cwd);
+		} else {
+			strcpy(bin_path, _bin_path.c_str());
+
+		}
 		if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
 			strcat(bin_path, "/");
 		}
