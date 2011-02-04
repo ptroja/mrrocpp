@@ -10,7 +10,7 @@
 
 #include "ui/src/ui.h"
 
-#include "robot/speaker/ecp_r_speaker.h"
+
 // Konfigurator.
 #include "base/lib/configurator.h"
 

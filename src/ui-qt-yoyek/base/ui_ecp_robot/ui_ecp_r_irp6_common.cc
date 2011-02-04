@@ -28,7 +28,7 @@
 
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6m/ecp_r_irp6m.h"
+
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/spkm/ecp_r_spkm.h"
 
@@ -57,10 +57,6 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		MOTOR_GRIPPER_STEP = DBL_MAX;
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
 		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
-
-	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
-
-		ecp = new ecp::irp6m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	}
 

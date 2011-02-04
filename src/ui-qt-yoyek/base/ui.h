@@ -21,9 +21,7 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 enum UI_NOTIFICATION_STATE_ENUM
 {
@@ -122,8 +120,6 @@ enum UI_ALL_EDPS_STATE
 // czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
 static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
-static const int CHECK_SPEAKER_STATE_ITER = 10; // co ile iteracji ma byc sprawdzony stan speakera
-
 typedef enum _EDP_STATE
 {
 	INACTIVE = -1, OFF = 0, WAITING_TO_START_READER = 1, WAITING_TO_STOP_READER = 2
@@ -144,9 +140,6 @@ typedef struct _edp_state_def
 	//! TODO: change from int to EDP_STATE enum
 	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop
 	int last_state;
-	std::string preset_sound_0; // dla EDP speaker
-	std::string preset_sound_1;
-	std::string preset_sound_2;
 
 	double preset_position[3][lib::MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
 	double front_position[lib::MAX_SERVOS_NR];

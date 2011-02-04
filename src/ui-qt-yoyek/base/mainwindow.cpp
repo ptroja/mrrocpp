@@ -192,14 +192,6 @@ void MainWindow::on_timer_slot()
 
 
 	Iteration_counter++;
-	/* TR
-	 if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
-	 if (interface.speaker->is_wind_speaker_play_open) // otworz okno
-	 {
-	 speaker_check_state(widget, apinfo, cbinfo);
-	 }
-	 }
-	 */
 
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
