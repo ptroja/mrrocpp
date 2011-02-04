@@ -357,7 +357,7 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 
 void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
 {
-	interface.irp6ot_m->synchronise();
+
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
@@ -549,17 +549,17 @@ void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
 
 void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
 {
-
+	interface.irp6p_tfg->edp_create();
 }
 
 void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
 {
-
+	interface.irp6p_tfg->EDP_slay_int();
 }
 
 void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
 {
-
+	interface.irp6p_tfg->synchronise();
 }
 
 void MainWindow::on_actionirp6p_tfg_Move_triggered()
@@ -569,22 +569,22 @@ void MainWindow::on_actionirp6p_tfg_Move_triggered()
 
 void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
 {
-
+	interface.irp6p_tfg->move_to_synchro_position();
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(0);
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(1);
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(2);
 }
 
 // conveyor menu
