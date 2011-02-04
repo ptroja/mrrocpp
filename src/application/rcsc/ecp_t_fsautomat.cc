@@ -426,20 +426,19 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	int num_c=0;
 	int num=0;
 
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+
 
 
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
-	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
-	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	//numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	//number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 
-	actTrajectory->arm_type =ps;
-	actTrajectory->pos_num = number_of_poses;
+	//actTrajectory->arm_type =ps;
+	//actTrajectory->pos_num = number_of_poses;
 
-	double tmp[actTrajectory->pos_num*axes_num];
+	double tmp[number_of_poses*axes_num];
 
 
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
@@ -447,6 +446,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
+				ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+									new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+				actTrajectory->arm_type =ps;
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
@@ -477,8 +479,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					num_c+=num;
 					xmlFree(xmlDataLine);
 				}
+				sg->load_absolute_pose((*actTrajectory));
 			}
-			sg->load_absolute_pose((*actTrajectory));
+
 			/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
 			std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
 			exit(0);*/
