@@ -195,6 +195,7 @@ void neuron_sensor::get_reading(){
 			memcpy(&(coordinates.x),buff+2,8);
 			memcpy(&(coordinates.y),buff+10,8);
 			memcpy(&(coordinates.z),buff+18,8);
+			base_period=macroSteps;
 			break;
 
 		case TR_NEXT_POSITION:

@@ -86,7 +86,7 @@ bool neuron_generator::next_step()
 	//generator has to interpolate this coordinates for 5 macro steps.
 	//this section is not performed in breaking phase, during which in every
 	//next step period is set to 4
-	if (neuron_sensor->current_period == 5) {
+	if (neuron_sensor->current_period == macroSteps) {
 		//printf("period 5\n");
 		if (neuron_sensor->startBraking()) {
 			breaking = true;
@@ -131,11 +131,11 @@ bool neuron_generator::next_step()
 		}
 	}
 
-	int node = 6 - neuron_sensor->current_period;
+	int node = macroSteps + 1 - neuron_sensor->current_period;
 
 	if (breaking) {
 		//set the current period to 4 to avoid entering the above "if" condition.
-		neuron_sensor->current_period = 4;
+		neuron_sensor->current_period = macroSteps - 1 ;
 	}
 
 	//for all of the axes...
@@ -239,10 +239,10 @@ bool neuron_generator::next_step()
 			//normal motion (not breaking), distance between desired and
 			//current position is divided by 5, desired position is reached in
 			//5 macrosteps and added to actual position
-			position[i] = actual_position[i] + (k[i] * (u[i] / 5) * node);
+			position[i] = actual_position[i] + (k[i] * (u[i] / macroSteps) * node);
 			//current velocity, last v[i] is the velocity just before breaking,
 			//it is not updated during breaking
-			v[i] = (u[i] / 5) / 0.02;
+			v[i] = (u[i] / macroSteps) / 0.02;
 			//printf("v[%d]: %f\n", i, v[i]);
 		}
 	}
