@@ -32,8 +32,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
-			position_refresh_interval(200)
+	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED), position_refresh_interval(200)
 {
 
 	mw = new MainWindow(*this);
@@ -303,7 +302,7 @@ void Interface::print_on_sr(char *buff, ...)
 	va_list arglist;
 
 	va_start(arglist,buff);
-	   vsprintf(text,buff,arglist);
+	vsprintf(text, buff, arglist);
 	va_end(arglist);
 
 	ui_msg->message(text);
@@ -584,12 +583,14 @@ void Interface::reload_whole_configuration()
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg == NULL) {
-			ui_msg = (boost::shared_ptr<lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
+			ui_msg
+					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (all_ecp_msg == NULL) {
-			all_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
+			all_ecp_msg
+					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji

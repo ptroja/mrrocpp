@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+function quitSig() {
+    echo "***BASH*** Received SIGINT, going down"
+}
+trap 'quitSig' INT
 
 ./messip_mgr &
 MESSIP_PID=$!
@@ -42,10 +47,6 @@ case `uname -s` in
 				./ui-qt-yoyek;;
 esac
 
-function quitSig() {
-    echo "***BASH*** Received SIGINT, going down"
-}
-trap 'quitSig' INT
 
 echo "***BASH*** UI exited"
 kill ${MESSIP_PID}

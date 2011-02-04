@@ -19,7 +19,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGINT:
-			interface->UI_close();
+			mrrocpp::ui::common::Interface::get_instance()->UI_close();
 			break;
 		case SIGALRM:
 			break;
