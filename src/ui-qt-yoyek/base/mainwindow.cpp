@@ -897,7 +897,6 @@ void MainWindow::on_actionConfiguration_triggered()
 
 		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
 				+ mrrocpp_root_local_path.length());
-
 		interface.reload_whole_configuration();
 		interface.set_default_configuration_file_name();
 

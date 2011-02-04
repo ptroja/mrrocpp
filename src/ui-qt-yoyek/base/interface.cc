@@ -523,6 +523,7 @@ void Interface::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
+		config->change_config_file("../" + config_file);
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
