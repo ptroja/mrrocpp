@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -165,9 +165,10 @@
       <property name="title">
        <string>A&amp;bsolute moves</string>
       </property>
+      <addaction name="actionirp6p_m_Absolute_Moves_Motors"/>
       <addaction name="actionirp6p_m_Joints"/>
-      <addaction name="actionirp6p_m_Xyz_Euler_Zyz"/>
-      <addaction name="actionirp6p_m_Xyz_Angle_Axis"/>
+      <addaction name="actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis"/>
      </widget>
      <widget class="QMenu" name="menuirp6p_m_Relative_Moves">
       <property name="title">
@@ -185,7 +186,6 @@
      <addaction name="actionirp6p_m_EDP_Load"/>
      <addaction name="actionirp6p_m_EDP_Unload"/>
      <addaction name="separator"/>
-     <addaction name="actionirp6p_m_Motors"/>
      <addaction name="menuirp6p_m_Pre_Synchro_Moves"/>
      <addaction name="menuirp6p_m_Absolute_Moves"/>
      <addaction name="menuirp6p_m_Relative_Moves"/>
@@ -294,68 +294,6 @@
      <addaction name="actionconveyor_Move"/>
      <addaction name="menuconveyor_Preset_Positions"/>
     </widget>
-    <widget class="QMenu" name="menu_Speaker">
-     <property name="title">
-      <string>&amp;Speaker</string>
-     </property>
-     <widget class="QMenu" name="menuSpeaker_Preset_Sounds">
-      <property name="title">
-       <string>Preset &amp;Sounds</string>
-      </property>
-      <addaction name="actionspeaker_Sound_0"/>
-      <addaction name="actionspeaker_Sound_1"/>
-      <addaction name="actionspeaker_Sound_2"/>
-     </widget>
-     <addaction name="actionspeaker_EDP_Load"/>
-     <addaction name="actionspeaker_EDP_Unload"/>
-     <addaction name="separator"/>
-     <addaction name="actionspeaker_Play"/>
-     <addaction name="menuSpeaker_Preset_Sounds"/>
-    </widget>
-    <widget class="QMenu" name="menuIrp6_Mechatronika">
-     <property name="title">
-      <string>Irp6-&amp;Mechatronika</string>
-     </property>
-     <widget class="QMenu" name="menuirp6_Mechatronika_Pre_Synchro_Moves">
-      <property name="title">
-       <string>P&amp;re Synchro Moves</string>
-      </property>
-      <addaction name="actionirp6_Mechatronika_Synchronization"/>
-      <addaction name="actionirp6_Mechatronika_Pre_Synchro_Moves_Motors"/>
-     </widget>
-     <widget class="QMenu" name="menuirp6_Mechatronika_Absolute_Moves">
-      <property name="title">
-       <string>A&amp;bsolute Moves</string>
-      </property>
-      <addaction name="actionirp6_Mechatronika_Absolute_Moves_Motors"/>
-      <addaction name="actionirp6_Mechatronika_Joints"/>
-      <addaction name="actionirp6_Mechatronika_Xyz_Euler_Zyz"/>
-      <addaction name="actionirp6_Mechatronika_Xyz_Angle_Axis"/>
-     </widget>
-     <widget class="QMenu" name="menuirp6_Mechatronika_Preset_Positions">
-      <property name="title">
-       <string>&amp;Preset Positions</string>
-      </property>
-      <addaction name="actionirp6_Mechatronika_Synchro_Position"/>
-      <addaction name="actionirp6_Mechatronika_Position_0"/>
-      <addaction name="actionirp6_Mechatronika_Position_1"/>
-      <addaction name="actionirp6_Mechatronika_Position_2"/>
-     </widget>
-     <widget class="QMenu" name="menuirp6_Mechatronika_Tool">
-      <property name="title">
-       <string>&amp;Tool</string>
-      </property>
-      <addaction name="actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz"/>
-      <addaction name="actionirp6_Mechatronika_Tool_Xyz_Angle_Axis"/>
-     </widget>
-     <addaction name="actionirp6_Mechatronika_EDP_Load"/>
-     <addaction name="actionirp6_Mechatronika_EDP_Unload"/>
-     <addaction name="separator"/>
-     <addaction name="menuirp6_Mechatronika_Pre_Synchro_Moves"/>
-     <addaction name="menuirp6_Mechatronika_Absolute_Moves"/>
-     <addaction name="menuirp6_Mechatronika_Preset_Positions"/>
-     <addaction name="menuirp6_Mechatronika_Tool"/>
-    </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuirp6ot_tfg"/>
     <addaction name="menuIrp6p_m"/>
@@ -369,8 +307,6 @@
     <addaction name="menuSmb"/>
     <addaction name="menuShead"/>
     <addaction name="separator"/>
-    <addaction name="menu_Speaker"/>
-    <addaction name="menuIrp6_Mechatronika"/>
     <addaction name="menuPolycrank"/>
    </widget>
    <widget class="QMenu" name="menuFile">
@@ -935,12 +871,12 @@
     <string>&amp;Joints</string>
    </property>
   </action>
-  <action name="actionirp6p_m_Xyz_Euler_Zyz">
+  <action name="actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz">
    <property name="text">
     <string>Xyz &amp;Euler Zyz</string>
    </property>
   </action>
-  <action name="actionirp6p_m_Xyz_Angle_Axis">
+  <action name="actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis">
    <property name="text">
     <string>Xyz &amp;Angle Axis</string>
    </property>
@@ -1138,6 +1074,11 @@
   <action name="actionirp6_Mechatronika_Tool_Xyz_Angle_Axis">
    <property name="text">
     <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Absolute_Moves_Motors">
+   <property name="text">
+    <string>Motors</string>
    </property>
   </action>
  </widget>

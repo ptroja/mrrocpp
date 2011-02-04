@@ -67,10 +67,10 @@ private slots:
 	void on_actionirp6ot_m_Synchronisation_triggered();
 	void on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered();
 
-	void on_actionirp6ot_m_Absolute_moves_Motors();
-	void on_actionirp6ot_m_Joints();
-	void on_actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz();
-	void on_actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis();
+	void on_actionirp6ot_m_Absolute_Moves_Motors_triggered();
+	void on_actionirp6ot_m_Joints_triggered();
+	void on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
 
 	void on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered();
 
@@ -90,7 +90,7 @@ private slots:
 	void on_actionirp6ot_tfg_Synchronization_triggered();
 	void on_actionirp6ot_tfg_Move_triggered();
 
-	void on_actionirp6ot_tfg_Synchro_position_triggered();
+	void on_actionirp6ot_tfg_Synchro_Position_triggered();
 	void on_actionirp6ot_tfg_Position_0_triggered();
 	void on_actionIrp6ot_tfg_Position_1_triggered();
 	void on_actionIrp6ot_tfg_Position_2_triggered();
@@ -100,12 +100,12 @@ private slots:
 	void on_actionirp6p_m_EDP_Unload_triggered();
 
 	void on_actionirp6p_m_Synchronisation_triggered();
-	void on_actionirp6p_m_Pre_Synchro_Moves_Motors();
+	void on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered();
 
-	void on_actionirp6p_m_Motors_triggered();
+	void on_actionirp6p_m_Absolute_Moves_Motors_triggered();
 	void on_actionirp6p_m_Joints_triggered();
-	void on_actionirp6p_m_Absolute_moves_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6p_m_Absolute_moves_Xyz_Angle_Axis_triggered();
+	void on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
 
 	void on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered();
 
@@ -115,8 +115,8 @@ private slots:
 	void on_actionirp6p_m_Position_1_triggered();
 	void on_actionirp6p_m_Position_2_triggered();
 
-	void on_actionirp6p_m_Tool_Xyz_Euler_Zyz();
-	void on_actionirp6p_m_Tool_Xyz_Angle_Axis();
+	void on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered();
 
 	//irp6p_tfg
 	void on_actionirp6p_tfg_EDP_Load_triggered();
@@ -190,7 +190,6 @@ private slots:
 	// shead menu
 	void on_actionshead_EDP_Load_triggered();
 	void on_actionshead_EDP_Unload_triggered();
-
 
 	// polycrank menu
 	void on_actionpolycrank_EDP_Load_triggered();

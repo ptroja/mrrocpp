@@ -367,22 +367,22 @@ void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
 	interface.irp6ot_m->synchronise();
 }
 
-void MainWindow::on_actionirp6ot_m_Absolute_moves_Motors()
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6ot_m_Joints()
+void MainWindow::on_actionirp6ot_m_Joints_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz()
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis()
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
 
 }
@@ -449,7 +449,7 @@ void MainWindow::on_actionirp6ot_tfg_Move_triggered()
 
 }
 
-void MainWindow::on_actionirp6ot_tfg_Synchro_position_triggered()
+void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
 {
 
 }
@@ -487,12 +487,12 @@ void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 	interface.irp6p_m->synchronise();
 }
 
-void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors()
+void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6p_m_Motors_triggered()
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
 {
 
 }
@@ -502,12 +502,12 @@ void MainWindow::on_actionirp6p_m_Joints_triggered()
 
 }
 
-void MainWindow::on_actionirp6p_m_Absolute_moves_Xyz_Euler_Zyz_triggered()
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6p_m_Absolute_moves_Xyz_Angle_Axis_triggered()
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
 
 }
@@ -542,12 +542,12 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 	interface.irp6p_m->move_to_preset_position(2);
 }
 
-void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz()
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
 {
 
 }
 
-void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis()
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
 {
 
 }
