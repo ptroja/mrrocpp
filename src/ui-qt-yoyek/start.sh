@@ -9,10 +9,13 @@ sleep 0.5
 
 PWD=`pwd`
 DEFAULT_CONFIG="../../configs/default_file.cfg"
+INITIAL_CONFIG="../../configs/initial_file.cfg"
 if [ ! -f ${DEFAULT_CONFIG} ]; then
 	echo "default config file ${DEFAULT_CONFIG} missing"
-	kill ${MESSIP_PID}
-	exit 1
+	echo "copying ${INITIAL_CONFIG} to ${DEFAULT_CONFIG}"
+	cp ${INITIAL_CONFIG} ${DEFAULT_CONFIG}
+#	kill ${MESSIP_PID}
+#	exit 1
 fi
 CONFIG=`cat ../../configs/default_file.cfg`
 CONFIG_FILE="../../${CONFIG}"
