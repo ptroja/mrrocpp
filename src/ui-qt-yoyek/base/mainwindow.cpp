@@ -1,6 +1,7 @@
 #include <QTextCharFormat>
 #include <QBrush>
 #include <QColor>
+#include <QFileDialog>
 
 #include <ctime>
 #include <fstream>
@@ -873,6 +874,37 @@ void MainWindow::on_actionProcess_Control_triggered()
 }
 void MainWindow::on_actionConfiguration_triggered()
 {
+	/*
+	 QFileDialog dialog;
+	 if (dialog.exec()) {
+	 // ...
+	 }
+	 */
+
+	QString fileName;
+
+	std::string mrrocpp_root_local_path =
+			interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
+	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
+	//interface.ui_msg->message(mrrocpp_root_local_path);
+
+	try {
+
+		fileName
+				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*.ini)"));
+
+		std::string str_fullpath = fileName.toStdString();
+
+		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
+				+ mrrocpp_root_local_path.length());
+
+		interface.set_default_configuration_file_name();
+
+	}
+
+	catch (...) {
+
+	}
 
 }
 
