@@ -99,11 +99,10 @@ private slots:
 	void on_actionirp6p_m_EDP_Load_triggered();
 	void on_actionirp6p_m_EDP_Unload_triggered();
 
-	void on_actionirp6p_m_Motors_triggered();
-
 	void on_actionirp6p_m_Synchronisation_triggered();
 	void on_actionirp6p_m_Pre_Synchro_Moves_Motors();
 
+	void on_actionirp6p_m_Motors_triggered();
 	void on_actionirp6p_m_Joints_triggered();
 	void on_actionirp6p_m_Absolute_moves_Xyz_Euler_Zyz_triggered();
 	void on_actionirp6p_m_Absolute_moves_Xyz_Angle_Axis_triggered();
@@ -133,7 +132,7 @@ private slots:
 
 	//conveyor
 	void on_actionconveyor_EDP_Load_triggered();
-	void on_actionconveyor_EDP_Unload_triggered(){};
+	void on_actionconveyor_EDP_Unload_triggered();
 
 	void on_actionconveyor_Synchronization_triggered();
 	void on_actionconveyor_Move_triggered();
@@ -192,34 +191,6 @@ private slots:
 	void on_actionshead_EDP_Load_triggered();
 	void on_actionshead_EDP_Unload_triggered();
 
-	//speaker
-	void on_actionspeaker_EDP_Load_triggered();
-	void on_actionspeaker_EDP_Unload_triggered();
-
-	void on_actionspeaker_Play_triggered();
-	void on_actionspeaker_Sound_0_triggered();
-	void on_actionspeaker_Sound_1_triggered();
-	void on_actionspeaker_Sound_2_triggered();
-
-	//irp6_mechatronika
-	void on_actionirp6_Mechatronika_EDP_Load_triggered();
-	void on_actionirp6_Mechatronika_EDP_Unload_triggered();
-
-	void on_actionirp6_Mechatronika_Synchronization_triggered();
-	void on_actionirp6_Mechatronika_Pre_Synchro_Moves_Motors_triggered();
-
-	void on_actionirp6_Mechatronika_Absolute_Moves_Motors_triggered();
-	void on_actionirp6_Mechatronika_Joints_triggered();
-	void on_actionirp6_Mechatronika_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6_Mechatronika_Xyz_Angle_Axis_triggered();
-
-	void on_actionirp6_Mechatronika_Synchro_Position_triggered();
-	void on_actionirp6_Mechatronika_Position_0_triggered();
-	void on_actionirp6_Mechatronika_Position_1_triggered();
-	void on_actionirp6_Mechatronika_Position_2_triggered();
-
-	void on_actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6_Mechatronika_Tool_Xyz_Angle_Axis_triggered();
 
 	// polycrank menu
 	void on_actionpolycrank_EDP_Load_triggered();
