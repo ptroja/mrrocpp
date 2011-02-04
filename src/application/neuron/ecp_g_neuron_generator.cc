@@ -59,6 +59,8 @@ bool neuron_generator::first_step()
 	//get neuron sensor and send information about starting new trajectory.
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
+	macroSteps=neuron_sensor->getMacroStepsNumber();
+	printf("macroStep: %d",macroSteps);
 
 	return true;
 }

@@ -63,6 +63,11 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		uint8_t command;
 
 		/**
+		 * @brief number of macro steps to perform.
+		 */
+		uint8_t macroSteps;
+
+		/**
 		 * Coordinates received from VSP
 		 */
 		Coordinates coordinates;
@@ -82,6 +87,7 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		Coordinates getFirstCoordinates();
 		Coordinates getCoordinates();
 		Coordinates getLastButOne();
+		uint8_t getMacroStepsNumber();
 		void startGettingTrajectory();
 		void sendCommunicationFinished();
 		void waitForVSPStart();

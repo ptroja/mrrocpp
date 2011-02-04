@@ -191,12 +191,18 @@ void neuron_sensor::get_reading(){
 
 		case FIRST_COORDINATES:
 		case TRAJECTORY_FIRST:
+			memcpy(&(macroSteps),buff+1,1);
+			memcpy(&(coordinates.x),buff+2,8);
+			memcpy(&(coordinates.y),buff+10,8);
+			memcpy(&(coordinates.z),buff+18,8);
+			break;
+
 		case TR_NEXT_POSITION:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
 			memcpy(&(coordinates.z),buff+17,8);
-			//printf("get_reading() %lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
 			break;
+
 		case START_BREAKING:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
@@ -260,6 +266,14 @@ Coordinates neuron_sensor::getLastButOne(){
  */
 uint8_t neuron_sensor::getCommand(){
 	return command;
+}
+
+/*=================================getMacroStepsNumber====================*//**
+ * @brief Number of macro steps received from VSP.
+ * @return macro steps received from VSP.
+ */
+uint8_t neuron_sensor::getMacroStepsNumber(){
+	return macroSteps;
 }
 
 /*================================sendCommand=============================*//**

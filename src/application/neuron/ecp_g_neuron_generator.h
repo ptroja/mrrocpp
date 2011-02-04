@@ -166,6 +166,11 @@ class neuron_generator: public common::generator::generator{
 		 */
 		double overshoot;
 
+		/**
+		 * @brief Number of macro steps between consequtive data.
+		 */
+		uint8_t macroSteps;
+
 	public:
 		neuron_generator(common::task::task& _ecp_task);
 		virtual ~neuron_generator();
