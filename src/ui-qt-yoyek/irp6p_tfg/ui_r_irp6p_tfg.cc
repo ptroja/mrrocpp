@@ -2,23 +2,14 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "ui_r_sarkofag.h"
-//#include "ui_ecp_r_sarkofag.h"
+#include "ui_r_irp6p_tfg.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
-
-#include "wgt_sarkofag_inc.h"
-
-#include "robot/sarkofag/const_sarkofag.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../base/interface.h"
-
-#include "../base/mainwindow.h"
-#include "ui_mainwindow.h"
-
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
 
 namespace mrrocpp {
 namespace ui {
-namespace sarkofag {
+namespace irp6p_tfg {
 
 //
 //
@@ -26,12 +17,13 @@ namespace sarkofag {
 //
 //
 
+
 void UiRobot::edp_create()
 {
 	if (state.edp.state == 0) {
 		create_thread();
 
-		eb.command(boost::bind(&ui::sarkofag::UiRobot::edp_create_int, &(*this)));
+		eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::edp_create_int, &(*this)));
 	}
 }
 
@@ -42,7 +34,7 @@ int UiRobot::edp_create_int()
 
 	try { // dla bledow robot :: ECP_error
 
-		// dla robota sarkofag
+		// dla robota irp6p_tfg
 		if (state.edp.state == 0) {
 
 			state.edp.state = 0;
@@ -57,15 +49,15 @@ int UiRobot::edp_create_int()
 			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
 			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
 					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_sarkofag already exists");
-			} else if (interface.check_node_existence(state.edp.node_name, "edp_sarkofag")) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_irp6p_tfg already exists");
+			} else if (interface.check_node_existence(state.edp.node_name, "edp_irp6p_tfg")) {
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
+					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::irp6p_tfg::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -102,6 +94,38 @@ int UiRobot::edp_create_int()
 
 }
 
+int UiRobot::synchronise()
+
+{
+
+	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::synchronise_int, &(*this)));
+
+	return 1;
+
+}
+
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = state.edp.preset_position[variant][i];
+	}
+	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*this)));
+
+	return 1;
+}
+
+int UiRobot::move_to_synchro_position()
+{
+
+	for (int i = 0; i < number_of_servos; i++) {
+		desired_pos[i] = 0.0;
+	}
+	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_motor_motion, &(*this)));
+
+	return 1;
+}
+
 int UiRobot::execute_motor_motion()
 {
 	try {
@@ -124,16 +148,6 @@ int UiRobot::execute_joint_motion()
 	CATCH_SECTION_UI
 
 	return 1;
-}
-
-int UiRobot::synchronise()
-
-{
-
-	eb.command(boost::bind(&ui::sarkofag::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
 int UiRobot::synchronise_int()
@@ -164,12 +178,9 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active"),
+			common::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active"),
 			ui_ecp_robot(NULL)
 {
-
-	wgt_inc = new wgt_sarkofag_inc(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SARKOFAG_INC] = wgt_inc->dwgt;
 
 }
 
@@ -181,60 +192,47 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuSarkofag);
-			/*TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag, NULL);
+			/* TR
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-			mw->enable_menu_item(true, 1, ui->menuSarkofag);
-			mw->enable_menu_item(true, 1, ui->actionsarkofag_EDP_Load);
 			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, ABN_mm_sarkofag_edp_load, NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_edp_unload, ABN_mm_irp6p_tfg_synchronisation, ABN_mm_irp6p_tfg_move, ABN_mm_irp6p_tfg_preset_positions, ABN_mm_irp6p_tfg_servo_algorithm, NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg, ABN_mm_irp6p_tfg_edp_load, NULL);
 			 */
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuSarkofag);
 			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg, NULL);
 			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->actionsarkofag_Synchronisation);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_synchronisation, NULL);
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_synchronisation, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 				 */
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 3, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
 						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg_edp_unload, ABN_mm_irp6p_tfg_move, ABN_mm_irp6p_tfg_preset_positions, ABN_mm_irp6p_tfg_servo_algorithm, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 2, ui->actionsarkofag_EDP_Load, ui->actionsarkofag_EDP_Unload);
-
 						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, ABN_mm_sarkofag_edp_unload, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg_move, ABN_mm_irp6p_tfg_preset_positions, ABN_mm_irp6p_tfg_servo_algorithm, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_edp_load, ABN_mm_irp6p_tfg_edp_unload, NULL);
 						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
+						 ABN_mm_irp6p_tfg_move, ABN_mm_irp6p_tfg_preset_positions, ABN_mm_irp6p_tfg_servo_algorithm, NULL);
 						 */
 						break;
 					default:
@@ -242,11 +240,9 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionall_Synchronisation);
-				mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
 				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
+				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6p_tfg_edp_unload, ABN_mm_irp6p_tfg_synchronisation, ABN_mm_irp6p_tfg_move, NULL);
+				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_edp_load, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
 				 */
 			}
@@ -263,8 +259,8 @@ void UiRobot::close_all_windows()
 	/* TR
 	 int pt_res = PtEnter(0);
 
-	 close_wind_sarkofag_moves(NULL, NULL, NULL);
-	 close_wnd_sarkofag_servo_algorithm(NULL, NULL, NULL);
+	 close_wind_irp6p_tfg_moves(NULL, NULL, NULL);
+	 close_wnd_irp6p_tfg_servo_algorithm(NULL, NULL, NULL);
 
 	 if (pt_res >= 0) {
 	 PtLeave(0);
@@ -276,7 +272,6 @@ void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
 }
-
 }
 } //namespace ui
 } //namespace mrrocpp

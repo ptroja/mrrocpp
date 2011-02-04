@@ -13,6 +13,7 @@
 
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
