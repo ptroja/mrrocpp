@@ -31,7 +31,8 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED)
+	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
+			position_refresh_interval(200)
 {
 
 	mw = new MainWindow(*this);
