@@ -53,7 +53,7 @@ public:
 	/**
 	 * Set the data as used
 	 */
-	void Use()
+	void Utilize()
 	{
 		fresh = false;
 	}
