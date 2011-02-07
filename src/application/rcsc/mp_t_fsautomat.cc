@@ -784,7 +784,7 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
 	break;
-
+std::cout<<"TYP STANU:"<<(*stateMap)[nextState].getType()<<std::endl;
 	if (strcmp((*stateMap)[nextState].getType(), "runGenerator") == 0) {
 		executeMotion((*stateMap)[nextState]);
 		std::cout << "TESTmotion" << std::endl;
@@ -811,7 +811,7 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "systemInitialization") == 0) {
-		std::cout << "In sensor initialization.." << std::endl;
+		std::cout << "In system initialization.." << std::endl;
 		sensorInitialization();
 		std::cout << nextState << " -> zakonczony" << std::endl;
 

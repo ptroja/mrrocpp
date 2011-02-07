@@ -21,6 +21,13 @@ enum POURING_PHASES
 	POURING_PHASE_1, POURING_PHASE_2
 };
 
+
+/**
+ * @brief Task label definition.
+ */
+const std::string ECP_T_FSAUTOMAT = "ECP_T_FSAUTOMAT";
+
+
 } // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp

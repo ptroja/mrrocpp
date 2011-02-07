@@ -228,104 +228,113 @@ fsautomat::fsautomat(lib::configurator &_config) :
 //TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
-	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
-	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
-	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
-	if (trjConf && ecpLevel) {
-		std::cout<< "!!!"<<std::endl;
-		std::cout<< "trajectorymap"<<std::endl;
-		std::cout<< "!!!"<<std::endl;
-		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
-		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
-	}
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+	sr_ecp_msg->message("poczatek");
+	std::cout<<"BLAAAAAAAAAAAA     "<<mp_2_ecp_next_state_string<<std::endl;
+	//if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_T_FSAUTOMAT) {
+		sr_ecp_msg->message("weszlo");
 
-
-		get_next_state();
-
-		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
-
-		sr_ecp_msg->message("Order received");
-
-		subtasks_conditional_execution();
-
-		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
-			std::string path(mrrocpp_network_path);
-			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
-			tig->flush_pose_list();
-			//tig->load_file_with_path (path.c_str());
-			//tig->initiate_pose_list();
-			tig->teach(lib::ECP_MOTOR, "asdasdkjasdj");
-			if (operator_reaction("Save?"))
-				tig->save_file(lib::ECP_MOTOR);
-			//tig->Move();
-
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-			if (trjConf) {
-
-				if (ecpLevel) {
-					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
-				} else {
-					std::string path(mrrocpp_network_path);
-					path += fileName;
-					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-				}
-			}//if
-			else //moj przypadekl -> z pliku
-			{
-				std::string path(mrrocpp_network_path);
-				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-				sg->load_trajectory_from_file(path.c_str());
-			}//else
-			std::cout<<"interpolating"<<std::endl;
-			sg->calculate_interpolate();
-			std::cout<<"interpolated, moving"<<std::endl;
-			sg->Move();//changed askubis
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
-			wmg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-			gt->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN) {
-			nrg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE) {
-			befg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			if (size > 3)
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
-			else
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2]);
-			rgg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
-			double gen_args[1];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			rfrg->configure(gen_args[0]);
-			rfrg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-			//double gen_args[2];
-			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-
-			//lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			//std::cout<<"gag"<<std::endl;
-			gag->configure(0.02, 300, 3);
-			//std::cout<<"gag_configured"<<std::endl;
-			gag->Move();
-			//std::cout<<"gag_configured moved"<<std::endl;
-			//lib::STOP czyli 2 powinien byc a jest 4...
-		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-			go_st->configure(gen_args[0], (int) gen_args[1]);
-			go_st->execute();
+			std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
+		int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
+		int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
+		if (trjConf && ecpLevel) {
+			std::cout<< "!!!"<<std::endl;
+			std::cout<< "trajectorymap"<<std::endl;
+			std::cout<< "!!!"<<std::endl;
+			trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
+			printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 		}
+			for (;;) {
+			sr_ecp_msg->message("Waiting for MP order");
 
-		ecp_termination_notice();
-	} //end for
+
+			get_next_state();
+
+			//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
+
+			sr_ecp_msg->message("Order received");
+
+			subtasks_conditional_execution();
+
+			if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
+				std::string path(mrrocpp_network_path);
+				path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				tig->flush_pose_list();
+				//tig->load_file_with_path (path.c_str());
+				//tig->initiate_pose_list();
+				tig->teach(lib::ECP_MOTOR, "asdasdkjasdj");
+				if (operator_reaction("Save?"))
+					tig->save_file(lib::ECP_MOTOR);
+				//tig->Move();
+
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
+				if (trjConf) {
+					if (ecpLevel) {
+						//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+						std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+						load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					} else {
+						std::string path(mrrocpp_network_path);
+						path += fileName;
+								std::cout<<"przeslano:    " <<(char*)  mp_command.ecp_next_state.mp_2_ecp_next_state_string <<std::endl;
+								std::cout<<"path:  "<<path<<std::endl;
+						load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					}
+				}//if
+			else //moj przypadekl -> z pliku
+				{
+					std::string path(mrrocpp_network_path);
+					path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+					sg->load_trajectory_from_file(path.c_str());
+				}//else
+				std::cout<<"interpolating"<<std::endl;
+				sg->calculate_interpolate();
+				std::cout<<"interpolated, moving"<<std::endl;
+				sg->Move();//changed askubis
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
+				wmg->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
+				gt->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN) {
+				nrg->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE) {
+				befg->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
+				double gen_args[4];
+				int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				if (size > 3)
+					rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
+				else
+					rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2]);
+				rgg->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
+				double gen_args[1];
+				lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				rfrg->configure(gen_args[0]);
+				rfrg->Move();
+			} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+				//double gen_args[2];
+				//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+				//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+
+				//lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				//std::cout<<"gag"<<std::endl;
+				gag->configure(0.02, 300, 3);
+				//std::cout<<"gag_configured"<<std::endl;
+				gag->Move();
+				//std::cout<<"gag_configured moved"<<std::endl;
+				//lib::STOP czyli 2 powinien byc a jest 4...
+			} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
+				double gen_args[2];
+				lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+				go_st->configure(gen_args[0], (int) gen_args[1]);
+				go_st->execute();
+			}
+
+			ecp_termination_notice();
+		} //end for
+
+	//}
+
 
 }
 
@@ -432,8 +441,8 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
-	//numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
-	//number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
+	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 
 	//actTrajectory->arm_type =ps;
 	//actTrajectory->pos_num = number_of_poses;
