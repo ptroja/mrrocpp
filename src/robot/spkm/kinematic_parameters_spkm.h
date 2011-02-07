@@ -92,6 +92,12 @@ public:
 	//! Distance between P4C and pi_h, according to e_h.
 	double hC;
 
+	//! Parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
+	static const double synchro_positions[6];
+
+	//! Parameters related to conversion from motor positions to joints.
+	static const double mp2i_ratios[6];
+
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
@@ -99,5 +105,6 @@ public:
 } // namespace spkm
 } // namespace kinematic
 } // namespace mrrocpp
+
 
 #endif /* KINEMATIC_PARAMETERS_H_ */

@@ -14,9 +14,16 @@ namespace mrrocpp {
 namespace kinematics {
 namespace spkm {
 
+//! Initialization of parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
+const double kinematic_parameters_spkm::synchro_positions[6] = { 0.252, 0.251, 0.272, 0.0, 0.0, 0.0};
+
+//! Initialization of parameters related to conversion from motor positions to joints.
+const double kinematic_parameters_spkm::mp2i_ratios[6] = { 0.005 / ((4 * 500) / 9), 0.005 / ((4 * 500) / 9), 0.005 / ((4 * 500) / 9), 0.0, 0.0, 0.0};
+
+
 kinematic_parameters_spkm::kinematic_parameters_spkm()
 {
-	// TODO Set parameters.
+  // TODO Set parameters.
 	// TODO Set W_S_P;
 	// std::cout<< W_S_P<<std::endl;
 	// Construct W_S_T on the base of W_S_P.
