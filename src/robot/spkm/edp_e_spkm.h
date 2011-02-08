@@ -39,6 +39,10 @@ private:
 	//! Axes container
 	boost::array<epos::epos *, 3> axes;
 
+	static const double Vdefault[6];// = { 5000, 5000, 5000, 5000, 5000, 5000 };
+	static const double Adefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
+	static const double Ddefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
+
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
 	lib::spkm::rbuffer edp_ecp_rbuffer;
