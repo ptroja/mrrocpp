@@ -303,12 +303,36 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND:
 			if (!robot_test_mode) {
 				// Execute command
-				for (std::size_t i = 0; i < axes.size(); ++i) {
+				BOOST_FOREACH(epos::epos * node, axes) {
 					// Brake with Quickstop command
-					axes[i]->changeEPOSstate(epos::epos::QUICKSTOP);
+					node->changeEPOSstate(epos::epos::QUICKSTOP);
 				}
 			}
 			break;
+		case lib::spkm::CBUFFER_EPOS_CLEAR_FAULT:
+			BOOST_FOREACH(epos::epos * node, axes) {
+
+				node->printEPOSstate();
+
+				// Check if in a FAULT state
+				if(node->checkEPOSstate() == 11) {
+					epos::UNSIGNED8 errNum = node->readNumberOfErrors();
+					std::cerr << "readNumberOfErrors() = " << (int) errNum << std::endl;
+					for(epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
+
+						epos::UNSIGNED32 errCode = node->readErrorHistory(i);
+
+						std::cerr << epos::epos::ErrorCodeMessage(errCode) << std::endl;
+					}
+					if (errNum > 0) {
+						node->clearNumberOfErrors();
+					}
+					node->changeEPOSstate(epos::epos::FAULT_RESET);
+				}
+
+				// Change to the operational mode
+				node->reset();
+			}
 		default:
 			break;
 
