@@ -242,6 +242,7 @@ void fsautomat::main_task_algorithm(void)
 		sr_ecp_msg->message("Waiting for MP order");
 
 
+
 		get_next_state();
 
 		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
@@ -266,7 +267,7 @@ void fsautomat::main_task_algorithm(void)
 				if (ecpLevel) {
 					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
@@ -444,12 +445,12 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
-		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )	{
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+			actTrajectory->arm_type =ps;
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
-				ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-									new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-				actTrajectory->arm_type =ps;
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
 				{
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
@@ -486,8 +487,8 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 							std::cout<<"SPEED:  "<<actTrajectory->v[i]<<std::endl;
 							std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
 				}
-				sg->load_absolute_pose((*actTrajectory));
 			}
+			sg->load_absolute_pose((*actTrajectory));
 
 
 		}
