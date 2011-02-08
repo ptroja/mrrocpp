@@ -46,14 +46,16 @@ EcpRobot::EcpRobot(common::Interface& _interface) :
 	epos_external_command_data_port
 			= the_robot->port_manager.get_port <lib::frame_tab> (lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT);
 
-	epos_cubic_command_data_port
-			= the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);
+	/*
+	 epos_cubic_command_data_port
+	 = the_robot->port_manager.get_port <lib::epos::epos_cubic_command> (lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT);
 
-	epos_trapezoidal_command_data_port
-			= the_robot->port_manager.get_port <lib::epos::epos_trapezoidal_command> (lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT);
+	 epos_trapezoidal_command_data_port
+	 = the_robot->port_manager.get_port <lib::epos::epos_trapezoidal_command> (lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT);
 
-	epos_operational_command_data_port
-			= the_robot->port_manager.get_port <lib::epos::epos_operational_command> (lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT);
+	 epos_operational_command_data_port
+	 = the_robot->port_manager.get_port <lib::epos::epos_operational_command> (lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT);
+	 */
 
 	epos_brake_command_data_port = the_robot->port_manager.get_port <bool> (lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT);
 
