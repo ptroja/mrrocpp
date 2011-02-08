@@ -278,6 +278,7 @@ void fsautomat::main_task_algorithm(void)
 			{
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+				std::cout<<"WSZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());
 			}//else
 			std::cout<<"interpolating"<<std::endl;
