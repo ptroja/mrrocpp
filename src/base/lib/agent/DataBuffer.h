@@ -53,7 +53,7 @@ public:
 	/**
 	 * Set the data as used
 	 */
-	void Utilize()
+	void markAsUsed()
 	{
 		fresh = false;
 	}
@@ -62,7 +62,7 @@ public:
 	 * Check if data has been already "getted"
 	 * @return fresh flag
 	 */
-	bool isFresh(void) const
+	bool isFresh() const
 	{
 		return fresh;
 	}
