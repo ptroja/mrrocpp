@@ -25,23 +25,32 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position)
 {
+	// Check limit for every motor.
+	/*	for (int i = 0; i < 3; ++i) {
+
+		}*/
+
 }
 
 void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 {
+	// Check joint limit for every axis.
+/*	for (int i = 0; i < 3; ++i) {
+
+	}*/
 }
 
 void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
-	// Precondition
+	// Precondition - check whether the desired position is valid.
 	check_joints(local_desired_joints);
 
-	// Linear axes
+	// Compute desired motor positions for linear axes.
 	for (int i = 0; i < 3; ++i) {
 		local_desired_motor_pos_new[i] = (params.synchro_positions[i] - local_desired_joints[i]) / params.mp2i_ratios[i];
 	}
 
-	// Rotary axes
+	// Compute desired motor positions for rotary axes.
 	for (int i = 3; i < 6; ++i) {
 		local_desired_motor_pos_new[i] = local_desired_joints[i] * 4 * 2000 * 100 / (2 * M_PI);
 	}

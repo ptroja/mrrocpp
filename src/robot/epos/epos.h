@@ -87,7 +87,7 @@ typedef uint32_t UNSIGNED32;
 
 /* EPOS will reset communication after 500ms of inactivity */
 
-/*! \brief try NTRY times to read one byte from EPOS, the give up */
+/*! \brief try NTRY times to read one byte from EPOS, then give up */
 #define NTRY      5
 
 /*! \brief wait TRYSLEEP usec between read() from EPOS, if no data available */
