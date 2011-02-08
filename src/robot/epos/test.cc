@@ -1,5 +1,7 @@
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
+#include <boost/array.hpp>
+#include <boost/foreach.hpp>
 #include <sys/time.h>
 
 #include "epos_access_usb.h"
@@ -11,23 +13,41 @@ int main(int argc, char *argv[])
 {
 	epos_access_usb gateway;
 
-	epos node4(gateway, 4);
-	epos node5(gateway, 5);
-	epos node6(gateway, 6);
+	boost::array<epos *, 3> axis;
 
 	try {
 		gateway.open();
 
-		// Check if in a FAULT state
-		if(node4.checkEPOSstate() == 11) {
-			UNSIGNED8 errNum = node4.readNumberOfErrors();
-			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
-			for(UNSIGNED8 i = 1; i <= errNum; ++i) {
+		epos node4(gateway, 4);
+		epos node5(gateway, 5);
+		epos node6(gateway, 6);
 
-				UNSIGNED32 errCode = node4.readErrorHistory(i);
+		axis[0] = &node4;
+		axis[1] = &node5;
+		axis[2] = &node6;
 
-				std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+		BOOST_FOREACH(epos * node, axis) {
+
+			node->printEPOSstate();
+
+			// Check if in a FAULT state
+			if(node->checkEPOSstate() == 11) {
+				UNSIGNED8 errNum = node->readNumberOfErrors();
+				std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
+				for(UNSIGNED8 i = 1; i <= errNum; ++i) {
+
+					UNSIGNED32 errCode = node->readErrorHistory(i);
+
+					std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+				}
+				if (errNum > 0) {
+					node->clearNumberOfErrors();
+				}
+				node->changeEPOSstate(epos::FAULT_RESET);
 			}
+
+			// Change to the operational mode
+			node->reset();
 		}
 
 		gateway.close();
