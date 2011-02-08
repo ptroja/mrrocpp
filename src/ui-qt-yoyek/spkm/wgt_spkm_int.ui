@@ -967,7 +967,7 @@
     </widget>
    </item>
    <item row="8" column="5">
-    <widget class="QRadioButton" name="radioButton_cyclic_read">
+    <widget class="QCheckBox" name="checkBox_cyclic_read">
      <property name="text">
       <string>Cyclic Read</string>
      </property>

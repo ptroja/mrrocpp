@@ -13,12 +13,12 @@ wgt_spkm_ext::wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
-	timer->start(1000);
+	timer->start(interface.position_refresh_interval);
 }
 
 void wgt_spkm_ext::on_timer_slot()
 {
-	if ((dwgt->isVisible()) && (ui.radioButton_cyclic_read->isChecked())) {
+	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();
 	}
 
