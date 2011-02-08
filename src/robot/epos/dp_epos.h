@@ -145,7 +145,7 @@ struct single_controller_epos_reply
  * @brief SwarmItFix Epos cubic trajectory command
  * @ingroup epos
  */
-struct epos_cubic_command
+struct epos_trapezoidal_command
 {
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double aa[EPOS_DATA_PORT_SERVOS_NUMBER];
@@ -189,7 +189,7 @@ struct epos_simple_command
  * @brief SwarmItFix Epos trapezoidal trajectory command
  * @ingroup epos
  */
-struct epos_trapezoidal_command
+struct epos_cubic_command
 {
 	double em[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];

@@ -101,7 +101,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	lib::epos::epos_cubic_command epos_params;
 
-	epos_params.da[4] = 3.7;
+	epos_params.em[4] = 3.7;
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
