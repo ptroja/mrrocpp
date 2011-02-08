@@ -342,7 +342,7 @@ public:
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
-	INTEGER8 readOpMode();
+	operational_mode_t readOpMode();
 
 	/*! \brief read demanded position; 14.1.61 */
 	INTEGER32 readDemandPosition();
@@ -671,6 +671,15 @@ public:
 	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
+
+private:
+	//! Cached for parameters values
+	//! @note have to be at the bottom because some typedefs are defined above
+	operational_mode_t OpMode;
+	INTEGER16 PositionProfileType;
+	UNSIGNED32 PositionProfileVelocity;
+	UNSIGNED32 PositionProfileAcceleration;
+	UNSIGNED32 PositionProfileDeceleration;
 };
 
 } /* namespace epos */
