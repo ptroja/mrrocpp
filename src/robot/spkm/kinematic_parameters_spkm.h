@@ -98,6 +98,18 @@ public:
 	//! Parameters related to conversion from motor positions to joints.
 	static const double mp2i_ratios[6];
 
+	//! Largest values that motors can reach.
+	static const double max_motor_pos_limits[6];
+
+	//! Smallest values that motors can reach.
+	static const double min_motor_pos_limits[6];
+
+	//! Largest values that joints can reach.
+	static const double max_joints_limits[6];
+
+	//! Smallest values that joints can reach.
+	static const double min_joints_limits[6];
+
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
