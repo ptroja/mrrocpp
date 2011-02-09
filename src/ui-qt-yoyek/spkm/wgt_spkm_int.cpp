@@ -122,6 +122,11 @@ void wgt_spkm_int::on_pushButton_copy_clicked()
 	copy();
 }
 
+void wgt_spkm_int::on_pushButton_stop_clicked()
+{
+	robot.execute_stop_motor();
+}
+
 int wgt_spkm_int::copy()
 {
 
@@ -270,6 +275,22 @@ int wgt_spkm_int::move_it()
 		if (robot.state.edp.pid != -1) {
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_polynomal->isChecked()) {
+				motion_variant = lib::epos::SYNC_POLYNOMAL;
+			}
+
+			else if (ui.radioButton_operational->isChecked()) {
+				motion_variant = lib::epos::OPERATIONAL;
+			}
 
 			robot.ui_ecp_robot->move_joints(robot.desired_pos, motion_variant);
 

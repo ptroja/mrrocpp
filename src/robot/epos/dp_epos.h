@@ -81,24 +81,24 @@ const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
 /*!
  * @brief SwarmItFix Epos clear fault command data port
  * @ingroup epos<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+ <ui version="4.0">
  <widget name="__qt_fake_top_level">
-  <widget class="QRadioButton" name="radioButton">
-   <property name="geometry">
-    <rect>
-     <x>580</x>
-     <y>100</y>
-     <width>108</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>RadioButton</string>
-   </property>
-  </widget>
+ <widget class="QRadioButton" name="radioButton">
+ <property name="geometry">
+ <rect>
+ <x>580</x>
+ <y>100</y>
+ <width>108</width>
+ <height>22</height>
+ </rect>
+ </property>
+ <property name="text">
+ <string>RadioButton</string>
+ </property>
+ </widget>
  </widget>
  <resources/>
-</ui>
+ </ui>
  *
  */
 const std::string EPOS_CLEAR_FAULT_DATA_PORT = "EPOS_CLEAR_FAULT_DATA_PORT";
@@ -212,8 +212,8 @@ struct epos_simple_command
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & desired_position;
 		ar & motion_variant;
+		ar & desired_position;
 	}
 }__attribute__((__packed__));
 
