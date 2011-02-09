@@ -251,8 +251,9 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Sensor")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Speech")) {
 				xmlChar * stringArgument = xmlNodeGetContent(child_node);
-				if (stringArgument)
-					actState->setStringArgument((char*) stringArgument);
+//askubis
+				if (stringArgument){std::cout<<"ARGUMENT STRINGOWY:                            "<<(char *) stringArgument<<std::endl;
+					actState->setStringArgument((std::string)(char*) stringArgument);}
 				xmlFree(stringArgument);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
@@ -371,12 +372,12 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
+	std::cout<<"STATE STRING w executeMotion:  "<<state.getStringArgument()<<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {
-	std::cout<<"TEST"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
 }
