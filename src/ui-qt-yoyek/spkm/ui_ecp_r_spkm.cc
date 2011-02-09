@@ -75,8 +75,10 @@ EcpRobot::EcpRobot(common::Interface& _interface) :
 }
 
 // ---------------------------------------------------------------
-void EcpRobot::move_motors(const double final_position[])
+void EcpRobot::move_motors(const double final_position[], lib::epos::EPOS_MOTION_VARIANT motion_variant)
 {
+	epos_motor_command_data_port->data.motion_variant = motion_variant;
+
 	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 		epos_motor_command_data_port->data.desired_position[i] = final_position[i];
 	}
@@ -88,8 +90,10 @@ void EcpRobot::move_motors(const double final_position[])
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-void EcpRobot::move_joints(const double final_position[])
+void EcpRobot::move_joints(const double final_position[], lib::epos::EPOS_MOTION_VARIANT motion_variant)
 {
+	epos_external_command_data_port->data.motion_variant = motion_variant;
+
 	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 		epos_joint_command_data_port->data.desired_position[i] = final_position[i];
 	}
@@ -99,8 +103,9 @@ void EcpRobot::move_joints(const double final_position[])
 
 }
 
-void EcpRobot::move_external(const double final_position[])
+void EcpRobot::move_external(const double final_position[], lib::epos::EPOS_MOTION_VARIANT motion_variant)
 {
+	epos_external_command_data_port->data.motion_variant = motion_variant;
 
 	for (int i = 0; i < 6; i++) {
 		epos_external_command_data_port->data.desired_position[i] = final_position[i];

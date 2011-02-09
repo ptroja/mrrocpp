@@ -269,7 +269,9 @@ int wgt_spkm_int::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_joints(robot.desired_pos);
+			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+			robot.ui_ecp_robot->move_joints(robot.desired_pos, motion_variant);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
