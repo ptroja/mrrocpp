@@ -21,7 +21,7 @@
 	<State id="approach_1" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -34,7 +34,7 @@
 	<State id="approach_2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_joint.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_joint.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<Velocity>0.05	0.2	0.2	0.2	0.2	0.2	0.2</Velocity>
@@ -85,7 +85,7 @@
 	<State id="approach_5" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle_p1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -130,7 +130,7 @@
 	<State id="Track_Joint" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_joint_p1.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_joint_p1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" numOfPoses="1">
 			<Pose>
 				<Velocity>0.05	0.2	0.2	0.2	0.2	0.2	0.2</Velocity>
@@ -156,7 +156,7 @@
 	<State id="Track_angle_axis" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle_p1a.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p1a.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -201,7 +201,7 @@
 	<State id="Postument_angle_axis2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -227,7 +227,7 @@
 	<State id="Postument_angle_axis21" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -253,7 +253,7 @@
 	<State id="Postument_angle_axis22" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -279,7 +279,7 @@
 	<State id="Postument_angle_axis23" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -324,7 +324,7 @@
 	<State id="Track_angle_axis2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -350,7 +350,7 @@
 	<State id="Track_angle_axis21" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -376,7 +376,7 @@
 	<State id="Track_angle_axis22" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -402,7 +402,7 @@
 	<State id="Track_angle_axis23" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -451,7 +451,7 @@
 	<State id="Track_end_aa" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -464,7 +464,7 @@
 	<State id="Postument_aa_end" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -490,7 +490,7 @@
 	<State id="Track_end_aa2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -503,7 +503,7 @@
 	<State id="Postument_aa_end2" type="runGenerator">
 		<ROBOT>ROBOT_IRP6P_M</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../../src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" numOfPoses="1">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>

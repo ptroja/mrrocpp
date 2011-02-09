@@ -116,9 +116,11 @@ effector::effector(lib::configurator &_config) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping
+
 		axisA = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
 		axisB = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
 		axisC = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
+
 		//		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
 		//		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
 		//		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
@@ -126,6 +128,7 @@ effector::effector(lib::configurator &_config) :
 		axes[0] = &(*axisA);
 		axes[1] = &(*axisB);
 		axes[2] = &(*axisC);
+
 		//		axes[3] = &(*axis4);
 		//		axes[4] = &(*axis5);
 		//		axes[5] = &(*axis6);
@@ -230,6 +233,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
 				std::cout << tmp_frame << std::endl;
 			}
+
 			break;
 		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
 			lib::epos::epos_cubic_command epos_cubic_command_structure;

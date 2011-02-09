@@ -67,6 +67,8 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
+	int execute_clear_fault();
+	int execute_stop_motor();
 };
 
 }

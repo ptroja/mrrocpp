@@ -49,7 +49,6 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 	union
 	{
-		lib::frame_tab desired_frame;
 		epos::epos_cubic_command epos_cubic_command_structure;
 		epos::epos_simple_command epos_simple_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
@@ -68,10 +67,8 @@ struct cbuffer
 		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
 			case CBUFFER_EPOS_JOINT_COMMAND:
-				ar & epos_simple_command_structure;
-				break;
 			case CBUFFER_EPOS_EXTERNAL_COMMAND:
-				ar & desired_frame;
+				ar & epos_simple_command_structure;
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				ar & epos_cubic_command_structure;
@@ -129,6 +126,9 @@ struct cbuffer
 				break;
 			case CBUFFER_EPOS_BRAKE_COMMAND:
 				os << "CBUFFER_EPOS_BRAKE_COMMAND\n";
+				break;
+			case CBUFFER_EPOS_CLEAR_FAULT:
+				os << "CBUFFER_EPOS_CLEAR_FAULT\n";
 				break;
 			default:
 				os << "Error: unknown CBUFFER_VARIANT";

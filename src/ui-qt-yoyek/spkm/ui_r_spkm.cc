@@ -281,6 +281,30 @@ int UiRobot::execute_joint_motion()
 	return 1;
 }
 
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

@@ -31,11 +31,12 @@ public:
 
 	lib::single_thread_port <lib::epos::epos_simple_command> * epos_motor_command_data_port;
 	lib::single_thread_port <lib::epos::epos_simple_command> * epos_joint_command_data_port;
-	lib::single_thread_port <lib::frame_tab> * epos_external_command_data_port;
-	lib::single_thread_port <lib::epos::epos_cubic_command> * epos_cubic_command_data_port;
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> * epos_trapezoidal_command_data_port;
-	lib::single_thread_port <lib::epos::epos_operational_command> * epos_operational_command_data_port;
+	lib::single_thread_port <lib::epos::epos_simple_command> * epos_external_command_data_port;
+	//lib::single_thread_port <lib::epos::epos_cubic_command> * epos_cubic_command_data_port;
+	//lib::single_thread_port <lib::epos::epos_trapezoidal_command> * epos_trapezoidal_command_data_port;
+	//lib::single_thread_port <lib::epos::epos_operational_command> * epos_operational_command_data_port;
 	lib::single_thread_port <bool> * epos_brake_command_data_port;
+	lib::single_thread_port <bool> * epos_clear_fault_data_port;
 
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_joint_reply_data_request_port;
@@ -47,7 +48,8 @@ public:
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_external(const double final_position[lib::MAX_SERVOS_NR]);
-
+	void clear_fault();
+	void stop_motors();
 };
 
 }

@@ -54,7 +54,7 @@ public:
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 
-	typedef std::map <const char *, ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * /*, str_cmp */> bang_trajectories_map;
+	typedef std::map <std::string, ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * /*, str_cmp */> bang_trajectories_map;
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
