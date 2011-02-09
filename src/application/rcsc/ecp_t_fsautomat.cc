@@ -232,9 +232,9 @@ void fsautomat::main_task_algorithm(void)
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
 	if (trjConf && ecpLevel) {
-		//std::cout<< "!!!"<<std::endl;
-		//std::cout<< "trajectorymap"<<std::endl;
-		//std::cout<< "!!!"<<std::endl;
+		std::cout<< "!!!"<<std::endl;
+		std::cout<< "trajectorymap"<<std::endl;
+		std::cout<< "!!!"<<std::endl;
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
@@ -248,7 +248,7 @@ void fsautomat::main_task_algorithm(void)
 		sr_ecp_msg->message("Order received");
 
 		subtasks_conditional_execution();
-//std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::endl;
+std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
 			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
@@ -259,12 +259,11 @@ void fsautomat::main_task_algorithm(void)
 			if (operator_reaction("Save?"))
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
-
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
 				if (ecpLevel) {
-					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					//std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
@@ -338,14 +337,18 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * trajectory) {
+void fsautomat::load_trajectory_from_xml(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect) {
 //TODO:askubis cos zle z pose specification, wypisac
 //std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
 
 	//std::cout<<"ASKUBIS!!!! loading traj"<<std::endl;
 	//if (trajectory==NULL)std::cout<<"brak trajektorii, BLAD????????????????"<<std::endl;
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trajectory);
-	sg->load_absolute_pose(trj);
+	for (int i=0;i<trj_vect.size();i++)
+	{
+		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
+		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
+		sg->load_absolute_pose(trj);
+	}
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
@@ -423,9 +426,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	xmlChar *coordinateType, *numOfPoses;
 	xmlChar *xmlDataLine;
 
-	int num_v=0;
-	int num_a=0;
-	int num_c=0;
 	int num=0;
 
 
@@ -458,7 +458,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->v.push_back(tmp[i]);
 					}
-					num_v+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
@@ -468,7 +467,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->a.push_back(tmp[i]);
 					}
-					num_a+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
@@ -478,7 +476,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->coordinates.push_back(tmp[i]);
 					}
-					num_c+=num;
 					xmlFree(xmlDataLine);
 				}
 				/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
