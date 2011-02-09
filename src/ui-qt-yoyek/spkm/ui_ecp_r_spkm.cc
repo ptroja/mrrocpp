@@ -59,6 +59,8 @@ EcpRobot::EcpRobot(common::Interface& _interface) :
 
 	epos_brake_command_data_port = the_robot->port_manager.get_port <bool> (lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT);
 
+	epos_clear_fault_data_port = the_robot->port_manager.get_port <bool> (lib::epos::EPOS_CLEAR_FAULT_DATA_PORT);
+
 	epos_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::epos::epos_reply> (lib::epos::EPOS_REPLY_DATA_REQUEST_PORT);
 

@@ -25,6 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -43,6 +44,7 @@ robot::robot(common::task::task_base& _ecp_object) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -147,6 +149,16 @@ void robot::create_command()
 		// narazie proste przepisanie
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND;
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
 	}

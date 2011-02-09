@@ -36,6 +36,7 @@ public:
 	//lib::single_thread_port <lib::epos::epos_trapezoidal_command> * epos_trapezoidal_command_data_port;
 	//lib::single_thread_port <lib::epos::epos_operational_command> * epos_operational_command_data_port;
 	lib::single_thread_port <bool> * epos_brake_command_data_port;
+	lib::single_thread_port <bool> * epos_clear_fault_data_port;
 
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
 	lib::single_thread_request_port <lib::epos::epos_reply> * epos_joint_reply_data_request_port;
