@@ -252,6 +252,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
+			msg->message("move_arm CBUFFER_EPOS_BRAKE_COMMAND");
 			if (!robot_test_mode) {
 				// Execute command
 				for (std::size_t i = 0; i < axes.size(); ++i) {
@@ -260,7 +261,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 			}
 		}
-
+			break;
 		case lib::spkm::CBUFFER_EPOS_CLEAR_FAULT: {
 			msg->message("move_arm CBUFFER_EPOS_CLEAR_FAULT");
 
