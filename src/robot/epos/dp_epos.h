@@ -31,6 +31,11 @@ enum EPOS_GEN_PROFILE
 	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, OPERATIONAL_SPACE, EPOS_GEN_PROFILE_NO_ACTION
 };
 
+enum EPOS_MOTION_VARIANT
+{
+	NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, SYNC_POLYNOMAL, OPERATIONAL
+};
+
 /*!
  * @brief SwarmItFix Epos simple motor command data port
  * @ingroup epos
@@ -50,19 +55,19 @@ const std::string EPOS_JOINT_COMMAND_DATA_PORT = "EPOS_JOINT_COMMAND_DATA_PORT";
 const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command data port
+ * @brief SwarmItFix Epos cubic trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_CUBIC_COMMAND_DATA_PORT = "EPOS_CUBIC_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos trapezoidal trajectory command data port
+ * @brief SwarmItFix Epos trapezoidal trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT = "EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos operational space trajectory command data port
+ * @brief SwarmItFix Epos operational space trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_OPERATIONAL_COMMAND_DATA_PORT = "EPOS_OPERATIONAL_COMMAND_DATA_PORT";
@@ -142,7 +147,7 @@ struct single_controller_epos_reply
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command
+ * @brief SwarmItFix Epos cubic trajectory command - deprecated
  * @ingroup epos
  */
 struct epos_trapezoidal_command
@@ -172,6 +177,7 @@ struct epos_trapezoidal_command
  */
 struct epos_simple_command
 {
+	EPOS_MOTION_VARIANT motion_variant;
 	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
 
 	//! Give access to boost::serialization framework
@@ -182,11 +188,12 @@ struct epos_simple_command
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & desired_position;
+		ar & motion_variant;
 	}
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos trapezoidal trajectory command
+ * @brief SwarmItFix Epos trapezoidal trajectory command - deprecated
  * @ingroup epos
  */
 struct epos_cubic_command
@@ -209,7 +216,7 @@ struct epos_cubic_command
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos operational trajectory command data port
+ * @brief SwarmItFix Epos operational trajectory command data port - deprecated
  * @ingroup epos
  */
 struct epos_operational_command
