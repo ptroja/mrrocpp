@@ -295,7 +295,7 @@ ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTraject
 }
 
 task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num)
-{
+{//boost pointermap
 	// Stworzenie sciezki do pliku.
 	std::string filePath(mrrocpp_network_path);
 	filePath += fileName;
@@ -320,7 +320,6 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	}
 
 	bang_trajectories_map* trajectoriesMap = new bang_trajectories_map();
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory;
 	const std::string robotName(lib::toString(propRobot));
 
 	for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
@@ -340,9 +339,10 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 							if (child_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 									&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
+								ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory;
 								actTrajectory = createTrajectory2(child_node, stateID, axes_num);
-								std::cout<<"returned for "<<(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-								trajectoriesMap->insert(bang_trajectories_map::value_type((char *) stateID, (actTrajectory)));
+								std::cout<<"returned for "<<(std::string)(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
+								trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *) stateID, (actTrajectory)));
 							}
 						}
 						xmlFree(robot);
@@ -361,9 +361,12 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 					if (child_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
+						ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory;
 						actTrajectory = createTrajectory2(child_node, stateID, axes_num);
-						std::cout<<"returned for "<<(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-						trajectoriesMap->insert(bang_trajectories_map::value_type((char *)stateID, (actTrajectory)));
+						if(actTrajectory)
+							std::cout<<"Trajektoria istnieje1"<<std::endl;
+						std::cout<<"returned for "<<(std::string)(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
+						trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *)stateID, (actTrajectory)));
 					}
 				}
 				xmlFree(robot);
@@ -374,6 +377,9 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	xmlCleanupParser();
 	//	for(trajectories_t::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 	//		(*ii).second.showTime();
+
+	if ((*trajectoriesMap)[(std::string)"approach_1"]==NULL)
+		std::cout<<"                                        juz nei ma w laod"<<std::endl;
 
 	return trajectoriesMap;
 }

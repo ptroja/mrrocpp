@@ -238,8 +238,9 @@ void fsautomat::main_task_algorithm(void)
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-	for (;;) {
+		for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
+
 
 
 		get_next_state();
@@ -263,21 +264,21 @@ void fsautomat::main_task_algorithm(void)
 
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
-
 				if (ecpLevel) {
 					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				}
 			}//if
-			else //moj przypadekl -> z pliku
+		else //moj przypadekl -> z pliku
 			{
 				std::string path(mrrocpp_network_path);
 				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+				std::cout<<"WSZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());
 			}//else
 			std::cout<<"interpolating"<<std::endl;
@@ -326,6 +327,8 @@ void fsautomat::main_task_algorithm(void)
 
 		ecp_termination_notice();
 	} //end for
+
+
 
 }
 
@@ -426,8 +429,7 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	int num_c=0;
 	int num=0;
 
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+
 
 
 
@@ -436,15 +438,18 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 
-	actTrajectory->arm_type =ps;
-	actTrajectory->pos_num = number_of_poses;
+	//actTrajectory->arm_type =ps;
+	//actTrajectory->pos_num = number_of_poses;
 
-	double tmp[actTrajectory->pos_num*axes_num];
+	double tmp[number_of_poses*axes_num];
 
 
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
-		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )	{
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+			actTrajectory->arm_type =ps;
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
@@ -477,11 +482,16 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					num_c+=num;
 					xmlFree(xmlDataLine);
 				}
+				for (int i = 0; i<actTrajectory->coordinates.size(); i++)
+				{
+							std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
+							std::cout<<"SPEED:  "<<actTrajectory->v[i]<<std::endl;
+							std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
+				}
 			}
 			sg->load_absolute_pose((*actTrajectory));
-			/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
-			std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
-			exit(0);*/
+
+
 		}
 	}
 	xmlFree(coordinateType);
