@@ -136,6 +136,11 @@ void wgt_spkm_ext::on_pushButton_copy_clicked()
 	copy();
 }
 
+void wgt_spkm_ext::on_pushButton_stop_clicked()
+{
+	robot.execute_stop_motor();
+}
+
 int wgt_spkm_ext::copy()
 {
 
@@ -283,7 +288,25 @@ int wgt_spkm_ext::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_external(robot.desired_pos);
+			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_polynomal->isChecked()) {
+				motion_variant = lib::epos::SYNC_POLYNOMAL;
+			}
+
+			else if (ui.radioButton_operational->isChecked()) {
+				motion_variant = lib::epos::OPERATIONAL;
+			}
+
+			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
