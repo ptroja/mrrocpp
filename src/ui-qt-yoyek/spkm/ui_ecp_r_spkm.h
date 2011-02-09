@@ -48,7 +48,8 @@ public:
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_external(const double final_position[lib::MAX_SERVOS_NR]);
-
+	void clear_fault();
+	void stop_motors();
 };
 
 }

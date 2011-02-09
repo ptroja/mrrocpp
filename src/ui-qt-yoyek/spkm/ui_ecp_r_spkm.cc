@@ -114,6 +114,26 @@ void EcpRobot::move_external(const double final_position[])
 
 }
 
+void EcpRobot::clear_fault()
+{
+
+	epos_clear_fault_data_port->data = true;
+
+	epos_clear_fault_data_port->set();
+	execute_motion();
+
+}
+
+void EcpRobot::stop_motors()
+{
+
+	epos_brake_command_data_port->data = true;
+
+	epos_brake_command_data_port->set();
+	execute_motion();
+
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp
