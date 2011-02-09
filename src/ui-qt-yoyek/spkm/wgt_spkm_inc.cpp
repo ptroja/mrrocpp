@@ -36,7 +36,7 @@ void wgt_spkm_inc::on_pushButton_read_clicked()
 	init();
 }
 
-int wgt_spkm_inc::synchro_depended_init(bool _set_disabled)
+int wgt_spkm_inc::synchro_depended_widgets_enable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p0->setDisabled(_set_disabled);
@@ -49,6 +49,28 @@ int wgt_spkm_inc::synchro_depended_init(bool _set_disabled)
 	return 1;
 }
 
+int wgt_spkm_inc::synchro_depended_init()
+{
+
+	try {
+
+		if (robot.state.edp.pid != -1) {
+			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				synchro_depended_widgets_enable(false);
+
+			}
+		} else {
+			// Wygaszanie elementow przy niezsynchronizowanym robocie
+			synchro_depended_widgets_enable(true);
+		}
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
 int wgt_spkm_inc::init()
 {
 
@@ -57,7 +79,7 @@ int wgt_spkm_inc::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				synchro_depended_init(false);
+				synchro_depended_widgets_enable(false);
 
 				robot.ui_ecp_robot->epos_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
@@ -76,7 +98,7 @@ int wgt_spkm_inc::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				synchro_depended_init(true);
+				synchro_depended_widgets_enable(true);
 			}
 		}
 
