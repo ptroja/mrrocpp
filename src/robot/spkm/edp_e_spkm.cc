@@ -53,9 +53,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Loop until homing is finished
 		try {
 			unsigned int referenced = 0;
-			for(std::size_t i = 0; i < axes.size(); ++i) {
+			for (std::size_t i = 0; i < axes.size(); ++i) {
 				try {
-					if(axes[i]->isReferenced()) {
+					if (axes[i]->isReferenced()) {
 						// Do not leave this loop so this is a also a preliminary axis error check
 						referenced++;
 					}
@@ -108,27 +108,27 @@ effector::effector(lib::configurator &_config) :
 
 	reset_variables();
 
-	if(!robot_test_mode) {
+	if (!robot_test_mode) {
 		// Create gateway object
-		gateway = (boost::shared_ptr<epos::epos_base>) new epos::epos_access_usb();
+		gateway = (boost::shared_ptr <epos::epos_base>) new epos::epos_access_usb();
 
 		// Connect to the gateway
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping
-		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 6);
-		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 5);
-		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 4);
-//		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
-//		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
-//		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
+		axis1 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
+		axis2 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
+		axis3 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
+		//		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
+		//		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
+		//		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
 
 		axes[0] = &(*axis1);
 		axes[1] = &(*axis2);
 		axes[2] = &(*axis3);
-//		axes[3] = &(*axis4);
-//		axes[4] = &(*axis5);
-//		axes[5] = &(*axis6);
+		//		axes[3] = &(*axis4);
+		//		axes[4] = &(*axis5);
+		//		axes[5] = &(*axis6);
 	}
 }
 
@@ -141,19 +141,22 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
 
 			// Copy data directly from buffer to local data
-			for(int i = 0; i < number_of_servos; ++i) {
-				desired_motor_pos_new[i] =  ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
-				std::cout << "MOTOR[ " << i << "]: " << ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i] << std::endl;
+			for (int i = 0; i < number_of_servos; ++i) {
+				desired_motor_pos_new[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
+				std::cout << "MOTOR[ " << i << "]: "
+						<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i] << std::endl;
 			}
 
 			// Execute command
 			if (!robot_test_mode) {
-				for(std::size_t i = 0; i < axes.size(); ++i) {
-					if(is_synchronised()) {
-						std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+				for (std::size_t i = 0; i < axes.size(); ++i) {
+					if (is_synchronised()) {
+						std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
+								<< std::endl;
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
-						std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+						std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
+								<< std::endl;
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					}
 				}
@@ -163,23 +166,26 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
 
-//			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
-//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
+			//			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
+			//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
 
 			// Transform data from buffer to local variable
-			lib::JointArray desired_joints_tmp(ecp_edp_cbuffer.epos_simple_command_structure.desired_position, number_of_servos);
+			lib::JointArray
+					desired_joints_tmp(ecp_edp_cbuffer.epos_simple_command_structure.desired_position, number_of_servos);
 
 			// Transform from joint to motors
 			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
 
 			// Execute command
 			if (!robot_test_mode) {
-				for(std::size_t i = 0; i < axes.size(); ++i) {
-					if(is_synchronised()) {
-						std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+				for (std::size_t i = 0; i < axes.size(); ++i) {
+					if (is_synchronised()) {
+						std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
+								<< std::endl;
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
-						std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+						std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
+								<< std::endl;
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					}
 				}
@@ -187,8 +193,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
+
 			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
-			lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
+
+			lib::Xyz_Angle_Axis_vector tmp_vector(ecp_edp_cbuffer.epos_simple_command_structure.desired_position);
+			lib::Homog_matrix tmp_frame(tmp_vector);
+
 			std::cout << tmp_frame << std::endl;
 		}
 			break;
@@ -201,25 +211,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			break;
 		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
 
-			if(!is_synchronised()) {
+			if (!is_synchronised()) {
 				std::cerr << "Robot is not synchronized for TRAPEZOIDAL profile motion" << std::endl;
 				return;
 			}
 
 			//ecp_edp_cbuffer.epos_trapezoidal_command_structure
-			Matrix<double,3,1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
+			Matrix <double, 3, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
-			for(int i = 0; i < 3; ++i) {
+			for (int i = 0; i < 3; ++i) {
 				Delta[i] = 0;
 				Vmax[i] = 5000;
 				Amax[i] = 2000;
 			}
 
 			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-			double t = ppm<3>(Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
+			double t = ppm <3> (Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
 
 			// Setup motion parameters
-			for(std::size_t i = 0; i < axes.size(); ++i) {
+			for (std::size_t i = 0; i < axes.size(); ++i) {
 				axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 				axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
 				axes[i]->writePositionProfileVelocity(Vnew[i]);
@@ -229,7 +239,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 
 			// Start motion
-			for(std::size_t i = 0; i < axes.size(); ++i) {
+			for (std::size_t i = 0; i < axes.size(); ++i) {
 				// switch to absolute positioning, cancel possible ongoing operation first!
 				axes[i]->writeControlword(0x3f);
 			}
@@ -244,7 +254,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND: {
 			if (!robot_test_mode) {
 				// Execute command
-				for(std::size_t i = 0; i < axes.size(); ++i) {
+				for (std::size_t i = 0; i < axes.size(); ++i) {
 					// Brake with Quickstop command
 					axes[i]->changeEPOSstate(epos::epos::QUICKSTOP);
 				}
@@ -277,7 +287,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			{
 				case lib::MOTOR: {
 					msg->message("EDP get_arm_position MOTOR");
-					if(robot_test_mode) {
+					if (robot_test_mode) {
 						static int licznikaaa = (-11);
 
 						std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -307,7 +317,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						}
 						licznikaaa++;
 					} else {
-						for(std::size_t i = 0; i < axes.size(); ++i) {
+						for (std::size_t i = 0; i < axes.size(); ++i) {
 							edp_ecp_rbuffer.epos_controller[i].position = axes[i]->readActualPosition();
 							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
 							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
@@ -318,7 +328,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					break;
 				case lib::JOINT: {
 					msg->message("EDP get_arm_position JOINT");
-					if(robot_test_mode) {
+					if (robot_test_mode) {
 						static int licznik_joint = (-11);
 						edp_ecp_rbuffer.epos_controller[2].position = licznik_joint;
 						licznik_joint++;
@@ -327,7 +337,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						lib::MotorArray motors(number_of_servos);
 
 						// Read actual values from hardware
-						for(std::size_t i = 0; i < axes.size(); ++i) {
+						for (std::size_t i = 0; i < axes.size(); ++i) {
 							motors[i] = axes[i]->readActualPosition();
 						}
 
@@ -338,7 +348,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						get_current_kinematic_model()->mp2i_transform(motors, joints);
 
 						// Fill the values into a buffer
-						for(int i = 0; i < number_of_servos; ++i) {
+						for (int i = 0; i < number_of_servos; ++i) {
 							edp_ecp_rbuffer.epos_controller[i].position = joints[i];
 						}
 					}
@@ -383,30 +393,34 @@ void effector::synchronise(void)
 	}
 
 	// reset controller
-	BOOST_FOREACH(epos::epos * node, axes) {
-		node->reset();
-	}
+	BOOST_FOREACH(epos::epos * node, axes)
+				{
+					node->reset();
+				}
 
 	// switch to homing mode
-	BOOST_FOREACH(epos::epos * node, axes) {
-		node->setOpMode(epos::epos::OMD_HOMING_MODE);
-	}
+	BOOST_FOREACH(epos::epos * node, axes)
+				{
+					node->setOpMode(epos::epos::OMD_HOMING_MODE);
+				}
 
 	// Do homing
-	BOOST_FOREACH(epos::epos * node, axes) {
-		node->startHoming();
-	}
+	BOOST_FOREACH(epos::epos * node, axes)
+				{
+					node->startHoming();
+				}
 
 	// Loop until homing is finished
 	bool finished;
 	do {
 		finished = true;
-		BOOST_FOREACH(epos::epos * node, axes) {
-			if(!node->isHomingFinished()) {
-				finished = false;
-			}
-		}
-	} while(!finished);
+		BOOST_FOREACH(epos::epos * node, axes)
+					{
+						if (!node->isHomingFinished()) {
+							finished = false;
+						}
+					}
+	} while (!finished);
 
 	controller_state_edp_buf.is_synchronised = true;
 }
