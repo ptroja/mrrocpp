@@ -514,7 +514,7 @@ public:
 	 */
 	virtual bool calculate_interpolate()
 	{
-std::cout<<"TEST calc_inter no0"<<std::endl;
+
 		if (debug) {
 			printf("\n##################################### calculate_interpolate ####################################\n");
 			flushall();
@@ -526,15 +526,15 @@ std::cout<<"TEST calc_inter no0"<<std::endl;
 		}
 
 		get_initial_position();
-std::cout<<"TEST calc_inter no1"<<std::endl;
+
 		calculated = calculate();
-std::cout<<"TEST calc_inter no2"<<std::endl;
+
 		if (debug) {
 			print_pose_vector();
 		}
 
 		interpolated = interpolate();
-std::cout<<"TEST calc_inter no3"<<std::endl;
+
 		if (debug) {
 			print_coordinate_vector();
 		}
