@@ -35,6 +35,8 @@ private:
 	int init();
 	int copy();
 
+	int synchro_depended_init(bool _set_disabled);
+
 	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
