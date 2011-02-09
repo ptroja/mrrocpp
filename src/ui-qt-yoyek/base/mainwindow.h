@@ -115,6 +115,8 @@ private slots:
 	void on_actionspkm_Position_1_triggered();
 	void on_actionspkm_Position_2_triggered();
 
+	void on_actionspkm_Clear_Fault_triggered();
+
 	// smb menu
 	void on_actionsmb_EDP_Load_triggered();
 	void on_actionsmb_EDP_Unload_triggered();

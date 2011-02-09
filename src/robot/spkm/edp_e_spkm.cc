@@ -260,6 +260,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 			}
 		}
+
+		case lib::spkm::CBUFFER_EPOS_CLEAR_FAULT: {
+			msg->message("move_arm CBUFFER_EPOS_CLEAR_FAULT");
+
+		}
+
 			break;
 		default:
 			break;

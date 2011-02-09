@@ -485,6 +485,11 @@ void MainWindow::on_actionspkm_Position_2_triggered()
 	interface.spkm->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionspkm_Clear_Fault_triggered()
+{
+	interface.spkm->execute_clear_fault();
+}
+
 // smb menu
 
 void MainWindow::on_actionsmb_EDP_Load_triggered()
