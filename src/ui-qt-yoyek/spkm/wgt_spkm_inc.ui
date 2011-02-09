@@ -294,6 +294,9 @@
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton_sync_polynomal">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -307,6 +310,9 @@
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton_operational">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>10</x>

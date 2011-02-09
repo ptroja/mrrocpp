@@ -140,6 +140,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND: {
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
 
+			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
+					<< std::endl;
+
 			// Copy data directly from buffer to local data
 			for (int i = 0; i < number_of_servos; ++i) {
 				desired_motor_pos_new[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
@@ -170,6 +173,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
 
 			// Transform data from buffer to local variable
+
+			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
+					<< std::endl;
+
 			lib::JointArray
 					desired_joints_tmp(ecp_edp_cbuffer.epos_simple_command_structure.desired_position, number_of_servos);
 
@@ -195,6 +202,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
 
 			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
+
+			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
+					<< std::endl;
 
 			lib::Xyz_Angle_Axis_vector tmp_vector(ecp_edp_cbuffer.epos_simple_command_structure.desired_position);
 			lib::Homog_matrix tmp_frame(tmp_vector);

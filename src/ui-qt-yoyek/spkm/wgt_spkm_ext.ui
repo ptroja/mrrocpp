@@ -84,6 +84,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QRadioButton" name="radioButton_sync_polynomal">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>sync polynomal</string>
         </property>
