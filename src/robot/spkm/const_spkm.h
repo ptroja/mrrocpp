@@ -50,7 +50,12 @@ struct cbuffer
 	//! Pose specification type
 	POSE_SPECIFICATION pose_specification;
 
-	epos::epos_simple_command epos_simple_command_structure;
+	//! Motion interpolation variant
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+
+	int32_t motor_pos[NUM_OF_SERVOS];
+	double joint_pos[NUM_OF_SERVOS];
+	double goal_pos[6];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -63,7 +68,18 @@ struct cbuffer
 		switch (variant) {
 			case CBUFFER_EPOS_POSE:
 				ar & pose_specification;
-				ar & epos_simple_command_structure;
+				switch (pose_specification) {
+					case FRAME:
+						ar & goal_pos;
+						break;
+					case JOINT:
+						ar & joint_pos;
+						break;
+					case MOTOR:
+						ar & motor_pos;
+						break;
+				}
+				ar & motion_variant;
 				break;
 			default:
 				break;
