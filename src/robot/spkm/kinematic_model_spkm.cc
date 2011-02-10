@@ -24,7 +24,7 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 	set_kinematic_model_label("SPKM kinematic model by D.Zlatanow and M.Zoppi");
 }
 
-void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position)
+void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	// Check upper limit for every motor.
 	for (int i = 0; i < 3; ++i) {
@@ -35,7 +35,7 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 	}
 }
 
-void kinematic_model_spkm::check_joints(const lib::JointArray & q)
+void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 {
 	// Check joint limit for every axis.
 	for (int i = 0; i < 3; ++i) {

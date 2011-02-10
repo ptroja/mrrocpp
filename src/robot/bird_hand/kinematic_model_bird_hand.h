@@ -44,7 +44,7 @@ protected:
 	 *
 	 * @param motor_position Motor position to be validated.
 	 */
-	void check_motor_position(const lib::MotorArray & motor_position)
+	void check_motor_position(const lib::MotorArray & motor_position) const
 	{
 	}
 
@@ -52,7 +52,7 @@ protected:
 	 * @brief Checks whether given internal coordinates are valid.
 	 * @param q Joints to be validated.
 	 */
-	void check_joints(const lib::JointArray & q);
+	void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.

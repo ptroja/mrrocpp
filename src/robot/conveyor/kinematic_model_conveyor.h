@@ -42,13 +42,13 @@ protected:
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
 	 */
-	virtual void check_motor_position(const lib::MotorArray & motor_position);
+	virtual void check_motor_position(const lib::MotorArray & motor_position) const;
 
 	/**
 	 * @brief Checks whether given internal coordinates are valid.
 	 * @param q Joints to be validated.
 	 */
-	virtual void check_joints(const lib::JointArray & q);
+	virtual void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.
