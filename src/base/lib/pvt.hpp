@@ -137,21 +137,22 @@ double ppm(
 		<< "tt: " << tt
 		<< std::endl;
 
+	// I guess this can be implemented as a single matrix calculation
 	for(unsigned int l = 0; l < N; ++l) {
 		const double delta = Delta(l,0);
 
 		Anew(l,0) = 2*delta/(ta*(tt+td-ta));
-		Dnew(l,0) = -2*delta/((tt+td-ta)*(tt-td));
+		Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
 		Vnew(l,0) = Anew(l,0)*ta;
 
-//		assert(Anew(l,0)<Amax(l,0));
+		//assert(Anew(l,0)<Amax(l,0));
 	}
 
-	std::cout <<
-		"Anew:\n" << Anew << std::endl <<
-		"Dnew:\n" << Dnew << std::endl <<
-		"Vnew:\n" << Vnew << std::endl <<
-		std::endl;
+//	std::cout <<
+//		"Vnew:\n" << Vnew << std::endl <<
+//		"Anew:\n" << Anew << std::endl <<
+//		"Dnew:\n" << Dnew << std::endl <<
+//		std::endl;
 
 	return tt;
 }

@@ -19,6 +19,8 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
+#include <boost/exception/all.hpp>
+
 #include "config.h"
 
 #if defined(HAVE_MLOCKALL)
@@ -122,17 +124,13 @@ int main(int argc, char *argv[])
 		//	printf("end\n");
 	}
 
+	catch (boost::exception & e) {
+		std::cerr << diagnostic_information(e);
+	}
+
 	catch (System_error & fe) {
-		// Obsluga bledow systemowych
-		/*
-		 // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
-		 // zabicie procesu przez operatora
-		 for (;;) {
-		 delay(100);
-		 //   printf("\a"); // Sygnal dzwiekowy
-		 }
-		 */
-	} // end: catch(System_error fe)
+		std::cerr << "EDP: System_error" << std::endl;
+	}
 
 	catch (std::exception & e) {
 		std::cerr << "EDP: " << e.what() << std::endl;
@@ -142,14 +140,5 @@ int main(int argc, char *argv[])
 		perror("Unidentified error in EDP");
 		// Komunikat o bledzie wysylamy do SR
 		edp::common::master->msg->message(lib::FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
-		/*
-		 // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
-		 // przez operatora
-
-		 for (;;) {
-		 delay(100);
-		 // printf("\a"); // Sygnal dzwiekowy
-		 }
-		 */
 	}
 }

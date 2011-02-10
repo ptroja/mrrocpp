@@ -82,7 +82,7 @@ public:
 	transmitters_t transmitter_m;
 
 	/**
-	 * @brief the pointer to sr communication object in multi thread version
+	 * @brief pointer to the SR communication object
 	 */
 	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
 

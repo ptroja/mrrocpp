@@ -1,5 +1,4 @@
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
+#include <iostream>
 
 #include "Reader.h"
 
@@ -8,11 +7,10 @@ main(int argc, char *argv[])
 {
 	Reader reader("Reader");
 
-	reader.Start();
-
-	// ... the reader is executing
-
-	reader.Join();
+	for(;;) {
+		reader.ReceiveSingleMessage(true);
+		std::cout << "int: " << reader.IntBuffer.Get() << " double: " << reader.DoubleBuffer.Get() << std::endl;
+	}
 
 	return 0;
 }
