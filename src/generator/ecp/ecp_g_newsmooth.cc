@@ -389,6 +389,7 @@ bool newsmooth::load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
 
+
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
 
 		sr_ecp_msg.message("Representation different than the previous one");
@@ -480,10 +481,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		return false;
 	}
 
-	if (ps != pose_spec) {
-		sr_ecp_msg.message("Bad pose spec in loaded file");
-		return false;
-	}
+
 
 	if (!(from_file >> number_of_poses)) {
 		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
@@ -504,8 +502,24 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		return false;
 	}
 
-	for (i = 0; i < number_of_poses; i++) {
+	//if(pose_vector.empty && this->ecp_t.ecp_m_robot->robot_name)
+	int pos = from_file.tellg();
+	char* line;
+	double tmp[22];
+	std::string string_line;
+	do
+	{
+	from_file.getline(line, 80);
+	string_line=line;
+	}
+	while (string_line.size()<2);
+std::cout<<"POSE: "<<string_line<<std::endl;
+int num = lib::setValuesInArray(tmp,string_line);
+from_file.seekg(string_line.size(), ios::beg);
+this->set_axes_num(num);
 
+
+	for (i = 0; i < number_of_poses; i++) {
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
@@ -514,7 +528,6 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		}
 
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
@@ -523,14 +536,12 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		}
 
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
-
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		if (ps == lib::ECP_MOTOR) {
