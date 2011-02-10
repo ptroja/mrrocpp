@@ -126,9 +126,9 @@ effector::effector(lib::configurator &_config) :
 		axes[0] = &(*axisA);
 		axes[1] = &(*axisB);
 		axes[2] = &(*axisC);
-//		axes[3] = &(*axis4);
-//		axes[4] = &(*axis5);
-//		axes[5] = &(*axis6);
+		//		axes[3] = &(*axis4);
+		//		axes[4] = &(*axis5);
+		//		axes[5] = &(*axis6);
 	}
 }
 
@@ -140,9 +140,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND:
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
 
-			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
-					<< std::endl;
-
 			// Copy data directly from buffer to local data
 			for (int i = 0; i < number_of_servos; ++i) {
 				desired_motor_pos_new[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
@@ -150,17 +147,30 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i] << std::endl;
 			}
 
+			// Check desired joint values - instead of checking motors we need to check joints, because it is more robust. ;)
+			if (is_synchronised()) {
+				get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+			}
+
 			// Execute command
-			if (!robot_test_mode) {
-				for (std::size_t i = 0; i < axes.size(); ++i) {
-					if (is_synchronised()) {
-						std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-								<< std::endl;
+			for (std::size_t i = 0; i < axes.size(); ++i) {
+				if (is_synchronised()) {
+					std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+					if (!robot_test_mode) {
+						axes[i]->writePositionProfileVelocity(Vdefault[i]);
+						axes[i]->writePositionProfileAcceleration(Adefault[i]);
+						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
-						std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-								<< std::endl;
-
+						current_joints[i] = desired_motor_pos_new[i];
+						current_motor_pos[i] = desired_motor_pos_new[i];
+					}
+				} else {
+					std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+					if (!robot_test_mode) {
+						axes[i]->writePositionProfileVelocity(Vdefault[i]);
+						axes[i]->writePositionProfileAcceleration(Adefault[i]);
+						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						current_motor_pos[i] += desired_motor_pos_new[i];
@@ -175,27 +185,36 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			//			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
 			//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
 
-			// Transform data from buffer to local variable
-
-			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
-					<< std::endl;
-
-			lib::JointArray
-					desired_joints_tmp(ecp_edp_cbuffer.epos_simple_command_structure.desired_position, number_of_servos);
-
-			// Transform from joint to motors
-			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints_tmp);
+			// Read variables from communication buffer.
+			for (int i = 0; i < number_of_servos; ++i) {
+				desired_joints[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
+			}
 
 			// Execute command
-			if (!robot_test_mode) {
+			if (is_synchronised()) {
+				// Transform from joint to motors (and check motors/joints values).
+				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 				for (std::size_t i = 0; i < axes.size(); ++i) {
-					if (is_synchronised()) {
-						std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-								<< std::endl;
+					std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+					// Perform move.
+					if (!robot_test_mode) {
+						axes[i]->writePositionProfileVelocity(Vdefault[i]);
+						axes[i]->writePositionProfileAcceleration(Adefault[i]);
+						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
-						std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-								<< std::endl;
+						current_joints[i] = desired_motor_pos_new[i];
+						current_motor_pos[i] = desired_motor_pos_new[i];
+					}
+				}
+			} else {
+				for (std::size_t i = 0; i < axes.size(); ++i) {
+					std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+					// Perform move.
+					if (!robot_test_mode) {
+						axes[i]->writePositionProfileVelocity(Vdefault[i]);
+						axes[i]->writePositionProfileAcceleration(Adefault[i]);
+						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] += desired_motor_pos_new[i];
@@ -204,18 +223,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 			}
 			break;
-		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND: {
-
+#endif
+		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND:
 			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
-
-			std::cout << " Motion variant " << ecp_edp_cbuffer.epos_simple_command_structure.motion_variant
-					<< std::endl;
-
-			lib::Xyz_Angle_Axis_vector tmp_vector(ecp_edp_cbuffer.epos_simple_command_structure.desired_position);
-			lib::Homog_matrix tmp_frame(tmp_vector);
-
-			std::cout << tmp_frame << std::endl;
-		}
+			{
+				//lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
+				//std::cout << tmp_frame << std::endl;
+			}
 			break;
 		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
 			lib::epos::epos_cubic_command epos_cubic_command_structure;
@@ -319,7 +333,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				// Change to the operational mode
 				node->reset();
 			}
->>>>>>> origin/master
 		default:
 			break;
 
