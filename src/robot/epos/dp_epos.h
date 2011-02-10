@@ -12,6 +12,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <string>
 
+#include"base/lib/impconst.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace epos {
@@ -251,7 +253,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
-	lib::frame_tab current_frame;
+	mrrocpp::lib::frame_tab current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 

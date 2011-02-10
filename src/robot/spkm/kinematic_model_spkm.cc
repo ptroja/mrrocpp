@@ -11,6 +11,7 @@
 #include <cmath>
 
 #include "base/lib/com_buf.h"
+#include "spkm_exception.h"
 #include "robot/spkm/kinematic_model_spkm.h"
 
 namespace mrrocpp {
@@ -25,19 +26,24 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position)
 {
-	// Check limit for every motor.
-	/*	for (int i = 0; i < 3; ++i) {
-
-		}*/
-
+	// Check upper limit for every motor.
+	for (int i = 0; i < 3; ++i) {
+		if (motor_position[i] > params.upper_motor_pos_limits[i])
+			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_desired_value(motor_position[i]) << spkm_motor_number(i) << spkm_limit_type(UPPER_LIMIT));
+		else if (motor_position[i] < params.lower_motor_pos_limits[i])
+			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_desired_value(motor_position[i]) << spkm_motor_number(i) << spkm_limit_type(LOWER_LIMIT));
+	}
 }
 
 void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 {
 	// Check joint limit for every axis.
-/*	for (int i = 0; i < 3; ++i) {
-
-	}*/
+	for (int i = 0; i < 3; ++i) {
+		if (q[i] > params.upper_joints_limits[i])
+			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_desired_value(q[i]) << spkm_joint_number(i) << spkm_limit_type(UPPER_LIMIT));
+		else if (q[i] < params.lower_joints_limits[i])
+			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_desired_value(q[i]) << spkm_joint_number(i) << spkm_limit_type(LOWER_LIMIT));
+	}
 }
 
 void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
@@ -47,7 +53,8 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 
 	// Compute desired motor positions for linear axes.
 	for (int i = 0; i < 3; ++i) {
-		local_desired_motor_pos_new[i] = (params.synchro_positions[i] - local_desired_joints[i]) / params.mp2i_ratios[i];
+		local_desired_motor_pos_new[i] = (params.synchro_positions[i] - local_desired_joints[i])
+				/ params.mp2i_ratios[i];
 	}
 
 	// Compute desired motor positions for rotary axes.
@@ -59,7 +66,6 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 	check_motor_position(local_desired_motor_pos_new);
 }
 
-
 void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
 	// Precondition
@@ -67,7 +73,7 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 
 	// Linear axes
 	for (int i = 0; i < 3; ++i) {
-    // Add different translation (in mm) depending on axis number (A=0, B=1, C=2).
+		// Add different translation (in mm) depending on axis number (A=0, B=1, C=2).
 		local_current_joints[i] = params.synchro_positions[i] - local_current_motor_pos[i] * params.mp2i_ratios[i];
 	}
 
@@ -80,10 +86,9 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 	check_joints(local_current_joints);
 }
 
-
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
-	// Transform Homog_matrix to Matrix4d.
+/*	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
 	O_W_T.matrix() << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
 
@@ -105,7 +110,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 
 	// Compute spherical wrist inverse kinematics.
 	Vector3d SW_joints = SW_inverse(P_W_T);
-
+*/
 	// Fill joints array.
 	/*	local_desired_joints[0] = PKM_joints[0];
 	 local_desired_joints[1] = PKM_joints[1];
@@ -117,7 +122,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 
 Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
 {
-	// Temporary variables used for computations of alpha..
+/*	// Temporary variables used for computations of alpha..
 	double t0_sq = _O_S_P.x() * _O_S_P.x() + _O_S_P.z() * _O_S_P.z();
 	double hx_sq = params.S_P_P.x() * params.S_P_P.x();
 
@@ -135,15 +140,15 @@ Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
 	double h = params.delta_B2 * (_O_S_P.y() * _O_S_P.y() + params.delta_B1 * t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6
 			+ _O_S_P.y() * _O_S_P.y()) - params.S_P_P.z();
 
-	// Return computed e vector.
+	// Return computed e vector.*/
 	Vector5d e;
-	e << s_alpha, c_alpha, s_beta, c_beta, h;
+	//e << s_alpha, c_alpha, s_beta, c_beta, h;
 	return e;
 }
 
 Vector3d kinematic_model_spkm::PKM_inverse_from_e(const Vector5d & _e)
 {
-	// "Retrieve" values from e.
+/*	// "Retrieve" values from e.
 	double s_alpha = _e[0];
 	double c_alpha = _e[1];
 	double s_beta = _e[2];
@@ -161,16 +166,16 @@ Vector3d kinematic_model_spkm::PKM_inverse_from_e(const Vector5d & _e)
 	double qC = sqrt(pow(t3 - params.pC * s_beta - params.hC * c_beta + params.delta_C * params.l12C, 2.0) + pow(t2
 			* s_beta - params.pC * c_beta + params.hC * s_beta + params.dC, 2.0));
 
-	// Return vector with joints.
+	// Return vector with joints.*/
 	Vector3d joints;
-	joints << qA, qB, qC;
+//	joints << qA, qB, qC;
 	return joints;
 }
 
 Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(const Vector5d & _e)
 {
 	Matrix4d O_P_T;
-
+/*
 	// "Retrieve" values from e.
 	double s_alpha = _e[0];
 	double c_alpha = _e[1];
@@ -195,7 +200,7 @@ Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(const Vector5d & _e)
 	O_P_T(3, 1) = 0.0;
 	O_P_T(3, 2) = 0.0;
 	O_P_T(3, 3) = 1.0;
-
+*/
 	// Return matrix.
 	return Homog4d(O_P_T);
 }
