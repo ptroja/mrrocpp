@@ -15,7 +15,7 @@ namespace kinematics {
 namespace spkm {
 
 // Initialization of parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
-const double kinematic_parameters_spkm::synchro_positions[6] = { 0.252, 0.251, 0.272, 0.0, 0.0, 0.0};
+const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.252, 0.251, 0.272, 0.0, 0.0, 0.0};
 
 // Initialization of parameters related to conversion from motor positions to joints.
 // Parameters for conversion of linear DOF are:
@@ -23,30 +23,43 @@ const double kinematic_parameters_spkm::synchro_positions[6] = { 0.252, 0.251, 0
 // * The encoder has 500 CPT (Counts per turn).
 // * Quadcounts = 4 x Encoder Counts.
 // * The gear ratio is equal to 9.
-const double kinematic_parameters_spkm::mp2i_ratios[6] = { 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.0, 0.0, 0.0};
+const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.0, 0.0, 0.0};
 
-// Initialization of max motors limits vector.
-const double kinematic_parameters_spkm::max_motor_pos_limits[6] = { 10998, 11000, 10207, 0, 0, 0 };
+// Initialization of upper motors limits vector.
+const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 10900, 11000, 10200, 0, 0, 0 };
 
-// Initialization of min motors limits vector.
-const double kinematic_parameters_spkm::min_motor_pos_limits[6] = { -194493, -282203, -174524, 0, 0, 0 };
+// Initialization of lower motors limits vector.
+const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -194000, -281000, -173000, 0, 0, 0 };
 
-// Initialization of max joints vector.
-const double kinematic_parameters_spkm::max_joints_limits[6] = { 4.6327, 6.6069, 4.2027, 0, 0, 0 };
+// Initialization of upper joints vector.
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.3059, 0.3292, 0.3203, 0, 0, 0 };
 
-// Initialization of min joints limits vector.
-const double kinematic_parameters_spkm::min_joints_limits[6] = { 0.0043, 0.0033, 0.0421, 0, 0, 0 };
+// Initialization of lower joints limits vector.
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.0043, 0.0033, 0.0421, 0, 0, 0 };
 
+// Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
+const double kinematic_parameters_spkm::dA = -0.05;
 
+// Lower platform: Initialize the ib coordinate of P1B in O(ib,jb,kb).
+const double kinematic_parameters_spkm::dB = 0.18;
 
-kinematic_parameters_spkm::kinematic_parameters_spkm()
-{
-  // TODO Set parameters.
-	// TODO Set W_S_P;
-	// std::cout<< W_S_P<<std::endl;
-	// Construct W_S_T on the base of W_S_P.
-	//W_S_T.matrix() << Matrix3d::Identity(), W_S_P.transpose(), 0,0,0, 1;
-}
+// Lower platform: Initialize the jb coordinate of P1C in O(ib,jb,kb).
+const double kinematic_parameters_spkm::dC = 0.5;
+
+// Upper platform: Initialize the j coordinate of P4A in P(ijk).
+const double kinematic_parameters_spkm::pA = -0.05;
+
+// Upper platform: Initialize the i coordinate of P5B in P(ijk).
+const double kinematic_parameters_spkm::pB = 0.086;
+
+// Upper platform: Initialize the j coordinate of P4C in P(ijk).
+const double kinematic_parameters_spkm::pC = 0.05;
+
+//Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
+const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);
+
+//const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);
+
 
 
 } // namespace spkm
