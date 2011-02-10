@@ -21,9 +21,6 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
-			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
@@ -40,9 +37,6 @@ robot::robot(common::task::task_base& _ecp_object) :
 			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
-			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
-			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
-			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
@@ -85,7 +79,8 @@ void robot::create_command()
 			ecp_command.set_arm_type = lib::MOTOR;
 		}
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.pose_specification = lib::spkm::MOTOR;
 
 		ecp_edp_cbuffer.epos_simple_command_structure = epos_motor_command_data_port.data;
 
@@ -95,7 +90,8 @@ void robot::create_command()
 	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_JOINT_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
 
 		ecp_edp_cbuffer.epos_simple_command_structure = epos_joint_command_data_port.data;
 
@@ -105,44 +101,17 @@ void robot::create_command()
 	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
 
 		ecp_edp_cbuffer.epos_simple_command_structure = epos_external_command_data_port.data;
+
 
 		//ecp_edp_cbuffer.desired_frame = epos_external_command_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_cubic_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.set_type = ARM_DEFINITION;
-
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND;
-
-		ecp_edp_cbuffer.epos_cubic_command_structure = epos_cubic_command_data_port.data;
-
-		check_then_set_command_flag(is_new_data);
-	}
-
-	if (epos_trapezoidal_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.set_type = ARM_DEFINITION;
-
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND;
-
-		ecp_edp_cbuffer.epos_trapezoidal_command_structure = epos_trapezoidal_command_data_port.data;
-
-		check_then_set_command_flag(is_new_data);
-	}
-
-	if (epos_operational_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.set_type = ARM_DEFINITION;
-
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND;
-
-		ecp_edp_cbuffer.epos_operational_command_structure = epos_operational_command_data_port.data;
-
-		check_then_set_command_flag(is_new_data);
-	}
 	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
@@ -162,23 +131,6 @@ void robot::create_command()
 
 		check_then_set_command_flag(is_new_data);
 	}
-	/*
-	 if (epos_gen_parameters_data_port.get(epos_gen_parameters_structure) == mrrocpp::lib::NewData) {
-	 ecp_command.set_type = ARM_DEFINITION;
-	 // generator command interpretation
-	 // narazie proste przepisanie
-
-	 ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_GEN_PARAMETERS;
-
-	 ecp_edp_cbuffer.epos_gen_parameters_structure = epos_gen_parameters_structure;
-
-	 if (is_new_data) {
-	 throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-	 } else {
-	 is_new_data = true;
-	 }
-	 }
-	 */
 
 	if (epos_reply_data_request_port.is_new_request()) {
 		ecp_command.get_arm_type = lib::MOTOR;
@@ -221,7 +173,6 @@ void robot::create_command()
 		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type == lib::SET_GET)) {
 			assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 			memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-			std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;
 		}
 	}
 }

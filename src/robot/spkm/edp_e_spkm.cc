@@ -47,30 +47,30 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		unsigned int powerOn = 0;
 		unsigned int notInFaultState = 0;
 		BOOST_FOREACH(epos::epos * node, axes)
-					{
-						try {
-							// Check if in the FAULT state
-							if (node->checkEPOSstate() == 11) {
-								// Read number of errors
-								int errNum = node->readNumberOfErrors();
-								for (int i = 1; i <= errNum; ++i) {
-									// Get the detailed error
-									uint32_t errCode = node->readErrorHistory(i);
+		{
+			try {
+				// Check if in the FAULT state
+				if (node->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = node->readNumberOfErrors();
+					for (int i = 1; i <= errNum; ++i) {
+						// Get the detailed error
+						uint32_t errCode = node->readErrorHistory(i);
 
-									msg->message(epos::epos::ErrorCodeMessage(errCode));
-								}
-							} else {
-								notInFaultState++;
-							}
-							if (node->isReferenced()) {
-								// Do not break from this loop so this is a also a preliminary axis error check
-								referenced++;
-							}
-							powerOn++;
-						} catch (...) {
-							// Probably the axis is not powered on, do nothing.
-						}
+						msg->message(epos::epos::ErrorCodeMessage(errCode));
 					}
+				} else {
+					notInFaultState++;
+				}
+				if (node->isReferenced()) {
+					// Do not break from this loop so this is a also a preliminary axis error check
+					referenced++;
+				}
+				powerOn++;
+			} catch (...) {
+				// Probably the axis is not powered on, do nothing.
+			}
+		}
 		// Robot is synchronised if all axes are referenced
 		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
@@ -137,6 +137,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 {
 	switch (ecp_edp_cbuffer.variant)
 	{
+#if 0
 		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND:
 			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
 
@@ -231,11 +232,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				//std::cout << tmp_frame << std::endl;
 			}
 			break;
-		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos::epos_cubic_command epos_cubic_command_structure;
-			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
-		}
-			break;
 		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND:
 		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
 
@@ -294,12 +290,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 		}
 			break;
-		case lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND: {
-			lib::epos::epos_operational_command epos_operational_command_structure;
-			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
-
-		}
-			break;
+#endif
 		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND:
 			if (!robot_test_mode) {
 				// Execute command
@@ -335,7 +326,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 		default:
 			break;
-
 	}
 
 	// Hold the issued command
@@ -482,8 +472,6 @@ void effector::create_threads()
 void effector::instruction_deserialization()
 {
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
-
-	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
 }
 
 void effector::reply_serialization(void)
