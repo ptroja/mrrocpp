@@ -360,6 +360,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].current = 0;
 						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 						edp_ecp_rbuffer.epos_controller[i].buffer_full = false;
+						usleep(3000);
 					} else {
 						current_motor_pos[i] = axes[i]->readActualPosition();
 						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
@@ -375,6 +376,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				// Read actual values from hardware
 				if (robot_test_mode) {
 					// Value of the current_motor_pos already filled in the move_arm() method.
+					usleep(3000*3);
 				} else {
 					for (std::size_t i = 0; i < axes.size(); ++i) {
 						current_motor_pos[i] = axes[i]->readActualPosition();
