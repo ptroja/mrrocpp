@@ -17,7 +17,7 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _config, _sr_ecp),
+			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _config, _sr_ecp),
 			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
@@ -25,6 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -35,7 +36,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
+			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
 			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
@@ -43,6 +44,7 @@ robot::robot(common::task::task_base& _ecp_object) :
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			epos_operational_command_data_port(lib::epos::EPOS_OPERATIONAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
+			epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -105,23 +107,9 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND;
 
-		lib::Homog_matrix tmp_matrix(epos_external_command_data_port.data);
-		tmp_matrix.get_frame_tab(ecp_edp_cbuffer.desired_frame);
+		ecp_edp_cbuffer.epos_simple_command_structure = epos_external_command_data_port.data;
+
 		//ecp_edp_cbuffer.desired_frame = epos_external_command_data_port.data;
-
-		check_then_set_command_flag(is_new_data);
-	}
-
-	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
-		ecp_command.set_type = ARM_DEFINITION;
-		if (!is_synchronised()) {
-			ecp_command.motion_type = lib::RELATIVE;
-			ecp_command.set_arm_type = lib::MOTOR;
-		}
-
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND;
-
-		ecp_edp_cbuffer.epos_simple_command_structure = epos_motor_command_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -161,6 +149,16 @@ void robot::create_command()
 		// narazie proste przepisanie
 
 		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND;
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -220,8 +218,7 @@ void robot::create_command()
 
 	// message serialization
 	if (communicate_with_edp) {
-		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type
-				== lib::SET_GET)) {
+		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type == lib::SET_GET)) {
 			assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
 			memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
 			std::cerr << "ECP: " << ecp_edp_cbuffer << std::endl;

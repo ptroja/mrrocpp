@@ -107,6 +107,10 @@ public:
    */
   ~bang_bang_trajectory_pose();
 
+  /**
+   * Copy constructor.
+   * @param trj
+   */
   bang_bang_trajectory_pose(const bang_bang_trajectory_pose &trj);
 
 };

@@ -52,7 +52,7 @@ protected:
 	bang_trajectories_map * trjMap;
 	int axes_num;
 
-	void load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * trajectory);
+	void load_trajectory_from_xml(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect);
 	void load_trajectory_from_xml(const char* fileName, const char* nodeName);
 	void load_file_with_path(const char* file_name);
 	void set_pose_from_xml(xmlNode *stateNode, bool &first_time);

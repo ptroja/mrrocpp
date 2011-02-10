@@ -9,7 +9,7 @@
 #include "wgt_spkm_ext.h"
 
 #include "robot/spkm/const_spkm.h"
-#include "../interface.h"
+#include "../base/interface.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -110,6 +110,7 @@ int UiRobot::edp_create_int()
 	CATCH_SECTION_UI
 
 	interface.manage_interface();
+	wgt_inc->synchro_depended_init();
 
 	return 1;
 
@@ -147,6 +148,7 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
+	wgt_inc->synchro_depended_init();
 
 	return 1;
 
@@ -261,7 +263,7 @@ int UiRobot::execute_motor_motion()
 {
 	try {
 
-		ui_ecp_robot->move_motors(desired_pos);
+		ui_ecp_robot->move_motors(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
 
 	} // end try
 	CATCH_SECTION_UI
@@ -273,7 +275,31 @@ int UiRobot::execute_joint_motion()
 {
 	try {
 
-		ui_ecp_robot->move_joints(desired_pos);
+		ui_ecp_robot->move_joints(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_UI
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
 
 	} // end try
 	CATCH_SECTION_UI

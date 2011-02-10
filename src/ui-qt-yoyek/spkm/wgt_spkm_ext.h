@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_spkm_ext.h"
-#include "../wgt_base.h"
+#include "../base/wgt_base.h"
 #include <QTimer>
 
 namespace mrrocpp {
@@ -46,6 +46,7 @@ private slots:
 	void on_pushButton_export_clicked();
 	void on_pushButton_import_clicked();
 	void on_pushButton_copy_clicked();
+	void on_pushButton_stop_clicked();
 
 	void on_pushButton_execute_clicked();
 	void on_pushButton_0l_clicked();

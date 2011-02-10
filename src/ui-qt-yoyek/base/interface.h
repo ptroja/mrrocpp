@@ -20,7 +20,6 @@
 
 #include "base/lib/messip/messip_dataport.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace spkm {
@@ -41,7 +40,12 @@ class UiRobot;
 namespace polycrank {
 class UiRobot;
 }
-
+namespace bird_hand {
+class UiRobot;
+}
+namespace sarkofag {
+class UiRobot;
+}
 namespace common {
 
 class UiRobot;
@@ -133,16 +137,19 @@ public:
 	irp6ot_m::UiRobot *irp6ot_m;
 	irp6p_m::UiRobot *irp6p_m;
 	polycrank::UiRobot *polycrank;
-
+	bird_hand::UiRobot *bird_hand;
+	sarkofag::UiRobot *sarkofag;
 	/*TR
-	 bird_hand::UiRobot *bird_hand;
+
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
 	 irp6p_tfg::UiRobot *irp6p_tfg;
-	 sarkofag::UiRobot *sarkofag;
+
 	 irp6m::UiRobot *irp6m_m;
 	 conveyor::UiRobot *conveyor;
 	 speaker::UiRobot *speaker;
 	 */
+
+	int position_refresh_interval;
 
 	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
@@ -172,11 +179,22 @@ public:
 	int EDP_all_robots_synchronise();
 	int MPup();
 	int MPslay();
+
+	// MP pulse
 	int pulse_start_mp();
 	int pulse_stop_mp();
 	int pulse_pause_mp();
 	int pulse_resume_mp();
 	int pulse_trigger_mp();
+
+	//ECP pulse
+	int pulse_trigger_ecp();
+
+	//Reader pulse
+	int pulse_start_all_reader();
+	int pulse_stop_all_reader();
+	int pulse_trigger_all_reader();
+
 	int unload_all();
 	int slay_all();
 

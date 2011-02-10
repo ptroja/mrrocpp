@@ -13,8 +13,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "base/lib/trajectory_pose/trajectory_pose.h"
-#include "base/lib/mrmath/mrmath.h"
+#include <base/lib/trajectory_pose/trajectory_pose.h>
+#include <base/lib/mrmath/mrmath.h>
 
 namespace mrrocpp {
     namespace ecp {
@@ -81,7 +81,7 @@ namespace mrrocpp {
 
                             it->s.clear();
                             it->k.clear();
-                            for (int i = 0; i < it->axes_num; i++) {
+                            for (std::size_t i = 0; i < it->axes_num; i++) {
                                 it->s.push_back(fabs(it->coordinates[i] - it->start_position[i]));
                                 if (eq(it->coordinates[i] - it->start_position[i], 0)) {
                                     it->k.push_back(0);
@@ -108,7 +108,7 @@ namespace mrrocpp {
 
                             it->s.clear();
                             it->k.clear();
-                            for (int i = 0; i < it->axes_num; i++) {
+                            for (std::size_t i = 0; i < it->axes_num; i++) {
                                 it->s.push_back(fabs(it->coordinates[i]));
 
                                 if (eq(it->coordinates[i], 0)) {
@@ -139,7 +139,7 @@ namespace mrrocpp {
 
                             bool trueFlag = true;
 
-                            for (int i = 0; i < it->axes_num; i++) {
+                            for (std::size_t i = 0; i < it->axes_num; i++) {
                                 if (calculate_time(it, i) == false) {
                                     trueFlag = false;
                                 }
@@ -182,7 +182,7 @@ namespace mrrocpp {
                          * @return true if the calculation was successful
                          */
                         bool set_times_to_t(typename std::vector<Pos>::iterator & it) {
-                            for (int i = 0; i < it->axes_num; i++) {
+                            for (std::size_t i = 0; i < it->axes_num; i++) {
                                 it->times[i] = it->t;
                             }
                             return true;
@@ -197,6 +197,9 @@ namespace mrrocpp {
                             lib::Homog_matrix start_position_matrix;
                             lib::Homog_matrix desired_position_matrix;
                             lib::Xyz_Angle_Axis_vector relative_angle_axis_vector;
+                            lib::Xyz_Angle_Axis_vector relative_angle_axis_vector_with_changed_configuration;
+                            //lib::Ft_tr xsi_star_matrix;
+
                             double start_position[6];
                             double coordinates[6];
 
@@ -210,7 +213,11 @@ namespace mrrocpp {
                             start_position_matrix.set_from_xyz_angle_axis(start_position);
                             desired_position_matrix.set_from_xyz_angle_axis(coordinates);
                             ((!start_position_matrix) * desired_position_matrix).get_xyz_angle_axis(relative_angle_axis_vector);
-                            relative_angle_axis_vector.to_vector(it->coordinates);
+
+                            it->xsi_star_matrix = lib::Ft_tr(!start_position_matrix.return_with_with_removed_translation());
+                            relative_angle_axis_vector_with_changed_configuration = it->xsi_star_matrix * relative_angle_axis_vector;
+
+                            relative_angle_axis_vector_with_changed_configuration.to_vector(it->coordinates);
 
                             //printf("relative vector: \n");
                             //printf("%f\t%f\t%f\t%f\t%f\t%f\n", it->coordinates[0], it->coordinates[1], it->coordinates[2], it->coordinates[3], it->coordinates[4], it->coordinates[5]);

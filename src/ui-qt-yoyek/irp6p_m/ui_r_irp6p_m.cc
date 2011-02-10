@@ -3,9 +3,9 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6p_m.h"
-#include "../ui_ecp_r_irp6_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_irp6_common.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "../interface.h"
+#include "../base/interface.h"
 
 namespace mrrocpp {
 namespace ui {
