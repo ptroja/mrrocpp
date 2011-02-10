@@ -19,15 +19,15 @@ sr_ui::sr_ui(process_type_t process_type, const std::string & process_name, cons
 }
 
 // Interpretacja bledow generowanych w UI // by Y - UWAGA UZUPELNIC
-void sr_ui::interpret(void)
+void sr_ui::interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1)
 {
-	switch (sr_message.message_type)
+	switch (message_type)
 	{
 		case NEW_MESSAGE:
-			sprintf(sr_message.description, "%s", strerror(error_tab[0]));
+			sprintf(description, "%s", strerror(error_code0));
 			break; // NEW_MESSAGE
 		default:
-			sprintf(sr_message.description, "UNIDENTIFIED UI ERROR");
+			sprintf(description, "UNIDENTIFIED UI ERROR");
 	}
 }
 

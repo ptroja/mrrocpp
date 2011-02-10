@@ -14,7 +14,6 @@
 #include <string>
 #include <stdint.h>
 
-#include <boost/thread/mutex.hpp>
 #include <boost/serialization/serialization.hpp>
 
 #include "base/lib/messip/messip.h"
@@ -41,7 +40,6 @@ static const unsigned int TEXT_LENGTH = 256;
 /* -------------------------------------------------------------------- */
 typedef struct sr_package
 {
-
 	//! Message timestamp
 	uint64_t time;
 
@@ -49,8 +47,7 @@ typedef struct sr_package
 	process_type_t process_type;
 
 	//! Message type
-	//! @bug this should be error_class_t, serialized properly after dropping of POD messaging
-	int16_t message_type;
+	error_class_t message_type;
 
 	//! Sender process name
 	char process_name[NAME_LENGTH];
@@ -60,10 +57,7 @@ typedef struct sr_package
 
 	//! Text message
 	char description[TEXT_LENGTH];
-
-	//  sr_package();
-} /*__attribute__((__packed__))*/ // not packed in case of msg_header_t
-sr_package_t;
+} sr_package_t;
 
 template<class Archive>
 void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
@@ -80,27 +74,23 @@ void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 class sr : public boost::noncopyable
 {
 private:
-	//! Size of the array with error codes
-	static const size_t ERROR_TAB_SIZE = 2;
-
-	//! One-thread a time access mutex
-	boost::mutex srMutex;
-
 	//! Send default message package to the SR
-	void send_package(void);
+	void send_package(sr_package_t & sr_message);
 
 	//! Interpret the status code into a text message
-	virtual void interpret() = 0;
+	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
 
 	//! Sender class
 	Sender sender;
 
-protected:
-	//! Error codes
-	uint64_t error_tab[ERROR_TAB_SIZE];
+	//! Process type
+	const process_type_t process_type;
 
-	//! Package for SR
-	sr_package_t sr_message;
+	//! Process name
+	const std::string process_name;
+
+	//! Cached hostname
+	char hostname[128];
 
 public:
 	/**
@@ -110,7 +100,7 @@ public:
 	 * @param sr_channel_name name of the SR communication channel
 	 * @param _multi_thread flag for selecting multi-threaded variant
 	 */
-	sr(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name);
+	sr(process_type_t _process_type, const std::string & _process_name, const std::string & sr_channel_name);
 
 	/**
 	 * Destructor
@@ -118,24 +108,23 @@ public:
 	virtual ~sr();
 
 	//! Send a message to SR
-	//! @bug these methods should me overloaded
-	//! @bug this method does not clear error_tab[1]
+	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, uint64_t error_code);
 
 	//! Send a message to SR
-	//! @bug these methods should me overloaded
+	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
 
 	//! Send a message to SR
-	//! @bug these methods should me overloaded
+	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, uint64_t error_code, const std::string & text);
 
 	//! Send a message to SR
-	//! @bug these methods should me overloaded
+	//! @bug these methods should be overloaded
 	void message(const std::string & text);
 
 	//! Send a message to SR
-	//! @bug these methods should me overloaded
+	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, const std::string & text);
 };
 
