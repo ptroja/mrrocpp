@@ -79,7 +79,7 @@ void robot::create_command()
 			ecp_command.set_arm_type = lib::MOTOR;
 		}
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
 		ecp_edp_cbuffer.pose_specification = lib::spkm::MOTOR;
 
@@ -95,7 +95,7 @@ void robot::create_command()
 	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
 		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
 
@@ -111,7 +111,7 @@ void robot::create_command()
 	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_POSE;
+		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
 		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
 
@@ -129,7 +129,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND;
+		ecp_edp_cbuffer.variant = lib::spkm::QUICKSTOP;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -139,7 +139,7 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::spkm::CBUFFER_EPOS_CLEAR_FAULT;
+		ecp_edp_cbuffer.variant = lib::spkm::CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
 	}

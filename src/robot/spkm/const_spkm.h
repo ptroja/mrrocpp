@@ -27,9 +27,9 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_EPOS_POSE,
-	CBUFFER_EPOS_BRAKE_COMMAND,
-	CBUFFER_EPOS_CLEAR_FAULT
+	POSE,
+	QUICKSTOP,
+	CLEAR_FAULT
 };
 
 //! Pose specification variants
@@ -66,7 +66,7 @@ struct cbuffer
 	{
 		ar & variant;
 		switch (variant) {
-			case CBUFFER_EPOS_POSE:
+			case POSE:
 				ar & pose_specification;
 				switch (pose_specification) {
 					case FRAME:
