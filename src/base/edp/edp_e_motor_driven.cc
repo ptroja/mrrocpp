@@ -1081,7 +1081,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(reply, nfe4.error, OK);
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe4.error, 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe4.error);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			// powrot do stanu: SYNCHRO_TERMINATED
