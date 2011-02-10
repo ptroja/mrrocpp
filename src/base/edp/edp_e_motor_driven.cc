@@ -1160,7 +1160,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			}
 		}
 
-		catch (NonFatal_error_1 nfe) {
+		catch (NonFatal_error_1 & nfe) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
@@ -1173,7 +1173,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
 
-		catch (NonFatal_error_2 nfe) {
+		catch (NonFatal_error_2 & nfe) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
@@ -1184,7 +1184,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
 
-		catch (NonFatal_error_3 nfe) {
+		catch (NonFatal_error_3 & nfe) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesowa
@@ -1208,7 +1208,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_3 nfe)
 
-		catch (Fatal_error fe) {
+		catch (Fatal_error & fe) {
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
