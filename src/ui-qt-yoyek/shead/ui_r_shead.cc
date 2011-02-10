@@ -5,7 +5,7 @@
 #include "ui_r_shead.h"
 #include "ui_ecp_r_shead.h"
 #include "robot/shead/const_shead.h"
-#include "../interface.h"
+#include "../base/interface.h"
 
 namespace mrrocpp {
 namespace ui {

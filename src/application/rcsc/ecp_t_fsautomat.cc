@@ -238,18 +238,17 @@ void fsautomat::main_task_algorithm(void)
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-	for (;;) {
+		for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
+
 
 
 		get_next_state();
 
-		//sprawdzic jaki rozkaz, sprawdzic jak powolac smooth
-
 		sr_ecp_msg->message("Order received");
 
 		subtasks_conditional_execution();
-
+std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
 			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
@@ -260,29 +259,29 @@ void fsautomat::main_task_algorithm(void)
 			if (operator_reaction("Save?"))
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
-
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
-
 				if (ecpLevel) {
-					//std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
+					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 				}
 			}//if
-			else //moj przypadekl -> z pliku
+		else //moj przypadekl -> z pliku
 			{
 				std::string path(mrrocpp_network_path);
-				path += mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+				path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				//std::cout<<"WCZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
+				//std::cout<<"STATE:  "<<mp_command.ecp_next_state.mp_2_ecp_next_state<<" STRING:  "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());
 			}//else
-			std::cout<<"interpolating"<<std::endl;
+			//std::cout<<"interpolating"<<std::endl;
 			sg->calculate_interpolate();
-			std::cout<<"interpolated, moving"<<std::endl;
+			//std::cout<<"interpolated, moving"<<std::endl;
 			sg->Move();//changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
@@ -327,6 +326,8 @@ void fsautomat::main_task_algorithm(void)
 		ecp_termination_notice();
 	} //end for
 
+
+
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)
@@ -336,14 +337,18 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * trajectory) {
+void fsautomat::load_trajectory_from_xml(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect) {
 //TODO:askubis cos zle z pose specification, wypisac
 //std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
 
-	std::cout<<"ASKUBIS!!!! loading traj"<<std::endl;
-	if (trajectory==NULL)std::cout<<"brak trajektorii, BLAD????????????????"<<std::endl;
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trajectory);
-	sg->load_absolute_pose(trj);
+	//std::cout<<"ASKUBIS!!!! loading traj"<<std::endl;
+	//if (trajectory==NULL)std::cout<<"brak trajektorii, BLAD????????????????"<<std::endl;
+	for (int i=0;i<trj_vect.size();i++)
+	{
+		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
+		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
+		sg->load_absolute_pose(trj);
+	}
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
@@ -421,13 +426,9 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	xmlChar *coordinateType, *numOfPoses;
 	xmlChar *xmlDataLine;
 
-	int num_v=0;
-	int num_a=0;
-	int num_c=0;
 	int num=0;
 
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+
 
 
 
@@ -436,15 +437,18 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
 	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
 
-	actTrajectory->arm_type =ps;
-	actTrajectory->pos_num = number_of_poses;
+	//actTrajectory->arm_type =ps;
+	//actTrajectory->pos_num = number_of_poses;
 
-	double tmp[actTrajectory->pos_num*axes_num];
+	double tmp[number_of_poses*axes_num];
 
 
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
 	{
-		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )							{
+		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )	{
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+			actTrajectory->arm_type =ps;
 			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
 			{
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
@@ -454,7 +458,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->v.push_back(tmp[i]);
 					}
-					num_v+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
@@ -464,7 +467,6 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->a.push_back(tmp[i]);
 					}
-					num_a+=num;
 					xmlFree(xmlDataLine);
 				}
 				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
@@ -474,14 +476,18 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 					for (int i=0; i<num;i++){
 						actTrajectory->coordinates.push_back(tmp[i]);
 					}
-					num_c+=num;
 					xmlFree(xmlDataLine);
 				}
+				/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
+				{
+							std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
+							std::cout<<"SPEED:  "<<actTrajectory->v[i]<<std::endl;
+							std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
+				}*/
 			}
 			sg->load_absolute_pose((*actTrajectory));
-			/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
-			std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
-			exit(0);*/
+
+
 		}
 	}
 	xmlFree(coordinateType);

@@ -36,7 +36,8 @@ enum CBUFFER_VARIANT
 	CBUFFER_EPOS_CUBIC_COMMAND,
 	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
 	CBUFFER_EPOS_OPERATIONAL_COMMAND,
-	CBUFFER_EPOS_BRAKE_COMMAND
+	CBUFFER_EPOS_BRAKE_COMMAND,
+	CBUFFER_EPOS_CLEAR_FAULT
 };
 
 /*!
@@ -48,7 +49,6 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 	union
 	{
-		lib::frame_tab desired_frame;
 		epos::epos_cubic_command epos_cubic_command_structure;
 		epos::epos_simple_command epos_simple_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
@@ -67,10 +67,8 @@ struct cbuffer
 		{
 			case CBUFFER_EPOS_MOTOR_COMMAND:
 			case CBUFFER_EPOS_JOINT_COMMAND:
-				ar & epos_simple_command_structure;
-				break;
 			case CBUFFER_EPOS_EXTERNAL_COMMAND:
-				ar & desired_frame;
+				ar & epos_simple_command_structure;
 				break;
 			case CBUFFER_EPOS_CUBIC_COMMAND:
 				ar & epos_cubic_command_structure;
@@ -101,21 +99,22 @@ struct cbuffer
 			case CBUFFER_EPOS_EXTERNAL_COMMAND:
 				os << "CBUFFER_EPOS_EXTERNAL_COMMAND:\n";
 				break;
-			case CBUFFER_EPOS_CUBIC_COMMAND:
-				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
-				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os << "\t" << m.epos_cubic_command_structure.aa[i] << "\t" << m.epos_cubic_command_structure.av[i]
-							<< "\t" << m.epos_cubic_command_structure.da[i] << "\t"
-							<< m.epos_cubic_command_structure.emdm[i] << "\n";
-				}
-				break;
 			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
 				os << "CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:\n";
 				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os << "\t" << m.epos_trapezoidal_command_structure.em[i] << "\t"
+					os << "\t" << m.epos_trapezoidal_command_structure.aa[i] << "\t"
+							<< m.epos_trapezoidal_command_structure.av[i] << "\t"
+							<< m.epos_trapezoidal_command_structure.da[i] << "\t"
 							<< m.epos_trapezoidal_command_structure.emdm[i] << "\n";
 				}
-				os << "\t" << m.epos_trapezoidal_command_structure.tt << "\n";
+				break;
+			case CBUFFER_EPOS_CUBIC_COMMAND:
+				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
+				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
+					os << "\t" << m.epos_cubic_command_structure.em[i] << "\t"
+							<< m.epos_cubic_command_structure.emdm[i] << "\n";
+				}
+				os << "\t" << m.epos_cubic_command_structure.tt << "\n";
 				break;
 			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
 				os << "CBUFFER_EPOS_OPERATIONAL_COMMAND:\n";
@@ -127,6 +126,9 @@ struct cbuffer
 				break;
 			case CBUFFER_EPOS_BRAKE_COMMAND:
 				os << "CBUFFER_EPOS_BRAKE_COMMAND\n";
+				break;
+			case CBUFFER_EPOS_CLEAR_FAULT:
+				os << "CBUFFER_EPOS_CLEAR_FAULT\n";
 				break;
 			default:
 				os << "Error: unknown CBUFFER_VARIANT";

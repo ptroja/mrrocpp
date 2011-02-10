@@ -75,6 +75,29 @@ private slots:
 	void on_actionirp6p_m_Position_1_triggered();
 	void on_actionirp6p_m_Position_2_triggered();
 
+	// birdhand menu
+	void on_actionbirdhand_EDP_Load_triggered();
+	void on_actionbirdhand_EDP_Unload_triggered();
+
+	void on_actionbirdhand_Command_triggered();
+	void on_actionbirdhand_Configuration_triggered();
+
+	// sarkofag menu
+	void on_actionsarkofag_EDP_Load_triggered();
+	void on_actionsarkofag_EDP_Unload_triggered();
+
+	void on_actionsarkofag_Synchronisation_triggered();
+	void on_actionsarkofag_Move_triggered();
+
+	void on_actionsarkofag_Synchro_Position_triggered();
+	void on_actionsarkofag_Front_Position_triggered();
+	void on_actionsarkofag_Position_0_triggered();
+	void on_actionsarkofag_Position_1_triggered();
+	void on_actionsarkofag_Position_2_triggered();
+
+	void on_actionsarkofag_Servo_Agortihm_triggered();
+
+
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
 	void on_actionspkm_EDP_Unload_triggered();
@@ -91,6 +114,8 @@ private slots:
 	void on_actionspkm_Position_0_triggered();
 	void on_actionspkm_Position_1_triggered();
 	void on_actionspkm_Position_2_triggered();
+
+	void on_actionspkm_Clear_Fault_triggered();
 
 	// smb menu
 	void on_actionsmb_EDP_Load_triggered();
