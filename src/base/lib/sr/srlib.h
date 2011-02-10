@@ -41,7 +41,10 @@ static const unsigned int TEXT_LENGTH = 256;
 typedef struct sr_package
 {
 	//! Message timestamp
-	uint64_t time;
+	struct _portable_timeval {
+		unsigned long tv_sec;
+		unsigned int tv_usec;
+	} tv;
 
 	//! Sender process type
 	process_type_t process_type;
@@ -62,7 +65,8 @@ typedef struct sr_package
 template<class Archive>
 void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 {
-    ar & p.time;
+    ar & p.tv.tv_sec;
+    ar & p.tv.tv_usec;
     ar & p.process_type;
     ar & p.message_type;
     ar & p.process_name;

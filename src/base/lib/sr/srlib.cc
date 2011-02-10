@@ -44,7 +44,8 @@ void sr::send_package(sr_package_t & sr_message)
 		perror("gettimeofday()");
 	}
 
-	sr_message.time = ((uint64_t) tv.tv_usec) * 1000 + ((uint64_t) tv.tv_sec) * 1000000000;
+	sr_message.tv.tv_sec = tv.tv_sec;
+	sr_message.tv.tv_usec = tv.tv_usec;
 
 	sender.send_package(sr_message);
 }
