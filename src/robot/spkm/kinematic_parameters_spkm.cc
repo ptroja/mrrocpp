@@ -26,16 +26,21 @@ const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NU
 const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.0, 0.0, 0.0};
 
 // Initialization of upper motors limits vector.
-const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 10000, 11000, 9000, 0, 0, 0 };
+// Those values were computed on the base of "safe" joint limits.
+const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9720, 10800, 8640, 0, 0, 0 };
 
 // Initialization of lower motors limits vector.
-const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -194000, -281000, -173000, 0, 0, 0 };
+// The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000}
+// Those values were computed on the base of "safe" joint limits.
+const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100800, -248400, -100799, 0, 0, 0 };
 
 // Initialization of upper joints vector.
-const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.3059, 0.3292, 0.3203, 0, 0, 0 };
+// Those are the "safe" limits, not related to sychronization sensors positions.
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.32, 0.30, 0, 0, 0 };
 
 // Initialization of lower joints limits vector.
-const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.0043, 0.0033, 0.0421, 0, 0, 0 };
+// The lower values are related to positions of synchronization sensors.
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2493, 0.2480, 0.2696, 0, 0, 0 };
 
 // Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 const double kinematic_parameters_spkm::dA = -0.05;

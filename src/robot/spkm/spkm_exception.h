@@ -39,6 +39,9 @@ typedef boost::error_info <struct motor_no, int> spkm_motor_number;
 //! Number of joint that caused the exception.
 typedef boost::error_info <struct joint_no, int> spkm_joint_number;
 
+//! Desired values that caused the exception.
+typedef boost::error_info <struct desired_value, double> spkm_desired_value;
+
 
 /*!
  * \brief Exception thrown in case of motor limits violation.

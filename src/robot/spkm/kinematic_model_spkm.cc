@@ -27,23 +27,23 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position)
 {
 	// Check upper limit for every motor.
-/*	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_motor_number(i) << spkm_limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_desired_value(motor_position[i]) << spkm_motor_number(i) << spkm_limit_type(UPPER_LIMIT));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_motor_number(i) << spkm_limit_type(LOWER_LIMIT));
-	}*/
+			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_desired_value(motor_position[i]) << spkm_motor_number(i) << spkm_limit_type(LOWER_LIMIT));
+	}
 }
 
 void kinematic_model_spkm::check_joints(const lib::JointArray & q)
 {
 	// Check joint limit for every axis.
-/*	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 3; ++i) {
 		if (q[i] > params.upper_joints_limits[i])
-			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_joint_number(i) << spkm_limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_desired_value(q[i]) << spkm_joint_number(i) << spkm_limit_type(UPPER_LIMIT));
 		else if (q[i] < params.lower_joints_limits[i])
-			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_joint_number(i) << spkm_limit_type(LOWER_LIMIT));
-	}*/
+			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_desired_value(q[i]) << spkm_joint_number(i) << spkm_limit_type(LOWER_LIMIT));
+	}
 }
 
 void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
