@@ -543,10 +543,14 @@ void sub_task_smooth_gen_test::conditional_execution()
 	// EULER RELATIVE END
 */
 
-	/*// ANGLE AXIS ABSOLUTE
+	// ANGLE AXIS ABSOLUTE
 	sr_ecp_msg.message("Angle axis absolute");
 	sgenangle->reset();
 	sgenangle->set_absolute();
+
+        //network_path += "../src/application/generator_tester/jerky.trj";
+        //sgenangle->load_trajectory_from_file(network_path.c_str());
+        sgenangle->load_trajectory_from_file("/Users/rafal/PW/mrrocpp/wut-rcprg/src/application/generator_tester/jerky.trj");
 
 	if (track) {
 		coordinates1[0] = 0.534987;
@@ -599,13 +603,13 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
+	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(2) == 0) {
 		sgenangle->Move();
 	}
-	// ANGLE AXIS ABSOLUTE END*/
+	// ANGLE AXIS ABSOLUTE END
 
 
-	// ANGLE AXIS RELATIVE
+	/*// ANGLE AXIS RELATIVE
 	sr_ecp_msg.message("Angle axis relative");
 	sgenangle->reset();
 	sgenangle->set_relative();
@@ -661,7 +665,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 	sgenangle->load_relative_angle_axis_trajectory_pose(coordinates1);
 
-	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(0.3) == 0) {
+	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(2) == 0) {
 		sgenangle->Move();
 	}
 	// ANGLE AXIS RELATIVE END*/
