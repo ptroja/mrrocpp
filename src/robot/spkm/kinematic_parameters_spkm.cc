@@ -26,7 +26,7 @@ const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NU
 const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.005 / (4 * 500 * 9), 0.0, 0.0, 0.0};
 
 // Initialization of upper motors limits vector.
-const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 10900, 11000, 10200, 0, 0, 0 };
+const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 10000, 11000, 9000, 0, 0, 0 };
 
 // Initialization of lower motors limits vector.
 const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -194000, -281000, -173000, 0, 0, 0 };
