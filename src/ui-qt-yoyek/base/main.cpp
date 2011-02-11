@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	interface = new mrrocpp::ui::common::Interface();
-	interface->init();
+	mrrocpp::ui::common::Interface::get_instance()->init();
 
 	return a.exec();
 }

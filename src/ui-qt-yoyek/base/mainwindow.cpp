@@ -38,6 +38,8 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
 	Qt::WindowFlags flags;
@@ -50,6 +52,67 @@ MainWindow::~MainWindow()
 {
 	delete ui;
 }
+Ui::MainWindow * MainWindow::get_ui()
+{
+	return ui;
+}
+
+//void MainWindow::enable_menu_item(bool _active, QWidget *_menu_item)
+//{
+//	interface.print_on_sr("signal");
+//	emit enable_menu_item_signal(_menu_item, _active);
+//}
+
+
+void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
+{
+	va_list menu_items;
+
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
+
+	va_start(menu_items, _num_of_menus);
+
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+	}
+
+	va_end(menu_items);
+}
+
+void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
+{
+	va_list menu_items;
+
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
+
+	va_start(menu_items, _num_of_menus);
+
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+	}
+
+	va_end(menu_items);
+}
+
+//void MainWindow::disable_menu_item(int _num_of_menus, ...)
+//{
+//	va_list menu_items;
+//	//QWidget *item;
+//
+//	va_start(menu_items, _num_of_menus);
+//
+//	for(int i=0; i<_num_of_menus; i++)
+//	{
+//	interface.print_on_sr("signal");
+//	emit enable_menu_item_signal(va_arg(menu_items, QWidget *), false);
+//	}
+//
+//	va_end(menu_items);
+//}
 
 void MainWindow::ui_notification(QString _string, QColor _color)
 {
@@ -89,6 +152,18 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 void MainWindow::raise_process_control_window_slot()
 {
 	interface.wgt_pc->my_open();
+}
+
+void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
+{
+	//interface.print_on_sr("menu coloring slot");
+	_menu_item->setDisabled(!_active);
+}
+
+void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
+{
+	//interface.print_on_sr("menu coloring slot");
+	_menu_item->setDisabled(!_active);
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)
@@ -243,7 +318,7 @@ void MainWindow::on_timer_slot()
 		delete interface.log_file_outfile;
 		printf("UI CLOSED\n");
 		interface.abort_threads();
-		interface.mw->close();
+		interface.get_main_window()->close();
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
@@ -418,7 +493,7 @@ void MainWindow::on_actionsarkofag_Position_2_triggered()
 	interface.sarkofag->move_to_preset_position(2);
 }
 
-void MainWindow::on_actionsarkofag_Servo_Agortihm_triggered()
+void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
 {
 
 }
@@ -540,7 +615,7 @@ void MainWindow::on_actionall_EDP_Load_triggered()
 	interface.EDP_all_robots_create();
 }
 
-void MainWindow::on_actionall_EDP_Uload_triggered()
+void MainWindow::on_actionall_EDP_Unload_triggered()
 {
 	interface.EDP_all_robots_slay();
 }

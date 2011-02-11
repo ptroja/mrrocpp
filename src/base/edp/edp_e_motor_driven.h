@@ -289,7 +289,7 @@ public:
 	 *
 	 * It is set by the specific robots.
 	 */
-	short number_of_servos;
+	unsigned short number_of_servos;
 
 	/*!
 	 * \brief pure virtual method of move arm to be implemented in specific robot.

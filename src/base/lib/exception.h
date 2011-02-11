@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include <boost/exception/all.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 //#include <exception>
 
 namespace mrrocpp {

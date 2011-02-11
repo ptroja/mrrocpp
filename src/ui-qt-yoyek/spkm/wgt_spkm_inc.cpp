@@ -47,6 +47,9 @@ void wgt_spkm_inc::on_pushButton_read_clicked()
 int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
+	ui.pushButton_read->setDisabled(_set_disabled);
+	ui.pushButton_copy->setDisabled(_set_disabled);
+	ui.checkBox_cyclic_read->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p0->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p1->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p2->setDisabled(_set_disabled);
@@ -135,7 +138,7 @@ void wgt_spkm_inc::on_pushButton_import_clicked()
 {
 	double val[robot.number_of_servos];
 
-	interface.mw->get_lineEdit_position(val, robot.number_of_servos);
+	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
 
 	ui.doubleSpinBox_des_p0->setValue(val[0]);
 	ui.doubleSpinBox_des_p1->setValue(val[1]);

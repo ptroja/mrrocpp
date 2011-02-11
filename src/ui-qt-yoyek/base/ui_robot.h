@@ -66,7 +66,7 @@ public:
 	void close_all_windows();
 	void EDP_slay_int();
 	void connect_to_reader(void);
-	void connect_to_ecp_pulse_chanell(void);
+	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot() = 0;
 	virtual int manage_interface() = 0;

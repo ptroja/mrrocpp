@@ -25,8 +25,14 @@ public:
 	~MainWindow();
 
 	void ui_notification(QString _string, QColor _color);
+	//void enable_menu_item(bool _active, QWidget *_menu_item);
+	void enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...);
+	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
+	//void disable_menu_item(int _num_of_menus, ...);
 	void raise_process_control_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
+
+	Ui::MainWindow * get_ui();
 
 private:
 	Ui::MainWindow *ui;
@@ -35,6 +41,8 @@ private:
 
 signals:
 	void ui_notification_signal(QString _string, QColor _color);
+	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
+	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 	void raise_process_control_window_signal();
 
 private slots:
@@ -43,7 +51,8 @@ private slots:
 
 	void ui_notification_slot(QString _string, QColor _color);
 	void raise_process_control_window_slot();
-
+	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
+	void enable_menu_item_slot(QAction *_menu_item, bool _active);
 	// menus
 
 	// file menu
@@ -95,8 +104,7 @@ private slots:
 	void on_actionsarkofag_Position_1_triggered();
 	void on_actionsarkofag_Position_2_triggered();
 
-	void on_actionsarkofag_Servo_Agortihm_triggered();
-
+	void on_actionsarkofag_Servo_Algorithm_triggered();
 
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
@@ -132,7 +140,7 @@ private slots:
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
-	void on_actionall_EDP_Uload_triggered();
+	void on_actionall_EDP_Unload_triggered();
 	void on_actionall_Synchronisation_triggered();
 	void on_actionall_Synchro_Position_triggered();
 	void on_actionall_Front_Position_triggered();
