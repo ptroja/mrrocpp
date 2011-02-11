@@ -92,33 +92,37 @@ double ppm(
 			amax = Amax(l,0),				// maximal acceleration
 			dmax = -Amax(l,0);				// maximal deceleration
 
-		// Velocity value, when the velocity profile is triangular
+		// Velocity value, when the velocity profile is triangular (eq. 3.32)
 		const double VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
-
-		std::cout << "VLimit: " << VTriangle << std::endl;
 
 		const bool TriangularProfile = (VTriangle <= vmax);
 
 		if(TriangularProfile) {
-			// acceleration and deceleration phase treated as 0
-			Time(l,0) = Time(l,1) = 0.0;
+			// tt: total motion time (eq. 3.33)
 			Time(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
+			// acceleration and deceleration phase treated as a half of the total motion time
+			Time(l,0) = Time(l,1) = Time(l,2)/2;
 		} else {
-			// ta: time to stop accelerate
+			// ta: time to stop accelerate (eq. 3.35)
 			Time(l,0) = vmax/amax;
 
-			// td: time to start deceleration
+			// td: time to start deceleration (eq. 3.42)
 			Time(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
 
-			// tt: total motion time
+			// tt: total motion time (eq. 3.40)
 			Time(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
 		}
+
+//		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
+//				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
+//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+//				std::endl;
 	}
 
 	Matrix<double,1,3> maxTime = Time.colwise().maxCoeff();
 
-	std::cout << "maxTime: " << maxTime << std::endl;
-	std::cout << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
+//	std::cerr << "maxTime: " << maxTime << std::endl;
+//	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
 
 	// total time
 	double tt = maxTime.col(2).maxCoeff();
@@ -131,24 +135,32 @@ double ppm(
 		tt += (ta - td);
 	}
 
-	std::cout
-		<< "ta: " << ta << "\t"
-		<< "td: " << td << "\t"
-		<< "tt: " << tt
-		<< std::endl;
+//	std::cout
+//		<< "ta: " << ta << "\t"
+//		<< "td: " << td << "\t"
+//		<< "tt: " << tt
+//		<< std::endl;
 
-	// I guess this can be implemented as a single matrix calculation
-	for(unsigned int l = 0; l < N; ++l) {
-		const double delta = Delta(l,0);
+	// If the total time is zero there will be no motion
+	if(tt > 0) {
+		// I guess this can be implemented as a single matrix calculation
+		for(unsigned int l = 0; l < N; ++l) {
+			const double delta = Delta(l,0);
 
-		Anew(l,0) = 2*delta/(ta*(tt+td-ta));
-		Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
-		Vnew(l,0) = Anew(l,0)*ta;
+			Anew(l,0) = 2*delta/(ta*(tt+td-ta));
+			Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
+			Vnew(l,0) = Anew(l,0)*ta;
 
-		//assert(Anew(l,0)<Amax(l,0));
+
+			assert(Anew(l,0)<=Amax(l,0));
+			assert(Vnew(l,0)<=Vmax(l,0));
+		}
+	} else {
+		Vnew = Vmax;
+		Anew = Dnew = Amax;
 	}
 
-//	std::cout <<
+//	std::cerr <<
 //		"Vnew:\n" << Vnew << std::endl <<
 //		"Anew:\n" << Anew << std::endl <<
 //		"Dnew:\n" << Dnew << std::endl <<
