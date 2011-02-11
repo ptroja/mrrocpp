@@ -47,6 +47,9 @@ void wgt_spkm_inc::on_pushButton_read_clicked()
 int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
+	ui.pushButton_read->setDisabled(_set_disabled);
+	ui.pushButton_copy->setDisabled(_set_disabled);
+	ui.checkBox_cyclic_read->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p0->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p1->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_p2->setDisabled(_set_disabled);
