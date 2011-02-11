@@ -39,11 +39,16 @@ case `uname -s` in
 				./ui-qt-yoyek;;
 esac
 
-function quitSig() {
-    echo "***BASH*** Received SIGINT, going down"
-}
-trap 'quitSig' INT
+#function quitSig() {
+#    echo "***BASH*** Received SIGINT, going down"
+#}
+#trap 'quitSig' INT
 
 echo "***BASH*** UI exited"
-kill ${MESSIP_PID}
-kill ${CONFIGSRV_PID}
+
+if ! kill ${CONFIGSRV_PID}; then
+		echo "failed to kill configsrv"
+fi
+if ! kill ${MESSIP_PID}; then
+		echo "failed to kill messip_mgr"
+fi
