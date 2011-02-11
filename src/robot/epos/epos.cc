@@ -18,6 +18,7 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include "epos_access.h"
 #include "epos.h"
 
 namespace mrrocpp {
@@ -73,12 +74,12 @@ namespace epos {
 /*           implementation of functions are following      */
 /************************************************************/
 
-epos_base::epos_base() :
+epos_access::epos_access() :
 	device_opened(false)
 {
 }
 
-epos_base::~epos_base()
+epos_access::~epos_access()
 {
 }
 
@@ -86,7 +87,7 @@ epos_base::~epos_base()
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(epos_base & _device, uint8_t _nodeId) :
+epos::epos(epos_access & _device, uint8_t _nodeId) :
 	device(_device), nodeId(_nodeId)
 {
 	// Read the cached parameters
@@ -1180,6 +1181,20 @@ void epos::writeMaximalPositionLimit(INTEGER32 val)
 	WriteObjectValue(0x607D, 0x02, val);
 }
 
+UNSIGNED32 epos::readActualBufferSize()
+{
+	return ReadObjectValue<UNSIGNED32> (0x60C4, 0x02);
+}
+
+void epos::clearPvtBuffer()
+{
+	// Clear input buffer (and all data records) access disabled
+	WriteObjectValue(0x60C4, 0x06, 0);
+
+	// Enable access to the input buffer for the drive functions
+	WriteObjectValue(0x60C4, 0x06, 1);
+}
+
 /*! read Error register */
 UNSIGNED8 epos::readErrorRegister() {
 	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
@@ -1535,7 +1550,7 @@ int epos::checkEPOSerror(DWORD E_error)
 }
 
 /* copied from EPOS Communication Guide, p.8 */
-WORD epos_base::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
 	WORD shifter, c;
 	WORD carry;

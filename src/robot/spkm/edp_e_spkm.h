@@ -31,7 +31,7 @@ class effector : public common::manip_effector
 {
 private:
 	//! Access to the CAN gateway unit
-	boost::shared_ptr<epos::epos_base> gateway;
+	boost::shared_ptr<epos::epos_access> gateway;
 
 	//! PKM axes
 	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
