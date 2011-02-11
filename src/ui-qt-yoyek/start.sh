@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ -x /usr/bin/color ]; then
+		COLOR=/usr/bin/color;
+else
+		COLOR=true
+fi
+
 ./messip_mgr &
 MESSIP_PID=$!
 
@@ -44,11 +50,13 @@ esac
 #}
 #trap 'quitSig' INT
 
-echo "***BASH*** UI exited"
-
+echo "$(${COLOR} blue)Killing configsrv$(${COLOR} off)"
 if ! kill ${CONFIGSRV_PID}; then
-		echo "failed to kill configsrv"
+		echo "$(${COLOR} red) failed to kill configsrv$(${COLOR} off)"
 fi
+echo "$(${COLOR} blue)Killing messip_mgr$(${COLOR} off)"
 if ! kill ${MESSIP_PID}; then
-		echo "failed to kill messip_mgr"
+		echo "$(${COLOR} red) failed to kill messip_mgr$(${COLOR} off)"
 fi
+
+echo "$(${COLOR} blue)***BASH*** UI exited$(${COLOR} off)"
