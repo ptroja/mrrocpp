@@ -42,9 +42,9 @@ public:
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(common::Interface& _interface); // Konstruktor
 
-	void move_motors(const double final_position[lib::MAX_SERVOS_NR], lib::epos::EPOS_MOTION_VARIANT motion_variant);
-	void move_joints(const double final_position[lib::MAX_SERVOS_NR], lib::epos::EPOS_MOTION_VARIANT motion_variant);
-	void move_external(const double final_position[lib::MAX_SERVOS_NR], lib::epos::EPOS_MOTION_VARIANT motion_variant);
+	void move_motors(const double final_position[lib::spkm::NUM_OF_SERVOS], lib::epos::EPOS_MOTION_VARIANT motion_variant);
+	void move_joints(const double final_position[lib::spkm::NUM_OF_SERVOS], lib::epos::EPOS_MOTION_VARIANT motion_variant);
+	void move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant);
 	void clear_fault();
 	void stop_motors();
 };

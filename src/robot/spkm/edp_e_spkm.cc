@@ -158,7 +158,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
 						std::cout << "JOINT[ " << i << "]: " << desired_joints[i] << std::endl;
 					}
-					break;
 
 					if (is_synchronised()) {
 						// Transform from joint to motors (and check motors/joints values).
@@ -211,20 +210,20 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					Matrix <double, 3, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
 					for (int i = 0; i < 3; ++i) {
-						Delta[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
+						Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]);
 						std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
 						Vmax[i] = Vdefault[i];
 						Amax[i] = Adefault[i];
 					}
 
 					// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-					double t = ppm <3> (Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
+					double t = ppm <3> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-					std::cerr <<
-						"Delta:\n" << Delta << std::endl <<
-						"Vmax:\n" << Vmax << std::endl <<
-						"Amax:\n" << Amax << std::endl <<
-						std::endl;
+//					std::cerr <<
+//						"Delta:\n" << Delta << std::endl <<
+//						"Vmax:\n" << Vmax << std::endl <<
+//						"Amax:\n" << Amax << std::endl <<
+//						std::endl;
 
 					if (t > 0) {
 						std::cerr <<
@@ -328,12 +327,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	msg->message("EDP get_arm_position");
-
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
-
-		msg->message("EDP get_arm_position");
 		switch (instruction.get_arm_type)
 		{
 			case lib::MOTOR:
@@ -446,6 +441,14 @@ void effector::synchronise(void)
 	//	axisA->writeMinimalPositionLimit(-100000);
 	//	axisB->writeMinimalPositionLimit(-100000);
 	//	axisC->writeMinimalPositionLimit(-100000);
+
+	// Reset internal state of the motor positions
+	for(int i = 0; i < number_of_servos; ++i) {
+		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+	}
+
+	// Compute joints positions in the home position
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	controller_state_edp_buf.is_synchronised = true;
 }

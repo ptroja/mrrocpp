@@ -99,10 +99,10 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
 
-		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
 
 		for(int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
-			ecp_edp_cbuffer.joint_pos[i] = epos_motor_command_data_port.data.desired_position[i];
+			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
 
 		check_then_set_command_flag(is_new_data);
@@ -115,10 +115,10 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
 
-		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 
-		for(int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
-			ecp_edp_cbuffer.goal_pos[i] = epos_motor_command_data_port.data.desired_position[i];
+		for(int i = 0; i < 6; ++i) {
+			ecp_edp_cbuffer.goal_pos[i] = epos_external_command_data_port.data.desired_position[i];
 		}
 
 		check_then_set_command_flag(is_new_data);
