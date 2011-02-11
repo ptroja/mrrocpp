@@ -28,11 +28,6 @@ namespace epos {
 /*    definitions used only internal in c   */
 /* ********************************************* */
 
-/*! starting point for (slow!) homing movement. If the zero point is
- not off too far, this will speed things up enormously!
- */
-#define E_STARTPOS_HOMING -200000
-
 /* EPOS error codes (Communication Guide, 6.4)  */
 
 /* CANopen defined error codes */
@@ -73,18 +68,6 @@ namespace epos {
 #define E_BIT02        0x0004      ///< bit code: operation enable
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
-/* EPOS modes of operation, firmware spec 14.1.59 (p.133, tbl. 72) */
-#define E_HOMING      6 ///< EPOS operation mode: homing
-#define E_PROFVEL     3 ///< EPOS operation mode: profile velocity mode
-#define E_PROFPOS     1 ///< EPOS operation mode: profile position mode
-// the modes below should not be used by user, defined here only for
-// completeness
-#define E_POSMOD     -1 ///< EPOS operation mode: position mode
-#define E_VELMOD     -2 ///< EPOS operation mode: velocity mode
-#define E_CURRMOD    -3 ///< EPOS operation mode: current mode
-#define E_DIAGMOD    -4 ///< EPOS operation mode: diagnostics mode
-#define E_MASTERENCMOD -5 ///< EPOS operation mode:internal
-#define E_STEPDIRECMOD -6 ///< EPOS operation mode:internal
 
 /************************************************************/
 /*           implementation of functions are following      */
