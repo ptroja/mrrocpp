@@ -32,8 +32,9 @@ CONFIGSRV_PID=$!
 
 sleep 0.5
 
-echo CONFIGSRV_PID=${CONFIGSRV_PID}
-echo MESSIP_PID=${MESSIP_PID}
+# debug: show PIDs
+#echo CONFIGSRV_PID=${CONFIGSRV_PID}
+#echo MESSIP_PID=${MESSIP_PID}
 
 case `uname -s` in
 		QNX)
