@@ -104,8 +104,7 @@ private slots:
 	void on_actionsarkofag_Position_1_triggered();
 	void on_actionsarkofag_Position_2_triggered();
 
-	void on_actionsarkofag_Servo_Agortihm_triggered();
-
+	void on_actionsarkofag_Servo_Algorithm_triggered();
 
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
@@ -141,7 +140,7 @@ private slots:
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
-	void on_actionall_EDP_Uload_triggered();
+	void on_actionall_EDP_Unload_triggered();
 	void on_actionall_Synchronisation_triggered();
 	void on_actionall_Synchro_Position_triggered();
 	void on_actionall_Front_Position_triggered();

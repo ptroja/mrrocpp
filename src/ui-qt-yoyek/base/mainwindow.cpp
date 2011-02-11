@@ -57,7 +57,6 @@ Ui::MainWindow * MainWindow::get_ui()
 	return ui;
 }
 
-
 //void MainWindow::enable_menu_item(bool _active, QWidget *_menu_item)
 //{
 //	interface.print_on_sr("signal");
@@ -69,14 +68,14 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 {
 	va_list menu_items;
 
-	emit enable_menu_item_signal(_menu_item, _enable);
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
 
 	va_start(menu_items, _num_of_menus);
 
-	for(int i=1; i<_num_of_menus; i++)
-	{
-	//interface.print_on_sr("signal");
-	emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
 	}
 
 	va_end(menu_items);
@@ -86,14 +85,14 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 {
 	va_list menu_items;
 
-	emit enable_menu_item_signal(_menu_item, _enable);
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
 
 	va_start(menu_items, _num_of_menus);
 
-	for(int i=1; i<_num_of_menus; i++)
-	{
-	//interface.print_on_sr("signal");
-	emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
 	}
 
 	va_end(menu_items);
@@ -494,7 +493,7 @@ void MainWindow::on_actionsarkofag_Position_2_triggered()
 	interface.sarkofag->move_to_preset_position(2);
 }
 
-void MainWindow::on_actionsarkofag_Servo_Agortihm_triggered()
+void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
 {
 
 }
@@ -616,7 +615,7 @@ void MainWindow::on_actionall_EDP_Load_triggered()
 	interface.EDP_all_robots_create();
 }
 
-void MainWindow::on_actionall_EDP_Uload_triggered()
+void MainWindow::on_actionall_EDP_Unload_triggered()
 {
 	interface.EDP_all_robots_slay();
 }
