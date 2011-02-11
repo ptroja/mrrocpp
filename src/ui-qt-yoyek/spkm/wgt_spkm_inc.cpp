@@ -17,6 +17,20 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
+	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_motor_pos_limits[0]);
+	ui.doubleSpinBox_des_p1->setMaximum(robot.kinematic_params.upper_motor_pos_limits[1]);
+	ui.doubleSpinBox_des_p2->setMaximum(robot.kinematic_params.upper_motor_pos_limits[2]);
+	ui.doubleSpinBox_des_p3->setMaximum(robot.kinematic_params.upper_motor_pos_limits[3]);
+	ui.doubleSpinBox_des_p4->setMaximum(robot.kinematic_params.upper_motor_pos_limits[4]);
+	ui.doubleSpinBox_des_p5->setMaximum(robot.kinematic_params.upper_motor_pos_limits[5]);
+
+	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
+	ui.doubleSpinBox_des_p1->setMinimum(robot.kinematic_params.lower_motor_pos_limits[1]);
+	ui.doubleSpinBox_des_p2->setMinimum(robot.kinematic_params.lower_motor_pos_limits[2]);
+	ui.doubleSpinBox_des_p3->setMinimum(robot.kinematic_params.lower_motor_pos_limits[3]);
+	ui.doubleSpinBox_des_p4->setMinimum(robot.kinematic_params.lower_motor_pos_limits[4]);
+	ui.doubleSpinBox_des_p5->setMinimum(robot.kinematic_params.lower_motor_pos_limits[5]);
+
 }
 
 void wgt_spkm_inc::synchro_depended_init()

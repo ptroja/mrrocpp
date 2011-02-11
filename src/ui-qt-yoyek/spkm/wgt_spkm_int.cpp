@@ -17,6 +17,20 @@ wgt_spkm_int::wgt_spkm_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
+	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_joints_limits[0]);
+	ui.doubleSpinBox_des_p1->setMaximum(robot.kinematic_params.upper_joints_limits[1]);
+	ui.doubleSpinBox_des_p2->setMaximum(robot.kinematic_params.upper_joints_limits[2]);
+	ui.doubleSpinBox_des_p3->setMaximum(robot.kinematic_params.upper_joints_limits[3]);
+	ui.doubleSpinBox_des_p4->setMaximum(robot.kinematic_params.upper_joints_limits[4]);
+	ui.doubleSpinBox_des_p5->setMaximum(robot.kinematic_params.upper_joints_limits[5]);
+
+	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_joints_limits[0]);
+	ui.doubleSpinBox_des_p1->setMinimum(robot.kinematic_params.lower_joints_limits[1]);
+	ui.doubleSpinBox_des_p2->setMinimum(robot.kinematic_params.lower_joints_limits[2]);
+	ui.doubleSpinBox_des_p3->setMinimum(robot.kinematic_params.lower_joints_limits[3]);
+	ui.doubleSpinBox_des_p4->setMinimum(robot.kinematic_params.lower_joints_limits[4]);
+	ui.doubleSpinBox_des_p5->setMinimum(robot.kinematic_params.lower_joints_limits[5]);
+
 }
 
 void wgt_spkm_int::on_timer_slot()
