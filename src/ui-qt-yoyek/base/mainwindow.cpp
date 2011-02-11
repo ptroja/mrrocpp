@@ -64,7 +64,7 @@ Ui::MainWindow * MainWindow::get_ui()
 //}
 
 
-void MainWindow::enable_menu_item(int num_of_menus, ...)
+void MainWindow::enable_menu_item(int _num_of_menus, ...)
 {
 	va_list menu_items;
 	QWidget *item;
@@ -80,7 +80,7 @@ void MainWindow::enable_menu_item(int num_of_menus, ...)
 	va_end(menu_items);
 }
 
-void MainWindow::disable_menu_item(int num_of_menus, ...)
+void MainWindow::disable_menu_item(int _num_of_menus, ...)
 {
 	va_list menu_items;
 	QWidget *item;

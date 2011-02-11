@@ -26,8 +26,8 @@ public:
 
 	void ui_notification(QString _string, QColor _color);
 	//void enable_menu_item(bool _active, QWidget *_menu_item);
-	void enable_menu_item(int num_of_menus, ...);
-	void disable_menu_item(int num_of_menus, ...);
+	void enable_menu_item(int _num_of_menus, ...);
+	void disable_menu_item(int _num_of_menus, ...);
 	void raise_process_control_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
 
