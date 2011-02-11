@@ -54,6 +54,17 @@ Interface::Interface() :
 
 }
 
+Interface * Interface::get_instance()
+{
+	static Interface *instance = new Interface();
+	return instance;
+}
+
+MainWindow* Interface::get_main_window()
+{
+	return mw;
+}
+
 int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
 	if (new_notifacion != notification_state) {
@@ -378,8 +389,7 @@ int Interface::manage_interface(void)
 	switch (all_edps)
 	{
 		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-			print_on_sr("1");
-			mw->disable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(false, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
 			 block_widget( ABW_base_all_robots);
@@ -391,7 +401,8 @@ int Interface::manage_interface(void)
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
 			print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
 			//mw->disable_menu_item(false, mw->get_ui()->menuAll_Robots);
-			mw->disable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->actionMP_Load, NULL);
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
@@ -402,7 +413,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
-			mw->enable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
 			/* TR
 			 //			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -414,7 +426,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-			mw->enable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
 			/* TR
 			 //			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -424,7 +437,7 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-			mw->enable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 			 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
@@ -459,17 +472,16 @@ int Interface::manage_interface(void)
 	// wlasciwosci menu task_menu
 	switch (mp.state)
 	{
-
 		case common::UI_MP_NOT_PERMITED_TO_RUN:
-			mw->disable_menu_item(2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
 			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 			 */
 			break;
 		case common::UI_MP_PERMITED_TO_RUN:
-			mw->disable_menu_item(1, mw->get_ui()->actionMP_Unload);
-			mw->enable_menu_item(1, mw->get_ui()->actionMP_Load);
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
 			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
@@ -477,8 +489,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case common::UI_MP_WAITING_FOR_START_PULSE:
-			mw->disable_menu_item(1, mw->get_ui()->actionMP_Unload);
-			mw->enable_menu_item(1, mw->get_ui()->actionMP_Load);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Load);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
@@ -488,7 +500,7 @@ int Interface::manage_interface(void)
 			break;
 		case common::UI_MP_TASK_RUNNING:
 		case common::UI_MP_TASK_PAUSED:
-			mw->disable_menu_item(2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
 			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);

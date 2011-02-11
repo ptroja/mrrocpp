@@ -4,7 +4,7 @@
 wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QWidget(parent), interface(_interface)
 {
-	dwgt = new QDockWidget(interface.mw);
+	dwgt = new QDockWidget(interface.get_main_window());
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
 	dwgt->setWindowTitle(_string);
 
@@ -15,7 +15,7 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 	dwgt->setWidget(this);
 	dwgt->hide();
 	dwgt->setFloating(true);
-	interface.mw->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
+	interface.get_main_window()->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
 void wgt_base::my_open()

@@ -135,7 +135,7 @@ void wgt_spkm_inc::on_pushButton_import_clicked()
 {
 	double val[robot.number_of_servos];
 
-	interface.mw->get_lineEdit_position(val, robot.number_of_servos);
+	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
 
 	ui.doubleSpinBox_des_p0->setValue(val[0]);
 	ui.doubleSpinBox_des_p1->setValue(val[1]);

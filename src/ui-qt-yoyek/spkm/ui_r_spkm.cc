@@ -11,6 +11,9 @@
 #include "robot/spkm/const_spkm.h"
 #include "../base/interface.h"
 
+#include "../base/mainwindow.h"
+#include "ui_mainwindow.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace spkm {
@@ -27,13 +30,13 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 
-	wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
+	wgt_inc = new wgt_spkm_inc(interface, *this, interface.get_main_window());
 	wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
 
-	wgt_int = new wgt_spkm_int(interface, *this, interface.mw);
+	wgt_int = new wgt_spkm_int(interface, *this, interface.get_main_window());
 	wndbase_m[WGT_SPKM_INT] = wgt_int->dwgt;
 
-	wgt_ext = new wgt_spkm_ext(interface, *this, interface.mw);
+	wgt_ext = new wgt_spkm_ext(interface, *this, interface.get_main_window());
 	wndbase_m[WGT_SPKM_EXT] = wgt_ext->dwgt;
 
 }
@@ -156,14 +159,24 @@ int UiRobot::synchronise_int()
 
 int UiRobot::manage_interface()
 {
+	MainWindow *mw = mrrocpp::ui::common::Interface::get_instance()->get_main_window();
+	Ui::MainWindow *ui = mw->get_ui();
+
 	switch (state.edp.state)
 	{
 		case -1:
+			interface.print_on_sr("blabla");
+			mw->enable_menu_item(false, 1, ui->menuSpkm);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			 */
 			break;
 		case 0:
+			interface.print_on_sr("case 0");
+			mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Unload);
+			mw->enable_menu_item(false, 2, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions);
+			mw->enable_menu_item(true, 1, ui->menuSpkm);
+			mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, ABN_mm_spkm_edp_load, NULL);
@@ -171,11 +184,14 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
+			mw->enable_menu_item(true, 1, ui->menuSpkm);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, NULL);
 			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
+				mw->enable_menu_item(false, 1, ui->menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_pre_synchro_moves, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
@@ -184,12 +200,18 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
+						mw->enable_menu_item(true, 1, ui->menuspkm_Preset_positions);
+						mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload); //???
+						mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
+						mw->enable_menu_item(true, 1, ui->menuspkm_Preset_positions);//???
+						mw->enable_menu_item(false, 2, ui->actionspkm_EDP_Load, ui->actionspkm_EDP_Unload);
+
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, ABN_mm_spkm_edp_unload, NULL);
@@ -197,6 +219,7 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
+						mw->enable_menu_item(false, 1, ui->menuspkm_Preset_positions);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
@@ -207,6 +230,9 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
+				mw->enable_menu_item(true, 2, ui->actionspkm_EDP_Unload, ui->actionall_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);

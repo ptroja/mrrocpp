@@ -37,7 +37,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 
-	wgt_int = new wgt_polycrank_int(interface, *this, interface.mw);
+	wgt_int = new wgt_polycrank_int(interface, *this, interface.get_main_window());
 	wndbase_m[WGT_POLYCRANK_INT] = wgt_int->dwgt;
 
 	//wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
