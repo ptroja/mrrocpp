@@ -18,11 +18,9 @@ namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _config, _sr_ecp),
-			kinematics_manager(),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
-
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -30,11 +28,9 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _ecp_object),
-			kinematics_manager(),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
-
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -51,7 +47,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 void robot::create_command()
 {
-
 	//	int new_data_counter;
 	bool is_new_data;
 	bool is_new_request;

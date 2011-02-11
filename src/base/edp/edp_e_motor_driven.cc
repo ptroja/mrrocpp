@@ -20,11 +20,11 @@
 #include <pthread.h>
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
-#include <sys/netmgr.h>
 #endif
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -138,7 +138,6 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 { // przemieszczenie ramienia
 	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
 	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
 
 	switch (instruction.set_arm_type)
 	{

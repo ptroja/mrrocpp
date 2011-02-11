@@ -18,7 +18,7 @@ namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _config, _sr_ecp),
-			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+			epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
@@ -26,7 +26,6 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
-
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -34,7 +33,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task_base& _ecp_object) :
 			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
-			kinematics_manager(), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+			epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 			epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
@@ -42,7 +41,6 @@ robot::robot(common::task::task_base& _ecp_object) :
 			epos_reply_data_request_port(lib::epos::EPOS_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 			epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
-
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

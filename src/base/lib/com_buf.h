@@ -273,8 +273,6 @@ struct UI_reply
  */
 struct UI_ECP_message
 {
-
-
 	UI_TO_ECP_COMMAND command;
 
 	union

@@ -55,7 +55,7 @@ public:
 	 * @brief Sets current kinematic model.
 	 * @param _desired_kinematic_model_nr Number of kinematic model  to be set.
 	 */
-	void set_kinematic_model(const unsigned int _desired_kinematic_model_nr);
+	void set_kinematic_model(unsigned int _desired_kinematic_model_nr);
 
 	//! Returns pointer to current kinematic model.
 	kinematic_model* get_current_kinematic_model(void);
