@@ -212,7 +212,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 					for (int i = 0; i < 3; ++i) {
 						Delta[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
-						std::cout << "new - old: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
+						std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
 						Vmax[i] = Vdefault[i];
 						Amax[i] = Adefault[i];
 					}
@@ -220,8 +220,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
 					double t = ppm <3> (Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
 
+					std::cerr <<
+						"Delta:\n" << Delta << std::endl <<
+						"Vmax:\n" << Vmax << std::endl <<
+						"Amax:\n" << Amax << std::endl <<
+						std::endl;
+
 					if (t > 0) {
-						std::cout <<
+						std::cerr <<
 							"Vnew:\n" << Vnew << std::endl <<
 							"Anew:\n" << Anew << std::endl <<
 							"Dnew:\n" << Dnew << std::endl <<
@@ -265,6 +271,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 					}
 				}
+					break;
 				default:
 					// TODO: throw non-fatal error - motion typy not supported
 					return;
@@ -307,6 +314,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			break;
 	}
 
+	for (int i = 0; i < 6; ++i) {
+		std::cout << "OLD     MOTOR[" << i << "]: " << desired_motor_pos_old[i] << std::endl;
+		std::cout << "CURRENT MOTOR[" << i << "]: " << current_motor_pos[i] << std::endl;
+		std::cout << "CURRENT JOINT[" << i << "]: " << current_joints[i] << std::endl;
+	}
+
 	// Hold the issued command
 	desired_motor_pos_old = desired_motor_pos_new;
 }
@@ -315,6 +328,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
+	msg->message("EDP get_arm_position");
+
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
 
