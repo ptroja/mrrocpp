@@ -1,6 +1,3 @@
-#if !defined(_MP_MAIN_ERROR_H)
-#define _MP_MAIN_ERROR_H
-
 /*!
  * @file
  * @brief File contains MP_main_error class declaration
@@ -9,16 +6,13 @@
  * @ingroup mp
  */
 
-#include <map>
+#if !defined(_MP_MAIN_ERROR_H)
+#define _MP_MAIN_ERROR_H
 
 #include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace mp {
-namespace robot {
-class robot;
-}
-
 namespace common {
 
 /*!
@@ -46,12 +40,10 @@ public:
 	 * @param err1 error number
 	 */
 	MP_main_error(lib::error_class_t err0, uint64_t err1);
-
 };
 // ---------------------------------------------------------------
 
 } // namespace common
-
 } // namespace mp
 } // namespace mrrocpp
 
