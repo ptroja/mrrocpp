@@ -11,6 +11,7 @@
 #include <QtGui/QApplication>
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "interface.h"
 #include "ui_sr.h"
@@ -283,6 +284,19 @@ void Interface::init()
 
 }
 
+//void Interface::print_on_sr(const std::string &text)
+void Interface::print_on_sr(char *buff, ...)
+{
+	char text[256];
+	va_list arglist;
+
+	va_start(arglist,buff);
+	   vsprintf(text,buff,arglist);
+	va_end(arglist);
+
+	ui_msg->message(text);
+}
+
 int Interface::MPup_int()
 
 {
@@ -363,6 +377,8 @@ int Interface::manage_interface(void)
 	switch (all_edps)
 	{
 		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+			print_on_sr("1");
+			mw->disable_menu_item(2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
 			 block_widget( ABW_base_all_robots);
@@ -372,6 +388,9 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
+			print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
+			//mw->enable_menu_item(false, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(false, mw->get_ui()->menuRobot, mw->get_ui()->actionMP_Load, NULL);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
@@ -382,6 +401,7 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
+			//mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -393,6 +413,7 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+			//mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -402,6 +423,7 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
+			//mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 			 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);

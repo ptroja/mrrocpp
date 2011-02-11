@@ -181,8 +181,6 @@
     </widget>
     <addaction name="menuIrp6ot_m"/>
     <addaction name="menuIrp6p_m"/>
-    <addaction name="actionIrp6ot_t_Fg"/>
-    <addaction name="action_Conveyor"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="menuBirdhand"/>
@@ -193,10 +191,6 @@
     <addaction name="menuShead"/>
     <addaction name="separator"/>
     <addaction name="menuPolycrank"/>
-    <addaction name="actionB_ird_hand"/>
-    <addaction name="actionS_arkofag"/>
-    <addaction name="action_Speaker"/>
-    <addaction name="actionIrpt6_mechatronika"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -228,7 +222,7 @@
      <addaction name="actionall_Position_2"/>
     </widget>
     <addaction name="actionall_EDP_Load"/>
-    <addaction name="actionall_EDP_Uload"/>
+    <addaction name="actionall_EDP_Unload"/>
     <addaction name="separator"/>
     <addaction name="actionall_Synchronisation"/>
     <addaction name="menuall_Preset_Positions"/>
@@ -420,7 +414,7 @@
     <string>EDP Load</string>
    </property>
   </action>
-  <action name="actionall_EDP_Uload">
+  <action name="actionall_EDP_Unload">
    <property name="text">
     <string>EDP Unload</string>
    </property>
@@ -590,36 +584,6 @@
     <string>Move Joints</string>
    </property>
   </action>
-<<<<<<< HEAD:src/ui-qt-yoyek/mainwindow.ui
-  <action name="actionIrp6ot_t_Fg">
-   <property name="text">
-    <string>Irp6ot-t&amp;Fg</string>
-   </property>
-  </action>
-  <action name="action_Conveyor">
-   <property name="text">
-    <string>&amp;Conveyor</string>
-   </property>
-  </action>
-  <action name="actionB_ird_hand">
-   <property name="text">
-    <string>B&amp;ird hand</string>
-   </property>
-  </action>
-  <action name="actionS_arkofag">
-   <property name="text">
-    <string>S&amp;arkofag</string>
-   </property>
-  </action>
-  <action name="action_Speaker">
-   <property name="text">
-    <string>&amp;Speaker</string>
-   </property>
-  </action>
-  <action name="actionIrpt6_mechatronika">
-   <property name="text">
-    <string>Irpt6-&amp;mechatronika</string>
-=======
   <action name="actionbirdhand_EDP_Load">
    <property name="text">
     <string>EDP Load</string>
@@ -688,7 +652,6 @@
   <action name="actionsarkofag_Servo_Algorithm">
    <property name="text">
     <string>Servo Algorithm</string>
->>>>>>> 73945d0a7a6c3ea8d4f8f0b4617ed2ad64ccdbe5:src/ui-qt-yoyek/base/mainwindow.ui
    </property>
   </action>
  </widget>

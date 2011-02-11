@@ -13,6 +13,7 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "string"
 
 #include "ui.h"
 
@@ -62,6 +63,7 @@ class Interface
 private:
 
 public:
+	void print_on_sr(char *buff, ...);
 
 	busy_flag communication_flag;
 

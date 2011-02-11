@@ -38,7 +38,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(ui_menu_coloring_signal(Widget*, bool)), this, SLOT(ui_menu_coloring_slot(Widget *, bool)), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
 	Qt::WindowFlags flags;
@@ -51,10 +51,49 @@ MainWindow::~MainWindow()
 {
 	delete ui;
 }
-
-void MainWindow::ui_menu_coloring(QWidget *_menu_item, bool _active)
+Ui::MainWindow * MainWindow::get_ui()
 {
-	emit ui_menu_coloring_signal(_menu_item, !_active);
+	return ui;
+}
+
+
+//void MainWindow::enable_menu_item(bool _active, QWidget *_menu_item)
+//{
+//	interface.print_on_sr("signal");
+//	emit enable_menu_item_signal(_menu_item, _active);
+//}
+
+
+void MainWindow::enable_menu_item(num_of_menus, ...)
+{
+	va_list menu_items;
+	QWidget *item;
+
+	va_start(menu_items, _num_of_menus);
+
+	for(int i=0; i<_num_of_menus; i++)
+	{
+	interface.print_on_sr("signal");
+	emit enable_menu_item_signal(item, true);
+	}
+
+	va_end(menu_items);
+}
+
+void MainWindow::disable_menu_item(num_of_menus, ...)
+{
+	va_list menu_items;
+	QWidget *item;
+
+	va_start(menu_items, _num_of_menus);
+
+	for(int i=0; i<_num_of_menus; i++)
+	{
+	interface.print_on_sr("signal");
+	emit enable_menu_item_signal(item, false);
+	}
+
+	va_end(menu_items);
 }
 
 void MainWindow::ui_notification(QString _string, QColor _color)
@@ -97,9 +136,10 @@ void MainWindow::raise_process_control_window_slot()
 	interface.wgt_pc->my_open();
 }
 
-void MainWindow::ui_menu_coloring_slot(QWidget *_menu_item, bool _disabled)
+void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
 {
-	_menu_item->setDisabled(_disabled);
+	interface.print_on_sr("menu coloring slot");
+	_menu_item->setDisabled(!_active);
 }
 
 void MainWindow::ui_notification_slot(QString _string, QColor _color)

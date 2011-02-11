@@ -25,9 +25,12 @@ public:
 	~MainWindow();
 
 	void ui_notification(QString _string, QColor _color);
-	void ui_menu_coloring(QWidget *widget, bool active);
+	//void enable_menu_item(bool _active, QWidget *_menu_item);
+	void enable_menu_item(bool _active, ...);
 	void raise_process_control_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
+
+	Ui::MainWindow * get_ui();
 
 private:
 	Ui::MainWindow *ui;
@@ -36,7 +39,7 @@ private:
 
 signals:
 	void ui_notification_signal(QString _string, QColor _color);
-	void ui_menu_coloring_signal(QWidget *menu_item, bool active);
+	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
 	void raise_process_control_window_signal();
 
 private slots:
@@ -45,7 +48,7 @@ private slots:
 
 	void ui_notification_slot(QString _string, QColor _color);
 	void raise_process_control_window_slot();
-	void ui_menu_coloring_slot(QWidget *widget, bool active);
+	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
 
 	// menus
 
