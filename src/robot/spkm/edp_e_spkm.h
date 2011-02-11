@@ -39,9 +39,14 @@ private:
 	//! Axes container
 	boost::array<epos::epos *, 3> axes;
 
-	static const double Vdefault[6];// = { 5000, 5000, 5000, 5000, 5000, 5000 };
-	static const double Adefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
-	static const double Ddefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
+	//! Default axis velocity
+	static const double Vdefault[6];
+
+	//! Default axis acceleration
+	static const double Adefault[6];
+
+	//! Default axis deceleration
+	static const double Ddefault[6];
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
