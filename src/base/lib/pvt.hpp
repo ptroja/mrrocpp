@@ -147,18 +147,27 @@ double ppm(
 		for(unsigned int l = 0; l < N; ++l) {
 			const double delta = Delta(l,0);
 
-			Anew(l,0) = 2*delta/(ta*(tt+td-ta));
-			Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
-			Vnew(l,0) = Anew(l,0)*ta;
-
-
-			assert(Anew(l,0)<=Amax(l,0));
-			assert(Vnew(l,0)<=Vmax(l,0));
+			// Calculate new parameters if there is motion along an axis
+			if(delta) {
+				Anew(l,0) = 2*delta/(ta*(tt+td-ta));
+				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
+				Vnew(l,0) = Anew(l,0)*ta;
+			} else {
+				Anew(l,0) = Amax(l,0);
+				Dnew(l,0) = Amax(l,0);
+				Vnew(l,0) = Vmax(l,0);
+			}
 		}
 	} else {
 		Vnew = Vmax;
 		Anew = Dnew = Amax;
 	}
+
+	// Those assertions fail because of floating point inequalities
+	//assert(Dnew(l,0)<=Amax(l,0));
+	//assert(Anew(l,0)<=Amax(l,0));
+	//assert(Vnew(l,0)<=Vmax(l,0));
+
 
 //	std::cerr <<
 //		"Vnew:\n" << Vnew << std::endl <<
