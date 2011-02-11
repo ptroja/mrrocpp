@@ -29,14 +29,10 @@
 
 #include <string>
 
-
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-
 #if defined(__QNXNTO__)
-#include <process.h>
-#include <spawn.h>
 #include <sys/netmgr.h>
 #endif /* __QNXNTO__ */
 
@@ -60,18 +56,15 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	mrrocpp_network_path += dir;*/
 	mrrocpp_network_path = "../";
 
-
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
-
 }
 
 
 
 void configurator::change_config_file(const std::string & _ini_file)
 {
-
 	config_query_t query, reply;
 
 	query.key = _ini_file;
@@ -89,7 +82,6 @@ void configurator::change_config_file(const std::string & _ini_file)
 		// TODO: throw
 		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
 	}
-
 }
 
 bool configurator::check_config(const std::string & key) const
@@ -99,9 +91,7 @@ bool configurator::check_config(const std::string & key) const
 
 int configurator::return_node_number(const std::string & node_name_l)
 {
-
 	return ND_LOCAL_NODE;
-
 }
 
 std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
@@ -280,7 +270,6 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	return child_pid;
-
 }
 
 

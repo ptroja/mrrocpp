@@ -13,12 +13,13 @@ wgt_spkm_ext::wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
-	timer->start(1000);
+	timer->start(interface.position_refresh_interval);
+	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 }
 
 void wgt_spkm_ext::on_timer_slot()
 {
-	if ((dwgt->isVisible()) && (ui.radioButton_cyclic_read->isChecked())) {
+	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();
 	}
 
@@ -44,7 +45,7 @@ int wgt_spkm_ext::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui.pushButton_execute->setDisabled(false);
+				//ui.pushButton_execute->setDisabled(false);
 
 				robot.ui_ecp_robot->epos_external_reply_data_request_port->set_request();
 				robot.ui_ecp_robot->execute_motion();
@@ -78,7 +79,7 @@ int wgt_spkm_ext::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				ui.pushButton_execute->setDisabled(true);
+				//ui.pushButton_execute->setDisabled(true);
 			}
 		}
 
@@ -134,6 +135,11 @@ void wgt_spkm_ext::on_pushButton_export_clicked()
 void wgt_spkm_ext::on_pushButton_copy_clicked()
 {
 	copy();
+}
+
+void wgt_spkm_ext::on_pushButton_stop_clicked()
+{
+	robot.execute_stop_motor();
 }
 
 int wgt_spkm_ext::copy()
@@ -283,7 +289,25 @@ int wgt_spkm_ext::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_external(robot.desired_pos);
+			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_trapezoidal->isChecked()) {
+				motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+			}
+
+			else if (ui.radioButton_sync_polynomal->isChecked()) {
+				motion_variant = lib::epos::SYNC_POLYNOMAL;
+			}
+
+			else if (ui.radioButton_operational->isChecked()) {
+				motion_variant = lib::epos::OPERATIONAL;
+			}
+
+			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);

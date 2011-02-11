@@ -26,7 +26,8 @@ public:
 
 	void ui_notification(QString _string, QColor _color);
 	//void enable_menu_item(bool _active, QWidget *_menu_item);
-	void enable_menu_item(bool _active, ...);
+	void enable_menu_item(int num_of_menus, ...);
+	void disable_menu_item(int num_of_menus, ...);
 	void raise_process_control_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
 
@@ -120,6 +121,8 @@ private slots:
 	void on_actionspkm_Position_0_triggered();
 	void on_actionspkm_Position_1_triggered();
 	void on_actionspkm_Position_2_triggered();
+
+	void on_actionspkm_Clear_Fault_triggered();
 
 	// smb menu
 	void on_actionsmb_EDP_Load_triggered();

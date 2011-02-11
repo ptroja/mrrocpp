@@ -87,7 +87,7 @@ typedef uint32_t UNSIGNED32;
 
 /* EPOS will reset communication after 500ms of inactivity */
 
-/*! \brief try NTRY times to read one byte from EPOS, the give up */
+/*! \brief try NTRY times to read one byte from EPOS, then give up */
 #define NTRY      5
 
 /*! \brief wait TRYSLEEP usec between read() from EPOS, if no data available */
@@ -342,7 +342,7 @@ public:
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
-	INTEGER8 readOpMode();
+	operational_mode_t readOpMode();
 
 	/*! \brief read demanded position; 14.1.61 */
 	INTEGER32 readDemandPosition();
@@ -597,6 +597,21 @@ public:
 	/*! All device parameters will be restored with default values */
 	void Restore();
 
+	/*! \brief Read the Mininal Position Limit
+	 * If the desired or the actual position is lower then the negative position
+	 * limit a software position limit Error will be launched.
+	 */
+	INTEGER32 readMinimalPositionLimit();
+
+	/*! Write the Minimal Position Limit */
+	void writeMinimalPositionLimit(INTEGER32 val);
+
+    /*! Read the Maximal Position Limit */
+	INTEGER32 readMaximalPositionLimit();
+
+	/*! Write the Maximal Position Limit */
+	void writeMaximalPositionLimit(INTEGER32 val);
+
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
@@ -656,6 +671,15 @@ public:
 	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
+
+private:
+	//! Cached for parameters values
+	//! @note have to be at the bottom because some typedefs are defined above
+	operational_mode_t OpMode;
+	INTEGER16 PositionProfileType;
+	UNSIGNED32 PositionProfileVelocity;
+	UNSIGNED32 PositionProfileAcceleration;
+	UNSIGNED32 PositionProfileDeceleration;
 };
 
 } /* namespace epos */

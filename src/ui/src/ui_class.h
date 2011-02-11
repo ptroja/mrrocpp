@@ -95,8 +95,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr<lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr<lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;

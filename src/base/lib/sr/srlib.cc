@@ -22,8 +22,7 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "base/lib/sr/SimpleSender.h"
-#include "base/lib/sr/ThreadedSender.h"
+#include "base/lib/sr/Sender.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -39,28 +38,23 @@ namespace lib {
  ts.tv_sec = ts.tv_nsec = 0;
  }
  */
-sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name, bool _multi_thread)
+sr::sr(process_type_t process_type, const std::string & process_name, const std::string & sr_name)
+	: sender(sr_name)
 {
 	struct utsname sysinfo;
 	if (uname(&sysinfo) == -1) {
 		// TODO: throw
 		perror("uname");
 	}
-	strcpy(sr_message.host_name, sysinfo.nodename);
 
-
+	strncpy(sr_message.host_name, sysinfo.nodename, sizeof(sr_message.host_name));
+	sr_message.host_name[sizeof(sr_message.host_name)] = 0;
 
 	sr_message.process_type = process_type;
 	sr_message.message_type = NEW_MESSAGE;
 	strcpy(sr_message.process_name, process_name.c_str());
 	for (size_t i = 0; i < ERROR_TAB_SIZE; i++) {
 		error_tab[i] = 0;
-	}
-
-	if(_multi_thread) {
-		sender = boost::shared_ptr<lib::SenderBase> (new lib::ThreadedSender(sr_name));
-	} else {
-		sender = boost::shared_ptr<lib::SenderBase> (new lib::SimpleSender(sr_name));
 	}
 }
 
@@ -72,7 +66,7 @@ void sr::send_package(void)
 	}
 
 	sr_message.time = ((uint64_t) tv.tv_usec) * 1000 + ((uint64_t) tv.tv_sec) * 1000000000;
-	sender->send_package(sr_message);
+	sender.send_package(sr_message);
 }
 
 sr::~sr()

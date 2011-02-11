@@ -24,13 +24,12 @@ public:
 	{
 	}
 
-	bool step()
+	void operator()()
 	{
 		std::cout << "Writer: " << cnt << std::endl;
 		DoubleBuf.Set(cnt);
 		cnt += 1.0;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
-		return true;
 	}
 };
 

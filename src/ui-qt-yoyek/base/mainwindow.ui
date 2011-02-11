@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -68,6 +68,8 @@
      <addaction name="menuspkm_Pre_synchro_moves"/>
      <addaction name="menuspkm_Post_synchro_moves"/>
      <addaction name="menuspkm_Preset_positions"/>
+     <addaction name="separator"/>
+     <addaction name="actionspkm_Clear_Fault"/>
     </widget>
     <widget class="QMenu" name="menuSmb">
      <property name="title">
@@ -652,6 +654,11 @@
   <action name="actionsarkofag_Servo_Algorithm">
    <property name="text">
     <string>Servo Algorithm</string>
+   </property>
+  </action>
+  <action name="actionspkm_Clear_Fault">
+   <property name="text">
+    <string>Clear Fault</string>
    </property>
   </action>
  </widget>

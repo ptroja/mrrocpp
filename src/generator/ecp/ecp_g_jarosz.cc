@@ -15,9 +15,6 @@
 #include <cerrno>
 #include <unistd.h>
 #include <fstream>
-#if defined(__QNXNTO__)
-#include <sys/neutrino.h>
-#endif /* __QNXNTO__ */
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"

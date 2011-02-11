@@ -64,7 +64,7 @@ Ui::MainWindow * MainWindow::get_ui()
 //}
 
 
-void MainWindow::enable_menu_item(num_of_menus, ...)
+void MainWindow::enable_menu_item(int num_of_menus, ...)
 {
 	va_list menu_items;
 	QWidget *item;
@@ -80,7 +80,7 @@ void MainWindow::enable_menu_item(num_of_menus, ...)
 	va_end(menu_items);
 }
 
-void MainWindow::disable_menu_item(num_of_menus, ...)
+void MainWindow::disable_menu_item(int num_of_menus, ...)
 {
 	va_list menu_items;
 	QWidget *item;
@@ -534,6 +534,11 @@ void MainWindow::on_actionspkm_Position_1_triggered()
 void MainWindow::on_actionspkm_Position_2_triggered()
 {
 	interface.spkm->move_to_preset_position(2);
+}
+
+void MainWindow::on_actionspkm_Clear_Fault_triggered()
+{
+	interface.spkm->execute_clear_fault();
 }
 
 // smb menu

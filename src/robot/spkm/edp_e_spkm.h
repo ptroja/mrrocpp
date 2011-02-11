@@ -34,10 +34,14 @@ private:
 	boost::shared_ptr<epos::epos_base> gateway;
 
 	//! PKM axes
-	boost::shared_ptr<epos::epos> axis1, axis2, axis3, axis4, axis5, axis6;
+	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
 	//! Axes container
 	boost::array<epos::epos *, 3> axes;
+
+	static const double Vdefault[6];// = { 5000, 5000, 5000, 5000, 5000, 5000 };
+	static const double Adefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
+	static const double Ddefault[6]; // = { 2000, 2000, 2000, 2000, 2000, 2000 };
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;

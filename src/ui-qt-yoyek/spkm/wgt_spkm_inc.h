@@ -28,6 +28,8 @@ public:
 	wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent = 0);
 	~wgt_spkm_inc();
 
+	void synchro_depended_init();
+
 private:
 	Ui::wgt_spkm_incClass ui;
 	mrrocpp::ui::spkm::UiRobot& robot;
@@ -35,18 +37,27 @@ private:
 	int init();
 	int copy();
 
+	int synchro_depended_widgets_disable(bool _set_disabled);
+
 	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
 
 	QTimer *timer;
 
+signals:
+	void synchro_depended_init_signal();
+
 private slots:
+
+	void synchro_depended_init_slot();
+
 	void on_timer_slot();
 	void on_pushButton_read_clicked();
 	void on_pushButton_export_clicked();
 	void on_pushButton_import_clicked();
 	void on_pushButton_copy_clicked();
+	void on_pushButton_stop_clicked();
 
 	void on_pushButton_execute_clicked();
 	void on_pushButton_0l_clicked();

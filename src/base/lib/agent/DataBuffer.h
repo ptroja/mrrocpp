@@ -8,11 +8,6 @@
 
 #include "Agent.h"
 
-// forward declarations
-class DataBufferBase;
-class AndDataCondition;
-class OrDataCondition;
-
 template <class T>
 class DataBuffer : public DataBufferBase {
 	//! Agent needs an access to Store/Update methods
@@ -22,9 +17,6 @@ private:
 	//! current data
 	T data;
 
-	//! place for keeping new data after arrive
-	T new_data;
-
 	//! flag indicating that the new data has not been getted yet
 	bool fresh;
 
@@ -32,23 +24,13 @@ private:
 	 * Store data in the buffer
 	 * @param ia input archive
 	 */
-	void Store(xdr_iarchive<> & ia) {
- 		ia >> new_data;
- 		if (new_data_ready) {
+	void Store(xdr_iarchive<> & ia)
+	{
+ 		ia >> data;
+ 		if (fresh) {
  			std::cerr << "Warning: data overwrite at buffer '" << getName() << "'" << std::endl;
  		}
-		new_data_ready = true;
-	}
-
-	/**
-	 * Update data from the temporary to the current data buffer
-	 */
-	void Update(void) {
-		if(new_data_ready) {
-			data = new_data;
-			new_data_ready = false;
-			fresh = true;
-		}
+		fresh = true;
 	}
 
 public:
@@ -63,28 +45,25 @@ public:
 	 * Get data from the buffer
 	 * @return current data
 	 */
-	T Get() {
-		fresh = false;
+	T Get() const
+	{
 		return data;
 	}
 
 	/**
-	 * Get data from the buffer
-	 * @param item where the data will be stored
-	 * @return fresh flag indicatig if this data has been already "getted"
+	 * Set the data as used
 	 */
-	bool Get(T & item) {
-		bool fresh_flag = fresh;
-		item = data;
+	void markAsUsed()
+	{
 		fresh = false;
-		return fresh_flag;
 	}
 
 	/**
-	 * Check if data has ben already "getted"
+	 * Check if data has been already "getted"
 	 * @return fresh flag
 	 */
-	bool isFresh(void) const {
+	bool isFresh() const
+	{
 		return fresh;
 	}
 };

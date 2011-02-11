@@ -9,16 +9,17 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <unistd.h>
 #include <cstring>
 #include <csignal>
+#include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <unistd.h>
+#include <pthread.h>
+
+#include <boost/shared_ptr.hpp>
 
 #include "base/lib/messip/messip_dataport.h"
-
-#include <pthread.h>
-#include <cerrno>
 
 #include "base/lib/mis_fun.h"
 #include "base/edp/edp_effector.h"
@@ -31,13 +32,9 @@ namespace common {
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	robot_name(l_robot_name), config(_config), robot_test_mode(true)
 {
-
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), true);
-
-	sh_msg
-			= new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str(), false);
+			= (boost::shared_ptr<lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str());
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
 		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
@@ -50,8 +47,6 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 
 effector::~effector()
 {
-	delete msg;
-	delete sh_msg;
 }
 
 /*--------------------------------------------------------------------------*/

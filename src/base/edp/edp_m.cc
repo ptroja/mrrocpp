@@ -19,6 +19,14 @@
 #include <sys/neutrino.h>
 #endif /* __QNXNTO__ */
 
+#include <boost/exception/all.hpp>
+
+#include "config.h"
+
+#if defined(HAVE_MLOCKALL)
+#	include <sys/mman.h>
+#endif /* HAVE_MLOCKALL */
+
 #include "base/lib/configurator.h"
 
 #include "base/lib/typedefs.h"
@@ -48,7 +56,7 @@ void catch_signal(int sig)
 #ifdef __QNXNTO__
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
-			master->sh_msg->message("edp terminated");
+			master->msg->message("edp terminated");
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
@@ -95,6 +103,13 @@ int main(int argc, char *argv[])
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
 
+#if defined(HAVE_MLOCKALL)
+		// Try to lock memory to avoid swapping whlie executing in real-time
+		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
+			perror("mlockall()");
+		}
+#endif /* HAVE_MLOCKALL */
+
 		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->create_threads();
@@ -109,17 +124,13 @@ int main(int argc, char *argv[])
 		//	printf("end\n");
 	}
 
+	catch (boost::exception & e) {
+		std::cerr << diagnostic_information(e);
+	}
+
 	catch (System_error & fe) {
-		// Obsluga bledow systemowych
-		/*
-		 // Wystapil blad w komunikacji miedzyprocesowej, oczekiwanie na jawne
-		 // zabicie procesu przez operatora
-		 for (;;) {
-		 delay(100);
-		 //   printf("\a"); // Sygnal dzwiekowy
-		 }
-		 */
-	} // end: catch(System_error fe)
+		std::cerr << "EDP: System_error" << std::endl;
+	}
 
 	catch (std::exception & e) {
 		std::cerr << "EDP: " << e.what() << std::endl;
@@ -129,14 +140,5 @@ int main(int argc, char *argv[])
 		perror("Unidentified error in EDP");
 		// Komunikat o bledzie wysylamy do SR
 		edp::common::master->msg->message(lib::FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
-		/*
-		 // Wystapil niezidentyfikowany blad, oczekiwanie na jawne zabicie procesu
-		 // przez operatora
-
-		 for (;;) {
-		 delay(100);
-		 // printf("\a"); // Sygnal dzwiekowy
-		 }
-		 */
 	}
 }

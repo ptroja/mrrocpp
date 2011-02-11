@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
+
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -57,11 +59,8 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-
 class Interface
 {
-private:
-
 public:
 	void print_on_sr(char *buff, ...);
 
@@ -100,8 +99,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr<lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr<lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;
@@ -152,6 +151,8 @@ public:
 	 conveyor::UiRobot *conveyor;
 	 speaker::UiRobot *speaker;
 	 */
+
+	const int position_refresh_interval;
 
 	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
@@ -214,7 +215,6 @@ public:
 	// windows
 	MainWindow* mw;
 	wgt_process_control* wgt_pc;
-
 };
 
 }

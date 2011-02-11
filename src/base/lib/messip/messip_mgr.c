@@ -1155,8 +1155,8 @@ static int client_channel_connect(int sockfd, struct sockaddr_in *client_addr)
 		reply.ok = MESSIP_OK;
 		reply.pid = ch->pid;
 		reply.tid = ch->tid;
-		reply.sin_port = ch->sin_port;
-		reply.sin_addr = ch->sin_addr;
+		reply.sin_port = htons(ch->sin_port);
+		reply.sin_addr = htonl(ch->sin_addr);
 		reply.mgr_sockfd = ch->sockfd;
 
 		//assert(strlen(ch->sin_addr_str) < sizeof(reply.sin_addr_str));
@@ -1328,11 +1328,11 @@ thread_client_send_buffered_msg(void *arg)
 
 			/*--- Message to send ---*/
 			datasend.flag = MESSIP_FLAG_BUFFERED;
-			datasend.pid = bmsg->pid_from;
+			datasend.pid = htonl(bmsg->pid_from);
 			datasend.tid = bmsg->tid_from;
-			datasend.type = bmsg->type;
-			datasend.subtype = bmsg->subtype;
-			datasend.datalen = bmsg->datalen;
+			datasend.type = htonl(bmsg->type);
+			datasend.subtype = htonl(bmsg->subtype);
+			datasend.datalen = htonl(bmsg->datalen);
 			UNLOCK;
 
 			/*--- Send a message to the 'server' ---*/
@@ -1540,13 +1540,13 @@ static int client_buffered_send(int sockfd, struct sockaddr_in *client_addr)
 
 	/*--- Update internal queue, managed by the thread client_send_buffered_msg ---*/
 	bmsg = (buffered_msg_t *) malloc(sizeof(buffered_msg_t));
-	bmsg->type = msg.type;
-	bmsg->subtype = msg.subtype;
+	bmsg->type = ntohl(msg.type);
+	bmsg->subtype = ntohl(msg.subtype);
 	bmsg->pid_from = msg.pid_from;
 	bmsg->tid_from = msg.tid_from;
 	bmsg->pid_to = cnx->pid;
 	bmsg->tid_to = cnx->tid;
-	bmsg->datalen = msg.datalen;
+	bmsg->datalen = ntohl(msg.datalen);
 	bmsg->data = data;
 	if ((nb = ch->nb_msg_buffered) == 0)
 		ch->buffered_msg = (buffered_msg_t **) malloc(sizeof(buffered_msg_t *));
@@ -1636,11 +1636,11 @@ thread_client_trigger_proxy(void *arg)
 
 			/*--- Message to send ---*/
 			datasend.flag = MESSIP_FLAG_PROXY;
-			datasend.pid = -1; // Unknown
+			datasend.pid = htonl(-1); // Unknown
 			datasend.tid = -1; // Unknown
-			datasend.type = proxy->proxy_index;
-			datasend.subtype = 10000 + (int) (9999.0 * rand() / (RAND_MAX + 1.0));
-			datasend.datalen = proxy->nbytes;
+			datasend.type = htonl(proxy->proxy_index);
+			datasend.subtype = htonl(10000 + (int) (9999.0 * rand() / (RAND_MAX + 1.0)));
+			datasend.datalen = htonl(proxy->nbytes);
 			UNLOCK;
 
 			/*--- Send a message to the 'server' ---*/
@@ -2196,10 +2196,10 @@ static int notify_server_death_client(channel_t * ch, pid_t pid, pthread_t tid, 
 
 	/*--- Message to send ---*/
 	datasend.flag = code;
-	datasend.pid = pid;
+	datasend.pid = htonl(pid);
 	datasend.tid = tid;
-	datasend.type = -1;
-	datasend.subtype = -1;
+	datasend.type = htonl(-1);
+	datasend.subtype = htonl(-1);
 	datasend.datalen = 0;
 
 	/*--- Send a message to the 'server' ---*/

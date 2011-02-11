@@ -31,9 +31,7 @@ namespace common {
  */
 class manip_effector : public common::motor_driven_effector
 {
-
 protected:
-
 	/*!
 	 * \brief method that computes desired_motor_pos_new basing on the end-effector frame commanded by the ECP
 	 *
@@ -201,8 +199,8 @@ public:
 	 */
 	virtual void get_arm_position_get_arm_type_switch(lib::c_buffer &instruction);
 
-public:
-EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+};
 
 } // namespace common
 } // namespace edp

@@ -72,7 +72,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		boost::mutex::scoped_lock lock(effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (int i = 0; i < number_of_servos; i++) {
