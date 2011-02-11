@@ -24,9 +24,9 @@ protected:
 	virtual void set_kinematic_parameters(void);
 	//Checks whether given motor increments are valid.
 	//otor_position Motor position to be validated.
-	virtual void check_motor_position(const lib::MotorArray & motor_position);
+	virtual void check_motor_position(const lib::MotorArray & motor_position) const;
 	//Checks whether given internal coordinates are valid.
-	virtual void check_joints(const lib::JointArray & q);
+	virtual void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.

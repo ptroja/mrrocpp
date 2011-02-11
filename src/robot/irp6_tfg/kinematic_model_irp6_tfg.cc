@@ -25,7 +25,7 @@ kinematic_model_irp6_tfg::kinematic_model_irp6_tfg(void)
 {
 }
 
-void kinematic_model_irp6_tfg::check_motor_position(const lib::MotorArray & motor_position)
+void kinematic_model_irp6_tfg::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	if (motor_position[0] < lower_limit_axis)
 		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
@@ -34,7 +34,7 @@ void kinematic_model_irp6_tfg::check_motor_position(const lib::MotorArray & moto
 }//: check_motor_position
 
 
-void kinematic_model_irp6_tfg::check_joints(const lib::JointArray & q)
+void kinematic_model_irp6_tfg::check_joints(const lib::JointArray & q) const
 {
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);

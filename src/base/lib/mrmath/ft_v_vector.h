@@ -57,6 +57,7 @@ public:
 	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
+public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
@@ -77,6 +78,7 @@ public:
 	//! @author Sibi
 	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
 
+public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 

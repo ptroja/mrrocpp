@@ -12,6 +12,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <string>
 
+#include"base/lib/impconst.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace epos {
@@ -134,10 +136,9 @@ struct mp_to_ecp_cubic_trapezoidal_parameters
  */
 struct single_controller_epos_reply
 {
-	double current;
+	int16_t current;
 	double position;
 	bool motion_in_progress;
-	bool buffer_full;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -149,7 +150,6 @@ struct single_controller_epos_reply
 		ar & current;
 		ar & position;
 		ar & motion_in_progress;
-		ar & buffer_full;
 	}
 }__attribute__((__packed__));
 
@@ -251,7 +251,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
-	lib::frame_tab current_frame;
+	mrrocpp::lib::frame_tab current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 

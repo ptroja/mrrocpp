@@ -47,30 +47,30 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		unsigned int powerOn = 0;
 		unsigned int notInFaultState = 0;
 		BOOST_FOREACH(epos::epos * node, axes)
-					{
-						try {
-							// Check if in the FAULT state
-							if (node->checkEPOSstate() == 11) {
-								// Read number of errors
-								int errNum = node->readNumberOfErrors();
-								for (int i = 1; i <= errNum; ++i) {
-									// Get the detailed error
-									uint32_t errCode = node->readErrorHistory(i);
+		{
+			try {
+				// Check if in the FAULT state
+				if (node->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = node->readNumberOfErrors();
+					for (int i = 1; i <= errNum; ++i) {
+						// Get the detailed error
+						uint32_t errCode = node->readErrorHistory(i);
 
-									msg->message(epos::epos::ErrorCodeMessage(errCode));
-								}
-							} else {
-								notInFaultState++;
-							}
-							if (node->isReferenced()) {
-								// Do not break from this loop so this is a also a preliminary axis error check
-								referenced++;
-							}
-							powerOn++;
-						} catch (...) {
-							// Probably the axis is not powered on, do nothing.
-						}
+						msg->message(epos::epos::ErrorCodeMessage(errCode));
 					}
+				} else {
+					notInFaultState++;
+				}
+				if (node->isReferenced()) {
+					// Do not break from this loop so this is a also a preliminary axis error check
+					referenced++;
+				}
+				powerOn++;
+			} catch (...) {
+				// Probably the axis is not powered on, do nothing.
+			}
+		}
 		// Robot is synchronised if all axes are referenced
 		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
@@ -137,170 +137,146 @@ void effector::move_arm(const lib::c_buffer &instruction)
 {
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::spkm::CBUFFER_EPOS_MOTOR_COMMAND:
-			msg->message("move_arm CBUFFER_EPOS_MOTOR_COMMAND");
-
-			// Copy data directly from buffer to local data
-			for (int i = 0; i < number_of_servos; ++i) {
-				desired_motor_pos_new[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
-				std::cout << "MOTOR[ " << i << "]: "
-						<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i] << std::endl;
-			}
-
-			// Check desired joint values - instead of checking motors we need to check joints, because it is more robust. ;)
-			if (is_synchronised()) {
-				get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
-			}
-
-			// Execute command
-			for (std::size_t i = 0; i < axes.size(); ++i) {
-				if (is_synchronised()) {
-					std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
-					if (!robot_test_mode) {
-						axes[i]->writePositionProfileVelocity(Vdefault[i]);
-						axes[i]->writePositionProfileAcceleration(Adefault[i]);
-						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
-						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-					} else {
-						current_joints[i] = desired_motor_pos_new[i];
-						current_motor_pos[i] = desired_motor_pos_new[i];
+		case lib::spkm::POSE:
+			switch (ecp_edp_cbuffer.pose_specification) {
+				case lib::spkm::MOTOR:
+					// Copy data directly from buffer
+					for (int i = 0; i < number_of_servos; ++i) {
+						desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
+						std::cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << std::endl;
 					}
-				} else {
-					std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
-					if (!robot_test_mode) {
-						axes[i]->writePositionProfileVelocity(Vdefault[i]);
-						axes[i]->writePositionProfileAcceleration(Adefault[i]);
-						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
-						axes[i]->moveRelative(desired_motor_pos_new[i]);
-					} else {
-						current_motor_pos[i] += desired_motor_pos_new[i];
+
+					// Check desired joint values if they are absolute.
+					if (is_synchronised()) {
+						get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
 					}
-				}
-			}
-			break;
-#if 0
-		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND:
-			msg->message("move_arm CBUFFER_EPOS_JOINT_COMMAND");
 
-			//			std::cout << "CBUFFER_EPOS_JOINT_COMMAND: desired_position[2]: "
-			//					<< ecp_edp_cbuffer.epos_simple_command_structure.desired_position[2] << std::endl;
-
-			// Read variables from communication buffer.
-			for (int i = 0; i < number_of_servos; ++i) {
-				desired_joints[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
-			}
-
-			// Execute command
-			if (is_synchronised()) {
-				// Transform from joint to motors (and check motors/joints values).
-				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
-				for (std::size_t i = 0; i < axes.size(); ++i) {
-					std::cout << "JOINT: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
-					// Perform move.
-					if (!robot_test_mode) {
-						axes[i]->writePositionProfileVelocity(Vdefault[i]);
-						axes[i]->writePositionProfileAcceleration(Adefault[i]);
-						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
-						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-					} else {
-						current_joints[i] = desired_motor_pos_new[i];
-						current_motor_pos[i] = desired_motor_pos_new[i];
+					break;
+				case lib::spkm::JOINT:
+					// Copy data directly from buffer
+					for (int i = 0; i < number_of_servos; ++i) {
+						desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
+						std::cout << "JOINT[ " << i << "]: " << desired_joints[i] << std::endl;
 					}
-				}
-			} else {
-				for (std::size_t i = 0; i < axes.size(); ++i) {
-					std::cout << "JOINT: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
-					// Perform move.
-					if (!robot_test_mode) {
-						axes[i]->writePositionProfileVelocity(Vdefault[i]);
-						axes[i]->writePositionProfileAcceleration(Adefault[i]);
-						axes[i]->writePositionProfileDeceleration(Ddefault[i]);
-						axes[i]->moveRelative(desired_motor_pos_new[i]);
+
+					if (is_synchronised()) {
+						// Transform from joint to motors (and check motors/joints values).
+						get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 					} else {
-						current_joints[i] += desired_motor_pos_new[i];
-						current_motor_pos[i] += desired_motor_pos_new[i];
+						// Joint commands prior to synchronization are ignored
+						return;
 					}
-				}
-			}
-			break;
-#endif
-		case lib::spkm::CBUFFER_EPOS_EXTERNAL_COMMAND:
-			msg->message("move_arm CBUFFER_EPOS_EXTERNAL_COMMAND");
-			{
-				//lib::Homog_matrix tmp_frame(ecp_edp_cbuffer.desired_frame);
-				//std::cout << tmp_frame << std::endl;
-			}
-			break;
-		case lib::spkm::CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos::epos_cubic_command epos_cubic_command_structure;
-			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
-		}
-			break;
-		case lib::spkm::CBUFFER_EPOS_JOINT_COMMAND:
-		case lib::spkm::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
 
-			if (!is_synchronised()) {
-				std::cerr << "Robot is not synchronized for TRAPEZOIDAL profile motion" << std::endl;
-				return;
+					break;
+				case lib::spkm::FRAME:
+					// TODO: ecp_edp_cbuffer.joint_pos
+					return;
+
+					break;
 			}
 
-			// Read variables from communication buffer.
-			for (int i = 0; i < number_of_servos; ++i) {
-				desired_joints[i] = ecp_edp_cbuffer.epos_simple_command_structure.desired_position[i];
-			}
+			// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 
-			// Transform from joint to motors (and check motors/joints values).
-			get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
-
-			//ecp_edp_cbuffer.epos_trapezoidal_command_structure
-			Matrix <double, 3, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
-
-			for (int i = 0; i < 3; ++i) {
-				Delta[i] = desired_motor_pos_new[i] - desired_motor_pos_old[i];
-				std::cout << "new - old: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
-				Vmax[i] = Vdefault[i];
-				Amax[i] = Adefault[i];
-			}
-
-			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-			double t = ppm <3> (Delta.cwise().abs(), Vmax, Amax, Vnew, Anew, Dnew);
-
-			if (t > 0) {
-				std::cout <<
-					"Vnew:\n" << Vnew << std::endl <<
-					"Anew:\n" << Anew << std::endl <<
-					"Dnew:\n" << Dnew << std::endl <<
-					std::endl;
-
-					// Setup motion parameters
+			switch(ecp_edp_cbuffer.motion_variant) {
+				case lib::epos::NON_SYNC_TRAPEZOIDAL:
+					// Execute command
 					for (std::size_t i = 0; i < axes.size(); ++i) {
-						if(Delta[i] != 0) {
-							axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
-							axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-							axes[i]->writePositionProfileVelocity(Vnew[i]);
-							axes[i]->writePositionProfileAcceleration(Anew[i]);
-							axes[i]->writePositionProfileDeceleration(Dnew[i]);
-							axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
+						if (is_synchronised()) {
+							std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+							if (!robot_test_mode) {
+								axes[i]->writePositionProfileVelocity(Vdefault[i]);
+								axes[i]->writePositionProfileAcceleration(Adefault[i]);
+								axes[i]->writePositionProfileDeceleration(Ddefault[i]);
+								axes[i]->moveAbsolute(desired_motor_pos_new[i]);
+							} else {
+								current_joints[i] = desired_joints[i];
+								current_motor_pos[i] = desired_motor_pos_new[i];
+							}
+						} else {
+							std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << std::endl;
+							if (!robot_test_mode) {
+								axes[i]->writePositionProfileVelocity(Vdefault[i]);
+								axes[i]->writePositionProfileAcceleration(Adefault[i]);
+								axes[i]->writePositionProfileDeceleration(Ddefault[i]);
+								axes[i]->moveRelative(desired_motor_pos_new[i]);
+							} else {
+								current_joints[i] += desired_joints[i];
+								current_motor_pos[i] += desired_motor_pos_new[i];
+							}
 						}
 					}
+					break;
+				case lib::epos::SYNC_TRAPEZOIDAL: {
+					Matrix <double, 3, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
-					// Start motion
-					for (std::size_t i = 0; i < axes.size(); ++i) {
-						if(Delta[i] != 0) {
-							// switch to absolute positioning, cancel possible ongoing operation first!
-							axes[i]->writeControlword(0x3f);
+					for (int i = 0; i < 3; ++i) {
+						Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]);
+						std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
+						Vmax[i] = Vdefault[i];
+						Amax[i] = Adefault[i];
+					}
+
+					// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
+					double t = ppm <3> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+
+//					std::cerr <<
+//						"Delta:\n" << Delta << std::endl <<
+//						"Vmax:\n" << Vmax << std::endl <<
+//						"Amax:\n" << Amax << std::endl <<
+//						std::endl;
+
+					if (t > 0) {
+						std::cerr <<
+							"Vnew:\n" << Vnew << std::endl <<
+							"Anew:\n" << Anew << std::endl <<
+							"Dnew:\n" << Dnew << std::endl <<
+							std::endl;
+
+						if(!robot_test_mode) {
+							// Setup motion parameters
+							for (std::size_t i = 0; i < axes.size(); ++i) {
+								if(Delta[i] != 0) {
+									axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
+									axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
+									axes[i]->writePositionProfileVelocity(Vnew[i]);
+									axes[i]->writePositionProfileAcceleration(Anew[i]);
+									axes[i]->writePositionProfileDeceleration(Dnew[i]);
+									axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
+								}
+							}
+						}
+
+						// Start motion
+						for (std::size_t i = 0; i < axes.size(); ++i) {
+							if(Delta[i] != 0) {
+								if(is_synchronised()) {
+									// Absolute motion
+									if(!robot_test_mode) {
+										axes[i]->writeControlword(0x3f);
+									} else {
+										current_joints[i] = desired_joints[i];
+										current_motor_pos[i] = desired_motor_pos_new[i];
+									}
+								} else {
+									// Relative motion
+									if(!robot_test_mode) {
+										axes[i]->writeControlword(0x005f);
+									} else {
+										current_joints[i] += desired_joints[i];
+										current_motor_pos[i] += desired_motor_pos_new[i];
+									}
+								}
+							}
 						}
 					}
+				}
+					break;
+				default:
+					// TODO: throw non-fatal error - motion typy not supported
+					return;
 			}
-		}
 			break;
-		case lib::spkm::CBUFFER_EPOS_OPERATIONAL_COMMAND: {
-			lib::epos::epos_operational_command epos_operational_command_structure;
-			memcpy(&epos_operational_command_structure, &(ecp_edp_cbuffer.epos_operational_command_structure), sizeof(epos_operational_command_structure));
-
-		}
-			break;
-		case lib::spkm::CBUFFER_EPOS_BRAKE_COMMAND:
+		case lib::spkm::QUICKSTOP:
 			if (!robot_test_mode) {
 				// Execute command
 				BOOST_FOREACH(epos::epos * node, axes) {
@@ -309,7 +285,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 			}
 			break;
-		case lib::spkm::CBUFFER_EPOS_CLEAR_FAULT:
+		case lib::spkm::CLEAR_FAULT:
 			BOOST_FOREACH(epos::epos * node, axes) {
 
 				node->printEPOSstate();
@@ -335,7 +311,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 		default:
 			break;
+	}
 
+	for (int i = 0; i < 6; ++i) {
+		std::cout << "OLD     MOTOR[" << i << "]: " << desired_motor_pos_old[i] << std::endl;
+		std::cout << "CURRENT MOTOR[" << i << "]: " << current_motor_pos[i] << std::endl;
+		std::cout << "CURRENT JOINT[" << i << "]: " << current_joints[i] << std::endl;
 	}
 
 	// Hold the issued command
@@ -348,8 +329,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
-
-		msg->message("EDP get_arm_position");
 		switch (instruction.get_arm_type)
 		{
 			case lib::MOTOR:
@@ -359,13 +338,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
 						edp_ecp_rbuffer.epos_controller[i].current = 0;
 						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-						edp_ecp_rbuffer.epos_controller[i].buffer_full = false;
 					} else {
 						current_motor_pos[i] = axes[i]->readActualPosition();
 						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
 						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
 						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
-						//edp_ecp_rbuffer.epos_controller[i].buffer_full = ...
 					}
 				}
 				break;
@@ -373,9 +350,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				msg->message("EDP get_arm_position JOINT");
 
 				// Read actual values from hardware
-				if (robot_test_mode) {
-					// Value of the current_motor_pos already filled in the move_arm() method.
-				} else {
+				if (!robot_test_mode) {
 					for (std::size_t i = 0; i < axes.size(); ++i) {
 						current_motor_pos[i] = axes[i]->readActualPosition();
 					}
@@ -467,6 +442,14 @@ void effector::synchronise(void)
 	//	axisB->writeMinimalPositionLimit(-100000);
 	//	axisC->writeMinimalPositionLimit(-100000);
 
+	// Reset internal state of the motor positions
+	for(int i = 0; i < number_of_servos; ++i) {
+		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+	}
+
+	// Compute joints positions in the home position
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
 	controller_state_edp_buf.is_synchronised = true;
 }
 
@@ -480,8 +463,6 @@ void effector::create_threads()
 void effector::instruction_deserialization()
 {
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
-
-	std::cerr << "EDP: " << ecp_edp_cbuffer << std::endl;
 }
 
 void effector::reply_serialization(void)
@@ -505,4 +486,3 @@ effector* return_created_efector(lib::configurator &_config)
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-

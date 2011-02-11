@@ -712,8 +712,6 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
-
-
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */

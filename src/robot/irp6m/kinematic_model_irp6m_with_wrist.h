@@ -67,10 +67,10 @@ protected:
   virtual void set_kinematic_parameters(void);
 
   // Sprawdzenie ograniczen na polozenia katowe walow silnikow
-  virtual void check_motor_position(const lib::MotorArray & motor_position);
+  virtual void check_motor_position(const lib::MotorArray & motor_position) const;
 
   // Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-  virtual void check_joints(const lib::JointArray & q);
+  virtual void check_joints(const lib::JointArray & q) const;
 
 public:
   // Konstruktor.
