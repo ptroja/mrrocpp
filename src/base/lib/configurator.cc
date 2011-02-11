@@ -154,8 +154,7 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-
-	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
+	const std::string program_name = value <std::string> ("program_name", _section_name);
 	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
 
 	std::string rsh_spawn_node;
@@ -201,7 +200,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	std::string opendir_path(bin_path);
-	opendir_path += spawned_program_name;
+	opendir_path += program_name;
 
 	if (access(opendir_path.c_str(), R_OK) != 0) {
 		printf("spawned program absent: %s\n", opendir_path.c_str());
@@ -220,7 +219,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
 
 		// create new session for separation of signal delivery
 		if (setsid() == (pid_t) -1) {
