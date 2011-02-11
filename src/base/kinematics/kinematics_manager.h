@@ -58,7 +58,11 @@ public:
 	void set_kinematic_model(const unsigned int _desired_kinematic_model_nr);
 
 	//! Returns pointer to current kinematic model.
-	kinematic_model* get_current_kinematic_model(void);
+	inline
+	kinematic_model* get_current_kinematic_model(void)
+	{
+		return (kinematic_model*) (kinematic_models_list[current_kinematic_model_no]);
+	}
 
 	//! Returns number of given kinematic model.
 	int get_current_kinematic_model_no(void);

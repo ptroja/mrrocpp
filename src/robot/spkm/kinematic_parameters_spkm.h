@@ -28,7 +28,7 @@ namespace spkm {
 typedef Eigen::Matrix<double, 5, 1> Vector5d;
 
 //! Type used for representation of 3-dimensional homogeneous matrices (4x4 doubles).
-typedef Eigen::Transform<double, 3> Homog4d;
+typedef Eigen::Matrix<double, 4 , 4> Homog4d;
 
 /*!
  * @struct kinematic_parameters_spkm
@@ -68,8 +68,8 @@ public:
     //! Transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
 	Homog4d P_S_T;
 
-    //! Transformation from S (middle of the spherical wrist) to W (SW end-effector).
-    Homog4d S_W_T;
+    //! Transformation from W (SW end-effector) to S (middle of the spherical wrist).
+    static const Homog4d W_S_T;
 
 	//! Parameters describing the synchronization positions of first three parallel PM axes (A=0,B=1,C=2).
 	static const double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];

@@ -86,18 +86,17 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 	check_joints(local_current_joints);
 }
 
+
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T;
-	O_W_T.matrix() << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
-    std::cout <<"Required pose of the end-effector:\n" << O_W_T.matrix()<<std::endl;
-
+	O_W_T << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
+    std::cout <<"Required pose of the end-effector:\n" << O_W_T<<std::endl;
 
     // Compute the required O_S_T - pose of the spherical wrist middle (S) in global reference frame (O).
-	Homog4d  O_S_T_desired;
-	O_S_T_desired = O_W_T * params.S_W_T.inverse(Isometry);
-	std::cout <<"Required pose of the wrist:\n" << O_S_T_desired.matrix()<<std::endl;
+	Homog4d  O_S_T_desired = O_W_T * params.W_S_T;
+	std::cout <<"Required pose of the wrist center:\n" << O_S_T_desired<<std::endl;
 
 /*    [O_W_T(1:3,4)',zyz_euler_inverse(O_W_T)]
 
