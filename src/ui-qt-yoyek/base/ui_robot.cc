@@ -63,7 +63,7 @@ void UiRobot::connect_to_reader()
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 
-	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == NULL) {
+	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == lib::invalid_fd) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
 		} else {

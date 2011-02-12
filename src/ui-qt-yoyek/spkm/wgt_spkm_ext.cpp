@@ -47,9 +47,9 @@ int wgt_spkm_ext::init()
 			{
 				//ui.pushButton_execute->setDisabled(false);
 
-				robot.ui_ecp_robot->epos_external_reply_data_request_port->set_request();
+				robot.ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				robot.ui_ecp_robot->execute_motion();
-				robot.ui_ecp_robot->epos_external_reply_data_request_port->get();
+				robot.ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
 
 				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.radioButton_mip_0);
 				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.radioButton_mip_1);
@@ -58,7 +58,7 @@ int wgt_spkm_ext::init()
 				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.radioButton_mip_4);
 				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.radioButton_mip_5);
 
-				lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_external_reply_data_request_port->data;
+				lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 
 				lib::Homog_matrix tmp_frame(er.current_frame);
 				lib::Xyz_Angle_Axis_vector tmp_vector;
@@ -91,8 +91,7 @@ int wgt_spkm_ext::init()
 
 int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip)
 {
-
-	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_reply_data_request_port->data;
+	lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 
 	if (er.epos_controller[axis].motion_in_progress) {
