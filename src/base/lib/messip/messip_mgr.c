@@ -2176,7 +2176,7 @@ static int notify_server_death_client(channel_t * ch, pid_t pid, pthread_t tid, 
 		if (errno != ECONNREFUSED)
 			perror("connect()");
 		fprintf(stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n\tdead channel: %s\n", __FILE__, __LINE__,
-				inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port, strerror(errno),
+				inet_ntoa(sockaddr.sin_addr), ch->sin_port, strerror(errno),
 				ch->channel_name
 				);
 		if (close(sockfd) == -1)
