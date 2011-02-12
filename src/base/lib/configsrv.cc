@@ -17,22 +17,30 @@
 
 #include "base/lib/configsrv.h"
 
-// Konstruktor obiektu - konfiguratora.
-configsrv::configsrv(const std::string & _dir, const std::string & _ini_file) :
-	dir(_dir), ini_file(_ini_file)
+configsrv::configsrv(const std::string & _dir, const std::string & ini_file) :
+	dir(_dir)
 {
-	// Stworzenie sciezki do pliku.
-	file_location = dir;
-	file_location += ini_file;
+	// Path to config file
+	std::string file_location, common_file_location;
 
-	// Stworzenie sciezki do pliku.
+	// Build path to config file
 	common_file_location = dir;
 	common_file_location += "../configs/";
 	common_file_location += "common.ini";
 
 	// Read configuration
-	read_property_tree_from_file(file_pt, file_location);
 	read_property_tree_from_file(common_file_pt, common_file_location);
+
+	if(ini_file.length()) {
+		// Path to config file
+		std::string file_location;
+
+		// Build path to config file
+		file_location = dir;
+		file_location += ini_file;
+
+		read_property_tree_from_file(file_pt, file_location);
+	}
 }
 
 void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
@@ -51,9 +59,10 @@ void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, c
 	}
 }
 
-void configsrv::change_ini_file(const std::string & _ini_file)
+void configsrv::change_ini_file(const std::string & ini_file)
 {
-	ini_file = _ini_file;
+	// Path to config files
+	std::string file_location;
 
 	// Stworzenie sciezki do pliku.
 	file_location = dir;
@@ -61,7 +70,6 @@ void configsrv::change_ini_file(const std::string & _ini_file)
 
 	// Reload configuration
 	read_property_tree_from_file(file_pt, file_location);
-	read_property_tree_from_file(common_file_pt, common_file_location);
 }
 
 std::string configsrv::value(const std::string & pt_path) const
