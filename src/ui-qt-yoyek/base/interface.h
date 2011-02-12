@@ -69,7 +69,7 @@ public:
 
 	static Interface * get_instance();
 	MainWindow* get_main_window();
-	void print_on_sr(char *buff, ...);
+	void print_on_sr(const char *buff, ...);
 
 	busy_flag communication_flag;
 

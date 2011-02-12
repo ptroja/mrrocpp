@@ -297,7 +297,7 @@ void Interface::init()
 }
 
 //void Interface::print_on_sr(const std::string &text)
-void Interface::print_on_sr(char *buff, ...)
+void Interface::print_on_sr(const char *buff, ...)
 {
 	char text[256];
 	va_list arglist;
