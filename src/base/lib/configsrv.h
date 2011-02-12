@@ -30,7 +30,7 @@ public:
 	boost::property_tree::ptree common_file_pt, file_pt;
 
 	//! Constructor with a existing configuration file
-	configsrv(const std::string & _dir, const std::string & _ini_file);
+	configsrv(const std::string & _dir);
 
 	//! Get the config value at the path
 	std::string value(const std::string & path) const;

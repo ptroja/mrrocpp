@@ -17,7 +17,7 @@
 
 #include "base/lib/configsrv.h"
 
-configsrv::configsrv(const std::string & _dir, const std::string & ini_file) :
+configsrv::configsrv(const std::string & _dir) :
 	dir(_dir)
 {
 	// Path to config file
@@ -30,17 +30,6 @@ configsrv::configsrv(const std::string & _dir, const std::string & ini_file) :
 
 	// Read configuration
 	read_property_tree_from_file(common_file_pt, common_file_location);
-
-	if(ini_file.length()) {
-		// Path to config file
-		std::string file_location;
-
-		// Build path to config file
-		file_location = dir;
-		file_location += ini_file;
-
-		read_property_tree_from_file(file_pt, file_location);
-	}
 }
 
 void configsrv::read_property_tree_from_file(boost::property_tree::ptree & pt, const std::string & file)
