@@ -331,17 +331,14 @@ int Interface::MPup_int()
 
 				unsigned tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd =
-
-				messip::port_connect(mp.network_pulse_attach_point)) == NULL
-
-				)
-					if ((tmp++) < lib::CONNECT_RETRY)
+				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
+					if ((tmp++) < lib::CONNECT_RETRY) {
 						usleep(lib::CONNECT_DELAY);
-					else {
+					} else {
 						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;
 					}
+				}
 
 				teachingstate = ui::common::MP_RUNNING;
 
@@ -1100,7 +1097,11 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		messip::port_disconnect(mp.pulse_fd);
+		if(mp.pulse_fd != lib::invalid_fd) {
+			messip::port_disconnect(mp.pulse_fd);
+		} else {
+			std::cerr << "MP pulse not connected?" << std::endl;
+		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
