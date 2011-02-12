@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ -x /usr/bin/color ]; then
+		COLOR=/usr/bin/color;
+else
+		COLOR=true
+fi
+
 ./messip_mgr &
 MESSIP_PID=$!
 
@@ -11,23 +17,32 @@ PWD=`pwd`
 DEFAULT_CONFIG="../../configs/default_file.cfg"
 if [ ! -f ${DEFAULT_CONFIG} ]; then
 	echo "default config file ${DEFAULT_CONFIG} missing"
-	kill ${MESSIP_PID}
-	exit 1
+else
+	CONFIG=`cat ../../configs/default_file.cfg`
+	CONFIG_FILE="../../${CONFIG}"
+	if [ ! -f ${CONFIG_FILE} ]; then
+		echo "config file ${CONFIG_FILE} missing"
+		CONFIG=""
+	fi
 fi
-CONFIG=`cat ../../configs/default_file.cfg`
-CONFIG_FILE="../../${CONFIG}"
-if [ ! -f ${CONFIG_FILE} ]; then
-	echo "config file ${CONFIG_FILE} missing"
-	kill ${MESSIP_PID}
-	exit 1
+
+if [ ${CONFIG} ]; then
+	./configsrv ${PWD}/../ ../${CONFIG} &
+else
+	./configsrv ${PWD}/../ &
 fi
-./configsrv ${PWD}/../ ../${CONFIG} &
 CONFIGSRV_PID=$!
 
 sleep 0.5
 
-echo CONFIGSRV_PID=${CONFIGSRV_PID}
-echo MESSIP_PID=${MESSIP_PID}
+# debug: display PIDs
+#echo CONFIGSRV_PID=${CONFIGSRV_PID}
+#echo MESSIP_PID=${MESSIP_PID}
+
+#function quitSig() {
+#    echo "***BASH*** Received SIGINT, going down"
+#}
+#trap 'quitSig' INT
 
 case `uname -s` in
 		QNX)
@@ -39,11 +54,13 @@ case `uname -s` in
 				./ui-qt-yoyek;;
 esac
 
-function quitSig() {
-    echo "***BASH*** Received SIGINT, going down"
-}
-trap 'quitSig' INT
+echo "$(${COLOR} blue)Killing configsrv$(${COLOR} off)"
+if ! kill ${CONFIGSRV_PID}; then
+		echo "$(${COLOR} red) failed to kill configsrv$(${COLOR} off)"
+fi
+echo "$(${COLOR} blue)Killing messip_mgr$(${COLOR} off)"
+if ! kill ${MESSIP_PID}; then
+		echo "$(${COLOR} red) failed to kill messip_mgr$(${COLOR} off)"
+fi
 
-echo "***BASH*** UI exited"
-kill ${MESSIP_PID}
-kill ${CONFIGSRV_PID}
+echo "$(${COLOR} blue)***BASH*** UI exited$(${COLOR} off)"

@@ -23,7 +23,7 @@
 int
 main(int argc, char *argv[])
 {
-	configsrv config(argv[1], argv[2]);
+	configsrv config(argv[1], (argc > 2) ? argv[2] : "");
 
 	messip_channel_t *ch = messip::port_create(CONFIGSRV_CHANNEL_NAME);
 	assert(ch);
