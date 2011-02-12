@@ -40,11 +40,9 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-
 	ACTIVATE_MP_ROBOT(spkm);
 	ACTIVATE_MP_ROBOT(smb);
 	ACTIVATE_MP_ROBOT(shead);
-
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
@@ -54,7 +52,6 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 void swarmitfix::main_task_algorithm(void)
 {
-
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
@@ -112,7 +109,6 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("END");
 
 	send_end_motion_to_ecps(2, lib::smb::ROBOT_NAME.c_str(), lib::shead::ROBOT_NAME.c_str());
-
 }
 
 } // namespace task
