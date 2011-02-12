@@ -224,6 +224,11 @@ public:
 	typedef ECP_ROBOT_T robot_t;
 
 	/**
+	 * @brief Type of the specialized task class itself
+	 */
+	typedef _task<ECP_ROBOT_T> task_t;
+
+	/**
 	 * @brief Associated single robot object shared pointer
 	 */
 	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;

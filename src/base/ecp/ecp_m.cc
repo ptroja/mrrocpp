@@ -50,6 +50,8 @@ void catch_signal_in_ecp(int sig)
 
 int main(int argc, char *argv[])
 {
+	sleep(30);
+
 	try {
 
 		// liczba argumentow

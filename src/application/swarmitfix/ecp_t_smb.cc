@@ -10,14 +10,12 @@
 #include "robot/smb/ecp_r_smb.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_sleep.h"
-#include "ecp_g_epos.h"
 #include "ecp_g_smb.h"
 #include "ecp_t_smb.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_sleep.h"
 #include "ecp_mp_g_smb.h"
-#include "ecp_mp_g_epos.h"
 
 namespace mrrocpp {
 namespace ecp {

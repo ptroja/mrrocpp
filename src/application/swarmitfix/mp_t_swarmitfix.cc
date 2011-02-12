@@ -22,7 +22,7 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/epos/dp_epos.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
-#include "ecp_mp_g_epos.h"
+#include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead.h"
 #include "robot/spkm/mp_r_spkm.h"
@@ -105,7 +105,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	memcpy(tmp_string, &epos_params, sizeof(epos_params));
 
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
+	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
 	sr_ecp_msg->message("5");
 	run_extended_empty_gen_and_wait(1, 1, lib::spkm::ROBOT_NAME.c_str(), lib::spkm::ROBOT_NAME.c_str());
 
