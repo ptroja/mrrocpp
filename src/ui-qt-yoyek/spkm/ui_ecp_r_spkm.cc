@@ -34,7 +34,7 @@ namespace spkm {
 EcpRobot::EcpRobot(common::Interface& _interface) :
 	EcpRobotDataPort(_interface)
 {
-	the_robot = new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
+	the_robot = (boost::shared_ptr<robot_t>) new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 	assert(the_robot);
 }
