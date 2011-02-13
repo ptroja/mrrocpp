@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                              task/mp_t_haptic.cc
-//
-// MP task for two robot haptic device
-//
-// -------------------------------------------------------------------------
-
 #include <iostream>
 #include <string>
 #include <sstream>

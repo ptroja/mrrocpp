@@ -78,7 +78,7 @@ public:
 	 * @brief pure virtual method to create robots
 	 * it have to be reimplemented in inherited classes
 	 */
-	virtual void create_robots(void) =0;
+	virtual void create_robots(void) = 0;
 
 	/**
 	 * @brief Waits for stop pulse from UI and terminated all ECP's
