@@ -71,7 +71,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 	emit
 	enable_menu_item_signal(_menu_item, _enable);
 
-	va_start(menu_items, _num_of_menus);
+	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
@@ -88,7 +88,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 	emit
 	enable_menu_item_signal(_menu_item, _enable);
 
-	va_start(menu_items, _num_of_menus);
+	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");

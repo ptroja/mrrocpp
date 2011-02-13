@@ -24,21 +24,9 @@ class Interface;
 namespace spkm {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobotDataPort
+class EcpRobot : public common::_EcpRobotDataPort<ecp::spkm::robot>
 {
-
 public:
-
-	lib::single_thread_port <lib::epos::epos_simple_command> * epos_motor_command_data_port;
-	lib::single_thread_port <lib::epos::epos_simple_command> * epos_joint_command_data_port;
-	lib::single_thread_port <lib::epos::epos_simple_command> * epos_external_command_data_port;
-	lib::single_thread_port <bool> * epos_brake_command_data_port;
-	lib::single_thread_port <bool> * epos_clear_fault_data_port;
-
-	lib::single_thread_request_port <lib::epos::epos_reply> * epos_reply_data_request_port;
-	lib::single_thread_request_port <lib::epos::epos_reply> * epos_joint_reply_data_request_port;
-	lib::single_thread_request_port <lib::epos::epos_reply> * epos_external_reply_data_request_port;
-
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(common::Interface& _interface); // Konstruktor
 

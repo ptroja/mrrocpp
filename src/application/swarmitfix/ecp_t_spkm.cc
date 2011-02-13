@@ -10,13 +10,13 @@
 #include "robot/spkm/ecp_r_spkm.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_sleep.h"
-#include "ecp_g_epos.h"
+#include "ecp_g_spkm.h"
 #include "ecp_t_spkm.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_sleep.h"
 
-#include "ecp_mp_g_epos.h"
+#include "ecp_mp_g_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -25,8 +25,9 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	common::task::task(_config)
+	task_t(_config)
 {
+#if 0
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
@@ -37,13 +38,13 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	g_epos_trapezoidal = new common::generator::epos_trapezoidal(*this);
 	g_epos_operational = new common::generator::epos_operational(*this);
 	g_epos_brake = new common::generator::epos_brake(*this);
-
+#endif
 	sr_ecp_msg->message("ecp spkm loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
-
+#if 0
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
 		gt->Move();
@@ -91,8 +92,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		g_epos_brake->Move();
 
-	}
-
+#endif
 }
 
 }

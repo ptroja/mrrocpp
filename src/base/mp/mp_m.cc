@@ -90,7 +90,7 @@ int main(int argc, char *argv[], char **arge)
 
 	// zewnetrzne try
 	try {
-		// This block is where the configurator is supposed to live
+		// This block is from where the configurator is supposed to be accessible
 		boost::shared_ptr<lib::configurator> _config;
 
 		try {

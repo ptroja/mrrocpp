@@ -17,7 +17,7 @@
 
 #include "base/lib/configsrv.h"
 
-configsrv::configsrv(const std::string & _dir, const std::string & ini_file) :
+configsrv::configsrv(const std::string & _dir) :
 	dir(_dir)
 {
 	// Path to config file
