@@ -39,12 +39,17 @@ protected:
 	/**
 	 * @brief ECP task object type
 	 */
-	typedef common::task::_task<ECP_ROBOT_T> base_task_t;
+	typedef common::task::_task<ECP_ROBOT_T> task_t;
+
+	/**
+	 * @brief ECP generator itself object type
+	 */
+	typedef _generator<ECP_ROBOT_T> generator_t;
 
 	/**
 	 * @brief ECP task object reference
 	 */
-	base_task_t & ecp_t;
+	task_t & ecp_t;
 
 public:
 	/**

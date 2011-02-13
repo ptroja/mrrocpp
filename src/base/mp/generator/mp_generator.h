@@ -1,6 +1,3 @@
-#ifndef MP_GENERATOR_H_
-#define MP_GENERATOR_H_
-
 /*!
  * @file
  * @brief File contains mp base generator declaration
@@ -8,6 +5,9 @@
  *
  * @ingroup mp
  */
+
+#ifndef MP_GENERATOR_H_
+#define MP_GENERATOR_H_
 
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_generator.h"
@@ -31,7 +31,6 @@ namespace generator {
 class generator : public ecp_mp::generator::generator
 {
 private:
-
 	/**
 	 * @brief mp task object reference
 	 */
@@ -66,7 +65,6 @@ public:
 	 * @param _mp_task mp task object reference.
 	 */
 	generator(task::task& _mp_task);
-
 };
 
 /*!

@@ -46,9 +46,9 @@ protected:
 	double inv_d_7;
 
 	// Sprawdzenie ograniczen na polozenia katowe walow silnikow
-	void check_motor_position(const lib::MotorArray & motor_position);
+	void check_motor_position(const lib::MotorArray & motor_position) const;
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne
-	void check_joints(const lib::JointArray & q);
+	void check_joints(const lib::JointArray & q) const;
 
 	// Ustawienie parametrow kinematycznych.
 	void set_kinematic_parameters(void);

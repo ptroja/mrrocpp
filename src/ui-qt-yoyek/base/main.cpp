@@ -19,7 +19,7 @@ void catch_signal(int sig)
 	switch (sig)
 	{
 		case SIGINT:
-			interface->UI_close();
+			mrrocpp::ui::common::Interface::get_instance()->UI_close();
 			break;
 		case SIGALRM:
 			break;
@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	interface = new mrrocpp::ui::common::Interface();
-	interface->init();
+	mrrocpp::ui::common::Interface::get_instance()->init();
 
 	return a.exec();
 }

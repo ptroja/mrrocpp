@@ -7,9 +7,12 @@
  * @ingroup LIB
  */
 
-#include "pvt.hpp"
+#include <stdio.h>
+#include <iostream>
 
 #include <Eigen/Core>
+
+#include "pvt.hpp"
 
 // import most common Eigen types
 USING_PART_OF_NAMESPACE_EIGEN
@@ -17,16 +20,24 @@ USING_PART_OF_NAMESPACE_EIGEN
 int
 main(int argc, char *argv[])
 {
-	Matrix<double,1,1> Goal, Vmax, Amax, Vnew, Anew, Dnew;
+	Matrix<double,1,1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
-	Goal(0,0) = 2.0; // position delta
-	Vmax(0,0) = 1.0; // maximal velotivy
-	Amax(0,0) = 1.0; // maximal acceleration
+	Delta(0,0) = 100; // position delta
+	Vmax(0,0) = 2; // maximal velotivy
+	Amax(0,0) = 1; // maximal acceleration
 
-	const double t1 = pvt<1>(Goal, Vmax, Amax);
-	const double t2 = ppm<1>(Goal, Vmax, Amax, Vnew, Anew, Dnew);
+	//const double t1 = pvt<1>(Goal, Vmax, Amax);
+	const double t2 = ppm<1>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-	printf("pvt: %f\tppm: %f\n", t1, t2);
+	std::cerr <<
+		"Vnew:\n" << Vnew << std::endl <<
+		"Anew:\n" << Anew << std::endl <<
+		"Dnew:\n" << Dnew << std::endl <<
+		std::endl;
+
+	std::cerr << "ppm: " << t2 << std::endl;
+
+	//printf("pvt: %f\tppm: %f\n", t1, t2);
 
 	return 0;
 }

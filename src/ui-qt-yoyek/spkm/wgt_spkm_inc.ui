@@ -95,7 +95,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>0</string>
+      <string>A</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -120,10 +120,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -158,10 +158,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-1000000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>1000000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -199,7 +199,7 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-282000.000000000000000</double>
+      <double>-194500.000000000000000</double>
      </property>
      <property name="maximum">
       <double>11000.000000000000000</double>
@@ -256,7 +256,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
-      <string>1</string>
+      <string>B</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -281,10 +281,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -319,10 +319,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-1000000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>1000000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -335,7 +335,7 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-194500.000000000000000</double>
+      <double>-282000.000000000000000</double>
      </property>
      <property name="maximum">
       <double>11000.000000000000000</double>
@@ -392,7 +392,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_11">
      <property name="text">
-      <string>2</string>
+      <string>C</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -417,10 +417,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -455,10 +455,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-1000000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>1000000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -471,10 +471,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-172500.000000000000000</double>
+      <double>-174500.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>12500.000000000000000</double>
+      <double>10500.000000000000000</double>
      </property>
      <property name="singleStep">
       <double>1000.000000000000000</double>
@@ -528,7 +528,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label_12">
      <property name="text">
-      <string>3</string>
+      <string>1</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -553,10 +553,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -661,7 +661,7 @@
    <item row="5" column="0">
     <widget class="QLabel" name="label_13">
      <property name="text">
-      <string>4</string>
+      <string>2</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -686,10 +686,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -794,7 +794,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="label_14">
      <property name="text">
-      <string>5</string>
+      <string>3</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -819,10 +819,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>

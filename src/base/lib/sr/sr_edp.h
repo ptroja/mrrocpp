@@ -26,9 +26,9 @@ public:
 	 * @param sr_channel_name name of the SR communication channel
 	 * @param _multi_thread flag for selecting multi-threaded variant
 	 */
-	sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name, bool _multi_thread =	false);
+	sr_edp(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name);
 protected:
-	virtual void interpret(void);
+	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
 };
 
 } // namespace lib

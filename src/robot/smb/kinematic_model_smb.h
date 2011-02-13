@@ -36,13 +36,13 @@ protected:
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
 	 */
-	void check_motor_position(const lib::MotorArray & motor_position);
+	void check_motor_position(const lib::MotorArray & motor_position) const;
 
 	/**
 	 * @brief Checks whether given internal coordinates are valid.
 	 * @param q Joints to be validated.
 	 */
-	void check_joints(const lib::JointArray & q);
+	void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.
@@ -61,7 +61,6 @@ public:
 	 * @param[in] local_desired_joints Current joints settings.
 	 */
 	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
-
 };
 
 } // namespace smb

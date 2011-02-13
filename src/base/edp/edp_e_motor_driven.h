@@ -145,9 +145,9 @@ protected:
 	/*!
 	 * \brief mutex to handle data set and get of the motor and joint position
 	 *
-	 * It is also used for the frame in chil manip_effector_class
+	 * It is also used for the frame in child manip_effector_class
 	 */
-	boost::mutex edp_irp6s_effector_mutex;
+	boost::mutex effector_mutex;
 
 	/*!
 	 * \brief desired joints position
@@ -289,7 +289,7 @@ public:
 	 *
 	 * It is set by the specific robots.
 	 */
-	short number_of_servos;
+	unsigned short number_of_servos;
 
 	/*!
 	 * \brief pure virtual method of move arm to be implemented in specific robot.
@@ -478,6 +478,8 @@ public:
 
 	lib::c_buffer instruction;
 	lib::r_buffer reply;
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace common

@@ -31,14 +31,12 @@ void model::set_kinematic_parameters(void)
 	motor_to_intext_ratio = 2250;
 }
 
-void model::check_motor_position(const lib::MotorArray & motor_position)
+void model::check_motor_position(const lib::MotorArray & motor_position) const
 {
-	return;
 }
 
-void model::check_joints(const lib::JointArray & q)
+void model::check_joints(const lib::JointArray & q) const
 {
-	return;
 }
 
 void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)

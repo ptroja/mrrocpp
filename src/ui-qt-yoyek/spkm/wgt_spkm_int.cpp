@@ -17,6 +17,20 @@ wgt_spkm_int::wgt_spkm_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
+	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_joints_limits[0]);
+	ui.doubleSpinBox_des_p1->setMaximum(robot.kinematic_params.upper_joints_limits[1]);
+	ui.doubleSpinBox_des_p2->setMaximum(robot.kinematic_params.upper_joints_limits[2]);
+	ui.doubleSpinBox_des_p3->setMaximum(robot.kinematic_params.upper_joints_limits[3]);
+	ui.doubleSpinBox_des_p4->setMaximum(robot.kinematic_params.upper_joints_limits[4]);
+	ui.doubleSpinBox_des_p5->setMaximum(robot.kinematic_params.upper_joints_limits[5]);
+
+	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_joints_limits[0]);
+	ui.doubleSpinBox_des_p1->setMinimum(robot.kinematic_params.lower_joints_limits[1]);
+	ui.doubleSpinBox_des_p2->setMinimum(robot.kinematic_params.lower_joints_limits[2]);
+	ui.doubleSpinBox_des_p3->setMinimum(robot.kinematic_params.lower_joints_limits[3]);
+	ui.doubleSpinBox_des_p4->setMinimum(robot.kinematic_params.lower_joints_limits[4]);
+	ui.doubleSpinBox_des_p5->setMinimum(robot.kinematic_params.lower_joints_limits[5]);
+
 }
 
 void wgt_spkm_int::on_timer_slot()
@@ -49,9 +63,9 @@ int wgt_spkm_int::init()
 			{
 				//ui.pushButton_execute->setDisabled(false);
 
-				robot.ui_ecp_robot->epos_joint_reply_data_request_port->set_request();
+				robot.ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
 				robot.ui_ecp_robot->execute_motion();
-				robot.ui_ecp_robot->epos_joint_reply_data_request_port->get();
+				robot.ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
 
 				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
@@ -79,7 +93,7 @@ int wgt_spkm_int::init()
 int wgt_spkm_int::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-	lib::epos::epos_reply &er = robot.ui_ecp_robot->epos_joint_reply_data_request_port->data;
+	lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 
@@ -96,7 +110,7 @@ void wgt_spkm_int::on_pushButton_import_clicked()
 {
 	double val[robot.number_of_servos];
 
-	interface.mw->get_lineEdit_position(val, robot.number_of_servos);
+	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
 
 	ui.doubleSpinBox_des_p0->setValue(val[0]);
 	ui.doubleSpinBox_des_p1->setValue(val[1]);

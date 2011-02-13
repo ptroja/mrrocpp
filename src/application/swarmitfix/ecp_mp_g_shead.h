@@ -15,10 +15,9 @@ const std::string ECP_GEN_HEAD_DESOLDIFY = "ECP_GEN_HEAD_DESOLDIFY";
 const std::string ECP_GEN_VACUUM_ON = "ECP_GEN_VACUUM_ON";
 const std::string ECP_GEN_VACUUM_OFF = "ECP_GEN_VACUUM_OFF";
 
-}// namespace generator
-} // namespace common
+} // namespace generator
+} // namespace shead
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

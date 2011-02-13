@@ -1,7 +1,7 @@
 #ifndef ECP_MP_ROBOT_H_
 #define ECP_MP_ROBOT_H_
 
-#include "base/lib/com_buf.h"
+#include "base/lib/impconst.h"
 
 /*!
  * @file

@@ -12,6 +12,7 @@
 #include "base/kinematics/kinematics_manager.h"
 
 #include "base/lib/exception.h"
+
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -19,7 +20,7 @@ namespace kinematics {
 namespace common {
 
 kinematics_manager::kinematics_manager()
-	: current_kinematic_model_no(-1), current_kinematic_model(NULL)
+	: current_kinematic_model_no(-1)
 {
 }
 
@@ -34,12 +35,11 @@ kinematics_manager::~kinematics_manager(void)
 	}//: while
 }
 
-void kinematics_manager::set_kinematic_model(int _desired_kinematic_model_nr)
+void kinematics_manager::set_kinematic_model(unsigned int _desired_kinematic_model_nr)
 {
 	if (_desired_kinematic_model_nr >= kinematic_models_list.size())
 		throw NonFatal_error_2(INVALID_KINEMATIC_MODEL_NO);
 
-	current_kinematic_model = (kinematic_model*) (kinematic_models_list[_desired_kinematic_model_nr]);
 	current_kinematic_model_no = _desired_kinematic_model_nr;
 }
 
@@ -51,7 +51,7 @@ void kinematics_manager::add_kinematic_model(kinematic_model* _model)
 
 kinematic_model* kinematics_manager::get_current_kinematic_model(void)
 {
-	return current_kinematic_model;
+	return (kinematic_model*) (kinematic_models_list[current_kinematic_model_no]);
 }
 
 int kinematics_manager::get_current_kinematic_model_no(void)

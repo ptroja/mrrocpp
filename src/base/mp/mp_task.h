@@ -1,6 +1,3 @@
-#ifndef MP_TASK_H_
-#define MP_TASK_H_
-
 /*!
  * @file
  * @brief File contains mp base task declaration
@@ -9,12 +6,13 @@
  * @ingroup mp
  */
 
+#ifndef MP_TASK_H_
+#define MP_TASK_H_
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-
 #include "base/lib/messip/messip.h"
-
 
 namespace mrrocpp {
 namespace mp {

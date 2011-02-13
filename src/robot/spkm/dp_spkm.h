@@ -30,8 +30,6 @@ struct mp_to_ecp_parameters
 	epos::EPOS_GEN_PROFILE motion_type;
 	epos::mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[NUM_OF_SERVOS];
 	lib::frame_tab goal_frame;
-	double m;
-	double tau;
 	bool guarded_move_manipulator;
 };
 

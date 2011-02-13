@@ -18,7 +18,7 @@ namespace smb {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _config, _sr_ecp),
-			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
 			smb_multi_pin_locking_data_port(lib::smb::MULTI_PIN_LOCKING_DATA_PORT, port_manager),
@@ -31,7 +31,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 
 robot::robot(common::task::task_base& _ecp_object) :
 	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, lib::smb::EDP_SECTION, _ecp_object),
-			kinematics_manager(), epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
+			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
 			smb_multi_pin_locking_data_port(lib::smb::MULTI_PIN_LOCKING_DATA_PORT, port_manager),

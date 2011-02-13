@@ -12,10 +12,73 @@
 #define __TRANSFORMER_ERROR_H
 
 #include <stdint.h>
+#include <boost/exception/all.hpp>
+#include <boost/exception/diagnostic_information.hpp>
+//#include <exception>
 
 namespace mrrocpp {
 namespace lib {
 namespace exception {
+
+//! Description used for diagnostic information in case of system errors.
+const std::string SYSTEM_ERROR = "SYSTEM ERROR";
+
+//! Description used for diagnostic information in case of fatal errors.
+const std::string FATAL_ERROR = "FATAL ERROR";
+
+//! Description used for diagnostic information in case of non fatal errors.
+const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
+
+//! Number of motor that caused the exception.
+typedef boost::error_info <struct limit, std::string> mrrocpp_error_type;
+
+/*!
+ * \brief Base class for all system errors.
+ * \author tkornuta
+ */
+struct mrrocpp_system_error : virtual public std::exception, virtual public boost::exception
+{
+	virtual const char* what() const throw ()
+	{
+		return SYSTEM_ERROR.c_str();
+	}
+
+	~mrrocpp_system_error() throw ()
+	{
+	}
+};
+
+/*!
+ * \brief Base class for all fatal errors.
+ * \author tkornuta
+ */
+struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost::exception
+{
+	virtual const char* what() const throw ()
+	{
+		return FATAL_ERROR.c_str();
+	}
+
+	~mrrocpp_fatal_error() throw ()
+	{
+	}
+};
+
+/*!
+ * \brief Base class for all non fatal errors.
+ * \author tkornuta
+ */
+struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public boost::exception
+{
+	virtual const char* what() const throw ()
+	{
+		return NON_FATAL_ERROR.c_str();
+	}
+
+	~mrrocpp_non_fatal_error() throw ()
+	{
+	}
+};
 
 /**
  * System error (inter-process communication, filesystem, etc.)

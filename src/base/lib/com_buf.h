@@ -50,7 +50,7 @@ typedef messip_channel_t * fd_server_t;
  */
 enum MP_COMMAND
 {
-	INVALID_COMMAND, START_TASK, NEXT_POSE, END_MOTION, NEXT_STATE, STOP
+	START_TASK, NEXT_POSE, END_MOTION, NEXT_STATE, STOP
 };
 
 //------------------------------------------------------------------------------
@@ -86,7 +86,6 @@ enum ECP_POSE_SPECIFICATION
  */
 enum UI_TO_ECP_COMMAND
 {
-	INVALID_REPLY,
 	NEXT,
 	QUIT,
 	ANSWER_YES,
@@ -274,8 +273,6 @@ struct UI_reply
  */
 struct UI_ECP_message
 {
-
-
 	UI_TO_ECP_COMMAND command;
 
 	union
@@ -512,14 +509,14 @@ enum GRIPPER_STATE_ENUM
 //------------------------------------------------------------------------------
 enum INSTRUCTION_TYPE
 {
-	INVALID, SET, GET, SET_GET, SYNCHRO, QUERY
+	SET, GET, SET_GET, SYNCHRO, QUERY
 };
 
 //------------------------------------------------------------------------------
-enum ROBOT_MODEL_SPECIFICATION
+typedef enum _ROBOT_MODEL_SPECIFICATION
 {
-	INVALID_ROBOT_MODEL, TOOL_FRAME, ARM_KINEMATIC_MODEL, SERVO_ALGORITHM, FORCE_TOOL, FORCE_BIAS
-};
+	TOOL_FRAME, ARM_KINEMATIC_MODEL, SERVO_ALGORITHM, FORCE_TOOL, FORCE_BIAS
+} ROBOT_MODEL_SPECIFICATION;
 
 //------------------------------------------------------------------------------
 enum MOTION_TYPE
@@ -531,8 +528,7 @@ enum MOTION_TYPE
 enum INTERPOLATION_TYPE
 {
 	MIM, //! motor interpolated motion
-	TCIM
-//! task coordinates interpolated motion
+	TCIM //! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -599,7 +595,7 @@ _robot_model
 {
 	//! Constructor set default discriminant type
 	_robot_model() :
-		type(INVALID_ROBOT_MODEL)
+		type(ROBOT_MODEL_SPECIFICATION(-1))
 	{
 	}
 
@@ -714,8 +710,6 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
-
-
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */

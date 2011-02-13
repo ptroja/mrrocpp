@@ -63,9 +63,7 @@ void UiRobot::connect_to_reader()
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
 
-	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == NULL
-
-	) {
+	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == lib::invalid_fd) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
 		} else {
@@ -328,7 +326,11 @@ int UiRobot::reload_configuration()
 				state.edp.network_reader_attach_point
 						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+				if (!interface.config->exists("node_name", state.edp.section_name)) {
+					state.edp.node_name = "localhost";
+				} else {
+					state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+				}
 				break;
 			case 1:
 			case 2:

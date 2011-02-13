@@ -11,6 +11,7 @@
 #include <QtGui/QApplication>
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "interface.h"
 #include "ui_sr.h"
@@ -31,8 +32,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), all_ecp_msg(NULL), ui_msg(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
-			position_refresh_interval(200)
+	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED), position_refresh_interval(200)
 {
 
 	mw = new MainWindow(*this);
@@ -51,6 +51,17 @@ Interface::Interface() :
 	is_teaching_window_open = false;
 	mrrocpp_bin_to_root_path = "../../";
 
+}
+
+Interface * Interface::get_instance()
+{
+	static Interface *instance = new Interface();
+	return instance;
+}
+
+MainWindow* Interface::get_main_window()
+{
+	return mw;
 }
 
 int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
@@ -284,6 +295,19 @@ void Interface::init()
 
 }
 
+//void Interface::print_on_sr(const std::string &text)
+void Interface::print_on_sr(const char *buff, ...)
+{
+	char text[256];
+	va_list arglist;
+
+	va_start(arglist,buff);
+	vsprintf(text, buff, arglist);
+	va_end(arglist);
+
+	ui_msg->message(text);
+}
+
 int Interface::MPup_int()
 
 {
@@ -305,19 +329,16 @@ int Interface::MPup_int()
 
 			if (mp.pid > 0) {
 
-				short tmp = 0;
+				unsigned tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd =
-
-				messip::port_connect(mp.network_pulse_attach_point)) == NULL
-
-				)
-					if ((tmp++) < lib::CONNECT_RETRY)
+				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
+					if ((tmp++) < lib::CONNECT_RETRY) {
 						usleep(lib::CONNECT_DELAY);
-					else {
+					} else {
 						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;
 					}
+				}
 
 				teachingstate = ui::common::MP_RUNNING;
 
@@ -364,6 +385,7 @@ int Interface::manage_interface(void)
 	switch (all_edps)
 	{
 		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+			mw->enable_menu_item(false, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_ACTIVATED\n");
 			 block_widget( ABW_base_all_robots);
@@ -373,6 +395,10 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
+			print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
+			//mw->disable_menu_item(false, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
@@ -383,6 +409,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED:
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
 			/* TR
 			 //			printf("UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -394,6 +422,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
 			/* TR
 			 //			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
@@ -403,6 +433,7 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
+			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 			/* TR
 			 //				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 			 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
@@ -437,14 +468,16 @@ int Interface::manage_interface(void)
 	// wlasciwosci menu task_menu
 	switch (mp.state)
 	{
-
 		case common::UI_MP_NOT_PERMITED_TO_RUN:
+			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
 			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
 			 */
 			break;
 		case common::UI_MP_PERMITED_TO_RUN:
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
 			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
@@ -452,6 +485,8 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case common::UI_MP_WAITING_FOR_START_PULSE:
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Load);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
@@ -461,6 +496,7 @@ int Interface::manage_interface(void)
 			break;
 		case common::UI_MP_TASK_RUNNING:
 		case common::UI_MP_TASK_PAUSED:
+			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
 			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
@@ -538,18 +574,26 @@ void Interface::reload_whole_configuration()
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
 					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+
+			if (!config->exists("node_name", lib::MP_SECTION)) {
+				mp.node_name = "localhost";
+			} else {
+				mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			}
+
 			mp.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg == NULL) {
-			ui_msg = new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point.c_str(), false);
+			ui_msg
+					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (all_ecp_msg == NULL) {
-			all_ecp_msg = new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point.c_str(), false);
+			all_ecp_msg
+					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -576,12 +620,10 @@ void Interface::UI_close(void)
 void Interface::abort_threads()
 
 {
-#if defined(__QNXNTO__)
 	delete ui_sr_obj;
 	delete ui_ecp_obj;
 
 	delete meb_tid;
-#endif
 }
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
@@ -596,7 +638,6 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 
 int Interface::check_gns()
 {
-
 	return 1;
 }
 
@@ -1056,7 +1097,11 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		messip::port_disconnect(mp.pulse_fd);
+		if(mp.pulse_fd != lib::invalid_fd) {
+			messip::port_disconnect(mp.pulse_fd);
+		} else {
+			std::cerr << "MP pulse not connected?" << std::endl;
+		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");

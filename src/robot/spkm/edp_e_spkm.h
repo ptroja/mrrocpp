@@ -31,13 +31,22 @@ class effector : public common::manip_effector
 {
 private:
 	//! Access to the CAN gateway unit
-	boost::shared_ptr<epos::epos_base> gateway;
+	boost::shared_ptr<epos::epos_access> gateway;
 
 	//! PKM axes
-	boost::shared_ptr<epos::epos> axis1, axis2, axis3, axis4, axis5, axis6;
+	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
 	//! Axes container
 	boost::array<epos::epos *, 3> axes;
+
+	//! Default axis velocity
+	static const double Vdefault[6];
+
+	//! Default axis acceleration
+	static const double Adefault[6];
+
+	//! Default axis deceleration
+	static const double Ddefault[6];
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;

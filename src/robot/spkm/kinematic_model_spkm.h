@@ -20,7 +20,7 @@ namespace spkm {
 
 /*!
  *
- * @brief Class solving the problem of inverse kinematics for Exechon parallel kinematc machine with spherical wrist attached to its upper platform.
+ * @brief Class solving the problem of inverse kinematics for Exechon parallel kinematic machine with spherical wrist attached to its upper platform.
  *
  * @author tkornuta
  * @date Jan 05, 2010
@@ -30,7 +30,7 @@ namespace spkm {
 class kinematic_model_spkm : public common::kinematic_model
 {
 protected:
-	//! Kinematic parameters of both: parallel kinematic machine and spherical wrist attached to it.
+	//! Kinematic parameters of both: parallel kinematic machine (PM) and spherical wrist (SW) attached to it.
 	kinematic_parameters_spkm params;
 
 	//! Sets parameters used by given kinematics model - empty.
@@ -42,13 +42,13 @@ protected:
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
 	 */
-	void check_motor_position(const lib::MotorArray & motor_position);
+	void check_motor_position(const lib::MotorArray & motor_position) const;
 
 	/**
 	 * @brief Checks whether given internal coordinates are valid.
 	 * @param q Joints to be validated.
 	 */
-	void check_joints(const lib::JointArray & q);
+	void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.

@@ -18,6 +18,7 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include "epos_access.h"
 #include "epos.h"
 
 namespace mrrocpp {
@@ -27,11 +28,6 @@ namespace epos {
 /* ********************************************* */
 /*    definitions used only internal in c   */
 /* ********************************************* */
-
-/*! starting point for (slow!) homing movement. If the zero point is
- not off too far, this will speed things up enormously!
- */
-#define E_STARTPOS_HOMING -200000
 
 /* EPOS error codes (Communication Guide, 6.4)  */
 
@@ -73,29 +69,17 @@ namespace epos {
 #define E_BIT02        0x0004      ///< bit code: operation enable
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
-/* EPOS modes of operation, firmware spec 14.1.59 (p.133, tbl. 72) */
-#define E_HOMING      6 ///< EPOS operation mode: homing
-#define E_PROFVEL     3 ///< EPOS operation mode: profile velocity mode
-#define E_PROFPOS     1 ///< EPOS operation mode: profile position mode
-// the modes below should not be used by user, defined here only for
-// completeness
-#define E_POSMOD     -1 ///< EPOS operation mode: position mode
-#define E_VELMOD     -2 ///< EPOS operation mode: velocity mode
-#define E_CURRMOD    -3 ///< EPOS operation mode: current mode
-#define E_DIAGMOD    -4 ///< EPOS operation mode: diagnostics mode
-#define E_MASTERENCMOD -5 ///< EPOS operation mode:internal
-#define E_STEPDIRECMOD -6 ///< EPOS operation mode:internal
 
 /************************************************************/
 /*           implementation of functions are following      */
 /************************************************************/
 
-epos_base::epos_base() :
+epos_access::epos_access() :
 	device_opened(false)
 {
 }
 
-epos_base::~epos_base()
+epos_access::~epos_access()
 {
 }
 
@@ -103,9 +87,15 @@ epos_base::~epos_base()
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(epos_base & _device, uint8_t _nodeId) :
+epos::epos(epos_access & _device, uint8_t _nodeId) :
 	device(_device), nodeId(_nodeId)
 {
+	// Read the cached parameters
+	OpMode = readOpMode();
+	PositionProfileType = readPositionProfileType();
+	PositionProfileVelocity = readPositionProfileVelocity();
+	PositionProfileAcceleration = readPositionProfileAcceleration();
+	PositionProfileDeceleration = readPositionProfileDeceleration();
 }
 
 /* read EPOS status word */
@@ -486,7 +476,7 @@ void epos::reset()
 	do {
 		state = checkEPOSstate();
 
-		std::cerr << "state " << state << " timeout " << timeout << std::endl;
+		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
 
 		if(state == 6) { // Measure in progress...
 			continue;
@@ -691,18 +681,23 @@ void epos::printEPOScontrolword(WORD s)
 /* set mode of operation --- 14.1.59 */
 void epos::setOpMode(operational_mode_t m)
 {
-	WORD dw[2];
+	if(OpMode != m) {
+		WORD dw[2];
 
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	dw[0] = (int8_t) m;
+		dw[1] = 0x0000; // high WORD of DWORD is not used here
+		dw[0] = (int8_t) m;
 
-	WriteObject(0x6060, 0x00, dw);
+		WriteObject(0x6060, 0x00, dw);
+
+		OpMode = m;
+	}
 }
 
 /* read mode of operation --- 14.1.60 */
-INTEGER8 epos::readOpMode()
+epos::operational_mode_t epos::readOpMode()
 {
-	return ReadObjectValue<INTEGER8>(0x6061, 0x00);
+	INTEGER8 mode = ReadObjectValue<INTEGER8>(0x6061, 0x00);
+	return (operational_mode_t) mode;
 }
 
 /* read demand position; 14.1.61 */
@@ -731,17 +726,26 @@ void epos::writePositionWindow(UNSIGNED32 val)
 
 void epos::writePositionProfileVelocity(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6081, 0x00, val);
+	if(PositionProfileVelocity != val) {
+		WriteObjectValue(0x6081, 0x00, val);
+		PositionProfileVelocity = val;
+	}
 }
 
 void epos::writePositionProfileAcceleration(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6083, 0x00, val);
+	if(PositionProfileAcceleration != val) {
+		WriteObjectValue(0x6083, 0x00, val);
+		PositionProfileAcceleration = val;
+	}
 }
 
 void epos::writePositionProfileDeceleration(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6084, 0x00, val);
+	if(PositionProfileDeceleration != val) {
+		WriteObjectValue(0x6084, 0x00, val);
+		PositionProfileDeceleration = val;
+	}
 }
 
 void epos::writePositionProfileQuickStopDeceleration(UNSIGNED32 val)
@@ -756,7 +760,10 @@ void epos::writePositionProfileMaxVelocity(UNSIGNED32 val)
 
 void epos::writePositionProfileType(INTEGER16 type)
 {
-	WriteObjectValue(0x6086, 0x00, type);
+	if(PositionProfileType != type) {
+		WriteObjectValue(0x6086, 0x00, type);
+		PositionProfileType = type;
+	}
 }
 
 UNSIGNED32 epos::readPositionProfileVelocity()
@@ -1150,6 +1157,44 @@ void epos::writeHomingMethod(homing_method_t method) {
 	WriteObjectValue(0x6098, 0x00, val);
 }
 
+/*! Read the Minimal Position Limit */
+INTEGER32 epos::readMinimalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x01);
+}
+
+/*! Write the Minimal Position Limit */
+void epos::writeMinimalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x01, val);
+}
+
+/*! Read the Maximal Position Limit */
+INTEGER32 epos::readMaximalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x02);
+}
+
+/*! Write the Maximal Position Limit */
+void epos::writeMaximalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x02, val);
+}
+
+UNSIGNED32 epos::readActualBufferSize()
+{
+	return ReadObjectValue<UNSIGNED32> (0x60C4, 0x02);
+}
+
+void epos::clearPvtBuffer()
+{
+	// Clear input buffer (and all data records) access disabled
+	WriteObjectValue(0x60C4, 0x06, 0);
+
+	// Enable access to the input buffer for the drive functions
+	WriteObjectValue(0x60C4, 0x06, 1);
+}
+
 /*! read Error register */
 UNSIGNED8 epos::readErrorRegister() {
 	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
@@ -1162,7 +1207,7 @@ UNSIGNED8 epos::readNumberOfErrors() {
 
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
-	if(num < 1 && num > 5) {
+	if(num < 1 || num > 5) {
 		throw epos_error() << reason("Error History index out of range <1..5>");
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
@@ -1252,10 +1297,8 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 void epos::moveRelative(INTEGER32 steps)
 {
-	// check, if we are in Profile Position Mode
-	if (readOpMode() != OMD_PROFILE_POSITION_MODE) {
-		setOpMode(OMD_PROFILE_POSITION_MODE);
-	}
+	// set the Profile Position Mode
+	setOpMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position
 	// firmware 14.1.70
@@ -1268,17 +1311,8 @@ void epos::moveRelative(INTEGER32 steps)
 
 void epos::moveAbsolute(INTEGER32 steps)
 {
-#ifdef DEBUG
-	printf("-> %s(): will move to %ld (%#010lx)\n", __func__, steps, steps);
-#endif
-
-	// check, if we are in Profile Position Mode
-	if (readOpMode() != OMD_PROFILE_POSITION_MODE) {
-		setOpMode(OMD_PROFILE_POSITION_MODE);
-	}
-#ifdef DEBUG
-	printf("-> OpMode is (now) 'Profile Position Mode'. That's OK!\n");
-#endif
+	// set the Profile Position Mode
+	setOpMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
@@ -1516,7 +1550,7 @@ int epos::checkEPOSerror(DWORD E_error)
 }
 
 /* copied from EPOS Communication Guide, p.8 */
-WORD epos_base::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
 	WORD shifter, c;
 	WORD carry;

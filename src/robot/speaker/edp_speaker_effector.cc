@@ -340,7 +340,7 @@ void effector::main_loop(void)
 			// printf("ERROR w EDP 1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
 		}
@@ -352,7 +352,7 @@ void effector::main_loop(void)
 
 			// printf("ERROR w EDP 2\n");
 			establish_error(reply, nfe.error, OK);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error);
 			// powrot do stanu: WAIT
 			next_state = common::WAIT;
 		}
@@ -375,7 +375,7 @@ void effector::main_loop(void)
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
-			msg->message(lib::NON_FATAL_ERROR, nfe.error, 0);
+			msg->message(lib::NON_FATAL_ERROR, nfe.error);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = common::GET_INSTRUCTION;
