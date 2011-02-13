@@ -16,7 +16,6 @@
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
-#include "ecp_mp_t_swarmitfix.h"
 #include "mp_t_swarmitfix.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -55,7 +54,7 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::spkm::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::spkm::generator::ECP_GEN_POSE, (int) 0, "", 0, 1, lib::spkm::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::smb::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::shead::ROBOT_NAME.c_str());
 
