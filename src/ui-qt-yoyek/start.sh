@@ -39,10 +39,8 @@ sleep 0.5
 #echo CONFIGSRV_PID=${CONFIGSRV_PID}
 #echo MESSIP_PID=${MESSIP_PID}
 
-#function quitSig() {
-#    echo "***BASH*** Received SIGINT, going down"
-#}
-#trap 'quitSig' INT
+# Ignore Ctrl-C to make a clean shutdown after exit of the UI
+trap '' INT
 
 case `uname -s` in
 		QNX)
