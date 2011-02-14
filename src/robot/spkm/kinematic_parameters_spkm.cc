@@ -63,12 +63,17 @@ const double kinematic_parameters_spkm::pC = 0.05;
 // Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
 const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);
 
+// Initialization of transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
+const double tmp_pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+const Homog4d kinematic_parameters_spkm::P_S_T(tmp_pst);
+
 // Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
 // The W_S_T is the inversion of:
 // S_W_P = [0.0; 0; 0.0725];
 // S_W_R = [1, 0, 0; 0 1 0; 0, 0, 1]
-const double tmp_wst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725,1};
+const double tmp_wst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1};
 const Homog4d kinematic_parameters_spkm::W_S_T(tmp_wst);
+
 
 
 } // namespace spkm
