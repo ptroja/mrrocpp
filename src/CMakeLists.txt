@@ -162,7 +162,7 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
 	# Warning messages (GCC)
-	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 
 	# keep this flag until we fix alignment 'new' operator issue
 	add_definitions (-DEIGEN_DONT_ALIGN)
