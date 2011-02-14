@@ -121,10 +121,12 @@ elseif (UBUNTU32BIT)
 	endif(HAVE_LIBRT)
 
 	# (cross) compiling for 32 bit target
-	add_definitions ("-m32")
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 
-	# this command can be used with any flags, including warnings
-	add_definitions ("-Wall -Werror=return-type")
+	# Warning messages (GCC)
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 
 	# keep this flag in production code
 	add_definitions (-DEIGEN_DONT_ALIGN)
@@ -162,6 +164,7 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
 	# Warning messages (GCC)
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 
 	# keep this flag until we fix alignment 'new' operator issue
