@@ -274,7 +274,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					}
 						break;
 					default:
-						// TODO: throw non-fatal error - motion typy not supported
+						// TODO: throw non-fatal error - motion type not supported
 						return;
 				}
 				break;
