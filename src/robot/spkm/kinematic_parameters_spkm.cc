@@ -15,7 +15,7 @@ namespace kinematics {
 namespace spkm {
 
 // Initialization of parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
-const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.252, 0.251, 0.272, 0.0, 0.0, 0.0};
+const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2515, 0.272, 0.2515, 0.0, 0.0, 0.0};
 
 // Initialization of parameters related to conversion from motor positions to joints.
 // Parameters for conversion of linear DOF are:
@@ -27,7 +27,7 @@ const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_S
 
 // Initialization of upper motors limits vector.
 // Those values were computed on the base of "safe" joint limits.
-const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9721, 10801, 8641, 0, 0, 0 };
+const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 0, 0, 0 };
 
 // Initialization of lower motors limits vector.
 // The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
@@ -35,12 +35,12 @@ const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spk
 const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, 0, 0, 0 };
 
 // Initialization of upper joints vector.
-// Those are the "safe" limits, not related to sychronization sensors positions.
-const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.32, 0.30, 0, 0, 0 };
+// Those are the "safe" limits, not related to synchronization sensors positions.
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2795, 0.32, 0.2795, 0, 0, 0 };
 
 // Initialization of lower joints limits vector.
 // The lower values are related to positions of synchronization sensors.
-const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2493, 0.2480, 0.2696, 0, 0, 0 };
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2488, 0.2690, 0.2488, 0, 0, 0 };
 
 // Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 const double kinematic_parameters_spkm::dA = -0.05;
@@ -49,7 +49,7 @@ const double kinematic_parameters_spkm::dA = -0.05;
 const double kinematic_parameters_spkm::dB = 0.18;
 
 // Lower platform: Initialize the jb coordinate of P1C in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dC = 0.5;
+const double kinematic_parameters_spkm::dC = 0.05;
 
 // Upper platform: Initialize the j coordinate of P4A in P(ijk).
 const double kinematic_parameters_spkm::pA = -0.05;

@@ -92,11 +92,11 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T_desired;
 	O_W_T_desired << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
-    std::cout <<"Desired pose of the end-effector:\n" << O_W_T_desired<<std::endl;
+//    std::cout <<"Desired pose of the end-effector:\n" << O_W_T_desired<<std::endl;
 
     // Compute the required O_S_T - pose of the spherical wrist middle (S) in global reference frame (O).
 	Homog4d  O_S_T_desired = O_W_T_desired * params.W_S_T;
-	std::cout <<"Desired pose of the wrist center:\n" << O_S_T_desired<<std::endl;
+//	std::cout <<"Desired pose of the wrist center:\n" << O_S_T_desired<<std::endl;
 
     // Compute e basing only on translation O_S_P from O_S_T.
 	Vector5d e = PM_S_to_e(O_S_T_desired);
@@ -105,7 +105,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Vector3d PKM_joints = PM_inverse_from_e(e);
 
 	// Compute upper platform pose.
-	Homog4d O_P_T = PM_O_P_T_from_e(e);
+/*	Homog4d O_P_T = PM_O_P_T_from_e(e);
 	std::cout <<"Computed upper platform pose:\n" << O_P_T << std::endl;
 
 	// Compute the pose of wrist (S) on the base of upper platform pose.
@@ -117,15 +117,15 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	// Transformation from computed OST to desired OST.
 	Homog4d wrist_twist = O_S_T_desired.inverse()*O_S_T_computed;
 	std::cout <<"Twist:\n" << O_S_T_computed << std::endl;
-
+*/
 	// Compute the inverse transform of the spherical wrist basing on its "twist".
 	//thetas = SW_inverse(obj, S_S_prim_R);
 
 	// Fill joints array.
-	/*	local_desired_joints[0] = PKM_joints[0];
+	 local_desired_joints[0] = PKM_joints[0];
 	 local_desired_joints[1] = PKM_joints[1];
 	 local_desired_joints[2] = PKM_joints[2];
-	 local_desired_joints[3] = SW_joints[0];
+/*	 local_desired_joints[3] = SW_joints[0];
 	 local_desired_joints[4] = SW_joints[1];
 	 local_desired_joints[5] = SW_joints[2];*/
 }
@@ -137,7 +137,7 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	double y = O_S_T_(1,3);
 	double z = O_S_T_(2,3);
 
-	std::cout<<"PM_S_to_e: ["<<x<<", "<<y<<", "<<z<<"]\n";
+	std::cout<<"S= ["<<x<<", "<<y<<", "<<z<<"]\n";
 
 /*
             % Temporary variables used for computations of alpha.
@@ -170,7 +170,7 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	double c_alpha = (-x * sqrt(t0_sq - hx_sq) + z * params.P_S_P.x()) / (t0_sq);
 
 	// Compute sine and cosine of the beta angle.
-	double t6 = ((z * z + x * x - params.dB * x) * sqrt(t0_sq - hx_sq) + params.dB * z * params.P_S_P.x()) / (t0_sq);
+	double t6 = ((t0_sq - params.dB * x) * sqrt(t0_sq - hx_sq) + params.dB * z * params.P_S_P.x()) / (t0_sq);
 	double s_beta = -y / sqrt(t6 * t6 + y * y);
 	double c_beta = t6 / sqrt(t6 * t6 + y * y);
 
@@ -180,7 +180,8 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	// Return computed e vector.*/
 	Vector5d e;
 	e << s_alpha, c_alpha, s_beta, c_beta, h;
-	std::cout<<"e= ["<<e.inverse()<<"]\n";
+
+	std::cout<<"e= ["<<e.transpose()<<"]\n";
 
 	return e;
 }
@@ -207,7 +208,7 @@ Vector3d kinematic_model_spkm::PM_inverse_from_e(const Vector5d & e_)
 	Vector3d joints;
 	joints << qA, qB, qC;
 
-	std::cout<<"joints: "<<joints<<std::endl;
+	std::cout<<"joints= ["<<joints.transpose()<<"]\n";
 
 	return joints;
 }
