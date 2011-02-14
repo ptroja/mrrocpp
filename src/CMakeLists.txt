@@ -156,7 +156,10 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
 	# Alignment of Eigen data is still difficult to solve
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type -DEIGEN_DONT_ALIGN")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+
+	# keep this flag until we fix alignment 'new' operator issue
+	add_definitions (-DEIGEN_DONT_ALIGN)
 endif (QNXNTO)
 
 # configure a header file to pass some of the CMake settings
