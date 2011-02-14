@@ -98,17 +98,25 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileDeceleration = readProfileDeceleration();
 
 	// initialize MaxAcceleration to beyond the default limits
-	writeMaxAcceleration(4294967295UL);
-	writeMaxProfileVelocity(12000UL);
+	writeMaxAcceleration(25000UL);
+	writeMotorMaxSpeed(50000UL);
+	writeMaxProfileVelocity(50000UL);
+	writeGearRatioNumerator(0);
 
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 			ProfileVelocity << ", " <<
 			ProfileAcceleration << ", " <<
 			ProfileDeceleration << std::endl;
 
-	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax} " <<
+	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax,VmotorMax} " <<
 				readMaxProfileVelocity() << ", " <<
-				readMaxAcceleration() << std::endl;
+				readMaxAcceleration() << ", " <<
+				readMotorMaxSpeed() << std::endl;
+
+	std::cout << "Gear[" << (int) nodeId << "] " <<
+				readGearRatioNumerator() << "/" <<
+				readGearRatioDenominator() << " maximal speed " <<
+				readGearMaximalSpeed() << std::endl;
 }
 
 /* read EPOS status word */
@@ -1020,25 +1028,25 @@ void epos::writeMotorOutputCurrentLimit(UNSIGNED16 cur)
 }
 
 // Pole Pairs -> 8 BITS
-UNSIGNED8 epos::readMotorPolePair()
+UNSIGNED8 epos::readMotorPolePairNumber()
 {
 	return ReadObjectValue<UNSIGNED8>(0x6410, 0x03);
 }
 
-void epos::writeMotorPolePair(UNSIGNED8 cur)
+void epos::writeMotorPolePairNumber(UNSIGNED8 cur)
 {
 	WriteObjectValue(0x6410, 0x03, cur);
 }
 
 // Max Speed in current mode
-UNSIGNED32 epos::readMotorMaxSpeedCurrent()
+UNSIGNED32 epos::readMotorMaxSpeed()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6410, 0x04);
 }
 
-void epos::writeMotorMaxSpeedCurrent(UNSIGNED32 val)
+void epos::writeMotorMaxSpeed(UNSIGNED32 val)
 {
-	WriteObjectValue(0x2081, 0x00, val);
+	WriteObjectValue(0x6410, 0x04, val);
 }
 
 // Thermal time constant in winding
@@ -1350,6 +1358,36 @@ void epos::moveAbsolute(INTEGER32 steps)
 	// switch to absolute positioning, cancel possible ongoing operation first!
 	// see maxon application note: device programming 2.1
 	writeControlword(0x3f);
+}
+
+UNSIGNED32 epos::readGearRatioNumerator()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x01);
+}
+
+void epos::writeGearRatioNumerator(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x01, val);
+}
+
+UNSIGNED16 epos::readGearRatioDenominator()
+{
+	return ReadObjectValue<UNSIGNED16> (0x2230, 0x02);
+}
+
+void epos::writeGearRatioDenominator(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2230, 0x02, val);
+}
+
+UNSIGNED32 epos::readGearMaximalSpeed()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x03);
+}
+
+void epos::writeGearMaximalSpeed(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x03, val);
 }
 
 // monitor device status

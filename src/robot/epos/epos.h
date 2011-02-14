@@ -446,16 +446,16 @@ public:
 	void writeMotorOutputCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor pole pair number
-	UNSIGNED8 readMotorPolePair();
+	UNSIGNED8 readMotorPolePairNumber();
 
 	//! \brief write motor pole pair number
-	void writeMotorPolePair(UNSIGNED8 cur);
+	void writeMotorPolePairNumber(UNSIGNED8 cur);
 
 	//! \brief read motor max speed current
-	UNSIGNED32 readMotorMaxSpeedCurrent();
+	UNSIGNED32 readMotorMaxSpeed();
 
 	//! \brief write motor max speed current
-	void writeMotorMaxSpeedCurrent(UNSIGNED32 val);
+	void writeMotorMaxSpeed(UNSIGNED32 val);
 
 	//! \brief read motor thermal constant
 	UNSIGNED16 readMotorThermalConstant();
@@ -546,6 +546,26 @@ public:
 
 	/*! Write the Maximal Position Limit */
 	void writeMaximalPositionLimit(INTEGER32 val);
+
+	// Gear Configuration
+
+	//! read Gear Ratio Numerator
+	UNSIGNED32 readGearRatioNumerator();
+
+	//! write Gear Ratio Numerator
+	void writeGearRatioNumerator(UNSIGNED32 val);
+
+	//! read Gear Ratio Denominator
+	UNSIGNED16 readGearRatioDenominator();
+
+	//! write Gear Ratio Denominator
+	void writeGearRatioDenominator(UNSIGNED16 val);
+
+	//! read Gear Maximal Speed
+	UNSIGNED32 readGearMaximalSpeed();
+
+	//! write Gear Maximal Speed
+	void writeGearMaximalSpeed(UNSIGNED32 val);
 
 	/*!
 	 * Interpolated Profile Motion mode commands

@@ -24,9 +24,9 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-const uint32_t effector::Vdefault[6] = { 20000UL, 20000UL, 20000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[6] = { 4000UL, 4000UL, 4000UL, 2000UL, 2000UL, 2000UL };
-const uint32_t effector::Ddefault[6] = { 4000UL, 4000UL, 4000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
