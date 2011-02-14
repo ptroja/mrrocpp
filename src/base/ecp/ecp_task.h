@@ -201,7 +201,7 @@ public:
 	void set_ecp_reply(lib::ECP_REPLY ecp_r);
 };
 
-template<typename ECP_ROBOT_T = robot::ecp_robot>
+template<typename ECP_ROBOT_T>
 class _task : public task_base
 {
 public:
@@ -224,12 +224,17 @@ public:
 	typedef ECP_ROBOT_T robot_t;
 
 	/**
+	 * @brief Type of the specialized task class itself
+	 */
+	typedef _task<ECP_ROBOT_T> task_t;
+
+	/**
 	 * @brief Associated single robot object shared pointer
 	 */
 	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
 };
 
-typedef _task<> task;
+typedef _task<robot::ecp_robot> task;
 
 task_base* return_created_ecp_task(lib::configurator &_config);
 

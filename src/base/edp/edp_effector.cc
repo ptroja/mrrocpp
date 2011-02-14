@@ -68,9 +68,7 @@ bool effector::initialize_communication()
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 
-	server_attach =
-
-	messip::port_create(server_attach_point);
+	server_attach =	messip::port_create(server_attach_point);
 
 	if (server_attach == NULL) {
 		msg->message(lib::SYSTEM_ERROR, errno, "edp: resmg failed to attach");

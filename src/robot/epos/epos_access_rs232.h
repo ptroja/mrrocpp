@@ -12,13 +12,13 @@
 
 #include <termios.h> /* POSIX terminal control definitions */
 
-#include "epos.h"
+#include "epos_access.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-class epos_access_rs232 : public epos_base {
+class epos_access_rs232 : public epos_access {
 private:
 	//! device name of EPOS port
 	const std::string device;

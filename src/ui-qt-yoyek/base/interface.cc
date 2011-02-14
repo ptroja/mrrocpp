@@ -32,8 +32,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
-			position_refresh_interval(200)
+	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED), position_refresh_interval(200)
 {
 
 	mw = new MainWindow(*this);
@@ -297,13 +296,13 @@ void Interface::init()
 }
 
 //void Interface::print_on_sr(const std::string &text)
-void Interface::print_on_sr(char *buff, ...)
+void Interface::print_on_sr(const char *buff, ...)
 {
 	char text[256];
 	va_list arglist;
 
 	va_start(arglist,buff);
-	   vsprintf(text,buff,arglist);
+	vsprintf(text, buff, arglist);
 	va_end(arglist);
 
 	ui_msg->message(text);
@@ -332,17 +331,14 @@ int Interface::MPup_int()
 
 				unsigned tmp = 0;
 				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd =
-
-				messip::port_connect(mp.network_pulse_attach_point)) == NULL
-
-				)
-					if ((tmp++) < lib::CONNECT_RETRY)
+				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
+					if ((tmp++) < lib::CONNECT_RETRY) {
 						usleep(lib::CONNECT_DELAY);
-					else {
+					} else {
 						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
 						break;
 					}
+				}
 
 				teachingstate = ui::common::MP_RUNNING;
 
@@ -578,18 +574,26 @@ void Interface::reload_whole_configuration()
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
 					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+
+			if (!config->exists("node_name", lib::MP_SECTION)) {
+				mp.node_name = "localhost";
+			} else {
+				mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			}
+
 			mp.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg == NULL) {
-			ui_msg = (boost::shared_ptr<lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
+			ui_msg
+					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (all_ecp_msg == NULL) {
-			all_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
+			all_ecp_msg
+					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -1093,7 +1097,11 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		messip::port_disconnect(mp.pulse_fd);
+		if(mp.pulse_fd != lib::invalid_fd) {
+			messip::port_disconnect(mp.pulse_fd);
+		} else {
+			std::cerr << "MP pulse not connected?" << std::endl;
+		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");

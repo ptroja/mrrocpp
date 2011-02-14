@@ -10,6 +10,8 @@
 #include <csignal>
 #include <cstdlib>
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/ecp_mp/transmitter.h"
 
 #include "base/lib/configurator.h"
@@ -23,7 +25,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-common::task::task_base *ecp_t;
+boost::shared_ptr<common::task::task_base> ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {
@@ -32,9 +34,7 @@ void catch_signal_in_ecp(int sig)
 	{
 		// print info message
 		case SIGTERM:
-		case SIGHUP:
 			ecp_t->sr_ecp_msg->message("ecp terminated");
-			delete ecp_t;
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
@@ -62,16 +62,15 @@ int main(int argc, char *argv[])
 		// configuration read
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4], argv[5]);
 
-		ecp::common::ecp_t = ecp::common::task::return_created_ecp_task(*_config);
+		ecp::common::ecp_t = (boost::shared_ptr<ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 
 		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 3);
 
-		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
-		signal(SIGHUP, &(ecp::common::catch_signal_in_ecp));
-		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
-
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
+
+		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
+		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
 
 	} catch (ecp_mp::task::ECP_MP_main_error & e) {
 		if (e.error_class == lib::SYSTEM_ERROR)

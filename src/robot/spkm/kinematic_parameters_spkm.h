@@ -17,7 +17,6 @@
 
 #include "robot/spkm/dp_spkm.h"
 
-
 using namespace Eigen;
 
 namespace mrrocpp {

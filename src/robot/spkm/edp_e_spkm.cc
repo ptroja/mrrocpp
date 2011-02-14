@@ -13,7 +13,6 @@
 
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
-#include "robot/epos/epos_gen.h"
 
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
@@ -110,7 +109,7 @@ effector::effector(lib::configurator &_config) :
 
 	if (!robot_test_mode) {
 		// Create gateway object
-		gateway = (boost::shared_ptr <epos::epos_base>) new epos::epos_access_usb();
+		gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_usb();
 
 		// Connect to the gateway
 		gateway->open();
@@ -488,7 +487,7 @@ void effector::synchronise(void)
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()

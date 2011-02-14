@@ -155,14 +155,8 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
-	# for non-QNX target messip is the only messaging protocol
-	
-
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-    if(DEFINE_EIGEN_DONT_ALIGN)
-    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_ALIGN")
-    endif(DEFINE_EIGEN_DONT_ALIGN)
+	# Alignment of Eigen data is still difficult to solve
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type -DEIGEN_DONT_ALIGN")
 endif (QNXNTO)
 
 # configure a header file to pass some of the CMake settings

@@ -1,6 +1,3 @@
-#ifndef MP_ROBOT_H_
-#define MP_ROBOT_H_
-
 /*!
  * @file
  * @brief File contains mp base robot declaration
@@ -9,6 +6,8 @@
  * @ingroup mp
  */
 
+#ifndef MP_ROBOT_H_
+#define MP_ROBOT_H_
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
@@ -31,7 +30,6 @@ namespace robot {
  */
 class robot : public ecp_mp::robot
 {
-
 private:
 	/**
 	 * @brief nummber of servos (joints)
@@ -49,7 +47,6 @@ private:
 	lib::fd_client_t ECP_fd;
 
 protected:
-
 	/**
 	 * @brief mp taks object reference
 	 */
