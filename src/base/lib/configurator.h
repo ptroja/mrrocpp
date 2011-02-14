@@ -25,11 +25,9 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/thread/mutex.hpp>
 
-
 #include <boost/property_tree/exceptions.hpp>
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
-
 
 namespace mrrocpp {
 namespace lib {
@@ -52,16 +50,11 @@ private:
 	//! System info
 	struct utsname sysinfo;
 
-	//! Session name
-	const std::string session_name;
-
 	//! Mutex to protect exclusive access
 	mutable boost::mutex access_mutex;
 
-
 	//! Communication channel to the configuration server
 	messip_channel_t *ch;
-
 
 public:
 	/**
@@ -95,9 +88,8 @@ public:
 	 * @param _dir directory to the install folder
 	 * @param _ini_file configuration file name
 	 * @param _section_name configuration section name
-	 * @param _session_name session ID
 	 */
-			configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name);
+	configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name);
 
 	/**
 	 * Change configuration file
@@ -133,7 +125,7 @@ public:
 	 * @return network path
 	 */
 	std::string
-			return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
 
 	/**
 	 * Return network attach point
@@ -175,14 +167,13 @@ public:
 		query.key = pt_path;
 		query.flag = false;
 
-		messip::port_send(this->ch,
-				0, 0,
-				query, reply);
+		messip::port_send(this->ch, 0, 0, query, reply);
 
-		if(reply.flag) {
-			return boost::lexical_cast<Type>(reply.key);
+		if (reply.flag) {
+			return boost::lexical_cast <Type>(reply.key);
 		} else {
-			throw boost::property_tree::ptree_error("remote config query failed: probably missing key \"" + __section_name + "." + _key + "\" in config file. pt_path=\"" + pt_path + "\".");
+			throw boost::property_tree::ptree_error("remote config query failed: probably missing key \""
+					+ __section_name + "." + _key + "\" in config file. pt_path=\"" + pt_path + "\".");
 		}
 
 	}
@@ -228,10 +219,8 @@ public:
 		return exists(_key.c_str(), __section_name.c_str());
 	}
 
-
 	//! Destructor
 	~configurator();
-
 
 protected:
 	/**

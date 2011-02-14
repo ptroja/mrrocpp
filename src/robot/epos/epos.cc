@@ -93,9 +93,30 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	// Read the cached parameters
 	OpMode = readOpMode();
 	PositionProfileType = readPositionProfileType();
-	PositionProfileVelocity = readPositionProfileVelocity();
-	PositionProfileAcceleration = readPositionProfileAcceleration();
-	PositionProfileDeceleration = readPositionProfileDeceleration();
+	ProfileVelocity = readProfileVelocity();
+	ProfileAcceleration = readProfileAcceleration();
+	ProfileDeceleration = readProfileDeceleration();
+
+	// initialize MaxAcceleration to beyond the default limits
+	writeMaxAcceleration(25000UL);
+	writeMotorMaxSpeed(50000UL);
+	writeMaxProfileVelocity(50000UL);
+	writeGearRatioNumerator(0);
+
+	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
+			ProfileVelocity << ", " <<
+			ProfileAcceleration << ", " <<
+			ProfileDeceleration << std::endl;
+
+	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax,VmotorMax} " <<
+				readMaxProfileVelocity() << ", " <<
+				readMaxAcceleration() << ", " <<
+				readMotorMaxSpeed() << std::endl;
+
+	std::cout << "Gear[" << (int) nodeId << "] " <<
+				readGearRatioNumerator() << "/" <<
+				readGearRatioDenominator() << " maximal speed " <<
+				readGearMaximalSpeed() << std::endl;
 }
 
 /* read EPOS status word */
@@ -724,38 +745,49 @@ void epos::writePositionWindow(UNSIGNED32 val)
 	WriteObjectValue(0x6067, 0x00, val);
 }
 
-void epos::writePositionProfileVelocity(UNSIGNED32 val)
+void epos::writeProfileVelocity(UNSIGNED32 val)
 {
-	if(PositionProfileVelocity != val) {
+	if(ProfileVelocity != val) {
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
 		WriteObjectValue(0x6081, 0x00, val);
-		PositionProfileVelocity = val;
+		ProfileVelocity = val;
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << readProfileVelocity() << std::endl;
 	}
 }
 
-void epos::writePositionProfileAcceleration(UNSIGNED32 val)
+void epos::writeProfileAcceleration(UNSIGNED32 val)
 {
-	if(PositionProfileAcceleration != val) {
+	if(ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
-		PositionProfileAcceleration = val;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileAcceleration = val;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << readProfileAcceleration() << std::endl;
 	}
 }
 
-void epos::writePositionProfileDeceleration(UNSIGNED32 val)
+void epos::writeProfileDeceleration(UNSIGNED32 val)
 {
-	if(PositionProfileDeceleration != val) {
+	if(ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
-		PositionProfileDeceleration = val;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileDeceleration = val;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << readProfileDeceleration() << std::endl;
 	}
 }
 
-void epos::writePositionProfileQuickStopDeceleration(UNSIGNED32 val)
+void epos::writeQuickStopDeceleration(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6085, 0x00, val);
 }
 
-void epos::writePositionProfileMaxVelocity(UNSIGNED32 val)
+void epos::writeMaxProfileVelocity(UNSIGNED32 val)
 {
 	WriteObjectValue(0x607F, 0x00, val);
+}
+
+void epos::writeMaxAcceleration(UNSIGNED32 val)
+{
+	WriteObjectValue(0x60C5, 0x00, val);
 }
 
 void epos::writePositionProfileType(INTEGER16 type)
@@ -766,29 +798,34 @@ void epos::writePositionProfileType(INTEGER16 type)
 	}
 }
 
-UNSIGNED32 epos::readPositionProfileVelocity()
+UNSIGNED32 epos::readProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6081, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileAcceleration()
+UNSIGNED32 epos::readProfileAcceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6083, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileDeceleration()
+UNSIGNED32 epos::readProfileDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6084, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileQuickStopDeceleration()
+UNSIGNED32 epos::readQuickStopDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6085, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileMaxVelocity()
+UNSIGNED32 epos::readMaxProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x607F, 0x00);
+}
+
+UNSIGNED32 epos::readMaxAcceleration()
+{
+	return ReadObjectValue<UNSIGNED32>(0x60C5, 0x00);
 }
 
 INTEGER16 epos::readPositionProfileType()
@@ -991,25 +1028,25 @@ void epos::writeMotorOutputCurrentLimit(UNSIGNED16 cur)
 }
 
 // Pole Pairs -> 8 BITS
-UNSIGNED8 epos::readMotorPolePair()
+UNSIGNED8 epos::readMotorPolePairNumber()
 {
 	return ReadObjectValue<UNSIGNED8>(0x6410, 0x03);
 }
 
-void epos::writeMotorPolePair(UNSIGNED8 cur)
+void epos::writeMotorPolePairNumber(UNSIGNED8 cur)
 {
 	WriteObjectValue(0x6410, 0x03, cur);
 }
 
 // Max Speed in current mode
-UNSIGNED32 epos::readMotorMaxSpeedCurrent()
+UNSIGNED32 epos::readMotorMaxSpeed()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6410, 0x04);
 }
 
-void epos::writeMotorMaxSpeedCurrent(UNSIGNED32 val)
+void epos::writeMotorMaxSpeed(UNSIGNED32 val)
 {
-	WriteObjectValue(0x2081, 0x00, val);
+	WriteObjectValue(0x6410, 0x04, val);
 }
 
 // Thermal time constant in winding
@@ -1254,8 +1291,8 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	// Display current homing parameters
 	std::cout << "Max. Following Error: " << readMaxFollowingError() << std::endl;
 	std::cout << "Home Offset: " << readHomeOffset() << std::endl;
-	std::cout << "Max. Profile Velocity: " << readPositionProfileMaxVelocity() << std::endl;
-	std::cout << "Quick Stop Deceleration: " << readPositionProfileQuickStopDeceleration() << std::endl;
+	std::cout << "Max. Profile Velocity: " << readMaxProfileVelocity() << std::endl;
+	std::cout << "Quick Stop Deceleration: " << readQuickStopDeceleration() << std::endl;
 	std::cout << "Speed for Switch Search: " << readSpeedForSwitchSearch() << std::endl;
 	std::cout << "Speed for Zero Search: " << readSpeedForZeroSearch() << std::endl;
 	std::cout << "Homing Acceleration: " << readHomingAcceleration() << std::endl;
@@ -1321,6 +1358,36 @@ void epos::moveAbsolute(INTEGER32 steps)
 	// switch to absolute positioning, cancel possible ongoing operation first!
 	// see maxon application note: device programming 2.1
 	writeControlword(0x3f);
+}
+
+UNSIGNED32 epos::readGearRatioNumerator()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x01);
+}
+
+void epos::writeGearRatioNumerator(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x01, val);
+}
+
+UNSIGNED16 epos::readGearRatioDenominator()
+{
+	return ReadObjectValue<UNSIGNED16> (0x2230, 0x02);
+}
+
+void epos::writeGearRatioDenominator(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2230, 0x02, val);
+}
+
+UNSIGNED32 epos::readGearMaximalSpeed()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x03);
+}
+
+void epos::writeGearMaximalSpeed(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x03, val);
 }
 
 // monitor device status

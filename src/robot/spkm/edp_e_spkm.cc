@@ -24,9 +24,9 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-const double effector::Vdefault[6] = { 5000, 5000, 5000, 5000, 5000, 5000 };
-const double effector::Adefault[6] = { 2000, 2000, 2000, 2000, 2000, 2000 };
-const double effector::Ddefault[6] = { 2000, 2000, 2000, 2000, 2000, 2000 };
+const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -187,9 +187,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								std::cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
 										<< std::endl;
 								if (!robot_test_mode) {
-									axes[i]->writePositionProfileVelocity(Vdefault[i]);
-									axes[i]->writePositionProfileAcceleration(Adefault[i]);
-									axes[i]->writePositionProfileDeceleration(Ddefault[i]);
+									axes[i]->writeProfileVelocity(Vdefault[i]);
+									axes[i]->writeProfileAcceleration(Adefault[i]);
+									axes[i]->writeProfileDeceleration(Ddefault[i]);
 									axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 								} else {
 									current_joints[i] = desired_joints[i];
@@ -199,9 +199,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								std::cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
 										<< std::endl;
 								if (!robot_test_mode) {
-									axes[i]->writePositionProfileVelocity(Vdefault[i]);
-									axes[i]->writePositionProfileAcceleration(Adefault[i]);
-									axes[i]->writePositionProfileDeceleration(Ddefault[i]);
+									axes[i]->writeProfileVelocity(Vdefault[i]);
+									axes[i]->writeProfileAcceleration(Adefault[i]);
+									axes[i]->writeProfileDeceleration(Ddefault[i]);
 									axes[i]->moveRelative(desired_motor_pos_new[i]);
 								} else {
 									current_joints[i] += desired_joints[i];
@@ -240,9 +240,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									if (Delta[i] != 0) {
 										axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writePositionProfileVelocity(Vnew[i]);
-										axes[i]->writePositionProfileAcceleration(Anew[i]);
-										axes[i]->writePositionProfileDeceleration(Dnew[i]);
+										axes[i]->writeProfileVelocity(Vnew[i]);
+										axes[i]->writeProfileAcceleration(Anew[i]);
+										axes[i]->writeProfileDeceleration(Dnew[i]);
 										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
 									}
 								}
@@ -274,7 +274,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					}
 						break;
 					default:
-						// TODO: throw non-fatal error - motion typy not supported
+						// TODO: throw non-fatal error - motion type not supported
 						return;
 				}
 				break;
@@ -493,3 +493,4 @@ effector* return_created_efector(lib::configurator &_config)
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
+

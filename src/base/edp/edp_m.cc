@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	try {
 		// allow for empty session name for easier valgrind/tcheck_cl launching
 		if (argc < 5) {
-			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section <session_name> [rsp_attach_name]\n");
+			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path config_file edp_config_section [rsp_attach_name]\n");
 			exit(EXIT_FAILURE);
 		}
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 		signal(SIGINT, SIG_IGN);
 
 		// create configuration object
-		lib::configurator _config(argv[1], argv[2], argv[3], argv[4], (argc < 6) ? "" : argv[5]);
+		lib::configurator _config(argv[1], argv[2], argv[3], argv[4]);
 
 #if defined(HAVE_MLOCKALL)
 		// Try to lock memory to avoid swapping whlie executing in real-time
