@@ -40,13 +40,13 @@ private:
 	boost::array<epos::epos *, 3> axes;
 
 	//! Default axis velocity
-	static const double Vdefault[6];
+	static const uint32_t Vdefault[6];
 
 	//! Default axis acceleration
-	static const double Adefault[6];
+	static const uint32_t Adefault[6];
 
 	//! Default axis deceleration
-	static const double Ddefault[6];
+	static const uint32_t Ddefault[6];
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;

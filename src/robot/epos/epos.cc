@@ -93,9 +93,22 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	// Read the cached parameters
 	OpMode = readOpMode();
 	PositionProfileType = readPositionProfileType();
-	PositionProfileVelocity = readPositionProfileVelocity();
-	PositionProfileAcceleration = readPositionProfileAcceleration();
-	PositionProfileDeceleration = readPositionProfileDeceleration();
+	ProfileVelocity = readProfileVelocity();
+	ProfileAcceleration = readProfileAcceleration();
+	ProfileDeceleration = readProfileDeceleration();
+
+	// initialize MaxAcceleration to beyond the default limits
+	writeMaxAcceleration(4294967295UL);
+	writeMaxProfileVelocity(12000UL);
+
+	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
+			ProfileVelocity << ", " <<
+			ProfileAcceleration << ", " <<
+			ProfileDeceleration << std::endl;
+
+	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax} " <<
+				readMaxProfileVelocity() << ", " <<
+				readMaxAcceleration() << std::endl;
 }
 
 /* read EPOS status word */
@@ -724,38 +737,49 @@ void epos::writePositionWindow(UNSIGNED32 val)
 	WriteObjectValue(0x6067, 0x00, val);
 }
 
-void epos::writePositionProfileVelocity(UNSIGNED32 val)
+void epos::writeProfileVelocity(UNSIGNED32 val)
 {
-	if(PositionProfileVelocity != val) {
+	if(ProfileVelocity != val) {
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
 		WriteObjectValue(0x6081, 0x00, val);
-		PositionProfileVelocity = val;
+		ProfileVelocity = val;
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << readProfileVelocity() << std::endl;
 	}
 }
 
-void epos::writePositionProfileAcceleration(UNSIGNED32 val)
+void epos::writeProfileAcceleration(UNSIGNED32 val)
 {
-	if(PositionProfileAcceleration != val) {
+	if(ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
-		PositionProfileAcceleration = val;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileAcceleration = val;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << readProfileAcceleration() << std::endl;
 	}
 }
 
-void epos::writePositionProfileDeceleration(UNSIGNED32 val)
+void epos::writeProfileDeceleration(UNSIGNED32 val)
 {
-	if(PositionProfileDeceleration != val) {
+	if(ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
-		PositionProfileDeceleration = val;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileDeceleration = val;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << readProfileDeceleration() << std::endl;
 	}
 }
 
-void epos::writePositionProfileQuickStopDeceleration(UNSIGNED32 val)
+void epos::writeQuickStopDeceleration(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6085, 0x00, val);
 }
 
-void epos::writePositionProfileMaxVelocity(UNSIGNED32 val)
+void epos::writeMaxProfileVelocity(UNSIGNED32 val)
 {
 	WriteObjectValue(0x607F, 0x00, val);
+}
+
+void epos::writeMaxAcceleration(UNSIGNED32 val)
+{
+	WriteObjectValue(0x60C5, 0x00, val);
 }
 
 void epos::writePositionProfileType(INTEGER16 type)
@@ -766,29 +790,34 @@ void epos::writePositionProfileType(INTEGER16 type)
 	}
 }
 
-UNSIGNED32 epos::readPositionProfileVelocity()
+UNSIGNED32 epos::readProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6081, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileAcceleration()
+UNSIGNED32 epos::readProfileAcceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6083, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileDeceleration()
+UNSIGNED32 epos::readProfileDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6084, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileQuickStopDeceleration()
+UNSIGNED32 epos::readQuickStopDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6085, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileMaxVelocity()
+UNSIGNED32 epos::readMaxProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x607F, 0x00);
+}
+
+UNSIGNED32 epos::readMaxAcceleration()
+{
+	return ReadObjectValue<UNSIGNED32>(0x60C5, 0x00);
 }
 
 INTEGER16 epos::readPositionProfileType()
@@ -1254,8 +1283,8 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	// Display current homing parameters
 	std::cout << "Max. Following Error: " << readMaxFollowingError() << std::endl;
 	std::cout << "Home Offset: " << readHomeOffset() << std::endl;
-	std::cout << "Max. Profile Velocity: " << readPositionProfileMaxVelocity() << std::endl;
-	std::cout << "Quick Stop Deceleration: " << readPositionProfileQuickStopDeceleration() << std::endl;
+	std::cout << "Max. Profile Velocity: " << readMaxProfileVelocity() << std::endl;
+	std::cout << "Quick Stop Deceleration: " << readQuickStopDeceleration() << std::endl;
 	std::cout << "Speed for Switch Search: " << readSpeedForSwitchSearch() << std::endl;
 	std::cout << "Speed for Zero Search: " << readSpeedForZeroSearch() << std::endl;
 	std::cout << "Homing Acceleration: " << readHomingAcceleration() << std::endl;

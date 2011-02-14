@@ -290,20 +290,23 @@ public:
 
 	//		int writePositionSoftwareLimits(long val, long val2);
 
-	//! write position profile velocity
-	void writePositionProfileVelocity(UNSIGNED32 vel);
+	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
+	void writeProfileVelocity(UNSIGNED32 vel);
 
-	//! write position profile acceleration
-	void writePositionProfileAcceleration(UNSIGNED32 acc);
+	//! write acceleration ramp during a movement
+	void writeProfileAcceleration(UNSIGNED32 acc);
 
-	//! write position profile deceleration
-	void writePositionProfileDeceleration(UNSIGNED32 dec);
+	//! write deceleration ramp during a movement
+	void writeProfileDeceleration(UNSIGNED32 dec);
 
-	//! write position profile quick stop deceleration
-	void writePositionProfileQuickStopDeceleration(UNSIGNED32 qsdec);
+	//! write deceleration ramp during a Quickstop
+	void writeQuickStopDeceleration(UNSIGNED32 qsdec);
 
-	//! write position profile max velocity
-	void writePositionProfileMaxVelocity(UNSIGNED32 maxvel);
+	//! write maximal allowed speed
+	void writeMaxProfileVelocity(UNSIGNED32 maxvel);
+
+	//! write maximal allowed acceleration
+	void writeMaxAcceleration(UNSIGNED32 maxvel);
 
 	/*! \brief write position profile type
 	 *
@@ -311,20 +314,23 @@ public:
 	 */
 	void writePositionProfileType(INTEGER16 type);
 
-	//! \brief read position profile velocity
-	UNSIGNED32 readPositionProfileVelocity();
+	//! \brief read velocity normally attained at the end of the acceleration ramp during a profiled move
+	UNSIGNED32 readProfileVelocity();
 
-	//! \brief read position profile acceleration
-	UNSIGNED32 readPositionProfileAcceleration();
+	//! \brief read acceleration ramp during a movement
+	UNSIGNED32 readProfileAcceleration();
 
-	//! \brief read position profile deceleration
-	UNSIGNED32 readPositionProfileDeceleration();
+	//! \brief read deceleration ramp during a movement
+	UNSIGNED32 readProfileDeceleration();
 
-	//! \brief read position profile quick stop deceleration
-	UNSIGNED32 readPositionProfileQuickStopDeceleration();
+	//! \brief read deceleration ramp during a Quickstop
+	UNSIGNED32 readQuickStopDeceleration();
 
-	//! \brief read position profile max velocity
-	UNSIGNED32 readPositionProfileMaxVelocity();
+	//! \brief read maximal allowed speed
+	UNSIGNED32 readMaxProfileVelocity();
+
+	//! \brief read maximal allowed acceleration
+	UNSIGNED32 readMaxAcceleration();
 
 	//! \brief read position profile type
 	INTEGER16 readPositionProfileType();
@@ -616,9 +622,9 @@ private:
 	//! @note have to be at the bottom because some typedefs are defined above
 	operational_mode_t OpMode;
 	INTEGER16 PositionProfileType;
-	UNSIGNED32 PositionProfileVelocity;
-	UNSIGNED32 PositionProfileAcceleration;
-	UNSIGNED32 PositionProfileDeceleration;
+	UNSIGNED32 ProfileVelocity;
+	UNSIGNED32 ProfileAcceleration;
+	UNSIGNED32 ProfileDeceleration;
 };
 
 } /* namespace epos */
