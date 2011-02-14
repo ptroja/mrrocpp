@@ -90,26 +90,17 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
-	Homog4d O_W_T;
-	O_W_T << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
-    std::cout <<"Required pose of the end-effector:\n" << O_W_T<<std::endl;
+	Homog4d O_W_T_desired;
+	O_W_T_desired << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
+    std::cout <<"Desired pose of the end-effector:\n" << O_W_T_desired<<std::endl;
 
     // Compute the required O_S_T - pose of the spherical wrist middle (S) in global reference frame (O).
-	Homog4d  O_S_T_desired = O_W_T * params.W_S_T;
-	std::cout <<"Required pose of the wrist center:\n" << O_S_T_desired<<std::endl;
+	Homog4d  O_S_T_desired = O_W_T_desired * params.W_S_T;
+	std::cout <<"Desired pose of the wrist center:\n" << O_S_T_desired<<std::endl;
 
-/*    [O_W_T(1:3,4)',zyz_euler_inverse(O_W_T)]
-
-    O_S_T_prim = O_W_T*inv(obj.params.S_W_T);
-
-    disp('Required pose of the spherical wrist center');
-    [O_S_T_prim(1:3,4)',zyz_euler_inverse(O_S_T_prim)]
-    // Extract translation.
-    O_S_P = O_S_T_prim(1:3,4);
-
-    // Compute all possible solutions.
-    solutions(1,:) = obj.inverse_kinematics_for_deltas(O_S_P, 1, 1);
-
+    // Compute inverse kinematics of the PM.
+	PM_S_to_e(O_S_T_desired);
+/*
     // Transformation between the upper platform P and middle of the
     // spherical wrist S.
     //P_S_T = [[1,0,0; 0,1,0; 0,0,1], obj.params.P_S_P; 0,0,0,1];
@@ -181,10 +172,39 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	 local_desired_joints[5] = SW_joints[2];*/
 }
 
-Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
+Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 {
-/*	// Temporary variables used for computations of alpha..
-	double t0_sq = _O_S_P.x() * _O_S_P.x() + _O_S_P.z() * _O_S_P.z();
+	// Extract variables describing position of the middle of wrist
+	double x = O_S_T_(0 ,3);
+	double y = O_S_T_(1,3);
+	double z = O_S_T_(2,3);
+
+	std::cout<<"PM_S_to_e: ("<<x<<", "<<y<<", "<<z<<"),\n";
+
+/*
+            % Temporary variables used for computations of alpha.
+            t0_sq = O_S_P(1) * O_S_P(1) + O_S_P(3) * O_S_P(3);
+            hx_sq = obj.params.P_S_P(1) * obj.params.P_S_P(1);
+
+            % Compute sine and cosine of the alpha angle.
+            s_alpha = (delta_B1 * O_S_P(3) * sqrt(t0_sq - hx_sq) + obj.params.P_S_P(1) * O_S_P(1)) / (t0_sq);
+            c_alpha = (-delta_B1 * O_S_P(1) * sqrt(t0_sq - hx_sq) + obj.params.P_S_P(1) * O_S_P(3)) / (t0_sq);
+
+            % Compute sine and cosine of the beta angle.
+            t6 = (delta_B1 * (t0_sq - obj.params.dB * O_S_P(1)) * sqrt(t0_sq - hx_sq) + ...
+                + obj.params.dB * obj.params.P_S_P(1) * O_S_P(3)) / (t0_sq);
+
+            s_beta = -delta_B2 * O_S_P(2) / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2));
+            c_beta = delta_B2 * t6 / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2));
+
+            % Compute h.
+            h = delta_B2 * (O_S_P(2) * O_S_P(2) + delta_B1 * t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2)) - obj.params.P_S_P(3);
+
+ */
+
+
+	// Temporary variables used for computations of alpha.
+/*	double t0_sq = _O_S_P.x() * _O_S_P.x() + _O_S_P.z() * _O_S_P.z();
 	double hx_sq = params.S_P_P.x() * params.S_P_P.x();
 
 	// Compute sine and cosine of the alpha angle.
@@ -207,7 +227,7 @@ Vector5d kinematic_model_spkm::PKM_S_to_e(const Vector3d & _O_S_P)
 	return e;
 }
 
-Vector3d kinematic_model_spkm::PKM_inverse_from_e(const Vector5d & _e)
+Vector3d kinematic_model_spkm::PM_inverse_from_e(const Vector5d & e_)
 {
 /*	// "Retrieve" values from e.
 	double s_alpha = _e[0];
@@ -233,7 +253,7 @@ Vector3d kinematic_model_spkm::PKM_inverse_from_e(const Vector5d & _e)
 	return joints;
 }
 
-Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(const Vector5d & _e)
+Homog4d kinematic_model_spkm::PM_O_P_T_from_e(const Vector5d & e_)
 {
 	Matrix4d O_P_T;
 /*
@@ -266,7 +286,7 @@ Homog4d kinematic_model_spkm::PKM_O_P_T_from_e(const Vector5d & _e)
 	return Homog4d(O_P_T);
 }
 
-Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & _P_W_T)
+Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & P_W_T_)
 {
 	// TODO Inverse kinematics of the spherical wrist.
 
