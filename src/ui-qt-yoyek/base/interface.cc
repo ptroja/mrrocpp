@@ -864,15 +864,10 @@ int Interface::initiate_configuration()
 	bool wyjscie = false;
 
 	while (!wyjscie) {
-		time_t now = time(NULL);
-		char now_string[32];
-		strftime(now_string, 8, "_%H%M%S", localtime(&now));
-		session_name = now_string;
-
 		if (config) {
 			delete config;
 		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, lib::UI_SECTION, session_name);
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, lib::UI_SECTION);
 
 		std::string attach_point =
 				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);

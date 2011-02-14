@@ -120,15 +120,21 @@ elseif (UBUNTU32BIT)
 		set (COMPATIBILITY_LIBRARIES rt)
 	endif(HAVE_LIBRT)
 
-	# for non-QNX target messip is the only messaging protocol
-	
-	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=return-type")
+	# (cross) compiling for 32 bit target
+	add_definitions ("-m32")
+
+	# this command can be used with any flags, including warnings
+	add_definitions ("-Wall -Werror=return-type")
+
+	# keep this flag in production code
+	add_definitions (-DEIGEN_DONT_ALIGN)
+
+	# cross-compiling linker flags
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
-	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
+
+	# Tips for finding cross-libraries and headers
+	include_directories (${MRLIB}/include)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
@@ -155,8 +161,11 @@ else (QNXNTO) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
-	# Alignment of Eigen data is still difficult to solve
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type -DEIGEN_DONT_ALIGN")
+	# Warning messages (GCC)
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+
+	# keep this flag until we fix alignment 'new' operator issue
+	add_definitions (-DEIGEN_DONT_ALIGN)
 endif (QNXNTO)
 
 # configure a header file to pass some of the CMake settings
