@@ -8,6 +8,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <cmath>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -18,7 +19,6 @@
 #include "ecp_g_dung.h"
 
 #include "base/lib/mrmath/mrmath.h"
-#include "math.h"
 
 namespace mrrocpp {
 namespace ecp {

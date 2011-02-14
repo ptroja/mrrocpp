@@ -44,8 +44,8 @@ namespace mrrocpp {
 namespace lib {
 
 // Konstruktor obiektu - konfiguratora.
-configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name) :
-	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name), section_name(_section_name)
+configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name) :
+	node(_node), dir(_dir), ini_file(_ini_file), section_name(_section_name)
 {
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
@@ -98,18 +98,15 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
 		name = "/dev/";
 		name += value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL) {
 		name = "/net/";
 		name += value <std::string> ("node_name", _section_name);
 		name += "/dev/";
 		name += value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else if (_type == CONFIG_SERVER) {
 		name = value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else {
 		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
@@ -232,7 +229,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
 		if (setsid() == (pid_t) -1) {
