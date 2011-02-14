@@ -202,10 +202,8 @@ void task_base::ecp_wait_for_stop(void)
 	}
 
 	// Wyslanie odpowiedzi.
-
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-
-	{// by Y&W
+	{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
@@ -254,11 +252,8 @@ void task_base::ecp_wait_for_start(void)
 			break;
 	}
 
-	// if (Reply (caller, &ecp_reply, sizeof(lib::ECP_REPLY_PACKAGE)) == -1 ) {
-
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-
-	{// by Y&W
+	{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
@@ -311,8 +306,7 @@ void task_base::get_next_state(void)
 	}
 
 	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-
-	{// by Y&W{
+	{
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
@@ -334,13 +328,11 @@ void task_base::get_next_state(void)
 	}
 
 	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
-
 }
 
 // Oczekiwanie na polecenie od MP
 bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 {
-
 	while (caller < 0) {
 
 		caller = receive_mp_message(true);
@@ -358,7 +350,6 @@ bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 // Oczekiwanie na polecenie od MP
 bool task_base::mp_buffer_receive_and_send(void)
 {
-
 	//std::cerr << "ecp mp_buffer_receive_and_send 1" << std::endl;
 
 	int caller = -2;
@@ -401,7 +392,6 @@ bool task_base::mp_buffer_receive_and_send(void)
 // Receive of mp message
 bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
 {
-
 	bool returned_value = true;
 	bool ecp_stop = false;
 	switch (mp_command_type())
@@ -454,7 +444,6 @@ bool task_base::reply_to_mp(int &caller, bool &mp_pulse_received)
 // Receive of mp message
 int task_base::receive_mp_message(bool block)
 {
-
 	//std::cerr << "ecp receive_mp_message 1" << std::endl;
 
 	while (1) {

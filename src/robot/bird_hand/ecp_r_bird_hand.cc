@@ -14,21 +14,17 @@ namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _config, _sr_ecp),
-			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
 			bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
 			bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
-
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
 			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, lib::bird_hand::EDP_SECTION, _ecp_object),
-			kinematics_manager(),
 			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
 			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
 			bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
@@ -118,7 +114,6 @@ void robot::create_command()
 
 void robot::get_reply()
 {
-
 	// message deserialization
 	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
 

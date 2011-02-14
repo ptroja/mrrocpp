@@ -16,8 +16,7 @@ class configsrv
 {
 private:
 	const std::string dir;
-	std::string ini_file, mrrocpp_network_path;
-	std::string file_location, common_file_location;
+	std::string mrrocpp_network_path;
 
 	/**
 	 * Read property tree from configuration file
@@ -30,8 +29,8 @@ public:
 	//! Property trees of configuration files
 	boost::property_tree::ptree common_file_pt, file_pt;
 
-	//! Constructor
-	configsrv(const std::string & _dir, const std::string & _ini_file);
+	//! Constructor with a existing configuration file
+	configsrv(const std::string & _dir);
 
 	//! Get the config value at the path
 	std::string value(const std::string & path) const;

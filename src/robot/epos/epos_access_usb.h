@@ -8,15 +8,15 @@
 #ifndef EPOS_ACCESS_USB_H_
 #define EPOS_ACCESS_USB_H_
 
-#include "epos.h"
-
 #include <ftdi.h>
+
+#include "epos_access.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-class epos_access_usb : public epos_base {
+class epos_access_usb : public epos_access {
 private:
 	//! USB FTDI context
 	struct ftdi_context ftdic;

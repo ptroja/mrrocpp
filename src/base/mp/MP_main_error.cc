@@ -6,7 +6,6 @@
  * @ingroup mp
  */
 
-
 #include "base/mp/MP_main_error.h"
 
 namespace mrrocpp {

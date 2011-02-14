@@ -21,7 +21,7 @@ namespace ecp {
 namespace speaker {
 namespace generator {
 
-speaking::speaking(base_task_t & _ecp_task) :
+speaking::speaking(task_t & _ecp_task) :
 	base_generator_t(_ecp_task)
 {
 }

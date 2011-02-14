@@ -28,11 +28,11 @@ void model::set_kinematic_parameters(void)
 {
 }
 
-void model::check_motor_position(const lib::MotorArray & motor_position)
+void model::check_motor_position(const lib::MotorArray & motor_position) const
 {
 }
 
-void model::check_joints(const lib::JointArray & q)
+void model::check_joints(const lib::JointArray & q) const
 {
 }
 

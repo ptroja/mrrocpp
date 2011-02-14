@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
+    <width>805</width>
     <height>357</height>
    </rect>
   </property>
@@ -56,7 +56,7 @@
    <item row="0" column="3">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>current position</string>
+      <string>current position [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -69,7 +69,7 @@
    <item row="0" column="5" colspan="2">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>desired position</string>
+      <string>desired position [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -79,7 +79,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="7" colspan="3">
+   <item row="0" column="7" colspan="2">
     <widget class="QLabel" name="label_9">
      <property name="text">
       <string>incremental move</string>
@@ -209,6 +209,50 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="7">
+    <widget class="QPushButton" name="pushButton_0l">
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="8">
+    <widget class="QPushButton" name="pushButton_0r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
@@ -311,6 +355,31 @@
      </property>
      <property name="text">
       <string>&lt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="8">
+    <widget class="QPushButton" name="pushButton_1r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
      </property>
      <property name="iconSize">
       <size>
@@ -431,6 +500,31 @@
      </property>
     </widget>
    </item>
+   <item row="3" column="8">
+    <widget class="QPushButton" name="pushButton_2r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_12">
      <property name="text">
@@ -530,6 +624,31 @@
      </property>
      <property name="text">
       <string>&lt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="8">
+    <widget class="QPushButton" name="pushButton_3r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
      </property>
      <property name="iconSize">
       <size>
@@ -647,6 +766,31 @@
      </property>
     </widget>
    </item>
+   <item row="5" column="8">
+    <widget class="QPushButton" name="pushButton_4r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_14">
      <property name="text">
@@ -739,6 +883,50 @@
      </property>
     </widget>
    </item>
+   <item row="6" column="7">
+    <widget class="QPushButton" name="pushButton_5l">
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="8">
+    <widget class="QPushButton" name="pushButton_5r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="3">
     <widget class="QPushButton" name="pushButton_read">
      <property name="text">
@@ -753,7 +941,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="7" colspan="3">
+   <item row="7" column="7" colspan="2">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -790,202 +978,114 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="7" colspan="3">
+   <item row="8" column="7" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Step</string>
+      <string>Step [qc]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
-   <item row="6" column="7">
-    <widget class="QPushButton" name="pushButton_5l">
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
+   <item row="7" column="2">
+    <widget class="QPushButton" name="pushButton_stop">
      <property name="text">
-      <string>&lt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
+      <string>Stop</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="7">
-    <widget class="QPushButton" name="pushButton_0l">
-     <property name="maximumSize">
+   <item row="1" column="9" rowspan="5">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
       <size>
-       <width>20</width>
-       <height>16777215</height>
+       <width>185</width>
+       <height>160</height>
       </size>
      </property>
-     <property name="text">
-      <string>&lt;</string>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="9">
-    <widget class="QPushButton" name="pushButton_0r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="9">
-    <widget class="QPushButton" name="pushButton_1r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="9">
-    <widget class="QPushButton" name="pushButton_2r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="9">
-    <widget class="QPushButton" name="pushButton_3r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="9">
-    <widget class="QPushButton" name="pushButton_4r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="9">
-    <widget class="QPushButton" name="pushButton_5r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
+     <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>171</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>non sync trapezoidal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_sync_trapezoidal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>141</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sync trapezoidal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_sync_polynomal">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>131</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>sync polynomal</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="radioButton_operational">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>108</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>operational</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Motion Variant</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>

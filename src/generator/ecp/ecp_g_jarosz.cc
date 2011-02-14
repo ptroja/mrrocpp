@@ -48,7 +48,6 @@ linear::linear(common::task::task& _ecp_task) :
 linear::linear(common::task::task& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg) :
 	delta(_ecp_task)
 {
-
 	mp_communication_mode = mp_communication_mode_arg;
 
 	td = tr_des;
@@ -224,9 +223,7 @@ bool linear::next_step()
 
 	}// end:switch
 
-
 	return true;
-
 }
 
 // ####################################################################################################

@@ -199,6 +199,7 @@ public:
 	 * \brief Method to initiate communication.
 	 *
 	 * It opens the communication channels of EDP server.
+	 * TODO: this should be void and throw an exception in case of failure
 	 */
 	bool initialize_communication(void);
 

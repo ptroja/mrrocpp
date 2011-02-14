@@ -273,8 +273,6 @@ struct UI_reply
  */
 struct UI_ECP_message
 {
-
-
 	UI_TO_ECP_COMMAND command;
 
 	union
@@ -712,8 +710,6 @@ c_buffer_arm
 //------------------------------------------------------------------------------
 struct c_buffer
 {
-
-
 	/*! Type of the instruction. */
 	INSTRUCTION_TYPE instruction_type;
 	/*! Type of the SET instruction. */

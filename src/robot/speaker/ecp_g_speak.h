@@ -30,7 +30,7 @@ private:
 	
 public:
 	// konstruktor
-	speaking(base_task_t & _ecp_task);
+	speaking(task_t & _ecp_task);
 	
 	bool configure(const char* text);
 

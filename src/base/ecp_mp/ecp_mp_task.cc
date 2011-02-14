@@ -40,6 +40,8 @@ lib::sr_ecp* task::sr_ecp_msg = NULL;
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
+	std::cerr << "mp 3a1" << std::endl;
+
 	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	//	// Obiekt do komuniacji z SR
@@ -65,15 +67,16 @@ task::task(lib::configurator &_config) :
 			throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, e );
 		}
 	}
+	std::cerr << "mp 3a9" << std::endl;
 }
 
 task::~task()
 {
 	// Zabicie wszystkich procesow VSP
 	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m)
-	{
-		delete sensor_item.second;
-	}
+				{
+					delete sensor_item.second;
+				}
 }
 
 // --------------------------------------------------------------------------
@@ -113,13 +116,14 @@ uint8_t task::choose_option(const char* question, uint8_t nr_of_options_input)
 
 
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	return ui_to_ecp_rep.reply;
+	return ui_to_ecp_rep.reply; // by Y
 }
 // --------------------------------------------------------------------------
 
@@ -134,7 +138,9 @@ int task::input_integer(const char* question)
 	ecp_to_ui_msg.ecp_message = lib::INTEGER_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
+
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -156,6 +162,7 @@ double task::input_double(const char* question)
 	ecp_to_ui_msg.ecp_message = lib::DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
+
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
@@ -163,7 +170,7 @@ double task::input_double(const char* question)
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		throw ECP_MP_main_error(lib::SYSTEM_ERROR, 0);
 	}
-	return ui_to_ecp_rep.double_number;
+	return ui_to_ecp_rep.double_number; // by Y
 }
 // --------------------------------------------------------------------------
 
@@ -180,6 +187,7 @@ bool task::show_message(const char* message)
 
 
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -195,28 +203,28 @@ bool task::show_message(const char* message)
 void task::all_sensors_initiate_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-	{
-		if (sensor_item.second->base_period > 0) {
-			if (sensor_item.second->current_period == sensor_item.second->base_period) {
-				sensor_item.second->initiate_reading();
-			}
-			sensor_item.second->current_period--;
-		}
-	}
+				{
+					if (sensor_item.second->base_period > 0) {
+						if (sensor_item.second->current_period == sensor_item.second->base_period) {
+							sensor_item.second->initiate_reading();
+						}
+						sensor_item.second->current_period--;
+					}
+				}
 }
 
 void task::all_sensors_get_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-	{
-		// jesli wogole mamy robic pomiar
-		if (sensor_item.second->base_period > 0) {
-			if (sensor_item.second->current_period == 0) {
-				sensor_item.second->get_reading();
-				sensor_item.second->current_period = sensor_item.second->base_period;
-			}
-		}
-	}
+				{
+					// jesli wogole mamy robic pomiar
+					if (sensor_item.second->base_period > 0) {
+						if (sensor_item.second->current_period == 0) {
+							sensor_item.second->get_reading();
+							sensor_item.second->current_period = sensor_item.second->base_period;
+						}
+					}
+				}
 }
 
 bool task::str_cmp::operator()(char const *a, char const *b) const
@@ -224,58 +232,62 @@ bool task::str_cmp::operator()(char const *a, char const *b) const
 	return strcmp(a, b) < 0;
 }
 
-ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
+std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *) "coordinateType");
 	xmlChar * numOfPoses = xmlGetProp(actNode, (const xmlChar *) "numOfPoses");
-
+	std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect;
 	/*ecp_mp::common::trajectory_pose::trajectory_pose * actTrajectory =
 			new ecp_mp::common::trajectory_pose::trajectory_pose((char *) numOfPoses, (char *) stateID, (char *) coordinateType);*/
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-	//coordinateType wrzucic do
-	actTrajectory->arm_type =lib::returnProperPS((char *) coordinateType);
-	actTrajectory->pos_num = atoi((char *) numOfPoses);
 
-	double tmp[actTrajectory->pos_num*axes_num];
-	int num_v=0;
-	int num_a=0;
-	int num_c=0;
+	//coordinateType wrzucic do
+
+	//actTrajectory->pos_num = atoi((char *) numOfPoses);
+
+
+	double tmp[(atoi((char *) numOfPoses))*axes_num];
 	int num=0;
 
 	for (xmlNodePtr cchild_node = actNode->children; cchild_node != NULL; cchild_node = cchild_node->next) {
 		if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "Pose")) {
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
+				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+			actTrajectory->arm_type =lib::returnProperPS((char *) coordinateType);
 			for (xmlNodePtr ccchild_node = cchild_node->children; ccchild_node != NULL; ccchild_node
 					= ccchild_node->next) {
 				if (ccchild_node->type == XML_ELEMENT_NODE) {
 					if (!xmlStrcmp(ccchild_node->name, (const xmlChar *) "Velocity")) {
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
 						num =lib::setValuesInArray(tmp,(char *) xmlDataLine);
-						actTrajectory->v.insert(actTrajectory->v.begin()+num_v,tmp,tmp+num);
-						num_v+=num;
+						for (int i=0; i<num;i++){
+							actTrajectory->v.push_back(tmp[i]);
+						}
 						xmlFree(xmlDataLine);
 					} else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *) "Accelerations")) {
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
 						num=lib::setValuesInArray(tmp,(char *) xmlDataLine);
-						actTrajectory->a.insert(actTrajectory->a.begin()+num_a,tmp,tmp+num);
-						num_a+=num;
+						for (int i=0; i<num;i++){
+							actTrajectory->a.push_back(tmp[i]);
+						}
 						xmlFree(xmlDataLine);
 					} else if (!xmlStrcmp(ccchild_node->name, (const xmlChar *) "Coordinates")) {
 						xmlChar *xmlDataLine = xmlNodeGetContent(ccchild_node);
 						num = lib::setValuesInArray(tmp,(char *) xmlDataLine);
-						actTrajectory->coordinates.insert(actTrajectory->coordinates.begin()+num_c,tmp,tmp+num);
-						num_c+=num;
+						for (int i=0; i<num;i++){
+							actTrajectory->coordinates.push_back(tmp[i]);
+						}
 						xmlFree(xmlDataLine);
 					}
 				}
 			}
+			trj_vect.push_back(actTrajectory);
 		}
 
 	}
 	xmlFree(coordinateType);
 	xmlFree(numOfPoses);
 
-	return actTrajectory;
+	return trj_vect;
 }
 
 task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num)
@@ -323,12 +335,11 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 							if (child_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 									&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
-								ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory;
-								actTrajectory = createTrajectory2(child_node, stateID, axes_num);
-								std::cout<<"returned for "<<(std::string)(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-								trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *) stateID, (actTrajectory)));
+								std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = createTrajectory2(child_node, stateID, axes_num);
+								trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *) stateID, (trj_vect)));
 							}
 						}
+
 						xmlFree(robot);
 					}
 				}
@@ -345,12 +356,10 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 					if (child_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
-						ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory;
-						actTrajectory = createTrajectory2(child_node, stateID, axes_num);
-						if(actTrajectory)
-							std::cout<<"Trajektoria istnieje1"<<std::endl;
-						std::cout<<"returned for "<<(std::string)(char *)stateID<<" is: "<<actTrajectory->arm_type<<std::endl;
-						trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *)stateID, (actTrajectory)));
+						std::cout<<(char *)stateID<<" tworze trajektorie"<<std::endl;
+						std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = createTrajectory2(child_node, stateID, axes_num);
+						std::cout<<"stworzona"<<std::endl;
+						trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *)stateID, (trj_vect)));
 					}
 				}
 				xmlFree(robot);
@@ -362,8 +371,6 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	//	for(trajectories_t::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 	//		(*ii).second.showTime();
 
-	if ((*trajectoriesMap)[(std::string)"approach_1"]==NULL)
-		std::cout<<"                                        juz nei ma w laod"<<std::endl;
 
 	return trajectoriesMap;
 }

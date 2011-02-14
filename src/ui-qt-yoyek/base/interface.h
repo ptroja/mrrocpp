@@ -15,6 +15,7 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "string"
 
 #include "ui.h"
 
@@ -60,7 +61,16 @@ class ecp_buffer;
 
 class Interface
 {
+private:
+	Interface();
+	MainWindow* mw;
+
 public:
+
+	static Interface * get_instance();
+	MainWindow* get_main_window();
+	void print_on_sr(const char *buff, ...);
+
 	busy_flag communication_flag;
 
 	sr_buffer* ui_sr_obj;
@@ -149,9 +159,8 @@ public:
 	 speaker::UiRobot *speaker;
 	 */
 
-	int position_refresh_interval;
+	const int position_refresh_interval;
 
-	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
@@ -210,7 +219,7 @@ public:
 	bool is_any_active_robot_loaded();
 
 	// windows
-	MainWindow* mw;
+
 	wgt_process_control* wgt_pc;
 };
 

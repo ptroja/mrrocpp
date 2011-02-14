@@ -9,9 +9,6 @@
  * @ingroup spkm
  */
 
-#include <ostream>
-#include <exception>
-
 #include "robot/spkm/dp_spkm.h"
 
 namespace mrrocpp {
@@ -30,15 +27,16 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_EPOS_MOTOR_COMMAND,
-	CBUFFER_EPOS_JOINT_COMMAND,
-	CBUFFER_EPOS_EXTERNAL_COMMAND,
-	CBUFFER_EPOS_CUBIC_COMMAND,
-	CBUFFER_EPOS_TRAPEZOIDAL_COMMAND,
-	CBUFFER_EPOS_OPERATIONAL_COMMAND,
-	CBUFFER_EPOS_BRAKE_COMMAND,
-	CBUFFER_EPOS_CLEAR_FAULT
+	POSE,
+	QUICKSTOP,
+	CLEAR_FAULT
 };
+
+//! Pose specification variants
+typedef enum _POSE_SPECIFICATION
+{
+	FRAME, JOINT, MOTOR
+} POSE_SPECIFICATION;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer
@@ -46,14 +44,18 @@ enum CBUFFER_VARIANT
  */
 struct cbuffer
 {
+	//! Variant of the command
 	CBUFFER_VARIANT variant;
-	union
-	{
-		epos::epos_cubic_command epos_cubic_command_structure;
-		epos::epos_simple_command epos_simple_command_structure;
-		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
-		epos::epos_operational_command epos_operational_command_structure;
-	};
+
+	//! Pose specification type
+	POSE_SPECIFICATION pose_specification;
+
+	//! Motion interpolation variant
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+
+	int32_t motor_pos[NUM_OF_SERVOS];
+	double joint_pos[NUM_OF_SERVOS];
+	double goal_pos[6];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -63,77 +65,25 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant)
-		{
-			case CBUFFER_EPOS_MOTOR_COMMAND:
-			case CBUFFER_EPOS_JOINT_COMMAND:
-			case CBUFFER_EPOS_EXTERNAL_COMMAND:
-				ar & epos_simple_command_structure;
-				break;
-			case CBUFFER_EPOS_CUBIC_COMMAND:
-				ar & epos_cubic_command_structure;
-				break;
-			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
-				ar & epos_trapezoidal_command_structure;
-				break;
-			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
-				ar & epos_operational_command_structure;
-				break;
-			case CBUFFER_EPOS_BRAKE_COMMAND:
+		switch (variant) {
+			case POSE:
+				ar & pose_specification;
+				switch (pose_specification) {
+					case FRAME:
+						ar & goal_pos;
+						break;
+					case JOINT:
+						ar & joint_pos;
+						break;
+					case MOTOR:
+						ar & motor_pos;
+						break;
+				}
+				ar & motion_variant;
 				break;
 			default:
-				throw std::logic_error("unknown SPKM CBUFFER_VARIANT");
-		}
-	}
-
-	friend std::ostream& operator<<(std::ostream& os, const cbuffer& m)
-	{
-		switch (m.variant)
-		{
-			case CBUFFER_EPOS_MOTOR_COMMAND:
-				os << "CBUFFER_EPOS_MOTOR_COMMAND:\n";
 				break;
-			case CBUFFER_EPOS_JOINT_COMMAND:
-				os << "CBUFFER_EPOS_JOINT_COMMAND:\n";
-				break;
-			case CBUFFER_EPOS_EXTERNAL_COMMAND:
-				os << "CBUFFER_EPOS_EXTERNAL_COMMAND:\n";
-				break;
-			case CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:
-				os << "CBUFFER_EPOS_TRAPEZOIDAL_COMMAND:\n";
-				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os << "\t" << m.epos_trapezoidal_command_structure.aa[i] << "\t"
-							<< m.epos_trapezoidal_command_structure.av[i] << "\t"
-							<< m.epos_trapezoidal_command_structure.da[i] << "\t"
-							<< m.epos_trapezoidal_command_structure.emdm[i] << "\n";
-				}
-				break;
-			case CBUFFER_EPOS_CUBIC_COMMAND:
-				os << "CBUFFER_EPOS_CUBIC_COMMAND:\n";
-				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os << "\t" << m.epos_cubic_command_structure.em[i] << "\t"
-							<< m.epos_cubic_command_structure.emdm[i] << "\n";
-				}
-				os << "\t" << m.epos_cubic_command_structure.tt << "\n";
-				break;
-			case CBUFFER_EPOS_OPERATIONAL_COMMAND:
-				os << "CBUFFER_EPOS_OPERATIONAL_COMMAND:\n";
-				for (int i = 0; i < lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER; ++i) {
-					os << "\t" << m.epos_operational_command_structure.em[i] << "\t"
-							<< m.epos_operational_command_structure.v[i] << "\n";
-				}
-				os << "\t" << m.epos_operational_command_structure.tau << "\n";
-				break;
-			case CBUFFER_EPOS_BRAKE_COMMAND:
-				os << "CBUFFER_EPOS_BRAKE_COMMAND\n";
-				break;
-			case CBUFFER_EPOS_CLEAR_FAULT:
-				os << "CBUFFER_EPOS_CLEAR_FAULT\n";
-				break;
-			default:
-				os << "Error: unknown CBUFFER_VARIANT";
-		}
-		return os;
+		};
 	}
 }__attribute__((__packed__));
 

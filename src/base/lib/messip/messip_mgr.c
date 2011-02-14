@@ -2175,7 +2175,10 @@ static int notify_server_death_client(channel_t * ch, pid_t pid, pthread_t tid, 
 	if (connect(sockfd, (const struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
 		if (errno != ECONNREFUSED)
 			perror("connect()");
-		fprintf(stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n", __FILE__, __LINE__, inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port, strerror(errno));
+		fprintf(stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n\tdead channel: %s\n", __FILE__, __LINE__,
+				inet_ntoa(sockaddr.sin_addr), ch->sin_port, strerror(errno),
+				ch->channel_name
+				);
 		if (close(sockfd) == -1)
 			fprintf(stderr, "Error while closing socket %d: %s\n", sockfd, strerror(errno));
 		return -1;

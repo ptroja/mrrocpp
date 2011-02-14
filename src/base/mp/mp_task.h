@@ -1,6 +1,3 @@
-#ifndef MP_TASK_H_
-#define MP_TASK_H_
-
 /*!
  * @file
  * @brief File contains mp base task declaration
@@ -9,12 +6,13 @@
  * @ingroup mp
  */
 
+#ifndef MP_TASK_H_
+#define MP_TASK_H_
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-
 #include "base/lib/messip/messip.h"
-
 
 namespace mrrocpp {
 namespace mp {
@@ -80,7 +78,7 @@ public:
 	 * @brief pure virtual method to create robots
 	 * it have to be reimplemented in inherited classes
 	 */
-	virtual void create_robots(void) =0;
+	virtual void create_robots(void) = 0;
 
 	/**
 	 * @brief Waits for stop pulse from UI and terminated all ECP's
