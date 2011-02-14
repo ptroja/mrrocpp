@@ -8,17 +8,19 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
+
 #include "robot/spkm/edp_e_spkm.h"
 #include "base/edp/reader.h"
 //#include "base/edp/vis_server.h"
-// Kinematyki.
+
 #include "robot/spkm/kinematic_model_spkm.h"
 #include "base/edp/manip_trans_t.h"
 
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
 #include "base/lib/pvt.hpp"
+
+#include "robot/spkm/exceptions.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -161,19 +163,41 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 
 						if (is_synchronised()) {
-							// Transform from joint to motors (and check motors/joints values).
+							// Transform desired joint to motors (and check motors/joints values).
 							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 						} else {
-							// Joint commands prior to synchronization are ignored
-							return;
+							// Throw non-fatal error - this mode requires synchronization.
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
 						}
 
 						break;
 					case lib::spkm::FRAME:
-						// TODO: ecp_edp_cbuffer.joint_pos
-						return;
+						std::cout<<"FRAME: [";
+						for (unsigned int i = 0; i < 6; ++i) {
+							std::cout<<ecp_edp_cbuffer.goal_pos[i]<<", ";
+						}
+						std::cout<<"]\n";
 
+						if (is_synchronised()) {
+							// Compute the desired homogeneous matrix on the base of received 6 variables related to angle-axis representation.
+							desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
+							//std::cout << desired_end_effector_frame<<std::endl;
+
+							// Compute inverse kinematics for desired pose.
+							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, current_joints, desired_end_effector_frame);
+
+							// Transform joints to motors (and check motors/joints values).
+							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+						} else {
+							// Throw non-fatal error - this mode requires synchronization.
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
+						}
 						break;
+					default:
+						// Throw non-fatal error - invalid pose specification.
+						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_pose_specification_error());
+						break;
+
 				}
 
 				// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
@@ -274,8 +298,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					}
 						break;
 					default:
-						// TODO: throw non-fatal error - motion type not supported
-						return;
+						// Throw non-fatal error - motion type not supported.
+						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_motion_type_error());
+						break;
 				}
 				break;
 			case lib::spkm::QUICKSTOP:
@@ -326,7 +351,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		// Hold the issued command
 		desired_motor_pos_old = desired_motor_pos_new;
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
-		std::cout<<boost::current_exception_diagnostic_information();
+		std::cout<<boost::current_exception_diagnostic_information()<<std::endl;
 	}
 }
 /*--------------------------------------------------------------------------*/
