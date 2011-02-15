@@ -41,9 +41,6 @@ private:
 	//! Installation directory
 	const std::string dir;
 
-	//! Configuration file
-	std::string ini_file;
-
 	//! Installation network path
 	std::string mrrocpp_network_path;
 
@@ -86,10 +83,9 @@ public:
 	 * Constructor
 	 * @param _node node of the install folder
 	 * @param _dir directory to the install folder
-	 * @param _ini_file configuration file name
 	 * @param _section_name configuration section name
 	 */
-	configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name);
+	configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name);
 
 	/**
 	 * Change configuration file

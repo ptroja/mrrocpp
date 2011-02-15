@@ -52,14 +52,14 @@ int main(int argc, char *argv[])
 {
 	try {
 		// liczba argumentow
-		if (argc < 5) {
+		if (argc < 4) {
 			printf("Za malo argumentow ECP\n");
 			return -1;
 		}
 
 		// TODO: this should not be a pointer; blcked by error handling fixup
 		// configuration read
-		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], argv[4]);
+		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3]);
 
 		ecp::common::ecp_t = (boost::shared_ptr<ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 

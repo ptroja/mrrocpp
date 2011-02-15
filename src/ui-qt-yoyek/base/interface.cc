@@ -867,7 +867,7 @@ int Interface::initiate_configuration()
 		if (config) {
 			delete config;
 		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path, config_file, lib::UI_SECTION);
+		config = new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
 		std::string attach_point =
 				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
