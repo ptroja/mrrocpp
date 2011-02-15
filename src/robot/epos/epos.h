@@ -249,6 +249,12 @@ public:
 	/*! \brief pretty-print controlword */
 	void printEPOScontrolword(WORD controlword);
 
+	//! \brief start motion with absolute demanded position
+	void startAbsoluteMotion();
+
+	//! \brief start motion with relative demanded position
+	void startRelativeMotion();
+
 	//! \brief EPOS Operational mode
 	typedef enum _operational_mode
 	{

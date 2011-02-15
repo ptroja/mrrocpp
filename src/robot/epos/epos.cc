@@ -699,6 +699,16 @@ void epos::printEPOScontrolword(WORD s)
 		printf("false\n");
 }
 
+void epos::startAbsoluteMotion()
+{
+	writeControlword(0x3f);
+}
+
+void epos::startRelativeMotion()
+{
+	writeControlword(0x005f);
+}
+
 /* set mode of operation --- 14.1.59 */
 void epos::setOperationMode(operational_mode_t m)
 {
@@ -1343,7 +1353,7 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// switch to relative positioning BY WRITING TO CONTROLWORD, finish	possible ongoing operation first!
 	// see ->maxon applicattion note: device programming 2.1
-	writeControlword(0x005f);
+	startRelativeMotion();
 }
 
 void epos::moveAbsolute(INTEGER32 steps)
@@ -1357,7 +1367,7 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// switch to absolute positioning, cancel possible ongoing operation first!
 	// see maxon application note: device programming 2.1
-	writeControlword(0x3f);
+	startAbsoluteMotion();
 }
 
 UNSIGNED32 epos::readGearRatioNumerator()

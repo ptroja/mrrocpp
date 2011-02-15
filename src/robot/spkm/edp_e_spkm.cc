@@ -174,7 +174,7 @@ void effector::synchronise(void)
 		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
 	}
 
-	// Just for testing if limits actually works
+	// Just for testing if limits actually work
 	//	axisA->writeMinimalPositionLimit(-100000);
 	//	axisB->writeMinimalPositionLimit(-100000);
 	//	axisC->writeMinimalPositionLimit(-100000);
@@ -229,6 +229,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						break;
 					case lib::spkm::FRAME:
+						// debug display
 						std::cout<<"FRAME: [";
 						for (unsigned int i = 0; i < 6; ++i) {
 							std::cout<<ecp_edp_cbuffer.goal_pos[i]<<", ";
@@ -312,6 +313,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						//						std::endl;
 
 						if (t > 0) {
+							// debug display
 							std::cerr << "Vnew:\n" << Vnew << std::endl << "Anew:\n" << Anew << std::endl << "Dnew:\n"
 									<< Dnew << std::endl << std::endl;
 
@@ -335,7 +337,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									if (is_synchronised()) {
 										// Absolute motion
 										if (!robot_test_mode) {
-											axes[i]->writeControlword(0x3f);
+											axes[i]->startAbsoluteMotion();
 										} else {
 											current_joints[i] = desired_joints[i];
 											current_motor_pos[i] = desired_motor_pos_new[i];
@@ -343,7 +345,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									} else {
 										// Relative motion
 										if (!robot_test_mode) {
-											axes[i]->writeControlword(0x005f);
+											axes[i]->startRelativeMotion();
 										} else {
 											current_joints[i] += desired_joints[i];
 											current_motor_pos[i] += desired_motor_pos_new[i];
@@ -369,7 +371,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						node->changeEPOSstate(epos::epos::QUICKSTOP);
 					}
 				}
-				break;
+				// Internal position counters need not be updated
+				return;
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(epos::epos * node, axes)
 				{
@@ -394,6 +397,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					// Change to the operational mode
 					node->reset();
 				}
+				// Internal position counters need not be updated
+				return;
 			default:
 				break;
 		}
