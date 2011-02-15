@@ -506,7 +506,7 @@ void epos::reset()
 		} else if(state == 11) {
 			throw epos_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Unexpected state during initialization" << std::endl;
+			std::cerr << "Node " << nodeId << ": unexpected state during initialization" << std::endl;
 		}
 
 	} while(timeout--);
