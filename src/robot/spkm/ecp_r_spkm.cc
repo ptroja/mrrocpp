@@ -136,7 +136,10 @@ void robot::create_command()
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
-
+		if (!is_synchronised()) {
+				ecp_command.motion_type = lib::RELATIVE;
+				ecp_command.set_arm_type = lib::MOTOR;
+			}
 		ecp_edp_cbuffer.variant = lib::spkm::CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
