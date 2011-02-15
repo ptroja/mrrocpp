@@ -236,9 +236,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					case lib::epos::SYNC_TRAPEZOIDAL: {
-						Matrix <double, 3, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
+						Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
-						for (int i = 0; i < 3; ++i) {
+						for (int i = 0; i < 6; ++i) {
 							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]);
 							std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - "
 									<< desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
@@ -247,7 +247,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-						double t = ppm <3> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
 						//					std::cerr <<
 						//						"Delta:\n" << Delta << std::endl <<
@@ -308,10 +308,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(epos::epos * node, axes)
-								{
-									// Brake with Quickstop command
-									node->changeEPOSstate(epos::epos::QUICKSTOP);
-								}
+					{
+						// Brake with Quickstop command
+						node->changeEPOSstate(epos::epos::QUICKSTOP);
+					}
 				}
 				break;
 			case lib::spkm::CLEAR_FAULT:
@@ -462,7 +462,7 @@ void effector::synchronise(void)
 	} while (!finished);
 
 	// Hardcoded safety values
-	// TODO: move to configuration file
+	// TODO: move to configuration file?
 	axisA->writeMinimalPositionLimit(-195000);
 	axisA->writeMaximalPositionLimit(11500);
 	axisB->writeMinimalPositionLimit(-282500);
@@ -470,7 +470,14 @@ void effector::synchronise(void)
 	axisC->writeMinimalPositionLimit(-175000);
 	axisC->writeMaximalPositionLimit(11000);
 
-	// Just for testing
+//	axis1->writeMinimalPositionLimit(-0);
+//	axis1->writeMaximalPositionLimit(0);
+//	axis2->writeMinimalPositionLimit(-0);
+//	axis2->writeMaximalPositionLimit(0);
+//	axis3->writeMinimalPositionLimit(-0);
+//	axis3->writeMaximalPositionLimit(0);
+
+	// Just for testing if limits actually works
 	//	axisA->writeMinimalPositionLimit(-100000);
 	//	axisB->writeMinimalPositionLimit(-100000);
 	//	axisC->writeMinimalPositionLimit(-100000);
@@ -483,6 +490,7 @@ void effector::synchronise(void)
 	// Compute joints positions in the home position
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
+	// Now the robot is synchronised
 	controller_state_edp_buf.is_synchronised = true;
 }
 
