@@ -27,12 +27,12 @@ const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_S
 
 // Initialization of upper motors limits vector.
 // Those values were computed on the base of "safe" joint limits.
-const double kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 0, 0, 0 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 400000, 400000, 400000 };
 
 // Initialization of lower motors limits vector.
 // The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
 // Those values were computed on the base of "safe" joint limits.
-const double kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, 0, 0, 0 };
+const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, -400000, -400000, -400000 };
 
 // Initialization of upper joints vector.
 // Those are the "safe" limits, not related to synchronization sensors positions.

@@ -77,10 +77,10 @@ public:
 	static const double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Largest values that motors can reach.
-	static const double upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	static const int32_t upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Smallest values that motors can reach.
-	static const double lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	static const int32_t lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Largest values that joints can reach.
 	static const double upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];

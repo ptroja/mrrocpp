@@ -37,7 +37,7 @@ private:
 	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
 	//! Axes container
-	boost::array<epos::epos *, 3> axes;
+	boost::array<epos::epos *, 6> axes;
 
 	//! Default axis velocity
 	static const uint32_t Vdefault[6];

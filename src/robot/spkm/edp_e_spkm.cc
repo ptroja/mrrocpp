@@ -120,16 +120,17 @@ effector::effector(lib::configurator &_config) :
 		axisA = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
 		axisB = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
 		axisC = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
-		//		axis4 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
-		//		axis5 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
-		//		axis6 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
+		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
+		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
+		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
 
+		// Collect axes into common array container
 		axes[0] = &(*axisA);
 		axes[1] = &(*axisB);
 		axes[2] = &(*axisC);
-		//		axes[3] = &(*axis4);
-		//		axes[4] = &(*axis5);
-		//		axes[5] = &(*axis6);
+		axes[3] = &(*axis1);
+		axes[4] = &(*axis2);
+		axes[5] = &(*axis3);
 	}
 }
 
@@ -432,32 +433,32 @@ void effector::synchronise(void)
 
 	// reset controller
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->reset();
-				}
+	{
+		node->reset();
+	}
 
 	// switch to homing mode
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->setOpMode(epos::epos::OMD_HOMING_MODE);
-				}
+	{
+		node->setOpMode(epos::epos::OMD_HOMING_MODE);
+	}
 
-	// Do homing
+	// Do homing using preconfigured setup
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->startHoming();
-				}
+	{
+		node->startHoming();
+	}
 
 	// Loop until homing is finished
 	bool finished;
 	do {
 		finished = true;
 		BOOST_FOREACH(epos::epos * node, axes)
-					{
-						if (!node->isHomingFinished()) {
-							finished = false;
-						}
-					}
+		{
+			if (!node->isHomingFinished()) {
+				finished = false;
+			}
+		}
 	} while (!finished);
 
 	// Hardcoded safety values
