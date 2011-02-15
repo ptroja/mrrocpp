@@ -8,7 +8,6 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-
 #include "robot/spkm/edp_e_spkm.h"
 #include "base/edp/reader.h"
 //#include "base/edp/vis_server.h"
@@ -30,74 +29,6 @@ namespace spkm {
 const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
 const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
-
-void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
-{
-	manip_effector::single_thread_master_order(nm_task, nm_tryb);
-}
-
-void effector::get_controller_state(lib::c_buffer &instruction)
-{
-	// False is the initial value
-	controller_state_edp_buf.is_synchronised = false;
-	controller_state_edp_buf.is_power_on = false;
-	controller_state_edp_buf.is_robot_blocked = false;
-
-	if (!robot_test_mode) {
-		// Try to get state of each axis
-		unsigned int referenced = 0;
-		unsigned int powerOn = 0;
-		unsigned int notInFaultState = 0;
-		BOOST_FOREACH(epos::epos * node, axes)
-					{
-						try {
-							// Check if in the FAULT state
-							if (node->checkEPOSstate() == 11) {
-								// Read number of errors
-								int errNum = node->readNumberOfErrors();
-								for (int i = 1; i <= errNum; ++i) {
-									// Get the detailed error
-									uint32_t errCode = node->readErrorHistory(i);
-
-									msg->message(epos::epos::ErrorCodeMessage(errCode));
-								}
-							} else {
-								notInFaultState++;
-							}
-							if (node->isReferenced()) {
-								// Do not break from this loop so this is a also a preliminary axis error check
-								referenced++;
-							}
-							powerOn++;
-						} catch (...) {
-							// Probably the axis is not powered on, do nothing.
-						}
-					}
-		// Robot is synchronised if all axes are referenced
-		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
-		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
-	}
-
-	// Copy data to reply buffer
-	reply.controller_state = controller_state_edp_buf;
-
-	// Check if it is safe to calculate joint positions
-	if (is_synchronised()) {
-		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	}
-
-	// Lock data structure during update
-	{
-		boost::mutex::scoped_lock lock(effector_mutex);
-
-		// Initialize internal data
-		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints[i] = current_joints[i];
-		}
-	}
-}
 
 // Konstruktor.
 effector::effector(lib::configurator &_config) :
@@ -126,16 +57,140 @@ effector::effector(lib::configurator &_config) :
 		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
 
 		// Collect axes into common array container
-		axes[0] = &(*axisA);
-		axes[1] = &(*axisB);
-		axes[2] = &(*axisC);
-		axes[3] = &(*axis1);
-		axes[4] = &(*axis2);
-		axes[5] = &(*axis3);
+		axes[0] = &(*axisA); axesNames[0] = "A";
+		axes[1] = &(*axisB); axesNames[1] = "B";
+		axes[2] = &(*axisC); axesNames[2] = "C";
+		axes[3] = &(*axis1); axesNames[3] = "1";
+		axes[4] = &(*axis2); axesNames[4] = "2";
+		axes[5] = &(*axis3); axesNames[5] = "3";
 	}
 }
 
-/*--------------------------------------------------------------------------*/
+void effector::get_controller_state(lib::c_buffer &instruction)
+{
+	// False is the initial value
+	controller_state_edp_buf.is_synchronised = false;
+	controller_state_edp_buf.is_power_on = false;
+	controller_state_edp_buf.is_robot_blocked = false;
+
+	if (!robot_test_mode) {
+		// Try to get state of each axis
+		unsigned int referenced = 0;
+		unsigned int powerOn = 0;
+		unsigned int notInFaultState = 0;
+		for (std::size_t i = 0; i < axes.size(); ++i)
+		{
+			try {
+				// Check if in the FAULT state
+				if (axes[i]->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = axes[i]->readNumberOfErrors();
+					for (int j = 1; j <= errNum; ++j) {
+						// Get the detailed error
+						uint32_t errCode = axes[i]->readErrorHistory(j);
+
+						msg->message(std::string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
+					}
+				} else {
+					notInFaultState++;
+				}
+				if (axes[i]->isReferenced()) {
+					// Do not break from this loop so this is a also a preliminary axis error check
+					referenced++;
+				}
+				powerOn++;
+			} catch (...) {
+				// Probably the axis is not powered on, do nothing.
+			}
+		}
+		// Robot is synchronised if all axes are referenced
+		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
+	}
+
+	// Copy data to reply buffer
+	reply.controller_state = controller_state_edp_buf;
+
+	// Check if it is safe to calculate joint positions
+	if (is_synchronised()) {
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
+
+	// Lock data structure during update
+	{
+		boost::mutex::scoped_lock lock(effector_mutex);
+
+		// Initialize internal data
+		for (int i = 0; i < number_of_servos; i++) {
+			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
+			desired_joints[i] = current_joints[i];
+		}
+	}
+}
+
+void effector::synchronise(void)
+{
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+	}
+
+	// reset controller
+	BOOST_FOREACH(epos::epos * node, axes)
+	{
+		node->reset();
+	}
+
+	// switch to homing mode
+	BOOST_FOREACH(epos::epos * node, axes)
+	{
+		node->setOpMode(epos::epos::OMD_HOMING_MODE);
+	}
+
+	// Do homing using preconfigured setup
+	BOOST_FOREACH(epos::epos * node, axes)
+	{
+		node->startHoming();
+	}
+
+	// Loop until homing is finished
+	bool finished;
+	do {
+		finished = true;
+		BOOST_FOREACH(epos::epos * node, axes)
+		{
+			if (!node->isHomingFinished()) {
+				finished = false;
+			}
+		}
+	} while (!finished);
+
+	// Hardcoded safety values
+	// TODO: move to configuration file?
+
+	for (std::size_t i = 0; i < axes.size(); ++i) {
+		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]-1);
+		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
+	}
+
+	// Just for testing if limits actually works
+	//	axisA->writeMinimalPositionLimit(-100000);
+	//	axisB->writeMinimalPositionLimit(-100000);
+	//	axisC->writeMinimalPositionLimit(-100000);
+
+	// Reset internal state of the motor positions
+	for (int i = 0; i < number_of_servos; ++i) {
+		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+	}
+
+	// Compute joints positions in the home position
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+	// Now the robot is synchronised
+	controller_state_edp_buf.is_synchronised = true;
+}
+
 void effector::move_arm(const lib::c_buffer &instruction)
 {
 	try {
@@ -317,29 +372,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(epos::epos * node, axes)
-							{
+				{
+					node->printEPOSstate();
 
-								node->printEPOSstate();
+					// Check if in a FAULT state
+					if (node->checkEPOSstate() == 11) {
+						epos::UNSIGNED8 errNum = node->readNumberOfErrors();
+						std::cerr << "readNumberOfErrors() = " << (int) errNum << std::endl;
+						for (epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-								// Check if in a FAULT state
-								if (node->checkEPOSstate() == 11) {
-									epos::UNSIGNED8 errNum = node->readNumberOfErrors();
-									std::cerr << "readNumberOfErrors() = " << (int) errNum << std::endl;
-									for (epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
+							epos::UNSIGNED32 errCode = node->readErrorHistory(i);
 
-										epos::UNSIGNED32 errCode = node->readErrorHistory(i);
+							std::cerr << epos::epos::ErrorCodeMessage(errCode) << std::endl;
+						}
+						if (errNum > 0) {
+							node->clearNumberOfErrors();
+						}
+						node->changeEPOSstate(epos::epos::FAULT_RESET);
+					}
 
-										std::cerr << epos::epos::ErrorCodeMessage(errCode) << std::endl;
-									}
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									node->changeEPOSstate(epos::epos::FAULT_RESET);
-								}
-
-								// Change to the operational mode
-								node->reset();
-							}
+					// Change to the operational mode
+					node->reset();
+				}
 			default:
 				break;
 		}
@@ -356,9 +410,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		std::cout<<boost::current_exception_diagnostic_information()<<std::endl;
 	}
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	// we do not check the arm position when only lib::SET is set
@@ -425,82 +477,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 	set_kinematic_model(0);
 }
 
-void effector::synchronise(void)
-{
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-	}
-
-	// reset controller
-	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->reset();
-	}
-
-	// switch to homing mode
-	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->setOpMode(epos::epos::OMD_HOMING_MODE);
-	}
-
-	// Do homing using preconfigured setup
-	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->startHoming();
-	}
-
-	// Loop until homing is finished
-	bool finished;
-	do {
-		finished = true;
-		BOOST_FOREACH(epos::epos * node, axes)
-		{
-			if (!node->isHomingFinished()) {
-				finished = false;
-			}
-		}
-	} while (!finished);
-
-	// Hardcoded safety values
-	// TODO: move to configuration file?
-
-	for (std::size_t i = 0; i < axes.size(); ++i) {
-		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]-1);
-		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
-	}
-
-//	axisA->writeMinimalPositionLimit(-195000);
-//	axisA->writeMaximalPositionLimit(11500);
-//	axisB->writeMinimalPositionLimit(-282500);
-//	axisB->writeMaximalPositionLimit(11500);
-//	axisC->writeMinimalPositionLimit(-175000);
-//	axisC->writeMaximalPositionLimit(11000);
-//
-//	axis1->writeMinimalPositionLimit(-310001);
-//	axis1->writeMaximalPositionLimit(340001);
-////	axis2->writeMinimalPositionLimit(-0);
-////	axis2->writeMaximalPositionLimit(0);
-//	axis3->writeMinimalPositionLimit(-290001);
-//	axis3->writeMaximalPositionLimit(350001);
-
-	// Just for testing if limits actually works
-	//	axisA->writeMinimalPositionLimit(-100000);
-	//	axisB->writeMinimalPositionLimit(-100000);
-	//	axisC->writeMinimalPositionLimit(-100000);
-
-	// Reset internal state of the motor positions
-	for (int i = 0; i < number_of_servos; ++i) {
-		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
-	}
-
-	// Compute joints positions in the home position
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-	// Now the robot is synchronised
-	controller_state_edp_buf.is_synchronised = true;
-}
-
+/*--------------------------------------------------------------------------*/
+/*                           Utility routines                               */
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
@@ -519,8 +497,12 @@ void effector::reply_serialization(void)
 	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
+void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
+{
+	manip_effector::single_thread_master_order(nm_task, nm_tryb);
 }
-// namespace spkm
+
+} // namespace spkm
 
 
 namespace common {
@@ -534,4 +516,3 @@ effector* return_created_efector(lib::configurator &_config)
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
-

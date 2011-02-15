@@ -36,6 +36,8 @@ private:
 	//! PKM axes
 	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
+	boost::array<std::string, 6> axesNames;
+
 	//! Axes container
 	boost::array<epos::epos *, 6> axes;
 
