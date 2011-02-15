@@ -372,10 +372,9 @@ int epos::checkEPOSstate()
 		return (11);
 
 	// if we get down here, statusword has a unknown value!
-	fprintf(stderr, "WARNING: EPOS status word %#06x is an unkown state!\n", w);
-	fprintf(stderr, "(function %s() in file %s, line %d)\n", __func__, __FILE__, __LINE__);
+	fprintf(stderr, "WARNING: EPOS status word %#06x is an unknown state!\n", w);
 
-	return (-2);
+	return (-1);
 }
 
 /* pretty-print EPOS state */
