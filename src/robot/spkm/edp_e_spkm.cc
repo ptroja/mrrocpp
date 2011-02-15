@@ -148,7 +148,7 @@ void effector::synchronise(void)
 		node->reset();
 	}
 
-	// Do homing using preconfigured setup
+	// Do homing with preconfigured parameters
 	BOOST_FOREACH(epos::epos * node, axes)
 	{
 		node->startHoming();
