@@ -14,6 +14,7 @@
 //#include "base/edp/vis_server.h"
 
 #include "robot/spkm/kinematic_model_spkm.h"
+#include "robot/spkm/kinematic_parameters_spkm.h"
 #include "base/edp/manip_trans_t.h"
 
 #include "robot/epos/epos.h"
@@ -463,19 +464,25 @@ void effector::synchronise(void)
 
 	// Hardcoded safety values
 	// TODO: move to configuration file?
-	axisA->writeMinimalPositionLimit(-195000);
-	axisA->writeMaximalPositionLimit(11500);
-	axisB->writeMinimalPositionLimit(-282500);
-	axisB->writeMaximalPositionLimit(11500);
-	axisC->writeMinimalPositionLimit(-175000);
-	axisC->writeMaximalPositionLimit(11000);
 
-//	axis1->writeMinimalPositionLimit(-0);
-//	axis1->writeMaximalPositionLimit(0);
-//	axis2->writeMinimalPositionLimit(-0);
-//	axis2->writeMaximalPositionLimit(0);
-//	axis3->writeMinimalPositionLimit(-0);
-//	axis3->writeMaximalPositionLimit(0);
+	for (std::size_t i = 0; i < axes.size(); ++i) {
+		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]-1);
+		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
+	}
+
+//	axisA->writeMinimalPositionLimit(-195000);
+//	axisA->writeMaximalPositionLimit(11500);
+//	axisB->writeMinimalPositionLimit(-282500);
+//	axisB->writeMaximalPositionLimit(11500);
+//	axisC->writeMinimalPositionLimit(-175000);
+//	axisC->writeMaximalPositionLimit(11000);
+//
+//	axis1->writeMinimalPositionLimit(-310001);
+//	axis1->writeMaximalPositionLimit(340001);
+////	axis2->writeMinimalPositionLimit(-0);
+////	axis2->writeMaximalPositionLimit(0);
+//	axis3->writeMinimalPositionLimit(-290001);
+//	axis3->writeMaximalPositionLimit(350001);
 
 	// Just for testing if limits actually works
 	//	axisA->writeMinimalPositionLimit(-100000);
