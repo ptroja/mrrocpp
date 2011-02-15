@@ -136,16 +136,16 @@ void effector::synchronise(void)
 		return;
 	}
 
+	// switch to homing mode
+	BOOST_FOREACH(epos::epos * node, axes)
+	{
+		node->setOperationMode(epos::epos::OMD_HOMING_MODE);
+	}
+
 	// reset controller
 	BOOST_FOREACH(epos::epos * node, axes)
 	{
 		node->reset();
-	}
-
-	// switch to homing mode
-	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->setOpMode(epos::epos::OMD_HOMING_MODE);
 	}
 
 	// Do homing using preconfigured setup
@@ -319,7 +319,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								// Setup motion parameters
 								for (std::size_t i = 0; i < axes.size(); ++i) {
 									if (Delta[i] != 0) {
-										axes[i]->setOpMode(epos::epos::OMD_PROFILE_POSITION_MODE);
+										axes[i]->setOperationMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
 										axes[i]->writeProfileVelocity(Vnew[i]);
 										axes[i]->writeProfileAcceleration(Anew[i]);

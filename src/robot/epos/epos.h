@@ -210,7 +210,7 @@ public:
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} state_t;
 
-	//! Reset the device by issuing a shutdown command followed by power-on
+	//! Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
 
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
@@ -252,10 +252,10 @@ public:
 	//! \brief EPOS Operational mode
 	typedef enum _operational_mode
 	{
-		OMD_PROFILE_POSITION_MODE = 1, //! profile position mode
-		OMD_PROFILE_VELOCITY_MODE = 3, //! profile velocity mode
-		OMD_HOMING_MODE = 6, //! homing
 		OMD_INTERPOLATED_POSITION_MODE = 7,
+		OMD_HOMING_MODE = 6, //! homing
+		OMD_PROFILE_VELOCITY_MODE = 3, //! profile velocity mode
+		OMD_PROFILE_POSITION_MODE = 1, //! profile position mode
 		OMD_POSITION_MODE = -1, //! position mode
 		OMD_VELOCITY_MODE = -2, //! velocity mode
 		OMD_CURRENT_MODE = -3, //! current mode
@@ -265,13 +265,13 @@ public:
 	} operational_mode_t;
 
 	/*! \brief set EPOS mode of operation -- 14.1.59 */
-	void setOpMode(operational_mode_t);
+	void setOperationMode(operational_mode_t);
 
 	/*! \brief read and returns  EPOS mode of operation -- 14.1.60
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
-	operational_mode_t readOpMode();
+	operational_mode_t readActualOperationMode();
 
 	/*! \brief read demanded position; 14.1.61 */
 	INTEGER32 readDemandPosition();

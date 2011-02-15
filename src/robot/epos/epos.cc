@@ -91,7 +91,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	device(_device), nodeId(_nodeId)
 {
 	// Read the cached parameters
-	OpMode = readOpMode();
+	OpMode = readActualOperationMode();
 	PositionProfileType = readPositionProfileType();
 	ProfileVelocity = readProfileVelocity();
 	ProfileAcceleration = readProfileAcceleration();
@@ -700,7 +700,7 @@ void epos::printEPOScontrolword(WORD s)
 }
 
 /* set mode of operation --- 14.1.59 */
-void epos::setOpMode(operational_mode_t m)
+void epos::setOperationMode(operational_mode_t m)
 {
 	if(OpMode != m) {
 		WORD dw[2];
@@ -715,7 +715,7 @@ void epos::setOpMode(operational_mode_t m)
 }
 
 /* read mode of operation --- 14.1.60 */
-epos::operational_mode_t epos::readOpMode()
+epos::operational_mode_t epos::readActualOperationMode()
 {
 	INTEGER8 mode = ReadObjectValue<INTEGER8>(0x6061, 0x00);
 	return (operational_mode_t) mode;
@@ -1281,7 +1281,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	//monitorStatus();
 
 	// switch to homing mode
-	setOpMode(OMD_HOMING_MODE);
+	setOperationMode(OMD_HOMING_MODE);
 
 	// Set homing parameters
 	writeHomeOffset(offset);
@@ -1335,7 +1335,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 void epos::moveRelative(INTEGER32 steps)
 {
 	// set the Profile Position Mode
-	setOpMode(OMD_PROFILE_POSITION_MODE);
+	setOperationMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position
 	// firmware 14.1.70
@@ -1349,7 +1349,7 @@ void epos::moveRelative(INTEGER32 steps)
 void epos::moveAbsolute(INTEGER32 steps)
 {
 	// set the Profile Position Mode
-	setOpMode(OMD_PROFILE_POSITION_MODE);
+	setOperationMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
