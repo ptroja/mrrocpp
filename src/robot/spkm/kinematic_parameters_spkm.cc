@@ -33,20 +33,20 @@ const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_S
 
 // Initialization of upper motors limits vector.
 // Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 400000, 400000, 400000 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 350000, 400000, 340000 };
 
 // Initialization of lower motors limits vector.
 // The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
 // Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, -400000, -400000, -400000 };
+const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, -290000, -400000, -310000 };
 
 // Initialization of upper joints vector.
 // Those are the "safe" limits, not related to synchronization sensors positions.
-const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2795, 0.32, 0.2795, 2*M_PI, 2*M_PI, 2*M_PI };
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2795, 0.32, 0.2795, 2.7489, 2*M_PI, 2.6704 };
 
 // Initialization of lower joints limits vector.
 // The lower values are related to positions of synchronization sensors.
-const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2488, 0.2690, 0.2488, -2*M_PI, -2*M_PI, -2*M_PI };
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2488, 0.2690, 0.2488, -2.2777, -2*M_PI, -2.4347 };
 
 // Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 const double kinematic_parameters_spkm::dA = -0.05;
