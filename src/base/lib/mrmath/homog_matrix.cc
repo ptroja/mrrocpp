@@ -278,9 +278,13 @@ void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 {
 	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
 	// Zredukowanie katow.
-	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
-	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
-	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
+	//TODO: TKORNUTA: WRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!! beta nie musi być <0,180>
+	//	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
+	//	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
+	//	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
+	const double alfa = l_vector[3];
+	const double beta = l_vector[4];
+	const double gamma = l_vector[5];
 
 	// Obliczenie sinusow/cosinusow.
 	const double c_alfa = cos(alfa);

@@ -115,7 +115,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 
 	// Compute the desired "twist of the wrist".
 	// Transformation from computed OST to desired OST.
-	Homog4d wrist_twist = O_S_T_desired.inverse()*O_S_T_computed;
+	Homog4d wrist_twist = O_S_T_computed.inverse()*O_S_T_desired;
 	std::cout <<"Twist:\n" << wrist_twist << std::endl;
 
 	// Compute the inverse transform of the spherical wrist basing on its "twist".
@@ -236,25 +236,26 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		theta = 0;
 		// Infinite number of solutions: only the phi + psi value can be computed, thus phi is equal to the previous one.
 		phi = local_current_joints[3];
-		psi = atan2(wrist_twist_(0,0), wrist_twist_(1,0)) - phi;
+		psi = atan2(wrist_twist_(1,0), wrist_twist_(0,0)) - phi;
+		// atan2(r(2,1), r(1,1)) - phi
 		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 	} else if (wrist_twist_(2,2) == -1) {
 		// If u33 = -1 then theta is equal to pi.
 		theta = M_PI;
 		// Infinite number of solutions: only the phi - psi value can be computed, thus phi is equal to the previous one.
 		phi = local_current_joints[3];
-		psi = - atan2(wrist_twist_(0,0), wrist_twist_(1,0)) + phi;
-		std::cout<<"CASE II: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		psi = - atan2(-wrist_twist_(0,1), -wrist_twist_(0,0)) + phi;
+		std::cout<<"CASE II: u33=-1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 	} else {
 		// Two possible solutions.
-		theta = atan2(wrist_twist_(2,2), sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
-		phi = atan2(wrist_twist_(0,2), wrist_twist_(1,2));
-		psi = atan2(-wrist_twist_(2,0), wrist_twist_(2,1));
+		theta = atan2(sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+		phi = atan2(wrist_twist_(1,2), wrist_twist_(0,2));
+		psi = atan2(wrist_twist_(2,1), -wrist_twist_(2,0));
 		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 
-		theta = atan2(wrist_twist_(2,2), -sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
-		phi = atan2(-wrist_twist_(0,2), -wrist_twist_(1,2));
-		psi = atan2(wrist_twist_(2,0), -wrist_twist_(2,1));
+		theta = atan2(-sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+		phi = atan2(-wrist_twist_(1,2), -wrist_twist_(0,2));
+		psi = atan2(-wrist_twist_(2,1), wrist_twist_(2,0));
 		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 	}
 

@@ -257,8 +257,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						if (is_synchronised()) {
 							// Compute the desired homogeneous matrix on the base of received 6 variables related to angle-axis representation.
-							desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
-							//std::cout << desired_end_effector_frame<<std::endl;
+							//desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
+							// TODO: Remove the ZYZ TEST MODE!!!!
+							std::cout << "the ZYZ TEST MODE!!!\n";
+							desired_end_effector_frame.set_from_xyz_euler_zyz(mrrocpp::lib::Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+							std::cout << desired_end_effector_frame<<std::endl;
 
 							// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
