@@ -105,7 +105,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Vector3d PKM_joints = PM_inverse_from_e(e);
 
 	// Compute upper platform pose.
-/*	Homog4d O_P_T = PM_O_P_T_from_e(e);
+	Homog4d O_P_T = PM_O_P_T_from_e(e);
 	std::cout <<"Computed upper platform pose:\n" << O_P_T << std::endl;
 
 	// Compute the pose of wrist (S) on the base of upper platform pose.
@@ -116,18 +116,18 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	// Compute the desired "twist of the wrist".
 	// Transformation from computed OST to desired OST.
 	Homog4d wrist_twist = O_S_T_desired.inverse()*O_S_T_computed;
-	std::cout <<"Twist:\n" << O_S_T_computed << std::endl;
-*/
+	std::cout <<"Twist:\n" << wrist_twist << std::endl;
+
 	// Compute the inverse transform of the spherical wrist basing on its "twist".
-	//thetas = SW_inverse(obj, S_S_prim_R);
+	Vector3d SW_thetas = SW_inverse(wrist_twist, local_current_joints);
 
 	// Fill joints array.
 	 local_desired_joints[0] = PKM_joints[0];
 	 local_desired_joints[1] = PKM_joints[1];
 	 local_desired_joints[2] = PKM_joints[2];
-/*	 local_desired_joints[3] = SW_joints[0];
-	 local_desired_joints[4] = SW_joints[1];
-	 local_desired_joints[5] = SW_joints[2];*/
+	 local_desired_joints[3] = SW_thetas[0];
+	 local_desired_joints[4] = SW_thetas[1];
+	 local_desired_joints[5] = SW_thetas[2];
 }
 
 Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
@@ -138,28 +138,6 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	double z = O_S_T_(2,3);
 
 	std::cout<<"S= ["<<x<<", "<<y<<", "<<z<<"]\n";
-
-/*
-            % Temporary variables used for computations of alpha.
-            t0_sq = O_S_P(1) * O_S_P(1) + O_S_P(3) * O_S_P(3);
-            hx_sq = obj.params.P_S_P(1) * obj.params.P_S_P(1);
-
-            % Compute sine and cosine of the alpha angle.
-            s_alpha = (delta_B1 * O_S_P(3) * sqrt(t0_sq - hx_sq) + obj.params.P_S_P(1) * O_S_P(1)) / (t0_sq);
-            c_alpha = (-delta_B1 * O_S_P(1) * sqrt(t0_sq - hx_sq) + obj.params.P_S_P(1) * O_S_P(3)) / (t0_sq);
-
-            % Compute sine and cosine of the beta angle.
-            t6 = (delta_B1 * (t0_sq - obj.params.dB * O_S_P(1)) * sqrt(t0_sq - hx_sq) + ...
-                + obj.params.dB * obj.params.P_S_P(1) * O_S_P(3)) / (t0_sq);
-
-            s_beta = -delta_B2 * O_S_P(2) / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2));
-            c_beta = delta_B2 * t6 / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2));
-
-            % Compute h.
-            h = delta_B2 * (O_S_P(2) * O_S_P(2) + delta_B1 * t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6 + O_S_P(2) * O_S_P(2)) - obj.params.P_S_P(3);
-
- */
-
 
 	// Temporary variables used for computations of alpha.
 	double t0_sq = x * x + z * z;
@@ -208,14 +186,14 @@ Vector3d kinematic_model_spkm::PM_inverse_from_e(const Vector5d & e_)
 	Vector3d joints;
 	joints << qA, qB, qC;
 
-	std::cout<<"joints= ["<<joints.transpose()<<"]\n";
+	std::cout<<"PM joints= ["<<joints.transpose()<<"]\n";
 
 	return joints;
 }
 
 Homog4d kinematic_model_spkm::PM_O_P_T_from_e(const Vector5d & e_)
 {
-	Matrix4d O_P_T;
+	Homog4d O_P_T;
 
 	// "Retrieve" values from e.
 	double s_alpha = e_[0];
@@ -224,36 +202,70 @@ Homog4d kinematic_model_spkm::PM_O_P_T_from_e(const Vector5d & e_)
 	double c_beta = e_[3];
 	double h = e_[4];
 
-	// Compute matrix representing the location and orientation of upper platform.
-	O_P_T(0, 0) = s_alpha;
-	O_P_T(0, 1) = 0.0;
-	O_P_T(0, 2) = c_alpha;
-	O_P_T(0, 3) = 0.0;
-	O_P_T(1, 0) = -s_beta * c_alpha;
-	O_P_T(1, 1) = c_beta;
-	O_P_T(1, 2) = s_beta * s_alpha;
-	O_P_T(1, 3) = c_alpha * params.dB * s_beta;
-	O_P_T(2, 0) = -c_beta * c_alpha;
-	O_P_T(2, 1) = -s_beta;
-	O_P_T(2, 2) = c_beta * s_alpha;
-	O_P_T(2, 3) = -h;
-	O_P_T(3, 0) = 0.0;
-	O_P_T(3, 1) = 0.0;
-	O_P_T(3, 2) = 0.0;
-	O_P_T(3, 3) = 1.0;
+    // Compute matrix representing the location and orientation of upper platform.
+    // Rotation matrix.
+    O_P_T(0, 0) = s_alpha;
+    O_P_T(0, 1) = -s_beta*c_alpha;
+    O_P_T(0, 2) = -c_beta*c_alpha;
+    O_P_T(1, 0) = 0;
+    O_P_T(1, 1) = c_beta;
+    O_P_T(1, 2) = -s_beta;
+    O_P_T(2, 0) = c_alpha;
+    O_P_T(2, 1) = s_beta*s_alpha;
+    O_P_T(2, 2) = c_beta*s_alpha;
+    // Translation matrix.
+    O_P_T(0, 3) = c_alpha*c_alpha * s_beta*s_beta * params.dB - h*c_beta*c_alpha;
+    O_P_T(1, 3) = -c_alpha * s_beta * c_beta * params.dB - h*s_beta;
+    O_P_T(2, 3) = -s_beta*s_beta * s_alpha * c_alpha * params.dB + s_alpha*c_beta*h;
+    // Last row.
+    O_P_T(3, 0) = 0.0;
+    O_P_T(3, 1) = 0.0;
+    O_P_T(3, 2) = 0.0;
+    O_P_T(3, 3) = 1.0;
 
 	// Return matrix.
-	return Homog4d(O_P_T);
+	return O_P_T;
 }
 
-Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & P_W_T_)
+Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const lib::JointArray & local_current_joints)
 {
-	// TODO Inverse kinematics of the spherical wrist.
+	double phi, theta, psi;
 
-	// Return vector with joints.
-	Vector3d joints;
-	joints << 0, 0, 0;
-	return joints;
+	if (wrist_twist_(2,2) == 1) {
+		// If u33 = 1 then theta is 0.
+		theta = 0;
+		// Infinite number of solutions: only the phi + psi value can be computed, thus phi is equal to the previous one.
+		phi = local_current_joints[3];
+		psi = atan2(wrist_twist_(0,0), wrist_twist_(1,0)) - phi;
+		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+	} else if (wrist_twist_(2,2) == -1) {
+		// If u33 = -1 then theta is equal to pi.
+		theta = M_PI;
+		// Infinite number of solutions: only the phi - psi value can be computed, thus phi is equal to the previous one.
+		phi = local_current_joints[3];
+		psi = - atan2(wrist_twist_(0,0), wrist_twist_(1,0)) + phi;
+		std::cout<<"CASE II: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+	} else {
+		// Two possible solutions.
+		theta = atan2(wrist_twist_(2,2), sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
+		phi = atan2(wrist_twist_(0,2), wrist_twist_(1,2));
+		psi = atan2(-wrist_twist_(2,0), wrist_twist_(2,1));
+		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+
+		theta = atan2(wrist_twist_(2,2), -sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
+		phi = atan2(-wrist_twist_(0,2), -wrist_twist_(1,2));
+		psi = atan2(wrist_twist_(2,0), -wrist_twist_(2,1));
+		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+	}
+
+
+
+	// Return vector with thetas.
+	Vector3d thetas;
+	thetas << 0, 0, 0;
+
+	std::cout<<"SW thetas= ["<<thetas.transpose()<<"]\n";
+	return thetas;
 }
 
 } // namespace spkm

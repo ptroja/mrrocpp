@@ -30,25 +30,26 @@ const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL,
 const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
-// Konstruktor.
 effector::effector(lib::configurator &_config) :
 	manip_effector(_config, lib::spkm::ROBOT_NAME)
 {
+	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
-	//  Stworzenie listy dostepnych kinematyk.
+	// Create all kinematic models for SPKM.
 	create_kinematic_models_for_given_robot();
 
+	// Zero motors and set initial joint values.
 	reset_variables();
 
 	if (!robot_test_mode) {
-		// Create gateway object
+		// Create gateway object.
 		gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_usb();
 
-		// Connect to the gateway
+		// Connect to the gateway.
 		gateway->open();
 
-		// Create epos objects according to CAN ID-mapping
+		// Create epos objects according to CAN ID-mapping.
 		axisA = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
 		axisB = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
 		axisC = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
@@ -56,7 +57,7 @@ effector::effector(lib::configurator &_config) :
 		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
 		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
 
-		// Collect axes into common array container
+		// Collect axes into common array container.
 		axes[0] = &(*axisA); axesNames[0] = "A";
 		axes[1] = &(*axisB); axesNames[1] = "B";
 		axes[2] = &(*axisC); axesNames[2] = "C";
@@ -65,6 +66,24 @@ effector::effector(lib::configurator &_config) :
 		axes[5] = &(*axis3); axesNames[5] = "3";
 	}
 }
+
+
+void effector::reset_variables() {
+
+	// Zero all variables related to motor positions.
+	for (int i = 0; i < number_of_servos; ++i) {
+		current_motor_pos[i] = 0;
+	}
+	//current_motor_pos << 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
+	desired_motor_pos_old = current_motor_pos;
+	desired_motor_pos_new = current_motor_pos;
+
+	// Compute current motor positions on the base of zeroed motors.
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	desired_joints = current_joints;
+	desired_joints_old = current_joints;
+}
+
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
@@ -241,11 +260,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
 							//std::cout << desired_end_effector_frame<<std::endl;
 
-							// Compute inverse kinematics for desired pose.
-							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, current_joints, desired_end_effector_frame);
+							// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
 							// Transform joints to motors (and check motors/joints values).
 							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+
+							// Remember the currently desired joints as old.
+							desired_joints_old = desired_joints;
 						} else {
 							// Throw non-fatal error - this mode requires synchronization.
 							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
@@ -409,7 +431,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			std::cout << "CURRENT JOINT[" << i << "]: " << current_joints[i] << std::endl;
 		}
 
-		// Hold the issued command
+		// Hold the issued command.
 		desired_motor_pos_old = desired_motor_pos_new;
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
 		std::cout<<boost::current_exception_diagnostic_information()<<std::endl;
@@ -471,14 +493,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	reply.servo_step = step_counter;
 }
-/*--------------------------------------------------------------------------*/
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
+	// Add main SPKM kinematics.
 	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
-	// Ustawienie aktywnego modelu.
+	// Set active model
 	set_kinematic_model(0);
 }
 
@@ -512,7 +532,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
+// Create spkm effector.
 effector* return_created_efector(lib::configurator &_config)
 {
 	return new spkm::effector(_config);

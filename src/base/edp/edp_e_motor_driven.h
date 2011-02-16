@@ -105,7 +105,7 @@ protected:
 	 *
 	 * number_of_servos should be previously set
 	 */
-	void reset_variables();
+	virtual void reset_variables();
 
 	/*!
 	 * \brief method to extract desired_motor_position basing on the ECP instruction with motor desired motor position in absolute or relative variant.
