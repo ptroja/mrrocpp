@@ -3,9 +3,18 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_sarkofag.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "ui_ecp_r_sarkofag.h"
+#include "wgt_sarkofag_inc.h"
+
+
+
 #include "robot/sarkofag/const_sarkofag.h"
 #include "../base/interface.h"
+
+#include "../base/mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -158,6 +167,9 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active"),
 			is_wind_sarkofag_moves_open(false), is_wind_sarkofag_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
+
+	wgt_inc = new wgt_sarkofag_inc(interface, *this, interface.get_main_window());
+	wndbase_m[WGT_SARKOFAG_INC] = wgt_inc->dwgt;
 
 }
 
