@@ -201,12 +201,24 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			strcpy(bin_path, _bin_path.c_str());
 
 		}
-		if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
-			strcat(bin_path, "/");
-		}
 
 	} else {
+#if defined(__QNXNTO__)
 		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/", node.c_str(), dir.c_str());
+#else
+		char* cwd;
+		char buff[PATH_MAX + 1];
+
+		cwd = getcwd(buff, PATH_MAX + 1);
+		if (cwd == NULL) {
+			perror("Blad cwd w configurator");
+		}
+		strcpy(bin_path, cwd);
+#endif
+	}
+
+	if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
+		strcat(bin_path, "/");
 	}
 
 	std::string opendir_path(bin_path);
@@ -236,44 +248,18 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			perror("setsid()");
 		}
 
-		if (exists("username", _section_name)) {
-			std::string username = value <std::string> ("username", _section_name);
-			if (username == std::string("current")) {
+		std::string username;
 
-				username = getenv("USER");
+		if (!exists("username", _section_name))
+			username = getenv("USER");
 
-			}
-			std::cerr << "username: " << username << std::endl;
-			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+		if ((rsh_spawn_node == "localhost") && ( username == getenv("USER") )) {
+			execlp("sh", "sh", "-c" , process_path, NULL);
+		} else {
 			if (!use_ssh) {
 				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
 				execlp(rsh_cmd, rsh_cmd, "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
-			}
-		} else {
-			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
-
-			//			fprintf(stderr,
-			//					"bin_path ->%s<-\n"
-			//					"ui_host ->%s<-\n"
-			//					"spawned_program_name ->%s<-\n"
-			//					"node ->%s<-\n"
-			//					"dir ->%s<-\n"
-			//					"ini_file ->%s<-\n"
-			//					"_section_name ->%s<-\n"
-			//					"session_name ->%s<-\n"
-			//					"asa ->%s<-\n",
-			//					bin_path, ui_host ? ui_host : "",
-			//					spawned_program_name.c_str(),
-			//					node.c_str(), dir.c_str(), ini_file.c_str(), _section_name,
-			//					session_name.length() ? session_name.c_str() : "\"\"",
-			//					asa.c_str()
-			//			);
-			//fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
-			if (!use_ssh) {
-				execlp(rsh_cmd, rsh_cmd, rsh_spawn_node.c_str(), process_path, NULL);
-			} else {
-				execlp(rsh_cmd, rsh_cmd, "-t", rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		}
 
