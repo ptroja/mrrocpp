@@ -276,17 +276,8 @@ void epos::printEPOSstatusword(WORD s)
 		printf("false\n");
 }
 
-/*! check EPOS state, firmware spec 8.1.1
-
- \return EPOS status as defined in firmware specification 8.1.1
-
- */
-int epos::checkEPOSstate()
+int epos::status2state(WORD w)
 {
-	WORD w = readStatusWord();
-
-	//printEPOSstatusword(w);
-
 	/* state 'start' (0)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx0  x000 0000 */
@@ -375,6 +366,39 @@ int epos::checkEPOSstate()
 	fprintf(stderr, "WARNING: EPOS status word %#06x is an unknown state!\n", w);
 
 	return (-1);
+}
+
+/*! check EPOS state, firmware spec 8.1.1
+
+ \return EPOS status as defined in firmware specification 8.1.1
+
+ */
+int epos::checkEPOSstate()
+{
+	WORD w = readStatusWord();
+
+	//printEPOSstatusword(w);
+
+	return status2state(w);
+}
+
+const char * epos::stateDescription(int state)
+{
+	switch (state) {
+		case 0: return "start"; break;
+		case 1: return "not ready to switch on"; break;
+		case 2: return "switch on disabled"; break;
+		case 3: return "ready to switch on"; break;
+		case 4: return "switched on"; break;
+		case 5: return "refresh"; break;
+		case 6: return "measure init"; break;
+		case 7: return "operation enable"; break;
+		case 8: return "quick stop active"; break;
+		case 9: return "fault reaction active (disabled)"; break;
+		case 10: return "fault reaction active (enabled)"; break;
+		case 11: return "fault"; break;
+		default: return "unknown";
+	}
 }
 
 /* pretty-print EPOS state */
@@ -505,7 +529,7 @@ void epos::reset()
 		} else if(state == 11) {
 			throw epos_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state " << state << " during initialization" << std::endl;
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
 			continue;
 		}
 
@@ -1718,7 +1742,7 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 
 	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
 	frame[1] = index;
-	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
+	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 	// data to transmit
 	frame[3] = data[0];
 	frame[4] = data[1];
@@ -1742,6 +1766,52 @@ void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)
 	dw[1] = (WORD) (data >> 16);
 
 	WriteObject(index, subindex, dw);
+}
+
+void epos::SendNMTService(NMT_COMMAND_t CmdSpecifier)
+{
+	WORD frame[4];
+
+	frame[0] = (2 << 8) | 0x0E; // (len << 8) | OpCode
+	frame[1] = nodeId;
+	frame[2] = CmdSpecifier;
+	frame[3] = 0x00; // ZERO word, will be filled with checksum
+
+	device.sendCommand(frame);
+
+	// Remark: no response with RS232
+	if(true /* USB */) {
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
+
+		checkEPOSerror(device.E_error);
+	}
+}
+
+void epos::SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8])
+{
+	WORD frame[4];
+
+	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
+	frame[1] = Identifier;
+	frame[2] = Length;
+	frame[3] = (Data[1] << 8)| Data[0];
+	frame[4] = (Data[3] << 8)| Data[2];
+	frame[5] = (Data[5] << 8)| Data[4];
+	frame[6] = (Data[7] << 8)| Data[6];
+	frame[7] = 0x00; // ZERO word, will be filled with checksum
+
+	device.sendCommand(frame);
+
+	// Remark: no response with RS232
+	if(true /* USB */) {
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
+
+		checkEPOSerror(device.E_error);
+	}
 }
 
 /* compare WORD a with WORD b bitwise */
