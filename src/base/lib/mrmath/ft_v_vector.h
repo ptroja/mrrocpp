@@ -27,10 +27,6 @@ public:
 	Ft_v_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
-	//! Ustawienie elementu wektora.
-	void set_values(const double t[6]);										// wypelnienie wektora na podstawie podanej tablicy
-	void set_values(double fx, double fy, double fz, double tx, double ty, double tz);
-
 	//! Zwrocenie elementu wektora.
 	void to_table(double tablica[6]) const;					// przepisanie wektora do tablicy podanej jako argument
 
