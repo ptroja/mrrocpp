@@ -18,6 +18,8 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include <boost/throw_exception.hpp>
+
 #include "epos_access.h"
 #include "epos.h"
 
@@ -499,7 +501,7 @@ void epos::reset()
 			}
 		}
 
-		throw epos_error() << reason("Device is in the fault state");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -510,7 +512,7 @@ void epos::reset()
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
@@ -536,7 +538,7 @@ void epos::reset()
 	} while(timeout--);
 
 	if(timeout == 0) {
-		throw epos_error() << reason("Timeout enabling device");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -546,7 +548,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != 7) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
@@ -615,7 +617,7 @@ void epos::changeEPOSstate(state_t state)
 			writeControlword(cw);
 			break;
 		default:
-			throw epos_error() << reason("ERROR: demanded state is UNKNOWN!"); // TODO: state
+			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
 	}
 }
 
@@ -635,7 +637,7 @@ UNSIGNED16 epos::readDInputPolarity()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		throw epos_error() << reason("polarity must be 0 (height active) or 1 (low active)");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -1279,7 +1281,7 @@ UNSIGNED8 epos::readNumberOfErrors() {
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
 	if(num < 1 || num > 5) {
-		throw epos_error() << reason("Error History index out of range <1..5>");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
 }
@@ -1507,7 +1509,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = readStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		throw epos_error() << reason("HOMING ERROR!");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1535,7 +1537,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			throw epos_error() << reason("HOMING ERROR!");
+			BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
@@ -1581,12 +1583,12 @@ int epos::waitForTarget(unsigned int t)
  */
 
 /* check the global variable E_error for EPOS error code */
-int epos::checkEPOSerror(DWORD E_error)
+void epos::checkEPOSerror(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
 		case E_NOERR:
-			return (0);
+			return;
 			break;
 		case E_ONOTEX:
 			msg = "requested object does not exist!";
@@ -1646,8 +1648,8 @@ int epos::checkEPOSerror(DWORD E_error)
 			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
 			break;
 	}
-	//EPOS responds with error:
-	return (-1);
+
+	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
 }
 
 /* copied from EPOS Communication Guide, p.8 */
