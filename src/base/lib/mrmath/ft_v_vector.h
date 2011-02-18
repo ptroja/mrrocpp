@@ -25,14 +25,17 @@ public:
 
 	//! Default constructor
 	Ft_v_vector();
+
 	//! utworzenie wektora na podstawie podanej tablicy
 	Ft_v_vector(const double t[6]);
+
+	//! utworzenie wektora na podstawie wartości
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 	//! przepisanie wektora do tablicy podanej jako argument
 	void to_table(double tablica[6]) const;
 
-	//fill in the input vector with the coordinates from the actual vector
+	//! fill in the input vector with the coordinates from the actual vector
 	void to_vector(std::vector<double> & vector);
 
 	//! Wyciagniecie max elementu z wektora
@@ -43,7 +46,7 @@ public:
 	// overload "operator new" so that it generates 16-bytes-aligned pointers.
 	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};// end class Ft_v_vector
+};
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_vector : public Ft_v_vector
