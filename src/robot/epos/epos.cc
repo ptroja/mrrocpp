@@ -73,17 +73,10 @@ namespace epos {
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
 
 /************************************************************/
-/*           implementation of functions are following      */
+/*           EPOS related constants                         */
 /************************************************************/
 
-epos_access::epos_access() :
-	device_opened(false)
-{
-}
-
-epos_access::~epos_access()
-{
-}
+const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 
 /************************************************************/
 /*          high-level read functions */

@@ -318,24 +318,26 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					case lib::epos::SYNC_TRAPEZOIDAL: {
+						// Motion calculation is done in dimensionless units, but it assumes they are coherent
+						// Delta[turns], Vmax[turns per second], Amax[turns per seconds per seconds]
 						Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
 						for (int i = 0; i < 6; ++i) {
-							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]);
+							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])/kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 							std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - "
 									<< desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
-							Vmax[i] = Vdefault[i];
+							Vmax[i] = Vdefault[i]/epos::epos::SECONDS_PER_MINUTE;
 							Amax[i] = Adefault[i];
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
 						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-						//					std::cerr <<
-						//						"Delta:\n" << Delta << std::endl <<
-						//						"Vmax:\n" << Vmax << std::endl <<
-						//						"Amax:\n" << Amax << std::endl <<
-						//						std::endl;
+						std::cerr <<
+							"Delta:\n" << Delta << std::endl <<
+							"Vmax:\n" << Vmax << std::endl <<
+							"Amax:\n" << Amax << std::endl <<
+							std::endl;
 
 						if (t > 0) {
 							// debug display
@@ -348,7 +350,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									if (Delta[i] != 0) {
 										axes[i]->setOperationMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writeProfileVelocity(Vnew[i]);
+										axes[i]->writeProfileVelocity(Vnew[i]*epos::epos::SECONDS_PER_MINUTE);
 										axes[i]->writeProfileAcceleration(Anew[i]);
 										axes[i]->writeProfileDeceleration(Dnew[i]);
 										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);

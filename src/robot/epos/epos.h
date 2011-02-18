@@ -184,7 +184,7 @@ public:
 	epos(epos_access & _device, uint8_t _nodeId);
 
 	/*! \brief check global variable E_error for EPOS error code */
-	static int checkEPOSerror(DWORD E_error);
+	static void checkEPOSerror(DWORD E_error);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
@@ -208,6 +208,10 @@ public:
 
 	/*! pretty-print EPOS Error Register */
 	static void printErrorRegister(UNSIGNED8 reg);
+
+	//! Seconds per minute -- used in motion profile calculations,
+	//! since EPOS velocity is in [rpm] and acceleration is in [rpm/s].
+	static const unsigned SECONDS_PER_MINUTE;
 
 	//! \brief States of the EPOS controller
 	typedef enum _state

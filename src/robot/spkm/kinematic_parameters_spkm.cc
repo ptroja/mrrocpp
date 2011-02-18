@@ -31,6 +31,12 @@ const double linear_mp2i_ratio = 0.005 / (4 * 500 * 9);
 const double rotational_mp2i_ratio = 2*M_PI / (4 * 2000 * 100);
 const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { linear_mp2i_ratio, linear_mp2i_ratio, linear_mp2i_ratio, rotational_mp2i_ratio, rotational_mp2i_ratio, rotational_mp2i_ratio };
 
+// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
+const uint32_t kinematic_parameters_spkm::encoder_resolution[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {
+		500*4, 500*4, 500*4,
+		2000*4, 2000*4, 2000*4
+};
+
 // Initialization of upper motors limits vector.
 // Those values were computed on the base of "safe" joint limits.
 const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 75801, 9801, 350000, 60000, 340000 };

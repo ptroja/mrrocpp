@@ -56,10 +56,12 @@ public:
 
 public:
 	//! Constructor
-	epos_access();
+	epos_access() : device_opened(false)
+	{}
 
 	//! Destructor
-	virtual ~epos_access();
+	virtual ~epos_access()
+	{}
 
 	/*! \brief  send command to EPOS, taking care of all necessary 'ack' and checksum tests
 	 *
