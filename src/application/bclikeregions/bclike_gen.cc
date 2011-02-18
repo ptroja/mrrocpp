@@ -309,7 +309,8 @@ bool bclike_gen::checkIfCodeBeenRead(task::mrrocpp_regions& code){
 		if(codesIntersect(code, (*it).first)){
 			(*it).first.x = ((*it).first.x + code.x)/2;
 			(*it).first.y = ((*it).first.y + code.y)/2;
-			(*it).first.r = sqrt(((*it).first.x - code.x)*((*it).first.x - code.x) + ((*it).first.y - code.y)*((*it).first.y - code.y))/2 + ((*it).first.r + code.r)/2;
+			//(*it).first.r = sqrt(((*it).first.x - code.x)*((*it).first.x - code.x) + ((*it).first.y - code.y)*((*it).first.y - code.y))/2 + ((*it).first.r + code.r)/2;
+			(*it).first.r = hypot(((*it).first.x - code.x), ((*it).first.y - code.y))/2 + ((*it).first.r + code.r)/2;
 
 			return true;
 		}
@@ -320,7 +321,8 @@ bool bclike_gen::checkIfCodeBeenRead(task::mrrocpp_regions& code){
 
 bool bclike_gen::codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions& c2){
 
-	if(sqrt((c1.x - c2.x)*(c1.x - c2.x) + (c1.y - c2.y)*(c1.y - c2.y)) < (c1.r + c2.r)){
+	//if(sqrt((c1.x - c2.x)*(c1.x - c2.x) + (c1.y - c2.y)*(c1.y - c2.y)) < (c1.r + c2.r)){
+	if(hypot((c1.x - c2.x), (c1.y - c2.y)) < (c1.r + c2.r)){
 		return true;
 	}
 	return false;
