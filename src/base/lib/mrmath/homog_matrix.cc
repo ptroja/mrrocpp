@@ -255,7 +255,7 @@ void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 		alfa = atan2(-matrix_m[1][0], matrix_m[1][1]);
 	} else {
 		// Normalne rozwiazanie.
-		double sb = sqrt(matrix_m[2][0] * matrix_m[2][0] + matrix_m[2][1] * matrix_m[2][1]);
+		double sb = hypot(matrix_m[2][0], matrix_m[2][1]);
 		beta = atan2(sb, matrix_m[2][2]);
 		//		beta = acos(matrix[2][2]);
 
@@ -322,7 +322,7 @@ void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector & l_vector) const
 
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	l_vector[3] = atan2(matrix_m[2][1], matrix_m[2][2]);
-	l_vector[4] = atan2(matrix_m[2][0], sqrt(matrix_m[0][0] * matrix_m[0][0] + matrix_m[1][0] * matrix_m[1][0]));
+	l_vector[4] = atan2(matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
 	l_vector[5] = atan2(matrix_m[1][0], matrix_m[0][0]);
 }
 
