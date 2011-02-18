@@ -33,12 +33,12 @@ const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_S
 
 // Initialization of upper motors limits vector.
 // Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 10801, 9801, 350000, 60000, 340000 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 9801, 75801, 9801, 350000, 60000, 340000 };
 
 // Initialization of lower motors limits vector.
 // The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
 // Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -248401, -100801, -290000, -70000, -310000 };
+const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -100801, -183401, -100801, -290000, -70000, -310000 };
 
 // Initialization of upper joints vector.
 // Those are the "safe" limits, not related to synchronization sensors positions.
@@ -69,8 +69,8 @@ const double kinematic_parameters_spkm::pC = 0.05;
 // Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
 const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);
 
-// Initialization of transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
-const double tmp_pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+// Initialization of transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
+const double tmp_pst[16] = {0, -1.0, 0, 0, 1.0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
 const Homog4d kinematic_parameters_spkm::P_S_T(tmp_pst);
 
 // Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
