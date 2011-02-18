@@ -57,8 +57,8 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Ft_vector();
+	Ft_vector(const double t[6]);
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 public:
@@ -76,8 +76,8 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Xyz_Angle_Axis_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Angle_Axis_vector();
+	Xyz_Angle_Axis_vector(const double t[6]);
 	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
@@ -102,8 +102,8 @@ public:
 	//! Reuse assignment operators from base class
 	using Ft_v_vector::operator=;
 
-	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Euler_Zyz_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Euler_Zyz_vector();
+	Xyz_Euler_Zyz_vector(const double t[6]);
 	Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 public:
@@ -121,8 +121,8 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Rpy_vector();
+	Xyz_Rpy_vector(const double t[6]);
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 public:
