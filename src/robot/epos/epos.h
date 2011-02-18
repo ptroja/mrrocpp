@@ -186,12 +186,40 @@ public:
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
 
+	//! CAN Network Management Commands
+	typedef enum _NMT_Command
+	{
+		Start_Remote_Node = 1,
+		Stop_Remote_Node = 2,
+		Enter_Pre_Operational = 128,
+		Reset_Node = 129,
+		Reset_Communication = 130
+	} NMT_COMMAND_t;
+
+	/*! \brief Send a NMT service to, for example, change NMT state or reset the device.
+	 *  \param CmdSpecifier command specifier
+	 */
+	void SendNMTService(NMT_COMMAND_t CmdSpecifier);
+
+	/*! Send CAN frame the the CAN bus
+	 *  @param Identifier CAN Frame 11-bit Identifier
+	 *  @param Length CAN Frame Data Length Code (DLC)
+	 *  @param Data CAN Frame Data
+	 */
+	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
+
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
 
 	/*! \brief check EPOS status
 	 * @return state according to firmware spec */
 	int checkEPOSstate();
+
+	//! Find EPOS state corresponding to given status word
+	static int status2state(WORD w);
+
+	//! Utility routine to pretty print device state
+	static const char * stateDescription(int state);
 
 	/*! \brief pretty-print EPOS state
 	 *

@@ -35,6 +35,10 @@ int main(int argc, char *argv[])
 		BOOST_FOREACH(epos * node, axis) {
 
 			node->printEPOSstate();
+//			node->SendNMTService(epos::Reset_Node);
+//			usleep(500000);
+//			node->SendNMTService(epos::Start_Remote_Node);
+//			usleep(500000);
 
 			// Check if in a FAULT state
 			if(node->checkEPOSstate() == 11) {
