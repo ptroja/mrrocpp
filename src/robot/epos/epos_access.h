@@ -73,6 +73,29 @@ public:
 	 */
 	virtual unsigned int readAnswer(WORD *ans, unsigned int ans_len) = 0;
 
+	//! CAN Network Management Commands
+	typedef enum _NMT_Command
+	{
+		Start_Remote_Node = 1,
+		Stop_Remote_Node = 2,
+		Enter_Pre_Operational = 128,
+		Reset_Node = 129,
+		Reset_Communication = 130
+	} NMT_COMMAND_t;
+
+	/*! \brief Send a NMT service to, for example, change NMT state or reset the device.
+	 *  \param nodeId CAN node ID
+	 *  \param CmdSpecifier command specifier
+	 */
+	virtual void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier) = 0;
+
+	/*! Send CAN frame the the CAN bus
+	 *  @param Identifier CAN Frame 11-bit Identifier
+	 *  @param Length CAN Frame Data Length Code (DLC)
+	 *  @param Data CAN Frame Data
+	 */
+	virtual void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]) = 0;
+
 	//! Open device
 	virtual void open() = 0;
 

@@ -1768,52 +1768,6 @@ void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)
 	WriteObject(index, subindex, dw);
 }
 
-void epos::SendNMTService(NMT_COMMAND_t CmdSpecifier)
-{
-	WORD frame[4];
-
-	frame[0] = (2 << 8) | 0x0E; // (len << 8) | OpCode
-	frame[1] = nodeId;
-	frame[2] = CmdSpecifier;
-	frame[3] = 0x00; // ZERO word, will be filled with checksum
-
-	device.sendCommand(frame);
-
-	// Remark: no response with RS232
-	if(true /* USB */) {
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-	}
-}
-
-void epos::SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8])
-{
-	WORD frame[4];
-
-	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
-	frame[1] = Identifier;
-	frame[2] = Length;
-	frame[3] = (Data[1] << 8)| Data[0];
-	frame[4] = (Data[3] << 8)| Data[2];
-	frame[5] = (Data[5] << 8)| Data[4];
-	frame[6] = (Data[7] << 8)| Data[6];
-	frame[7] = 0x00; // ZERO word, will be filled with checksum
-
-	device.sendCommand(frame);
-
-	// Remark: no response with RS232
-	if(true /* USB */) {
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-	}
-}
-
 /* compare WORD a with WORD b bitwise */
 bool epos::bitcmp(WORD a, WORD b)
 {

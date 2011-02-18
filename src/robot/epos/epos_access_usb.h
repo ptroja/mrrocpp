@@ -31,6 +31,12 @@ public:
 	//! Read from device via USB
 	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
 
+	//! Send a NMT service to, for example, change NMT state or reset the device.
+	void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier);
+
+	//! Send CAN frame the the CAN bus
+	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
+
 	/*! \brief create new USB EPOS object
 	 *
 	 * @param vendor USB device vendor ID

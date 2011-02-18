@@ -164,9 +164,6 @@ private:
 	 */
 	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
 
-	/*! \brief check global variable E_error for EPOS error code */
-	int checkEPOSerror(DWORD E_error);
-
 	/*! \brief compare two 16bit bitmasks
 	 *
 	 * @return result of comparison */
@@ -186,27 +183,8 @@ public:
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
 
-	//! CAN Network Management Commands
-	typedef enum _NMT_Command
-	{
-		Start_Remote_Node = 1,
-		Stop_Remote_Node = 2,
-		Enter_Pre_Operational = 128,
-		Reset_Node = 129,
-		Reset_Communication = 130
-	} NMT_COMMAND_t;
-
-	/*! \brief Send a NMT service to, for example, change NMT state or reset the device.
-	 *  \param CmdSpecifier command specifier
-	 */
-	void SendNMTService(NMT_COMMAND_t CmdSpecifier);
-
-	/*! Send CAN frame the the CAN bus
-	 *  @param Identifier CAN Frame 11-bit Identifier
-	 *  @param Length CAN Frame Data Length Code (DLC)
-	 *  @param Data CAN Frame Data
-	 */
-	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
+	/*! \brief check global variable E_error for EPOS error code */
+	static int checkEPOSerror(DWORD E_error);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
