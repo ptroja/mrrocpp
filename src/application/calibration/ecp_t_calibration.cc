@@ -220,7 +220,8 @@ bool calibration::rotation_matrix_to_angles(const gsl_matrix * rotation, gsl_vec
 	// alpha = atan2(r21, r11)
 	gsl_vector_set(angles, 0, atan2(y,x));
 
-	x = sqrt( pow( gsl_matrix_get( rotation, 0, 0 ), 2) + pow(gsl_matrix_get(rotation, 1, 0),2));
+	//x = sqrt( pow( gsl_matrix_get( rotation, 0, 0 ), 2) + pow(gsl_matrix_get(rotation, 1, 0),2));
+	x = hypot( gsl_matrix_get( rotation, 0, 0 ), gsl_matrix_get(rotation, 1, 0));
 	y = -gsl_matrix_get(rotation, 2, 0);
 	// beta = atan2(-r31, sqrt(r11^2 + r21^2))
 	gsl_vector_set(angles, 1, atan2(y,x));

@@ -49,10 +49,6 @@ void kinematics_manager::add_kinematic_model(kinematic_model* _model)
 	kinematic_models_list[kinematic_models_list.size()] = _model;
 }
 
-kinematic_model* kinematics_manager::get_current_kinematic_model(void)
-{
-	return (kinematic_model*) (kinematic_models_list[current_kinematic_model_no]);
-}
 
 int kinematics_manager::get_current_kinematic_model_no(void)
 {

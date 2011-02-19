@@ -61,7 +61,7 @@ void robot::create_command()
 	bool is_new_data;
 	bool is_new_request;
 
-	sr_ecp_msg.message("create_command");
+	//sr_ecp_msg.message("create_command");
 
 	is_new_data = false;
 	is_new_request = false;
@@ -136,7 +136,10 @@ void robot::create_command()
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
-
+		if (!is_synchronised()) {
+				ecp_command.motion_type = lib::RELATIVE;
+				ecp_command.set_arm_type = lib::MOTOR;
+			}
 		ecp_edp_cbuffer.variant = lib::spkm::CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
@@ -150,26 +153,26 @@ void robot::create_command()
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
 		ecp_command.get_arm_type = lib::JOINT;
-		sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
+		//sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 		ecp_command.get_arm_type = lib::FRAME;
-		sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
+		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	communicate_with_edp = true;
 	if (is_new_data && is_new_request) {
 		ecp_command.instruction_type = lib::SET_GET;
-		sr_ecp_msg.message("is_new_data is_new_request");
+		//sr_ecp_msg.message("is_new_data is_new_request");
 	} else if (is_new_data) {
 		ecp_command.instruction_type = lib::SET;
-		sr_ecp_msg.message("is_new_data");
+		//sr_ecp_msg.message("is_new_data");
 	} else if (is_new_request) {
 		ecp_command.instruction_type = lib::GET;
-		sr_ecp_msg.message("is_new_request");
+		//sr_ecp_msg.message("is_new_request");
 	} else {
 		communicate_with_edp = false;
 	}

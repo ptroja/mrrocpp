@@ -83,8 +83,8 @@ void catch_signal_in_mp(int sig)
 
 int main(int argc, char *argv[], char **arge)
 {
-	if (argc < 6) {
-		std::cerr << "Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>" << std::endl;
+	if (argc < 4) {
+		std::cerr << "Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[], char **arge)
 		boost::shared_ptr<lib::configurator> _config;
 
 		try {
-			_config = (boost::shared_ptr<lib::configurator>) new lib::configurator(argv[1], argv[2], argv[3], lib::MP_SECTION, argv[5]);
+			_config = (boost::shared_ptr<lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
 
 			mp::common::mp_t = (boost::shared_ptr<mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
 

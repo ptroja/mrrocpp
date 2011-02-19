@@ -164,9 +164,6 @@ private:
 	 */
 	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
 
-	/*! \brief check global variable E_error for EPOS error code */
-	int checkEPOSerror(DWORD E_error);
-
 	/*! \brief compare two 16bit bitmasks
 	 *
 	 * @return result of comparison */
@@ -186,12 +183,21 @@ public:
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
 
+	/*! \brief check global variable E_error for EPOS error code */
+	static void checkEPOSerror(DWORD E_error);
+
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
 
 	/*! \brief check EPOS status
 	 * @return state according to firmware spec */
 	int checkEPOSstate();
+
+	//! Find EPOS state corresponding to given status word
+	static int status2state(WORD w);
+
+	//! Utility routine to pretty print device state
+	static const char * stateDescription(int state);
 
 	/*! \brief pretty-print EPOS state
 	 *
@@ -203,6 +209,10 @@ public:
 	/*! pretty-print EPOS Error Register */
 	static void printErrorRegister(UNSIGNED8 reg);
 
+	//! Seconds per minute -- used in motion profile calculations,
+	//! since EPOS velocity is in [rpm] and acceleration is in [rpm/s].
+	static const unsigned SECONDS_PER_MINUTE;
+
 	//! \brief States of the EPOS controller
 	typedef enum _state
 	{
@@ -210,7 +220,7 @@ public:
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} state_t;
 
-	//! Reset the device by issuing a shutdown command followed by power-on
+	//! Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
 
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
@@ -249,13 +259,19 @@ public:
 	/*! \brief pretty-print controlword */
 	void printEPOScontrolword(WORD controlword);
 
+	//! \brief start motion with absolute demanded position
+	void startAbsoluteMotion();
+
+	//! \brief start motion with relative demanded position
+	void startRelativeMotion();
+
 	//! \brief EPOS Operational mode
 	typedef enum _operational_mode
 	{
-		OMD_PROFILE_POSITION_MODE = 1, //! profile position mode
-		OMD_PROFILE_VELOCITY_MODE = 3, //! profile velocity mode
-		OMD_HOMING_MODE = 6, //! homing
 		OMD_INTERPOLATED_POSITION_MODE = 7,
+		OMD_HOMING_MODE = 6, //! homing
+		OMD_PROFILE_VELOCITY_MODE = 3, //! profile velocity mode
+		OMD_PROFILE_POSITION_MODE = 1, //! profile position mode
 		OMD_POSITION_MODE = -1, //! position mode
 		OMD_VELOCITY_MODE = -2, //! velocity mode
 		OMD_CURRENT_MODE = -3, //! current mode
@@ -265,13 +281,13 @@ public:
 	} operational_mode_t;
 
 	/*! \brief set EPOS mode of operation -- 14.1.59 */
-	void setOpMode(operational_mode_t);
+	void setOperationMode(operational_mode_t);
 
 	/*! \brief read and returns  EPOS mode of operation -- 14.1.60
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
-	operational_mode_t readOpMode();
+	operational_mode_t readActualOperationMode();
 
 	/*! \brief read demanded position; 14.1.61 */
 	INTEGER32 readDemandPosition();
@@ -290,20 +306,23 @@ public:
 
 	//		int writePositionSoftwareLimits(long val, long val2);
 
-	//! write position profile velocity
-	void writePositionProfileVelocity(UNSIGNED32 vel);
+	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
+	void writeProfileVelocity(UNSIGNED32 vel);
 
-	//! write position profile acceleration
-	void writePositionProfileAcceleration(UNSIGNED32 acc);
+	//! write acceleration ramp during a movement
+	void writeProfileAcceleration(UNSIGNED32 acc);
 
-	//! write position profile deceleration
-	void writePositionProfileDeceleration(UNSIGNED32 dec);
+	//! write deceleration ramp during a movement
+	void writeProfileDeceleration(UNSIGNED32 dec);
 
-	//! write position profile quick stop deceleration
-	void writePositionProfileQuickStopDeceleration(UNSIGNED32 qsdec);
+	//! write deceleration ramp during a Quickstop
+	void writeQuickStopDeceleration(UNSIGNED32 qsdec);
 
-	//! write position profile max velocity
-	void writePositionProfileMaxVelocity(UNSIGNED32 maxvel);
+	//! write maximal allowed speed
+	void writeMaxProfileVelocity(UNSIGNED32 maxvel);
+
+	//! write maximal allowed acceleration
+	void writeMaxAcceleration(UNSIGNED32 maxvel);
 
 	/*! \brief write position profile type
 	 *
@@ -311,20 +330,23 @@ public:
 	 */
 	void writePositionProfileType(INTEGER16 type);
 
-	//! \brief read position profile velocity
-	UNSIGNED32 readPositionProfileVelocity();
+	//! \brief read velocity normally attained at the end of the acceleration ramp during a profiled move
+	UNSIGNED32 readProfileVelocity();
 
-	//! \brief read position profile acceleration
-	UNSIGNED32 readPositionProfileAcceleration();
+	//! \brief read acceleration ramp during a movement
+	UNSIGNED32 readProfileAcceleration();
 
-	//! \brief read position profile deceleration
-	UNSIGNED32 readPositionProfileDeceleration();
+	//! \brief read deceleration ramp during a movement
+	UNSIGNED32 readProfileDeceleration();
 
-	//! \brief read position profile quick stop deceleration
-	UNSIGNED32 readPositionProfileQuickStopDeceleration();
+	//! \brief read deceleration ramp during a Quickstop
+	UNSIGNED32 readQuickStopDeceleration();
 
-	//! \brief read position profile max velocity
-	UNSIGNED32 readPositionProfileMaxVelocity();
+	//! \brief read maximal allowed speed
+	UNSIGNED32 readMaxProfileVelocity();
+
+	//! \brief read maximal allowed acceleration
+	UNSIGNED32 readMaxAcceleration();
 
 	//! \brief read position profile type
 	INTEGER16 readPositionProfileType();
@@ -440,16 +462,16 @@ public:
 	void writeMotorOutputCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor pole pair number
-	UNSIGNED8 readMotorPolePair();
+	UNSIGNED8 readMotorPolePairNumber();
 
 	//! \brief write motor pole pair number
-	void writeMotorPolePair(UNSIGNED8 cur);
+	void writeMotorPolePairNumber(UNSIGNED8 cur);
 
 	//! \brief read motor max speed current
-	UNSIGNED32 readMotorMaxSpeedCurrent();
+	UNSIGNED32 readMotorMaxSpeed();
 
 	//! \brief write motor max speed current
-	void writeMotorMaxSpeedCurrent(UNSIGNED32 val);
+	void writeMotorMaxSpeed(UNSIGNED32 val);
 
 	//! \brief read motor thermal constant
 	UNSIGNED16 readMotorThermalConstant();
@@ -541,6 +563,26 @@ public:
 	/*! Write the Maximal Position Limit */
 	void writeMaximalPositionLimit(INTEGER32 val);
 
+	// Gear Configuration
+
+	//! read Gear Ratio Numerator
+	UNSIGNED32 readGearRatioNumerator();
+
+	//! write Gear Ratio Numerator
+	void writeGearRatioNumerator(UNSIGNED32 val);
+
+	//! read Gear Ratio Denominator
+	UNSIGNED16 readGearRatioDenominator();
+
+	//! write Gear Ratio Denominator
+	void writeGearRatioDenominator(UNSIGNED16 val);
+
+	//! read Gear Maximal Speed
+	UNSIGNED32 readGearMaximalSpeed();
+
+	//! write Gear Maximal Speed
+	void writeGearMaximalSpeed(UNSIGNED32 val);
+
 	/*!
 	 * Interpolated Profile Motion mode commands
 	 */
@@ -616,9 +658,9 @@ private:
 	//! @note have to be at the bottom because some typedefs are defined above
 	operational_mode_t OpMode;
 	INTEGER16 PositionProfileType;
-	UNSIGNED32 PositionProfileVelocity;
-	UNSIGNED32 PositionProfileAcceleration;
-	UNSIGNED32 PositionProfileDeceleration;
+	UNSIGNED32 ProfileVelocity;
+	UNSIGNED32 ProfileAcceleration;
+	UNSIGNED32 ProfileDeceleration;
 };
 
 } /* namespace epos */

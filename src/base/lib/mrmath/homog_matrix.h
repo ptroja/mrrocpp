@@ -170,15 +170,23 @@ public:
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
 
 	/**
-	 * Set from the XYZ_EULER_ZYZ representation
+	 * Set from the XYZ_EULER_ZYZ representation. Takes into consideration limits for beta <0, PI).
 	 *
 	 * @param[in] l_vector requested representation
 	 */
 	void set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector);
 
+	/**
+	 * Set from the XYZ_EULER_ZYZ representation without limits for beta (it can vary from <-PI, PI)).
+	 *
+	 * @param[in] l_vector requested representation
+	 */
+	void set_from_xyz_euler_zyz_without_limits(const Xyz_Euler_Zyz_vector & l_vector);
+
 	//! Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(Xyz_Rpy_vector & l_vector) const;
-	// Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
+
+	//! Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
 	void set_from_xyz_rpy(const Xyz_Rpy_vector & l_vector);
 
 	//! Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.

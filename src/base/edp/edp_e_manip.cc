@@ -295,7 +295,7 @@ void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray &
 			}
 			break;
 		case lib::PF_VELOCITY:
-			base_pos_xyz_rot_xyz_vector.set_values(instruction.arm.pf_def.arm_coordinates);
+			base_pos_xyz_rot_xyz_vector = lib::Xyz_Angle_Axis_vector(instruction.arm.pf_def.arm_coordinates);
 			break;
 		default:
 			throw System_error();
@@ -399,7 +399,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 		if (step_counter - last_force_step_counter > PREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE) {
 			//			printf("\n\nPREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE\n\n");
-			previous_move_rot_vector.set_values(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+			previous_move_rot_vector = lib::Xyz_Angle_Axis_vector::Zero();
 		} else {
 			//	printf("\n\nPREVIOUS_MOVE_VECTOR_NULL_STEP_VALUE NOT\n\n");
 		}

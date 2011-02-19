@@ -27,7 +27,7 @@ namespace spkm {
 typedef Eigen::Matrix<double, 5, 1> Vector5d;
 
 //! Type used for representation of 3-dimensional homogeneous matrices (4x4 doubles).
-typedef Eigen::Transform<double, 3> Homog4d;
+typedef Eigen::Matrix<double, 4 , 4> Homog4d;
 
 /*!
  * @struct kinematic_parameters_spkm
@@ -65,10 +65,10 @@ public:
 	static const Vector3d P_S_P;
 
     //! Transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
-	Homog4d P_S_T;
+	static const Homog4d P_S_T;
 
-    //! Transformation from S (middle of the spherical wrist) to W (SW end-effector).
-    Homog4d S_W_T;
+    //! Transformation from W (SW end-effector) to S (middle of the spherical wrist).
+    static const Homog4d W_S_T;
 
 	//! Parameters describing the synchronization positions of first three parallel PM axes (A=0,B=1,C=2).
 	static const double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];
@@ -76,11 +76,14 @@ public:
 	//! Parameters related to conversion from motor positions to joints.
 	static const double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
+	//! Encoder resolution.
+	static const uint32_t encoder_resolution[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
 	//! Largest values that motors can reach.
-	static const double upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	static const int32_t upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Smallest values that motors can reach.
-	static const double lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	static const int32_t lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Largest values that joints can reach.
 	static const double upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];

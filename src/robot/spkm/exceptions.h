@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File containing consts, types and classes related to SPKM exception.
+ * @brief File containing consts, types and classes related to SPKM exceptions.
  *
  * @author tkornuta
  * @date 08-02-2011
@@ -49,9 +49,7 @@ typedef boost::error_info <struct desired_value, double> spkm_desired_value;
  */
 struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_motor_limit_error() throw ()
-	{
-	}
+	~spkm_motor_limit_error() throw () { }
 };
 
 /*!
@@ -60,10 +58,37 @@ struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
  */
 struct spkm_joint_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_joint_limit_error() throw ()
-	{
-	}
+	~spkm_joint_limit_error() throw () { }
 };
+
+/*!
+ * \brief Exception thrown in case of invalid pose specification.
+ * \author tkornuta
+ */
+struct spkm_pose_specification_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+{
+	~spkm_pose_specification_error() throw () { }
+};
+
+/*!
+ * \brief Exception thrown in case of invalid motion type.
+ * \author tkornuta
+ */
+struct spkm_motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+{
+	~spkm_motion_type_error() throw () { }
+};
+
+/*!
+ * \brief Exception thrown when in an unsychronized robot state a command requiring synchronization is received.
+ * \author tkornuta
+ */
+struct spkm_unsynchronized_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+{
+	~spkm_unsynchronized_error() throw () { }
+};
+
+
 
 } // namespace spkm
 } // namespace kinematic
