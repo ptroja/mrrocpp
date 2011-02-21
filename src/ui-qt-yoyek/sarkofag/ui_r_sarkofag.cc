@@ -3,7 +3,9 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_sarkofag.h"
-#include "ui_ecp_r_sarkofag.h"
+//#include "ui_ecp_r_sarkofag.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+
 #include "wgt_sarkofag_inc.h"
 
 
