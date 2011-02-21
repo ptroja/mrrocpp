@@ -503,30 +503,52 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	}
 
 	//if(pose_vector.empty && this->ecp_t.ecp_m_robot->robot_name)
+	std::cout<<file_name<<std::endl;
 	int pos = from_file.tellg();
 	char* line;
-	double tmp[22];
+	//double tmp[22];
 	std::string string_line;
+	int dlugosc;
 	do
 	{
 	from_file.getline(line, 80);
-	string_line=line;
+	string_line=(*new std::string(line));
+	std::cout<<"line "<<string_line<<std::endl;
+	dlugosc=string_line.size();
 	}
-	while (string_line.size()<2);
+	while (dlugosc<2);
+int num=1;
 std::cout<<"POSE: "<<string_line<<std::endl;
-int num = lib::setValuesInArray(tmp,string_line);
-from_file.seekg(string_line.size(), ios::beg);
+std::cout<<"dlugosc "<<dlugosc<<std::endl;
+for (i=1;i<dlugosc;i++)
+{
+	std::cout<<"test"<<std::endl;
+	if(line[i]=='/t')num++;
+}
+std::cout<<"MEGATEST0 "<<num<<std::endl;
+for (i=dlugosc-2;i>=0;i--)
+{
+	std::cout<<"test2"<<std::endl;
+	if(line[i]!='/t')break;
+	num--;
+}
+std::cout<<"MEGATEST1 "<<num<<std::endl;
+//int num = lib::setValuesInArray(tmp,string_line);
 this->set_axes_num(num);
+std::cout<<"MEGATEST2"<<std::endl;
+from_file.seekg(dlugosc, ios::beg);
+std::cout<<"MEGATEST3"<<std::endl;
 
 
 	for (i = 0; i < number_of_poses; i++) {
+		std::cout<<"pose "<<i+1<<" loading1"<<std::endl;
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
-
+		std::cout<<"pose "<<i+1<<" loading2"<<std::endl;
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
@@ -534,7 +556,7 @@ this->set_axes_num(num);
 				return false;
 			}
 		}
-
+		std::cout<<"pose "<<i+1<<" loading3"<<std::endl;
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
@@ -553,6 +575,7 @@ this->set_axes_num(num);
 		} else if (ps == lib::ECP_XYZ_ANGLE_AXIS) {
 			load_trajectory_pose(coordinates, mt, ps, v, a, angle_axis_max_velocity, angle_axis_max_acceleration);
 		}
+		std::cout<<"pose "<<i+1<<" loaded"<<std::endl;
 	}
 
 	return true;
