@@ -9,6 +9,8 @@
  * @ingroup spkm
  */
 
+#include <boost/serialization/serialization.hpp>
+
 #include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
@@ -19,7 +21,7 @@ namespace spkm {
  * @brief SwarmItFix Parallel Kinematic Machine mp to ecp command
  * @ingroup spkm
  */
-struct mp_to_ecp_parameters
+typedef struct _segment
 {
 	//! The goal pose of the manipulator
 	lib::frame_tab goal_pose;
@@ -38,7 +40,17 @@ struct mp_to_ecp_parameters
 	//! - the contact was expected and did not happend
 	//! - OR the contact was NOT expected and did happend.
 	bool guarded_motion;
-};
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & goal_pose;
+		ar & motion_type;
+		ar & duration;
+		ar & guarded_motion;
+	}
+} segment_t;
 
 } // namespace spkm
 } // namespace lib
