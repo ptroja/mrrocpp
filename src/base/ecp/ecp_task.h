@@ -189,7 +189,7 @@ public:
 	void wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
 
 public:
-	// TODO: what follows should be private method
+	// TODO: what follows should be private
 
 	/**
 	 * @brief communicates with MP
