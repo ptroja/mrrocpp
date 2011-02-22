@@ -49,7 +49,7 @@ typedef subtasks_t::value_type subtask_pair_t;
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-class task_base : public ecp_mp::task::task, Agent
+class task_base : public ecp_mp::task::task
 {
 private:
 	/**

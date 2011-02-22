@@ -50,7 +50,6 @@ task::task(lib::configurator &_config) :
 {
 	// initialize communication with other processes
 	initialize_communication();
-
 }
 
 task::~task()

@@ -14,6 +14,7 @@
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
+#include "base/lib/agent/Agent.h"
 
 #include <libxml/tree.h>
 
@@ -45,7 +46,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class task
+class task : Agent
 {
 public:
 	/**
