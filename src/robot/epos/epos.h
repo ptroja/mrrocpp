@@ -164,9 +164,6 @@ private:
 	 */
 	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
 
-	/*! \brief check global variable E_error for EPOS error code */
-	int checkEPOSerror(DWORD E_error);
-
 	/*! \brief compare two 16bit bitmasks
 	 *
 	 * @return result of comparison */
@@ -186,12 +183,21 @@ public:
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
 
+	/*! \brief check global variable E_error for EPOS error code */
+	static void checkEPOSerror(DWORD E_error);
+
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
 
 	/*! \brief check EPOS status
 	 * @return state according to firmware spec */
 	int checkEPOSstate();
+
+	//! Find EPOS state corresponding to given status word
+	static int status2state(WORD w);
+
+	//! Utility routine to pretty print device state
+	static const char * stateDescription(int state);
 
 	/*! \brief pretty-print EPOS state
 	 *
@@ -202,6 +208,10 @@ public:
 
 	/*! pretty-print EPOS Error Register */
 	static void printErrorRegister(UNSIGNED8 reg);
+
+	//! Seconds per minute -- used in motion profile calculations,
+	//! since EPOS velocity is in [rpm] and acceleration is in [rpm/s].
+	static const unsigned SECONDS_PER_MINUTE;
 
 	//! \brief States of the EPOS controller
 	typedef enum _state

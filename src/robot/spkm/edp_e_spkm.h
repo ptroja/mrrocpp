@@ -41,13 +41,13 @@ private:
 	//! Axes container
 	boost::array<epos::epos *, 6> axes;
 
-	//! Default axis velocity
+	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[6];
 
-	//! Default axis acceleration
+	//! Default axis acceleration [rpm/s]
 	static const uint32_t Adefault[6];
 
-	//! Default axis deceleration
+	//! Default axis deceleration [rpm/s]
 	static const uint32_t Ddefault[6];
 
 	//! "Desired" joint values that were required by previously received SET command. It is threated as current position of joints - which can be retrieved from the hardware only by the GET command.

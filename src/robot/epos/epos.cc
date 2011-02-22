@@ -18,6 +18,8 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include <boost/throw_exception.hpp>
+
 #include "epos_access.h"
 #include "epos.h"
 
@@ -71,17 +73,10 @@ namespace epos {
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
 
 /************************************************************/
-/*           implementation of functions are following      */
+/*           EPOS related constants                         */
 /************************************************************/
 
-epos_access::epos_access() :
-	device_opened(false)
-{
-}
-
-epos_access::~epos_access()
-{
-}
+const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 
 /************************************************************/
 /*          high-level read functions */
@@ -276,17 +271,8 @@ void epos::printEPOSstatusword(WORD s)
 		printf("false\n");
 }
 
-/*! check EPOS state, firmware spec 8.1.1
-
- \return EPOS status as defined in firmware specification 8.1.1
-
- */
-int epos::checkEPOSstate()
+int epos::status2state(WORD w)
 {
-	WORD w = readStatusWord();
-
-	//printEPOSstatusword(w);
-
 	/* state 'start' (0)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx0  x000 0000 */
@@ -375,6 +361,39 @@ int epos::checkEPOSstate()
 	fprintf(stderr, "WARNING: EPOS status word %#06x is an unknown state!\n", w);
 
 	return (-1);
+}
+
+/*! check EPOS state, firmware spec 8.1.1
+
+ \return EPOS status as defined in firmware specification 8.1.1
+
+ */
+int epos::checkEPOSstate()
+{
+	WORD w = readStatusWord();
+
+	//printEPOSstatusword(w);
+
+	return status2state(w);
+}
+
+const char * epos::stateDescription(int state)
+{
+	switch (state) {
+		case 0: return "start"; break;
+		case 1: return "not ready to switch on"; break;
+		case 2: return "switch on disabled"; break;
+		case 3: return "ready to switch on"; break;
+		case 4: return "switched on"; break;
+		case 5: return "refresh"; break;
+		case 6: return "measure init"; break;
+		case 7: return "operation enable"; break;
+		case 8: return "quick stop active"; break;
+		case 9: return "fault reaction active (disabled)"; break;
+		case 10: return "fault reaction active (enabled)"; break;
+		case 11: return "fault"; break;
+		default: return "unknown";
+	}
 }
 
 /* pretty-print EPOS state */
@@ -475,7 +494,7 @@ void epos::reset()
 			}
 		}
 
-		throw epos_error() << reason("Device is in the fault state");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -486,7 +505,7 @@ void epos::reset()
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
@@ -505,14 +524,14 @@ void epos::reset()
 		} else if(state == 11) {
 			throw epos_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state " << state << " during initialization" << std::endl;
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
 			continue;
 		}
 
 	} while(timeout--);
 
 	if(timeout == 0) {
-		throw epos_error() << reason("Timeout enabling device");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -522,7 +541,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != 7) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
@@ -591,7 +610,7 @@ void epos::changeEPOSstate(state_t state)
 			writeControlword(cw);
 			break;
 		default:
-			throw epos_error() << reason("ERROR: demanded state is UNKNOWN!"); // TODO: state
+			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
 	}
 }
 
@@ -611,7 +630,7 @@ UNSIGNED16 epos::readDInputPolarity()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		throw epos_error() << reason("polarity must be 0 (height active) or 1 (low active)");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -1255,7 +1274,7 @@ UNSIGNED8 epos::readNumberOfErrors() {
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
 	if(num < 1 || num > 5) {
-		throw epos_error() << reason("Error History index out of range <1..5>");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
 }
@@ -1483,7 +1502,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = readStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		throw epos_error() << reason("HOMING ERROR!");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1511,7 +1530,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			throw epos_error() << reason("HOMING ERROR!");
+			BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
@@ -1557,12 +1576,12 @@ int epos::waitForTarget(unsigned int t)
  */
 
 /* check the global variable E_error for EPOS error code */
-int epos::checkEPOSerror(DWORD E_error)
+void epos::checkEPOSerror(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
 		case E_NOERR:
-			return (0);
+			return;
 			break;
 		case E_ONOTEX:
 			msg = "requested object does not exist!";
@@ -1622,8 +1641,8 @@ int epos::checkEPOSerror(DWORD E_error)
 			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
 			break;
 	}
-	//EPOS responds with error:
-	return (-1);
+
+	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
 }
 
 /* copied from EPOS Communication Guide, p.8 */
@@ -1718,7 +1737,7 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 
 	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
 	frame[1] = index;
-	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
+	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 	// data to transmit
 	frame[3] = data[0];
 	frame[4] = data[1];

@@ -257,8 +257,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						if (is_synchronised()) {
 							// Compute the desired homogeneous matrix on the base of received 6 variables related to angle-axis representation.
-							desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
-							//std::cout << desired_end_effector_frame<<std::endl;
+							//desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
+
+							// Compute the desired homogeneous matrix on the base of received 6 variables related to Euler Z-Y-Z representation.
+							desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(mrrocpp::lib::Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+							std::cout << desired_end_effector_frame<<std::endl;
 
 							// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
@@ -315,24 +318,26 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					case lib::epos::SYNC_TRAPEZOIDAL: {
+						// Motion calculation is done in dimensionless units, but it assumes they are coherent
+						// Delta[turns], Vmax[turns per second], Amax[turns per seconds per seconds]
 						Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
 						for (int i = 0; i < 6; ++i) {
-							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]);
+							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])/kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 							std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - "
 									<< desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
-							Vmax[i] = Vdefault[i];
+							Vmax[i] = Vdefault[i]/epos::epos::SECONDS_PER_MINUTE;
 							Amax[i] = Adefault[i];
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
 						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-						//					std::cerr <<
-						//						"Delta:\n" << Delta << std::endl <<
-						//						"Vmax:\n" << Vmax << std::endl <<
-						//						"Amax:\n" << Amax << std::endl <<
-						//						std::endl;
+						std::cerr <<
+							"Delta:\n" << Delta << std::endl <<
+							"Vmax:\n" << Vmax << std::endl <<
+							"Amax:\n" << Amax << std::endl <<
+							std::endl;
 
 						if (t > 0) {
 							// debug display
@@ -345,7 +350,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									if (Delta[i] != 0) {
 										axes[i]->setOperationMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writeProfileVelocity(Vnew[i]);
+										axes[i]->writeProfileVelocity(Vnew[i]*epos::epos::SECONDS_PER_MINUTE);
 										axes[i]->writeProfileAcceleration(Anew[i]);
 										axes[i]->writeProfileDeceleration(Dnew[i]);
 										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);

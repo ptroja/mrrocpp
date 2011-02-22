@@ -27,7 +27,7 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	// Check upper limit for every motor.
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
 			BOOST_THROW_EXCEPTION(spkm_motor_limit_error() << spkm_desired_value(motor_position[i]) << spkm_motor_number(i) << spkm_limit_type(UPPER_LIMIT));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
@@ -38,7 +38,7 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 {
 	// Check joint limit for every axis.
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		if (q[i] > params.upper_joints_limits[i])
 			BOOST_THROW_EXCEPTION(spkm_joint_limit_error() << spkm_desired_value(q[i]) << spkm_joint_number(i) << spkm_limit_type(UPPER_LIMIT));
 		else if (q[i] < params.lower_joints_limits[i])
@@ -115,7 +115,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 
 	// Compute the desired "twist of the wrist".
 	// Transformation from computed OST to desired OST.
-	Homog4d wrist_twist = O_S_T_desired.inverse()*O_S_T_computed;
+	Homog4d wrist_twist = O_S_T_computed.inverse()*O_S_T_desired;
 	std::cout <<"Twist:\n" << wrist_twist << std::endl;
 
 	// Compute the inverse transform of the spherical wrist basing on its "twist".
@@ -153,7 +153,8 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	double c_beta = t6 / sqrt(t6 * t6 + y * y);
 
 	// Compute h.
-	double h = (y * y + t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6 + y * y) - params.P_S_P.z();
+//	double h = (y * y + t6 * sqrt(t0_sq - hx_sq)) / sqrt(t6 * t6 + y * y) - params.P_S_P.z();
+	double h = (y * y + t6 * sqrt(t0_sq - hx_sq)) / hypot(t6, y) - params.P_S_P.z();
 
 	// Return computed e vector.*/
 	Vector5d e;
@@ -229,41 +230,54 @@ Homog4d kinematic_model_spkm::PM_O_P_T_from_e(const Vector5d & e_)
 
 Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const lib::JointArray & local_current_joints)
 {
-	double phi, theta, psi;
+	double phi, theta, psi, dist;
+	double phi2, theta2, psi2, dist2;
+	Vector3d thetas;
 
 	if (wrist_twist_(2,2) == 1) {
 		// If u33 = 1 then theta is 0.
 		theta = 0;
 		// Infinite number of solutions: only the phi + psi value can be computed, thus phi is equal to the previous one.
 		phi = local_current_joints[3];
-		psi = atan2(wrist_twist_(0,0), wrist_twist_(1,0)) - phi;
+		psi = atan2(wrist_twist_(1,0), wrist_twist_(0,0)) - phi;
+		// atan2(r(2,1), r(1,1)) - phi
 		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		thetas << phi, theta, psi;
 	} else if (wrist_twist_(2,2) == -1) {
 		// If u33 = -1 then theta is equal to pi.
 		theta = M_PI;
 		// Infinite number of solutions: only the phi - psi value can be computed, thus phi is equal to the previous one.
 		phi = local_current_joints[3];
-		psi = - atan2(wrist_twist_(0,0), wrist_twist_(1,0)) + phi;
-		std::cout<<"CASE II: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		psi = - atan2(-wrist_twist_(0,1), -wrist_twist_(0,0)) + phi;
+		std::cout<<"CASE II: u33=-1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		thetas << phi, theta, psi;
 	} else {
 		// Two possible solutions.
-		theta = atan2(wrist_twist_(2,2), sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
-		phi = atan2(wrist_twist_(0,2), wrist_twist_(1,2));
-		psi = atan2(-wrist_twist_(2,0), wrist_twist_(2,1));
-		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 
-		theta = atan2(wrist_twist_(2,2), -sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)));
-		phi = atan2(-wrist_twist_(0,2), -wrist_twist_(1,2));
-		psi = atan2(wrist_twist_(2,0), -wrist_twist_(2,1));
-		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		// First solution.
+		theta = atan2(sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+		phi = atan2(wrist_twist_(1,2), wrist_twist_(0,2));
+		psi = atan2(wrist_twist_(2,1), -wrist_twist_(2,0));
+		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+		// Compute maximal delta.
+		dist = std::max(std::max(fabs(phi - local_current_joints[3]), fabs(theta - local_current_joints[4])), fabs(psi - local_current_joints[5]));
+
+		// Second solution.
+		theta2 = atan2(-sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+		phi2 = atan2(-wrist_twist_(1,2), -wrist_twist_(0,2));
+		psi2 = atan2(-wrist_twist_(2,1), wrist_twist_(2,0));
+		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi2<<", "<<theta2<<", "<<psi2<<"]\n";
+		// Compute maximal delta.
+		dist2 = std::max(std::max(fabs(phi2 - local_current_joints[3]), fabs(theta2 - local_current_joints[4])), fabs(psi2 - local_current_joints[5]));
+
+		// Select best solution.
+		if (dist < dist2)
+			thetas << phi, theta, psi;
+		else
+			thetas << phi2, theta2, psi2;
 	}
 
-
-
 	// Return vector with thetas.
-	Vector3d thetas;
-	thetas << 0, 0, 0;
-
 	std::cout<<"SW thetas= ["<<thetas.transpose()<<"]\n";
 	return thetas;
 }

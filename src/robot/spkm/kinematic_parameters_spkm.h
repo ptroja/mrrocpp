@@ -76,6 +76,9 @@ public:
 	//! Parameters related to conversion from motor positions to joints.
 	static const double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
+	//! Encoder resolution.
+	static const uint32_t encoder_resolution[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
 	//! Largest values that motors can reach.
 	static const int32_t upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
