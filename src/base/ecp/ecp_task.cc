@@ -328,7 +328,7 @@ void task_base::get_next_state(void)
 }
 
 // Oczekiwanie na polecenie od MP
-bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
+void task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 {
 	while (caller < 0) {
 
@@ -340,8 +340,6 @@ bool task_base::wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received)
 		}
 		//printf("mp_buffer_receive_and_send caller: %d\n", caller);
 	}
-
-	return true;
 }
 
 // Oczekiwanie na polecenie od MP
