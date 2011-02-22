@@ -2,6 +2,8 @@ add_library(messip
 	logg_messip.c messip_lib.c
 	messip_utils.c messip_dataport.cc)
 
+install(TARGETS messip DESTINATION lib)
+
 add_executable(messip_mgr messip_mgr.c)
 target_link_libraries (messip_mgr messip
 	${CMAKE_THREAD_LIBS_INIT} ${COMPATIBILITY_LIBRARIES}) 

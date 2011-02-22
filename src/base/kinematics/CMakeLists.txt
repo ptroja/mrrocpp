@@ -6,3 +6,5 @@ add_library(kinematics
 )
 
 target_link_libraries(kinematics mrrocpp)
+
+install(TARGETS kinematics DESTINATION lib)

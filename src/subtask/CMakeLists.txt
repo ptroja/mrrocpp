@@ -6,3 +6,5 @@ add_library(ecp_subtasks
 )
 
 target_link_libraries(ecp_subtasks ecp ecp_generators)
+
+install(TARGETS ecp_subtasks DESTINATION lib)

@@ -1,10 +1,10 @@
 
-	add_subdirectory (messip)
+add_subdirectory (messip)
 
-	# configsrv is needed only for non-QNX platforms and then messip is used
-	add_executable(configsrv configsrv.cc configsrv_m.cc)
-	target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
-	install(TARGETS configsrv DESTINATION bin)
+# configsrv is needed only for non-QNX platforms and then messip is used
+add_executable(configsrv configsrv.cc configsrv_m.cc)
+target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+install(TARGETS configsrv DESTINATION bin)
 
 
 add_subdirectory (agent)
@@ -40,8 +40,7 @@ add_library(mrrocpp
 
 target_link_libraries (mrrocpp sr)
 
+target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
 
-
-
-    target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
+install(TARGETS mrrocpp DESTINATION lib)
 
