@@ -29,7 +29,9 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config), continuous_coordination(false)
+	ecp_mp::task::task(_config),
+	Agent(_config.section_name),
+	continuous_coordination(false)
 {
 	initialize_communication();
 }

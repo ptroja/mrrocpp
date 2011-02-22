@@ -18,4 +18,4 @@ add_library(ecp
 )
 
 target_link_libraries(ecp
-	ecp_robots ecp_mp)
+	ecp_robots ecp_mp agent)
