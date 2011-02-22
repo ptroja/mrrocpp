@@ -22,4 +22,6 @@ add_library(ecp_r_conv ecp_r_conv.cc)
 target_link_libraries(ecp_r_conv kinematicsconveyor)
 
 install(TARGETS edp_conveyor DESTINATION bin)
+install(TARGETS ecp_r_conv kinematicsconveyor DESTINATION lib)
+
 endif(ROBOT_CONVEYOR)

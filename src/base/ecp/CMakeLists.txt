@@ -1,5 +1,6 @@
 MACRO(ADD_ECP_ROBOT NAME)
   add_library("ecp_r_${NAME}" "ecp_r_${NAME}.cc")
+  install(TARGETS "ecp_r_${NAME}" DESTINATION lib)
 ENDMACRO(ADD_ECP_ROBOT)
 
 MACRO(ADD_ECP_ROBOT_WITH_KINEMATICS NAME)
@@ -19,3 +20,5 @@ add_library(ecp
 
 target_link_libraries(ecp
 	ecp_robots ecp_mp agent)
+	
+install(TARGETS ecp DESTINATION lib)
