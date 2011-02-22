@@ -24,6 +24,7 @@
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
+#include "../sarkofag/wgt_sarkofag_inc.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -465,7 +466,7 @@ void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 
 void MainWindow::on_actionsarkofag_Move_triggered()
 {
-
+	interface.sarkofag->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionsarkofag_Synchro_Position_triggered()

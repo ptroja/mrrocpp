@@ -12,6 +12,8 @@
 #include "../base/ui_robot.h"
 #include "robot/sarkofag/const_sarkofag.h"
 
+class wgt_sarkofag_inc;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -47,6 +49,7 @@ public:
 	bool is_wind_sarkofag_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	wgt_sarkofag_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
