@@ -30,7 +30,7 @@ namespace robot {
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos) :
 	ecp_mp::robot(l_robot_name),
 	number_of_servos(_number_of_servos),
-	ECP_pid(mp_object_l.config.process_spawn(_section_name)),
+	ECP_pid(mp_object_l.config, _section_name),
 	ecp(_section_name),
 	command(ecp, "command"),
 	mp_object(mp_object_l),
@@ -46,15 +46,6 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 robot::~robot()
 {
 	fprintf(stderr, "robot::~robot()\n");
-
-	if (kill(ECP_pid, SIGTERM) == -1) {
-		perror("kill()");
-		fprintf(stderr, "kill failed for robot %s pid %d\n", lib::toString(robot_name).c_str(), ECP_pid);
-	} else {
-		if (waitpid(ECP_pid, NULL, 0) == -1) {
-			perror("waitpid()");
-		}
-	}
 }
 
 void robot::start_ecp(void)

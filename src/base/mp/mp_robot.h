@@ -10,6 +10,7 @@
 #define MP_ROBOT_H_
 
 #include "base/lib/configurator.h"
+#include "base/lib/child.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/agent/RemoteAgent.h"
@@ -41,7 +42,7 @@ private:
 	/**
 	 * @brief pid of spawned ECP process
 	 */
-	const pid_t ECP_pid;
+	lib::child ECP_pid;
 
 	//! Pointer to the remote agent proxy
 	RemoteAgent ecp;
