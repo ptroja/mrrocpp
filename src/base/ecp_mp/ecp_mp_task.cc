@@ -40,8 +40,9 @@ namespace task {
 boost::shared_ptr<lib::sr_ecp> task::sr_ecp_msg;
 
 task::task(lib::configurator &_config) :
-	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path()),
-	Agent(_config.section_name)
+	Agent(_config.section_name),
+	config(_config),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	const std::string ui_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
