@@ -23,26 +23,26 @@ sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, 
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:
-			sgen = new generator::newsmooth(ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
+			sgen = (boost::shared_ptr<generator::newsmooth>) new generator::newsmooth(ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
 			break;
 		case lib::ECP_XYZ_ANGLE_AXIS:
-			sgen = new generator::newsmooth(ecp_t, pose_spec, 6);
+			sgen = (boost::shared_ptr<generator::newsmooth>) new generator::newsmooth(ecp_t, pose_spec, 6);
 			sgen->set_debug(true);
 			break;
 		default:
 			break;
-
 	}
 
 }
 
 void sub_task_smooth_file_from_mp::conditional_execution()
 {
-
-	path = std::string("");
+	const std::string path = ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 	sgen->reset();
-	path += ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
-	sgen->load_trajectory_from_file(path.c_str());
+
+	bool result = sgen->load_trajectory_from_file(path.c_str());
+
+	assert(result);
 
 	if (detect_jerks) {
 		if (sgen->calculate_interpolate() && sgen->detect_jerks(1) == 0) {
@@ -54,11 +54,6 @@ void sub_task_smooth_file_from_mp::conditional_execution()
 			sgen->Move();
 		}
 	}
-}
-
-sub_task_smooth_file_from_mp::~sub_task_smooth_file_from_mp()
-{
-	delete sgen;
 }
 
 } // namespace task
