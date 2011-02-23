@@ -41,6 +41,8 @@ add_library(ecp_robot
 
 add_library(ecp_robots)
 
+SET_TARGET_PROPERTIES(ecp_robots PROPERTIES LINKER_LANGUAGE CXX)
+
 target_link_libraries(ecp_robot ecp_mp)
 
 target_link_libraries(ecp_robots ecp_robot)
