@@ -15,3 +15,4 @@ target_link_libraries(ecp_tfg
 )
 
 install(TARGETS ecp_tfg DESTINATION bin)
+install(TARGETS kinematic_model_irp6_tfg DESTINATION lib)

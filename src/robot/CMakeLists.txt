@@ -53,3 +53,6 @@ target_link_library_if(ROBOT_SARKOFAG ecp_robots ecp_r_sarkofag)
 target_link_library_if(ROBOT_SHEAD ecp_robots ecp_r_shead)
 target_link_library_if(ROBOT_SMB ecp_robots ecp_r_smb)
 target_link_library_if(ROBOT_SPKM ecp_robots ecp_r_spkm)
+
+install(TARGETS mp_robots ecp_robots DESTINATION lib)
+

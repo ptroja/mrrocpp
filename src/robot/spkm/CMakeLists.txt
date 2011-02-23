@@ -21,5 +21,6 @@ target_link_libraries(kinematicsspkm kinematics)
 add_library(ecp_r_spkm ecp_r_spkm.cc)	
 	
 target_link_libraries(ecp_r_spkm kinematicsspkm)
+install(TARGETS kinematicsspkm ecp_r_spkm DESTINATION lib)
 
 endif(ROBOT_SPKM)

@@ -231,6 +231,7 @@ void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
  t[5] = gamma;
  }
  */
+
 void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 {
 	double alfa, beta, gamma; // Katy Euler'a Z-Y-Z
@@ -255,7 +256,7 @@ void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 		alfa = atan2(-matrix_m[1][0], matrix_m[1][1]);
 	} else {
 		// Normalne rozwiazanie.
-		double sb = sqrt(matrix_m[2][0] * matrix_m[2][0] + matrix_m[2][1] * matrix_m[2][1]);
+		double sb = hypot(matrix_m[2][0], matrix_m[2][1]);
 		beta = atan2(sb, matrix_m[2][2]);
 		//		beta = acos(matrix[2][2]);
 
@@ -274,23 +275,17 @@ void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 	l_vector[5] = gamma;
 }
 
-void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
+void Homog_matrix::set_from_xyz_euler_zyz_without_limits(const Xyz_Euler_Zyz_vector & l_vector)
 {
-	// alfa, beta, gamma - Katy Euler'a Z-Y-Z
-	// Zredukowanie katow.
-	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
-	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
-	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
+	// Compute the sines and cosines of all angles.
+	const double c_alfa = cos(l_vector[3]);
+	const double s_alfa = sin(l_vector[3]);
+	const double c_beta = cos(l_vector[4]);
+	const double s_beta = sin(l_vector[4]);
+	const double c_gamma = cos(l_vector[5]);
+	const double s_gamma = sin(l_vector[5]);
 
-	// Obliczenie sinusow/cosinusow.
-	const double c_alfa = cos(alfa);
-	const double s_alfa = sin(alfa);
-	const double c_beta = cos(beta);
-	const double s_beta = sin(beta);
-	const double c_gamma = cos(gamma);
-	const double s_gamma = sin(gamma);
-
-	// Obliczenie macierzy rotacji.
+	// Compute the rotation matrix coefficients.
 	matrix_m[0][0] = c_alfa * c_beta * c_gamma - s_alfa * s_gamma;
 	matrix_m[1][0] = s_alfa * c_beta * c_gamma + c_alfa * s_gamma;
 	matrix_m[2][0] = -s_beta * c_gamma;
@@ -303,13 +298,25 @@ void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 	matrix_m[1][2] = s_alfa * s_beta;
 	matrix_m[2][2] = c_beta;
 
-	// Przepisanie polozenia.
+	// Copy position variables.
 	matrix_m[0][3] = l_vector[0];
 	matrix_m[1][3] = l_vector[1];
 	matrix_m[2][3] = l_vector[2];
 }
 
-// notacja i wzory z Craiga - wydanie angielskie str. 41
+void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
+{
+	// Reduction of alpha and beta to <-PI, PI) makes no sense, because sin and cos are periodical with period equal to 2PI.
+	//	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
+	//	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
+
+	// The beta angle is reduced to <0,PI).
+	//	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
+	Xyz_Euler_Zyz_vector l_reduced(l_vector[0], l_vector[1], l_vector[2], l_vector[3], reduce(l_vector[4], 0, M_PI, M_PI), l_vector[5]);
+
+	// Compute the homogenous matrix coefficients.
+	set_from_xyz_euler_zyz_without_limits(l_reduced);
+}
 
 // UWAGA ponizsze dwie funckje nie byly testowane - po pozytywnych  testach usunac komentarz
 // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
@@ -322,7 +329,7 @@ void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector & l_vector) const
 
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	l_vector[3] = atan2(matrix_m[2][1], matrix_m[2][2]);
-	l_vector[4] = atan2(matrix_m[2][0], sqrt(matrix_m[0][0] * matrix_m[0][0] + matrix_m[1][0] * matrix_m[1][0]));
+	l_vector[4] = atan2(matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
 	l_vector[5] = atan2(matrix_m[1][0], matrix_m[0][0]);
 }
 

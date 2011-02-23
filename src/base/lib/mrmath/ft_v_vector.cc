@@ -15,34 +15,13 @@ Ft_v_vector::Ft_v_vector()
 }
 
 Ft_v_vector::Ft_v_vector(const double t[6])
+	: BaseClass(t)
 {
-	// utworznie wektora o parametrach podanych w tablicy, bedacej argumentem
-	set_values(t);
 }
 
 Ft_v_vector::Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz)
 {
-	// utworznie wektora o parametrach podanych w tablicy, bedacej argumentem
-	set_values(fx, fy, fz, tx, ty, tz);
-}
-
-// Ustawienie elementu wektora.
-void Ft_v_vector::set_values(const double t[6])
-{
-	for(int i = 0; i < this->size(); ++i) {
-		this->operator[](i) = t[i];
-	}
-}
-
-// Ustawienie elementu wektora.
-void Ft_v_vector::set_values(double fx, double fy, double fz, double tx, double ty, double tz)
-{
-	this->operator[](0) = fx;
-	this->operator[](1) = fy;
-	this->operator[](2) = fz;
-	this->operator[](3) = tx;
-	this->operator[](4) = ty;
-	this->operator[](5) = tz;
+	(*this) << fx, fy, fz, tx, ty, tz;
 }
 
 void Ft_v_vector::to_table(double tablica[6]) const

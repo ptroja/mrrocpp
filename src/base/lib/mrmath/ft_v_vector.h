@@ -10,6 +10,7 @@ namespace lib {
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {
+	//! Helper type for the base type
 	typedef Eigen::Matrix<double, 6, 1> BaseClass;
 
 public:
@@ -24,25 +25,28 @@ public:
 
 	//! Default constructor
 	Ft_v_vector();
-	Ft_v_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+
+	//! utworzenie wektora na podstawie podanej tablicy
+	Ft_v_vector(const double t[6]);
+
+	//! utworzenie wektora na podstawie wartości
 	Ft_v_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
-	//! Ustawienie elementu wektora.
-	void set_values(const double t[6]);										// wypelnienie wektora na podstawie podanej tablicy
-	void set_values(double fx, double fy, double fz, double tx, double ty, double tz);
+	//! przepisanie wektora do tablicy podanej jako argument
+	void to_table(double tablica[6]) const;
 
-	//! Zwrocenie elementu wektora.
-	void to_table(double tablica[6]) const;					// przepisanie wektora do tablicy podanej jako argument
-
-	void to_vector(std::vector<double> & vector);			//fill in the input vector with the coordinates from the actual vector
+	//! fill in the input vector with the coordinates from the actual vector
+	void to_vector(std::vector<double> & vector);
 
 	//! Wyciagniecie max elementu z wektora
 	//! @author Sibi
-	double max_element ();	//wyciagniecie maksymalnego elementu wektora
+	double max_element ();
 
 public:
+	// overload "operator new" so that it generates 16-bytes-aligned pointers.
+	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};// end class Ft_v_vector
+};
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_vector : public Ft_v_vector
@@ -53,11 +57,13 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Ft_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Ft_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Ft_vector();
+	Ft_vector(const double t[6]);
 	Ft_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 public:
+	// overload "operator new" so that it generates 16-bytes-aligned pointers.
+	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
@@ -70,8 +76,8 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Xyz_Angle_Axis_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Angle_Axis_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Angle_Axis_vector();
+	Xyz_Angle_Axis_vector(const double t[6]);
 	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
@@ -79,6 +85,8 @@ public:
 	void position_distance(const Homog_matrix& local_current_end_effector_frame, const Homog_matrix& local_desired_end_effector_frame);
 
 public:
+	// overload "operator new" so that it generates 16-bytes-aligned pointers.
+	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
@@ -94,11 +102,13 @@ public:
 	//! Reuse assignment operators from base class
 	using Ft_v_vector::operator=;
 
-	Xyz_Euler_Zyz_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Euler_Zyz_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Euler_Zyz_vector();
+	Xyz_Euler_Zyz_vector(const double t[6]);
 	Xyz_Euler_Zyz_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
 public:
+	// overload "operator new" so that it generates 16-bytes-aligned pointers.
+	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
@@ -111,10 +121,13 @@ public:
 		: Ft_v_vector(other)
 	{}
 
-	Xyz_Rpy_vector();													// konstruktor domniemany [0, 0, 0, 0, 0, 0]
-	Xyz_Rpy_vector(const double t[6]);										// utworzenie wektora na podstawie podanej tablicy
+	Xyz_Rpy_vector();
+	Xyz_Rpy_vector(const double t[6]);
 	Xyz_Rpy_vector(double fx, double fy, double fz, double tx, double ty, double tz);
 
+public:
+	// overload "operator new" so that it generates 16-bytes-aligned pointers.
+	// @note not sure if this is really required here
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 

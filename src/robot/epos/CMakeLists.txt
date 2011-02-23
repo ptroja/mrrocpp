@@ -13,6 +13,6 @@ else(LibFTDI_FOUND)
     add_library(epos
         	epos.cc
         	epos_access_rs232.cc)    	
-endif(LibFTDI_FOUND)
+endif(LibFTDI_FOUND)	
 
-add_executable(pvtgen pvtgen.cc)	
+install(TARGETS epos DESTINATION lib)

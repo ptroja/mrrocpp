@@ -3,3 +3,5 @@ add_library(mp_generators
 )
 
 target_link_libraries(mp_generators mrrocpp mp)
+
+install(TARGETS mp_generators DESTINATION lib)

@@ -9,7 +9,7 @@ ENDMACRO(TARGET_LINK_LIBRARY_IF)
 OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
 # the RPATH to be used when installing
-# SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 ## this is currently disabled
 ## as CMake option names duplicates _ROBOT_ENUM values
@@ -54,13 +54,9 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
 	"Build support for SwarmItFIX parallel kinematics machine robot"
 	ON "ROBOTS_SWARMITFIX" OFF)
 	
-CMAKE_DEPENDENT_OPTION(ROBOT_BIRD_HAND
-	"Build support for three finger robot hand"
-	ON "ROBOTS_SWARMITFIX" OFF)
+option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
-CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
-	"Build support for sarkofag"
-	ON "ROBOTS_SWARMITFIX" OFF)
+option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
 
 # QNX is default MRROC++ target
