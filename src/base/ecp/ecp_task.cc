@@ -160,7 +160,6 @@ void task_base::ecp_termination_notice(void)
 // Wysyla puls do Mp przed oczekiwaniem na spotkanie
 void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 {
-
 	if (messip::port_send_pulse(MP_fd, pulse_code, pulse_value) < 0)
 
 	{
@@ -170,14 +169,12 @@ void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 
 void task_base::subtasks_conditional_execution()
 {
-	subtasks_t subtasks_m_tmp = subtask_m;
-
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtasks_m_tmp)
-				{
-					if (mp_2_ecp_next_state_string == subtask_node.first) {
-						subtask_node.second->conditional_execution();
-					}
-				}
+	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
+	{
+		if (mp_2_ecp_next_state_string == subtask_node.first) {
+			subtask_node.second->conditional_execution();
+		}
+	}
 }
 
 // Petla odbierania wiadomosci.
