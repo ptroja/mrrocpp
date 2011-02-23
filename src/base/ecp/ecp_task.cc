@@ -85,16 +85,15 @@ bool task_base::pulse_check()
 	}
 
 	return false;
-
 }
 
 // ---------------------------------------------------------------
 void task_base::initialize_communication()
 {
-	std::string ecp_attach_point =
+	const std::string ecp_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
 
-	std::string sr_net_attach_point =
+	const std::string sr_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
 
 	// Obiekt do komuniacji z SR
@@ -102,8 +101,7 @@ void task_base::initialize_communication()
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
-
-	std::string trigger_attach_point =
+	const std::string trigger_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
 
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
@@ -169,9 +167,11 @@ void task_base::wait_for_start(void)
 			ReceiveSingleMessage(true);
 		}
 
+		mp_command = command.Get();
+
 		command.markAsUsed();
 
-		switch (command.Get().command)
+		switch (mp_command.command)
 		{
 			case lib::START_TASK:
 				// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
@@ -279,24 +279,19 @@ void task_base::reply_to_mp()
 }
 
 // Receive a message from MP
-bool task_base::receive_mp_message(bool block)
+bool task_base::peek_mp_message()
 {
 	command.markAsUsed();
 
-	while(!command.isFresh()) {
-		bool received = ReceiveSingleMessage(block);
-
-		if (received) {
+	if(ReceiveSingleMessage(false)) {
+		if (command.isFresh()) {
 			mp_command = command.Get();
-		}
 
-		// If non-blocking mode, than return just what we've got
-		if(!block) {
-			break;
+			return (command.Get().command == lib::END_MOTION);
 		}
 	}
 
-	return (command.Get().command == lib::END_MOTION);
+	return false;
 }
 
 } // namespace task

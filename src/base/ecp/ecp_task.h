@@ -189,10 +189,9 @@ public:
 
 	/**
 	 * @brief Receives MP message
-	 * @param block true for blocking mode
 	 * @return true if the END_MOTION has been received
 	 */
-	bool receive_mp_message(bool block);
+	bool peek_mp_message();
 };
 
 template<typename ECP_ROBOT_T>
