@@ -18,7 +18,6 @@ namespace sub_task {
 
 class sub_task_smooth_file_from_mp : public sub_task
 {
-
 private:
 	boost::shared_ptr<generator::newsmooth> sgen;
 	bool detect_jerks;
