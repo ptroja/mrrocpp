@@ -5,8 +5,9 @@
  * @ingroup generators
  */
 
-#include "generator/ecp/ecp_g_newsmooth.h"
 #include <fstream>
+
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {
