@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 #if defined(HAVE_MLOCKALL)
 		// Try to lock memory to avoid swapping whlie executing in real-time
 		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
-			perror("mlockall()");
+			perror("No real-time warrany: mlockall() failed");
 		}
 #endif /* HAVE_MLOCKALL */
 
