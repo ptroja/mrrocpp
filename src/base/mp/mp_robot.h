@@ -57,6 +57,11 @@ protected:
 
 public:
 	/**
+	 * @brief reference to sr_ecp object for sending messages to UI_SR console
+	 */
+	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+
+	/**
 	 * @brief continuous coordination flag
 	 *
 	 * if it set it causes every macrostep communication with ECP
@@ -96,11 +101,6 @@ public:
 	 * in the following iterations of Move
 	 */
 	bool communicate_with_ecp;
-
-	/**
-	 * @brief reference to sr_ecp object for sending messages to UI_SR console
-	 */
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
 	 * @brief new pulse from ecp flag

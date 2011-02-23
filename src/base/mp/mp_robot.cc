@@ -28,13 +28,18 @@ namespace mp {
 namespace robot {
 
 robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos) :
-	ecp_mp::robot(l_robot_name), number_of_servos(_number_of_servos), mp_object(mp_object_l),
-	continuous_coordination(false), communicate_with_ecp(true), sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-	new_pulse(false), new_pulse_checked(false),
-	ECP_pid(mp_object.config.process_spawn(_section_name)),
+	ecp_mp::robot(l_robot_name),
+	number_of_servos(_number_of_servos),
+	ECP_pid(mp_object_l.config.process_spawn(_section_name)),
 	ecp(_section_name),
 	command(ecp, "command"),
-	ecp_reply(_section_name)
+	mp_object(mp_object_l),
+	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
+	continuous_coordination(false),
+	ecp_reply(_section_name),
+	communicate_with_ecp(true),
+	new_pulse(false),
+	new_pulse_checked(false)
 {
 }
 
