@@ -552,10 +552,10 @@ void task::execute_all(const common::robots_t & _robot_m)
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 	{
 		if (robot_node.second->communicate_with_ecp) {
-			if ((robot_node.second->mp_command.command == lib::STOP)
-					|| (robot_node.second->mp_command.command == lib::END_MOTION)
-					|| (robot_node.second->mp_command.command == lib::NEXT_STATE)
-					|| (robot_node.second->continuous_coordination)) {
+			if ((robot_node.second->mp_command.command == lib::STOP) ||
+				(robot_node.second->mp_command.command == lib::END_MOTION) ||
+				(robot_node.second->mp_command.command == lib::NEXT_STATE) ||
+				(robot_node.second->continuous_coordination)) {
 				robot_node.second->execute_motion();
 			}
 		}

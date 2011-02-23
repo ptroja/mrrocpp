@@ -1021,8 +1021,8 @@ public:
 struct ecp_next_state_t
 {
 	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
-	int mp_2_ecp_next_state_variant;
-	uint32_t mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	int variant;
+	uint32_t string_data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
@@ -1037,8 +1037,8 @@ struct ecp_next_state_t
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & mp_2_ecp_next_state;
-		ar & mp_2_ecp_next_state_variant;
-		ar & mp_2_ecp_next_state_string;
+		ar & variant;
+		ar & string_data;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };

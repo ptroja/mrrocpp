@@ -212,11 +212,11 @@ void task_base::get_next_state(void)
 			ReceiveSingleMessage(true);
 		}
 
-		command.markAsUsed();
-
 		mp_command = command.Get();
 
-		switch (command.Get().command)
+		command.markAsUsed();
+
+		switch (mp_command.command)
 		{
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -240,7 +240,7 @@ void task_base::get_next_state(void)
 	}
 
 	// Extract the next command to the local variable
-	mp_2_ecp_next_state_string = command.Get().ecp_next_state.mp_2_ecp_next_state;
+	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
 }
 
 void task_base::reply_to_mp()

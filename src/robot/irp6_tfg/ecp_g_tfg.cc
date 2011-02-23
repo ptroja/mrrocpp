@@ -113,7 +113,7 @@ void tfg::create_ecp_mp_reply()
 
 void tfg::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_command, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_command));
+	memcpy(&mp_ecp_command, ecp_t.mp_command.ecp_next_state.string_data, sizeof(mp_ecp_command));
 
 }
 
