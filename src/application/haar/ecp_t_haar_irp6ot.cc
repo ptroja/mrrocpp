@@ -39,7 +39,7 @@ haar::haar(lib::configurator &_config) :
 		sr_ecp_msg->message(
 				"Zle zdefiniowany obiekt: USTAW PLIK KONFIGURACYJNY");
 		ecp_termination_notice();
-		ecp_wait_for_stop();
+		wait_for_stop();
 	}
 
 	//Create cvFraDIA sensor - for testing purposes.

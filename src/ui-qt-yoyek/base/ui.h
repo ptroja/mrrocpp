@@ -23,6 +23,7 @@
 
 
 #include "base/lib/messip/messip_dataport.h"
+#include "base/lib/agent/RemoteAgent.h"
 
 
 enum UI_NOTIFICATION_STATE_ENUM
@@ -177,7 +178,8 @@ typedef struct
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	lib::fd_client_t pulse_fd;
+	RemoteAgent * MP;
+	RemoteBuffer<char> * pulse;
 	UI_MP_STATE state;
 	UI_MP_STATE last_state;
 } mp_state_def;

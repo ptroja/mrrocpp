@@ -329,21 +329,12 @@ int Interface::MPup_int()
 
 			if (mp.pid > 0) {
 
-				unsigned tmp = 0;
-				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
-					if ((tmp++) < lib::CONNECT_RETRY) {
-						usleep(lib::CONNECT_DELAY);
-					} else {
-						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
-						break;
-					}
-				}
+				mp.MP = new RemoteAgent(lib::MP_SECTION);
+				mp.pulse = new RemoteBuffer<char>(*mp.MP, "MP_PULSE");
 
 				teachingstate = ui::common::MP_RUNNING;
 
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-
 
 				mw->raise_process_control_window();
 
@@ -1006,16 +997,8 @@ int Interface::execute_mp_pulse(char pulse_code)
 {
 
 	// printf("w send pulse\n");
-	if (mp.pulse_fd > 0) {
-		long pulse_value = 1;
-
-		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
-
-		{
-			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
-			delay(1000);
-		}
+	if (mp.pulse) {
+		mp.pulse->Set(pulse_code);
 	}
 
 	return 1;
@@ -1092,10 +1075,16 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		if(mp.pulse_fd != lib::invalid_fd) {
-			messip::port_disconnect(mp.pulse_fd);
+		if(mp.pulse) {
+			delete mp.pulse;
 		} else {
 			std::cerr << "MP pulse not connected?" << std::endl;
+		}
+
+		if(mp.MP) {
+			delete mp.MP;
+		} else {
+			std::cerr << "MP not connected?" << std::endl;
 		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
@@ -1119,7 +1108,9 @@ int Interface::MPslay()
 	// 	kill(mp_pid,SIGTERM);
 	// 	printf("mp pupa po kill\n");
 	mp.pid = -1;
-	mp.pulse_fd = lib::invalid_fd;
+
+	mp.pulse = NULL;
+	mp.MP = NULL;
 
 	/* TR
 	 irp6ot_m->deactivate_ecp_trigger();

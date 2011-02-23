@@ -36,11 +36,10 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	mp_object(mp_object_l),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 	continuous_coordination(false),
-	ecp_reply(_section_name),
-	communicate_with_ecp(true),
-	new_pulse(false),
-	new_pulse_checked(false)
+	reply(_section_name),
+	communicate_with_ecp(true)
 {
+	mp_object.registerBuffer(reply);
 }
 
 robot::~robot()

@@ -380,78 +380,6 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 	// koniec petli
 }
 
-bool task::check_and_optional_wait_for_new_message(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
-{
-	RECEIVE_PULSE_MODE current_wait_mode(NONBLOCK);
-
-	bool desired_pulse_found = false;
-
-	// checking of already registered pulses
-	if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-		BOOST_FOREACH (const common::robot_pair_t & robot_node, robot_m)
-		{
-			if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
-				desired_pulse_found = true;
-			}
-		}
-	}
-
-	if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-		if (ui_pulse.isFresh()) {
-			desired_pulse_found = true;
-		}
-	}
-
-	bool exit_from_while = false;
-
-	while (!exit_from_while) {
-
-		bool received = ReceiveSingleMessage(current_wait_mode);
-
-		if (received == false) {
-			if (desired_wait_mode == BLOCK && !desired_pulse_found) {
-				current_wait_mode = BLOCK;
-			} else {
-				exit_from_while = true;
-			}
-			continue;
-		} else {
-			// handle pulse
-			if (ui_pulse.isFresh()) {
-
-				if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-					desired_pulse_found = true;
-					if (current_wait_mode == BLOCK) {
-						exit_from_while = true;
-					}
-				}
-				//fprintf(stderr, "new UI pulse type %d received\n", type);
-				continue;
-			}
-
-			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->ecp_reply.isFresh()) {
-					robot_node.second->new_pulse = true;
-
-					if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-						if (!(robot_node.second->new_pulse_checked)) {
-							desired_pulse_found = true;
-							if (current_wait_mode == BLOCK) {
-								exit_from_while = true;
-							}
-						}
-					}
-					// can we get out of this loop?
-					//	fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
-				}
-			}
-		}
-
-	}
-
-	return desired_pulse_found;
-}
-
 //
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 //
@@ -461,12 +389,12 @@ bool task::check_and_optional_wait_for_new_message(WAIT_FOR_NEW_PULSE_MODE proce
 //     1) block for ECP pulse and react to UI pulses
 // otherwise
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
-void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator)
+void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator)
 {
 	enum MP_STATE_ENUM
 	{
-		MP_STATE_RUNNING, MP_STATE_PAUSED
-	} mp_state = MP_STATE_RUNNING;
+		MP_RUNNING, MP_PAUSED
+	} mp_state = MP_RUNNING;
 
 	bool ui_exit_from_while = false;
 	bool ecp_exit_from_while = (the_generator.wait_for_ECP_pulse) ? false : true;
@@ -477,20 +405,17 @@ void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::
 	// 1 1 -> not enter
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
 
-		WAIT_FOR_NEW_PULSE_MODE from_who;
-		RECEIVE_PULSE_MODE block_mode;
+		bool block;
 
-		if (mp_state == MP_STATE_RUNNING) {
+		if (mp_state == MP_RUNNING) {
 			// check for UI pulse or block for UI/ECP pulse
-			from_who = NEW_UI_OR_ECP_PULSE;
-			block_mode = ecp_exit_from_while ? NONBLOCK : BLOCK;
+			block = ecp_exit_from_while ? false : true;
 		} else {
 			// block for UI resume/stop pulse
-			from_who = NEW_UI_PULSE;
-			block_mode = BLOCK;
+			block = true;
 		}
 
-		if (check_and_optional_wait_for_new_message(from_who, block_mode)) {
+		if (ReceiveSingleMessage(block)) {
 			// UI Pulse arrived
 			if (ui_pulse.isFresh()) {
 
@@ -502,16 +427,16 @@ void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::
 						terminate_all(_robot_m);
 						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					case MP_PAUSE:
-						mp_state = MP_STATE_PAUSED;
+						mp_state = MP_PAUSED;
 						ui_exit_from_while = false;
 						continue;
 					default:
 						break;
 				}
 
-				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
+				if (mp_state == MP_PAUSED) {// oczekujemy na resume
 					if (ui_pulse.Get() == MP_RESUME) { // odebrano resume
-						mp_state = MP_STATE_RUNNING;
+						mp_state = MP_RUNNING;
 						ui_exit_from_while = true;
 					}
 				} else {
@@ -525,7 +450,7 @@ void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::
 				}
 				continue;
 			} else {
-				if (mp_state == MP_STATE_RUNNING) {
+				if (mp_state == MP_RUNNING) {
 					ui_exit_from_while = true;
 				}
 			}
@@ -533,8 +458,9 @@ void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::
 			if (the_generator.wait_for_ECP_pulse) {
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
-					if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
-						robot_node.second->new_pulse_checked = true;
+					if (robot_node.second->reply.isFresh()) {
+						robot_node.second->ecp_reply_package = robot_node.second->reply.Get();
+						robot_node.second->reply.markAsUsed();
 						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 						ecp_exit_from_while = true;
 					}
@@ -543,7 +469,7 @@ void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::
 				ecp_exit_from_while = true;
 			}
 		} else {
-			if (mp_state == MP_STATE_RUNNING) {
+			if (mp_state == MP_RUNNING) {
 				ui_exit_from_while = true;
 			}
 		}
@@ -575,7 +501,7 @@ void task::wait_for_start()
 	// Oczekiwanie na zlecenie START od UI
 
 	while (ui_pulse.Get() != MP_START) {
-		check_and_optional_wait_for_new_message(NEW_UI_PULSE, BLOCK);
+		ReceiveSingleMessage(true);
 	}
 
 	sr_ecp_msg->message("mp user program is running");
@@ -588,7 +514,7 @@ void task::wait_for_stop(void)
 	sr_ecp_msg->message("To terminate user program click STOP icon");
 
 	while (ui_pulse.Get() != MP_STOP) {
-		check_and_optional_wait_for_new_message(NEW_UI_PULSE, BLOCK);
+		ReceiveSingleMessage(true);
 	}
 }
 
@@ -597,20 +523,28 @@ void task::start_all(const common::robots_t & _robot_m)
 	// Wystartowanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 	{
-		robot_node.second->terminate_ecp();
+		robot_node.second->start_ecp();
 	}
 
-	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	common::robots_t robots_m_tmp = _robot_m;
+	// Container for awaiting acknowledgements
+	common::robots_t not_confirmed = _robot_m;
 
-	// TODO: collect ACKNOWLEDGEMENTS
-//	while(1)
-//		if (robots_m_tmp.empty()) {
-//			break;
-//		} else {
-//			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
-//		}
+//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+//	{
+//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
 //	}
+
+	// Wait for ACK from all the robots
+	while(!not_confirmed.empty()) {
+		ReceiveSingleMessage(true);
+
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+		{
+			if(robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply == lib::TASK_TERMINATED) {
+				not_confirmed.erase(robot_node.first);
+			}
+		}
+	}
 }
 
 void task::execute_all(const common::robots_t & _robot_m)
@@ -633,20 +567,23 @@ void task::terminate_all(const common::robots_t & _robot_m)
 	// Zatrzymanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 	{
+		//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
 		robot_node.second->terminate_ecp();
 	}
 
-	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	common::robots_t robots_m_tmp = _robot_m;
+	common::robots_t not_confirmed = _robot_m;
 
-	// TODO: collect ACKNOWLEDGEMENTS
-//	while(1)
-//		if (robots_m_tmp.empty()) {
-//			break;
-//		} else {
-//			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
-//		}
-//	}
+	// Wait for ACK from all the robots
+	while(!not_confirmed.empty()) {
+		ReceiveSingleMessage(true);
+
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+		{
+			if(robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply == lib::TASK_TERMINATED) {
+				not_confirmed.erase(robot_node.first);
+			}
+		}
+	}
 }
 
 } // namespace task

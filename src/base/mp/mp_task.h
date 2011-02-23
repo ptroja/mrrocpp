@@ -220,10 +220,7 @@ public:
 	/**
 	 * @brief receives pulse from UI or ECP
 	 */
-	void mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator);
-
-	//! Peek or block for a message from a specified sender (UI or ECP)
-	bool check_and_optional_wait_for_new_message(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	void receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator);
 
 private:
 	friend class robot::robot;

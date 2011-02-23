@@ -166,12 +166,12 @@ public:
 	/**
 	 * @brief Waits for START command from MP
 	 */
-	void ecp_wait_for_start(void);
+	void wait_for_start(void);
 
 	/**
 	 * @brief Waits for STOP command from MP
 	 */
-	void ecp_wait_for_stop(void);
+	void wait_for_stop(void);
 
 	/**
 	 * @brief method called from main_task_algorithm to handle ecp subtasks execution

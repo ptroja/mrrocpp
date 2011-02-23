@@ -43,7 +43,7 @@ void generator::Move()
 		mp_t.all_sensors_get_reading(sensor_m);
 
 		// oczekiwanie na puls z ECP lub UI
-		mp_t.mp_receive_ui_or_ecp_message(mp_t.robot_m, *this);
+		mp_t.receive_ui_or_ecp_message(mp_t.robot_m, *this);
 
 		node_counter++;
 	} while (next_step());

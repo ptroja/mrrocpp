@@ -33,7 +33,7 @@ namespace task {
 task_base::task_base(lib::configurator &_config) :
 	ecp_mp::task::task(_config),
 	MP(lib::MP_SECTION),
-	reply(MP, "reply"),
+	reply(MP, _config.section_name),
 	command("command"),
 	continuous_coordination(false)
 {
@@ -151,7 +151,7 @@ void task_base::subtasks_conditional_execution()
 }
 
 // Petla odbierania wiadomosci.
-void task_base::ecp_wait_for_stop(void)
+void task_base::wait_for_stop(void)
 {
 	while(command.Get().command != lib::STOP) {
 		ReceiveSingleMessage(true);
@@ -159,7 +159,7 @@ void task_base::ecp_wait_for_stop(void)
 }
 
 // Oczekiwanie na polecenie START od MP
-void task_base::ecp_wait_for_start(void)
+void task_base::wait_for_start(void)
 {
 	// Awaiting for the START command
 	bool start_received = false;
@@ -168,6 +168,8 @@ void task_base::ecp_wait_for_start(void)
 		while(!command.isFresh()) {
 			ReceiveSingleMessage(true);
 		}
+
+		command.markAsUsed();
 
 		switch (command.Get().command)
 		{
@@ -210,12 +212,17 @@ void task_base::get_next_state(void)
 			ReceiveSingleMessage(true);
 		}
 
+		command.markAsUsed();
+
+		mp_command = command.Get();
+
 		switch (command.Get().command)
 		{
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				// Reply with ACK
 				reply.Set(ecp_reply);
+				next_state_received = true;
 				break;
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -277,7 +284,11 @@ bool task_base::receive_mp_message(bool block)
 	command.markAsUsed();
 
 	while(!command.isFresh()) {
-		ReceiveSingleMessage(block);
+		bool received = ReceiveSingleMessage(block);
+
+		if (received) {
+			mp_command = command.Get();
+		}
 
 		// If non-blocking mode, than return just what we've got
 		if(!block) {

@@ -84,7 +84,7 @@ public:
 	lib::ECP_REPLY_PACKAGE ecp_reply_package;
 
 	//! Data buffer with messages from the ECP
-	DataBuffer<lib::ECP_REPLY_PACKAGE> ecp_reply;
+	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief ECP pulse receive time
@@ -102,16 +102,6 @@ public:
 	 * in the following iterations of Move
 	 */
 	bool communicate_with_ecp;
-
-	/**
-	 * @brief new pulse from ecp flag
-	 */
-	bool new_pulse;
-
-	/**
-	 * @brief new pulse from ecp checked flag
-	 */
-	bool new_pulse_checked;
 
 	/**
 	 * @brief constructor
