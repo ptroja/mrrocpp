@@ -48,7 +48,7 @@ public:
 				usleep(lib::CONNECT_DELAY);
 			} else {
 				fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
-				throw;
+				throw std::logic_error("Connect from remote agent failed");
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public:
 	{
 		if(messip::port_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
 			// TODO: check for results
-			throw;
+			throw std::logic_error("Disconnect from remote agent failed");
 		}
 	}
 };
