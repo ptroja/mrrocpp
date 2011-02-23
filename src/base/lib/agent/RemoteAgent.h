@@ -32,8 +32,9 @@ public:
 				oa.get_buffer(), oa.getArchiveSize(),
 				NULL, NULL, -1, MESSIP_NOTIMEOUT);
 
-		// TODO: check for results
-		if (ret != 0) throw;
+		if (ret != 0) {
+			throw std::logic_error("Could not send to remote agent");
+		}
 	};
 
 	RemoteAgent(const std::string & _name) :
