@@ -20,8 +20,9 @@ add_library(mrrocpp
 	mrmath/mathtr.cc
 	mrmath/k_vector.cc
 	mrmath/ft_v_vector.cc
-	mrmath/jacobian_matrix.cc
+	mrmath/jacobian_matrix.cc	
 	configurator.cc
+	child.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
 	timer.cc
