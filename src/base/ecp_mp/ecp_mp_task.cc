@@ -17,6 +17,7 @@
 #include <csignal>
 
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -36,7 +37,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-lib::sr_ecp* task::sr_ecp_msg = NULL;
+boost::shared_ptr<lib::sr_ecp> task::sr_ecp_msg;
 
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path()),

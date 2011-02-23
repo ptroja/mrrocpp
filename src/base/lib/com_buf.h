@@ -1051,7 +1051,6 @@ struct MP_COMMAND_PACKAGE
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
-	bool pulse_to_ecp_sent;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -1063,7 +1062,6 @@ struct MP_COMMAND_PACKAGE
 		ar & command;
 		ar & ecp_next_state;
 		ar & instruction;
-		ar & pulse_to_ecp_sent;
 	}
 };
 

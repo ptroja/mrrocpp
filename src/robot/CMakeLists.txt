@@ -35,9 +35,15 @@ add_library(mp_robots
 	sarkofag/mp_r_sarkofag.cc
 )
 
-add_library(ecp_robots
+add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
 )
+
+add_library(ecp_robots)
+
+target_link_libraries(ecp_robot ecp_mp)
+
+target_link_libraries(ecp_robots ecp_robot)
 
 # enable conditional inclusion to ecp_robots
 target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_robots ecp_r_irp6ot_m)

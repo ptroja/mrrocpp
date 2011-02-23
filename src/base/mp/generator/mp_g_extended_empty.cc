@@ -43,11 +43,11 @@ bool extended_empty::first_step()
 {
 	wait_for_ECP_pulse = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::NEXT_POSE;
-					robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-					robot_node.second->communicate_with_ecp = false;
-				}
+	{
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
+		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
+		robot_node.second->communicate_with_ecp = false;
+	}
 
 	return true;
 }
@@ -72,17 +72,12 @@ bool extended_empty::next_step()
 	}
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->communicate_with_ecp = (robot_node.second->new_pulse);
-				}
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						//  sr_ecp_msg.message("w mp task terminated");
-						return false;
-					}
-				}
+	{
+		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+			//  sr_ecp_msg.message("w mp task terminated");
+			return false;
+		}
+	}
 
 	return true;
 }

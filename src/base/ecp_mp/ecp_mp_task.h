@@ -10,6 +10,7 @@
  */
 
 #include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
@@ -46,7 +47,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class task : Agent
+class task : protected Agent
 {
 public:
 	/**
@@ -85,7 +86,7 @@ public:
 	/**
 	 * @brief pointer to the SR communication object
 	 */
-	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
+	static boost::shared_ptr<lib::sr_ecp> sr_ecp_msg; // TODO: rename from _ecp_ (?!)
 
 	/**
 	 * @brief configurator object reference

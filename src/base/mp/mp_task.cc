@@ -46,7 +46,8 @@ lib::fd_server_t task::mp_pulse_attach = NULL;
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ui_opened(false), ui_new_pulse(false)
+	ecp_mp::task::task(_config),
+	ui_pulse("MP_PULSE")
 {
 	// initialize communication with other processes
 	initialize_communication();
@@ -379,40 +380,7 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 	// koniec petli
 }
 
-int task::wait_for_name_open(void)
-{
-	while(1) {
-		int32_t type, subtype;
-		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
-
-		if (rcvid == -1) {
-			int e = errno;
-			perror("mp: messip::port_receive_pulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-		} else if (rcvid >= 0) {
-			fprintf(stderr, "mp: unexpected message received\n");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		} else if (rcvid == MESSIP_MSG_NOREPLY) {
-			// handle pulse
-			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
-				ui_new_pulse = true;
-				ui_pulse_code = type;
-			}
-
-			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
-					robot_node.second->new_pulse = true;
-					robot_node.second->ecp_pulse_code = type;
-				}
-			}
-		} else if (rcvid == MESSIP_MSG_CONNECTING) {
-			return mp_pulse_attach->lastmsg_sockfd;
-		}
-	}
-
-}
-
-bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
+bool task::check_and_optional_wait_for_new_message(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode)
 {
 	RECEIVE_PULSE_MODE current_wait_mode(NONBLOCK);
 
@@ -429,7 +397,7 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 	}
 
 	if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-		if (ui_new_pulse) {
+		if (ui_pulse.isFresh()) {
 			desired_pulse_found = true;
 		}
 	}
@@ -437,29 +405,20 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 	bool exit_from_while = false;
 
 	while (!exit_from_while) {
-		int32_t type, subtype;
-		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype,
-				(current_wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
 
-		if (rcvid == -1) {
-			int e = errno;
-			perror("mp: messip::port_receive_pulse()");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, e);
-		} else if (rcvid == MESSIP_MSG_TIMEOUT) {
+		bool received = ReceiveSingleMessage(current_wait_mode);
+
+		if (received == false) {
 			if (desired_wait_mode == BLOCK && !desired_pulse_found) {
 				current_wait_mode = BLOCK;
 			} else {
 				exit_from_while = true;
 			}
 			continue;
-		} else if (rcvid >= 0) {
-			fprintf(stderr, "mp: unexpected message received\n");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		} else if (rcvid == MESSIP_MSG_NOREPLY) {
+		} else {
 			// handle pulse
-			if (ui_opened && ui_scoid == mp_pulse_attach->lastmsg_sockfd) {
-				ui_new_pulse = true;
-				ui_pulse_code = type;
+			if (ui_pulse.isFresh()) {
+
 				if ((process_type == NEW_UI_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 					desired_pulse_found = true;
 					if (current_wait_mode == BLOCK) {
@@ -471,14 +430,8 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 			}
 
 			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
+				if (robot_node.second->ecp_reply.isFresh()) {
 					robot_node.second->new_pulse = true;
-					robot_node.second->ecp_pulse_code = type;
-
-					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time))
-							== -1) {
-						perror("clock_gettime()");
-					}
 
 					if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
 						if (!(robot_node.second->new_pulse_checked)) {
@@ -508,7 +461,7 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 //     1) block for ECP pulse and react to UI pulses
 // otherwise
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
-void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator)
+void task::mp_receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator)
 {
 	enum MP_STATE_ENUM
 	{
@@ -537,20 +490,19 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 			block_mode = BLOCK;
 		}
 
-		if (check_and_optional_wait_for_new_pulse(from_who, block_mode)) {
+		if (check_and_optional_wait_for_new_message(from_who, block_mode)) {
 			// UI Pulse arrived
-			if (ui_new_pulse) {
+			if (ui_pulse.isFresh()) {
 
-				ui_new_pulse = false;
+				ui_pulse.markAsUsed();
 
-				switch (ui_pulse_code)
+				switch (ui_pulse.Get())
 				{
 					case MP_STOP:
 						terminate_all(_robot_m);
 						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					case MP_PAUSE:
 						mp_state = MP_STATE_PAUSED;
-						request_communication_with_robots(_robot_m);
 						ui_exit_from_while = false;
 						continue;
 					default:
@@ -558,12 +510,12 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 				}
 
 				if (mp_state == MP_STATE_PAUSED) {// oczekujemy na resume
-					if (ui_pulse_code == MP_RESUME) { // odebrano resume
+					if (ui_pulse.Get() == MP_RESUME) { // odebrano resume
 						mp_state = MP_STATE_RUNNING;
 						ui_exit_from_while = true;
 					}
 				} else {
-					if (ui_pulse_code == MP_TRIGGER) { // odebrano trigger
+					if (ui_pulse.Get() == MP_TRIGGER) { // odebrano trigger
 						ui_exit_from_while = true;
 						the_generator.trigger = true;
 						// 2 ponizsze linie po dodaniu prawdziwej sporadycznej synchrnozniacji
@@ -580,13 +532,13 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 
 			if (the_generator.wait_for_ECP_pulse) {
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-							{
-								if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
-									robot_node.second->new_pulse_checked = true;
-									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
-									ecp_exit_from_while = true;
-								}
-							}
+				{
+					if ((robot_node.second->new_pulse) && !(robot_node.second->new_pulse_checked)) {
+						robot_node.second->new_pulse_checked = true;
+						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
+						ecp_exit_from_while = true;
+					}
+				}
 			} else {
 				ecp_exit_from_while = true;
 			}
@@ -609,51 +561,25 @@ void task::initialize_communication()
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
+	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
 
 	const std::string mp_pulse_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
 
 	// Rejestracja kanalu dla pulsow z procesu UI
-	if (!mp_pulse_attach) {
-
-		if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL)
-		{
-			uint64_t e = errno; // kod bledu systemowego
-			perror("Failed to attach UI Pulse chanel for Master Process");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "mp: Failed to attach UI Pulse channel");
-
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		}
-	}
-
-	ui_scoid = wait_for_name_open();
-
-	// unexepected possible resolution of bug 1526
-	usleep(100*1000);
-	ui_opened = true;
+	registerBuffer(ui_pulse);
 }
-// -------------------------------------------------------------------
 
 void task::wait_for_start()
 {
 	// Oczekiwanie na zlecenie START od UI
 
-	while (1) {
-		check_and_optional_wait_for_new_pulse(NEW_UI_PULSE, BLOCK);
-
-		if (ui_new_pulse) {
-			ui_new_pulse = false;
-			if (ui_pulse_code == MP_START) {
-				break;
-			}
-		}
+	while (ui_pulse.Get() != MP_START) {
+		check_and_optional_wait_for_new_message(NEW_UI_PULSE, BLOCK);
 	}
 
 	sr_ecp_msg->message("mp user program is running");
 }
-// ------------------------------------------------------------------------
-
 
 void task::wait_for_stop(void)
 {
@@ -661,166 +587,67 @@ void task::wait_for_stop(void)
 
 	sr_ecp_msg->message("To terminate user program click STOP icon");
 
-	while (1) {
-		check_and_optional_wait_for_new_pulse(NEW_UI_PULSE, BLOCK);
-
-		if (ui_new_pulse) {
-			ui_new_pulse = false;
-			if (ui_pulse_code == MP_STOP) {
-				break;
-			}
-		}
+	while (ui_pulse.Get() != MP_STOP) {
+		check_and_optional_wait_for_new_message(NEW_UI_PULSE, BLOCK);
 	}
 }
-// ------------------------------------------------------------------------
-
-
-// ------------------------------------------------------------------------
 
 void task::start_all(const common::robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	{
+		robot_node.second->terminate_ecp();
+	}
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	common::robots_t robots_m_tmp = _robot_m;
 
-	while (1) {
-
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp)
-		{
-			if (robot_node.second->new_pulse) {
-				if (robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_START) {
-					robot_node.second->new_pulse = false;
-					robot_node.second->new_pulse_checked = false;
-					robot_node.second->start_ecp();
-					//					fprintf(stderr, "starting %s robot\n", lib::toString(robot_node.second->robot_name).c_str());
-				} else {
-					printf("phase 2 bledny kod pulsu w start_all\n");
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_START_ALL);
-				}
-				robots_m_tmp.erase(robot_node.first);
-			}
-		}
-
-		if (robots_m_tmp.empty()) {
-			break;
-		} else {
-			assert(0);
-			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
-		}
-	}
-	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m) {
-	//		fprintf(stderr, "task::start_all check: robot %s new_pulse %d new_pulse_checked %d pulse_code %d\n",
-	//				lib::toString(robot_node.second->robot_name).c_str(),
-	//				robot_node.second->new_pulse, robot_node.second->new_pulse_checked, robot_node.second->ecp_pulse_code);
-	//	}
+	// TODO: collect ACKNOWLEDGEMENTS
+//	while(1)
+//		if (robots_m_tmp.empty()) {
+//			break;
+//		} else {
+//			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
+//		}
+//	}
 }
-// ------------------------------------------------------------------------
 
-
-// ------------------------------------------------------------------------
 void task::execute_all(const common::robots_t & _robot_m)
 {
-	// Wystartowanie wszystkich ECP
-	// do przepisania wg http://www.thescripts.com/forum/thread62378.html
-
-	common::robots_t robots_m_tmp;
-
-	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 	{
 		if (robot_node.second->communicate_with_ecp) {
 			if ((robot_node.second->mp_command.command == lib::STOP)
 					|| (robot_node.second->mp_command.command == lib::END_MOTION)
 					|| (robot_node.second->mp_command.command == lib::NEXT_STATE)
-					|| (robot_node.second->continuous_coordination) || (robot_node.second->new_pulse)) {
-				robots_m_tmp.insert(robot_node);
+					|| (robot_node.second->continuous_coordination)) {
+				robot_node.second->execute_motion();
 			}
-		}
-
-	}
-
-	request_communication_with_robots(robots_m_tmp);
-
-	while (1) {
-
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp)
-		{
-			// komunikujemy sie tylko z aktywnymi robotami
-			if (robot_node.second->new_pulse) {
-				if ((robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_COMMAND)
-						|| (robot_node.second->ecp_pulse_code == ECP_WAIT_FOR_NEXT_STATE)) {
-					robot_node.second->new_pulse = false;
-					robot_node.second->new_pulse_checked = false;
-					robot_node.second->execute_motion();
-				} else {
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL);
-				}
-				robots_m_tmp.erase(robot_node.first);
-			}
-					}
-
-		if (robots_m_tmp.empty()) {
-			break;
-		} else {
-			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
 		}
 	}
 }
-// ------------------------------------------------------------------------
 
-
-// ------------------------------------------------------------------------
-void task::request_communication_with_robots(const common::robots_t & _robot_m)
-{
-	// Zatrzymanie wszystkich ECP
-
-	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
-	{
-		// wysylamy zadanie komunikacji do ECP o ile ECP jeszcze sie nie zglosilo
-		robot_node.second->send_pulse_to_ecp(MP_TO_ECP_COMMUNICATION_REQUEST);
-
-	}
-}
-
-// ------------------------------------------------------------------------
 void task::terminate_all(const common::robots_t & _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
-	std::cerr << "mp terminate_all 1" << std::endl;
-	request_communication_with_robots(_robot_m);
-	std::cerr << "mp terminate_all 2" << std::endl;
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	{
+		robot_node.second->terminate_ecp();
+	}
+
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	common::robots_t robots_m_tmp = _robot_m;
 
-	while (1) {
-
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_m_tmp)
-		{
-
-			if (robot_node.second->new_pulse) {
-				//if ((robot_m_iterator->second->ui_pulse_code == ECP_WAIT_FOR_STOP) || (robot_m_iterator->second->ui_pulse_code == ECP_WAIT_FOR_COMMAND))
-				if (1) {
-					robot_node.second->new_pulse = false;
-					robot_node.second->new_pulse_checked = false;
-					robot_node.second->terminate_ecp();
-				} else {
-					printf("phase 2 bledny kod pulsu w terminate_all\n");
-					throw common::MP_main_error(lib::NON_FATAL_ERROR, INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL);
-				}
-				robots_m_tmp.erase(robot_node.first);
-			}
-		}
-
-		if (robots_m_tmp.empty()) {
-			break;
-		} else {
-			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
-		}
-	}
+	// TODO: collect ACKNOWLEDGEMENTS
+//	while(1)
+//		if (robots_m_tmp.empty()) {
+//			break;
+//		} else {
+//			check_and_optional_wait_for_new_pulse(NEW_ECP_PULSE, BLOCK);
+//		}
+//	}
 }
-// ------------------------------------------------------------------------
 
 } // namespace task
 } // namespace mp

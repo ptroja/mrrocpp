@@ -61,7 +61,7 @@ public:
 
 		move_init();
 
-		if (!first_step() || (!ecp_t.mp_buffer_receive_and_send())) {
+		if (!first_step() || (!ecp_t.receive_mp_message(false))) {
 			return; // Warunek koncowy spelniony w pierwszym kroku
 		}
 
@@ -94,7 +94,7 @@ public:
 				trigger = true;
 			}
 
-		} while (next_step() && (ecp_t.mp_buffer_receive_and_send()));
+		} while (next_step() && (!ecp_t.receive_mp_message(false)));
 	}
 
 	/**
