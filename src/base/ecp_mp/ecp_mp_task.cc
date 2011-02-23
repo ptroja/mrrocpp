@@ -28,6 +28,7 @@
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/ecp/ECP_main_error.h"
+#include "base/lib/agent/Agent.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -38,7 +39,8 @@ namespace task {
 lib::sr_ecp* task::sr_ecp_msg = NULL;
 
 task::task(lib::configurator &_config) :
-	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
+	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path()),
+	Agent(_config.section_name)
 {
 	const std::string ui_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
