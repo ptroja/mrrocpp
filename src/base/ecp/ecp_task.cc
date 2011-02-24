@@ -35,6 +35,7 @@ task_base::task_base(lib::configurator &_config) :
 	MP(lib::MP_SECTION),
 	reply(MP, _config.section_name),
 	command("command"),
+	mp_command(command.access),
 	continuous_coordination(false)
 {
 	initialize_communication();
@@ -167,8 +168,6 @@ void task_base::wait_for_start(void)
 			ReceiveSingleMessage(true);
 		}
 
-		mp_command = command.Get();
-
 		command.markAsUsed();
 
 		switch (mp_command.command)
@@ -211,8 +210,6 @@ void task_base::get_next_state(void)
 		while(!command.isFresh()) {
 			ReceiveSingleMessage(true);
 		}
-
-		mp_command = command.Get();
 
 		command.markAsUsed();
 
@@ -285,9 +282,7 @@ bool task_base::peek_mp_message()
 
 	if(ReceiveSingleMessage(false)) {
 		if (command.isFresh()) {
-			mp_command = command.Get();
-
-			return (command.Get().command == lib::END_MOTION);
+			return (mp_command.command == lib::END_MOTION);
 		}
 	}
 

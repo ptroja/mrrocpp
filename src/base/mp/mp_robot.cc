@@ -37,6 +37,7 @@ robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, 
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 	continuous_coordination(false),
 	reply(_section_name),
+	ecp_reply_package(reply.access),
 	communicate_with_ecp(true)
 {
 	mp_object.registerBuffer(reply);

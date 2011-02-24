@@ -459,7 +459,6 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					if (robot_node.second->reply.isFresh()) {
-						robot_node.second->ecp_reply_package = robot_node.second->reply.Get();
 						robot_node.second->reply.markAsUsed();
 						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 						ecp_exit_from_while = true;

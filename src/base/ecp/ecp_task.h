@@ -64,6 +64,13 @@ private:
 	RemoteAgent MP;
 
 	/**
+	 * Data buffer with command from MP
+	 *
+	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
+	 */
+	DataBuffer<lib::MP_COMMAND_PACKAGE> command;
+
+	/**
 	 * @brief replies to MP message
 	 * @param caller calling MP id
 	 * @param mp_pulse_received MP pulse received flag
@@ -112,10 +119,7 @@ public:
 	 * @brief buffered MP command
 	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
-	lib::MP_COMMAND_PACKAGE mp_command;
-
-	//! Data buffer with command from MP
-	DataBuffer<lib::MP_COMMAND_PACKAGE> command;
+	const lib::MP_COMMAND_PACKAGE & mp_command;
 
 	/**
 	 * @brief continuous coordination flag

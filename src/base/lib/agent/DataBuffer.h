@@ -45,7 +45,7 @@ public:
 	//! Constructor
 	DataBuffer(const std::string & _name, const T & _default_value = T())
 		: DataBufferBase(_name), data(_default_value),
-		fresh(false)
+		fresh(false), access(data)
 	{
 	}
 
@@ -82,6 +82,11 @@ public:
 	{
 		return timestamp;
 	}
+
+	/**
+	 * Read-only direct access to the data buffer
+	 */
+	const T & access;
 };
 
 #endif /* _DATABUFFER_H */

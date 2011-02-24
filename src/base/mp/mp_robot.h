@@ -76,15 +76,15 @@ public:
 	 */
 	lib::MP_COMMAND_PACKAGE mp_command;
 
+	//! Data buffer with messages from the ECP
+	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
+
 	/**
 	 * @brief reply buffer from ecp
 	 *
 	 * it is received during communication with ECP
 	 */
-	lib::ECP_REPLY_PACKAGE ecp_reply_package;
-
-	//! Data buffer with messages from the ECP
-	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
+	const lib::ECP_REPLY_PACKAGE & ecp_reply_package;
 
 	/**
 	 * @brief ECP pulse receive time
