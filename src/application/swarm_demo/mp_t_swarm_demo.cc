@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #include "base/mp/mp_task.h"
 #include "mp_t_swarm_demo.h"
 
@@ -12,9 +16,6 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include <iostream>
-#include <string>
-#include <sstream>
 #include "base/lib/sr/srlib.h"
 
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
@@ -48,11 +49,7 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 
 void swarm_demo::main_task_algorithm(void)
 {
-
 	sr_ecp_msg->message("Swarm Demo (MP) START");
-
-	lib::robot_name_t manipulator_name;
-	lib::robot_name_t gripper_name;
 
 	sr_ecp_msg->message("Both Joint");
 
