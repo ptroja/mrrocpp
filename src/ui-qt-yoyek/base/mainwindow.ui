@@ -94,13 +94,14 @@
      </property>
      <widget class="QMenu" name="menuirp6ot_m_Pre_Synchro_Moves">
       <property name="title">
-       <string>Pre Synchro Moves</string>
+       <string>P&amp;re Synchro Moves</string>
       </property>
       <addaction name="actionirp6ot_m_Synchronisation"/>
+      <addaction name="actionirp6ot_m_Pre_Synchro_Moves_Motors"/>
      </widget>
      <widget class="QMenu" name="menuirp6ot_m_Preset_Positions">
       <property name="title">
-       <string>Preset Positions</string>
+       <string>&amp;Preset Positions</string>
       </property>
       <addaction name="actionirp6ot_m_Synchro_Position"/>
       <addaction name="actionirp6ot_m_Front_Position"/>
@@ -108,11 +109,36 @@
       <addaction name="actionirp6ot_m_Position_1"/>
       <addaction name="actionirp6ot_m_Position_2"/>
      </widget>
+     <widget class="QMenu" name="menuirp6ot_m_Absolute_moves">
+      <property name="title">
+       <string>A&amp;bsolute moves</string>
+      </property>
+      <addaction name="actionirp6ot_m_Absolute_moves_Motors"/>
+      <addaction name="actionirp6ot_m_Joints"/>
+      <addaction name="actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuIrp6ot_m_Relative_Moves">
+      <property name="title">
+       <string>Re&amp;lative Moves</string>
+      </property>
+      <addaction name="actionirp6ot_m_Relative_Xyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menu_Tool">
+      <property name="title">
+       <string>&amp;Tool</string>
+      </property>
+      <addaction name="actionirp6ot_m_Tool_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6ot_m_Tool_Xyz_Angle_Axis"/>
+     </widget>
      <addaction name="actionirp6ot_m_EDP_Load"/>
      <addaction name="actionirp6ot_m_EDP_Unload"/>
      <addaction name="separator"/>
      <addaction name="menuirp6ot_m_Pre_Synchro_Moves"/>
+     <addaction name="menuirp6ot_m_Absolute_moves"/>
+     <addaction name="menuIrp6ot_m_Relative_Moves"/>
      <addaction name="menuirp6ot_m_Preset_Positions"/>
+     <addaction name="menu_Tool"/>
     </widget>
     <widget class="QMenu" name="menuIrp6p_m">
      <property name="title">
@@ -123,6 +149,7 @@
        <string>Pre Synchro Moves</string>
       </property>
       <addaction name="actionirp6p_m_Synchronisation"/>
+      <addaction name="actionMotors"/>
      </widget>
      <widget class="QMenu" name="menuirp6p_m_Preset_Positions">
       <property name="title">
@@ -134,11 +161,37 @@
       <addaction name="actionirp6p_m_Position_1"/>
       <addaction name="actionirp6p_m_Position_2"/>
      </widget>
+     <widget class="QMenu" name="menuA_bsolute_moves">
+      <property name="title">
+       <string>A&amp;bsolute moves</string>
+      </property>
+      <addaction name="action_Joints"/>
+      <addaction name="actionXyz_Euler_Zyz"/>
+      <addaction name="actionXyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuRe_lative_moves">
+      <property name="title">
+       <string>Re&amp;lative moves</string>
+      </property>
+      <addaction name="actionXyz_Angle_Axis_2"/>
+     </widget>
+     <widget class="QMenu" name="menuTool">
+      <property name="title">
+       <string>Tool</string>
+      </property>
+      <addaction name="actionXyz_Euler_Zyz_2"/>
+      <addaction name="actionXyz_Angle_Axis_3"/>
+     </widget>
      <addaction name="actionirp6p_m_EDP_Load"/>
      <addaction name="actionirp6p_m_EDP_Unload"/>
      <addaction name="separator"/>
+     <addaction name="action_Motors"/>
      <addaction name="menuirp6p_m_Pre_Synchro_Moves"/>
+     <addaction name="menuA_bsolute_moves"/>
+     <addaction name="menuRe_lative_moves"/>
      <addaction name="menuirp6p_m_Preset_Positions"/>
+     <addaction name="separator"/>
+     <addaction name="menuTool"/>
     </widget>
     <widget class="QMenu" name="menuPolycrank">
      <property name="title">
@@ -181,9 +234,133 @@
      <addaction name="menusarkofag_Preset_Positions"/>
      <addaction name="actionsarkofag_Servo_Algorithm"/>
     </widget>
+    <widget class="QMenu" name="menuIrp6ot_t_Fg">
+     <property name="title">
+      <string>Irp6ot_t&amp;Fg</string>
+     </property>
+     <widget class="QMenu" name="menu_Preset_positions">
+      <property name="title">
+       <string>&amp;Preset positions</string>
+      </property>
+      <addaction name="action_Synchro_position"/>
+      <addaction name="actionPosition_0"/>
+      <addaction name="actionPosition_1"/>
+      <addaction name="actionPosition_2"/>
+     </widget>
+     <addaction name="actionEDP_Load"/>
+     <addaction name="actionEDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="action_Synchronization"/>
+     <addaction name="action_Move"/>
+     <addaction name="menu_Preset_positions"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6p_tf_G">
+     <property name="title">
+      <string>Irp6p_tf&amp;G</string>
+     </property>
+     <widget class="QMenu" name="menuPreset_positions">
+      <property name="title">
+       <string>Preset positions</string>
+      </property>
+      <addaction name="action_Synchro_position_2"/>
+      <addaction name="actionPosition_3"/>
+      <addaction name="actionPosition_4"/>
+      <addaction name="actionPosition_5"/>
+     </widget>
+     <addaction name="actionEDP_Load_2"/>
+     <addaction name="actionEDP_Unload_2"/>
+     <addaction name="separator"/>
+     <addaction name="action_Synchronization_2"/>
+     <addaction name="action_Move_2"/>
+     <addaction name="menuPreset_positions"/>
+    </widget>
+    <widget class="QMenu" name="menu_Conveyor">
+     <property name="title">
+      <string>&amp;Conveyor</string>
+     </property>
+     <widget class="QMenu" name="menu_Preset_Positions">
+      <property name="title">
+       <string>&amp;Preset Positions</string>
+      </property>
+      <addaction name="action_Synchro_Position"/>
+      <addaction name="actionPosition_6"/>
+      <addaction name="actionPosition_7"/>
+      <addaction name="actionPostion_2"/>
+     </widget>
+     <addaction name="actionEDP_Load_3"/>
+     <addaction name="actionEDP_Unload_3"/>
+     <addaction name="separator"/>
+     <addaction name="action_Synchronization_3"/>
+     <addaction name="action_Move_3"/>
+     <addaction name="menu_Preset_Positions"/>
+    </widget>
+    <widget class="QMenu" name="menu_Speaker">
+     <property name="title">
+      <string>&amp;Speaker</string>
+     </property>
+     <widget class="QMenu" name="menuPreset_Sounds">
+      <property name="title">
+       <string>Preset &amp;Sounds</string>
+      </property>
+      <addaction name="actionSound_0"/>
+      <addaction name="actionSound_1"/>
+      <addaction name="actionSound_2"/>
+     </widget>
+     <addaction name="actionEDP_Load_4"/>
+     <addaction name="actionEDP_Unload_4"/>
+     <addaction name="separator"/>
+     <addaction name="action_Play"/>
+     <addaction name="menuPreset_Sounds"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6_Mechatronika">
+     <property name="title">
+      <string>Irp6-&amp;Mechatronika</string>
+     </property>
+     <widget class="QMenu" name="menuP_re_Synchro_Moves">
+      <property name="title">
+       <string>P&amp;re Synchro Moves</string>
+      </property>
+      <addaction name="action_Synchronization_4"/>
+      <addaction name="action_Motors_2"/>
+     </widget>
+     <widget class="QMenu" name="menuA_bsolute_Moves">
+      <property name="title">
+       <string>A&amp;bsolute Moves</string>
+      </property>
+      <addaction name="action_Motors_3"/>
+      <addaction name="action_Joints_2"/>
+      <addaction name="actionXyz_Euler_Zyz_3"/>
+      <addaction name="actionXyz_Angle_Axis_4"/>
+     </widget>
+     <widget class="QMenu" name="menu_Preset_Positions_2">
+      <property name="title">
+       <string>&amp;Preset Positions</string>
+      </property>
+      <addaction name="action_Synchro_Position_2"/>
+      <addaction name="actionPosition_8"/>
+      <addaction name="actionPosition_9"/>
+      <addaction name="actionPosition_10"/>
+     </widget>
+     <widget class="QMenu" name="menu_Tool_2">
+      <property name="title">
+       <string>&amp;Tool</string>
+      </property>
+      <addaction name="actionXyz_Euler_Zyz_4"/>
+      <addaction name="actionXyz_Angle_Axis_5"/>
+     </widget>
+     <addaction name="actionEDP_Load_5"/>
+     <addaction name="actionEDP_Unload_5"/>
+     <addaction name="separator"/>
+     <addaction name="menuP_re_Synchro_Moves"/>
+     <addaction name="menuA_bsolute_Moves"/>
+     <addaction name="menu_Preset_Positions_2"/>
+     <addaction name="menu_Tool_2"/>
+    </widget>
     <addaction name="menuIrp6ot_m"/>
+    <addaction name="menuIrp6ot_t_Fg"/>
     <addaction name="menuIrp6p_m"/>
-    <addaction name="separator"/>
+    <addaction name="menuIrp6p_tf_G"/>
+    <addaction name="menu_Conveyor"/>
     <addaction name="separator"/>
     <addaction name="menuBirdhand"/>
     <addaction name="menuSarkofag"/>
@@ -192,6 +369,8 @@
     <addaction name="menuSmb"/>
     <addaction name="menuShead"/>
     <addaction name="separator"/>
+    <addaction name="menu_Speaker"/>
+    <addaction name="menuIrp6_Mechatronika"/>
     <addaction name="menuPolycrank"/>
    </widget>
    <widget class="QMenu" name="menuFile">
@@ -493,12 +672,12 @@
   </action>
   <action name="actionirp6ot_m_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionirp6ot_m_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionirp6p_m_EDP_Load">
@@ -518,7 +697,7 @@
   </action>
   <action name="actionirp6ot_m_Synchronisation">
    <property name="text">
-    <string>Synchronisation</string>
+    <string>&amp;Synchronisation</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Synchro_Position">
@@ -533,17 +712,17 @@
   </action>
   <action name="actionirp6ot_m_Position_0">
    <property name="text">
-    <string>Position 0</string>
+    <string>Position &amp;0</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Position_1">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Position_2">
    <property name="text">
-    <string>Position 2</string>
+    <string>Position &amp;2</string>
    </property>
   </action>
   <action name="actionirp6p_m_Synchro_Position">
@@ -588,22 +767,22 @@
   </action>
   <action name="actionbirdhand_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionbirdhand_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionbirdhand_Command">
    <property name="text">
-    <string>Command</string>
+    <string>&amp;Command</string>
    </property>
   </action>
   <action name="actionbirdhand_Configuration">
    <property name="text">
-    <string>Configuration</string>
+    <string>Co&amp;Nfiguration</string>
    </property>
   </action>
   <action name="actionsarkofag_EDP_Load">
@@ -659,6 +838,306 @@
   <action name="actionspkm_Clear_Fault">
    <property name="text">
     <string>Clear Fault</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Pre_Synchro_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis </string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Relative_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Tool_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Tool_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="action_Synchronization">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="action_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="action_Synchro_position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionPosition_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionPosition_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionPosition_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="action_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionMotors">
+   <property name="text">
+    <string>Motors</string>
+   </property>
+  </action>
+  <action name="action_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionXyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionXyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionXyz_Angle_Axis_2">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionXyz_Euler_Zyz_2">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionXyz_Angle_Axis_3">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load_2">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Unload_2">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="action_Synchronization_2">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="action_Move_2">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="action_Synchro_position_2">
+   <property name="text">
+    <string>&amp;Synchro position</string>
+   </property>
+  </action>
+  <action name="actionPosition_3">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionPosition_4">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionPosition_5">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load_3">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Unload_3">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="action_Synchronization_3">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="action_Move_3">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="action_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionPosition_6">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionPosition_7">
+   <property name="text">
+    <string>Position  &amp;1</string>
+   </property>
+  </action>
+  <action name="actionPostion_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load_4">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Unload_4">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="action_Play">
+   <property name="text">
+    <string>&amp;Play</string>
+   </property>
+  </action>
+  <action name="actionSound_0">
+   <property name="text">
+    <string>Sound &amp;0</string>
+   </property>
+  </action>
+  <action name="actionSound_1">
+   <property name="text">
+    <string>Sound &amp;1</string>
+   </property>
+  </action>
+  <action name="actionSound_2">
+   <property name="text">
+    <string>Sound &amp;2</string>
+   </property>
+  </action>
+  <action name="actionEDP_Load_5">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionEDP_Unload_5">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="action_Synchronization_4">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="action_Motors_2">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="action_Motors_3">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="action_Joints_2">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionXyz_Euler_Zyz_3">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionXyz_Angle_Axis_4">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="action_Synchro_Position_2">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionPosition_8">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionPosition_9">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionPosition_10">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionXyz_Euler_Zyz_4">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionXyz_Angle_Axis_5">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
    </property>
   </action>
  </widget>

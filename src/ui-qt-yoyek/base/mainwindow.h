@@ -65,12 +65,21 @@ private slots:
 	void on_actionirp6ot_m_EDP_Unload_triggered();
 
 	void on_actionirp6ot_m_Synchronisation_triggered();
+	void on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered();
+
+	void on_actionirp6ot_m_Absolute_moves_Motors();
+	void on_actionirp6ot_m_Joints();
+	void on_actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz();
+	void on_actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis();
+
+	actionirp6ot_m_Relative_Xyz_Angle_Axis
 
 	void on_actionirp6ot_m_Synchro_Position_triggered();
 	void on_actionirp6ot_m_Front_Position_triggered();
 	void on_actionirp6ot_m_Position_0_triggered();
 	void on_actionirp6ot_m_Position_1_triggered();
 	void on_actionirp6ot_m_Position_2_triggered();
+
 
 	//irp6p_m menu
 	void on_actionirp6p_m_EDP_Load_triggered();
@@ -83,6 +92,9 @@ private slots:
 	void on_actionirp6p_m_Position_0_triggered();
 	void on_actionirp6p_m_Position_1_triggered();
 	void on_actionirp6p_m_Position_2_triggered();
+
+	void on_actionirp6ot_m_Tool_Xyz_Euler_Zyz();
+	void on_actionirp6ot_m_Tool_Xyz_Angle_Axis();
 
 	// birdhand menu
 	void on_actionbirdhand_EDP_Load_triggered();
