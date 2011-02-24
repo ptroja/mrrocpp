@@ -41,7 +41,7 @@ namespace task {
 using namespace std;
 
 
-lib::fd_server_t task::mp_pulse_attach = NULL;
+lib::fd_server_t task::mp_pulse_attach = lib::invalid_fd;
 
 
 // KONSTRUKTORY
