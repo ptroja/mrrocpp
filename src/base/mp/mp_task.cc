@@ -185,14 +185,10 @@ void task::run_extended_empty_gen_base(bool activate_trigger, int number_of_robo
 
 void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...)
 {
-	// CZYNNOSCI WSTEPNE
+	// TRANSLATE CALL ARGUMENTS
+
 	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
 	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
-	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-
-	// powolanie generatora i jego konfiguracja
-	generator::extended_empty mp_ext_empty_gen(*this);
-	mp_ext_empty_gen.configure(false);
 
 	// na podstawie argumentow wywolania biezacej metody
 	va_list arguments; // A place to store the list of arguments
@@ -209,14 +205,52 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 
 	va_end(arguments); // Cleans up the list
 
-	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
+	// CALL THE PROPER METHOD
+	run_extended_empty_gen_and_wait(robots_to_move, robots_to_wait_for_task_termination);
+}
 
+void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
+{
+	// TRANSLATE CALL ARGUMENTS
+
+	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
+	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
+
+	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
+
+	// najpierw zbior robots_to_move...
+	for (int x = 0; x < number_of_robots_to_move; x++) // Loop until all numbers are added
+	{
+		lib::robot_name_t robot_l = robotsToMove[x]; // Adds the next value in argument list to sum.
+
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
+		} else {
+			robots_to_move[robot_l] = robot_m[robot_l];
+		}
+	}
+	// ...potem zbior robots_to_wait_for_task_termination
+	for (int x = 0; x < number_of_robots_to_wait_for_task_termin; x++) // Loop until all numbers are added
+	{
+		lib::robot_name_t robot_l = robotsWaitingForTaskTermination[x]; // Adds the next value in argument list to sum.
+
+		if (robot_m.count(robot_l) == 0) {
+			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
+		} else {
+			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
+		}
+	}
+
+	// CALL THE PROPER METHOD
+	run_extended_empty_gen_and_wait(robots_to_move, robots_to_wait_for_task_termination);
+}
+
+void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, common::robots_t & robots_to_wait_for_task_termination)
+{
+	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
 	{
-
-		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
-
-		if (robots_map_iter == robots_to_move.end()) {
+		if (robots_to_move.count(robot_node.first) == 0) {
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
 			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
 		}
@@ -228,19 +262,14 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
 		// wtedy wyjscie z petli
 
-		//	if (debug_tmp) printf(" run_extended_empty_gen_and_wait 1\n");
 		// przygotowanie zapasowych list robotow
-		robots_to_move_tmp.clear();
-		robots_to_wait_for_task_termination_tmp.clear();
-
-		robots_to_move_tmp = robots_to_move;
-		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
+		common::robots_t robots_to_move_tmp = robots_to_move;
+		common::robots_t robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp)
 		{
 			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
 				robots_to_move.erase(robot_node.first);
 			}
 		}
@@ -249,126 +278,26 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp)
 		{
 			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
 				robots_to_wait_for_task_termination.erase(robot_node.first);
 			}
 		}
 
 		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
+		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
 		if (robots_to_wait_for_task_termination.empty())
 			break;
+
+		// powolanie generatora i jego konfiguracja
+		generator::extended_empty mp_ext_empty_gen(*this);
+		mp_ext_empty_gen.configure(false);
 
 		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
 		mp_ext_empty_gen.robot_m = robots_to_move;
 
-		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_gen_and_wait 1\n");
 		// uruchomienie generatora
 		mp_ext_empty_gen.Move();
 
-		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_gen_and_wait 1\n");
 	} while (true);
-}
-
-void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination)
-{
-	// CZYNNOSCI WSTEPNE
-	// utworzenie zbiorow robotow robots_to_move i robots_to_wait_for_task_termination
-	common::robots_t robots_to_move, robots_to_wait_for_task_termination;
-	common::robots_t robots_to_move_tmp, robots_to_wait_for_task_termination_tmp;
-
-	// powolanie generatora i jego konfiguracja
-	generator::extended_empty mp_ext_empty_gen(*this);
-	mp_ext_empty_gen.configure(false);
-
-	// na podstawie argumentow wywolania biezacej metody
-	//va_list arguments;    // A place to store the list of arguments
-	lib::robot_name_t robot_l;
-
-	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
-	//va_start ( arguments, number_of_robots_to_wait_for_task_termin);
-	// najpierw zbior robots_to_move...
-	for (int x = 0; x < number_of_robots_to_move; x++) // Loop until all numbers are added
-	{
-		robot_l = robotsToMove[x]; // Adds the next value in argument list to sum.
-
-		if (robot_m.count(robot_l) == 0) {
-			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
-		} else {
-			robots_to_move[robot_l] = robot_m[robot_l];
-		}
-	}
-	// ...potem zbior robots_to_wait_for_task_termination
-	for (int x = 0; x < number_of_robots_to_wait_for_task_termin; x++) // Loop until all numbers are added
-	{
-		robot_l = robotsWaitingForTaskTermination[x]; // Adds the next value in argument list to sum.
-		if (robot_m.count(robot_l) == 0) {
-			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-		} else {
-			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
-		}
-	}
-	//va_end ( arguments );              // Cleans up the list
-
-	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
-	{
-
-		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
-
-		if (robots_map_iter == robots_to_move.end()) {
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, (uint64_t) 0);
-		}
-	}
-
-	// GLOWNA PETLA
-
-	do {
-		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
-		// wtedy wyjscie z petli
-
-		//	if (debug_tmp) printf(" run_extended_empty_gen_and_wait 1\n");
-		// przygotowanie zapasowych list robotow
-		robots_to_move_tmp.clear();
-		robots_to_wait_for_task_termination_tmp.clear();
-
-		robots_to_move_tmp = robots_to_move;
-		robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
-
-		// sprawdzenie zbioru robots_to_move
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp)
-		{
-			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				//	if (debug_tmp) robot_m_iterator->second->printf_state("1 ");
-				robots_to_move.erase(robot_node.first);
-			}
-		}
-
-		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp)
-		{
-			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				//	if (debug_tmp) robot_m_iterator->second->printf_state("2 ");
-				robots_to_wait_for_task_termination.erase(robot_node.first);
-			}
-		}
-
-		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-		// Jesli tak wyjscie z petli i w konsekwencji wyjscie z calej metody
-		if (robots_to_wait_for_task_termination.empty())
-			break;
-
-		// przypisanie generatorowi mp_ext_empty_gen zbioru robots_to_move
-		mp_ext_empty_gen.robot_m = robots_to_move;
-
-		//	if (debug_tmp) printf("PRZED MOVE run_extended_empty_gen_and_wait 1\n");
-		// uruchomienie generatora
-		mp_ext_empty_gen.Move();
-		//		if (debug_tmp) printf("ZA MOVE move run_extended_empty_gen_and_wait 1\n");
-	} while (true);
-	// koniec petli
 }
 
 //
@@ -380,7 +309,7 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 //     1) block for ECP pulse and react to UI pulses
 // otherwise
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
-void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator)
+void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator & the_generator)
 {
 	enum MP_STATE_ENUM
 	{

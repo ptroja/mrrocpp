@@ -173,6 +173,15 @@ public:
 	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 	/**
+	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param move_robots container with robots to move
+	 * @param wait_robots container with robots to wait for task termination
+	 */
+	void
+	run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, common::robots_t & robots_to_wait_for_task_termination);
+
+	/**
 	 * @brief executes delay
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param _ms_delay delay time
