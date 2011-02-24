@@ -8,6 +8,8 @@
 #include <cstdio>
 #include <iostream>
 
+#include <boost/date_time/posix_time/posix_time_types.hpp> //no i/o just types
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -216,10 +218,9 @@ bool haptic_stiffness::next_step()
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
 
-	float time_interval = (irp6ot->ecp_pulse_receive_time.tv_sec + irp6ot->ecp_pulse_receive_time.tv_nsec / 1e9)
-			- (irp6p->ecp_pulse_receive_time.tv_sec + irp6p->ecp_pulse_receive_time.tv_nsec / 1e9);
+	boost::posix_time::time_duration time_interval = irp6ot->reply.getTimestamp() - irp6p->reply.getTimestamp();
 
-	if (time_interval > 0.002) {
+	if (time_interval > boost::posix_time::millisec(2)) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;
 		irp6p->mp_command.instruction.value_in_step_no = step_no + 1 - 4;
 	} else {

@@ -87,14 +87,6 @@ public:
 	const lib::ECP_REPLY_PACKAGE & ecp_reply_package;
 
 	/**
-	 * @brief ECP pulse receive time
-	 *
-	 * it is used to diversify macrostep length in multi continous coordination
-	 * taking into account differences in communication readiness pulse receive time from different ECP's
-	 */
-	struct timespec ecp_pulse_receive_time;
-
-	/**
 	 * @brief the communication with EDP flag
 	 *
 	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
