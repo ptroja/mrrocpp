@@ -1030,7 +1030,7 @@ struct ecp_next_state_t
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
-	char* get_mp_2_ecp_next_state_string();
+	const char * get_mp_2_ecp_next_state_string() const;
 
 	//! Serialization of the data structure
 	template <class Archive>
