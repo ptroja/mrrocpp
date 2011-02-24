@@ -37,7 +37,7 @@ ecp_st_scan_move::~ecp_st_scan_move() {
 void ecp_st_scan_move::conditional_execution(){
 
 	std::vector<double>vec;
-	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.string_data);
 
 	bcl_gen->reset();
 	bcl_gen->set_absolute();

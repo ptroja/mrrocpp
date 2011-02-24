@@ -61,13 +61,18 @@ public:
 
 		move_init();
 
-		if (!first_step() || (!ecp_t.mp_buffer_receive_and_send())) {
+		if (!first_step()) {
 			return; // Warunek koncowy spelniony w pierwszym kroku
 		}
 
-		do { // realizacja ruchu
+		// realizacja ruchu
+		do {
+			if(ecp_t.peek_mp_message()) {
+				// END_MOTION received
+				break;
+			}
 
-			// zadanie przygotowania danych od czujnikow
+			// zlecenie przygotowania danych przez czujniki
 			ecp_t.all_sensors_initiate_reading(sensor_m);
 
 			if (the_robot) {
@@ -94,7 +99,7 @@ public:
 				trigger = true;
 			}
 
-		} while (next_step() && (ecp_t.mp_buffer_receive_and_send()));
+		} while (next_step());
 	}
 
 	/**

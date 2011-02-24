@@ -44,7 +44,6 @@ endif(ROBOT_SPEAKER)
 
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
-	../../generator/ecp/ecp_g_operator_reaction_condition.cc
 )
 
 target_link_libraries(mp_rcsc mp)

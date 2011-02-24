@@ -1021,8 +1021,8 @@ public:
 struct ecp_next_state_t
 {
 	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
-	int mp_2_ecp_next_state_variant;
-	uint32_t mp_2_ecp_next_state_string[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	int variant;
+	uint32_t string_data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
@@ -1030,15 +1030,15 @@ struct ecp_next_state_t
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
-	char* get_mp_2_ecp_next_state_string();
+	const char * get_mp_2_ecp_next_state_string() const;
 
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & mp_2_ecp_next_state;
-		ar & mp_2_ecp_next_state_variant;
-		ar & mp_2_ecp_next_state_string;
+		ar & variant;
+		ar & string_data;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };
@@ -1051,7 +1051,6 @@ struct MP_COMMAND_PACKAGE
 	MP_COMMAND command;
 	ecp_next_state_t ecp_next_state;
 	c_buffer instruction;
-	bool pulse_to_ecp_sent;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -1063,7 +1062,6 @@ struct MP_COMMAND_PACKAGE
 		ar & command;
 		ar & ecp_next_state;
 		ar & instruction;
-		ar & pulse_to_ecp_sent;
 	}
 };
 

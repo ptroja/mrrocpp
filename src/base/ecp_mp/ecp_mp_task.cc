@@ -17,6 +17,7 @@
 #include <csignal>
 
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -36,30 +37,23 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-lib::sr_ecp* task::sr_ecp_msg = NULL;
+boost::shared_ptr<lib::sr_ecp> task::sr_ecp_msg;
 
 task::task(lib::configurator &_config) :
-	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path()),
-	Agent(_config.section_name)
+	Agent(_config.section_name),
+	config(_config),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
-	std::cerr << "mp 3a1" << std::endl;
-
-	// std::string sr_net_attach_point = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
-
-	//	// Obiekt do komuniacji z SR
-	//	sr_ecp_msg = new lib::sr_ecp(process_type, process_name, sr_net_attach_point);
-
 	const std::string ui_net_attach_point =
 			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
 
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	unsigned int tmp = 0;
 
-		while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
-
-		if ((tmp++) < lib::CONNECT_RETRY)
+	while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
+		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
-		else {
+		} else {
 			int e = errno;
 			perror("Connect to UI failed");
 			// WARNING: sr_ecp_msg is not yet initialized!;
@@ -69,16 +63,15 @@ task::task(lib::configurator &_config) :
 			throw ecp_mp::task::ECP_MP_main_error(lib::SYSTEM_ERROR, e );
 		}
 	}
-	std::cerr << "mp 3a9" << std::endl;
 }
 
 task::~task()
 {
 	// Zabicie wszystkich procesow VSP
 	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m)
-				{
-					delete sensor_item.second;
-				}
+	{
+		delete sensor_item.second;
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -164,9 +157,7 @@ double task::input_double(const char* question)
 	ecp_to_ui_msg.ecp_message = lib::DOUBLE_NUMBER; // Polecenie odpowiedzi na zadane
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
-
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -187,9 +178,7 @@ bool task::show_message(const char* message)
 	ecp_to_ui_msg.ecp_message = lib::MESSAGE; // Polecenie wyswietlenia komunikatu
 	strcpy(ecp_to_ui_msg.string, message);
 
-
 	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
@@ -205,28 +194,28 @@ bool task::show_message(const char* message)
 void task::all_sensors_initiate_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-				{
-					if (sensor_item.second->base_period > 0) {
-						if (sensor_item.second->current_period == sensor_item.second->base_period) {
-							sensor_item.second->initiate_reading();
-						}
-						sensor_item.second->current_period--;
-					}
-				}
+	{
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == sensor_item.second->base_period) {
+				sensor_item.second->initiate_reading();
+			}
+			sensor_item.second->current_period--;
+		}
+	}
 }
 
 void task::all_sensors_get_reading(sensors_t & _sensor_m)
 {
 	BOOST_FOREACH(sensor_item_t & sensor_item, _sensor_m)
-				{
-					// jesli wogole mamy robic pomiar
-					if (sensor_item.second->base_period > 0) {
-						if (sensor_item.second->current_period == 0) {
-							sensor_item.second->get_reading();
-							sensor_item.second->current_period = sensor_item.second->base_period;
-						}
-					}
-				}
+	{
+		// jesli wogole mamy robic pomiar
+		if (sensor_item.second->base_period > 0) {
+			if (sensor_item.second->current_period == 0) {
+				sensor_item.second->get_reading();
+				sensor_item.second->current_period = sensor_item.second->base_period;
+			}
+		}
+	}
 }
 
 bool task::str_cmp::operator()(char const *a, char const *b) const
@@ -318,6 +307,7 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	}
 
 	bang_trajectories_map* trajectoriesMap = new bang_trajectories_map();
+
 	const std::string robotName(lib::toString(propRobot));
 
 	for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
@@ -372,7 +362,6 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 	xmlCleanupParser();
 	//	for(trajectories_t::iterator ii = trjMap->begin(); ii != trjMap->end(); ++ii)
 	//		(*ii).second.showTime();
-
 
 	return trajectoriesMap;
 }

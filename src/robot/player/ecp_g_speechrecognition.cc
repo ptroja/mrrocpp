@@ -48,7 +48,7 @@ bool speechrecognition::next_step()
 	if (device->fresh) {
 		device->Clear();
 		device->fresh = false;
-		strncpy(ecp_t.ecp_reply.recognized_command, device->rawText, ECP_2_MP_STRING_SIZE);
+		strncpy(ecp_t.reply.recognized_command, device->rawText, ECP_2_MP_STRING_SIZE);
 		return false;
 	}
 

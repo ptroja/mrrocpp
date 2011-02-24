@@ -12,6 +12,7 @@
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
+#include "base/lib/agent/DataBuffer.h"
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
@@ -87,10 +88,12 @@ public:
 
 	/**
 	 * @brief Enum of two possible pulse receive variants (BLOCK/NONBLOCK)
+	 * @note it is assumend, that values of this enum equals to "block?" predicate.
 	 */
 	typedef enum _MP_RECEIVE_PULSE_ENUM
 	{
-		NONBLOCK, BLOCK
+		NONBLOCK = 0,
+		BLOCK = 1
 	} RECEIVE_PULSE_MODE;
 
 	/**
@@ -119,7 +122,7 @@ public:
 	 * @param ... robots labels
 	 */
 	void
-			set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -167,7 +170,7 @@ public:
 	 * @param robotsWaitingForTaskTermination robot to wait list
 	 */
 	void
-			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
+	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 	/**
 	 * @brief executes delay
@@ -199,11 +202,6 @@ public:
 	void terminate_all(const common::robots_t & _robot_m);
 
 	/**
-	 * @brief sends communication request pulse to ECP
-	 */
-	void request_communication_with_robots(const common::robots_t & _robot_m);
-
-	/**
 	 * @brief communicates with all ECP's that are set to communicate
 	 */
 	void execute_all(const common::robots_t & _robot_m);
@@ -222,36 +220,15 @@ public:
 	/**
 	 * @brief receives pulse from UI or ECP
 	 */
-	void mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator);
+	void receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator);
 
 private:
 	friend class robot::robot;
 
 	/**
-	 * @brief wait until ECP/UI calls name_open() to pulse channel;]
-	 * @return identifier (scoid/QNET or socket/messip) of the next connected process
+	 * @brief pulse from UI
 	 */
-	int wait_for_name_open(void);
-
-	/**
-	 * @brief A server connection ID identifying UI
-	 */
-	int ui_scoid;
-
-	/**
-	 * @brief flag indicating opened pulse connection from UI
-	 */
-	bool ui_opened;
-
-	/**
-	 * @brief code of the pulse received from UI
-	 */
-	char ui_pulse_code;
-
-	/**
-	 * @brief new UI pulse flaf
-	 */
-	bool ui_new_pulse;
+	DataBuffer<char> ui_pulse;
 
 	/**
 	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
@@ -260,7 +237,7 @@ private:
 	 * @return desired pulse found
 	 */
 	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 /**

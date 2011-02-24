@@ -10,8 +10,11 @@
 #define MP_ROBOT_H_
 
 #include "base/lib/configurator.h"
+#include "base/lib/child.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
+#include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/DataBuffer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -39,12 +42,13 @@ private:
 	/**
 	 * @brief pid of spawned ECP process
 	 */
-	pid_t ECP_pid;
+	lib::child ECP_pid;
 
-	/**
-	 * @brief main ECP communication channel descriptor
-	 */
-	lib::fd_client_t ECP_fd;
+	//! Pointer to the remote agent proxy
+	RemoteAgent ecp;
+
+	//! Remote agent's data buffer
+	RemoteBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 protected:
 	/**
@@ -54,20 +58,16 @@ protected:
 
 public:
 	/**
+	 * @brief reference to sr_ecp object for sending messages to UI_SR console
+	 */
+	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+
+	/**
 	 * @brief continuous coordination flag
 	 *
 	 * if it set it causes every macrostep communication with ECP
 	 */
 	bool continuous_coordination;
-
-	/**
-	 * @brief sends pulse to ecp
-	 *
-	 * sends communication request etc.
-	 * @param[in] pulse_code pulse code
-	 * @param[in] pulse_value pusle value - default = -1
-	 */
-	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
 
 	/**
 	 * @brief command buffer for ecp
@@ -76,12 +76,15 @@ public:
 	 */
 	lib::MP_COMMAND_PACKAGE mp_command;
 
+	//! Data buffer with messages from the ECP
+	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
+
 	/**
 	 * @brief reply buffer from ecp
 	 *
 	 * it is received during communication with ECP
 	 */
-	lib::ECP_REPLY_PACKAGE ecp_reply_package;
+	const lib::ECP_REPLY_PACKAGE & ecp_reply_package;
 
 	/**
 	 * @brief ECP pulse receive time
@@ -101,43 +104,13 @@ public:
 	bool communicate_with_ecp;
 
 	/**
-	 * @brief reference to sr_ecp object for sending messages to UI_SR console
-	 */
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
-
-	/**
-	 * @brief A server connection ID identifying ECP
-	 */
-	int ecp_scoid;
-
-	/**
-	 * @brief flag indicating opened pulse connection from ECP
-	 */
-	bool ecp_opened;
-
-	/**
-	 * @brief pulse code from ECP
-	 */
-	char ecp_pulse_code;
-
-	/**
-	 * @brief new pulse from ecp flag
-	 */
-	bool new_pulse;
-
-	/**
-	 * @brief new pulse from ecp checked flag
-	 */
-	bool new_pulse_checked;
-
-	/**
 	 * @brief constructor
 	 * @param l_robot_name robot label
 	 * @param _section_name ECP configuration file section
 	 * @param mp_object_l mp task object reference
 	 * @param _number_of_servos number of robot servos (joints)
 	 */
-			robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
+	robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
 
 	/**
 	 * @brief destructor

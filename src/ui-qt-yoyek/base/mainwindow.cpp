@@ -284,7 +284,7 @@ void MainWindow::on_timer_slot()
 
 			ui->plainTextEdit_sr->setCurrentCharFormat(format);
 			ui->plainTextEdit_sr->appendPlainText(current_line);
-			(*interface.log_file_outfile) << current_line;
+			(*interface.log_file_outfile) << current_line << std::endl;
 		}
 
 		(*interface.log_file_outfile).flush();
