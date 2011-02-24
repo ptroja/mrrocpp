@@ -8,3 +8,5 @@ add_library(sr
 )
 
 target_link_libraries(sr messip)
+
+install(TARGETS sr DESTINATION lib)
