@@ -6,3 +6,5 @@ add_library(pcbird_sensor
 if(QNXNTO)
 target_link_libraries (pcbird_sensor socket)
 endif(QNXNTO)
+
+install(TARGETS pcbird_sensor DESTINATION lib)
