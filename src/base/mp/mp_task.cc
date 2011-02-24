@@ -30,18 +30,27 @@
 #include "base/mp/generator/mp_g_extended_empty.h"
 #include "base/mp/mp_robot.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-using namespace std;
-
-
 lib::fd_server_t task::mp_pulse_attach = lib::invalid_fd;
+
+//! Utility function to put robot from va_list to STL map
+static void va_to_robot_map(int num, va_list arguments, common::robots_t & from, common::robots_t & to)
+{
+	for (int i = 0; i < num; ++i) // Loop until all numbers are added
+	{
+		lib::robot_name_t robot_l = (lib::robot_name_t) (va_arg ( arguments, const char* )); // Adds the next value in argument list to sum.
+		if (from.count(robot_l) == 0) {
+			std::cerr << "usunieto nadmiarowe roboty" << std::endl;
+		} else {
+			to[robot_l] = from[robot_l];
+		}
+	}
+}
 
 
 // KONSTRUKTORY
@@ -101,14 +110,12 @@ void task::set_next_ecps_state(std::string l_state, int l_variant, const char* l
 	generator::set_next_ecps_state mp_snes_gen(*this);
 
 	va_list arguments; // A place to store the list of arguments
-	lib::robot_name_t robot_l;
 
 	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-		mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
+
+	// Copy given robots to the map container
+	va_to_robot_map(number_of_robots, arguments, robot_m, mp_snes_gen.robot_m);
+
 	va_end(arguments); // Cleans up the list
 
 	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
@@ -132,11 +139,10 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 	lib::robot_name_t robot_l;
 
 	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
+
+	// Copy given robots to the map container
+	va_to_robot_map(number_of_robots, arguments, robot_m, mp_semte_gen.robot_m);
+
 	va_end(arguments); // Cleans up the list
 
 	mp_semte_gen.Move();
@@ -166,11 +172,10 @@ void task::run_extended_empty_gen_base(bool activate_trigger, int number_of_robo
 	lib::robot_name_t robot_l;
 
 	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-		mp_ext_empty_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
+
+	// Copy given robots to the map container
+	va_to_robot_map(number_of_robots, arguments, robot_m, mp_ext_empty_gen.robot_m);
+
 	va_end(arguments); // Cleans up the list
 
 	mp_ext_empty_gen.configure(activate_trigger);
@@ -195,41 +200,27 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 
 	// przypisanie robotow do zbiorow robots_to_move i robots_to_wait_for_task_termination, eliminacja robotow ktorych nie ma w systemie
 	va_start(arguments, number_of_robots_to_wait_for_task_termin);
-	// najpierw zbior robots_to_move...
-	for (int x = 0; x < number_of_robots_to_move; x++) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
 
-		if (robot_m.count(robot_l) == 0) {
-			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty");
-		} else {
-			robots_to_move[robot_l] = robot_m[robot_l];
-		}
-	}
+	// najpierw zbior robots_to_move...
+	va_to_robot_map(number_of_robots_to_move, arguments, robot_m, robots_to_move);
+
 	// ...potem zbior robots_to_wait_for_task_termination
-	for (int x = 0; x < number_of_robots_to_wait_for_task_termin; x++) // Loop until all numbers are added
-	{
-		robot_l = (lib::robot_name_t) (va_arg ( arguments, char* )); // Adds the next value in argument list to sum.
-		if (robot_m.count(robot_l) == 0) {
-			sr_ecp_msg->message("run_..._for_set_of_robots_... usunieto nadmiarowe roboty 2");
-		} else {
-			robots_to_wait_for_task_termination[robot_l] = robot_m[robot_l];
-		}
-	}
+	va_to_robot_map(number_of_robots_to_wait_for_task_termin, arguments, robot_m, robots_to_wait_for_task_termination);
+
 	va_end(arguments); // Cleans up the list
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
-				{
+	{
 
-					common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
+		common::robots_t::iterator robots_map_iter = robots_to_move.find(robot_node.first);
 
-					if (robots_map_iter == robots_to_move.end()) {
-						sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-						throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-					}
-				}
+		if (robots_map_iter == robots_to_move.end()) {
+			sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+		}
+	}
 
 	// GLOWNA PETLA
 
