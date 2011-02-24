@@ -177,14 +177,21 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
+	MainWindow *mw = mrrocpp::ui::common::Interface::get_instance()->get_main_window();
+	Ui::MainWindow *ui = mw->get_ui();
+
 	switch (state.edp.state)
 	{
 		case -1:
+			mw->enable_menu_item(false, 1, ui->menuSarkofag);
 			/*TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag, NULL);
 			 */
 			break;
 		case 0:
+			mw->enable_menu_item(false, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
+			mw->enable_menu_item(true, 1, ui->menuSarkofag);
+			mw->enable_menu_item(true, 1, ui->actionsarkofag_EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, ABN_mm_sarkofag_edp_load, NULL);
@@ -192,11 +199,14 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
+			mw->enable_menu_item(true, 1, ui->menuSarkofag);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, NULL);
 			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
+				mw->enable_menu_item(false, 1, ui->actionsarkofag_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_synchronisation, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
@@ -205,12 +215,17 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
+						mw->enable_menu_item(true, 3,  ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
+						mw->enable_menu_item(true, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 2, ui->actionsarkofag_EDP_Load, ui->actionsarkofag_EDP_Unload);
+
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, ABN_mm_sarkofag_edp_unload, NULL);
@@ -218,6 +233,7 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
+						mw->enable_menu_item(false, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
@@ -228,6 +244,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
+				mw->enable_menu_item(true, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionall_Synchronisation);
+				mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);

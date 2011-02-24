@@ -165,14 +165,12 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			interface.print_on_sr("blabla");
 			mw->enable_menu_item(false, 1, ui->menuSpkm);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			 */
 			break;
 		case 0:
-			interface.print_on_sr("case 0");
 			mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Unload);
 			mw->enable_menu_item(false, 2, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions);
 			mw->enable_menu_item(true, 1, ui->menuSpkm);
