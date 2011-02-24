@@ -177,7 +177,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = mrrocpp::ui::common::Interface::get_instance()->get_main_window();
+	MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)

@@ -62,12 +62,11 @@ class ecp_buffer;
 class Interface
 {
 private:
-	Interface();
 	MainWindow* mw;
 
 public:
-
-	static Interface * get_instance();
+	Interface();
+	//static Interface * get_instance();
 	MainWindow* get_main_window();
 	void print_on_sr(const char *buff, ...);
 

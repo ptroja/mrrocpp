@@ -53,11 +53,11 @@ Interface::Interface() :
 
 }
 
-Interface * Interface::get_instance()
-{
-	static Interface *instance = new Interface();
-	return instance;
-}
+//Interface * Interface::get_instance()
+//{
+//	static Interface *instance = new Interface();
+//	return instance;
+//}
 
 MainWindow* Interface::get_main_window()
 {
