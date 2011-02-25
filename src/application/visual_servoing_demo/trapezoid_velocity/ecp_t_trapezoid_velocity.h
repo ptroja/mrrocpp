@@ -8,6 +8,8 @@
 #ifndef TRAPEZOID_VELOCITY_TASK_H_
 #define TRAPEZOID_VELOCITY_TASK_H_
 
+#include "ecp_g_trapezoid_velocity.h"
+#include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
@@ -24,6 +26,8 @@ public:
 	virtual ~trapezoid_velocity_task();
 
 	void main_task_algorithm();
+private:
+	boost::shared_ptr<mrrocpp::ecp::common::generator::trapezoid_velocity> trapezoid_gen;
 };
 
 }
