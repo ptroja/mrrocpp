@@ -127,7 +127,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
+
 effector* return_created_efector(lib::configurator &_config)
 {
 	return new polycrank::effector(_config);

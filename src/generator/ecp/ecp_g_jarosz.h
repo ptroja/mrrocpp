@@ -31,21 +31,16 @@ namespace generator {
 
 class linear : public delta
 {
-  int mp_communication_mode; // by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
+	int mp_communication_mode; // by Y - 0 bez TASK TERMINATED, 1 - z TASK TERMINATED
+
 public:
 	// konstruktor
-	linear (common::task::task& _ecp_task);
-	linear (common::task::task& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg = 1);
+	linear(common::task::task& _ecp_task);
+	linear(common::task::task& _ecp_task, lib::trajectory_description tr_des, int mp_communication_mode_arg = 1);
 
-  virtual bool first_step ();
-  virtual bool next_step ();
-
-}; // end: class all_irp6p_linear_generator
-
-
-
-
-
+	bool first_step();
+	bool next_step();
+};
 
 //------------------------------------------------------------------------------
 /**

@@ -24,6 +24,9 @@
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
+#include "../sarkofag/wgt_sarkofag_inc.h"
+
+#include "../bird_hand/wgt_bird_hand_command.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -38,6 +41,8 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
 	Qt::WindowFlags flags;
@@ -50,6 +55,67 @@ MainWindow::~MainWindow()
 {
 	delete ui;
 }
+Ui::MainWindow * MainWindow::get_ui()
+{
+	return ui;
+}
+
+//void MainWindow::enable_menu_item(bool _active, QWidget *_menu_item)
+//{
+//	interface.print_on_sr("signal");
+//	emit enable_menu_item_signal(_menu_item, _active);
+//}
+
+
+void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
+{
+	va_list menu_items;
+
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
+
+	va_start(menu_items, _menu_item);
+
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+	}
+
+	va_end(menu_items);
+}
+
+void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
+{
+	va_list menu_items;
+
+	emit
+	enable_menu_item_signal(_menu_item, _enable);
+
+	va_start(menu_items, _menu_item);
+
+	for (int i = 1; i < _num_of_menus; i++) {
+		//interface.print_on_sr("signal");
+		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+	}
+
+	va_end(menu_items);
+}
+
+//void MainWindow::disable_menu_item(int _num_of_menus, ...)
+//{
+//	va_list menu_items;
+//	//QWidget *item;
+//
+//	va_start(menu_items, _num_of_menus);
+//
+//	for(int i=0; i<_num_of_menus; i++)
+//	{
+//	interface.print_on_sr("signal");
+//	emit enable_menu_item_signal(va_arg(menu_items, QWidget *), false);
+//	}
+//
+//	va_end(menu_items);
+//}
 
 void MainWindow::ui_notification(QString _string, QColor _color)
 {
@@ -91,6 +157,18 @@ void MainWindow::raise_process_control_window_slot()
 	interface.wgt_pc->my_open();
 }
 
+void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
+{
+	//interface.print_on_sr("menu coloring slot");
+	_menu_item->setDisabled(!_active);
+}
+
+void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
+{
+	//interface.print_on_sr("menu coloring slot");
+	_menu_item->setDisabled(!_active);
+}
+
 void MainWindow::ui_notification_slot(QString _string, QColor _color)
 {
 	QPalette pal;
@@ -114,14 +192,6 @@ void MainWindow::on_timer_slot()
 
 
 	Iteration_counter++;
-	/* TR
-	 if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
-	 if (interface.speaker->is_wind_speaker_play_open) // otworz okno
-	 {
-	 speaker_check_state(widget, apinfo, cbinfo);
-	 }
-	 }
-	 */
 
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
@@ -136,9 +206,9 @@ void MainWindow::on_timer_slot()
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 			strcat(current_line, "  ");
-			time_t time = sr_msg.time / 1000000000;
+			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03ld   ", (sr_msg.time % 1000000000) / 1000000);
+			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
 
 			switch (sr_msg.process_type)
 			{
@@ -243,7 +313,7 @@ void MainWindow::on_timer_slot()
 		delete interface.log_file_outfile;
 		printf("UI CLOSED\n");
 		interface.abort_threads();
-		interface.mw->close();
+		interface.get_main_window()->close();
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
@@ -284,6 +354,36 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 	interface.irp6ot_m->synchronise();
 }
 
+void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
+{
+	interface.irp6ot_m->synchronise();
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Joints_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
+{
+
+}
+
 void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
 {
 	interface.irp6ot_m->move_to_synchro_position();
@@ -309,7 +409,60 @@ void MainWindow::on_actionirp6ot_m_Position_2_triggered()
 	interface.irp6ot_m->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6ot_tfg
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_1_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_2_triggered()
+{
+
+}
+
 // irp6p_m menu
+
 
 void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
 {
@@ -324,6 +477,36 @@ void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
 void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 {
 	interface.irp6p_m->synchronise();
+}
+
+void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Joints_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
+{
+
 }
 
 void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
@@ -351,6 +534,99 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 	interface.irp6p_m->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6p_tfg
+
+void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
+{
+
+}
+
+// conveyor menu
+void MainWindow::on_actionconveyor_EDP_Load_triggered()
+{
+	//	interface.conveyor->edp_create();
+}
+
+void MainWindow::on_actionconveyor_EDP_Unload_triggered()
+{
+	//interface.conveyor->EDP_slay_int();
+}
+
+void MainWindow::on_actionconveyor_Synchronization_triggered()
+{
+	//interface.conveyor->synchronise();
+}
+
+void MainWindow::on_actionconveyor_Move_triggered()
+{
+	//interface.conveyor->wgt_inc->my_open();
+}
+
+void MainWindow::on_actionconveyor_Synchro_Position_triggered()
+{
+	//interface.conveyor->move_to_synchro_position();
+}
+
+void MainWindow::on_actionconveyor_Position_0_triggered()
+{
+	//interface.conveyor->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionconveyor_Position_1_triggered()
+{
+	//interface.conveyor->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionconveyor_Position_2_triggered()
+{
+	//interface.conveyor->move_to_preset_position(2);
+}
+
 // birdhand menu
 void MainWindow::on_actionbirdhand_EDP_Load_triggered()
 {
@@ -364,7 +640,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-
+	interface.bird_hand->wnd_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()
@@ -390,7 +666,7 @@ void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 
 void MainWindow::on_actionsarkofag_Move_triggered()
 {
-
+	interface.sarkofag->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
@@ -418,7 +694,7 @@ void MainWindow::on_actionsarkofag_Position_2_triggered()
 	interface.sarkofag->move_to_preset_position(2);
 }
 
-void MainWindow::on_actionsarkofag_Servo_Agortihm_triggered()
+void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
 {
 
 }
@@ -540,7 +816,7 @@ void MainWindow::on_actionall_EDP_Load_triggered()
 	interface.EDP_all_robots_create();
 }
 
-void MainWindow::on_actionall_EDP_Uload_triggered()
+void MainWindow::on_actionall_EDP_Unload_triggered()
 {
 	interface.EDP_all_robots_slay();
 }

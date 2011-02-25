@@ -25,9 +25,20 @@ namespace spkm {
  */
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
-protected:
-	//bufory wejsciowe z generatora
+private:
+	void create_kinematic_models_for_given_robot(void);
 
+	/**
+	 * @brief EDP command buffer
+	 */
+	lib::spkm::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
+	lib::spkm::rbuffer edp_ecp_rbuffer;
+
+public:
 	/**
 	 * @brief epos motor motion command data port
 	 */
@@ -42,21 +53,6 @@ protected:
 	 * @brief epos external motion command data port
 	 */
 	lib::single_thread_port <lib::epos::epos_simple_command> epos_external_command_data_port;
-
-	/**
-	 * @brief epos cubic motion command data port
-	 */
-	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
-
-	/**
-	 * @brief epos trapezoidal motion command data port
-	 */
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
-
-	/**
-	 * @brief epos operational motion command data port
-	 */
-	lib::single_thread_port <lib::epos::epos_operational_command> epos_operational_command_data_port;
 
 	/**
 	 * @brief epos brake command data port
@@ -83,19 +79,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::spkm::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::spkm::rbuffer edp_ecp_rbuffer;
-
-	void create_kinematic_models_for_given_robot(void);
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

@@ -22,4 +22,6 @@ add_library(ecp_r_polycrank ecp_r_polycrank.cc)
 target_link_libraries(ecp_r_polycrank kinematicspolycrank)
 
 install(TARGETS edp_polycrank DESTINATION bin)
+install(TARGETS kinematicspolycrank ecp_r_polycrank DESTINATION lib)
+
 endif(ROBOT_POLYCRANK)

@@ -29,14 +29,10 @@
 
 #include <string>
 
-
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-
 #if defined(__QNXNTO__)
-#include <process.h>
-#include <spawn.h>
 #include <sys/netmgr.h>
 #endif /* __QNXNTO__ */
 
@@ -48,30 +44,25 @@ namespace mrrocpp {
 namespace lib {
 
 // Konstruktor obiektu - konfiguratora.
-configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _ini_file, const std::string & _section_name, const std::string & _session_name) :
-	node(_node), dir(_dir), ini_file(_ini_file), session_name(_session_name), section_name(_section_name)
+configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name) :
+	node(_node), dir(_dir), section_name(_section_name)
 {
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
 	/*mrrocpp_network_path = "/net/";
-	mrrocpp_network_path += node;
-	mrrocpp_network_path += dir;*/
+	 mrrocpp_network_path += node;
+	 mrrocpp_network_path += dir;*/
 	mrrocpp_network_path = "../";
-
 
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
 	}
 	assert(ch);
-
 }
-
-
 
 void configurator::change_config_file(const std::string & _ini_file)
 {
-
 	config_query_t query, reply;
 
 	query.key = _ini_file;
@@ -80,16 +71,13 @@ void configurator::change_config_file(const std::string & _ini_file)
 	{
 		boost::mutex::scoped_lock l(access_mutex);
 
-		messip::port_send(this->ch,
-				0, 0,
-				query, reply);
+		messip::port_send(this->ch, 0, 0, query, reply);
 	}
 
-	if(!reply.flag) {
+	if (!reply.flag) {
 		// TODO: throw
 		std::cerr << "change_config_file to " << _ini_file << " failed" << std::endl;
 	}
-
 }
 
 bool configurator::check_config(const std::string & key) const
@@ -99,9 +87,7 @@ bool configurator::check_config(const std::string & key) const
 
 int configurator::return_node_number(const std::string & node_name_l)
 {
-
 	return ND_LOCAL_NODE;
-
 }
 
 std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
@@ -112,18 +98,15 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
 		name = "/dev/";
 		name += value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL) {
 		name = "/net/";
 		name += value <std::string> ("node_name", _section_name);
 		name += "/dev/";
 		name += value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else if (_type == CONFIG_SERVER) {
 		name = value <std::string> (_key, _section_name);
-		name += session_name;
 
 	} else {
 		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
@@ -133,8 +116,6 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 	// Zwrocenie atach_point'a.
 	return (name);
 }
-
-
 
 std::string configurator::return_default_reader_measures_path() const
 {
@@ -164,26 +145,31 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-
-	std::string spawned_program_name = value <std::string> ("program_name", _section_name);
-	std::string spawned_node_name = value <std::string> ("node_name", _section_name);
+	const std::string program_name = value <std::string> ("program_name", _section_name);
 
 	std::string rsh_spawn_node;
 
-	if (spawned_node_name == sysinfo.nodename) {
+	if (!exists("node_name", _section_name)) {
 		rsh_spawn_node = "localhost";
 	} else {
-		rsh_spawn_node = spawned_node_name;
-#if defined(__QNXNTO__)
-		/* This check works only with QNX and Qnet */
-		std::string opendir_path("/net/");
-		opendir_path += rsh_spawn_node;
 
-		if (access(opendir_path.c_str(), R_OK) != 0) {
-			printf("spawned node absent: %s\n", opendir_path.c_str());
-			//throw std::logic_error("spawned node absent: " + opendir_path);
-		}
+		std::string spawned_node_name = value <std::string> ("node_name", _section_name);
+
+		if (spawned_node_name == sysinfo.nodename) {
+			rsh_spawn_node = "localhost";
+		} else {
+			rsh_spawn_node = spawned_node_name;
+#if defined(__QNXNTO__)
+			/* This check works only with QNX and Qnet */
+			std::string opendir_path("/net/");
+			opendir_path += rsh_spawn_node;
+
+			if (access(opendir_path.c_str(), R_OK) != 0) {
+				printf("spawned node absent: %s\n", opendir_path.c_str());
+				//throw std::logic_error("spawned node absent: " + opendir_path);
+			}
 #endif /* __QNXNTO__ */
+		}
 	}
 
 	bool use_ssh;
@@ -201,17 +187,42 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	char bin_path[PATH_MAX];
 	if (exists("binpath", _section_name)) {
 		std::string _bin_path = value <std::string> ("binpath", _section_name);
-		strcpy(bin_path, _bin_path.c_str());
-		if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
-			strcat(bin_path, "/");
+
+		if (_bin_path == std::string("current")) {
+			char* cwd;
+			char buff[PATH_MAX + 1];
+
+			cwd = getcwd(buff, PATH_MAX + 1);
+			if (cwd == NULL) {
+				perror("Blad cwd w configurator");
+			}
+			strcpy(bin_path, cwd);
+		} else {
+			strcpy(bin_path, _bin_path.c_str());
+
 		}
 
 	} else {
+#if defined(__QNXNTO__)
 		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/", node.c_str(), dir.c_str());
+#else
+		char* cwd;
+		char buff[PATH_MAX + 1];
+
+		cwd = getcwd(buff, PATH_MAX + 1);
+		if (cwd == NULL) {
+			perror("Blad cwd w configurator");
+		}
+		strcpy(bin_path, cwd);
+#endif
+	}
+
+	if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
+		strcat(bin_path, "/");
 	}
 
 	std::string opendir_path(bin_path);
-	opendir_path += spawned_program_name;
+	opendir_path += program_name;
 
 	if (access(opendir_path.c_str(), R_OK) != 0) {
 		printf("spawned program absent: %s\n", opendir_path.c_str());
@@ -230,46 +241,32 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, spawned_program_name.c_str(), node.c_str(), dir.c_str(), ini_file.c_str(), _section_name.c_str(), session_name.length() ? session_name.c_str() : "\"\"", asa.c_str());
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
 		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 
-		if (exists("username", _section_name)) {
-			std::string username = value <std::string> ("username", _section_name);
+		std::string username;
 
-			//fprintf(stderr, "rsh -l %s %s \"%s\"\n", username.c_str(), rsh_spawn_node.c_str(), process_path);
+		if (!exists("username", _section_name))
+		{
+			username = getenv("USER");
+		} else {
+			username = value<std::string>("username", _section_name);
+		}
+
+
+		if ((rsh_spawn_node == "localhost") && ( username == getenv("USER") )) {
+                        snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
+                        chdir(bin_path);
+                        execlp(process_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str(), NULL);
+		} else {
 			if (!use_ssh) {
 				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
 			} else {
 				execlp(rsh_cmd, rsh_cmd, "-t", "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
-			}
-		} else {
-			//			printf("rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
-
-			//			fprintf(stderr,
-			//					"bin_path ->%s<-\n"
-			//					"ui_host ->%s<-\n"
-			//					"spawned_program_name ->%s<-\n"
-			//					"node ->%s<-\n"
-			//					"dir ->%s<-\n"
-			//					"ini_file ->%s<-\n"
-			//					"_section_name ->%s<-\n"
-			//					"session_name ->%s<-\n"
-			//					"asa ->%s<-\n",
-			//					bin_path, ui_host ? ui_host : "",
-			//					spawned_program_name.c_str(),
-			//					node.c_str(), dir.c_str(), ini_file.c_str(), _section_name,
-			//					session_name.length() ? session_name.c_str() : "\"\"",
-			//					asa.c_str()
-			//			);
-			//fprintf(stderr, "rsh %s \"%s\"\n", rsh_spawn_node.c_str(), process_path);
-			if (!use_ssh) {
-				execlp(rsh_cmd, rsh_cmd, rsh_spawn_node.c_str(), process_path, NULL);
-			} else {
-				execlp(rsh_cmd, rsh_cmd, "-t", rsh_spawn_node.c_str(), process_path, NULL);
 			}
 		}
 
@@ -280,15 +277,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	}
 
 	return child_pid;
-
 }
-
 
 configurator::~configurator()
 {
 	messip::port_disconnect(ch);
 }
-
 
 } // namespace lib
 } // namespace mrrocpp

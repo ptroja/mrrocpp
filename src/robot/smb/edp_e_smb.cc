@@ -1,14 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			edp_irp6m_effector.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- definicja metod klasy edp_irp6m_effector
-//				- definicja funkcji return_created_efector()
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
 
 #include <cstdio>
 
@@ -24,7 +13,6 @@
 #include "robot/smb/kinematic_model_smb.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
-#include "robot/epos/epos_gen.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
@@ -60,7 +48,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
-		boost::mutex::scoped_lock lock(edp_irp6s_effector_mutex);
+		boost::mutex::scoped_lock lock(effector_mutex);
 
 		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
 		for (int i = 0; i < number_of_servos; i++) {
@@ -208,7 +196,7 @@ void effector::reply_serialization(void)
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
+
 effector* return_created_efector(lib::configurator &_config)
 {
 	return new smb::effector(_config);

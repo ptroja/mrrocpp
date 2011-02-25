@@ -11,6 +11,7 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 #include "robot/spkm/const_spkm.h"
+#include "robot/spkm/kinematic_parameters_spkm.h"
 
 class wgt_spkm_inc;
 class wgt_spkm_int;
@@ -40,6 +41,7 @@ public:
 	double current_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja biezaca
 	double desired_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja zadana
 
+	kinematics::spkm::kinematic_parameters_spkm kinematic_params;
 
 	EcpRobot *ui_ecp_robot;
 	wgt_spkm_inc *wgt_inc;

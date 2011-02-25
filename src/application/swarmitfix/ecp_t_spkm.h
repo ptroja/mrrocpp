@@ -1,28 +1,28 @@
 #if !defined(_ECP_T_SPKM_SWARMITFIX_H)
 #define _ECP_T_SPKM_SWARMITFIX_H
 
+#include "robot/spkm/ecp_r_spkm.h"
+
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+
+#include "ecp_g_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace spkm {
 namespace task {
 
-class swarmitfix : public common::task::task
+class swarmitfix : public common::task::_task<ecp::spkm::robot>
 {
 protected:
-	//generatory
-	common::generator::transparent* gt;
-	//common::generator::smooth* sg;
-	common::generator::sleep* g_sleep;
-	common::generator::epos_cubic* g_epos_cubic;
-	common::generator::epos_trapezoidal* g_epos_trapezoidal;
-	common::generator::epos_operational* g_epos_operational;
-	common::generator::epos_brake* g_epos_brake;
+	//! Move the robot the the specified pose
+	generator::spkm_pose * g_pose;
+
+	//! Stop the robot in case of emergency
+	generator::spkm_quickstop * g_quickstop;
 
 public:
-	// KONSTRUKTORY
+	//! Constructor
 	swarmitfix(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes

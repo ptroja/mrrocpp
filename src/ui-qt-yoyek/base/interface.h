@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
+
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -13,6 +15,7 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "string"
 
 #include "ui.h"
 
@@ -56,12 +59,16 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-
 class Interface
 {
 private:
+	MainWindow* mw;
 
 public:
+	Interface();
+	//static Interface * get_instance();
+	MainWindow* get_main_window();
+	void print_on_sr(const char *buff, ...);
 
 	busy_flag communication_flag;
 
@@ -98,8 +105,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	lib::sr_ecp* all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	lib::sr_ui* ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;
@@ -146,14 +153,11 @@ public:
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
 	 irp6p_tfg::UiRobot *irp6p_tfg;
 
-	 irp6m::UiRobot *irp6m_m;
 	 conveyor::UiRobot *conveyor;
-	 speaker::UiRobot *speaker;
 	 */
 
-	int position_refresh_interval;
+	const int position_refresh_interval;
 
-	Interface();
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
@@ -212,9 +216,8 @@ public:
 	bool is_any_active_robot_loaded();
 
 	// windows
-	MainWindow* mw;
-	wgt_process_control* wgt_pc;
 
+	wgt_process_control* wgt_pc;
 };
 
 }

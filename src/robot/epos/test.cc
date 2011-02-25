@@ -1,5 +1,7 @@
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
+#include <boost/array.hpp>
+#include <boost/foreach.hpp>
 #include <sys/time.h>
 
 #include "epos_access_usb.h"
@@ -11,46 +13,52 @@ int main(int argc, char *argv[])
 {
 	epos_access_usb gateway;
 
-	epos node4(gateway, 4);
-	epos node5(gateway, 5);
-	epos node6(gateway, 6);
+	boost::array<epos *, 6> axis;
 
 	try {
 		gateway.open();
 
-		node4.printEPOSstate();
+		epos node1(gateway, 1);
+		epos node2(gateway, 2);
+		epos node3(gateway, 3);
+		epos node4(gateway, 4);
+		epos node5(gateway, 5);
+		epos node6(gateway, 6);
 
-		node4.reset();
-		node5.reset();
-		node6.reset();
+		axis[0] = &node1;
+		axis[1] = &node2;
+		axis[2] = &node3;
+		axis[3] = &node4;
+		axis[4] = &node5;
+		axis[5] = &node6;
 
-		node4.printEPOSstate();
+		BOOST_FOREACH(epos * node, axis) {
 
-		printf("synchronized? %s\n", node4.isReferenced() ? "TRUE" : "FALSE");
+			node->printEPOSstate();
+//			node->SendNMTService(epos::Reset_Node);
+//			usleep(500000);
+//			node->SendNMTService(epos::Start_Remote_Node);
+//			usleep(500000);
 
-		// switch to homing mode
-		node4.setOpMode(epos::OMD_HOMING_MODE);
-		node5.setOpMode(epos::OMD_HOMING_MODE);
-		node6.setOpMode(epos::OMD_HOMING_MODE);
+			// Check if in a FAULT state
+			if(node->checkEPOSstate() == 11) {
+				UNSIGNED8 errNum = node->readNumberOfErrors();
+				std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
+				for(UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-		// Do homing
-		node4.startHoming();
-		node5.startHoming();
-		node6.startHoming();
+					UNSIGNED32 errCode = node->readErrorHistory(i);
 
-		for(;;) {
-			bool node4ok = node4.isHomingFinished();
-			bool node5ok = node5.isHomingFinished();
-			bool node6ok = node6.isHomingFinished();
-
-			if(node4ok && node5ok && node6ok) {
-				break;
+					std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+				}
+				if (errNum > 0) {
+					node->clearNumberOfErrors();
+				}
+				node->changeEPOSstate(epos::FAULT_RESET);
 			}
-		};
 
-		// Move back
-		//node4.moveRelative(-50000);
-		//node4.monitorStatus();
+			// Change to the operational mode
+			node->reset();
+		}
 
 		gateway.close();
 	} catch (epos_error & error) {
@@ -64,6 +72,8 @@ int main(int argc, char *argv[])
 
 		if ( int const * errno_value = boost::get_error_info<errno_code>(error) )
 			std::cerr << "Errno value: " << *errno_value << std::endl;
+	} catch (...) {
+		std::cerr << "Unhandled exception" << std::endl;
 	}
 
 	return 0;

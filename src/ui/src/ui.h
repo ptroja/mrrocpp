@@ -67,14 +67,14 @@ catch (ecp::common::robot::ECP_error & er) { \
 			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
 		break; \
 		default: \
-			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
+			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, "ecp: Unidentified exception"); \
 			perror("Unidentified exception"); \
 		} /* end: switch */ \
 	} \
 } /* end: catch */ \
 \
 catch(const std::exception & e){\
-	std::string tmp_string(" The following error has been detected: ");\
+	std::string tmp_string("The following error has been detected: ");\
 	tmp_string += e.what(); \
 	interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
    std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\

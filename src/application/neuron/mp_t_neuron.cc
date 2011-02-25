@@ -49,8 +49,8 @@ neuron::neuron(lib::configurator &_config) :
 void neuron::create_robots()
 {
 	//ACTIVATE_MP_ROBOT(conveyor);
-	//ACTIVATE_MP_ROBOT(speaker);
-	//ACTIVATE_MP_ROBOT(irp6m);
+	//
+	//
 	//ACTIVATE_MP_ROBOT(polycrank);
 	//ACTIVATE_MP_ROBOT(bird_hand);
 	//ACTIVATE_MP_ROBOT(spkm);

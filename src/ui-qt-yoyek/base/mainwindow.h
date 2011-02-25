@@ -25,8 +25,14 @@ public:
 	~MainWindow();
 
 	void ui_notification(QString _string, QColor _color);
+	//void enable_menu_item(bool _active, QWidget *_menu_item);
+	void enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...);
+	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
+	//void disable_menu_item(int _num_of_menus, ...);
 	void raise_process_control_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
+
+	Ui::MainWindow * get_ui();
 
 private:
 	Ui::MainWindow *ui;
@@ -35,6 +41,8 @@ private:
 
 signals:
 	void ui_notification_signal(QString _string, QColor _color);
+	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
+	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 	void raise_process_control_window_signal();
 
 private slots:
@@ -43,7 +51,8 @@ private slots:
 
 	void ui_notification_slot(QString _string, QColor _color);
 	void raise_process_control_window_slot();
-
+	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
+	void enable_menu_item_slot(QAction *_menu_item, bool _active);
 	// menus
 
 	// file menu
@@ -56,6 +65,14 @@ private slots:
 	void on_actionirp6ot_m_EDP_Unload_triggered();
 
 	void on_actionirp6ot_m_Synchronisation_triggered();
+	void on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered();
+
+	void on_actionirp6ot_m_Absolute_Moves_Motors_triggered();
+	void on_actionirp6ot_m_Joints_triggered();
+	void on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
+
+	void on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered();
 
 	void on_actionirp6ot_m_Synchro_Position_triggered();
 	void on_actionirp6ot_m_Front_Position_triggered();
@@ -63,17 +80,67 @@ private slots:
 	void on_actionirp6ot_m_Position_1_triggered();
 	void on_actionirp6ot_m_Position_2_triggered();
 
+	void on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered();
+
+	//irp6ot_tfg
+	void on_actionirp6ot_tfg_EDP_Load_triggered();
+	void on_actionirp6ot_tfg_EDP_Unload_triggered();
+
+	void on_actionirp6ot_tfg_Synchronization_triggered();
+	void on_actionirp6ot_tfg_Move_triggered();
+
+	void on_actionirp6ot_tfg_Synchro_Position_triggered();
+	void on_actionirp6ot_tfg_Position_0_triggered();
+	void on_actionIrp6ot_tfg_Position_1_triggered();
+	void on_actionIrp6ot_tfg_Position_2_triggered();
+
 	//irp6p_m menu
 	void on_actionirp6p_m_EDP_Load_triggered();
 	void on_actionirp6p_m_EDP_Unload_triggered();
 
 	void on_actionirp6p_m_Synchronisation_triggered();
+	void on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered();
+
+	void on_actionirp6p_m_Absolute_Moves_Motors_triggered();
+	void on_actionirp6p_m_Joints_triggered();
+	void on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
+
+	void on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered();
 
 	void on_actionirp6p_m_Synchro_Position_triggered();
 	void on_actionirp6p_m_Front_Position_triggered();
 	void on_actionirp6p_m_Position_0_triggered();
 	void on_actionirp6p_m_Position_1_triggered();
 	void on_actionirp6p_m_Position_2_triggered();
+
+	void on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered();
+
+	//irp6p_tfg
+	void on_actionirp6p_tfg_EDP_Load_triggered();
+	void on_actionirp6p_tfg_EDP_Unload_triggered();
+
+	void on_actionirp6p_tfg_Synchronization_triggered();
+	void on_actionirp6p_tfg_Move_triggered();
+
+	void on_actionirp6p_tfg_Synchro_Position_triggered();
+	void on_actionirp6p_tfg_Position_0_triggered();
+	void on_actionirp6p_tfg_Position_1_triggered();
+	void on_actionirp6p_tfg_Position_2_triggered();
+
+	//conveyor
+	void on_actionconveyor_EDP_Load_triggered();
+	void on_actionconveyor_EDP_Unload_triggered();
+
+	void on_actionconveyor_Synchronization_triggered();
+	void on_actionconveyor_Move_triggered();
+
+	void on_actionconveyor_Synchro_Position_triggered();
+	void on_actionconveyor_Position_0_triggered();
+	void on_actionconveyor_Position_1_triggered();
+	void on_actionconveyor_Position_2_triggered();
 
 	// birdhand menu
 	void on_actionbirdhand_EDP_Load_triggered();
@@ -95,8 +162,7 @@ private slots:
 	void on_actionsarkofag_Position_1_triggered();
 	void on_actionsarkofag_Position_2_triggered();
 
-	void on_actionsarkofag_Servo_Agortihm_triggered();
-
+	void on_actionsarkofag_Servo_Algorithm_triggered();
 
 	// spkm menu
 	void on_actionspkm_EDP_Load_triggered();
@@ -132,7 +198,7 @@ private slots:
 
 	// all robots menu
 	void on_actionall_EDP_Load_triggered();
-	void on_actionall_EDP_Uload_triggered();
+	void on_actionall_EDP_Unload_triggered();
 	void on_actionall_Synchronisation_triggered();
 	void on_actionall_Synchro_Position_triggered();
 	void on_actionall_Front_Position_triggered();

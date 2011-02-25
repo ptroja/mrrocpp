@@ -28,7 +28,6 @@
 // #include "ui/src/ui.h"
 
 #include "base/lib/configurator.h"
-#include "robot/irp6m/const_irp6m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -38,7 +37,6 @@
 #include "robot/smb/const_smb.h"
 #include "robot/spkm/const_spkm.h"
 #include "robot/shead/const_shead.h"
-#include "robot/speaker/const_speaker.h"
 #include "robot/conveyor/const_conveyor.h"
 #include "robot/bird_hand/const_bird_hand.h"
 
@@ -396,8 +394,6 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 
 				start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
-				start_wnd_irp6m_xyz_angle_axis(widget, apinfo, cbinfo);
 			}
 			break;
 		case lib::C_XYZ_EULER_ZYZ:
@@ -406,8 +402,6 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
 			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
-				start_wnd_irp6m_xyz_euler_zyz(widget, apinfo, cbinfo);
 			}
 
 			break;
@@ -416,8 +410,6 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_int(widget, apinfo, cbinfo);
 			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_int(widget, apinfo, cbinfo);
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
-				start_wnd_irp6m_int(widget, apinfo, cbinfo);
 			}
 
 			break;
@@ -426,8 +418,6 @@ int init_teaching_window(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 				start_wnd_irp6_on_track_inc(widget, apinfo, cbinfo);
 			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				start_wnd_irp6_postument_inc(widget, apinfo, cbinfo);
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
-				start_wnd_irp6m_inc(widget, apinfo, cbinfo);
 			}
 
 			break;
@@ -690,7 +680,6 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 		// Dla irp6_mechatronika
 
-		interface.irp6m_m->process_control_window_irp6m_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 		// All reader's pulse buttons
 		if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
@@ -778,12 +767,7 @@ int block_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	if (interface.conveyor->state.edp.is_synchronised) {
 		interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (interface.speaker->state.edp.is_synchronised) {
-		interface.block_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
-	}
-	if (interface.irp6m_m->state.edp.is_synchronised) {
-		interface.block_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
-	}
+
 	interface.block_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
 
 	return (Pt_CONTINUE);
@@ -805,12 +789,7 @@ int unblock_all_ecp_trigger_widgets(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	if (interface.conveyor->state.edp.is_synchronised) {
 		interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	}
-	if (interface.speaker->state.edp.is_synchronised) {
-		interface.unblock_widget(ABW_PtButton_wnd_processes_control_speaker_ecp_trigger);
-	}
-	if (interface.irp6m_m->state.edp.is_synchronised) {
-		interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6m_ecp_trigger);
-	}
+
 	interface.unblock_widget(ABW_PtButton_wnd_processes_control_all_ecp_trigger);
 
 	return (Pt_CONTINUE);
@@ -1184,9 +1163,6 @@ int teaching_window_send_move(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackIn
 	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
 			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6p_m->current_pos[i];
-	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6m::ROBOT_NAME) {
-		for (int i = 0; i < lib::irp6m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6m_m->current_pos[i];
 	}
 
 	interface.ui_ecp_obj->ui_rep.double_number = *motion_time;
@@ -1261,9 +1237,7 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 			pulse_stop_mp(widget, apinfo, cbinfo);
 		}
 
-
 		messip::port_disconnect(interface.mp.pulse_fd);
-
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
 		// 	printf("mp slay\n");
@@ -1280,8 +1254,6 @@ int MPslay(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo)
 	interface.irp6ot_m->deactivate_ecp_trigger();
 	interface.irp6p_m->deactivate_ecp_trigger();
 	interface.conveyor->deactivate_ecp_trigger();
-	interface.speaker->deactivate_ecp_trigger();
-	interface.irp6m_m->deactivate_ecp_trigger();
 
 	// modyfikacja menu
 	interface.manage_interface();
@@ -1485,7 +1457,6 @@ int pulse_reader_all_robots_start(PtWidget_t *widget, ApInfo_t *apinfo, PtCallba
 	interface.irp6ot_m->pulse_reader_start_exec_pulse();
 	interface.irp6p_m->pulse_reader_start_exec_pulse();
 	interface.conveyor->pulse_reader_start_exec_pulse();
-	interface.irp6m_m->pulse_reader_start_exec_pulse();
 
 	process_control_window_init(widget, apinfo, cbinfo);
 
@@ -1503,7 +1474,6 @@ int pulse_reader_all_robots_stop(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbac
 	interface.irp6ot_m->pulse_reader_stop_exec_pulse();
 	interface.irp6p_m->pulse_reader_stop_exec_pulse();
 	interface.conveyor->pulse_reader_stop_exec_pulse();
-	interface.irp6m_m->pulse_reader_stop_exec_pulse();
 	process_control_window_init(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
@@ -1520,7 +1490,6 @@ int pulse_reader_all_robots_trigger(PtWidget_t *widget, ApInfo_t *apinfo, PtCall
 	interface.irp6ot_m->pulse_reader_trigger_exec_pulse();
 	interface.irp6p_m->pulse_reader_trigger_exec_pulse();
 	interface.conveyor->pulse_reader_trigger_exec_pulse();
-	interface.irp6m_m->pulse_reader_trigger_exec_pulse();
 
 	return (Pt_CONTINUE);
 
@@ -1536,8 +1505,6 @@ int pulse_ecp_all_robots(PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t 
 	pulse_ecp_irp6_on_track(widget, apinfo, cbinfo);
 	pulse_ecp_irp6_postument(widget, apinfo, cbinfo);
 	pulse_ecp_conveyor(widget, apinfo, cbinfo);
-	pulse_ecp_speaker(widget, apinfo, cbinfo);
-	pulse_ecp_irp6_mechatronika(widget, apinfo, cbinfo);
 
 	return (Pt_CONTINUE);
 

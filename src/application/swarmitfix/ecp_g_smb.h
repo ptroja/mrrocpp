@@ -96,4 +96,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif /* ECP_G_SLEEP_H_ */
+#endif

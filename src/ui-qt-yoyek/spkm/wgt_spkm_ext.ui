@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
+    <width>840</width>
     <height>363</height>
    </rect>
   </property>
@@ -44,7 +44,7 @@
     <widget class="QFrame" name="frame">
      <property name="minimumSize">
       <size>
-       <width>180</width>
+       <width>185</width>
        <height>160</height>
       </size>
      </property>
@@ -130,10 +130,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -301,10 +301,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -447,10 +447,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -593,10 +593,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -739,10 +739,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -885,10 +885,10 @@
       <number>0</number>
      </property>
      <property name="minimum">
-      <double>-10000.000000000000000</double>
+      <double>-100000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>10000.000000000000000</double>
+      <double>100000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -1061,7 +1061,7 @@
    <item row="9" column="9" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Step</string>
+      <string>Step [SI]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1071,7 +1071,7 @@
    <item row="1" column="7" colspan="2">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>desired position</string>
+      <string>desired position [SI]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
@@ -1084,7 +1084,7 @@
    <item row="1" column="5">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>current position</string>
+      <string>current position [SI]</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>

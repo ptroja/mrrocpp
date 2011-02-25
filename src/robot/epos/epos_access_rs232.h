@@ -12,13 +12,13 @@
 
 #include <termios.h> /* POSIX terminal control definitions */
 
-#include "epos.h"
+#include "epos_access.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-class epos_access_rs232 : public epos_base {
+class epos_access_rs232 : public epos_access {
 private:
 	//! device name of EPOS port
 	const std::string device;
@@ -73,6 +73,12 @@ public:
 
 	//! Read from device
 	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
+
+	//! Send a NMT service to, for example, change NMT state or reset the device.
+	void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier);
+
+	//! Send CAN frame the the CAN bus
+	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
 
 	//! Open device
 	void open();

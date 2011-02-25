@@ -12,6 +12,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <string>
 
+#include"base/lib/impconst.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace epos {
@@ -80,25 +82,7 @@ const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Epos clear fault command data port
- * @ingroup epos<?xml version="1.0" encoding="UTF-8"?>
- <ui version="4.0">
- <widget name="__qt_fake_top_level">
- <widget class="QRadioButton" name="radioButton">
- <property name="geometry">
- <rect>
- <x>580</x>
- <y>100</y>
- <width>108</width>
- <height>22</height>
- </rect>
- </property>
- <property name="text">
- <string>RadioButton</string>
- </property>
- </widget>
- </widget>
- <resources/>
- </ui>
+ * @ingroup epos
  *
  */
 const std::string EPOS_CLEAR_FAULT_DATA_PORT = "EPOS_CLEAR_FAULT_DATA_PORT";
@@ -152,10 +136,9 @@ struct mp_to_ecp_cubic_trapezoidal_parameters
  */
 struct single_controller_epos_reply
 {
-	double current;
+	int16_t current;
 	double position;
 	bool motion_in_progress;
-	bool buffer_full;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -167,7 +150,6 @@ struct single_controller_epos_reply
 		ar & current;
 		ar & position;
 		ar & motion_in_progress;
-		ar & buffer_full;
 	}
 }__attribute__((__packed__));
 
@@ -269,7 +251,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
-	lib::frame_tab current_frame;
+	mrrocpp::lib::frame_tab current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 

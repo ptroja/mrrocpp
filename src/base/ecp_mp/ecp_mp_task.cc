@@ -15,10 +15,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <csignal>
-#if defined(__QNXNTO__)
-#include <sys/neutrino.h>
-#include <sys/netmgr.h>
-#endif /* __QNXNTO__ */
+
+#include <boost/foreach.hpp>
+
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xinclude.h>
 
 #include "base/lib/datastr.h"
 
@@ -26,23 +29,13 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/ecp/ECP_main_error.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-#include <libxml/xinclude.h>
-
-#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
 lib::sr_ecp* task::sr_ecp_msg = NULL;
-lib::sr_ecp* task::sh_msg = NULL;
 
 task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
@@ -97,7 +90,7 @@ bool task::operator_reaction(const char* question)
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI podczas uczenia
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp operator_reaction(): Send() to UI failed");
@@ -122,7 +115,7 @@ uint8_t task::choose_option(const char* question, uint8_t nr_of_options_input)
 	ecp_to_ui_msg.nr_of_options = nr_of_options_input;
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
@@ -146,7 +139,7 @@ int task::input_integer(const char* question)
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
@@ -170,7 +163,7 @@ double task::input_double(const char* question)
 	strcpy(ecp_to_ui_msg.string, question); // Komunikat przesylany do UI
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");
@@ -193,7 +186,7 @@ bool task::show_message(const char* message)
 	strcpy(ecp_to_ui_msg.string, message);
 
 
-		if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+	if(messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
 
 		uint64_t e = errno;
 		perror("ecp: Send() to UI failed");

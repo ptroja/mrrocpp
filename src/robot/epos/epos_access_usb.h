@@ -8,15 +8,15 @@
 #ifndef EPOS_ACCESS_USB_H_
 #define EPOS_ACCESS_USB_H_
 
-#include "epos.h"
-
 #include <ftdi.h>
+
+#include "epos_access.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-class epos_access_usb : public epos_base {
+class epos_access_usb : public epos_access {
 private:
 	//! USB FTDI context
 	struct ftdi_context ftdic;
@@ -30,6 +30,12 @@ public:
 
 	//! Read from device via USB
 	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
+
+	//! Send a NMT service to, for example, change NMT state or reset the device.
+	void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier);
+
+	//! Send CAN frame the the CAN bus
+	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
 
 	/*! \brief create new USB EPOS object
 	 *

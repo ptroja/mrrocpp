@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/ecp_mp/transmitter.h"
 
 #include "base/lib/mis_fun.h"
@@ -26,7 +28,7 @@ namespace mp {
 namespace common {
 
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-task::task* mp_t;
+boost::shared_ptr<task::task> mp_t;
 
 void catch_signal_in_mp(int sig)
 {
@@ -37,15 +39,10 @@ void catch_signal_in_mp(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
-		case SIGHUP:
-			mp_t->sh_msg->message("mp terminated");
+			mp_t->sr_ecp_msg->message("mp terminated");
 			// restore default (none) handler for SIGCHLD
 			signal(SIGCHLD, SIG_DFL);
-			delete mp_t;
 			exit(EXIT_SUCCESS);
-			break;
-		case SIGSEGV:
-			signal(SIGSEGV, SIG_DFL);
 			break;
 		case SIGCHLD:
 			child_pid = waitpid(-1, &status, 0);
@@ -77,7 +74,6 @@ void catch_signal_in_mp(int sig)
 			}
 			break;
 	}
-	flushall();
 }
 
 } // namespace common
@@ -87,46 +83,41 @@ void catch_signal_in_mp(int sig)
 
 int main(int argc, char *argv[], char **arge)
 {
+	if (argc < 4) {
+		std::cerr << "Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file>" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	// zewnetrzne try
 	try {
-		std::cerr << "mp 1" << std::endl;
-
-		if (argc < 6) {
-			printf("Usage: mp_m_c <ui_node_name> <mrrocpp_local_path> <config_file> <session_name>\n");
-			exit(EXIT_FAILURE);
-		}
+		// This block is from where the configurator is supposed to be accessible
+		boost::shared_ptr<lib::configurator> _config;
 
 		try {
-			// TODO: new/delete fixup
-			std::cerr << "mp 2" << std::endl;
-			lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3], lib::MP_SECTION, argv[5]);
-			std::cerr << "mp 3" << std::endl;
-			mp::common::mp_t = mp::task::return_created_mp_task(*_config);
-			std::cerr << "mp 4" << std::endl;
+			_config = (boost::shared_ptr<lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
+
+			mp::common::mp_t = (boost::shared_ptr<mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
+
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
 			mp::common::mp_t->create_robots();
-			std::cerr << "mp 5" << std::endl;
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
-			std::cerr << "mp 6" << std::endl;
 
 			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
-			signal(SIGHUP, &(mp::common::catch_signal_in_mp));
 
-			//signal(SIGINT,  &(catch_signal_in_mp));
-			signal(SIGSEGV, &(mp::common::catch_signal_in_mp));
 			signal(SIGCHLD, &(mp::common::catch_signal_in_mp));
 
-			// ignore Ctrl-C signal, which cames from UI console
+			// ignore Ctrl-C signal, which comes from UI console
 			signal(SIGINT, SIG_IGN);
 
 		} catch (ecp_mp::task::ECP_MP_main_error & e) {
 			/* Obsluga bledow ECP_MP_main_error */
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
-		} /*end: catch */
+		}
+
 		catch (mp::common::MP_main_error & e) {
 
 			perror("initialize incorrect");
@@ -146,23 +137,25 @@ int main(int argc, char *argv[], char **arge)
 					perror("Message to SR has been already sent");
 			}/* end:switch */
 			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
-		} /*end: catch*/
+		}
 
 		catch (lib::sensor::sensor_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
-		} /* end: catch sensor_error  */
+		}
+
 		catch (mp::generator::MP_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
 			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
-		} /* end: catch sensor_error  */
+		}
+
 		catch (ecp_mp::transmitter::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
 			mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
-		} /* end: catch sensor_error  */
+		}
 
 		catch (const std::exception& e) {
 			std::string tmp_string(" The following error has been detected: ");
@@ -176,7 +169,7 @@ int main(int argc, char *argv[], char **arge)
 			/*  Komunikat o bledzie wysylamy do SR */
 			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
 			exit(EXIT_FAILURE);
-		} /*end: catch  */
+		}
 
 		for (;;) { // Wewnetrzna petla nieskonczona
 

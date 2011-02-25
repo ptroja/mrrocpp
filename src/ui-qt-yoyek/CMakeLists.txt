@@ -51,6 +51,8 @@ SET(GUI_CXX_SRCS
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
     polycrank/wgt_polycrank_int.cpp
+    sarkofag/wgt_sarkofag_inc.cpp
+    bird_hand/wgt_bird_hand_command.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -62,6 +64,8 @@ SET(GUI_MOC_SRCS
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
     polycrank/wgt_polycrank_int.h
+    sarkofag/wgt_sarkofag_inc.h
+    bird_hand/wgt_bird_hand_command.h
 )
 
 # Generate MOC files
@@ -75,6 +79,8 @@ SET(GUI_UI
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui
     polycrank/wgt_polycrank_int.ui
+    sarkofag/wgt_sarkofag_inc.ui
+    bird_hand/wgt_bird_hand_command.ui
 )
 
 # Generate UI include files
@@ -89,7 +95,6 @@ ADD_EXECUTABLE(
 	base/interface.cc
 	base/ui_ecp_robot/ui_ecp_r_common.cc
 	base/ui_ecp_robot/ui_ecp_r_irp6_common.cc
-	base/ui_ecp_robot/ui_ecp_r_data_port.cc
 	base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
