@@ -58,10 +58,6 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		JOINT_GRIPPER_STEP = DBL_MAX;// Przyrost liniowy w chwytaku [m]
 		END_EFFECTOR_GRIPPER_STEP = DBL_MAX; // Przyrost wspolrzednej orientacji koncowki [rad]
 
-	} else if (_robot_name == lib::irp6m::ROBOT_NAME) {
-
-		ecp = new ecp::irp6m::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
 	}
 
 	assert(ecp);

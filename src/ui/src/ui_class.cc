@@ -42,7 +42,6 @@
 
 #include "base/lib/messip/messip_dataport.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -155,14 +154,8 @@ void Interface::init()
 	sarkofag = new sarkofag::UiRobot(*this);
 	robot_m[sarkofag->robot_name] = sarkofag;
 
-	irp6m_m = new irp6m::UiRobot(*this);
-	robot_m[irp6m_m->robot_name] = irp6m_m;
-
 	conveyor = new conveyor::UiRobot(*this);
 	robot_m[conveyor->robot_name] = conveyor;
-
-	speaker = new speaker::UiRobot(*this);
-	robot_m[speaker->robot_name] = speaker;
 
 	spkm = new spkm::UiRobot(*this);
 	robot_m[spkm->robot_name] = spkm;
@@ -303,9 +296,9 @@ int Interface::MPup_int()
 				// kilka sekund  (~1) na otworzenie urzadzenia
 				while ((mp.pulse_fd =
 
-					messip::port_connect(mp.network_pulse_attach_point)) == NULL
+				messip::port_connect(mp.network_pulse_attach_point)) == NULL
 
-					)
+				)
 					if ((tmp++) < lib::CONNECT_RETRY)
 						usleep(lib::CONNECT_DELAY);
 					else {
@@ -466,7 +459,6 @@ void Interface::reload_whole_configuration()
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
 
-
 		// funkcja dziala niepoprawnie z config serwerem
 		// config->change_config_file(config_file);
 
@@ -529,12 +521,14 @@ void Interface::reload_whole_configuration()
 
 		// inicjacja komunikacji z watkiem sr
 		if (ui_msg == NULL) {
-			ui_msg = (boost::shared_ptr<lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
+			ui_msg
+					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
 		}
 
 		// inicjacja komunikacji z watkiem sr
 		if (all_ecp_msg == NULL) {
-			all_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
+			all_ecp_msg
+					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -569,19 +563,19 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 {
 
 	return true;
-/*
-	std::string opendir_path("/net/");
-	opendir_path += _node;
+	/*
+	 std::string opendir_path("/net/");
+	 opendir_path += _node;
 
-	if (access(opendir_path.c_str(), R_OK) != 0) {
-		std::string tmp(beginnig_of_message);
-		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-		ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+	 if (access(opendir_path.c_str(), R_OK) != 0) {
+	 std::string tmp(beginnig_of_message);
+	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 
-		return false;
-	}
-	return true;
-*/
+	 return false;
+	 }
+	 return true;
+	 */
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
@@ -1071,8 +1065,7 @@ int Interface::execute_mp_pulse(char pulse_code)
 	if (mp.pulse_fd > 0) {
 		long pulse_value = 1;
 
-
-		if(messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
+		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
 
 		{
 			perror("Blad w wysylaniu pulsu do mp");
