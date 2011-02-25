@@ -14,7 +14,6 @@ add_library(ecp
 	ecp_m.cc
 	ecp_task.cc
 	ecp_sub_task.cc
-	ecp_generator.cc
 	ecp_taught_in_pose.cc
 	ecp_g_transparent.cc
 )
