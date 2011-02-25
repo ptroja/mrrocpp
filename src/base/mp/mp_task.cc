@@ -258,8 +258,23 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 		// wtedy wyjscie z petli
 
 		// przygotowanie zapasowych list robotow
+		bool all_robots_terminated = true;
+
+		// sprawdzenie zbioru robots_to_wait_for_task_termination
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
+		{
+			if (robot_node.second->ecp_reply_package.reply != lib::TASK_TERMINATED) {
+				all_robots_terminated = false;
+			}
+		}
+
+		// sprawdzenie czy wszystkie roboty są w stanie TASK_TERMINATED
+		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
+		if (all_robots_terminated)
+			break;
+
+		// przygotowanie zapasowych list robotow
 		common::robots_t robots_to_move_tmp = robots_to_move;
-		common::robots_t robots_to_wait_for_task_termination_tmp = robots_to_wait_for_task_termination;
 
 		// sprawdzenie zbioru robots_to_move
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp)
@@ -268,20 +283,6 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 				robots_to_move.erase(robot_node.first);
 			}
 		}
-
-		// sprawdzenie zbioru robots_to_wait_for_task_termination
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination_tmp)
-		{
-			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				robots_to_wait_for_task_termination.erase(robot_node.first);
-			}
-		}
-
-		// sprawdzenie czy zbior robots_to_wait_for_task_termination jest pusty.
-		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
-		if (robots_to_wait_for_task_termination.empty())
-			break;
-
 		// powolanie generatora i jego konfiguracja
 		generator::extended_empty mp_ext_empty_gen(*this);
 		mp_ext_empty_gen.configure(false);
