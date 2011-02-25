@@ -72,7 +72,7 @@ private slots:
 	void on_actionirp6ot_m_Absolute_moves_Xyz_Euler_Zyz();
 	void on_actionirp6ot_m_Absolute_moves_Xyz_Angle_Axis();
 
-	actionirp6ot_m_Relative_Xyz_Angle_Axis
+	void on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered();
 
 	void on_actionirp6ot_m_Synchro_Position_triggered();
 	void on_actionirp6ot_m_Front_Position_triggered();
@@ -80,12 +80,35 @@ private slots:
 	void on_actionirp6ot_m_Position_1_triggered();
 	void on_actionirp6ot_m_Position_2_triggered();
 
+	void on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered();
+
+	//irp6ot_tfg
+	void on_actionirp6ot_tfg_EDP_Load_triggered();
+	void on_actionirp6ot_tfg_EDP_Unload_triggered();
+
+	void on_actionirp6ot_tfg_Synchronization_triggered();
+	void on_actionirp6ot_tfg_Move_triggered();
+
+	void on_actionirp6ot_tfg_Synchro_position_triggered();
+	void on_actionirp6ot_tfg_Position_0_triggered();
+	void on_actionIrp6ot_tfg_Position_1_triggered();
+	void on_actionIrp6ot_tfg_Position_2_triggered();
 
 	//irp6p_m menu
 	void on_actionirp6p_m_EDP_Load_triggered();
 	void on_actionirp6p_m_EDP_Unload_triggered();
 
+	void on_actionirp6p_m_Motors_triggered();
+
 	void on_actionirp6p_m_Synchronisation_triggered();
+	void on_actionirp6p_m_Pre_Synchro_Moves_Motors();
+
+	void on_actionirp6p_m_Joints_triggered();
+	void on_actionirp6p_m_Absolute_moves_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6p_m_Absolute_moves_Xyz_Angle_Axis_triggered();
+
+	void on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered();
 
 	void on_actionirp6p_m_Synchro_Position_triggered();
 	void on_actionirp6p_m_Front_Position_triggered();
@@ -93,8 +116,32 @@ private slots:
 	void on_actionirp6p_m_Position_1_triggered();
 	void on_actionirp6p_m_Position_2_triggered();
 
-	void on_actionirp6ot_m_Tool_Xyz_Euler_Zyz();
-	void on_actionirp6ot_m_Tool_Xyz_Angle_Axis();
+	void on_actionirp6p_m_Tool_Xyz_Euler_Zyz();
+	void on_actionirp6p_m_Tool_Xyz_Angle_Axis();
+
+	//irp6p_tfg
+	void on_actionirp6p_tfg_EDP_Load_triggered();
+	void on_actionirp6p_tfg_EDP_Unload_triggered();
+
+	void on_actionirp6p_tfg_Synchronization_triggered();
+	void on_actionirp6p_tfg_Move_triggered();
+
+	void on_actionirp6p_tfg_Synchro_Position_triggered();
+	void on_actionirp6p_tfg_Position_0_triggered();
+	void on_actionirp6p_tfg_Position_1_triggered();
+	void on_actionirp6p_tfg_Position_2_triggered();
+
+	//conveyor
+	void on_actionconveyor_EDP_Load_triggered();
+	void on_actionirp6p_tfg_EDP_Unload_triggered();
+
+	void on_actionconveyor_Synchronization_triggered();
+	void on_actionconveyor_Move_triggered();
+
+	void on_actionconveyor_Synchro_Position_triggered();
+	void on_actionconveyor_Position_0_triggered();
+	void on_actionconveyor_Position_1_triggered();
+	void on_actionconveyor_Position_2_triggered();
 
 	// birdhand menu
 	void on_actionbirdhand_EDP_Load_triggered();
@@ -144,6 +191,35 @@ private slots:
 	// shead menu
 	void on_actionshead_EDP_Load_triggered();
 	void on_actionshead_EDP_Unload_triggered();
+
+	//speaker
+	void on_actionspeaker_EDP_Load_triggered();
+	void on_actionspeaker_EDP_Unload_triggered();
+
+	void on_actionspeaker_Play_triggered();
+	void on_actionspeaker_Sound_0_triggered();
+	void on_actionspeaker_Sound_1_triggered();
+	void on_actionspeaker_Sound_2_triggered();
+
+	//irp6_mechatronika
+	void on_actionirp6_Mechatronika_EDP_Load_triggered();
+	void on_actionirp6_Mechatronika_EDP_Unload_triggered();
+
+	void on_actionirp6_Mechatronika_Synchronization_triggered();
+	void on_actionirp6_Mechatronika_Pre_Synchro_Moves_Motors_triggered();
+
+	void on_actionirp6_Mechatronika_Absolute_Moves_Motors_triggered();
+	void on_actionirp6_Mechatronika_Joints_triggered();
+	void on_actionirp6_Mechatronika_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6_Mechatronika_Xyz_Angle_Axis_triggered();
+
+	void on_actionirp6_Mechatronika_Synchro_Position_triggered();
+	void on_actionirp6_Mechatronika_Position_0_triggered();
+	void on_actionirp6_Mechatronika_Position_1_triggered();
+	void on_actionirp6_Mechatronika_Position_2_triggered();
+
+	void on_actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz_triggered();
+	void on_actionirp6_Mechatronika_Tool_Xyz_Angle_Axis_triggered();
 
 	// polycrank menu
 	void on_actionpolycrank_EDP_Load_triggered();
