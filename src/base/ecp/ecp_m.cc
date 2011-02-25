@@ -126,7 +126,9 @@ int main(int argc, char *argv[])
 		catch (ecp_mp::task::ECP_MP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
-		} catch (ecp::common::ECP_main_error & e) {
+		}
+
+		catch (ecp::common::ECP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		}
@@ -192,12 +194,14 @@ int main(int argc, char *argv[])
 		catch (lib::sensor::sensor_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		} catch (ecp_mp::transmitter::transmitter_error & e) {
+		}
+
+		catch (ecp_mp::transmitter::transmitter_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 
-		catch (const std::exception& e) {
+		catch (const std::exception & e) {
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
 			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());

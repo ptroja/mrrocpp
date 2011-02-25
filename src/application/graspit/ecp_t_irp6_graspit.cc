@@ -76,7 +76,6 @@ void irp6_grasp::main_task_algorithm(void)
 
 	ecp_termination_notice();
 }
-;
 
 } // namespace task
 } // namespace common
