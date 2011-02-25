@@ -10,6 +10,7 @@ ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
 
 add_library(ecp
 	ECP_main_error.cc
+	ECP_error.cc
 	ecp_m.cc
 	ecp_task.cc
 	ecp_sub_task.cc
