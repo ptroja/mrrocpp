@@ -21,6 +21,7 @@
 #include "base/ecp/ecp_sub_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
+#include "base/ecp/ECP_error.h"
 #include "base/ecp/ecp_generator.h"
 
 #include "base/lib/messip/messip_dataport.h"
@@ -238,41 +239,6 @@ void task_base::get_next_state(void)
 
 	// Extract the next command to the local variable
 	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
-}
-
-void task_base::reply_to_mp()
-{
-	bool ecp_stop = false;
-
-	switch (mp_command_type())
-	{
-		case lib::NEXT_POSE:
-			if ((ecp_reply.reply != lib::TASK_TERMINATED) && (ecp_reply.reply != lib::ERROR_IN_ECP))
-				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-			break;
-		case lib::STOP:
-			set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-			ecp_stop = true;
-			break;
-		case lib::END_MOTION:
-			// dla ulatwienia programowania aplikacji wielorobotowych
-			if (ecp_reply.reply != lib::ERROR_IN_ECP)
-				set_ecp_reply(lib::TASK_TERMINATED);
-			break;
-		default:
-			set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-			break;
-	}
-
-	reply.Set(ecp_reply);
-
-	if (ecp_stop)
-		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
-
-	if (ecp_reply.reply == lib::INCORRECT_MP_COMMAND) {
-		fprintf(stderr, "ecp_ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND) @ %s:%d\n", __FILE__, __LINE__);
-		throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
-	}
 }
 
 // Receive a message from MP

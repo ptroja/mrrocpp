@@ -72,13 +72,6 @@ private:
 	DataBuffer<lib::MP_COMMAND_PACKAGE> command;
 
 	/**
-	 * @brief replies to MP message
-	 * @param caller calling MP id
-	 * @param mp_pulse_received MP pulse received flag
-	 */
-	void reply_to_mp();
-
-	/**
 	 * @brief Returns MP command type
 	 * @return mp command variant
 	 */
