@@ -85,7 +85,7 @@
      <addaction name="actionshead_EDP_Load"/>
      <addaction name="actionshead_EDP_Unload"/>
     </widget>
-    <widget class="QMenu" name="menuirp6ot_m">
+    <widget class="QMenu" name="menuIrp6ot_m">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -356,7 +356,7 @@
      <addaction name="menuirp6_Mechatronika_Preset_Positions"/>
      <addaction name="menuirp6_Mechatronika_Tool"/>
     </widget>
-    <addaction name="menuirp6ot_m"/>
+    <addaction name="menuIrp6ot_m"/>
     <addaction name="menuirp6ot_tfg"/>
     <addaction name="menuIrp6p_m"/>
     <addaction name="menuIrp6p_tfg"/>

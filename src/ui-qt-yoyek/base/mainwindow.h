@@ -133,7 +133,7 @@ private slots:
 
 	//conveyor
 	void on_actionconveyor_EDP_Load_triggered();
-	void on_actionirp6p_tfg_EDP_Unload_triggered();
+	void on_actionconveyor_EDP_Unload_triggered(){};
 
 	void on_actionconveyor_Synchronization_triggered();
 	void on_actionconveyor_Move_triggered();
