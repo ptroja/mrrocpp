@@ -4,9 +4,9 @@
 
 #include "ui_ecp_r_bird_hand.h"
 #include "ui_r_bird_hand.h"
-/* TR
- #include "ui/src/bird_hand/wnd_bird_hand_command_and_status.h"
- #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
+
+ #include "wgt_bird_hand_command.h"
+/* #include "ui/src/bird_hand/wnd_bird_hand_configuration.h"
  */
 #include "robot/bird_hand/const_bird_hand.h"
 #include "../base/interface.h"
@@ -111,10 +111,10 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, "is_bird_hand_active"),
 			ui_ecp_robot(NULL)
 {
-	/* TR
-	 wnd_command_and_status = new WndCommandAndStatus(interface, *this);
-	 wndbase_m[wnd_command_and_status->window_name] = wnd_command_and_status;
-	 wnd_configuration = new WndConfiguration(interface, *this);
+
+	 wnd_command_and_status = new wgt_bird_hand_command(interface, *this);
+	// wndbase_m[wnd_command_and_status->window_name] = wnd_command_and_status;
+	/* wnd_configuration = new WndConfiguration(interface, *this);
 	 wndbase_m[wnd_configuration->window_name] = wnd_configuration;
 	 */
 
@@ -122,7 +122,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = mrrocpp::ui::common::Interface::get_instance()->get_main_window();
+	MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
@@ -189,7 +189,7 @@ int UiRobot::manage_interface()
 			} else // jesli robot jest niezsynchronizowany
 			{
 				mw->enable_menu_item(true, 2, ui->actionbirdhand_EDP_Unload, ui->actionall_Synchronisation);
-				mw->enable_menu_item(true, 3, ui->actionbirdhand_EDP_Load, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
+				mw->enable_menu_item(false, 3, ui->actionbirdhand_EDP_Load, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);

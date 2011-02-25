@@ -14,3 +14,5 @@ else(LibFTDI_FOUND)
         	epos.cc
         	epos_access_rs232.cc)    	
 endif(LibFTDI_FOUND)	
+
+install(TARGETS epos DESTINATION lib)

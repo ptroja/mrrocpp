@@ -5,3 +5,5 @@ add_library(edp
 	servo_gr.cc regulator.cc in_out.cc
 	trans_t.cc manip_trans_t.cc vis_server.cc reader.cc
 )
+
+install(TARGETS edp DESTINATION lib)

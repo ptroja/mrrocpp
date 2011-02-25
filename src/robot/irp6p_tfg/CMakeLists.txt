@@ -23,4 +23,6 @@ add_library(ecp_r_irp6p_tfg ecp_r_irp6p_tfg.cc)
 target_link_libraries(ecp_r_irp6p_tfg kinematicsirp6p_tfg)
 
 install(TARGETS edp_irp6p_tfg DESTINATION bin)
+install(TARGETS kinematicsirp6p_tfg ecp_r_irp6p_tfg DESTINATION lib)
+
 endif(ROBOT_IRP6_POSTUMENT_TFG)

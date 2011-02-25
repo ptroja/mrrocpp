@@ -27,5 +27,6 @@ add_library(ecp_r_irp6m ecp_r_irp6m)
 target_link_libraries(ecp_r_irp6m kinematicsirp6m)
 
 install(TARGETS edp_irp6_mechatronika DESTINATION bin)
+install(TARGETS kinematicsirp6m ecp_r_irp6m DESTINATION lib)
 
 endif(ROBOT_IRP6_MECHATRONICS)
