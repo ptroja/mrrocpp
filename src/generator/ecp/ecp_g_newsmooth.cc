@@ -503,7 +503,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	}
 
 	//if(pose_vector.empty && this->ecp_t.ecp_m_robot->robot_name)
-	std::cout<<file_name<<std::endl;
+	std::cout<<"FILENAME: "<<file_name<<std::endl;
 	int pos = from_file.tellg();
 	char* line;
 	//double tmp[22];
