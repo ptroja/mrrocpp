@@ -53,11 +53,11 @@ Interface::Interface() :
 
 }
 
-Interface * Interface::get_instance()
-{
-	static Interface *instance = new Interface();
-	return instance;
-}
+//Interface * Interface::get_instance()
+//{
+//	static Interface *instance = new Interface();
+//	return instance;
+//}
 
 MainWindow* Interface::get_main_window()
 {
@@ -177,15 +177,8 @@ void Interface::init()
 	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
 
-
-	 irp6m_m = new irp6m::UiRobot(*this);
-	 robot_m[irp6m_m->robot_name] = irp6m_m;
-
 	 conveyor = new conveyor::UiRobot(*this);
 	 robot_m[conveyor->robot_name] = conveyor;
-
-	 speaker = new speaker::UiRobot(*this);
-	 robot_m[speaker->robot_name] = speaker;
 	 */
 
 	ui_node_name = sysinfo.nodename;
@@ -1116,8 +1109,6 @@ int Interface::MPslay()
 	 irp6ot_m->deactivate_ecp_trigger();
 	 irp6p_m->deactivate_ecp_trigger();
 	 conveyor->deactivate_ecp_trigger();
-	 speaker->deactivate_ecp_trigger();
-	 irp6m_m->deactivate_ecp_trigger();
 	 */
 	// modyfikacja menu
 	manage_interface();

@@ -192,14 +192,6 @@ void MainWindow::on_timer_slot()
 
 
 	Iteration_counter++;
-	/* TR
-	 if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
-	 if (interface.speaker->is_wind_speaker_play_open) // otworz okno
-	 {
-	 speaker_check_state(widget, apinfo, cbinfo);
-	 }
-	 }
-	 */
 
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
@@ -216,7 +208,7 @@ void MainWindow::on_timer_slot()
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec /1000));
+			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
 
 			switch (sr_msg.process_type)
 			{
@@ -362,6 +354,36 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 	interface.irp6ot_m->synchronise();
 }
 
+void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
+{
+	interface.irp6ot_m->synchronise();
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Joints_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
+{
+
+}
+
 void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
 {
 	interface.irp6ot_m->move_to_synchro_position();
@@ -387,7 +409,60 @@ void MainWindow::on_actionirp6ot_m_Position_2_triggered()
 	interface.irp6ot_m->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6ot_tfg
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_1_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_2_triggered()
+{
+
+}
+
 // irp6p_m menu
+
 
 void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
 {
@@ -402,6 +477,36 @@ void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
 void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 {
 	interface.irp6p_m->synchronise();
+}
+
+void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Joints_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
+{
+
 }
 
 void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
@@ -427,6 +532,99 @@ void MainWindow::on_actionirp6p_m_Position_1_triggered()
 void MainWindow::on_actionirp6p_m_Position_2_triggered()
 {
 	interface.irp6p_m->move_to_preset_position(2);
+}
+
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6p_tfg
+
+void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
+{
+
+}
+
+// conveyor menu
+void MainWindow::on_actionconveyor_EDP_Load_triggered()
+{
+	//	interface.conveyor->edp_create();
+}
+
+void MainWindow::on_actionconveyor_EDP_Unload_triggered()
+{
+	//interface.conveyor->EDP_slay_int();
+}
+
+void MainWindow::on_actionconveyor_Synchronization_triggered()
+{
+	//interface.conveyor->synchronise();
+}
+
+void MainWindow::on_actionconveyor_Move_triggered()
+{
+	//interface.conveyor->wgt_inc->my_open();
+}
+
+void MainWindow::on_actionconveyor_Synchro_Position_triggered()
+{
+	//interface.conveyor->move_to_synchro_position();
+}
+
+void MainWindow::on_actionconveyor_Position_0_triggered()
+{
+	//interface.conveyor->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionconveyor_Position_1_triggered()
+{
+	//interface.conveyor->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionconveyor_Position_2_triggered()
+{
+	//interface.conveyor->move_to_preset_position(2);
 }
 
 // birdhand menu

@@ -159,26 +159,25 @@ int UiRobot::synchronise_int()
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = mrrocpp::ui::common::Interface::get_instance()->get_main_window();
+	MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			interface.print_on_sr("blabla");
 			mw->enable_menu_item(false, 1, ui->menuSpkm);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm, NULL);
 			 */
 			break;
 		case 0:
-			interface.print_on_sr("case 0");
 			mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Unload);
-			mw->enable_menu_item(false, 2, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions);
+			mw->enable_menu_item(false, 3, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
 			mw->enable_menu_item(true, 1, ui->menuSpkm);
 			mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Load);
 			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
+			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_unload, ABN_mm_spkm_pre_synchro_moves,
+			  ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm, ABN_mm_spkm_edp_load, NULL);
 			 */
 			break;
@@ -200,16 +199,17 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, ui->menuspkm_Preset_positions);
+						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
 						mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload); //???
 						mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
 						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
+						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves,
+						  ABN_mm_spkm_preset_positions, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, ui->menuspkm_Preset_positions);//???
+						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);//???
 						mw->enable_menu_item(false, 2, ui->actionspkm_EDP_Load, ui->actionspkm_EDP_Unload);
 
 						/* TR

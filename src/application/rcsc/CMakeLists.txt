@@ -31,16 +31,7 @@ add_executable(ecp_irp6p_rcsc
 	ecp_t_rcsc_irp6p.cc
 )
 
-if(ROBOT_SPEAKER)
-add_executable(ecp_speak_rcsc
-	ecp_t_rcsc_speaker.cc
-	../../robot/speaker/ecp_g_speak.cc
-)
-target_link_libraries(ecp_speak_rcsc ecp_r_speaker ecp)
-install(TARGETS
-	ecp_speak_rcsc
-	DESTINATION bin)
-endif(ROBOT_SPEAKER)
+
 
 add_executable(ecp_fsautomat
 	ecp_t_fsautomat.cc
