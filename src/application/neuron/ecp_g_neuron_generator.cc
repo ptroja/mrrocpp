@@ -142,6 +142,7 @@ namespace mrrocpp {
                         if (first_breaking_node == true) {
                             calculate();
                             first_breaking_node = false;
+                            return false;
                         }
                     }
 
@@ -223,10 +224,11 @@ namespace mrrocpp {
 
                     if (breaking) {
                         //check if it is the last macrostep in the list
+                        false;
                     }
 
                     //return false, desired positions in all of the axes reached
-                    return false;
+                    return true;
                 }
 
                 void neuron_generator::clear_vectors() {
@@ -238,7 +240,9 @@ namespace mrrocpp {
                 }
 
                 void neuron_generator::calculate() {
-                    for (int i = 0; i < 3; i++) {
+
+                    int i;
+                    for (i = 0; i < 3; i++) {
 
                         clear_vectors();
 
@@ -251,6 +255,7 @@ namespace mrrocpp {
 
                         if (check_if_able_to_break(s[i], v[i], a_max[i])) {//one pose breaking
 
+                            printf("jedna pozycja");
                             s_vect.push_back(s[i]);
                             v_max_vect.push_back(v_max[i]);
                             a_max_vect.push_back(a_max[i]);
@@ -280,8 +285,11 @@ namespace mrrocpp {
                                 }
                             }
 
-                        } else {//2 pose breaking
+                            pose_vector_iterator->t = pose_vector_iterator->times[0];
+                            time_sum.push_back(pose_vector_iterator->times[0]);
 
+                        } else {//2 pose breaking
+                            printf("dwie pozycje");
                             //first pose
                             s[i] = 0.5 * v[i] * v[i] / a_max[i];
                             double t_temp = sqrt(2 * s[i] / a_max[i]);
@@ -316,6 +324,8 @@ namespace mrrocpp {
                             pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / t);
                             pose_vector_iterator->acc[0] = pose_vector_iterator->interpolation_node_no;
                             pose_vector_iterator->uni[0] = 0.0;
+
+                            time_sum.push_back(pose_vector_iterator->times[0]);
                             //first pose end
 
                             clear_vectors();
@@ -329,8 +339,9 @@ namespace mrrocpp {
                             //second pose
                             load_trajectory_pose(pose_vector_list[i], desired_position_vect, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS,
                                     v_max_vect, a_max_vect, actual_position_vect, s_vect);
-                            //second pose end
-
+                            
+                            pose_vector_iterator++;
+                            
                             pose_vector_iterator->k[0] = -k[i];
                             pose_vector_iterator->v_p[0] = 0.0;
                             pose_vector_iterator->v_k[0] = 0.0;
@@ -350,11 +361,51 @@ namespace mrrocpp {
                                     printf("reduction axis error");
                                 }
                             }
+                            time_sum[i] += pose_vector_iterator->times[0];
+                            //second pose end
                         }
                     }
 
-                    //sumowanie czasów, wyłonienie najdłuższego
-                    //przeliczenie dla wszystkich osi jeszcze raz dojazdu
+                    double max_time = 0.0;
+                    
+                    for (i = 0; i < 3; i++) {
+                        
+                        if (max_time < time_sum[i]) {
+                            max_time = time_sum[i];
+                        }
+                    }
+
+                    if (ceil(max_time / t) * t != max_time) { //extend the pose time to be the multiplicity of the macrostep time
+                        max_time = ceil(max_time / t);
+                        max_time = max_time * t;
+                    }
+
+                    for (i = 0; i < 3; i ++) {
+                        pose_vector_iterator = pose_vector_list[i].begin();
+
+                        if (pose_vector_iterator++ == pose_vector_list[i].end()) {
+                            pose_vector_iterator--;
+                            printf("jedna pozycja 2");
+                            pose_vector_iterator->t = max_time;
+                            vpc.set_times_to_t(pose_vector_iterator);
+                            pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / t);
+                        } else {
+                            pose_vector_iterator--;
+                            printf("dwie pozycje 2");
+                            double temp_time = pose_vector_iterator->t;
+                            pose_vector_iterator++;
+                            pose_vector_iterator->t = max_time - temp_time;
+                            vpc.set_times_to_t(pose_vector_iterator);
+                            pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / t);
+                        }
+
+                        if(!vpc.reduction_axis(pose_vector_iterator, 0)) {
+                            printf("reduction axis 2 error");
+                        }
+                        if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, t)) {//set uni and acc
+                            printf("calculate acc_uni_pose error");
+                        }
+                    }
                 }
 
                 bool neuron_generator::check_if_able_to_break(double s, double v, double a_max) {

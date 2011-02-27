@@ -179,6 +179,7 @@ class neuron_generator: public common::generator::generator{
 		 */
 		double overshoot;
 
+                std::vector<double> time_sum;
 		/**
 		 * @brief Number of macro steps between consequtive data.
 		 */
