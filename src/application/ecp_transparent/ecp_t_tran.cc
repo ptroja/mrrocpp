@@ -16,9 +16,9 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6m/ecp_r_irp6m.h"
+
 #include "robot/conveyor/ecp_r_conv.h"
-#include "robot/speaker/ecp_r_speaker.h"
+
 #include "robot/polycrank/ecp_r_polycrank.h"
 
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -37,25 +37,17 @@ tran::tran(lib::configurator &_config) :
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_tfg::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_tfg::robot(*this);
 	} else if (config.section_name == lib::irp6p_tfg::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_tfg::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_tfg::robot(*this);
 	} else if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else if (config.section_name == lib::conveyor::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new conveyor::robot(*this);
-#if defined(__QNXNTO__)
-	/* TODO: transparent speaker generator not yet supported
-	} else if (config.section_name == lib::speaker::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new speaker::robot(*this);
-	*/
-#endif
-	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new conveyor::robot(*this);
 	} else if (config.section_name == lib::polycrank::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new polycrank::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new polycrank::robot(*this);
 	}
 
 	sr_ecp_msg->message("ecp loaded");

@@ -5,7 +5,6 @@ add_executable(ui
 	../abmain.cc
 	../fun.cc
 	../fun_r_conveyor.cc
-	../fun_r_irp6_mechatronika.cc
 	../fun_r_irp6_on_track.cc
 	../fun_r_irp6_postument.cc
 	../fun_r_irp6ot_tfg.cc
@@ -15,13 +14,11 @@ add_executable(ui
 	../fun_r_polycrank.cc
 	../fun_r_shead.cc
 	../fun_r_smb.cc
-	../fun_r_speaker.cc
 	../fun_r_spkm.cc
 	../timer.cc
 	../ui.cc
 	../ui_ecp_r_common.cc
 	../ui_ecp_r_irp6_common.cc
-	../speaker/ui_ecp_r_speaker.cc
 	../ui_ecp_r_tfg_and_conv.cc
 	../ui_ecp_r_data_port.cc
 	../bird_hand/ui_ecp_r_bird_hand.cc
@@ -34,10 +31,8 @@ add_executable(ui
 	../irp6p_m/ui_r_irp6p_m.cc
 	../irp6p_tfg/ui_r_irp6p_tfg.cc
 	../sarkofag/ui_r_sarkofag.cc
-	../irp6m_m/ui_r_irp6m_m.cc
 	../polycrank/ui_r_polycrank.cc
 	../conveyor/ui_r_conveyor.cc
-	../speaker/ui_r_speaker.cc
 	../spkm/ui_ecp_r_spkm.cc
 	../spkm/ui_r_spkm.cc
 	../spkm/wnd_spkm_inc.cc

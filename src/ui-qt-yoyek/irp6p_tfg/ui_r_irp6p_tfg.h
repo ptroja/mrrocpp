@@ -5,11 +5,14 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __UI_R_SPEAKER_H
-#define __UI_R_SPEAKER_H
+#ifndef __UI_R_IRP6P_TFG_H
+#define __UI_R_IRP6P_TFG_H
 
-#include "ui/src/ui.h"
-#include "ui/src/ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
+
+class wgt_irp6p_tfg_inc;
 
 namespace mrrocpp {
 namespace ui {
@@ -17,7 +20,10 @@ namespace common {
 class Interface;
 }
 
-namespace speaker {
+namespace tfg_and_conv {
+class EcpRobot;
+}
+namespace irp6p_tfg {
 
 //
 //
@@ -26,26 +32,33 @@ namespace speaker {
 //
 
 
-class EcpRobot;
-
 class UiRobot : public common::UiRobot
 {
 private:
 
 public:
 
-	bool is_wind_speaker_play_open; // informacja czy okno odtwarzania dzwiekow jest otwarte
-	EcpRobot *ui_ecp_robot;
+	double current_pos[lib::irp6p_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::irp6p_tfg::NUM_OF_SERVOS]; // pozycja zadana
+
+	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	wgt_irp6p_tfg_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
-
 	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();
+	int synchronise_int();
 	void edp_create();
 	int edp_create_int();
+
+	int move_to_synchro_position();
+	int move_to_preset_position(int variant);
+
+	int execute_motor_motion();
+	int execute_joint_motion();
 };
 
 }

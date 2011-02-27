@@ -45,9 +45,6 @@ public:
 	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 
-	bool is_wind_sarkofag_moves_open; // informacja czy okno ruchow
-	bool is_wind_sarkofag_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
-
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
 	wgt_sarkofag_inc *wgt_inc;
 

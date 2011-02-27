@@ -13,6 +13,7 @@
 
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
@@ -25,6 +26,7 @@
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
 #include "../sarkofag/wgt_sarkofag_inc.h"
+#include "../irp6p_tfg/wgt_irp6p_tfg_inc.h"
 
 #include "../bird_hand/wgt_bird_hand_command.h"
 
@@ -192,14 +194,6 @@ void MainWindow::on_timer_slot()
 
 
 	Iteration_counter++;
-	/* TR
-	 if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
-	 if (interface.speaker->is_wind_speaker_play_open) // otworz okno
-	 {
-	 speaker_check_state(widget, apinfo, cbinfo);
-	 }
-	 }
-	 */
 
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
@@ -364,7 +358,7 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 
 void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
 {
-	interface.irp6ot_m->synchronise();
+
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
@@ -556,42 +550,42 @@ void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
 
 void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
 {
-
+	interface.irp6p_tfg->edp_create();
 }
 
 void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
 {
-
+	interface.irp6p_tfg->EDP_slay_int();
 }
 
 void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
 {
-
+	interface.irp6p_tfg->synchronise();
 }
 
 void MainWindow::on_actionirp6p_tfg_Move_triggered()
 {
-
+	interface.irp6p_tfg->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
 {
-
+	interface.irp6p_tfg->move_to_synchro_position();
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(0);
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(1);
 }
 
 void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
 {
-
+	interface.irp6p_tfg->move_to_preset_position(2);
 }
 
 // conveyor menu

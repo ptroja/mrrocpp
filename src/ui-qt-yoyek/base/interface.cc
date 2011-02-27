@@ -21,6 +21,7 @@
 #include "../shead/ui_r_shead.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
@@ -170,22 +171,15 @@ void Interface::init()
 	sarkofag = new sarkofag::UiRobot(*this);
 	robot_m[sarkofag->robot_name] = sarkofag;
 
+	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
 	/* TR
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
-	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-
-	 irp6m_m = new irp6m::UiRobot(*this);
-	 robot_m[irp6m_m->robot_name] = irp6m_m;
-
 	 conveyor = new conveyor::UiRobot(*this);
 	 robot_m[conveyor->robot_name] = conveyor;
-
-	 speaker = new speaker::UiRobot(*this);
-	 robot_m[speaker->robot_name] = speaker;
 	 */
 
 	ui_node_name = sysinfo.nodename;
@@ -1092,7 +1086,7 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		if(mp.pulse_fd != lib::invalid_fd) {
+		if (mp.pulse_fd != lib::invalid_fd) {
 			messip::port_disconnect(mp.pulse_fd);
 		} else {
 			std::cerr << "MP pulse not connected?" << std::endl;
@@ -1125,8 +1119,6 @@ int Interface::MPslay()
 	 irp6ot_m->deactivate_ecp_trigger();
 	 irp6p_m->deactivate_ecp_trigger();
 	 conveyor->deactivate_ecp_trigger();
-	 speaker->deactivate_ecp_trigger();
-	 irp6m_m->deactivate_ecp_trigger();
 	 */
 	// modyfikacja menu
 	manage_interface();

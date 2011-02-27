@@ -18,7 +18,7 @@
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
-#include "robot/speaker/ecp_mp_g_speak.h"
+
 #include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
@@ -170,8 +170,6 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
 		this->generatorType = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
-	else
-		this->generatorType = ecp_mp::speaker::generator::ECP_GEN_SPEAK;
 	// TODO: unknown generatorType handler should throw an exception
 }
 
