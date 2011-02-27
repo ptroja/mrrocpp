@@ -16,6 +16,9 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
+
+#include "../../generator/ecp/velocity_profile_calculator/bang_bang_profile.h"
+#include "../../base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include <vector>
 
 namespace mrrocpp{
@@ -65,10 +68,14 @@ class neuron_generator: public common::generator::generator{
 		 */
 		double actual_position[6];
 
+                std::vector<double> actual_position_vect;
+
 		/**
 		 * @brief Desired position received from vsp.
 		 */
 		double desired_position[6];
+
+                std::vector<double> desired_position_vect;
 
 		/**
 		 * @brief Array filled with coordinates send to the robot.
@@ -92,10 +99,14 @@ class neuron_generator: public common::generator::generator{
 		 */
 		double a_max[6];
 
+                std::vector<double> a_max_vect;
+
 		/**
 		 * @brief Maximal allowed velocity in all axes.
 		 */
 		double v_max[6];
+
+                std::vector<double> v_max_vect;
 
 		/**
 		 * @brief Node counter used for breaking.
@@ -127,6 +138,8 @@ class neuron_generator: public common::generator::generator{
 		 * @brief Distance covered in the set of five macrosteps.
 		 */
 		double s[6];
+
+                std::vector<double> s_vect;
 
 		/**
 		 * @brief Set to true if change of the direction is needed.
@@ -171,7 +184,28 @@ class neuron_generator: public common::generator::generator{
 		 */
 		uint8_t macroSteps;
 
-	public:
+                bool first_breaking_node;
+
+                void calculate();
+
+                bool check_if_able_to_break(double s, double v, double a_max);
+
+                void clear_vectors();
+
+                std::vector<std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> >pose_vector_list;
+                /**
+                 * Position vector iterator.
+                 */
+                std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator pose_vector_iterator;
+
+            ecp::common::generator::velocity_profile_calculator::bang_bang_profile vpc;
+
+                bool load_trajectory_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> & pose_vector,
+                    const std::vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec,
+                    const std::vector<double> & v, const std::vector<double> & a, const std::vector<double> & start_pos,
+                    const std::vector<double> & s);
+
+        public:
 		neuron_generator(common::task::task& _ecp_task);
 		virtual ~neuron_generator();
 		virtual bool first_step();
