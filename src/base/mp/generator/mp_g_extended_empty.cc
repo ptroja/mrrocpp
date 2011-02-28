@@ -6,14 +6,10 @@
  * @ingroup mp
  */
 
-#include <cstring>
-
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
 #include "base/mp/generator/mp_g_extended_empty.h"
 
 namespace mrrocpp {
@@ -84,4 +80,3 @@ bool extended_empty::next_step()
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
-
