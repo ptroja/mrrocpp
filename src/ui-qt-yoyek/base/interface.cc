@@ -21,9 +21,11 @@
 #include "../shead/ui_r_shead.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
+#include "../conveyor/ui_r_conveyor.h"
 
 extern void catch_signal(int sig);
 
@@ -170,15 +172,15 @@ void Interface::init()
 	sarkofag = new sarkofag::UiRobot(*this);
 	robot_m[sarkofag->robot_name] = sarkofag;
 
+	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
+	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
 	/* TR
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-
-	 irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	 robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	 conveyor = new conveyor::UiRobot(*this);
-	 robot_m[conveyor->robot_name] = conveyor;
 	 */
 
 	ui_node_name = sysinfo.nodename;

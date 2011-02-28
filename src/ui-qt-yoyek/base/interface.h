@@ -38,6 +38,9 @@ class UiRobot;
 namespace irp6p_m {
 class UiRobot;
 }
+namespace irp6p_tfg {
+class UiRobot;
+}
 namespace polycrank {
 class UiRobot;
 }
@@ -45,6 +48,9 @@ namespace bird_hand {
 class UiRobot;
 }
 namespace sarkofag {
+class UiRobot;
+}
+namespace conveyor {
 class UiRobot;
 }
 namespace common {
@@ -148,12 +154,11 @@ public:
 	polycrank::UiRobot *polycrank;
 	bird_hand::UiRobot *bird_hand;
 	sarkofag::UiRobot *sarkofag;
+	irp6p_tfg::UiRobot *irp6p_tfg;
+	conveyor::UiRobot *conveyor;
+
 	/*TR
-
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
-	 irp6p_tfg::UiRobot *irp6p_tfg;
-
-	 conveyor::UiRobot *conveyor;
 	 */
 
 	const int position_refresh_interval;

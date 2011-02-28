@@ -52,6 +52,8 @@ SET(GUI_CXX_SRCS
     spkm/wgt_spkm_ext.cpp
     polycrank/wgt_polycrank_int.cpp
     sarkofag/wgt_sarkofag_inc.cpp
+    conveyor/wgt_conveyor_inc.cpp
+    irp6p_tfg/wgt_irp6p_tfg_inc.cpp
     bird_hand/wgt_bird_hand_command.cpp
 )
 
@@ -65,6 +67,8 @@ SET(GUI_MOC_SRCS
     spkm/wgt_spkm_ext.h
     polycrank/wgt_polycrank_int.h
     sarkofag/wgt_sarkofag_inc.h
+    conveyor/wgt_conveyor_inc.h
+    irp6p_tfg/wgt_irp6p_tfg_inc.h
     bird_hand/wgt_bird_hand_command.h
 )
 
@@ -80,6 +84,8 @@ SET(GUI_UI
     spkm/wgt_spkm_ext.ui
     polycrank/wgt_polycrank_int.ui
     sarkofag/wgt_sarkofag_inc.ui
+    conveyor/wgt_conveyor_inc.ui
+    irp6p_tfg/wgt_irp6p_tfg_inc.ui
     bird_hand/wgt_bird_hand_command.ui
 )
 
@@ -98,9 +104,11 @@ ADD_EXECUTABLE(
 	base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
+	irp6p_tfg/ui_r_irp6p_tfg.cc
 	bird_hand/ui_ecp_r_bird_hand.cc
 	bird_hand/ui_r_bird_hand.cc
 	sarkofag/ui_r_sarkofag.cc
+	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_r_spkm.cc
 	smb/ui_ecp_r_smb.cc

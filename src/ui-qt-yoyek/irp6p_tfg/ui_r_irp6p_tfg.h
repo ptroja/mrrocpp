@@ -5,14 +5,14 @@
 // Ostatnia modyfikacja: 2010
 // -------------------------------------------------------------------------
 
-#ifndef __UI_R_SARKOFAG_H
-#define __UI_R_SARKOFAG_H
+#ifndef __UI_R_IRP6P_TFG_H
+#define __UI_R_IRP6P_TFG_H
 
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
-#include "robot/sarkofag/const_sarkofag.h"
+#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
-class wgt_sarkofag_inc;
+class wgt_irp6p_tfg_inc;
 
 namespace mrrocpp {
 namespace ui {
@@ -23,16 +23,13 @@ class Interface;
 namespace tfg_and_conv {
 class EcpRobot;
 }
-namespace sarkofag {
+namespace irp6p_tfg {
 
 //
 //
-// KLASA UiRobotSarkofag
+// KLASA UiRobot
 //
 //
-
-
-// super klasa agregujaca porozrzucane struktury
 
 
 class UiRobot : public common::UiRobot
@@ -41,12 +38,11 @@ private:
 
 public:
 
-	double current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
-	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
-
+	double current_pos[lib::irp6p_tfg::NUM_OF_SERVOS];// pozycja biezaca
+	double desired_pos[lib::irp6p_tfg::NUM_OF_SERVOS]; // pozycja zadana
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	wgt_sarkofag_inc *wgt_inc;
+	wgt_irp6p_tfg_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
@@ -57,6 +53,10 @@ public:
 	int synchronise_int();
 	void edp_create();
 	int edp_create_int();
+
+	int move_to_synchro_position();
+	int move_to_preset_position(int variant);
+
 	int execute_motor_motion();
 	int execute_joint_motion();
 };

@@ -515,7 +515,11 @@ void Interface::reload_whole_configuration()
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
 					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			if (!config->exists("node_name", lib::MP_SECTION)) {
+				mp.node_name = "localhost";
+			} else {
+				mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			}
 			mp.pid = -1;
 		}
 
