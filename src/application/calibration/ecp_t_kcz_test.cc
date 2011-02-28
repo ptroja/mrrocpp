@@ -161,7 +161,7 @@ void kcz_test::main_task_algorithm(void ) {
 
 	smoothgen2->reset();
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 }

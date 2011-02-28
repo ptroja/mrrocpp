@@ -55,7 +55,7 @@ void task_base::main_task_algorithm(void)
 
 		mp_2_ecp_next_state_string_handler();
 
-		ecp_termination_notice();
+		termination_notice();
 	} //end for
 }
 
@@ -131,7 +131,7 @@ void task_base::set_ecp_reply(lib::ECP_REPLY ecp_r)
 }
 
 // Informacja dla MP o zakonczeniu zadania uzytkownika
-void task_base::ecp_termination_notice(void)
+void task_base::termination_notice(void)
 {
 	if (mp_command_type() != lib::END_MOTION) {
 

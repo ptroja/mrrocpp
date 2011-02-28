@@ -42,7 +42,7 @@ void ecp_t_vs_tutorial::main_task_algorithm(void)
 {
 	move_visual_servo();
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 void ecp_t_vs_tutorial::move_visual_servo()

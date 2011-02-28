@@ -159,7 +159,7 @@ public:
 	/**
 	 * @brief sends the message to MP after task execution is finished
 	 */
-	void ecp_termination_notice(void);
+	void termination_notice(void);
 
 	/**
 	 * @brief Waits for START command from MP

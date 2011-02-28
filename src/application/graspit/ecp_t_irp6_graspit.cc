@@ -71,10 +71,10 @@ void irp6_grasp::main_task_algorithm(void)
 				cvgenjoint->Move();
 		}
 
-		ecp_termination_notice();
+		termination_notice();
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 } // namespace task

@@ -323,7 +323,7 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			go_st->execute();
 		}
 
-		ecp_termination_notice();
+		termination_notice();
 	} //end for
 
 

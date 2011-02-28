@@ -80,7 +80,7 @@ void ecp_t_objectfollower_ib::main_task_algorithm(void)
 		}
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &config)

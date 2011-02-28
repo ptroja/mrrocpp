@@ -405,7 +405,7 @@ void acq_eih::main_task_algorithm(void)
 		fclose(FP);
 	}
 
-	//ecp_termination_notice();
+	//termination_notice();
 	//ecp_wait_for_stop();
 }
 

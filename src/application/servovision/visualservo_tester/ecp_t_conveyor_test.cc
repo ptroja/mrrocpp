@@ -51,7 +51,7 @@ void ecp_t_conveyor_test::main_task_algorithm(void)
 		}
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 } //namespace task
