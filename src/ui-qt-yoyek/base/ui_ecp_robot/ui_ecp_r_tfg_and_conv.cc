@@ -50,9 +50,9 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
 	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
-		/* TR
-		 ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
-		 */
+
+		ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
+
 		MOTOR_STEP = 0.4; // Przyrost kata obrotu walu silnika [rad]
 		JOINT_LINEAR_STEP = 0.00001; // Przyrost liniowy w przegubach posuwistych [m]
 
