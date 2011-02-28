@@ -105,6 +105,7 @@ ADD_EXECUTABLE(
 	bird_hand/ui_ecp_r_bird_hand.cc
 	bird_hand/ui_r_bird_hand.cc
 	sarkofag/ui_r_sarkofag.cc
+	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_r_spkm.cc
 	smb/ui_ecp_r_smb.cc
