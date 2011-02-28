@@ -25,9 +25,8 @@ namespace generator {
 // ###############################################################
 
 extended_empty::extended_empty(task::task& _mp_task) :
-	generator(_mp_task)
+	generator(_mp_task),activate_trigger(true)
 {
-	activate_trigger = true;
 }
 
 void extended_empty::configure(bool l_activate_trigger)
