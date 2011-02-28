@@ -283,6 +283,7 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 				robots_to_move.erase(robot_node.first);
 			}
 		}
+
 		// powolanie generatora i jego konfiguracja
 		generator::extended_empty mp_ext_empty_gen(*this);
 		mp_ext_empty_gen.configure(false);

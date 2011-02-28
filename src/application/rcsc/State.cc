@@ -26,9 +26,8 @@ namespace mp {
 namespace common {
 
 State::State()
+	: numArgument(0), robotSet(NULL)
 {
-	numArgument = 0;
-	robotSet = NULL;
 	stateTransitions = new std::list <Transition>();
 }
 //-----------------------------------------------------------------------------------------------------------
@@ -58,12 +57,10 @@ State::~State()
 }
 
 //-----------------------------------------------------------------------------------------------------------
-State::RobotSets::RobotSets()
+State::RobotSets::RobotSets() :
+	firstSetCount(0), secondSetCount(0),
+	firstSet(NULL), secondSet(NULL)
 {
-	firstSetCount = 0;
-	secondSetCount = 0;
-	firstSet = NULL;
-	secondSet = NULL;
 }
 //-----------------------------------------------------------------------------------------------------------
 State::RobotSets::RobotSets(const RobotSets &robotSets)
