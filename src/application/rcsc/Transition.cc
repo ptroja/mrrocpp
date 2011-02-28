@@ -1,3 +1,4 @@
+#include <string>
 
 #include <cstdio>
 #include <cstring>
@@ -28,8 +29,7 @@ Transition::~Transition()
 
 bool Transition::getConditionResult()
 {
-	bool result = condition->checkCompareResult();
-	return result;
+	return condition->checkCompareResult();;
 }
 
 void Transition::setConditionResult(bool result)

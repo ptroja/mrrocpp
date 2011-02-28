@@ -1,4 +1,3 @@
-
 #if !defined(_TRANSITION_H_)
 #define _TRANSITION_H_
 
@@ -26,7 +25,7 @@ class Transition
 
 	private:
 		std::string targetID;
-		Condition *condition;
+		Condition * condition;
 };
 
 } // namespace common
