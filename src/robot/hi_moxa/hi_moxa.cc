@@ -75,6 +75,8 @@ void HI_moxa::init()
 			if (fd[i] < 0) {
 				std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
 				//throw(std::runtime_error("unable to open device!!!"));
+				perror("[error] Nie wykryto sprzetu! ");
+
 			} else {
 				std::cout << "...OK" << std::endl;
 				if (fd[i] > fd_max) {
@@ -286,6 +288,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
 	//	std::cout << "[info] current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
+		std::cout << "[info] position[0] = " << (int) servo_data[0].drive_status.position;
+		std::cout << " current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
 		status_disp_cnt = 0;
 	}
 
