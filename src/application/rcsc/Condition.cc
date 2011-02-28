@@ -4,12 +4,14 @@
 
 #include "Condition.h"
 
+#include "base/lib/configurator.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace common {
 
 
-Condition::Condition(const std::string & _condDesc, lib::configurator &_config)
+Condition::Condition(const std::string & _condDesc, const lib::configurator &_config)
 	: condition(_condDesc), config(_config)
 {
 	operationType = splitCondExpr();
@@ -20,16 +22,16 @@ Condition::Condition(const std::string & _condDesc, lib::configurator &_config)
 
 Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 {
-	const char *opc[] = {"==", "!=", "<=", ">=", "<", ">"};
-	char *temp;
-
-	// TODO: memory leak
+	// TODO: rewrite with boost::tokenize
 	char *myExpr = strdup(condition.c_str());
+
+	char *ptr = myExpr;
 
 	if(myExpr != NULL)
 	{
 		for(int i=0; i<6; i++)
 		{
+			const char *opc[] = {"==", "!=", "<=", ">=", "<", ">"};
 			char *res;
 
 			if((res = strstr(myExpr, opc[i])) != NULL)
@@ -38,15 +40,25 @@ Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 					strncpy(res, "  ", 2);
 				else
 					strncpy(res, " ", 1);
-				temp = strtok(myExpr, " ");
+				char * temp = strtok(myExpr, " ");
 				lhValue = temp;
 				temp = strtok(NULL, " ");
 				rhValue = temp;
 				//printf("lv: %s\nrv: %s\n", lhValue, rhValue);
+
+				// free allcated memory
+				free(ptr);
+
 				return (Condition::RELATIONAL_OPERATOR)i;
 			}
 		}
 	}
+
+	if(ptr) {
+		// free allcated memory
+		free(ptr);
+	}
+
 	return Condition::WITHOUT_OP;
 }
 
@@ -65,42 +77,51 @@ bool Condition::checkCompareResult()
 
 	if(strstr(condition.c_str(), ".") != NULL)
 	{
-		bool result = checkContext(condition);
-		return result;
+		return checkContext(condition);
 	}
-	else
-		return false;
+
+	// defalt to false
+	return false;
 }
 
 bool Condition::checkContext(const std::string & toCheck)
 {
 	if(strstr(toCheck.c_str(), ".")!=NULL)
 	{
-		std::list<const char *> args = returnSplitedStr(toCheck);
-		std::list<const char *>::iterator it = args.begin();
-		if(!strcmp("iniFile", (*it)))
+		std::list<std::string> args = returnSplitedStr(toCheck);
+		std::list<std::string>::iterator it = args.begin();
+		if((*it) == "iniFile")
 		{
-			if(config.exists(*(++it)))
+			++it;
+			if(config.exists((*it).c_str())) {
 				return (bool)config.value<int>(*it);
-			return false;
+			}
 		}
 		//for(std::list<char *>::iterator it = args->begin(); it != args->end(); ++it)
 		//	printf("Element: %s\n", (*it));
 	}
+
+	// default to false
 	return false;
 }
 
-std::list<const char *> Condition::returnSplitedStr(const std::string & toSplit)
+std::list<std::string> Condition::returnSplitedStr(const std::string & toSplit)
 {
-	// TODO: memory leak - change from char * to std::string implementation
+	// TODO: rewrite with boost::tokenize
 	char *dataStr = strdup(toSplit.c_str());
-	char *element;
-	std::list<const char *> splitedStr;
 
-	element = strtok(dataStr, ".");
+	// pointer to the allocated memory
+	char *ptr = dataStr;
+
+	std::list<std::string> splitedStr;
+
+	char *element = strtok(dataStr, ".");
 	splitedStr.push_back(element);
 	while((element = strtok(NULL, ".")) != NULL)
 		splitedStr.push_back(element);
+
+	// free allocated memory
+	free(ptr);
 
 	return splitedStr;
 }

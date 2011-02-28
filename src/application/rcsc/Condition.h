@@ -16,12 +16,12 @@ class Condition
 		enum RELATIONAL_OPERATOR {EQUAL_TO, NOT_EQUAL, LESS_EQUAL, GREATER_EQUAL, LESS_THAN, GREATER_THAN, WITHOUT_OP};
 
 	public:
-		Condition(const std::string & condDesc, lib::configurator &_config);
+		Condition(const std::string & condDesc, const lib::configurator &_config);
 
 		bool checkCompareResult();
 		bool checkContext(const std::string & toCheck);
 		void setResult(bool result);
-		static std::list<const char *> returnSplitedStr(const std::string & toSplit);
+		static std::list<std::string> returnSplitedStr(const std::string & toSplit);
 		const std::string & getCondDesc() const;
 		RELATIONAL_OPERATOR splitCondExpr();
 
@@ -32,7 +32,7 @@ class Condition
 		bool result;
 		RELATIONAL_OPERATOR operationType;
 
-		lib::configurator &config;
+		const lib::configurator &config;
 };
 
 } // namespace common
