@@ -42,6 +42,7 @@ public:
 	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	wgt_conveyor_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 

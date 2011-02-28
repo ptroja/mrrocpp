@@ -1,10 +1,10 @@
-#ifndef WGT_IRP6P_TFG_INC_H
-#define WGT_IRP6P_TFG_INC_H
+#ifndef WGT_CONVEYOR_INC_H
+#define WGT_CONVEYOR_INC_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include "ui_wgt_irp6p_tfg_inc.h"
+#include "ui_wgt_conveyor_inc.h"
 #include "../base/wgt_base.h"
 #include <QTimer>
 
@@ -13,27 +13,27 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace irp6p_tfg {
+namespace conveyor {
 class UiRobot;
-const std::string WGT_IRP6P_TFG_INC = "WGT_IRP6P_TFG_INC";
+const std::string WGT_CONVEYOR_INC = "WGT_CONVEYOR_INC";
 }
 }
 }
 
-class wgt_irp6p_tfg_inc : public wgt_base
+class wgt_conveyor_inc : public wgt_base
 {
 Q_OBJECT
 
 public:
-			wgt_irp6p_tfg_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6p_tfg::UiRobot& _robot, QWidget *parent =
+			wgt_conveyor_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent =
 					0);
-	~wgt_irp6p_tfg_inc();
+	~wgt_conveyor_inc();
 
 	void synchro_depended_init();
 
 private:
-	Ui::wgt_irp6p_tfg_incClass ui;
-	mrrocpp::ui::irp6p_tfg::UiRobot& robot;
+	Ui::wgt_conveyor_incClass ui;
+	mrrocpp::ui::conveyor::UiRobot& robot;
 
 	int init();
 	int copy();
@@ -66,4 +66,4 @@ private slots:
 
 };
 
-#endif // WGT_IRP6P_TFG_INC_H
+#endif // WGT_CONVEYOR_INC_H

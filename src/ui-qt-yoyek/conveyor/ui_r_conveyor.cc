@@ -7,10 +7,7 @@
 #include "robot/conveyor/const_conveyor.h"
 #include "../base/interface.h"
 
-#include "../base/mainwindow.h"
-#include "ui_mainwindow.h"
-
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "wgt_conveyor_inc.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -133,7 +130,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active"),
 			ui_ecp_robot(NULL)
 {
-
+	wgt_inc = new wgt_conveyor_inc(interface, *this, interface.get_main_window());
+	wndbase_m[WGT_CONVEYOR_INC] = wgt_inc->dwgt;
 }
 
 int UiRobot::manage_interface()

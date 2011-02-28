@@ -14,12 +14,12 @@ wgt_sarkofag_inc::wgt_sarkofag_inc(mrrocpp::ui::common::Interface& _interface, m
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(interface.position_refresh_interval);
-//	ui.radioButton_non_sync_trapezoidal->setChecked(true);
+	//	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
-//	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_motor_pos_limits[0]);
-//	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
+	//	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_motor_pos_limits[0]);
+	//	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
 }
 
 wgt_sarkofag_inc::~wgt_sarkofag_inc()
@@ -85,18 +85,15 @@ int wgt_sarkofag_inc::init()
 			{
 				//synchro_depended_widgets_disable(false);
 
-//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
-//				robot.ui_ecp_robot->execute_motion();
-//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
-//
-//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-
-
+				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				//				robot.ui_ecp_robot->execute_motion();
+				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				//
+				//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 
 
 				robot.ui_ecp_robot->read_motors(interface.sarkofag->current_pos); // Odczyt polozenia walow silnikow
 				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-
 
 				for (int i = 0; i < robot.number_of_servos; i++) {
 					robot.desired_pos[i] = robot.current_pos[i];
@@ -117,16 +114,16 @@ int wgt_sarkofag_inc::init()
 int wgt_sarkofag_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-//	lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
-//	qdsb_mcur->setValue(er.epos_controller[axis].current);
-//	qdsb_cur_p->setValue(er.epos_controller[axis].position);
+	//	lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+	//	qdsb_mcur->setValue(er.epos_controller[axis].current);
+	//	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 	qdsb_cur_p->setValue(interface.sarkofag->current_pos[axis]);
 
-//	if (er.epos_controller[axis].motion_in_progress) {
-//		qab_mip->setChecked(true);
-//	} else {
-//		qab_mip->setChecked(false);
-//	}
+	//	if (er.epos_controller[axis].motion_in_progress) {
+	//		qab_mip->setChecked(true);
+	//	} else {
+	//		qab_mip->setChecked(false);
+	//	}
 
 	return 1;
 }
@@ -156,7 +153,7 @@ void wgt_sarkofag_inc::on_pushButton_copy_clicked()
 
 void wgt_sarkofag_inc::on_pushButton_stop_clicked()
 {
-//	robot.execute_stop_motor();
+	//	robot.execute_stop_motor();
 }
 
 int wgt_sarkofag_inc::copy()
