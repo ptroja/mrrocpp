@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cstring>
-#include <cstdlib>
 #include <cstdio>
 
-#include "base/lib/datastr.h"
+#include <boost/lexical_cast.hpp>
+
 #include "State.h"
+#include "base/lib/datastr.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
@@ -28,7 +29,6 @@ namespace common {
 State::State()
 	: numArgument(0), robotSet(NULL)
 {
-	stateTransitions = new std::list <Transition>();
 }
 //-----------------------------------------------------------------------------------------------------------
 State::State(const State &state)
@@ -43,15 +43,13 @@ State::State(const State &state)
 		this->robotSet = new RobotSets(*(state.robotSet));
 	else
 		robotSet = NULL;
-	this->stateTransitions = new std::list <Transition>(*(state.stateTransitions));
+	this->stateTransitions = state.stateTransitions;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 
 State::~State()
 {
-	if (stateTransitions)
-		delete stateTransitions;
 	if (robotSet)
 		delete robotSet;
 }
@@ -98,7 +96,7 @@ const char* State::getStateID() const
 
 void State::setNumArgument(const char *numArgument)
 {
-	this->numArgument = atoi(numArgument);
+	this->numArgument = boost::lexical_cast<int>(numArgument);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -193,17 +191,17 @@ const char* State::getStringArgument() const
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setTransition(const char *cond, const char *target, lib::configurator &_config)
+void State::setTransition(const std::string & cond, const std::string & target, lib::configurator &_config)
 {
 	Transition *tempTr = new Transition(cond, target, _config);
-	stateTransitions->push_back(*tempTr);
+	stateTransitions.push_back(*tempTr);
 }
 
 //----------------------------------------------------------------------------------------------------------
 
 void State::setProperTransitionResult(bool result)
 {
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		if (((*it).getConditionDescription()) == "stateOperationResult")
 			(*it).setConditionResult(result);
 	}
@@ -211,7 +209,7 @@ void State::setProperTransitionResult(bool result)
 
 //----------------------------------------------------------------------------------------------------------
 
-std::list <Transition> * State::getTransitions() const
+const std::list <Transition> & State::getTransitions() const
 {
 	return stateTransitions;
 }
@@ -219,7 +217,7 @@ std::list <Transition> * State::getTransitions() const
 //----------------------------------------------------------------------------------------------------------
 const char * State::returnNextStateID(StateHeap &sh)
 {
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		if ((*it).getConditionResult())
 			return (*it).getTargetID(sh);
 	}
@@ -240,8 +238,8 @@ void State::showStateContent() const
 			std::cout << robotSet->secondSet[i] << "; ";
 		std::cout << std::endl;
 	}
-	std::cout << "Transitions count: " << stateTransitions->size() << std::endl;
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	std::cout << "Transitions count: " << stateTransitions.size() << std::endl;
+	for (std::list <Transition>::const_iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		std::cout << "----- Transition ------" << std::endl;
 		(*it).showContent();
 	}

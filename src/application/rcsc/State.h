@@ -56,11 +56,11 @@ public:
 	void setStringArgument(const std::string & trajFilePath);
 	const char * getStringArgument() const;
 
-	void setTransition(const char *cond, const char *target, lib::configurator &_config);
+	void setTransition(const std::string & cond, const std::string & target, lib::configurator &_config);
 	void setProperTransitionResult(bool result);
 
 	const char *returnNextStateID(StateHeap &sh);
-	std::list <Transition> * getTransitions() const;
+	const std::list <Transition> & getTransitions() const;
 
 	void showStateContent() const;
 
@@ -74,7 +74,7 @@ private:
 	std::string generatorType;
 	std::string stringArgument;
 
-	std::list <Transition> *stateTransitions;
+	std::list <Transition> stateTransitions;
 };
 
 } // namespace common
