@@ -502,8 +502,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		return false;
 	}
 
-	//if(pose_vector.empty && this->ecp_t.ecp_m_robot->robot_name)
-	std::cout<<"FILENAME: "<<file_name<<std::endl;
+	double tab[10];
 	int pos = from_file.tellg();
 	char line[80];
 		int dlugosc;
@@ -513,25 +512,9 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		dlugosc=strlen(line);
 		}
 		while (dlugosc<5);
-	int num=0;
-	int slowo = 0;
-	for (i=0;i<dlugosc;i++)
-	{
-		if(((line[i]<='9'&&line[i]>='0') || line[i]=='.'))
-		{
-			if(slowo==0)		num++;
-			slowo=1;
-		}
-		else
-		{
-			slowo=0;
-		}
-	}
-//int num = lib::setValuesInArray(tmp,string_line);
+int num = lib::setValuesInArray(tab,line);
 this->set_axes_num(num);
-std::cout<<"MEGATEST2"<<std::endl;
-from_file.seekg(dlugosc, ios::beg);
-std::cout<<"MEGATEST3"<<std::endl;
+from_file.seekg(pos);
 
 
 	for (i = 0; i < number_of_poses; i++) {
