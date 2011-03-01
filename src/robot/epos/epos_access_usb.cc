@@ -283,24 +283,35 @@ void epos_access_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 	epos::checkEPOSerror(E_error);
 }
 
-void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8])
+void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
 {
-	WORD frame[4];
+	WORD frame[8];
 
 	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
 	frame[1] = Identifier;
 	frame[2] = Length;
-	frame[3] = (Data[1] << 8)| Data[0];
-	frame[4] = (Data[3] << 8)| Data[2];
-	frame[5] = (Data[5] << 8)| Data[4];
-	frame[6] = (Data[7] << 8)| Data[6];
+
+	if(Length > 0) frame[3] = Data[0];
+	if(Length > 1) frame[3] |= (Data[1] << 8);
+	if(Length > 2) frame[4] = Data[2];
+	if(Length > 3) frame[4] |= (Data[3] << 8);
+	if(Length > 4) frame[5] = Data[4];
+	if(Length > 5) frame[5] |= (Data[5] << 8);
+	if(Length > 6) frame[6] = Data[6];
+	if(Length > 7) frame[6] |= (Data[7] << 8);
+
 	frame[7] = 0x00; // ZERO word, will be filled with checksum
 
 	sendCommand(frame);
 
 	// read response
 	WORD answer[8];
-	readAnswer(answer, 8);
+
+	unsigned int a = readAnswer(answer, 8);
+
+	if (a != 2) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected answer"));
+	}
 
 	epos::checkEPOSerror(E_error);
 }

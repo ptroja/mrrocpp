@@ -6,9 +6,12 @@ if(LibFTDI_FOUND)
     	
     target_link_libraries(epos ${LibFTDI_LDFLAGS})
 
-    # Test utility
+    # Test utilities
     add_executable(test test.cc)
     target_link_libraries (test epos) 
+
+    add_executable(cantest cantest.cc)
+    target_link_libraries (cantest epos) 
 else(LibFTDI_FOUND)
     add_library(epos
         	epos.cc

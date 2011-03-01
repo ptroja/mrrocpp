@@ -615,6 +615,12 @@ void epos::changeEPOSstate(state_t state)
 }
 
 /* returns software version as HEX  --  14.1.33*/
+UNSIGNED8 epos::readNodeID()
+{
+	return ReadObjectValue<UNSIGNED8>(0x2000, 0x00);
+}
+
+/* returns software version as HEX  --  14.1.33*/
 UNSIGNED16 epos::readSWversion()
 {
 	return ReadObjectValue<UNSIGNED16>(0x2003, 0x01);

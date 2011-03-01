@@ -96,7 +96,7 @@ public:
 	 *  @param Length CAN Frame Data Length Code (DLC)
 	 *  @param Data CAN Frame Data
 	 */
-	virtual void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]) = 0;
+	virtual void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]) = 0;
 
 	//! Open device
 	virtual void open() = 0;
