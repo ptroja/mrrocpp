@@ -58,7 +58,7 @@ const std::string ports_strings[] = {"/dev/ser2"};
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup sarkofag
  */
-const int MAX_CURRENT_0 = 120;
+const int MAX_CURRENT_0 = 150;
 
 }
 } // namespace lib

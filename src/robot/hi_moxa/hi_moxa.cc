@@ -131,6 +131,8 @@ int HI_moxa::get_current(int drive_number)
 
 	ret = servo_data[drive_number].drive_status.current;
 
+	//ret = ret;
+
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_current(" << drive_number << ") = " << ret << std::endl;
 #endif
@@ -287,9 +289,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
-	//	std::cout << "[info] current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
-		std::cout << "[info] position[0] = " << (int) servo_data[0].drive_status.position;
-		std::cout << " current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
+//		std::cout << "[info]";
+//		std::cout << " sw1_sw2_swSynchr[0] = " << (int) servo_data[0].drive_status.sw1 << "," << (int) servo_data[0].drive_status.sw2 << "," << (int) servo_data[0].drive_status.swSynchr;
+//		std::cout << " position[0] = " << (int) servo_data[0].drive_status.position;
+//		std::cout << " current[0] = " << (int) servo_data[0].drive_status.current;
+//		std::cout << std::endl;
 		status_disp_cnt = 0;
 	}
 
