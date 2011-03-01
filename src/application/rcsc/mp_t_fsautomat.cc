@@ -185,23 +185,22 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	 transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
 	 = new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 	 */
-	cube_state = new common::CubeState();
 }
 
-common::State * fsautomat::createState(xmlNodePtr stateNode)
+common::State fsautomat::createState(xmlNodePtr stateNode)
 {
-	common::State * actState = new common::State();
+	common::State actState;
 
 	xmlChar * stateID = xmlGetProp(stateNode, (const xmlChar *) "id");
 
 	if (stateID) {
-		actState->setStateID((char*) stateID);
+		actState.setStateID((char*) stateID);
 	}
 
 	xmlChar * stateType = xmlGetProp(stateNode, (const xmlChar *) "type");
 
 	if (stateType) {
-		actState->setType((char*) stateType);
+		actState.setType((char*) stateType);
 	}
 	// For each child of state: i.e. Robot
 	for (xmlNodePtr child_node = stateNode->children; child_node != NULL; child_node = child_node->next) {
@@ -210,35 +209,35 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 
 				xmlChar * ecpGeneratorType = xmlNodeGetContent(child_node);
 				if (ecpGeneratorType)
-					actState->setGeneratorType((const char *) ecpGeneratorType);
+					actState.setGeneratorType((const char *) ecpGeneratorType);
 				xmlFree(ecpGeneratorType);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "ROBOT")) {
 
 				xmlChar * robot = xmlNodeGetContent(child_node);
 				if (robot)
-					actState->setRobot((char*) robot);
+					actState.setRobot((char*) robot);
 				xmlFree(robot);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
-				actState->robotSet = common::State::RobotSets();
+				actState.robotSet = common::State::RobotSets();
 				for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL; cchild_node
 						= cchild_node->next) {
 					if (cchild_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
-						//actState->robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-						//actState->robotSet->firstSet = new lib::robot_name_t[actState->robotSet->firstSetCount];
+						//actState.robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						//actState.robotSet->firstSet = new lib::robot_name_t[actState.robotSet->firstSetCount];
 						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 							if (set_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-								actState->robotSet->firstSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
+								actState.robotSet->firstSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
 					}
 					if (cchild_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
-						//actState->robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-						//actState->robotSet->secondSet = new lib::robot_name_t[actState->robotSet->secondSetCount];
+						//actState.robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+						//actState.robotSet->secondSet = new lib::robot_name_t[actState.robotSet->secondSetCount];
 						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
 							if (set_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-								actState->robotSet->secondSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
+								actState.robotSet->secondSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
 					}
 				}
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath")
@@ -251,21 +250,21 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 				if (stringArgument) {
 					std::cout << "ARGUMENT STRINGOWY:                            " << (char *) stringArgument
 							<< std::endl;
-					actState->setStringArgument((std::string) (char*) stringArgument);
+					actState.setStringArgument((std::string) (char*) stringArgument);
 				}
 				xmlFree(stringArgument);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
 				xmlChar * numArgument = xmlNodeGetContent(child_node);
 				if (numArgument)
-					actState->setNumArgument((const char *) numArgument);
+					actState.setNumArgument((const char *) numArgument);
 				xmlFree(numArgument);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "transition")) {
 				//printf("name: %s\n", (char *)child_node->name);
 				xmlChar *cond = xmlGetProp(child_node, (const xmlChar *) "condition");
 				xmlChar *trans = xmlGetProp(child_node, (const xmlChar *) "target");
 				if (cond && trans)
-					actState->setTransition((const char *) cond, (const char *) trans, config);
+					actState.setTransition((const char *) cond, (const char *) trans, config);
 			}
 		}
 	}
@@ -274,9 +273,9 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 	return actState;
 }
 
-std::map <std::string, common::State> fsautomat::takeStatesMap()
+fsautomat::stateMap_t fsautomat::takeStatesMap()
 {
-	std::map <std::string, common::State> statesMap;
+	stateMap_t statesMap;
 
 	std::string fileName(config.value <std::string> ("xml_file", "[xml_settings]"));
 	std::string filePath("../");
@@ -305,14 +304,14 @@ std::map <std::string, common::State> fsautomat::takeStatesMap()
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask")) {
 			for (xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
 				if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "State")) {
-					common::State * actState = createState(child_node);
-					statesMap.insert(std::map <std::string, common::State>::value_type(actState->getStateID(), *actState));
+					common::State actState = createState(child_node);
+					statesMap.insert(stateMap_t::value_type(actState.getStateID(), actState));
 				}
 			}
 		}
 		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
-			common::State * actState = createState(cur_node);
-			statesMap.insert(std::map <std::string, common::State>::value_type(actState->getStateID(), *actState));
+			common::State actState = createState(cur_node);
+			statesMap.insert(stateMap_t::value_type(actState.getStateID(), actState));
 		}
 	}
 	// free the document
@@ -412,7 +411,7 @@ void fsautomat::initializeCubeState(common::State &state)
 	}
 	//	for(int i=0; i<6; i++)
 	//		printf("c[%d]: %d\n", i, colors[i]);
-	cube_state->set_state(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
+	cube_state.set_state(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
 }
 
 void fsautomat::initiateSensorReading(common::State &state)
@@ -461,38 +460,38 @@ void fsautomat::writeCubeState(common::State &state)
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_state->cube_tab[index][3 * i + j] = (char) cube_recognition->image.colors[3 * i + j];
+			cube_state.cube_tab[index][3 * i + j] = (char) cube_recognition->image.colors[3 * i + j];
 
 	printf("\nFACE FACE %d:\n", index);
 	for (int i = 0; i < 9; i++) {
-		switch (cube_state->cube_tab[index][i])
+		switch (cube_state.cube_tab[index][i])
 		{
 			case 1:
-				cube_state->cube_tab[index][i] = 'r';
+				cube_state.cube_tab[index][i] = 'r';
 				printf("R");
 				break;
 			case 2:
-				cube_state->cube_tab[index][i] = 'o';
+				cube_state.cube_tab[index][i] = 'o';
 				printf("O");
 				break;
 			case 3:
-				cube_state->cube_tab[index][i] = 'y';
+				cube_state.cube_tab[index][i] = 'y';
 				printf("Y");
 				break;
 			case 4:
-				cube_state->cube_tab[index][i] = 'g';
+				cube_state.cube_tab[index][i] = 'g';
 				printf("G");
 				break;
 			case 5:
-				cube_state->cube_tab[index][i] = 'b';
+				cube_state.cube_tab[index][i] = 'b';
 				printf("B");
 				break;
 			case 6:
-				cube_state->cube_tab[index][i] = 'w';
+				cube_state.cube_tab[index][i] = 'w';
 				printf("W");
 				break;
 			default:
-				cube_state->cube_tab[index][i] = 'o';
+				cube_state.cube_tab[index][i] = 'o';
 				printf("?");
 				break;
 		}
@@ -506,18 +505,18 @@ void fsautomat::changeCubeState(common::State &state)
 	int turn_angle = state.getNumArgument();
 	common::CubeState tmp_cube_state;
 
-	tmp_cube_state.set_state(*cube_state, turn_angle);
+	tmp_cube_state.set_state(cube_state, turn_angle);
 
-	*cube_state = tmp_cube_state;
+	cube_state = tmp_cube_state;
 }
 
 void fsautomat::changeCubeState(int turn_angle)
 {
 	common::CubeState tmp_cube_state;
 
-	tmp_cube_state.set_state(*cube_state, turn_angle);
+	tmp_cube_state.set_state(cube_state, turn_angle);
 
-	*cube_state = tmp_cube_state;
+	cube_state = tmp_cube_state;
 }
 
 void fsautomat::communicate_with_windows_solver(common::State &state)
@@ -532,27 +531,27 @@ void fsautomat::communicate_with_windows_solver(common::State &state)
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[2 * 9 + 3 * i + j] = cube_state->cube_tab[0][3 * i + j]; //rot cl 0
+			cube_tab_send[2 * 9 + 3 * i + j] = cube_state.cube_tab[0][3 * i + j]; //rot cl 0
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[1 * 9 + 3 * j + 2 - i] = cube_state->cube_tab[1][3 * i + j]; //rot cl 90
+			cube_tab_send[1 * 9 + 3 * j + 2 - i] = cube_state.cube_tab[1][3 * i + j]; //rot cl 90
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[3 * 9 + 3 * (2 - j) + i] = cube_state->cube_tab[2][3 * i + j]; //rot ccl 90
+			cube_tab_send[3 * 9 + 3 * (2 - j) + i] = cube_state.cube_tab[2][3 * i + j]; //rot ccl 90
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[5 * 9 + 3 * i + j] = cube_state->cube_tab[3][3 * i + j]; //rot cl 0
+			cube_tab_send[5 * 9 + 3 * i + j] = cube_state.cube_tab[3][3 * i + j]; //rot cl 0
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[4 * 9 + 3 * j + 2 - i] = cube_state->cube_tab[4][3 * i + j]; //rot cl 90
+			cube_tab_send[4 * 9 + 3 * j + 2 - i] = cube_state.cube_tab[4][3 * i + j]; //rot cl 90
 
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			cube_tab_send[0 * 9 + 3 * j + 2 - i] = cube_state->cube_tab[5][3 * i + j]; //rot cl 90
+			cube_tab_send[0 * 9 + 3 * j + 2 - i] = cube_state.cube_tab[5][3 * i + j]; //rot cl 90
 
 	printf("SEQ IN COLOR : %s\n", cube_tab_send);
 
@@ -699,71 +698,67 @@ void fsautomat::communicate_with_windows_solver(common::State &state)
 
 void fsautomat::translateManipulationSequence(common::StateHeap &sh)
 {
-	std::list <const char *> *scenario = new std::list <const char *>();
+	std::list <const char *> scenario;
 
-	for (std::list <common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin(); manipulation_list_iterator
-			!= manipulation_list.end(); manipulation_list_iterator++) {
-		if (manipulation_list_iterator->face_to_turn == cube_state->getUp()) {
-			scenario->push_back("fco_CL_90_1");
+	BOOST_FOREACH(const common::SingleManipulation & manipulation, manipulation_list) {
+		if (manipulation.face_to_turn == cube_state.getUp()) {
+			scenario.push_back("fco_CL_90_1");
 			changeCubeState(90);
-		} else if (manipulation_list_iterator->face_to_turn == cube_state->getDown()) {
-			scenario->push_back("fco_CCL_90_1");
+		} else if (manipulation.face_to_turn == cube_state.getDown()) {
+			scenario.push_back("fco_CCL_90_1");
 			changeCubeState(270);
-		} else if (manipulation_list_iterator->face_to_turn == cube_state->getFront()) {
-			scenario->push_back("fco_CL_0_1");
+		} else if (manipulation.face_to_turn == cube_state.getFront()) {
+			scenario.push_back("fco_CL_0_1");
 			changeCubeState(0);
-			scenario->push_back("fto_CL_0_1");
-			scenario->push_back("fco_CL_90_1");
+			scenario.push_back("fto_CL_0_1");
+			scenario.push_back("fco_CL_90_1");
 			changeCubeState(90);
-		} else if (manipulation_list_iterator->face_to_turn == cube_state->getRear()) {
-			scenario->push_back("fco_CL_0_1");
+		} else if (manipulation.face_to_turn == cube_state.getRear()) {
+			scenario.push_back("fco_CL_0_1");
 			changeCubeState(0);
-			scenario->push_back("fto_CL_0_1");
-			scenario->push_back("fco_CCL_90_1");
+			scenario.push_back("fto_CL_0_1");
+			scenario.push_back("fco_CCL_90_1");
 			changeCubeState(270);
-		} else if (manipulation_list_iterator->face_to_turn == cube_state->getLeft()) {
-			scenario->push_back("fco_CL_0_1");
+		} else if (manipulation.face_to_turn == cube_state.getLeft()) {
+			scenario.push_back("fco_CL_0_1");
 			changeCubeState(0);
-		} else if (manipulation_list_iterator->face_to_turn == cube_state->getRight()) {
-			scenario->push_back("fco_CL_180_1");
+		} else if (manipulation.face_to_turn == cube_state.getRight()) {
+			scenario.push_back("fco_CL_180_1");
 			changeCubeState(180);
 		}
-		switch (manipulation_list_iterator->turn_angle)
+		switch (manipulation.turn_angle)
 		{
 			case common::CL_90:
-				scenario->push_back("fto_CL_90_1");
+				scenario.push_back("fto_CL_90_1");
 				break;
 			case common::CL_0:
-				scenario->push_back("fto_CL_0_1");
+				scenario.push_back("fto_CL_0_1");
 				break;
 			case common::CCL_90:
-				scenario->push_back("fto_CCL_90_1");
+				scenario.push_back("fto_CCL_90_1");
 				break;
 			case common::CL_180:
-				scenario->push_back("fto_CL_180_1");
+				scenario.push_back("fto_CL_180_1");
 				break;
 			default:
 				break;
 		}
 	}
 
-	scenario->reverse();
-	for (std::list <const char *>::iterator it = scenario->begin(); it != scenario->end(); ++it) {
-		sh.pushTargetName((*it));
+	scenario.reverse();
+	BOOST_FOREACH(const char * ptr, scenario) {
+		sh.pushTargetName(ptr);
 	}
 	sh.showHeapContent();
-
-	delete scenario;
-
 }
 
 void fsautomat::main_task_algorithm(void)
 {
 	common::StateHeap sh;
+
 	break_state = false;
 
-	//	std::list<State> *statesList = takeStatesList();
-	std::map <std::string, common::State> stateMap = takeStatesMap();
+	stateMap_t stateMap = takeStatesMap();
 	std::cout << "Mapa zawiera: " << stateMap.size() << std::endl;
 	//	std::cout<<"ELEMENTOW INIT jest: "<<stateMap->count((const char *)"INIT")<<std::endl;
 

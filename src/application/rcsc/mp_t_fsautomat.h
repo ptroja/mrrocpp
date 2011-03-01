@@ -39,11 +39,13 @@ class fsautomat : public task
 {
 protected:
 	bool break_state;
-	common::CubeState *cube_state;
+	common::CubeState cube_state;
 	// should depend on init node in xml task definition or be computed in Condition
 	bool manipulation_sequence_computed;
 
 public:
+	typedef std::map <std::string, common::State> stateMap_t;
+
 	// stl'owa lista manipulacji
 	std::list <common::SingleManipulation> manipulation_list;
 
@@ -55,9 +57,8 @@ public:
 	/// utworzenie robotow
 	void create_robots(void);
 
-	std::list <common::State> * takeStatesList(void);
-	common::State * createState(xmlNodePtr stateNode);
-	std::map <std::string, common::State> takeStatesMap();
+	common::State createState(xmlNodePtr stateNode);
+	stateMap_t takeStatesMap();
 	void executeMotion(common::State &state);
 	void runEmptyGenForSet(common::State &state);
 	void runEmptyGen(common::State &state);

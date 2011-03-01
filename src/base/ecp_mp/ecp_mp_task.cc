@@ -218,11 +218,6 @@ void task::all_sensors_get_reading(sensors_t & _sensor_m)
 	}
 }
 
-bool task::str_cmp::operator()(char const *a, char const *b) const
-{
-	return strcmp(a, b) < 0;
-}
-
 std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *) "coordinateType");
