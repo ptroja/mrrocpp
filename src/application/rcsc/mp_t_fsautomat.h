@@ -55,9 +55,9 @@ public:
 	/// utworzenie robotow
 	void create_robots(void);
 
-	std::list <common::State> *takeStatesList(void);
+	std::list <common::State> * takeStatesList(void);
 	common::State * createState(xmlNodePtr stateNode);
-	std::map <const char *, common::State, ecp_mp::task::task::str_cmp> * takeStatesMap();
+	std::map <std::string, common::State> takeStatesMap();
 	void executeMotion(common::State &state);
 	void runEmptyGenForSet(common::State &state);
 	void runEmptyGen(common::State &state);

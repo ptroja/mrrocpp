@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cstdio>
 
+#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include "State.h"
@@ -27,60 +28,9 @@ namespace mp {
 namespace common {
 
 State::State()
-	: numArgument(0), robotSet(NULL)
+	: numArgument(0)
 {
 }
-//-----------------------------------------------------------------------------------------------------------
-State::State(const State &state)
-{
-	this->numArgument = state.numArgument;
-	this->id = state.id;
-	this->type = state.type;
-	this->stringArgument = state.stringArgument;
-	robot = state.robot;
-	generatorType = state.generatorType;
-	if (state.robotSet)
-		this->robotSet = new RobotSets(*(state.robotSet));
-	else
-		robotSet = NULL;
-	this->stateTransitions = state.stateTransitions;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-
-State::~State()
-{
-	if (robotSet)
-		delete robotSet;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::RobotSets() :
-	firstSetCount(0), secondSetCount(0),
-	firstSet(NULL), secondSet(NULL)
-{
-}
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::RobotSets(const RobotSets &robotSets)
-{
-	this->firstSetCount = robotSets.firstSetCount;
-	this->secondSetCount = robotSets.secondSetCount;
-	this->firstSet = new lib::robot_name_t[firstSetCount];
-	for (int i = 0; i < firstSetCount; i++)
-		this->firstSet[i] = robotSets.firstSet[i];
-	this->secondSet = new lib::robot_name_t[secondSetCount];
-	for (int i = 0; i < secondSetCount; i++)
-		this->secondSet[i] = robotSets.secondSet[i];
-}
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::~RobotSets()
-{
-	if (firstSet)
-		delete[] firstSet;
-	if (secondSet)
-		delete[] secondSet;
-}
-//-----------------------------------------------------------------------------------------------------------
 
 void State::setStateID(const std::string & stateID)
 {
@@ -94,7 +44,7 @@ const char* State::getStateID() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setNumArgument(const char *numArgument)
+void State::setNumArgument(const std::string & numArgument)
 {
 	this->numArgument = boost::lexical_cast<int>(numArgument);
 }
@@ -115,9 +65,9 @@ void State::setType(const std::string & _type)
 
 //-----------------------------------------------------------------------------------------------------------
 
-const char * State::getType() const
+const std::string & State::getType() const
 {
-	return type.c_str();
+	return type;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -184,9 +134,9 @@ void State::setStringArgument(const std::string & trajFilePath)
 
 //----------------------------------------------------------------------------------------------------------
 
-const char* State::getStringArgument() const
+const std::string & State::getStringArgument() const
 {
-	return stringArgument.c_str();
+	return stringArgument;
 }
 
 //----------------------------------------------------------------------------------------------------------
@@ -229,13 +179,17 @@ const char * State::returnNextStateID(StateHeap &sh)
 void State::showStateContent() const
 {
 	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl;//<<stringArgument<<std::endl;
-	if (robotSet != NULL) {
-		std::cout << "\nFirst set count: " << robotSet->firstSetCount << " = ";
-		for (int i = 0; i < robotSet->firstSetCount; i++)
-			std::cout << robotSet->firstSet[i] << "; ";
-		std::cout << "\nSecond set count: " << robotSet->secondSetCount << " = ";
-		for (int i = 0; i < robotSet->secondSetCount; i++)
-			std::cout << robotSet->secondSet[i] << "; ";
+	if (robotSet.is_initialized()) {
+		std::cout << "\nFirst set count: " << robotSet->firstSet.size() << " = ";
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet) {
+			std::cout << name << "; ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "\nSecond set count: " << robotSet->secondSet.size() << " = ";
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet) {
+			std::cout << name << "; ";
+		}
 		std::cout << std::endl;
 	}
 	std::cout << "Transitions count: " << stateTransitions.size() << std::endl;

@@ -248,8 +248,6 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	printf("SEQ FROM VIS : %s\n", cube_tab_send);
 
 	//reszta
-	// struktura pomiocnicza
-	common::SingleManipulation single_manipulation;
 
 	// czyszczenie listy
 	manipulation_list.clear();
@@ -357,9 +355,11 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	//pocztaek ukladania
 	// dodawanie manipulacji do listy
 	for (unsigned int char_i = 0; char_i < strlen(manipulation_sequence) - 1; char_i += 2) {
-		single_manipulation.set_state(common::read_cube_color(manipulation_sequence[char_i]), common::read_cube_turn_angle(manipulation_sequence[char_i
-				+ 1]));
-		manipulation_list.push_back(single_manipulation);
+		manipulation_list.push_back(
+				common::SingleManipulation(
+						common::read_cube_color(manipulation_sequence[char_i]),
+						common::read_cube_turn_angle(manipulation_sequence[char_i + 1])
+		));
 	}
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "juZ ukl/adam", 0, 1, lib::festival::ROBOT_NAME.c_str());
