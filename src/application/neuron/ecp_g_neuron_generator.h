@@ -127,7 +127,7 @@ class neuron_generator: public common::generator::generator{
 		/**
 		 * @brief Motion direction.
 		 */
-		int k[6];
+		double k[6];
 
 		/**
 		 * @brief Acceleration while breaking

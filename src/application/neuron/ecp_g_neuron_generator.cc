@@ -140,6 +140,8 @@ namespace mrrocpp {
                         neuron_sensor->current_period = macroSteps - 1;
 
                         if (first_breaking_node == true) {
+                            printf("przed calculate\n");
+                            flushall();
                             calculate();
                             first_breaking_node = false;
                             return false;
@@ -224,7 +226,7 @@ namespace mrrocpp {
 
                     if (breaking) {
                         //check if it is the last macrostep in the list
-                        false;
+                        return false;
                     }
 
                     //return false, desired positions in all of the axes reached
@@ -240,22 +242,28 @@ namespace mrrocpp {
                 }
 
                 void neuron_generator::calculate() {
-
+                    printf("calculate\n");
+                    flushall();
                     int i;
                     for (i = 0; i < 3; i++) {
 
                         clear_vectors();
-
+                        printf("after clear vect\n");
+                        flushall();
                         s[i] = fabs(actual_position[i] - desired_position[i]);
 
                         actual_position_vect.push_back(actual_position[i]);
 
-                        std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> new_pose_vector = std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose > (1);
+                        std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> new_pose_vector = std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>();
                         pose_vector_list.push_back(new_pose_vector);
 
+                        printf("before if\n");
+                        flushall();
+                        
                         if (check_if_able_to_break(s[i], v[i], a_max[i])) {//one pose breaking
 
-                            printf("jedna pozycja");
+                            printf("jedna pozycja\n");
+                            flushall();
                             s_vect.push_back(s[i]);
                             v_max_vect.push_back(v_max[i]);
                             a_max_vect.push_back(a_max[i]);
@@ -278,10 +286,12 @@ namespace mrrocpp {
                             } else {//if not
                                 if (!vpc.optimize_time_axis(pose_vector_iterator, 0)) {
                                     printf("optimize time error\n");
+                                    flushall();
                                 }
 
                                 if (!vpc.reduction_axis(pose_vector_iterator, 0)) {
-                                    printf("reduction axis error");
+                                    printf("reduction axis \n");
+                                    flushall();
                                 }
                             }
 
@@ -289,7 +299,8 @@ namespace mrrocpp {
                             time_sum.push_back(pose_vector_iterator->times[0]);
 
                         } else {//2 pose breaking
-                            printf("dwie pozycje");
+                            printf("dwie pozycje\n");
+                            flushall();
                             //first pose
                             s[i] = 0.5 * v[i] * v[i] / a_max[i];
                             double t_temp = sqrt(2 * s[i] / a_max[i]);
@@ -307,41 +318,83 @@ namespace mrrocpp {
                             s_vect.push_back(s[i]);
                             desired_position_vect.push_back(actual_position[i] + k[i] * s[i]);
 
+                            printf("before load first pose\n");
+                            flushall();
+
                             load_trajectory_pose(pose_vector_list[i], desired_position_vect, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS,
                                     v_max_vect, a_max_vect, actual_position_vect, s_vect);
 
+                            printf("before iterator settinf\n");
+                            flushall();
                             pose_vector_iterator = pose_vector_list[i].begin();
 
+                            printf("before other settings\n");
+                            flushall();
+                            printf("pose v_r: %f\n", pose_vector_iterator->v_r[0]);
+                            flushall();
+
                             pose_vector_iterator->k[0] = k[i];
+                            printf("settings 1\n");
+                            flushall();
                             pose_vector_iterator->v_p[0] = v[i];
+                            printf("settings 2\n");
+                            flushall();
                             pose_vector_iterator->v_k[0] = 0.0;
+                            printf("settings 3\n");
+                            flushall();
                             pose_vector_iterator->times[0] = t_temp;
+                            printf("settings 4\n");
+                            flushall();
                             pose_vector_iterator->s_acc[0] = s[i];
+                            printf("settings 5\n");
+                            flushall();
                             pose_vector_iterator->s_dec[0] = 0.0;
+                            printf("settings 6\n");
+                            flushall();
                             pose_vector_iterator->s_uni[0] = 0.0;
+                            printf("settings 7\n");
+                            flushall();
                             pose_vector_iterator->t = t_temp;
+                            printf("settings 8\n");
+                            flushall();
                             pose_vector_iterator->v_r[0] = 0.0;
+                            printf("settings 9\n");
+                            flushall();
                             pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / t);
+                            printf("settings 10\n");
+                            flushall();
                             pose_vector_iterator->acc[0] = pose_vector_iterator->interpolation_node_no;
+                            printf("settings 11\n");
+                            flushall();
                             pose_vector_iterator->uni[0] = 0.0;
 
+                            printf("before time_sum push back\n");
+                            flushall();
                             time_sum.push_back(pose_vector_iterator->times[0]);
                             //first pose end
 
+                            printf("po pierwszej poz\n");
+                            flushall();
+                            
                             clear_vectors();
 
                             v_max_vect.push_back(v_max[i]);
-                            a_max_vect.push_back(temp_a_max);
+                            a_max_vect.push_back(a_max[i]);
                             s[i] = fabs(desired_position_vect[0] - desired_position[i]);
                             actual_position_vect.push_back(desired_position_vect[0]);
                             desired_position_vect.push_back(desired_position[i]);
                             s_vect.push_back(s[i]);
                             //second pose
+
+                            printf("przed drugą poz\n");
+                            flushall();
                             load_trajectory_pose(pose_vector_list[i], desired_position_vect, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS,
                                     v_max_vect, a_max_vect, actual_position_vect, s_vect);
                             
                             pose_vector_iterator++;
-                            
+
+                            printf("przed drugimi settings\n");
+                            flushall();
                             pose_vector_iterator->k[0] = -k[i];
                             pose_vector_iterator->v_p[0] = 0.0;
                             pose_vector_iterator->v_k[0] = 0.0;
@@ -355,10 +408,12 @@ namespace mrrocpp {
                             } else {//if not
                                 if (!vpc.optimize_time_axis(pose_vector_iterator, 0)) {
                                     printf("optimize time error\n");
+                                    flushall();
                                 }
 
                                 if (!vpc.reduction_axis(pose_vector_iterator, 0)) {
-                                    printf("reduction axis error");
+                                    printf("reduction axis error\n");
+                                    flushall();
                                 }
                             }
                             time_sum[i] += pose_vector_iterator->times[0];
@@ -385,13 +440,15 @@ namespace mrrocpp {
 
                         if (pose_vector_iterator++ == pose_vector_list[i].end()) {
                             pose_vector_iterator--;
-                            printf("jedna pozycja 2");
+                            printf("jedna pozycja 2\n");
+                            flushall();
                             pose_vector_iterator->t = max_time;
                             vpc.set_times_to_t(pose_vector_iterator);
                             pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / t);
                         } else {
                             pose_vector_iterator--;
-                            printf("dwie pozycje 2");
+                            printf("dwie pozycje 2\n");
+                            flushall();
                             double temp_time = pose_vector_iterator->t;
                             pose_vector_iterator++;
                             pose_vector_iterator->t = max_time - temp_time;
@@ -400,10 +457,12 @@ namespace mrrocpp {
                         }
 
                         if(!vpc.reduction_axis(pose_vector_iterator, 0)) {
-                            printf("reduction axis 2 error");
+                            printf("reduction axis 2 error\n");
+                            flushall();
                         }
                         if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, t)) {//set uni and acc
-                            printf("calculate acc_uni_pose error");
+                            printf("calculate acc_uni_pose error\n");
+                            flushall();
                         }
                     }
                 }
@@ -421,17 +480,23 @@ namespace mrrocpp {
                         const std::vector<double> & v, const std::vector<double> & a, const std::vector<double> & start_pos,
                         const std::vector<double> & s) {
 
+                    printf("load pose\n");
+                    flushall();
                     ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose pose; //new trajectory pose
                     pose = ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose(pose_spec, coordinates, v, a); //create new trajectory pose
                     pose.v_r = v; //set the v_max vector
                     pose.a_r = a; //set the a_max vector
 
+                    printf("load pose 2\n");
+                    flushall();
                     if (pose_vector.empty()) {
                         pose.pos_num = 1;
                     } else {
                         pose.pos_num = pose_vector.back().pos_num + 1;
                     }
 
+                    printf("load pose 3\n");
+                    flushall();
                     if (motion_type == lib::ABSOLUTE) {
                         if (!pose_vector.empty()) {//set the start position of the added pose as the desired position of the previous pose
                             pose.start_position = pose_vector.back().coordinates;
@@ -440,9 +505,16 @@ namespace mrrocpp {
                         }
                     }
 
+                    printf("load pose 4\n");
+                    flushall();
                     pose.s = s;
 
+                    printf("pose przed pushem: %f\n", pose.v_r[0]);
+                    flushall();
                     pose_vector.push_back(pose); //put new trajectory pose into a pose vector
+
+                    printf("v_r w load pose: %f\n",pose_vector[0].v_r[0]);
+                    flushall();
 
                     return true;
                 }
