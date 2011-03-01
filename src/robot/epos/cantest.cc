@@ -31,28 +31,28 @@ int main(int argc, char *argv[])
 
 		std::cout << "gateway CAN-ID: " << (int) node0.readNodeID() << std::endl;
 
+		RPDO3 cmd;
+
+		cmd.controlWord = 0x0102;
+		cmd.targetPosition = 0xabcf;
+
 		for (uint8_t cmdNode = 1; cmdNode < 7; ++cmdNode) {
-
-			RPDO3 cmd;
-
-			cmd.controlWord = 0x0102;
-			cmd.targetPosition = 0xabcd;
-
 			epos nodeX(gateway, cmdNode);
 
 			nodeX.writeTargetPosition(291);
 
+			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
+
 			WORD cobID = 0x0400 | cmdNode;
 
-//			BYTE data[8] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-
-			printf("0x%04x -> 0x%04x remote %s\n", (int) cobID, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
 			gateway.SendCANFrame(cobID, 8, (uint8_t *)&cmd);
-//			gateway.SendCANFrame(cobID, 8, data);
-			printf("0x%04x -> 0x%04x remote %s\n", (int) cobID, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
-			//gateway.SendCANFrame(0x80, 0, data);
+		}
 
-			// node4.startRelativeMotion();
+		//gateway.SendCANFrame(0x80, 0, (uint8_t *)&cmd);
+
+		for (uint8_t cmdNode = 1; cmdNode < 7; ++cmdNode) {
+			epos nodeX(gateway, cmdNode);
+			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
 		}
 
 		gateway.close();
