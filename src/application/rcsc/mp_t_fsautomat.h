@@ -63,7 +63,7 @@ public:
 	void runEmptyGenForSet(const common::State & state);
 	void runEmptyGen(const common::State &state);
 	void runWaitFunction(const common::State &state);
-	void stopProperGen(common::State &state);
+	void stopProperGen(const common::State &state);
 	void sensorInitialization();
 	void initializeCubeState(common::State &state);
 	void initiateSensorReading(common::State &state);
