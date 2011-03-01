@@ -329,7 +329,11 @@ int UiRobot::reload_configuration()
 				state.edp.network_reader_attach_point
 						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
 
-				state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+				if (!interface.config->exists("node_name", state.edp.section_name)) {
+					state.edp.node_name = "localhost";
+				} else {
+					state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+				}
 				break;
 			case 1:
 			case 2:
