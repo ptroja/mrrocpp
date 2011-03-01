@@ -59,10 +59,10 @@ public:
 
 	common::State createState(xmlNodePtr stateNode);
 	stateMap_t takeStatesMap();
-	void executeMotion(common::State &state);
-	void runEmptyGenForSet(common::State &state);
-	void runEmptyGen(common::State &state);
-	void runWaitFunction(common::State &state);
+	void executeMotion(const common::State & state);
+	void runEmptyGenForSet(const common::State & state);
+	void runEmptyGen(const common::State &state);
+	void runWaitFunction(const common::State &state);
 	void stopProperGen(common::State &state);
 	void sensorInitialization();
 	void initializeCubeState(common::State &state);

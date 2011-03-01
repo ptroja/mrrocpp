@@ -344,7 +344,7 @@ void fsautomat::configureProperTransmitter(const char *propTrans)
 			= new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 }
 
-void fsautomat::stopProperGen(common::State &state)
+void fsautomat::stopProperGen(const common::State &state)
 {
 	if (!state.robotSet)
 		send_end_motion_to_ecps(1, (state.getRobot()).c_str());
@@ -352,23 +352,23 @@ void fsautomat::stopProperGen(common::State &state)
 	//send_end_motion_to_ecps(state.robotSet->firstSetCount, state.robotSet->firstSet);
 }
 
-void fsautomat::runWaitFunction(common::State &state)
+void fsautomat::runWaitFunction(const common::State &state)
 {
 	wait_ms(state.getNumArgument());
 }
 
-void fsautomat::runEmptyGen(common::State &state)
+void fsautomat::runEmptyGen(const common::State &state)
 {
 	run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
 }
 
-void fsautomat::runEmptyGenForSet(common::State &state)
+void fsautomat::runEmptyGenForSet(const common::State &state)
 {
 	// TODO
 	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
 }
 
-void fsautomat::executeMotion(common::State &state)
+void fsautomat::executeMotion(const common::State &state)
 {
 	std::cout << "STATE STRING w executeMotion:  " << state.getStringArgument() << std::endl;
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
