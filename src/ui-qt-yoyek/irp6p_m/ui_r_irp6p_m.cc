@@ -208,7 +208,7 @@ int UiRobot::manage_interface()
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 2, ui->menuirp6p_m_Pre_Synchro_Moves, ui->menuirp6p_m_Preset_Positions);
+			mw->enable_menu_item(false, 5, ui->menuirp6p_m_Pre_Synchro_Moves, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 			mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Unload);
 			mw->enable_menu_item(true, 1, ui->menuIrp6p_m);
 			mw->enable_menu_item(true, 1, ui->actionirp6p_m_EDP_Load);
@@ -229,7 +229,7 @@ int UiRobot::manage_interface()
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
-				//mw->enable_menu_item(true, 1, ui->actionall
+				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
@@ -238,7 +238,7 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions);
+						mw->enable_menu_item(true, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 						mw->enable_menu_item(true, 1, ui->actionirp6p_m_EDP_Unload);
 						mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
 						/* TR
@@ -249,7 +249,7 @@ int UiRobot::manage_interface()
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions);
+						mw->enable_menu_item(true, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 						mw->enable_menu_item(false, 2, ui->actionirp6p_m_EDP_Unload, ui->actionirp6p_m_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
@@ -259,7 +259,7 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, ui->menuirp6p_m_Preset_Positions);
+						mw->enable_menu_item(false, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_preset_positions,
@@ -272,7 +272,8 @@ int UiRobot::manage_interface()
 
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions);
+				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
+				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions);	///co to tutaj robi?
 				mw->enable_menu_item(true, 2, ui->actionirp6p_m_EDP_Unload, ui->actionall_Synchronisation);
 				mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
 				/* TR
