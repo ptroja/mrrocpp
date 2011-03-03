@@ -124,7 +124,7 @@
       </property>
       <addaction name="actionirp6ot_m_Relative_Xyz_Angle_Axis"/>
      </widget>
-     <widget class="QMenu" name="menu_Tool">
+     <widget class="QMenu" name="menuirp6ot_m_Tool">
       <property name="title">
        <string>&amp;Tool</string>
       </property>
@@ -138,7 +138,7 @@
      <addaction name="menuirp6ot_m_Absolute_moves"/>
      <addaction name="menuIrp6ot_m_Relative_Moves"/>
      <addaction name="menuirp6ot_m_Preset_Positions"/>
-     <addaction name="menu_Tool"/>
+     <addaction name="menuirp6ot_m_Tool"/>
     </widget>
     <widget class="QMenu" name="menuIrp6p_m">
      <property name="title">
