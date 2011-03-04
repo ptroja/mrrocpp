@@ -150,7 +150,7 @@ int UiRobot::manage_interface()
 			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->menuRobot);
+				//mw->enable_menu_item(false, 1, ui->menuRobot); //??
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);

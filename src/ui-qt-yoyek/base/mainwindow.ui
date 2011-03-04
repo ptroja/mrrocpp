@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -39,14 +39,14 @@
      </property>
      <widget class="QMenu" name="menuspkm_Pre_synchro_moves">
       <property name="title">
-       <string>Pre Synchro Moves</string>
+       <string>P&amp;re Synchro Moves</string>
       </property>
       <addaction name="actionspkm_Synchronisation"/>
       <addaction name="actionspkm_Motors"/>
      </widget>
      <widget class="QMenu" name="menuspkm_Post_synchro_moves">
       <property name="title">
-       <string>Post Synchro Moves</string>
+       <string>P&amp;ost Synchro Moves</string>
       </property>
       <addaction name="actionspkm_Motors_post"/>
       <addaction name="actionspkm_Joints"/>
@@ -54,7 +54,7 @@
      </widget>
      <widget class="QMenu" name="menuspkm_Preset_positions">
       <property name="title">
-       <string>Preset Positions</string>
+       <string>Pr&amp;eset Positions</string>
       </property>
       <addaction name="actionspkm_Synchro_Position"/>
       <addaction name="actionspkm_Front_Position"/>
@@ -124,7 +124,7 @@
       </property>
       <addaction name="actionirp6ot_m_Relative_Xyz_Angle_Axis"/>
      </widget>
-     <widget class="QMenu" name="menu_Tool">
+     <widget class="QMenu" name="menuirp6ot_m_Tool">
       <property name="title">
        <string>&amp;Tool</string>
       </property>
@@ -138,7 +138,7 @@
      <addaction name="menuirp6ot_m_Absolute_moves"/>
      <addaction name="menuIrp6ot_m_Relative_Moves"/>
      <addaction name="menuirp6ot_m_Preset_Positions"/>
-     <addaction name="menu_Tool"/>
+     <addaction name="menuirp6ot_m_Tool"/>
     </widget>
     <widget class="QMenu" name="menuIrp6p_m">
      <property name="title">
@@ -146,14 +146,14 @@
      </property>
      <widget class="QMenu" name="menuirp6p_m_Pre_Synchro_Moves">
       <property name="title">
-       <string>Pre Synchro Moves</string>
+       <string>P&amp;re Synchro Moves</string>
       </property>
       <addaction name="actionirp6p_m_Synchronisation"/>
       <addaction name="actionirp6p_m_Pre_Synchro_Moves_Motors"/>
      </widget>
      <widget class="QMenu" name="menuirp6p_m_Preset_Positions">
       <property name="title">
-       <string>Preset Positions</string>
+       <string>Pr&amp;eset Positions</string>
       </property>
       <addaction name="actionirp6p_m_Synchro_Position"/>
       <addaction name="actionirp6p_m_Front_Position"/>
@@ -178,7 +178,7 @@
      </widget>
      <widget class="QMenu" name="menuirp6p_m_Tool">
       <property name="title">
-       <string>Tool</string>
+       <string>&amp;Tool</string>
       </property>
       <addaction name="actionirp6p_m_Tool_Xyz_Euler_Zyz"/>
       <addaction name="actionirp6p_m_Tool_Xyz_Angle_Axis"/>
@@ -204,7 +204,7 @@
     </widget>
     <widget class="QMenu" name="menuBirdhand">
      <property name="title">
-      <string>Birdhand</string>
+      <string>&amp;Birdhand</string>
      </property>
      <addaction name="actionbirdhand_EDP_Load"/>
      <addaction name="actionbirdhand_EDP_Unload"/>
@@ -214,11 +214,11 @@
     </widget>
     <widget class="QMenu" name="menuSarkofag">
      <property name="title">
-      <string>Sarkofag</string>
+      <string>&amp;Sarkofag</string>
      </property>
      <widget class="QMenu" name="menusarkofag_Preset_Positions">
       <property name="title">
-       <string>Preset Positions</string>
+       <string>Pr&amp;eset Positions</string>
       </property>
       <addaction name="actionsarkofag_Synchro_Position"/>
       <addaction name="actionsarkofag_Front_Position"/>
@@ -260,7 +260,7 @@
      </property>
      <widget class="QMenu" name="menuirp6p_tfg_Preset_Positions">
       <property name="title">
-       <string>Preset positions</string>
+       <string>Pr&amp;eset positions</string>
       </property>
       <addaction name="actionirp6p_tfg_Synchro_Position"/>
       <addaction name="actionirp6p_tfg_Position_0"/>
@@ -330,7 +330,7 @@
     </property>
     <widget class="QMenu" name="menuall_Preset_Positions">
      <property name="title">
-      <string>Preset Positions</string>
+      <string>Pr&amp;eset Positions</string>
      </property>
      <addaction name="actionall_Synchro_Position"/>
      <addaction name="actionall_Front_Position"/>
@@ -438,62 +438,62 @@
   </widget>
   <action name="actionspkm_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionspkm_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionspkm_Synchronisation">
    <property name="text">
-    <string>Synchronisation</string>
+    <string>&amp;Synchronisation</string>
    </property>
   </action>
   <action name="actionspkm_Motors">
    <property name="text">
-    <string>Motors</string>
+    <string>&amp;Motors</string>
    </property>
   </action>
   <action name="actionspkm_Motors_post">
    <property name="text">
-    <string>Motors</string>
+    <string>&amp;Motors</string>
    </property>
   </action>
   <action name="actionspkm_Joints">
    <property name="text">
-    <string>Joints</string>
+    <string>&amp;Joints</string>
    </property>
   </action>
   <action name="actionspkm_External">
    <property name="text">
-    <string>External</string>
+    <string>&amp;External</string>
    </property>
   </action>
   <action name="actionspkm_Synchro_Position">
    <property name="text">
-    <string>Synchro Position</string>
+    <string>&amp;Synchro Position</string>
    </property>
   </action>
   <action name="actionspkm_Front_Position">
    <property name="text">
-    <string>Front Position</string>
+    <string>&amp;Front Position</string>
    </property>
   </action>
   <action name="actionspkm_Position_0">
    <property name="text">
-    <string>Position 0</string>
+    <string>Position &amp;0</string>
    </property>
   </action>
   <action name="actionspkm_Position_1">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionspkm_Position_2">
    <property name="text">
-    <string>Position 2</string>
+    <string>Position &amp;2</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -528,42 +528,42 @@
   </action>
   <action name="actionall_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionall_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionall_Synchronisation">
    <property name="text">
-    <string>Synchronisation</string>
+    <string>&amp;Synchronisation</string>
    </property>
   </action>
   <action name="actionall_Synchro_Position">
    <property name="text">
-    <string>Synchro Position</string>
+    <string>&amp;Synchro Position</string>
    </property>
   </action>
   <action name="actionall_Front_Position">
    <property name="text">
-    <string>Front Position</string>
+    <string>&amp;Front Position</string>
    </property>
   </action>
   <action name="actionall_Position_0">
    <property name="text">
-    <string>Position 0</string>
+    <string>Position &amp;0</string>
    </property>
   </action>
   <action name="actionall_Position_1">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionall_Position_2">
    <property name="text">
-    <string>Position 2</string>
+    <string>Position &amp;2</string>
    </property>
   </action>
   <action name="actionMP_Load">
@@ -588,22 +588,22 @@
   </action>
   <action name="actionsmb_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionsmb_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionshead_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionshead_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionirp6ot_m_EDP_Load">
@@ -618,17 +618,17 @@
   </action>
   <action name="actionirp6p_m_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionirp6p_m_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionirp6p_m_Synchronisation">
    <property name="text">
-    <string>Synchronisation</string>
+    <string>&amp;Synchronisation</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Synchronisation">
@@ -638,12 +638,12 @@
   </action>
   <action name="actionirp6ot_m_Synchro_Position">
    <property name="text">
-    <string>Synchro Position</string>
+    <string>&amp;Synchro Position</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Front_Position">
    <property name="text">
-    <string>Front Position</string>
+    <string>&amp;Front Position</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Position_0">
@@ -663,42 +663,42 @@
   </action>
   <action name="actionirp6p_m_Synchro_Position">
    <property name="text">
-    <string>Synchro Position</string>
+    <string>&amp;Synchro Position</string>
    </property>
   </action>
   <action name="actionirp6p_m_Front_Position">
    <property name="text">
-    <string>Front Position</string>
+    <string>&amp;Front Position</string>
    </property>
   </action>
   <action name="actionirp6p_m_Position_0">
    <property name="text">
-    <string>Position 0</string>
+    <string>Position &amp;0</string>
    </property>
   </action>
   <action name="actionirp6p_m_Position_1">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionirp6p_m_Position_2">
    <property name="text">
-    <string>Position 2</string>
+    <string>Position &amp;2</string>
    </property>
   </action>
   <action name="actionpolycrank_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionpolycrank_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionpolycrank_Move_Joints">
    <property name="text">
-    <string>Move Joints</string>
+    <string>Move &amp;Joints</string>
    </property>
   </action>
   <action name="actionbirdhand_EDP_Load">
@@ -723,57 +723,57 @@
   </action>
   <action name="actionsarkofag_EDP_Load">
    <property name="text">
-    <string>EDP Load</string>
+    <string>EDP &amp;Load</string>
    </property>
   </action>
   <action name="actionsarkofag_EDP_Unload">
    <property name="text">
-    <string>EDP Unload</string>
+    <string>EDP &amp;Unload</string>
    </property>
   </action>
   <action name="actionsarkofag_Synchronisation">
    <property name="text">
-    <string>Synchronisation</string>
+    <string>&amp;Synchronisation</string>
    </property>
   </action>
   <action name="actionsarkofag_Move">
    <property name="text">
-    <string>Move</string>
+    <string>&amp;Move</string>
    </property>
   </action>
   <action name="actionsarkofag_Synchro_Position">
    <property name="text">
-    <string>Synchro Position</string>
+    <string>&amp;Synchro Position</string>
    </property>
   </action>
   <action name="actionsarkofag_Front_Position">
    <property name="text">
-    <string>Front Position</string>
+    <string>&amp;Front Position</string>
    </property>
   </action>
   <action name="actionsarkofag_Position_0">
    <property name="text">
-    <string>Position 0</string>
+    <string>Position &amp;0</string>
    </property>
   </action>
   <action name="actionsarkofag_Position_1">
    <property name="text">
-    <string>Position 1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionsarkofag_Position_2">
    <property name="text">
-    <string>Position 2</string>
+    <string>Position &amp;2</string>
    </property>
   </action>
   <action name="actionsarkofag_Servo_Algorithm">
    <property name="text">
-    <string>Servo Algorithm</string>
+    <string>S&amp;ervo Algorithm</string>
    </property>
   </action>
   <action name="actionspkm_Clear_Fault">
    <property name="text">
-    <string>Clear Fault</string>
+    <string>&amp;Clear Fault</string>
    </property>
   </action>
   <action name="actionirp6ot_m_Pre_Synchro_Moves_Motors">
@@ -863,7 +863,7 @@
   </action>
   <action name="actionirp6p_m_Pre_Synchro_Moves_Motors">
    <property name="text">
-    <string>Motors</string>
+    <string>&amp;Motors</string>
    </property>
   </action>
   <action name="actionirp6p_m_Joints">
@@ -968,7 +968,7 @@
   </action>
   <action name="actionconveyor_Position_1">
    <property name="text">
-    <string>Position  &amp;1</string>
+    <string>Position &amp;1</string>
    </property>
   </action>
   <action name="actionconveyor_Position_2">
@@ -1078,7 +1078,7 @@
   </action>
   <action name="actionirp6p_m_Absolute_Moves_Motors">
    <property name="text">
-    <string>Motors</string>
+    <string>&amp;Motors</string>
    </property>
   </action>
  </widget>

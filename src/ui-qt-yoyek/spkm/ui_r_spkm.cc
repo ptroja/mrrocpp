@@ -219,7 +219,7 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, ui->menuspkm_Preset_positions);
+						mw->enable_menu_item(false, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_spkm_absolute_moves, ABN_mm_spkm_preset_positions, NULL);
