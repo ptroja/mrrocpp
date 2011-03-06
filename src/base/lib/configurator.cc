@@ -251,7 +251,12 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		std::string username;
 
 		if (!exists("username", _section_name))
+		{
 			username = getenv("USER");
+		} else {
+			username = value<std::string>("username", _section_name);
+		}
+
 
 		if ((rsh_spawn_node == "localhost") && ( username == getenv("USER") )) {
                         snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
