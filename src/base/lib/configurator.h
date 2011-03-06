@@ -24,8 +24,8 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/thread/mutex.hpp>
-
 #include <boost/property_tree/exceptions.hpp>
+
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
@@ -121,7 +121,7 @@ public:
 	 * @return network path
 	 */
 	std::string
-	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & _section_name) const;
 
 	/**
 	 * Return network attach point
@@ -130,10 +130,7 @@ public:
 	 * @param __section_name section name
 	 * @return network path
 	 */
-	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & __section_name) const
-	{
-		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
-	}
+	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key) const;
 
 	/**
 	 * Get value from the configuration
@@ -202,7 +199,7 @@ public:
 	 * @param __section_name section name
 	 * @return true if the non-zero value exists
 	 */
-	bool exists(const char* _key, const char* __section_name = NULL) const;
+	bool exists(const std::string & _key) const;
 
 	/**
 	 * Check is non-zero configuration value exist
@@ -210,10 +207,7 @@ public:
 	 * @param __section_name section name
 	 * @return true if the non-zero value exists
 	 */
-	bool exists(const std::string & _key, const std::string & __section_name) const
-	{
-		return exists(_key.c_str(), __section_name.c_str());
-	}
+	bool exists(const std::string & _key, const std::string & __section_name) const;
 
 	//! Destructor
 	~configurator();

@@ -90,9 +90,8 @@ int configurator::return_node_number(const std::string & node_name_l)
 	return ND_LOCAL_NODE;
 }
 
-std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
+std::string configurator::return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string &_section_name) const
 {
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 	std::string name;
 
 	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
@@ -117,6 +116,11 @@ std::string configurator::return_attach_point_name(config_path_type_t _type, con
 	return (name);
 }
 
+std::string configurator::return_attach_point_name(config_path_type_t _type, const std::string & _key) const
+{
+	return return_attach_point_name(_type, _key, section_name);
+}
+
 std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
@@ -130,10 +134,8 @@ std::string configurator::return_mrrocpp_network_path() const
 	return mrrocpp_network_path;
 }
 
-bool configurator::exists(const char* _key, const char* __section_name) const
+bool configurator::exists(const std::string & _key, const std::string & _section_name) const
 {
-	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-
 	try {
 		value <std::string> (_key, _section_name);
 	} catch (boost::property_tree::ptree_error & e) {
@@ -141,6 +143,11 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	}
 
 	return true;
+}
+
+bool configurator::exists(const std::string & _key) const
+{
+	return exists(_key, section_name);
 }
 
 pid_t configurator::process_spawn(const std::string & _section_name)
