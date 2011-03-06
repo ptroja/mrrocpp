@@ -186,10 +186,10 @@ public:
 	 * @brief method to wait to receive pulses and messages from MP
 	 * it returns when message is received (randevous happens)
 	 */
-	bool wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
+	void wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
 
 public:
-	// TODO: what follows should be private method
+	// TODO: what follows should be private
 
 	/**
 	 * @brief communicates with MP
