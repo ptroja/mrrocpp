@@ -47,6 +47,13 @@ int wgt_irp6p_tfg_move::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.pushButton_copy_mr->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_mr->setDisabled(_set_disabled);
 
+	ui.pushButton_execute_si->setDisabled(_set_disabled);
+	ui.pushButton_read_si->setDisabled(_set_disabled);
+	ui.pushButton_copy_si->setDisabled(_set_disabled);
+	ui.doubleSpinBox_des_si->setDisabled(_set_disabled);
+	ui.pushButton_l_si->setDisabled(_set_disabled);
+	ui.pushButton_r_si->setDisabled(_set_disabled);
+
 	return 1;
 }
 
@@ -197,11 +204,14 @@ int wgt_irp6p_tfg_move::move_it_mr()
 
 			robot.ui_ecp_robot->move_motors(robot.desired_pos);
 
-			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
+			if (robot.state.edp.is_synchronised) {
 				ui.doubleSpinBox_des_mr->setValue(robot.desired_pos[0]);
 
+				init_mr();
 			}
+
 		} // end if (robot.state.edp.pid!=-1)
+
 	} // end try
 
 	CATCH_SECTION_UI
