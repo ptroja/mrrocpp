@@ -71,6 +71,7 @@ private:
 	MainWindow* mw;
 
 public:
+
 	Interface();
 	//static Interface * get_instance();
 	MainWindow* get_main_window();

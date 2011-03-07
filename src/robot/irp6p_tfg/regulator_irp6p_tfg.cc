@@ -217,6 +217,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 #define PROP_I_REG 0.0
 #define INT_I_REG 0.4
 #define MAX_REG_CURRENT 15.0
+#define CURRENT_PRESCALER 0.1
 
 	switch (algorithm_no)
 	{
@@ -243,7 +244,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 			// HI_MOXA zwraca prad w mA, ze znakiem odpowiadajacym kierunkowi przeplywu
 			// Przeskalowanie na przedzial -15..15 = -150mA..150mA
-			current_measured = - ((float) meassured_current) / 10;
+			current_measured = - ((float) meassured_current) * CURRENT_PRESCALER;
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -276,12 +277,12 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			 display++;
 			 if ((display % 100) == 0)
 			 {
-				 		std::cout << "[info]";
-				 		std::cout << " current_desired = " << current_desired << ",";
-				 		std::cout << " current_measured = " << current_measured << ",";
-				 		std::cout << " int_current_error = " << int_current_error << ",";
-				 		std::cout << " set_value_new = " << set_value_new << ",";
-				 		std::cout << std::endl;
+//				 		std::cout << "[info]";
+//				 		std::cout << " current_desired = " << current_desired << ",";
+//				 		std::cout << " current_measured = " << current_measured << ",";
+//				 		std::cout << " int_current_error = " << int_current_error << ",";
+//				 		std::cout << " set_value_new = " << set_value_new << ",";
+//				 		std::cout << std::endl;
 
 
 			 //  display = 0;

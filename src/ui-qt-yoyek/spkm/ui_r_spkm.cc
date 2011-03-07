@@ -204,7 +204,7 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_spkm_edp_unload, ABN_mm_spkm_absolute_moves,
-						  ABN_mm_spkm_preset_positions, NULL);
+						 ABN_mm_spkm_preset_positions, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_spkm_edp_load, NULL);
 						 */
 						break;

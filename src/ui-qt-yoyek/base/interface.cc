@@ -1148,7 +1148,6 @@ int Interface::pulse_start_mp()
 		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		// close_all_windows
-
 		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 					{
 						robot_node.second->close_all_windows();
@@ -1326,8 +1325,7 @@ int Interface::slay_all()
 		 #endif
 		 printf("aaa: %s\n", system_command);
 		 system(system_command);
-		 */
-		delay(10);
+		 */delay(10);
 
 #if 0
 		sprintf(system_command, "rsh %s killall -e -q -v %s",
