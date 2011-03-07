@@ -223,7 +223,7 @@ int UiRobot::manage_interface()
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_Synchronization);
-				mw->enable_menu_item(true, 1, ui->menuirp6p_tfg_Preset_Positions);
+				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6p_tfg_synchronisation, NULL);
