@@ -1,6 +1,7 @@
 #include <QTextCharFormat>
 #include <QBrush>
 #include <QColor>
+#include <QFileDialog>
 
 #include <ctime>
 #include <fstream>
@@ -20,12 +21,14 @@
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
+#include "../conveyor/ui_r_conveyor.h"
 
 #include "../spkm/wgt_spkm_inc.h"
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
 #include "../sarkofag/wgt_sarkofag_inc.h"
+#include "../conveyor/wgt_conveyor_inc.h"
 #include "../irp6p_tfg/wgt_irp6p_tfg_inc.h"
 
 #include "../bird_hand/wgt_bird_hand_command.h"
@@ -591,42 +594,42 @@ void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
 // conveyor menu
 void MainWindow::on_actionconveyor_EDP_Load_triggered()
 {
-	//	interface.conveyor->edp_create();
+	interface.conveyor->edp_create();
 }
 
 void MainWindow::on_actionconveyor_EDP_Unload_triggered()
 {
-	//interface.conveyor->EDP_slay_int();
+	interface.conveyor->EDP_slay_int();
 }
 
 void MainWindow::on_actionconveyor_Synchronization_triggered()
 {
-	//interface.conveyor->synchronise();
+	interface.conveyor->synchronise();
 }
 
 void MainWindow::on_actionconveyor_Move_triggered()
 {
-	//interface.conveyor->wgt_inc->my_open();
+	interface.conveyor->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionconveyor_Synchro_Position_triggered()
 {
-	//interface.conveyor->move_to_synchro_position();
+	interface.conveyor->move_to_synchro_position();
 }
 
 void MainWindow::on_actionconveyor_Position_0_triggered()
 {
-	//interface.conveyor->move_to_preset_position(0);
+	interface.conveyor->move_to_preset_position(0);
 }
 
 void MainWindow::on_actionconveyor_Position_1_triggered()
 {
-	//interface.conveyor->move_to_preset_position(1);
+	interface.conveyor->move_to_preset_position(1);
 }
 
 void MainWindow::on_actionconveyor_Position_2_triggered()
 {
-	//interface.conveyor->move_to_preset_position(2);
+	interface.conveyor->move_to_preset_position(2);
 }
 
 // birdhand menu
@@ -871,6 +874,37 @@ void MainWindow::on_actionProcess_Control_triggered()
 }
 void MainWindow::on_actionConfiguration_triggered()
 {
+	/*
+	 QFileDialog dialog;
+	 if (dialog.exec()) {
+	 // ...
+	 }
+	 */
+
+	QString fileName;
+
+	std::string mrrocpp_root_local_path =
+			interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
+	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
+	//interface.ui_msg->message(mrrocpp_root_local_path);
+
+	try {
+
+		fileName
+				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*.ini)"));
+
+		std::string str_fullpath = fileName.toStdString();
+
+		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
+				+ mrrocpp_root_local_path.length());
+		interface.reload_whole_configuration();
+		interface.set_default_configuration_file_name();
+
+	}
+
+	catch (...) {
+
+	}
 
 }
 

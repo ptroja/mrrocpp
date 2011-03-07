@@ -458,10 +458,9 @@ void Interface::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
+		// UWAGA PRZETESTOWAC NA QNX
 
-		// funkcja dziala niepoprawnie z config serwerem
-		// config->change_config_file(config_file);
-
+		config->change_config_file("../" + config_file);
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
@@ -515,7 +514,11 @@ void Interface::reload_whole_configuration()
 		if (is_mp_and_ecps_active) {
 			mp.network_pulse_attach_point
 					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
-			mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			if (!config->exists("node_name", lib::MP_SECTION)) {
+				mp.node_name = "localhost";
+			} else {
+				mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+			}
 			mp.pid = -1;
 		}
 

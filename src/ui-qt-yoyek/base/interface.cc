@@ -25,6 +25,7 @@
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
+#include "../conveyor/ui_r_conveyor.h"
 
 extern void catch_signal(int sig);
 
@@ -174,12 +175,12 @@ void Interface::init()
 	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
 	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
 
+	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
 	/* TR
 	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-
-	 conveyor = new conveyor::UiRobot(*this);
-	 robot_m[conveyor->robot_name] = conveyor;
 	 */
 
 	ui_node_name = sysinfo.nodename;
@@ -359,9 +360,12 @@ int Interface::manage_interface(void)
 	// UWAGA ta funkcja powinna byc odporna na odpalaenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
+	mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+	mw->enable_menu_item(false, 3, mw->get_ui()->actionall_Synchronisation, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
 	/*TR
 	 // na wstepie wylaczamy przyciski EDP z all robots menu. Sa one ewentualnie wlaczane dalej
-	 ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, ABN_mm_all_robots_synchronisation, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_edp_load, NULL);
+	 ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions,
+	 ABN_mm_all_robots_synchronisation, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_edp_load, NULL);
 
 	 // menu file
 	 // ApModifyItemState( &file_menu, AB_ITEM_DIM, NULL);
@@ -372,6 +376,8 @@ int Interface::manage_interface(void)
 				{
 					robot_node.second->manage_interface();
 				}
+
+	mw->enable_menu_item(false, 1, mw->get_ui()->menuirp6ot_tfg); //tymczasowe deaktywowanie, aż robot zostanie uruchomiony
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -389,10 +395,9 @@ int Interface::manage_interface(void)
 			 */
 			break;
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
-			print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
-			//mw->disable_menu_item(false, mw->get_ui()->menuAll_Robots);
+			//print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
 			mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-			mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Load);
 			/* TR
 			 //				printf("UI_ALL_EDPS_NONE_EDP_LOADED\n");
 			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
@@ -433,27 +438,31 @@ int Interface::manage_interface(void)
 			 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
 			 unblock_widget(ABW_base_all_robots);
 			 unblock_widget(ABW_base_robot);
-
-			 // w zaleznosci od stanu MP
-			 switch (mp.state)
-			 {
-			 case common::UI_MP_NOT_PERMITED_TO_RUN:
-			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-			 break;
-			 case common::UI_MP_PERMITED_TO_RUN:
-			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_preset_positions, NULL);
-			 break;
-			 case common::UI_MP_WAITING_FOR_START_PULSE:
-			 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-			 break;
-			 case common::UI_MP_TASK_RUNNING:
-			 case common::UI_MP_TASK_PAUSED:
-			 ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, NULL);
-			 break;
-			 default:
-			 break;
-			 }
 			 */
+			// w zaleznosci od stanu MP
+			switch (mp.state)
+			{
+				case common::UI_MP_NOT_PERMITED_TO_RUN:
+					mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
+					// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+					break;
+				case common::UI_MP_PERMITED_TO_RUN:
+					mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+					// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				case common::UI_MP_WAITING_FOR_START_PULSE:
+					mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+					// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				case common::UI_MP_TASK_RUNNING:
+				case common::UI_MP_TASK_PAUSED:
+					mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+					// ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, NULL);
+					break;
+				default:
+					break;
+			}
+
 			break;
 		default:
 			break;
@@ -480,7 +489,7 @@ int Interface::manage_interface(void)
 			break;
 		case common::UI_MP_WAITING_FOR_START_PULSE:
 			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
-			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Load);
+			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionall_EDP_Unload);
 			/* TR
 			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
 			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
@@ -514,6 +523,7 @@ void Interface::reload_whole_configuration()
 
 	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
+		config->change_config_file("../" + config_file);
 
 		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
 
