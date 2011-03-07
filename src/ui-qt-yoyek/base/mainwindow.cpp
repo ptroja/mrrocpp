@@ -50,10 +50,24 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
-	Qt::WindowFlags flags;
-	flags |= Qt::WindowMaximizeButtonHint;
-	flags |= Qt::WindowMinimizeButtonHint;
-	setWindowFlags(flags);
+	/*
+	 Qt::WindowFlags flags;
+	 flags |= Qt::WindowMaximizeButtonHint;
+	 flags |= Qt::WindowMinimizeButtonHint;
+	 setWindowFlags(flags);
+	 */
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+
+	interface.UI_close();
+
+	if (interface.ui_state == 6) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
 }
 
 MainWindow::~MainWindow()
@@ -320,6 +334,7 @@ void MainWindow::on_timer_slot()
 		printf("UI CLOSED\n");
 		interface.abort_threads();
 		interface.get_main_window()->close();
+
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
