@@ -68,9 +68,9 @@ class ecp_buffer;
 class Interface
 {
 private:
+	MainWindow* mw;
 
 public:
-	MainWindow* mw;
 
 	Interface();
 	//static Interface * get_instance();

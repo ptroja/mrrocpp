@@ -20,9 +20,10 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 
 void wgt_base::my_open()
 {
+	MainWindow *mw = interface.get_main_window();
 	if (!(dwgt->isVisible())) {
 		if ((interface.wgt_pc->dwgt) != dwgt) {
-			interface.mw->tabifyDockWidget(interface.wgt_pc->dwgt, dwgt);
+			mw->tabifyDockWidget(interface.wgt_pc->dwgt, dwgt);
 		}
 	}
 	dwgt->show();
