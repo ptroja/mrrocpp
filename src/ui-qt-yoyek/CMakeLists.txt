@@ -53,7 +53,7 @@ SET(GUI_CXX_SRCS
     polycrank/wgt_polycrank_int.cpp
     sarkofag/wgt_sarkofag_inc.cpp
     conveyor/wgt_conveyor_inc.cpp
-    irp6p_tfg/wgt_irp6p_tfg_inc.cpp
+    irp6p_tfg/wgt_irp6p_tfg_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
 )
 
@@ -68,7 +68,7 @@ SET(GUI_MOC_SRCS
     polycrank/wgt_polycrank_int.h
     sarkofag/wgt_sarkofag_inc.h
     conveyor/wgt_conveyor_inc.h
-    irp6p_tfg/wgt_irp6p_tfg_inc.h
+    irp6p_tfg/wgt_irp6p_tfg_move.h
     bird_hand/wgt_bird_hand_command.h
 )
 
@@ -85,7 +85,7 @@ SET(GUI_UI
     polycrank/wgt_polycrank_int.ui
     sarkofag/wgt_sarkofag_inc.ui
     conveyor/wgt_conveyor_inc.ui
-    irp6p_tfg/wgt_irp6p_tfg_inc.ui
+    irp6p_tfg/wgt_irp6p_tfg_move.ui
     bird_hand/wgt_bird_hand_command.ui
 )
 

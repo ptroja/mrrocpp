@@ -29,7 +29,7 @@
 #include "../polycrank/wgt_polycrank_int.h"
 #include "../sarkofag/wgt_sarkofag_inc.h"
 #include "../conveyor/wgt_conveyor_inc.h"
-#include "../irp6p_tfg/wgt_irp6p_tfg_inc.h"
+#include "../irp6p_tfg/wgt_irp6p_tfg_move.h"
 
 #include "../bird_hand/wgt_bird_hand_command.h"
 
@@ -568,7 +568,7 @@ void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
 
 void MainWindow::on_actionirp6p_tfg_Move_triggered()
 {
-	interface.irp6p_tfg->wgt_inc->my_open();
+	interface.irp6p_tfg->wgt_move->my_open();
 }
 
 void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
