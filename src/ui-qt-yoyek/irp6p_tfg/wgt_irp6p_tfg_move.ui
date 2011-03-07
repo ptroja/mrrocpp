@@ -91,7 +91,7 @@
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="minimum">
       <double>-1000000.000000000000000</double>
@@ -132,7 +132,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="minimum">
       <double>-194500.000000000000000</double>
@@ -275,7 +275,7 @@
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="minimum">
       <double>-1000000.000000000000000</double>
@@ -316,7 +316,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="minimum">
       <double>-194500.000000000000000</double>
