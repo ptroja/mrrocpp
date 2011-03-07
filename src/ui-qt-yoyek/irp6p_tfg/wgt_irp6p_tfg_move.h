@@ -46,6 +46,12 @@ private:
 	int get_desired_position_mr();
 	int move_it_mr();
 
+	int init_si();
+	int copy_si();
+
+	int get_desired_position_si();
+	int move_it_si();
+
 signals:
 	void synchro_depended_init_signal();
 
@@ -61,6 +67,15 @@ private slots:
 	void on_pushButton_execute_mr_clicked();
 	void on_pushButton_l_mr_clicked();
 	void on_pushButton_r_mr_clicked();
+
+	void on_pushButton_read_si_clicked();
+	void on_pushButton_export_si_clicked();
+	void on_pushButton_import_si_clicked();
+	void on_pushButton_copy_si_clicked();
+
+	void on_pushButton_execute_si_clicked();
+	void on_pushButton_l_si_clicked();
+	void on_pushButton_r_si_clicked();
 
 };
 
