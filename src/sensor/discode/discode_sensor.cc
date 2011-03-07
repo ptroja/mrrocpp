@@ -252,7 +252,9 @@ void discode_sensor::receive_buffers_from_discode()
 		throw ds_connection_exception(string("read() failed: ") + strerror(errno));
 	}
 	if (nread != rmh.data_size) {
-		throw ds_connection_exception("read() failed: nread != rmh.data_size");
+		char txt[128];
+		sprintf(txt, "read() failed: nread(%d) != rmh.data_size(%d)", nread, rmh.data_size);
+		throw ds_connection_exception(txt);
 	}
 	//	if (rmh.is_rpc_call) {
 	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
