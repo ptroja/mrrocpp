@@ -35,15 +35,15 @@ private:
 	Ui::wgt_irp6p_tfg_moveClass ui;
 	mrrocpp::ui::irp6p_tfg::UiRobot& robot;
 
-	int init();
-	int copy();
+	QTimer *timer;
 
 	int synchro_depended_widgets_disable(bool _set_disabled);
 
-	int get_desired_position();
-	int move_it();
+	int init_mr();
+	int copy_mr();
 
-	QTimer *timer;
+	int get_desired_position_mr();
+	int move_it_mr();
 
 signals:
 	void synchro_depended_init_signal();

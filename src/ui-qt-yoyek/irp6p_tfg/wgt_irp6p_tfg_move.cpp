@@ -30,7 +30,7 @@ void wgt_irp6p_tfg_move::synchro_depended_init()
 
 void wgt_irp6p_tfg_move::on_pushButton_read_mr_clicked()
 {
-	init();
+	init_mr();
 }
 
 int wgt_irp6p_tfg_move::synchro_depended_widgets_disable(bool _set_disabled)
@@ -63,7 +63,7 @@ void wgt_irp6p_tfg_move::synchro_depended_init_slot()
 	CATCH_SECTION_UI
 }
 
-int wgt_irp6p_tfg_move::init()
+int wgt_irp6p_tfg_move::init_mr()
 {
 
 	try {
@@ -119,10 +119,10 @@ void wgt_irp6p_tfg_move::on_pushButton_export_mr_clicked()
 
 void wgt_irp6p_tfg_move::on_pushButton_copy_mr_clicked()
 {
-	copy();
+	copy_mr();
 }
 
-int wgt_irp6p_tfg_move::copy()
+int wgt_irp6p_tfg_move::copy_mr()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -144,25 +144,25 @@ int wgt_irp6p_tfg_move::copy()
 
 void wgt_irp6p_tfg_move::on_pushButton_execute_mr_clicked()
 {
-	get_desired_position();
-	move_it();
+	get_desired_position_mr();
+	move_it_mr();
 }
 
 void wgt_irp6p_tfg_move::on_pushButton_l_mr_clicked()
 {
-	get_desired_position();
+	get_desired_position_mr();
 	robot.desired_pos[0] -= ui.doubleSpinBox_step_mr->value();
-	move_it();
+	move_it_mr();
 }
 
 void wgt_irp6p_tfg_move::on_pushButton_r_mr_clicked()
 {
-	get_desired_position();
+	get_desired_position_mr();
 	robot.desired_pos[0] += ui.doubleSpinBox_step_mr->value();
-	move_it();
+	move_it_mr();
 }
 
-int wgt_irp6p_tfg_move::get_desired_position()
+int wgt_irp6p_tfg_move::get_desired_position_mr()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -181,7 +181,7 @@ int wgt_irp6p_tfg_move::get_desired_position()
 	return 1;
 }
 
-int wgt_irp6p_tfg_move::move_it()
+int wgt_irp6p_tfg_move::move_it_mr()
 {
 	// wychwytania ew. bledow ECP::robot
 	try {
