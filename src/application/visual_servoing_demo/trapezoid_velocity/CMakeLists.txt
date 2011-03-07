@@ -1,9 +1,9 @@
-add_executable(trapezoid_velocity
+add_executable(ecp_trapezoid_velocity
     ecp_g_trapezoid_velocity.cc
     ecp_t_trapezoid_velocity.cc
 )
 
-target_link_libraries(trapezoid_velocity
+target_link_libraries(ecp_trapezoid_velocity
 	ecp_r_irp6p_m
 	ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
@@ -11,4 +11,4 @@ target_link_libraries(trapezoid_velocity
 
 
 ################################
-install(TARGETS trapezoid_velocity DESTINATION bin)
+install(TARGETS ecp_trapezoid_velocity DESTINATION bin)

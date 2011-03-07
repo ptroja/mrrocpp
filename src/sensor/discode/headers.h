@@ -36,12 +36,16 @@ struct reading_message_header
 {
 	int data_size;
 	bool is_rpc_call;
+	uint64_t readingTimeSeconds;
+	uint64_t readingTimeNanoseconds;
 
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & data_size;
 		ar & is_rpc_call;
+		ar & readingTimeSeconds;
+		ar & readingTimeNanoseconds;
 	}
 };
 
