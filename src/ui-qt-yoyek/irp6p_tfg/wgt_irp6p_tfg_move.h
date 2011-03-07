@@ -40,7 +40,6 @@ private:
 
 	int synchro_depended_widgets_disable(bool _set_disabled);
 
-	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
 
@@ -53,16 +52,14 @@ private slots:
 
 	void synchro_depended_init_slot();
 
-	void on_timer_slot();
-	void on_pushButton_read_clicked();
-	void on_pushButton_export_clicked();
-	void on_pushButton_import_clicked();
-	void on_pushButton_copy_clicked();
-	void on_pushButton_stop_clicked();
+	void on_pushButton_read_mr_clicked();
+	void on_pushButton_export_mr_clicked();
+	void on_pushButton_import_mr_clicked();
+	void on_pushButton_copy_mr_clicked();
 
-	void on_pushButton_execute_clicked();
-	void on_pushButton_0l_clicked();
-	void on_pushButton_0r_clicked();
+	void on_pushButton_execute_mr_clicked();
+	void on_pushButton_l_mr_clicked();
+	void on_pushButton_r_mr_clicked();
 
 };
 
