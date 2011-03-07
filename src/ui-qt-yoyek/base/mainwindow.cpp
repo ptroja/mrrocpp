@@ -60,6 +60,7 @@ MainWindow::~MainWindow()
 {
 	delete ui;
 }
+
 Ui::MainWindow * MainWindow::get_ui()
 {
 	return ui;
@@ -880,18 +881,20 @@ void MainWindow::on_actionConfiguration_triggered()
 	 // ...
 	 }
 	 */
-
-	QString fileName;
-
-	std::string mrrocpp_root_local_path =
-			interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
-	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
-	//interface.ui_msg->message(mrrocpp_root_local_path);
-
 	try {
+		QString fileName;
+
+		std::string mrrocpp_root_local_path =
+				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
+		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
+		//interface.ui_msg->message(mrrocpp_root_local_path);
+
+
+		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		interface.ui_msg->message(mrrocpp_current_config_full_path);
 
 		fileName
-				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*.ini)"));
+				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
 
 		std::string str_fullpath = fileName.toStdString();
 
