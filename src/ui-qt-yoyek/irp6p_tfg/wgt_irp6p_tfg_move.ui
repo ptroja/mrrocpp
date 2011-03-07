@@ -209,7 +209,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="maximum">
       <double>10000.000000000000000</double>
@@ -230,16 +230,6 @@
     <widget class="QPushButton" name="pushButton_export_mr">
      <property name="text">
       <string>Export</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="7" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Step</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -275,7 +265,7 @@
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
      <property name="decimals">
-      <number>3</number>
+      <number>4</number>
      </property>
      <property name="minimum">
       <double>-1000000.000000000000000</double>
@@ -316,7 +306,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="decimals">
-      <number>3</number>
+      <number>4</number>
      </property>
      <property name="minimum">
       <double>-194500.000000000000000</double>
@@ -368,7 +358,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="decimals">
-      <number>0</number>
+      <number>4</number>
      </property>
      <property name="maximum">
       <double>10000.000000000000000</double>
@@ -389,16 +379,6 @@
     <widget class="QPushButton" name="pushButton_export_si">
      <property name="text">
       <string>Export</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="7" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Step</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

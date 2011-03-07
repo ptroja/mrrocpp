@@ -8,7 +8,7 @@
 #include "../base/mainwindow.h"
 
 wgt_irp6p_tfg_move::wgt_irp6p_tfg_move(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6p_tfg::UiRobot& _robot, QWidget *parent) :
-	wgt_base("Sarkofag incremental motion", _interface, parent), robot(_robot)
+	wgt_base("IRp6p_tfg motion", _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 
@@ -214,6 +214,7 @@ int wgt_irp6p_tfg_move::move_it_mr()
 				ui.doubleSpinBox_des_mr->setValue(robot.desired_pos[0]);
 
 				init_mr();
+				init_si();
 			}
 
 		} // end if (robot.state.edp.pid!=-1)
@@ -364,6 +365,7 @@ int wgt_irp6p_tfg_move::move_it_si()
 			if (robot.state.edp.is_synchronised) {
 				ui.doubleSpinBox_des_si->setValue(robot.desired_pos[0]);
 
+				init_mr();
 				init_si();
 			}
 
