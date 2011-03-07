@@ -23,6 +23,13 @@ wgt_irp6p_tfg_move::~wgt_irp6p_tfg_move()
 
 }
 
+void wgt_irp6p_tfg_move::my_open()
+{
+	wgt_base::my_open();
+	init_mr();
+	copy_mr();
+}
+
 void wgt_irp6p_tfg_move::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();

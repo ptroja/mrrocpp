@@ -30,6 +30,7 @@ public:
 	~wgt_irp6p_tfg_move();
 
 	void synchro_depended_init();
+	void my_open();
 
 private:
 	Ui::wgt_irp6p_tfg_moveClass ui;
