@@ -27,6 +27,7 @@ Q_OBJECT
 public:
 	wgt_irp6ot_m_joints(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6ot_m::UiRobot& _robot, QWidget *parent = 0);
 	~wgt_irp6ot_m_joints();
+	void my_open();
 
 private:
 	Ui::wgt_irp6ot_m_jointsClass ui;

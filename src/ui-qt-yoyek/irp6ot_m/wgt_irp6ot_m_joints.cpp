@@ -18,6 +18,13 @@ wgt_irp6ot_m_joints::~wgt_irp6ot_m_joints()
 
 }
 
+void wgt_irp6ot_m_joints::my_open()
+{
+	wgt_base::my_open();
+	init();
+	copy();
+}
+
 // slots
 void wgt_irp6ot_m_joints::on_pushButton_read_clicked()
 {
@@ -279,6 +286,7 @@ int wgt_irp6ot_m_joints::move_it()
 				ui.doubleSpinBox_des_p5->setValue(robot.desired_pos[4]);
 				ui.doubleSpinBox_des_p6->setValue(robot.desired_pos[5]);
 				ui.doubleSpinBox_des_p7->setValue(robot.desired_pos[6]);
+				init();
 			}
 		} // end if (robot.state.edp.pid!=-1)
 	} // end try
