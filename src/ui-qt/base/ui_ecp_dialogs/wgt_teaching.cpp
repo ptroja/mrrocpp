@@ -24,7 +24,7 @@ void wgt_teaching::hideEvent(QHideEvent *event)
 	event->accept();
 }
 
-void wgt_teaching::on_pushButton_ok_clicked()
+void wgt_teaching::on_pushButton_send_move_clicked()
 {
 	interface.ui_ecp_obj->ui_rep.reply = lib::ANSWER_YES;
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
@@ -33,7 +33,7 @@ void wgt_teaching::on_pushButton_ok_clicked()
 	my_close();
 }
 
-void wgt_teaching::on_pushButton_cancel_clicked()
+void wgt_teaching::on_pushButton_end_motion_clicked()
 {
 	interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;

@@ -211,18 +211,18 @@ void MainWindow::raise_ui_ecp_window_slot()
 			if (interface.teachingstate == ui::common::MP_RUNNING) {
 				interface.teachingstate = ui::common::ECP_TEACHING;
 			}
-			/* TR PtEnter(0); */
-			if (!interface.is_teaching_window_open) {
-				/* TR
-				 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-				 */
-				interface.is_teaching_window_open = true;
-			} else {
-				/* TR
-				 PtWindowToFront( ABW_teaching_window);
-				 */
-			}
-			/* TR PtLeave(0); */
+			/* TR PtEnter(0);
+			 if (!interface.is_teaching_window_open) {
+
+			 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
+
+			 interface.is_teaching_window_open = true;
+			 } else {
+
+			 PtWindowToFront( ABW_teaching_window);
+
+			 }
+			 PtLeave(0); */
 		}
 			break;
 		case lib::YES_NO: {

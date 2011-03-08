@@ -47,11 +47,8 @@ Interface::Interface() :
 	mp.pid = -1;
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
-	is_task_window_open = false;// informacja czy okno zadanai jest otwarte
-	is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
-	process_control_window_renew = true;
-	is_file_selection_window_open = false;
-	is_teaching_window_open = false;
+
+
 	mrrocpp_bin_to_root_path = "../../";
 
 }

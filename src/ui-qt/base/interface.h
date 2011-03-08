@@ -110,12 +110,7 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 
-	bool is_task_window_open; // informacja czy okno zadania jest otwarte
-	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
-	bool process_control_window_renew; // czy okno ma zostac odswierzone
 
-	bool is_teaching_window_open; // informacja czy okno nauki jest otwarte
-	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
 
 	std::ofstream *log_file_outfile;
 

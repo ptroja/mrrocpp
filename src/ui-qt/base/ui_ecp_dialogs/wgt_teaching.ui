@@ -49,16 +49,16 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QPushButton" name="pushButton_ok">
+    <widget class="QPushButton" name="pushButton_send_move">
      <property name="text">
-      <string>OK</string>
+      <string>SEND MOVE</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QPushButton" name="pushButton_cancel">
+    <widget class="QPushButton" name="pushButton_end_motion">
      <property name="text">
-      <string>CANCEL</string>
+      <string>END MOTION</string>
      </property>
     </widget>
    </item>

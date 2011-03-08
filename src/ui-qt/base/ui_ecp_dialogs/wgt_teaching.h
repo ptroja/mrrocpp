@@ -32,8 +32,8 @@ private:
 
 private slots:
 
-	void on_pushButton_ok_clicked();
-	void on_pushButton_cancel_clicked();
+	void on_pushButton_send_move_clicked();
+	void on_pushButton_end_motion_clicked();
 
 };
 
