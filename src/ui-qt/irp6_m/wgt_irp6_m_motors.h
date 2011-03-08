@@ -4,6 +4,7 @@
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
+#include <QVector>
 #include "ui_wgt_irp6_m_motors.h"
 #include "../base/wgt_base.h"
 
@@ -32,6 +33,9 @@ public:
 	~wgt_irp6_m_motors();
 	void my_open();
 	QString robot_label;
+
+	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 
 private:
 	Ui::wgt_irp6_m_motorsClass ui;
