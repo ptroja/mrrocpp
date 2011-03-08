@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QCloseEvent>
+#include <pthread.h>
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +43,8 @@ private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
 	QTimer *timer;
+
+	pthread_t main_thread_id;
 
 signals:
 	void ui_notification_signal(QString _string, QColor _color);

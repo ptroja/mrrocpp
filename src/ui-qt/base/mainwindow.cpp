@@ -2,6 +2,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QFileDialog>
+#include <QThread>
 
 #include <ctime>
 #include <fstream>
@@ -55,13 +56,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
-	// wyłączenie przycisku zamykania okna
-	/*
-	 Qt::WindowFlags flags;
-	 flags |= Qt::WindowMaximizeButtonHint;
-	 flags |= Qt::WindowMinimizeButtonHint;
-	 setWindowFlags(flags);
-	 */
+	main_thread_id = pthread_self();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -145,8 +140,18 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 
 void MainWindow::ui_notification(QString _string, QColor _color)
 {
-	//ui->notification_label->setText("GUGUGU");
-	emit ui_notification_signal(_string, _color);
+
+	if (main_thread_id == pthread_self()) {
+		// jeśli wątek główny
+		//	interface.ui_msg->message("same thread");
+		ui_notification_slot(_string, _color);
+
+	} else {
+		//jeśli inny wątek niż główny
+		//	interface.ui_msg->message("different thread");
+		emit ui_notification_signal(_string, _color);
+	}
+
 }
 
 void MainWindow::raise_process_control_window()
@@ -370,6 +375,10 @@ void MainWindow::ui_notification_slot(QString _string, QColor _color)
 	ui->notification_label->setPalette(pal);
 
 	ui->notification_label->setText(_string);
+	ui->notification_label->repaint();
+	ui->notification_label->update();
+	qApp->processEvents();
+
 }
 
 void MainWindow::on_timer_slot()
