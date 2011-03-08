@@ -1,6 +1,7 @@
 #include <QTextCharFormat>
 #include <QBrush>
 #include <QColor>
+#include <QFileDialog>
 
 #include <ctime>
 #include <fstream>
@@ -13,20 +14,26 @@
 
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
+#include "../conveyor/ui_r_conveyor.h"
 
 #include "../spkm/wgt_spkm_inc.h"
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
 #include "../sarkofag/wgt_sarkofag_inc.h"
+#include "../conveyor/wgt_conveyor_inc.h"
+#include "../irp6p_tfg/wgt_irp6p_tfg_move.h"
 
 #include "../bird_hand/wgt_bird_hand_command.h"
+
+#include "../irp6ot_m/wgt_irp6ot_m_joints.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -45,16 +52,31 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
-	Qt::WindowFlags flags;
-	flags |= Qt::WindowMaximizeButtonHint;
-	flags |= Qt::WindowMinimizeButtonHint;
-	setWindowFlags(flags);
+	/*
+	 Qt::WindowFlags flags;
+	 flags |= Qt::WindowMaximizeButtonHint;
+	 flags |= Qt::WindowMinimizeButtonHint;
+	 setWindowFlags(flags);
+	 */
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+
+	interface.UI_close();
+
+	if (interface.ui_state == 6) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
 }
+
 Ui::MainWindow * MainWindow::get_ui()
 {
 	return ui;
@@ -192,14 +214,6 @@ void MainWindow::on_timer_slot()
 
 
 	Iteration_counter++;
-	/* TR
-	 if ((Iteration_counter % ui::common::CHECK_SPEAKER_STATE_ITER) == 0) {
-	 if (interface.speaker->is_wind_speaker_play_open) // otworz okno
-	 {
-	 speaker_check_state(widget, apinfo, cbinfo);
-	 }
-	 }
-	 */
 
 	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
@@ -216,7 +230,7 @@ void MainWindow::on_timer_slot()
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec /1000));
+			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
 
 			switch (sr_msg.process_type)
 			{
@@ -322,6 +336,7 @@ void MainWindow::on_timer_slot()
 		printf("UI CLOSED\n");
 		interface.abort_threads();
 		interface.get_main_window()->close();
+
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
@@ -362,6 +377,36 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 	interface.irp6ot_m->synchronise();
 }
 
+void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Joints_triggered()
+{
+	interface.irp6ot_m->wgt_joints->my_open();
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
+{
+
+}
+
 void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
 {
 	interface.irp6ot_m->move_to_synchro_position();
@@ -387,7 +432,60 @@ void MainWindow::on_actionirp6ot_m_Position_2_triggered()
 	interface.irp6ot_m->move_to_preset_position(2);
 }
 
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6ot_tfg
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Move_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_1_triggered()
+{
+
+}
+
+void MainWindow::on_actionIrp6ot_tfg_Position_2_triggered()
+{
+
+}
+
 // irp6p_m menu
+
 
 void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
 {
@@ -402,6 +500,36 @@ void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
 void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 {
 	interface.irp6p_m->synchronise();
+}
+
+void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Joints_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
+{
+
 }
 
 void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
@@ -427,6 +555,99 @@ void MainWindow::on_actionirp6p_m_Position_1_triggered()
 void MainWindow::on_actionirp6p_m_Position_2_triggered()
 {
 	interface.irp6p_m->move_to_preset_position(2);
+}
+
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
+{
+
+}
+
+void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
+{
+
+}
+
+//irp6p_tfg
+
+void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
+{
+	interface.irp6p_tfg->edp_create();
+}
+
+void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
+{
+	interface.irp6p_tfg->EDP_slay_int();
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
+{
+	interface.irp6p_tfg->synchronise();
+}
+
+void MainWindow::on_actionirp6p_tfg_Move_triggered()
+{
+	interface.irp6p_tfg->wgt_move->my_open();
+}
+
+void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
+{
+	interface.irp6p_tfg->move_to_synchro_position();
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
+{
+	interface.irp6p_tfg->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
+{
+	interface.irp6p_tfg->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
+{
+	interface.irp6p_tfg->move_to_preset_position(2);
+}
+
+// conveyor menu
+void MainWindow::on_actionconveyor_EDP_Load_triggered()
+{
+	interface.conveyor->edp_create();
+}
+
+void MainWindow::on_actionconveyor_EDP_Unload_triggered()
+{
+	interface.conveyor->EDP_slay_int();
+}
+
+void MainWindow::on_actionconveyor_Synchronization_triggered()
+{
+	interface.conveyor->synchronise();
+}
+
+void MainWindow::on_actionconveyor_Move_triggered()
+{
+	interface.conveyor->wgt_inc->my_open();
+}
+
+void MainWindow::on_actionconveyor_Synchro_Position_triggered()
+{
+	interface.conveyor->move_to_synchro_position();
+}
+
+void MainWindow::on_actionconveyor_Position_0_triggered()
+{
+	interface.conveyor->move_to_preset_position(0);
+}
+
+void MainWindow::on_actionconveyor_Position_1_triggered()
+{
+	interface.conveyor->move_to_preset_position(1);
+}
+
+void MainWindow::on_actionconveyor_Position_2_triggered()
+{
+	interface.conveyor->move_to_preset_position(2);
 }
 
 // birdhand menu
@@ -671,6 +892,39 @@ void MainWindow::on_actionProcess_Control_triggered()
 }
 void MainWindow::on_actionConfiguration_triggered()
 {
+	/*
+	 QFileDialog dialog;
+	 if (dialog.exec()) {
+	 // ...
+	 }
+	 */
+	try {
+		QString fileName;
+
+		std::string mrrocpp_root_local_path =
+				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
+		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
+		//interface.ui_msg->message(mrrocpp_root_local_path);
+
+
+		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		interface.ui_msg->message(mrrocpp_current_config_full_path);
+
+		fileName
+				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
+
+		std::string str_fullpath = fileName.toStdString();
+
+		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
+				+ mrrocpp_root_local_path.length());
+		interface.reload_whole_configuration();
+		interface.set_default_configuration_file_name();
+
+	}
+
+	catch (...) {
+
+	}
 
 }
 

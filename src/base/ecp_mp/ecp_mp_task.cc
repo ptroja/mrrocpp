@@ -219,20 +219,20 @@ bool task::str_cmp::operator()(char const *a, char const *b) const
 	return strcmp(a, b) < 0;
 }
 
-std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
+std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *) "coordinateType");
-	xmlChar * numOfPoses = xmlGetProp(actNode, (const xmlChar *) "numOfPoses");
+	xmlChar * m_type = xmlGetProp(actNode, (const xmlChar *) "motionType");
 	std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect;
 	/*ecp_mp::common::trajectory_pose::trajectory_pose * actTrajectory =
 			new ecp_mp::common::trajectory_pose::trajectory_pose((char *) numOfPoses, (char *) stateID, (char *) coordinateType);*/
 
 	//coordinateType wrzucic do
 
-	//actTrajectory->pos_num = atoi((char *) numOfPoses);
 
 
-	double tmp[(atoi((char *) numOfPoses))*axes_num];
+
+	double tmp[10];//TODO: askubis check if it's enough
 	int num=0;
 
 	for (xmlNodePtr cchild_node = actNode->children; cchild_node != NULL; cchild_node = cchild_node->next) {
@@ -272,9 +272,17 @@ std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> task::
 
 	}
 	xmlFree(coordinateType);
-	xmlFree(numOfPoses);
+	xmlFree(m_type);
+if(!strcmp((char *)m_type,"Absoulte"))
+	return std::make_pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE>(trj_vect, lib::ABSOLUTE);
+else if(!strcmp((char *)m_type,"Relative"))
+	return std::make_pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE>(trj_vect, lib::RELATIVE);
+else
+{
+	return std::make_pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE>(trj_vect, lib::ABSOLUTE);//default
+}
 
-	return trj_vect;
+
 }
 
 task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num)
@@ -323,8 +331,8 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 							if (child_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 									&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
-								std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = createTrajectory2(child_node, stateID, axes_num);
-								trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *) stateID, (trj_vect)));
+								std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion = createTrajectory2(child_node, stateID, axes_num);
+								trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *) stateID, (pair_trj_motion)));
 							}
 						}
 
@@ -344,10 +352,8 @@ task::bang_trajectories_map * task::loadTrajectories(const char * fileName, lib:
 					if (child_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")
 							&& !xmlStrcmp(robot, (const xmlChar *) robotName.c_str())) {
-						std::cout<<(char *)stateID<<" tworze trajektorie"<<std::endl;
-						std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = createTrajectory2(child_node, stateID, axes_num);
-						std::cout<<"stworzona"<<std::endl;
-						trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *)stateID, (trj_vect)));
+						std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion = createTrajectory2(child_node, stateID, axes_num);
+						trajectoriesMap->insert(bang_trajectories_map::value_type((std::string)(char *)stateID, (pair_trj_motion)));
 					}
 				}
 				xmlFree(robot);

@@ -14,12 +14,18 @@ wgt_base::wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, 
 	//	vl->addWidget(this);
 	dwgt->setWidget(this);
 	dwgt->hide();
-	dwgt->setFloating(true);
+	//dwgt->setFloating(true);
 	interface.get_main_window()->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
 void wgt_base::my_open()
 {
+	MainWindow *mw = interface.get_main_window();
+	if (!(dwgt->isVisible())) {
+		if ((interface.wgt_pc->dwgt) != dwgt) {
+			mw->tabifyDockWidget(interface.wgt_pc->dwgt, dwgt);
+		}
+	}
 	dwgt->show();
 	dwgt->raise();
 }

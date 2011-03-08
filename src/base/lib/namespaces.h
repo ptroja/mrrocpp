@@ -6,18 +6,9 @@
  *	\author Tomasz Winiarski <tomrobotics@gmail.com>
  */
 
-
-
-
-
-
 /*! \namespace mrrocpp
  * \brief MRROC++ programming framework
  */
-
-
-
-
 
 /*! \namespace mrrocpp::ecp
  * \brief MRROC++ ECP process
@@ -59,10 +50,6 @@
  * \brief MRROC++ ECP process festival tasks
  */
 
-/*! \namespace mrrocpp::ecp::irp6m
- * \brief MRROC++ ECP process irp6 mechatronika robot classes
- */
-
 /*! \namespace mrrocpp::ecp::irp6ot
  * \brief MRROC++ ECP process irp6 on track robot classes
  */
@@ -99,23 +86,6 @@
  * \brief MRROC++ ECP process player tasks
  */
 
-/*! \namespace mrrocpp::ecp::speaker
- * \brief MRROC++ ECP process speaker classes
- */
-
-/*! \namespace mrrocpp::ecp::speaker::generator
- * \brief MRROC++ ECP process speaker generators
- */
-
-/*! \namespace mrrocpp::ecp::speaker::task
- * \brief MRROC++ ECP process speaker tasks
- */
-
-
-
-
-
-
 /*! \namespace mrrocpp::ecp_mp
  * \brief MRROC++ ECP, MP shared classes
  */
@@ -136,11 +106,6 @@
  * \brief MRROC++ ECP, MP shared transmitters
  */
 
-
-
-
-
-
 /*! \namespace mrrocpp::edp
  * \brief MRROC++ EDP process
  */
@@ -151,10 +116,6 @@
 
 /*! \namespace mrrocpp::edp::conveyor
  * \brief MRROC++ EDP process conveyor robot classes
- */
-
-/*! \namespace mrrocpp::edp::irp6m
- * \brief MRROC++ EDP process irp6 mechatronika robot classes
  */
 
 /*! \namespace mrrocpp::edp::irp6ot
@@ -169,15 +130,6 @@
  * \brief MRROC++ EDP process sensors classes
  */
 
-/*! \namespace mrrocpp::edp::speaker
- * \brief MRROC++ EDP process speaker classes
- */
-
-
-
-
-
-
 /*! \namespace mrrocpp::kinematic
  * \brief MRROC++ robots kinematic
  */
@@ -190,10 +142,6 @@
  * \brief MRROC++ conveyor robot kinematic classes
  */
 
-/*! \namespace mrrocpp::kinematic::irp6m
- * \brief MRROC++ irp6 mechatronika robot kinematic classes
- */
-
 /*! \namespace mrrocpp::kinematic::irp6ot
  * \brief MRROC++ irp6 on track robot kinematic classes
  */
@@ -202,20 +150,9 @@
  * \brief MRROC++ irp6 postument robot kinematic classes
  */
 
-
-
-
-
-
 /*! \namespace mrrocpp::lib
  * \brief MRROC++ common libraries and headers
  */
-
-
-
-
-
-
 
 /*! \namespace mrrocpp::mp
  * \brief MRROC++ MP process
@@ -233,9 +170,6 @@
  * \brief MRROC++ MP process tasks classes
  */
 
-
-
-
 /*! \namespace mrrocpp::vsp
  * \brief MRROC++ VSP process
  */
@@ -247,11 +181,5 @@
 /*! \namespace mrrocpp::vsp::sensor
  * \brief MRROC++ VSP process sensors classes
  */
-
-
-
-
-
-
 
 #endif

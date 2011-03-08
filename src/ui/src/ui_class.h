@@ -23,9 +23,7 @@
 #include "ui/src/irp6p_m/ui_r_irp6p_m.h"
 #include "ui/src/irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "ui/src/sarkofag/ui_r_sarkofag.h"
-#include "ui/src/irp6m_m/ui_r_irp6m_m.h"
 #include "ui/src/conveyor/ui_r_conveyor.h"
-#include "ui/src/speaker/ui_r_speaker.h"
 #include "ui/src/spkm/ui_r_spkm.h"
 #include "ui/src/shead/ui_r_shead.h"
 #include "ui/src/smb/ui_r_smb.h"
@@ -39,7 +37,6 @@
 
 
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ui {
@@ -95,8 +92,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	boost::shared_ptr<lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	boost::shared_ptr<lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;
@@ -136,9 +133,7 @@ public:
 	irp6p_m::UiRobot *irp6p_m;
 	irp6p_tfg::UiRobot *irp6p_tfg;
 	sarkofag::UiRobot *sarkofag;
-	irp6m::UiRobot *irp6m_m;
 	conveyor::UiRobot *conveyor;
-	speaker::UiRobot *speaker;
 	spkm::UiRobot *spkm;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;

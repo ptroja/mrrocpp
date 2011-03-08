@@ -38,6 +38,9 @@ class UiRobot;
 namespace irp6p_m {
 class UiRobot;
 }
+namespace irp6p_tfg {
+class UiRobot;
+}
 namespace polycrank {
 class UiRobot;
 }
@@ -45,6 +48,9 @@ namespace bird_hand {
 class UiRobot;
 }
 namespace sarkofag {
+class UiRobot;
+}
+namespace conveyor {
 class UiRobot;
 }
 namespace common {
@@ -62,12 +68,12 @@ class ecp_buffer;
 class Interface
 {
 private:
-	Interface();
 	MainWindow* mw;
 
 public:
 
-	static Interface * get_instance();
+	Interface();
+	//static Interface * get_instance();
 	MainWindow* get_main_window();
 	void print_on_sr(const char *buff, ...);
 
@@ -106,8 +112,8 @@ public:
 
 	boost::mutex process_creation_mtx;
 	lib::configurator* config;
-	boost::shared_ptr<lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
-	boost::shared_ptr<lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
 	// bool is_any_edp_active;
@@ -149,14 +155,11 @@ public:
 	polycrank::UiRobot *polycrank;
 	bird_hand::UiRobot *bird_hand;
 	sarkofag::UiRobot *sarkofag;
+	irp6p_tfg::UiRobot *irp6p_tfg;
+	conveyor::UiRobot *conveyor;
+
 	/*TR
-
 	 irp6ot_tfg::UiRobot *irp6ot_tfg;
-	 irp6p_tfg::UiRobot *irp6p_tfg;
-
-	 irp6m::UiRobot *irp6m_m;
-	 conveyor::UiRobot *conveyor;
-	 speaker::UiRobot *speaker;
 	 */
 
 	const int position_refresh_interval;

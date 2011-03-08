@@ -17,7 +17,7 @@
 //#define T_INFO_FUNC
 //#define T_INFO_CALC
 
-#define STATUS_DISP_T 100
+#define STATUS_DISP_T 1
 
 #include "base/lib/periodic_timer.h"
 #include "base/edp/HardwareInterface.h"
