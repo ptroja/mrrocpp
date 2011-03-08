@@ -11,6 +11,11 @@ wgt_irp6_m_motors::wgt_irp6_m_motors(mrrocpp::ui::common::Interface& _interface,
 	wgt_base("irp6_m motors moves", _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
+
+	if (robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
+
+	}
+
 }
 
 wgt_irp6_m_motors::~wgt_irp6_m_motors()

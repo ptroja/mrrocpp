@@ -7,6 +7,9 @@
 #include "ui_wgt_irp6_m_motors.h"
 #include "../base/wgt_base.h"
 
+#include "robot/irp6ot_m/const_irp6ot_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -28,6 +31,7 @@ public:
 					0);
 	~wgt_irp6_m_motors();
 	void my_open();
+	QString robot_label;
 
 private:
 	Ui::wgt_irp6_m_motorsClass ui;
