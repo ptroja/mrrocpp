@@ -2,6 +2,8 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+#include "wgt_irp6ot_m_joints.h"
+
 #include "ui_r_irp6ot_m.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_irp6_common.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
@@ -164,6 +166,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			is_wind_irp6ot_xyz_angle_axis_ts_open(false), is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
 			is_wind_irp6ot_kinematic_open(false), is_wind_irp6ot_servo_algorithm_open(false), ui_ecp_robot(NULL)
 {
+	wgt_joints = new wgt_irp6ot_m_joints(interface, *this, interface.get_main_window());
+	wndbase_m[WGT_IRP6OT_JOINTS] = wgt_joints->dwgt;
 
 }
 

@@ -33,6 +33,8 @@
 
 #include "../bird_hand/wgt_bird_hand_command.h"
 
+#include "../irp6ot_m/wgt_irp6ot_m_joints.h"
+
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 
@@ -387,7 +389,7 @@ void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
 
 void MainWindow::on_actionirp6ot_m_Joints_triggered()
 {
-
+	interface.irp6ot_m->wgt_joints->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
