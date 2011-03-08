@@ -100,12 +100,10 @@ int wgt_conveyor_move::init_mr()
 				//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 
 
-				robot.ui_ecp_robot->read_motors(interface.conveyor->current_pos); // Odczyt polozenia walow silnikow
-				ui.doubleSpinBox_cur_mr->setValue(interface.conveyor->current_pos[0]);
+				robot.ui_ecp_robot->read_motors(robot.current_pos); // Odczyt polozenia walow silnikow
+				ui.doubleSpinBox_cur_mr->setValue(robot.current_pos[0]);
 
-				for (int i = 0; i < robot.number_of_servos; i++) {
-					robot.desired_pos[i] = robot.current_pos[i];
-				}
+				robot.desired_pos[0] = robot.current_pos[0];
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
@@ -193,9 +191,8 @@ int wgt_conveyor_move::get_desired_position_mr()
 
 		} else {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
-				robot.desired_pos[i] = 0.0;
-			}
+			robot.desired_pos[0] = 0.0;
+
 		}
 	}
 	return 1;
@@ -252,12 +249,10 @@ int wgt_conveyor_move::init_si()
 				//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 
 
-				robot.ui_ecp_robot->read_joints(interface.conveyor->current_pos); // Odczyt polozenia walow silnikow
-				ui.doubleSpinBox_cur_si->setValue(interface.conveyor->current_pos[0]);
+				robot.ui_ecp_robot->read_joints(robot.current_pos); // Odczyt polozenia walow silnikow
+				ui.doubleSpinBox_cur_si->setValue(robot.current_pos[0]);
 
-				for (int i = 0; i < robot.number_of_servos; i++) {
-					robot.desired_pos[i] = robot.current_pos[i];
-				}
+				robot.desired_pos[0] = robot.current_pos[0];
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
@@ -345,9 +340,8 @@ int wgt_conveyor_move::get_desired_position_si()
 
 		} else {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
-				robot.desired_pos[i] = 0.0;
-			}
+			robot.desired_pos[0] = 0.0;
+
 		}
 	}
 	return 1;
