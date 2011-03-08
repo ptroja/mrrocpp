@@ -18,4 +18,6 @@ add_library(ecp_r_shead ecp_r_shead.cc)
 target_link_libraries(ecp_r_shead kinematicsshead)
 
 install(TARGETS edp_shead DESTINATION bin)
+install(TARGETS kinematicsshead ecp_r_shead DESTINATION lib)
+
 endif(ROBOT_SHEAD)

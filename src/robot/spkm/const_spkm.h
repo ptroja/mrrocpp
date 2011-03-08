@@ -22,6 +22,12 @@ namespace spkm {
 const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 
 /*!
+ * @brief SwarmItFix arallel Kinematic Machine total number of servos
+ * @ingroup spkm
+ */
+const int NUM_OF_SERVOS = 6;
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
  * @ingroup spkm
  */
@@ -32,7 +38,10 @@ enum CBUFFER_VARIANT
 	CLEAR_FAULT
 };
 
-//! Pose specification variants
+/*!
+ * Pose specification variants
+ * @ingroup spkm
+ */
 typedef enum _POSE_SPECIFICATION
 {
 	FRAME, JOINT, MOTOR

@@ -24,6 +24,9 @@
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
+#include "../sarkofag/wgt_sarkofag_inc.h"
+
+#include "../bird_hand/wgt_bird_hand_command.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -439,7 +442,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-
+	interface.bird_hand->wnd_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()
@@ -465,7 +468,7 @@ void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 
 void MainWindow::on_actionsarkofag_Move_triggered()
 {
-
+	interface.sarkofag->wgt_inc->my_open();
 }
 
 void MainWindow::on_actionsarkofag_Synchro_Position_triggered()

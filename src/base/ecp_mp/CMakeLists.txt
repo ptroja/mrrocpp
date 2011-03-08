@@ -7,3 +7,5 @@ add_library(ecp_mp
 )
 
 target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES})
+
+install(TARGETS ecp_mp DESTINATION lib)

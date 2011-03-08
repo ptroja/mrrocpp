@@ -11,6 +11,9 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 
+class wgt_bird_hand_command;
+class WndConfiguration;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -29,8 +32,7 @@ namespace bird_hand {
 // super klasa agregujaca porozrzucane struktury
 
 class EcpRobot;
-class WndCommandAndStatus;
-class WndConfiguration;
+
 
 class UiRobot : public common::UiRobot
 {
@@ -38,8 +40,10 @@ private:
 
 public:
 	EcpRobot *ui_ecp_robot;
-	WndCommandAndStatus *wnd_command_and_status;
+	wgt_bird_hand_command *wnd_command_and_status;
 	WndConfiguration *wnd_configuration;
+
+
 
 	UiRobot(common::Interface& _interface);
 

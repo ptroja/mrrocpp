@@ -8,3 +8,5 @@ add_library(mp
 )
 
 target_link_libraries(mp mp_generator_base mp_robots ecp_mp)
+
+install(TARGETS mp DESTINATION lib)

@@ -299,6 +299,13 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 	char tx_buf[SERVO_ST_BUF_LEN];
 	char rx_buf[SERVO_ST_BUF_LEN];
 
+	// test mode
+	if (master.robot_test_mode) {
+	//	ptimer.sleep();
+
+		return 0;
+	}// end test mode
+
 	tx_buf[0] = 0x00;
 	tx_buf[1] = 0x00;
 	tx_buf[2] = 0x00;

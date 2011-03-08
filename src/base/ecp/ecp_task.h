@@ -100,11 +100,12 @@ public:
 	// TODO: following packages should be 'protected'
 	/**
 	 * @brief Reply to MP
+	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
 	/**
-	 * @brief ECP subtasks stl map
+	 * @brief ECP subtasks container
 	 */
 	subtasks_t subtask_m;
 
@@ -115,6 +116,7 @@ public:
 
 	/**
 	 * @brief buffered MP command
+	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
 	lib::MP_COMMAND_PACKAGE mp_command;
 
@@ -184,10 +186,10 @@ public:
 	 * @brief method to wait to receive pulses and messages from MP
 	 * it returns when message is received (randevous happens)
 	 */
-	bool wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
+	void wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
 
 public:
-	// TODO: what follows should be private method
+	// TODO: what follows should be private
 
 	/**
 	 * @brief communicates with MP
