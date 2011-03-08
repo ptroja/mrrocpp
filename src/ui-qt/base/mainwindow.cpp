@@ -36,8 +36,8 @@
 #include "../bird_hand/wgt_bird_hand_command.h"
 
 #include "../irp6ot_m/wgt_irp6ot_m_joints.h"
-#include "../irp6p_m/wgt_irp6p_m_joints.h"
-#include "../irp6p_m/wgt_irp6p_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wgt_irp6p_m_jointsClass</class>
- <widget class="QWidget" name="wgt_irp6p_m_jointsClass">
+ <class>wgt_irp6_m_jointsClass</class>
+ <widget class="QWidget" name="wgt_irp6_m_jointsClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>wgt_irp6p_m_joints</string>
+   <string>wgt_irp6_m_joints</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

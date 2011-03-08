@@ -1,10 +1,10 @@
-#ifndef WGT_IRP6P_M_MOTORS_H
-#define WGT_IRP6P_M_MOTORS_H
+#ifndef WGT_IRP6_M_JOINTS_H
+#define WGT_IRP6_M_JOINTS_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include "ui_wgt_irp6p_m_motors.h"
+#include "ui_wgt_irp6_m_joints.h"
 #include "../base/wgt_base.h"
 
 namespace mrrocpp {
@@ -12,26 +12,26 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace irp6p_m {
+namespace irp6_m {
 class UiRobot;
-const std::string WGT_IRP6P_MOTORS = "WGT_IRP6P_MOTORS";
+
 }
 }
 }
 
-
-class wgt_irp6p_m_motors : public wgt_base
+class wgt_irp6_m_joints : public wgt_base
 {
 Q_OBJECT
 
 public:
-	wgt_irp6p_m_motors(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6p_m::UiRobot& _robot, QWidget *parent = 0);
-	~wgt_irp6p_m_motors();
+			wgt_irp6_m_joints(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
+					0);
+	~wgt_irp6_m_joints();
 	void my_open();
 
 private:
-	Ui::wgt_irp6p_m_motorsClass ui;
-	mrrocpp::ui::irp6p_m::UiRobot& robot;
+	Ui::wgt_irp6_m_jointsClass ui;
+	mrrocpp::ui::irp6_m::UiRobot& robot;
 
 	int init();
 	int copy();

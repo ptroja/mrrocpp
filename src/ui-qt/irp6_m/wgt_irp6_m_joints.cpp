@@ -1,24 +1,24 @@
-//#include "ui_ecp_r_irp6p_m.h"
-#include "ui_r_irp6p_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
+//#include "ui_ecp_r_irp6_m.h"
+#include "ui_r_irp6_m.h"
+
 //#include "ui/src/ui_ecp_r_single_motor.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
-#include "wgt_irp6p_m_joints.h"
+#include "wgt_irp6_m_joints.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_irp6p_m_joints::wgt_irp6p_m_joints(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6p_m::UiRobot& _robot, QWidget *parent) :
-	wgt_base("irp6p_m joints moves", _interface, parent), robot(_robot)
+wgt_irp6_m_joints::wgt_irp6_m_joints(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
+	wgt_base("irp6_m joints moves", _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 }
 
-wgt_irp6p_m_joints::~wgt_irp6p_m_joints()
+wgt_irp6_m_joints::~wgt_irp6_m_joints()
 {
 
 }
 
-void wgt_irp6p_m_joints::my_open()
+void wgt_irp6_m_joints::my_open()
 {
 	wgt_base::my_open();
 	init();
@@ -26,13 +26,13 @@ void wgt_irp6p_m_joints::my_open()
 }
 
 // slots
-void wgt_irp6p_m_joints::on_pushButton_read_clicked()
+void wgt_irp6_m_joints::on_pushButton_read_clicked()
 {
 	printf("read\n");
 	init();
 }
 
-int wgt_irp6p_m_joints::init()
+int wgt_irp6_m_joints::init()
 {
 
 	try {
@@ -67,7 +67,7 @@ int wgt_irp6p_m_joints::init()
 	return 1;
 }
 
-void wgt_irp6p_m_joints::on_pushButton_import_clicked()
+void wgt_irp6_m_joints::on_pushButton_import_clicked()
 {
 	double val[robot.number_of_servos];
 
@@ -87,12 +87,12 @@ void wgt_irp6p_m_joints::on_pushButton_import_clicked()
 
 }
 
-void wgt_irp6p_m_joints::on_pushButton_export_clicked()
+void wgt_irp6_m_joints::on_pushButton_export_clicked()
 {
 
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_irp6p_m INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
+	buffer << "edp_irp6_m INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
 			<< ui.doubleSpinBox_des_p2->value() << " " << ui.doubleSpinBox_des_p3->value() << " "
 			<< ui.doubleSpinBox_des_p4->value() << " " << ui.doubleSpinBox_des_p5->value() << " "
 			<< ui.doubleSpinBox_des_p6->value() << " " << ui.doubleSpinBox_des_p7->value();
@@ -100,12 +100,12 @@ void wgt_irp6p_m_joints::on_pushButton_export_clicked()
 	interface.ui_msg->message(buffer.str());
 }
 
-void wgt_irp6p_m_joints::on_pushButton_copy_clicked()
+void wgt_irp6_m_joints::on_pushButton_copy_clicked()
 {
 	copy();
 }
 
-int wgt_irp6p_m_joints::copy()
+int wgt_irp6_m_joints::copy()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -131,111 +131,111 @@ int wgt_irp6p_m_joints::copy()
 	return 1;
 }
 
-void wgt_irp6p_m_joints::on_pushButton_execute_clicked()
+void wgt_irp6_m_joints::on_pushButton_execute_clicked()
 {
 	get_desired_position();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_1l_clicked()
+void wgt_irp6_m_joints::on_pushButton_1l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[0] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_2l_clicked()
+void wgt_irp6_m_joints::on_pushButton_2l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[1] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_3l_clicked()
+void wgt_irp6_m_joints::on_pushButton_3l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[2] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_4l_clicked()
+void wgt_irp6_m_joints::on_pushButton_4l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[3] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_5l_clicked()
+void wgt_irp6_m_joints::on_pushButton_5l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[4] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_6l_clicked()
+void wgt_irp6_m_joints::on_pushButton_6l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[5] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_7l_clicked()
+void wgt_irp6_m_joints::on_pushButton_7l_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[6] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_1r_clicked()
+void wgt_irp6_m_joints::on_pushButton_1r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[0] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_2r_clicked()
+void wgt_irp6_m_joints::on_pushButton_2r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[1] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_3r_clicked()
+void wgt_irp6_m_joints::on_pushButton_3r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[2] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_4r_clicked()
+void wgt_irp6_m_joints::on_pushButton_4r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[3] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_5r_clicked()
+void wgt_irp6_m_joints::on_pushButton_5r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[4] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_6r_clicked()
+void wgt_irp6_m_joints::on_pushButton_6r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[5] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-void wgt_irp6p_m_joints::on_pushButton_7r_clicked()
+void wgt_irp6_m_joints::on_pushButton_7r_clicked()
 {
 	get_desired_position();
 	robot.desired_pos[6] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
-int wgt_irp6p_m_joints::get_desired_position()
+int wgt_irp6_m_joints::get_desired_position()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -260,7 +260,7 @@ int wgt_irp6p_m_joints::get_desired_position()
 	return 1;
 }
 
-int wgt_irp6p_m_joints::move_it()
+int wgt_irp6_m_joints::move_it()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -273,9 +273,9 @@ int wgt_irp6p_m_joints::move_it()
 			//robot.ui_ecp_robot->move_motors(robot.desired_pos);
 			robot.ui_ecp_robot->move_joints(robot.desired_pos);
 
-			//robot.ui_ecp_robot->interface.irp6p_m->ui_ecp_robot->move_joints(robot.desired_pos);
-			//interface.irp6p_m->ui_ecp_robot->move_motors(interface.irp6p_m->desired_pos);
-			//interface.irp6p_m->ui_ecp_robot->move_joints(interface.irp6p_m->desired_pos);
+			//robot.ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_joints(robot.desired_pos);
+			//interface.irp6_m->ui_ecp_robot->move_motors(interface.irp6_m->desired_pos);
+			//interface.irp6_m->ui_ecp_robot->move_joints(interface.irp6_m->desired_pos);
 			//robot.ui_ecp_robot->move_motors(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
