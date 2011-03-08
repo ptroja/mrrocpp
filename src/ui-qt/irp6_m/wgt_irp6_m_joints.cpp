@@ -7,8 +7,8 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_irp6_m_joints::wgt_irp6_m_joints(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
-	wgt_base("irp6_m joints moves", _interface, parent), robot(_robot)
+wgt_irp6_m_joints::wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 }
@@ -92,7 +92,7 @@ void wgt_irp6_m_joints::on_pushButton_export_clicked()
 
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_irp6_m INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
+	buffer << widget_label.toStdString() << "INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
 			<< ui.doubleSpinBox_des_p2->value() << " " << ui.doubleSpinBox_des_p3->value() << " "
 			<< ui.doubleSpinBox_des_p4->value() << " " << ui.doubleSpinBox_des_p5->value() << " "
 			<< ui.doubleSpinBox_des_p6->value() << " " << ui.doubleSpinBox_des_p7->value();

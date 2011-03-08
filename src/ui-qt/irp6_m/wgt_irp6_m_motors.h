@@ -27,7 +27,7 @@ class wgt_irp6_m_motors : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_irp6_m_motors(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
+			wgt_irp6_m_motors(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
 					0);
 	~wgt_irp6_m_motors();
 	void my_open();
