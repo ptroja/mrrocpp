@@ -12,8 +12,31 @@ wgt_irp6_m_motors::wgt_irp6_m_motors(QString _widget_label, mrrocpp::ui::common:
 {
 	ui.setupUi(this);
 
-	if (robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p2);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p3);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p4);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p5);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p6);
 
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p1);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p2);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p3);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p6);
+
+	if (robot.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+		doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p7);
+		doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p7);
+	}
+
+	if (robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
+		ui.label_2->hide();
+		ui.doubleSpinBox_cur_p7->hide();
+		ui.doubleSpinBox_des_p7->hide();
+		ui.pushButton_7l->hide();
+		ui.pushButton_7r->hide();
 	}
 
 }
@@ -48,15 +71,8 @@ int wgt_irp6_m_motors::init()
 				ui.pushButton_execute->setDisabled(false);
 				robot.ui_ecp_robot->read_motors(robot.current_pos);
 
-				ui.doubleSpinBox_cur_p1->setValue(robot.current_pos[0]);
-				ui.doubleSpinBox_cur_p2->setValue(robot.current_pos[1]);
-				ui.doubleSpinBox_cur_p3->setValue(robot.current_pos[2]);
-				ui.doubleSpinBox_cur_p4->setValue(robot.current_pos[3]);
-				ui.doubleSpinBox_cur_p5->setValue(robot.current_pos[4]);
-				ui.doubleSpinBox_cur_p6->setValue(robot.current_pos[5]);
-				ui.doubleSpinBox_cur_p7->setValue(robot.current_pos[6]);
-
 				for (int i = 0; i < robot.number_of_servos; i++) {
+					doubleSpinBox_cur_Vector[i]->setValue(robot.current_pos[i]);
 					robot.desired_pos[i] = robot.current_pos[i];
 				}
 
@@ -82,13 +98,9 @@ void wgt_irp6_m_motors::on_pushButton_import_clicked()
 
 	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
 
-	ui.doubleSpinBox_des_p1->setValue(val[0]);
-	ui.doubleSpinBox_des_p2->setValue(val[1]);
-	ui.doubleSpinBox_des_p3->setValue(val[2]);
-	ui.doubleSpinBox_des_p4->setValue(val[3]);
-	ui.doubleSpinBox_des_p5->setValue(val[4]);
-	ui.doubleSpinBox_des_p6->setValue(val[5]);
-	ui.doubleSpinBox_des_p7->setValue(val[6]);
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		doubleSpinBox_des_Vector[i]->setValue(val[i]);
+	}
 
 }
 
@@ -97,10 +109,10 @@ void wgt_irp6_m_motors::on_pushButton_export_clicked()
 
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << widget_label.toStdString() << " INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
-			<< ui.doubleSpinBox_des_p2->value() << " " << ui.doubleSpinBox_des_p3->value() << " "
-			<< ui.doubleSpinBox_des_p4->value() << " " << ui.doubleSpinBox_des_p5->value() << " "
-			<< ui.doubleSpinBox_des_p6->value() << " " << ui.doubleSpinBox_des_p7->value();
+	buffer << widget_label.toStdString() << " INCREMENTAL POSITION\n ";
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		buffer << " " << doubleSpinBox_des_Vector[i]->value();
+	}
 
 	interface.ui_msg->message(buffer.str());
 }
@@ -118,14 +130,9 @@ int wgt_irp6_m_motors::copy()
 		{
 			ui.pushButton_execute->setDisabled(false);
 
-			ui.doubleSpinBox_des_p1->setValue(ui.doubleSpinBox_cur_p1->value());
-			ui.doubleSpinBox_des_p2->setValue(ui.doubleSpinBox_cur_p2->value());
-			ui.doubleSpinBox_des_p3->setValue(ui.doubleSpinBox_cur_p3->value());
-			ui.doubleSpinBox_des_p4->setValue(ui.doubleSpinBox_cur_p4->value());
-			ui.doubleSpinBox_des_p5->setValue(ui.doubleSpinBox_cur_p5->value());
-			ui.doubleSpinBox_des_p6->setValue(ui.doubleSpinBox_cur_p6->value());
-			ui.doubleSpinBox_des_p7->setValue(ui.doubleSpinBox_cur_p7->value());
-
+			for (int i = 0; i < robot.number_of_servos; i++) {
+				doubleSpinBox_des_Vector[i]->setValue(doubleSpinBox_cur_Vector[i]->value());
+			}
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
 			ui.pushButton_execute->setDisabled(true);
@@ -247,14 +254,9 @@ int wgt_irp6_m_motors::get_desired_position()
 
 		if (robot.state.edp.is_synchronised) {
 
-			robot.desired_pos[0] = ui.doubleSpinBox_des_p1->value();
-			robot.desired_pos[1] = ui.doubleSpinBox_des_p2->value();
-			robot.desired_pos[2] = ui.doubleSpinBox_des_p3->value();
-			robot.desired_pos[3] = ui.doubleSpinBox_des_p4->value();
-			robot.desired_pos[4] = ui.doubleSpinBox_des_p5->value();
-			robot.desired_pos[5] = ui.doubleSpinBox_des_p6->value();
-			robot.desired_pos[6] = ui.doubleSpinBox_des_p7->value();
-
+			for (int i = 0; i < robot.number_of_servos; i++) {
+				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+			}
 		} else {
 
 			for (int i = 0; i < robot.number_of_servos; i++) {
@@ -284,13 +286,9 @@ int wgt_irp6_m_motors::move_it()
 			//robot.ui_ecp_robot->move_motors(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				ui.doubleSpinBox_des_p1->setValue(robot.desired_pos[0]);
-				ui.doubleSpinBox_des_p2->setValue(robot.desired_pos[1]);
-				ui.doubleSpinBox_des_p3->setValue(robot.desired_pos[2]);
-				ui.doubleSpinBox_des_p4->setValue(robot.desired_pos[3]);
-				ui.doubleSpinBox_des_p5->setValue(robot.desired_pos[4]);
-				ui.doubleSpinBox_des_p6->setValue(robot.desired_pos[5]);
-				ui.doubleSpinBox_des_p7->setValue(robot.desired_pos[6]);
+				for (int i = 0; i < robot.number_of_servos; i++) {
+					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
+				}
 				init();
 			}
 		} // end if (robot.state.edp.pid!=-1)

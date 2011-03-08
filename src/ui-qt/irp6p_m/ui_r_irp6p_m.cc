@@ -155,37 +155,24 @@ int UiRobot::manage_interface()
 
 		case -1:
 			mw->enable_menu_item(false, 1, ui->menuIrp6p_m);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument, NULL);
-			 */
 			break;
 		case 0:
 			mw->enable_menu_item(false, 5, ui->menuirp6p_m_Pre_Synchro_Moves, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 			mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Unload);
 			mw->enable_menu_item(true, 1, ui->menuIrp6p_m);
 			mw->enable_menu_item(true, 1, ui->actionirp6p_m_EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_pre_synchro_moves, ABN_mm_irp6_postument_absolute_moves,
-			 ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, ABN_mm_irp6_postument_edp_load, NULL);
-			 */
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, ui->menuIrp6p_m);
 			mw->enable_menu_item(true, 1, ui->actionall_EDP_Unload);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument, NULL);
-			 */
+
 			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
+
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -193,30 +180,17 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 						mw->enable_menu_item(true, 1, ui->actionirp6p_m_EDP_Unload);
 						mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_absolute_moves,
-						 ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_preset_positions,
-						 ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
-						 */
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
 						mw->enable_menu_item(false, 2, ui->actionirp6p_m_EDP_Unload, ui->actionirp6p_m_EDP_Load);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
-						 ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, ABN_mm_irp6_postument_edp_unload, NULL);
-						 */
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 4, ui->menuirp6p_m_Absolute_Moves, ui->menuirp6p_m_Preset_Positions, ui->menuirp6p_m_Relative_Moves, ui->menuirp6p_m_Tool);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves, ABN_mm_irp6_postument_preset_positions,
-						 ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
-						 */
+
 						break;
 					default:
 						break;
@@ -228,11 +202,7 @@ int UiRobot::manage_interface()
 				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions); ///co to tutaj robi?
 				mw->enable_menu_item(true, 2, ui->actionirp6p_m_EDP_Unload, ui->actionall_Synchronisation);
 				mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_edp_unload, ABN_mm_irp6_postument_pre_synchro_moves, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+
 			}
 			break;
 		default:
