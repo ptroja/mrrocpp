@@ -13,9 +13,9 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace conveyor {
+namespace single_motor {
 class UiRobot;
-const std::string WGT_CONVEYOR_MOVE = "WGT_CONVEYOR_MOVE";
+
 }
 }
 }
@@ -25,7 +25,7 @@ class wgt_conveyor_move : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent =
+			wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent =
 					0);
 	~wgt_conveyor_move();
 
@@ -34,7 +34,7 @@ public:
 
 private:
 	Ui::wgt_conveyor_moveClass ui;
-	mrrocpp::ui::conveyor::UiRobot& robot;
+	mrrocpp::ui::single_motor::UiRobot& robot;
 
 	QTimer *timer;
 

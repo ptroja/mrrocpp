@@ -1,13 +1,11 @@
-//#include "ui_ecp_r_conveyor.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
-#include "ui_r_conveyor.h"
-#include "robot/conveyor/const_conveyor.h"
+#include "../base/ui_r_single_motor.h"
 
 #include "wgt_conveyor_move.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_conveyor_move::wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent) :
+wgt_conveyor_move::wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent) :
 	wgt_base(_robot_label, _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);

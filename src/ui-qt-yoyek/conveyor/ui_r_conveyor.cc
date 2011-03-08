@@ -15,7 +15,7 @@
 namespace mrrocpp {
 namespace ui {
 namespace conveyor {
-
+const std::string WGT_CONVEYOR_MOVE = "WGT_CONVEYOR_MOVE";
 // extern ui_state_def ui_state;
 
 //
