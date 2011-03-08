@@ -46,7 +46,7 @@ void HI_moxa::init()
 #endif
 	// inicjalizacja zmiennych
 	for (unsigned int i = 0; i <= last_drive_number; i++) {
-		servo_data[i].first_hardware_read = true;
+		servo_data[i].first_hardware_reads = FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
 		servo_data[i].command_params = 0;
 		for(int j=0; j<SERVO_ST_BUF_LEN; j++)
 			servo_data[i].buf[j] = 0;
@@ -252,10 +252,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
 		}
 
-		// W pierwszym odczycie danych z napedu przyrost pozycji musi byc 0.
-		if (servo_data[drive_number].first_hardware_read && hardware_read_ok) {
+		// W pierwszych odczytach danych z napedu przyrost pozycji musi byc 0.
+		if ((servo_data[drive_number].first_hardware_reads > 0) && hardware_read_ok) {
 			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
-			servo_data[drive_number].first_hardware_read = false;
+			servo_data[drive_number].first_hardware_reads --;
 		}
 
 		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position
@@ -321,11 +321,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
-		const int disp_drv_no = 0;
+//		const int disp_drv_no = 0;
 //		std::cout << "[info]";
-//		std::cout << " sw1_sw2_swSynchr[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
-//		std::cout << " position[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.position;
-//		std::cout << " current[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.current;
+//		std::cout << " sw1_sw2_swSynchr = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
+//		std::cout << " position = " << (int) servo_data[disp_drv_no].drive_status.position;
+//		std::cout << " current = " << (int) servo_data[disp_drv_no].drive_status.current;
 //		std::cout << std::endl;
 
 
@@ -337,7 +337,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 //		if(servo_data[5].drive_status.swSynchr != 0)
 //			std::cout << "   ########################### ########################### ";
 //
-		std::cout << std::endl;
+//		std::cout << std::endl;
 
 		status_disp_cnt = 0;
 	}
@@ -490,7 +490,7 @@ void HI_moxa::reset_position(int drive_number)
 	servo_data[drive_number].current_absolute_position = 0L;
 	servo_data[drive_number].previous_absolute_position = 0L;
 	servo_data[drive_number].current_position_inc = 0.0;
-	servo_data[drive_number].first_hardware_read = true;
+	servo_data[drive_number].first_hardware_reads = FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
 	//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::reset_position(" << drive_number << ")" << std::endl;
 	//#endif
