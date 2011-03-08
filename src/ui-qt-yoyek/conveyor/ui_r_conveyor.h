@@ -9,7 +9,7 @@
 #define __UI_R_CONVEYOR_H
 
 #include "../base/ui.h"
-#include "../base/ui_robot.h"
+#include "../base/ui_r_single_motor.h"
 #include "robot/conveyor/const_conveyor.h"
 
 class wgt_conveyor_move;
@@ -32,16 +32,12 @@ namespace conveyor {
 //
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 private:
 
 public:
 
-	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
-	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
-
-	single_motor::EcpRobot *ui_ecp_robot;
 	wgt_conveyor_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);

@@ -121,6 +121,7 @@ ADD_EXECUTABLE(
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
+	base/ui_r_single_motor.cc
 )
 
 # Link executable with QT libraries
