@@ -55,6 +55,7 @@ SET(GUI_CXX_SRCS
     conveyor/wgt_conveyor_inc.cpp
     irp6p_tfg/wgt_irp6p_tfg_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
+    irp6ot_m/wgt_irp6ot_m_joints.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -70,6 +71,7 @@ SET(GUI_MOC_SRCS
     conveyor/wgt_conveyor_inc.h
     irp6p_tfg/wgt_irp6p_tfg_move.h
     bird_hand/wgt_bird_hand_command.h
+    irp6ot_m/wgt_irp6ot_m_joints.h
 )
 
 # Generate MOC files
@@ -87,6 +89,7 @@ SET(GUI_UI
     conveyor/wgt_conveyor_inc.ui
     irp6p_tfg/wgt_irp6p_tfg_move.ui
     bird_hand/wgt_bird_hand_command.ui
+    irp6ot_m/wgt_irp6ot_m_joints.ui
 )
 
 # Generate UI include files
