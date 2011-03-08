@@ -205,7 +205,7 @@ void MainWindow::raise_ui_ecp_window_slot()
 		case lib::C_XYZ_ANGLE_AXIS:
 		case lib::C_XYZ_EULER_ZYZ:
 		case lib::C_JOINT:
-		case lib::C_MOTOR:
+		case lib::C_MOTOR: {
 			//  printf("C_MOTOR\n");
 
 			if (interface.teachingstate == ui::common::MP_RUNNING) {
@@ -223,7 +223,7 @@ void MainWindow::raise_ui_ecp_window_slot()
 				 */
 			}
 			/* TR PtLeave(0); */
-
+		}
 			break;
 		case lib::YES_NO: {
 			Ui::wgt_yes_noClass* ui = interface.wgt_yes_no_obj->get_ui();
@@ -234,18 +234,16 @@ void MainWindow::raise_ui_ecp_window_slot()
 
 		}
 			break;
-		case lib::MESSAGE:
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 TR PtLeave(0);
-			 */
+		case lib::MESSAGE: {
+			Ui::wgt_messageClass* ui = interface.wgt_message_obj->get_ui();
+			ui->label_message->setText(ecp_to_ui_msg.string);
+			interface.wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
-		case lib::DOUBLE_NUMBER:
+		case lib::DOUBLE_NUMBER: {
 
 			/* TR
 			 PtEnter(0);
@@ -253,10 +251,9 @@ void MainWindow::raise_ui_ecp_window_slot()
 			 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
 			 PtLeave(0);
 			 */
-
+		}
 			break;
-		case lib::INTEGER_NUMBER:
-
+		case lib::INTEGER_NUMBER: {
 			/*
 			 TR PtEnter(0);
 
@@ -265,10 +262,9 @@ void MainWindow::raise_ui_ecp_window_slot()
 
 			 PtLeave(0);
 			 */
-
+		}
 			break;
-		case lib::CHOOSE_OPTION:
-
+		case lib::CHOOSE_OPTION: {
 			/* TR
 
 			 PtEnter(0);
@@ -295,9 +291,11 @@ void MainWindow::raise_ui_ecp_window_slot()
 			}
 
 			/* TR PtLeave(0); */
-
+		}
 			break;
-		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::LOAD_FILE: {
+			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+
 			//    printf("lib::LOAD_FILE\n");
 
 			wyjscie = false;
@@ -318,9 +316,10 @@ void MainWindow::raise_ui_ecp_window_slot()
 			}
 
 			ui_rep.reply = lib::FILE_LOADED;
-
+		}
 			break;
-		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::SAVE_FILE: {
+			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 
 
@@ -341,12 +340,13 @@ void MainWindow::raise_ui_ecp_window_slot()
 			}
 
 			ui_rep.reply = lib::FILE_SAVED;
-
+		}
 			break;
 
-		default:
+		default: {
 			perror("Strange ECP message");
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
 	}
 

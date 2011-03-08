@@ -12,6 +12,7 @@
 #include "mainwindow.h"
 #include "wgt_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_message.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -227,6 +228,7 @@ public:
 
 	wgt_process_control* wgt_pc;
 	wgt_yes_no* wgt_yes_no_obj;
+	wgt_message* wgt_message_obj;
 };
 
 }

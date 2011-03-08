@@ -119,6 +119,7 @@ void Interface::init()
 	// dodanie innych okien w dock widgetach
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
+	wgt_message_obj = new wgt_message(*this);
 
 	// ustalenie katalogow UI
 
