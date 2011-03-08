@@ -196,7 +196,7 @@ void MainWindow::raise_process_control_window_slot()
 void MainWindow::raise_ui_ecp_window_slot()
 {
 	interface.ui_msg->message("raise_ui_ecp_window_slot");
-	bool wyjscie;
+
 	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
 
@@ -326,27 +326,43 @@ void MainWindow::raise_ui_ecp_window_slot()
 		}
 			break;
 		case lib::SAVE_FILE: {
+
 			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
 
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 PtLeave(0);
-					 */
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getOpenFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_SAVED;
 				} else {
-					delay(1);
+					ui_rep.reply = lib::QUIT;
 				}
+				//std::string str_fullpath = fileName.toStdString();
 			}
 
-			ui_rep.reply = lib::FILE_SAVED;
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
+
+			interface.ui_ecp_obj->synchroniser.command();
+
 		}
 			break;
 
@@ -1091,14 +1107,14 @@ void MainWindow::on_actionConfiguration_triggered()
 
 		fileName
 				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
+		if (fileName.length() > 0) {
+			std::string str_fullpath = fileName.toStdString();
 
-		std::string str_fullpath = fileName.toStdString();
-
-		interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
-				+ interface.mrrocpp_root_local_path.length());
-		interface.reload_whole_configuration();
-		interface.set_default_configuration_file_name();
-
+			interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
+					+ interface.mrrocpp_root_local_path.length());
+			interface.reload_whole_configuration();
+			interface.set_default_configuration_file_name();
+		}
 	}
 
 	catch (...) {
