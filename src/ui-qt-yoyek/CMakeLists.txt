@@ -51,7 +51,6 @@ SET(GUI_CXX_SRCS
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
     polycrank/wgt_polycrank_int.cpp
-    sarkofag/wgt_sarkofag_move.cpp
     base/wgt_single_motor_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
     irp6ot_m/wgt_irp6ot_m_joints.cpp
@@ -66,7 +65,6 @@ SET(GUI_MOC_SRCS
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
     polycrank/wgt_polycrank_int.h
-    sarkofag/wgt_sarkofag_move.h
     base/wgt_single_motor_move.h
     bird_hand/wgt_bird_hand_command.h
     irp6ot_m/wgt_irp6ot_m_joints.h
@@ -83,7 +81,6 @@ SET(GUI_UI
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui
     polycrank/wgt_polycrank_int.ui
-    sarkofag/wgt_sarkofag_move.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
     irp6ot_m/wgt_irp6ot_m_joints.ui

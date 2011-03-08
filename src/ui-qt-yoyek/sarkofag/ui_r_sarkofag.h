@@ -9,10 +9,10 @@
 #define __UI_R_SARKOFAG_H
 
 #include "../base/ui.h"
-#include "../base/ui_robot.h"
+#include "../base/ui_r_single_motor.h"
 #include "robot/sarkofag/const_sarkofag.h"
 
-class wgt_sarkofag_move;
+class wgt_single_motor_move;
 
 namespace mrrocpp {
 namespace ui {
@@ -35,18 +35,11 @@ namespace sarkofag {
 // super klasa agregujaca porozrzucane struktury
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 private:
 
 public:
-
-	double current_pos[lib::sarkofag::NUM_OF_SERVOS];// pozycja biezaca
-	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
-
-
-	single_motor::EcpRobot *ui_ecp_robot;
-	wgt_sarkofag_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 

@@ -3,23 +3,19 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_sarkofag.h"
-//#include "ui_ecp_r_sarkofag.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
-
-#include "wgt_sarkofag_move.h"
-
 #include "robot/sarkofag/const_sarkofag.h"
 #include "../base/interface.h"
 
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace sarkofag {
-
+const std::string WGT_SARKOFAG_MOVE = "WGT_SARKOFAG_MOVE";
 //
 //
 // KLASA UiRobot
@@ -164,12 +160,11 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active"),
-			ui_ecp_robot(NULL)
+			single_motor::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active")
 {
 
-	wgt_inc = new wgt_sarkofag_move(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SARKOFAG_MOVE] = wgt_inc->dwgt;
+	wgt_move = new wgt_single_motor_move("Sarkofag moves", interface, *this, interface.get_main_window());
+	wndbase_m[WGT_SARKOFAG_MOVE] = wgt_move->dwgt;
 
 }
 
