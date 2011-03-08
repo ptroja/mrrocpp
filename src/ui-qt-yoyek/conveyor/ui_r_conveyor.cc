@@ -10,7 +10,7 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "wgt_single_motor_move.h"
+#include "../base/wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
