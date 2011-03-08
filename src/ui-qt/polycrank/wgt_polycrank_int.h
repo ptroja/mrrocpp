@@ -4,6 +4,7 @@
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
+#include <QVector>
 #include "ui_wgt_polycrank_int.h"
 #include "../base/wgt_base.h"
 
@@ -24,8 +25,12 @@ class wgt_polycrank_int : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_polycrank_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::polycrank::UiRobot& _robot, QWidget *parent = 0);
+			wgt_polycrank_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::polycrank::UiRobot& _robot, QWidget *parent =
+					0);
 	~wgt_polycrank_int();
+
+	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 
 private:
 	Ui::wgt_polycrank_intClass ui;
