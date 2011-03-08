@@ -12,7 +12,7 @@
 #include "../base/ui_robot.h"
 #include "robot/conveyor/const_conveyor.h"
 
-class wgt_conveyor_move;
+class wgt_single_motor_move;
 
 namespace mrrocpp {
 namespace ui {

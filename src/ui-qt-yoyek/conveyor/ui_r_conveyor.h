@@ -12,7 +12,7 @@
 #include "../base/ui_r_single_motor.h"
 #include "robot/conveyor/const_conveyor.h"
 
-class wgt_conveyor_move;
+class wgt_single_motor_move;
 
 namespace mrrocpp {
 namespace ui {
@@ -38,7 +38,7 @@ private:
 
 public:
 
-	wgt_conveyor_move *wgt_inc;
+	wgt_single_motor_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 

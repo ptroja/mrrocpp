@@ -10,7 +10,7 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "wgt_conveyor_move.h"
+#include "wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -132,7 +132,7 @@ int UiRobot::synchronise_int()
 UiRobot::UiRobot(common::Interface& _interface) :
 			single_motor::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active")
 {
-	wgt_inc = new wgt_conveyor_move("Conveyor moves", interface, *this, interface.get_main_window());
+	wgt_inc = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
 	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_inc->dwgt;
 }
 

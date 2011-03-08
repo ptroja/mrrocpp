@@ -1,10 +1,10 @@
-#ifndef WGT_CONVEYOR_INC_H
-#define WGT_CONVEYOR_INC_H
+#ifndef WGT_SINGLE_MOTOR_MOVE_H
+#define WGT_SINGLE_MOTOR_MOVE_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include "ui_wgt_conveyor_move.h"
+#include "ui_wgt_single_motor_move.h"
 #include "../base/wgt_base.h"
 #include <QTimer>
 
@@ -20,20 +20,20 @@ class UiRobot;
 }
 }
 
-class wgt_conveyor_move : public wgt_base
+class wgt_single_motor_move : public wgt_base
 {
 Q_OBJECT
 
 public:
-			wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent =
+			wgt_single_motor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent =
 					0);
-	~wgt_conveyor_move();
+	~wgt_single_motor_move();
 
 	void synchro_depended_init();
 	void my_open();
 
 private:
-	Ui::wgt_conveyor_moveClass ui;
+	Ui::wgt_single_motor_moveClass ui;
 	mrrocpp::ui::single_motor::UiRobot& robot;
 
 	QTimer *timer;

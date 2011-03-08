@@ -1,11 +1,11 @@
 #include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "../base/ui_r_single_motor.h"
 
-#include "wgt_conveyor_move.h"
+#include "wgt_single_motor_move.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_conveyor_move::wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent) :
+wgt_single_motor_move::wgt_single_motor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent) :
 	wgt_base(_robot_label, _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
@@ -16,12 +16,12 @@ wgt_conveyor_move::wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::
 	//	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
 }
 
-wgt_conveyor_move::~wgt_conveyor_move()
+wgt_single_motor_move::~wgt_single_motor_move()
 {
 
 }
 
-void wgt_conveyor_move::my_open()
+void wgt_single_motor_move::my_open()
 {
 	wgt_base::my_open();
 	init_mr();
@@ -30,12 +30,12 @@ void wgt_conveyor_move::my_open()
 	copy_si();
 }
 
-void wgt_conveyor_move::synchro_depended_init()
+void wgt_single_motor_move::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();
 }
 
-int wgt_conveyor_move::synchro_depended_widgets_disable(bool _set_disabled)
+int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute_mr->setDisabled(_set_disabled);
 	ui.pushButton_read_mr->setDisabled(_set_disabled);
@@ -52,7 +52,7 @@ int wgt_conveyor_move::synchro_depended_widgets_disable(bool _set_disabled)
 	return 1;
 }
 
-void wgt_conveyor_move::synchro_depended_init_slot()
+void wgt_single_motor_move::synchro_depended_init_slot()
 {
 
 	try {
@@ -76,12 +76,12 @@ void wgt_conveyor_move::synchro_depended_init_slot()
  * MOTORS
  ****************************/
 
-void wgt_conveyor_move::on_pushButton_read_mr_clicked()
+void wgt_single_motor_move::on_pushButton_read_mr_clicked()
 {
 	init_mr();
 }
 
-int wgt_conveyor_move::init_mr()
+int wgt_single_motor_move::init_mr()
 {
 
 	try {
@@ -115,7 +115,7 @@ int wgt_conveyor_move::init_mr()
 	return 1;
 }
 
-void wgt_conveyor_move::on_pushButton_import_mr_clicked()
+void wgt_single_motor_move::on_pushButton_import_mr_clicked()
 {
 	double val[robot.number_of_servos];
 
@@ -124,7 +124,7 @@ void wgt_conveyor_move::on_pushButton_import_mr_clicked()
 	ui.doubleSpinBox_des_mr->setValue(val[0]);
 }
 
-void wgt_conveyor_move::on_pushButton_export_mr_clicked()
+void wgt_single_motor_move::on_pushButton_export_mr_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
@@ -133,12 +133,12 @@ void wgt_conveyor_move::on_pushButton_export_mr_clicked()
 	interface.ui_msg->message(buffer.str());
 }
 
-void wgt_conveyor_move::on_pushButton_copy_mr_clicked()
+void wgt_single_motor_move::on_pushButton_copy_mr_clicked()
 {
 	copy_mr();
 }
 
-int wgt_conveyor_move::copy_mr()
+int wgt_single_motor_move::copy_mr()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -158,27 +158,27 @@ int wgt_conveyor_move::copy_mr()
 	return 1;
 }
 
-void wgt_conveyor_move::on_pushButton_execute_mr_clicked()
+void wgt_single_motor_move::on_pushButton_execute_mr_clicked()
 {
 	get_desired_position_mr();
 	move_it_mr();
 }
 
-void wgt_conveyor_move::on_pushButton_l_mr_clicked()
+void wgt_single_motor_move::on_pushButton_l_mr_clicked()
 {
 	get_desired_position_mr();
 	robot.desired_pos[0] -= ui.doubleSpinBox_step_mr->value();
 	move_it_mr();
 }
 
-void wgt_conveyor_move::on_pushButton_r_mr_clicked()
+void wgt_single_motor_move::on_pushButton_r_mr_clicked()
 {
 	get_desired_position_mr();
 	robot.desired_pos[0] += ui.doubleSpinBox_step_mr->value();
 	move_it_mr();
 }
 
-int wgt_conveyor_move::get_desired_position_mr()
+int wgt_single_motor_move::get_desired_position_mr()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -196,7 +196,7 @@ int wgt_conveyor_move::get_desired_position_mr()
 	return 1;
 }
 
-int wgt_conveyor_move::move_it_mr()
+int wgt_single_motor_move::move_it_mr()
 {
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -225,12 +225,12 @@ int wgt_conveyor_move::move_it_mr()
  * JOINS
  ****************************/
 
-void wgt_conveyor_move::on_pushButton_read_si_clicked()
+void wgt_single_motor_move::on_pushButton_read_si_clicked()
 {
 	init_si();
 }
 
-int wgt_conveyor_move::init_si()
+int wgt_single_motor_move::init_si()
 {
 
 	try {
@@ -264,7 +264,7 @@ int wgt_conveyor_move::init_si()
 	return 1;
 }
 
-void wgt_conveyor_move::on_pushButton_import_si_clicked()
+void wgt_single_motor_move::on_pushButton_import_si_clicked()
 {
 	double val[robot.number_of_servos];
 
@@ -273,7 +273,7 @@ void wgt_conveyor_move::on_pushButton_import_si_clicked()
 	ui.doubleSpinBox_des_si->setValue(val[0]);
 }
 
-void wgt_conveyor_move::on_pushButton_export_si_clicked()
+void wgt_single_motor_move::on_pushButton_export_si_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
@@ -282,12 +282,12 @@ void wgt_conveyor_move::on_pushButton_export_si_clicked()
 	interface.ui_msg->message(buffer.str());
 }
 
-void wgt_conveyor_move::on_pushButton_copy_si_clicked()
+void wgt_single_motor_move::on_pushButton_copy_si_clicked()
 {
 	copy_si();
 }
 
-int wgt_conveyor_move::copy_si()
+int wgt_single_motor_move::copy_si()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -307,27 +307,27 @@ int wgt_conveyor_move::copy_si()
 	return 1;
 }
 
-void wgt_conveyor_move::on_pushButton_execute_si_clicked()
+void wgt_single_motor_move::on_pushButton_execute_si_clicked()
 {
 	get_desired_position_si();
 	move_it_si();
 }
 
-void wgt_conveyor_move::on_pushButton_l_si_clicked()
+void wgt_single_motor_move::on_pushButton_l_si_clicked()
 {
 	get_desired_position_si();
 	robot.desired_pos[0] -= ui.doubleSpinBox_step_si->value();
 	move_it_si();
 }
 
-void wgt_conveyor_move::on_pushButton_r_si_clicked()
+void wgt_single_motor_move::on_pushButton_r_si_clicked()
 {
 	get_desired_position_si();
 	robot.desired_pos[0] += ui.doubleSpinBox_step_si->value();
 	move_it_si();
 }
 
-int wgt_conveyor_move::get_desired_position_si()
+int wgt_single_motor_move::get_desired_position_si()
 {
 
 	if (robot.state.edp.pid != -1) {
@@ -345,7 +345,7 @@ int wgt_conveyor_move::get_desired_position_si()
 	return 1;
 }
 
-int wgt_conveyor_move::move_it_si()
+int wgt_single_motor_move::move_it_si()
 {
 	// wychwytania ew. bledow ECP::robot
 	try {
