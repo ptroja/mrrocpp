@@ -51,6 +51,7 @@ SET(GUI_CXX_SRCS
     base/ui_ecp_dialogs/wgt_message.cpp
     base/ui_ecp_dialogs/wgt_input_integer.cpp
     base/ui_ecp_dialogs/wgt_input_double.cpp
+    base/ui_ecp_dialogs/wgt_choose_option.cpp
     spkm/wgt_spkm_inc.cpp
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
@@ -70,6 +71,7 @@ SET(GUI_MOC_SRCS
     base/ui_ecp_dialogs/wgt_message.h
     base/ui_ecp_dialogs/wgt_input_integer.h
     base/ui_ecp_dialogs/wgt_input_double.h
+    base/ui_ecp_dialogs/wgt_choose_option.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -91,6 +93,7 @@ SET(GUI_UI
     base/ui_ecp_dialogs/wgt_message.ui
     base/ui_ecp_dialogs/wgt_input_integer.ui
     base/ui_ecp_dialogs/wgt_input_double.ui
+    base/ui_ecp_dialogs/wgt_choose_option.ui
     spkm/wgt_spkm_inc.ui
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui

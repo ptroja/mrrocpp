@@ -21,7 +21,7 @@ void wgt_yes_no::hideEvent(QHideEvent *event)
 
 	}
 	interface.ui_ecp_obj->synchroniser.command();
-	interface.ui_msg->message("wgt_yes_no::hideEvent");
+	//interface.ui_msg->message("wgt_yes_no::hideEvent");
 	event->accept();
 }
 

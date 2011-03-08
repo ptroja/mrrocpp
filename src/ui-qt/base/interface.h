@@ -15,6 +15,7 @@
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
 #include "ui_ecp_dialogs/wgt_input_double.h"
+#include "ui_ecp_dialogs/wgt_choose_option.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -233,6 +234,7 @@ public:
 	wgt_message* wgt_message_obj;
 	wgt_input_integer* wgt_input_integer_obj;
 	wgt_input_double* wgt_input_double_obj;
+	wgt_choose_option* wgt_choose_option_obj;
 };
 
 }

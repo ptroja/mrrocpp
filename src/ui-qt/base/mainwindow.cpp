@@ -263,32 +263,25 @@ void MainWindow::raise_ui_ecp_window_slot()
 		}
 			break;
 		case lib::CHOOSE_OPTION: {
-			/* TR
 
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 */
+			Ui::wgt_choose_optionClass* ui = interface.wgt_choose_option_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
 
 			if (ecp_to_ui_msg.nr_of_options == 2) {
-				/* TR
-				 interface.block_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->hide();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->show();
 			}
 
-			/* TR PtLeave(0); */
+			interface.wgt_choose_option_obj->my_open();
 		}
 			break;
 		case lib::LOAD_FILE: {
