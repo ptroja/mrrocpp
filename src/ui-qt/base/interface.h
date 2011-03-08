@@ -14,6 +14,7 @@
 #include "ui_ecp_dialogs/wgt_yes_no.h"
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
+#include "ui_ecp_dialogs/wgt_input_double.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -231,6 +232,7 @@ public:
 	wgt_yes_no* wgt_yes_no_obj;
 	wgt_message* wgt_message_obj;
 	wgt_input_integer* wgt_input_integer_obj;
+	wgt_input_double* wgt_input_double_obj;
 };
 
 }

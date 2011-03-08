@@ -245,12 +245,11 @@ void MainWindow::raise_ui_ecp_window_slot()
 			break;
 		case lib::DOUBLE_NUMBER: {
 
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			Ui::wgt_input_doubleClass* ui = interface.wgt_input_double_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			interface.wgt_input_double_obj->my_open();
 		}
 			break;
 		case lib::INTEGER_NUMBER: {

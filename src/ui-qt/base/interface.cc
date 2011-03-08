@@ -121,6 +121,8 @@ void Interface::init()
 	wgt_yes_no_obj = new wgt_yes_no(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
+	wgt_input_double_obj = new wgt_input_double(*this);
+
 	// ustalenie katalogow UI
 
 	mw->show();
