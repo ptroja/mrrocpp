@@ -89,6 +89,7 @@ int UiRobot::edp_create_int()
 	CATCH_SECTION_UI
 
 	interface.manage_interface();
+	wgt_motors->synchro_depended_init();
 	return 1;
 
 }

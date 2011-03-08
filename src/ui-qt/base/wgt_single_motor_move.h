@@ -6,7 +6,6 @@
 #include <QDockWidget>
 #include "ui_wgt_single_motor_move.h"
 #include "../base/wgt_base.h"
-#include <QTimer>
 
 namespace mrrocpp {
 namespace ui {
@@ -35,8 +34,6 @@ public:
 private:
 	Ui::wgt_single_motor_moveClass ui;
 	mrrocpp::ui::single_motor::UiRobot& robot;
-
-	QTimer *timer;
 
 	int synchro_depended_widgets_disable(bool _set_disabled);
 

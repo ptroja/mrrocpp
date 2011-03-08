@@ -95,6 +95,7 @@ int UiRobot::edp_create_int()
 	CATCH_SECTION_UI
 
 	interface.manage_interface();
+	wgt_move->synchro_depended_init();
 	return 1;
 
 }
@@ -177,7 +178,7 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-
+	wgt_move->synchro_depended_init();
 	return 1;
 
 }

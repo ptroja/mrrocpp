@@ -2,10 +2,9 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-/* TR
- #include "wgt_irp6_m_joints.h"
- #include "wgt_irp6_m_motors.h"
- */
+#include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_joints.h"
+
 #include "ui_r_irp6_m.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 
@@ -71,7 +70,7 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-
+	wgt_motors->synchro_depended_init();
 	return 1;
 
 }
@@ -81,12 +80,7 @@ UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_
 			ui_ecp_robot(NULL)
 
 {
-	/* TR
-	 wgt_joints = new wgt_irp6_m_joints(interface, *this, interface.get_main_window());
-	 wgt_motors = new wgt_irp6_m_motors(interface, *this, interface.get_main_window());
-	 wndbase_m[WGT_IRP6_JOINTS] = wgt_joints->dwgt;
-	 wndbase_m[WGT_IRP6_MOTORS] = wgt_motors->dwgt;
-	 */
+
 }
 
 void UiRobot::delete_ui_ecp_robot()

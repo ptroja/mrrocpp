@@ -94,7 +94,7 @@ int wgt_single_motor_move::init_mr()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				//synchro_depended_widgets_disable(false);
+				synchro_depended_widgets_disable(false);
 
 				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
 				//				robot.ui_ecp_robot->execute_motion();
@@ -110,7 +110,7 @@ int wgt_single_motor_move::init_mr()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				//synchro_depended_widgets_disable(true);
+				synchro_depended_widgets_disable(true);
 			}
 		}
 
@@ -242,7 +242,7 @@ int wgt_single_motor_move::init_si()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				//synchro_depended_widgets_disable(false);
+				synchro_depended_widgets_disable(false);
 
 				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
 				//				robot.ui_ecp_robot->execute_motion();
@@ -258,7 +258,7 @@ int wgt_single_motor_move::init_si()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				//synchro_depended_widgets_disable(true);
+				synchro_depended_widgets_disable(true);
 			}
 		}
 

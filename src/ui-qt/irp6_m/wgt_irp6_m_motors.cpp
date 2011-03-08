@@ -12,6 +12,8 @@ wgt_irp6_m_motors::wgt_irp6_m_motors(QString _widget_label, mrrocpp::ui::common:
 {
 	ui.setupUi(this);
 
+	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p2);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p3);
@@ -46,11 +48,50 @@ wgt_irp6_m_motors::~wgt_irp6_m_motors()
 
 }
 
+int wgt_irp6_m_motors::synchro_depended_widgets_disable(bool _set_disabled)
+{
+	ui.pushButton_execute->setDisabled(_set_disabled);
+	ui.pushButton_copy->setDisabled(_set_disabled);
+	ui.pushButton_read->setDisabled(_set_disabled);
+
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		doubleSpinBox_cur_Vector[i]->setDisabled(_set_disabled);
+		doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
+	}
+
+	return 1;
+}
+
 void wgt_irp6_m_motors::my_open()
 {
 	wgt_base::my_open();
 	init();
 	copy();
+}
+
+void wgt_irp6_m_motors::synchro_depended_init()
+{
+	emit synchro_depended_init_signal();
+}
+
+void wgt_irp6_m_motors::synchro_depended_init_slot()
+{
+
+	try {
+
+		if (robot.state.edp.pid != -1) {
+			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				synchro_depended_widgets_disable(false);
+
+			} else {
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
+				synchro_depended_widgets_disable(true);
+			}
+		}
+
+	} // end try
+	CATCH_SECTION_UI
 }
 
 // slots
@@ -68,7 +109,8 @@ int wgt_irp6_m_motors::init()
 		if (robot.state.edp.pid != -1) {
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				ui.pushButton_execute->setDisabled(false);
+				synchro_depended_widgets_disable(false);
+
 				robot.ui_ecp_robot->read_motors(robot.current_pos);
 
 				for (int i = 0; i < robot.number_of_servos; i++) {
@@ -78,7 +120,8 @@ int wgt_irp6_m_motors::init()
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				ui.pushButton_execute->setDisabled(true);
+				synchro_depended_widgets_disable(true);
+
 			}
 		}
 
