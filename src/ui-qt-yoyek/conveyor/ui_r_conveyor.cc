@@ -139,7 +139,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-		MainWindow *mw = interface.get_main_window();
+	MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
@@ -236,11 +236,6 @@ int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_w
 
 	return 1;
 
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
 }
 
 }
