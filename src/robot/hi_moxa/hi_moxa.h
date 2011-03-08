@@ -17,7 +17,7 @@
 //#define T_INFO_FUNC
 //#define T_INFO_CALC
 
-#define STATUS_DISP_T 1
+#define STATUS_DISP_T 100
 
 #include "base/lib/periodic_timer.h"
 #include "base/edp/HardwareInterface.h"
@@ -46,7 +46,7 @@ class HI_moxa : public common::HardwareInterface
 {
 
 public:
-	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports, const double* max_increments); // Konstruktor
 
 	~HI_moxa();
 
@@ -76,7 +76,10 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
+	bool hardware_panic;
 	const std::size_t last_drive_number;
+	//std::vector<double> ridiculous_increment;
+	const double* ridiculous_increment;
 	std::vector<std::string> port_names;
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];

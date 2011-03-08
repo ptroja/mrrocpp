@@ -30,6 +30,10 @@ const int PARAM_PID_CURR_I = 0x70;
 const int PARAM_PID_CURR_D = 0x80;
 const int PARAM_DRIVER_MODE = 0x90;
 
+// DRIVER_MODE values
+const int PARAM_DRIVER_MODE_PWM = 0x00;
+const int PARAM_DRIVER_MODE_ER_STOP = 0x0f;
+
 // error flags returned by hi::read_write_hardware (defined in servo_gr.h)
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
 const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
