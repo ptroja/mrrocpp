@@ -166,6 +166,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 {
 	static int64_t receive_attempts = 0, receive_timeouts = 0;
 	static int error_msg_power_stage = 0;
+	static int synchro_switch_filter[] = {0,0,0,0,0,0,0,0};
+	const int synchro_switch_filter_th = 2;
 	bool robot_synchronized;
 	bool power_fault;
 	bool hardware_read_ok = true;
@@ -279,21 +281,43 @@ uint64_t HI_moxa::read_write_hardware(void)
 			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5 * (drive_number))); // Zadzialal wylacznik "gorny" krancowy
 		if (servo_data[drive_number].drive_status.sw2 != 0)
 			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5 * (drive_number ))); // Zadzialal wylacznik "dolny" krancowy
-		if (servo_data[drive_number].drive_status.swSynchr != 0)
-			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5 * (drive_number))); // Zadzialal wylacznik synchronizacji
 		if (servo_data[drive_number].drive_status.synchroZero != 0)
 			ret |= (uint64_t) (SYNCHRO_ZERO << (5 * (drive_number))); // Impuls zera rezolwera
 		if (servo_data[drive_number].drive_status.overcurrent != 0)
 			ret |= (uint64_t) (OVER_CURRENT << (5 * (drive_number))); // Przekroczenie dopuszczalnego pradu
+		if (servo_data[drive_number].drive_status.swSynchr != 0)
+		{
+			if(synchro_switch_filter[drive_number] == synchro_switch_filter_th)
+				ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5 * (drive_number))); // Zadzialal wylacznik synchronizacji
+			else
+				synchro_switch_filter[drive_number]++;
+		}
+		else
+		{
+			synchro_switch_filter[drive_number] = 0;
+		}
 	}
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
+//		const int disp_drv_no = 5;
 //		std::cout << "[info]";
-//		std::cout << " sw1_sw2_swSynchr[0] = " << (int) servo_data[0].drive_status.sw1 << "," << (int) servo_data[0].drive_status.sw2 << "," << (int) servo_data[0].drive_status.swSynchr;
-//		std::cout << " position[0] = " << (int) servo_data[0].drive_status.position;
-//		std::cout << " current[0] = " << (int) servo_data[0].drive_status.current;
+//		std::cout << " sw1_sw2_swSynchr[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
+//		std::cout << " position[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.position;
+//		std::cout << " current[disp_drv_no] = " << (int) servo_data[disp_drv_no].drive_status.current;
 //		std::cout << std::endl;
+
+
+//		for(int disp_drv_no=0; disp_drv_no<6; disp_drv_no++)
+//		{
+//			std::cout << "   " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
+//		}
+//
+//		if(servo_data[5].drive_status.swSynchr != 0)
+//			std::cout << "   ########################### ########################### ";
+//
+//		std::cout << std::endl;
+
 		status_disp_cnt = 0;
 	}
 
