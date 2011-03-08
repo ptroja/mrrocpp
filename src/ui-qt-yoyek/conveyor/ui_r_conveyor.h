@@ -38,8 +38,6 @@ private:
 
 public:
 
-	wgt_single_motor_move *wgt_inc;
-
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();

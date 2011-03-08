@@ -22,7 +22,7 @@ namespace single_motor {
 
 
 UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
-			common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active")
+	common::UiRobot(_interface, edp_section_name, ecp_section_name, _robot_name, _number_of_servos, _activation_string)
 {
 
 }

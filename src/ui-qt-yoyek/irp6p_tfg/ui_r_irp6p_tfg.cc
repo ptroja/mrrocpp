@@ -10,12 +10,12 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "wgt_irp6p_tfg_move.h"
+#include "../base/wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace irp6p_tfg {
-
+const std::string WGT_IRP6P_TFG_MOVE = "WGT_IRP6P_TFG_MOVE";
 //
 //
 // KLASA UiRobot
@@ -183,16 +183,18 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active"),
-			ui_ecp_robot(NULL)
+			single_motor::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS, "is_irp6p_tfg_active")
+
 {
-	wgt_move = new wgt_irp6p_tfg_move(interface, *this, interface.get_main_window());
+
+	wgt_move = new wgt_single_motor_move("Irp6p_tfg moves", interface, *this, interface.get_main_window());
 	wndbase_m[WGT_IRP6P_TFG_MOVE] = wgt_move->dwgt;
 
 }
 
 int UiRobot::manage_interface()
 {
+
 	MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 

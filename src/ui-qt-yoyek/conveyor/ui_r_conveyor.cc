@@ -132,13 +132,14 @@ int UiRobot::synchronise_int()
 UiRobot::UiRobot(common::Interface& _interface) :
 			single_motor::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active")
 {
-	wgt_inc = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
-	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_inc->dwgt;
+
+	wgt_move = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
+	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_move->dwgt;
 }
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+		MainWindow *mw = interface.get_main_window();
 	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
