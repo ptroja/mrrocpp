@@ -1,5 +1,5 @@
 /**
- * @file ecp_g_neuron_generator.cpp
+ * @file ecp_g_neuron_generator.cc
  * @brief Header file for neuron_generator class
  * @author Tomasz Bem (mebmot@wp.pl)
  * @author Rafal Tulwin (rtulwin@gmail.com)
@@ -21,7 +21,7 @@ namespace generator {
 
 /*================================Constructor=============================*//**
  * @brief Constructor along with task configurator.
- * @param _ecp_taks Reference to task configurator.
+ * @param _ecp_task Reference to task configurator.
  */
 neuron_generator::neuron_generator(common::task::task& _ecp_task) :
 	common::generator::generator(_ecp_task)
@@ -59,14 +59,17 @@ bool neuron_generator::first_step()
 	//get neuron sensor and send information about starting new trajectory.
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
+	macroSteps=neuron_sensor->getMacroStepsNumber();
+	printf("macroStep: %d",macroSteps);
+
 	return true;
 }
 
 /*================================next_step===============================*//**
  * @brief next step for neuron generator.
  * @details Next step interpolates 5 consecutive macro steps basing on received
- * coordinates from VSP. It also received information whether to start breaking
- * or not.
+ * coordinates from VSP. It also receives information whether to start breaking
+ * or not. More over it calculates the overshoot of the manipulator.
  */
 bool neuron_generator::next_step()
 {
@@ -83,7 +86,7 @@ bool neuron_generator::next_step()
 	//generator has to interpolate this coordinates for 5 macro steps.
 	//this section is not performed in breaking phase, during which in every
 	//next step period is set to 4
-	if (neuron_sensor->current_period == 5) {
+	if (neuron_sensor->current_period == macroSteps) {
 		//printf("period 5\n");
 		if (neuron_sensor->startBraking()) {
 			breaking = true;
@@ -107,30 +110,32 @@ bool neuron_generator::next_step()
 		desired_position[4] = position[4] = actual_position[4];
 		desired_position[5] = position[5] = actual_position[5];
 
-		last_but_one[0] = neuron_sensor->getLastButOne().x;
-		last_but_one[1] = neuron_sensor->getLastButOne().y;
-		last_but_one[2] = neuron_sensor->getLastButOne().z;
+		normalized_vector[0] = neuron_sensor->getLastButOne().x;
+		normalized_vector[1] = neuron_sensor->getLastButOne().y;
+		normalized_vector[2] = neuron_sensor->getLastButOne().z;
 
 
+		//printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
+		//printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 
 		if (breaking) {
-			for (int i = 0; i < 3; i++) {
-				normalized_vector[i] = (last_but_one[i] - desired_position[i]) /
-						sqrt((last_but_one[0] - desired_position[0]) * (last_but_one[0] - desired_position[0]) +
-							 (last_but_one[1] - desired_position[1]) * (last_but_one[1] - desired_position[1]) +
-						     (last_but_one[2] - desired_position[2]) * (last_but_one[2] - desired_position[2]));
-			}
+//			for (int i = 0; i < 3; i++) {
+//				normalized_vector[i] = (last_but_one[i] - desired_position[i]) /
+//						sqrt((last_but_one[0] - desired_position[0]) * (last_but_one[0] - desired_position[0]) +
+//							 (last_but_one[1] - desired_position[1]) * (last_but_one[1] - desired_position[1]) +
+//						     (last_but_one[2] - desired_position[2]) * (last_but_one[2] - desired_position[2]));
+//			}
 			overshoot = (position[0] - desired_position[0]) * normalized_vector[0] + (position[1] - desired_position[1]) * normalized_vector[1] + (position[2] - desired_position[2]) * normalized_vector[2];
-			printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
-			printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
+			//printf("current: %f\t %f\t %f\t %f\t %f\t %f\n", actual_position[0], actual_position[1], actual_position[2], actual_position[3], actual_position[4], actual_position[5]);
+			//printf("desired: %f\t %f\t %f\t %f\t %f\t %f\n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 		}
 	}
 
-	int node = 6 - neuron_sensor->current_period;
+	int node = macroSteps + 1 - neuron_sensor->current_period;
 
 	if (breaking) {
 		//set the current period to 4 to avoid entering the above "if" condition.
-		neuron_sensor->current_period = 4;
+		neuron_sensor->current_period = macroSteps - 1 ;
 	}
 
 	//for all of the axes...
@@ -228,20 +233,20 @@ bool neuron_generator::next_step()
 				s[i] = v[i] * t;
 			}
 			position[i] += k[i] * s[i];
-			printf("%f\t", (k[i] * s[i]));
+			//printf("%f\t", (k[i] * s[i]));
 
 		} else {
 			//normal motion (not breaking), distance between desired and
 			//current position is divided by 5, desired position is reached in
 			//5 macrosteps and added to actual position
-			position[i] = actual_position[i] + (k[i] * (u[i] / 5) * node);
+			position[i] = actual_position[i] + (k[i] * (u[i] / macroSteps) * node);
 			//current velocity, last v[i] is the velocity just before breaking,
 			//it is not updated during breaking
-			v[i] = (u[i] / 5) / 0.02;
+			v[i] = (u[i] / macroSteps) / 0.02;
 			//printf("v[%d]: %f\n", i, v[i]);
 		}
 	}
-	printf("\n");
+	//printf("\n");
 	/*printf("k:\t %d\t\t %d\t\t %d\t\t %d\t\t %d\t\t %d\n", k[0], k[1], k[2], k[3], k[4], k[5]);
 	printf("s:\t %f\t %f\t %f\t %f\t %f\t %f\n", s[0], s[1], s[2], s[3], s[4], s[5]);
 	printf("u:\t %f\t %f\t %f\t %f\t %f\t %f\n", u[0], u[1], u[2], u[3], u[4], u[5]);
@@ -275,7 +280,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (neuron_sensor->current_period == 1) {
-		printf("coordiantes sent from current period = 1\n");
+		//printf("coordiantes sent from current period = 1\n");
 		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
 	}
 
@@ -310,8 +315,8 @@ double neuron_generator::get_breaking_time()
 }
 
 /**
- * @brief
- * @return the biggest value of the overshoot while breaking
+ * @brief returns the overshoot.
+ * @return the biggest value of the overshoot while breaking.
  */
 double neuron_generator::get_overshoot()
 {
@@ -320,7 +325,7 @@ double neuron_generator::get_overshoot()
 
 /**
  * @brief Resets generator between consecutive call of Move() method.
- * @detail Resets all of the temporary variables. It is necessary to call the
+ * @details Resets all of the temporary variables. It is necessary to call the
  * reset between the calls of the generator Move() method.
  */
 void neuron_generator::reset()

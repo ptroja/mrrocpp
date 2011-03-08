@@ -101,11 +101,16 @@ namespace sensor {
  */
 #define START_BREAKING			0x25
 
+
 /**
- *
+ * @brief Message from MRROC++ to VSP with an overshoot information.
+ * @details Message is created by the MRROC++ after execution of entire
+ * trajectory therefore after breaking phase. The overshoot is the maximum
+ * distance between hyperplane perpendicular to the difference between last and
+ * last but one position on trajectory and the robot position beyond this
+ * hyperplane. Value is used for rewarding or punishing the neural nerworks.
  */
-//TODO: dopisac komentarz
-#define FINAL_POSITION			0x26
+#define OVERSHOOT				0x26
 
 /*==================================Constructor===========================*//**
  * @brief Constructor, creates and initalizes a communication with VSP.
@@ -176,7 +181,6 @@ void neuron_sensor::get_reading(){
 
 	//copy data from packet to variables
 	memcpy(&command,buff,1);
-	printf("command: %x\n",command);
 	switch(command){
 		case VSP_START:
 			printf("VSP start command received\n");
@@ -187,11 +191,19 @@ void neuron_sensor::get_reading(){
 
 		case FIRST_COORDINATES:
 		case TRAJECTORY_FIRST:
+			memcpy(&(macroSteps),buff+1,1);
+			memcpy(&(coordinates.x),buff+2,8);
+			memcpy(&(coordinates.y),buff+10,8);
+			memcpy(&(coordinates.z),buff+18,8);
+			base_period=macroSteps;
+			break;
+
 		case TR_NEXT_POSITION:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
 			memcpy(&(coordinates.z),buff+17,8);
 			break;
+
 		case START_BREAKING:
 			memcpy(&(coordinates.x),buff+1,8);
 			memcpy(&(coordinates.y),buff+9,8);
@@ -199,8 +211,8 @@ void neuron_sensor::get_reading(){
 			memcpy(&(lastButOne.x),buff+25,8);
 			memcpy(&(lastButOne.y),buff+33,8);
 			memcpy(&(lastButOne.z),buff+41,8);
-			printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
-			printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
+			//printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
+			//printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
 			break;
 
 		default:
@@ -257,6 +269,14 @@ uint8_t neuron_sensor::getCommand(){
 	return command;
 }
 
+/*=================================getMacroStepsNumber====================*//**
+ * @brief Number of macro steps received from VSP.
+ * @return macro steps received from VSP.
+ */
+uint8_t neuron_sensor::getMacroStepsNumber(){
+	return macroSteps;
+}
+
 /*================================sendCommand=============================*//**
  * @brief Sends command to VSP.
  * @details Commands that are recognized by VSP are:
@@ -270,7 +290,7 @@ uint8_t neuron_sensor::getCommand(){
  * @param command One of the above command.
  */
 void neuron_sensor::sendCommand(uint8_t command){
-	printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
+	//printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
 	int result = write(socketDescriptor, &command, sizeof(uint8_t));
 
 	if (result < 0) {
@@ -282,14 +302,36 @@ void neuron_sensor::sendCommand(uint8_t command){
 	}
 }
 
-//TODO: dodac komentarz
+/**
+ * @brief Sends given position to the VSP
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param z Z coordinate.
+ */
 void neuron_sensor::sendCurrentPosition(double x, double y, double z){
-	printf("current position %d\n",CURRENT_POSITION);
 	sendCoordinates(CURRENT_POSITION,x,y,z);
 }
 
-void neuron_sensor::sendFinalPosition(double x, double y, double z){
-	sendCoordinates(FINAL_POSITION,x,y,z);
+/**
+ * @brief Sends the overshoot to the VSP
+ * @param overshoot value of the overshoot.
+ */
+void neuron_sensor::sendOvershoot(double overshoot){
+	char buff[9];
+	uint8_t command=OVERSHOOT;
+	memcpy(buff,&command,1);
+	memcpy(buff+1,&overshoot,8);
+
+	printf("overshoot sent: %lf\n",overshoot);
+	int result=write(socketDescriptor,buff,sizeof(buff));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+
+	if (result != sizeof(buff)) {
+		throw std::runtime_error("write() failed: result != sizeof(buff)");
+	}
 }
 
 /*==============================sendCoordinates===========================*//**
@@ -307,7 +349,7 @@ void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double
 	memcpy(buff+9,&y,8);
 	memcpy(buff+17,&z,8);
 
-	printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	//printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
 
 	int result=write(socketDescriptor,buff,sizeof(buff));
 
