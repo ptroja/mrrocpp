@@ -53,7 +53,6 @@ SET(GUI_CXX_SRCS
     polycrank/wgt_polycrank_int.cpp
     base/wgt_single_motor_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
-    irp6ot_m/wgt_irp6ot_m_joints.cpp
     irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
 )
@@ -69,7 +68,6 @@ SET(GUI_MOC_SRCS
     polycrank/wgt_polycrank_int.h
     base/wgt_single_motor_move.h
     bird_hand/wgt_bird_hand_command.h
-    irp6ot_m/wgt_irp6ot_m_joints.h
     irp6_m/wgt_irp6_m_joints.h
     irp6_m/wgt_irp6_m_motors.h
 )
@@ -87,7 +85,6 @@ SET(GUI_UI
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
-    irp6ot_m/wgt_irp6ot_m_joints.ui
     irp6_m/wgt_irp6_m_joints.ui
     irp6_m/wgt_irp6_m_motors.ui
 )

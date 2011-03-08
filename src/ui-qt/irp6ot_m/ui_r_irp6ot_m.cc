@@ -2,7 +2,8 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "wgt_irp6ot_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
 
 #include "ui_r_irp6ot_m.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
@@ -15,7 +16,8 @@
 namespace mrrocpp {
 namespace ui {
 namespace irp6ot_m {
-
+const std::string WGT_IRP6OT_M_JOINTS = "WGT_IRP6OT_M_JOINTS";
+const std::string WGT_IRP6OT_M_MOTORS = "WGT_IRP6OT_M_MOTORS";
 //
 //
 // KLASA UiRobot
@@ -138,8 +140,10 @@ int UiRobot::move_to_preset_position(int variant)
 UiRobot::UiRobot(common::Interface& _interface) :
 			irp6_m::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS, "is_irp6ot_m_active")
 {
-	wgt_joints = new wgt_irp6ot_m_joints(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_IRP6OT_JOINTS] = wgt_joints->dwgt;
+	wgt_joints = new wgt_irp6_m_joints(interface, *this, interface.get_main_window());
+	wgt_motors = new wgt_irp6_m_motors(interface, *this, interface.get_main_window());
+	wndbase_m[WGT_IRP6OT_M_JOINTS] = wgt_joints->dwgt;
+	wndbase_m[WGT_IRP6OT_M_MOTORS] = wgt_motors->dwgt;
 
 }
 

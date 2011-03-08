@@ -12,7 +12,8 @@
 #include "../irp6_m/ui_r_irp6_m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 
-class wgt_irp6ot_m_joints;
+class wgt_irp6_m_joints;
+class wgt_irp6_m_motors;
 
 namespace mrrocpp {
 namespace ui {
@@ -37,7 +38,8 @@ private:
 public:
 
 	UiRobot(common::Interface& _interface);
-	wgt_irp6ot_m_joints *wgt_joints;
+	wgt_irp6_m_joints *wgt_joints;
+	wgt_irp6_m_motors *wgt_motors;
 
 	int manage_interface();
 	int
