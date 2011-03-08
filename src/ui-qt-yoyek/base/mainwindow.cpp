@@ -27,7 +27,7 @@
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
-#include "../sarkofag/wgt_sarkofag_inc.h"
+#include "../sarkofag/wgt_sarkofag_move.h"
 #include "../conveyor/wgt_conveyor_inc.h"
 #include "../irp6p_tfg/wgt_irp6p_tfg_move.h"
 

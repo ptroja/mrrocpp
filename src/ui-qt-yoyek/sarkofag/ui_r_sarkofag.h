@@ -12,7 +12,7 @@
 #include "../base/ui_robot.h"
 #include "robot/sarkofag/const_sarkofag.h"
 
-class wgt_sarkofag_inc;
+class wgt_sarkofag_move;
 
 namespace mrrocpp {
 namespace ui {
@@ -46,12 +46,11 @@ public:
 
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	wgt_sarkofag_inc *wgt_inc;
+	wgt_sarkofag_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
-	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
