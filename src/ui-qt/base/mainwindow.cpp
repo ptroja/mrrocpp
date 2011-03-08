@@ -202,27 +202,90 @@ void MainWindow::raise_ui_ecp_window_slot()
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
-		case lib::C_XYZ_ANGLE_AXIS:
-		case lib::C_XYZ_EULER_ZYZ:
-		case lib::C_JOINT:
+		case lib::C_XYZ_ANGLE_AXIS: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_XYZ_EULER_ZYZ: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_JOINT: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_JOINT");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_joints->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_joints->my_open();
+			}
+
+		}
+			break;
 		case lib::C_MOTOR: {
 			//  printf("C_MOTOR\n");
 
 			if (interface.teachingstate == ui::common::MP_RUNNING) {
 				interface.teachingstate = ui::common::ECP_TEACHING;
 			}
-			/* TR PtEnter(0);
-			 if (!interface.is_teaching_window_open) {
 
-			 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
 
-			 interface.is_teaching_window_open = true;
-			 } else {
+			ui->label_message->setText("C_MOTOR");
 
-			 PtWindowToFront( ABW_teaching_window);
+			interface.wgt_teaching_obj->my_open();
 
-			 }
-			 PtLeave(0); */
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_motors->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_motors->my_open();
+			}
+
 		}
 			break;
 		case lib::YES_NO: {
