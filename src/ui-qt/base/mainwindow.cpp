@@ -254,14 +254,13 @@ void MainWindow::raise_ui_ecp_window_slot()
 		}
 			break;
 		case lib::INTEGER_NUMBER: {
-			/*
-			 TR PtEnter(0);
 
-			 ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			Ui::wgt_input_integerClass* ui = interface.wgt_input_integer_obj->get_ui();
 
-			 PtLeave(0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			interface.wgt_input_integer_obj->my_open();
+
 		}
 			break;
 		case lib::CHOOSE_OPTION: {

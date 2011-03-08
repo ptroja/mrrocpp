@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>100</height>
+    <height>138</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -38,17 +38,27 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pushButton_yes">
-     <property name="text">
-      <string>YES</string>
+   <item row="1" column="0" colspan="2">
+    <widget class="QSpinBox" name="spinBox_input">
+     <property name="minimum">
+      <number>-10000000</number>
+     </property>
+     <property name="maximum">
+      <number>10000000</number>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QPushButton" name="pushButton_no">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pushButton_ok">
      <property name="text">
-      <string>NO</string>
+      <string>OK</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="pushButton_cancel">
+     <property name="text">
+      <string>CANCEL</string>
      </property>
     </widget>
    </item>

@@ -545,7 +545,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 			PtDamageWidget(ABW_PtFileSel_sl);
 
 			// zaznaczenie jednego z elementow
-			item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
+			item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL);
 			item = *item_list;
 			PtFSSelect(ABW_PtFileSel_sl, item);
 			break;
@@ -569,7 +569,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 				strcat(current_path, p);
 				// 	     printf( "word: %s\n", current_path );
 
-				item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL );
+				item_list = PtFSAllItems(ABW_PtFileSel_sl, NULL);
 				for (; !(((*item_list) == NULL) || (wyjscie)); item_list++) {
 					item = *item_list;
 					if (strcmp(item->fullpath, current_path) == 0)
@@ -578,7 +578,7 @@ int file_selection_window_post_realize(PtWidget_t *widget, ApInfo_t *apinfo, PtC
 				}
 				if (wyjscie) {
 					PtFSSelect(ABW_PtFileSel_sl, item);
-					PtFSFolderExpand(ABW_PtFileSel_sl, item, NULL );
+					PtFSFolderExpand(ABW_PtFileSel_sl, item, NULL);
 					PtFSGoto(ABW_PtFileSel_sl, item);
 					PtFSDamageItem(ABW_PtFileSel_sl, item);
 				}

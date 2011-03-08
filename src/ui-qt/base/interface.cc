@@ -120,7 +120,7 @@ void Interface::init()
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
 	wgt_message_obj = new wgt_message(*this);
-
+	wgt_input_integer_obj = new wgt_input_integer(*this);
 	// ustalenie katalogow UI
 
 	mw->show();
