@@ -224,16 +224,14 @@ void MainWindow::raise_ui_ecp_window_slot()
 			/* TR PtLeave(0); */
 
 			break;
-		case lib::YES_NO:
+		case lib::YES_NO: {
+			Ui::wgt_yes_noClass* ui = interface.wgt_yes_no_obj->get_ui();
 
-			interface.ui_msg->message("YES_NO");
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
 
+			interface.wgt_yes_no_obj->my_open();
+
+		}
 			break;
 		case lib::MESSAGE:
 			/* TR

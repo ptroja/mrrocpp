@@ -23,8 +23,10 @@ public:
 	wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_yes_no();
 
+	Ui::wgt_yes_noClass * get_ui();
+
 private:
-	Ui::wgt_yes_noClass ui;
+	Ui::wgt_yes_noClass* ui;
 
 private slots:
 
