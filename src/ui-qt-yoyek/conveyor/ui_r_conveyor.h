@@ -12,7 +12,7 @@
 #include "../base/ui_robot.h"
 #include "robot/conveyor/const_conveyor.h"
 
-class wgt_conveyor_inc;
+class wgt_conveyor_move;
 
 namespace mrrocpp {
 namespace ui {
@@ -42,7 +42,7 @@ public:
 	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
 	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	wgt_conveyor_inc *wgt_inc;
+	wgt_conveyor_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
