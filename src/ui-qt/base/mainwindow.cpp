@@ -399,7 +399,7 @@ void MainWindow::raise_ui_ecp_window_slot()
 				QString fileName;
 
 				fileName
-						= QFileDialog::getOpenFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+						= QFileDialog::getSaveFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
 
 				if (fileName.length() > 0) {
 
