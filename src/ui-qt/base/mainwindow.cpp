@@ -9,8 +9,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "ui.h"
 #include "interface.h"
 #include "ui_sr.h"
+#include "ui_ecp.h"
 
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
@@ -47,6 +49,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
@@ -150,6 +153,12 @@ void MainWindow::raise_process_control_window()
 	emit raise_process_control_window_signal();
 }
 
+void MainWindow::raise_ui_ecp_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_ui_ecp_window_signal();
+}
+
 void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 {
 
@@ -176,6 +185,166 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 void MainWindow::raise_process_control_window_slot()
 {
 	interface.wgt_pc->my_open();
+}
+
+void MainWindow::raise_ui_ecp_window_slot()
+{
+	bool wyjscie;
+	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
+	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
+
+	switch (ecp_to_ui_msg.ecp_message)
+	{ // rodzaj polecenia z ECP
+		case lib::C_XYZ_ANGLE_AXIS:
+		case lib::C_XYZ_EULER_ZYZ:
+		case lib::C_JOINT:
+		case lib::C_MOTOR:
+			//  printf("C_MOTOR\n");
+
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+			/* TR PtEnter(0); */
+			if (!interface.is_teaching_window_open) {
+				/* TR
+				 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
+				 */
+				interface.is_teaching_window_open = true;
+			} else {
+				/* TR
+				 PtWindowToFront( ABW_teaching_window);
+				 */
+			}
+			/* TR PtLeave(0); */
+
+			break;
+		case lib::YES_NO:
+
+			interface.ui_msg->message("YES_NO");
+			/* TR
+			 PtEnter(0);
+			 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
+			 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			 PtLeave(0);
+			 */
+
+			break;
+		case lib::MESSAGE:
+			/* TR
+			 PtEnter(0);
+			 ApCreateModule(ABM_wnd_message, ABW_base, NULL);
+			 PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			 TR PtLeave(0);
+			 */
+
+			ui_rep.reply = lib::ANSWER_YES;
+			interface.ui_ecp_obj->synchroniser.command();
+			break;
+		case lib::DOUBLE_NUMBER:
+
+			/* TR
+			 PtEnter(0);
+			 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
+			 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			 PtLeave(0);
+			 */
+
+			break;
+		case lib::INTEGER_NUMBER:
+
+			/*
+			 TR PtEnter(0);
+
+			 ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
+			 PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+
+			 PtLeave(0);
+			 */
+
+			break;
+		case lib::CHOOSE_OPTION:
+
+			/* TR
+
+			 PtEnter(0);
+			 ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
+			 PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			 */
+			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
+
+			if (ecp_to_ui_msg.nr_of_options == 2) {
+				/* TR
+				 interface.block_widget(ABW_PtButton_wind_choose_option_3);
+				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
+				 */
+			} else if (ecp_to_ui_msg.nr_of_options == 3) {
+				/* TR
+				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
+				 */
+			} else if (ecp_to_ui_msg.nr_of_options == 4) {
+				/* TR
+				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
+				 interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
+				 */
+			}
+
+			/* TR PtLeave(0); */
+
+			break;
+		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::LOAD_FILE\n");
+
+			wyjscie = false;
+			while (!wyjscie) {
+				if (!interface.is_file_selection_window_open) {
+					interface.is_file_selection_window_open = 1;
+					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
+					wyjscie = true;
+					/* TR
+					 PtEnter(0);
+					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
+					 // 	PtRealizeWidget( ABW_file_selection_window );
+					 PtLeave(0);
+					 */
+				} else {
+					delay(1);
+				}
+			}
+
+			ui_rep.reply = lib::FILE_LOADED;
+
+			break;
+		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::SAVE_FILE\n");
+
+
+			wyjscie = false;
+			while (!wyjscie) {
+				if (!interface.is_file_selection_window_open) {
+					interface.is_file_selection_window_open = 1;
+					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
+					wyjscie = true;
+					/* TR
+					 PtEnter(0);
+					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
+					 PtLeave(0);
+					 */
+				} else {
+					delay(1);
+				}
+			}
+
+			ui_rep.reply = lib::FILE_SAVED;
+
+			break;
+
+		default:
+			perror("Strange ECP message");
+			interface.ui_ecp_obj->synchroniser.command();
+			break;
+	}
+
 }
 
 void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)

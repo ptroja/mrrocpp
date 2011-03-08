@@ -23,6 +23,7 @@
 #include "ui_ecp.h"
 
 #include "base/lib/messip/messip_dataport.h"
+#include "mainwindow.h"
 
 namespace mrrocpp {
 
@@ -58,10 +59,11 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
+	MainWindow *mw = interface.get_main_window();
+
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
-	bool wyjscie;
 
 	lib::fd_server_t ch;
 
@@ -84,162 +86,7 @@ void ecp_buffer::operator()()
 		// tu wyemitowac sygnal (wywqaolac odpowiednia metode mainwindow)
 
 		//dalszy kod do obslugi slotu
-
-
-		switch (ecp_to_ui_msg.ecp_message)
-		{ // rodzaj polecenia z ECP
-			case lib::C_XYZ_ANGLE_AXIS:
-			case lib::C_XYZ_EULER_ZYZ:
-			case lib::C_JOINT:
-			case lib::C_MOTOR:
-				//  printf("C_MOTOR\n");
-
-				if (interface.teachingstate == ui::common::MP_RUNNING) {
-					interface.teachingstate = ECP_TEACHING;
-				}
-				/* TR PtEnter(0); */
-				if (!interface.is_teaching_window_open) {
-					/* TR
-					 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-					 */
-					interface.is_teaching_window_open = true;
-				} else {
-					/* TR
-					 PtWindowToFront( ABW_teaching_window);
-					 */
-				}
-				/* TR PtLeave(0); */
-
-				break;
-			case lib::YES_NO:
-
-				interface.ui_msg->message("YES_NO");
-				/* TR
-				 PtEnter(0);
-				 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-				 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-				 PtLeave(0);
-				 */
-
-				break;
-			case lib::MESSAGE:
-				/* TR
-				 PtEnter(0);
-				 ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-				 PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-				 TR PtLeave(0);
-				 */
-
-				ui_rep.reply = lib::ANSWER_YES;
-				interface.ui_ecp_obj->synchroniser.command();
-				break;
-			case lib::DOUBLE_NUMBER:
-
-				/* TR
-				 PtEnter(0);
-				 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-				 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-				 PtLeave(0);
-				 */
-
-				break;
-			case lib::INTEGER_NUMBER:
-
-				/*
-				 TR PtEnter(0);
-
-				 ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-				 PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-
-				 PtLeave(0);
-				 */
-
-				break;
-			case lib::CHOOSE_OPTION:
-
-				/* TR
-
-				 PtEnter(0);
-				 ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-				 PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-				 */
-				// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
-
-				if (ecp_to_ui_msg.nr_of_options == 2) {
-					/* TR
-					 interface.block_widget(ABW_PtButton_wind_choose_option_3);
-					 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-					 */
-				} else if (ecp_to_ui_msg.nr_of_options == 3) {
-					/* TR
-					 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-					 */
-				} else if (ecp_to_ui_msg.nr_of_options == 4) {
-					/* TR
-					 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-					 interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
-					 */
-				}
-
-				/* TR PtLeave(0); */
-
-				break;
-			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-				//    printf("lib::LOAD_FILE\n");
-
-				wyjscie = false;
-				while (!wyjscie) {
-					if (!interface.is_file_selection_window_open) {
-						interface.is_file_selection_window_open = 1;
-						interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-						wyjscie = true;
-						/* TR
-						 PtEnter(0);
-						 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-						 // 	PtRealizeWidget( ABW_file_selection_window );
-						 PtLeave(0);
-						 */
-					} else {
-						delay(1);
-					}
-				}
-
-				ui_rep.reply = lib::FILE_LOADED;
-
-				break;
-			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-				//    printf("lib::SAVE_FILE\n");
-
-
-				wyjscie = false;
-				while (!wyjscie) {
-					if (!interface.is_file_selection_window_open) {
-						interface.is_file_selection_window_open = 1;
-						interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-						wyjscie = true;
-						/* TR
-						 PtEnter(0);
-						 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-						 PtLeave(0);
-						 */
-					} else {
-						delay(1);
-					}
-				}
-
-				ui_rep.reply = lib::FILE_SAVED;
-
-				break;
-
-			default:
-				perror("Strange ECP message");
-				interface.ui_ecp_obj->synchroniser.command();
-				break;
-		}
-
-		// Koniec do obslugi slotu
-		// pamietac o dodaniu interface.ui_ecp_obj->synchroniser.command();
+		mw->raise_ui_ecp_window();
 
 		synchroniser.wait();
 
