@@ -133,7 +133,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active"),
 			ui_ecp_robot(NULL)
 {
-	wgt_inc = new wgt_conveyor_move(interface, *this, interface.get_main_window());
+	wgt_inc = new wgt_conveyor_move("Conveyor moves", interface, *this, interface.get_main_window());
 	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_inc->dwgt;
 }
 

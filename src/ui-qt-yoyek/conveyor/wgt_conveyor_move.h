@@ -25,7 +25,7 @@ class wgt_conveyor_move : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_conveyor_move(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent =
+			wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent =
 					0);
 	~wgt_conveyor_move();
 

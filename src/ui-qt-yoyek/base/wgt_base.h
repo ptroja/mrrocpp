@@ -18,10 +18,11 @@ class wgt_base : public QWidget
 Q_OBJECT
 
 public:
-	wgt_base(QString _string, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
+	wgt_base(QString _robot_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_base();
 	virtual void my_open();
 
+	QString robot_label;
 	QDockWidget* dwgt;
 	//QVBoxLayout* vl;
 

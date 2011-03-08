@@ -7,8 +7,8 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_conveyor_move::wgt_conveyor_move(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent) :
-	wgt_base("Conveyor motion", _interface, parent), robot(_robot)
+wgt_conveyor_move::wgt_conveyor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::conveyor::UiRobot& _robot, QWidget *parent) :
+	wgt_base(_robot_label, _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 
@@ -130,7 +130,7 @@ void wgt_conveyor_move::on_pushButton_export_mr_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_conveyor INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_mr->value();
+	buffer << robot_label.toStdString() << " INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_mr->value();
 
 	interface.ui_msg->message(buffer.str());
 }
@@ -279,7 +279,7 @@ void wgt_conveyor_move::on_pushButton_export_si_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_conveyor JOINTS POSITION\n " << ui.doubleSpinBox_des_si->value();
+	buffer << robot_label.toStdString() << " JOINTS POSITION\n " << ui.doubleSpinBox_des_si->value();
 
 	interface.ui_msg->message(buffer.str());
 }
