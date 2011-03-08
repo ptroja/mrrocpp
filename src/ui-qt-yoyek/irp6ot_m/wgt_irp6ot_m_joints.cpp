@@ -1,7 +1,7 @@
 //#include "ui_ecp_r_irp6ot_m.h"
 #include "ui_r_irp6ot_m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
-//#include "ui/src/ui_ecp_r_tfg_and_conv.h"
+//#include "ui/src/ui_ecp_r_single_motor.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_irp6_common.h"
 #include "wgt_irp6ot_m_joints.h"
 #include "../base/interface.h"

@@ -1,5 +1,5 @@
 //#include "ui_ecp_r_conveyor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "ui_r_conveyor.h"
 #include "robot/conveyor/const_conveyor.h"
 

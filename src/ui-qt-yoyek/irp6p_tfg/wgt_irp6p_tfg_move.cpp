@@ -1,5 +1,5 @@
 //#include "ui_ecp_r_irp6p_tfg.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "ui_r_irp6p_tfg.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 

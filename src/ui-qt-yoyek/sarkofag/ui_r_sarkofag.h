@@ -20,7 +20,7 @@ namespace common {
 class Interface;
 }
 
-namespace tfg_and_conv {
+namespace single_motor {
 class EcpRobot;
 }
 namespace sarkofag {
@@ -45,7 +45,7 @@ public:
 	double desired_pos[lib::sarkofag::NUM_OF_SERVOS]; // pozycja zadana
 
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	single_motor::EcpRobot *ui_ecp_robot;
 	wgt_sarkofag_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);

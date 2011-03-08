@@ -4,7 +4,7 @@
 
 #include "ui_r_sarkofag.h"
 //#include "ui_ecp_r_sarkofag.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 
 #include "wgt_sarkofag_move.h"
 
@@ -14,7 +14,7 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -65,7 +65,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
+					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();

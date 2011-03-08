@@ -20,7 +20,7 @@ namespace common {
 class Interface;
 
 }
-namespace tfg_and_conv {
+namespace single_motor {
 class EcpRobot;
 }
 
@@ -41,7 +41,7 @@ public:
 	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
 	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	single_motor::EcpRobot *ui_ecp_robot;
 	wgt_conveyor_move *wgt_inc;
 
 	UiRobot(common::Interface& _interface);

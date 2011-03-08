@@ -1,5 +1,5 @@
 //#include "ui_ecp_r_sarkofag.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "ui_r_sarkofag.h"
 #include "robot/sarkofag/const_sarkofag.h"
 

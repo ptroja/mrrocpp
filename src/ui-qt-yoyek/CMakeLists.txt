@@ -104,7 +104,7 @@ ADD_EXECUTABLE(
 	base/interface.cc
 	base/ui_ecp_robot/ui_ecp_r_common.cc
 	base/ui_ecp_robot/ui_ecp_r_irp6_common.cc
-	base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.cc
+	base/ui_ecp_robot/ui_ecp_r_single_motor.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
 	irp6p_tfg/ui_r_irp6p_tfg.cc
