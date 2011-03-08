@@ -288,38 +288,41 @@ void MainWindow::raise_ui_ecp_window_slot()
 			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 
 			//    printf("lib::LOAD_FILE\n");
-			QString fileName;
+
 
 			interface.file_window_mode = ui::common::FSTRAJECTORY;
 
 			try {
+				QString fileName;
+
 				fileName
 						= QFileDialog::getOpenFileName(this, tr("Choose file to load or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
 
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_LOADED;
+				} else {
+					ui_rep.reply = lib::QUIT;
+				}
 				//std::string str_fullpath = fileName.toStdString();
 			}
 
 			catch (...) {
-
-			}
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 // 	PtRealizeWidget( ABW_file_selection_window );
-					 PtLeave(0);
-					 */
-				} else {
-					delay(1);
-				}
+				ui_rep.reply = lib::QUIT;
 			}
 
-			ui_rep.reply = lib::FILE_LOADED;
+			interface.ui_ecp_obj->synchroniser.command();
+
 		}
 			break;
 		case lib::SAVE_FILE: {
@@ -1071,6 +1074,7 @@ void MainWindow::on_actionProcess_Control_triggered()
 {
 	raise_process_control_window();
 }
+
 void MainWindow::on_actionConfiguration_triggered()
 {
 	/*
