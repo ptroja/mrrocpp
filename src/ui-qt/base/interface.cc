@@ -123,6 +123,7 @@ void Interface::init()
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);
 	wgt_choose_option_obj = new wgt_choose_option(*this);
+	wgt_teaching_obj = new wgt_teaching(*this);
 
 	// ustalenie katalogow UI
 
