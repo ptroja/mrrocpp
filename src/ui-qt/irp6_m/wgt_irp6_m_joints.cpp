@@ -92,7 +92,7 @@ void wgt_irp6_m_joints::on_pushButton_export_clicked()
 
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << widget_label.toStdString() << "INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
+	buffer << widget_label.toStdString() << " INTERNAL POSITION\n " << ui.doubleSpinBox_des_p1->value() << " "
 			<< ui.doubleSpinBox_des_p2->value() << " " << ui.doubleSpinBox_des_p3->value() << " "
 			<< ui.doubleSpinBox_des_p4->value() << " " << ui.doubleSpinBox_des_p5->value() << " "
 			<< ui.doubleSpinBox_des_p6->value() << " " << ui.doubleSpinBox_des_p7->value();
