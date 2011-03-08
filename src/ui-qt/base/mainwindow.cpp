@@ -288,7 +288,20 @@ void MainWindow::raise_ui_ecp_window_slot()
 			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 
 			//    printf("lib::LOAD_FILE\n");
+			QString fileName;
 
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				fileName
+						= QFileDialog::getOpenFileName(this, tr("Choose file to load or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				//std::string str_fullpath = fileName.toStdString();
+			}
+
+			catch (...) {
+
+			}
 			wyjscie = false;
 			while (!wyjscie) {
 				if (!interface.is_file_selection_window_open) {
@@ -1069,13 +1082,7 @@ void MainWindow::on_actionConfiguration_triggered()
 	try {
 		QString fileName;
 
-		std::string mrrocpp_root_local_path =
-				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
-		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
-		//interface.ui_msg->message(mrrocpp_root_local_path);
-
-
-		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		std::string mrrocpp_current_config_full_path = interface.mrrocpp_root_local_path + interface.config_file;
 		interface.ui_msg->message(mrrocpp_current_config_full_path);
 
 		fileName
@@ -1083,8 +1090,8 @@ void MainWindow::on_actionConfiguration_triggered()
 
 		std::string str_fullpath = fileName.toStdString();
 
-		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
-				+ mrrocpp_root_local_path.length());
+		interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
+				+ interface.mrrocpp_root_local_path.length());
 		interface.reload_whole_configuration();
 		interface.set_default_configuration_file_name();
 

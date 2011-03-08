@@ -131,7 +131,9 @@ public:
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
-	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
+	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/build". W niej katalogi bin, configs etc.
+	std::string mrrocpp_root_local_path; // lokalna sciezka (bez build) mrrocpp: np. "/home/yoyek/mrrocpp". W niej katalogi bin, configs etc.
+
 
 	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
 	std::string config_file;// nazwa pliku konfiguracyjnego dla UI

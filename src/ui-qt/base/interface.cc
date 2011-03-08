@@ -194,6 +194,8 @@ void Interface::init()
 	mrrocpp_local_path = cwd;
 	mrrocpp_local_path.erase(mrrocpp_local_path.length() - 3);// kopiowanie lokalnej sciezki bez "bin" - 3 znaki
 	//mrrocpp_local_path += "../";
+	mrrocpp_root_local_path = mrrocpp_local_path.substr(0, mrrocpp_local_path.rfind("/"));
+	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
 	binaries_network_path = "/net/";
 	binaries_network_path += ui_node_name;
 	binaries_network_path += binaries_local_path;
