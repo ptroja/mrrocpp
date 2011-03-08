@@ -86,13 +86,6 @@ int wgt_spkm_int::init()
 				robot.ui_ecp_robot->execute_motion();
 				robot.ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
 
-				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
-				set_single_axis(2, ui.doubleSpinBox_mcur_2, ui.doubleSpinBox_cur_p2, ui.radioButton_mip_2);
-				set_single_axis(3, ui.doubleSpinBox_mcur_3, ui.doubleSpinBox_cur_p3, ui.radioButton_mip_3);
-				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.doubleSpinBox_cur_p4, ui.radioButton_mip_4);
-				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.doubleSpinBox_cur_p5, ui.radioButton_mip_5);
-
 				for (int i = 0; i < robot.number_of_servos; i++) {
 					set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
 					robot.desired_pos[i] = robot.current_pos[i];
