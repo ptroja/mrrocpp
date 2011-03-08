@@ -21,6 +21,7 @@ public:
 	wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_base();
 	virtual void my_open();
+	void my_close();
 
 	QString widget_label;
 	QDockWidget* dwgt;

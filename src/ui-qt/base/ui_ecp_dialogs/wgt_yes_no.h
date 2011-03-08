@@ -25,6 +25,8 @@ public:
 
 	Ui::wgt_yes_noClass * get_ui();
 
+	void hideEvent(QHideEvent * event);
+
 private:
 	Ui::wgt_yes_noClass* ui;
 

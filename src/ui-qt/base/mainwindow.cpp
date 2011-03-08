@@ -195,6 +195,7 @@ void MainWindow::raise_process_control_window_slot()
 
 void MainWindow::raise_ui_ecp_window_slot()
 {
+	interface.ui_msg->message("raise_ui_ecp_window_slot");
 	bool wyjscie;
 	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
