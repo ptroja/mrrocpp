@@ -22,9 +22,7 @@
 #include "ui_sr.h"
 #include "ui_ecp.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 
@@ -60,8 +58,6 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-
-
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
@@ -83,6 +79,13 @@ void ecp_buffer::operator()()
 			continue;
 		}
 
+		synchroniser.null_command();
+
+		// tu wyemitowac sygnal (wywqaolac odpowiednia metode mainwindow)
+
+		//dalszy kod do obslugi slotu
+
+
 		switch (ecp_to_ui_msg.ecp_message)
 		{ // rodzaj polecenia z ECP
 			case lib::C_XYZ_ANGLE_AXIS:
@@ -90,7 +93,7 @@ void ecp_buffer::operator()()
 			case lib::C_JOINT:
 			case lib::C_MOTOR:
 				//  printf("C_MOTOR\n");
-				synchroniser.null_command();
+
 				if (interface.teachingstate == ui::common::MP_RUNNING) {
 					interface.teachingstate = ECP_TEACHING;
 				}
@@ -106,22 +109,17 @@ void ecp_buffer::operator()()
 					 */
 				}
 				/* TR PtLeave(0); */
-				synchroniser.wait();
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::YES_NO:
-				synchroniser.null_command();
+
+				interface.ui_msg->message("YES_NO");
 				/* TR
 				 PtEnter(0);
 				 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
 				 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
 				 PtLeave(0);
 				 */
-				synchroniser.wait();
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::MESSAGE:
@@ -133,24 +131,20 @@ void ecp_buffer::operator()()
 				 */
 
 				ui_rep.reply = lib::ANSWER_YES;
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
+				interface.ui_ecp_obj->synchroniser.command();
 				break;
 			case lib::DOUBLE_NUMBER:
-				synchroniser.null_command();
+
 				/* TR
 				 PtEnter(0);
 				 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
 				 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
 				 PtLeave(0);
 				 */
-				synchroniser.wait();
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::INTEGER_NUMBER:
-				synchroniser.null_command();
+
 				/*
 				 TR PtEnter(0);
 
@@ -159,13 +153,10 @@ void ecp_buffer::operator()()
 
 				 PtLeave(0);
 				 */
-				synchroniser.wait();
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::CHOOSE_OPTION:
-				synchroniser.null_command();
+
 				/* TR
 
 				 PtEnter(0);
@@ -192,159 +183,68 @@ void ecp_buffer::operator()()
 				}
 
 				/* TR PtLeave(0); */
-				synchroniser.wait();
-
-				messip::port_reply(ch, rcvid, 0, ui_rep);
 
 				break;
 			case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::LOAD_FILE\n");
-				if (interface.teachingstate == ui::common::MP_RUNNING) {
-					synchroniser.null_command();
-					wyjscie = false;
-					while (!wyjscie) {
-						if (!interface.is_file_selection_window_open) {
-							interface.is_file_selection_window_open = 1;
-							interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-							wyjscie = true;
-							/* TR
-							 PtEnter(0);
-							 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-							 // 	PtRealizeWidget( ABW_file_selection_window );
-							 PtLeave(0);
-							 */
-						} else {
-							delay(1);
-						}
+
+				wyjscie = false;
+				while (!wyjscie) {
+					if (!interface.is_file_selection_window_open) {
+						interface.is_file_selection_window_open = 1;
+						interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						wyjscie = true;
+						/* TR
+						 PtEnter(0);
+						 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
+						 // 	PtRealizeWidget( ABW_file_selection_window );
+						 PtLeave(0);
+						 */
+					} else {
+						delay(1);
 					}
-
-					ui_rep.reply = lib::FILE_LOADED;
-					synchroniser.wait();
-
-					messip::port_reply(ch, rcvid, 0, ui_rep);
-
 				}
+
+				ui_rep.reply = lib::FILE_LOADED;
+
 				break;
 			case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 				//    printf("lib::SAVE_FILE\n");
-				if (interface.teachingstate == ui::common::MP_RUNNING) {
-					synchroniser.null_command();
-					wyjscie = false;
-					while (!wyjscie) {
-						if (!interface.is_file_selection_window_open) {
-							interface.is_file_selection_window_open = 1;
-							interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-							wyjscie = true;
-							/* TR
-							 PtEnter(0);
-							 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-							 PtLeave(0);
-							 */
-						} else {
-							delay(1);
-						}
+
+
+				wyjscie = false;
+				while (!wyjscie) {
+					if (!interface.is_file_selection_window_open) {
+						interface.is_file_selection_window_open = 1;
+						interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
+						wyjscie = true;
+						/* TR
+						 PtEnter(0);
+						 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
+						 PtLeave(0);
+						 */
+					} else {
+						delay(1);
 					}
-
-					ui_rep.reply = lib::FILE_SAVED;
-					synchroniser.wait();
-
-					messip::port_reply(ch, rcvid, 0, ui_rep);
-
 				}
-				break;
-			case lib::OPEN_FORCE_SENSOR_MOVE_WINDOW:
-				// obsluga sterowania silowego -> ForceSensorMove
-				// przejecie kontroli nad Fotonen
 
-				/* TR
-				 PtEnter(0);
-				 // stworzenie okna wndForceControl
-				 ApCreateModule(ABM_wndForceControl, ABW_base, NULL);
-				 // 	oddanie kontroli
-				 PtLeave(0);
-				 */
-				// odeslanie -> odwieszenie ECP
-
-				messip::port_reply_ack(ch, rcvid);
-				break;
-			case lib::OPEN_TRAJECTORY_REPRODUCE_WINDOW:
-				// obsluga odtwarzania trajektorii
-				// przejecie kontroli nad Fotonen
-				/* TR
-				 PtEnter(0);
-				 // stworzenie okna wndTrajectoryReproduce
-				 ApCreateModule(ABM_wndTrajectoryReproduce, ABW_base, NULL);
-				 // 	oddanie kontroli
-				 PtLeave(0);
-				 */
-				// odeslanie -> odwieszenie ECP
-
-				messip::port_reply_ack(ch, rcvid);
-
-				break;
-			case lib::TR_REFRESH_WINDOW:
-				// przejecie kontroli nad Fotonen
-				/* TR
-				 PtEnter(0);
-				 // Odswiezenie okna
-				 TRRefreshWindow(NULL, NULL, NULL);
-				 // 	oddanie kontroli
-				 PtLeave(0);
-				 */
-				// odeslanie -> odwieszenie ECP
-
-				messip::port_reply_ack(ch, rcvid);
-
-				break;
-			case lib::TR_DANGEROUS_FORCE_DETECTED:
-				// przejecie kontroli nad Fotonen
-				/* TR
-				 PtEnter(0);
-				 // Ustawienie stanu przyciskow.
-				 TRDangerousForceDetected(NULL, NULL, NULL);
-				 // 	oddanie kontroli
-				 PtLeave(0);
-				 */
-				// odeslanie -> odwieszenie ECP
-
-				messip::port_reply_ack(ch, rcvid);
-
-				break;
-
-			case lib::MAM_OPEN_WINDOW:
-				// Obsluga odtwarzania trajektorii.
-				// Przejecie kontroli nad Fotonen.
-				/* TR
-				 PtEnter(0);
-				 // Stworzenie okna wnd_manual_moves_automatic_measures.
-				 //		ApCreateModule (ABM_wndTrajectoryReproduce, ABW_base, NULL);
-				 ApCreateModule(ABM_MAM_wnd_manual_moves_automatic_measures, ABW_base, NULL);
-				 // Oddanie kontroli.
-				 PtLeave(0);
-				 */
-				// Odeslanie -> odwieszenie ECP.
-
-				messip::port_reply_ack(ch, rcvid);
-
-				break;
-			case lib::MAM_REFRESH_WINDOW:
-				// Przejecie kontroli nad Photonen.
-				/* TR
-				 PtEnter(0);
-				 // Odswiezenie okna.
-				 MAM_refresh_window(NULL, NULL, NULL);
-				 // 	oddanie kontroli
-				 PtLeave(0);
-				 */
-				// Odeslanie -> odwieszenie ECP.
-
-				messip::port_reply_ack(ch, rcvid);
+				ui_rep.reply = lib::FILE_SAVED;
 
 				break;
 
 			default:
 				perror("Strange ECP message");
+				interface.ui_ecp_obj->synchroniser.command();
+				break;
 		}
+
+		// Koniec do obslugi slotu
+		// pamietac o dodaniu interface.ui_ecp_obj->synchroniser.command();
+
+		synchroniser.wait();
+
+		messip::port_reply(ch, rcvid, 0, ui_rep);
+
 	}
 
 }
