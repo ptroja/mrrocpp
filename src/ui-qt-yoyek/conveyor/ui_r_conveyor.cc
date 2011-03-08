@@ -146,34 +146,24 @@ int UiRobot::manage_interface()
 	{
 		case -1:
 			mw->enable_menu_item(false, 1, ui->menuConveyor);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor, NULL);
-			 */
+
 			break;
 		case 0:
 			mw->enable_menu_item(false, 3, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 			mw->enable_menu_item(false, 1, ui->menuconveyor_Preset_Positions);
 			mw->enable_menu_item(true, 1, ui->menuConveyor);
 			mw->enable_menu_item(true, 1, ui->actionconveyor_EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_synchronisation, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor, ABN_mm_conveyor_edp_load, NULL);
-			 */
+
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, ui->menuConveyor);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor, NULL);
-			 */
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->actionconveyor_Synchronization);
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_synchronisation, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
+
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -181,28 +171,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 2, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, NULL);
-						 */
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load, ui->actionconveyor_EDP_Unload);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, ABN_mm_conveyor_edp_unload, NULL);
-						 */
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(true, 1, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 */
+
 						break;
 					default:
 						break;
@@ -211,11 +192,7 @@ int UiRobot::manage_interface()
 			{
 				mw->enable_menu_item(true, 4, ui->actionall_Synchronisation, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 				mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_synchronisation, ABN_mm_conveyor_move, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+
 			}
 			break;
 		default:
@@ -259,20 +236,6 @@ int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_w
 
 	return 1;
 
-}
-
-void UiRobot::close_all_windows()
-{
-	/* TR
-	 int pt_res = PtEnter(0);
-
-	 close_wind_conveyor_moves(NULL, NULL, NULL);
-	 close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
-
-	 if (pt_res >= 0) {
-	 PtLeave(0);
-	 }
-	 */
 }
 
 void UiRobot::delete_ui_ecp_robot()
