@@ -5,8 +5,8 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-wgt_single_motor_move::wgt_single_motor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent) :
-	wgt_base(_robot_label, _interface, parent), robot(_robot)
+wgt_single_motor_move::wgt_single_motor_move(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, parent), robot(_robot)
 {
 	ui.setupUi(this);
 
@@ -133,7 +133,7 @@ void wgt_single_motor_move::on_pushButton_export_mr_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << robot_label.toStdString() << " INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_mr->value();
+	buffer << widget_label.toStdString() << " INCREMENTAL POSITION\n " << ui.doubleSpinBox_des_mr->value();
 
 	interface.ui_msg->message(buffer.str());
 }
@@ -281,7 +281,7 @@ void wgt_single_motor_move::on_pushButton_export_si_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << robot_label.toStdString() << " JOINTS POSITION\n " << ui.doubleSpinBox_des_si->value();
+	buffer << widget_label.toStdString() << " JOINTS POSITION\n " << ui.doubleSpinBox_des_si->value();
 
 	interface.ui_msg->message(buffer.str());
 }

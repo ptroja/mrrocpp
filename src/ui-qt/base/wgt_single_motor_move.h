@@ -25,7 +25,7 @@ class wgt_single_motor_move : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_single_motor_move(QString _robot_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent =
+			wgt_single_motor_move(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::single_motor::UiRobot& _robot, QWidget *parent =
 					0);
 	~wgt_single_motor_move();
 

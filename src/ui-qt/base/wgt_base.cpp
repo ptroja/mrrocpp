@@ -1,12 +1,12 @@
 #include "wgt_base.h"
 #include "interface.h"
 
-wgt_base::wgt_base(QString _robot_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	QWidget(parent), robot_label(_robot_label), interface(_interface)
+wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
+	QWidget(parent), widget_label(_widget_label), interface(_interface)
 {
 	dwgt = new QDockWidget(interface.get_main_window());
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
-	dwgt->setWindowTitle(robot_label);
+	dwgt->setWindowTitle(widget_label);
 
 	//vl = new QVBoxLayout();
 	//dwgt->setLayout(vl);
