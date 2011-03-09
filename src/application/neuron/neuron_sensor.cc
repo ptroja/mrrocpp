@@ -102,52 +102,58 @@ namespace sensor {
 #define START_BREAKING			0x25
 
 /**
- *
+ * @brief Message from MRROC++ to VSP with an overshoot information.
+ * @details Message is created by the MRROC++ after execution of entire
+ * trajectory therefore after breaking phase. The overshoot is the maximum
+ * distance between hyperplane perpendicular to the difference between last and
+ * last but one position on trajectory and the robot position beyond this
+ * hyperplane. Value is used for rewarding or punishing the neural nerworks.
  */
-//TODO: dopisac komentarz
-#define FINAL_POSITION			0x26
+#define OVERSHOOT				0x26
 
 /*==================================Constructor===========================*//**
  * @brief Constructor, creates and initalizes a communication with VSP.
  * @param _configurator MRROC++ configurator.
  */
-neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_configurator) {
+neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator) :
+	config(_configurator)
+{
 
-	base_period=5;
-	current_period=1;
+	base_period = 5;
+	current_period = 1;
 
-	uint16_t vsp_port = config.value<uint16_t>("vsp_port", "[VSP]");
-	const std::string vsp_node_name = config.value<std::string>("vsp_node_name", "[VSP]");
+	uint16_t vsp_port = config.value <uint16_t> ("vsp_port", "[VSP]");
+	const std::string vsp_node_name = config.value <std::string> ("vsp_node_name", "[VSP]");
 
 	printf("%d %s\n", vsp_port, vsp_node_name.c_str());
 
 	//Try to open socket.
-	socketDescriptor=socket(AF_INET, SOCK_STREAM, 0);
-	if(socketDescriptor==-1)
-		throw std::runtime_error("socket(): "+std::string(strerror(errno)));
+	socketDescriptor = socket(AF_INET, SOCK_STREAM, 0);
+	if (socketDescriptor == -1)
+		throw std::runtime_error("socket(): " + std::string(strerror(errno)));
 
 	//Set socket options.
-	int flag=1;
-	if(setsockopt(socketDescriptor,IPPROTO_TCP,TCP_NODELAY,(char*) &flag, sizeof(int))==-1)
-		throw std::runtime_error("setsockopt(): "+std::string(strerror(errno)));
+	int flag = 1;
+	if (setsockopt(socketDescriptor, IPPROTO_TCP, TCP_NODELAY, (char*) &flag, sizeof(int)) == -1)
+		throw std::runtime_error("setsockopt(): " + std::string(strerror(errno)));
 
 	//Get server hostname.
-	hostent* server=gethostbyname(vsp_node_name.c_str());
-	if(server==NULL)
-		throw std::runtime_error("gethostbyname("+vsp_node_name+"): "+std::string(hstrerror(h_errno)));
+	hostent* server = gethostbyname(vsp_node_name.c_str());
+	if (server == NULL)
+		throw std::runtime_error("gethostbyname(" + vsp_node_name + "): " + std::string(hstrerror(h_errno)));
 
 	//Data with addres of connection.
 	sockaddr_in serv_addr;
 	memset(&serv_addr, 0, sizeof(serv_addr));
 
 	//Fill it with data.
-	serv_addr.sin_family=AF_INET;
-	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr,server->h_length);
-	serv_addr.sin_port=htons(vsp_port);
+	serv_addr.sin_family = AF_INET;
+	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
+	serv_addr.sin_port = htons(vsp_port);
 
 	//Try to estabilish a connection with neuron VSP.
-	if(connect(socketDescriptor, (const struct sockaddr*) &serv_addr, sizeof(serv_addr))==-1)
-		throw std::runtime_error("connect(): "+std::string(strerror(errno)));
+	if (connect(socketDescriptor, (const struct sockaddr*) &serv_addr, sizeof(serv_addr)) == -1)
+		throw std::runtime_error("connect(): " + std::string(strerror(errno)));
 
 	printf("Neuron sensor created\n");
 }
@@ -155,7 +161,8 @@ neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator):config(_
 /*==================================Destructor============================*//**
  * @brief Destructor.
  */
-neuron_sensor::~neuron_sensor() {
+neuron_sensor::~neuron_sensor()
+{
 	close(socketDescriptor);
 }
 
@@ -165,7 +172,8 @@ neuron_sensor::~neuron_sensor() {
  * the current period from neuron sensor interface reaches 1. It gets data
  * from VSP and stores command and if needed new coordinates.
  */
-void neuron_sensor::get_reading(){
+void neuron_sensor::get_reading()
+{
 	char buff[49];
 
 	//Read packet from socket*/
@@ -175,9 +183,9 @@ void neuron_sensor::get_reading(){
 	}
 
 	//copy data from packet to variables
-	memcpy(&command,buff,1);
-	printf("command: %x\n",command);
-	switch(command){
+	memcpy(&command, buff, 1);
+	switch (command)
+	{
 		case VSP_START:
 			printf("VSP start command received\n");
 			break;
@@ -187,24 +195,34 @@ void neuron_sensor::get_reading(){
 
 		case FIRST_COORDINATES:
 		case TRAJECTORY_FIRST:
-		case TR_NEXT_POSITION:
-			memcpy(&(coordinates.x),buff+1,8);
-			memcpy(&(coordinates.y),buff+9,8);
-			memcpy(&(coordinates.z),buff+17,8);
+			memcpy(&(macroSteps), buff + 1, 1);
+			memcpy(&(radius),buff+2, 8);
+			memcpy(&(coordinates.x), buff + 10, 8);
+			memcpy(&(coordinates.y), buff + 18, 8);
+			memcpy(&(coordinates.z), buff + 26, 8);
+			printf("first_Coordinates - %lf %lf %lf\n", coordinates.x, coordinates.y, coordinates.z);
+			base_period = macroSteps;
 			break;
+
+		case TR_NEXT_POSITION:
+			memcpy(&(coordinates.x), buff + 1, 8);
+			memcpy(&(coordinates.y), buff + 9, 8);
+			memcpy(&(coordinates.z), buff + 17, 8);
+			break;
+
 		case START_BREAKING:
-			memcpy(&(coordinates.x),buff+1,8);
-			memcpy(&(coordinates.y),buff+9,8);
-			memcpy(&(coordinates.z),buff+17,8);
-			memcpy(&(lastButOne.x),buff+25,8);
-			memcpy(&(lastButOne.y),buff+33,8);
-			memcpy(&(lastButOne.z),buff+41,8);
-			printf("%lf %lf %lf\n",coordinates.x,coordinates.y,coordinates.z);
-			printf("%lf %lf %lf\n",lastButOne.x,lastButOne.y,lastButOne.z);
+			memcpy(&(coordinates.x), buff + 1, 8);
+			memcpy(&(coordinates.y), buff + 9, 8);
+			memcpy(&(coordinates.z), buff + 17, 8);
+			memcpy(&(lastButOne.x), buff + 25, 8);
+			memcpy(&(lastButOne.y), buff + 33, 8);
+			memcpy(&(lastButOne.z), buff + 41, 8);
+			printf("Start breaking - %lf %lf %lf\n", coordinates.x, coordinates.y, coordinates.z);
+			printf("%lf %lf %lf\n", lastButOne.x, lastButOne.y, lastButOne.z);
 			break;
 
 		default:
-			printf("unknown command %d\n",command);
+			printf("unknown command %d\n", command);
 	}
 }
 
@@ -215,8 +233,9 @@ void neuron_sensor::get_reading(){
  * and wait for pressing start button in VSP once more.
  * @return True if transmission if finished, false otherwise.
  */
-bool neuron_sensor::stop(){
-	if(command==VSP_STOP)
+bool neuron_sensor::stop()
+{
+	if (command == VSP_STOP)
 		return true;
 	return false;
 }
@@ -227,8 +246,9 @@ bool neuron_sensor::stop(){
  * manipulator should enter into breaking phase to eventually stop.
  * @return True if START_BREAKING command was sent from VSP.
  */
-bool neuron_sensor::startBraking(){
-	if(command==START_BREAKING)
+bool neuron_sensor::startBraking()
+{
+	if (command == START_BREAKING)
 		return true;
 	return false;
 }
@@ -237,7 +257,8 @@ bool neuron_sensor::startBraking(){
  * @brief Returns latest coordinates received from VSP.
  * @return Latest coordinates received from VSP.
  */
-Coordinates neuron_sensor::getCoordinates(){
+Coordinates neuron_sensor::getCoordinates()
+{
 	return coordinates;
 }
 
@@ -245,7 +266,8 @@ Coordinates neuron_sensor::getCoordinates(){
  * @brief Returns last but one coordinates received from VSP.
  * @return Last but one coordinates received from VSP.
  */
-Coordinates neuron_sensor::getLastButOne(){
+Coordinates neuron_sensor::getLastButOne()
+{
 	return lastButOne;
 }
 
@@ -253,8 +275,18 @@ Coordinates neuron_sensor::getLastButOne(){
  * @brief Returns latest command received from VSP.
  * @return Latest command received from VSP.
  */
-uint8_t neuron_sensor::getCommand(){
+uint8_t neuron_sensor::getCommand()
+{
 	return command;
+}
+
+/*=================================getMacroStepsNumber====================*//**
+ * @brief Number of macro steps received from VSP.
+ * @return macro steps received from VSP.
+ */
+uint8_t neuron_sensor::getMacroStepsNumber()
+{
+	return macroSteps;
 }
 
 /*================================sendCommand=============================*//**
@@ -269,8 +301,9 @@ uint8_t neuron_sensor::getCommand(){
  *
  * @param command One of the above command.
  */
-void neuron_sensor::sendCommand(uint8_t command){
-	printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
+void neuron_sensor::sendCommand(uint8_t command)
+{
+	//printf("neuron_sensor->sendCommand simple command nr : %d\n",command);
 	int result = write(socketDescriptor, &command, sizeof(uint8_t));
 
 	if (result < 0) {
@@ -282,14 +315,39 @@ void neuron_sensor::sendCommand(uint8_t command){
 	}
 }
 
-//TODO: dodac komentarz
-void neuron_sensor::sendCurrentPosition(double x, double y, double z){
-	printf("current position %d\n",CURRENT_POSITION);
-	sendCoordinates(CURRENT_POSITION,x,y,z);
+/**
+ * @brief Sends given position to the VSP
+ * @param x X coordinate.
+ * @param y Y coordinate.
+ * @param z Z coordinate.
+ */
+void neuron_sensor::sendCurrentPosition(double x, double y, double z)
+{
+	sendCoordinates(CURRENT_POSITION, x, y, z);
+	printf("sendCurrentPosition %f %f %f\n", x, y, z);
 }
 
-void neuron_sensor::sendFinalPosition(double x, double y, double z){
-	sendCoordinates(FINAL_POSITION,x,y,z);
+/**
+ * @brief Sends the overshoot to the VSP
+ * @param overshoot value of the overshoot.
+ */
+void neuron_sensor::sendOvershoot(double overshoot)
+{
+	char buff[9];
+	uint8_t command = OVERSHOOT;
+	memcpy(buff, &command, 1);
+	memcpy(buff + 1, &overshoot, 8);
+
+	printf("overshoot sent: %lf\n", overshoot);
+	int result = write(socketDescriptor, buff, sizeof(buff));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+
+	if (result != sizeof(buff)) {
+		throw std::runtime_error("write() failed: result != sizeof(buff)");
+	}
 }
 
 /*==============================sendCoordinates===========================*//**
@@ -299,17 +357,18 @@ void neuron_sensor::sendFinalPosition(double x, double y, double z){
  * @param y Y coordinate.
  * @param z Z coordinate.
  */
-void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double z){
+void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double z)
+{
 	char buff[25];
-	uint8_t temp_command=_command;
-	memcpy(buff,&temp_command,1);
-	memcpy(buff+1,&x,8);
-	memcpy(buff+9,&y,8);
-	memcpy(buff+17,&z,8);
+	uint8_t temp_command = _command;
+	memcpy(buff, &temp_command, 1);
+	memcpy(buff + 1, &x, 8);
+	memcpy(buff + 9, &y, 8);
+	memcpy(buff + 17, &z, 8);
 
-	printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	//printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
 
-	int result=write(socketDescriptor,buff,sizeof(buff));
+	int result = write(socketDescriptor, buff, sizeof(buff));
 
 	if (result < 0) {
 		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
@@ -326,7 +385,8 @@ void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double
  * which returns coordinates that came from VSP.
  * @return First coordinates of current trajectory.
  */
-Coordinates neuron_sensor::getFirstCoordinates(){
+Coordinates neuron_sensor::getFirstCoordinates()
+{
 	sendCommand(FIRST_COORDINATES);
 	get_reading();
 	return coordinates;
@@ -337,8 +397,9 @@ Coordinates neuron_sensor::getFirstCoordinates(){
  * @details Sends TRAJECTORY_FIRST to VSP and sets appropriate value for
  * current_period.
  */
-void neuron_sensor::startGettingTrajectory(){
-	current_period=1;
+void neuron_sensor::startGettingTrajectory()
+{
+	current_period = 1;
 	sendCommand(TRAJECTORY_FIRST);
 }
 
@@ -347,33 +408,77 @@ void neuron_sensor::startGettingTrajectory(){
  * @details Receives commands in loop until proper command VSP_START is
  * received.
  */
-void neuron_sensor::waitForVSPStart(){
+void neuron_sensor::waitForVSPStart()
+{
 	sendCommand(MRROCPP_READY);
-	do{
+	do {
 		get_reading();
-	}while(command!=VSP_START);
+	} while (command != VSP_START);
 }
 
 /*============================sendCommunicationFinished===================*//**
  * @brief Sends MRROCPP_FINISHED to VSP.
  * @details Command is sent when communication link in not needed anymore.
  */
-void neuron_sensor::sendCommunicationFinished(){
+void neuron_sensor::sendCommunicationFinished()
+{
 	sendCommand(MRROCPP_FINISHED);
 }
 
 /*================================configure_sensor========================*//**
  * @brief Unused method from sensor interface.
  */
-void neuron_sensor::configure_sensor(){
+void neuron_sensor::configure_sensor()
+{
 }
 
 /*================================initiate_reading========================*//**
  * @brief Unused method from sensor interface.
  */
-void neuron_sensor::initiate_reading(){
+void neuron_sensor::initiate_reading()
+{
 }
 
+/*=====================================newData============================*//**
+ * @brief Informs weather new data from VSP should be available.
+ * @return True if new data is available, otherwise false.
+ */
+bool neuron_sensor::newData()
+{
+	if (current_period == base_period)
+		return true;
+
+	return false;
+}
+
+/*=================================positionRequested======================*//**
+ * @brief Informs weather new position request was sent from VSP.
+ * @return True if new data is available, otherwise false.
+ */
+bool neuron_sensor::positionRequested()
+{
+	if (current_period == 1)
+		return true;
+
+	return false;
+}
+
+/*=================================positionRequested======================*//**
+ * @brief Stops receving data from VSP if currentPeriod equals 1
+ */
+void neuron_sensor::stopReceivingData()
+{
+	base_period = 0;
+}
+
+/*======================================getRadius=========================*//**
+ * @brief Provides radius of breaking circle received from VSP.
+ * @return radius of breaking circle received from VSP.
+ */
+double neuron_sensor::getRadius()
+{
+	return radius;
+}
 
 } //sensor
 } //ecp_mp
