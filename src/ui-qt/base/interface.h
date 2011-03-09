@@ -110,8 +110,6 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 
-
-
 	std::ofstream *log_file_outfile;
 
 	boost::mutex process_creation_mtx;
@@ -172,6 +170,8 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	void manage_pc(void);
+
 	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();

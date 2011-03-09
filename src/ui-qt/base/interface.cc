@@ -351,19 +351,24 @@ int Interface::MPup_int()
 			}
 			manage_interface();
 
-			wgt_pc->process_control_window_init();
-
 		}
 	}
 
 	return 1;
 }
 
+void Interface::manage_pc(void)
+{
+	wgt_pc->process_control_window_init();
+
+}
+
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
 int Interface::manage_interface(void)
 {
-
+	// okienko process control
+	manage_pc();
 	// UWAGA ta funkcja powinna byc odporna na odpalaenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -1174,7 +1179,7 @@ int Interface::pulse_stop_mp()
 		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		execute_mp_pulse(MP_STOP);
-		wgt_pc->process_control_window_init();
+
 		manage_interface();
 	}
 
@@ -1191,7 +1196,7 @@ int Interface::pulse_pause_mp()
 		mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
 
 		execute_mp_pulse(MP_PAUSE);
-		wgt_pc->process_control_window_init();
+
 		manage_interface();
 	}
 
@@ -1208,7 +1213,7 @@ int Interface::pulse_resume_mp()
 		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		execute_mp_pulse(MP_RESUME);
-		wgt_pc->process_control_window_init();
+
 		manage_interface();
 	}
 
@@ -1251,7 +1256,7 @@ int Interface::pulse_start_all_reader()
 					robot_node.second->pulse_reader_start_exec_pulse();
 				}
 
-	wgt_pc->process_control_window_init();
+	manage_pc();
 
 	return 1;
 }
@@ -1262,7 +1267,7 @@ int Interface::pulse_stop_all_reader()
 				{
 					robot_node.second->pulse_reader_stop_exec_pulse();
 				}
-	wgt_pc->process_control_window_init();
+	manage_pc();
 	return 1;
 }
 
