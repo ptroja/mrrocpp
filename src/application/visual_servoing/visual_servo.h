@@ -9,11 +9,12 @@
 #define VISUAL_SERVO_H_
 
 #include <boost/circular_buffer.hpp>
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+
 #include "base/lib/mrmath/mrmath.h"
 #include "sensor/discode/discode_sensor.h"
-#include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"
-
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
@@ -39,6 +40,9 @@ struct visual_servo_log_sample{
 
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
+
+	static void printHeader(std::ostream& os);
+	void print(std::ostream& os, uint64_t t0);
 };
 
 

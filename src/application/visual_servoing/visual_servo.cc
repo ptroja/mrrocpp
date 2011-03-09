@@ -83,7 +83,9 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	}
 
 	log_buffer.push_back(sample);
-
+	if (log_buffer.size() % 100 == 0) {
+		log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
+	}
 	if (log_buffer.full()) {
 		write_log();
 	}
@@ -108,25 +110,59 @@ boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_serv
 
 void visual_servo::write_log()
 {
+	log("visual_servo::write_log() begin\n");
 	ofstream os;
 	os.open(time_log_filename.c_str(), ofstream::out | ofstream::trunc);
-	os
-			<< "sampleTimeSeconds;sampleTimeNanoseconds;readingTimeSeconds;readingTimeNanoseconds;sendTimeSeconds;sendTimeNanoseconds;receivedTimeSeconds;receivedTimeNanoseconds;is_object_visible\n";
+
+	visual_servo_log_sample::printHeader(os);
+
 	boost::circular_buffer <visual_servo_log_sample>::iterator it;
+	uint64_t t0 = 0;
 	for (it = log_buffer.begin(); it != log_buffer.end(); ++it) {
-		os << it->sampleTimeSeconds << ";";
-		os << it->sampleTimeNanoseconds << ";";
-		os << it->readingTimeSeconds << ";";
-		os << it->readingTimeNanoseconds << ";";
-		os << it->sendTimeSeconds << ";";
-		os << it->sendTimeNanoseconds << ";";
-		os << it->receivedTimeSeconds << ";";
-		os << it->receivedTimeNanoseconds << ";";
-		os << it->is_object_visible;
-		os << "\n";
+		if (it == log_buffer.begin()) {
+			t0 = it->readingTimeSeconds + it->readingTimeNanoseconds * 1e-9;
+		}
+		it->print(os, t0);
 	}
 	os.close();
 	log_buffer.clear();
+	log("visual_servo::write_log() end\n");
+}
+
+void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
+{
+	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
+	double readingTime = (readingTimeSeconds - t0) + readingTimeNanoseconds * 1e-9;
+	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+	double receivedTime = (receivedTimeSeconds - t0) + receivedTimeNanoseconds * 1e-9;
+
+	if (sampleTimeSeconds > 0) {
+		os << sampleTime;
+	}
+	os << ";";
+
+	if (readingTimeSeconds > 0) {
+		os << readingTime;
+	}
+	os << ";";
+
+	if (sendTimeSeconds > 0) {
+		os << sendTime;
+	}
+	os << ";";
+
+	if (receivedTimeSeconds > 0) {
+		os << receivedTime;
+	}
+	os << ";";
+
+	os << is_object_visible;
+	os << "\n";
+}
+
+void visual_servo_log_sample::printHeader(std::ostream& os)
+{
+	os << "sampleTime;readingTime;sendTime;receivedTime;is_object_visible\n";
 }
 
 } // namespace servovision
