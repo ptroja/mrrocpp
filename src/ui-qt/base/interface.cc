@@ -350,6 +350,9 @@ int Interface::MPup_int()
 				fprintf(stderr, "mp spawn failed\n");
 			}
 			manage_interface();
+
+			wgt_pc->process_control_window_init();
+
 		}
 	}
 
@@ -1133,9 +1136,7 @@ int Interface::MPslay()
 
 	// modyfikacja menu
 	manage_interface();
-	/* TR
-	 process_control_window_init(widget, apinfo, cbinfo);
-	 */
+	wgt_pc->process_control_window_init();
 	return 1;
 
 }
@@ -1156,9 +1157,7 @@ int Interface::pulse_start_mp()
 
 		execute_mp_pulse(MP_START);
 
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+		wgt_pc->process_control_window_init();
 		manage_interface();
 	}
 
@@ -1175,9 +1174,7 @@ int Interface::pulse_stop_mp()
 		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		execute_mp_pulse(MP_STOP);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+		wgt_pc->process_control_window_init();
 		manage_interface();
 	}
 
@@ -1194,9 +1191,7 @@ int Interface::pulse_pause_mp()
 		mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
 
 		execute_mp_pulse(MP_PAUSE);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+		wgt_pc->process_control_window_init();
 		manage_interface();
 	}
 
@@ -1213,9 +1208,7 @@ int Interface::pulse_resume_mp()
 		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		execute_mp_pulse(MP_RESUME);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+		wgt_pc->process_control_window_init();
 		manage_interface();
 	}
 
@@ -1230,9 +1223,7 @@ int Interface::pulse_trigger_mp()
 	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
 
 		execute_mp_pulse(MP_TRIGGER);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+
 		manage_interface();
 	}
 
@@ -1260,6 +1251,8 @@ int Interface::pulse_start_all_reader()
 					robot_node.second->pulse_reader_start_exec_pulse();
 				}
 
+	wgt_pc->process_control_window_init();
+
 	return 1;
 }
 
@@ -1269,7 +1262,7 @@ int Interface::pulse_stop_all_reader()
 				{
 					robot_node.second->pulse_reader_stop_exec_pulse();
 				}
-
+	wgt_pc->process_control_window_init();
 	return 1;
 }
 
