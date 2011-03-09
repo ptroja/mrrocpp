@@ -46,10 +46,10 @@ case `uname -s` in
 		QNX)
 				./ui;;
 		Linux)
-				./ui-qt-yoyek;;
+				./ui-qt;;
 		*)
 				echo "OS not fully supported; defaults to UNIX"
-				./ui-qt-yoyek;;
+				./ui-qt;;
 esac
 
 echo "$(${COLOR} blue)Killing configsrv$(${COLOR} off)"
