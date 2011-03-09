@@ -59,6 +59,114 @@ EcpRobot::~EcpRobot()
 // ---------------------------------------------------------------
 // virtual  // by Y - wywalone
 
+
+// ---------------------------------------------------------------
+void EcpRobot::move_motors(const double final_position[])
+{
+	// Zlecenie wykonania makrokroku ruchu zadanego dla walow silnikow
+	int nr_of_steps = 0, nr_tmp = 0; // Liczba krokow
+	double temp = 0.0; // Zmienne pomocnicze
+
+	/*
+	 if (is_synchronised())
+	 printf("zsynchronizowany move motors\n");
+	 else
+	 printf("niezsynchronizowany move motors\n");
+	 */
+	if (ecp->is_synchronised()) { // Robot zsynchronizowany
+		// Odczyt aktualnego polozenia
+		//   	printf("is synchronised przed read motors\n");
+		read_motors(current_position);
+
+		for (int j = 0; j < ecp->number_of_servos; j++) {
+			temp = fabs(final_position[j] - current_position[j]);
+			nr_tmp = (int) ceil(temp / MOTOR_STEP[j]);
+			nr_of_steps = (nr_of_steps > nr_tmp) ? nr_of_steps : nr_tmp;
+		}
+
+		//  printf("is synchronised za read motors: nr of steps %d\n", nr_of_steps);
+		// Parametry zlecenia ruchu i odczytu polozenia
+		ecp->ecp_command.instruction_type = lib::SET_GET;
+		ecp->ecp_command.motion_type = lib::ABSOLUTE;
+		ecp->ecp_command.interpolation_type = lib::MIM;
+	} else {
+		// printf("!is_synchronised: %f \n",MOTOR_STEP);
+		// Robot niezsynchroniozowany
+		for (int j = 0; j < ecp->number_of_servos; j++) {
+			temp = fabs(final_position[j]);
+			nr_tmp = (int) ceil(temp / MOTOR_STEP[j]);
+			nr_of_steps = (nr_of_steps > nr_tmp) ? nr_of_steps : nr_tmp;
+		}
+
+		ecp->ecp_command.instruction_type = lib::SET;
+		ecp->ecp_command.motion_type = lib::RELATIVE;
+		ecp->ecp_command.interpolation_type = lib::MIM;
+	}
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::MOTOR;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::MOTOR;
+	ecp->ecp_command.motion_steps = nr_of_steps;
+	ecp->ecp_command.value_in_step_no = nr_of_steps;
+
+	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
+		return;
+	for (int j = 0; j < ecp->number_of_servos; j++)
+		ecp->ecp_command.arm.pf_def.arm_coordinates[j] = final_position[j];
+
+	// printf("\n ilosc krokow: %d, po ilu komun: %d, odleglosc 1: %f\n",ecp_command.motion_steps, ecp_command.value_in_step_no, ecp_command.arm.pf_def.arm_coordinates[1]);
+
+	execute_motion();
+
+	if (ecp->is_synchronised())
+		for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
+			current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+}
+// ---------------------------------------------------------------
+
+// ---------------------------------------------------------------
+void EcpRobot::move_joints(const double final_position[])
+{
+	// Zlecenie wykonania makrokroku ruchu zadanego dla wspolrzednych wewnetrznych
+	int nr_of_steps = 0, nr_tmp = 0; // Liczba krokow
+	double temp = 0.0; // Zmienne pomocnicze
+
+	// Odczyt aktualnego polozenia
+	read_joints(current_position);
+
+	for (int j = 0; j < ecp->number_of_servos; j++) {
+		temp = fabs(final_position[j] - current_position[j]);
+		nr_tmp = (int) ceil(temp / JOINT_STEP[j]);
+		nr_of_steps = (nr_of_steps > nr_tmp) ? nr_of_steps : nr_tmp;
+	}
+
+	// Parametry zlecenia ruchu i odczytu polozenia
+	ecp->ecp_command.instruction_type = lib::SET_GET;
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::JOINT;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::JOINT;
+	ecp->ecp_command.motion_type = lib::ABSOLUTE;
+	ecp->ecp_command.interpolation_type = lib::MIM;
+	ecp->ecp_command.motion_steps = nr_of_steps;
+	ecp->ecp_command.value_in_step_no = nr_of_steps;
+
+	// cprintf("NOS=%u\n",ecp_command.motion_steps);
+
+	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
+		return;
+
+	for (int j = 0; j < ecp->number_of_servos; j++)
+		ecp->ecp_command.arm.pf_def.arm_coordinates[j] = final_position[j];
+
+	execute_motion();
+
+	for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
+		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+}
+// ---------------------------------------------------------------
+
+
 void EcpRobot::execute_motion(void)
 {
 

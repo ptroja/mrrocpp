@@ -28,14 +28,9 @@ protected:
 
 	// Dopuszczalne przyrosty polozenia w pojedynczym kroku [2ms] przy ruchach
 	// recznych dla roznych wspolrzednych
-	double MOTOR_STEP; // Przyrost kata obrotu walu silnika [rad]
-	double MOTOR_GRIPPER_STEP;
-	double JOINT_ANGULAR_STEP; // Przyrost kata obrotu w przegubie obrotowym [rad]
-	double JOINT_LINEAR_STEP; // Przyrost liniowy w przegubach posuwistych [mm]
-	double JOINT_GRIPPER_STEP;
-	double END_EFFECTOR_LINEAR_STEP; // Przyrost wspolrzednej polozenia koncowki [mm]
-	double END_EFFECTOR_ANGULAR_STEP; // Przyrost wspolrzednej orientacji koncowki [rad]
-	double END_EFFECTOR_GRIPPER_STEP; // Przyrost wspolrzednej orientacji koncowki [rad]
+	double MOTOR_STEP[lib::MAX_SERVOS_NR]; // Przyrost kata obrotu walu silnika [rad]
+	double JOINT_STEP[lib::MAX_SERVOS_NR]; // Przyrost kata obrotu w przegubie obrotowym [rad]
+	double END_EFFECTOR_STEP[lib::MAX_SERVOS_NR]; // Przyrost wspolrzednej polozenia koncowki [mm]
 
 	double desired_position[lib::MAX_SERVOS_NR]; // polozenie zadane
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
@@ -46,6 +41,10 @@ public:
 
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(Interface& _interface, lib::robot_name_t _robot_name); // Konstruktor
+
+
+	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
+	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
 
 	virtual ~EcpRobot();
 
