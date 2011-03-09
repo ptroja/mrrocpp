@@ -24,13 +24,8 @@
 #include "../interface.h"
 #include "ui_ecp_r_irp6_common.h"
 
-#include "ui_ecp_r_irp6_common.h"
-
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-
-#include "robot/smb/ecp_r_smb.h"
-#include "robot/spkm/ecp_r_spkm.h"
 
 #include "robot/irp6p_m/const_irp6p_m.h"
 
