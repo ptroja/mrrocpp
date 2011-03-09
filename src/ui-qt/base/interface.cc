@@ -376,8 +376,6 @@ int Interface::manage_interface(void)
 					robot_node.second->manage_interface();
 				}
 
-	mw->enable_menu_item(false, 1, mw->get_ui()->menuIrp6ot_tfg); //tymczasowe deaktywowanie, aż robot zostanie uruchomiony
-
 	// wlasciwosci menu  ABW_base_all_robots
 
 
