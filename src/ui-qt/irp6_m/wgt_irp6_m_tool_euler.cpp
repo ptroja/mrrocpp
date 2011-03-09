@@ -7,7 +7,7 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-const int wgt_irp6_m_tool_euler::aa_number=6;
+const int wgt_irp6_m_tool_euler::aa_number = 6;
 
 wgt_irp6_m_tool_euler::wgt_irp6_m_tool_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
 	wgt_base(_widget_label, _interface, parent), robot(_robot)
@@ -117,7 +117,7 @@ int wgt_irp6_m_tool_euler::init()
 
 				for (int i = 0; i < aa_number; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(tool_vector[i]);
-					robot.desired_pos[i] = tool_vector[i];
+
 				}
 
 			} else {
@@ -132,8 +132,6 @@ int wgt_irp6_m_tool_euler::init()
 
 	return 1;
 }
-
-
 
 void wgt_irp6_m_tool_euler::on_pushButton_copy_clicked()
 {
@@ -175,12 +173,12 @@ int wgt_irp6_m_tool_euler::get_desired_position()
 		if (robot.state.edp.is_synchronised) {
 
 			for (int i = 0; i < aa_number; i++) {
-				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+				tool_vector[i] = doubleSpinBox_des_Vector[i]->value();
 			}
 		} else {
 
 			for (int i = 0; i < aa_number; i++) {
-				robot.desired_pos[i] = 0.0;
+				tool_vector[i] = 0.0;
 			}
 		}
 	}
