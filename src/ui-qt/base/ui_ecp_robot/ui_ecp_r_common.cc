@@ -83,9 +83,9 @@ EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 		}
 
 	} else if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
-		/* TR
-		 ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
-		 */
+
+		ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
+
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.04;
 			JOINT_STEP[j] = 0.00001;

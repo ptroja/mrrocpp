@@ -41,6 +41,9 @@ class UiRobot;
 namespace irp6p_tfg {
 class UiRobot;
 }
+namespace irp6ot_tfg {
+class UiRobot;
+}
 namespace polycrank {
 class UiRobot;
 }
@@ -158,9 +161,7 @@ public:
 	irp6p_tfg::UiRobot *irp6p_tfg;
 	conveyor::UiRobot *conveyor;
 
-	/*TR
-	 irp6ot_tfg::UiRobot *irp6ot_tfg;
-	 */
+	irp6ot_tfg::UiRobot *irp6ot_tfg;
 
 	const int position_refresh_interval;
 

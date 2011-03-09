@@ -15,6 +15,7 @@
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
+#include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
@@ -444,42 +445,42 @@ void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
 
 void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
 {
-
+	interface.irp6ot_tfg->edp_create();
 }
 
 void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
 {
-
+	interface.irp6ot_tfg->EDP_slay_int();
 }
 
 void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
 {
-
+	interface.irp6ot_tfg->synchronise();
 }
 
 void MainWindow::on_actionirp6ot_tfg_Move_triggered()
 {
-
+	interface.irp6ot_tfg->wgt_move->my_open();
 }
 
 void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
 {
-
+	interface.irp6ot_tfg->move_to_synchro_position();
 }
 
 void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
 {
-
+	interface.irp6ot_tfg->move_to_preset_position(0);
 }
 
-void MainWindow::on_actionIrp6ot_tfg_Position_1_triggered()
+void MainWindow::on_actionirp6ot_tfg_Position_1_triggered()
 {
-
+	interface.irp6ot_tfg->move_to_preset_position(1);
 }
 
-void MainWindow::on_actionIrp6ot_tfg_Position_2_triggered()
+void MainWindow::on_actionirp6ot_tfg_Position_2_triggered()
 {
-
+	interface.irp6ot_tfg->move_to_preset_position(2);
 }
 
 // irp6p_m menu

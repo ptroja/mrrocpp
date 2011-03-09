@@ -22,6 +22,7 @@
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
+#include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
 #include "../polycrank/ui_r_polycrank.h"
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
@@ -178,10 +179,8 @@ void Interface::init()
 	conveyor = new conveyor::UiRobot(*this);
 	robot_m[conveyor->robot_name] = conveyor;
 
-	/* TR
-	 irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	 robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-	 */
+	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
 	ui_node_name = sysinfo.nodename;
 	is_sr_thread_loaded = false;

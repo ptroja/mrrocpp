@@ -42,7 +42,6 @@ private:
 	mrrocpp::ui::common::Interface& interface;
 	QTimer *timer;
 
-
 signals:
 	void ui_notification_signal(QString _string, QColor _color);
 	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
@@ -96,8 +95,8 @@ private slots:
 
 	void on_actionirp6ot_tfg_Synchro_Position_triggered();
 	void on_actionirp6ot_tfg_Position_0_triggered();
-	void on_actionIrp6ot_tfg_Position_1_triggered();
-	void on_actionIrp6ot_tfg_Position_2_triggered();
+	void on_actionirp6ot_tfg_Position_1_triggered();
+	void on_actionirp6ot_tfg_Position_2_triggered();
 
 	//irp6p_m menu
 	void on_actionirp6p_m_EDP_Load_triggered();
