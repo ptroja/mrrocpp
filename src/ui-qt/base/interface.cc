@@ -642,8 +642,39 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+	/*
+	 char buffer[50];
+	 char c[20];
+	 sprintf(buffer, "ping -c 3 %s | grep -c ms > a.txt", _node.c_str());
+	 system(buffer);
+	 FILE *p = fopen("a.txt", "r");
+	 fgets(c, 5, p);
+	 fclose(p);
+	 if (strcmp(c, "5\n") != 0) {
+	 std::string tmp(beginnig_of_message);
+	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 
+	 return false;
+	 }
+
+	 return true;
+	 */
+	/*
+	 std::string opendir_path("/net/");
+	 opendir_path += _node;
+
+	 if (access(opendir_path.c_str(), R_OK) != 0) {
+	 std::string tmp(beginnig_of_message);
+	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+
+	 return false;
+	 }
+	 return true;
+	 */
 	return true;
+
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
