@@ -73,6 +73,19 @@ public:
 	void get_kinematic(uint8_t* kinematic_model_no);
 	void get_servo_algorithm(uint8_t algorithm_no[lib::MAX_SERVOS_NR], uint8_t parameters_no[lib::MAX_SERVOS_NR]);
 
+	// Zlecenie ruchu
+	void move_xyz_euler_zyz(const double final_position[7]);
+	void move_xyz_angle_axis(const double final_position[7]);
+	void move_xyz_angle_axis_relative(const double position_increment[7]);
+	void set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector);
+	void set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector);
+
+	// Odczyt polozenia
+	void read_xyz_euler_zyz(double current_position[7]);
+	void read_xyz_angle_axis(double current_position[7]);
+	void read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector);
+	void read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector);
+
 };
 
 }
