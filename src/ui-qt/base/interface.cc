@@ -43,7 +43,7 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
+	mp.last_state = UI_MP_STATE_NOT_KNOWN;// mp wylaczone
 	mp.pid = -1;
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie

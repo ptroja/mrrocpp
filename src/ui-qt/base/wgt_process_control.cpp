@@ -1,3 +1,7 @@
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "../irp6p_m/ui_r_irp6p_m.h"
+#include "../conveyor/ui_r_conveyor.h"
+
 #include "wgt_process_control.h"
 #include "interface.h"
 
@@ -9,7 +13,6 @@ wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interf
 
 	connect(this, SIGNAL(process_control_window_init_signal()), this, SLOT(process_control_window_init_slot()), Qt::QueuedConnection);
 
-	init(true);
 }
 
 wgt_process_control::~wgt_process_control()
@@ -95,20 +98,17 @@ int wgt_process_control::init(bool do_it)
 	ui.all_reader_stop_pushButton->setDisabled(true);
 	ui.all_reader_trigger_pushButton->setDisabled(true);
 
-	/* TR
+	// Dla irp6_on_track
 
-	 // Dla irp6_on_track
+	interface.irp6ot_m->process_control_window_irp6ot_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
-	 interface.irp6ot_m->process_control_window_irp6ot_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	// Dla irp6_postument
 
-	 // Dla irp6_postument
+	interface.irp6p_m->process_control_window_irp6p_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
-	 interface.irp6p_m->process_control_window_irp6p_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	// Dla conveyor
 
-	 // Dla conveyor
-
-	 interface.conveyor->process_control_window_conveyor_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	 */
+	interface.conveyor->process_control_window_conveyor_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
@@ -128,9 +128,9 @@ int wgt_process_control::init(bool do_it)
 
 	// Dla mp i ecp
 	if ((interface.mp.state != interface.mp.last_state) || (do_it)) {
-
 		switch (interface.mp.state)
 		{
+			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
 			case ui::common::UI_MP_PERMITED_TO_RUN:
 				ui.mp_start_pushButton->setDisabled(true);
 				ui.mp_stop_pushButton->setDisabled(true);
@@ -141,6 +141,7 @@ int wgt_process_control::init(bool do_it)
 				block_all_ecp_trigger_widgets();
 				break;
 			case ui::common::UI_MP_WAITING_FOR_START_PULSE:
+
 				ui.mp_start_pushButton->setDisabled(false);
 				ui.mp_stop_pushButton->setDisabled(true);
 				ui.mp_pause_pushButton->setDisabled(true);
@@ -170,6 +171,7 @@ int wgt_process_control::init(bool do_it)
 				block_all_ecp_trigger_widgets();
 				break;
 			default:
+
 				break;
 		}
 

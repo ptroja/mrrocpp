@@ -700,6 +700,7 @@ int process_control_window_init(PtWidget_t *widget, ApInfo_t *apinfo, PtCallback
 
 			switch (interface.mp.state)
 			{
+				case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
 				case ui::common::UI_MP_PERMITED_TO_RUN:
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_start);
 					interface.block_widget(ABW_PtButton_wnd_processes_control_mp_pulse_stop);

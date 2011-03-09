@@ -230,6 +230,7 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
+
 		/* TR
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
