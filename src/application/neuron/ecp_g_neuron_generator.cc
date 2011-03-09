@@ -20,7 +20,6 @@ namespace common {
 namespace generator {
 
 const double MIN_VELOCITY = 0.1;
-const double RADIUS = 0.2;
 const double MSTEP_TIME = 0.002 * 10.0;
 
 
@@ -74,7 +73,9 @@ bool neuron_generator::first_step()
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
 	macroSteps=neuron_sensor->getMacroStepsNumber();
-	printf("macroStep: %d",macroSteps);
+	radius=neuron_sensor->getRadius();
+	printf("macroStep: %d\n",macroSteps);
+	printf("radius: %f\n",radius);
 
 	mstep_ = 0;
 
@@ -102,13 +103,8 @@ bool neuron_generator::next_step()
 	//generator has to interpolate this coordinates for 5 macro steps.
 	//this section is not performed in breaking phase, during which in every
 	//next step period is set to 4
-	if (neuron_sensor->newData()) {
-		if (neuron_sensor->startBraking()) {
-                        breaking_ = true;
-			printf("\n-------- breaking ----------\n");
-			flushall();
-		}
-
+	if (neuron_sensor->newData() && !breaking_) {
+		printf("\n-------- new interpolation point ----------\n");
 		flushall();
 		// ------------ read the current robot position ----------
 		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
@@ -129,18 +125,22 @@ bool neuron_generator::next_step()
 		normalized_vector[1] = neuron_sensor->getLastButOne().y;
 		normalized_vector[2] = neuron_sensor->getLastButOne().z;
 
-                if(neuron_sensor->startBraking()) {
-			double time;
+        if(neuron_sensor->startBraking()) {
+        	double time;
+        	neuron_sensor->stopReceivingData();
 			breaking_ = true;
 
-                        if( sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) < MIN_VELOCITY)
+			printf("\n-------- breaking ----------\n");
+			flushall();
+
+            if( sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) < MIN_VELOCITY)
 			{
-				time = 2 * MIN_VELOCITY / RADIUS;
+				time = 2 * MIN_VELOCITY / radius;
 			} else {
-                                time = 2 * sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) / RADIUS;
+                                time = 2 * sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) / radius;
 			}
 
-			break_steps_ = time / MSTEP_TIME;
+			break_steps_ = time / ((double)macroSteps * MSTEP_TIME);
 
 			for(int i = 0; i < 3; i++)
 			{
@@ -150,17 +150,17 @@ bool neuron_generator::next_step()
 			for(int i = 0; i < 3; i++)
 			{
 				velocityProfileLinear(coeff_[i], actual_position[i], desired_position[i], (double)macroSteps * MSTEP_TIME);
-                                vel_[i] = (desired_position[i] - actual_position[i]) / ((double)macroSteps * MSTEP_TIME);
+                vel_[i] = (desired_position[i] - actual_position[i]) / ((double)macroSteps * MSTEP_TIME);
 			}
 		}
-		mstep_ = 0;
+		mstep_ = 1;
 	}
 
 	//for all of the axes...
 	double time = (double)mstep_ * MSTEP_TIME;
 	double t[6];
 	generatePowers(5, time, t);
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 3; i++) {
 		position[i] = t[0]*coeff_[i][0] +
                               t[1]*coeff_[i][1] +
                               t[2]*coeff_[i][2] +
@@ -177,11 +177,12 @@ bool neuron_generator::next_step()
 	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	// --------- send new position to the robot (EDP) (end) --------------
 
-	if (neuron_sensor->positionRequested()) {
+
+	if (neuron_sensor->positionRequested()  && !breaking_) {
 		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
 	}
 
-        if(breaking_ && (mstep_ > break_steps_)){
+    if(breaking_ && (mstep_ > break_steps_)){
 		return false;
 	} else {
 		return true;

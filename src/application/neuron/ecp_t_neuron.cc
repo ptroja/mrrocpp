@@ -68,6 +68,8 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 				//Obtain first coordinates from VSP for smooth generator.
 				coordinates=neuronSensor->getFirstCoordinates();
 
+				printf("coordinates received: %f %f %f\n",coordinates.x, coordinates.y, coordinates.z);
+
 				smoothGenerator->reset();
 				smoothGenerator->set_absolute();
 
