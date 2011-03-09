@@ -236,23 +236,21 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		 */
-	} else {
-		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
-			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			/* TR
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-			 */
-		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
-			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			/* TR
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-			 */
-		}
+	} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
+		/* TR
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		 */
+	} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
+		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
+		/* TR
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		 */
 	}
 
 	state.edp.last_state = state.edp.state;

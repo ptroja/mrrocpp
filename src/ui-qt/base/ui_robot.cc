@@ -30,7 +30,7 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
 	state.edp.state = -1; // edp nieaktywne
-	state.edp.last_state = -1; // edp nieaktywne
+	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
 }
