@@ -373,13 +373,13 @@ int main(int argc, char *argv[])
 	signal(SIGINT, SIG_IGN);
 
 	// Check number of arguments.
-	if (argc <= 6) {
+	if (argc < 4) {
 		printf("Number of required arguments is insufficient.\n");
 		return -1;
 	}
 
 	// Read system configuration.
-	lib::configurator _config(argv[1], argv[2], argv[3], argv[4], argv[5]);
+	lib::configurator _config(argv[1], argv[2], argv[3]);
 
 	resourceman_attach_point
 			= _config.return_attach_point_name(lib::configurator::CONFIG_RESOURCEMAN_LOCAL, "resourceman_attach_point");

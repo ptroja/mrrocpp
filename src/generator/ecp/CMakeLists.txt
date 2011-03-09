@@ -20,3 +20,5 @@ add_library(ecp_generators
 )
 
 target_link_libraries(ecp_generators ecp_generators_force mrrocpp ecp)
+
+install(TARGETS ecp_generators DESTINATION lib)

@@ -12,6 +12,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <string>
 
+#include"base/lib/impconst.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace epos {
@@ -29,6 +31,11 @@ static const int EPOS_DATA_PORT_SERVOS_NUMBER = 7; // nie moze byc mniej niz 6 b
 enum EPOS_GEN_PROFILE
 {
 	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, OPERATIONAL_SPACE, EPOS_GEN_PROFILE_NO_ACTION
+};
+
+enum EPOS_MOTION_VARIANT
+{
+	NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, SYNC_POLYNOMAL, OPERATIONAL
 };
 
 /*!
@@ -50,19 +57,19 @@ const std::string EPOS_JOINT_COMMAND_DATA_PORT = "EPOS_JOINT_COMMAND_DATA_PORT";
 const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command data port
+ * @brief SwarmItFix Epos cubic trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_CUBIC_COMMAND_DATA_PORT = "EPOS_CUBIC_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos trapezoidal trajectory command data port
+ * @brief SwarmItFix Epos trapezoidal trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT = "EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Epos operational space trajectory command data port
+ * @brief SwarmItFix Epos operational space trajectory command data port - deprecated
  * @ingroup epos
  */
 const std::string EPOS_OPERATIONAL_COMMAND_DATA_PORT = "EPOS_OPERATIONAL_COMMAND_DATA_PORT";
@@ -72,6 +79,13 @@ const std::string EPOS_OPERATIONAL_COMMAND_DATA_PORT = "EPOS_OPERATIONAL_COMMAND
  * @ingroup epos
  */
 const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos clear fault command data port
+ * @ingroup epos
+ *
+ */
+const std::string EPOS_CLEAR_FAULT_DATA_PORT = "EPOS_CLEAR_FAULT_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Epos status data request port
@@ -122,10 +136,9 @@ struct mp_to_ecp_cubic_trapezoidal_parameters
  */
 struct single_controller_epos_reply
 {
-	double current;
+	int16_t current;
 	double position;
 	bool motion_in_progress;
-	bool buffer_full;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -137,15 +150,14 @@ struct single_controller_epos_reply
 		ar & current;
 		ar & position;
 		ar & motion_in_progress;
-		ar & buffer_full;
 	}
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command
+ * @brief SwarmItFix Epos cubic trajectory command - deprecated
  * @ingroup epos
  */
-struct epos_cubic_command
+struct epos_trapezoidal_command
 {
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double aa[EPOS_DATA_PORT_SERVOS_NUMBER];
@@ -172,6 +184,7 @@ struct epos_cubic_command
  */
 struct epos_simple_command
 {
+	EPOS_MOTION_VARIANT motion_variant;
 	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
 
 	//! Give access to boost::serialization framework
@@ -181,15 +194,16 @@ struct epos_simple_command
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & motion_variant;
 		ar & desired_position;
 	}
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos trapezoidal trajectory command
+ * @brief SwarmItFix Epos trapezoidal trajectory command - deprecated
  * @ingroup epos
  */
-struct epos_trapezoidal_command
+struct epos_cubic_command
 {
 	double em[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];
@@ -209,7 +223,7 @@ struct epos_trapezoidal_command
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos operational trajectory command data port
+ * @brief SwarmItFix Epos operational trajectory command data port - deprecated
  * @ingroup epos
  */
 struct epos_operational_command
@@ -237,7 +251,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
-	lib::frame_tab current_frame;
+	mrrocpp::lib::frame_tab current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 

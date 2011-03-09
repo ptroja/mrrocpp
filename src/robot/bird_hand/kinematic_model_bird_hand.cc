@@ -26,9 +26,8 @@ kinematic_model_bird_hand::kinematic_model_bird_hand(void)
 	set_kinematic_model_label("BIRD_HAND kinematic model");
 }
 
-void kinematic_model_bird_hand::check_joints(const lib::JointArray & q)
+void kinematic_model_bird_hand::check_joints(const lib::JointArray & q) const
 {
-
 	if (isnan(q[0]))
 		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_D0);
 	if (q[0] < params.lower_limit_joint[0])

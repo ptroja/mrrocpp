@@ -23,7 +23,15 @@
 int
 main(int argc, char *argv[])
 {
-	configsrv config(argv[1], argv[2]);
+	// TODO: handle exceptions at the top level
+
+	// Object with access to the configuration
+	configsrv config(argv[1]);
+
+	// Use config file is supplied with a command line
+	if (argc > 2) {
+		config.change_ini_file(argv[2]);
+	}
 
 	messip_channel_t *ch = messip::port_create(CONFIGSRV_CHANNEL_NAME);
 	assert(ch);

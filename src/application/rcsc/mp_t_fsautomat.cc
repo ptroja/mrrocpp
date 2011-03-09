@@ -44,8 +44,8 @@
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-#include "robot/irp6m/mp_r_irp6m.h"
-#include "robot/speaker/mp_r_speaker.h"
+
+
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
@@ -70,8 +70,8 @@ task* return_created_mp_task(lib::configurator &_config)
 void fsautomat::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
-	ACTIVATE_MP_ROBOT(speaker);
-	ACTIVATE_MP_ROBOT(irp6m);
+	
+	
 	ACTIVATE_MP_ROBOT(polycrank);
 	ACTIVATE_MP_ROBOT(bird_hand);
 	ACTIVATE_MP_ROBOT(spkm);
@@ -251,8 +251,9 @@ common::State * fsautomat::createState(xmlNodePtr stateNode)
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Sensor")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "Speech")) {
 				xmlChar * stringArgument = xmlNodeGetContent(child_node);
-				if (stringArgument)
-					actState->setStringArgument((char*) stringArgument);
+//askubis
+				if (stringArgument){std::cout<<"ARGUMENT STRINGOWY:                            "<<(char *) stringArgument<<std::endl;
+					actState->setStringArgument((std::string)(char*) stringArgument);}
 				xmlFree(stringArgument);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TimeSpan")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "AddArg")) {
@@ -371,12 +372,12 @@ run_extended_empty_gen_and_wait(
 
 void fsautomat::executeMotion(common::State &state)
 {
+	std::cout<<"STATE STRING w executeMotion:  "<<state.getStringArgument()<<std::endl;
 int trjConf = config.value<int>("trajectory_from_xml", "[xml_settings]");
 if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {
-	std::cout<<"TEST"<<state.getGeneratorType()<<" "<< state.getNumArgument()<<" "<<state.getStringArgument()<<" "<<(state.getRobot()).c_str()<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
 }
@@ -784,7 +785,7 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 	// protection from wrong targetID specyfication
 	if (stateMap->count(nextState) == 0)
 	break;
-
+std::cout<<"TYP STANU:"<<(*stateMap)[nextState].getType()<<std::endl;
 	if (strcmp((*stateMap)[nextState].getType(), "runGenerator") == 0) {
 		executeMotion((*stateMap)[nextState]);
 		std::cout << "TESTmotion" << std::endl;
@@ -811,7 +812,7 @@ for (; strcmp(nextState, (const char *) "_STOP_"); strcpy(nextState, (*stateMap)
 
 	}
 	if (strcmp((*stateMap)[nextState].getType(), "systemInitialization") == 0) {
-		std::cout << "In sensor initialization.." << std::endl;
+		std::cout << "In system initialization.." << std::endl;
 		sensorInitialization();
 		std::cout << nextState << " -> zakonczony" << std::endl;
 

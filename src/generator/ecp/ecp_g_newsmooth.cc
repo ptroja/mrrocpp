@@ -354,7 +354,6 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 }
 
 bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
-	std::cout<<"armtype: " << trajectory_pose.arm_type<<std::endl;
 	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
 		std::cout<<"JOINT"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
@@ -368,7 +367,6 @@ bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 		std::cout<<"EULER7"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
 	} else {
-		std::cout<<"ARMTYPE IN MOVE "<<trajectory_pose.arm_type<<std::endl;
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
 	}
 	return true;
@@ -390,6 +388,7 @@ bool newsmooth::load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 }
 
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
+
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
 
@@ -482,10 +481,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		return false;
 	}
 
-	if (ps != pose_spec) {
-		sr_ecp_msg.message("Bad pose spec in loaded file");
-		return false;
-	}
+
 
 	if (!(from_file >> number_of_poses)) {
 		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
@@ -506,33 +502,42 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 		return false;
 	}
 
-	for (i = 0; i < number_of_poses; i++) {
+	double tab[10];
+	int pos = from_file.tellg();
+	char line[80];
+		int dlugosc;
+		do
+		{
+		from_file.getline(line, 80);
+		dlugosc=strlen(line);
+		}
+		while (dlugosc<5);
+int num = lib::setValuesInArray(tab,line);
+this->set_axes_num(num);
+from_file.seekg(pos);
 
+
+	for (i = 0; i < number_of_poses; i++) {
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
-
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
-
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
 		for (j = 0; j < axes_num; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
-
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		if (ps == lib::ECP_MOTOR) {

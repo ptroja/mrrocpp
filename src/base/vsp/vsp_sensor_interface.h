@@ -12,6 +12,8 @@
 #if !defined(_VSP_SENSOR_INTERFACE_H)
 #define _VSP_SENSOR_INTERFACE_H
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/lib/sensor_interface.h"
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_vsp.h"
@@ -72,7 +74,7 @@ public:
 	lib::configurator &config;
 
 	/** @brief Object used for communication with the SR thread of the UI. */
-	lib::sr_vsp *sr_msg;
+	boost::shared_ptr<lib::sr_vsp> sr_msg;
 
 	/** @brief Network path to the MRROC++ binaries. */
 	const std::string mrrocpp_network_path;

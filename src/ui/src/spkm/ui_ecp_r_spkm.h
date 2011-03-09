@@ -28,7 +28,6 @@ class EcpRobot : public common::EcpRobotDataPort
 {
 
 public:
-
 	lib::single_thread_port <lib::epos::epos_simple_command> * epos_motor_command_data_port;
 	lib::single_thread_port <lib::epos::epos_simple_command> * epos_joint_command_data_port;
 	lib::single_thread_port <lib::frame_tab> * epos_external_command_data_port;
@@ -46,8 +45,7 @@ public:
 
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);
-	void move_external(const double final_position[lib::MAX_SERVOS_NR]);
-
+	void move_external(const double final_position[6]);
 };
 
 }

@@ -131,10 +131,10 @@ private:
 
 	/**
 	 * @brief Returns true, if there's data available to read.
-	 * @param usec Timeout, if 0 is passed, method returns immediately.
+	 * @param sec Timeout, if 0 is passed, method returns without blocking.
 	 * @return
 	 */
-	bool is_data_available(double usec = 0);
+	bool is_data_available(double sec = 0);
 
 	/**
 	 * @brief Receives data from discode and puts it to header_iarchive and iarchive.

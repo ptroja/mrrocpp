@@ -1,15 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			edp_irp6m_effector.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- definicja metod klasy edp_irp6m_effector
-//				- definicja funkcji return_created_efector()
-//
-// Autor:
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
-
 #include <cstdio>
 
 #include "edp_combuf.h"
@@ -206,7 +194,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	// zawieszenie do query_time
 
 	int err = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &query_timespec, NULL);
-	if(err != 0) {
+	if (err != 0) {
 		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 	}
 
@@ -305,8 +293,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()

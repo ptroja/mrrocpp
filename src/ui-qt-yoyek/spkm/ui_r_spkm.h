@@ -8,9 +8,10 @@
 #ifndef __UI_R_SPKM_H
 #define __UI_R_SPKM_H
 
-#include "../ui.h"
-#include "../ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
 #include "robot/spkm/const_spkm.h"
+#include "robot/spkm/kinematic_parameters_spkm.h"
 
 class wgt_spkm_inc;
 class wgt_spkm_int;
@@ -40,6 +41,7 @@ public:
 	double current_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja biezaca
 	double desired_pos[lib::spkm::NUM_OF_SERVOS]; // pozycja zadana
 
+	kinematics::spkm::kinematic_parameters_spkm kinematic_params;
 
 	EcpRobot *ui_ecp_robot;
 	wgt_spkm_inc *wgt_inc;
@@ -67,6 +69,8 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
+	int execute_clear_fault();
+	int execute_stop_motor();
 };
 
 }

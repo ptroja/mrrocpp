@@ -116,7 +116,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t ok;
+	int8_t ok;
 } messip_reply_connect_t;
 
 
@@ -347,7 +347,7 @@ typedef struct
 
 typedef struct
 {
-	int32_t flag;
+	int8_t flag;
 	pid_t pid;
 	uint64_t tid;
 	int32_t type, subtype;

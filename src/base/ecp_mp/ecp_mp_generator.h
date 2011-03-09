@@ -38,7 +38,7 @@ protected:
 
 public:
 	/**
-	 * @brief trigger received flad
+	 * @brief trigger received flag
 	 */
 	bool trigger;
 

@@ -7,3 +7,5 @@
 #     endif
 
 #cmakedefine HAVE_KQUEUE
+
+#cmakedefine HAVE_MLOCKALL

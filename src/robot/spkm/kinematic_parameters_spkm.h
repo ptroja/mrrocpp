@@ -15,6 +15,8 @@
 #include <eigen2/Eigen/Geometry>
 #include <eigen2/Eigen/LU>
 
+#include "robot/spkm/dp_spkm.h"
+
 using namespace Eigen;
 
 namespace mrrocpp {
@@ -25,7 +27,7 @@ namespace spkm {
 typedef Eigen::Matrix<double, 5, 1> Vector5d;
 
 //! Type used for representation of 3-dimensional homogeneous matrices (4x4 doubles).
-typedef Eigen::Transform<double, 3> Homog4d;
+typedef Eigen::Matrix<double, 4 , 4> Homog4d;
 
 /*!
  * @struct kinematic_parameters_spkm
@@ -39,65 +41,63 @@ typedef Eigen::Transform<double, 3> Homog4d;
 struct kinematic_parameters_spkm {
 public:
 	//! Constructor - sets the values of the SPKM geometric parameters.
-	kinematic_parameters_spkm();
+//	kinematic_parameters_spkm();
 
-	//! Vector representing a translation from W (end of the spherical wrist) to S (middle of the spherical wrist). An equivalent of <Sx,Sy,Sz>.
-	Vector3d W_S_P;
+	//! Lower platform: jb coordinate of P1A in O(ib,jb,kb).
+	static const double dA;
 
-	//! Matrix computed on the base of W_S_P (with identity rotation matrix) - a transformation from end of SW (W) to its middle (S).
-	Homog4d W_S_T;
+	//! Lower platform: ib coordinate of P1B in O(ib,jb,kb).
+	static const double dB;
 
-	//! Vector representing a translation from P (middle of upper PM platform) to S (middle of the spherical wrist). An equivalent of <Hx,0,Hz>.
-	Vector3d S_P_P;
+	//! Lower platform: jb coordinate of P1C in O(ib,jb,kb).
+	static const double dC;
 
-	//! Working mode parameter for leg A (equal to +-1).
-	short delta_A;
+	//! Upper platform: j coordinate of P4A in P(ijk).
+	static const double pA;
 
-	//! Working mode parameter for leg C (equal to +-1).
-	short delta_C;
+	//! Upper platform: i coordinate of P5B in P(ijk).
+	static const double pB;
 
-	//! First working mode parameter for leg B (equal to +-1).
-	short delta_B1;
+	//! Upper platform: j coordinate of P4C in P(ijk).
+	static const double pC;
 
-	//! Second working mode parameter for leg A (equal to +-1).
-	short delta_B2;
+    //! Vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist). An equivalent of <Hx,0,Hz>.
+	static const Vector3d P_S_P;
 
-	//! jb coordinate of P1A in O(ib,jb,kb).
-	double dA;
+    //! Transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
+	static const Homog4d P_S_T;
 
-	//! ib coordinate of P1B in O(ib,jb,kb).
-	double dB;
+    //! Transformation from W (SW end-effector) to S (middle of the spherical wrist).
+    static const Homog4d W_S_T;
 
-	//! jb coordinate of P1C in O(ib,jb,kb).
-	double dC;
+	//! Parameters describing the synchronization positions of first three parallel PM axes (A=0,B=1,C=2).
+	static const double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! j coordinate of P4A in P(ijk).
-	double pA;
+	//! Parameters related to conversion from motor positions to joints.
+	static const double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! i coordinate of P5B in P(ijk).
-	double pB;
+	//! Encoder resolution.
+	static const uint32_t encoder_resolution[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! j coordinate of P4C in P(ijk).
-	double pC;
+	//! Largest values that motors can reach.
+	static const int32_t upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Distance between P1A and P2A along with pi_alpha.
-	double l12A;
+	//! Smallest values that motors can reach.
+	static const int32_t lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Distance between P1C and P2C along with pi_alpha.
-	double l12C;
+	//! Largest values that joints can reach.
+	static const double upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Distance between P4A and pi_h, according to e_h.
-	double hA;
+	//! Smallest values that joints can reach.
+	static const double lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Distance between P4C and pi_h, according to e_h.
-	double hC;
-
-	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
+	// You must overload "operator new" so that it generates 16-bytes-aligned pointers.
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } // namespace spkm
 } // namespace kinematic
 } // namespace mrrocpp
+
 
 #endif /* KINEMATIC_PARAMETERS_H_ */

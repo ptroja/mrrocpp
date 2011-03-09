@@ -18,6 +18,9 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include <boost/throw_exception.hpp>
+
+#include "epos_access.h"
 #include "epos.h"
 
 namespace mrrocpp {
@@ -27,11 +30,6 @@ namespace epos {
 /* ********************************************* */
 /*    definitions used only internal in c   */
 /* ********************************************* */
-
-/*! starting point for (slow!) homing movement. If the zero point is
- not off too far, this will speed things up enormously!
- */
-#define E_STARTPOS_HOMING -200000
 
 /* EPOS error codes (Communication Guide, 6.4)  */
 
@@ -73,39 +71,47 @@ namespace epos {
 #define E_BIT02        0x0004      ///< bit code: operation enable
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
-/* EPOS modes of operation, firmware spec 14.1.59 (p.133, tbl. 72) */
-#define E_HOMING      6 ///< EPOS operation mode: homing
-#define E_PROFVEL     3 ///< EPOS operation mode: profile velocity mode
-#define E_PROFPOS     1 ///< EPOS operation mode: profile position mode
-// the modes below should not be used by user, defined here only for
-// completeness
-#define E_POSMOD     -1 ///< EPOS operation mode: position mode
-#define E_VELMOD     -2 ///< EPOS operation mode: velocity mode
-#define E_CURRMOD    -3 ///< EPOS operation mode: current mode
-#define E_DIAGMOD    -4 ///< EPOS operation mode: diagnostics mode
-#define E_MASTERENCMOD -5 ///< EPOS operation mode:internal
-#define E_STEPDIRECMOD -6 ///< EPOS operation mode:internal
 
 /************************************************************/
-/*           implementation of functions are following      */
+/*           EPOS related constants                         */
 /************************************************************/
 
-epos_base::epos_base() :
-	device_opened(false)
-{
-}
-
-epos_base::~epos_base()
-{
-}
+const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(epos_base & _device, uint8_t _nodeId) :
+epos::epos(epos_access & _device, uint8_t _nodeId) :
 	device(_device), nodeId(_nodeId)
 {
+	// Read the cached parameters
+	OpMode = readActualOperationMode();
+	PositionProfileType = readPositionProfileType();
+	ProfileVelocity = readProfileVelocity();
+	ProfileAcceleration = readProfileAcceleration();
+	ProfileDeceleration = readProfileDeceleration();
+
+	// initialize MaxAcceleration to beyond the default limits
+	writeMaxAcceleration(25000UL);
+	writeMotorMaxSpeed(50000UL);
+	writeMaxProfileVelocity(50000UL);
+	writeGearRatioNumerator(0);
+
+	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
+			ProfileVelocity << ", " <<
+			ProfileAcceleration << ", " <<
+			ProfileDeceleration << std::endl;
+
+	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax,VmotorMax} " <<
+				readMaxProfileVelocity() << ", " <<
+				readMaxAcceleration() << ", " <<
+				readMotorMaxSpeed() << std::endl;
+
+	std::cout << "Gear[" << (int) nodeId << "] " <<
+				readGearRatioNumerator() << "/" <<
+				readGearRatioDenominator() << " maximal speed " <<
+				readGearMaximalSpeed() << std::endl;
 }
 
 /* read EPOS status word */
@@ -265,17 +271,8 @@ void epos::printEPOSstatusword(WORD s)
 		printf("false\n");
 }
 
-/*! check EPOS state, firmware spec 8.1.1
-
- \return EPOS status as defined in firmware specification 8.1.1
-
- */
-int epos::checkEPOSstate()
+int epos::status2state(WORD w)
 {
-	WORD w = readStatusWord();
-
-	//printEPOSstatusword(w);
-
 	/* state 'start' (0)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx0  x000 0000 */
@@ -361,10 +358,42 @@ int epos::checkEPOSstate()
 		return (11);
 
 	// if we get down here, statusword has a unknown value!
-	fprintf(stderr, "WARNING: EPOS status word %#06x is an unkown state!\n", w);
-	fprintf(stderr, "(function %s() in file %s, line %d)\n", __func__, __FILE__, __LINE__);
+	fprintf(stderr, "WARNING: EPOS status word %#06x is an unknown state!\n", w);
 
-	return (-2);
+	return (-1);
+}
+
+/*! check EPOS state, firmware spec 8.1.1
+
+ \return EPOS status as defined in firmware specification 8.1.1
+
+ */
+int epos::checkEPOSstate()
+{
+	WORD w = readStatusWord();
+
+	//printEPOSstatusword(w);
+
+	return status2state(w);
+}
+
+const char * epos::stateDescription(int state)
+{
+	switch (state) {
+		case 0: return "start"; break;
+		case 1: return "not ready to switch on"; break;
+		case 2: return "switch on disabled"; break;
+		case 3: return "ready to switch on"; break;
+		case 4: return "switched on"; break;
+		case 5: return "refresh"; break;
+		case 6: return "measure init"; break;
+		case 7: return "operation enable"; break;
+		case 8: return "quick stop active"; break;
+		case 9: return "fault reaction active (disabled)"; break;
+		case 10: return "fault reaction active (enabled)"; break;
+		case 11: return "fault"; break;
+		default: return "unknown";
+	}
 }
 
 /* pretty-print EPOS state */
@@ -465,7 +494,7 @@ void epos::reset()
 			}
 		}
 
-		throw epos_error() << reason("Device is in the fault state");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -476,7 +505,7 @@ void epos::reset()
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
@@ -486,7 +515,7 @@ void epos::reset()
 	do {
 		state = checkEPOSstate();
 
-		std::cerr << "state " << state << " timeout " << timeout << std::endl;
+		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
 
 		if(state == 6) { // Measure in progress...
 			continue;
@@ -495,13 +524,14 @@ void epos::reset()
 		} else if(state == 11) {
 			throw epos_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Unexpected state during initialization" << std::endl;
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
+			continue;
 		}
 
 	} while(timeout--);
 
 	if(timeout == 0) {
-		throw epos_error() << reason("Timeout enabling device");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -511,7 +541,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != 7) {
-		throw epos_error() << reason("Ready-to-switch-On expected");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
@@ -580,7 +610,7 @@ void epos::changeEPOSstate(state_t state)
 			writeControlword(cw);
 			break;
 		default:
-			throw epos_error() << reason("ERROR: demanded state is UNKNOWN!"); // TODO: state
+			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
 	}
 }
 
@@ -600,7 +630,7 @@ UNSIGNED16 epos::readDInputPolarity()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		throw epos_error() << reason("polarity must be 0 (height active) or 1 (low active)");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -688,21 +718,36 @@ void epos::printEPOScontrolword(WORD s)
 		printf("false\n");
 }
 
-/* set mode of operation --- 14.1.59 */
-void epos::setOpMode(operational_mode_t m)
+void epos::startAbsoluteMotion()
 {
-	WORD dw[2];
+	writeControlword(0x3f);
+}
 
-	dw[1] = 0x0000; // high WORD of DWORD is not used here
-	dw[0] = (int8_t) m;
+void epos::startRelativeMotion()
+{
+	writeControlword(0x005f);
+}
 
-	WriteObject(0x6060, 0x00, dw);
+/* set mode of operation --- 14.1.59 */
+void epos::setOperationMode(operational_mode_t m)
+{
+	if(OpMode != m) {
+		WORD dw[2];
+
+		dw[1] = 0x0000; // high WORD of DWORD is not used here
+		dw[0] = (int8_t) m;
+
+		WriteObject(0x6060, 0x00, dw);
+
+		OpMode = m;
+	}
 }
 
 /* read mode of operation --- 14.1.60 */
-INTEGER8 epos::readOpMode()
+epos::operational_mode_t epos::readActualOperationMode()
 {
-	return ReadObjectValue<INTEGER8>(0x6061, 0x00);
+	INTEGER8 mode = ReadObjectValue<INTEGER8>(0x6061, 0x00);
+	return (operational_mode_t) mode;
 }
 
 /* read demand position; 14.1.61 */
@@ -729,59 +774,87 @@ void epos::writePositionWindow(UNSIGNED32 val)
 	WriteObjectValue(0x6067, 0x00, val);
 }
 
-void epos::writePositionProfileVelocity(UNSIGNED32 val)
+void epos::writeProfileVelocity(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6081, 0x00, val);
+	if(ProfileVelocity != val) {
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
+		WriteObjectValue(0x6081, 0x00, val);
+		ProfileVelocity = val;
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << readProfileVelocity() << std::endl;
+	}
 }
 
-void epos::writePositionProfileAcceleration(UNSIGNED32 val)
+void epos::writeProfileAcceleration(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6083, 0x00, val);
+	if(ProfileAcceleration != val) {
+		WriteObjectValue(0x6083, 0x00, val);
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileAcceleration = val;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << readProfileAcceleration() << std::endl;
+	}
 }
 
-void epos::writePositionProfileDeceleration(UNSIGNED32 val)
+void epos::writeProfileDeceleration(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6084, 0x00, val);
+	if(ProfileDeceleration != val) {
+		WriteObjectValue(0x6084, 0x00, val);
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		ProfileDeceleration = val;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << readProfileDeceleration() << std::endl;
+	}
 }
 
-void epos::writePositionProfileQuickStopDeceleration(UNSIGNED32 val)
+void epos::writeQuickStopDeceleration(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6085, 0x00, val);
 }
 
-void epos::writePositionProfileMaxVelocity(UNSIGNED32 val)
+void epos::writeMaxProfileVelocity(UNSIGNED32 val)
 {
 	WriteObjectValue(0x607F, 0x00, val);
 }
 
-void epos::writePositionProfileType(INTEGER16 type)
+void epos::writeMaxAcceleration(UNSIGNED32 val)
 {
-	WriteObjectValue(0x6086, 0x00, type);
+	WriteObjectValue(0x60C5, 0x00, val);
 }
 
-UNSIGNED32 epos::readPositionProfileVelocity()
+void epos::writePositionProfileType(INTEGER16 type)
+{
+	if(PositionProfileType != type) {
+		WriteObjectValue(0x6086, 0x00, type);
+		PositionProfileType = type;
+	}
+}
+
+UNSIGNED32 epos::readProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6081, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileAcceleration()
+UNSIGNED32 epos::readProfileAcceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6083, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileDeceleration()
+UNSIGNED32 epos::readProfileDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6084, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileQuickStopDeceleration()
+UNSIGNED32 epos::readQuickStopDeceleration()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6085, 0x00);
 }
 
-UNSIGNED32 epos::readPositionProfileMaxVelocity()
+UNSIGNED32 epos::readMaxProfileVelocity()
 {
 	return ReadObjectValue<UNSIGNED32>(0x607F, 0x00);
+}
+
+UNSIGNED32 epos::readMaxAcceleration()
+{
+	return ReadObjectValue<UNSIGNED32>(0x60C5, 0x00);
 }
 
 INTEGER16 epos::readPositionProfileType()
@@ -984,25 +1057,25 @@ void epos::writeMotorOutputCurrentLimit(UNSIGNED16 cur)
 }
 
 // Pole Pairs -> 8 BITS
-UNSIGNED8 epos::readMotorPolePair()
+UNSIGNED8 epos::readMotorPolePairNumber()
 {
 	return ReadObjectValue<UNSIGNED8>(0x6410, 0x03);
 }
 
-void epos::writeMotorPolePair(UNSIGNED8 cur)
+void epos::writeMotorPolePairNumber(UNSIGNED8 cur)
 {
 	WriteObjectValue(0x6410, 0x03, cur);
 }
 
 // Max Speed in current mode
-UNSIGNED32 epos::readMotorMaxSpeedCurrent()
+UNSIGNED32 epos::readMotorMaxSpeed()
 {
 	return ReadObjectValue<UNSIGNED32>(0x6410, 0x04);
 }
 
-void epos::writeMotorMaxSpeedCurrent(UNSIGNED32 val)
+void epos::writeMotorMaxSpeed(UNSIGNED32 val)
 {
-	WriteObjectValue(0x2081, 0x00, val);
+	WriteObjectValue(0x6410, 0x04, val);
 }
 
 // Thermal time constant in winding
@@ -1150,6 +1223,44 @@ void epos::writeHomingMethod(homing_method_t method) {
 	WriteObjectValue(0x6098, 0x00, val);
 }
 
+/*! Read the Minimal Position Limit */
+INTEGER32 epos::readMinimalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x01);
+}
+
+/*! Write the Minimal Position Limit */
+void epos::writeMinimalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x01, val);
+}
+
+/*! Read the Maximal Position Limit */
+INTEGER32 epos::readMaximalPositionLimit()
+{
+	return ReadObjectValue<INTEGER32> (0x607D, 0x02);
+}
+
+/*! Write the Maximal Position Limit */
+void epos::writeMaximalPositionLimit(INTEGER32 val)
+{
+	WriteObjectValue(0x607D, 0x02, val);
+}
+
+UNSIGNED32 epos::readActualBufferSize()
+{
+	return ReadObjectValue<UNSIGNED32> (0x60C4, 0x02);
+}
+
+void epos::clearPvtBuffer()
+{
+	// Clear input buffer (and all data records) access disabled
+	WriteObjectValue(0x60C4, 0x06, 0);
+
+	// Enable access to the input buffer for the drive functions
+	WriteObjectValue(0x60C4, 0x06, 1);
+}
+
 /*! read Error register */
 UNSIGNED8 epos::readErrorRegister() {
 	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
@@ -1162,8 +1273,8 @@ UNSIGNED8 epos::readNumberOfErrors() {
 
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
-	if(num < 1 && num > 5) {
-		throw epos_error() << reason("Error History index out of range <1..5>");
+	if(num < 1 || num > 5) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
 }
@@ -1199,7 +1310,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	//monitorStatus();
 
 	// switch to homing mode
-	setOpMode(OMD_HOMING_MODE);
+	setOperationMode(OMD_HOMING_MODE);
 
 	// Set homing parameters
 	writeHomeOffset(offset);
@@ -1209,8 +1320,8 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	// Display current homing parameters
 	std::cout << "Max. Following Error: " << readMaxFollowingError() << std::endl;
 	std::cout << "Home Offset: " << readHomeOffset() << std::endl;
-	std::cout << "Max. Profile Velocity: " << readPositionProfileMaxVelocity() << std::endl;
-	std::cout << "Quick Stop Deceleration: " << readPositionProfileQuickStopDeceleration() << std::endl;
+	std::cout << "Max. Profile Velocity: " << readMaxProfileVelocity() << std::endl;
+	std::cout << "Quick Stop Deceleration: " << readQuickStopDeceleration() << std::endl;
 	std::cout << "Speed for Switch Search: " << readSpeedForSwitchSearch() << std::endl;
 	std::cout << "Speed for Zero Search: " << readSpeedForZeroSearch() << std::endl;
 	std::cout << "Homing Acceleration: " << readHomingAcceleration() << std::endl;
@@ -1252,10 +1363,8 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 void epos::moveRelative(INTEGER32 steps)
 {
-	// check, if we are in Profile Position Mode
-	if (readOpMode() != OMD_PROFILE_POSITION_MODE) {
-		setOpMode(OMD_PROFILE_POSITION_MODE);
-	}
+	// set the Profile Position Mode
+	setOperationMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position
 	// firmware 14.1.70
@@ -1263,22 +1372,13 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// switch to relative positioning BY WRITING TO CONTROLWORD, finish	possible ongoing operation first!
 	// see ->maxon applicattion note: device programming 2.1
-	writeControlword(0x005f);
+	startRelativeMotion();
 }
 
 void epos::moveAbsolute(INTEGER32 steps)
 {
-#ifdef DEBUG
-	printf("-> %s(): will move to %ld (%#010lx)\n", __func__, steps, steps);
-#endif
-
-	// check, if we are in Profile Position Mode
-	if (readOpMode() != OMD_PROFILE_POSITION_MODE) {
-		setOpMode(OMD_PROFILE_POSITION_MODE);
-	}
-#ifdef DEBUG
-	printf("-> OpMode is (now) 'Profile Position Mode'. That's OK!\n");
-#endif
+	// set the Profile Position Mode
+	setOperationMode(OMD_PROFILE_POSITION_MODE);
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
@@ -1286,7 +1386,37 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// switch to absolute positioning, cancel possible ongoing operation first!
 	// see maxon application note: device programming 2.1
-	writeControlword(0x3f);
+	startAbsoluteMotion();
+}
+
+UNSIGNED32 epos::readGearRatioNumerator()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x01);
+}
+
+void epos::writeGearRatioNumerator(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x01, val);
+}
+
+UNSIGNED16 epos::readGearRatioDenominator()
+{
+	return ReadObjectValue<UNSIGNED16> (0x2230, 0x02);
+}
+
+void epos::writeGearRatioDenominator(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2230, 0x02, val);
+}
+
+UNSIGNED32 epos::readGearMaximalSpeed()
+{
+	return ReadObjectValue<UNSIGNED32> (0x2230, 0x03);
+}
+
+void epos::writeGearMaximalSpeed(UNSIGNED32 val)
+{
+	WriteObjectValue(0x2230, 0x03, val);
 }
 
 // monitor device status
@@ -1372,7 +1502,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = readStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		throw epos_error() << reason("HOMING ERROR!");
+		BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1400,7 +1530,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			throw epos_error() << reason("HOMING ERROR!");
+			BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
@@ -1446,12 +1576,12 @@ int epos::waitForTarget(unsigned int t)
  */
 
 /* check the global variable E_error for EPOS error code */
-int epos::checkEPOSerror(DWORD E_error)
+void epos::checkEPOSerror(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
 		case E_NOERR:
-			return (0);
+			return;
 			break;
 		case E_ONOTEX:
 			msg = "requested object does not exist!";
@@ -1511,12 +1641,12 @@ int epos::checkEPOSerror(DWORD E_error)
 			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
 			break;
 	}
-	//EPOS responds with error:
-	return (-1);
+
+	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
 }
 
 /* copied from EPOS Communication Guide, p.8 */
-WORD epos_base::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
 	WORD shifter, c;
 	WORD carry;
@@ -1607,7 +1737,7 @@ void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 
 	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
 	frame[1] = index;
-	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: 0x00(Node-ID == 0), low BYTE: subindex */
+	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 	// data to transmit
 	frame[3] = data[0];
 	frame[4] = data[1];

@@ -54,7 +54,7 @@ public:
 	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
 
 
-	typedef std::map <const char *, ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * /*, str_cmp */> bang_trajectories_map;
+	typedef std::map <std::string, std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> /*, str_cmp */> bang_trajectories_map;
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
@@ -82,15 +82,9 @@ public:
 	transmitters_t transmitter_m;
 
 	/**
-	 * @brief the pointer to sr communication object in multi thread version
+	 * @brief pointer to the SR communication object
 	 */
 	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
-
-	/**
-	 * @brief the pointer to sr communication object in single thread version
-	 * to be used in e.g. singnal handlers
-	 */
-	static lib::sr_ecp* sh_msg; // TODO: rename from _ecp_ (?!)
 
 	/**
 	 * @brief configurator object reference
@@ -176,7 +170,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
+	std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory

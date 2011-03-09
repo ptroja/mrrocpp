@@ -27,7 +27,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-template<typename ECP_ROBOT_T = robot::ecp_robot>
+template<typename ECP_ROBOT_T>
 class _generator : public ecp_mp::generator::generator
 {
 protected:
@@ -39,12 +39,17 @@ protected:
 	/**
 	 * @brief ECP task object type
 	 */
-	typedef common::task::_task<ECP_ROBOT_T> base_task_t;
+	typedef common::task::_task<ECP_ROBOT_T> task_t;
+
+	/**
+	 * @brief ECP generator itself object type
+	 */
+	typedef _generator<ECP_ROBOT_T> generator_t;
 
 	/**
 	 * @brief ECP task object reference
 	 */
-	base_task_t & ecp_t;
+	task_t & ecp_t;
 
 public:
 	/**
@@ -150,7 +155,7 @@ public:
 	lib::trajectory_description td;
 };
 
-typedef _generator<> generator;
+typedef _generator<robot::ecp_robot> generator;
 
 /*!
  * @brief ECP generator error handling class

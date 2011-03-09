@@ -9,7 +9,7 @@ ENDMACRO(TARGET_LINK_LIBRARY_IF)
 OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
 # the RPATH to be used when installing
-# SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
 ## this is currently disabled
 ## as CMake option names duplicates _ROBOT_ENUM values
@@ -39,9 +39,7 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
 option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
 option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
-if(QNXNTO)
-option(ROBOT_SPEAKER "Build support for speaker robot" ON)
-endif(QNXNTO)
+
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
 CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
@@ -54,23 +52,10 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
 	"Build support for SwarmItFIX parallel kinematics machine robot"
 	ON "ROBOTS_SWARMITFIX" OFF)
 	
-CMAKE_DEPENDENT_OPTION(ROBOT_BIRD_HAND
-	"Build support for three finger robot hand"
-	ON "ROBOTS_SWARMITFIX" OFF)
+option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
-CMAKE_DEPENDENT_OPTION(ROBOT_SARKOFAG
-	"Build support for sarkofag"
-	ON "ROBOTS_SWARMITFIX" OFF)
+option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
-
-# configure a header file to pass some of the CMake settings
-# to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/config.h.in"
-  "${PROJECT_BINARY_DIR}/src/config.h"
-)
-# add include path to the generated config file
-include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 # QNX is default MRROC++ target
 if (QNXNTO)
@@ -129,15 +114,23 @@ elseif (UBUNTU32BIT)
 		set (COMPATIBILITY_LIBRARIES rt)
 	endif(HAVE_LIBRT)
 
-	# for non-QNX target messip is the only messaging protocol
-	
-	set(CMAKE_CXX_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-	set(CMAKE_C_FLAGS "-Wall -m32 -DEIGEN_DONT_ALIGN")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=return-type")
+	# (cross) compiling for 32 bit target
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+
+	# Warning messages (GCC)
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+
+	# keep this flag in production code
+	add_definitions (-DEIGEN_DONT_ALIGN)
+
+	# cross-compiling linker flags
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--rpath-link=${UBUNTU32BIT_ROOT}/lib:${MRLIB}/lib")
-	include_directories (${MRLIB}/include)
 	set(CMAKE_SKIP_RPATH ON)
+
+	# Tips for finding cross-libraries and headers
+	include_directories (${MRLIB}/include)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (QNXNTO) # Linux, MacOS, etc.
 	# find dependency packages
@@ -162,17 +155,26 @@ else (QNXNTO) # Linux, MacOS, etc.
 	# check for kqueue()
 	INCLUDE (CheckSymbolExists)
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
+	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
-	# for non-QNX target messip is the only messaging protocol
-	
+	# Warning messages (GCC)
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
-    if(DEFINE_EIGEN_DONT_ALIGN)
-    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEIGEN_DONT_ALIGN")
-    endif(DEFINE_EIGEN_DONT_ALIGN)
+	# keep this flag until we fix alignment 'new' operator issue
+	add_definitions (-DEIGEN_DONT_ALIGN)
 endif (QNXNTO)
 
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
+
+# Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 if (QNXNTO)
@@ -206,12 +208,4 @@ add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (ui)
 add_subdirectory (application)
-
-# QNX is default MRROC++ target
-if (QNXNTO)
-
-elseif (UBUNTU32BIT)
-
-else (QNXNTO) # Linux, etc.
-	add_subdirectory (ui-qt-yoyek)
-endif (QNXNTO)
+add_subdirectory (ui-qt-yoyek)

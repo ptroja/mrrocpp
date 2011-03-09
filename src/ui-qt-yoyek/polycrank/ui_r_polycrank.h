@@ -8,8 +8,8 @@
 #ifndef __UI_R_POLYCRANK_H
 #define __UI_R_POLYCRANK_H
 
-#include "../ui.h"
-#include "../ui_robot.h"
+#include "../base/ui.h"
+#include "../base/ui_robot.h"
 #include "robot/polycrank/const_polycrank.h"
 
 //class wgt_spkm_inc;
@@ -21,7 +21,7 @@ namespace common {
 class Interface;
 }
 
-namespace tfg_and_conv {
+namespace single_motor {
 class EcpRobot;
 }
 namespace polycrank {
@@ -42,7 +42,7 @@ public:
 
 	//bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
+	single_motor::EcpRobot *ui_ecp_robot;
 	wgt_polycrank_int *wgt_int;
 	//wgt_spkm_inc *wgt_int;
 
