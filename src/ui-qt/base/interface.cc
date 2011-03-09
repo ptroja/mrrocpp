@@ -42,6 +42,8 @@ Interface::Interface() :
 
 	main_eb = new function_execution_buffer(*this);
 
+	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
+
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_state = UI_MP_STATE_NOT_KNOWN;// mp wylaczone
 	mp.pid = -1;
@@ -58,6 +60,7 @@ Interface::Interface() :
 //	static Interface *instance = new Interface();
 //	return instance;
 //}
+
 
 MainWindow* Interface::get_main_window()
 {
@@ -367,9 +370,17 @@ void Interface::manage_pc(void)
 
 int Interface::manage_interface(void)
 {
+	emit
+	manage_interface_signal();
+
+	return 1;
+}
+
+void Interface::manage_interface_slot()
+{
 	// okienko process control
-	manage_pc();
-	// UWAGA ta funkcja powinna byc odporna na odpalaenie z dowolnego watku !!!
+	wgt_pc->process_control_window_init_slot();
+	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
 	mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
@@ -519,7 +530,6 @@ int Interface::manage_interface(void)
 			break;
 	}
 
-	return 1;
 }
 
 void Interface::reload_whole_configuration()

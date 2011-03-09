@@ -74,10 +74,18 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-class Interface
+class Interface : public QObject
 {
+Q_OBJECT
 private:
 	MainWindow* mw;
+
+signals:
+	void manage_interface_signal();
+
+private slots:
+
+	void manage_interface_slot();
 
 public:
 

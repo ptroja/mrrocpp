@@ -38,9 +38,11 @@ private:
 signals:
 	void process_control_window_init_signal();
 
+public slots:
+	void process_control_window_init_slot();
+
 private slots:
 	// MP
-	void process_control_window_init_slot();
 	void on_mp_start_pushButton_clicked();
 	void on_mp_stop_pushButton_clicked();
 	void on_mp_pause_pushButton_clicked();
