@@ -416,6 +416,14 @@ void neuron_sensor::configure_sensor(){
 void neuron_sensor::initiate_reading(){
 }
 
+bool neuron_sensor::newData(){
+    return false;
+}
+
+bool neuron_sensor::positionRequested(){
+    return false;
+}
+
 
 } //sensor
 } //ecp_mp

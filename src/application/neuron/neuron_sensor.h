@@ -94,6 +94,8 @@ class neuron_sensor : public ecp_mp::sensor::sensor_interface {
 		bool startBraking();
 		void sendOvershoot(double overshoot);
 		void sendCurrentPosition(double x, double y, double z);
+                bool newData();
+                bool positionRequested();
 };
 
 } //sensor

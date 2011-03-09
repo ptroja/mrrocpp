@@ -80,7 +80,7 @@ class neuron_generator: public common::generator::generator{
 		 * @details If true, generator tries to break in each axis until robot
 		 * stops.
 		 */
-		bool breaking;
+                bool breaking_;
 
 		/**
 		 * @brief Current velocity in all axes.
@@ -170,6 +170,17 @@ class neuron_generator: public common::generator::generator{
 		 * @brief Number of macro steps between consequtive data.
 		 */
 		uint8_t macroSteps;
+
+                uint8_t mstep_;
+
+                uint8_t break_steps_;
+
+                double coeff_[6][6];
+                double vel_[6];
+
+
+                void velocityProfileLinear(double *coeff, double pos1, double pos2, double t);
+                void velocityProfileSpline(double *coeff, double pos1, double vel1, double pos2, double vel2, double time);
 
 	public:
 		neuron_generator(common::task::task& _ecp_task);
