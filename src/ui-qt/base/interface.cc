@@ -1126,12 +1126,11 @@ int Interface::MPslay()
 	// 	printf("mp pupa po kill\n");
 	mp.pid = -1;
 	mp.pulse_fd = lib::invalid_fd;
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->deactivate_ecp_trigger();
+				}
 
-	/* TR
-	 irp6ot_m->deactivate_ecp_trigger();
-	 irp6p_m->deactivate_ecp_trigger();
-	 conveyor->deactivate_ecp_trigger();
-	 */
 	// modyfikacja menu
 	manage_interface();
 	/* TR
