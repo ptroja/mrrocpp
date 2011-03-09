@@ -126,7 +126,7 @@ void wgt_irp6_m_tool_angle_axis::on_pushButton_read_clicked()
 
 void wgt_irp6_m_tool_angle_axis::on_pushButton_copy_clicked()
 {
-
+	copy();
 }
 
 int wgt_irp6_m_tool_angle_axis::init()
