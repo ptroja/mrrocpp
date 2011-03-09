@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6p_tfg.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../base/interface.h"
 
@@ -62,7 +62,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::irp6p_tfg::ROBOT_NAME);
+					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6p_tfg::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -258,7 +258,6 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
-
 
 }
 } //namespace ui

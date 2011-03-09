@@ -18,11 +18,9 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
-}
-
-namespace irp6 {
 class EcpRobot;
 }
+
 namespace irp6ot_m {
 
 //
@@ -52,13 +50,14 @@ public:
 	bool is_wind_irp6ot_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
 
-	irp6::EcpRobot *ui_ecp_robot;
+	common::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 	wgt_irp6ot_m_joints *wgt_joints;
 
 	int manage_interface();
-	int process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	int
+			process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();

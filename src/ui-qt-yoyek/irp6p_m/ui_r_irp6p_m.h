@@ -16,11 +16,9 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
-}
-
-namespace irp6 {
 class EcpRobot;
 }
+
 namespace irp6p_m {
 
 //
@@ -46,7 +44,7 @@ public:
 	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
 	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
 
-	irp6::EcpRobot *ui_ecp_robot;
+	common::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 

@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_conveyor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/conveyor/const_conveyor.h"
 #include "../base/interface.h"
 
@@ -60,7 +60,7 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name.c_str());
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::conveyor::ROBOT_NAME);
+					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::conveyor::ROBOT_NAME);
 
 				}
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();

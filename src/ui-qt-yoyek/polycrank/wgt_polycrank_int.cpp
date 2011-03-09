@@ -2,7 +2,7 @@
 #include "ui_r_polycrank.h"
 #include "robot/polycrank/const_polycrank.h"
 //#include "ui/src/ui_ecp_r_single_motor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "wgt_polycrank_int.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"

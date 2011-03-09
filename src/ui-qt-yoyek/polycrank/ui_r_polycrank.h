@@ -19,11 +19,9 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
-}
-
-namespace single_motor {
 class EcpRobot;
 }
+
 namespace polycrank {
 
 //
@@ -42,7 +40,7 @@ public:
 
 	//bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
-	single_motor::EcpRobot *ui_ecp_robot;
+	common::EcpRobot *ui_ecp_robot;
 	wgt_polycrank_int *wgt_int;
 	//wgt_spkm_inc *wgt_int;
 

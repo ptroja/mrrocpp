@@ -1,4 +1,4 @@
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "../base/ui_r_single_motor.h"
 
 #include "wgt_single_motor_move.h"

@@ -5,7 +5,7 @@
 #include "wgt_irp6ot_m_joints.h"
 
 #include "ui_r_irp6ot_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_irp6_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "../base/interface.h"
 
@@ -61,7 +61,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::irp6::EcpRobot(interface, lib::irp6ot_m::ROBOT_NAME);
+					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6ot_m::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -229,7 +229,7 @@ int UiRobot::manage_interface()
 			mw->enable_menu_item(true, 1, ui->actionirp6ot_m_EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves,
-			  ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+			 ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
 			 */
 			break;
@@ -268,7 +268,7 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(false, 2, ui->actionirp6ot_m_EDP_Load, ui->actionirp6ot_m_EDP_Unload);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification,
-						  ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						 ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
 						 */
 						break;
@@ -278,7 +278,7 @@ int UiRobot::manage_interface()
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_tool_specification,
-						  ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
+						 ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
 						 */
 						break;
 					default:

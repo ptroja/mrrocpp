@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6p_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_irp6_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "../base/interface.h"
 
@@ -59,7 +59,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::irp6::EcpRobot(interface, lib::irp6p_m::ROBOT_NAME);
+					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6p_m::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -253,7 +253,7 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(false, 2, ui->actionirp6p_m_EDP_Unload, ui->actionirp6p_m_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_postument_absolute_moves, ABN_mm_irp6_postument_relative_moves,
-						  ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
+						 ABN_mm_irp6_postument_preset_positions, ABN_mm_irp6_postument_tool_specification, ABN_mm_irp6_postument_kinematic, ABN_mm_irp6_postument_servo_algorithm, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_postument_edp_load, ABN_mm_irp6_postument_edp_unload, NULL);
 						 */
 						break;
@@ -273,7 +273,7 @@ int UiRobot::manage_interface()
 			} else // jesli robot jest niezsynchronizowany
 			{
 				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
-				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions);	///co to tutaj robi?
+				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Preset_Positions); ///co to tutaj robi?
 				mw->enable_menu_item(true, 2, ui->actionirp6p_m_EDP_Unload, ui->actionall_Synchronisation);
 				mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
 				/* TR

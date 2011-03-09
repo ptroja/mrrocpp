@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_single_motor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "../base/interface.h"
 
 #include "../base/mainwindow.h"

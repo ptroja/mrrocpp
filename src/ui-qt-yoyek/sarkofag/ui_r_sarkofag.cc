@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_sarkofag.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/sarkofag/const_sarkofag.h"
 #include "../base/interface.h"
 
@@ -61,7 +61,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
+					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
