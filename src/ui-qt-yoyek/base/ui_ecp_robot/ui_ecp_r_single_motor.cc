@@ -42,50 +42,6 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 	common::EcpRobot(_interface, _robot_name)
 {
 
-	if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
-		/* TR
-		 ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
-		 */
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
-
-		ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (_robot_name == lib::sarkofag::ROBOT_NAME) {
-
-		ecp = new ecp::sarkofag::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.0001;
-		}
-	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
-
-		ecp = new ecp::conveyor::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00004;
-		}
-	} else if (_robot_name == lib::polycrank::ROBOT_NAME) {
-
-		ecp = new ecp::polycrank::robot(*(_interface.config), *(_interface.all_ecp_msg));
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00004;
-		}
-	}
-
-	init();
 }
 
 }
