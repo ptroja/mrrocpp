@@ -42,6 +42,7 @@ public:
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(Interface& _interface, lib::robot_name_t _robot_name); // Konstruktor
 
+	void init();
 
 	void move_motors(const double final_position[lib::MAX_SERVOS_NR]);
 	void move_joints(const double final_position[lib::MAX_SERVOS_NR]);

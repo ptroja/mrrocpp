@@ -44,21 +44,22 @@ EcpRobot::~EcpRobot()
 }
 
 // ---------------------------------------------------------------
-/* // by Y - zdefiniowane w irp6_on_track_robot - przemyslec czy nie trzeba wstawic warunku na poprawnosc synchronizacji
- void EcpRobot::synchronise ( void ) {
- // Zlecenie synchronizacji robota
- ecp->ecp_command.instruction_type = lib::SYNCHRO;
- ecp->EDP_buffer.send(EDP_fd);  // Wyslanie zlecenia synchronizacji
- ecp->EDP_buffer.query(EDP_fd); // Odebranie wyniku zlecenia
- if (ecp->reply_package.reply_type == lib::SYNCHRO_OK)
- synchronised = true;
- };// end: EcpRobot::synchronise ()
- */
-// ---------------------------------------------------------------
+void EcpRobot::init()
+{
+	assert(ecp);
 
-// ---------------------------------------------------------------
-// virtual  // by Y - wywalone
+	// Konstruktor klasy
+	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = 0;
+	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.get_arm_type = lib::MOTOR;
+	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
+	ecp->ecp_command.set_arm_type = lib::MOTOR;
+	ecp->ecp_command.motion_steps = 0;
+	ecp->ecp_command.value_in_step_no = 0;
 
+	ecp->synchronised = false;
+
+}
 
 // ---------------------------------------------------------------
 void EcpRobot::move_motors(const double final_position[])

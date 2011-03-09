@@ -47,36 +47,42 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 
 		ecp = new ecp::irp6ot_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
+		for (int j = 0; j < ecp->number_of_servos; j++) {
+			MOTOR_STEP[j] = 0.05;
+		}
+
+		JOINT_STEP[0] = 0.00004;
+		for (int j = 1; j < ecp->number_of_servos; j++) {
+			JOINT_STEP[j] = 0.0004;
+		}
+
+		for (int j = 0; j < 3; j++) {
+			END_EFFECTOR_STEP[j] = 0.00002;
+		}
+
+		for (int j = 3; j < 6; j++) {
+			END_EFFECTOR_STEP[j] = 0.0002;
+		}
+
 	} else if (_robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp = new ecp::irp6p_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
+		for (int j = 0; j < ecp->number_of_servos; j++) {
+			MOTOR_STEP[j] = 0.05;
+			JOINT_STEP[j] = 0.0004;
+		}
+
+		for (int j = 0; j < 3; j++) {
+			END_EFFECTOR_STEP[j] = 0.00002;
+		}
+
+		for (int j = 3; j < 6; j++) {
+			END_EFFECTOR_STEP[j] = 0.0002;
+		}
+
 	}
 
-	assert(ecp);
-
-	// Konstruktor klasy
-	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = 0;
-	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.get_arm_type = lib::MOTOR;
-	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.set_arm_type = lib::MOTOR;
-	ecp->ecp_command.motion_steps = 0;
-	ecp->ecp_command.value_in_step_no = 0;
-
-	ecp->synchronised = false;
-
-	for (int j = 0; j < ecp->number_of_servos; j++) {
-		MOTOR_STEP[j] = 0.05;
-		JOINT_STEP[j] = 0.0004;
-		END_EFFECTOR_STEP[j] = 0.00002;
-	}
-	/*
-	 MOTOR_STEP = 0.05; // Przyrost kata obrotu walu silnika [rad]
-	 JOINT_ANGULAR_STEP = 0.0004; // Przyrost kata obrotu w przegubie obrotowym [rad]
-	 JOINT_LINEAR_STEP = 0.00004; // Przyrost liniowy w przegubach posuwistych [m]
-	 END_EFFECTOR_LINEAR_STEP = 0.00002;// Przyrost wspolrzednej polozenia koncowki [m]
-	 END_EFFECTOR_ANGULAR_STEP = 0.0002; // Przyrost wspolrzednej orientacji koncowki [rad]
-	 */
+	init();
 
 }
 

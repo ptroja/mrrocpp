@@ -85,20 +85,8 @@ EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name)
 		}
 	}
 
-	assert(ecp);
-
-	// Konstruktor klasy
-	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = 0;
-	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.get_arm_type = lib::MOTOR;
-	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.set_arm_type = lib::MOTOR;
-	ecp->ecp_command.motion_steps = 0;
-	ecp->ecp_command.value_in_step_no = 0;
-
-	ecp->synchronised = false;
+	init();
 }
-
 
 }
 } //namespace ui
