@@ -104,6 +104,8 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 				break;
 		}
 
+		mw->thread()->yield();
+
 		return 1;
 
 	}
