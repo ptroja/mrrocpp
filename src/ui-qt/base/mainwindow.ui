@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuRobot">
@@ -234,7 +234,7 @@
      <addaction name="menusarkofag_Preset_Positions"/>
      <addaction name="actionsarkofag_Servo_Algorithm"/>
     </widget>
-    <widget class="QMenu" name="menuirp6ot_tfg">
+    <widget class="QMenu" name="menuIrp6ot_tfg">
      <property name="title">
       <string>Irp6ot_t&amp;Fg</string>
      </property>
@@ -244,8 +244,8 @@
       </property>
       <addaction name="actionirp6ot_tfg_Synchro_Position"/>
       <addaction name="actionirp6ot_tfg_Position_0"/>
-      <addaction name="actionIrp6ot_tfg_Position_1"/>
-      <addaction name="actionIrp6ot_tfg_Position_2"/>
+      <addaction name="actionirp6ot_tfg_Position_1"/>
+      <addaction name="actionirp6ot_tfg_Position_2"/>
      </widget>
      <addaction name="actionirp6ot_tfg_EDP_Load"/>
      <addaction name="actionirp6ot_tfg_EDP_Unload"/>
@@ -295,7 +295,7 @@
      <addaction name="menuconveyor_Preset_Positions"/>
     </widget>
     <addaction name="menuIrp6ot_m"/>
-    <addaction name="menuirp6ot_tfg"/>
+    <addaction name="menuIrp6ot_tfg"/>
     <addaction name="menuIrp6p_m"/>
     <addaction name="menuIrp6p_tfg"/>
     <addaction name="menuConveyor"/>
@@ -435,6 +435,17 @@
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <action name="actionspkm_EDP_Load">
    <property name="text">
@@ -846,12 +857,12 @@
     <string>Position &amp;0</string>
    </property>
   </action>
-  <action name="actionIrp6ot_tfg_Position_1">
+  <action name="actionirp6ot_tfg_Position_1">
    <property name="text">
     <string>Position &amp;1</string>
    </property>
   </action>
-  <action name="actionIrp6ot_tfg_Position_2">
+  <action name="actionirp6ot_tfg_Position_2">
    <property name="text">
     <string>Position &amp;2</string>
    </property>

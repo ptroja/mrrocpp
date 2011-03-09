@@ -201,19 +201,19 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuirp6ot_tfg);
+			mw->enable_menu_item(false, 1, ui->menuIrp6ot_tfg);
 
 			break;
 		case 0:
 			mw->enable_menu_item(false, 3, ui->actionirp6ot_tfg_EDP_Unload, ui->actionirp6ot_tfg_Synchronization, ui->actionirp6ot_tfg_Move);
 			mw->enable_menu_item(false, 1, ui->menuirp6ot_tfg_Preset_Positions);
-			mw->enable_menu_item(true, 1, ui->menuirp6ot_tfg);
+			mw->enable_menu_item(true, 1, ui->menuIrp6ot_tfg);
 			mw->enable_menu_item(true, 1, ui->actionirp6ot_tfg_EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuirp6ot_tfg);
+			mw->enable_menu_item(true, 1, ui->menuIrp6ot_tfg);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
