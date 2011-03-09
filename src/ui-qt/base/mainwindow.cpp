@@ -95,6 +95,7 @@ Ui::MainWindow * MainWindow::get_ui()
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
 {
 	va_list menu_items;
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 	/*
 	 emit
 	 enable_menu_item_signal(_menu_item, _enable);
@@ -104,6 +105,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 		/*
 		 emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
 		 */
@@ -116,6 +118,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
 {
 	va_list menu_items;
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 	/*
 	 emit
 	 enable_menu_item_signal(_menu_item, _enable);
@@ -126,6 +129,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 		/*
 		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
 		 */
