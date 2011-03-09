@@ -24,9 +24,8 @@ wgt_single_motor_move::~wgt_single_motor_move()
 void wgt_single_motor_move::my_open()
 {
 	wgt_base::my_open();
-	init_mr();
+	init_mr_and_si();
 	copy_mr();
-	init_si();
 	copy_si();
 }
 
@@ -78,7 +77,13 @@ void wgt_single_motor_move::synchro_depended_init_slot()
 
 void wgt_single_motor_move::on_pushButton_read_mr_clicked()
 {
+	init_mr_and_si();
+}
+
+void wgt_single_motor_move::init_mr_and_si()
+{
 	init_mr();
+	init_si();
 }
 
 int wgt_single_motor_move::init_mr()
@@ -208,8 +213,7 @@ int wgt_single_motor_move::move_it_mr()
 			if (robot.state.edp.is_synchronised) {
 				ui.doubleSpinBox_des_mr->setValue(robot.desired_pos[0]);
 
-				init_mr();
-				init_si();
+				init_mr_and_si();
 			}
 
 		} // end if (robot.state.edp.pid!=-1)
@@ -227,7 +231,7 @@ int wgt_single_motor_move::move_it_mr()
 
 void wgt_single_motor_move::on_pushButton_read_si_clicked()
 {
-	init_si();
+	init_mr_and_si();
 }
 
 int wgt_single_motor_move::init_si()
@@ -357,8 +361,7 @@ int wgt_single_motor_move::move_it_si()
 			if (robot.state.edp.is_synchronised) {
 				ui.doubleSpinBox_des_si->setValue(robot.desired_pos[0]);
 
-				init_mr();
-				init_si();
+				init_mr_and_si();
 			}
 
 		} // end if (robot.state.edp.pid!=-1)

@@ -43,6 +43,8 @@ private:
 	int init_mr();
 	int copy_mr();
 
+	void init_mr_and_si();
+
 	int get_desired_position_mr();
 	int move_it_mr();
 
