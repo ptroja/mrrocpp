@@ -9,10 +9,8 @@
 #define __UI_R_IRP6P_TFG_H
 
 #include "../base/ui.h"
-#include "../base/ui_robot.h"
+#include "../base/ui_r_single_motor.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
-
-class wgt_irp6p_tfg_inc;
 
 namespace mrrocpp {
 namespace ui {
@@ -20,7 +18,7 @@ namespace common {
 class Interface;
 }
 
-namespace tfg_and_conv {
+namespace single_motor {
 class EcpRobot;
 }
 namespace irp6p_tfg {
@@ -32,23 +30,16 @@ namespace irp6p_tfg {
 //
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 private:
 
 public:
 
-	double current_pos[lib::irp6p_tfg::NUM_OF_SERVOS];// pozycja biezaca
-	double desired_pos[lib::irp6p_tfg::NUM_OF_SERVOS]; // pozycja zadana
-
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	wgt_irp6p_tfg_inc *wgt_inc;
-
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
-	void close_all_windows();
-	void delete_ui_ecp_robot();
+
 	int synchronise();
 	int synchronise_int();
 	void edp_create();

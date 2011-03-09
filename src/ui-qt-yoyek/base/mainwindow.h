@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QCloseEvent>
 
 namespace Ui {
 class MainWindow;
@@ -34,10 +35,13 @@ public:
 
 	Ui::MainWindow * get_ui();
 
+	void closeEvent(QCloseEvent * event);
+
 private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
 	QTimer *timer;
+
 
 signals:
 	void ui_notification_signal(QString _string, QColor _color);

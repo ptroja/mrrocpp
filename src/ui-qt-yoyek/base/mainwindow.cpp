@@ -27,11 +27,11 @@
 #include "../spkm/wgt_spkm_int.h"
 #include "../spkm/wgt_spkm_ext.h"
 #include "../polycrank/wgt_polycrank_int.h"
-#include "../sarkofag/wgt_sarkofag_inc.h"
-#include "../conveyor/wgt_conveyor_inc.h"
-#include "../irp6p_tfg/wgt_irp6p_tfg_inc.h"
+#include "../base/wgt_single_motor_move.h"
 
 #include "../bird_hand/wgt_bird_hand_command.h"
+
+#include "../irp6ot_m/wgt_irp6ot_m_joints.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -50,16 +50,31 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	// wyłączenie przycisku zamykania okna
-	Qt::WindowFlags flags;
-	flags |= Qt::WindowMaximizeButtonHint;
-	flags |= Qt::WindowMinimizeButtonHint;
-	setWindowFlags(flags);
+	/*
+	 Qt::WindowFlags flags;
+	 flags |= Qt::WindowMaximizeButtonHint;
+	 flags |= Qt::WindowMinimizeButtonHint;
+	 setWindowFlags(flags);
+	 */
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+
+	interface.UI_close();
+
+	if (interface.ui_state == 6) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
 }
+
 Ui::MainWindow * MainWindow::get_ui()
 {
 	return ui;
@@ -319,6 +334,7 @@ void MainWindow::on_timer_slot()
 		printf("UI CLOSED\n");
 		interface.abort_threads();
 		interface.get_main_window()->close();
+
 	} else {
 		if (!(interface.communication_flag.is_busy())) {
 			interface.set_ui_state_notification(UI_N_READY);
@@ -371,7 +387,7 @@ void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
 
 void MainWindow::on_actionirp6ot_m_Joints_triggered()
 {
-
+	interface.irp6ot_m->wgt_joints->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
@@ -568,7 +584,7 @@ void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
 
 void MainWindow::on_actionirp6p_tfg_Move_triggered()
 {
-	interface.irp6p_tfg->wgt_inc->my_open();
+	interface.irp6p_tfg->wgt_move->my_open();
 }
 
 void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
@@ -609,7 +625,7 @@ void MainWindow::on_actionconveyor_Synchronization_triggered()
 
 void MainWindow::on_actionconveyor_Move_triggered()
 {
-	interface.conveyor->wgt_inc->my_open();
+	interface.conveyor->wgt_move->my_open();
 }
 
 void MainWindow::on_actionconveyor_Synchro_Position_triggered()
@@ -671,7 +687,7 @@ void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 
 void MainWindow::on_actionsarkofag_Move_triggered()
 {
-	interface.sarkofag->wgt_inc->my_open();
+	interface.sarkofag->wgt_move->my_open();
 }
 
 void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
@@ -880,18 +896,20 @@ void MainWindow::on_actionConfiguration_triggered()
 	 // ...
 	 }
 	 */
-
-	QString fileName;
-
-	std::string mrrocpp_root_local_path =
-			interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
-	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
-	//interface.ui_msg->message(mrrocpp_root_local_path);
-
 	try {
+		QString fileName;
+
+		std::string mrrocpp_root_local_path =
+				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
+		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
+		//interface.ui_msg->message(mrrocpp_root_local_path);
+
+
+		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		interface.ui_msg->message(mrrocpp_current_config_full_path);
 
 		fileName
-				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*.ini)"));
+				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
 
 		std::string str_fullpath = fileName.toStdString();
 

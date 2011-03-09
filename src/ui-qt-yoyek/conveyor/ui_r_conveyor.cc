@@ -3,19 +3,19 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_conveyor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "robot/conveyor/const_conveyor.h"
 #include "../base/interface.h"
 
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "wgt_conveyor_inc.h"
+#include "../base/wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace conveyor {
-
+const std::string WGT_CONVEYOR_MOVE = "WGT_CONVEYOR_MOVE";
 // extern ui_state_def ui_state;
 
 //
@@ -60,7 +60,7 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name.c_str());
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::conveyor::ROBOT_NAME);
+					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::conveyor::ROBOT_NAME);
 
 				}
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -130,11 +130,11 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active"),
-			ui_ecp_robot(NULL)
+			single_motor::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, "is_conveyor_active")
 {
-	wgt_inc = new wgt_conveyor_inc(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_CONVEYOR_INC] = wgt_inc->dwgt;
+
+	wgt_move = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
+	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_move->dwgt;
 }
 
 int UiRobot::manage_interface()
@@ -146,34 +146,24 @@ int UiRobot::manage_interface()
 	{
 		case -1:
 			mw->enable_menu_item(false, 1, ui->menuConveyor);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor, NULL);
-			 */
+
 			break;
 		case 0:
 			mw->enable_menu_item(false, 3, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 			mw->enable_menu_item(false, 1, ui->menuconveyor_Preset_Positions);
 			mw->enable_menu_item(true, 1, ui->menuConveyor);
 			mw->enable_menu_item(true, 1, ui->actionconveyor_EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_synchronisation, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor, ABN_mm_conveyor_edp_load, NULL);
-			 */
+
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, ui->menuConveyor);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor, NULL);
-			 */
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->actionconveyor_Synchronization);
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_synchronisation, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
+
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -181,28 +171,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 2, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, NULL);
-						 */
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load, ui->actionconveyor_EDP_Unload);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, ABN_mm_conveyor_edp_unload, NULL);
-						 */
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(true, 1, ui->actionconveyor_Move);
 						mw->enable_menu_item(true, 1, ui->menuconveyor_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_conveyor_move, ABN_mm_conveyor_preset_positions, ABN_mm_conveyor_servo_algorithm, NULL);
-						 */
+
 						break;
 					default:
 						break;
@@ -211,11 +192,7 @@ int UiRobot::manage_interface()
 			{
 				mw->enable_menu_item(true, 4, ui->actionall_Synchronisation, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 				mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_conveyor_edp_unload, ABN_mm_conveyor_synchronisation, ABN_mm_conveyor_move, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_conveyor_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+
 			}
 			break;
 		default:
@@ -259,25 +236,6 @@ int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_w
 
 	return 1;
 
-}
-
-void UiRobot::close_all_windows()
-{
-	/* TR
-	 int pt_res = PtEnter(0);
-
-	 close_wind_conveyor_moves(NULL, NULL, NULL);
-	 close_wnd_conveyor_servo_algorithm(NULL, NULL, NULL);
-
-	 if (pt_res >= 0) {
-	 PtLeave(0);
-	 }
-	 */
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
 }
 
 }

@@ -24,7 +24,7 @@
 
 #include "base/lib/sr/srlib.h"
 
-#include "ui_ecp_r_tfg_and_conv.h"
+#include "ui_ecp_r_single_motor.h"
 
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
@@ -35,7 +35,7 @@
 
 namespace mrrocpp {
 namespace ui {
-namespace tfg_and_conv {
+namespace single_motor {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :

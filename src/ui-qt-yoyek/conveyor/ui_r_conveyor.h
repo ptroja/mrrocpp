@@ -9,10 +9,10 @@
 #define __UI_R_CONVEYOR_H
 
 #include "../base/ui.h"
-#include "../base/ui_robot.h"
+#include "../base/ui_r_single_motor.h"
 #include "robot/conveyor/const_conveyor.h"
 
-class wgt_conveyor_inc;
+class wgt_single_motor_move;
 
 namespace mrrocpp {
 namespace ui {
@@ -20,7 +20,7 @@ namespace common {
 class Interface;
 
 }
-namespace tfg_and_conv {
+namespace single_motor {
 class EcpRobot;
 }
 
@@ -32,25 +32,18 @@ namespace conveyor {
 //
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 private:
 
 public:
-
-	double current_pos[lib::conveyor::NUM_OF_SERVOS];// pozycja biezaca
-	double desired_pos[lib::conveyor::NUM_OF_SERVOS]; // pozycja zadana
-
-	tfg_and_conv::EcpRobot *ui_ecp_robot;
-	wgt_conveyor_inc *wgt_inc;
 
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
 	int
 			process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-	void close_all_windows();
-	void delete_ui_ecp_robot();
+
 	int synchronise();
 	int synchronise_int();
 	void edp_create();

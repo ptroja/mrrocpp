@@ -3,23 +3,19 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_sarkofag.h"
-//#include "ui_ecp_r_sarkofag.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
-
-#include "wgt_sarkofag_inc.h"
-
+#include "../base/ui_ecp_robot/ui_ecp_r_single_motor.h"
 #include "robot/sarkofag/const_sarkofag.h"
 #include "../base/interface.h"
 
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "../base/ui_ecp_robot/ui_ecp_r_tfg_and_conv.h"
+#include "../base/wgt_single_motor_move.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace sarkofag {
-
+const std::string WGT_SARKOFAG_MOVE = "WGT_SARKOFAG_MOVE";
 //
 //
 // KLASA UiRobot
@@ -65,7 +61,7 @@ int UiRobot::edp_create_int()
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 
-					ui_ecp_robot = new ui::tfg_and_conv::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
+					ui_ecp_robot = new ui::single_motor::EcpRobot(interface, lib::sarkofag::ROBOT_NAME);
 				}
 
 				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
@@ -164,12 +160,11 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active"),
-			ui_ecp_robot(NULL)
+			single_motor::UiRobot(_interface, lib::sarkofag::EDP_SECTION, lib::sarkofag::ECP_SECTION, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS, "is_sarkofag_active")
 {
 
-	wgt_inc = new wgt_sarkofag_inc(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SARKOFAG_INC] = wgt_inc->dwgt;
+	wgt_move = new wgt_single_motor_move("Sarkofag moves", interface, *this, interface.get_main_window());
+	wndbase_m[WGT_SARKOFAG_MOVE] = wgt_move->dwgt;
 
 }
 
@@ -182,34 +177,24 @@ int UiRobot::manage_interface()
 	{
 		case -1:
 			mw->enable_menu_item(false, 1, ui->menuSarkofag);
-			/*TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag, NULL);
-			 */
+
 			break;
 		case 0:
 			mw->enable_menu_item(false, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 			mw->enable_menu_item(true, 1, ui->menuSarkofag);
 			mw->enable_menu_item(true, 1, ui->actionsarkofag_EDP_Load);
 			mw->enable_menu_item(false, 1, ui->menusarkofag_Preset_Positions);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, ABN_mm_sarkofag_edp_load, NULL);
-			 */
+
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, ui->menuSarkofag);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag, NULL);
-			 */
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->actionsarkofag_Synchronisation);
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_synchronisation, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
+
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -217,28 +202,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 3, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
 						mw->enable_menu_item(true, 1, ui->menusarkofag_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
-						 */
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 2, ui->actionsarkofag_EDP_Load, ui->actionsarkofag_EDP_Unload);
 						mw->enable_menu_item(true, 1, ui->menusarkofag_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, ABN_mm_sarkofag_edp_unload, NULL);
-						 */
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 1, ui->menusarkofag_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_sarkofag_move, ABN_mm_sarkofag_preset_positions, ABN_mm_sarkofag_servo_algorithm, NULL);
-						 */
+
 						break;
 					default:
 						break;
@@ -247,11 +223,7 @@ int UiRobot::manage_interface()
 			{
 				mw->enable_menu_item(true, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionall_Synchronisation);
 				mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_sarkofag_edp_unload, ABN_mm_sarkofag_synchronisation, ABN_mm_sarkofag_move, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_sarkofag_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+
 			}
 			break;
 		default:
@@ -259,25 +231,6 @@ int UiRobot::manage_interface()
 	}
 
 	return 1;
-}
-
-void UiRobot::close_all_windows()
-{
-	/* TR
-	 int pt_res = PtEnter(0);
-
-	 close_wind_sarkofag_moves(NULL, NULL, NULL);
-	 close_wnd_sarkofag_servo_algorithm(NULL, NULL, NULL);
-
-	 if (pt_res >= 0) {
-	 PtLeave(0);
-	 }
-	 */
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
 }
 
 }

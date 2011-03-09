@@ -5,8 +5,8 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef _UI_ECP_R_TFG_H
-#define _UI_ECP_R_TFG_H
+#ifndef _UI_ECP_R_SINGLE_MOTOR_H
+#define _UI_ECP_R_SINGLE_MOTOR_H
 
 #include "../ui.h"
 // Konfigurator.
@@ -20,7 +20,7 @@ namespace ui {
 namespace common {
 class Interface;
 }
-namespace tfg_and_conv {
+namespace single_motor {
 
 // ---------------------------------------------------------------
 class EcpRobot : public common::EcpRobot

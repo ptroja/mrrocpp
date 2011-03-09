@@ -54,11 +54,18 @@ const std::string ports_strings[] = {"/dev/ttyMI6"};
 #else
 const std::string ports_strings[] = {"/dev/ser8"};
 #endif
+
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
- * @ingroup sarkofag
+ * @ingroup irp6p_tfg
  */
 const int MAX_CURRENT_0 = 150;
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const double MAX_INCREMENT[] = {0};
 
 }
 } // namespace lib
