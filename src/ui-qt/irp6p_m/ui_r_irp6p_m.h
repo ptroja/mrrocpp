@@ -9,7 +9,7 @@
 #define __UI_R_IRP6P_M_H
 
 #include "../base/ui.h"
-#include "../base/ui_robot.h"
+#include "../irp6_m/ui_r_irp6_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 class wgt_irp6p_m_joints;
@@ -31,34 +31,20 @@ namespace irp6p_m {
 //
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public irp6_m::UiRobot
 {
 public:
-	double current_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja biezaca
-	double desired_pos[lib::irp6p_m::NUM_OF_SERVOS]; // pozycja zadana
-
-	bool is_wind_irp6p_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
-	bool is_wind_irp6p_inc_open; // informacja czy okno ruchow w radianach na wale silnika jest otwarte
-	bool is_wind_irp6p_xyz_euler_zyz_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_angle_axis_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_aa_relative_open; // informacja czy okno ruchow we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_angle_axis_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_xyz_euler_zyz_ts_open; // informacja czy okno definicji narzedzia we wspolrzednych zewnetrznych jest otwarte
-	bool is_wind_irp6p_kinematic_open; // informacja czy okno definicji kinematyki jest otwarte
-	bool is_wind_irp6p_servo_algorithm_open; // informacja czy okno definicji kinematyki jest otwarte
-
-	common::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
 	wgt_irp6p_m_joints *wgt_joints;
 	wgt_irp6p_m_motors *wgt_motors;
 
 	int manage_interface();
-	void process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	void
+			process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
-	void delete_ui_ecp_robot();
 	int synchronise();
-	int synchronise_int();
+
 	void edp_create();
 	int edp_create_int();
 
@@ -66,8 +52,6 @@ public:
 	int move_to_front_position();
 	int move_to_preset_position(int variant);
 
-	int execute_motor_motion();
-	int execute_joint_motion();
 };
 
 }
