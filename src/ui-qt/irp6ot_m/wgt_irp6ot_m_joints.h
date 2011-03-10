@@ -1,5 +1,5 @@
-#ifndef WGT_IRP6OT_M_INT_H
-#define WGT_IRP6OT_M_INT_H
+#ifndef WGT_IRP6OT_M_JOINTS_H
+#define WGT_IRP6OT_M_JOINTS_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>

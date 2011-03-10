@@ -54,6 +54,8 @@ SET(GUI_CXX_SRCS
     base/wgt_single_motor_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
     irp6ot_m/wgt_irp6ot_m_joints.cpp
+    irp6p_m/wgt_irp6p_m_joints.cpp
+    irp6p_m/wgt_irp6p_m_motors.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -68,6 +70,8 @@ SET(GUI_MOC_SRCS
     base/wgt_single_motor_move.h
     bird_hand/wgt_bird_hand_command.h
     irp6ot_m/wgt_irp6ot_m_joints.h
+    irp6p_m/wgt_irp6p_m_joints.h
+    irp6p_m/wgt_irp6p_m_motors.h
 )
 
 # Generate MOC files
@@ -84,6 +88,8 @@ SET(GUI_UI
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
     irp6ot_m/wgt_irp6ot_m_joints.ui
+    irp6p_m/wgt_irp6p_m_joints.ui
+    irp6p_m/wgt_irp6p_m_motors.ui
 )
 
 # Generate UI include files

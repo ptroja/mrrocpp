@@ -12,6 +12,9 @@
 #include "../base/ui_robot.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
+class wgt_irp6p_m_joints;
+class wgt_irp6p_m_motors;
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -47,10 +50,11 @@ public:
 	common::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface);
+	wgt_irp6p_m_joints *wgt_joints;
+	wgt_irp6p_m_motors *wgt_motors;
 
 	int manage_interface();
-	void
-			process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	void process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 	void close_all_windows();
 	void delete_ui_ecp_robot();
 	int synchronise();
