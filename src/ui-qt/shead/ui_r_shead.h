@@ -34,7 +34,7 @@ private:
 public:
 
 	EcpRobot *ui_ecp_robot;
-	void close_all_windows();
+
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();

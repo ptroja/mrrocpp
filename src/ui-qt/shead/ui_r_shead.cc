@@ -107,9 +107,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-void UiRobot::close_all_windows()
-{
-}
 
 int UiRobot::manage_interface()
 {

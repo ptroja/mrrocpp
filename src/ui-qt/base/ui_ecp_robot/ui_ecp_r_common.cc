@@ -87,7 +87,7 @@ EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 		ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
+			MOTOR_STEP[j] = 0.4;
 			JOINT_STEP[j] = 0.00001;
 		}
 
@@ -96,7 +96,7 @@ EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 		ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
+			MOTOR_STEP[j] = 0.4;
 			JOINT_STEP[j] = 0.00001;
 		}
 

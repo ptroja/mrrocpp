@@ -35,9 +35,8 @@
 
 #include "../bird_hand/wgt_bird_hand_command.h"
 
-#include "../irp6ot_m/wgt_irp6ot_m_joints.h"
-#include "../irp6p_m/wgt_irp6p_m_joints.h"
-#include "../irp6p_m/wgt_irp6p_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -558,12 +557,12 @@ void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
 
 void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
 {
-
+	interface.irp6ot_m->wgt_motors->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
 {
-
+	interface.irp6ot_m->wgt_motors->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Joints_triggered()
@@ -683,7 +682,7 @@ void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
 
 void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
 {
-
+	interface.irp6p_m->wgt_motors->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()

@@ -53,9 +53,8 @@ SET(GUI_CXX_SRCS
     polycrank/wgt_polycrank_int.cpp
     base/wgt_single_motor_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
-    irp6ot_m/wgt_irp6ot_m_joints.cpp
-    irp6p_m/wgt_irp6p_m_joints.cpp
-    irp6p_m/wgt_irp6p_m_motors.cpp
+    irp6_m/wgt_irp6_m_joints.cpp
+    irp6_m/wgt_irp6_m_motors.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -69,9 +68,8 @@ SET(GUI_MOC_SRCS
     polycrank/wgt_polycrank_int.h
     base/wgt_single_motor_move.h
     bird_hand/wgt_bird_hand_command.h
-    irp6ot_m/wgt_irp6ot_m_joints.h
-    irp6p_m/wgt_irp6p_m_joints.h
-    irp6p_m/wgt_irp6p_m_motors.h
+    irp6_m/wgt_irp6_m_joints.h
+    irp6_m/wgt_irp6_m_motors.h
 )
 
 # Generate MOC files
@@ -87,9 +85,8 @@ SET(GUI_UI
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
-    irp6ot_m/wgt_irp6ot_m_joints.ui
-    irp6p_m/wgt_irp6p_m_joints.ui
-    irp6p_m/wgt_irp6p_m_motors.ui
+    irp6_m/wgt_irp6_m_joints.ui
+    irp6_m/wgt_irp6_m_motors.ui
 )
 
 # Generate UI include files
@@ -105,6 +102,7 @@ ADD_EXECUTABLE(
 	base/ui_ecp_robot/ui_ecp_r_common.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
+	irp6_m/ui_r_irp6_m.cc
 	irp6p_tfg/ui_r_irp6p_tfg.cc
 	irp6ot_tfg/ui_r_irp6ot_tfg.cc
 	bird_hand/ui_ecp_r_bird_hand.cc

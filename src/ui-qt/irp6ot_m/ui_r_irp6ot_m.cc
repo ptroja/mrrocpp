@@ -2,7 +2,8 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-#include "wgt_irp6ot_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
 
 #include "ui_r_irp6ot_m.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
@@ -15,7 +16,8 @@
 namespace mrrocpp {
 namespace ui {
 namespace irp6ot_m {
-
+const std::string WGT_IRP6OT_M_JOINTS = "WGT_IRP6OT_M_JOINTS";
+const std::string WGT_IRP6OT_M_MOTORS = "WGT_IRP6OT_M_MOTORS";
 //
 //
 // KLASA UiRobot
@@ -94,7 +96,7 @@ int UiRobot::edp_create_int()
 	CATCH_SECTION_UI
 
 	interface.manage_interface();
-
+	wgt_motors->synchro_depended_init();
 	return 1;
 
 }
@@ -135,39 +137,13 @@ int UiRobot::move_to_preset_position(int variant)
 	return 1;
 }
 
-int UiRobot::execute_motor_motion()
-{
-	try {
-
-		ui_ecp_robot->move_motors(desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
-}
-
-int UiRobot::execute_joint_motion()
-{
-	try {
-
-		ui_ecp_robot->move_joints(desired_pos);
-
-	} // end try
-	CATCH_SECTION_UI
-
-	return 1;
-}
-
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS, "is_irp6ot_m_active"),
-			is_wind_irp6ot_int_open(false), is_wind_irp6ot_inc_open(false), is_wind_irp6ot_xyz_euler_zyz_open(false),
-			is_wind_irp6ot_xyz_angle_axis_open(false), is_wind_irp6ot_xyz_aa_relative_open(false),
-			is_wind_irp6ot_xyz_angle_axis_ts_open(false), is_wind_irp6ot_xyz_euler_zyz_ts_open(false),
-			is_wind_irp6ot_kinematic_open(false), is_wind_irp6ot_servo_algorithm_open(false), ui_ecp_robot(NULL)
+			irp6_m::UiRobot(_interface, lib::irp6ot_m::EDP_SECTION, lib::irp6ot_m::ECP_SECTION, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS, "is_irp6ot_m_active")
 {
-	wgt_joints = new wgt_irp6ot_m_joints(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_IRP6OT_JOINTS] = wgt_joints->dwgt;
+	wgt_joints = new wgt_irp6_m_joints("Irp6ot_m joints", interface, *this, interface.get_main_window());
+	wgt_motors = new wgt_irp6_m_motors("Irp6ot_m motors", interface, *this, interface.get_main_window());
+	wndbase_m[WGT_IRP6OT_M_JOINTS] = wgt_joints->dwgt;
+	wndbase_m[WGT_IRP6OT_M_MOTORS] = wgt_motors->dwgt;
 
 }
 
@@ -176,33 +152,6 @@ int UiRobot::synchronise()
 {
 
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
-}
-
-int UiRobot::synchronise_int()
-
-{
-
-	interface.set_ui_state_notification(UI_N_SYNCHRONISATION);
-
-	// wychwytania ew. bledow ECP::robot
-	try {
-		// dla robota irp6_on_track
-
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
-			ui_ecp_robot->ecp->synchronise();
-			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
-		} else {
-			// 	printf("edp irp6_on_track niepowolane, synchronizacja niedozwolona\n");
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	// modyfikacje menu
-	interface.manage_interface();
 
 	return 1;
 
@@ -218,38 +167,25 @@ int UiRobot::manage_interface()
 
 		case -1:
 			mw->enable_menu_item(false, 1, ui->menuIrp6ot_m);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track, NULL);
-			 */
+
 			break;
 		case 0:
 			mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Unload); //??? brakuje czegos?
 			mw->enable_menu_item(false, 5, ui->menuirp6ot_m_Pre_Synchro_Moves, ui->menuirp6ot_m_Absolute_moves, ui->menuIrp6ot_m_Relative_Moves, ui->menuirp6ot_m_Tool, ui->menuirp6ot_m_Preset_Positions);
 			mw->enable_menu_item(true, 1, ui->menuIrp6ot_m);
 			mw->enable_menu_item(true, 1, ui->actionirp6ot_m_EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, ABN_mm_irp6_on_track_absolute_moves,
-			 ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, ABN_mm_irp6_on_track_edp_load, NULL);
-			 */
+
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, ui->menuIrp6ot_m);
 			mw->enable_menu_item(true, 1, ui->actionall_EDP_Unload);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track, NULL);
-			 //ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-			 */
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, ui->menuirp6ot_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
+
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -257,29 +193,17 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 4, ui->menuirp6ot_m_Absolute_moves, ui->menuIrp6ot_m_Relative_Moves, ui->menuirp6ot_m_Tool, ui->menuirp6ot_m_Preset_Positions);
 						mw->enable_menu_item(true, 1, ui->actionirp6ot_m_EDP_Unload);
 						mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Load);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_absolute_moves,
-						 ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
-						 */
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 4, ui->menuirp6ot_m_Absolute_moves, ui->menuIrp6ot_m_Relative_Moves, ui->menuirp6ot_m_Tool, ui->menuirp6ot_m_Preset_Positions);
 						mw->enable_menu_item(false, 2, ui->actionirp6ot_m_EDP_Load, ui->actionirp6ot_m_EDP_Unload);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_tool_specification,
-						 ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, ABN_mm_irp6_on_track_edp_unload, NULL);
-						 */
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 4, ui->menuirp6ot_m_Absolute_moves, ui->menuIrp6ot_m_Relative_Moves, ui->menuirp6ot_m_Tool, ui->menuirp6ot_m_Preset_Positions);
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 ABN_mm_irp6_on_track_absolute_moves, ABN_mm_irp6_on_track_relative_moves, ABN_mm_irp6_on_track_preset_positions, ABN_mm_irp6_on_track_tool_specification,
-						 ABN_mm_irp6_on_track_kinematic, ABN_mm_irp6_on_track_servo_algorithm, NULL);
-						 */
+
 						break;
 					default:
 						break;
@@ -290,11 +214,7 @@ int UiRobot::manage_interface()
 				mw->enable_menu_item(true, 2, ui->actionirp6ot_m_EDP_Unload, ui->actionall_Synchronisation);
 				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_irp6_on_track_edp_unload, ABN_mm_irp6_on_track_pre_synchro_moves, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_irp6_on_track_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+
 			}
 			break;
 		default:
@@ -338,32 +258,6 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 
 	return 1;
 
-}
-
-void UiRobot::close_all_windows()
-{
-	/* TR
-	 int pt_res = PtEnter(0);
-
-	 close_wnd_irp6_on_track_inc(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_int(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_xyz_angle_axis(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_xyz_angle_axis_ts(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_xyz_aa_relative(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_xyz_euler_zyz(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_xyz_euler_zyz_ts(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_kinematic(NULL, NULL, NULL);
-	 close_wnd_irp6_on_track_servo_algorithm(NULL, NULL, NULL);
-
-	 if (pt_res >= 0) {
-	 PtLeave(0);
-	 }
-	 */
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
 }
 
 }

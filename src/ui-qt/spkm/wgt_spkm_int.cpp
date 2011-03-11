@@ -11,25 +11,44 @@ wgt_spkm_int::wgt_spkm_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 {
 	ui.setupUi(this);
 
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p0);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p2);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p3);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p4);
+	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p5);
+
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p0);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p1);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p2);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p3);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
+	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
+
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
+	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
+
+	radioButton_mip_Vector.append(ui.radioButton_mip_0);
+	radioButton_mip_Vector.append(ui.radioButton_mip_1);
+	radioButton_mip_Vector.append(ui.radioButton_mip_2);
+	radioButton_mip_Vector.append(ui.radioButton_mip_3);
+	radioButton_mip_Vector.append(ui.radioButton_mip_4);
+	radioButton_mip_Vector.append(ui.radioButton_mip_5);
+
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(interface.position_refresh_interval);
 
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
-	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_joints_limits[0]);
-	ui.doubleSpinBox_des_p1->setMaximum(robot.kinematic_params.upper_joints_limits[1]);
-	ui.doubleSpinBox_des_p2->setMaximum(robot.kinematic_params.upper_joints_limits[2]);
-	ui.doubleSpinBox_des_p3->setMaximum(robot.kinematic_params.upper_joints_limits[3]);
-	ui.doubleSpinBox_des_p4->setMaximum(robot.kinematic_params.upper_joints_limits[4]);
-	ui.doubleSpinBox_des_p5->setMaximum(robot.kinematic_params.upper_joints_limits[5]);
-
-	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_joints_limits[0]);
-	ui.doubleSpinBox_des_p1->setMinimum(robot.kinematic_params.lower_joints_limits[1]);
-	ui.doubleSpinBox_des_p2->setMinimum(robot.kinematic_params.lower_joints_limits[2]);
-	ui.doubleSpinBox_des_p3->setMinimum(robot.kinematic_params.lower_joints_limits[3]);
-	ui.doubleSpinBox_des_p4->setMinimum(robot.kinematic_params.lower_joints_limits[4]);
-	ui.doubleSpinBox_des_p5->setMinimum(robot.kinematic_params.lower_joints_limits[5]);
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		doubleSpinBox_des_Vector[i]->setMaximum(robot.kinematic_params.upper_joints_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot.kinematic_params.lower_joints_limits[i]);
+	}
 
 }
 
@@ -67,14 +86,8 @@ int wgt_spkm_int::init()
 				robot.ui_ecp_robot->execute_motion();
 				robot.ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
 
-				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-				set_single_axis(1, ui.doubleSpinBox_mcur_1, ui.doubleSpinBox_cur_p1, ui.radioButton_mip_1);
-				set_single_axis(2, ui.doubleSpinBox_mcur_2, ui.doubleSpinBox_cur_p2, ui.radioButton_mip_2);
-				set_single_axis(3, ui.doubleSpinBox_mcur_3, ui.doubleSpinBox_cur_p3, ui.radioButton_mip_3);
-				set_single_axis(4, ui.doubleSpinBox_mcur_4, ui.doubleSpinBox_cur_p4, ui.radioButton_mip_4);
-				set_single_axis(5, ui.doubleSpinBox_mcur_5, ui.doubleSpinBox_cur_p5, ui.radioButton_mip_5);
-
 				for (int i = 0; i < robot.number_of_servos; i++) {
+					set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
 					robot.desired_pos[i] = robot.current_pos[i];
 				}
 
@@ -112,12 +125,9 @@ void wgt_spkm_int::on_pushButton_import_clicked()
 
 	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
 
-	ui.doubleSpinBox_des_p0->setValue(val[0]);
-	ui.doubleSpinBox_des_p1->setValue(val[1]);
-	ui.doubleSpinBox_des_p2->setValue(val[2]);
-	ui.doubleSpinBox_des_p3->setValue(val[3]);
-	ui.doubleSpinBox_des_p4->setValue(val[4]);
-	ui.doubleSpinBox_des_p5->setValue(val[5]);
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		doubleSpinBox_des_Vector[i]->setValue(val[i]);
+	}
 
 }
 
@@ -125,11 +135,11 @@ void wgt_spkm_int::on_pushButton_export_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_spkm INTERNAL POSITION\n " << ui.doubleSpinBox_des_p0->value() << " "
-			<< ui.doubleSpinBox_des_p1->value() << " " << ui.doubleSpinBox_des_p2->value() << " "
-			<< ui.doubleSpinBox_des_p3->value() << " " << ui.doubleSpinBox_des_p4->value() << " "
-			<< ui.doubleSpinBox_des_p5->value();
+	buffer << "edp_spkm INTERNAL POSITION\n";
 
+	for (int i = 0; i < robot.number_of_servos; i++) {
+		buffer << " " << doubleSpinBox_des_Vector[i]->value();
+	}
 	interface.ui_msg->message(buffer.str());
 
 }
@@ -152,13 +162,9 @@ int wgt_spkm_int::copy()
 		{
 			ui.pushButton_execute->setDisabled(false);
 
-			ui.doubleSpinBox_des_p0->setValue(ui.doubleSpinBox_cur_p0->value());
-			ui.doubleSpinBox_des_p1->setValue(ui.doubleSpinBox_cur_p1->value());
-			ui.doubleSpinBox_des_p2->setValue(ui.doubleSpinBox_cur_p2->value());
-			ui.doubleSpinBox_des_p3->setValue(ui.doubleSpinBox_cur_p3->value());
-			ui.doubleSpinBox_des_p4->setValue(ui.doubleSpinBox_cur_p4->value());
-			ui.doubleSpinBox_des_p5->setValue(ui.doubleSpinBox_cur_p5->value());
-
+			for (int i = 0; i < robot.number_of_servos; i++) {
+				doubleSpinBox_des_Vector[i]->setValue(doubleSpinBox_cur_Vector[i]->value());
+			}
 		} else {
 			// Wygaszanie elementow przy niezsynchronizowanym robocie
 			ui.pushButton_execute->setDisabled(true);
@@ -266,13 +272,9 @@ int wgt_spkm_int::get_desired_position()
 
 		if (robot.state.edp.is_synchronised) {
 
-			robot.desired_pos[0] = ui.doubleSpinBox_des_p0->value();
-			robot.desired_pos[1] = ui.doubleSpinBox_des_p1->value();
-			robot.desired_pos[2] = ui.doubleSpinBox_des_p2->value();
-			robot.desired_pos[3] = ui.doubleSpinBox_des_p3->value();
-			robot.desired_pos[4] = ui.doubleSpinBox_des_p4->value();
-			robot.desired_pos[5] = ui.doubleSpinBox_des_p5->value();
-
+			for (int i = 0; i < robot.number_of_servos; i++) {
+				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+			}
 		} else {
 
 			for (int i = 0; i < robot.number_of_servos; i++) {
@@ -312,13 +314,11 @@ int wgt_spkm_int::move_it()
 			robot.ui_ecp_robot->move_joints(robot.desired_pos, motion_variant);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				ui.doubleSpinBox_des_p0->setValue(robot.desired_pos[0]);
-				ui.doubleSpinBox_des_p1->setValue(robot.desired_pos[1]);
-				ui.doubleSpinBox_des_p2->setValue(robot.desired_pos[2]);
-				ui.doubleSpinBox_des_p3->setValue(robot.desired_pos[3]);
-				ui.doubleSpinBox_des_p4->setValue(robot.desired_pos[4]);
-				ui.doubleSpinBox_des_p5->setValue(robot.desired_pos[5]);
+				for (int i = 0; i < robot.number_of_servos; i++) {
+					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
+				}
 
+				init();
 			}
 		} // end if (robot.state.edp.pid!=-1)
 	} // end try

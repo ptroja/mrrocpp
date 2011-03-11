@@ -45,7 +45,7 @@ public:
 	//wgt_spkm_inc *wgt_int;
 
 	UiRobot(common::Interface& _interface);
-	void close_all_windows();
+
 
 	int manage_interface();
 	void delete_ui_ecp_robot();

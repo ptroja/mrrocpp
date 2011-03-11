@@ -252,18 +252,7 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::close_all_windows()
-{
-	/* TR
-	 int pt_res = PtEnter(0);
 
-	 close_wnd_polycrank_int(NULL, NULL, NULL);
-
-	 if (pt_res >= 0) {
-	 PtLeave(0);
-	 }
-	 */
-}
 
 void UiRobot::delete_ui_ecp_robot()
 {

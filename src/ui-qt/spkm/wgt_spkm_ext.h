@@ -28,6 +28,11 @@ public:
 	wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent = 0);
 	~wgt_spkm_ext();
 
+	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
+	QVector <QRadioButton*> radioButton_mip_Vector;
+
 private:
 	Ui::wgt_spkm_extClass ui;
 	mrrocpp::ui::spkm::UiRobot& robot;
