@@ -11,6 +11,7 @@ wgt_single_motor_move::wgt_single_motor_move(QString _widget_label, mrrocpp::ui:
 	ui.setupUi(this);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
 	//	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_motor_pos_limits[0]);
 	//	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
@@ -24,13 +25,17 @@ wgt_single_motor_move::~wgt_single_motor_move()
 void wgt_single_motor_move::my_open()
 {
 	wgt_base::my_open();
-	init_mr_and_si();
-	copy_mr_and_si();
+	init_and_copy_slot();
 }
 
 void wgt_single_motor_move::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();
+}
+
+void wgt_single_motor_move::init_and_copy()
+{
+	emit init_and_copy_signal();
 }
 
 int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
@@ -53,6 +58,12 @@ int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.pushButton_r_si->setDisabled(_set_disabled);
 
 	return 1;
+}
+
+void wgt_single_motor_move::init_and_copy_slot()
+{
+	init_mr_and_si();
+	copy_mr_and_si();
 }
 
 void wgt_single_motor_move::synchro_depended_init_slot()
