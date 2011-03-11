@@ -72,6 +72,7 @@ int UiRobot::synchronise_int()
 	interface.manage_interface();
 	wgt_motors->synchro_depended_init();
 	wgt_motors->init_and_copy();
+
 	return 1;
 
 }
