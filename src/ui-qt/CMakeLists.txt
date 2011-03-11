@@ -47,6 +47,7 @@ SET(GUI_CXX_SRCS
     base/mainwindow.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
+    base/ui_ecp_dialogs/wgt_yes_no.cpp
     spkm/wgt_spkm_inc.cpp
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
@@ -62,6 +63,7 @@ SET(GUI_MOC_SRCS
     base/mainwindow.h
     base/wgt_base.h
     base/wgt_process_control.h
+    base/ui_ecp_dialogs/wgt_yes_no.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -79,6 +81,7 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 SET(GUI_UI
     base/mainwindow.ui
     base/wgt_process_control.ui
+    base/ui_ecp_dialogs/wgt_yes_no.ui
     spkm/wgt_spkm_inc.ui
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui
