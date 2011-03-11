@@ -25,7 +25,9 @@ class mm_test: public task {
 
 	public:
 		mm_test(lib::configurator &_config);
-
+		void move_down(double mm);
+		void move_right(double mm);
+		void move_back(double mm);
 		void main_task_algorithm(void);
 };
 

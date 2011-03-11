@@ -32,7 +32,9 @@ public:
 	void runEmptyGenForSet(common::State &state);
 	void runEmptyGen(common::State &state);
 	void runWaitFunction(common::State &state);*/
-
+	void move_down(double mm);
+	void move_right(double mm);
+	void move_back(double mm);
 
 
 }; // end : class mp_task_fsautomat
