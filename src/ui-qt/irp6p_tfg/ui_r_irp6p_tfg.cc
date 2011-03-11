@@ -179,6 +179,8 @@ int UiRobot::synchronise_int()
 	// modyfikacje menu
 	interface.manage_interface();
 	wgt_move->synchro_depended_init();
+	wgt_move->init_mr_and_si();
+	wgt_move->copy_mr_and_si();
 	return 1;
 
 }

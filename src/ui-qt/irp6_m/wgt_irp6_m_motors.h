@@ -38,14 +38,15 @@ public:
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 
+	int init();
+	int copy();
+
 private:
 	Ui::wgt_irp6_m_motorsClass ui;
 	mrrocpp::ui::irp6_m::UiRobot& robot;
 
 	int synchro_depended_widgets_disable(bool _set_disabled);
 
-	int init();
-	int copy();
 	int get_desired_position();
 	int move_it();
 	//int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);

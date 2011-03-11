@@ -52,6 +52,8 @@ int wgt_irp6_m_motors::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
 	ui.pushButton_copy->setDisabled(_set_disabled);
+	ui.pushButton_export->setDisabled(_set_disabled);
+	ui.pushButton_import->setDisabled(_set_disabled);
 	ui.pushButton_read->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot.number_of_servos; i++) {
