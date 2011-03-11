@@ -57,6 +57,12 @@ const std::string ports_strings[] = {"/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2"
 const std::string ports_strings[] = {"/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
 #endif
 
+/*!
+ * @brief IRp6 postument max encoder increment
+ * @ingroup irp6p_m
+ */
+const double MAX_INCREMENT[] = {0, 0, 0, 0, 0, 0};
+
 } // namespace irp6p_m
 } // namespace lib
 } // namespace mrrocpp

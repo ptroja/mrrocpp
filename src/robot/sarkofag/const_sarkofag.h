@@ -55,11 +55,18 @@ const std::string ports_strings[] = {"/dev/ttyMI0"};
 #else
 const std::string ports_strings[] = {"/dev/ser2"};
 #endif
+
 /*!
  * @brief Sarkofag overcurrent threshold [mA]
  * @ingroup sarkofag
  */
 const int MAX_CURRENT_0 = 20000;
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup sarkofag
+ */
+const double MAX_INCREMENT[] = {0};
 
 }
 } // namespace lib

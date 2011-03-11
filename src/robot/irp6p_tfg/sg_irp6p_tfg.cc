@@ -49,9 +49,13 @@ void servo_buffer::load_hardware_interface(void)
 
 	const std::vector<std::string> ports_vector(mrrocpp::lib::irp6p_tfg::ports_strings,
 				mrrocpp::lib::irp6p_tfg::ports_strings+mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM, ports_vector);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_tfg::MAX_INCREMENT);
 	hi->init();
-	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_tfg::MAX_CURRENT_0);
+
+	//Ustawienie zwlocznego ograniczenia pradowego - dlugotrwale przekroczenie ustawionej wartosci
+	//spowoduje wlaczenie stopu awaryjnego przez sterownik
+		hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_tfg::MAX_CURRENT_0);
+	//	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, 0);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
