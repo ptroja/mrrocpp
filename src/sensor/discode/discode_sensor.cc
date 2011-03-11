@@ -226,6 +226,14 @@ bool discode_sensor::is_data_available(double sec)
 void discode_sensor::receive_buffers_from_discode()
 {
 	//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
+	struct timespec ts;
+	if(clock_gettime(CLOCK_REALTIME, &ts) == 0){
+		reading_received_time = ts;
+	} else {
+		reading_received_time.tv_sec = 0;
+		reading_received_time.tv_nsec = 0;
+	}
+
 
 	header_iarchive.clear_buffer();
 	int nread = read(sockfd, header_iarchive.get_buffer(), reading_message_header_size);
@@ -244,7 +252,9 @@ void discode_sensor::receive_buffers_from_discode()
 		throw ds_connection_exception(string("read() failed: ") + strerror(errno));
 	}
 	if (nread != rmh.data_size) {
-		throw ds_connection_exception("read() failed: nread != rmh.data_size");
+		char txt[128];
+		sprintf(txt, "read() failed: nread(%d) != rmh.data_size(%d)", nread, rmh.data_size);
+		throw ds_connection_exception(txt);
 	}
 	//	if (rmh.is_rpc_call) {
 	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
@@ -319,6 +329,14 @@ void discode_sensor::timer_show(const char *str)
 		fflush(stdout);
 		throw logic_error("timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
+}
+
+reading_message_header discode_sensor::get_rmh() const{
+	return rmh;
+}
+
+struct timespec discode_sensor::get_receive_time() const{
+	return reading_received_time;
 }
 
 } // namespace discode
