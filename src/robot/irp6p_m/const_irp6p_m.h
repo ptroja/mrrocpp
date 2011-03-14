@@ -58,10 +58,21 @@ const std::string ports_strings[] = {"/dev/ser2", "/dev/ser3", "/dev/ser4", "/de
 #endif
 
 /*!
+ * @brief IRp6 postument overcurrent threshold [mA]
+ * @ingroup irp6p_m
+ */
+const int MAX_CURRENT_0 = 10000;
+const int MAX_CURRENT_1 = 10000;
+const int MAX_CURRENT_2 = 10000;
+const int MAX_CURRENT_3 = 10000;
+const int MAX_CURRENT_4 = 10000;
+const int MAX_CURRENT_5 = 10000;
+
+/*!
  * @brief IRp6 postument max encoder increment
  * @ingroup irp6p_m
  */
-const double MAX_INCREMENT[] = {0, 0, 0, 0, 0, 0};
+const double MAX_INCREMENT[] = {100, 100, 100, 100, 100, 100};
 
 } // namespace irp6p_m
 } // namespace lib
