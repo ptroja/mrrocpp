@@ -13,6 +13,7 @@ using namespace logger;
 using namespace visual_servo_types;
 using namespace std;
 using namespace boost;
+using namespace mrrocpp::ecp_mp::sensor::discode;
 
 namespace mrrocpp {
 
@@ -118,6 +119,18 @@ bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 {
 //	return vsp_fradia->get_reading_message().tracking;
 	return false;
+}
+
+void ib_eih_visual_servo::retrieve_reading(){
+	try{
+	//		log_dbg("pb_visual_servo::retrieve_reading()\n");
+			if(sensor->get_state() == discode_sensor::DSS_READING_RECEIVED){
+	//			log_dbg("pb_visual_servo::retrieve_reading(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED.\n");
+				reading = sensor->retreive_reading <Processors::VisualServoIB::IBReading> ();
+			}
+		} catch(exception &ex) {
+			log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());
+		}
 }
 
 }//namespace generator
