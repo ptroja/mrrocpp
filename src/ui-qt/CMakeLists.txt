@@ -47,6 +47,12 @@ SET(GUI_CXX_SRCS
     base/mainwindow.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
+    base/ui_ecp_dialogs/wgt_yes_no.cpp
+    base/ui_ecp_dialogs/wgt_message.cpp
+    base/ui_ecp_dialogs/wgt_input_integer.cpp
+    base/ui_ecp_dialogs/wgt_input_double.cpp
+    base/ui_ecp_dialogs/wgt_choose_option.cpp
+    base/ui_ecp_dialogs/wgt_teaching.cpp
     spkm/wgt_spkm_inc.cpp
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
@@ -62,6 +68,12 @@ SET(GUI_MOC_SRCS
     base/mainwindow.h
     base/wgt_base.h
     base/wgt_process_control.h
+    base/ui_ecp_dialogs/wgt_yes_no.h
+    base/ui_ecp_dialogs/wgt_message.h
+    base/ui_ecp_dialogs/wgt_input_integer.h
+    base/ui_ecp_dialogs/wgt_input_double.h
+    base/ui_ecp_dialogs/wgt_choose_option.h
+    base/ui_ecp_dialogs/wgt_teaching.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -79,6 +91,12 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 SET(GUI_UI
     base/mainwindow.ui
     base/wgt_process_control.ui
+    base/ui_ecp_dialogs/wgt_yes_no.ui
+    base/ui_ecp_dialogs/wgt_message.ui
+    base/ui_ecp_dialogs/wgt_input_integer.ui
+    base/ui_ecp_dialogs/wgt_input_double.ui
+    base/ui_ecp_dialogs/wgt_choose_option.ui
+    base/ui_ecp_dialogs/wgt_teaching.ui
     spkm/wgt_spkm_inc.ui
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui

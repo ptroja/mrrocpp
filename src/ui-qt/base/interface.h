@@ -11,6 +11,12 @@
 
 #include "mainwindow.h"
 #include "wgt_process_control.h"
+#include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_message.h"
+#include "ui_ecp_dialogs/wgt_input_integer.h"
+#include "ui_ecp_dialogs/wgt_input_double.h"
+#include "ui_ecp_dialogs/wgt_choose_option.h"
+#include "ui_ecp_dialogs/wgt_teaching.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -104,13 +110,6 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state;
 
-	bool is_task_window_open; // informacja czy okno zadania jest otwarte
-	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
-	bool process_control_window_renew; // czy okno ma zostac odswierzone
-
-	bool is_teaching_window_open; // informacja czy okno nauki jest otwarte
-	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
-
 	std::ofstream *log_file_outfile;
 
 	boost::mutex process_creation_mtx;
@@ -126,7 +125,9 @@ public:
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
-	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
+	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/build". W niej katalogi bin, configs etc.
+	std::string mrrocpp_root_local_path; // lokalna sciezka (bez build) mrrocpp: np. "/home/yoyek/mrrocpp". W niej katalogi bin, configs etc.
+
 
 	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
 	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
@@ -169,6 +170,8 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	void manage_pc(void);
+
 	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();
@@ -225,6 +228,12 @@ public:
 	// windows
 
 	wgt_process_control* wgt_pc;
+	wgt_yes_no* wgt_yes_no_obj;
+	wgt_message* wgt_message_obj;
+	wgt_input_integer* wgt_input_integer_obj;
+	wgt_input_double* wgt_input_double_obj;
+	wgt_choose_option* wgt_choose_option_obj;
+	wgt_teaching* wgt_teaching_obj;
 };
 
 }

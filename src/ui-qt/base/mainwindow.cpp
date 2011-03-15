@@ -195,159 +195,244 @@ void MainWindow::raise_process_control_window_slot()
 
 void MainWindow::raise_ui_ecp_window_slot()
 {
-	bool wyjscie;
+	interface.ui_msg->message("raise_ui_ecp_window_slot");
+
 	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
-		case lib::C_XYZ_ANGLE_AXIS:
-		case lib::C_XYZ_EULER_ZYZ:
-		case lib::C_JOINT:
-		case lib::C_MOTOR:
+		case lib::C_XYZ_ANGLE_AXIS: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_XYZ_EULER_ZYZ: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_JOINT: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_JOINT");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_joints->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_joints->my_open();
+			}
+
+		}
+			break;
+		case lib::C_MOTOR: {
 			//  printf("C_MOTOR\n");
 
 			if (interface.teachingstate == ui::common::MP_RUNNING) {
 				interface.teachingstate = ui::common::ECP_TEACHING;
 			}
-			/* TR PtEnter(0); */
-			if (!interface.is_teaching_window_open) {
-				/* TR
-				 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-				 */
-				interface.is_teaching_window_open = true;
-			} else {
-				/* TR
-				 PtWindowToFront( ABW_teaching_window);
-				 */
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_MOTOR");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_motors->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_motors->my_open();
 			}
-			/* TR PtLeave(0); */
 
+		}
 			break;
-		case lib::YES_NO:
+		case lib::YES_NO: {
+			Ui::wgt_yes_noClass* ui = interface.wgt_yes_no_obj->get_ui();
 
-			interface.ui_msg->message("YES_NO");
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
 
+			interface.wgt_yes_no_obj->my_open();
+
+		}
 			break;
-		case lib::MESSAGE:
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 TR PtLeave(0);
-			 */
+		case lib::MESSAGE: {
+			Ui::wgt_messageClass* ui = interface.wgt_message_obj->get_ui();
+			ui->label_message->setText(ecp_to_ui_msg.string);
+			interface.wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
-		case lib::DOUBLE_NUMBER:
+		case lib::DOUBLE_NUMBER: {
 
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			Ui::wgt_input_doubleClass* ui = interface.wgt_input_double_obj->get_ui();
 
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			interface.wgt_input_double_obj->my_open();
+		}
 			break;
-		case lib::INTEGER_NUMBER:
+		case lib::INTEGER_NUMBER: {
 
-			/*
-			 TR PtEnter(0);
+			Ui::wgt_input_integerClass* ui = interface.wgt_input_integer_obj->get_ui();
 
-			 ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			ui->label_message->setText(ecp_to_ui_msg.string);
 
-			 PtLeave(0);
-			 */
+			interface.wgt_input_integer_obj->my_open();
 
+		}
 			break;
-		case lib::CHOOSE_OPTION:
+		case lib::CHOOSE_OPTION: {
 
-			/* TR
+			Ui::wgt_choose_optionClass* ui = interface.wgt_choose_option_obj->get_ui();
 
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
 
 			if (ecp_to_ui_msg.nr_of_options == 2) {
-				/* TR
-				 interface.block_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->hide();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->show();
 			}
 
-			/* TR PtLeave(0); */
-
+			interface.wgt_choose_option_obj->my_open();
+		}
 			break;
-		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::LOAD_FILE: {
+			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+
 			//    printf("lib::LOAD_FILE\n");
 
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 // 	PtRealizeWidget( ABW_file_selection_window );
-					 PtLeave(0);
-					 */
+
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getOpenFileName(this, tr("Choose file to load or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_LOADED;
 				} else {
-					delay(1);
+					ui_rep.reply = lib::QUIT;
 				}
+				//std::string str_fullpath = fileName.toStdString();
 			}
 
-			ui_rep.reply = lib::FILE_LOADED;
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
 
+			interface.ui_ecp_obj->synchroniser.command();
+
+		}
 			break;
-		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::SAVE_FILE: {
+
+			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
 
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 PtLeave(0);
-					 */
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getSaveFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_SAVED;
 				} else {
-					delay(1);
+					ui_rep.reply = lib::QUIT;
 				}
+				//std::string str_fullpath = fileName.toStdString();
 			}
 
-			ui_rep.reply = lib::FILE_SAVED;
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
 
+			interface.ui_ecp_obj->synchroniser.command();
+
+		}
 			break;
 
-		default:
+		default: {
 			perror("Strange ECP message");
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
 	}
 
@@ -1068,6 +1153,7 @@ void MainWindow::on_actionProcess_Control_triggered()
 {
 	raise_process_control_window();
 }
+
 void MainWindow::on_actionConfiguration_triggered()
 {
 	/*
@@ -1079,25 +1165,19 @@ void MainWindow::on_actionConfiguration_triggered()
 	try {
 		QString fileName;
 
-		std::string mrrocpp_root_local_path =
-				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
-		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
-		//interface.ui_msg->message(mrrocpp_root_local_path);
-
-
-		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		std::string mrrocpp_current_config_full_path = interface.mrrocpp_root_local_path + interface.config_file;
 		interface.ui_msg->message(mrrocpp_current_config_full_path);
 
 		fileName
 				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
+		if (fileName.length() > 0) {
+			std::string str_fullpath = fileName.toStdString();
 
-		std::string str_fullpath = fileName.toStdString();
-
-		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
-				+ mrrocpp_root_local_path.length());
-		interface.reload_whole_configuration();
-		interface.set_default_configuration_file_name();
-
+			interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
+					+ interface.mrrocpp_root_local_path.length());
+			interface.reload_whole_configuration();
+			interface.set_default_configuration_file_name();
+		}
 	}
 
 	catch (...) {

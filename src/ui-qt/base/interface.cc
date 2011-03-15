@@ -43,15 +43,12 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	mp.last_state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
+	mp.last_state = UI_MP_STATE_NOT_KNOWN;// mp wylaczone
 	mp.pid = -1;
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
-	is_task_window_open = false;// informacja czy okno zadanai jest otwarte
-	is_process_control_window_open = false;// informacja czy okno sterowania procesami jest otwarte
-	process_control_window_renew = true;
-	is_file_selection_window_open = false;
-	is_teaching_window_open = false;
+
+
 	mrrocpp_bin_to_root_path = "../../";
 
 }
@@ -118,6 +115,12 @@ void Interface::init()
 
 	// dodanie innych okien w dock widgetach
 	wgt_pc = new wgt_process_control(*this);
+	wgt_yes_no_obj = new wgt_yes_no(*this);
+	wgt_message_obj = new wgt_message(*this);
+	wgt_input_integer_obj = new wgt_input_integer(*this);
+	wgt_input_double_obj = new wgt_input_double(*this);
+	wgt_choose_option_obj = new wgt_choose_option(*this);
+	wgt_teaching_obj = new wgt_teaching(*this);
 
 	// ustalenie katalogow UI
 
@@ -189,6 +192,8 @@ void Interface::init()
 	mrrocpp_local_path = cwd;
 	mrrocpp_local_path.erase(mrrocpp_local_path.length() - 3);// kopiowanie lokalnej sciezki bez "bin" - 3 znaki
 	//mrrocpp_local_path += "../";
+	mrrocpp_root_local_path = mrrocpp_local_path.substr(0, mrrocpp_local_path.rfind("/"));
+	mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
 	binaries_network_path = "/net/";
 	binaries_network_path += ui_node_name;
 	binaries_network_path += binaries_local_path;
@@ -345,17 +350,25 @@ int Interface::MPup_int()
 				fprintf(stderr, "mp spawn failed\n");
 			}
 			manage_interface();
+
 		}
 	}
 
 	return 1;
 }
 
+void Interface::manage_pc(void)
+{
+	wgt_pc->process_control_window_init();
+
+}
+
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
 int Interface::manage_interface(void)
 {
-
+	// okienko process control
+	manage_pc();
 	// UWAGA ta funkcja powinna byc odporna na odpalaenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -629,8 +642,39 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+	/*
+	 char buffer[50];
+	 char c[20];
+	 sprintf(buffer, "ping -c 3 %s | grep -c ms > a.txt", _node.c_str());
+	 system(buffer);
+	 FILE *p = fopen("a.txt", "r");
+	 fgets(c, 5, p);
+	 fclose(p);
+	 if (strcmp(c, "5\n") != 0) {
+	 std::string tmp(beginnig_of_message);
+	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
 
+	 return false;
+	 }
+
+	 return true;
+	 */
+	/*
+	 std::string opendir_path("/net/");
+	 opendir_path += _node;
+
+	 if (access(opendir_path.c_str(), R_OK) != 0) {
+	 std::string tmp(beginnig_of_message);
+	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+
+	 return false;
+	 }
+	 return true;
+	 */
 	return true;
+
 }
 
 // sprawdza czy sa postawione gns's i ew. stawia je
@@ -1121,17 +1165,14 @@ int Interface::MPslay()
 	// 	printf("mp pupa po kill\n");
 	mp.pid = -1;
 	mp.pulse_fd = lib::invalid_fd;
+	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->deactivate_ecp_trigger();
+				}
 
-	/* TR
-	 irp6ot_m->deactivate_ecp_trigger();
-	 irp6p_m->deactivate_ecp_trigger();
-	 conveyor->deactivate_ecp_trigger();
-	 */
 	// modyfikacja menu
 	manage_interface();
-	/* TR
-	 process_control_window_init(widget, apinfo, cbinfo);
-	 */
+	wgt_pc->process_control_window_init();
 	return 1;
 
 }
@@ -1152,9 +1193,7 @@ int Interface::pulse_start_mp()
 
 		execute_mp_pulse(MP_START);
 
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+		wgt_pc->process_control_window_init();
 		manage_interface();
 	}
 
@@ -1171,9 +1210,7 @@ int Interface::pulse_stop_mp()
 		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
 
 		execute_mp_pulse(MP_STOP);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+
 		manage_interface();
 	}
 
@@ -1190,9 +1227,7 @@ int Interface::pulse_pause_mp()
 		mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
 
 		execute_mp_pulse(MP_PAUSE);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+
 		manage_interface();
 	}
 
@@ -1209,9 +1244,7 @@ int Interface::pulse_resume_mp()
 		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
 
 		execute_mp_pulse(MP_RESUME);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+
 		manage_interface();
 	}
 
@@ -1226,9 +1259,7 @@ int Interface::pulse_trigger_mp()
 	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
 
 		execute_mp_pulse(MP_TRIGGER);
-		/* TR
-		 process_control_window_init(widget, apinfo, cbinfo);
-		 */
+
 		manage_interface();
 	}
 
@@ -1256,6 +1287,8 @@ int Interface::pulse_start_all_reader()
 					robot_node.second->pulse_reader_start_exec_pulse();
 				}
 
+	manage_pc();
+
 	return 1;
 }
 
@@ -1265,7 +1298,7 @@ int Interface::pulse_stop_all_reader()
 				{
 					robot_node.second->pulse_reader_stop_exec_pulse();
 				}
-
+	manage_pc();
 	return 1;
 }
 

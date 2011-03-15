@@ -170,8 +170,8 @@ int UiRobot::manage_interface()
 
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Unload); //??? brakuje czegos?
 			mw->enable_menu_item(false, 5, ui->menuirp6ot_m_Pre_Synchro_Moves, ui->menuirp6ot_m_Absolute_moves, ui->menuIrp6ot_m_Relative_Moves, ui->menuirp6ot_m_Tool, ui->menuirp6ot_m_Preset_Positions);
+			mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Unload);
 			mw->enable_menu_item(true, 1, ui->menuIrp6ot_m);
 			mw->enable_menu_item(true, 1, ui->actionirp6ot_m_EDP_Load);
 
@@ -211,8 +211,8 @@ int UiRobot::manage_interface()
 
 			} else // jesli robot jest niezsynchronizowany
 			{
+				mw->enable_menu_item(true, 1, ui->menuirp6ot_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(true, 2, ui->actionirp6ot_m_EDP_Unload, ui->actionall_Synchronisation);
-				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Load);
 
 			}
@@ -230,28 +230,27 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
+
 		/* TR
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		 */
-	} else {
-		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
-			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-			/* TR
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-			 */
-		} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
-			wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-			wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-			/* TR
-			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-			 */
-		}
+	} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
+		/* TR
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		 */
+	} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
+		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
+		/* TR
+		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
+		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
+		 */
 	}
 
 	state.edp.last_state = state.edp.state;

@@ -218,14 +218,13 @@ int UiRobot::manage_interface()
 void UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
-	if (state.edp.state <= 0) {// edp wylaczone
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
-		 */
-	} else {
-		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+		if (state.edp.state <= 0) {// edp wylaczone
+			/* TR
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_stop);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
+			 */
+		} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			/* TR
 			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_start);
@@ -241,7 +240,7 @@ void UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd
 			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_reader_trigger);
 			 */
 		}
-	}
+
 
 	state.edp.last_state = state.edp.state;
 }
