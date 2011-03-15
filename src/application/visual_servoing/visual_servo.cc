@@ -24,7 +24,7 @@ using namespace std;
 visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor) :
 	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5),
-			steps_without_reading(0), time_log_filename("visual_servo_time_log.csv"), log_buffer(2000)
+			steps_without_reading(0), log_buffer(1000)
 {
 	//log_dbg("visual_servo::visual_servo() begin\n");
 }
@@ -35,7 +35,7 @@ visual_servo::~visual_servo()
 
 lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	log_dbg("visual_servo::get_position_change(): begin\n");
+//	log_dbg("visual_servo::get_position_change(): begin\n");
 
 	visual_servo_log_sample sample;
 	memset(&sample, 0, sizeof(visual_servo_log_sample));
@@ -80,7 +80,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	sample.is_object_visible = object_visible;
 
 	if (object_visible) {
-		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
+//		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
 		delta_position = compute_position_change(current_position, dt);
 	}
 
@@ -92,7 +92,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		write_log();
 	}
 
-	log_dbg("visual_servo::get_position_change(): end\n");
+//	log_dbg("visual_servo::get_position_change(): end\n");
 	return delta_position;
 } // get_position_change
 
@@ -114,8 +114,14 @@ boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_serv
 void visual_servo::write_log()
 {
 	log("visual_servo::write_log() begin\n");
+
+	time_t timep = time(NULL);
+	struct tm* time_split = localtime(&timep);
+	char time_log_filename[128];
+	sprintf(time_log_filename, "../../msr/%04d-%02d-%02d_%02d-%02d-%02d_VS.csv", time_split->tm_year + 1900, time_split->tm_mon + 1, time_split->tm_mday, time_split->tm_hour, time_split->tm_min, time_split->tm_sec);
+
 	ofstream os;
-	os.open(time_log_filename.c_str(), ofstream::out | ofstream::trunc);
+	os.open(time_log_filename, ofstream::out | ofstream::trunc);
 
 	visual_servo_log_sample::printHeader(os);
 
