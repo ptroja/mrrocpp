@@ -7,7 +7,7 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-const int wgt_irp6_m_tool_angle_axis::aa_number=6;
+const int wgt_irp6_m_tool_angle_axis::aa_number = 6;
 
 wgt_irp6_m_tool_angle_axis::wgt_irp6_m_tool_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
 	wgt_base(_widget_label, _interface, parent), robot(_robot)
@@ -124,6 +124,11 @@ void wgt_irp6_m_tool_angle_axis::on_pushButton_read_clicked()
 	init();
 }
 
+void wgt_irp6_m_tool_angle_axis::on_pushButton_copy_clicked()
+{
+
+}
+
 int wgt_irp6_m_tool_angle_axis::init()
 {
 	try {
@@ -134,7 +139,7 @@ int wgt_irp6_m_tool_angle_axis::init()
 				synchro_depended_widgets_disable(false);
 				//robot.ui_ecp_robot->read_tool
 
-				robot.ui_ecp_robot->read_tool_xyz_angle_axis(tool_vector);  //co tutaj ma być?
+				robot.ui_ecp_robot->read_tool_xyz_angle_axis(tool_vector); //co tutaj ma być?
 
 				for (int i = 0; i < aa_number; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(tool_vector[i]);
@@ -154,14 +159,11 @@ int wgt_irp6_m_tool_angle_axis::init()
 	return 1;
 }
 
-
-
 void wgt_irp6_m_tool_angle_axis::on_pushButton_set_clicked()
 {
 	get_desired_position();
 	move_it();
 }
-
 
 int wgt_irp6_m_tool_angle_axis::get_desired_position()
 {
