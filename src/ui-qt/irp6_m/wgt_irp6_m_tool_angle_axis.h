@@ -10,7 +10,7 @@
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-//#include "../../base/lib/mrmath/ft_v_vector.h"
+#include "../../base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -24,8 +24,8 @@ class UiRobot;
 }
 }
 
-namespace mrrocpp{
-namespace lib{
+namespace mrrocpp {
+namespace lib {
 class Xyz_Angle_Axis_vector;
 }
 }
@@ -76,22 +76,22 @@ private slots:
 	void on_pushButton_copy_clicked();
 
 	void on_pushButton_set_clicked();
-//	void on_pushButton_1l_clicked();
-//	void on_pushButton_2l_clicked();
-//	void on_pushButton_3l_clicked();
-//	void on_pushButton_4l_clicked();
-//	void on_pushButton_5l_clicked();
-//	void on_pushButton_6l_clicked();
-//	void on_pushButton_7l_clicked();
-//	void on_pushButton_8l_clicked();
-//	void on_pushButton_1r_clicked();
-//	void on_pushButton_2r_clicked();
-//	void on_pushButton_3r_clicked();
-//	void on_pushButton_4r_clicked();
-//	void on_pushButton_5r_clicked();
-//	void on_pushButton_6r_clicked();
-//	void on_pushButton_7r_clicked();
-//	void on_pushButton_8r_clicked();
+	//	void on_pushButton_1l_clicked();
+	//	void on_pushButton_2l_clicked();
+	//	void on_pushButton_3l_clicked();
+	//	void on_pushButton_4l_clicked();
+	//	void on_pushButton_5l_clicked();
+	//	void on_pushButton_6l_clicked();
+	//	void on_pushButton_7l_clicked();
+	//	void on_pushButton_8l_clicked();
+	//	void on_pushButton_1r_clicked();
+	//	void on_pushButton_2r_clicked();
+	//	void on_pushButton_3r_clicked();
+	//	void on_pushButton_4r_clicked();
+	//	void on_pushButton_5r_clicked();
+	//	void on_pushButton_6r_clicked();
+	//	void on_pushButton_7r_clicked();
+	//	void on_pushButton_8r_clicked();
 };
 
 #endif // WGT_SPKM_INC_H
