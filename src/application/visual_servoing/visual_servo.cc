@@ -35,7 +35,8 @@ visual_servo::~visual_servo()
 
 lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	//	log_dbg("visual_servo::get_position_change(): begin\n");
+	log_dbg("visual_servo::get_position_change(): begin\n");
+
 	visual_servo_log_sample sample;
 	memset(&sample, 0, sizeof(visual_servo_log_sample));
 
@@ -70,6 +71,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	if (steps_without_reading > max_steps_without_reading) {
 		// The object is no longer visible
+		log_dbg("visual_servo::get_position_change(): steps_without_reading > max_steps_without_reading.\n");
 		object_visible = false;
 	} else {
 		object_visible = is_object_visible_in_latest_reading();
@@ -78,7 +80,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	sample.is_object_visible = object_visible;
 
 	if (object_visible) {
-		//		log_dbg("visual_servo::get_position_change(): object_visible\n");
+		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
 		delta_position = compute_position_change(current_position, dt);
 	}
 
@@ -90,6 +92,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		write_log();
 	}
 
+	log_dbg("visual_servo::get_position_change(): end\n");
 	return delta_position;
 } // get_position_change
 
