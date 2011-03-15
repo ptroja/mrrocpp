@@ -37,6 +37,11 @@
 
 #include "../irp6_m/wgt_irp6_m_joints.h"
 #include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_euler.h"
+#include "../irp6_m/wgt_irp6_m_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -657,17 +662,17 @@ void MainWindow::on_actionirp6ot_m_Joints_triggered()
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6ot_m->wgt_euler->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_relative_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
@@ -697,12 +702,12 @@ void MainWindow::on_actionirp6ot_m_Position_2_triggered()
 
 void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6ot_m->wgt_tool_euler->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_tool_angle_axis->my_open();
 }
 
 //irp6ot_tfg
@@ -782,17 +787,17 @@ void MainWindow::on_actionirp6p_m_Joints_triggered()
 
 void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6p_m->wgt_euler->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_relative_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
@@ -822,12 +827,12 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 
 void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6p_m->wgt_tool_euler->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_tool_angle_axis->my_open();
 }
 
 //irp6p_tfg
