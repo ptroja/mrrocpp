@@ -250,7 +250,7 @@ void reader_buffer::operator()()
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary
 		time_of_day = time(NULL);
-		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
+		strftime(file_date, 40, "%Y-%m-%d_%H-%M-%S", localtime(&time_of_day));
 
 		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_filename.c_str(), ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir.c_str());

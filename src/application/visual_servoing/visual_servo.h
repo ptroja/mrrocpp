@@ -120,7 +120,6 @@ private:
 
 	int max_steps_without_reading;
 	int steps_without_reading;
-	std::string time_log_filename;
 
 	boost::circular_buffer<visual_servo_log_sample> log_buffer;
 
