@@ -84,13 +84,13 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		delta_position = compute_position_change(current_position, dt);
 	}
 
-	log_buffer.push_back(sample);
-	if (log_buffer.size() % 100 == 0) {
-		log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
-	}
-	if (log_buffer.full()) {
-		write_log();
-	}
+//	log_buffer.push_back(sample);
+//	if (log_buffer.size() % 100 == 0) {
+//		log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
+//	}
+//	if (log_buffer.full()) {
+//		write_log();
+//	}
 
 //	log_dbg("visual_servo::get_position_change(): end\n");
 	return delta_position;
