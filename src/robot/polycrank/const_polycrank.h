@@ -23,24 +23,24 @@ const int LAST_MOXA_PORT_NUM = 0;
 //const std::string ports_strings[] = {"/dev/ser7","/dev/ser3"};
 
 #ifndef __QNXNTO__
-const std::string ports_strings[] = {"/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5", "/dev/ttyMI6"};
+const std::string ports_strings[] =
+		{ "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5", "/dev/ttyMI6" };
 #else
 const std::string ports_strings[] = {"/dev/ser1","/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
 #endif
-
 
 /*!
  * @brief Conveyor robot label
  * @ingroup conveyor
  */
 /*
-const robot_name_t ROBOT_NAME = "ROBOT_CONVEYOR";
-static const std::string EDP_SECTION = "[edp_conveyor]";
-const std::string ECP_SECTION = "[ecp_conveyor]";
-const int NUM_OF_SERVOS = 1;
-const int LAST_MOXA_PORT_NUM = 0;
-const std::string ports_strings[] = {"/dev/ser9"};
-*/
+ const robot_name_t ROBOT_NAME = "ROBOT_CONVEYOR";
+ static const std::string EDP_SECTION = "[edp_conveyor]";
+ const std::string ECP_SECTION = "[ecp_conveyor]";
+ const int NUM_OF_SERVOS = 1;
+ const int LAST_MOXA_PORT_NUM = 0;
+ const std::string ports_strings[] = {"/dev/ser9"};
+ */
 
 }
 } // namespace lib
