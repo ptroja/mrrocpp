@@ -23,12 +23,14 @@ ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulat
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator, sensor)
 {
-	desired_position = configurator.value <1, 4> ("desired_position", section_name);
+	desired_position = configurator.value <4, 1> ("desired_position", section_name);
 
 	Eigen::Matrix <double, 3, 4> e_T_c;
 	e_T_c.setZero();
 	e_T_c.block(0,0,3,3) = configurator.value <3, 3> ("e_t_c_rotation", section_name);
 	e_T_c_position = lib::Homog_matrix(e_T_c);
+
+	reading.objectVisible = false;
 }
 
 ib_eih_visual_servo::~ib_eih_visual_servo()
@@ -44,10 +46,8 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	e.setZero();
 
-	//	e(0, 0) = vsp_fradia->get_reading_message().error.x;
-	//	e(1, 0) = vsp_fradia->get_reading_message().error.y;
-	//	e(2, 0) = vsp_fradia->get_reading_message().error.z;
-	//	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
+	Eigen::Matrix <double, Types::ImagePosition::elementsSize, 1> imagePosition(reading.imagePosition.elements);
+	e.block(0, 0, 4, 1) = imagePosition - desired_position;
 
 	error = e;
 
@@ -81,8 +81,7 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 {
-	//	return vsp_fradia->get_reading_message().tracking;
-	return false;
+	return reading.objectVisible;
 }
 
 void ib_eih_visual_servo::retrieve_reading()

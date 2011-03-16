@@ -37,7 +37,7 @@ protected:
 
 	lib::Homog_matrix e_T_c_position;
 private:
-	Eigen::Matrix <double, 1, 4> desired_position;
+	Eigen::Matrix <double, 4, 1> desired_position;
 	Types::Mrrocpp_Proxy::IBReading reading;
 };
 

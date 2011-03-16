@@ -21,6 +21,7 @@ pb_visual_servo::pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regu
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator, sensor)
 {
+	reading.objectVisible = false;
 	//log_dbg("pb_visual_servo::pb_visual_servo() begin\n");
 	lib::Homog_matrix E_T_G_desired = configurator.value <3, 4> ("E_T_G_desired", section_name);
 	G_T_E_desired = !E_T_G_desired;
