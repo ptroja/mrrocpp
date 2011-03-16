@@ -54,14 +54,13 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	e.block(0, 0, 4, 1) = imagePosition - desired_position;
 
 	log_dbg("reading.imagePosition.elements = [%g; %g; %g; %g]\n", reading.imagePosition.elements[0], reading.imagePosition.elements[1], reading.imagePosition.elements[2], reading.imagePosition.elements[3]);
-	cout<<"e = "<<e<<endl;
 
 	error = e;
 
 	Eigen::Matrix <double, 6, 1> control;
 
 	control = regulator->compute_control(e, dt);
-	log_dbg("ib_eih_visual_servo::get_position_change() control: %+07.3lg, %+07.3lg, %+07.3lg\n", control(0, 0), control(1, 0), control(2, 0));
+	log_dbg("ib_eih_visual_servo::get_position_change() control: [%+07.3lg; %+07.3lg; %+07.3lg; %+07.3lg]\n", control(0, 0), control(1, 0), control(2, 0), control(3, 0));
 
 	Eigen::Matrix <double, 3, 1> camera_to_object_translation;
 	camera_to_object_translation(0, 0) = control(0, 0);
