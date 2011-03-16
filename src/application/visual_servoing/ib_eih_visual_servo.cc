@@ -10,9 +10,7 @@
 #include <stdexcept>
 
 using namespace logger;
-using namespace visual_servo_types;
 using namespace std;
-using namespace boost;
 using namespace mrrocpp::ecp_mp::sensor::discode;
 
 namespace mrrocpp {
@@ -21,50 +19,16 @@ namespace ecp {
 
 namespace servovision {
 
-ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
+ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
+		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
 	visual_servo(regulator, sensor)
 {
-	Eigen::Matrix <double, 1, 3> desired_translation;
-	Eigen::Matrix <double, 3, 3> intrinsics;
-	Eigen::Matrix <double, 1, 5> distortion;
+	desired_position = configurator.value <1, 4> ("desired_position", section_name);
 
-	image_based_configuration ib_config;
-	desired_translation = configurator.value <1, 3> ("desired_position_translation", section_name);
-	ib_config.desired_position.x = desired_translation(0, 0);
-	ib_config.desired_position.y = desired_translation(0, 1);
-	ib_config.desired_position.z = desired_translation(0, 2);
-
-	ib_config.desired_position.gamma = configurator.value <double> ("desired_position_rotation", section_name);
-
-	intrinsics = configurator.value <3, 3> ("fradia_camera_intrinsics", section_name);
-
-	distortion = configurator.value <1, 5> ("fradia_camera_distortion", section_name);
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			ib_config.dcp.intrinsics[i][j] = intrinsics(i, j);
-		}
-	}
-	for (int i = 0; i < 5; ++i) {
-		ib_config.dcp.distortion[i] = distortion(0, i);
-	}
-
-	ib_config.z_estimation_A = configurator.value <double> ("fradia_z_estimation_a", section_name);
-	ib_config.z_estimation_B = configurator.value <double> ("fradia_z_estimation_b", section_name);
-	ib_config.z_estimation_C = configurator.value <double> ("fradia_z_estimation_c", section_name);
-
-	Eigen::Matrix <double, 3, 3> e_T_c;
-	e_T_c = configurator.value <3, 3> ("e_t_c_rotation", section_name);
-
-	double rot[3][3];
-
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			rot[i][j] = e_T_c(i, j);
-		}
-	}
-
-	e_T_c_position.set_rotation_matrix(rot);
+	Eigen::Matrix <double, 3, 4> e_T_c;
+	e_T_c.setZero();
+	e_T_c.block(0,0,3,3) = configurator.value <3, 3> ("e_t_c_rotation", section_name);
+	e_T_c_position = lib::Homog_matrix(e_T_c);
 }
 
 ib_eih_visual_servo::~ib_eih_visual_servo()
@@ -80,10 +44,10 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	e.setZero();
 
-//	e(0, 0) = vsp_fradia->get_reading_message().error.x;
-//	e(1, 0) = vsp_fradia->get_reading_message().error.y;
-//	e(2, 0) = vsp_fradia->get_reading_message().error.z;
-//	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
+	//	e(0, 0) = vsp_fradia->get_reading_message().error.x;
+	//	e(1, 0) = vsp_fradia->get_reading_message().error.y;
+	//	e(2, 0) = vsp_fradia->get_reading_message().error.z;
+	//	e(3, 0) = vsp_fradia->get_reading_message().error.gamma;
 
 	error = e;
 
@@ -117,20 +81,21 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 {
-//	return vsp_fradia->get_reading_message().tracking;
+	//	return vsp_fradia->get_reading_message().tracking;
 	return false;
 }
 
-void ib_eih_visual_servo::retrieve_reading(){
-	try{
-	//		log_dbg("pb_visual_servo::retrieve_reading()\n");
-			if(sensor->get_state() == discode_sensor::DSS_READING_RECEIVED){
-	//			log_dbg("pb_visual_servo::retrieve_reading(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED.\n");
-				reading = sensor->retreive_reading <Processors::VisualServoIB::IBReading> ();
-			}
-		} catch(exception &ex) {
-			log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());
+void ib_eih_visual_servo::retrieve_reading()
+{
+	try {
+		//		log_dbg("pb_visual_servo::retrieve_reading()\n");
+		if (sensor->get_state() == discode_sensor::DSS_READING_RECEIVED) {
+			//			log_dbg("pb_visual_servo::retrieve_reading(): sensor->get_state() == discode_sensor::DSS_READING_RECEIVED.\n");
+			reading = sensor->retreive_reading <Types::Mrrocpp_Proxy::IBReading> ();
 		}
+	} catch (exception &ex) {
+		log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());
+	}
 }
 
 }//namespace generator

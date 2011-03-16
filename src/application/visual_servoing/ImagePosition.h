@@ -31,19 +31,19 @@ private:
 	friend std::ostream& operator<<(std::ostream& os, const ImagePosition& ip);
 };
 
-std::ostream& operator<<(std::ostream& os, const ImagePosition& ip)
-{
-	os<<"[";
-	for(int i=0; i<ImagePosition::elementsSize; ++i){
-		os<<ip.elements[i];
-		if(i < ImagePosition::elementsSize-1){
-			os<<"; ";
-		}
-	}
-	os<<"]";
-
-	return os;
-}
+//std::ostream& operator<<(std::ostream& os, const ImagePosition& ip)
+//{
+//	os<<"[";
+//	for(int i=0; i<ImagePosition::elementsSize; ++i){
+//		os<<ip.elements[i];
+//		if(i < ImagePosition::elementsSize-1){
+//			os<<"; ";
+//		}
+//	}
+//	os<<"]";
+//
+//	return os;
+//}
 
 } // namespace Types
 

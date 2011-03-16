@@ -43,7 +43,7 @@ public:
 	Types::ImagePosition imagePosition;
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
-		LOG(LNOTICE) << "IBReading::send(): hehehehe\n";
+//		LOG(LNOTICE) << "IBReading::send(): hehehehe\n";
 		*ar<<*this;
 	}
 private:
@@ -52,7 +52,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object <Reading>(*this);
-		LOG(LTRACE) << "IBReading::serialize()\n";
+//		LOG(LTRACE) << "IBReading::serialize()\n";
 		ar & objectVisible;
 		ar & imagePosition;
 	}

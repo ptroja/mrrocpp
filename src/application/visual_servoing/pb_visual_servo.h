@@ -34,7 +34,7 @@ protected:
 	virtual void retrieve_reading();
 	virtual bool is_object_visible_in_latest_reading();
 
-	Processors::VisualServoPB::PBReading reading;
+	Types::Mrrocpp_Proxy::PBReading reading;
 
 	lib::Homog_matrix G_T_E_desired;
 };

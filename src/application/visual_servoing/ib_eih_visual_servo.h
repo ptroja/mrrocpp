@@ -37,8 +37,8 @@ protected:
 
 	lib::Homog_matrix e_T_c_position;
 private:
-
-	Processors::VisualServoIB::IBReading reading;
+	Eigen::Matrix <double, 1, 4> desired_position;
+	Types::Mrrocpp_Proxy::IBReading reading;
 };
 
 /** @} */

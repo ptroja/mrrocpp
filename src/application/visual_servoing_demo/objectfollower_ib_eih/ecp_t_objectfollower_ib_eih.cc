@@ -52,7 +52,9 @@ ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(mrrocpp::lib::configura
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
 
 	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 2\n");
-	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
+
+	boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> ds = boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor>(new mrrocpp::ecp_mp::sensor::discode::discode_sensor(configurator, config_section_name));
+	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, config_section_name, configurator));
 
 	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(configurator, config_section_name));
 
