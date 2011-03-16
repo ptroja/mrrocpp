@@ -4,6 +4,11 @@
 
 #include "../irp6_m/wgt_irp6_m_joints.h"
 #include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_euler.h"
+#include "../irp6_m/wgt_irp6_m_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
 #include "ui_r_irp6p_m.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
@@ -18,6 +23,11 @@ namespace ui {
 namespace irp6p_m {
 const std::string WGT_IRP6P_M_JOINTS = "WGT_IRP6P_M_JOINTS";
 const std::string WGT_IRP6P_M_MOTORS = "WGT_IRP6P_M_MOTORS";
+const std::string WGT_IRP6P_M_ANGLE_AXIS = "WGT_IRP6P_M_ANGLE_AXIS";
+const std::string WGT_IRP6P_M_EULER = "WGT_IRP6P_M_EULER";
+const std::string WGT_IRP6P_M_RELATIVE_ANGLE_AXIS = "WGT_IRP6P_M_RELATIVE_ANGLE_AXIS";
+const std::string WGT_IRP6P_M_TOOL_ANGLE_AXIS = "WGT_IRP6P_M_ANGLE_AXIS";
+const std::string WGT_IRP6P_M_TOOL_EULER = "WGT_IRP6P_M_TOOL_EULER";
 //
 //
 // KLASA UiRobot
@@ -142,8 +152,19 @@ UiRobot::UiRobot(common::Interface& _interface) :
 {
 	wgt_joints = new wgt_irp6_m_joints("Irp6p_m joints", interface, *this, interface.get_main_window());
 	wgt_motors = new wgt_irp6_m_motors("Irp6p_m motors", interface, *this, interface.get_main_window());
+	wgt_angle_axis = new wgt_irp6_m_angle_axis("Irp6p_m angle axis", interface, *this, interface.get_main_window());
+	wgt_euler = new wgt_irp6_m_euler("Irp6p_m euler", interface, *this, interface.get_main_window());
+	wgt_relative_angle_axis = new wgt_irp6_m_relative_angle_axis("Irp6p_m relative angle axis", interface, *this, interface.get_main_window());
+	wgt_tool_angle_axis = new wgt_irp6_m_tool_angle_axis("Irp6p_m tool angle axis", interface, *this, interface.get_main_window());
+	wgt_tool_euler = new wgt_irp6_m_tool_euler("Irp6p_m tool euler", interface, *this, interface.get_main_window());
+
 	wndbase_m[WGT_IRP6P_M_JOINTS] = wgt_joints->dwgt;
 	wndbase_m[WGT_IRP6P_M_MOTORS] = wgt_motors->dwgt;
+	wndbase_m[WGT_IRP6P_M_ANGLE_AXIS] = wgt_angle_axis->dwgt;
+	wndbase_m[WGT_IRP6P_M_EULER] = wgt_euler->dwgt;
+	wndbase_m[WGT_IRP6P_M_RELATIVE_ANGLE_AXIS] = wgt_relative_angle_axis->dwgt;
+	wndbase_m[WGT_IRP6P_M_TOOL_ANGLE_AXIS] = wgt_tool_angle_axis->dwgt;
+	wndbase_m[WGT_IRP6P_M_TOOL_EULER] = wgt_tool_euler->dwgt;
 }
 
 int UiRobot::manage_interface()

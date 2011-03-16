@@ -61,6 +61,11 @@ SET(GUI_CXX_SRCS
     bird_hand/wgt_bird_hand_command.cpp
     irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
+    irp6_m/wgt_irp6_m_angle_axis.cpp
+    irp6_m/wgt_irp6_m_euler.cpp
+    irp6_m/wgt_irp6_m_relative_angle_axis.cpp
+    irp6_m/wgt_irp6_m_tool_angle_axis.cpp
+    irp6_m/wgt_irp6_m_tool_euler.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -82,6 +87,11 @@ SET(GUI_MOC_SRCS
     bird_hand/wgt_bird_hand_command.h
     irp6_m/wgt_irp6_m_joints.h
     irp6_m/wgt_irp6_m_motors.h
+    irp6_m/wgt_irp6_m_angle_axis.h
+    irp6_m/wgt_irp6_m_euler.h
+    irp6_m/wgt_irp6_m_relative_angle_axis.h
+    irp6_m/wgt_irp6_m_tool_angle_axis.h
+    irp6_m/wgt_irp6_m_tool_euler.h
 )
 
 # Generate MOC files
@@ -105,6 +115,11 @@ SET(GUI_UI
     bird_hand/wgt_bird_hand_command.ui
     irp6_m/wgt_irp6_m_joints.ui
     irp6_m/wgt_irp6_m_motors.ui
+    irp6_m/wgt_irp6_m_angle_axis.ui
+    irp6_m/wgt_irp6_m_euler.ui
+    irp6_m/wgt_irp6_m_relative_angle_axis.ui
+    irp6_m/wgt_irp6_m_tool_angle_axis.ui
+    irp6_m/wgt_irp6_m_tool_euler.ui
 )
 
 # Generate UI include files
