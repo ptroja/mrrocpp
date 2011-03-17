@@ -390,16 +390,24 @@ namespace mrrocpp {
                             flushall();
                             load_trajectory_pose(pose_vector_list[i], desired_position_vect, lib::ABSOLUTE, lib::ECP_XYZ_ANGLE_AXIS,
                                     v_max_vect, a_max_vect, actual_position_vect, s_vect);
-                            
+
+
+                            printf("pose_vector size 2: %d\n", pose_vector_list[i].size());
                             pose_vector_iterator++;
 
                             printf("przed drugimi settings\n");
+                            printf("v_r[0]: %f\n", pose_vector_iterator->v_r[0]);
                             flushall();
+
                             pose_vector_iterator->k[0] = -k[i];
+                            printf("k[0]: %f\n", pose_vector_iterator->k[0]);
+                            flushall();
                             pose_vector_iterator->v_p[0] = 0.0;
                             pose_vector_iterator->v_k[0] = 0.0;
                             pose_vector_iterator->model[0] = 1;
 
+                            printf("przed calculate s acc s dec\n");
+                            flushall();
                             vpc.calculate_s_acc_s_dec_pose(pose_vector_iterator);
 
                             if (vpc.check_s_acc_s_decc(pose_vector_iterator, 0)) {//check if s_acc && s_dec < s
@@ -513,7 +521,7 @@ namespace mrrocpp {
                     flushall();
                     pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 
-                    printf("v_r w load pose: %f\n",pose_vector[0].v_r[0]);
+                    printf("v_r w load pose: %f\n", pose_vector[0].v_r[0]);
                     flushall();
 
                     return true;
