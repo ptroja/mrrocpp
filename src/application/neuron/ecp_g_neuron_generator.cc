@@ -74,6 +74,7 @@ bool neuron_generator::first_step()
 	neuron_sensor->startGettingTrajectory();
 	macroSteps=neuron_sensor->getMacroStepsNumber();
 	radius=neuron_sensor->getRadius();
+	neuron_sensor->get_reading();
 	printf("macroStep: %d\n",macroSteps);
 	printf("radius: %f\n",radius);
 
@@ -168,7 +169,6 @@ bool neuron_generator::next_step()
                               t[4]*coeff_[i][4] +
                               t[5]*coeff_[i][5];
 	}
-
 	++mstep_; // increment macro step number
 
 	// --------- send new position to the robot (EDP) ---------------
@@ -177,9 +177,9 @@ bool neuron_generator::next_step()
 	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	// --------- send new position to the robot (EDP) (end) --------------
 
-
 	if (neuron_sensor->positionRequested()  && !breaking_) {
 		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
+		neuron_sensor->get_reading();
 	}
 
     if(breaking_ && (mstep_ > break_steps_)){

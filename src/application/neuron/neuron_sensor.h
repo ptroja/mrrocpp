@@ -79,6 +79,16 @@ private:
 	Coordinates coordinates;
 	Coordinates lastButOne;
 
+	/**
+	 * After how many macrosteps new reading from a sensor should be performed
+	 */
+	short int basePeriod;
+
+	/**
+	 * current counter for basePeriod.
+	 */
+	short int currentPeriod;
+
 	void sendCommand(uint8_t command);
 	void sendCoordinates(uint8_t command, double x, double y, double z);
 
