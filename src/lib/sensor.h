@@ -1,462 +1,76 @@
 // -------------------------------------------------------------------------
 // Proces:		Wszystkie
-// Plik:           sensor.h
-// System:	QNX/MRROC++  v. 6.3
+// Plik:        sensor.h
 // Opis:		Definicje klasy sensor dla procesow ECP/MP, VSP, EDP
 // Autor:		tkornuta
-// Data:		17.01.2007
 // -------------------------------------------------------------------------
 
 #if !defined(_SENSOR_H)
 #define _SENSOR_H
 
-#include <stdint.h>
-#include <time.h>
 #include <string>
+#include <stdint.h>
 
-#include "lib/srlib.h"
+#include "lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
 
 /*********** stale dla wszystkich czujnikow *************/
 // Polecenie dla VSP
-enum VSP_COMMAND
+typedef enum _VSP_COMMAND
 {
-	VSP_CONFIGURE_SENSOR, VSP_INITIATE_READING, VSP_GET_READING, VSP_TERMINATE, VSP_NONE, VSP_FRADIA_CONFIGURE_TASK
-};
-enum VSP_REPORT
+	VSP_CONFIGURE_SENSOR, VSP_INITIATE_READING, VSP_GET_READING, VSP_TERMINATE
+} VSP_COMMAND_t;
+
+typedef enum _VSP_REPORT
 {
-	VSP_REPLY_OK,
-	VSP_SENSOR_NOT_CONFIGURED,
-	VSP_READING_NOT_READY,
-	INVALID_VSP_COMMAND,
-	VSP_FRADIA_TASK_LOADED,
-	VSP_FRADIA_TASK_CONFIGURED
-};
+	VSP_REPLY_OK, VSP_SENSOR_NOT_CONFIGURED, VSP_READING_NOT_READY, INVALID_VSP_COMMAND
+} VSP_REPORT_t;
 
-// Odpowiedz od VSP
+typedef struct _object_tracker
+{//unia do lapania kostki
+	bool reached;
+	bool tracking;
+	int x;
+	int y;
+	int z;
+} object_tracker_t;
 
-#define EDP_FORCE_SENSOR_OVERLOAD 2
-#define EDP_FORCE_SENSOR_READING_ERROR 1
-#define EDP_FORCE_SENSOR_READING_CORRECT 0
-
-typedef enum
+typedef struct _cube_face
 {
-	RCS_INIT_SUCCESS, RCS_INIT_FAILURE
-} RCS_INIT;
-typedef enum
+	char colors[9];
+} cube_face_t;
+
+typedef struct _vis_sac
 {
-	RCS_SOLUTION_FOUND,
-	RCS_SOLUTION_NOTFOUND,
-	RCS_SOLUTION_NOTNEEDED,
-	RCS_SOLUTION_NOTPOSSIBLE
-} RCS_READING;
+	double frame_O_T_G[16];
+	double frame_E_T_G[16];
+	double frame_E_r_G[6];
+	double frame_E_r_G__CEIH[6];
+	double frame_E_r_G__f[6];
+	double fEIH_G[8];
+} vis_sac_t;
 
-/*!
- * \enum HD_READING
- * \brief Types commands get from PW_HaarDetect task.
- */
-typedef enum { HD_SOLUTION_NOTFOUND, HD_SOLUTION_FOUND } HD_READING;
-
-/*commands from mrrocpp used in Draughts task*/
-typedef enum{
-	TRACK_PAWN,
-	Z_TRACKER,
-	DETECT_BOARD_STATE,
-	NONE,
-	STORE_BOARD,
-	CHECK_MOVE
-}DRAUGHTS_MODE;
-
-/*information returned to mrrocpp used in Draughts task*/
-typedef enum{
-	STATE_CHANGED,
-	STATE_UNCHANGED,
-	STATE_OK,
-	BOARD_DETECTION_ERROR
-}BOARD_STATUS;
-
-/** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
-#define SENSOR_IMAGE_FRADIA_READING_SIZE 24
-
-/*! \struct sensor_image_t
- * \ Structure used for storing and passing sensors data.
- * \author tkornuta
- */
-typedef struct sensor_image_t
+typedef struct _empty
 {
-	// wlasciwe pola obrazu - unie!
-	union sensor_union_t
-	{
-		char begin; // pole uzywane jako adres do wlasciwych elementow unii dla memcpy()
-		struct
-		{
-			short reading;
-			char text[10];
-		} pattern;
-		struct
-		{
-			double rez[6]; // by Y pomiar sily
-			short force_reading_status; // informacja o odczycie sil
-			// EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-			// EDP_FORCE_SENSOR_READING_CORRECT
-			int event_type; // zdarzenie wykryte w VSP
-		} force;
-		struct
-		{
-			double frame[16];
-		} camera;
-		struct
-		{
-			char colors[9];
-		} cube_face;
-		struct
-		{
-			double joy[3];
-			char active_motors;
-		} pp;
-		struct
-		{
-			int word_id;
-		} mic;
+	//! This is empty data type
+}__attribute__((__packed__)) empty_t;
 
-		struct
-		{
-			double frame_O_T_G[16];
-			double frame_E_T_G[16];
-			double frame_E_r_G[6];
-			double frame_E_r_G__CEIH[6];
-			double frame_E_r_G__f[6];
-			double fEIH_G[8];
-		} vis_sac;
+typedef std::string SENSOR_t;
 
-		// rcs - rozwiazanie kostki Rubika
-		struct
-		{
-			RCS_INIT init_mode;
-			RCS_READING reading_mode;
-			char cube_solution[200];
-		} rcs;
-
-		// tlemanipulacja - vsp_pawel
-		struct
-		{
-			double x, y, z;
-			unsigned int nr;
-			struct timespec ts;
-		} ball;
-
-		// testowy VSP (ptrojane)
-		struct
-		{
-			struct timespec ts;
-		} time;
-
-		// uchyb vsp pwilkows
-		struct deviation_t{
-			int frame_number;
-			int x;
-			int y;
-		} deviation;
-
-		// uchyb w follower
-		struct {
-			bool tracking;
-			int x;
-			int y;
-		} tracker;
-
-		struct object_tracker_t{//unia do lapania kostki
-			bool reached;
-			bool tracking;
-			int x;
-			int y;
-			int z;
-		} object_tracker;
-
-		/*
-		 * Structure for storing pawn coordinates from cvFraDIA
-		 * used in Draughts task
-		 * \author tbem
-		 */
-		struct {
-			char fields[32];
-			BOARD_STATUS status;
-		} board;
-
-		//Obraz fradii dla rotate_gripper
-		struct {
-			HD_READING reading_state;
-			float angle;
-		} hd_angle;
-
-		/*!
-		 * \struct fradia_t
-		 * Structure for storing data retrieved from cvFraDIA.
-		 * For testing purposes.
-		 * \author tkornuta
-		 */
-		struct fradia_t
-		{
-			int x, y, width, height;
-		} fradia;
-
-		// struktura z pozycja i katami pcbirda
-		struct
-		{
-			float x, y, z; // pozycja
-			float a, b, g; // katy (a = azimuth, b = elevation, g = roll)
-			float distance; // odleglosc
-			uint32_t ts_sec, ts_usec; // timestamp
-		} pcbird;
-
-		//Structure for storing data retrieved from the Wii-mote server
-		struct wiimote_t
-		{
-			int left;
-			int right;
-			int up;
-			int down;
-            int buttonA;
-            int buttonB;
-            int button1;
-            int button2;
-            int buttonPlus;
-            int buttonMinus;
-            int buttonHome;
-			float orientation_x;
-			float orientation_y;
-			float orientation_z;
-		} wiimote;
-
-		/// \brief Communication with EdgeShapeAnalyzer (FraDIA)
-		/// \author mnowak
-		union visioncoordinates_union_t
-		{
-			/// \brief Array of 8 structures, contains coordinates of found 8 best objects (in SEARCH mode) from FraDIA
-			/// \note if we are used less then 8 structures, first unused structure must have distance == 0
-			struct Search
-			{
-				double rot_z;		///< wokol osi Z, wzgledem osi y, w plaszczyznie obrazu (x0y)
-				double rot_dev;	///< miedzy osia Z, a prosta 'kamera-obiekt'
-				double dist;		///< approximate distance to object
-			} search[8];
-
-			/// Structure for response to mrrocpp "is it that object" (is TEST mode) from FraDIA
-			struct Test
-			{
-				bool found;		///< is object found
-			} test;
-
-			struct List
-			{
-				int count;			 ///< count of known objects in structure
-				char object[8][32]; ///< known objects
-			} list;
-		} visioncoordinates_union;
-
-		// struktura z informacja czy znaleziono szachownice
-		struct chessboard_t
-		{
-			int frame_number;
-			float transformation_matrix[12];
-			bool found;
-			bool calibrated;
-		} chessboard;
-
-		char fradia_sensor_reading[SENSOR_IMAGE_FRADIA_READING_SIZE];
-	} sensor_union; // koniec unii
-} SENSOR_IMAGE;
-
-/*****************************************************/
-
-typedef enum
-{
-	RCS_BUILD_TABLES, RCS_CUBE_STATE
-} RCS_CONFIGURE;
-
-
-/*!
- * \enum HD_MODE
- * \brief Types commands sent to PW_HaarDetect task.
- */
-typedef enum{  WITHOUT_ROTATION, PERFORM_ROTATION } HD_MODE;
-
-/// \brief search or test against choosen object (in FraDIA with EdgeShapeAnalyzer)
-/// \author mnowak
-enum ESA_MODE
-{
-	EM_UNKNOWN = 0,		///< unknown, not used
-	EM_SEARCH = 1,		///< search - we get all ROI's with possible interesting objects
-	EM_TEST = 2,		///< test - we test object on screen against choosed object from list
-	EM_LIST = 3			///< list - we read list of known objects from FraDIA
-};
-
-// BUFORY KOMUNIKACYJNE
-/** Define size of data buffer for FraDIA <-> MRROC++ communication. Used by CommunicationWrapper (FraDIA) and fradia_sensor (MRROC++) */
-#define ECP_VSP_MSG_FRADIA_COMMAND_SIZE 160
-
-struct ECP_VSP_MSG
-{
-	VSP_COMMAND i_code;
-	union
-	{
-		short parameters;
-
-		// Name of the cvFraDIA task.
-		char cvfradia_task_name[80];
-
-		// rcs - rozwiazanie kostki Rubika
-		struct
-		{
-			RCS_CONFIGURE configure_mode;
-			char cube_state[54];
-		} rcs;
-
-		//dane do spots recognition - zadanie wykonania odczytu
-		struct
-		{
-			short command;
-			double plate_pos[3];
-		} ps_response;
-
-		//structure for controlling fraDIA form mrrocpp
-		struct{
-			DRAUGHTS_MODE draughts_mode;
-			char pawn_nr;
-		}draughts_control;
-
-
-		/// \struct esa
-		/// \brief Structure used for choosing mode for FraDIA with EdgeShapeAnalyzer
-		/// \author mnowak
-		struct
-		{
-			ESA_MODE mode;		///< mode for EdgeShapeAnalyzer
-			union
-			{
-				char object[32];///< name of object (must be known)
-				int offset;     ///< i.e. for LIST
-			};
-		} esa;
-
-		// struct eihcalibration
-		// structure used to send to fradia data needed for eih calibration
-		struct
-		{
-			int frame_number;
-			float transformation_matrix[12];
-		}eihcalibration;
-
-		// Tryb HaarDetect
-		HD_MODE haar_detect_mode;
-
-                struct
-                {
-                  bool led_change;
-                  unsigned int led_status;
-                  bool rumble;
-                } wii_command;
-
-        char fradia_sensor_command[ECP_VSP_MSG_FRADIA_COMMAND_SIZE];
-	};//: koniec unii
-};
-
-struct VSP_ECP_MSG
-{
-	VSP_REPORT vsp_report;
-	SENSOR_IMAGE comm_image;
-};
-
-/*****************************************************/
-// do komunikacji za pomoca devctl()
-typedef union
-{
-	ECP_VSP_MSG to_vsp; // Filled by client on send
-	VSP_ECP_MSG from_vsp; // Filled by server on reply
-} DEVCTL_MSG;
-
-// ROZKAZY uzywane w devctl()
-// odczyt z czujnika
-#define DEVCTL_RD __DIOF(_DCMD_MISC, 1, lib::VSP_ECP_MSG)
-// zapis do czujnika
-#define DEVCTL_WT __DIOT(_DCMD_MISC, 2, lib::ECP_VSP_MSG)
-// zapis i odczyt
-#define DEVCTL_RW __DIOTF(_DCMD_MISC, 3, lib::DEVCTL_MSG)
-
-// by Y - CZUJNIKI
-
-typedef enum _SENSOR_ENUM
-{
-	SENSOR_UNDEFINED,
-	SENSOR_FORCE_ON_TRACK,
-	SENSOR_FORCE_POSTUMENT,
-	SENSOR_CAMERA_SA,
-	SENSOR_CAMERA_ON_TRACK,
-	SENSOR_CAMERA_POSTUMENT,
-	SENSOR_GRIPPER_ON_TRACK,
-	SENSOR_GRIPPER_POSTUMENT,
-	SENSOR_DIGITAL_SCALE_SENSOR,
-	SENSOR_FORCE_SENSOR,
-	SENSOR_PP,
-	SENSOR_MIC,
-	SENSOR_PAWEL,
-	// rcs - VSP znajdujace rozwiazanie dla kostki Rubika
-	SENSOR_RCS_KORF,
-	SENSOR_RCS_KOCIEMBA,
-
-	// time, testowy czujnik czasu (ptrojane)
-	SENSOR_TIME,
-	/*!
-	 * Sensor used for communication with the cvFraDIA.
-	 */
-	SENSOR_CVFRADIA,
-	/*!
-	 * Sensor used for communication with the PCBird.
-	 */
-	SENSOR_PCBIRD,
-	SENSOR_WIIMOTE
-} SENSOR_t;
-
-// Klasa obslugi bledow procesu VSP.
-class VSP_main_error
-{
-public:
-	const error_class_t error_class;
-	const uint64_t error_no;
-	VSP_main_error(error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
-	{
-	}
-};
+const SENSOR_t SENSOR_CAMERA_SA = "SENSOR_CAMERA_SA";
+const SENSOR_t SENSOR_CAMERA_ON_TRACK = "SENSOR_CAMERA_ON_TRACK";
+const SENSOR_t SENSOR_CAMERA_POSTUMENT = "SENSOR_CAMERA_POSTUMENT";
 
 // Klasa bazowa dla czujnikow (klasa abstrakcyjna)
 // Czujniki konkretne wyprowadzane sa z klasy bazowej
-class sensor
+class sensor_interface
 {
 public:
-	// Wielkosc przesylanej unii - dla kazdego obrazu inny.
-	size_t union_size;
-
-	// ponizsze zmienne pozwalaja na odczyty z roznym okresem z czujnikow (mierzonym w krokach generatora)
-	// w szczegolnosci mozliwe jest unikniecie odczytu po first stepie (nalezy base_period ustawic na 0)
-	short base_period; // by Y okresla co ile krokow generatora ma nastapic odczyt z czujnika
-	short current_period; // by Y ilosc krokow pozostajaca do odczytu z czujnika
-
-	std::string node_name; // nazwa wezla na ktorym jest powolane vsp
-
-	// Obraz czujnika.
-	SENSOR_IMAGE image;
-	// Bufor na odczyty otrzymywane z VSP.
-	ECP_VSP_MSG to_vsp;
-	// Bufor na odczyty otrzymywane z VSP.
-	VSP_ECP_MSG from_vsp;
-	// Pole do komunikacji za pomoca DEVCTL.
-	DEVCTL_MSG devmsg;
-
 	// Odebranie odczytu od VSP.
 	virtual void get_reading(void)=0;
+
 	// Konfiguracja czujnika.
 	virtual void configure_sensor(void)
 	{
@@ -467,48 +81,27 @@ public:
 	{
 	}
 
-	virtual ~sensor()
+	virtual ~sensor_interface()
 	{
 	}
+};
 
-	// Klasa obslugi bledow czujnikow
-	class sensor_error
+namespace sensor {
+// Klasa obslugi bledow czujnikow
+class sensor_error
+{
+public:
+	const lib::error_class_t error_class;
+	const uint64_t error_no;
+
+	sensor_error(lib::error_class_t err_cl, uint64_t err_no) :
+		error_class(err_cl), error_no(err_no)
 	{
-	public:
-		const error_class_t error_class;
-		uint64_t error_no;
-
-		sensor_error(error_class_t err_cl, uint64_t err_no) :
-			error_class(err_cl), error_no(err_no)
-		{
-		}
-	};
+	}
 };
-
-// Przesylka z VSP do EDP
-struct VSP_EDP_message
-{
-#ifndef USE_MESSIP_SRR
-	msg_header_t hdr;
-#endif
-	char vsp_name[20];
-	short konfigurowac;
-};
-
-// Odpowiedz EDP do VSP
-struct EDP_VSP_reply
-{
-	unsigned long servo_step; // by Y numer kroku servo
-	double current_present_XYZ_ZYZ_arm_coordinates[6]; // aktualne wspolrzedne XYZ +
-	double force[6];
-	short force_reading_status; // informacja o odczycie sil
-	// EDP_FORCE_SENSOR_OVERLOAD lub EDP_FORCE_SENSOR_READING_ERROR
-	// EDP_FORCE_SENSOR_READING_CORRECT
-
-};
+} // namespace sensor
 
 } // namespace lib
 } // namespace mrrocpp
 
 #endif /* _SENSOR_H */
-

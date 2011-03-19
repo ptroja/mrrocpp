@@ -8,25 +8,24 @@
 #ifndef MP_G_PNML_H_
 #define MP_G_PNML_H_
 
-#include <map>
-
-#include "mp/generator/mp_generator.h"
+#include "base/mp/generator/mp_generator.h"
 #include "PNExec/Net.hh"
 
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-class pnmlExecutor : public generator {
-	public:
-		pnmlExecutor(task::task & _mp_task, pnexec::Net & _net);
+class pnmlExecutor : public generator
+{
+public:
+	pnmlExecutor(task::task & _mp_task, pnexec::Net & _net);
 
-		bool first_step ();
+	bool first_step();
 
-		bool next_step ();
+	bool next_step();
 
-	private:
-		pnexec::Net & pnmlNet;
+private:
+	pnexec::Net & pnmlNet;
 };
 
 }

@@ -1,17 +1,12 @@
-#include <stdio.h>
+#include <cstdio>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/sr/srlib.h"
 
-#include "lib/srlib.h"
-#include "ecp_mp_t_swarmitfix.h"
+#include "robot/spkm/ecp_r_spkm.h"
 
-#include "ecp/spkm/ecp_r_spkm.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
-#include "ecp/common/generator/ecp_g_sleep.h"
-#include "ecp_g_epos.h"
 #include "ecp_t_spkm.h"
+#include "ecp_g_spkm.h"
+#include "ecp_mp_g_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,70 +15,31 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task(_config) {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = new robot(*this);
+	task_t(_config)
+{
+	// Create the robot object
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
 
-	gt = new common::generator::transparent(*this);
-	sg = new common::generator::smooth(*this, true);
-	g_sleep = new common::generator::sleep(*this);
-	g_epos = new common::generator::epos(*this);
+	// Create the generators
+	g_pose = new generator::spkm_pose(*this);
+	g_quickstop = new generator::spkm_quickstop(*this);
 
-	sr_ecp_msg->message("ECP spkm loaded");
+	sr_ecp_msg->message("ecp spkm loaded");
 }
 
-void swarmitfix::main_task_algorithm(void) {
-	for (;;) {
-		sr_ecp_msg->message("Waiting for MP order");
+void swarmitfix::mp_2_ecp_next_state_string_handler(void)
+{
+	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_QUICKSTOP) {
 
-		get_next_state();
+		g_quickstop->Move();
 
-		sr_ecp_msg->message("Order received");
-		//printf("postument: %d\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
-		flushall();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_POSE) {
 
-		switch ((ecp_mp::task::SWARMITFIX_ECP_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state) {
-		case ecp_mp::task::ECP_GEN_TRANSPARENT:
-			gt->throw_kinematics_exceptions
-					= (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-			gt->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_SMOOTH: {
-			std::string path(mrrocpp_network_path);
-			path += mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		// g_pose->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
 
-			switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant) {
-			case ecp_mp::task::RELATIVE:
-				sg->set_relative();
-				break;
-			case ecp_mp::task::ABSOLUTE:
-				sg->set_absolute();
-				break;
-			default:
-				break;
-			}
+		g_pose->Move();
 
-			sg->load_file_with_path(path.c_str());
-			sg->Move();
-			break;
-		}
-		case ecp_mp::task::ECP_GEN_SLEEP:
-			g_sleep->init_time(
-					mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-			g_sleep->Move();
-			break;
-		case ecp_mp::task::ECP_GEN_EPOS: {
-			sr_ecp_msg->message("ECP_GEN_EPOS");
-
-			g_epos->Move();
-			break;
-		}
-		default:
-			break;
-		} // end switch
-
-		ecp_termination_notice();
-	} //end for
+	}
 }
 
 }
@@ -92,7 +48,8 @@ void swarmitfix::main_task_algorithm(void) {
 namespace common {
 namespace task {
 
-task* return_created_ecp_task(lib::configurator &_config) {
+task_base* return_created_ecp_task(lib::configurator &_config)
+{
 	return new spkm::task::swarmitfix(_config);
 }
 

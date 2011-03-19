@@ -1,0 +1,20 @@
+/** 
+
+ @defgroup robots Robots
+  
+ @defgroup grippers Grippers
+ @ingroup robots
+ 
+ @defgroup manipulators Manipulators
+ @ingroup robots
+ 
+ @defgroup hardware_interfaces Hardware Interfaces
+ @ingroup robots
+ 
+ @defgroup mobile_bases Mobile Bases
+ @ingroup robots
+ 
+ @defgroup swarm_robots SwarmItFix
+ @ingroup robots
+  
+*/

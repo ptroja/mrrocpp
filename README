@@ -1,3 +1,5 @@
+=== Introduction 
+
 This project contains sources and utilities for MRROC++, which is
 MultiRobot Research Oriented Controller (implemented in C++).
 
@@ -12,4 +14,8 @@ Main authors:
 	Tomasz Kornuta
 	Piotr Trojanek
 
-TEST
+=== Build instructions
+
+To build this software for QNX OS please do the following:
+mkdir build; cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../Toolchain-QCC.cmake ../; cmake .
+make && make install 

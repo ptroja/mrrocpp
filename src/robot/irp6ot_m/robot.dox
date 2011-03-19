@@ -1,0 +1,41 @@
+/** 
+
+@namespace mrrocpp::lib::irp6ot_m
+@brief Namespace for IRp6 on track manipulator libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6ot_m
+
+@namespace mrrocpp::ecp::irp6ot_m
+@brief Namespace for ECP IRp6 on track manipulator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6ot_m
+
+@namespace mrrocpp::kinematics::irp6ot
+@brief Contains classes related to the kinematics of the IRp-6 on track manipulator.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS IRP6OT_KINEMATICS irp6ot_m
+
+
+@defgroup IRP6OT_KINEMATICS Kinematics: The IRp-6 on track manipulator and its grippers.
+@{
+The group contains classes related to two main <b>software agents</b> of the IRp-6 on track manipulator.
+
+The first part consideres different kinematic models of the manipulator itself:
+ - \link mrrocpp::kinematics::irp6ot::model_with_wrist model_with_wrist\endlink model with active wrist and passive track DOFs, 
+ - \link mrrocpp::kinematics::irp6ot::model_with_track model_with_track\endlink model with active track and passive wrist DOFs,
+ - \link mrrocpp::kinematics::irp6ot::model_calibrated_with_wrist model_calibrated_with_wrist\endlink model with active wrist, 
+ passive track DOFs and kinematic values computed during the calibration process. 
+
+The other one contains kinematics of its grippers:
+ - \link mrrocpp::kinematics::irp6ot_tfg::model tfg\endlink model of the two finger gripper,
+ - \link mrrocpp::kinematics::bird_hand::kinematic_model_bird_hand bird_hand\endlink model ot the three finger gripper.
+@}
+
+
+   @defgroup irp6ot_m IRp6 on track manipulator
+   @ingroup manipulators
+
+*/
+
+

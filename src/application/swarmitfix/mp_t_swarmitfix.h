@@ -1,15 +1,5 @@
-// -------------------------------------------------------------------------
-//                            task/mp_t_haptic.h
-//
-// MP task for two robot haptic device
-// Ostatnia modyfikacja: 2007
-// -------------------------------------------------------------------------
-
 #if !defined(__MP_T_SWARMITFIX_H)
 #define __MP_T_SWARMITFIX_H
-
-#include "mp/mp.h"
-
 
 namespace mrrocpp {
 namespace mp {
@@ -23,19 +13,17 @@ namespace task {
 
 class swarmitfix : public task
 {
-protected:
-
-
 public:
-
 	swarmitfix(lib::configurator &_config);
+
+	/// utworzenie robotow
+	void create_robots(void);
 
 	// methods for mp template
 	void main_task_algorithm(void);
-
 };
 
-/** @} */ // end of edge_following
+/** @} */// end of swarmitfix
 
 } // namespace task
 } // namespace mp

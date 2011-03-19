@@ -9,10 +9,10 @@
 #if !defined(_ECP_GEN_PLOT_H)
 #define _ECP_GEN_PLOT_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,7 +28,7 @@ protected:
 
 	long run_counter;
 	bool second_step;
-    double start_joint_arm_coordinates[MAX_SERVOS_NR];
+    double start_joint_arm_coordinates[lib::MAX_SERVOS_NR];
 	
 public:
 	lib::trajectory_description td;

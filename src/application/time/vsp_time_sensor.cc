@@ -7,13 +7,13 @@
 // Data:		29.11.2006
 // -------------------------------------------------------------------------
 
-#include <time.h>
+#include <ctime>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/sr/srlib.h"
 
 #include "vsp_time_sensor.h"
 
@@ -21,45 +21,50 @@ namespace mrrocpp {
 namespace vsp {
 namespace sensor {
 
-// Konstruktor klasy czujnika wirtualnego, odpowiedzialnego za odczyty z czujnika sily.
-time::time(lib::configurator &_config) : sensor(_config){
-	// Wielkosc unii.
-	union_size = sizeof(image.sensor_union.time);
-} // end: vsp_time_sensor
+time::time(lib::configurator &_config) :
+	mrrocpp::vsp::common::sensor <struct timespec>(_config)
+{
+}
 
-// Metoda sluzaca do konfiguracji czujnika.
-void time::configure_sensor (void){// w obecnej implementacji zeruje poziom odczytow z czujnika w EDP
-   	is_sensor_configured=true;
-} // end: configure_sensor
+void time::configure_sensor(void)
+{
+	is_sensor_configured = true;
+}
 
-// Metoda dokonujaca przepisania odczytu do obrazu czujnika.
-void time::initiate_reading (void){
+void time::initiate_reading(void)
+{
 	// Jesli czujnik nie jest skonfigurowany.
-	if(!is_sensor_configured)
-	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured)
+		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	// Odczyt w porzadku.
-	is_reading_ready=true;
-} // end: initiate_reading
+	is_reading_ready = true;
+}
 
-// Metoda wysyla przepisuje dane z obrazu czujnika do bufora oraz wysyla bufor do procesu oczekujacego na odczyty.
-void time::get_reading (void){
+void time::get_reading(void)
+{
 	// Jesli czujnik nie jest skonfigurowany.
-	if(!is_sensor_configured)
-	     throw sensor_error (lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+	if (!is_sensor_configured)
+		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+
 	// Jezeli nie ma nowego odczytu -> wyslanie starego.
-	if(!is_reading_ready)
+	if (!is_reading_ready)
 		return;
-	// Odczyt w porzadku.
-	from_vsp.vsp_report= lib::VSP_REPLY_OK;
 
-	clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image.sensor_union.time.ts);
+	// Odczyt w porzadku.
+	from_vsp.vsp_report = lib::sensor::VSP_REPLY_OK;
+
+	if(clock_gettime(CLOCK_REALTIME, &from_vsp.comm_image) == -1) {
+		perror("clock_gettime()");
+	}
 
 	// Obacny odczyt nie jest "nowy".
-	is_reading_ready=false;
+	is_reading_ready = false;
 } // end: get_reading
-
-VSP_CREATE_SENSOR(time)
 
 } // namespace sensor
 } // namespace vsp
 } // namespace mrrocpp
+
+// Register time sensor.
+mrrocpp::vsp::common::VSP_REGISTER_SENSOR(mrrocpp::vsp::sensor::time)
+

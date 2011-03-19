@@ -10,25 +10,25 @@
 
 #include "PNExec/Net.hh"
 
-#include "mp/mp.h"
-#include "mp/task/mp_task.h"
+#include "base/mp/mp_task.h"
 #include "mp_g_pnml.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-class pnmlAutomat : public mrrocpp::mp::task::task {
-	public:
-		// methods for mp template
-		void main_task_algorithm(void);
+class pnmlAutomat : public mrrocpp::mp::task::task
+{
+public:
+	// methods for mp template
+	void main_task_algorithm(void);
 
-		pnmlAutomat(lib::configurator &_config);
-		~pnmlAutomat();
+	pnmlAutomat(lib::configurator &_config);
+	~pnmlAutomat();
 
-	private:
-		pnexec::Net pnmlNet;
-		generator::pnmlExecutor *executor;
+private:
+	pnexec::Net pnmlNet;
+	generator::pnmlExecutor *executor;
 };
 
 }

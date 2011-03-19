@@ -3,15 +3,21 @@
 
 #include <pthread.h>
 
-#include "ecp_mp/transmitter/transmitter.h"				// klasa bazowa transmitter
+#include "base/ecp_mp/transmitter.h"				// klasa bazowa transmitter
 #include "player/playerc.h"
+
+playerc_joystick_t player_joystick;
+playerc_position_t player_position;
+playerc_speech_recognition_t player_speech_recognition;
 
 namespace mrrocpp {
 namespace ecp_mp {
 namespace transmitter {
 
+static const std::string TRANSMITTER_PLAYER = "TRANSMITTER_PLAYER";
+
 /***************** Klasa czujnikow ********************/
-class player: public transmitter{
+class player: public transmitter {
   private:						// pola do komunikacji
     pthread_t worker;
     pthread_cond_t cond;
@@ -24,7 +30,7 @@ class player: public transmitter{
   public:
 	// Konstruktor
  	player (
-            TRANSMITTER_ENUM _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
+            TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object,
             const char *host, unsigned int port,
             const char *devname, int devindex, int access);
 											// konstruktor czujnika virtualnego

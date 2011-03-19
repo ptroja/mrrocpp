@@ -1,0 +1,7 @@
+/** 
+
+   @defgroup edge_follow Edge following
+   @ingroup applications
+   Application of IRp6 manipulator following of an uknown contour
+  
+*/

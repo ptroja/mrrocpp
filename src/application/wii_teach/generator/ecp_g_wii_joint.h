@@ -1,16 +1,13 @@
 #ifndef ECP_WII_JOINT_GENERATOR_H
 #define ECP_WII_JOINT_GENERATOR_H
 
-#include <string.h>
-#include <math.h>
-
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 #include "application/wii_teach/generator/ecp_g_wii.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_teach
@@ -18,7 +15,7 @@ namespace generator {
  *  @{
  */
 
-class wii_joint : public irp6ot::generator::wii
+class wii_joint : public generator::wii
 {
     public:
 	/**
@@ -38,7 +35,7 @@ class wii_joint : public irp6ot::generator::wii
 
         void preset_position(void);
 
-        virtual void set_position(void);
+        virtual void set_position(bool changed);
 };
 
 /** @} */ // end of wii_teach

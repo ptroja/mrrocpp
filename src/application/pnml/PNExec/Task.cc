@@ -11,7 +11,7 @@
 #include "Task.hh"
 #include "../../rcsc/ecp_mp_t_fsautomat.h"
 
-#include "lib/datastr.h"
+#include "base/lib/datastr.h"
 
 namespace pnexec {
 
@@ -63,7 +63,7 @@ mrrocpp::lib::robot_name_t TrajectoryTask::execute(mrrocpp::mp::common::robots_t
 	std::cerr << "executing for " << lib::toString(_robot.robot_name) << std::endl; fflush(stderr);
 
 	_robot.mp_command.command = lib::NEXT_STATE;
-	_robot.mp_command.ecp_next_state.mp_2_ecp_next_state = mrrocpp::ecp_mp::task::ECP_GEN_SMOOTH;
+	_robot.mp_command.ecp_next_state.mp_2_ecp_next_state = mrrocpp::ecp_mp::generator::ECP_GEN_SMOOTH;
 
 	strncpy(_robot.mp_command.ecp_next_state.mp_2_ecp_next_state_string,
 			file.c_str(),

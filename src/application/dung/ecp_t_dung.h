@@ -1,14 +1,14 @@
 #if !defined(_ECP_T_DUNG_H)
 #define _ECP_T_DUNG_H
 
-#include "ecp/common/task/ecp_task.h"
+#include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace task {
 
-class dung: public common::task::task  {
+class dung: public common::task::task {
 
 public:
 	// KONSTRUKTORY

@@ -1,0 +1,23 @@
+/** 
+
+@namespace mrrocpp::lib::smb
+@brief Namespace for SwarmItFIX agent's mobile base libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup smb
+
+@namespace mrrocpp::ecp::smb
+@brief Namespace for ECP SwarmItFIX agent's mobile base classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup smb
+
+@namespace mrrocpp::kinematics::smb
+@brief Contains classes related to the kinematics of the SwarmItFIX agent's mobile base.
+@date 2010.02.01 
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup KINEMATICS SIF_KINEMATICS smb
+
+   @defgroup smb SwarmItFix mobile base
+   @ingroup swarm_robots mobile_bases
+
+
+*/

@@ -7,8 +7,8 @@
 
 #include <list>
 
-#include "ecp/common/generator/ecp_generator.h"
-#include "ecp/common/ecp_taught_in_pose.h"
+#include "base/ecp/ecp_generator.h"
+#include "base/ecp/ecp_taught_in_pose.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -62,18 +62,18 @@ public:
   void get_pose (ecp_taught_in_pose& tip);
   // -------------------------------------------------------
   // Pobierz nastepna pozycje z listy
-  void get_next_pose (double next_pose[MAX_SERVOS_NR]);
+  void get_next_pose (double next_pose[lib::MAX_SERVOS_NR]);
   // -------------------------------------------------------
-  void set_pose (lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void set_pose (lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
   // -------------------------------------------------------
   bool is_pose_list_element ( void ) ;
   // -------------------------------------------------------
   bool is_last_list_element ( void );
   // -------------------------------------------------------
 
-  void create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void create_pose_list_head (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
 
-  void insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[MAX_SERVOS_NR], int extra_info = 0);
+  void insert_pose_list_element (lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info = 0);
 
   // -------------------------------------------------------
   int pose_list_length(void);

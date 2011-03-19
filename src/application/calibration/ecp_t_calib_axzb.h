@@ -1,10 +1,7 @@
 #if !defined(_ECP_T_CALIB_AXZB_H)
 #define _ECP_T_CALIB_AXZB_H
 
-#include <string.h>
-#include <unistd.h>
 #include "ecp_t_calibration.h"
-#include "ecp_t_calib_axzb.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -115,7 +115,7 @@
             <xs:element ref="server_port"/>
           </xs:sequence>
         </xs:choice>
-        <xs:element minOccurs="0" ref="test_mode"/>
+        <xs:element minOccurs="0" ref="robot_test_mode"/>
         <xs:element minOccurs="0" ref="node_name"/>
       </xs:sequence>
     </xs:complexType>
@@ -140,7 +140,7 @@
         <xs:choice minOccurs="0">
           <xs:element ref="is_gripper_active"/>
           <xs:sequence>
-            <xs:element ref="test_mode"/>
+            <xs:element ref="robot_test_mode"/>
             <xs:element ref="node_name"/>
           </xs:sequence>
         </xs:choice>
@@ -216,6 +216,6 @@
   <xs:element name="edp_section" type="xs:string"/>
   <xs:element name="program_name" type="xs:NCName"/>
   <xs:element name="node_name" type="xs:NCName"/>
-  <xs:element name="test_mode" type="xs:integer"/>
+  <xs:element name="robot_test_mode" type="xs:integer"/>
   <xs:element name="resourceman_attach_point" type="xs:NCName"/>
 </xs:schema>

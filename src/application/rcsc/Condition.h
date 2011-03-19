@@ -4,7 +4,7 @@
 
 #include <list>
 
-#include "lib/configurator.h"
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace mp {

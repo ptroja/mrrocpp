@@ -1,0 +1,11 @@
+// does the platform provide individual system calls
+
+#include <unistd.h>
+
+#     if (defined(_POSIX_TIMERS) && (_POSIX_TIMERS+0 >= 0))
+#	define HAVE_POSIX_TIMERS
+#     endif
+
+#cmakedefine HAVE_KQUEUE
+
+#cmakedefine HAVE_MLOCKALL

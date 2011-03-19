@@ -1,0 +1,158 @@
+/** 
+@namespace mrrocpp::vsp
+@brief Main namespace for issues related to the Virtual Sensor Process.
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::common
+@brief Common classes, functions and macros, used in different VSP shells and kernels (sensors). 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::nint_shell
+@brief Namespace containing functions required by the \b noninteractive VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::int_shell
+@brief Namespace containing functions required by the \b interactive VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@namespace mrrocpp::vsp::int_nw_shell
+@brief Namespace containing functions required by the <b>interactive communication without delay</b> VSP shell. 
+@date 03.08.2010 
+@author tkornuta
+@ingroup VSP
+
+
+@defgroup VSP Sensors: The VSP process.
+@{
+
+@section role The role of VSP (Virtual Sensor Process)
+
+Sensors are used to gather information for the purpose of motion
+control. However, usually hardware sensors deliver measurements that
+cannot be used for that purpose directly - they need to be
+processed beforehand. For instance, in the case of such a complex
+sensor as a camera, a bit-map has to be processed to obtain the
+grasping location of an object. In some other cases a simple sensor
+in its own right would not suffice to control the motion (e.g., a
+single touch sensor), but several such sensors deliver meaningful
+data. The process of extracting meaningful information for the
+purpose of motion control is named <b>data aggregation</b> and is 
+performed by <b>virtual sensors</b>. As a result virtual sensor readings
+ are obtained. This is the main reason for the existence of the VSPs.
+
+VSP processes are intermediaries between the <b>higher layers</b> (i.e., 
+the MP and ECPs) of the control system and the hardware sensors. Their 
+role of is the following:
+ - process commands from either the ECP or the MP,
+ - read the data from the associated hardware sensors,
+ - aggregate that data (extract information useful for the control purposes),
+ - dispatch the results of aggregation (known as <b>virtual sensor readings</b>) either to the ECP or the MP,
+ - report the detected errors either to the ECP or the MP.
+
+
+@section division VSP process division
+
+The subdivision into the @b kernel and the @b shell is analogous to the
+division of other MRROC++ processes. 
+
+The tasks of the frozen spot (process @b shell) of the VSP process are:
+ - creation of the communication channels,
+ - reaction to the commands sent by the higher layer processes,
+ - handling of the errors that occurred,
+ - alarming other processes about the detected errors,
+ - replying aggregated sensor readings to the requesting process.
+
+The @b kernel of a VSP process consists of a class derived from the
+\link mrrocpp::vsp::common::sensor sensor\endlink template class and should implement all
+the methods necessary for the given cooperation type. Types of
+cooperation between the VSP processes and the higher layer
+processes are described in the next sections.
+
+The system builder has to utilize the \link mrrocpp::vsp::common::VSP_REGISTER_SENSOR VSP_REGISTER_SENSOR\endlink macro, 
+the purpose of which is to create function returning an object of the newly created sensor class, used 
+later by the process shell. Due to this, the VSP shell can call the methods of the class implemented by the programmer 
+without recompilation of the shell - the file containing the shell body remains unchanged.
+
+
+@section communication Communication with the VSP processes
+
+@subsection commands Commands
+
+The VSP shell accepts four commands:
+ - <b>VSP_CONFIGURE_SENSOR</b> - sensor configuration instruction. Some sensors need to be configured before they can do their job. For
+    example, in a digital camera must be focused. Of course sensors can be also reconfigured at a later stage, while working.
+ - <b>VSP_INITIATE_READING</b> - request to prepare the
+    reading. Time of access to the hardware and the time taken by the data
+aggregation depends mostly on the type of sensor. When the kernel
+receives this command, it triggers the process of preparation of
+virtual sensor reading, so that the reading will be available when
+required.
+ - <b>VSP_GET_READING</b> - request to supply the reading.
+    This command causes the VSP process to transfer the current virtual sensor reading to the process that requested it.
+ - <b>VSP_TERMINATE</b> - Request for the termination of the VSP process.
+
+The operational codes of these commands form the enumerated type
+\link mrrocpp::lib::sensor::VSP_COMMAND_t VSP_COMMAND\endlink.
+
+@subsection responses Responses
+
+The VSP process can reply with one of the following codes:
+ - <b>VSP_REPLY_OK</b> - the command was executed
+    properly,
+ - <b>VSP_SENSOR_NOT_CONFIGURED</b> - the command cannot be executed, because the sensor was not
+    configured,
+ - <b>VSP_READING_NOT_READY</b> - the reading cannot be send back, because it had not been ready when the request
+    came,
+ - <b>INVALID_VSP_COMMAND</b> - Unrecognized command has been received.
+The above error codes form the enumerated type \link mrrocpp::lib::sensor::VSP_REPORT_t VSP_REPORT\endlink.
+
+
+@subsection cooperation Types of communication
+
+There are three types of the VSP shells, depending on the way they
+communicate with other MRROC++ processes.
+
+First type of shells repeatedly collect and aggregate measurements,
+regardless of whether they are needed by other processes or not. The
+frequency of initiating readings depends on the sensor type and task
+requirements. In this case, if the MP or the ECP requests
+readings, the VSP sends the latest virtual sensor readings stored
+in its internal sensor image. As such VSP processes initiate the
+readings on their own, this communication type is called \b noninteractive.
+
+
+In opposition to the noninteractive communication, in the \b interactive 
+form of communication the VSPs collect new measurements only when an 
+explicit reading initiation request arrives.
+
+There are two kinds of interactive communication. Communication, in which 
+the higher layer processes must wait until the VSP finishes ordered task, 
+is simply called interactive communication. In the second kind of interactive 
+communication, before the execution of the command, the VSP replies a 
+confirmation message, which enables the MP or the ECP to proceed with 
+other tasks. This type of communication is called <b>interactive communication 
+without delay</b>.
+
+All three types of communications are implemented, each as a different VSP 
+shell. When the <b>system builder</b> adds a new sensor to the system, he 
+can change the communication type at any time, simply by recompilating the VSP
+process with the same kernel and another shell. However, he must remember 
+that during the noninteractive communication an additional <b>wait_for_event()</b> 
+method is used.
+
+
+@}
+*/
+

@@ -1,0 +1,24 @@
+/** 
+@namespace mrrocpp::ecp_mp::sensor
+@brief Main namespace for issues related to sensors used by the ECPs and MPs.
+@date 03.08.2010 
+@author tkornuta
+@ingroup SENSORS
+
+
+
+@defgroup SENSORS Sensors: The ECP and MP processes.
+@{
+Sensors are used to gather information for the purpose of motion control. 
+In MRROC++ the VSPs are responsible for gathering sensory data from 
+hardware and its aggregation into form usefull in control. Different sensors 
+have different roles, however from the MP or ECP point of view sensors should 
+behave similarily, thus posses similar interfaces in order to facilitate 
+tasks implementation.    
+
+The \link mrrocpp::ecp_mp::sensor::sensor_interface ecp_mp::sensor_interface\endlink 
+plays a role of such interface, but one should inherit from the template 
+\link mrrocpp::ecp_mp::sensor::sensor ecp_mp::sensor\endlink class.
+@}
+
+*/

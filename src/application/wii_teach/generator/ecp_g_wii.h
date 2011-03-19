@@ -1,17 +1,14 @@
 #ifndef ECP_WII_GENERATOR_H
 #define ECP_WII_GENERATOR_H
 
-#include <string.h>
-#include <math.h>
+#include "base/lib/mrmath/mrmath.h"
 
-#include "lib/mrmath/mrmath.h"
-
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace irp6ot_m {
 namespace generator {
 
 /** @addtogroup wii_teach
@@ -79,7 +76,7 @@ class wii : public common::generator::generator
 
         virtual void preset_position(void) = 0;
 
-        virtual void set_position(void) = 0;
+        virtual void set_position(bool changed) = 0;
 
         bool calculate_change(int axis, double value);
 

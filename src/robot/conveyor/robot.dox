@@ -1,0 +1,30 @@
+/** 
+
+@namespace mrrocpp::lib::conveyor
+@brief Namespace for Conveyor libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup conveyor
+
+@namespace mrrocpp::ecp::conveyor
+@brief Namespace for ECP Conveyor classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup conveyor
+
+@namespace mrrocpp::kinematics::conveyor
+@brief Contains classes related to the kinematics of the conveyor.
+@date Nov 26, 2009
+@author tkornuta
+@ingroup KINEMATICS CONVEYOR_KINEMATICS conveyor
+
+
+@defgroup CONVEYOR_KINEMATICS Kinematics: The Conveyor - a 1-DOF robot.
+@{
+
+The \link mrrocpp::kinematics::conveyor::model model\endlink 
+is a class responsible for kinematics computations required to control the conveyor - a single motor, thus DOF robot. 
+@}
+
+   @defgroup conveyor Conveyor
+   @ingroup robots
+
+*/

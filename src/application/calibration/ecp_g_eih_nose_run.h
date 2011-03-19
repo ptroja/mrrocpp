@@ -8,23 +8,17 @@
 #if !defined(_ECP_GEN_EIH_H)
 #define _ECP_GEN_EIH_H
 
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "ecp/common/generator/ecp_g_teach_in.h"
-#include "ecp/common/generator/ecp_g_force.h"
-#include "lib/mrmath/mrmath.h"
-
+#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
-
-// Generator do wykrywania zmiany wagi chwytaka wraz z obiektem chwytanym
-// ciezary wyskalowane w newtonach
-#define WEIGHT_MEASSURE_GENERATOR_BUFFER_SIZE 10
-#define USLEEP_TIME 10000
 
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadania kalibracji ukladu eih.
@@ -35,10 +29,10 @@ class eih_nose_run : public tff_nose_run
 	int count;
 
 public:
-    // konstruktor
-    eih_nose_run(common::task::task& _ecp_task, int step=0);
+	// konstruktor
+	eih_nose_run(common::task::task& _ecp_task, int step = 0);
 
-    virtual bool next_step ();
+	virtual bool next_step();
 
 }; // end : class ecp_eih_nose_run_generator
 

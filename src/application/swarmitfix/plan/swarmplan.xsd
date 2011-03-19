@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="State">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TindFrom" type="xs:nonNegativeInteger">
+                    <xs:annotation>
+                        <xs:documentation>index of situation, when the move towards this position should start</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="TindTo" type="xs:nonNegativeInteger">
+                    <xs:annotation>
+                        <xs:documentation>index of situation, when the move should end and the required position should be reached</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PkmState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element form="unqualified" name="l1" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>extensions of first leg</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="l2" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>extensions of second leg</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="l3" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>extensions of third leg</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="phi" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>rotation angle of local PKM coordinate system, relative to the orientation of base</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="psi1" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>first rotation angle of the head support</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="psi2" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>second rotation angle of the head support</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="psi3" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>third rotation angle of the head support</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element form="unqualified" name="rho" nillable="false" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>additional rotation angle of the head</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="ind" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="BaseState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element name="bx" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>X-coordinate for the base’s reference point</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="by" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>Y-coordinate for the base’s reference point</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bz" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>Z-coordinate for the base’s reference point</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="theta" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>rotation angle, which gives the orientation of base</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="ind" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="HeadState">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="State"/>
+                <xs:element name="alpha" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>rotation angle, specifying the orientation of head in 3-D space</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="beta" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>rotation angle, specifying the orientation of head in 3-D space</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="gamma" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">rotation angle, specifying the orientation of head in 3-D space</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="hx" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>X-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="hy" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>Y-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="hz" type="xs:double">
+                    <xs:annotation>
+                        <xs:documentation>Z-location of the head reference point in world coordinates (relative to the bench)</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="ind" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Plan">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="head">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="HeadState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="mbase">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="BaseState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="pkm">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="PkmState"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PathPlan">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="agents">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="Plan"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="D">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="D" type="xs:double"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="H">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="H" type="xs:double"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="timePoints">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="timePoint">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:double">
+                                            <xs:attribute name="id" type="xs:nonNegativeInteger"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="timeValueUniq">
+                        <xs:annotation>
+                            <xs:documentation>uniqueness constraint for time values</xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="timePoint"/>
+                        <xs:field xpath="."/>
+                    </xs:unique>
+                    <xs:key name="timeIdKey">
+                        <xs:annotation>
+                            <xs:documentation>key constraint for time-points id</xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="timePoint"/>
+                        <xs:field xpath="@id"/>
+                    </xs:key>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:keyref name="timePointFromKeyref" refer="timeIdKey">
+            <xs:annotation>
+                <xs:documentation>keyref constraint for TindFrom</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="agents/Plan/head/HeadState/State/TindFrom"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="timePointToKeyref" refer="timeIdKey">
+            <xs:annotation>
+                <xs:documentation>keyref constraint for TindTo</xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="agents/Plan/head/HeadState/State/TindTo"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+    </xs:element>
+    <xs:attribute name="ind" type="xs:nonNegativeInteger">
+        <xs:annotation>
+            <xs:documentation>agent's index</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
+</xs:schema>

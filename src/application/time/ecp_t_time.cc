@@ -5,17 +5,18 @@
 // ------------------------------------------------------------------------
 
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <map>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
-#include "ecp/irp6_on_track/ecp_r_irp6ot.h"
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "base/lib/sr/srlib.h"
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "ecp_g_time.h"
 #include "ecp_t_time.h"
 #include "ecp_mp_s_time.h"
@@ -27,13 +28,13 @@ namespace task {
 
 
 // Initilization
-time::time(lib::configurator &_config) : task(_config)
+time::time(lib::configurator &_config) : common::task::task(_config)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == ECP_IRP6_ON_TRACK_SECTION)
-		{ ecp_m_robot = new irp6ot::robot (*this); }
-	else if (config.section_name == ECP_IRP6_POSTUMENT_SECTION)
-		{ ecp_m_robot = new irp6p::robot (*this); }
+	if (config.section_name == lib::irp6ot_m::ECP_SECTION)
+		{ ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot (*this); }
+	else if (config.section_name == lib::irp6p_m::ECP_SECTION)
+		{ ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot (*this); }
 	else
 		assert(0);
 #if 0
@@ -50,7 +51,7 @@ time::time(lib::configurator &_config) : task(_config)
 	tfg = new generator::time(*this, 8);
 	//tfg->sensor_m = sensor_m;
 
-	sr_ecp_msg->message("ECP time loaded");
+	sr_ecp_msg->message("ecp time loaded");
 }
 
 void time::main_task_algorithm(void)
@@ -60,7 +61,7 @@ void time::main_task_algorithm(void)
 	}
 }
 
-task* return_created_ecp_task (lib::configurator &_config)
+task_base* return_created_ecp_task (lib::configurator &_config)
 {
 	return new time(_config);
 }

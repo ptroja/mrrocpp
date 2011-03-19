@@ -1,3 +1,0 @@
-if(ROBOT_IRP6_ON_TRACK)
-add_ecp_robot_with_kinematics(irp6ot)
-endif(ROBOT_IRP6_ON_TRACK)

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<Trajectory coordinateType="JOINT" numOfPoses="1">
-  <Pose>
-    <Velocity>0.5	0.5	0.5	0.5	0.5	0.5	0.5	1</Velocity>
-    <Accelerations>0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.01</Accelerations>
-    <Coordinates>0	-0.077462	-1.54187	0.024063	1.21873	2.57816	-2.66439	0.059</Coordinates>
-  </Pose>
-</Trajectory>

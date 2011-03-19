@@ -5,9 +5,13 @@
  *      Author: mboryn
  */
 
+#include "base/ecp/ecp_task.h"
+#include "base/ecp/ecp_robot.h"
+
 #include "visual_servo_manager.h"
 
 using namespace logger;
+using namespace mrrocpp::ecp::servovision;
 
 namespace mrrocpp {
 
@@ -17,14 +21,17 @@ namespace common {
 
 namespace generator {
 
-visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char *section_name) :
-	generator(ecp_task), current_position_saved(false), motion_steps(30), a_max(0), v_max(0)
+visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
+	common::generator::generator(ecp_task), current_position_saved(false), motion_steps(30), max_speed(0), max_angular_speed(0),
+			max_acceleration(0), max_angular_acceleration(0)
 {
 	// 2 ms per one step
 	dt = motion_steps * 0.002;
 
-	v_max = ecp_task.config.value <double> ("v_max", section_name);
-	a_max = ecp_task.config.value <double> ("a_max", section_name);
+	max_speed = ecp_task.config.value <double> ("v_max", section_name);
+	max_angular_speed = ecp_task.config.value <double> ("omega_max", section_name);
+	max_acceleration = ecp_task.config.value <double> ("a_max", section_name);
+	max_angular_acceleration = ecp_task.config.value <double> ("epsilon_max", section_name);
 
 	//	log("a_max: %lg, v_max: %lg\n", a_max, v_max);
 	//	log("v_max * dt: %lg\n", v_max * dt);
@@ -36,20 +43,20 @@ visual_servo_manager::~visual_servo_manager()
 
 bool visual_servo_manager::first_step()
 {
-	logDbg("ecp_g_ib_eih::first_step()\n");
+	log_dbg("ecp_g_ib_eih::first_step()\n");
 
-	the_robot->ecp_command.instruction.instruction_type = lib::GET;
-	the_robot->ecp_command.instruction.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.get_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.motion_type = lib::ABSOLUTE;
-	the_robot->ecp_command.instruction.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.instruction.set_arm_type = lib::FRAME;
-	the_robot->ecp_command.instruction.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.instruction.motion_steps = motion_steps;
-	the_robot->ecp_command.instruction.value_in_step_no = motion_steps - 3;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = motion_steps;
+	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.instruction.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
+		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	current_position_saved = false;
@@ -63,11 +70,14 @@ bool visual_servo_manager::first_step()
 	//
 	//	setup_timer();
 
-	prev_v.setZero();
-	v.setZero();
-	a.setZero();
+	prev_velocity.setZero();
+	prev_angular_velocity.setZero();
+	velocity.setZero();
+	angular_velocity.setZero();
+	acceleration.setZero();
+	angular_acceleration.setZero();
 
-	for (int i = 0; i < termination_conditions.size(); ++i) {
+	for (std::size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
 
@@ -81,86 +91,83 @@ bool visual_servo_manager::first_step()
 //	timer_settime(timerek, 0, &max_t, NULL);
 //}
 
+//	timer_gettime(timerek, &curr_t);
+//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
+//	setup_timer();
+
 bool visual_servo_manager::next_step()
 {
-	//	timer_gettime(timerek, &curr_t);
-	//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
-	//	setup_timer();
-
-	//	logDbg("bool visual_servo_manager::next_step() begin\n");
-	the_robot->ecp_command.instruction.instruction_type = lib::SET_GET;
-
-	if (!current_position_saved) { // save first frame
-		//logDbg("ecp_g_ib_eih::next_step() 1\n");
+	if (!current_position_saved) { // save first position
 		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-		current_gripper_coordinate = the_robot->reply_package.arm.pf_def.gripper_coordinate;
-
 		current_position_saved = true;
 	}
 
-	bool object_visible = false;
-	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
-		(*it)->get_vsp_fradia()->get_reading();
-		object_visible = object_visible || (*it)->is_object_visible();
-	}
-
-	// update object visiblity in termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		termination_conditions[i]->update_object_visibility(object_visible);
-	}
-
-	// get readings from all servos and aggregate
+	// get aggregated position change from all servos
 	lib::Homog_matrix position_change = get_aggregated_position_change();
+
+	// calculate new position with respect to robot's base
 	lib::Homog_matrix next_position = current_position * position_change;
 
 	// apply weak position constraints
-	bool constraints_kept = false;
-	for (int i = 0; i < position_constraints.size(); ++i) {
-		if (position_constraints[i]->is_position_ok(next_position)) {
-			constraints_kept = true;
-		}
-	}
-	if (!constraints_kept && position_constraints.size() > 0) {
-		position_constraints[0]->apply_constraint(next_position);
-	}
+	constrain_position(next_position);
 
-	apply_speed_accel_constraints(next_position);
+	// position change is now different, because position constraints were applied
+	position_change = (!current_position) * next_position;
 
-	// update speed and acceleration in termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		termination_conditions[i]->update_end_effector_speed(v);
-		termination_conditions[i]->update_end_effector_accel(a);
-	}
+	// change representation to AA, because in AA form it's easier to constrain velocity and acceleration
+	constrain_speed_accel(position_change);
 
-	// send command to the robot
-	next_position.get_frame_tab(the_robot->ecp_command.instruction.arm.pf_def.arm_frame);
-	the_robot->ecp_command.instruction.arm.pf_def.gripper_coordinate = current_gripper_coordinate;
+	// update next position, because it may have changed by velocity and acceleration constraints
+	next_position = current_position * position_change;
+
+	// prepare command to EDP
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
+	next_position.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 
 	// save next position
 	current_position = next_position;
 
 	// check termination conditions
-	for (int i = 0; i < termination_conditions.size(); ++i) {
-		if (termination_conditions[i]->terminate_now()) {
-			return false;
+	bool any_condition_met = false;
+	for (std::size_t i = 0; i < termination_conditions.size(); ++i) {
+		termination_conditions[i]->update(this);
+		if (termination_conditions[i]->is_condition_met()) {
+			any_condition_met = true;
 		}
 	}
 
-	return true;
+	return !any_condition_met;
 } // next_step()
 
-void visual_servo_manager::apply_speed_accel_constraints(lib::Homog_matrix& new_position)
+void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
+{
+	double nearest_allowed_area_distance = INFINITY;
+	lib::Homog_matrix constrained_position = new_position;
+
+	for (std::size_t i = 0; i < position_constraints.size(); ++i) {
+		lib::Homog_matrix c1 = position_constraints[i]->apply_constraint(new_position);
+		Eigen::Matrix <double, 3, 1> translation;
+		translation(0, 0) = c1(0, 3) - new_position(0, 3);
+		translation(1, 0) = c1(1, 3) - new_position(1, 3);
+		translation(2, 0) = c1(2, 3) - new_position(2, 3);
+
+		double d = translation.norm();
+
+		if(nearest_allowed_area_distance > d){
+			nearest_allowed_area_distance = d;
+			constrained_position = c1;
+		}
+	}
+	new_position = constrained_position;
+}
+
+void visual_servo_manager::constrain_vector(Eigen::Matrix <double, 3, 1> &ds, Eigen::Matrix <double, 3, 1> &prev_v, Eigen::Matrix <
+		double, 3, 1> &v, Eigen::Matrix <double, 3, 1> &a, double max_v, double max_a)
 {
 	// apply speed constraints
-	Eigen::Matrix <double, 3, 1> ds;
-
-	for (int i = 0; i < 3; ++i) {
-		ds(i, 0) = new_position[i][3] - current_position[i][3];
-	}
-
 	double ds_norm = ds.norm();
-	if (ds_norm > (v_max * dt)) {
-		ds = ds * ((v_max * dt) / ds_norm);
+	if (ds_norm > (max_v * dt)) {
+		ds = ds * ((max_v * dt) / ds_norm);
 	}
 
 	v = ds / dt;
@@ -168,21 +175,31 @@ void visual_servo_manager::apply_speed_accel_constraints(lib::Homog_matrix& new_
 	// apply acceleration constraints
 	Eigen::Matrix <double, 3, 1> dv = v - prev_v;
 	double dv_norm = dv.norm();
-	//	logDbg("dv = %10lg    prev_v = %10lg     v = %10lg\n", dv_norm, prev_v.norm(), v.norm());
-	if (dv_norm > (a_max * dt)) {
-		dv = dv * ((a_max * dt) / dv_norm);
+	if (dv_norm > (max_a * dt)) {
+		dv = dv * ((max_a * dt) / dv_norm);
 		v = prev_v + dv;
 		ds = v * dt;
-		//		logDbg("Acceleration constrained (%10lg > %10lg): dv = %10lg  ds = %10lg\n", dv_norm, (a_max * dt), dv.norm(), ds.norm());
-	}
-	//	logDbg("ds = %10lg\n", ds.norm());
-
-	for (int i = 0; i < 3; ++i) {
-		new_position[i][3] = current_position[i][3] + ds(i, 0);
 	}
 
 	a = dv / dt;
+
 	prev_v = v;
+}
+
+void visual_servo_manager::constrain_speed_accel(lib::Homog_matrix & position_change)
+{
+	lib::Xyz_Angle_Axis_vector aa_vector;
+	position_change.get_xyz_angle_axis(aa_vector);
+	Eigen::Matrix <double, 3, 1> ds = aa_vector.block(0, 0, 3, 1);
+	Eigen::Matrix <double, 3, 1> dalpha = aa_vector.block(3, 0, 3, 1);
+
+	constrain_vector(ds, prev_velocity, velocity, acceleration, max_speed, max_acceleration);
+	constrain_vector(dalpha, prev_angular_velocity, angular_velocity, angular_acceleration, max_angular_speed, max_angular_acceleration);
+
+	aa_vector.block(0, 0, 3, 1) = ds;
+	aa_vector.block(3, 0, 3, 1) = dalpha;
+	// get back to homogeneous matrix representation
+	position_change.set_from_xyz_angle_axis(aa_vector);
 }
 
 const lib::Homog_matrix& visual_servo_manager::get_current_position() const
@@ -190,15 +207,20 @@ const lib::Homog_matrix& visual_servo_manager::get_current_position() const
 	return current_position;
 }
 
-void visual_servo_manager::configure()
+void visual_servo_manager::configure(const std::string & sensor_prefix)
 {
-	//	logDbg("void visual_servo_manager::configure() 1\n");
+	//	log_dbg("void visual_servo_manager::configure() 1\n");
 	configure_all_servos();
-	//	logDbg("void visual_servo_manager::configure() 2\n");
-	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it) {
+	//	log_dbg("void visual_servo_manager::configure() 2\n");
+	int i = 0;
+	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it, ++i) {
 		(*it)->get_vsp_fradia()->configure_sensor();
+		char sensor_suffix[64];
+		sprintf(sensor_suffix, "%02d", i);
+		lib::sensor::SENSOR_t sensor_id = sensor_prefix + sensor_suffix;
+		sensor_m[sensor_id] = (*it)->get_vsp_fradia().get();
 	}
-	//	logDbg("void visual_servo_manager::configure() 3\n");
+	//	log_dbg("void visual_servo_manager::configure() 3\n");
 }
 
 void visual_servo_manager::add_position_constraint(boost::shared_ptr <position_constraint> new_constraint)
@@ -211,10 +233,29 @@ void visual_servo_manager::add_termination_condition(boost::shared_ptr <terminat
 	termination_conditions.push_back(term_cond);
 }
 
-void visual_servo_manager::set_speed_accel_constraints(double v_max, double a_max)
+double visual_servo_manager::get_linear_speed() const
 {
-	this->a_max = a_max;
-	this->v_max = v_max;
+	return velocity.norm();
+}
+
+double visual_servo_manager::get_angular_speed() const
+{
+	return angular_velocity.norm();
+}
+
+double visual_servo_manager::get_linear_acceleration() const
+{
+	return acceleration.norm();
+}
+
+double visual_servo_manager::get_angular_acceleration() const
+{
+	return angular_acceleration.norm();
+}
+
+const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& visual_servo_manager::get_servos() const
+{
+	return servos;
 }
 
 } // namespace generator

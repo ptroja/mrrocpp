@@ -9,7 +9,7 @@
 #include <boost/foreach.hpp>
 
 #include "Place.hh"
-#include "lib/impconst.h"
+#include "base/lib/impconst.h"
 
 namespace pnexec {
 

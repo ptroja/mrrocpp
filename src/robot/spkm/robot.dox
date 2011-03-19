@@ -1,0 +1,39 @@
+/** 
+
+@namespace mrrocpp::lib::spkm
+@brief Namespace for SwarmItFIX agent's parallel manipulator libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup spkm
+
+@namespace mrrocpp::ecp::spkm
+@brief Namespace for ECP SwarmItFIX agent's parallel manipulator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup spkm
+
+@namespace mrrocpp::kinematics::spkm
+@brief Contains classes related to the kinematics of the SwarmItFIX hybrid, 7DOFs manipulator.
+@date 2010.02.01 
+@author tkornuta
+@ingroup KINEMATICS SIF_KINEMATICS spkm
+
+
+
+@defgroup SIF_KINEMATICS Kinematics: The SwarmItFIX software agents.
+@{
+The group contains classes related to three main <b>software agents</b> related to different parts of the SwarmItFIX physical agent (p-agent).
+
+A single p-agent consists of the manipulator with the head attached as its end-effector and the mobile base enabling the relocation of the
+whole manipulator. Worth notting is the fact that the actions of the mobile base, the manipulator and the head are disjoint, thus can be controlled  separatelly.
+
+The division is as follows:
+ - the \link mrrocpp::kinematics::smb::model smb\endlink kinematic model is responsible for control of the mobile base, 
+ - the \link mrrocpp::kinematics::spkm::kinematic_model_spkm spkm\endlink kinematic model is responsible for control of the 7DOFs hybrid manipulator mounted on the top of mobile base, 
+ - the \link mrrocpp::kinematics::shead::model shead\endlink kinematic model is responsible for control of the head attached to the manipulator end-effector. 
+
+@}
+
+   @defgroup spkm SwarmItFix parallel kinematic machine
+   @ingroup swarm_robots manipulators
+
+
+*/

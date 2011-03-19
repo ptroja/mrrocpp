@@ -764,7 +764,7 @@ void calib_axxb::objective_function_fdf(const gsl_vector *v, void *params, doubl
 	objective_function_df(v, params, df);
 }
 
-//task* return_created_ecp_task (lib::configurator &_config)
+//task_base* return_created_ecp_task (lib::configurator &_config)
 //{
 //	return new calib_axxb(_config);
 //}

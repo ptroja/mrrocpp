@@ -1,0 +1,30 @@
+/** 
+
+@namespace mrrocpp::ecp
+@brief Main, base namespace for ECP classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::common
+@brief namespace for common ECP classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::common::robot
+@brief namespace for common ECP robot classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::common::generator
+@brief namespace for common ECP generator classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::common::task
+@brief namespace for common ECP task classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::ecp::common::sub_task
+@brief namespace for common ECP sub_task classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+ @defgroup ecp ECP
+ @ingroup base
+   
+*/

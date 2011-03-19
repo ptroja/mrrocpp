@@ -5,7 +5,7 @@ add_executable(ecp_dung
 )
 
 target_link_libraries(ecp_dung
-	ecp_r_irp6p
+	ecp_r_irp6p_m
 	ecp
 )
 

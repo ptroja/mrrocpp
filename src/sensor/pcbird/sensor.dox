@@ -1,0 +1,22 @@
+/** 
+
+
+@defgroup PCBIRD_SENSOR Sensors: PcBird - Detection of object position and orientation.   
+@{
+Ascension pcBIRD is a magnetic tracker with an electronics unit powered by the ISA bus on your personal computer. 
+The pcBIRD is a six degrees-of-freedom measuring device that measures the position and orientation of a small body-mounted sensor.
+
+More information can be found at the 
+<a href="http://www.inition.co.uk/inition/dispatcher.php?action=get&model=products&URL_=product_mocaptrack_ascension_pcbird&SubCatID_=18&tab=blurb">Ascension</a>
+ webpage.
+
+In the Robotics Lab it was utilized for:
+ - calibration of a dual-arm robot,
+ - localization of objects for grasping purposes.  
+
+First version of the PcBird VSP (working under the Linux control) was created by B.Bielawski, T.Wlostowski and T.Adamczyk 
+as a project from the ISR (polish: Inteligentne Systemy Robotyczne, Intelligent Robotic Systems) led by T.Kornuta.
+@}
+
+
+*/

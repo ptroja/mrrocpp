@@ -9,13 +9,11 @@
 #define ECP_G_EIHCALIBRATION_H_
 
 //fradia
-#include "ecp_mp/sensor/ecp_mp_s_cvfradia.h"
+#include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
 
-#include "ecp/common/generator/ecp_generator.h"
+#include "base/ecp/ecp_generator.h"
 
-#include <cstring>
-#include <iostream>
-#include <unistd.h>
+#include "datatypes.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,7 +22,7 @@ namespace generator {
 
 class eihgenerator : public common::generator::generator
 {
-	ecp_mp::sensor::cvfradia * sensor;
+	ecp_mp::sensor::fradia_sensor<lib::empty_t, chessboard_t, eihcalibration_t> * sensor;
 
   public:
 	int count;

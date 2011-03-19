@@ -1,0 +1,11 @@
+/** 
+
+@namespace mrrocpp::lib::irp6_tfg
+@brief Common namespace for two finger grippers
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup irp6_tfg
+
+   @defgroup irp6_tfg Common two finger grippers
+   @ingroup grippers
+
+*/

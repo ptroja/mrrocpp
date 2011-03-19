@@ -1,0 +1,16 @@
+/** 
+
+@namespace mrrocpp::lib
+@brief Main, base namespace for libraries
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+
+@namespace mrrocpp::lib::sensor
+@brief Namespace containing classes and types related to sensors common to all MRROC++ processes.
+@date 04.08.2010 
+@author tkornuta
+@ingroup SENSORS
+
+ @defgroup lib Libraries
+ @ingroup base
+
+*/

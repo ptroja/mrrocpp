@@ -7,36 +7,37 @@
 // ------------------------------------------------------------------------
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 #include <map>
 
-#include "lib/typedefs.h"
-#include "lib/impconst.h"
-#include "lib/com_buf.h"
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
 
-#include "lib/srlib.h"
+#include "base/lib/configurator.h"
+#include "base/lib/sr/sr_ecp.h"
 
-#include "ecp/irp6_postument/ecp_r_irp6p.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_dung.h"
 #include "ecp_g_dung.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p {
+namespace irp6p_m {
 namespace task {
 
 // KONSTRUKTORY
-dung::dung(lib::configurator &_config) : task(_config)
+dung::dung(lib::configurator &_config) :
+	common::task::task(_config)
 {
-	ecp_m_robot = new robot (*this);
+	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 }
 
-void dung::main_task_algorithm(void)
-{
+void dung::main_task_algorithm(void) {
 	generator::dung dg(*this, 4);
 
-	for(;;) {
+	for (;;) {
 		sr_ecp_msg->message("NEW SERIES");
 
 		dg.Move();
@@ -49,9 +50,8 @@ void dung::main_task_algorithm(void)
 namespace common {
 namespace task {
 
-task* return_created_ecp_task (lib::configurator &_config)
-{
-	return new irp6p::task::dung(_config);
+task_base* return_created_ecp_task(lib::configurator &_config) {
+	return new irp6p_m::task::dung(_config);
 }
 
 }

@@ -1,10 +1,15 @@
 #if !defined(_ECP_T_KCZ_TEST_H)
 #define _ECP_T_KCZ_TEST_H
 
-#include "ecp/common/task/ecp_task.h"
-#include "ecp/common/generator/ecp_g_smooth.h"
+#include "base/ecp/ecp_task.h"
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
+
+namespace lib {
+	class configurator;
+}
+
 namespace ecp {
 namespace common {
 namespace task {
@@ -12,7 +17,7 @@ namespace task {
 class kcz_test: public common::task::task {
 
   protected:
-	  common::generator::smooth* smoothgen2;
+	  common::generator::newsmooth* smoothgen2;
 
   public:
 	  kcz_test(lib::configurator &_config);
