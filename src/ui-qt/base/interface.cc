@@ -486,23 +486,23 @@ void Interface::manage_interface_slot()
 				switch (mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
+
 						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-						// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 						break;
 					case common::UI_MP_PERMITED_TO_RUN:
+
 						mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
-						// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, ABN_mm_all_robots_preset_positions, NULL);
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
+
 						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
 						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						// ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
+
 						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
 						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-						// ApModifyItemState(&all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_preset_positions, NULL);
 						break;
 					default:
 						break;
@@ -520,6 +520,7 @@ void Interface::manage_interface_slot()
 		switch (mp.state)
 		{
 			case common::UI_MP_NOT_PERMITED_TO_RUN:
+				mw->get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
 				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 				/* TR
 				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
@@ -527,6 +528,7 @@ void Interface::manage_interface_slot()
 				 */
 				break;
 			case common::UI_MP_PERMITED_TO_RUN:
+				mw->get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
 				mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
 				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
 				/* TR
@@ -536,6 +538,7 @@ void Interface::manage_interface_slot()
 				 */
 				break;
 			case common::UI_MP_WAITING_FOR_START_PULSE:
+				mw->get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
 				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
 				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionall_EDP_Unload);
 				/* TR
@@ -546,7 +549,11 @@ void Interface::manage_interface_slot()
 				 */
 				break;
 			case common::UI_MP_TASK_RUNNING:
+				mw->get_ui()->label_mp_notification->setText("TASK_RUNNING");
+				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				break;
 			case common::UI_MP_TASK_PAUSED:
+				mw->get_ui()->label_mp_notification->setText("TASK_PAUSED");
 				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
 				/* TR
 				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
