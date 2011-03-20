@@ -233,6 +233,7 @@ public:
 	bool are_all_robots_synchronised_or_inactive();
 	bool are_all_robots_loaded_or_inactive();
 	bool is_any_active_robot_loaded();
+	bool is_any_active_robot_loaded_and_all_synchronised();
 
 	// windows
 

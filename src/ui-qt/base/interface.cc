@@ -439,15 +439,32 @@ void Interface::manage_interface_slot()
 				 unblock_widget(ABW_base_robot);
 				 */
 				break;
-			case UI_ALL_EDPS_SOME_EDPS_LOADED:
-				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
+			case UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED:
+				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED_AND_SYNCHRONISED");
 				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
 				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
 
 				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
 				/* TR
-				 //			printf("UI_ALL_EDPS_SOME_EDPS_LOADED\n");
+				 //			printf("UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED\n");
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
+				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
+				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
+				 PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
+				 unblock_widget(ABW_base_all_robots);
+				 unblock_widget(ABW_base_robot);
+				 */
+				break;
+			case UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
+				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED_BUT_NOT_SYNCHRONISED");
+				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+
+				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
+				/* TR
+				 //			printf("UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED\n");
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
 				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
@@ -459,8 +476,8 @@ void Interface::manage_interface_slot()
 			case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_notification->setText("LOADED_BUT_NOT_SYNCHRONISED");
 				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionall_Synchronisation, mw->get_ui()->actionall_EDP_Load);
-
+				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Load);
+				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
 				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
 				/* TR
@@ -475,7 +492,7 @@ void Interface::manage_interface_slot()
 				mw->get_ui()->label_all_edps_notification->setText("LOADED_AND_SYNCHRONISED");
 				mw->enable_menu_item(false, 2, mw->get_ui()->actionall_Synchronisation, mw->get_ui()->actionall_EDP_Load);
 				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+
 				/* TR
 				 //				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
 				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
@@ -486,8 +503,7 @@ void Interface::manage_interface_slot()
 				switch (mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
-
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
+						mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
 						break;
 					case common::UI_MP_PERMITED_TO_RUN:
 
@@ -782,6 +798,25 @@ bool Interface::are_all_robots_loaded_or_inactive()
 	return r_value;
 }
 
+bool Interface::is_any_active_robot_loaded_and_all_synchronised()
+{
+	bool r_value = true;
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
+							> 0) && (robot_node.second->state.edp.is_synchronised))
+							|| (!(robot_node.second->state.is_active)) || ((robot_node.second->state.is_active)
+							&& (robot_node.second->state.edp.state <= 0)));
+
+					if (!r_value) {
+						return false;
+					}
+				}
+
+	return r_value;
+}
+
 bool Interface::is_any_active_robot_loaded()
 {
 	bool r_value = false;
@@ -814,9 +849,19 @@ int Interface::check_edps_state_and_modify_mp_state()
 	} else if (are_all_robots_loaded_or_inactive()) {
 		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
 
-		// jesli chociaz jeden jest zaladowany
+		// jesli chociaz jeden jest zaladowany a wszystkie zsynchronizowane
+
 	} else if (is_any_active_robot_loaded()) {
-		all_edps = UI_ALL_EDPS_SOME_EDPS_LOADED;
+
+		if (is_any_active_robot_loaded_and_all_synchronised()) {
+			all_edps = UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED;
+
+			// jesli chociaz jeden jest zaladowany
+
+		} else {
+
+			all_edps = UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
+		}
 
 		// jesli zaden nie jest zaladowany
 	} else {
@@ -836,7 +881,8 @@ int Interface::check_edps_state_and_modify_mp_state()
 			break;
 
 		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-		case UI_ALL_EDPS_SOME_EDPS_LOADED:
+		case UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED:
+		case UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
 		case UI_ALL_EDPS_NONE_EDP_LOADED:
 			if (mp.state == UI_MP_PERMITED_TO_RUN) {
 				mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
