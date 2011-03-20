@@ -421,7 +421,7 @@
       <widget class="QFrame" name="frame">
        <property name="minimumSize">
         <size>
-         <width>210</width>
+         <width>180</width>
          <height>40</height>
         </size>
        </property>
@@ -436,13 +436,13 @@
          <rect>
           <x>20</x>
           <y>20</y>
-          <width>180</width>
+          <width>150</width>
           <height>20</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>150</width>
           <height>17</height>
          </size>
         </property>
@@ -461,7 +461,7 @@
        <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
-          <x>40</x>
+          <x>10</x>
           <y>0</y>
           <width>161</width>
           <height>20</height>
@@ -491,7 +491,7 @@
       <widget class="QFrame" name="frame_3">
        <property name="minimumSize">
         <size>
-         <width>210</width>
+         <width>270</width>
          <height>40</height>
         </size>
        </property>
@@ -506,13 +506,13 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>191</width>
+          <width>240</width>
           <height>20</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>240</width>
           <height>17</height>
          </size>
         </property>
@@ -531,7 +531,7 @@
        <widget class="QLabel" name="label_4">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>60</x>
           <y>0</y>
           <width>191</width>
           <height>20</height>
@@ -574,7 +574,7 @@
        <widget class="QLabel" name="label_mp_notification">
         <property name="geometry">
          <rect>
-          <x>50</x>
+          <x>20</x>
           <y>20</y>
           <width>150</width>
           <height>20</height>
@@ -601,7 +601,7 @@
        <widget class="QLabel" name="label_3">
         <property name="geometry">
          <rect>
-          <x>50</x>
+          <x>20</x>
           <y>0</y>
           <width>151</width>
           <height>20</height>
