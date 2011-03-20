@@ -130,6 +130,7 @@ public:
 	bool is_mp_and_ecps_active;
 	bool is_sr_thread_loaded;
 	UI_ALL_EDPS_STATE all_edps;
+	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
