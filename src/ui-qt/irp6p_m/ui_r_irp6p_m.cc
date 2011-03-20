@@ -223,7 +223,7 @@ int UiRobot::manage_interface()
 			} else // jesli robot jest niezsynchronizowany
 			{
 				mw->enable_menu_item(true, 1, ui->menuirp6p_m_Pre_Synchro_Moves);
-				mw->enable_menu_item(true, 2, ui->actionirp6p_m_EDP_Unload, ui->actionall_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->actionirp6p_m_EDP_Unload);
 				mw->enable_menu_item(false, 1, ui->actionirp6p_m_EDP_Load);
 
 			}

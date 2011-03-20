@@ -188,7 +188,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 2, ui->actionbirdhand_EDP_Unload, ui->actionall_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->actionbirdhand_EDP_Unload);
 				mw->enable_menu_item(false, 3, ui->actionbirdhand_EDP_Load, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, NULL);
