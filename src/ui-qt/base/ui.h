@@ -173,7 +173,8 @@ typedef struct
 	int node_nr;
 	lib::fd_client_t pulse_fd;
 	UI_MP_STATE state;
-	UI_MP_STATE last_state;
+	UI_MP_STATE last_process_control_state;
+	UI_MP_STATE last_manage_interface_state;
 } mp_state_def;
 
 typedef struct

@@ -127,7 +127,7 @@ int wgt_process_control::init()
 	}
 
 	// Dla mp i ecp
-	if (interface.mp.state != interface.mp.last_state) {
+	if (interface.mp.state != interface.mp.last_process_control_state) {
 		switch (interface.mp.state)
 		{
 			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
@@ -175,7 +175,7 @@ int wgt_process_control::init()
 				break;
 		}
 
-		interface.mp.last_state = interface.mp.state;
+		interface.mp.last_process_control_state = interface.mp.state;
 
 	}
 

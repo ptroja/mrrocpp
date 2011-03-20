@@ -45,8 +45,11 @@ Interface::Interface() :
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	mp.last_state = UI_MP_STATE_NOT_KNOWN;// mp wylaczone
+	mp.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
+	mp.last_manage_interface_state = UI_MP_STATE_NOT_KNOWN;
+
 	mp.pid = -1;
+
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
@@ -489,45 +492,48 @@ void Interface::manage_interface_slot()
 			break;
 	}
 
-	// wlasciwosci menu task_menu
-	switch (mp.state)
-	{
-		case common::UI_MP_NOT_PERMITED_TO_RUN:
-			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
-			/* TR
-			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
-			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
-			 */
-			break;
-		case common::UI_MP_PERMITED_TO_RUN:
-			mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
-			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
-			/* TR
-			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
-			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
-			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
-			 */
-			break;
-		case common::UI_MP_WAITING_FOR_START_PULSE:
-			mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
-			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionall_EDP_Unload);
-			/* TR
-			 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
-			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
-			 //	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
-			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
-			 */
-			break;
-		case common::UI_MP_TASK_RUNNING:
-		case common::UI_MP_TASK_PAUSED:
-			mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
-			/* TR
-			 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
-			 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
-			 */
-			break;
-		default:
-			break;
+	if (mp.state != mp.last_manage_interface_state) {
+		// wlasciwosci menu task_menu
+		switch (mp.state)
+		{
+			case common::UI_MP_NOT_PERMITED_TO_RUN:
+				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				/* TR
+				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, ABN_mm_mp_unload, NULL);
+				 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
+				 */
+				break;
+			case common::UI_MP_PERMITED_TO_RUN:
+				mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
+				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
+				/* TR
+				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, NULL);
+				 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_load, NULL);
+				 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLACK, 0);
+				 */
+				break;
+			case common::UI_MP_WAITING_FOR_START_PULSE:
+				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
+				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionall_EDP_Unload);
+				/* TR
+				 ApModifyItemState(&task_menu, AB_ITEM_NORMAL, ABN_mm_mp_unload, NULL);
+				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_load, NULL);
+				 //	ApModifyItemState( &all_robots_menu, AB_ITEM_DIM, ABN_mm_all_robots_edp_unload, NULL);
+				 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_DBLUE, 0);
+				 */
+				break;
+			case common::UI_MP_TASK_RUNNING:
+			case common::UI_MP_TASK_PAUSED:
+				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				/* TR
+				 ApModifyItemState(&task_menu, AB_ITEM_DIM, ABN_mm_mp_unload, ABN_mm_mp_load, NULL);
+				 PtSetResource(ABW_base_task, Pt_ARG_COLOR, Pg_BLUE, 0);
+				 */
+				break;
+			default:
+				break;
+		}
+		mp.last_manage_interface_state = mp.state;
 	}
 
 }
