@@ -662,6 +662,7 @@ void Interface::reload_whole_configuration()
 			msg += " config file loaded";
 			ui_msg->message(msg.c_str());
 		}
+		mw->get_ui()->label_config_file_notification->setText(config_file.c_str());
 
 	}
 
