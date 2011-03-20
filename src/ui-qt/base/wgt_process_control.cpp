@@ -27,7 +27,7 @@ void wgt_process_control::process_control_window_init()
 
 void wgt_process_control::process_control_window_init_slot()
 {
-	init(false);
+	init();
 }
 
 void wgt_process_control::my_open()
@@ -84,7 +84,7 @@ void wgt_process_control::on_all_reader_trigger_pushButton_clicked()
 }
 
 // aktualizacja ustawien przyciskow
-int wgt_process_control::init(bool do_it)
+int wgt_process_control::init()
 
 {
 
@@ -127,7 +127,7 @@ int wgt_process_control::init(bool do_it)
 	}
 
 	// Dla mp i ecp
-	if ((interface.mp.state != interface.mp.last_state) || (do_it)) {
+	if (interface.mp.state != interface.mp.last_state) {
 		switch (interface.mp.state)
 		{
 			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:

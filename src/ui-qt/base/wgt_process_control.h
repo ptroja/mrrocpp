@@ -31,7 +31,7 @@ private:
 	Ui::wgt_process_controlClass ui;
 
 	// aktualizacja ustawien przyciskow
-	int init(bool do_it);
+	int init();
 	int block_all_ecp_trigger_widgets();
 	int unblock_all_ecp_trigger_widgets();
 
