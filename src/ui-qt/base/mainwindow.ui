@@ -434,9 +434,9 @@
        <widget class="QLabel" name="notification_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>20</x>
           <y>20</y>
-          <width>191</width>
+          <width>180</width>
           <height>20</height>
          </rect>
         </property>
@@ -461,9 +461,9 @@
        <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>40</x>
           <y>0</y>
-          <width>191</width>
+          <width>161</width>
           <height>20</height>
          </rect>
         </property>
@@ -561,7 +561,7 @@
       <widget class="QFrame" name="frame_2">
        <property name="minimumSize">
         <size>
-         <width>210</width>
+         <width>160</width>
          <height>40</height>
         </size>
        </property>
@@ -574,15 +574,15 @@
        <widget class="QLabel" name="label_mp_notification">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>50</x>
           <y>20</y>
-          <width>191</width>
+          <width>150</width>
           <height>20</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>150</width>
           <height>17</height>
          </size>
         </property>
@@ -601,9 +601,9 @@
        <widget class="QLabel" name="label_3">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>50</x>
           <y>0</y>
-          <width>191</width>
+          <width>151</width>
           <height>20</height>
          </rect>
         </property>
@@ -631,7 +631,7 @@
       <widget class="QFrame" name="frame_4">
        <property name="minimumSize">
         <size>
-         <width>210</width>
+         <width>320</width>
          <height>40</height>
         </size>
        </property>
@@ -644,15 +644,15 @@
        <widget class="QLabel" name="label_config_file_notification">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>11</x>
           <y>20</y>
-          <width>221</width>
+          <width>290</width>
           <height>20</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>290</width>
           <height>17</height>
          </size>
         </property>
@@ -671,9 +671,9 @@
        <widget class="QLabel" name="label_5">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>20</x>
           <y>0</y>
-          <width>221</width>
+          <width>281</width>
           <height>20</height>
          </rect>
         </property>
