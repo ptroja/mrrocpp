@@ -32,13 +32,13 @@ namespace task {
  */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+		if (config.value <int> ("is_active", "[edp_" #__robot_name "]")) {\
 			robot::robot* created_robot = new robot::__robot_name(*this);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
 		}
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+		if (config.value <int> ("is_active", "[edp_" #__robot_name "]")) {\
 			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
 		}

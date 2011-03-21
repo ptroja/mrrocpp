@@ -245,7 +245,7 @@ int UiRobot::reload_configuration()
 	//	printf("final_position: %lf, %lf, %lf, %lf, %lf, %lf\n ", final_position[0], final_position[1], final_position[2], final_position[3], final_position[4], final_position[5]);
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> (activation_string)) == 1) {
+	if ((state.is_active = interface.config->value <int> ("is_active", state.edp.section_name)) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {
