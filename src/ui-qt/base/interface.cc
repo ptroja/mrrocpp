@@ -959,7 +959,9 @@ int Interface::fill_program_node_list()
 	for (std::list <Interface::list_t>::iterator section_list_iterator = section_list.begin(); section_list_iterator
 			!= section_list.end(); section_list_iterator++) {
 
-		if (config->exists("program_name", *section_list_iterator)) {
+		if (config->exists("program_name", *section_list_iterator)
+				&& config->exists("is_active", *section_list_iterator)
+				&& config->value <bool> ("is_active", *section_list_iterator)) {
 			//	char* tmp_p =config->value<std::string>("program_name", *section_list_iterator);
 			//	char* tmp_n =config->value<std::string>("node_name", *section_list_iterator);
 
@@ -1442,7 +1444,7 @@ int Interface::slay_all()
 
 	// program unload
 
-	// unload_all();
+	unload_all();
 
 	// brutal overkilling
 
