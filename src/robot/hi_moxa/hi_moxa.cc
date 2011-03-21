@@ -344,7 +344,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
-		const int disp_drv_no = 0;
+//		const int disp_drv_no = 0;
 //		std::cout << "[info]";
 //		std::cout << " sw1_sw2_swSynchr = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
 //		std::cout << " position = " << (int) servo_data[disp_drv_no].drive_status.position;
