@@ -108,7 +108,7 @@ public:
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
 	std::list <list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list <program_node_def> program_node_list;
+	std::list <program_node_user_def> program_node_user_list;
 
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI

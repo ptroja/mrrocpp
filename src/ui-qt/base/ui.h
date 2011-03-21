@@ -183,7 +183,8 @@ typedef struct
 {
 	std::string program_name;
 	std::string node_name;
-} program_node_def;
+	std::string user_name;
+} program_node_user_def;
 
 class function_execution_buffer
 {

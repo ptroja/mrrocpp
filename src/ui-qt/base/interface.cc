@@ -964,12 +964,12 @@ int Interface::fill_program_node_list()
 			//	char* tmp_p =config->value<std::string>("program_name", *section_list_iterator);
 			//	char* tmp_n =config->value<std::string>("node_name", *section_list_iterator);
 
-			program_node_def tmp_s;
+			program_node_user_def tmp_s;
 
 			tmp_s.program_name = config->value <std::string> ("program_name", *section_list_iterator);
 			tmp_s.node_name = config->value <std::string> ("node_name", *section_list_iterator);
 
-			program_node_list.push_back(tmp_s);
+			program_node_user_list.push_back(tmp_s);
 		}
 	}
 
@@ -982,7 +982,7 @@ int Interface::clear_all_configuration_lists()
 	section_list.clear();
 	config_node_list.clear();
 	all_node_list.clear();
-	program_node_list.clear();
+	program_node_user_list.clear();
 
 	return 1;
 }
@@ -1431,8 +1431,8 @@ int Interface::slay_all()
 
 	// brutal overkilling
 
-	for (std::list <ui::common::program_node_def>::iterator program_node_list_iterator = program_node_list.begin(); program_node_list_iterator
-			!= program_node_list.end(); program_node_list_iterator++) {
+	for (std::list <ui::common::program_node_user_def>::iterator program_node_user_list_iterator =
+			program_node_user_list.begin(); program_node_user_list_iterator != program_node_user_list.end(); program_node_user_list_iterator++) {
 		char system_command[100];
 		/*
 		 #if 0
@@ -1450,13 +1450,10 @@ int Interface::slay_all()
 		 system(system_command);
 		 */delay(10);
 
-#if 0
-		sprintf(system_command, "rsh %s killall -e -q -v %s",
-				program_node_list_iterator->node_name.c_str(),
-				program_node_list_iterator->program_name.c_str()
-		);
+#if 1
+		sprintf(system_command, "rsh -l %s %s killall -e -q -v %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 #else
-		sprintf(system_command, "killall -e -q -v %s", program_node_list_iterator->program_name.c_str());
+		sprintf(system_command, "killall -e -q -v %s", program_node_user_list_iterator->program_name.c_str());
 #endif
 		printf("bbb: %s\n", system_command);
 		system(system_command);
