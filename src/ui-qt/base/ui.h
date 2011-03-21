@@ -184,6 +184,7 @@ typedef struct
 	std::string program_name;
 	std::string node_name;
 	std::string user_name;
+	bool is_qnx;
 } program_node_user_def;
 
 class function_execution_buffer

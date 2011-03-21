@@ -959,15 +959,30 @@ int Interface::fill_program_node_list()
 	for (std::list <Interface::list_t>::iterator section_list_iterator = section_list.begin(); section_list_iterator
 			!= section_list.end(); section_list_iterator++) {
 
-		if ((config->exists("program_name", *section_list_iterator)
-				&& config->exists("node_name", *section_list_iterator))) {
+		if (config->exists("program_name", *section_list_iterator)) {
 			//	char* tmp_p =config->value<std::string>("program_name", *section_list_iterator);
 			//	char* tmp_n =config->value<std::string>("node_name", *section_list_iterator);
 
 			program_node_user_def tmp_s;
 
 			tmp_s.program_name = config->value <std::string> ("program_name", *section_list_iterator);
-			tmp_s.node_name = config->value <std::string> ("node_name", *section_list_iterator);
+			if (config->exists("node_name", *section_list_iterator)) {
+				tmp_s.node_name = config->value <std::string> ("node_name", *section_list_iterator);
+			} else {
+				tmp_s.node_name = std::string("localhost");
+			}
+
+			if (config->exists("username", *section_list_iterator)) {
+				tmp_s.user_name = config->value <std::string> ("username", *section_list_iterator);
+			} else {
+				tmp_s.user_name = getenv("USER");
+			}
+
+			if (config->exists("is_qnx", *section_list_iterator)) {
+				tmp_s.is_qnx = config->value <bool> ("is_qnx", *section_list_iterator);
+			} else {
+				tmp_s.is_qnx = false;
+			}
 
 			program_node_user_list.push_back(tmp_s);
 		}
@@ -1427,7 +1442,7 @@ int Interface::slay_all()
 
 	// program unload
 
-	unload_all();
+	// unload_all();
 
 	// brutal overkilling
 
@@ -1448,17 +1463,23 @@ int Interface::slay_all()
 		 #endif
 		 printf("aaa: %s\n", system_command);
 		 system(system_command);
-		 */delay(10);
+		 */delay(500);
 
 #if 1
-		sprintf(system_command, "rsh -l %s %s killall -e -q -v %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
+		if (program_node_user_list_iterator->is_qnx) {
+			sprintf(system_command, "rsh -l %s %s slay -v -f %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
+
+		} else {
+			sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
+
+		}
 #else
 		sprintf(system_command, "killall -e -q -v %s", program_node_user_list_iterator->program_name.c_str());
 #endif
 		printf("bbb: %s\n", system_command);
 		system(system_command);
 	}
-
+	printf("za\n");
 	manage_interface();
 
 	return 1;
