@@ -40,8 +40,8 @@ private:
 
 public:
 	EcpRobot *ui_ecp_robot;
-	wgt_bird_hand_command *wnd_command_and_status;
-	WndConfiguration *wnd_configuration;
+	wgt_bird_hand_command *wgt_command_and_status;
+	WndConfiguration *wgt_configuration;
 
 
 

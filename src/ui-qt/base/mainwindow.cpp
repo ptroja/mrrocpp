@@ -944,7 +944,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-	interface.bird_hand->wnd_command_and_status->my_open();
+	interface.bird_hand->wgt_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()
