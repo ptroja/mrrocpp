@@ -112,7 +112,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 
-	 wnd_command_and_status = new wgt_bird_hand_command(interface, *this);
+	 wgt_command_and_status = new wgt_bird_hand_command(interface, *this, interface.get_main_window());
+		wndbase_m[WGT_BIRD_HAND_COMMAND] = wgt_command_and_status->dwgt;
 	// wndbase_m[wnd_command_and_status->window_name] = wnd_command_and_status;
 	/* wnd_configuration = new WndConfiguration(interface, *this);
 	 wndbase_m[wnd_configuration->window_name] = wnd_configuration;
