@@ -103,8 +103,13 @@ void HI_moxa::init()
 			// activate new settings
 			tcflush(fd[i], TCIFLUSH);
 			tcsetattr(fd[i], TCSANOW, &newtio);
+
+			// start driver in MANUAL mode
+			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
+			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
 		}
 	}
+
 
 	reset_counters();
 }
@@ -283,7 +288,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 		if (servo_data[drive_number].drive_status.overcurrent == 1) {
 			if (error_msg_overcurrent == 0) {
-				master.msg->message(lib::FATAL_ERROR, "Overcurrent");
+				master.msg->message(lib::NON_FATAL_ERROR, "Overcurrent");
 				std::cout << "[error] overcurrent on (" << (int)drive_number << "): read = "
 						<< servo_data[drive_number].drive_status.current << "mA" << std::endl;
 				error_msg_overcurrent++;
