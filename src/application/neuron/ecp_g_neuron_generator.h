@@ -84,75 +84,9 @@ private:
 	bool breaking_;
 
 	/**
-	 * @brief Current velocity in all axes.
-	 */
-	double v[6];
-
-	/**
-	 * @brief Maximal allowed acceleration in all axes.
-	 */
-	double a_max[6];
-
-	/**
-	 * @brief Maximal allowed velocity in all axes.
-	 */
-	double v_max[6];
-
-	/**
-	 * @brief Node counter used for breaking.
-	 * @details When generator knows that it should start breaking, it
-	 * calculates how many macro steps its going to need to stop. The
-	 * member describes in which breaking macro step according to
-	 * calculated one it is.
-	 */
-	int breaking_node;
-
-	/**
-	 * @brief Informs whether desired position is reach or not.
-	 * @details Set to true if robot reached desired position for each axes
-	 * for currently processed trajectory.
-	 */
-	bool reached[6];
-
-	/**
-	 * @brief Motion direction.
-	 */
-	int k[6];
-
-	/**
-	 * @brief Acceleration while breaking
-	 */
-	double a;
-
-	/**
-	 * @brief Distance covered in the set of five macrosteps.
-	 */
-	double s[6];
-
-	/**
-	 * @brief Set to true if change of the direction is needed.
-	 */
-	bool change[6];
-
-	/**
-	 * @brief Current position error.
-	 */
-	double u[6];
-
-	/**
 	 * @brief Time of a macrostep.
 	 */
 	double t;
-
-	/**
-	 * @brief Flag set to true if final breaking begins.
-	 */
-	bool almost_reached[6];
-
-	/**
-	 * @brief Flag set to true if breaking without overshoot is possible.
-	 */
-	bool breaking_possible[6];
 
 	/**
 	 * @brief Difference between last and last but one position.
@@ -165,7 +99,7 @@ private:
 	 * @details Overshoot is a maximal distance from the perpendicular hyperplane to
 	 * normalized vector.
 	 */
-	double overshoot;
+	double overshoot_;
 
 	/**
 	 * @brief Number of macro steps between consequtive data.
@@ -174,6 +108,9 @@ private:
 
 	uint8_t mstep_;
 
+	/**
+	 * @brief length of breking
+	 */
 	uint8_t break_steps_;
 
 	/**
@@ -181,6 +118,9 @@ private:
 	 */
 	double radius;
 
+	/**
+	 * @brief interpolation polynomial coefficients
+	 */
 	double coeff_[6][6];
 	double vel_[6];
 
