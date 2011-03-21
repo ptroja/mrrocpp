@@ -597,7 +597,7 @@ void Interface::reload_whole_configuration()
 
 		config->change_config_file("../" + config_file);
 
-		is_mp_and_ecps_active = config->value <int> ("is_mp_and_ecps_active");
+		is_mp_and_ecps_active = config->value <int> ("is_active", "[mp]");
 
 		switch (all_edps)
 		{
