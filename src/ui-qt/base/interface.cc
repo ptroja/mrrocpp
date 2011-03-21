@@ -927,9 +927,9 @@ int Interface::get_default_configuration_file_name()
 		if (!outfile.good()) {
 			std::cerr << "Cannot open file: default_file.cfg" << std::endl;
 			perror("because of");
-		} else
+		} else {
 			outfile << config_file;
-
+		}
 		return 2;
 	}
 }
