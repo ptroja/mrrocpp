@@ -79,6 +79,8 @@ bool effector::initialize_communication()
 		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
 		if (fp) {
 			fclose(fp);
+		} else {
+			return false;
 		}
 
 		std::string system_command_string;
@@ -90,6 +92,7 @@ bool effector::initialize_communication()
 		if (!outfile.good()) {
 			std::cerr << hardware_busy_file_fullpath << std::endl;
 			perror("because of");
+			return false;
 		} else {
 			outfile << my_pid;
 		}
@@ -102,6 +105,7 @@ bool effector::initialize_communication()
 			if (!infile.good()) {
 				std::cerr << hardware_busy_file_fullpath << std::endl;
 				perror("because of");
+				return false;
 			} else {
 				infile >> file_pid;
 			}
@@ -118,6 +122,7 @@ bool effector::initialize_communication()
 			// usun plik
 			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
 				perror("Error deleting file");
+				return false;
 			} else {
 				puts("File successfully deleted");
 			}
@@ -125,12 +130,15 @@ bool effector::initialize_communication()
 			fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
 			if (fp) {
 				fclose(fp);
+			} else {
+				return false;
 			}
 			// wypelnij plik pidem edp
 			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
 			if (!outfile.good()) {
 				std::cerr << hardware_busy_file_fullpath << std::endl;
 				perror("because of");
+				return false;
 			} else {
 				outfile << my_pid;
 			}
