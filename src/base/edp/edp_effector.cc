@@ -75,11 +75,22 @@ bool effector::initialize_communication()
 		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-		pid_t file_pid;
+
 		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
 		if (fp) {
 			fclose(fp);
 		}
+
+		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+		if (!outfile.good()) {
+			std::cerr << hardware_busy_file_fullpath << std::endl;
+			perror("because of");
+		} else {
+			outfile << my_pid;
+		}
+
+	} else {
+		pid_t file_pid;
 
 		{
 			std::fstream infile(hardware_busy_file_fullpath.c_str(), std::ios::in);
@@ -91,7 +102,26 @@ bool effector::initialize_communication()
 			}
 		}
 
-		{
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+		ss << "/proc/" << file_pid;
+		ss.str().c_str();
+
+		std::cerr << ss.str() << std::endl;
+		// jesli nie ma procesu
+		if (access(ss.str().c_str(), R_OK) != 0) {
+			// usun plik
+			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
+				perror("Error deleting file");
+			} else {
+				puts("File successfully deleted");
+			}
+			// utworz plik
+			fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+			if (fp) {
+				fclose(fp);
+			}
+			// wypelnij plik pidem edp
 			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
 			if (!outfile.good()) {
 				std::cerr << hardware_busy_file_fullpath << std::endl;
@@ -99,9 +129,11 @@ bool effector::initialize_communication()
 			} else {
 				outfile << my_pid;
 			}
+		} else {
+			// juz jest EDP
+			fprintf(stderr, "edp: hardware busy\n");
+			return false;
 		}
-
-	} else {
 
 	}
 
@@ -175,10 +207,12 @@ bool effector::close_hardware_busy_file()
 			}
 		}
 		if (file_pid == my_pid) {
-			if (remove(hardware_busy_file_fullpath.c_str()) != 0)
+			// usun plik
+			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
 				perror("Error deleting file");
-			else
+			} else {
 				puts("File successfully deleted");
+			}
 		} else {
 			std::cerr << "Another EDP was running" << std::endl;
 		}
