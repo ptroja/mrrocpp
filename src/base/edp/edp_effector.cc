@@ -61,7 +61,7 @@ bool effector::initialize_communication()
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	//	if (!(robot_test_mode)) {
+
 	const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
 
 	hardware_busy_file_fullpath = "/tmp/.";
@@ -72,7 +72,7 @@ bool effector::initialize_communication()
 
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) != 0) {
 
-		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
+		std::cerr << "initialize_communication nie moglem odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
 
@@ -80,6 +80,11 @@ bool effector::initialize_communication()
 		if (fp) {
 			fclose(fp);
 		}
+
+		std::string system_command_string;
+
+		system_command_string = "chmod 757 " + hardware_busy_file_fullpath;
+		system(system_command_string.c_str());
 
 		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
 		if (!outfile.good()) {
@@ -137,28 +142,7 @@ bool effector::initialize_communication()
 
 	}
 
-#if 0
-	const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
-
-	std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
-	full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
-
-	// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-	if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK) == 0) {
-		fprintf(stderr, "edp: hardware busy\n");
-		return false;
-	}
-
-	name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-
-	if (tmp_attach == NULL) {
-		msg->message(lib::SYSTEM_ERROR, errno, "edp: hardware_busy_attach_point failed to attach");
-		fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
-		// TODO: throw
-		return false;
-	}
-#endif /* !defined(USE_MESSIP_SRR */
-	//	}
+	// nawiazywanie komunikacji
 
 	std::string full_path_to_server_attach_point("/dev/name/global/");
 	full_path_to_server_attach_point += server_attach_point;
@@ -191,7 +175,7 @@ bool effector::close_hardware_busy_file()
 
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 
-		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
+		std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
 
 		pid_t file_pid;
 
