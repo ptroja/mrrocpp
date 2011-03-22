@@ -116,11 +116,12 @@ public:
 
 	TEACHING_STATE teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;
-	UI_NOTIFICATION_STATE_ENUM notification_state;
+	UI_NOTIFICATION_STATE_ENUM notification_state, next_notification;
 
 	std::ofstream *log_file_outfile;
 
 	boost::mutex process_creation_mtx;
+	boost::mutex ui_notification_state_mutex;
 	lib::configurator* config;
 	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR

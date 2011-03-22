@@ -76,47 +76,18 @@ MainWindow* Interface::get_main_window()
 
 int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
-	if (new_notifacion != notification_state) {
 
-		notification_state = new_notifacion;
+	{
 
-		switch (new_notifacion)
-		{
-			case UI_N_STARTING:
-				mw->ui_notification("STARTING", Qt::magenta);
+		boost::unique_lock <boost::mutex> lock(ui_notification_state_mutex);
 
-				break;
-			case UI_N_READY:
-				mw->ui_notification("READY", Qt::blue);
-
-				break;
-			case UI_N_BUSY:
-				mw->ui_notification("BUSY", Qt::red);
-
-				break;
-			case UI_N_EXITING:
-				mw->ui_notification("EXITING", Qt::magenta);
-
-				break;
-			case UI_N_COMMUNICATION:
-				mw->ui_notification("COMMUNICATION", Qt::red);
-
-				break;
-			case UI_N_SYNCHRONISATION:
-				mw->ui_notification("SYNCHRONISATION", Qt::red);
-
-				break;
-			case UI_N_PROCESS_CREATION:
-				mw->ui_notification("PROCESS CREATION", Qt::red);
-
-				break;
-		}
-
-		return 1;
+		next_notification = new_notifacion;
 
 	}
 
-	return 0;
+	mw->ui_notification();
+
+	return 1;
 
 }
 
