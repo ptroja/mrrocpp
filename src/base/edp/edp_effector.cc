@@ -75,17 +75,30 @@ bool effector::initialize_communication()
 		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-
+		pid_t file_pid;
 		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
 		if (fp) {
 			fclose(fp);
 		}
-		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
-		if (!outfile.good()) {
-			std::cerr << hardware_busy_file_fullpath << std::endl;
-			perror("because of");
-		} else {
-			outfile << my_pid;
+
+		{
+			std::fstream infile(hardware_busy_file_fullpath.c_str(), std::ios::in);
+			if (!infile.good()) {
+				std::cerr << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+			} else {
+				infile >> file_pid;
+			}
+		}
+
+		{
+			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+			if (!outfile.good()) {
+				std::cerr << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+			} else {
+				outfile << my_pid;
+			}
 		}
 
 	} else {
@@ -144,21 +157,33 @@ bool effector::initialize_communication()
 bool effector::close_hardware_busy_file()
 {
 
-	FILE * fp;
-
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 
 		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 
+		pid_t file_pid;
+
 		// utworz plik i wstaw do niego pid
 
-		if (remove(hardware_busy_file_fullpath.c_str()) != 0)
-			perror("Error deleting file");
-		else
-			puts("File successfully deleted");
-
+		{
+			std::fstream infile(hardware_busy_file_fullpath.c_str(), std::ios::in);
+			if (!infile.good()) {
+				std::cerr << "infile " << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+			} else {
+				infile >> file_pid;
+			}
+		}
+		if (file_pid == my_pid) {
+			if (remove(hardware_busy_file_fullpath.c_str()) != 0)
+				perror("Error deleting file");
+			else
+				puts("File successfully deleted");
+		} else {
+			std::cerr << "Another EDP was running" << std::endl;
+		}
 	} else {
-
+		std::cerr << "close_hardware_busy_file nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 	}
 
 	return true;
