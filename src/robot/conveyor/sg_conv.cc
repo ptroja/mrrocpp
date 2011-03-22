@@ -40,9 +40,11 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
-	const std::vector<std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings,
-				mrrocpp::lib::conveyor::ports_strings+mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::conveyor::MAX_INCREMENT);
+	const std::vector <std::string>
+			ports_vector(mrrocpp::lib::conveyor::ports_strings, mrrocpp::lib::conveyor::ports_strings
+					+ mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM + 1);
+	hi
+			= new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::conveyor::MAX_INCREMENT);
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika
@@ -100,15 +102,6 @@ void servo_buffer::synchronise(void)
 /*-----------------------------------------------------------------------*/
 
 } // namespace conveyor
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new conveyor::servo_buffer((conveyor::effector &) (_master));
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp
 
