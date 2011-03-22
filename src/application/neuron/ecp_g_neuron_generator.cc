@@ -105,20 +105,19 @@ bool neuron_generator::next_step()
 	actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
 	angle_axis_vector.to_table(actual_position);
 
-	if(breaking_)
-	{
+	if(breaking_){
 		double tmp;
 
 		tmp = normalized_vector[0] * actual_position[0] +
 			  normalized_vector[1] * actual_position[1] +
 			  normalized_vector[2] * actual_position[2];
-		if(tmp < overshoot_)
-		{
+		if(tmp < overshoot_){
 			overshoot_ = tmp;
 		} 
 	}
-
+	printf("position: %f %f %f\n",actual_position[0],actual_position[1],actual_position[2]);
 	if (neuron_sensor->positionRequested()  && !breaking_) {
+		printf("position requested inside\n");
 		neuron_sensor->sendCurrentPosition(actual_position[0], actual_position[1], actual_position[2]);
 		neuron_sensor->get_reading();
 	}
@@ -185,6 +184,7 @@ bool neuron_generator::next_step()
 	}
 	++mstep_; // increment macro step number
 
+	printf("position: %f %f %f\n",position[0],position[1],position[2]);
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	//send new position to the robot

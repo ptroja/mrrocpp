@@ -403,7 +403,7 @@ Coordinates neuron_sensor::getFirstCoordinates()
  */
 void neuron_sensor::startGettingTrajectory()
 {
-	currentPeriod = 5;
+	currentPeriod = 1;
 	sendCommand(TRAJECTORY_FIRST);
 }
 
@@ -462,7 +462,7 @@ bool neuron_sensor::newData()
 bool neuron_sensor::positionRequested()
 {
 	--currentPeriod;
-
+	printf("current period: %d\n",currentPeriod);
 	if (basePeriod>0 && currentPeriod == 0){
 		currentPeriod = basePeriod;
 		return true;
