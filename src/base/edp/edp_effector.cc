@@ -32,7 +32,7 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config), robot_test_mode(true)
+	hardware_busy_file_fullpath(""), robot_name(l_robot_name), config(_config), robot_test_mode(true)
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
@@ -45,6 +45,8 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	if (robot_test_mode) {
 		msg->message("Robot test mode activated");
 	}
+
+	my_pid = getpid();
 }
 
 effector::~effector()
@@ -62,27 +64,25 @@ bool effector::initialize_communication()
 	//	if (!(robot_test_mode)) {
 	const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
 
-	std::string pid_file_fullpath = "/var/run/";
+	hardware_busy_file_fullpath = "/tmp/.";
 
-	pid_file_fullpath += hardware_busy_attach_point + ".pid";
+	hardware_busy_file_fullpath += hardware_busy_attach_point + ".pid";
 
-	pid_t my_pid = getpid();
 	FILE * fp;
 
-	if (access(pid_file_fullpath.c_str(), R_OK) != 0) {
+	if (access(hardware_busy_file_fullpath.c_str(), R_OK) != 0) {
 
-		std::cerr << "nie mogle odczytac: " << pid_file_fullpath << std::endl;
+		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-		/*
-		 fp = fopen(pid_file_fullpath.c_str(), "w");
 
-		 fclose(fp);
-		 */
-
-		std::ofstream outfile(pid_file_fullpath.c_str(), std::ios::out);
+		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+		if (fp) {
+			fclose(fp);
+		}
+		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
 		if (!outfile.good()) {
-			std::cerr << pid_file_fullpath << std::endl;
+			std::cerr << hardware_busy_file_fullpath << std::endl;
 			perror("because of");
 		} else {
 			outfile << my_pid;
@@ -137,6 +137,29 @@ bool effector::initialize_communication()
 	}
 
 	msg->message("edp loaded");
+
+	return true;
+}
+
+bool effector::close_hardware_busy_file()
+{
+
+	FILE * fp;
+
+	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
+
+		std::cerr << "nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
+
+		// utworz plik i wstaw do niego pid
+
+		if (remove(hardware_busy_file_fullpath.c_str()) != 0)
+			perror("Error deleting file");
+		else
+			puts("File successfully deleted");
+
+	} else {
+
+	}
 
 	return true;
 }
