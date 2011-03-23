@@ -35,7 +35,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
+	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_LOADED),
 			all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
 			all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
 			all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
@@ -413,7 +413,7 @@ void Interface::manage_interface_slot()
 
 		switch (all_edps)
 		{
-			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
+			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
 				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
 				mw->enable_menu_item(false, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
@@ -426,7 +426,7 @@ void Interface::manage_interface_slot()
 				 PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_GRAY, 0);
 				 */
 				break;
-			case UI_ALL_EDPS_NONE_EDP_LOADED:
+			case UI_ALL_EDPS_NONE_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
 				//print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
 				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
@@ -443,91 +443,85 @@ void Interface::manage_interface_slot()
 				 unblock_widget(ABW_base_robot);
 				 */
 				break;
-			case UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED_AND_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
-
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+			case UI_ALL_EDPS_SOME_LOADED:
+				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
 				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
-				/* TR
-				 //			printf("UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED\n");
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
-				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
-				 PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
-				 unblock_widget(ABW_base_all_robots);
-				 unblock_widget(ABW_base_robot);
-				 */
-				break;
-			case UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED_BUT_NOT_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
-
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
-				/* TR
-				 //			printf("UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED\n");
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_load, NULL);
-				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLACK, 0);
-				 PtSetResource(ABW_base_robot, Pt_ARG_COLOR, Pg_BLACK, 0);
-				 unblock_widget(ABW_base_all_robots);
-				 unblock_widget(ABW_base_robot);
-				 */
-				break;
-			case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_notification->setText("LOADED_BUT_NOT_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Load);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-				/* TR
-				 //			printf("UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED\n");
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
-				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_DBLUE, 0);
-				 unblock_widget(ABW_base_all_robots);
-				 unblock_widget(ABW_base_robot);
-				 */
-				break;
-			case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_notification->setText("LOADED_AND_SYNCHRONISED");
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionall_Synchronisation, mw->get_ui()->actionall_EDP_Load);
 				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
 
-				/* TR
-				 //				printf("UI_ALL_EDPS_LOADED_AND_SYNCHRONISED\n");
-				 PtSetResource(ABW_base_all_robots, Pt_ARG_COLOR, Pg_BLUE, 0);
-				 unblock_widget(ABW_base_all_robots);
-				 unblock_widget(ABW_base_robot);
-				 */
-				// w zaleznosci od stanu MP
-				switch (mp.state)
+				switch (all_edps_synchro)
 				{
-					case common::UI_MP_NOT_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
-						break;
-					case common::UI_MP_PERMITED_TO_RUN:
-
-						mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
-						break;
-					case common::UI_MP_WAITING_FOR_START_PULSE:
-
-						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						break;
-					case common::UI_MP_TASK_RUNNING:
-					case common::UI_MP_TASK_PAUSED:
-
-						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
+					case UI_ALL_EDPS_NONE_SYNCHRONISED:
 						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+
 						break;
-					default:
+					case UI_ALL_EDPS_SOME_SYNCHRONISED:
+						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+
+						break;
+					case UI_ALL_EDPS_ALL_SYNCHRONISED:
+
+						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+
 						break;
 				}
 
+				break;
+
+			case UI_ALL_EDPS_ALL_LOADED:
+				mw->get_ui()->label_all_edps_notification->setText("ALL_LOADED		");
+				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+
+				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Load);
+
+				switch (all_edps_synchro)
+				{
+					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
+					case UI_ALL_EDPS_NONE_SYNCHRONISED:
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
+						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+
+						break;
+					case UI_ALL_EDPS_SOME_SYNCHRONISED:
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
+						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+
+						break;
+					case UI_ALL_EDPS_ALL_SYNCHRONISED:
+
+						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+
+						switch (mp.state)
+						{
+							case common::UI_MP_NOT_PERMITED_TO_RUN:
+								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								break;
+							case common::UI_MP_PERMITED_TO_RUN:
+
+								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								break;
+							case common::UI_MP_WAITING_FOR_START_PULSE:
+
+								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+								mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+								break;
+							case common::UI_MP_TASK_RUNNING:
+							case common::UI_MP_TASK_PAUSED:
+
+								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+								mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+								break;
+							default:
+								break;
+						}
+						break;
+				}
 				break;
 			default:
 				break;
@@ -606,8 +600,8 @@ void Interface::reload_whole_configuration()
 
 		switch (all_edps)
 		{
-			case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-			case UI_ALL_EDPS_NONE_EDP_LOADED:
+			case UI_ALL_EDPS_NONE_ACTIVATED:
+			case UI_ALL_EDPS_NONE_LOADED:
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
@@ -768,7 +762,7 @@ bool Interface::is_any_robot_active()
 	return r_value;
 }
 
-bool Interface::are_all_robots_synchronised_or_inactive()
+bool Interface::are_all_active_robots_loaded()
 {
 	bool r_value = true;
 
@@ -844,58 +838,36 @@ int Interface::check_edps_state_and_modify_mp_state()
 
 	// jesli wszytkie sa nieaktywne
 	if (!is_any_robot_active()) {
-		all_edps = UI_ALL_EDPS_NONE_EDP_ACTIVATED;
+		all_edps = UI_ALL_EDPS_NONE_ACTIVATED;
 
 		// jesli wszystkie sa zsynchronizowane
-	} else if (are_all_robots_synchronised_or_inactive()) {
-		all_edps = UI_ALL_EDPS_LOADED_AND_SYNCHRONISED;
+	} else if (are_all_active_robots_loaded()) {
+		all_edps = UI_ALL_EDPS_ALL_LOADED;
 
 		// jesli wszystkie sa zaladowane
-	} else if (are_all_robots_loaded_or_inactive()) {
-		all_edps = UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
-
-		// jesli chociaz jeden jest zaladowany a wszystkie zsynchronizowane
-
 	} else if (is_any_active_robot_loaded()) {
 
-		if (is_any_active_robot_loaded_and_all_synchronised()) {
-			all_edps = UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED;
-
-			// jesli chociaz jeden jest zaladowany
-
-		} else {
-
-			all_edps = UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED;
-		}
+		all_edps = UI_ALL_EDPS_SOME_LOADED;
 
 		// jesli zaden nie jest zaladowany
 	} else {
-		all_edps = UI_ALL_EDPS_NONE_EDP_LOADED;
+		all_edps = UI_ALL_EDPS_NONE_LOADED;
 
 	}
 
 	// modyfikacja stanu MP przez stan wysztkich EDP
 
-	switch (all_edps)
-	{
-		case UI_ALL_EDPS_NONE_EDP_ACTIVATED:
-		case UI_ALL_EDPS_LOADED_AND_SYNCHRONISED:
-			if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
-				mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-			}
-			break;
-
-		case UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-		case UI_ALL_EDPS_SOME_EDPS_LOADED_AND_SYNCHRONISED:
-		case UI_ALL_EDPS_SOME_EDPS_LOADED_BUT_NOT_SYNCHRONISED:
-		case UI_ALL_EDPS_NONE_EDP_LOADED:
-			if (mp.state == UI_MP_PERMITED_TO_RUN) {
-				mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
-			}
-			break;
-		default:
-			break;
+	if ((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || ((all_edps == UI_ALL_EDPS_ALL_LOADED) && (all_edps_synchro
+			== UI_ALL_EDPS_ALL_SYNCHRONISED))) {
+		if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
+			mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
+		}
+	} else {
+		if (mp.state == UI_MP_PERMITED_TO_RUN) {
+			mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
+		}
 	}
+
 	return 1;
 }
 
