@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
+#include <fstream>
 
 #include <boost/shared_ptr.hpp>
 
@@ -30,7 +32,7 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config), robot_test_mode(true)
+	hardware_busy_file_fullpath(""), robot_name(l_robot_name), config(_config), robot_test_mode(true)
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
@@ -43,6 +45,8 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	if (robot_test_mode) {
 		msg->message("Robot test mode activated");
 	}
+
+	my_pid = getpid();
 }
 
 effector::~effector()
@@ -56,31 +60,97 @@ bool effector::initialize_communication()
 	const std::string
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
-#if 0
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(robot_test_mode)) {
 
-		const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
+	const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
 
-		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
-		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
+	hardware_busy_file_fullpath = "/tmp/.";
 
-		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-		if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK) == 0) {
+	hardware_busy_file_fullpath += hardware_busy_attach_point + ".pid";
+
+	FILE * fp;
+
+	if (access(hardware_busy_file_fullpath.c_str(), R_OK) != 0) {
+
+		std::cerr << "initialize_communication nie moglem odczytac: " << hardware_busy_file_fullpath << std::endl;
+
+		// utworz plik i wstaw do niego pid
+
+		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+		if (fp) {
+			fclose(fp);
+		} else {
+			return false;
+		}
+
+		std::string system_command_string;
+
+		system_command_string = "chmod 757 " + hardware_busy_file_fullpath;
+		system(system_command_string.c_str());
+
+		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+		if (!outfile.good()) {
+			std::cerr << hardware_busy_file_fullpath << std::endl;
+			perror("because of");
+			return false;
+		} else {
+			outfile << my_pid;
+		}
+
+	} else {
+		pid_t file_pid;
+
+		{
+			std::fstream infile(hardware_busy_file_fullpath.c_str(), std::ios::in);
+			if (!infile.good()) {
+				std::cerr << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+				return false;
+			} else {
+				infile >> file_pid;
+			}
+		}
+
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+		ss << "/proc/" << file_pid;
+		ss.str().c_str();
+
+		std::cerr << ss.str() << std::endl;
+		// jesli nie ma procesu
+		if (access(ss.str().c_str(), R_OK) != 0) {
+			// usun plik
+			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
+				perror("Error deleting file");
+				return false;
+			} else {
+				puts("File successfully deleted");
+			}
+			// utworz plik
+			fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+			if (fp) {
+				fclose(fp);
+			} else {
+				return false;
+			}
+			// wypelnij plik pidem edp
+			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+			if (!outfile.good()) {
+				std::cerr << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+				return false;
+			} else {
+				outfile << my_pid;
+			}
+		} else {
+			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
 			return false;
 		}
 
-		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-
-		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno, "edp: hardware_busy_attach_point failed to attach");
-			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
-			// TODO: throw
-			return false;
-		}
 	}
-#endif /* !defined(USE_MESSIP_SRR */
+
+	// nawiazywanie komunikacji
 
 	std::string full_path_to_server_attach_point("/dev/name/global/");
 	full_path_to_server_attach_point += server_attach_point;
@@ -104,6 +174,43 @@ bool effector::initialize_communication()
 	}
 
 	msg->message("edp loaded");
+
+	return true;
+}
+
+bool effector::close_hardware_busy_file()
+{
+
+	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
+
+		std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
+
+		pid_t file_pid;
+
+		// utworz plik i wstaw do niego pid
+
+		{
+			std::fstream infile(hardware_busy_file_fullpath.c_str(), std::ios::in);
+			if (!infile.good()) {
+				std::cerr << "infile " << hardware_busy_file_fullpath << std::endl;
+				perror("because of");
+			} else {
+				infile >> file_pid;
+			}
+		}
+		if (file_pid == my_pid) {
+			// usun plik
+			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
+				perror("Error deleting file");
+			} else {
+				puts("File successfully deleted");
+			}
+		} else {
+			std::cerr << "Another EDP was running" << std::endl;
+		}
+	} else {
+		std::cerr << "close_hardware_busy_file nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
+	}
 
 	return true;
 }

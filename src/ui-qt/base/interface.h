@@ -74,10 +74,18 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-class Interface
+class Interface : public QObject
 {
+Q_OBJECT
 private:
 	MainWindow* mw;
+
+signals:
+	void manage_interface_signal();
+
+private slots:
+
+	void manage_interface_slot();
 
 public:
 
@@ -100,7 +108,7 @@ public:
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
 	std::list <list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list <program_node_def> program_node_list;
+	std::list <program_node_user_def> program_node_user_list;
 
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
@@ -122,6 +130,7 @@ public:
 	bool is_mp_and_ecps_active;
 	bool is_sr_thread_loaded;
 	UI_ALL_EDPS_STATE all_edps;
+	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
@@ -224,6 +233,7 @@ public:
 	bool are_all_robots_synchronised_or_inactive();
 	bool are_all_robots_loaded_or_inactive();
 	bool is_any_active_robot_loaded();
+	bool is_any_active_robot_loaded_and_all_synchronised();
 
 	// windows
 
