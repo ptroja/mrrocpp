@@ -411,13 +411,16 @@ void Interface::manage_interface_slot()
 		switch (all_edps_synchro)
 		{
 			case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
+				mw->get_ui()->label_all_edps_synchro_notification->setText("NOT_KNOWN");
 				break;
 			case UI_ALL_EDPS_NONE_SYNCHRONISED:
+				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE_SYNCHRONISED");
 				break;
 			case UI_ALL_EDPS_SOME_SYNCHRONISED:
+				mw->get_ui()->label_all_edps_synchro_notification->setText("SOME_SYNCHRONISED");
 				break;
 			case UI_ALL_EDPS_ALL_SYNCHRONISED:
-
+				mw->get_ui()->label_all_edps_synchro_notification->setText("ALL_SYNCHRONISED");
 				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
 
 				break;
