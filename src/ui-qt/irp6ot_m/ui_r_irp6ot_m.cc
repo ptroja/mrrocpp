@@ -18,6 +18,8 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "../base/wgt_process_control.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace irp6ot_m {
@@ -251,8 +253,12 @@ int UiRobot::manage_interface()
 // aktualizacja ustawien przyciskow
 int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
+	//wgt_process_control *ui = interface.get_process_control_window(); //TODO: zmienic sposob
 
 	if (state.edp.state <= 0) {// edp wylaczone
+//		ui->all_reader_start_pushButton->setDisabled(true);
+//		ui->all_reader_stop_pushButton->setDisabled(true);
+//		ui->all_reader_trigger_pushButton->setDisabled(true);
 
 		/* TR
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
@@ -261,6 +267,9 @@ int UiRobot::process_control_window_irp6ot_section_init(bool &wlacz_PtButton_wnd
 		 */
 	} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
+//		ui->all_reader_start_pushButton->setEnabled(true);
+//		ui->all_reader_stop_pushButton->setDisabled(true);
+//		ui->all_reader_trigger_pushButton->setDisabled(true);
 		/* TR
 		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);

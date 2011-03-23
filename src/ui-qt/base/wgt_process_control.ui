@@ -62,35 +62,35 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="mp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>TRI&amp;GGER</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="mp_start_pushButton">
       <property name="text">
-       <string>START</string>
+       <string>S&amp;TART</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="mp_stop_pushButton">
       <property name="text">
-       <string>STOP</string>
+       <string>ST&amp;OP</string>
       </property>
      </widget>
     </item>
     <item row="2" column="0">
      <widget class="QPushButton" name="mp_pause_pushButton">
       <property name="text">
-       <string>PAUSE</string>
+       <string>&amp;PAUSE</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
      <widget class="QPushButton" name="mp_resume_pushButton">
       <property name="text">
-       <string>RESUME</string>
+       <string>R&amp;ESUME</string>
       </property>
      </widget>
     </item>
@@ -127,7 +127,7 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_ecp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>TR&amp;IGGER</string>
       </property>
      </widget>
     </item>
@@ -176,14 +176,14 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_reader_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>T&amp;RIGGER</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="all_reader_stop_pushButton">
       <property name="text">
-       <string>STOP</string>
+       <string>S&amp;TOP</string>
       </property>
      </widget>
     </item>
@@ -208,7 +208,7 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="all_reader_start_pushButton">
       <property name="text">
-       <string>START</string>
+       <string>&amp;START</string>
       </property>
      </widget>
     </item>
