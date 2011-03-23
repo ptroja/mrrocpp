@@ -407,6 +407,22 @@ void Interface::manage_interface_slot()
 
 	// wlasciwosci menu  ABW_base_all_robots
 
+	if (all_edps_synchro != all_edps_synchro_last_manage_interface_state) {
+		switch (all_edps_synchro)
+		{
+			case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
+				break;
+			case UI_ALL_EDPS_NONE_SYNCHRONISED:
+				break;
+			case UI_ALL_EDPS_SOME_SYNCHRONISED:
+				break;
+			case UI_ALL_EDPS_ALL_SYNCHRONISED:
+
+				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+
+				break;
+		}
+	}
 
 	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
 			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
@@ -780,7 +796,7 @@ bool Interface::are_all_active_robots_loaded()
 	return r_value;
 }
 
-bool Interface::are_all_robots_loaded_or_inactive()
+bool Interface::are_all_loaded_robots_synchronised()
 {
 	bool r_value = true;
 
@@ -797,7 +813,7 @@ bool Interface::are_all_robots_loaded_or_inactive()
 	return r_value;
 }
 
-bool Interface::is_any_active_robot_loaded_and_all_synchronised()
+bool Interface::is_any_loaded_robot_synchronised()
 {
 	bool r_value = true;
 
@@ -840,11 +856,9 @@ int Interface::check_edps_state_and_modify_mp_state()
 	if (!is_any_robot_active()) {
 		all_edps = UI_ALL_EDPS_NONE_ACTIVATED;
 
-		// jesli wszystkie sa zsynchronizowane
 	} else if (are_all_active_robots_loaded()) {
 		all_edps = UI_ALL_EDPS_ALL_LOADED;
 
-		// jesli wszystkie sa zaladowane
 	} else if (is_any_active_robot_loaded()) {
 
 		all_edps = UI_ALL_EDPS_SOME_LOADED;
@@ -855,7 +869,20 @@ int Interface::check_edps_state_and_modify_mp_state()
 
 	}
 
-	// modyfikacja stanu MP przez stan wysztkich EDP
+	// jesli wszytkie sa zsynchronizowane
+	if (!are_all_loaded_robots_synchronised()) {
+		all_edps_synchro = UI_ALL_EDPS_ALL_SYNCHRONISED;
+
+	} else if (is_any_loaded_robot_synchronised()) {
+		all_edps_synchro = UI_ALL_EDPS_SOME_SYNCHRONISED;
+
+	} else {
+
+		all_edps_synchro = UI_ALL_EDPS_NONE_SYNCHRONISED;
+
+	}
+
+	// modyfikacja stanu MP przez stan wszystkich EDP
 
 	if ((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || ((all_edps == UI_ALL_EDPS_ALL_LOADED) && (all_edps_synchro
 			== UI_ALL_EDPS_ALL_SYNCHRONISED))) {
