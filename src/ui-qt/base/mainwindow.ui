@@ -490,76 +490,6 @@
        </widget>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QFrame" name="frame_3">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <widget class="QLabel" name="label_all_edps_notification">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>120</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>17</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>EDPS_NOTIFICATION</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_4">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>0</y>
-          <width>91</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>ALL EDPS STATE:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </widget>
-     </item>
      <item row="2" column="2">
       <widget class="QFrame" name="frame_5">
        <property name="minimumSize">
@@ -604,7 +534,7 @@
        <widget class="QLabel" name="label_7">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>0</y>
           <width>151</width>
           <height>21</height>
@@ -622,19 +552,22 @@
          </font>
         </property>
         <property name="text">
-         <string>ALL EDPS SYNCHRO STATE:</string>
+         <string>EDPS SYNCHRO STATE:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
+       <zorder>label_all_edps_synchro_notification</zorder>
+       <zorder>label_7</zorder>
+       <zorder>frame_3</zorder>
       </widget>
      </item>
      <item row="2" column="3">
       <widget class="QFrame" name="frame_2">
        <property name="minimumSize">
         <size>
-         <width>160</width>
+         <width>180</width>
          <height>40</height>
         </size>
        </property>
@@ -649,13 +582,13 @@
          <rect>
           <x>0</x>
           <y>20</y>
-          <width>150</width>
+          <width>170</width>
           <height>20</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>170</width>
           <height>17</height>
          </size>
         </property>
@@ -674,7 +607,7 @@
        <widget class="QLabel" name="label_3">
         <property name="geometry">
          <rect>
-          <x>0</x>
+          <x>20</x>
           <y>0</y>
           <width>151</width>
           <height>20</height>
@@ -767,6 +700,76 @@
         </property>
         <property name="text">
          <string>Config File:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QFrame" name="frame_3">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_all_edps_notification">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>120</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>EDPS_NOTIFICATION</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>0</y>
+          <width>91</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>EDPS STATE:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

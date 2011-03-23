@@ -413,6 +413,10 @@ void Interface::manage_interface_slot()
 			case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NOT_KNOWN");
 				break;
+			case UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED:
+				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE EDP LOADED");
+				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+				break;
 			case UI_ALL_EDPS_NONE_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE_SYNCHRONISED");
 				break;
@@ -471,6 +475,8 @@ void Interface::manage_interface_slot()
 						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
 
 						break;
+					default:
+						break;
 				}
 
 				break;
@@ -523,6 +529,8 @@ void Interface::manage_interface_slot()
 							default:
 								break;
 						}
+						break;
+					default:
 						break;
 				}
 				break;
@@ -824,17 +832,22 @@ int Interface::check_edps_state_and_modify_mp_state()
 
 	}
 
-	// jesli wszytkie sa zsynchronizowane
-	if (are_all_loaded_robots_synchronised()) {
-		all_edps_synchro = UI_ALL_EDPS_ALL_SYNCHRONISED;
-
-	} else if (is_any_loaded_robot_synchronised()) {
-		all_edps_synchro = UI_ALL_EDPS_SOME_SYNCHRONISED;
-
+	if ((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
+		all_edps_synchro = UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED;
 	} else {
 
-		all_edps_synchro = UI_ALL_EDPS_NONE_SYNCHRONISED;
+		// jesli wszytkie sa zsynchronizowane
+		if (are_all_loaded_robots_synchronised()) {
+			all_edps_synchro = UI_ALL_EDPS_ALL_SYNCHRONISED;
 
+		} else if (is_any_loaded_robot_synchronised()) {
+			all_edps_synchro = UI_ALL_EDPS_SOME_SYNCHRONISED;
+
+		} else {
+
+			all_edps_synchro = UI_ALL_EDPS_NONE_SYNCHRONISED;
+
+		}
 	}
 
 	// modyfikacja stanu MP przez stan wszystkich EDP
