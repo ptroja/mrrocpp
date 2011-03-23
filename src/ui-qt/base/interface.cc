@@ -767,19 +767,16 @@ bool Interface::are_all_active_robots_loaded()
 
 bool Interface::are_all_loaded_robots_synchronised()
 {
-	bool r_value = true;
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
-					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
-							> 0)) || (!(robot_node.second->state.is_active)));
+					if ((robot_node.second->state.edp.state > 0) && (!(robot_node.second->state.edp.is_synchronised))) {
 
-					if (!r_value) {
 						return false;
 					}
 				}
 
-	return r_value;
+	return true;
 }
 
 bool Interface::is_any_loaded_robot_synchronised()
