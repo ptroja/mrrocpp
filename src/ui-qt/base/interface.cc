@@ -825,7 +825,7 @@ int Interface::check_edps_state_and_modify_mp_state()
 	}
 
 	// jesli wszytkie sa zsynchronizowane
-	if (!are_all_loaded_robots_synchronised()) {
+	if (are_all_loaded_robots_synchronised()) {
 		all_edps_synchro = UI_ALL_EDPS_ALL_SYNCHRONISED;
 
 	} else if (is_any_loaded_robot_synchronised()) {
