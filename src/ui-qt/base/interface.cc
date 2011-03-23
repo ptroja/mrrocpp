@@ -735,8 +735,6 @@ int Interface::check_gns()
 
 bool Interface::is_any_robot_active()
 {
-	bool r_value = false;
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					if (robot_node.second->state.is_active) {
@@ -744,25 +742,34 @@ bool Interface::is_any_robot_active()
 					}
 				}
 
-	return r_value;
+	return false;
 }
 
 bool Interface::are_all_active_robots_loaded()
 {
-	bool r_value = true;
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
-					r_value = r_value && (((robot_node.second->state.is_active)
-							&& (robot_node.second->state.edp.is_synchronised))
-							|| (!(robot_node.second->state.is_active)));
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state <= 0)) {
 
-					if (!r_value) {
 						return false;
 					}
 				}
 
-	return r_value;
+	return true;
+}
+
+bool Interface::is_any_active_robot_loaded()
+{
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						return true;
+					}
+				}
+
+	return false;
 }
 
 bool Interface::are_all_loaded_robots_synchronised()
@@ -781,35 +788,14 @@ bool Interface::are_all_loaded_robots_synchronised()
 
 bool Interface::is_any_loaded_robot_synchronised()
 {
-	bool r_value = true;
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
-					r_value = r_value && (((robot_node.second->state.is_active) && (robot_node.second->state.edp.state
-							> 0) && (robot_node.second->state.edp.is_synchronised))
-							|| (!(robot_node.second->state.is_active)) || ((robot_node.second->state.is_active)
-							&& (robot_node.second->state.edp.state <= 0)));
-
-					if (!r_value) {
-						return false;
-					}
-				}
-
-	return r_value;
-}
-
-bool Interface::is_any_active_robot_loaded()
-{
-	bool r_value = false;
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+					if ((robot_node.second->state.edp.state > 0) && (robot_node.second->state.edp.is_synchronised)) {
 						return true;
 					}
 				}
 
-	return r_value;
+	return false;
 }
 
 // ustala stan wszytkich EDP
