@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>250</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MRROC++; The best robotic framework ever ...</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuRobot">
+    <property name="title">
+     <string>&amp;Robot</string>
+    </property>
+    <widget class="QMenu" name="menuSpkm">
+     <property name="title">
+      <string>Sp&amp;km</string>
+     </property>
+     <widget class="QMenu" name="menuspkm_Pre_synchro_moves">
+      <property name="title">
+       <string>P&amp;re Synchro Moves</string>
+      </property>
+      <addaction name="actionspkm_Synchronisation"/>
+      <addaction name="actionspkm_Motors"/>
+     </widget>
+     <widget class="QMenu" name="menuspkm_Post_synchro_moves">
+      <property name="title">
+       <string>P&amp;ost Synchro Moves</string>
+      </property>
+      <addaction name="actionspkm_Motors_post"/>
+      <addaction name="actionspkm_Joints"/>
+      <addaction name="actionspkm_External"/>
+     </widget>
+     <widget class="QMenu" name="menuspkm_Preset_positions">
+      <property name="title">
+       <string>Pr&amp;eset Positions</string>
+      </property>
+      <addaction name="actionspkm_Synchro_Position"/>
+      <addaction name="actionspkm_Front_Position"/>
+      <addaction name="actionspkm_Position_0"/>
+      <addaction name="actionspkm_Position_1"/>
+      <addaction name="actionspkm_Position_2"/>
+     </widget>
+     <addaction name="actionspkm_EDP_Load"/>
+     <addaction name="actionspkm_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="menuspkm_Pre_synchro_moves"/>
+     <addaction name="menuspkm_Post_synchro_moves"/>
+     <addaction name="menuspkm_Preset_positions"/>
+     <addaction name="separator"/>
+     <addaction name="actionspkm_Clear_Fault"/>
+    </widget>
+    <widget class="QMenu" name="menuSmb">
+     <property name="title">
+      <string>S&amp;mb</string>
+     </property>
+     <addaction name="actionsmb_EDP_Load"/>
+     <addaction name="actionsmb_EDP_Unload"/>
+    </widget>
+    <widget class="QMenu" name="menuShead">
+     <property name="title">
+      <string>S&amp;head</string>
+     </property>
+     <addaction name="actionshead_EDP_Load"/>
+     <addaction name="actionshead_EDP_Unload"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6ot_m">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Irp6&amp;ot_m</string>
+     </property>
+     <widget class="QMenu" name="menuirp6ot_m_Pre_Synchro_Moves">
+      <property name="title">
+       <string>P&amp;re Synchro Moves</string>
+      </property>
+      <addaction name="actionirp6ot_m_Synchronisation"/>
+      <addaction name="actionirp6ot_m_Pre_Synchro_Moves_Motors"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6ot_m_Preset_Positions">
+      <property name="title">
+       <string>&amp;Preset Positions</string>
+      </property>
+      <addaction name="actionirp6ot_m_Synchro_Position"/>
+      <addaction name="actionirp6ot_m_Front_Position"/>
+      <addaction name="actionirp6ot_m_Position_0"/>
+      <addaction name="actionirp6ot_m_Position_1"/>
+      <addaction name="actionirp6ot_m_Position_2"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6ot_m_Absolute_moves">
+      <property name="title">
+       <string>A&amp;bsolute moves</string>
+      </property>
+      <addaction name="actionirp6ot_m_Absolute_Moves_Motors"/>
+      <addaction name="actionirp6ot_m_Joints"/>
+      <addaction name="actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuIrp6ot_m_Relative_Moves">
+      <property name="title">
+       <string>Re&amp;lative Moves</string>
+      </property>
+      <addaction name="actionirp6ot_m_Relative_Xyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6ot_m_Tool">
+      <property name="title">
+       <string>&amp;Tool</string>
+      </property>
+      <addaction name="actionirp6ot_m_Tool_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6ot_m_Tool_Xyz_Angle_Axis"/>
+     </widget>
+     <addaction name="actionirp6ot_m_EDP_Load"/>
+     <addaction name="actionirp6ot_m_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="menuirp6ot_m_Pre_Synchro_Moves"/>
+     <addaction name="menuirp6ot_m_Absolute_moves"/>
+     <addaction name="menuIrp6ot_m_Relative_Moves"/>
+     <addaction name="menuirp6ot_m_Preset_Positions"/>
+     <addaction name="menuirp6ot_m_Tool"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6p_m">
+     <property name="title">
+      <string>Irp6&amp;p_m</string>
+     </property>
+     <widget class="QMenu" name="menuirp6p_m_Pre_Synchro_Moves">
+      <property name="title">
+       <string>P&amp;re Synchro Moves</string>
+      </property>
+      <addaction name="actionirp6p_m_Synchronisation"/>
+      <addaction name="actionirp6p_m_Pre_Synchro_Moves_Motors"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6p_m_Preset_Positions">
+      <property name="title">
+       <string>Pr&amp;eset Positions</string>
+      </property>
+      <addaction name="actionirp6p_m_Synchro_Position"/>
+      <addaction name="actionirp6p_m_Front_Position"/>
+      <addaction name="actionirp6p_m_Position_0"/>
+      <addaction name="actionirp6p_m_Position_1"/>
+      <addaction name="actionirp6p_m_Position_2"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6p_m_Absolute_Moves">
+      <property name="title">
+       <string>A&amp;bsolute moves</string>
+      </property>
+      <addaction name="actionirp6p_m_Absolute_Moves_Motors"/>
+      <addaction name="actionirp6p_m_Joints"/>
+      <addaction name="actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6p_m_Relative_Moves">
+      <property name="title">
+       <string>Re&amp;lative moves</string>
+      </property>
+      <addaction name="actionirp6p_m_Xyz_Relative_Moves_Angle_Axis"/>
+     </widget>
+     <widget class="QMenu" name="menuirp6p_m_Tool">
+      <property name="title">
+       <string>&amp;Tool</string>
+      </property>
+      <addaction name="actionirp6p_m_Tool_Xyz_Euler_Zyz"/>
+      <addaction name="actionirp6p_m_Tool_Xyz_Angle_Axis"/>
+     </widget>
+     <addaction name="actionirp6p_m_EDP_Load"/>
+     <addaction name="actionirp6p_m_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="menuirp6p_m_Pre_Synchro_Moves"/>
+     <addaction name="menuirp6p_m_Absolute_Moves"/>
+     <addaction name="menuirp6p_m_Relative_Moves"/>
+     <addaction name="menuirp6p_m_Preset_Positions"/>
+     <addaction name="separator"/>
+     <addaction name="menuirp6p_m_Tool"/>
+    </widget>
+    <widget class="QMenu" name="menuPolycrank">
+     <property name="title">
+      <string>Polyc&amp;rank</string>
+     </property>
+     <addaction name="actionpolycrank_EDP_Load"/>
+     <addaction name="actionpolycrank_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionpolycrank_Move_Joints"/>
+    </widget>
+    <widget class="QMenu" name="menuBirdhand">
+     <property name="title">
+      <string>&amp;Birdhand</string>
+     </property>
+     <addaction name="actionbirdhand_EDP_Load"/>
+     <addaction name="actionbirdhand_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionbirdhand_Command"/>
+     <addaction name="actionbirdhand_Configuration"/>
+    </widget>
+    <widget class="QMenu" name="menuSarkofag">
+     <property name="title">
+      <string>&amp;Sarkofag</string>
+     </property>
+     <widget class="QMenu" name="menusarkofag_Preset_Positions">
+      <property name="title">
+       <string>Pr&amp;eset Positions</string>
+      </property>
+      <addaction name="actionsarkofag_Synchro_Position"/>
+      <addaction name="actionsarkofag_Front_Position"/>
+      <addaction name="actionsarkofag_Position_0"/>
+      <addaction name="actionsarkofag_Position_1"/>
+      <addaction name="actionsarkofag_Position_2"/>
+     </widget>
+     <addaction name="actionsarkofag_EDP_Load"/>
+     <addaction name="actionsarkofag_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionsarkofag_Synchronisation"/>
+     <addaction name="actionsarkofag_Move"/>
+     <addaction name="menusarkofag_Preset_Positions"/>
+     <addaction name="actionsarkofag_Servo_Algorithm"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6ot_tfg">
+     <property name="title">
+      <string>Irp6ot_t&amp;Fg</string>
+     </property>
+     <widget class="QMenu" name="menuirp6ot_tfg_Preset_Positions">
+      <property name="title">
+       <string>&amp;Preset positions</string>
+      </property>
+      <addaction name="actionirp6ot_tfg_Synchro_Position"/>
+      <addaction name="actionirp6ot_tfg_Position_0"/>
+      <addaction name="actionirp6ot_tfg_Position_1"/>
+      <addaction name="actionirp6ot_tfg_Position_2"/>
+     </widget>
+     <addaction name="actionirp6ot_tfg_EDP_Load"/>
+     <addaction name="actionirp6ot_tfg_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionirp6ot_tfg_Synchronization"/>
+     <addaction name="actionirp6ot_tfg_Move"/>
+     <addaction name="menuirp6ot_tfg_Preset_Positions"/>
+    </widget>
+    <widget class="QMenu" name="menuIrp6p_tfg">
+     <property name="title">
+      <string>Irp6p_tf&amp;G</string>
+     </property>
+     <widget class="QMenu" name="menuirp6p_tfg_Preset_Positions">
+      <property name="title">
+       <string>Pr&amp;eset positions</string>
+      </property>
+      <addaction name="actionirp6p_tfg_Synchro_Position"/>
+      <addaction name="actionirp6p_tfg_Position_0"/>
+      <addaction name="actionirp6p_tfg_Position_1"/>
+      <addaction name="actionirp6p_tfg_Position_2"/>
+     </widget>
+     <addaction name="actionirp6p_tfg_EDP_Load"/>
+     <addaction name="actionirp6p_tfg_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionirp6p_tfg_Synchronization"/>
+     <addaction name="actionirp6p_tfg_Move"/>
+     <addaction name="menuirp6p_tfg_Preset_Positions"/>
+    </widget>
+    <widget class="QMenu" name="menuConveyor">
+     <property name="title">
+      <string>&amp;Conveyor</string>
+     </property>
+     <widget class="QMenu" name="menuconveyor_Preset_Positions">
+      <property name="title">
+       <string>&amp;Preset Positions</string>
+      </property>
+      <addaction name="actionconveyor_Synchro_Position"/>
+      <addaction name="actionconveyor_Position_0"/>
+      <addaction name="actionconveyor_Position_1"/>
+      <addaction name="actionconveyor_Position_2"/>
+     </widget>
+     <addaction name="actionconveyor_EDP_Load"/>
+     <addaction name="actionconveyor_EDP_Unload"/>
+     <addaction name="separator"/>
+     <addaction name="actionconveyor_Synchronization"/>
+     <addaction name="actionconveyor_Move"/>
+     <addaction name="menuconveyor_Preset_Positions"/>
+    </widget>
+    <addaction name="menuIrp6ot_m"/>
+    <addaction name="menuIrp6ot_tfg"/>
+    <addaction name="menuIrp6p_m"/>
+    <addaction name="menuIrp6p_tfg"/>
+    <addaction name="menuConveyor"/>
+    <addaction name="separator"/>
+    <addaction name="menuBirdhand"/>
+    <addaction name="menuSarkofag"/>
+    <addaction name="separator"/>
+    <addaction name="menuSpkm"/>
+    <addaction name="menuSmb"/>
+    <addaction name="menuShead"/>
+    <addaction name="separator"/>
+    <addaction name="menuPolycrank"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuSpecial">
+    <property name="title">
+     <string>&amp;Special</string>
+    </property>
+    <addaction name="actionClear_Console"/>
+    <addaction name="separator"/>
+    <addaction name="actionUnload_All"/>
+    <addaction name="actionSlay_All"/>
+   </widget>
+   <widget class="QMenu" name="menuAll_Robots">
+    <property name="title">
+     <string>&amp;All robots</string>
+    </property>
+    <widget class="QMenu" name="menuall_Preset_Positions">
+     <property name="title">
+      <string>Pr&amp;eset Positions</string>
+     </property>
+     <addaction name="actionall_Synchro_Position"/>
+     <addaction name="actionall_Front_Position"/>
+     <addaction name="actionall_Position_0"/>
+     <addaction name="actionall_Position_1"/>
+     <addaction name="actionall_Position_2"/>
+    </widget>
+    <addaction name="actionall_EDP_Load"/>
+    <addaction name="actionall_EDP_Unload"/>
+    <addaction name="separator"/>
+    <addaction name="actionall_Synchronisation"/>
+    <addaction name="menuall_Preset_Positions"/>
+   </widget>
+   <widget class="QMenu" name="menuTask">
+    <property name="title">
+     <string>&amp;Task</string>
+    </property>
+    <addaction name="actionMP_Load"/>
+    <addaction name="actionMP_Unload"/>
+    <addaction name="separator"/>
+    <addaction name="actionProcess_Control"/>
+    <addaction name="actionConfiguration"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuRobot"/>
+   <addaction name="menuAll_Robots"/>
+   <addaction name="menuTask"/>
+   <addaction name="menuSpecial"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QDockWidget" name="sr_dockWidget">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>konsola sr</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0" colspan="4">
+      <widget class="QPlainTextEdit" name="plainTextEdit_sr">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Monospace</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="4">
+      <widget class="QLineEdit" name="lineEdit_position">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Monospace</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QFrame" name="frame">
+       <property name="minimumSize">
+        <size>
+         <width>180</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="notification_label">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>150</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>UI_NOTIFICATION</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>161</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>UI STATE:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QFrame" name="frame_3">
+       <property name="minimumSize">
+        <size>
+         <width>270</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_all_edps_notification">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>240</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>ALL_EDPS_NOTIFICATION</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>0</y>
+          <width>191</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>ALL EDPS STATE:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QFrame" name="frame_2">
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_mp_notification">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>150</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>MP_NOTIFICATION</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>0</y>
+          <width>151</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>MP STATE:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QFrame" name="frame_4">
+       <property name="minimumSize">
+        <size>
+         <width>320</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="label_config_file_notification">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>20</y>
+          <width>290</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>290</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>CONFIG FILE</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>0</y>
+          <width>281</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Config File:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionspkm_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionspkm_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionspkm_Synchronisation">
+   <property name="text">
+    <string>&amp;Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionspkm_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionspkm_Motors_post">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionspkm_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionspkm_External">
+   <property name="text">
+    <string>&amp;External</string>
+   </property>
+  </action>
+  <action name="actionspkm_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionspkm_Front_Position">
+   <property name="text">
+    <string>&amp;Front Position</string>
+   </property>
+  </action>
+  <action name="actionspkm_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionspkm_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionspkm_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+  </action>
+  <action name="actionClear_Console">
+   <property name="text">
+    <string>&amp;Clear Console</string>
+   </property>
+  </action>
+  <action name="actionEDP_load_smb">
+   <property name="text">
+    <string>EDP load</string>
+   </property>
+  </action>
+  <action name="actionUnload_All">
+   <property name="text">
+    <string>&amp;Unload All</string>
+   </property>
+  </action>
+  <action name="actionSlay_All">
+   <property name="text">
+    <string>&amp;Slay All</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionall_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionall_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionall_Synchronisation">
+   <property name="text">
+    <string>&amp;Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionall_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionall_Front_Position">
+   <property name="text">
+    <string>&amp;Front Position</string>
+   </property>
+  </action>
+  <action name="actionall_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionall_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionall_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionMP_Load">
+   <property name="text">
+    <string>MP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionMP_Unload">
+   <property name="text">
+    <string>MP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionProcess_Control">
+   <property name="text">
+    <string>&amp;Process Control</string>
+   </property>
+  </action>
+  <action name="actionConfiguration">
+   <property name="text">
+    <string>&amp;Configuration</string>
+   </property>
+  </action>
+  <action name="actionsmb_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionsmb_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionshead_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionshead_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Synchronisation">
+   <property name="text">
+    <string>&amp;Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Synchronisation">
+   <property name="text">
+    <string>&amp;Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Front_Position">
+   <property name="text">
+    <string>&amp;Front Position</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Front_Position">
+   <property name="text">
+    <string>&amp;Front Position</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionpolycrank_Move_Joints">
+   <property name="text">
+    <string>Move &amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_Command">
+   <property name="text">
+    <string>&amp;Command</string>
+   </property>
+  </action>
+  <action name="actionbirdhand_Configuration">
+   <property name="text">
+    <string>Co&amp;Nfiguration</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Synchronisation">
+   <property name="text">
+    <string>&amp;Synchronisation</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Front_Position">
+   <property name="text">
+    <string>&amp;Front Position</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionsarkofag_Servo_Algorithm">
+   <property name="text">
+    <string>S&amp;ervo Algorithm</string>
+   </property>
+  </action>
+  <action name="actionspkm_Clear_Fault">
+   <property name="text">
+    <string>&amp;Clear Fault</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Pre_Synchro_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis </string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Relative_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Tool_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_m_Tool_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Synchronization">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionirp6ot_tfg_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Pre_Synchro_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Xyz_Relative_Moves_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Tool_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Tool_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Synchronization">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro position</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionirp6p_tfg_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionconveyor_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionconveyor_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Synchronization">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Move">
+   <property name="text">
+    <string>&amp;Move</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionconveyor_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionspeaker_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionspeaker_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionspeaker_Play">
+   <property name="text">
+    <string>&amp;Play</string>
+   </property>
+  </action>
+  <action name="actionspeaker_Sound_0">
+   <property name="text">
+    <string>Sound &amp;0</string>
+   </property>
+  </action>
+  <action name="actionspeaker_Sound_1">
+   <property name="text">
+    <string>Sound &amp;1</string>
+   </property>
+  </action>
+  <action name="actionspeaker_Sound_2">
+   <property name="text">
+    <string>Sound &amp;2</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_EDP_Load">
+   <property name="text">
+    <string>EDP &amp;Load</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_EDP_Unload">
+   <property name="text">
+    <string>EDP &amp;Unload</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Synchronization">
+   <property name="text">
+    <string>&amp;Synchronization</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Pre_Synchro_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Absolute_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Joints">
+   <property name="text">
+    <string>&amp;Joints</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Synchro_Position">
+   <property name="text">
+    <string>&amp;Synchro Position</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Position_0">
+   <property name="text">
+    <string>Position &amp;0</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Position_1">
+   <property name="text">
+    <string>Position &amp;1</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Position_2">
+   <property name="text">
+    <string>Position &amp;2</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz">
+   <property name="text">
+    <string>Xyz &amp;Euler Zyz</string>
+   </property>
+  </action>
+  <action name="actionirp6_Mechatronika_Tool_Xyz_Angle_Axis">
+   <property name="text">
+    <string>Xyz &amp;Angle Axis</string>
+   </property>
+  </action>
+  <action name="actionirp6p_m_Absolute_Moves_Motors">
+   <property name="text">
+    <string>&amp;Motors</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

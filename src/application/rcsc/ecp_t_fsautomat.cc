@@ -337,18 +337,22 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 
 
 
-void fsautomat::load_trajectory_from_xml(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect) {
-//TODO:askubis cos zle z pose specification, wypisac
-//std::cout<<"armtype in load "<<trajectory.arm_type<<std::endl;
-
-	//std::cout<<"ASKUBIS!!!! loading traj"<<std::endl;
-	//if (trajectory==NULL)std::cout<<"brak trajektorii, BLAD????????????????"<<std::endl;
+void fsautomat::load_trajectory_from_xml(std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion) {
+std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = pair_trj_motion.first;
+if(pair_trj_motion.second==lib::ABSOLUTE)
 	for (int i=0;i<trj_vect.size();i++)
 	{
 		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
 		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
 		sg->load_absolute_pose(trj);
 	}
+else if (pair_trj_motion.second==lib::RELATIVE)
+	for (int i=0;i<trj_vect.size();i++)
+	{
+		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
+		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
+		sg->load_relative_pose(trj);
+		}
 }
 
 void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
@@ -418,29 +422,23 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 
 void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
-	uint64_t number_of_poses; // Liczba zapamietanych pozycji
 	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
 
 
 	xmlNode *cchild_node, *ccchild_node;
-	xmlChar *coordinateType, *numOfPoses;
+	xmlChar *coordinateType, *m_type;
 	xmlChar *xmlDataLine;
 
 	int num=0;
 
 
-
-
-
 	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
 	ps = lib::returnProperPS((char *)coordinateType);
-	numOfPoses = xmlGetProp(stateNode, (const xmlChar *)"numOfPoses");
-	number_of_poses = (uint64_t)atoi((const char *)numOfPoses);
+	m_type = xmlGetProp(stateNode, (const xmlChar *)"motionType");
+	char * motionType = ((char *)m_type);
 
-	//actTrajectory->arm_type =ps;
-	//actTrajectory->pos_num = number_of_poses;
 
-	double tmp[number_of_poses*axes_num];
+	double tmp[10];
 
 
 	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
@@ -485,13 +483,21 @@ void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
 							std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
 				}*/
 			}
+			if(!strcmp(motionType,"Absolute"))
 			sg->load_absolute_pose((*actTrajectory));
+			else if(!strcmp(motionType,"Realative"))
+			sg->load_relative_pose((*actTrajectory));
+			else
+			{
+				//some error
+			}
+
 
 
 		}
 	}
 	xmlFree(coordinateType);
-	xmlFree(numOfPoses);
+	xmlFree(m_type);
 }
 
 
