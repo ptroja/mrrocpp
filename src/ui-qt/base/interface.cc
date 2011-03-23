@@ -1272,7 +1272,6 @@ int Interface::MPslay()
 		robot_node.second->deactivate_ecp_trigger();
 	}
 
-
 	// modyfikacja menu
 	manage_interface();
 	wgt_pc->process_control_window_init();
