@@ -116,6 +116,14 @@ enum UI_ALL_EDPS_STATE
 	UI_ALL_EDPS_LOADED_AND_SYNCHRONISED
 };
 
+enum UI_ALL_EDPS_SYNCHRO_STATE
+{
+	UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN,
+	UI_ALL_EDPS_NONE_SYNCHRONISED,
+	UI_ALL_EDPS_SOME_SYNCHRONISED,
+	UI_ALL_EDPS_ALL_SYNCHRONISED
+};
+
 // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
 // 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
 

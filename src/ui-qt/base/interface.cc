@@ -36,7 +36,10 @@ namespace common {
 
 Interface::Interface() :
 	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_EDP_LOADED),
-			all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN), position_refresh_interval(200)
+			all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
+			all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
+			all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
+			position_refresh_interval(200)
 {
 
 	mw = new MainWindow(*this);
@@ -405,7 +408,8 @@ void Interface::manage_interface_slot()
 	// wlasciwosci menu  ABW_base_all_robots
 
 
-	if ((all_edps != all_edps_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
+	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
+			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
 
 		switch (all_edps)
 		{
@@ -529,6 +533,7 @@ void Interface::manage_interface_slot()
 				break;
 		}
 		all_edps_last_manage_interface_state = all_edps;
+		all_edps_synchro_last_manage_interface_state = all_edps_synchro;
 	}
 
 	if (mp.state != mp.last_manage_interface_state) {
