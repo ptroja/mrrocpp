@@ -56,7 +56,8 @@ public:
 	 */
 	typedef std::map <const char *, ecp_mp::common::Trajectory> trajectories_t;
 
-	typedef std::map <std::string, std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> > bang_trajectories_map;
+	typedef std::map <std::string, std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> > bang_trajectories_map;
+
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
@@ -160,7 +161,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
+	std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory

@@ -134,8 +134,7 @@ protected:
 		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 			reply.reply_type = real_reply_type;
 
-
-			if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
+		if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
 
 			uint64_t e = errno;
 			perror("Reply() to ECP failed");
@@ -166,6 +165,18 @@ protected:
 	 */
 	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
+	/*!
+	 * \brief full path to the hardware busy file
+	 *
+	 */
+	std::string hardware_busy_file_fullpath;
+
+	/*!
+	 * \brief EDP pid
+	 *
+	 */
+	pid_t my_pid;
+
 public:
 	/*!
 	 * \brief Name of the robot
@@ -186,7 +197,7 @@ public:
 	 *
 	 * For the usage in asynchronous communication.
 	 */
-	boost::shared_ptr<lib::sr_edp> msg;
+	boost::shared_ptr <lib::sr_edp> msg;
 
 	/*!
 	 * \brief Info if the robot test mode is active.
@@ -202,6 +213,12 @@ public:
 	 * TODO: this should be void and throw an exception in case of failure
 	 */
 	bool initialize_communication(void);
+
+	/*!
+	 * \brief Method to close hardware busy notification file
+	 *
+	 */
+	bool close_hardware_busy_file(void);
 
 	/*!
 	 * \brief Constructor.

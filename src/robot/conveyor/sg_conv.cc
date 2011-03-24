@@ -42,7 +42,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	const std::vector<std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings,
 				mrrocpp::lib::conveyor::ports_strings+mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::conveyor::MAX_INCREMENT);
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika

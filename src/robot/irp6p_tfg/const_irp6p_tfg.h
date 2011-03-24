@@ -39,6 +39,34 @@ const std::string ECP_SECTION = "[ecp_irp6p_tfg]";
  */
 const int NUM_OF_SERVOS = 1;
 
+/*!
+ * @brief Sarkofag last Moxa port number [0..7]
+ * @ingroup sarkofag
+ */
+const int LAST_MOXA_PORT_NUM = 0;
+
+/*!
+ * @brief IRp6 postument two finger gripper array of communication port names
+ * @ingroup sarkofag
+ */
+#ifndef __QNXNTO__
+const std::string ports_strings[] = {"/dev/ttyMI6"};
+#else
+const std::string ports_strings[] = {"/dev/ser8"};
+#endif
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const int MAX_CURRENT_0 = 150;
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const double MAX_INCREMENT[] = {100};
+
 }
 } // namespace lib
 } // namespace mrrocpp

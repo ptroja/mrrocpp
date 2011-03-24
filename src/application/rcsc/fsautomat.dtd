@@ -19,7 +19,7 @@
 	<!ELEMENT TrajectoryFilePath (#PCDATA)>
 	<!ELEMENT Trajectory (Pose+)>
 		<!ATTLIST Trajectory coordinateType CDATA #REQUIRED>
-		<!ATTLIST Trajectory numOfPoses CDATA #REQUIRED>
+		<!ATTLIST Trajectory motionType CDATA #REQUIRED>
 		
 	<!ELEMENT Pose (StartVelocity,EndVelocity,Velocity,Accelerations,Coordinates)>
 		<!ELEMENT StartVelocity (#PCDATA)>

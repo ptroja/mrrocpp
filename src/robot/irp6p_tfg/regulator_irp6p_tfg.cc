@@ -217,6 +217,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 #define PROP_I_REG 0.0
 #define INT_I_REG 0.4
 #define MAX_REG_CURRENT 15.0
+#define CURRENT_PRESCALER 0.1
 
 	switch (algorithm_no)
 	{
@@ -236,10 +237,14 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			current_desired = (MAX_REG_CURRENT * set_value_new) / MAX_PWM;
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
-			if (set_value_new > 0)
-				current_measured = (float) meassured_current;
-			else
-				current_measured = (float) (-meassured_current);
+//			if (set_value_new > 0)
+//				current_measured = (float) meassured_current;
+//			else
+//				current_measured = (float) (-meassured_current);
+
+			// HI_MOXA zwraca prad w mA, ze znakiem odpowiadajacym kierunkowi przeplywu
+			// Przeskalowanie na przedzial -15..15 = -150mA..150mA
+			current_measured = - ((float) meassured_current) * CURRENT_PRESCALER;
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -268,16 +273,23 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 			// wyznaczenie nowego sterowania
 			set_value_new = PROP_I_REG * current_error + int_current_error;
-			/*
+
 			 display++;
-			 if ((display % 1)==0)
+			 if ((display % 100) == 0)
 			 {
+//				 		std::cout << "[info]";
+//				 		std::cout << " current_desired = " << current_desired << ",";
+//				 		std::cout << " current_measured = " << current_measured << ",";
+//				 		std::cout << " int_current_error = " << int_current_error << ",";
+//				 		std::cout << " set_value_new = " << set_value_new << ",";
+//				 		std::cout << std::endl;
+
+
 			 //  display = 0;
-			 printf("joint 7:  current_desired = %f,  meassured_current = %f, int_current_error = %f,  set_value_new = %f \n",
-			 current_desired,   current_measured, int_current_error, set_value_new);
+			 //printf("khm... joint 7:  current_desired = %f,  meassured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
 			 }
 
-			 */
+
 
 			break;
 
@@ -306,10 +318,10 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				current_desired = 0;
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
-			if (set_value_new > 0)
+//			if (set_value_new > 0)
 				current_measured = (float) meassured_current;
-			else
-				current_measured = (float) (-meassured_current);
+//			else
+//				current_measured = (float) (-meassured_current);
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -338,10 +350,10 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			set_value_new = PROP_I_REG * current_error + int_current_error;
 
 			display++;
-			if ((display % 100) == 0) {
-				//display = 0;
-				printf("joint 7:   meassured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
-			}
+//			if (display == 100) {
+//				display = 0;
+//				printf("joint 7:   meassured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
+//			}
 			// DUNG END
 			break;
 		default: // w tym miejscu nie powinien wystapic blad zwiazany z
@@ -393,7 +405,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, meassured_current, reg_state, kk);
 
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
-
+/*
 	// wyznaczenie pradu na zalozonych horyzoncie wstecz
 	if (master.step_counter > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
 		sum_of_currents -= currents[current_index];
@@ -450,7 +462,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	}
 
 	prev_reg_state = reg_state;
-
+*/
 	return alg_par_status;
 
 }
