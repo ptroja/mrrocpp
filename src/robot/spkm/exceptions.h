@@ -47,7 +47,7 @@ typedef boost::error_info <struct desired_value, double> spkm_desired_value;
  * \brief Exception thrown in case of motor limits violation.
  * \author tkornuta
  */
-struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct spkm_motor_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
 	~spkm_motor_limit_error() throw () { }
 };
@@ -56,7 +56,7 @@ struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
  * \brief Exception thrown in case of joint limits violation.
  * \author tkornuta
  */
-struct spkm_joint_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct spkm_joint_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
 	~spkm_joint_limit_error() throw () { }
 };
@@ -65,7 +65,7 @@ struct spkm_joint_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
  * \brief Exception thrown in case of invalid pose specification.
  * \author tkornuta
  */
-struct spkm_pose_specification_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct spkm_pose_specification_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
 	~spkm_pose_specification_error() throw () { }
 };
@@ -77,6 +77,15 @@ struct spkm_pose_specification_error : mrrocpp::lib::exception::mrrocpp_non_fata
 struct spkm_motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
 	~spkm_motion_type_error() throw () { }
+};
+
+/*!
+ * \brief Exception thrown when cartesian pose is required, but unknown.
+ * \author tkornuta
+ */
+struct spkm_cartesian_pose_unknown : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+{
+	~spkm_cartesian_pose_unknown() throw () { }
 };
 
 /*!

@@ -32,16 +32,26 @@ const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
 //! Number of motor that caused the exception.
 typedef boost::error_info <struct limit, std::string> mrrocpp_error_type;
 
+//!
+#define MRROCPP_THROW_SYSTEM_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_type(SYSTEM_ERROR))
+
+//!
+#define MRROCPP_THROW_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_type(FATAL))
+
+//!
+#define MRROCPP_THROW_NON_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_type(NON_FATAL_ERROR))
+
+
 /*!
  * \brief Base class for all system errors.
  * \author tkornuta
  */
 struct mrrocpp_system_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+/*	virtual const char* what() const throw ()
 	{
 		return SYSTEM_ERROR.c_str();
-	}
+	}*/
 
 	~mrrocpp_system_error() throw ()
 	{
@@ -54,10 +64,10 @@ struct mrrocpp_system_error : virtual public std::exception, virtual public boos
  */
 struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+/*	virtual const char* what() const throw ()
 	{
 		return FATAL_ERROR.c_str();
-	}
+	}*/
 
 	~mrrocpp_fatal_error() throw ()
 	{
@@ -70,10 +80,10 @@ struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost
  */
 struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+/*	virtual const char* what() const throw ()
 	{
 		return NON_FATAL_ERROR.c_str();
-	}
+	}*/
 
 	~mrrocpp_non_fatal_error() throw ()
 	{

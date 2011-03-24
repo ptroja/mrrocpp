@@ -82,6 +82,11 @@ void effector::reset_variables() {
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 	desired_joints = current_joints;
 	desired_joints_old = current_joints;
+
+	// Reset cartesian-related variables.
+	//current_end_effector_frame.setIdentity(4,4);
+	//desired...
+	is_previous_cartesian_pose_known = false;
 }
 
 
@@ -185,9 +190,8 @@ void effector::synchronise(void)
 		}
 	} while (!finished);
 
-	// Hardcoded safety values
+	// Hardcoded safety values.
 	// TODO: move to configuration file?
-
 	for (std::size_t i = 0; i < axes.size(); ++i) {
 		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]-1);
 		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
@@ -212,6 +216,9 @@ void effector::synchronise(void)
 
 void effector::move_arm(const lib::c_buffer &instruction)
 {
+	// Variable denoting that the move is performed in the cartesian space.
+	//bool cartesian_space_move = true;
+
 	try {
 		switch (ecp_edp_cbuffer.variant)
 		{
@@ -229,7 +236,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						if (is_synchronised()) {
 							get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
 						}
-
 						break;
 					case lib::spkm::JOINT:
 						// Copy data directly from buffer
@@ -243,7 +249,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 						} else {
 							// Throw non-fatal error - this mode requires synchronization.
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
+							MRROCPP_THROW_NON_FATAL_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
+//							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
 						}
 
 						break;
@@ -383,11 +390,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 					}
 						break;
+					case lib::epos::OPERATIONAL: {
+						// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
+						if (!is_previous_cartesian_pose_known)
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
+					}
+						break;
 					default:
 						// Throw non-fatal error - motion type not supported.
 						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_motion_type_error());
 						break;
-				}
+				}//: switch (ecp_edp_cbuffer.motion_variant)
 				break;
 			case lib::spkm::QUICKSTOP:
 				if (!robot_test_mode) {
@@ -438,7 +451,15 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		// Hold the issued command.
 		desired_motor_pos_old = desired_motor_pos_new;
+
+		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
+		is_previous_cartesian_pose_known = (ecp_edp_cbuffer.pose_specification == lib::spkm::FRAME);
+/*		if (cartesian_space_move)
+			is_previous_cartesian_pose_known = true;
+		else
+			is_previous_cartesian_pose_known = false;*/
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
+		is_previous_cartesian_pose_known = false;
 		std::cout<<boost::current_exception_diagnostic_information()<<std::endl;
 	}
 }
