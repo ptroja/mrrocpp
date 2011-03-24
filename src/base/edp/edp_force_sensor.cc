@@ -188,15 +188,22 @@ void force::get_reading(void)
 			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 			// wykrywanie przekroczenia sily granciznej
 			bool overforce = false;
-			for (int i = 0; i++; i < 6) {
-				if ((output[i] > force_constraints[i]) || (output[i] < -force_constraints[i])) {
+			for (int i = 0; i < 6; i++) {
+				if (fabs(output[i]) > force_constraints[i]) {
 					overforce = true;
+
 				}
 			}
 			if (!overforce) {
 				master.force_msr_upload(output);
 			} else {
-				sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque over_force detected");
+				std::stringstream buffer(std::stringstream::in | std::stringstream::out);
+				buffer << "Force / Torque over_force detected";
+				for (int i = 0; i < 6; i++) {
+					buffer << i << ": " << output[i];
+				}
+
+				sr_msg->message(lib::NON_FATAL_ERROR, buffer.str());
 			}
 		}
 
