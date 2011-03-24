@@ -198,9 +198,9 @@ void force::get_reading(void)
 				master.force_msr_upload(output);
 			} else {
 				std::stringstream buffer(std::stringstream::in | std::stringstream::out);
-				buffer << "Force / Torque over_force detected";
+				buffer << "over_force detected step: " << master.step_counter << " ";
 				for (int i = 0; i < 6; i++) {
-					buffer << i << ": " << output[i];
+					buffer << i << ": " << output[i] << " ";
 				}
 
 				sr_msg->message(lib::NON_FATAL_ERROR, buffer.str());
