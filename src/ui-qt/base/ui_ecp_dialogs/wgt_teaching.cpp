@@ -14,7 +14,7 @@ wgt_teaching::wgt_teaching(mrrocpp::ui::common::Interface& _interface, QWidget *
 
 wgt_teaching::~wgt_teaching()
 {
-
+	delete ui;
 }
 
 void wgt_teaching::hideEvent(QHideEvent *event)

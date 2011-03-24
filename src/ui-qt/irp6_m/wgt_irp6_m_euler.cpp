@@ -21,7 +21,6 @@ wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::I
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p4);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p5);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p6);
-	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p7);
 
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p1);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p2);
@@ -29,20 +28,6 @@ wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::I
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p6);
-	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p7);
-
-	if (robot.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p8);
-		doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p8);
-	}
-
-	if (robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ui.label_3->hide();
-		ui.doubleSpinBox_cur_p8->hide();
-		ui.doubleSpinBox_des_p8->hide();
-		ui.pushButton_8l->hide();
-		ui.pushButton_8r->hide();
-	}
 
 }
 
@@ -59,7 +44,7 @@ int wgt_irp6_m_euler::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.pushButton_import->setDisabled(_set_disabled);
 	ui.pushButton_read->setDisabled(_set_disabled);
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < 6; i++) {
 		doubleSpinBox_cur_Vector[i]->setDisabled(_set_disabled);
 		doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
 	}
@@ -128,7 +113,7 @@ int wgt_irp6_m_euler::init()
 
 				robot.ui_ecp_robot->read_xyz_euler_zyz(robot.current_pos);
 
-				for (int i = 0; i < robot.number_of_servos; i++) {
+				for (int i = 0; i < 6; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(robot.current_pos[i]);
 					robot.desired_pos[i] = robot.current_pos[i];
 				}
@@ -148,15 +133,15 @@ int wgt_irp6_m_euler::init()
 
 void wgt_irp6_m_euler::on_pushButton_import_clicked()
 {
-	double val[robot.number_of_servos];
+	double val[6];
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < 6; i++) {
 		val[i] = 0.0;
 	}
 
-	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
+	interface.get_main_window()->get_lineEdit_position(val, 6);
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < 6; i++) {
 		doubleSpinBox_des_Vector[i]->setValue(val[i]);
 	}
 
@@ -168,7 +153,7 @@ void wgt_irp6_m_euler::on_pushButton_export_clicked()
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
 	buffer << widget_label.toStdString() << " INCREMENTAL POSITION\n ";
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < 6; i++) {
 		buffer << " " << doubleSpinBox_des_Vector[i]->value();
 	}
 
@@ -188,7 +173,7 @@ int wgt_irp6_m_euler::copy()
 		{
 			ui.pushButton_execute->setDisabled(false);
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
+			for (int i = 0; i < 6; i++) {
 				doubleSpinBox_des_Vector[i]->setValue(doubleSpinBox_cur_Vector[i]->value());
 			}
 		} else {
@@ -249,20 +234,6 @@ void wgt_irp6_m_euler::on_pushButton_6l_clicked()
 	move_it();
 }
 
-void wgt_irp6_m_euler::on_pushButton_7l_clicked()
-{
-	get_desired_position();
-	robot.desired_pos[6] -= ui.doubleSpinBox_step->value();
-	move_it();
-}
-
-void wgt_irp6_m_euler::on_pushButton_8l_clicked()
-{
-	get_desired_position();
-	robot.desired_pos[7] -= ui.doubleSpinBox_step->value();
-	move_it();
-}
-
 void wgt_irp6_m_euler::on_pushButton_1r_clicked()
 {
 	get_desired_position();
@@ -305,20 +276,6 @@ void wgt_irp6_m_euler::on_pushButton_6r_clicked()
 	move_it();
 }
 
-void wgt_irp6_m_euler::on_pushButton_7r_clicked()
-{
-	get_desired_position();
-	robot.desired_pos[6] += ui.doubleSpinBox_step->value();
-	move_it();
-}
-
-void wgt_irp6_m_euler::on_pushButton_8r_clicked()
-{
-	get_desired_position();
-	robot.desired_pos[7] += ui.doubleSpinBox_step->value();
-	move_it();
-}
-
 int wgt_irp6_m_euler::get_desired_position()
 {
 
@@ -326,12 +283,12 @@ int wgt_irp6_m_euler::get_desired_position()
 
 		if (robot.state.edp.is_synchronised) {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
+			for (int i = 0; i < 6; i++) {
 				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
 			}
 		} else {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
+			for (int i = 0; i < 6; i++) {
 				robot.desired_pos[i] = 0.0;
 			}
 		}
@@ -347,7 +304,6 @@ int wgt_irp6_m_euler::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-
 			robot.ui_ecp_robot->move_xyz_euler_zyz(robot.desired_pos);
 
 			//robot.ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_euler(robot.desired_pos);
@@ -356,7 +312,7 @@ int wgt_irp6_m_euler::move_it()
 			//robot.ui_ecp_robot->move_euler(robot.desired_pos);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				for (int i = 0; i < robot.number_of_servos; i++) {
+				for (int i = 0; i < 6; i++) {
 					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
 				}
 				init();

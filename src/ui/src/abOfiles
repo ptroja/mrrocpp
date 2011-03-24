@@ -1,1 +1,0 @@
-ABOBJ = MAM_wnd_manual_moves_automatic_measure.o abmain.o fun.o fun_r_bird_hand.o fun_r_conveyor.o fun_r_irp6_on_track.o fun_r_irp6_postument.o fun_r_irp6ot_tfg.o fun_r_irp6p_tfg.o fun_r_polycrank.o fun_r_sarkofag.o fun_r_shead.o fun_r_smb.o fun_r_spkm.o timer.o ui_init.o wndFileLocationEvents.o wndForceControlEvents.o wndTrajectoryReproduceEvents.o 

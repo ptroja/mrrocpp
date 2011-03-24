@@ -107,11 +107,20 @@ enum UI_MP_STATE
 
 enum UI_ALL_EDPS_STATE
 {
-	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
-	UI_ALL_EDPS_NONE_EDP_LOADED,
-	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
-	UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED,
-	UI_ALL_EDPS_LOADED_AND_SYNCHRONISED
+	UI_ALL_EDPS_STATE_NOT_KNOWN,
+	UI_ALL_EDPS_NONE_ACTIVATED,
+	UI_ALL_EDPS_NONE_LOADED,
+	UI_ALL_EDPS_SOME_LOADED,
+	UI_ALL_EDPS_ALL_LOADED,
+};
+
+enum UI_ALL_EDPS_SYNCHRO_STATE
+{
+	UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN,
+	UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED,
+	UI_ALL_EDPS_NONE_SYNCHRONISED,
+	UI_ALL_EDPS_SOME_SYNCHRONISED,
+	UI_ALL_EDPS_ALL_SYNCHRONISED
 };
 
 // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
@@ -173,14 +182,17 @@ typedef struct
 	int node_nr;
 	lib::fd_client_t pulse_fd;
 	UI_MP_STATE state;
-	UI_MP_STATE last_state;
+	UI_MP_STATE last_process_control_state;
+	UI_MP_STATE last_manage_interface_state;
 } mp_state_def;
 
 typedef struct
 {
 	std::string program_name;
 	std::string node_name;
-} program_node_def;
+	std::string user_name;
+	bool is_qnx;
+} program_node_user_def;
 
 class function_execution_buffer
 {

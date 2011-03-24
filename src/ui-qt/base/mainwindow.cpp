@@ -54,7 +54,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(50);
 
-	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
@@ -95,15 +95,21 @@ Ui::MainWindow * MainWindow::get_ui()
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
-
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QWidget *), _enable);
 	}
 
 	va_end(menu_items);
@@ -112,15 +118,22 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QAction *), _enable);
 	}
 
 	va_end(menu_items);
@@ -142,18 +155,18 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 //	va_end(menu_items);
 //}
 
-void MainWindow::ui_notification(QString _string, QColor _color)
+void MainWindow::ui_notification()
 {
 
 	if (main_thread_id == pthread_self()) {
 		// jeśli wątek główny
 		//	interface.ui_msg->message("same thread");
-		ui_notification_slot(_string, _color);
+		ui_notification_slot();
 
 	} else {
 		//jeśli inny wątek niż główny
 		//	interface.ui_msg->message("different thread");
-		emit ui_notification_signal(_string, _color);
+		emit ui_notification_signal();
 	}
 
 }
@@ -455,19 +468,66 @@ void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
 	_menu_item->setDisabled(!_active);
 }
 
-void MainWindow::ui_notification_slot(QString _string, QColor _color)
+void MainWindow::ui_notification_slot()
 {
-	QPalette pal;
-	pal.setColor(QPalette::Text, _color);
-	pal.setColor(QPalette::Foreground, _color);
 
-	ui->notification_label->setPalette(pal);
+	if (interface.next_notification != interface.notification_state) {
 
-	ui->notification_label->setText(_string);
-	ui->notification_label->repaint();
-	ui->notification_label->update();
-	qApp->processEvents();
+		QString _string;
+		QColor _color;
 
+		interface.notification_state = interface.next_notification;
+
+		switch (interface.next_notification)
+		{
+			case UI_N_STARTING:
+				_string = "STARTING";
+				_color = Qt::magenta;
+
+				break;
+			case UI_N_READY:
+				_string = "READY";
+				_color = Qt::blue;
+
+				break;
+			case UI_N_BUSY:
+				_string = "BUSY";
+				_color = Qt::red;
+
+				break;
+			case UI_N_EXITING:
+				_string = "EXITING";
+				_color = Qt::magenta;
+
+				break;
+			case UI_N_COMMUNICATION:
+				_string = "COMMUNICATION";
+				_color = Qt::red;
+
+				break;
+			case UI_N_SYNCHRONISATION:
+				_string = "SYNCHRONISATION";
+				_color = Qt::red;
+
+				break;
+			case UI_N_PROCESS_CREATION:
+				_string = "PROCESS CREATION";
+				_color = Qt::red;
+
+				break;
+		}
+
+		QPalette pal;
+		pal.setColor(QPalette::Text, _color);
+		pal.setColor(QPalette::Foreground, _color);
+
+		ui->notification_label->setPalette(pal);
+
+		ui->notification_label->setText(_string);
+		ui->notification_label->repaint();
+		ui->notification_label->update();
+		qApp->processEvents();
+	}
 }
 
 void MainWindow::on_timer_slot()
@@ -931,7 +991,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-	interface.bird_hand->wnd_command_and_status->my_open();
+	interface.bird_hand->wgt_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()

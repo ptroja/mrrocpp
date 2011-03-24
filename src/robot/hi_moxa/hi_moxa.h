@@ -80,8 +80,8 @@ private:
 	bool hardware_panic;
 	const std::size_t last_drive_number;
 	//std::vector<double> ridiculous_increment;
-	const double* ridiculous_increment;
 	std::vector<std::string> port_names;
+	const double* ridiculous_increment;
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];

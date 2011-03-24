@@ -126,7 +126,7 @@ void wgt_irp6_m_tool_angle_axis::on_pushButton_read_clicked()
 
 void wgt_irp6_m_tool_angle_axis::on_pushButton_copy_clicked()
 {
-
+	copy();
 }
 
 int wgt_irp6_m_tool_angle_axis::init()
@@ -143,7 +143,7 @@ int wgt_irp6_m_tool_angle_axis::init()
 
 				for (int i = 0; i < aa_number; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(tool_vector[i]);
-					robot.desired_pos[i] = tool_vector[i];
+
 				}
 
 			} else {
@@ -173,12 +173,12 @@ int wgt_irp6_m_tool_angle_axis::get_desired_position()
 		if (robot.state.edp.is_synchronised) {
 
 			for (int i = 0; i < aa_number; i++) {
-				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+				tool_vector[i] = doubleSpinBox_des_Vector[i]->value();
 			}
 		} else {
 
 			for (int i = 0; i < aa_number; i++) {
-				robot.desired_pos[i] = 0.0;
+				tool_vector[i] = 0.0;
 			}
 		}
 	}

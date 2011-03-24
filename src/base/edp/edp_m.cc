@@ -56,11 +56,14 @@ void catch_signal(int sig)
 #ifdef __QNXNTO__
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
+			master->close_hardware_busy_file();
 			master->msg->message("edp terminated");
+
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
+			master->close_hardware_busy_file();
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	} // end: switch

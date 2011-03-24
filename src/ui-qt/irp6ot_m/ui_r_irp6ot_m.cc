@@ -26,7 +26,7 @@ const std::string WGT_IRP6OT_M_MOTORS = "WGT_IRP6OT_M_MOTORS";
 const std::string WGT_IRP6OT_M_ANGLE_AXIS = "WGT_IRP6OT_M_ANGLE_AXIS";
 const std::string WGT_IRP6OT_M_EULER = "WGT_IRP6OT_M_EULER";
 const std::string WGT_IRP6OT_M_RELATIVE_ANGLE_AXIS = "WGT_IRP6OT_M_RELATIVE_ANGLE_AXIS";
-const std::string WGT_IRP6OT_M_TOOL_ANGLE_AXIS = "WGT_IRP6OT_M_ANGLE_AXIS";
+const std::string WGT_IRP6OT_M_TOOL_ANGLE_AXIS = "WGT_IRP6OT_M_TOOL_ANGLE_AXIS";
 const std::string WGT_IRP6OT_M_TOOL_EULER = "WGT_IRP6OT_M_TOOL_EULER";
 //
 //
@@ -154,8 +154,10 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	wgt_motors = new wgt_irp6_m_motors("Irp6ot_m motors", interface, *this, interface.get_main_window());
 	wgt_angle_axis = new wgt_irp6_m_angle_axis("Irp6ot_m angle axis", interface, *this, interface.get_main_window());
 	wgt_euler = new wgt_irp6_m_euler("Irp6ot_m euler", interface, *this, interface.get_main_window());
-	wgt_relative_angle_axis = new wgt_irp6_m_relative_angle_axis("Irp6ot_m relative angle axis", interface, *this, interface.get_main_window());
-	wgt_tool_angle_axis = new wgt_irp6_m_tool_angle_axis("Irp6ot_m tool angle axis", interface, *this, interface.get_main_window());
+	wgt_relative_angle_axis
+			= new wgt_irp6_m_relative_angle_axis("Irp6ot_m relative angle axis", interface, *this, interface.get_main_window());
+	wgt_tool_angle_axis
+			= new wgt_irp6_m_tool_angle_axis("Irp6ot_m tool angle axis", interface, *this, interface.get_main_window());
 	wgt_tool_euler = new wgt_irp6_m_tool_euler("Irp6ot_m tool euler", interface, *this, interface.get_main_window());
 
 	wndbase_m[WGT_IRP6OT_M_JOINTS] = wgt_joints->dwgt;
@@ -233,7 +235,7 @@ int UiRobot::manage_interface()
 			} else // jesli robot jest niezsynchronizowany
 			{
 				mw->enable_menu_item(true, 1, ui->menuirp6ot_m_Pre_Synchro_Moves);
-				mw->enable_menu_item(true, 2, ui->actionirp6ot_m_EDP_Unload, ui->actionall_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->actionirp6ot_m_EDP_Unload);
 				mw->enable_menu_item(false, 1, ui->actionirp6ot_m_EDP_Load);
 
 			}
