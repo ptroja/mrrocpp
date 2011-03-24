@@ -214,6 +214,10 @@ public:
 	 */
 	bool initialize_communication(void);
 
+
+	bool detect_hardware_busy(void);
+
+
 	/*!
 	 * \brief Method to close hardware busy notification file
 	 *

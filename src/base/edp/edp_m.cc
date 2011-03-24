@@ -114,6 +114,9 @@ int main(int argc, char *argv[])
 #endif /* HAVE_MLOCKALL */
 
 		edp::common::master = edp::common::return_created_efector(_config);
+		if (!edp::common::master->detect_hardware_busy()) {
+			return EXIT_FAILURE;
+		}
 
 		edp::common::master->create_threads();
 
