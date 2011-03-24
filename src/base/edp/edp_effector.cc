@@ -93,6 +93,7 @@ bool effector::detect_hardware_busy()
 		} else {
 			outfile << my_pid;
 		}
+		outfile.close();
 
 	} else {
 		pid_t file_pid;
@@ -139,6 +140,7 @@ bool effector::detect_hardware_busy()
 			} else {
 				outfile << my_pid;
 			}
+			outfile.close();
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
