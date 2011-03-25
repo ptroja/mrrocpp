@@ -193,6 +193,15 @@ void force::get_reading(void)
 
 				}
 			}
+			/*
+			 std::stringstream buffero(std::stringstream::in | std::stringstream::out);
+			 buffero << "over_force detected step: " << master.step_counter << " ";
+			 for (int i = 0; i < 6; i++) {
+			 buffero << i << ": " << ft_table[i] << " ";
+			 }
+
+			 std::cout << buffero.str() << std::endl;
+			 */
 			if (!overforce) {
 				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
 				// wykrywanie przekroczenia sily granciznej
