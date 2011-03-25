@@ -14,6 +14,7 @@
 #include <cerrno>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <iostream>
@@ -68,10 +69,10 @@ bool shell::detect_hardware_busy()
 			return false;
 		}
 
-		std::string system_command_string;
-
-		system_command_string = "chmod 757 " + hardware_busy_file_fullpath;
-		system(system_command_string.c_str());
+		if (chmod(hardware_busy_file_fullpath.c_str(), S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR) != 0) {
+			perror("chmod() error");
+			return false;
+		}
 
 		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
 		if (!outfile.good()) {
