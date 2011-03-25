@@ -62,7 +62,7 @@ void gen_test::main_task_algorithm(void)
 
 	// Track
 
-	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
+	if (config.value <int> ("is_active", lib::irp6ot_m::EDP_SECTION)) {
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 
 		//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
@@ -80,7 +80,7 @@ void gen_test::main_task_algorithm(void)
 
 	// Postument
 
-	if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+	if (config.value <int> ("is_active", lib::irp6p_m::EDP_SECTION)) {
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -96,7 +96,7 @@ void gen_test::main_task_algorithm(void)
 
 	// Polycrank
 
-	if (config.value <int> ("is_polycrank_active", lib::UI_SECTION)) {
+	if (config.value <int> ("is_active", lib::polycrank::EDP_SECTION)) {
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::polycrank::ROBOT_NAME.c_str());
 
@@ -112,7 +112,7 @@ void gen_test::main_task_algorithm(void)
 
 	// Conveyor
 
-	if (config.value <int> ("is_conveyor_active", lib::UI_SECTION)) {
+	if (config.value <int> ("is_active", lib::conveyor::EDP_SECTION)) {
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::conveyor::ROBOT_NAME.c_str());
 
