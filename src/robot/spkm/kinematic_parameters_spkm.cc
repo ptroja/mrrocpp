@@ -8,6 +8,7 @@
  * @ingroup SIF_KINEMATICS spkm
  */
 
+#include "const_spkm.h"
 #include "kinematic_parameters_spkm.h"
 
 namespace mrrocpp {
