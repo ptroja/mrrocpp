@@ -21,10 +21,10 @@
 #include "../../base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include <vector>
 
-namespace mrrocpp{
-namespace ecp{
-namespace common{
-namespace generator{
+namespace mrrocpp {
+namespace ecp {
+namespace common {
+namespace generator {
 
 /**
  * @brief Generator working with VSP and neural networks.
@@ -38,184 +38,169 @@ namespace generator{
  * position for next 5 macro steps, which are processed and interpolated in
  * next step method of the generator.
  */
-class neuron_generator: public common::generator::generator{
-	private:
 
-		/**
-		 * @brief Communication manager between VSP and MRROC++.
-		 * @details Neuron sensor from the point of view of this class is used
-		 * to send current position and assesment data and receive next postion
-		 */
-		ecp_mp::sensor::neuron_sensor *neuron_sensor;
+class neuron_generator : public common::generator::generator
+{
+private:
 
-		/**
-		 * @brief Matrix to which the current position of the robot is written.
-		 */
-		lib::Homog_matrix actual_position_matrix;
+	/**
+	 * @brief Communication manager between VSP and MRROC++.
+	 * @details Neuron sensor from the point of view of this class is used
+	 * to send current position and assesment data and receive next postion
+	 */
+	ecp_mp::sensor::neuron_sensor *neuron_sensor;
 
-		/**
-		 * @brief Matrix to which the new position for the robot is written.
-		 */
-		lib::Homog_matrix position_matrix;
+	/**
+	 * @brief Matrix to which the current position of the robot is written.
+	 */
+	lib::Homog_matrix actual_position_matrix;
 
-		/**
-		 * @brief Temporary angle vector used while reading the current robot position.
-		 */
-		lib::Xyz_Angle_Axis_vector angle_axis_vector;
+	/**
+	 * @brief Matrix to which the new position for the robot is written.
+	 */
+	lib::Homog_matrix position_matrix;
 
-		/**
-		 * @brief Current position of the robot.
-		 */
-		double actual_position[6];
+	/**
+	 * @brief Temporary angle vector used while reading the current robot position.
+	 */
+	lib::Xyz_Angle_Axis_vector angle_axis_vector;
 
-                std::vector<double> actual_position_vect;
+	/**
+	 * @brief Current position of the robot.
+	 */
+	double actual_position[6];
 
-		/**
-		 * @brief Desired position received from vsp.
-		 */
-		double desired_position[6];
+	/**
+	 * @brief Desired position received from vsp.
+	 */
+	double desired_position[6];
 
-                std::vector<double> desired_position_vect;
+	/**
+	 * @brief Array filled with coordinates send to the robot.
+	 */
+	double position[6];
 
-		/**
-		 * @brief Array filled with coordinates send to the robot.
-		 */
-		double position[6];
+	/**
+	 * @brief Provides information whether start breaking or not.
+	 * @details If true, generator tries to break in each axis until robot
+	 * stops.
+	 */
+	bool breaking_;
 
-		/**
-		 * @brief Provides information whether start breaking or not.
-		 * @details If true, generator tries to break in each axis until robot
-		 * stops.
-		 */
-		bool breaking;
+	/**
+	 * @brief Current velocity in all axes.
+	 */
+	double v[6];
 
-		/**
-		 * @brief Current velocity in all axes.
-		 */
-		double v[6];
+	/**
+	 * @brief Maximal allowed acceleration in all axes.
+	 */
+	double a_max[6];
 
-		/**
-		 * @brief Maximal allowed acceleration in all axes.
-		 */
-		double a_max[6];
+	/**
+	 * @brief Maximal allowed velocity in all axes.
+	 */
+	double v_max[6];
 
-                std::vector<double> a_max_vect;
+	/**
+	 * @brief Node counter used for breaking.
+	 * @details When generator knows that it should start breaking, it
+	 * calculates how many macro steps its going to need to stop. The
+	 * member describes in which breaking macro step according to
+	 * calculated one it is.
+	 */
+	int breaking_node;
 
-		/**
-		 * @brief Maximal allowed velocity in all axes.
-		 */
-		double v_max[6];
+	/**
+	 * @brief Informs whether desired position is reach or not.
+	 * @details Set to true if robot reached desired position for each axes
+	 * for currently processed trajectory.
+	 */
+	bool reached[6];
 
-                std::vector<double> v_max_vect;
+	/**
+	 * @brief Motion direction.
+	 */
+	int k[6];
 
-		/**
-		 * @brief Node counter used for breaking.
-		 * @details When generator knows that it should start breaking, it
-		 * calculates how many macro steps its going to need to stop. The
-		 * member describes in which breaking macro step according to
-		 * calculated one it is.
-		 */
-		int breaking_node;
+	/**
+	 * @brief Acceleration while breaking
+	 */
+	double a;
 
-		/**
-		 * @brief Informs whether desired position is reach or not.
-		 * @details Set to true if robot reached desired position for each axes
-		 * for currently processed trajectory.
-		 */
-		bool reached[6];
+	/**
+	 * @brief Distance covered in the set of five macrosteps.
+	 */
+	double s[6];
 
-		/**
-		 * @brief Motion direction.
-		 */
-		double k[6];
+	/**
+	 * @brief Set to true if change of the direction is needed.
+	 */
+	bool change[6];
 
-		/**
-		 * @brief Acceleration while breaking
-		 */
-		double a;
+	/**
+	 * @brief Current position error.
+	 */
+	double u[6];
 
-		/**
-		 * @brief Distance covered in the set of five macrosteps.
-		 */
-		double s[6];
+	/**
+	 * @brief Time of a macrostep.
+	 */
+	double t;
 
-                std::vector<double> s_vect;
+	/**
+	 * @brief Flag set to true if final breaking begins.
+	 */
+	bool almost_reached[6];
 
-		/**
-		 * @brief Set to true if change of the direction is needed.
-		 */
-		bool change[6];
+	/**
+	 * @brief Flag set to true if breaking without overshoot is possible.
+	 */
+	bool breaking_possible[6];
 
-		/**
-		 * @brief Current position error.
-		 */
-		double u[6];
+	/**
+	 * @brief Difference between last and last but one position.
+	 * @details Calculated on the VSP side.
+	 */
+	double normalized_vector[3];
 
-		/**
-		 * @brief Time of a macrostep.
-		 */
-		double t;
+	/**
+	 * @brief Value of an overshoot.
+	 * @details Overshoot is a maximal distance from the perpendicular hyperplane to
+	 * normalized vector.
+	 */
+	double overshoot;
 
-		/**
-		 * @brief Flag set to true if final breaking begins.
-		 */
-		bool almost_reached[6];
+	/**
+	 * @brief Number of macro steps between consequtive data.
+	 */
+	uint8_t macroSteps;
 
-		/**
-		 * @brief Flag set to true if breaking without overshoot is possible.
-		 */
-		bool breaking_possible[6];
+	uint8_t mstep_;
 
-		/**
-		 * @brief Difference between last and last but one position.
-		 * @details Calculated on the VSP side.
-		 */
-		double normalized_vector[3];
+	uint8_t break_steps_;
 
-		/**
-		 * @brief Value of an overshoot.
-		 * @details Overshoot is a maximal distance from the perpendicular hyperplane to
-		 * normalized vector.
-		 */
-		double overshoot;
+	/**
+	 * @brief Breaking circle radius received from VSP.
+	 */
+	double radius;
 
-                std::vector<double> time_sum;
-		/**
-		 * @brief Number of macro steps between consequtive data.
-		 */
-		uint8_t macroSteps;
+	double coeff_[6][6];
+	double vel_[6];
 
-                bool first_breaking_node;
+	void velocityProfileLinear(double *coeff, double pos1, double pos2, double t);
+	void velocityProfileSpline(double *coeff, double pos1, double vel1, double pos2, double vel2, double time);
 
-                void calculate();
+public:
+	neuron_generator(common::task::task& _ecp_task);
+	virtual ~neuron_generator();
+	virtual bool first_step();
+	virtual bool next_step();
 
-                bool check_if_able_to_break(double s, double v, double a_max);
-
-                void clear_vectors();
-
-                std::vector<std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> >pose_vector_list;
-                /**
-                 * Position vector iterator.
-                 */
-                std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator pose_vector_iterator;
-
-            ecp::common::generator::velocity_profile_calculator::bang_bang_profile vpc;
-
-                bool load_trajectory_pose(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose> & pose_vector,
-                    const std::vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec,
-                    const std::vector<double> & v, const std::vector<double> & a, const std::vector<double> & start_pos,
-                    const std::vector<double> & s);
-
-        public:
-		neuron_generator(common::task::task& _ecp_task);
-		virtual ~neuron_generator();
-		virtual bool first_step();
-		virtual bool next_step();
-
-		double get_breaking_time();
-		double * get_position();
-		double get_overshoot();
-		void reset();
+	double get_breaking_time();
+	double * get_position();
+	double get_overshoot();
+	void reset();
 };
 
 }//generator

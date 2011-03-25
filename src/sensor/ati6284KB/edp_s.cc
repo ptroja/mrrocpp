@@ -32,7 +32,7 @@ namespace sensor {
 
 // Rejstracja procesu VSP
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
-	force(_master), dev_name("/dev/comedi0")
+	force(_master), dev_name("/dev/comedi1")
 {
 	printf("FT6284KB created !!! \n");
 

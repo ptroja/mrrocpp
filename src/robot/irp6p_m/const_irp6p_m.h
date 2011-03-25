@@ -57,6 +57,23 @@ const std::string ports_strings[] = {"/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2"
 const std::string ports_strings[] = {"/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
 #endif
 
+/*!
+ * @brief IRp6 postument overcurrent threshold [mA]
+ * @ingroup irp6p_m
+ */
+const int MAX_CURRENT_0 = 10000;
+const int MAX_CURRENT_1 = 10000;
+const int MAX_CURRENT_2 = 10000;
+const int MAX_CURRENT_3 = 10000;
+const int MAX_CURRENT_4 = 10000;
+const int MAX_CURRENT_5 = 10000;
+
+/*!
+ * @brief IRp6 postument max encoder increment
+ * @ingroup irp6p_m
+ */
+const double MAX_INCREMENT[] = {100, 100, 100, 100, 100, 100};
+
 } // namespace irp6p_m
 } // namespace lib
 } // namespace mrrocpp

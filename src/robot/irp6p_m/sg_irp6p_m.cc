@@ -70,8 +70,15 @@ void servo_buffer::load_hardware_interface(void)
 
 	const std::vector<std::string> ports_vector(mrrocpp::lib::irp6p_m::ports_strings,
 			mrrocpp::lib::irp6p_m::ports_strings+mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM, ports_vector);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_m::MAX_INCREMENT);
 	hi->init();
+
+	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_0);
+	hi->set_parameter(1, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_1);
+	hi->set_parameter(2, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_2);
+	hi->set_parameter(3, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_3);
+	hi->set_parameter(4, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_4);
+	hi->set_parameter(5, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_5);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
