@@ -20,6 +20,79 @@ namespace mrrocpp {
         namespace common {
             namespace generator {
 
+<<<<<<< HEAD
+=======
+const double MIN_VELOCITY = 0.1;
+const double MSTEP_TIME = 0.002 * 10.0;
+
+
+static inline void generatePowers(int n, double x, double* powers)
+{
+  powers[0] = 1.0;
+  for (int i=1; i<=n; i++)
+  {
+    powers[i] = powers[i-1]*x;
+  }
+}
+
+/*================================Constructor=============================*//**
+ * @brief Constructor along with task configurator.
+ * @param _ecp_task Reference to task configurator.
+ */
+neuron_generator::neuron_generator(common::task::task& _ecp_task) :
+	common::generator::generator(_ecp_task)
+{
+	reset();
+}
+
+/*==============================Destructor================================*//**
+ * @brief Destructor.
+ */
+neuron_generator::~neuron_generator()
+{
+}
+
+/*===============================first_step===============================*//**
+ * @brief First step of neuron generator
+ * @details Initializes instruction for robot and sends information to VSP that
+ * new trajectory execution is starting, therefore requests first coordinates
+ * of a trajectory.
+ */
+bool neuron_generator::first_step()
+{
+	sr_ecp_msg.message("neuron generator first step");
+	printf("neuron generator first step\n");
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.interpolation_type = lib::MIM;
+	the_robot->ecp_command.motion_steps = 10;
+	the_robot->ecp_command.value_in_step_no = 10 - 2;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+
+	//get neuron sensor and send information about starting new trajectory.
+	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
+	neuron_sensor->startGettingTrajectory();
+	macroSteps=neuron_sensor->getMacroStepsNumber();
+	radius=neuron_sensor->getRadius();
+	neuron_sensor->get_reading();
+	printf("macroStep: %d\n",macroSteps);
+	printf("radius: %f\n",radius);
+
+	mstep_ = 0;
+
+	return true;
+}
+
+/*================================next_step===============================*//**
+ * @brief next step for neuron generator.
+ * @details Next step interpolates 5 consecutive macro steps basing on received
+ * coordinates from VSP. It also receives information whether to start breaking
+ * or not. More over it calculates the overshoot of the manipulator.
+ */
+>>>>>>> 0aa720f1eccac0d0fedb327dbb25e07673b996e7
 bool neuron_generator::next_step()
 {
 	the_robot->ecp_command.instruction_type = lib::SET;
@@ -31,18 +104,31 @@ bool neuron_generator::next_step()
 		return false;
 	}
 
-	//when current period == 5 then new data from VSP is ready, therefore
-	//generator has to interpolate this coordinates for 5 macro steps.
-	//this section is not performed in breaking phase, during which in every
-	//next step period is set to 4
+	// ------------ read the current robot position ----------
+	actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
+	angle_axis_vector.to_table(actual_position);
+
+	if(breaking_){
+		double tmp;
+
+		tmp = normalized_vector[0] * actual_position[0] +
+			  normalized_vector[1] * actual_position[1] +
+			  normalized_vector[2] * actual_position[2];
+		if(tmp < overshoot_){
+			overshoot_ = tmp;
+		} 
+	}
+	printf("position: %f %f %f\n",actual_position[0],actual_position[1],actual_position[2]);
+	if (neuron_sensor->positionRequested()  && !breaking_) {
+		printf("position requested inside\n");
+		neuron_sensor->sendCurrentPosition(actual_position[0], actual_position[1], actual_position[2]);
+		neuron_sensor->get_reading();
+	}
+
 	if (neuron_sensor->newData() && !breaking_) {
 		printf("\n-------- new interpolation point ----------\n");
 		flushall();
-		// ------------ read the current robot position ----------
-		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-		actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-		angle_axis_vector.to_table(actual_position);
-		// ------------ read the current robot position (end) ---------
 
 		//get desired position for robot.
 		flushall();
@@ -69,7 +155,7 @@ bool neuron_generator::next_step()
 			{
 				time = 2 * MIN_VELOCITY / radius;
 			} else {
-                                time = 2 * sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) / radius;
+                time = 2 * sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) / radius;
 			}
 
 			break_steps_ = time / ((double)macroSteps * MSTEP_TIME);
@@ -100,19 +186,14 @@ bool neuron_generator::next_step()
                               t[4]*coeff_[i][4] +
                               t[5]*coeff_[i][5];
 	}
-
 	++mstep_; // increment macro step number
 
+	printf("position: %f %f %f\n",position[0],position[1],position[2]);
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
 	//send new position to the robot
 	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	// --------- send new position to the robot (EDP) (end) --------------
-
-
-	if (neuron_sensor->positionRequested()  && !breaking_) {
-		neuron_sensor->sendCurrentPosition(position[0], position[1], position[2]);
-	}
 
     if(breaking_ && (mstep_ > break_steps_)){
 		return false;
@@ -136,7 +217,7 @@ double * neuron_generator::get_position()
  */
 double neuron_generator::get_breaking_time()
 {
-	return breaking_node * 0.02;
+	return break_steps_ * 0.02;
 }
 
 /**
@@ -145,7 +226,7 @@ double neuron_generator::get_breaking_time()
  */
 double neuron_generator::get_overshoot()
 {
-	return overshoot;
+	return overshoot_;
 }
 
 /**
@@ -155,24 +236,11 @@ double neuron_generator::get_overshoot()
  */
 void neuron_generator::reset()
 {
+	t = 0.02;
+	overshoot_ = 1000000;
 
-	for (int i = 0; i < 6; i++) {
-		v[i] = 0.0;
-		u[i] = 0.0;
-		a_max[i] = 0.15;
-		v_max[i] = 0.15;
-		s[i] = 0.0;
-		k[i] = 0.0;
-		reached[i] = false;
-		change[i] = false;
-		t = 0.02;
-		almost_reached[i] = false;
-		breaking_possible[i] = false;
-		overshoot = 0;
-	}
-
-        breaking_ = false;
-	breaking_node = 1;
+    breaking_ = false;
+	break_steps_ = 1;
 }
 
 void neuron_generator::velocityProfileLinear(double *coeff, double pos1, double pos2, double t)

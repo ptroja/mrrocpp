@@ -119,8 +119,10 @@ neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator) :
 	config(_configurator)
 {
 
-	base_period = 5;
-	current_period = 1;
+	base_period = current_period = 0;
+
+	basePeriod=5;
+	currentPeriod=1;
 
 	uint16_t vsp_port = config.value <uint16_t> ("vsp_port", "[VSP]");
 	const std::string vsp_node_name = config.value <std::string> ("vsp_node_name", "[VSP]");
@@ -184,6 +186,7 @@ void neuron_sensor::get_reading()
 
 	//copy data from packet to variables
 	memcpy(&command, buff, 1);
+	printf("command %d %x\n",command,command);
 	switch (command)
 	{
 		case VSP_START:
@@ -201,7 +204,7 @@ void neuron_sensor::get_reading()
 			memcpy(&(coordinates.y), buff + 18, 8);
 			memcpy(&(coordinates.z), buff + 26, 8);
 			printf("first_Coordinates - %lf %lf %lf\n", coordinates.x, coordinates.y, coordinates.z);
-			base_period = macroSteps;
+			basePeriod= macroSteps;
 			break;
 
 		case TR_NEXT_POSITION:
@@ -224,6 +227,7 @@ void neuron_sensor::get_reading()
 		default:
 			printf("unknown command %d\n", command);
 	}
+	printf("data received\n");
 }
 
 /*===============================stop=====================================*//**
@@ -399,7 +403,7 @@ Coordinates neuron_sensor::getFirstCoordinates()
  */
 void neuron_sensor::startGettingTrajectory()
 {
-	current_period = 1;
+	currentPeriod = 1;
 	sendCommand(TRAJECTORY_FIRST);
 }
 
@@ -445,7 +449,7 @@ void neuron_sensor::initiate_reading()
  */
 bool neuron_sensor::newData()
 {
-	if (current_period == base_period)
+	if (basePeriod>0 && currentPeriod == basePeriod)
 		return true;
 
 	return false;
@@ -457,8 +461,13 @@ bool neuron_sensor::newData()
  */
 bool neuron_sensor::positionRequested()
 {
-	if (current_period == 1)
+	--currentPeriod;
+	printf("current period: %d\n",currentPeriod);
+	if (basePeriod>0 && currentPeriod == 0){
+		currentPeriod = basePeriod;
 		return true;
+	}
+
 
 	return false;
 }
@@ -468,7 +477,7 @@ bool neuron_sensor::positionRequested()
  */
 void neuron_sensor::stopReceivingData()
 {
-	base_period = 0;
+	basePeriod = 0;
 }
 
 /*======================================getRadius=========================*//**

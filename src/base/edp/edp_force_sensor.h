@@ -91,6 +91,8 @@ protected:
 	// ft_table used in get_reading and get_particualr_reading
 	lib::Ft_vector ft_table;
 
+	lib::Ft_vector force_constraints;
+
 	void get_reading(void);
 
 	struct _from_vsp

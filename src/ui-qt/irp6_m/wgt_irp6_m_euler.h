@@ -74,16 +74,14 @@ private slots:
 	void on_pushButton_4l_clicked();
 	void on_pushButton_5l_clicked();
 	void on_pushButton_6l_clicked();
-	void on_pushButton_7l_clicked();
-	void on_pushButton_8l_clicked();
+
 	void on_pushButton_1r_clicked();
 	void on_pushButton_2r_clicked();
 	void on_pushButton_3r_clicked();
 	void on_pushButton_4r_clicked();
 	void on_pushButton_5r_clicked();
 	void on_pushButton_6r_clicked();
-	void on_pushButton_7r_clicked();
-	void on_pushButton_8r_clicked();
+
 };
 
 #endif // WGT_SPKM_INC_H

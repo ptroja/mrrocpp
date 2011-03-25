@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
+#include <fstream>
 
 #include <boost/shared_ptr.hpp>
 
@@ -43,6 +45,7 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	if (robot_test_mode) {
 		msg->message("Robot test mode activated");
 	}
+
 }
 
 effector::~effector()
@@ -56,31 +59,7 @@ bool effector::initialize_communication()
 	const std::string
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
 
-#if 0
-	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
-	if (!(robot_test_mode)) {
-
-		const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
-
-		std::string full_path_to_hardware_busy_attach_point("/dev/name/global/");
-		full_path_to_hardware_busy_attach_point += hardware_busy_attach_point;
-
-		// sprawdzenie czy nie jakis proces EDP nie zajmuje juz sprzetu
-		if (access(full_path_to_hardware_busy_attach_point.c_str(), R_OK) == 0) {
-			fprintf(stderr, "edp: hardware busy\n");
-			return false;
-		}
-
-		name_attach_t * tmp_attach = name_attach(NULL, hardware_busy_attach_point.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-
-		if (tmp_attach == NULL) {
-			msg->message(lib::SYSTEM_ERROR, errno, "edp: hardware_busy_attach_point failed to attach");
-			fprintf(stderr, "hardware_busy_attach_point name_attach() to %s failed: %s\n", hardware_busy_attach_point.c_str(), strerror(errno));
-			// TODO: throw
-			return false;
-		}
-	}
-#endif /* !defined(USE_MESSIP_SRR */
+	// nawiazywanie komunikacji
 
 	std::string full_path_to_server_attach_point("/dev/name/global/");
 	full_path_to_server_attach_point += server_attach_point;

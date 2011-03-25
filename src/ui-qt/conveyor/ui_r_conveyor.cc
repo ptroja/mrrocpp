@@ -191,7 +191,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 4, ui->actionall_Synchronisation, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
+				mw->enable_menu_item(true, 3,  ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 				mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
 
 			}

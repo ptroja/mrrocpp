@@ -7,7 +7,7 @@
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
 
-const int wgt_irp6_m_relative_angle_axis::aa_number=6;
+const int wgt_irp6_m_relative_angle_axis::aa_number = 6;
 
 wgt_irp6_m_relative_angle_axis::wgt_irp6_m_relative_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
 	wgt_base(_widget_label, _interface, parent), robot(_robot)
@@ -32,11 +32,11 @@ wgt_irp6_m_relative_angle_axis::~wgt_irp6_m_relative_angle_axis()
 
 int wgt_irp6_m_relative_angle_axis::synchro_depended_widgets_disable(bool _set_disabled)
 {
-//	ui.pushButton_execute->setDisabled(_set_disabled);
-//	ui.pushButton_copy->setDisabled(_set_disabled);
-//	ui.pushButton_export->setDisabled(_set_disabled);
-//	ui.pushButton_import->setDisabled(_set_disabled);
-//	ui.pushButton_read->setDisabled(_set_disabled);
+	//	ui.pushButton_execute->setDisabled(_set_disabled);
+	//	ui.pushButton_copy->setDisabled(_set_disabled);
+	//	ui.pushButton_export->setDisabled(_set_disabled);
+	//	ui.pushButton_import->setDisabled(_set_disabled);
+	//	ui.pushButton_read->setDisabled(_set_disabled);
 
 	for (int i = 0; i < aa_number; i++) {
 		doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
@@ -64,7 +64,7 @@ void wgt_irp6_m_relative_angle_axis::init_and_copy()
 void wgt_irp6_m_relative_angle_axis::init_and_copy_slot()
 {
 	init();
-//	copy();
+	//	copy();
 }
 
 void wgt_irp6_m_relative_angle_axis::synchro_depended_init_slot()
@@ -86,7 +86,6 @@ void wgt_irp6_m_relative_angle_axis::synchro_depended_init_slot()
 	} // end try
 	CATCH_SECTION_UI
 }
-
 
 int wgt_irp6_m_relative_angle_axis::init()
 {
@@ -128,7 +127,7 @@ void wgt_irp6_m_relative_angle_axis::on_pushButton_r_clicked()
 {
 	zero_desired_position(); // zerowanie desired position
 	for (int i = 0; i < aa_number; i++)
-			robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+		robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
 
 	move_it();
 }
@@ -137,7 +136,7 @@ void wgt_irp6_m_relative_angle_axis::on_pushButton_l_clicked()
 {
 	zero_desired_position(); // zerowanie desired position
 	for (int i = 0; i < aa_number; i++)
-			robot.desired_pos[i] = -doubleSpinBox_des_Vector[i]->value();
+		robot.desired_pos[i] = -doubleSpinBox_des_Vector[i]->value();
 
 	move_it();
 }
@@ -254,20 +253,20 @@ int wgt_irp6_m_relative_angle_axis::move_it()
 
 		if (robot.state.edp.pid != -1) {
 
-
 			robot.ui_ecp_robot->move_xyz_angle_axis_relative(robot.desired_pos);
 
 			//robot.ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_relative_angle_axis(robot.desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_relative_angle_axis(interface.irp6_m->desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_relative_angle_axis(interface.irp6_m->desired_pos);
 			//robot.ui_ecp_robot->move_relative_angle_axis(robot.desired_pos);
-
-			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				for (int i = 0; i < aa_number; i++) {
-					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
-				}
-				init();
-			}
+			/*
+			 if ((robot.state.edp.is_synchronised)
+			 for (int i = 0; i < aa_number; i++) {
+			 doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
+			 }
+			 //	init();
+			 }
+			 */
 		} // end if (robot.state.edp.pid!=-1)
 	} // end try
 
