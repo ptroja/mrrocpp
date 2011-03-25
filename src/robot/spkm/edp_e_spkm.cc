@@ -234,7 +234,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Check desired joint values if they are absolute.
 						if (is_synchronised()) {
-							get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+							try{
+								get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+							}
+							  catch (boost::exception &e_)
+							  {
+							    e_ << mrrocpp::kinematics::spkm::spkm_motion_type(ecp_edp_cbuffer.pose_specification);
+							    throw;
+							  }
 						}
 						break;
 					case lib::spkm::JOINT:
@@ -249,8 +256,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 						} else {
 							// Throw non-fatal error - this mode requires synchronization.
-							MRROCPP_THROW_NON_FATAL_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
-//							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
 						}
 
 						break;
@@ -263,21 +269,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						std::cout<<"]\n";
 
 						if (is_synchronised()) {
-							// Compute the desired homogeneous matrix on the base of received 6 variables related to angle-axis representation.
-							//desired_end_effector_frame.set_from_xyz_angle_axis(mrrocpp::lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
-
-							// Compute the desired homogeneous matrix on the base of received 6 variables related to Euler Z-Y-Z representation.
+							// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 							desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(mrrocpp::lib::Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-							std::cout << desired_end_effector_frame<<std::endl;
+							std::cout << desired_end_effector_frame <<std::endl;
 
-							// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
-							get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
+							// Check the motion type.
+							if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL)
+							{
+								// In operational space the previous cartesian pose is required.
+								if (!is_previous_cartesian_pose_known)
+									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
+							}
+							else
+							{
+								// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+								get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
-							// Transform joints to motors (and check motors/joints values).
-							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+								// Transform joints to motors (and check motors/joints values).
+								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 
-							// Remember the currently desired joints as old.
-							desired_joints_old = desired_joints;
+								// Remember the currently desired joints as old.
+								desired_joints_old = desired_joints;
+							}
 						} else {
 							// Throw non-fatal error - this mode requires synchronization.
 							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
@@ -392,8 +405,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						break;
 					case lib::epos::OPERATIONAL: {
 						// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
-						if (!is_previous_cartesian_pose_known)
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
+						//if (!is_previous_cartesian_pose_known)
+						//	BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
+						// This is done earlier - in the lib::spkm::POSE == FRAME section.
+
+						// Compute transformation from current to desired pose.
+						desired_relative_end_effector_frame = !current_end_effector_frame * desired_end_effector_frame;
+						std::cout << desired_relative_end_effector_frame <<std::endl;
+
+						// Compute P, v and gamma.
+						Eigen::Matrix<double, 7, 1> xyz_aa;
+						desired_relative_end_effector_frame.get_xyz_angle_axis_gamma(xyz_aa);
+						std::cout << xyz_aa <<std::endl;
+
 					}
 						break;
 					default:
@@ -454,6 +478,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
 		is_previous_cartesian_pose_known = (ecp_edp_cbuffer.pose_specification == lib::spkm::FRAME);
+		if (is_previous_cartesian_pose_known)
+			current_end_effector_frame = desired_end_effector_frame;
 /*		if (cartesian_space_move)
 			is_previous_cartesian_pose_known = true;
 		else

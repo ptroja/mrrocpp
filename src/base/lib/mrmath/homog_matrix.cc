@@ -427,7 +427,8 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 	set_translation_vector(l_vector[0], l_vector[1], l_vector[2]);
 }
 
-void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
+
+void Homog_matrix::get_xyz_angle_axis_gamma(Eigen::Matrix<double, 7, 1> & xyz_aa) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
 	static const double EPS = 1.0E-6;
@@ -447,9 +448,9 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		value = 1;
 
 	// kat obrotu
-	double alfa = acos(value);
+	double gamma = acos(value);
 
-	if ((alfa < M_PI + delta) && (alfa > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
+	if ((gamma < M_PI + delta) && (gamma > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
 	{
 
 		Kd[0] = sqrt((matrix_m[0][0] + 1) / (double) 2);
@@ -484,28 +485,41 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		}
 
 	}// end kat obrotu 180 stopni
-	else if ((alfa < ALPHA_SENSITIVITY) && (alfa > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
+	else if ((gamma < ALPHA_SENSITIVITY) && (gamma > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
 	{
 
 		for (int i = 0; i < 3; i++)
 			Kd[i] = 0;
 
-		alfa = 0;
+		gamma = 0;
 
 	} else // standardowe obliczenia
 	{
 		// sinus kata obrotu alfa
-		const double s_alfa = sin(alfa);
+		const double s_alfa = sin(gamma);
 
 		Kd[0] = (1 / (2 * s_alfa)) * (matrix_m[2][1] - matrix_m[1][2]);
 		Kd[1] = (1 / (2 * s_alfa)) * (matrix_m[0][2] - matrix_m[2][0]);
 		Kd[2] = (1 / (2 * s_alfa)) * (matrix_m[1][0] - matrix_m[0][1]);
 	}
 
-	// Przepisanie wyniku do tablicy
+	// Write the computed values in output parameter.
+	xyz_aa << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], Kd[0], Kd[1], Kd[2], gamma;
+}
+
+
+void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
+{
+	Eigen::Matrix<double, 7, 1> xyz_aa;
+	// Compute x,y,z,vx,vy,vz, gamma.
+	get_xyz_angle_axis_gamma(xyz_aa);
+
+	// Copy results to table.
 	for (int i = 0; i < 3; i++) {
-		l_vector[i] = matrix_m[i][3];
-		l_vector[3 + i] = Kd[i] * alfa;
+		// The translation.
+		l_vector[i] = xyz_aa[i];
+		// The rotation in the form of vector multiplied by angle.
+		l_vector[3+i] = xyz_aa[3+i] * xyz_aa[6];
 	}
 }
 

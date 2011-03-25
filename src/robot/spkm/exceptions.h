@@ -18,6 +18,7 @@
 #define SPKM_EXCEPTION_H_
 
 #include "base/lib/exception.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace kinematics {
@@ -39,8 +40,11 @@ typedef boost::error_info <struct motor_no, int> spkm_motor_number;
 //! Number of joint that caused the exception.
 typedef boost::error_info <struct joint_no, int> spkm_joint_number;
 
-//! Desired values that caused the exception.
+//! Desired value that caused the exception.
 typedef boost::error_info <struct desired_value, double> spkm_desired_value;
+
+//! Motion type.
+typedef boost::error_info <struct motion_type, mrrocpp::lib::spkm::POSE_SPECIFICATION> spkm_motion_type;
 
 
 /*!
