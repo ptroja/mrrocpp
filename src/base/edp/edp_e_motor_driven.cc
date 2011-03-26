@@ -194,7 +194,7 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), sb_loaded(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
 			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
 			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
 			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
