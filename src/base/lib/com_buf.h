@@ -700,7 +700,6 @@ c_buffer_arm
 		ar & pf_def.inertia;
 		ar & pf_def.reciprocal_damping;
 		ar & pf_def.force_xyz_torque_xyz;
-		ar & pf_def.arm_frame;
 		ar & pf_def.behaviour;
 
 		ar & serialized_command;
@@ -870,11 +869,7 @@ typedef struct _controller_state_t
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef
-
-struct
-
-r_buffer_arm
+typedef struct r_buffer_arm
 {
 	/*!
 	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
@@ -1104,16 +1099,6 @@ typedef struct _empty
 	{
 	}
 } empty_t;
-
-/*
- // by Y
- inline void copy_frame(frame_tab destination_frame, frame_tab source_frame)
- {
- for (int   column = 0; column < 4; column++)
- for (int row = 0; row < 3; row++)
- destination_frame[column][row] = source_frame[column][row];
- }
- */
 
 } // namespace lib
 } // namespace mrrocpp
