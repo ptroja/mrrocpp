@@ -122,9 +122,8 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-
-	ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-	// 	printf("KONTRUKTOR EDP_S POCATEK\n");
+	// nadanie odpowiednich uprawnien watkowi
+	ThreadCtl(_NTO_TCTL_IO, NULL);
 
 	// ZMIENNE POMOCNICZE
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
@@ -134,6 +133,7 @@ void ATI3084_force::connect_to_hardware(void)
 	// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
 
 	phdl = pci_attach(0);
+
 	if (phdl == -1) {
 		fprintf(stderr, "Unable to initialize PCI\n");
 
@@ -204,8 +204,6 @@ void ATI3084_force::connect_to_hardware(void)
 	}
 
 	do_init(); // komunikacja wstepna
-
-
 }
 
 ATI3084_force::~ATI3084_force(void)

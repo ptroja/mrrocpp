@@ -42,7 +42,7 @@ void force::operator()()
 		}
 		sr_msg->message(lib::FATAL_ERROR, e.error_no);
 
-	} //!< end CATCH
+	}
 
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
@@ -131,9 +131,9 @@ void force::operator()()
 
 force::force(common::manip_effector &_master) :
 	force_sensor_test_mode(true),
-			is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-			is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
-			is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
+	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
+	is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
+	is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
 {
 	/*! Lokalizacja procesu wywietlania komunikatow SR */
 	sr_msg
@@ -172,7 +172,6 @@ void force::wait_for_event()
 /***************************** odczyt z czujnika *****************************/
 void force::get_reading(void)
 {
-
 	if (!is_sensor_configured) {
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
