@@ -185,18 +185,37 @@ void force::get_reading(void)
 		if (gravity_transformation) {
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-			// wykrywanie przekroczenia sily granciznej
+
 			bool overforce = false;
-			for (int i = 0; i++; i < 6) {
-				if ((output[i] > force_constraints[i]) || (output[i] < -force_constraints[i])) {
+			for (int i = 0; i < 6; i++) {
+				if (fabs(ft_table[i]) > force_constraints[i]) {
 					overforce = true;
+
 				}
 			}
+			/*
+			 std::stringstream buffero(std::stringstream::in | std::stringstream::out);
+			 buffero << "over_force detected step: " << master.step_counter << " ";
+			 for (int i = 0; i < 6; i++) {
+			 buffero << i << ": " << ft_table[i] << " ";
+			 }
+
+			 std::cout << buffero.str() << std::endl;
+			 */
 			if (!overforce) {
+				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+				// wykrywanie przekroczenia sily granciznej
+
+
 				master.force_msr_upload(output);
 			} else {
-				sr_msg->message(lib::NON_FATAL_ERROR, "Force / Torque over_force detected");
+				std::stringstream buffer(std::stringstream::in | std::stringstream::out);
+				buffer << "over_force detected step: " << master.step_counter << " ";
+				for (int i = 0; i < 6; i++) {
+					buffer << i << ": " << ft_table[i] << " ";
+				}
+
+				sr_msg->message(lib::NON_FATAL_ERROR, buffer.str());
 			}
 		}
 

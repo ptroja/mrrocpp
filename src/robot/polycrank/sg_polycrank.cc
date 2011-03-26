@@ -117,17 +117,7 @@ void servo_buffer::synchronise(void)
 }
 */
 
-} // namespace conveyor
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new polycrank::servo_buffer((polycrank::effector &) (_master));
-}
-
-
-} // namespace common
+} // namespace polycrank
 } // namespace edp
 } // namespace mrrocpp
 
