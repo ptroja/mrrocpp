@@ -9,7 +9,6 @@
 #ifndef NEURON_SENSOR_H_
 #define NEURON_SENSOR_H_
 
-
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
@@ -19,9 +18,21 @@ namespace sensor {
 /**
  * @brief Structure that represents coordinates in 3D space.
  */
-struct Coordinates{
+struct Coordinates
+{
+	/**
+	 * @brief x coordinate.
+	 */
 	double x;
+
+	/**
+	 * @brief y coordinate.
+	 */
 	double y;
+
+	/**
+	 * @brief z coordinate.
+	 */
 	double z;
 };
 
@@ -33,50 +44,76 @@ struct Coordinates{
  * control commands from VSP which is considered as a server and thus holds
  * main control over entire system.
  */
-class neuron_sensor : public ecp_mp::sensor::sensor_interface {
+class neuron_sensor : public ecp_mp::sensor::sensor_interface
+{
 
-	private:
-		/**
-		 * @brief Configurator.
-		 */
-		mrrocpp::lib::configurator& config;
+private:
+	/**
+	 * @brief Configurator.
+	 */
+	mrrocpp::lib::configurator& config;
 
-		/**
-		 * @brief Socket used to connect with server (VSP).
-		 */
-		int socketDescriptor;
+	/**
+	 * @brief Socket used to connect with server (VSP).
+	 */
+	int socketDescriptor;
 
-		/**
-		 * @brief command received from VSP.
-		 */
-		uint8_t command;
+	/**
+	 * @brief command received from VSP.
+	 */
+	uint8_t command;
 
-		/**
-		 * Coordinates received from VSP
-		 */
-		Coordinates coordinates;
-		Coordinates lastButOne;
+	/**
+	 * @brief number of macro steps to perform.
+	 */
+	uint8_t macroSteps;
 
-		void sendCommand(uint8_t command);
-		void sendCoordinates(uint8_t command, double x, double y, double z);
+	/**
+	 * @brief radius of braking circle.
+	 */
+	double radius;
 
-	public:
-		neuron_sensor(mrrocpp::lib::configurator& _configurator);
-		virtual ~neuron_sensor();
-		void get_reading();
-		void configure_sensor();
-		void initiate_reading();
-		bool stop();
-		uint8_t getCommand();
-		Coordinates getFirstCoordinates();
-		Coordinates getCoordinates();
-		Coordinates getLastButOne();
-		void startGettingTrajectory();
-		void sendCommunicationFinished();
-		void waitForVSPStart();
-		bool startBraking();
-		void sendFinalPosition(double x, double y, double z);
-		void sendCurrentPosition(double x, double y, double z);
+	/**
+	 * Coordinates received from VSP
+	 */
+	Coordinates coordinates;
+	Coordinates lastButOne;
+
+	/**
+	 * After how many macrosteps new reading from a sensor should be performed
+	 */
+	short int basePeriod;
+
+	/**
+	 * current counter for basePeriod.
+	 */
+	short int currentPeriod;
+
+	void sendCommand(uint8_t command);
+	void sendCoordinates(uint8_t command, double x, double y, double z);
+
+public:
+	neuron_sensor(mrrocpp::lib::configurator& _configurator);
+	virtual ~neuron_sensor();
+	void get_reading();
+	void configure_sensor();
+	void initiate_reading();
+	bool stop();
+	uint8_t getCommand();
+	Coordinates getFirstCoordinates();
+	Coordinates getCoordinates();
+	Coordinates getLastButOne();
+	uint8_t getMacroStepsNumber();
+	void startGettingTrajectory();
+	void sendCommunicationFinished();
+	void waitForVSPStart();
+	bool startBraking();
+	void sendOvershoot(double overshoot);
+	void sendCurrentPosition(double x, double y, double z);
+	bool newData();
+	bool positionRequested();
+	void stopReceivingData();
+	double getRadius();
 };
 
 } //sensor

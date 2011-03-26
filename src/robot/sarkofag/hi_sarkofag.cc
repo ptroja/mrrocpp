@@ -7,7 +7,7 @@
 // przerwania - tasmociag
 // ------------------------------------------------------------------------
 
-// Klasa edp_irp6m_effector.
+
 #include "robot/sarkofag/edp_e_sarkofag.h"
 // Klasa hardware_interface.
 #include "robot/sarkofag/hi_sarkofag.h"

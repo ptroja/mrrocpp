@@ -20,8 +20,8 @@
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-#include "robot/irp6m/mp_r_irp6m.h"
-#include "robot/speaker/mp_r_speaker.h"
+
+
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
@@ -51,8 +51,8 @@ cxx::cxx(lib::configurator &_config) :
 void cxx::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
-	ACTIVATE_MP_ROBOT(speaker);
-	ACTIVATE_MP_ROBOT(irp6m);
+	
+	
 	ACTIVATE_MP_ROBOT(polycrank);
 	ACTIVATE_MP_ROBOT(bird_hand);
 	ACTIVATE_MP_ROBOT(spkm);

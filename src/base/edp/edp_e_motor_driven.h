@@ -16,6 +16,7 @@
 #include <boost/thread/condition.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include "base/lib/condition_synchroniser.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
@@ -206,6 +207,11 @@ public:
 	 * and transmission of output data to the hardware
 	 */
 	in_out_buffer in_out_obj;
+
+	/*!
+	 * \brief to wait for servo_buffer load in servo
+	 */
+	lib::condition_synchroniser sb_loaded;
 
 	/*!
 	 * \brief object to handle measurements
@@ -479,8 +485,7 @@ public:
 	lib::c_buffer instruction;
 	lib::r_buffer reply;
 
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-};
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
 
 } // namespace common
 } // namespace edp

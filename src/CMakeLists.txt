@@ -39,9 +39,7 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
 option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
 option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
-if(QNXNTO)
-option(ROBOT_SPEAKER "Build support for speaker robot" ON)
-endif(QNXNTO)
+
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
 CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
@@ -208,6 +206,5 @@ add_subdirectory (sensor)
 add_subdirectory (generator)
 add_subdirectory (subtask)
 add_subdirectory (robot)
-add_subdirectory (ui)
 add_subdirectory (application)
-add_subdirectory (ui-qt-yoyek)
+add_subdirectory (ui-qt)

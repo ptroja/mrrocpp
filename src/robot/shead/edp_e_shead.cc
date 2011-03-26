@@ -1,14 +1,3 @@
-// ------------------------------------------------------------------------
-// Proces:		EDP
-// Plik:			edp_irp6m_effector.cc
-// System:	QNX/MRROC++  v. 6.3
-// Opis:		Robot IRp-6 na postumencie
-//				- definicja metod klasy edp_irp6m_effector
-//				- definicja funkcji return_created_efector()
-//
-// Autor:		tkornuta
-// Data:		14.02.2007
-// ------------------------------------------------------------------------
 
 #include <cstdio>
 
@@ -170,7 +159,7 @@ void effector::reply_serialization(void)
 
 namespace common {
 
-// Stworzenie obiektu edp_irp6m_effector.
+
 effector* return_created_efector(lib::configurator &_config)
 {
 	return new shead::effector(_config);

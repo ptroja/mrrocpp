@@ -34,6 +34,7 @@ const std::size_t WRITE_BYTES = 10;
 const std::size_t READ_BYTES = 8;
 const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
+const int FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT = 2;
 
 const unsigned long COMMCYCLE_TIME_NS = 2000000;
 
@@ -46,7 +47,7 @@ class HI_moxa : public common::HardwareInterface
 {
 
 public:
-	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports, const double* max_increments); // Konstruktor
 
 	~HI_moxa();
 
@@ -76,8 +77,11 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
+	bool hardware_panic;
 	const std::size_t last_drive_number;
+	//std::vector<double> ridiculous_increment;
 	std::vector<std::string> port_names;
+	const double* ridiculous_increment;
 	int fd[MOXA_SERVOS_NR], fd_max;
 	struct servo_St servo_data[MOXA_SERVOS_NR];
 	struct termios oldtio[MOXA_SERVOS_NR];

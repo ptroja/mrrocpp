@@ -54,7 +54,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	const std::vector<std::string> ports_vector(mrrocpp::lib::polycrank::ports_strings,
 				mrrocpp::lib::polycrank::ports_strings+mrrocpp::lib::polycrank::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::polycrank::LAST_MOXA_PORT_NUM, ports_vector);
+	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::polycrank::LAST_MOXA_PORT_NUM, ports_vector, NULL);
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika
@@ -117,17 +117,7 @@ void servo_buffer::synchronise(void)
 }
 */
 
-} // namespace conveyor
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new polycrank::servo_buffer((polycrank::effector &) (_master));
-}
-
-
-} // namespace common
+} // namespace polycrank
 } // namespace edp
 } // namespace mrrocpp
 

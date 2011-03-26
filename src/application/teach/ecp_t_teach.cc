@@ -14,7 +14,6 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "robot/irp6m/ecp_r_irp6m.h"
 
 #include "application/teach/ecp_t_teach.h"
 #include "generator/ecp/ecp_g_teach_in.h"
@@ -31,11 +30,9 @@ teach::teach(lib::configurator &_config) :
 	common::task::task(_config)
 {
 	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
-	} else if (config.section_name == lib::irp6m::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
 		throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));

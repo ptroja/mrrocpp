@@ -134,8 +134,7 @@ protected:
 		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 			reply.reply_type = real_reply_type;
 
-
-			if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
+		if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
 
 			uint64_t e = errno;
 			perror("Reply() to ECP failed");
@@ -186,7 +185,7 @@ public:
 	 *
 	 * For the usage in asynchronous communication.
 	 */
-	boost::shared_ptr<lib::sr_edp> msg;
+	boost::shared_ptr <lib::sr_edp> msg;
 
 	/*!
 	 * \brief Info if the robot test mode is active.
@@ -202,6 +201,7 @@ public:
 	 * TODO: this should be void and throw an exception in case of failure
 	 */
 	bool initialize_communication(void);
+
 
 	/*!
 	 * \brief Constructor.

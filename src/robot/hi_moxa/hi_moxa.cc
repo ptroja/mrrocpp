@@ -16,8 +16,8 @@ namespace mrrocpp {
 namespace edp {
 namespace hi_moxa {
 
-HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports) :
-	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports),
+HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports, const double* max_increments) :
+	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports), ridiculous_increment(max_increments),
 	ptimer(COMMCYCLE_TIME_NS/1000000)
 {
 #ifdef T_INFO_FUNC
@@ -46,11 +46,12 @@ void HI_moxa::init()
 #endif
 	// inicjalizacja zmiennych
 	for (unsigned int i = 0; i <= last_drive_number; i++) {
-		servo_data[i].first_hardware_read = true;
+		servo_data[i].first_hardware_reads = FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
 		servo_data[i].command_params = 0;
 		for(int j=0; j<SERVO_ST_BUF_LEN; j++)
 			servo_data[i].buf[j] = 0;
 	}
+	hardware_panic = false;
 
 	// informacja o stanie robota
 	master.controller_state_edp_buf.is_power_on = true;
@@ -75,6 +76,8 @@ void HI_moxa::init()
 			if (fd[i] < 0) {
 				std::cout << std::endl << "[error] Nie wykryto sprzetu! fd == " << (int) fd[i] << std::endl;
 				//throw(std::runtime_error("unable to open device!!!"));
+				perror("[error] Nie wykryto sprzetu! ");
+
 			} else {
 				std::cout << "...OK" << std::endl;
 				if (fd[i] > fd_max) {
@@ -100,8 +103,13 @@ void HI_moxa::init()
 			// activate new settings
 			tcflush(fd[i], TCIFLUSH);
 			tcsetattr(fd[i], TCSANOW, &newtio);
+
+			// start driver in MANUAL mode
+			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
+			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
 		}
 	}
+
 
 	reset_counters();
 }
@@ -128,6 +136,8 @@ int HI_moxa::get_current(int drive_number)
 	int ret;
 
 	ret = servo_data[drive_number].drive_status.current;
+
+	//ret = ret;
 
 #ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::get_current(" << drive_number << ") = " << ret << std::endl;
@@ -162,7 +172,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 {
 	static int64_t receive_attempts = 0, receive_timeouts = 0;
 	static int error_msg_power_stage = 0;
-	bool robot_synchronized;
+	static int error_msg_hardware_panic = 0;
+	static int error_msg_overcurrent = 0;
+	static int synchro_switch_filter[] = {0,0,0,0,0,0,0,0};
+	const int synchro_switch_filter_th = 2;
+	bool robot_synchronized = false;
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
@@ -178,6 +192,19 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 		return ret;
 	}// end test mode
+
+	if(hardware_panic){
+		for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+			set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+
+
+		if (error_msg_hardware_panic == 0) {
+			master.msg->message(lib::FATAL_ERROR, "Hardware panic");
+			std::cout << "[error] hardware panic" << std::endl;
+			error_msg_hardware_panic++;
+		}
+		return ret;
+	}
 
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
@@ -237,14 +264,37 @@ uint64_t HI_moxa::read_write_hardware(void)
 			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
 		}
 
-		// W pierwszym odczycie danych z napedu przyrost pozycji musi byc 0.
-		if (servo_data[drive_number].first_hardware_read && hardware_read_ok) {
+		// W pierwszych odczytach danych z napedu przyrost pozycji musi byc 0.
+		if ((servo_data[drive_number].first_hardware_reads > 0) && hardware_read_ok) {
 			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
-			servo_data[drive_number].first_hardware_read = false;
+			servo_data[drive_number].first_hardware_reads --;
 		}
 
 		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position
 				- servo_data[drive_number].previous_absolute_position);
+
+		if((robot_synchronized) && (ridiculous_increment[drive_number] != 0))
+		{
+			if((servo_data[drive_number].current_position_inc > ridiculous_increment[drive_number])
+				   || (servo_data[drive_number].current_position_inc < - ridiculous_increment[drive_number]))
+			{
+				hardware_panic = true;
+				master.msg->message(lib::FATAL_ERROR, "Ridiculous encoder read");
+				std::cout << "[error] ridiculous increment on (" << (int)drive_number << "): read = "
+						<< servo_data[drive_number].current_position_inc << ", max = "
+						<< ridiculous_increment[drive_number] << std::endl;
+			}
+		}
+
+		if (servo_data[drive_number].drive_status.overcurrent == 1) {
+			if (error_msg_overcurrent == 0) {
+				master.msg->message(lib::NON_FATAL_ERROR, "Overcurrent");
+				std::cout << "[error] overcurrent on (" << (int)drive_number << "): read = "
+						<< servo_data[drive_number].drive_status.current << "mA" << std::endl;
+				error_msg_overcurrent++;
+			}
+		}
+
 	}
 
 	robot_synchronized = true;
@@ -275,17 +325,43 @@ uint64_t HI_moxa::read_write_hardware(void)
 			ret |= (uint64_t) (UPPER_LIMIT_SWITCH << (5 * (drive_number))); // Zadzialal wylacznik "gorny" krancowy
 		if (servo_data[drive_number].drive_status.sw2 != 0)
 			ret |= (uint64_t) (LOWER_LIMIT_SWITCH << (5 * (drive_number ))); // Zadzialal wylacznik "dolny" krancowy
-		if (servo_data[drive_number].drive_status.swSynchr != 0)
-			ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5 * (drive_number))); // Zadzialal wylacznik synchronizacji
 		if (servo_data[drive_number].drive_status.synchroZero != 0)
 			ret |= (uint64_t) (SYNCHRO_ZERO << (5 * (drive_number))); // Impuls zera rezolwera
 		if (servo_data[drive_number].drive_status.overcurrent != 0)
 			ret |= (uint64_t) (OVER_CURRENT << (5 * (drive_number))); // Przekroczenie dopuszczalnego pradu
+		if (servo_data[drive_number].drive_status.swSynchr != 0)
+		{
+			if(synchro_switch_filter[drive_number] == synchro_switch_filter_th)
+				ret |= (uint64_t) (SYNCHRO_SWITCH_ON << (5 * (drive_number))); // Zadzialal wylacznik synchronizacji
+			else
+				synchro_switch_filter[drive_number]++;
+		}
+		else
+		{
+			synchro_switch_filter[drive_number] = 0;
+		}
 	}
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
-	//	std::cout << "[info] current[0] = " << (int) servo_data[0].drive_status.current << std::endl;
+//		const int disp_drv_no = 0;
+//		std::cout << "[info]";
+//		std::cout << " sw1_sw2_swSynchr = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
+//		std::cout << " position = " << (int) servo_data[disp_drv_no].drive_status.position;
+//		std::cout << " current = " << (int) servo_data[disp_drv_no].drive_status.current;
+//		std::cout << std::endl;
+
+
+//		for(int disp_drv_no=0; disp_drv_no<6; disp_drv_no++)
+//		{
+//			std::cout << "   " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
+//		}
+//
+//		if(servo_data[5].drive_status.swSynchr != 0)
+//			std::cout << "   ########################### ########################### ";
+//
+//		std::cout << std::endl;
+
 		status_disp_cnt = 0;
 	}
 
@@ -437,7 +513,7 @@ void HI_moxa::reset_position(int drive_number)
 	servo_data[drive_number].current_absolute_position = 0L;
 	servo_data[drive_number].previous_absolute_position = 0L;
 	servo_data[drive_number].current_position_inc = 0.0;
-	servo_data[drive_number].first_hardware_read = true;
+	servo_data[drive_number].first_hardware_reads = FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
 	//#ifdef T_INFO_FUNC
 	std::cout << "[func] HI_moxa::reset_position(" << drive_number << ")" << std::endl;
 	//#endif
