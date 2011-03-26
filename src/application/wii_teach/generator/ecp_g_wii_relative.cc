@@ -15,10 +15,9 @@ namespace generator {
 wii_relative::wii_relative(common::task::task& _ecp_task, ecp_mp::sensor::wiimote* _wiimote) :
 	wii(_ecp_task, _wiimote)
 {
-	int i;
 	char buffer[100];
 
-	for (i = 0; i < MAX_NO_OF_DEGREES; ++i) {
+	for (int i = 0; i < MAX_NO_OF_DEGREES; ++i) {
 		sprintf(buffer, "relative_multiplier_%d", i);
 		multipliers[i] = ecp_t.config.value <double> (buffer);
 		sprintf(buffer, "relative_max_change_%d", i);
@@ -34,7 +33,7 @@ void wii_relative::set_position(bool changed)
 
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(nextChange[2], nextChange[0], nextChange[1], nextChange[4], nextChange[6], nextChange[5]));
 
-	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = homog_matrix;
 }
 
 bool wii_relative::first_step()

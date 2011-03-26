@@ -35,8 +35,6 @@ const unsigned int CONNECT_RETRY = 200;
 const unsigned int CONNECT_DELAY = 10000;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
-typedef double frame_tab[3][4];
-
 const std::string MP_SECTION = "[mp]";
 const std::string UI_SECTION = "[ui]";
 

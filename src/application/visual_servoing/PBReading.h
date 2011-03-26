@@ -8,9 +8,10 @@
 #ifndef PBREADING_HPP_
 #define PBREADING_HPP_
 
+#include <sstream>
+
 #include "Reading.h"
 #include "HomogMatrix.h"
-#include <sstream>
 
 namespace Processors {
 
@@ -48,7 +49,7 @@ public:
 		if (objectVisible) {
 			for (int i = 0; i < 3; ++i) {
 				for (int j = 0; j < 4; ++j) {
-					ss << objectPosition.elements[i][j] << "  ";
+					ss << objectPosition(i,j) << "  ";
 				}
 
 				ss << "\n";

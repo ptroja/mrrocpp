@@ -23,16 +23,16 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
-#include "base/lib/impconst.h"
-#include "base/lib/typedefs.h"
-
-
-#include "base/lib/messip/messip.h"
-
-
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
+
+#include "base/lib/impconst.h"
+#include "base/lib/typedefs.h"
+
+#include "base/lib/mrmath/homog_matrix.h"
+
+#include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -606,7 +606,7 @@ _robot_model
 	struct
 	{
 		/*! Tool trihedron relative to the collar. */
-		frame_tab tool_frame;
+		lib::Homog_matrix tool_frame;
 	} tool_frame_def;
 	//----------------------------------------------------------
 	struct
@@ -667,15 +667,13 @@ typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef struct
-
-c_buffer_arm
+typedef struct c_buffer_arm
 {
 	//----------------------------------------------------------
 	struct
 	{
 		/*!  End's trihedron relative to the base system. */
-		frame_tab arm_frame;
+		lib::Homog_matrix arm_frame;
 		/*! XYZ + end's orientation relative to the base system. */
 		double arm_coordinates[lib::MAX_SERVOS_NR];
 		/*! Given torque. */
@@ -694,8 +692,8 @@ c_buffer_arm
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & pf_def.arm_frame;
-		ar & pf_def.arm_coordinates;
+		ar & pf_def.arm_frame; // if set_arm_type == FRAME
+		ar & pf_def.arm_coordinates; // otherwise.
 		ar & pf_def.desired_torque;
 		ar & pf_def.inertia;
 		ar & pf_def.reciprocal_damping;
@@ -883,19 +881,22 @@ typedef struct r_buffer_arm
 		 *  Macierz reprezentujaca koncowke wzgledem bazy manipulatora.
 		 *  @todo Translate to English.
 		 */
-		frame_tab arm_frame;
+		lib::Homog_matrix arm_frame;
 		/*!
 		 *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
 		 *  @todo Translate to English.
 		 */
 		double arm_coordinates[lib::MAX_SERVOS_NR];
+
 		double force_xyz_torque_xyz[6];
-		/*!
-		 *  Stan w ktorym znajduje sie regulator chwytaka.
-		 *  @todo Translate to English.
-		 */
-		int16_t gripper_reg_state;
 	} pf_def;
+
+	/*!
+	 *  Stan w ktorym znajduje sie regulator chwytaka.
+	 *  @todo Translate to English.
+	 */
+	int16_t gripper_reg_state;
+
 	//----------------------------------------------------------
 
 	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
@@ -908,10 +909,18 @@ typedef struct r_buffer_arm
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & type;
-		ar & pf_def.arm_frame;
-		ar & pf_def.arm_coordinates;
+
+		switch (type) {
+			case FRAME:
+				ar & pf_def.arm_frame;
+				break;
+			default:
+				ar & pf_def.arm_coordinates;
+				break;
+		}
+
 		ar & pf_def.force_xyz_torque_xyz;
-		ar & pf_def.gripper_reg_state;
+		ar & gripper_reg_state;
 		ar & serialized_reply;
 	}
 } r_buffer_arm_t;
