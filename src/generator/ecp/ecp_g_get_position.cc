@@ -60,7 +60,7 @@ bool get_position::next_step()
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
 
 		lib::Homog_matrix actual_position_matrix;
-		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
 			lib::Xyz_Angle_Axis_vector angle_axis_vector;

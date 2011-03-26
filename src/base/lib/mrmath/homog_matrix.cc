@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <ostream>
 
+#include <Eigen/Core>
+
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
@@ -58,7 +60,6 @@ Homog_matrix::Homog_matrix(const Xyz_Euler_Zyz_vector & l_vector)
 
 Homog_matrix::Homog_matrix(const Xyz_Rpy_vector & l_vector)
 {
-
 	set_from_xyz_rpy(l_vector);
 }
 
@@ -104,19 +105,6 @@ Homog_matrix::Homog_matrix(const double r[3][3], const double t[3])
 	}
 }
 
-// Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
-Homog_matrix::Homog_matrix(const frame_tab & frame)
-{
-	set_from_frame_tab(frame);
-}
-
-// kontruktor kopiujacy
-// jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
-Homog_matrix::Homog_matrix(const Homog_matrix & wzor)
-{
-	set_from_frame_tab(wzor.matrix_m);
-}
-
 Homog_matrix::Homog_matrix(double x, double y, double z)
 {
 	// Tworzy macierz jednorodna
@@ -154,16 +142,6 @@ Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
 			matrix_m[i][j] = eigen_matrix(i, j);
 		}
 	}
-}
-
-void Homog_matrix::get_frame_tab(frame_tab frame) const
-{
-	copy_frame_tab(frame, matrix_m);
-}
-
-void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
-{
-	copy_frame_tab(matrix_m, frame);
 }
 
 // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
@@ -562,15 +540,6 @@ void Homog_matrix::get_xyz_quaternion(double t[7]) const
 
 }
 
-// operator przypisania
-Homog_matrix & Homog_matrix::operator=(const Homog_matrix & wzor)
-{
-	if (this == &wzor)
-		return *this;
-	set_from_frame_tab(wzor.matrix_m);
-	return *this;
-}
-
 Homog_matrix Homog_matrix::operator*(const Homog_matrix & m) const
 {
 	// mnozenie macierzy
@@ -684,15 +653,12 @@ bool Homog_matrix::operator==(const Homog_matrix & comp) const
 
 	Homog_matrix T(A * !B);
 
-	frame_tab t_m;
-	T.get_frame_tab(t_m);
-
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 3; j++) {
 			if (i == j)
-				val += ((t_m[i][i] - 1) * (t_m[i][i] - 1));
+				val += ((T.matrix_m[i][i] - 1) * (T.matrix_m[i][i] - 1));
 			else
-				val += (t_m[j][i] * t_m[j][i]);
+				val += (T.matrix_m[j][i] * T.matrix_m[j][i]);
 		}
 
 	// przekroczony eps => macierze sa rozne

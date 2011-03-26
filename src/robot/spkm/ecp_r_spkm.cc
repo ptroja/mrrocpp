@@ -237,8 +237,8 @@ void robot::get_reply()
 					= edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}
 		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
-		lib::Homog_matrix tmp(edp_ecp_rbuffer.current_frame);
-		tmp.get_frame_tab(epos_external_reply_data_request_port.data.current_frame);
+
+		epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_frame;
 
 		epos_external_reply_data_request_port.set();
 	}
