@@ -172,10 +172,10 @@ bool haptic::next_step()
 
 	}
 
-	lib::Homog_matrix irp6ot_current_arm_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
-	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+	const lib::Homog_matrix & irp6ot_current_arm_frame = irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
+	const lib::Homog_matrix & irp6p_current_arm_frame = irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
 
-	lib::Homog_matrix irp6p_goal_frame(global_base * irp6ot_current_arm_frame);
+	const lib::Homog_matrix irp6p_goal_frame = global_base * irp6ot_current_arm_frame;
 	irp6p->mp_command.instruction.arm.pf_def.arm_frame = irp6p_goal_frame;
 
 	/*
@@ -205,7 +205,7 @@ bool haptic::next_step()
 
 	if (time_interval > boost::posix_time::millisec(2)) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;
-		irp6p->mp_command.instruction.value_in_step_no = step_no + 1 - 4;
+		irp6p->mp_command.instruction.value_in_step_no = step_no - 4 + 1;
 	} else {
 		irp6p->mp_command.instruction.motion_steps = step_no;
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
@@ -214,19 +214,22 @@ bool haptic::next_step()
 	std::cout << time_interval << std::endl;
 
 	/*
-	 if ((node_counter % 10) == 0) {
+	if ((node_counter % 10) == 0) {
 	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	 << time_interval << std::endl << irp6p_goal_frame << std::endl;
 	 //	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
-	 }
-	 */
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	}
+	*/
+
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) ||
+		(irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED))
+	{
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
-	} else
-		return true;
+	}
+
+	return true;
 }
 
 } // namespace generator

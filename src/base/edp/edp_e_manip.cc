@@ -573,7 +573,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			// Sprawdzenie poprawnosci macierzy
 			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.robot_model.tool_frame_def.tool_frame));
 		{
-			lib::Homog_matrix hm(instruction.robot_model.tool_frame_def.tool_frame);
+			const lib::Homog_matrix & hm = instruction.robot_model.tool_frame_def.tool_frame;
 
 			if (!(hm.is_valid())) {
 				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
