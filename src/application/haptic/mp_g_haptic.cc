@@ -67,11 +67,11 @@ bool haptic::first_step()
 	irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6ot->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
+	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = lib::Ft_vector::Zero();
+
 	for (int i = 0; i < 3; i++) {
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 40;
@@ -110,11 +110,12 @@ bool haptic::first_step()
 
 	irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 
+	irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = lib::Ft_vector::Zero();
+
 	for (int i = 0; i < 3; i++) {
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING/40;
@@ -192,12 +193,9 @@ bool haptic::next_step()
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	lib::Ft_vector
-			irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
+	const lib::Ft_vector & irp6p_ECPtoMP_force_xyz_torque_xyz = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz;
 
-	for (int i = 0; i < 6; i++) {
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
-	}
+	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = -irp6p_ECPtoMP_force_xyz_torque_xyz;
 
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.

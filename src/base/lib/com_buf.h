@@ -31,6 +31,7 @@
 #include "base/lib/typedefs.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
+#include "base/lib/mrmath/ft_v_vector.h"
 
 #include "base/lib/messip/messip.h"
 
@@ -679,7 +680,7 @@ typedef struct c_buffer_arm
 		/*! Given torque. */
 		double desired_torque[lib::MAX_SERVOS_NR];
 		double inertia[6], reciprocal_damping[6];
-		double force_xyz_torque_xyz[6];
+		lib::Ft_vector force_xyz_torque_xyz;
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 	} pf_def;
 	//----------------------------------------------------------
@@ -882,13 +883,14 @@ typedef struct r_buffer_arm
 		 *  @todo Translate to English.
 		 */
 		lib::Homog_matrix arm_frame;
+
 		/*!
 		 *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
 		 *  @todo Translate to English.
 		 */
 		double arm_coordinates[lib::MAX_SERVOS_NR];
 
-		double force_xyz_torque_xyz[6];
+		lib::Ft_vector force_xyz_torque_xyz;
 	} pf_def;
 
 	/*!
