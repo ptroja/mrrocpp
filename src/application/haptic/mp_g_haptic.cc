@@ -40,10 +40,9 @@ haptic::haptic(task::task& _mp_task, int step) :
 
 bool haptic::first_step()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// cout << "first_step" << endl;
+
 	irp6ot = robot_m[lib::irp6ot_m::ROBOT_NAME];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
@@ -93,7 +92,7 @@ bool haptic::first_step()
 
 	}
 
-	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	const lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	irp6p->mp_command.command = lib::NEXT_POSE;
@@ -173,7 +172,9 @@ bool haptic::next_step()
 	}
 
 	const lib::Homog_matrix & irp6ot_current_arm_frame = irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
-	const lib::Homog_matrix & irp6p_current_arm_frame = irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
+
+	// not used
+	//const lib::Homog_matrix & irp6p_current_arm_frame = irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
 
 	const lib::Homog_matrix irp6p_goal_frame = global_base * irp6ot_current_arm_frame;
 	irp6p->mp_command.instruction.arm.pf_def.arm_frame = irp6p_goal_frame;
@@ -191,7 +192,7 @@ bool haptic::next_step()
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	lib::Ft_v_vector
+	lib::Ft_vector
 			irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	for (int i = 0; i < 6; i++) {
