@@ -81,7 +81,7 @@ void haptic::main_task_algorithm(void)
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	// mp_h_gen.sensor_m = sensor_m;
-	mp_h_gen.configure(1, 0);
+
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_h_gen.Move();
 

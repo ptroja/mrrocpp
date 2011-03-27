@@ -29,15 +29,9 @@ namespace mp {
 namespace generator {
 
 haptic::haptic(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
-}
-
-void haptic::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
-{
-	irp6ot_con = l_irp6ot_con;
-	irp6p_con = l_irp6p_con;
 }
 
 // ----------------------------------------------------------------------------------------------
