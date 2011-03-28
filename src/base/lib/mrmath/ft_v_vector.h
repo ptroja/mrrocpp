@@ -4,6 +4,8 @@
 #include <Eigen/Core>
 #include <vector>
 
+#include <boost/serialization/serialization.hpp>
+
 namespace mrrocpp {
 namespace lib {
 
@@ -12,6 +14,20 @@ class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {
 	//! Helper type for the base type
 	typedef Eigen::Matrix<double, 6, 1> BaseClass;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		for(int r = 0; r < this->rows(); ++r) {
+			for(int c = 0; c < this->cols(); ++c) {
+				ar & this->operator()(r,c);
+			}
+		}
+	}
 
 public:
 	//! Copy constructor from any Eigen matrix type

@@ -122,9 +122,8 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 void ATI3084_force::connect_to_hardware(void)
 {
-
-	ThreadCtl(_NTO_TCTL_IO, NULL); // nadanie odpowiednich uprawnien watkowi
-	// 	printf("KONTRUKTOR EDP_S POCATEK\n");
+	// nadanie odpowiednich uprawnien watkowi
+	ThreadCtl(_NTO_TCTL_IO, NULL);
 
 	// ZMIENNE POMOCNICZE
 	int_timeout = SCHUNK_INTR_TIMEOUT_HIGH;// by Y
@@ -134,6 +133,7 @@ void ATI3084_force::connect_to_hardware(void)
 	// PODLACZENIE DO PCI, INICJACJA KARTY ADVANTECH I OBSLUGI PRZERWANIA
 
 	phdl = pci_attach(0);
+
 	if (phdl == -1) {
 		fprintf(stderr, "Unable to initialize PCI\n");
 
@@ -204,8 +204,6 @@ void ATI3084_force::connect_to_hardware(void)
 	}
 
 	do_init(); // komunikacja wstepna
-
-
 }
 
 ATI3084_force::~ATI3084_force(void)
@@ -314,10 +312,13 @@ void ATI3084_force::get_particular_reading(void)
 
 	lib::Ft_vector kartez_force;
 
+	lib::Ft_vector new_force;
+
 	InterruptLock(&mds.spinlock);
 
 	for (int i = 0; i < 6; i++)
-		ft_table[i] = static_cast <double> (mds.data[i + 1]);
+		new_force[i] = static_cast <double> (mds.data[i + 1]);
+
 	int16_t measure_report = mds.data[0];
 
 	InterruptUnlock(&mds.spinlock);
@@ -326,13 +327,15 @@ void ATI3084_force::get_particular_reading(void)
 	if (measure_report == COMMAND_OK) {
 		is_reading_ready = true;
 
-		// jesli ma byc wykorzytstywana biblioteka transformacji sil
+		ft_table = new_force;
 
 		for (int i = 0; i < 3; i++)
 			ft_table[i] /= 20;
 		//			for(int i=3;i<6;i++) ft_table[i]/=333;
 		for (int i = 3; i < 6; i++)
 			ft_table[i] /= 1000; // by Y - korekta
+
+		// jesli ma byc wykorzytstywana biblioteka transformacji sil
 
 
 #if 0

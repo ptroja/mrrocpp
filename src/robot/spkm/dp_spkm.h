@@ -11,6 +11,7 @@
 
 #include <boost/serialization/serialization.hpp>
 
+#include "base/lib/mrmath/homog_matrix.h"
 #include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
@@ -24,7 +25,7 @@ namespace spkm {
 typedef struct _segment
 {
 	//! The goal pose of the manipulator
-	lib::frame_tab goal_pose;
+	lib::Homog_matrix goal_pose;
 
 	//! Interpolation type for the motion
 	lib::epos::EPOS_MOTION_VARIANT motion_type;

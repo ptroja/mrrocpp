@@ -29,15 +29,9 @@ namespace mp {
 namespace generator {
 
 haptic::haptic(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6ot_con(1), irp6p_con(1), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	generator(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
-}
-
-void haptic::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
-{
-	irp6ot_con = l_irp6ot_con;
-	irp6p_con = l_irp6p_con;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -46,10 +40,9 @@ void haptic::configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con)
 
 bool haptic::first_step()
 {
-	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i oreintacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// cout << "first_step" << endl;
+
 	irp6ot = robot_m[lib::irp6ot_m::ROBOT_NAME];
 	irp6p = robot_m[lib::irp6p_m::ROBOT_NAME];
 
@@ -74,11 +67,11 @@ bool haptic::first_step()
 	irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6ot->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
+	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = lib::Ft_vector::Zero();
+
 	for (int i = 0; i < 3; i++) {
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
 		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6ot->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 40;
@@ -99,8 +92,8 @@ bool haptic::first_step()
 
 	}
 
-	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	const lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
+	irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
@@ -115,13 +108,14 @@ bool haptic::first_step()
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6p->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
+
+	irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = lib::Ft_vector::Zero();
 
 	for (int i = 0; i < 3; i++) {
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = 0;
+
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i + 3] = 0;
-		irp6p->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i + 3] = 0;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / 2;
 		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING / 2;
 		//		irp6p->mp_command.instruction.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING/40;
@@ -178,11 +172,13 @@ bool haptic::next_step()
 
 	}
 
-	lib::Homog_matrix irp6ot_current_arm_frame(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
-	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+	const lib::Homog_matrix & irp6ot_current_arm_frame = irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
 
-	lib::Homog_matrix irp6p_goal_frame(global_base * irp6ot_current_arm_frame);
-	irp6p_goal_frame.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
+	// not used
+	//const lib::Homog_matrix & irp6p_current_arm_frame = irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
+
+	const lib::Homog_matrix irp6p_goal_frame = global_base * irp6ot_current_arm_frame;
+	irp6p->mp_command.instruction.arm.pf_def.arm_frame = irp6p_goal_frame;
 
 	/*
 	 lib::Homog_matrix irp6p_goal_frame_increment_in_end_effector ((!irp6p_current_arm_frame)*irp6p_goal_frame);
@@ -197,12 +193,9 @@ bool haptic::next_step()
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	lib::Ft_v_vector
-			irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
+	const lib::Ft_vector & irp6p_ECPtoMP_force_xyz_torque_xyz = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz;
 
-	for (int i = 0; i < 6; i++) {
-		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
-	}
+	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = -irp6p_ECPtoMP_force_xyz_torque_xyz;
 
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
@@ -211,7 +204,7 @@ bool haptic::next_step()
 
 	if (time_interval > boost::posix_time::millisec(2)) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;
-		irp6p->mp_command.instruction.value_in_step_no = step_no + 1 - 4;
+		irp6p->mp_command.instruction.value_in_step_no = step_no - 4 + 1;
 	} else {
 		irp6p->mp_command.instruction.motion_steps = step_no;
 		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
@@ -220,19 +213,22 @@ bool haptic::next_step()
 	std::cout << time_interval << std::endl;
 
 	/*
-	 if ((node_counter % 10) == 0) {
+	if ((node_counter % 10) == 0) {
 	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	 << time_interval << std::endl << irp6p_goal_frame << std::endl;
 	 //	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
-	 }
-	 */
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	}
+	*/
+
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) ||
+		(irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED))
+	{
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
-	} else
-		return true;
+	}
+
+	return true;
 }
 
 } // namespace generator

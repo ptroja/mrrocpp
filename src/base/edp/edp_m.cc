@@ -34,12 +34,15 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/sr_edp.h"
 #include "base/edp/edp_effector.h"
+#include "edp_shell.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
+effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
+
+shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
 
 #ifdef __QNXNTO__
 static _clockperiod old_cp;
@@ -56,14 +59,19 @@ void catch_signal(int sig)
 #ifdef __QNXNTO__
 			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
 #endif /* __QNXNTO__ */
-			master->close_hardware_busy_file();
-			master->msg->message("edp terminated");
-
+			if (edp_shell) {
+				edp_shell->close_hardware_busy_file();
+			}
+			if (master) {
+				master->msg->message("edp terminated");
+			}
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
-			master->close_hardware_busy_file();
+			if (edp_shell) {
+				edp_shell->close_hardware_busy_file();
+			}
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	} // end: switch
@@ -105,6 +113,12 @@ int main(int argc, char *argv[])
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3]);
+
+		edp::common::edp_shell = new edp::common::shell(_config);
+
+		if (!edp::common::edp_shell->detect_hardware_busy()) {
+			return EXIT_FAILURE;
+		}
 
 #if defined(HAVE_MLOCKALL)
 		// Try to lock memory to avoid swapping whlie executing in real-time

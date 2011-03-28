@@ -26,7 +26,7 @@ public:
 	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
-	void ui_notification(QString _string, QColor _color);
+	void ui_notification();
 	//void enable_menu_item(bool _active, QWidget *_menu_item);
 	void enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...);
 	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
@@ -47,7 +47,7 @@ private:
 	pthread_t main_thread_id;
 
 signals:
-	void ui_notification_signal(QString _string, QColor _color);
+	void ui_notification_signal();
 	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
 	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 	void raise_process_control_window_signal();
@@ -57,7 +57,7 @@ private slots:
 
 	void on_timer_slot();
 
-	void ui_notification_slot(QString _string, QColor _color);
+	void ui_notification_slot();
 	void raise_process_control_window_slot();
 	void raise_ui_ecp_window_slot();
 	void enable_menu_item_slot(QWidget *_menu_item, bool _active);

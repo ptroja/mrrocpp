@@ -8,4 +8,3 @@ add_library(mp_generator_base
 )
 
 install(TARGETS mp_generator_base DESTINATION lib)
-
