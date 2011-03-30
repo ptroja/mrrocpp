@@ -114,8 +114,8 @@ run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6
 
 for(int i=0;i<10;i++)
 {
-	double n=0.01;
-	n+=0.01;
+	double n=0.03;
+
 	move_right(n);
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 	move_back(-n);
@@ -124,7 +124,6 @@ for(int i=0;i<10;i++)
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 	move_back(n);
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-	n+=0.01;
 }
 
 //runWaitFunction(5000);
