@@ -1,11 +1,11 @@
 /*
- * ecp_t_objectfollower_ib.cc
+ * ecp_t_objectfollower_ib_eih.cc
  *
  *  Created on: Apr 21, 2010
  *      Author: mboryn
  */
 
-#include "ecp_t_objectfollower_ib.h"
+#include "ecp_t_objectfollower_ib_eih.h"
 
 #include "../defines.h"
 
@@ -33,8 +33,8 @@ namespace common {
 
 namespace task {
 
-ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& configurator) :
-	task(configurator)
+ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(mrrocpp::lib::configurator& configurator) :
+		common::task::task(configurator)
 {
 #ifdef ROBOT_P
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
@@ -45,38 +45,41 @@ ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(mrrocpp::lib::configurator& con
 	char config_section_name[] = { "[object_follower_ib]" };
 
 	log_dbg_enabled = true;
+	log_enabled = true;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(configurator, config_section_name));
 
-	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 1\n");
+	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 1\n");
 	reg = shared_ptr <visual_servo_regulator> (new regulator_p(configurator, config_section_name));
 
-	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 2\n");
-	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, config_section_name, configurator));
+	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 2\n");
+
+	boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> ds = boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor>(new mrrocpp::ecp_mp::sensor::discode::discode_sensor(configurator, config_section_name));
+	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, config_section_name, configurator));
 
 	term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(configurator, config_section_name));
 
-	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 3\n");
+	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 3\n");
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 
-	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 4\n");
+	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 4\n");
 	sm->add_position_constraint(cube);
 
 	//sm->add_termination_condition(term_cond);
-	//log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 5\n");
+	//log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 5\n");
 
 	sm->configure();
-	log_dbg("ecp_t_objectfollower_ib::ecp_t_objectfollower_ib(): 6\n");
+	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 6\n");
 }
 
-void ecp_t_objectfollower_ib::main_task_algorithm(void)
+void ecp_t_objectfollower_ib_eih::main_task_algorithm(void)
 {
 	while (1) {
 		get_next_state();
 		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 			sm->Move();
 		} else {
-			log("ecp_t_objectfollower_ib::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+			log("ecp_t_objectfollower_ib_eih::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
 		}
 	}
 
@@ -85,7 +88,7 @@ void ecp_t_objectfollower_ib::main_task_algorithm(void)
 
 task_base* return_created_ecp_task(lib::configurator &config)
 {
-	return new ecp_t_objectfollower_ib(config);
+	return new ecp_t_objectfollower_ib_eih(config);
 }
 
 } // namespace task

@@ -5,12 +5,11 @@
  *      Author: mateusz
  */
 
-#ifndef PBREADING_HPP_
-#define PBREADING_HPP_
+#ifndef IBREADING_HPP_
+#define IBREADING_HPP_
 
 #include "Reading.h"
-#include "HomogMatrix.h"
-#include <sstream>
+#include "ImagePosition.h"
 
 namespace Types {
 namespace Mrrocpp_Proxy {
@@ -18,48 +17,48 @@ namespace Mrrocpp_Proxy {
 /**
  *
  */
-class PBReading: public Reading
+class IBReading: public Reading
 {
 public:
-	PBReading()
+	IBReading()
 	{
 	}
 
-	PBReading(const PBReading& o)
+	IBReading(const IBReading& o)
 	{
 		objectVisible = o.objectVisible;
-		objectPosition = o.objectPosition;
+		imagePosition = o.imagePosition;
 	}
 
-	virtual ~PBReading()
+	virtual ~IBReading()
 	{
 	}
 
-	virtual PBReading* clone()
+	virtual IBReading* clone()
 	{
-		return new PBReading(*this);
+		return new IBReading(*this);
 	}
 
 	bool objectVisible;
-	Types::HomogMatrix objectPosition;
+	Types::ImagePosition imagePosition;
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
+//		LOG(LNOTICE) << "IBReading::send(): hehehehe\n";
 		*ar<<*this;
 	}
-
 private:
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object <Reading>(*this);
-//		LOG(LTRACE) << "PBReading::serialize()\n";
+//		LOG(LTRACE) << "IBReading::serialize()\n";
 		ar & objectVisible;
-		ar & objectPosition;
+		ar & imagePosition;
 	}
 };
 
 }//namespace Mrrocpp_Proxy
 }//namespace Types
 
-#endif /* PBREADING_HPP_ */
+#endif /* IBREADING_HPP_ */
