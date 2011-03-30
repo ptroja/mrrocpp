@@ -6,10 +6,10 @@
 #include "interface.h"
 
 wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Process control", _interface, parent)
+	wgt_base("Process control", _interface, parent), ui(new Ui::wgt_process_controlClass)
 {
 
-	ui.setupUi(this);
+	ui->setupUi(this);
 
 	connect(this, SIGNAL(process_control_window_init_signal()), this, SLOT(process_control_window_init_slot()), Qt::QueuedConnection);
 
@@ -17,7 +17,12 @@ wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interf
 
 wgt_process_control::~wgt_process_control()
 {
+	delete ui;
+}
 
+Ui::wgt_process_controlClass * wgt_process_control::get_ui()
+{
+	return ui;
 }
 
 void wgt_process_control::process_control_window_init()
@@ -27,7 +32,7 @@ void wgt_process_control::process_control_window_init()
 
 void wgt_process_control::process_control_window_init_slot()
 {
-	init(false);
+	init();
 }
 
 void wgt_process_control::my_open()
@@ -84,7 +89,7 @@ void wgt_process_control::on_all_reader_trigger_pushButton_clicked()
 }
 
 // aktualizacja ustawien przyciskow
-int wgt_process_control::init(bool do_it)
+int wgt_process_control::init()
 
 {
 
@@ -94,9 +99,9 @@ int wgt_process_control::init(bool do_it)
 
 	// Dla READER'A
 
-	ui.all_reader_start_pushButton->setDisabled(true);
-	ui.all_reader_stop_pushButton->setDisabled(true);
-	ui.all_reader_trigger_pushButton->setDisabled(true);
+	ui->all_reader_start_pushButton->setDisabled(true);
+	ui->all_reader_stop_pushButton->setDisabled(true);
+	ui->all_reader_trigger_pushButton->setDisabled(true);
 
 	// Dla irp6_on_track
 
@@ -112,61 +117,61 @@ int wgt_process_control::init(bool do_it)
 
 	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
-		ui.all_reader_start_pushButton->setDisabled(false);
+		ui->all_reader_start_pushButton->setDisabled(false);
 
 	}
 
 	if (wlacz_PtButton_wnd_processes_control_all_reader_stop) {
-		ui.all_reader_stop_pushButton->setDisabled(false);
+		ui->all_reader_stop_pushButton->setDisabled(false);
 
 	}
 
 	if (wlacz_PtButton_wnd_processes_control_all_reader_trigger) {
-		ui.all_reader_trigger_pushButton->setDisabled(false);
+		ui->all_reader_trigger_pushButton->setDisabled(false);
 
 	}
 
 	// Dla mp i ecp
-	if ((interface.mp.state != interface.mp.last_state) || (do_it)) {
+	if (interface.mp.state != interface.mp.last_process_control_state) {
 		switch (interface.mp.state)
 		{
 			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
 			case ui::common::UI_MP_PERMITED_TO_RUN:
-				ui.mp_start_pushButton->setDisabled(true);
-				ui.mp_stop_pushButton->setDisabled(true);
-				ui.mp_pause_pushButton->setDisabled(true);
-				ui.mp_resume_pushButton->setDisabled(true);
-				ui.mp_trigger_pushButton->setDisabled(true);
+				ui->mp_start_pushButton->setDisabled(true);
+				ui->mp_stop_pushButton->setDisabled(true);
+				ui->mp_pause_pushButton->setDisabled(true);
+				ui->mp_resume_pushButton->setDisabled(true);
+				ui->mp_trigger_pushButton->setDisabled(true);
 
 				block_all_ecp_trigger_widgets();
 				break;
 			case ui::common::UI_MP_WAITING_FOR_START_PULSE:
 
-				ui.mp_start_pushButton->setDisabled(false);
-				ui.mp_stop_pushButton->setDisabled(true);
-				ui.mp_pause_pushButton->setDisabled(true);
-				ui.mp_resume_pushButton->setDisabled(true);
-				ui.mp_trigger_pushButton->setDisabled(true);
+				ui->mp_start_pushButton->setDisabled(false);
+				ui->mp_stop_pushButton->setDisabled(true);
+				ui->mp_pause_pushButton->setDisabled(true);
+				ui->mp_resume_pushButton->setDisabled(true);
+				ui->mp_trigger_pushButton->setDisabled(true);
 
 				block_all_ecp_trigger_widgets();
 				break;
 			case ui::common::UI_MP_TASK_RUNNING:
 
-				ui.mp_start_pushButton->setDisabled(true);
-				ui.mp_stop_pushButton->setDisabled(false);
-				ui.mp_pause_pushButton->setDisabled(false);
-				ui.mp_resume_pushButton->setDisabled(true);
-				ui.mp_trigger_pushButton->setDisabled(false);
+				ui->mp_start_pushButton->setDisabled(true);
+				ui->mp_stop_pushButton->setDisabled(false);
+				ui->mp_pause_pushButton->setDisabled(false);
+				ui->mp_resume_pushButton->setDisabled(true);
+				ui->mp_trigger_pushButton->setDisabled(false);
 
 				unblock_all_ecp_trigger_widgets();
 				break;
 			case ui::common::UI_MP_TASK_PAUSED:
 
-				ui.mp_start_pushButton->setDisabled(true);
-				ui.mp_stop_pushButton->setDisabled(false);
-				ui.mp_pause_pushButton->setDisabled(true);
-				ui.mp_resume_pushButton->setDisabled(false);
-				ui.mp_trigger_pushButton->setDisabled(true);
+				ui->mp_start_pushButton->setDisabled(true);
+				ui->mp_stop_pushButton->setDisabled(false);
+				ui->mp_pause_pushButton->setDisabled(true);
+				ui->mp_resume_pushButton->setDisabled(false);
+				ui->mp_trigger_pushButton->setDisabled(true);
 
 				block_all_ecp_trigger_widgets();
 				break;
@@ -175,7 +180,7 @@ int wgt_process_control::init(bool do_it)
 				break;
 		}
 
-		interface.mp.last_state = interface.mp.state;
+		interface.mp.last_process_control_state = interface.mp.state;
 
 	}
 
@@ -200,7 +205,7 @@ int wgt_process_control::block_all_ecp_trigger_widgets()
 	 }
 	 */
 
-	ui.all_ecp_trigger_pushButton->setDisabled(true);
+	ui->all_ecp_trigger_pushButton->setDisabled(true);
 
 	return 1;
 }
@@ -222,6 +227,6 @@ int wgt_process_control::unblock_all_ecp_trigger_widgets()
 	 }
 	 */
 
-	ui.all_ecp_trigger_pushButton->setDisabled(false);
+	ui->all_ecp_trigger_pushButton->setDisabled(false);
 	return 1;
 }

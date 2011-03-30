@@ -83,15 +83,5 @@ void servo_buffer::load_hardware_interface(void)
 }
 
 } // namespace irp6ot
-
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new irp6ot_m::servo_buffer((irp6ot_m::effector &) (_master));
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp

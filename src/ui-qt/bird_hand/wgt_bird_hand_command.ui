@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1027</width>
-    <height>515</height>
+    <width>1023</width>
+    <height>416</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1023</width>
+    <height>416</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>1023</width>
+    <height>416</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -17,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>399</x>
-     <y>10</y>
+     <y>-30</y>
      <width>221</width>
      <height>391</height>
     </rect>
@@ -64,6 +82,12 @@ position</string>
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="frame">
        <bool>true</bool>
       </property>
@@ -80,6 +104,12 @@ position</string>
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="frame">
        <bool>true</bool>
       </property>
@@ -93,6 +123,12 @@ position</string>
     </item>
     <item row="1" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_thumb_0">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -105,6 +141,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_thumb_1">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -119,6 +161,12 @@ position</string>
     </item>
     <item row="2" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_thumb_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -129,6 +177,12 @@ position</string>
     </item>
     <item row="2" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_thumb_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -145,7 +199,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>71</width>
-        <height>20</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -158,7 +212,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>48</width>
-        <height>20</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -171,7 +225,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>54</width>
-        <height>20</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -180,6 +234,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_index_0">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -194,6 +254,12 @@ position</string>
     </item>
     <item row="4" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_index_0">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -204,6 +270,12 @@ position</string>
     </item>
     <item row="4" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_index_0">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -216,6 +288,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_index_1">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -230,6 +308,12 @@ position</string>
     </item>
     <item row="5" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_index_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -240,6 +324,12 @@ position</string>
     </item>
     <item row="5" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_index_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -252,6 +342,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_index_2">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -266,6 +362,12 @@ position</string>
     </item>
     <item row="6" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_index_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -276,6 +378,12 @@ position</string>
     </item>
     <item row="6" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_index_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -292,7 +400,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>25</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -305,7 +413,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>48</width>
-        <height>25</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -318,7 +426,7 @@ position</string>
       <property name="sizeHint" stdset="0">
        <size>
         <width>54</width>
-        <height>25</height>
+        <height>5</height>
        </size>
       </property>
      </spacer>
@@ -327,6 +435,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_ring_0">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -341,6 +455,12 @@ position</string>
     </item>
     <item row="8" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_ring_0">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -351,6 +471,12 @@ position</string>
     </item>
     <item row="8" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_ring_0">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -363,6 +489,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_ring_1">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -377,6 +509,12 @@ position</string>
     </item>
     <item row="9" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_ring_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -387,6 +525,12 @@ position</string>
     </item>
     <item row="9" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_ring_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -399,6 +543,12 @@ position</string>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_mcur_ring_2">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frame">
        <bool>true</bool>
@@ -413,6 +563,12 @@ position</string>
     </item>
     <item row="10" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curtor_ring_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -423,6 +579,12 @@ position</string>
     </item>
     <item row="10" column="2">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_curpos_ring_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -437,7 +599,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>650</x>
-     <y>10</y>
+     <y>-30</y>
      <width>240</width>
      <height>391</height>
     </rect>
@@ -639,7 +801,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>11</y>
+     <y>-20</y>
      <width>401</width>
      <height>391</height>
     </rect>
@@ -667,7 +829,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>130</y>
+      <y>120</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -683,7 +845,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>3</x>
-      <y>290</y>
+      <y>280</y>
       <width>391</width>
       <height>91</height>
      </rect>
@@ -704,6 +866,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="2">
@@ -711,6 +876,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="3">
@@ -718,6 +886,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="4">
@@ -725,6 +896,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="5">
@@ -732,6 +906,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="6">
@@ -739,6 +916,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="7">
@@ -746,6 +926,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="8" colspan="2">
@@ -753,6 +936,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="0">
@@ -770,6 +956,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="2">
@@ -777,6 +966,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="3">
@@ -784,6 +976,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="4">
@@ -791,6 +986,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="5">
@@ -798,6 +996,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="6">
@@ -805,6 +1006,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="7">
@@ -812,6 +1016,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="8" colspan="2">
@@ -819,6 +1026,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="0">
@@ -836,6 +1046,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="2">
@@ -843,6 +1056,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="3">
@@ -850,6 +1066,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="4">
@@ -857,6 +1076,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="5">
@@ -864,6 +1086,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="6">
@@ -871,6 +1096,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="7">
@@ -878,6 +1106,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="8" colspan="2">
@@ -885,6 +1116,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_ring_2</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -893,7 +1127,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>260</y>
+      <y>250</y>
       <width>51</width>
       <height>21</height>
      </rect>
@@ -909,7 +1143,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>160</y>
+      <y>150</y>
       <width>392</width>
       <height>91</height>
      </rect>
@@ -930,6 +1164,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="2">
@@ -937,6 +1174,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="3">
@@ -944,6 +1184,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="4">
@@ -951,6 +1194,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="5">
@@ -958,6 +1204,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="6">
@@ -965,6 +1214,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="7">
@@ -972,6 +1224,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="8" colspan="2">
@@ -979,6 +1234,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="0">
@@ -996,6 +1254,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="2">
@@ -1003,6 +1264,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="3">
@@ -1010,6 +1274,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="4">
@@ -1017,6 +1284,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="5">
@@ -1024,6 +1294,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="6">
@@ -1031,6 +1304,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="7">
@@ -1038,6 +1314,19 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="8" colspan="2">
+      <widget class="QCheckBox" name="checkBox_index_1l8">
+       <property name="text">
+        <string>l8</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="0">
@@ -1055,6 +1344,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="2">
@@ -1062,6 +1354,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="3">
@@ -1069,6 +1364,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="4">
@@ -1076,6 +1374,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="5">
@@ -1083,6 +1384,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="6">
@@ -1090,6 +1394,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="7">
@@ -1097,6 +1404,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item row="2" column="8" colspan="2">
@@ -1104,13 +1414,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="8" colspan="2">
-      <widget class="QCheckBox" name="checkBox_index_1l8">
-       <property name="text">
-        <string>l8</string>
-       </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_index_2</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1121,7 +1427,7 @@ position</string>
       <x>0</x>
       <y>60</y>
       <width>391</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -1140,6 +1446,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="2">
@@ -1147,6 +1456,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="3">
@@ -1154,6 +1466,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="4">
@@ -1161,6 +1476,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="5">
@@ -1168,6 +1486,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="6">
@@ -1175,6 +1496,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="7">
@@ -1182,6 +1506,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="0" column="8">
@@ -1189,6 +1516,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="1">
@@ -1196,6 +1526,9 @@ position</string>
        <property name="text">
         <string>l1</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="2">
@@ -1203,6 +1536,9 @@ position</string>
        <property name="text">
         <string>l2</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="3">
@@ -1210,6 +1546,9 @@ position</string>
        <property name="text">
         <string>l3</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="4">
@@ -1217,6 +1556,9 @@ position</string>
        <property name="text">
         <string>l4</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="5">
@@ -1224,6 +1566,9 @@ position</string>
        <property name="text">
         <string>l5</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="6">
@@ -1231,6 +1576,9 @@ position</string>
        <property name="text">
         <string>l6</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="7">
@@ -1238,6 +1586,9 @@ position</string>
        <property name="text">
         <string>l7</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="8">
@@ -1245,6 +1596,9 @@ position</string>
        <property name="text">
         <string>l8</string>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_checkbox_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item row="1" column="0">
@@ -1260,11 +1614,11 @@ position</string>
     </layout>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="pushButton_copy">
    <property name="geometry">
     <rect>
      <x>630</x>
-     <y>70</y>
+     <y>30</y>
      <width>21</width>
      <height>321</height>
     </rect>
@@ -1273,11 +1627,11 @@ position</string>
     <string>&gt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Button_move">
+  <widget class="QPushButton" name="pushButton_execute">
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>430</y>
+     <y>360</y>
      <width>111</width>
      <height>27</height>
     </rect>
@@ -1286,31 +1640,31 @@ position</string>
     <string>Execute move</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox">
+  <widget class="QSpinBox" name="spinBox_query_step">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>440</y>
+     <x>660</x>
+     <y>360</y>
      <width>55</width>
      <height>27</height>
     </rect>
    </property>
   </widget>
-  <widget class="QSpinBox" name="spinBox_2">
+  <widget class="QSpinBox" name="spinBox_motion_steps">
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>440</y>
+     <y>360</y>
      <width>55</width>
      <height>27</height>
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="Button_read">
+  <widget class="QPushButton" name="pushButton_read">
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>430</y>
+     <y>360</y>
      <width>101</width>
      <height>27</height>
     </rect>
@@ -1323,7 +1677,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>890</x>
-     <y>10</y>
+     <y>-30</y>
      <width>141</width>
      <height>391</height>
     </rect>
@@ -1360,6 +1714,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1367,6 +1724,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1377,6 +1737,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_1</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1426,6 +1789,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1433,6 +1799,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_2</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1443,6 +1812,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_2</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1476,6 +1848,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1483,6 +1858,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1493,6 +1871,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_0</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1526,6 +1907,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1533,6 +1917,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_2</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1543,6 +1930,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_index_2</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1576,6 +1966,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1583,6 +1976,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1593,6 +1989,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_0</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1626,6 +2025,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1633,6 +2035,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_0</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1643,6 +2048,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_0</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1676,6 +2084,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1683,6 +2094,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1693,6 +2107,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_ring_1</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1726,6 +2143,9 @@ position</string>
        <property name="checked">
         <bool>false</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1733,6 +2153,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_1</string>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -1743,6 +2166,9 @@ position</string>
        <property name="checked">
         <bool>true</bool>
        </property>
+       <attribute name="buttonGroup">
+        <string>buttonGroup_thumb_1</string>
+       </attribute>
       </widget>
      </item>
     </layout>
@@ -1880,7 +2306,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>410</x>
-     <y>430</y>
+     <y>350</y>
      <width>67</width>
      <height>41</height>
     </rect>
@@ -1901,7 +2327,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>580</x>
-     <y>430</y>
+     <y>350</y>
      <width>67</width>
      <height>41</height>
     </rect>
@@ -1922,6 +2348,21 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_checkbox_index_2"/>
+  <buttongroup name="buttonGroup_ring_0"/>
+  <buttongroup name="buttonGroup_checkbox_ring_0"/>
+  <buttongroup name="buttonGroup_ring_1"/>
+  <buttongroup name="buttonGroup_checkbox_ring_1"/>
+  <buttongroup name="buttonGroup_ring_2"/>
+  <buttongroup name="buttonGroup_checkbox_ring_2"/>
+  <buttongroup name="buttonGroup_index_0"/>
+  <buttongroup name="buttonGroup_thumb_0"/>
+  <buttongroup name="buttonGroup_index_1"/>
+  <buttongroup name="buttonGroup_checkbox_thumb_0"/>
+  <buttongroup name="buttonGroup_thumb_1"/>
+  <buttongroup name="buttonGroup_index_2"/>
+  <buttongroup name="buttonGroup_checkbox_thumb_1"/>
+  <buttongroup name="buttonGroup_checkbox_index_0"/>
+  <buttongroup name="buttonGroup_checkbox_index_1"/>
  </buttongroups>
 </ui>

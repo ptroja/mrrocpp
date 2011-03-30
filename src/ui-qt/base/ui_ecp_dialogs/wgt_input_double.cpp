@@ -11,7 +11,7 @@ wgt_input_double::wgt_input_double(mrrocpp::ui::common::Interface& _interface, Q
 
 wgt_input_double::~wgt_input_double()
 {
-
+	delete ui;
 }
 
 void wgt_input_double::hideEvent(QHideEvent *event)
