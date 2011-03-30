@@ -11,6 +11,7 @@ wgt_single_motor_move::wgt_single_motor_move(QString _widget_label, mrrocpp::ui:
 	ui.setupUi(this);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
 	//	ui.doubleSpinBox_des_p0->setMaximum(robot.kinematic_params.upper_motor_pos_limits[0]);
 	//	ui.doubleSpinBox_des_p0->setMinimum(robot.kinematic_params.lower_motor_pos_limits[0]);
@@ -24,9 +25,7 @@ wgt_single_motor_move::~wgt_single_motor_move()
 void wgt_single_motor_move::my_open()
 {
 	wgt_base::my_open();
-	init_mr_and_si();
-	copy_mr();
-	copy_si();
+	init_and_copy_slot();
 }
 
 void wgt_single_motor_move::synchro_depended_init()
@@ -34,21 +33,37 @@ void wgt_single_motor_move::synchro_depended_init()
 	emit synchro_depended_init_signal();
 }
 
+void wgt_single_motor_move::init_and_copy()
+{
+	emit init_and_copy_signal();
+}
+
 int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute_mr->setDisabled(_set_disabled);
 	ui.pushButton_read_mr->setDisabled(_set_disabled);
+	ui.pushButton_export_mr->setDisabled(_set_disabled);
+	ui.pushButton_import_mr->setDisabled(_set_disabled);
 	ui.pushButton_copy_mr->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_mr->setDisabled(_set_disabled);
 
 	ui.pushButton_execute_si->setDisabled(_set_disabled);
 	ui.pushButton_read_si->setDisabled(_set_disabled);
+	ui.pushButton_export_si->setDisabled(_set_disabled);
+	ui.pushButton_import_si->setDisabled(_set_disabled);
+	ui.doubleSpinBox_step_si->setDisabled(_set_disabled);
 	ui.pushButton_copy_si->setDisabled(_set_disabled);
 	ui.doubleSpinBox_des_si->setDisabled(_set_disabled);
 	ui.pushButton_l_si->setDisabled(_set_disabled);
 	ui.pushButton_r_si->setDisabled(_set_disabled);
 
 	return 1;
+}
+
+void wgt_single_motor_move::init_and_copy_slot()
+{
+	init_mr_and_si();
+	copy_mr_and_si();
 }
 
 void wgt_single_motor_move::synchro_depended_init_slot()
@@ -85,6 +100,11 @@ void wgt_single_motor_move::init_mr_and_si()
 	init_mr();
 	init_si();
 }
+void wgt_single_motor_move::copy_mr_and_si()
+{
+	copy_mr();
+	copy_si();
+}
 
 int wgt_single_motor_move::init_mr()
 {
@@ -95,13 +115,6 @@ int wgt_single_motor_move::init_mr()
 			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
-
-				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
-				//				robot.ui_ecp_robot->execute_motion();
-				//				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
-				//
-				//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
-
 
 				robot.ui_ecp_robot->read_motors(robot.current_pos); // Odczyt polozenia walow silnikow
 				ui.doubleSpinBox_cur_mr->setValue(robot.current_pos[0]);

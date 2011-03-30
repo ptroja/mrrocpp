@@ -30,6 +30,12 @@ void wgt_base::my_open()
 	dwgt->raise();
 }
 
+void wgt_base::my_close()
+{
+	dwgt->hide();
+
+}
+
 wgt_base::~wgt_base()
 {
 

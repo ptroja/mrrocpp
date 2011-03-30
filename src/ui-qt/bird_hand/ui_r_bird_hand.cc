@@ -112,7 +112,8 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			ui_ecp_robot(NULL)
 {
 
-	 wnd_command_and_status = new wgt_bird_hand_command(interface, *this);
+	 wgt_command_and_status = new wgt_bird_hand_command(interface, *this, interface.get_main_window());
+		wndbase_m[WGT_BIRD_HAND_COMMAND] = wgt_command_and_status->dwgt;
 	// wndbase_m[wnd_command_and_status->window_name] = wnd_command_and_status;
 	/* wnd_configuration = new WndConfiguration(interface, *this);
 	 wndbase_m[wnd_configuration->window_name] = wnd_configuration;
@@ -188,7 +189,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 2, ui->actionbirdhand_EDP_Unload, ui->actionall_Synchronisation);
+				mw->enable_menu_item(true, 1, ui->actionbirdhand_EDP_Unload);
 				mw->enable_menu_item(false, 3, ui->actionbirdhand_EDP_Load, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, NULL);

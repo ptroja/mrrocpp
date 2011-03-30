@@ -11,6 +11,12 @@
 
 #include "mainwindow.h"
 #include "wgt_process_control.h"
+#include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_message.h"
+#include "ui_ecp_dialogs/wgt_input_integer.h"
+#include "ui_ecp_dialogs/wgt_input_double.h"
+#include "ui_ecp_dialogs/wgt_choose_option.h"
+#include "ui_ecp_dialogs/wgt_teaching.h"
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -68,10 +74,18 @@ class ecp_buffer;
 
 // super klasa agregujaca porozrzucane struktury
 
-class Interface
+class Interface : public QObject
 {
+Q_OBJECT
 private:
 	MainWindow* mw;
+
+signals:
+	void manage_interface_signal();
+
+private slots:
+
+	void manage_interface_slot();
 
 public:
 
@@ -94,7 +108,7 @@ public:
 	// listy sekcji i wezlow sieciowych plikow konfiguracyjnych
 	std::list <list_t> section_list, config_node_list, all_node_list;
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
-	std::list <program_node_def> program_node_list;
+	std::list <program_node_user_def> program_node_user_list;
 
 	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
 	pid_t ui_pid; // pid UI
@@ -102,18 +116,12 @@ public:
 
 	TEACHING_STATE teachingstate; // dawne systemState do nauki
 	TEACHING_STATE_ENUM file_window_mode;
-	UI_NOTIFICATION_STATE_ENUM notification_state;
-
-	bool is_task_window_open; // informacja czy okno zadania jest otwarte
-	bool is_process_control_window_open; // informacja czy okno sterowania procesami jest otwarte
-	bool process_control_window_renew; // czy okno ma zostac odswierzone
-
-	bool is_teaching_window_open; // informacja czy okno nauki jest otwarte
-	bool is_file_selection_window_open; // informacja czy okno z wyborem pliku jest otwarte
+	UI_NOTIFICATION_STATE_ENUM notification_state, next_notification;
 
 	std::ofstream *log_file_outfile;
 
 	boost::mutex process_creation_mtx;
+	boost::mutex ui_notification_state_mutex;
 	lib::configurator* config;
 	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
@@ -123,10 +131,15 @@ public:
 	bool is_mp_and_ecps_active;
 	bool is_sr_thread_loaded;
 	UI_ALL_EDPS_STATE all_edps;
+	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
+	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro;
+	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro_last_manage_interface_state;
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
-	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/". W niej katalogi bin, configs etc.
+	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/build". W niej katalogi bin, configs etc.
+	std::string mrrocpp_root_local_path; // lokalna sciezka (bez build) mrrocpp: np. "/home/yoyek/mrrocpp". W niej katalogi bin, configs etc.
+
 
 	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
 	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
@@ -169,6 +182,8 @@ public:
 	void UI_close(void);
 	void init();
 	int manage_interface(void);
+	void manage_pc(void);
+
 	int MPup_int();
 	void reload_whole_configuration();
 	void abort_threads();
@@ -218,13 +233,20 @@ public:
 	int all_robots_move_to_preset_position_2();
 
 	bool is_any_robot_active();
-	bool are_all_robots_synchronised_or_inactive();
-	bool are_all_robots_loaded_or_inactive();
+	bool are_all_active_robots_loaded();
 	bool is_any_active_robot_loaded();
+	bool are_all_loaded_robots_synchronised();
+	bool is_any_loaded_robot_synchronised();
 
 	// windows
 
 	wgt_process_control* wgt_pc;
+	wgt_yes_no* wgt_yes_no_obj;
+	wgt_message* wgt_message_obj;
+	wgt_input_integer* wgt_input_integer_obj;
+	wgt_input_double* wgt_input_double_obj;
+	wgt_choose_option* wgt_choose_option_obj;
+	wgt_teaching* wgt_teaching_obj;
 };
 
 }

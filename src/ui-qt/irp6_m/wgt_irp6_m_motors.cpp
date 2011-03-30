@@ -13,6 +13,7 @@ wgt_irp6_m_motors::wgt_irp6_m_motors(QString _widget_label, mrrocpp::ui::common:
 	ui.setupUi(this);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p2);
@@ -52,6 +53,8 @@ int wgt_irp6_m_motors::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
 	ui.pushButton_copy->setDisabled(_set_disabled);
+	ui.pushButton_export->setDisabled(_set_disabled);
+	ui.pushButton_import->setDisabled(_set_disabled);
 	ui.pushButton_read->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot.number_of_servos; i++) {
@@ -65,13 +68,23 @@ int wgt_irp6_m_motors::synchro_depended_widgets_disable(bool _set_disabled)
 void wgt_irp6_m_motors::my_open()
 {
 	wgt_base::my_open();
-	init();
-	copy();
+	init_and_copy_slot();
 }
 
 void wgt_irp6_m_motors::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();
+}
+
+void wgt_irp6_m_motors::init_and_copy()
+{
+	emit init_and_copy_signal();
+}
+
+void wgt_irp6_m_motors::init_and_copy_slot()
+{
+	init();
+	copy();
 }
 
 void wgt_irp6_m_motors::synchro_depended_init_slot()

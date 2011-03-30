@@ -179,6 +179,7 @@ int UiRobot::synchronise_int()
 	// modyfikacje menu
 	interface.manage_interface();
 	wgt_move->synchro_depended_init();
+	wgt_move->init_and_copy();
 	return 1;
 
 }
@@ -249,7 +250,7 @@ int UiRobot::manage_interface()
 			{
 				mw->enable_menu_item(true, 3, ui->actionirp6p_tfg_EDP_Unload, ui->actionirp6p_tfg_Synchronization, ui->actionirp6p_tfg_Move);
 				mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_EDP_Load);
-				mw->enable_menu_item(true, 1, ui->actionall_Synchronisation);
+
 
 			}
 			break;

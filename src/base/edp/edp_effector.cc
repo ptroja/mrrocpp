@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
+#include <fstream>
 
 #include <boost/shared_ptr.hpp>
 
@@ -34,7 +36,7 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
-			= (boost::shared_ptr<lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str());
+			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str());
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
 		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
@@ -43,6 +45,7 @@ effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 	if (robot_test_mode) {
 		msg->message("Robot test mode activated");
 	}
+
 }
 
 effector::~effector()
@@ -52,8 +55,11 @@ effector::~effector()
 /*--------------------------------------------------------------------------*/
 bool effector::initialize_communication()
 {
+
 	const std::string
 			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
+
+	// nawiazywanie komunikacji
 
 	std::string full_path_to_server_attach_point("/dev/name/global/");
 	full_path_to_server_attach_point += server_attach_point;
@@ -68,7 +74,7 @@ bool effector::initialize_communication()
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
 
-	server_attach =	messip::port_create(server_attach_point);
+	server_attach = messip::port_create(server_attach_point);
 
 	if (server_attach == NULL) {
 		msg->message(lib::SYSTEM_ERROR, errno, "edp: resmg failed to attach");

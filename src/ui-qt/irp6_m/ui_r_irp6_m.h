@@ -13,6 +13,11 @@
 
 class wgt_irp6_m_joints;
 class wgt_irp6_m_motors;
+class wgt_irp6_m_angle_axis;
+class wgt_irp6_m_euler;
+class wgt_irp6_m_relative_angle_axis;
+class wgt_irp6_m_tool_angle_axis;
+class wgt_irp6_m_tool_euler;
 
 namespace mrrocpp {
 namespace ui {
@@ -43,6 +48,11 @@ public:
 
 	wgt_irp6_m_joints *wgt_joints;
 	wgt_irp6_m_motors *wgt_motors;
+	wgt_irp6_m_angle_axis *wgt_angle_axis;
+	wgt_irp6_m_euler *wgt_euler;
+	wgt_irp6_m_relative_angle_axis *wgt_relative_angle_axis;
+	wgt_irp6_m_tool_angle_axis *wgt_tool_angle_axis;
+	wgt_irp6_m_tool_euler *wgt_tool_euler;
 
 	void delete_ui_ecp_robot();
 	int synchronise_int();

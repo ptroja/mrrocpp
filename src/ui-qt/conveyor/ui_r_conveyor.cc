@@ -125,6 +125,7 @@ int UiRobot::synchronise_int()
 	// modyfikacje menu
 	interface.manage_interface();
 	wgt_move->synchro_depended_init();
+	wgt_move->init_and_copy();
 	return 1;
 
 }
@@ -190,7 +191,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 4, ui->actionall_Synchronisation, ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
+				mw->enable_menu_item(true, 3,  ui->actionconveyor_EDP_Unload, ui->actionconveyor_Synchronization, ui->actionconveyor_Move);
 				mw->enable_menu_item(false, 1, ui->actionconveyor_EDP_Load);
 
 			}
@@ -206,14 +207,14 @@ int UiRobot::manage_interface()
 int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
-	if (state.edp.state <= 0) {// edp wylaczone
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		 */
-	} else {
-		if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+
+		if (state.edp.state <= 0) {// edp wylaczone
+			/* TR
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
+			 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
+			 */
+		} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
 
 			wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 			/* TR
@@ -230,7 +231,7 @@ int UiRobot::process_control_window_conveyor_section_init(bool &wlacz_PtButton_w
 			 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
 			 */
 		}
-	}
+
 
 	state.edp.last_state = state.edp.state;
 

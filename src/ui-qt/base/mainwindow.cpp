@@ -37,6 +37,11 @@
 
 #include "../irp6_m/wgt_irp6_m_joints.h"
 #include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_euler.h"
+#include "../irp6_m/wgt_irp6_m_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
@@ -49,7 +54,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	timer->start(50);
 
-	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
@@ -90,15 +95,21 @@ Ui::MainWindow * MainWindow::get_ui()
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
-
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QWidget *), _enable);
 	}
 
 	va_end(menu_items);
@@ -107,15 +118,22 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QAction *), _enable);
 	}
 
 	va_end(menu_items);
@@ -137,18 +155,18 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 //	va_end(menu_items);
 //}
 
-void MainWindow::ui_notification(QString _string, QColor _color)
+void MainWindow::ui_notification()
 {
 
 	if (main_thread_id == pthread_self()) {
 		// jeśli wątek główny
 		//	interface.ui_msg->message("same thread");
-		ui_notification_slot(_string, _color);
+		ui_notification_slot();
 
 	} else {
 		//jeśli inny wątek niż główny
 		//	interface.ui_msg->message("different thread");
-		emit ui_notification_signal(_string, _color);
+		emit ui_notification_signal();
 	}
 
 }
@@ -195,159 +213,244 @@ void MainWindow::raise_process_control_window_slot()
 
 void MainWindow::raise_ui_ecp_window_slot()
 {
-	bool wyjscie;
+	interface.ui_msg->message("raise_ui_ecp_window_slot");
+
 	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
-		case lib::C_XYZ_ANGLE_AXIS:
-		case lib::C_XYZ_EULER_ZYZ:
-		case lib::C_JOINT:
-		case lib::C_MOTOR:
+		case lib::C_XYZ_ANGLE_AXIS: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_XYZ_EULER_ZYZ: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_JOINT: {
+			if (interface.teachingstate == ui::common::MP_RUNNING) {
+				interface.teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_JOINT");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_joints->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_joints->my_open();
+			}
+
+		}
+			break;
+		case lib::C_MOTOR: {
 			//  printf("C_MOTOR\n");
 
 			if (interface.teachingstate == ui::common::MP_RUNNING) {
 				interface.teachingstate = ui::common::ECP_TEACHING;
 			}
-			/* TR PtEnter(0); */
-			if (!interface.is_teaching_window_open) {
-				/* TR
-				 ApCreateModule(ABM_teaching_window, ABW_base, NULL);
-				 */
-				interface.is_teaching_window_open = true;
-			} else {
-				/* TR
-				 PtWindowToFront( ABW_teaching_window);
-				 */
+
+			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_MOTOR");
+
+			interface.wgt_teaching_obj->my_open();
+
+			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				interface.irp6ot_m->wgt_motors->my_open();
+			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				interface.irp6p_m->wgt_motors->my_open();
 			}
-			/* TR PtLeave(0); */
 
+		}
 			break;
-		case lib::YES_NO:
+		case lib::YES_NO: {
+			Ui::wgt_yes_noClass* ui = interface.wgt_yes_no_obj->get_ui();
 
-			interface.ui_msg->message("YES_NO");
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_yes_no_window, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_pytanie, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
 
+			interface.wgt_yes_no_obj->my_open();
+
+		}
 			break;
-		case lib::MESSAGE:
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_message, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_message, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 TR PtLeave(0);
-			 */
+		case lib::MESSAGE: {
+			Ui::wgt_messageClass* ui = interface.wgt_message_obj->get_ui();
+			ui->label_message->setText(ecp_to_ui_msg.string);
+			interface.wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
-		case lib::DOUBLE_NUMBER:
+		case lib::DOUBLE_NUMBER: {
 
-			/* TR
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_input_double, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_double, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 PtLeave(0);
-			 */
+			Ui::wgt_input_doubleClass* ui = interface.wgt_input_double_obj->get_ui();
 
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			interface.wgt_input_double_obj->my_open();
+		}
 			break;
-		case lib::INTEGER_NUMBER:
+		case lib::INTEGER_NUMBER: {
 
-			/*
-			 TR PtEnter(0);
+			Ui::wgt_input_integerClass* ui = interface.wgt_input_integer_obj->get_ui();
 
-			 ApCreateModule(ABM_wnd_input_integer, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_input_integer, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
+			ui->label_message->setText(ecp_to_ui_msg.string);
 
-			 PtLeave(0);
-			 */
+			interface.wgt_input_integer_obj->my_open();
 
+		}
 			break;
-		case lib::CHOOSE_OPTION:
+		case lib::CHOOSE_OPTION: {
 
-			/* TR
+			Ui::wgt_choose_optionClass* ui = interface.wgt_choose_option_obj->get_ui();
 
-			 PtEnter(0);
-			 ApCreateModule(ABM_wnd_choose_option, ABW_base, NULL);
-			 PtSetResource(ABW_PtLabel_wind_choose_option, Pt_ARG_TEXT_STRING, ecp_to_ui_msg.string, 0);
-			 */
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
 			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
 
 			if (ecp_to_ui_msg.nr_of_options == 2) {
-				/* TR
-				 interface.block_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->hide();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.block_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->hide();
 			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				/* TR
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_3);
-				 interface.unblock_widget(ABW_PtButton_wind_choose_option_4);
-				 */
+				ui->pushButton_3->show();
+				ui->pushButton_4->show();
 			}
 
-			/* TR PtLeave(0); */
-
+			interface.wgt_choose_option_obj->my_open();
+		}
 			break;
-		case lib::LOAD_FILE: // Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::LOAD_FILE: {
+			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+
 			//    printf("lib::LOAD_FILE\n");
 
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 // 	PtRealizeWidget( ABW_file_selection_window );
-					 PtLeave(0);
-					 */
+
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getOpenFileName(this, tr("Choose file to load or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_LOADED;
 				} else {
-					delay(1);
+					ui_rep.reply = lib::QUIT;
 				}
+				//std::string str_fullpath = fileName.toStdString();
 			}
 
-			ui_rep.reply = lib::FILE_LOADED;
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
 
+			interface.ui_ecp_obj->synchroniser.command();
+
+		}
 			break;
-		case lib::SAVE_FILE: // Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+		case lib::SAVE_FILE: {
+
+			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
 
+			interface.file_window_mode = ui::common::FSTRAJECTORY;
 
-			wyjscie = false;
-			while (!wyjscie) {
-				if (!interface.is_file_selection_window_open) {
-					interface.is_file_selection_window_open = 1;
-					interface.file_window_mode = ui::common::FSTRAJECTORY; // wybor pliku z trajektoria
-					wyjscie = true;
-					/* TR
-					 PtEnter(0);
-					 ApCreateModule(ABM_file_selection_window, ABW_base, NULL);
-					 PtLeave(0);
-					 */
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getSaveFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
+							= '\0';
+
+					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_SAVED;
 				} else {
-					delay(1);
+					ui_rep.reply = lib::QUIT;
 				}
+				//std::string str_fullpath = fileName.toStdString();
 			}
 
-			ui_rep.reply = lib::FILE_SAVED;
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
 
+			interface.ui_ecp_obj->synchroniser.command();
+
+		}
 			break;
 
-		default:
+		default: {
 			perror("Strange ECP message");
 			interface.ui_ecp_obj->synchroniser.command();
+		}
 			break;
 	}
 
@@ -365,19 +468,66 @@ void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
 	_menu_item->setDisabled(!_active);
 }
 
-void MainWindow::ui_notification_slot(QString _string, QColor _color)
+void MainWindow::ui_notification_slot()
 {
-	QPalette pal;
-	pal.setColor(QPalette::Text, _color);
-	pal.setColor(QPalette::Foreground, _color);
 
-	ui->notification_label->setPalette(pal);
+	if (interface.next_notification != interface.notification_state) {
 
-	ui->notification_label->setText(_string);
-	ui->notification_label->repaint();
-	ui->notification_label->update();
-	qApp->processEvents();
+		QString _string;
+		QColor _color;
 
+		interface.notification_state = interface.next_notification;
+
+		switch (interface.next_notification)
+		{
+			case UI_N_STARTING:
+				_string = "STARTING";
+				_color = Qt::magenta;
+
+				break;
+			case UI_N_READY:
+				_string = "READY";
+				_color = Qt::blue;
+
+				break;
+			case UI_N_BUSY:
+				_string = "BUSY";
+				_color = Qt::red;
+
+				break;
+			case UI_N_EXITING:
+				_string = "EXITING";
+				_color = Qt::magenta;
+
+				break;
+			case UI_N_COMMUNICATION:
+				_string = "COMMUNICATION";
+				_color = Qt::red;
+
+				break;
+			case UI_N_SYNCHRONISATION:
+				_string = "SYNCHRONISATION";
+				_color = Qt::red;
+
+				break;
+			case UI_N_PROCESS_CREATION:
+				_string = "PROCESS CREATION";
+				_color = Qt::red;
+
+				break;
+		}
+
+		QPalette pal;
+		pal.setColor(QPalette::Text, _color);
+		pal.setColor(QPalette::Foreground, _color);
+
+		ui->notification_label->setPalette(pal);
+
+		ui->notification_label->setText(_string);
+		ui->notification_label->repaint();
+		ui->notification_label->update();
+		qApp->processEvents();
+	}
 }
 
 void MainWindow::on_timer_slot()
@@ -572,17 +722,17 @@ void MainWindow::on_actionirp6ot_m_Joints_triggered()
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6ot_m->wgt_euler->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_relative_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
@@ -612,12 +762,12 @@ void MainWindow::on_actionirp6ot_m_Position_2_triggered()
 
 void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6ot_m->wgt_tool_euler->my_open();
 }
 
 void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6ot_m->wgt_tool_angle_axis->my_open();
 }
 
 //irp6ot_tfg
@@ -697,17 +847,17 @@ void MainWindow::on_actionirp6p_m_Joints_triggered()
 
 void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6p_m->wgt_euler->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_relative_angle_axis->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
@@ -737,12 +887,12 @@ void MainWindow::on_actionirp6p_m_Position_2_triggered()
 
 void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
 {
-
+	interface.irp6p_m->wgt_tool_euler->my_open();
 }
 
 void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
 {
-
+	interface.irp6p_m->wgt_tool_angle_axis->my_open();
 }
 
 //irp6p_tfg
@@ -841,7 +991,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-	interface.bird_hand->wnd_command_and_status->my_open();
+	interface.bird_hand->wgt_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()
@@ -1068,6 +1218,7 @@ void MainWindow::on_actionProcess_Control_triggered()
 {
 	raise_process_control_window();
 }
+
 void MainWindow::on_actionConfiguration_triggered()
 {
 	/*
@@ -1079,25 +1230,19 @@ void MainWindow::on_actionConfiguration_triggered()
 	try {
 		QString fileName;
 
-		std::string mrrocpp_root_local_path =
-				interface.mrrocpp_local_path.substr(0, interface.mrrocpp_local_path.rfind("/"));
-		mrrocpp_root_local_path = mrrocpp_root_local_path.substr(0, mrrocpp_root_local_path.rfind("/") + 1);
-		//interface.ui_msg->message(mrrocpp_root_local_path);
-
-
-		std::string mrrocpp_current_config_full_path = mrrocpp_root_local_path + interface.config_file;
+		std::string mrrocpp_current_config_full_path = interface.mrrocpp_root_local_path + interface.config_file;
 		interface.ui_msg->message(mrrocpp_current_config_full_path);
 
 		fileName
 				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
+		if (fileName.length() > 0) {
+			std::string str_fullpath = fileName.toStdString();
 
-		std::string str_fullpath = fileName.toStdString();
-
-		interface.config_file = str_fullpath.substr(str_fullpath.rfind(mrrocpp_root_local_path)
-				+ mrrocpp_root_local_path.length());
-		interface.reload_whole_configuration();
-		interface.set_default_configuration_file_name();
-
+			interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
+					+ interface.mrrocpp_root_local_path.length());
+			interface.reload_whole_configuration();
+			interface.set_default_configuration_file_name();
+		}
 	}
 
 	catch (...) {

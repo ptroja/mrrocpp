@@ -29,18 +29,20 @@ public:
 	~wgt_single_motor_move();
 
 	void synchro_depended_init();
+	void init_and_copy();
 	void my_open();
 
 private:
 	Ui::wgt_single_motor_moveClass ui;
 	mrrocpp::ui::single_motor::UiRobot& robot;
 
+	void init_mr_and_si();
+	void copy_mr_and_si();
+
 	int synchro_depended_widgets_disable(bool _set_disabled);
 
 	int init_mr();
 	int copy_mr();
-
-	void init_mr_and_si();
 
 	int get_desired_position_mr();
 	int move_it_mr();
@@ -53,10 +55,12 @@ private:
 
 signals:
 	void synchro_depended_init_signal();
+	void init_and_copy_signal();
 
 private slots:
 
 	void synchro_depended_init_slot();
+	void init_and_copy_slot();
 
 	void on_pushButton_read_mr_clicked();
 	void on_pushButton_export_mr_clicked();

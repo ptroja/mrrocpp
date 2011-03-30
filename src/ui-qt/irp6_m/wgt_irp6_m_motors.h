@@ -32,6 +32,7 @@ public:
 					0);
 	~wgt_irp6_m_motors();
 	void synchro_depended_init();
+	void init_and_copy();
 	void my_open();
 	QString robot_label;
 
@@ -42,10 +43,11 @@ private:
 	Ui::wgt_irp6_m_motorsClass ui;
 	mrrocpp::ui::irp6_m::UiRobot& robot;
 
-	int synchro_depended_widgets_disable(bool _set_disabled);
-
 	int init();
 	int copy();
+
+	int synchro_depended_widgets_disable(bool _set_disabled);
+
 	int get_desired_position();
 	int move_it();
 	//int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);
@@ -53,10 +55,12 @@ private:
 
 signals:
 	void synchro_depended_init_signal();
+	void init_and_copy_signal();
 
 private slots:
 
 	void synchro_depended_init_slot();
+	void init_and_copy_slot();
 
 	void on_pushButton_read_clicked();
 	void on_pushButton_export_clicked();

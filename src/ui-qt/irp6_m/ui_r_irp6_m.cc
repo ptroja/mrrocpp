@@ -71,6 +71,8 @@ int UiRobot::synchronise_int()
 	// modyfikacje menu
 	interface.manage_interface();
 	wgt_motors->synchro_depended_init();
+	wgt_motors->init_and_copy();
+
 	return 1;
 
 }

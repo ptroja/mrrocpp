@@ -47,9 +47,11 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//	int max_current[NUM_OF_SERVOS] = { SARKOFAG_AXIS_7_MAX_CURRENT };
 
-	const std::vector<std::string> ports_vector(mrrocpp::lib::sarkofag::ports_strings,
-				mrrocpp::lib::sarkofag::ports_strings+mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::sarkofag::MAX_INCREMENT);
+	const std::vector <std::string>
+			ports_vector(mrrocpp::lib::sarkofag::ports_strings, mrrocpp::lib::sarkofag::ports_strings
+					+ mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM + 1);
+	hi
+			= new hi_moxa::HI_moxa(master, mrrocpp::lib::sarkofag::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::sarkofag::MAX_INCREMENT);
 	hi->init();
 	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::sarkofag::MAX_CURRENT_0);
 	// utworzenie tablicy regulatorow
@@ -75,13 +77,5 @@ void servo_buffer::get_all_positions(void)
 /*-----------------------------------------------------------------------*/
 
 } // namespace sarkofag
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new sarkofag::servo_buffer((sarkofag::effector &) (_master));
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp

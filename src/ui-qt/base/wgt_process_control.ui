@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>200</width>
+    <width>240</width>
     <height>270</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>200</width>
+    <width>240</width>
     <height>270</height>
    </size>
   </property>
@@ -24,13 +24,13 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>180</width>
+     <width>220</width>
      <height>100</height>
     </rect>
    </property>
    <property name="maximumSize">
     <size>
-     <width>180</width>
+     <width>220</width>
      <height>100</height>
     </size>
    </property>
@@ -62,35 +62,50 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="mp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>TRIGGER (m)</string>
+      </property>
+      <property name="shortcut">
+       <string>M</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="mp_start_pushButton">
       <property name="text">
-       <string>START</string>
+       <string>START (a)</string>
+      </property>
+      <property name="shortcut">
+       <string>A</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="mp_stop_pushButton">
       <property name="text">
-       <string>STOP</string>
+       <string>STOP (s)</string>
+      </property>
+      <property name="shortcut">
+       <string>S</string>
       </property>
      </widget>
     </item>
     <item row="2" column="0">
      <widget class="QPushButton" name="mp_pause_pushButton">
       <property name="text">
-       <string>PAUSE</string>
+       <string>PAUSE (p)</string>
+      </property>
+      <property name="shortcut">
+       <string>P</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
      <widget class="QPushButton" name="mp_resume_pushButton">
       <property name="text">
-       <string>RESUME</string>
+       <string>RESUME (r)</string>
+      </property>
+      <property name="shortcut">
+       <string>R</string>
       </property>
      </widget>
     </item>
@@ -101,13 +116,13 @@
     <rect>
      <x>10</x>
      <y>110</y>
-     <width>180</width>
+     <width>220</width>
      <height>50</height>
     </rect>
    </property>
    <property name="maximumSize">
     <size>
-     <width>180</width>
+     <width>220</width>
      <height>100</height>
     </size>
    </property>
@@ -127,7 +142,10 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_ecp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>TRIGGER (e)</string>
+      </property>
+      <property name="shortcut">
+       <string>E</string>
       </property>
      </widget>
     </item>
@@ -153,13 +171,13 @@
     <rect>
      <x>10</x>
      <y>160</y>
-     <width>180</width>
+     <width>220</width>
      <height>100</height>
     </rect>
    </property>
    <property name="maximumSize">
     <size>
-     <width>180</width>
+     <width>220</width>
      <height>100</height>
     </size>
    </property>
@@ -176,14 +194,20 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_reader_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER</string>
+       <string>TRIGGER (c)</string>
+      </property>
+      <property name="shortcut">
+       <string>C</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="all_reader_stop_pushButton">
       <property name="text">
-       <string>STOP</string>
+       <string>STOP (x)</string>
+      </property>
+      <property name="shortcut">
+       <string>X</string>
       </property>
      </widget>
     </item>
@@ -208,7 +232,10 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="all_reader_start_pushButton">
       <property name="text">
-       <string>START</string>
+       <string>START (z)</string>
+      </property>
+      <property name="shortcut">
+       <string>Z</string>
       </property>
      </widget>
     </item>
