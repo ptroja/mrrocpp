@@ -9,11 +9,7 @@
 #define __IN_OUT_BUFFER_H
 
 #include <stdint.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#define SPIN_LOCK	InterruptLock
-#define SPIN_UNLOCK	InterruptUnlock
-#elif (defined(__APPLE__) && defined(__MACH__))
+#if (defined(__APPLE__) && defined(__MACH__))
 #include <libkern/OSAtomic.h>
 #define SPIN_LOCK	OSSpinLockLock
 #define SPIN_UNLOCK	OSSpinLockUnlock
@@ -35,13 +31,11 @@ private:
     uint8_t analog_input[8];		// wejscie analogowe - dla 8 kanalow
 
     uint16_t binary_output;		// wyjscie binarne
-#ifdef __QNXNTO__
-    intrspin_t
-#elif (defined(__APPLE__) && defined(__MACH__))
+#if (defined(__APPLE__) && defined(__MACH__))
     OSSpinLock
 #else
     pthread_spinlock_t
-#endif /* __QNXNTO__ */
+#endif
 		output_spinlock, input_spinlock; // spinlocki do wejścia/wyjscia
 
 public:
