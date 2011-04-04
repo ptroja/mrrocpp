@@ -21,7 +21,7 @@ typedef struct
 {
 	msg_header_t hdr;
 	int data; // TODO: this probably is not needed anymore
-} _pulse_msg;
+}_pulse_msg;
 
 #else
 /* --- Symbolic names of the error return conditions --- */
@@ -79,17 +79,17 @@ typedef int clockid_t;
 #   define TIMER_ABSTIME        1
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-int clock_gettime( clockid_t clock_id, struct timespec * tp );
+	int clock_gettime( clockid_t clock_id, struct timespec * tp );
 
-/* declaration only; not replaced yet, but this is used only for robot hardware drivers */
-int clock_nanosleep(clockid_t clock_id, int flags,
-       const struct timespec *rqtp, struct timespec *rmtp);
+	/* declaration only; not replaced yet, but this is used only for robot hardware drivers */
+	int clock_nanosleep(clockid_t clock_id, int flags,
+			const struct timespec *rqtp, struct timespec *rmtp);
 
 #ifdef __cplusplus
- }
+}
 #endif
 
 #define	out8(port,val)	(void) 0

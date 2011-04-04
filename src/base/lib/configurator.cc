@@ -32,9 +32,7 @@
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-#if defined(__QNXNTO__)
-#include <sys/netmgr.h>
-#endif /* __QNXNTO__ */
+
 
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
@@ -159,16 +157,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			rsh_spawn_node = "localhost";
 		} else {
 			rsh_spawn_node = spawned_node_name;
-#if defined(__QNXNTO__)
-			/* This check works only with QNX and Qnet */
-			std::string opendir_path("/net/");
-			opendir_path += rsh_spawn_node;
 
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				printf("spawned node absent: %s\n", opendir_path.c_str());
-				//throw std::logic_error("spawned node absent: " + opendir_path);
-			}
-#endif /* __QNXNTO__ */
 		}
 	}
 
@@ -203,9 +192,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		}
 
 	} else {
-#if defined(__QNXNTO__)
-		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/", node.c_str(), dir.c_str());
-#else
+
 		char* cwd;
 		char buff[PATH_MAX + 1];
 
@@ -214,7 +201,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			perror("Blad cwd w configurator");
 		}
 		strcpy(bin_path, cwd);
-#endif
+
 	}
 
 	if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
