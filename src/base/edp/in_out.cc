@@ -1,10 +1,8 @@
 #include <cstring>
 #include <stdint.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#else
+
 #include <pthread.h>
-#endif
+
 
 #include "base/edp/in_out.h"
 

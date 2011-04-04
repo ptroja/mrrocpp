@@ -244,24 +244,22 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 
 		std::string username;
 
-		if (!exists("username", _section_name))
-		{
+		if (!exists("username", _section_name)) {
 			username = getenv("USER");
 		} else {
-			username = value<std::string>("username", _section_name);
+			username = value <std::string> ("username", _section_name);
 		}
 
-
-		if ((rsh_spawn_node == "localhost") && ( username == getenv("USER") )) {
-                        snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
-                        chdir(bin_path);
-                        execlp(process_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str(), NULL);
+		if ((rsh_spawn_node == "localhost") && (username == getenv("USER"))) {
+			snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
+			chdir(bin_path);
+			execlp(process_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str(), NULL);
 		} else {
 			if (!use_ssh) {
 				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);

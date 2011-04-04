@@ -108,14 +108,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 
 	 SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
 	 */
-#ifdef __QNXNTO__
-	if (MsgSend(servo_fd, &servo_command, sizeof(servo_command), &sg_reply, sizeof(sg_reply)) < 0) {
-		uint64_t e = errno;
-		perror("Send() from EDP to SERVO error");
-		master.msg->message(lib::SYSTEM_ERROR, e, "Send() from EDP to SERVO error");
-		throw System_error();
-	}
-#else
+
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		servo_command_rdy = true;
@@ -128,7 +121,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 		}
 		sg_reply_rdy = false;
 	}
-#endif
+
 
 	//   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
@@ -268,20 +261,12 @@ SERVO_COMMAND servo_buffer::command_type() const
 }
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
-#ifndef __QNXNTO__
+
 			servo_command_rdy(false), sg_reply_rdy(false),
-#endif
+
 			thread_started(), master(_master)
 {
-#ifdef __QNXNTO__
-	if ((servo_to_tt_chid = ChannelCreate(_NTO_CHF_UNBLOCK)) == -1) {
-		perror("ChannelCreate()");
-	}
-	if ((servo_fd = ConnectAttach(0, 0, servo_to_tt_chid, 0, _NTO_COF_CLOEXEC)) == -1) {
-		perror("ConnectAttach()");
-	}
-	ThreadCtl(_NTO_TCTL_IO, NULL);
-#endif
+
 }
 
 /*-----------------------------------------------------------------------*/
@@ -290,14 +275,7 @@ bool servo_buffer::get_command(void)
 	// Odczytanie polecenia z EDP_MASTER o ile zostalo przyslane
 	bool new_command_available = false;
 
-#ifdef __QNXNTO__
-	// by Y zamiast creceive
-	if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_RECEIVE, NULL, NULL, NULL) == -1) {
-		perror("servo_buffer: TimerTimeout()");
-	}
-	if ((edp_caller = MsgReceive_r(servo_to_tt_chid, &command, sizeof(command), NULL)) >= 0)
-	new_command_available = true;
-#else
+
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		if (servo_command_rdy) {
@@ -306,7 +284,7 @@ bool servo_buffer::get_command(void)
 			new_command_available = true;
 		}
 	}
-#endif
+
 
 	if (new_command_available) { // jezeli jest nowa wiadomosc
 
@@ -339,13 +317,7 @@ bool servo_buffer::get_command(void)
 				return false; // Potraktowac jakby nie bylo polecenia
 		} // end: switch
 	} else {
-#ifdef __QNXNTO__
-		/* Nie otrzymano nowego polecenia ruchu */
-		if (edp_caller != -ETIMEDOUT) {
-			// nastapil blad przy odbieraniu wiadomosci rozny od jej braku
-			fprintf(stderr, "SERVO_GROUP: Receive error from EDP_MASTER\n");
-		}
-#endif
+
 		return false;
 	}
 } // end: servo_buffer::get_command
@@ -536,10 +508,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 	get_all_positions();
 
 	// Wyslac informacje do EDP_MASTER
-#ifdef __QNXNTO__
-	if (MsgReply(edp_caller, EOK, &servo_data, sizeof(servo_group_reply)) < 0)
-	perror(" Reply to EDP_MASTER error");
-#else
+
 	{
 		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
 
@@ -549,7 +518,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 
 	// TODO: should not call notify with mutex locked?
 	sg_reply_cond.notify_one();
-#endif
+
 	// Wyzerowac zmienne sygnalizujace stan procesu
 	clear_reply_status();
 	send_after_last_step = false;
@@ -569,10 +538,7 @@ void servo_buffer::ppp(void) const
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {
-#ifdef __QNXNTO__
-	ConnectDetach_r(servo_fd);
-	ChannelDestroy_r(servo_to_tt_chid);
-#endif
+
 
 	// Destruktor grupy regulatorow
 	// Zniszcyc regulatory
