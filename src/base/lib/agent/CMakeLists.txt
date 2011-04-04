@@ -4,9 +4,7 @@ target_link_libraries(agent ${Boost_SERIALIZATION_LIBRARY})
 
 target_link_libraries(agent messip)
 
-if(QNXNTO)
-target_link_libraries(agent rpc)
-endif(QNXNTO)
+
 
 add_executable(reader reader.cc)
 
