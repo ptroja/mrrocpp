@@ -48,6 +48,9 @@ private:
 	Vector6d datav; // mensured voltage
 	Vector6d bias_data; // sensor bias voltage
 
+	lsampl_t maxdata;
+	comedi_range *rangetype;
+
 	comedi_polynomial_t ADC_calib[6]; // ADC calibration polynomial
 
 	Matrix6d conversion_matrix; // F/T conversion matrix

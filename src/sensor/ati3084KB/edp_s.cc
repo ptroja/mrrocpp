@@ -59,17 +59,20 @@ void ATI3084_force::connect_to_hardware(void)
 		printf("unable to open device !!! \n");
 	//  throw runtime_error("Could not open device");
 
-	char * file_path = comedi_get_default_calibration_path(device);
-	comedi_calibration_t* calib = comedi_parse_calibration_file(file_path);
+	//char * file_path = comedi_get_default_calibration_path(device);
+	//comedi_calibration_t* calib = comedi_parse_calibration_file(file_path);
 
-	if (calib)
-		printf("unable to callibrate device \n");
+	//if (calib)
+	//	printf("unable to callibrate device \n");
 
-	for (int i = 0; i < 6; i++)
-		comedi_get_softcal_converter(0, 0, 0, COMEDI_TO_PHYSICAL, calib, &ADC_calib[i]);
+	//for (int i = 0; i < 6; i++)
+	//	comedi_get_softcal_converter(0, 0, 0, COMEDI_TO_PHYSICAL, calib, &ADC_calib[i]);
 
-	comedi_cleanup_calibration(calib);
-	free(file_path);
+	//comedi_cleanup_calibration(calib);
+	//free(file_path);
+
+	maxdata = comedi_get_maxdata(device, 0, 0);
+        rangetype =  comedi_get_range(device, 0, 0, 0);
 
 }
 
@@ -149,7 +152,8 @@ void ATI3084_force::wait_for_particular_event()
 
 
 	for (int i = 0; i < 6; i++) {
-		datav[i] = comedi_to_physical(adc_data[i], &ADC_calib[i]);
+		//datav[i] = comedi_to_physical(adc_data[i], &ADC_calib[i]);
+		datav[i] = comedi_to_phys(adc_data[i], rangetype, maxdata);
 	}
 
 }
