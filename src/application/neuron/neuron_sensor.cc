@@ -81,7 +81,7 @@ namespace sensor {
  * with information about exact coordinates of a manipulator. VSP receives it
  * and use it to calculate next position to which manipulator should be moved.
  */
-#define CURRENT_POSITION		0x23
+#define CURRENT_ROBOT_STATE		0x23
 
 /**
  * @brief Message from VSP containing next position for a robot.
@@ -325,9 +325,9 @@ void neuron_sensor::sendCommand(uint8_t command)
  * @param y Y coordinate.
  * @param z Z coordinate.
  */
-void neuron_sensor::sendCurrentPosition(double x, double y, double z)
+void neuron_sensor::sendRobotState(double x, double y, double z, double vx, double vy, double vz)
 {
-	sendCoordinates(CURRENT_POSITION, x, y, z);
+	sendData(CURRENT_ROBOT_STATE, x, y, z, vx, vy, vz);
 	//printf("sendCurrentPosition %f %f %f\n", x, y, z);
 }
 
@@ -354,23 +354,26 @@ void neuron_sensor::sendOvershoot(double overshoot)
 	}
 }
 
-/*==============================sendCoordinates===========================*//**
+/*==============================sendData===========================*//**
  * @brief Sends coordinates to VSP.
- * @details Sends CURRENT_POSITION command along with coordinates to VSP.
+ * @details Sends CURRENT_ROBOT_STATE command along with coordinates to VSP.
  * @param x X coordinate.
  * @param y Y coordinate.
  * @param z Z coordinate.
  */
-void neuron_sensor::sendCoordinates(uint8_t _command, double x, double y, double z)
+void neuron_sensor::sendData(uint8_t _command, double x, double y, double z, double vx, double vy, double vz)
 {
-	char buff[25];
+	char buff[49];
 	uint8_t temp_command = _command;
 	memcpy(buff, &temp_command, 1);
 	memcpy(buff + 1, &x, 8);
 	memcpy(buff + 9, &y, 8);
 	memcpy(buff + 17, &z, 8);
+	memcpy(buff + 25, &vx, 8);
+	memcpy(buff + 33, &vy, 8);
+	memcpy(buff + 41, &vz, 8);
 
-	//printf("neuron_sensor->sendCoordinates command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	//printf("neuron_sensor->sendData command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
 
 	int result = write(socketDescriptor, buff, sizeof(buff));
 

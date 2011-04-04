@@ -118,7 +118,9 @@ bool neuron_generator::next_step()
 	//printf("position: %f %f %f\n",actual_position[0],actual_position[1],actual_position[2]);
 	if (neuron_sensor->positionRequested()  && !breaking_) {
 		//printf("position requested inside\n");
-		neuron_sensor->sendCurrentPosition(actual_position[0], actual_position[1], actual_position[2]);
+		//TODO:konrad uzupełnic
+		neuron_sensor->sendRobotState(actual_position[0], actual_position[1], actual_position[2],0,1,2);
+		//neuron_sensor->sendRobotState(actual_position[0], actual_position[1], actual_position[2]);
 		neuron_sensor->get_reading();
 	}
 
