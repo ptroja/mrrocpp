@@ -10,20 +10,6 @@
 #if !defined(__TYPEDEFS_H)
 #define __TYPEDEFS_H
 
-#if defined(__QNXNTO__)
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-
-typedef struct _pulse msg_header_t;
-
-//! Pulse data structure
-typedef struct
-{
-	msg_header_t hdr;
-	int data; // TODO: this probably is not needed anymore
-}_pulse_msg;
-
-#else
 /* --- Symbolic names of the error return conditions --- */
 
 #define EOK              0  /* No error */
@@ -98,7 +84,5 @@ extern "C" {
 #define	in16(port)		0
 
 #endif
-
-#endif /* ! __QNXNTO__ */
 
 #endif /* __TYPEDEFS_H */
