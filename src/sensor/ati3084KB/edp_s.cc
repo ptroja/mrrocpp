@@ -43,7 +43,7 @@ ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 
 	conversion_matrix << -0.000022, 0.001325, -0.035134, 0.640126, 0.051951, -0.641909, 0.017570, -0.743414, -0.016234, 0.372558, -0.032329, 0.366082, -1.184654, -0.012028, -1.165485, -0.014266, -1.174821, 0.002540, 0.007847, -0.144965, 0.552931, 0.079813, -0.571950, 0.071877, -0.661215, -0.007048, 0.337836, -0.125610, 0.315335, 0.132327, -0.010556, 0.346443, -0.009666, 0.344562, -0.031572, 0.339944;
 
-	conversion_scale << 20.4, 20.4, 20.4, 1.23, 1.23, 1.23;
+	conversion_scale << -20.4, -20.4, -20.4, -1.23, -1.23, -1.23;
 
 	sensor_frame = lib::Homog_matrix(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0.09);
 	force_sensor_name = edp::sensor::FORCE_SENSOR_ATI3084;
@@ -72,7 +72,7 @@ void ATI3084_force::connect_to_hardware(void)
 	//free(file_path);
 
 	maxdata = comedi_get_maxdata(device, 0, 0);
-        rangetype =  comedi_get_range(device, 0, 0, 0);
+	rangetype = comedi_get_range(device, 0, 0, 0);
 
 }
 
