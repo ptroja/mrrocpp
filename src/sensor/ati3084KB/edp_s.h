@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------
 //
 //
-// Definicje klasy edp_ATI6284_force_sensor
+// Definicje klasy edp_ATI3084_force_sensor
 //
 // Ostatnia modyfikacja: styczen 2010
 // Autor: labi (Kamil Tarkowski)
@@ -9,8 +9,8 @@
 // -------------------------------------------------------------------------
 
 
-#if !defined(_EDP_S_ATI6284_KB_H)
-#define _EDP_S_ATI6284_KB_H
+#if !defined(_EDP_S_ATI3084_KB_H)
+#define _EDP_S_ATI3084_KB_H
 
 #include <comedilib.h>
 #include <Eigen/Core>
@@ -28,14 +28,14 @@ typedef Matrix <double, 6, 6> Matrix6d;
 typedef Matrix <double, 6, 1> Vector6d;
 
 /********** klasa czujnikow po stronie VSP **************/
-class ATI6284_force : public force
+class ATI3084_force : public force
 {
 public:
 
 	void connect_to_hardware(void);
 
-	ATI6284_force(common::manip_effector &_master);
-	virtual ~ATI6284_force();
+	ATI3084_force(common::manip_effector &_master);
+	virtual ~ATI3084_force();
 	void disconnect_from_hardware(void);
 	void configure_particular_sensor(void); // konfiguracja czujnika
 	void wait_for_particular_event(void); // oczekiwanie na zdarzenie
@@ -61,4 +61,4 @@ private:
 } // namespace mrrocpp
 
 
-#endif //_EDP_S_ATI6284_KB_H
+#endif //_EDP_S_ATI3084_KB_H

@@ -14,12 +14,12 @@ target_link_libraries(
 	edp hi_rydz ${COMMON_LIBRARIES}
 )
 
-if(QNXNTO)
+
 target_link_libraries(
 	edp_irp6ot_m
-	ati3084
+	ati3084KB
 )
-endif(QNXNTO)
+
 	
 add_library(kinematicsirp6ot_m
 	kinematic_model_calibrated_irp6ot_with_wrist.cc
