@@ -15,9 +15,7 @@
 #include <csignal>
 #include <cerrno>
 #include <sys/wait.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif /* __QNXNTO__ */
+
 
 #include <boost/exception/all.hpp>
 
@@ -44,10 +42,7 @@ effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
 
 shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
 
-#ifdef __QNXNTO__
-static _clockperiod old_cp;
-static const int TIME_SLICE = 500000; // by Y
-#endif /* __QNXNTO__ */
+
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
@@ -56,9 +51,7 @@ void catch_signal(int sig)
 	{
 		case SIGTERM:
 		case SIGHUP:
-#ifdef __QNXNTO__
-			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
-#endif /* __QNXNTO__ */
+
 			if (edp_shell) {
 				edp_shell->close_hardware_busy_file();
 			}
@@ -93,14 +86,7 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-#ifdef __QNXNTO__
 
-		// zmniejszenie stalej czasowej ticksize dla szeregowania
-		_clockperiod new_cp;
-		new_cp.nsec = edp::common::TIME_SLICE;
-		new_cp.fract = 0;
-		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
-#endif /* __QNXNTO__ */
 
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);
