@@ -16,15 +16,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdint.h>
-#if defined(__QNXNTO__)
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/mman.h>
-#elif defined(linux)
+#if defined(linux)
 #include <sys/io.h>
 #elif defined(__FreeBSD__)
 #include <machine/cpufunc.h>
@@ -58,22 +50,7 @@ void HI_rydz::init()
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
 
-#ifdef __QNXNTO__
-		// by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
-		// 	w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
-		ThreadCtl (_NTO_TCTL_IO, NULL);
-
-		if (mmap_device_io(0xC, (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
-			perror("mmap_device_io");
-		}
-
-		if (mmap_device_io(1, (hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
-			perror("mmap_device_io");
-		}
-
-		memset(&irq_data.event, 0, sizeof(irq_data.event));
-		irq_data.event.sigev_notify = SIGEV_INTR;
-#elif defined(linux)
+#if defined(linux)
 		// grant I/O port permissions to the first card region
 		if (ioperm(hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset, 0xC, 1) == -1) {
 			perror("ioperm()");
@@ -92,13 +69,7 @@ void HI_rydz::init()
 		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + hi_isa_card_offset));
 
-#ifdef __QNXNTO__
-		int irq_no = hi_irq_real; // Numer przerwania sprzetowego od karty ISA
-		if ((int_id = InterruptAttach (irq_no, int_handler, (void *) &irq_data, sizeof(irq_data), 0)) == -1)
-		{
-			perror("Unable to attach interrupt handler");
-		}
-#endif
+
 	}
 
 	// oczekiwanie na przerwanie
@@ -322,47 +293,9 @@ bool HI_rydz::is_hardware_error(void)
 int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 {
 	if (!master.robot_test_mode) {
-#ifdef __QNXNTO__
-		const uint64_t int_timeout = hi_intr_timeout_high;
-		struct sigevent tim_event;
 
-		static short interrupt_error = 0;
-		static short msg_send = 0;
-
-		// TODO: this can be done passing timeout to InterruptWait()
-		tim_event.sigev_notify = SIGEV_UNBLOCK;
-		if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL ) == -1) {
-			perror("hardware_interface: TimerTimeout()");
-		}
-		irq_data.md.interrupt_mode=_interrupt_mode; // przypisanie odpowiedniego trybu oprzerwania
-		//	irq_data.md.is_power_on = true;
-		int iw_ret=InterruptWait (0, NULL);
-
-		if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
-			if (interrupt_error == 1) master.msg->message(lib::NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
-			interrupt_error++;
-			master.controller_state_edp_buf.is_wardrobe_on = false;
-		} else {
-			if (interrupt_error >= 1) master.msg->message("Przywrocono obsluge przerwania");
-			interrupt_error = 0;
-			master.controller_state_edp_buf.is_wardrobe_on = true;
-			master.controller_state_edp_buf.is_power_on = irq_data.md.is_power_on;
-		}
-
-		if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
-		{
-			if ((msg_send++) == 0) master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
-			irq_data.md.is_robot_blocked = true;
-		}
-
-		master.controller_state_edp_buf.is_robot_blocked = irq_data.md.is_robot_blocked;
-
-		if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
-
-		return iw_ret;
-#else
 		return -1;
-#endif
+
 	} else {
 		ptimer->sleep();
 

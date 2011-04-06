@@ -50,11 +50,9 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief IRp6 Sarkofag array of communication port names
  * @ingroup sarkofag
  */
-#ifndef __QNXNTO__
+
 const std::string ports_strings[] = {"/dev/ttyMI0"};
-#else
-const std::string ports_strings[] = {"/dev/ser2"};
-#endif
+
 
 /*!
  * @brief Sarkofag overcurrent threshold [mA]

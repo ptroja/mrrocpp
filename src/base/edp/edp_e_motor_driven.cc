@@ -18,9 +18,6 @@
 #include <sys/types.h>
 #include <cerrno>
 #include <pthread.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
@@ -212,9 +209,6 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	stoppedCallbackRegistered_ = false;
 	//#endif
 
-#ifdef __QNXNTO__
-	ThreadCtl(_NTO_TCTL_IO, NULL);
-#endif
 }
 
 motor_driven_effector::~motor_driven_effector()
