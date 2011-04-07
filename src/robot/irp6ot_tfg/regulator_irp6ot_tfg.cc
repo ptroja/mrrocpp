@@ -73,8 +73,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	
-	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -263,15 +261,15 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
 
-
 	// scope-locked reader data update
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[7] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[7] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[0] = meassured_current;
 	}
 
 	// if (set_value_new > 0.0) {

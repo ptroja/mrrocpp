@@ -303,6 +303,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[1] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[1] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[1] = meassured_current;
 	}
 
 	//  	set_value_new=set_value_new;
@@ -522,6 +523,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[2] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[2] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[2] = meassured_current;
 	}
 
 	// ograniczenie na sterowanie
@@ -742,6 +744,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[3] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[3] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[3] = meassured_current;
 		// master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
 	}
 
@@ -958,6 +961,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[4] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[4] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[4] = meassured_current;
 	}
 
 	// ograniczenie na sterowanie
@@ -1185,6 +1189,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[5] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[5] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[5] = meassured_current;
 	}
 
 	// if (set_value_new > 0.0) {
@@ -1415,6 +1420,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[6] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[6] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.meassured_current[6] = meassured_current;
 	}
 
 	// if (set_value_new > 0.0) {

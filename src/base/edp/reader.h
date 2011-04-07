@@ -72,6 +72,7 @@ struct reader_data
 
 	double desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
 	double current_joints[lib::MAX_SERVOS_NR]; // spolozenie w joints
+	int meassured_current[lib::MAX_SERVOS_NR]; // prad w zalozeniu w [ma]
 
 	double real_cartesian_position[6]; // polozenie rzeczywiste
 	double real_cartesian_vel[6]; // predkosc rzeczywista
