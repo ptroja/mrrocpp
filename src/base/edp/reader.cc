@@ -389,6 +389,8 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 			outfile << "desired_inc[" << j << "];";
 		if (reader_cnf.current_inc[j])
 			outfile << "current_inc[" << j << "];";
+		if (reader_cnf.measured_current[j])
+			outfile << "measured_current[" << j << "];";
 		if (reader_cnf.pwm[j])
 			outfile << "pwm[" << j << "];";
 		if (reader_cnf.uchyb[j])
@@ -446,6 +448,8 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 			outfile << data.desired_inc[j] << ";";
 		if (reader_cnf.current_inc[j])
 			outfile << data.current_inc[j] << ";";
+		if (reader_cnf.measured_current[j])
+			outfile << data.measured_current[j] << ";";
 		if (reader_cnf.pwm[j])
 			outfile << data.pwm[j] << ";";
 		if (reader_cnf.uchyb[j])
