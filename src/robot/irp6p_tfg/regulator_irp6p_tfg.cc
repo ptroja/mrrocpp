@@ -220,7 +220,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	switch (algorithm_no)
 	{
 		case 0: // algorytm nr 0
-			//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
 
@@ -236,13 +236,13 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
 			//			if (set_value_new > 0)
-			//				current_measured = (float) meassured_current;
+			//				current_measured = (float) measured_current;
 			//			else
-			//				current_measured = (float) (-meassured_current);
+			//				current_measured = (float) (-measured_current);
 
 			// HI_MOXA zwraca prad w mA, ze znakiem odpowiadajacym kierunkowi przeplywu
 			// Przeskalowanie na przedzial -15..15 = -150mA..150mA
-			current_measured = -((float) meassured_current) * CURRENT_PRESCALER;
+			current_measured = -((float) measured_current) * CURRENT_PRESCALER;
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -283,13 +283,13 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 
 				//  display = 0;
-				//printf("khm... joint 7:  current_desired = %f,  meassured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
+				//printf("khm... joint 7:  current_desired = %f,  measured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
 			}
 
 			break;
 
 		case 1: // algorytm nr 1
-			//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
 
@@ -314,9 +314,9 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
 			//			if (set_value_new > 0)
-			current_measured = (float) meassured_current;
+			current_measured = (float) measured_current;
 			//			else
-			//				current_measured = (float) (-meassured_current);
+			//				current_measured = (float) (-measured_current);
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -347,7 +347,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			display++;
 			//			if (display == 100) {
 			//				display = 0;
-			//				printf("joint 7:   meassured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
+			//				printf("joint 7:   measured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
 			//			}
 			// DUNG END
 			break;
@@ -383,7 +383,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
-		master.rb_obj->step_data.meassured_current[0] = meassured_current;
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	// if (set_value_new > 0.0) {
@@ -398,7 +398,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	PWM_value = (int) set_value_new;
 
-	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, meassured_current, reg_state, kk);
+	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, measured_current, reg_state, kk);
 
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
 	/*
@@ -406,17 +406,17 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	 if (master.step_counter > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
 	 sum_of_currents -= currents[current_index];
 	 }
-	 if (meassured_current > 0) {
-	 sum_of_currents += meassured_current;
+	 if (measured_current > 0) {
+	 sum_of_currents += measured_current;
 	 } else {
-	 sum_of_currents -= meassured_current;
+	 sum_of_currents -= measured_current;
 	 }
 
-	 currents[current_index] = meassured_current;
+	 currents[current_index] = measured_current;
 
 	 current_index = ((++current_index) % IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
 
-	 //	printf("aa: %d, %d, %d\n",  sum_of_currents, meassured_current, kk);
+	 //	printf("aa: %d, %d, %d\n",  sum_of_currents, measured_current, kk);
 	 //	printf("aa: %d\n", sum_of_currents);
 
 

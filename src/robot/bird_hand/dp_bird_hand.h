@@ -85,7 +85,7 @@ struct single_joint_status
 {
 	double meassured_position;
 	double meassured_torque;
-	double meassured_current;
+	double measured_current;
 	bool upper_limit_of_absolute_value_of_desired_position_increment;
 	bool upper_limit_of_absolute_value_of_computed_position_increment;
 	bool upper_limit_of_absolute_position;
@@ -93,7 +93,7 @@ struct single_joint_status
 	bool upper_limit_of_absolute_value_of_desired_torque;
 	bool lower_limit_of_absolute_value_of_desired_torque;
 	bool upper_limit_of_absolute_value_of_meassured_torque;
-	bool upper_limit_of_meassured_current;
+	bool upper_limit_of_measured_current;
 }__attribute__((__packed__));
 
 /*!
@@ -107,7 +107,7 @@ struct single_joint_configuration
 	int d_factor;
 	int value_of_upper_limit_of_absolute_position;
 	int value_of_lower_limit_of_absolute_position;
-	int value_of_upper_limit_of_meassured_current;
+	int value_of_upper_limit_of_measured_current;
 	int value_of_upper_limit_of_absolute_value_of_torque;
 	int value_of_lower_limit_of_absolute_value_of_torque;
 	int value_of_lower_limit_of_absolute_value_of_meassured_torque;

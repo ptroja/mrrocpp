@@ -211,7 +211,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				device.getStatus(i, status, pos, c, t);
 
 			desired_motor_pos_new_tmp[i] = (double) pos - synchro_position_motor[i];
-			edp_ecp_rbuffer.status_reply_structure.finger[i].meassured_current = c;
+			edp_ecp_rbuffer.status_reply_structure.finger[i].measured_current = c;
 			edp_ecp_rbuffer.status_reply_structure.finger[i].meassured_torque = t;
 
 			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_absolute_value_of_meassured_torque = status
@@ -220,7 +220,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					<< LOWER_LIMIT);
 			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_absolute_position = status & (1
 					<< UPPER_LIMIT);
-			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_meassured_current = status & (1
+			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_measured_current = status & (1
 					<< CURRENT_LIMIT);
 		}
 

@@ -231,7 +231,7 @@ void servo_buffer::get_all_positions(void)
 
 		// przyrost polozenia w impulsach
 		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
-		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
+		servo_data.current[i] = regulator_ptr[i]->get_measured_current();
 		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
@@ -584,7 +584,7 @@ uint64_t servo_buffer::compute_all_set_values(void)
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step() * axe_inc_per_revolution[j]
 					/ (2 * M_PI));
 		} else {
-			regulator_ptr[j]->insert_meassured_current(hi->get_current(j));
+			regulator_ptr[j]->insert_measured_current(hi->get_current(j));
 			regulator_ptr[j]->insert_new_pos_increment(hi->get_increment(j));
 		}
 		// obliczenie nowej wartosci zadanej dla napedu

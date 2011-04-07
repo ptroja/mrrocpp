@@ -229,7 +229,7 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
-		master.rb_obj->step_data.meassured_current[0] = meassured_current;
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	// ograniczenie na sterowanie
