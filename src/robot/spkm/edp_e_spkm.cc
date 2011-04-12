@@ -19,6 +19,7 @@
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
 #include "base/lib/pvt.hpp"
+#include "base/lib/pavt_cartesian.hpp"
 
 #include "robot/spkm/exceptions.h"
 
@@ -53,22 +54,28 @@ effector::effector(lib::configurator &_config) :
 		axisA = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
 		axisB = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
 		axisC = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
-		axis1 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 3);
-		axis2 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 2);
-		axis3 = (boost::shared_ptr<epos::epos>) new epos::epos(*gateway, 1);
+		axis1 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 3);
+		axis2 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 2);
+		axis3 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 1);
 
 		// Collect axes into common array container.
-		axes[0] = &(*axisA); axesNames[0] = "A";
-		axes[1] = &(*axisB); axesNames[1] = "B";
-		axes[2] = &(*axisC); axesNames[2] = "C";
-		axes[3] = &(*axis1); axesNames[3] = "1";
-		axes[4] = &(*axis2); axesNames[4] = "2";
-		axes[5] = &(*axis3); axesNames[5] = "3";
+		axes[0] = &(*axisA);
+		axesNames[0] = "A";
+		axes[1] = &(*axisB);
+		axesNames[1] = "B";
+		axes[2] = &(*axisC);
+		axesNames[2] = "C";
+		axes[3] = &(*axis1);
+		axesNames[3] = "1";
+		axes[4] = &(*axis2);
+		axesNames[4] = "2";
+		axes[5] = &(*axis3);
+		axesNames[5] = "3";
 	}
 }
 
-
-void effector::reset_variables() {
+void effector::reset_variables()
+{
 
 	// Zero all variables related to motor positions.
 	for (int i = 0; i < number_of_servos; ++i) {
@@ -89,7 +96,6 @@ void effector::reset_variables() {
 	is_previous_cartesian_pose_known = false;
 }
 
-
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 	// False is the initial value
@@ -102,8 +108,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		unsigned int referenced = 0;
 		unsigned int powerOn = 0;
 		unsigned int notInFaultState = 0;
-		for (std::size_t i = 0; i < axes.size(); ++i)
-		{
+		for (std::size_t i = 0; i < axes.size(); ++i) {
 			try {
 				// Check if in the FAULT state
 				if (axes[i]->checkEPOSstate() == 11) {
@@ -162,39 +167,39 @@ void effector::synchronise(void)
 
 	// switch to homing mode
 	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->setOperationMode(epos::epos::OMD_HOMING_MODE);
-	}
+				{
+					node->setOperationMode(epos::epos::OMD_HOMING_MODE);
+				}
 
 	// reset controller
 	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->reset();
-	}
+				{
+					node->reset();
+				}
 
 	// Do homing with preconfigured parameters
 	BOOST_FOREACH(epos::epos * node, axes)
-	{
-		node->startHoming();
-	}
+				{
+					node->startHoming();
+				}
 
 	// Loop until homing is finished
 	bool finished;
 	do {
 		finished = true;
 		BOOST_FOREACH(epos::epos * node, axes)
-		{
-			if (!node->isHomingFinished()) {
-				finished = false;
-			}
-		}
+					{
+						if (!node->isHomingFinished()) {
+							finished = false;
+						}
+					}
 	} while (!finished);
 
 	// Hardcoded safety values.
 	// TODO: move to configuration file?
 	for (std::size_t i = 0; i < axes.size(); ++i) {
-		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]-1);
-		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]+1);
+		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 1);
+		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 1);
 	}
 
 	// Just for testing if limits actually work
@@ -223,84 +228,79 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		switch (ecp_edp_cbuffer.variant)
 		{
 			case lib::spkm::POSE:
-				switch (ecp_edp_cbuffer.pose_specification)
-				{
-					case lib::spkm::MOTOR:
-						// Copy data directly from buffer
-						for (int i = 0; i < number_of_servos; ++i) {
-							desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
-							std::cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << std::endl;
-						}
+				try {
+					switch (ecp_edp_cbuffer.pose_specification)
+					{
+						case lib::spkm::MOTOR:
+							// Copy data directly from buffer
+							for (int i = 0; i < number_of_servos; ++i) {
+								desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
+								std::cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << std::endl;
+							}
 
-						// Check desired joint values if they are absolute.
-						if (is_synchronised()) {
-							try{
+							// Check desired joint values if they are absolute.
+							if (is_synchronised()) {
 								get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
 							}
-							  catch (boost::exception &e_)
-							  {
-							    e_ << mrrocpp::kinematics::spkm::spkm_motion_type(ecp_edp_cbuffer.pose_specification);
-							    throw;
-							  }
-						}
-						break;
-					case lib::spkm::JOINT:
-						// Copy data directly from buffer
-						for (int i = 0; i < number_of_servos; ++i) {
-							desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
-							std::cout << "JOINT[ " << i << "]: " << desired_joints[i] << std::endl;
-						}
-
-						if (is_synchronised()) {
-							// Transform desired joint to motors (and check motors/joints values).
-							get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
-						} else {
-							// Throw non-fatal error - this mode requires synchronization.
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
-						}
-
-						break;
-					case lib::spkm::FRAME:
-						// debug display
-						std::cout<<"FRAME: [";
-						for (unsigned int i = 0; i < 6; ++i) {
-							std::cout<<ecp_edp_cbuffer.goal_pos[i]<<", ";
-						}
-						std::cout<<"]\n";
-
-						if (is_synchronised()) {
-							// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
-							desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(mrrocpp::lib::Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-							std::cout << desired_end_effector_frame <<std::endl;
-
-							// Check the motion type.
-							if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL)
-							{
-								// In operational space the previous cartesian pose is required.
-								if (!is_previous_cartesian_pose_known)
-									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
+							break;
+						case lib::spkm::JOINT:
+							// Copy data directly from buffer
+							for (int i = 0; i < number_of_servos; ++i) {
+								desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
+								std::cout << "JOINT[ " << i << "]: " << desired_joints[i] << std::endl;
 							}
-							else
-							{
-								// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
-								get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
-								// Transform joints to motors (and check motors/joints values).
+							if (is_synchronised()) {
+								// Transform desired joint to motors (and check motors/joints values).
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
-
-								// Remember the currently desired joints as old.
-								desired_joints_old = desired_joints;
+							} else {
+								// Throw non-fatal error - this mode requires synchronization.
+								BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
 							}
-						} else {
-							// Throw non-fatal error - this mode requires synchronization.
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_unsynchronized_error());
-						}
-						break;
-					default:
-						// Throw non-fatal error - invalid pose specification.
-						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_pose_specification_error());
-						break;
 
+							break;
+						case lib::spkm::FRAME:
+							// debug display
+							std::cout << "FRAME: [";
+							for (unsigned int i = 0; i < 6; ++i) {
+								std::cout << ecp_edp_cbuffer.goal_pos[i] << ", ";
+							}
+							std::cout << "]\n";
+
+							if (is_synchronised()) {
+								// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
+								desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(mrrocpp::lib::Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+								std::cout << desired_end_effector_frame << std::endl;
+
+								// Check the motion type.
+								if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
+									// In operational space the previous cartesian pose is required.
+									if (!is_previous_cartesian_pose_known)
+										BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
+									// Rest of computations is performed elswhere...
+								} else {
+									// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+									get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
+
+									// Transform joints to motors (and check motors/joints values).
+									get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+
+									// Remember the currently desired joints as old.
+									desired_joints_old = desired_joints;
+								}
+							} else {
+								// Throw non-fatal error - this mode requires synchronization.
+								BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
+							}
+							break;
+						default:
+							// Throw non-fatal error - invalid pose specification.
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::pose_specification_error());
+							break;
+					}//: switch (ecp_edp_cbuffer.pose_specification)
+				} catch (boost::exception &e_) {
+					e_ << mrrocpp::kinematics::spkm::pose_specification(ecp_edp_cbuffer.pose_specification);
+					throw;
 				}
 
 				// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
@@ -343,21 +343,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
 						for (int i = 0; i < 6; ++i) {
-							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])/kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
+							Delta[i] = std::fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])
+									/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 							std::cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - "
 									<< desired_motor_pos_old[i] << " = " << Delta[i] << std::endl;
-							Vmax[i] = Vdefault[i]/epos::epos::SECONDS_PER_MINUTE;
+							Vmax[i] = Vdefault[i] / epos::epos::SECONDS_PER_MINUTE;
 							Amax[i] = Adefault[i];
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
 						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-						std::cerr <<
-							"Delta:\n" << Delta << std::endl <<
-							"Vmax:\n" << Vmax << std::endl <<
-							"Amax:\n" << Amax << std::endl <<
-							std::endl;
+						std::cerr << "Delta:\n" << Delta << std::endl << "Vmax:\n" << Vmax << std::endl << "Amax:\n"
+								<< Amax << std::endl << std::endl;
 
 						if (t > 0) {
 							// debug display
@@ -370,7 +368,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									if (Delta[i] != 0) {
 										axes[i]->setOperationMode(epos::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writeProfileVelocity(Vnew[i]*epos::epos::SECONDS_PER_MINUTE);
+										axes[i]->writeProfileVelocity(Vnew[i] * epos::epos::SECONDS_PER_MINUTE);
 										axes[i]->writeProfileAcceleration(Anew[i]);
 										axes[i]->writeProfileDeceleration(Dnew[i]);
 										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
@@ -405,24 +403,64 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						break;
 					case lib::epos::OPERATIONAL: {
 						// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
-						//if (!is_previous_cartesian_pose_known)
-						//	BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_cartesian_pose_unknown());
-						// This is done earlier - in the lib::spkm::POSE == FRAME section.
+						// This ins fact is done earlier, in the lib::spkm::POSE == FRAME section, but I'm leaving this here for the clearance of solution.
+						if (!is_previous_cartesian_pose_known)
+							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
 
-						// Compute transformation from current to desired pose.
-						desired_relative_end_effector_frame = !current_end_effector_frame * desired_end_effector_frame;
-						std::cout << desired_relative_end_effector_frame <<std::endl;
+						// Position, Velocity, Acceleration, Deacceleration - for all axes.
+						Matrix <double, 6, 1> P, V, A, D;
 
-						// Compute P, v and gamma.
-						Eigen::Matrix<double, 7, 1> xyz_aa;
-						desired_relative_end_effector_frame.get_xyz_angle_axis_gamma(xyz_aa);
-						std::cout << xyz_aa <<std::endl;
+						// Calculate time - currently I assume that time is 5s.
+						// TODO: analyze required (desired) movement time -> III cases: t<t_req, t=t_req, t>t_req.
+						double t = 5;
+						// Constant time for one segment - 250ms.
+						double seq_t = 0.25;
 
+						// Number of interpolation poses (segments).
+						unsigned int n =  t/seq_t; // = 20
+
+						// Compute interpolation poses.
+						double a = mrrocpp::lib::compute_cartesian_trajectory_interpolated_poses <6> (n, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+
+						// Perform movement.
+/*						if (!robot_test_mode) {
+							// Setup motion parameters
+							for (std::size_t i = 0; i < axes.size(); ++i) {
+								if (Delta[i] != 0) {
+									axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
+									// TODO Wystawka dla PT: Cubic Spline Interpolation, coś znalazłem w dokumentacji EPOS  o 0x60C0,
+									// ale pod dokładniejszym przyjrzeniu się myślę że to nie to...
+									axes[i]->writePositionProfileType(0);
+									axes[i]->writeProfileVelocity(Vnew[i] * epos::epos::SECONDS_PER_MINUTE);
+									axes[i]->writeProfileAcceleration(Anew[i]);
+									axes[i]->writeProfileDeceleration(Dnew[i]);
+									axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
+								}
+							}
+						}*/
+
+/*						// Start motion
+						for (std::size_t i = 0; i < axes.size(); ++i) {
+							if (Delta[i] != 0) {
+								if (is_synchronised()) {
+									// Absolute motion
+									if (!robot_test_mode) {
+										axes[i]->startAbsoluteMotion();
+									} else {
+										current_joints[i] = desired_joints[i];
+										current_motor_pos[i] = desired_motor_pos_new[i];
+									}
+								} else {
+									// Throw non-fatal error - this mode requires synchronization.
+									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
+								}
+							}
+						}*/
 					}
 						break;
 					default:
 						// Throw non-fatal error - motion type not supported.
-						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::spkm_motion_type_error());
+						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::motion_type_error());
 						break;
 				}//: switch (ecp_edp_cbuffer.motion_variant)
 				break;
@@ -430,37 +468,37 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(epos::epos * node, axes)
-					{
-						// Brake with Quickstop command
-						node->changeEPOSstate(epos::epos::QUICKSTOP);
-					}
+								{
+									// Brake with Quickstop command
+									node->changeEPOSstate(epos::epos::QUICKSTOP);
+								}
 				}
 				// Internal position counters need not be updated
 				return;
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->printEPOSstate();
+							{
+								node->printEPOSstate();
 
-					// Check if in a FAULT state
-					if (node->checkEPOSstate() == 11) {
-						epos::UNSIGNED8 errNum = node->readNumberOfErrors();
-						std::cerr << "readNumberOfErrors() = " << (int) errNum << std::endl;
-						for (epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
+								// Check if in a FAULT state
+								if (node->checkEPOSstate() == 11) {
+									epos::UNSIGNED8 errNum = node->readNumberOfErrors();
+									std::cerr << "readNumberOfErrors() = " << (int) errNum << std::endl;
+									for (epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-							epos::UNSIGNED32 errCode = node->readErrorHistory(i);
+										epos::UNSIGNED32 errCode = node->readErrorHistory(i);
 
-							std::cerr << epos::epos::ErrorCodeMessage(errCode) << std::endl;
-						}
-						if (errNum > 0) {
-							node->clearNumberOfErrors();
-						}
-						node->changeEPOSstate(epos::epos::FAULT_RESET);
-					}
+										std::cerr << epos::epos::ErrorCodeMessage(errCode) << std::endl;
+									}
+									if (errNum > 0) {
+										node->clearNumberOfErrors();
+									}
+									node->changeEPOSstate(epos::epos::FAULT_RESET);
+								}
 
-					// Change to the operational mode
-					node->reset();
-				}
+								// Change to the operational mode
+								node->reset();
+							}
 				// Internal position counters need not be updated
 				return;
 			default:
@@ -480,13 +518,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		is_previous_cartesian_pose_known = (ecp_edp_cbuffer.pose_specification == lib::spkm::FRAME);
 		if (is_previous_cartesian_pose_known)
 			current_end_effector_frame = desired_end_effector_frame;
-/*		if (cartesian_space_move)
-			is_previous_cartesian_pose_known = true;
-		else
-			is_previous_cartesian_pose_known = false;*/
+		/*		if (cartesian_space_move)
+		 is_previous_cartesian_pose_known = true;
+		 else
+		 is_previous_cartesian_pose_known = false;*/
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
 		is_previous_cartesian_pose_known = false;
-		std::cout<<boost::current_exception_diagnostic_information()<<std::endl;
+		std::cout << boost::current_exception_diagnostic_information() << std::endl;
 	}
 }
 

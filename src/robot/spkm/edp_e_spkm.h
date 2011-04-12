@@ -61,14 +61,6 @@ private:
 	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
 	bool is_previous_cartesian_pose_known;
 
-	/*!
-	 * \brief Variable containing computed transformation from current end-effector post to the desired one.
-	 *
-	 *	It is utilized in the operational space trajectory generation.
-	 *
-	 */
-	lib::Homog_matrix desired_relative_end_effector_frame;
-
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
 	lib::spkm::rbuffer edp_ecp_rbuffer;

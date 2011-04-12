@@ -15,6 +15,8 @@
 #include <cmath>
 
 #include "base/lib/impconst.h"	// frame_tab
+#include "base/lib/mrmath/Xyz_Angle_Axis_Gamma_vector.h"
+
 #define delta_m (M_PI - 3.14154)
 #define zero_eps 1.0E-4
 #define ALFA_SENSITIVITY 0.00001
@@ -22,9 +24,11 @@
 namespace mrrocpp {
 namespace lib {
 
+//TK: A PO CO TO? CZEMU NIE INCLUDE...?
 // forward declarations
 class K_vector;
 class Xyz_Angle_Axis_vector;
+//class Xyz_Angle_Axis_Gamma_vector;
 class Xyz_Euler_Zyz_vector;
 class Xyz_Rpy_vector;
 
@@ -186,17 +190,18 @@ public:
 
 	/*!
 	 * Computes the angle and axis values for given homogeneous matrix.
-	 *
 	 * @param[out] xyz_aa Vector containing computed pose (x,y,z) and orientation (vx,vy,vz,gamma).
 	 */
-	void get_xyz_angle_axis_gamma(Eigen::Matrix<double, 7, 1> & xyz_aa) const;
+	void get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma) const;
 
 	//! Returns XYZ_ANGLE_AXIS representation (x,y,z, vx*gamma,vy*gamma,vz*gamma).
-	void get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const;
+	void get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const;
 
 	//! Sets the homogeneous matrix values on the base of given XYZ_ANGLE_AXIS vector.
-	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector);
+	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa);
 
+	//! Sets the homogeneous matrix values on the base of given XYZ_ANGLE_AXIS (x,y,z, vx,vy,vz,gamma) vector.
+	void set_from_xyz_angle_axis_gamma(const Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma);
 
 
 	//! Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
