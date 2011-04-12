@@ -46,6 +46,7 @@ struct reader_config
 	bool filtered_force[6]; // sila po przefiltrowaniu
 
 	bool current_joints[lib::MAX_SERVOS_NR];
+	bool measured_current[lib::MAX_SERVOS_NR];
 
 	bool desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
 	bool real_cartesian_position[6]; // polozenie rzeczywiste
@@ -72,6 +73,7 @@ struct reader_data
 
 	double desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego
 	double current_joints[lib::MAX_SERVOS_NR]; // spolozenie w joints
+	int measured_current[lib::MAX_SERVOS_NR]; // prad w zalozeniu w [ma]
 
 	double real_cartesian_position[6]; // polozenie rzeczywiste
 	double real_cartesian_vel[6]; // predkosc rzeczywista

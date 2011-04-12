@@ -18,9 +18,6 @@
 #include <sys/types.h>
 #include <cerrno>
 #include <pthread.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
@@ -192,10 +189,11 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
-	servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
-	desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR),
-	current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
+	effector(_config, l_robot_name), sb_loaded(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
+			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
+			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
+			number_of_servos(-1)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
@@ -211,9 +209,6 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	stoppedCallbackRegistered_ = false;
 	//#endif
 
-#ifdef __QNXNTO__
-	ThreadCtl(_NTO_TCTL_IO, NULL);
-#endif
 }
 
 motor_driven_effector::~motor_driven_effector()
@@ -232,11 +227,11 @@ void motor_driven_effector::master_joints_read(double output[])
 
 void motor_driven_effector::hi_create_threads()
 {
-	rb_obj = (boost::shared_ptr<reader_buffer>) new reader_buffer(*this);
-	mt_tt_obj = (boost::shared_ptr<manip_trans_t>) new manip_trans_t(*this);
-	vis_obj = (boost::shared_ptr<vis_server>) new vis_server(*this);
-	sb = (boost::shared_ptr<servo_buffer>) return_created_servo_buffer();
-
+	rb_obj = (boost::shared_ptr <reader_buffer>) new reader_buffer(*this);
+	mt_tt_obj = (boost::shared_ptr <manip_trans_t>) new manip_trans_t(*this);
+	vis_obj = (boost::shared_ptr <vis_server>) new vis_server(*this);
+	sb = (boost::shared_ptr <servo_buffer>) return_created_servo_buffer();
+	sb_loaded.command();
 	// wait for initialization of servo thread
 	sb->thread_started.wait();
 }
