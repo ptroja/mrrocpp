@@ -71,6 +71,10 @@ void ATI3084_force::connect_to_hardware(void)
 	//comedi_cleanup_calibration(calib);
 	//free(file_path);
 
+        comedi_dio_config(device, 2, 0, COMEDI_OUTPUT);
+	comedi_dio_config(device, 2, 1, COMEDI_OUTPUT);
+	comedi_dio_config(device, 2, 2, COMEDI_OUTPUT);
+
 	maxdata = comedi_get_maxdata(device, 0, 0);
 	rangetype = comedi_get_range(device, 0, 0, 0);
 
