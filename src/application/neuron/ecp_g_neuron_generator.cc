@@ -102,25 +102,30 @@ bool neuron_generator::next_step()
 
 	// ------------ read the current robot position ----------
 	actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-	actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-	angle_axis_vector.to_table(actual_position);
+	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
 	if(breaking_){
 		double tmp;
 
-		tmp = normalized_vector[0] * (actual_position[0] - desired_position[0]) +
-			  normalized_vector[1] * (actual_position[1] - desired_position[1]) +
-			  normalized_vector[2] * (actual_position[2] - desired_position[2] );
+		tmp = normalized_vector[0] * (msr_position[0] - desired_position[0]) +
+			  normalized_vector[1] * (msr_position[1] - desired_position[1]) +
+			  normalized_vector[2] * (msr_position[2] - desired_position[2] );
 		if(tmp < overshoot_){
 			overshoot_ = tmp;
 		} 
 	}
-	//printf("position: %f %f %f\n",actual_position[0],actual_position[1],actual_position[2]);
+	//printf("position: %f %f %f\n",msr_position[0],msr_position[1],msr_position[2]);
 	if (neuron_sensor->positionRequested()  && !breaking_) {
-		//printf("position requested inside\n");
-		neuron_sensor->sendCurrentPosition(actual_position[0], actual_position[1], actual_position[2]);
+
+		msr_velocity = msr_position - msr_position_old;
+		msr_velocity /= MSTEP_TIME;
+
+		neuron_sensor->sendRobotState(msr_position[0], msr_position[1], msr_position[2], msr_velocity[0], msr_velocity[1], msr_velocity[2]);
+
 		neuron_sensor->get_reading();
 	}
+
+	msr_position_old = msr_position;
 
 	if (neuron_sensor->newData() && !breaking_) {
 		//printf("\n-------- new interpolation point ----------\n");
@@ -131,9 +136,9 @@ bool neuron_generator::next_step()
 		desired_position[0] = neuron_sensor->getCoordinates().x;
 		desired_position[1] = neuron_sensor->getCoordinates().y;
 		desired_position[2] = neuron_sensor->getCoordinates().z;
-		desired_position[3] = position[3] = actual_position[3];
-		desired_position[4] = position[4] = actual_position[4];
-		desired_position[5] = position[5] = actual_position[5];
+		desired_position[3] = position[3] = msr_position[3];
+		desired_position[4] = position[4] = msr_position[4];
+		desired_position[5] = position[5] = msr_position[5];
 
 		normalized_vector[0] = neuron_sensor->getLastButOne().x;
 		normalized_vector[1] = neuron_sensor->getLastButOne().y;
@@ -162,15 +167,15 @@ bool neuron_generator::next_step()
 
 			for(int i = 0; i < 3; i++)
 			{
-				velocityProfileSpline(coeff_[i], actual_position[i], vel_[i], desired_position[i], 0.0, time);
+				velocityProfileSpline(coeff_[i], msr_position[i], vel_[i], desired_position[i], 0.0, time);
 				//printf("coeff : %f %f %f %f \n", coeff_[i][0], coeff_[i][1], coeff_[i][2], coeff_[i][3]);
 				
 			}
 		} else {
 			for(int i = 0; i < 3; i++)
 			{
-				velocityProfileLinear(coeff_[i], actual_position[i], desired_position[i], (double)macroSteps * MSTEP_TIME);
-                		vel_[i] = (desired_position[i] - actual_position[i]) / ((double)macroSteps * MSTEP_TIME);
+				velocityProfileLinear(coeff_[i], msr_position[i], desired_position[i], (double)macroSteps * MSTEP_TIME);
+                		vel_[i] = (desired_position[i] - msr_position[i]) / ((double)macroSteps * MSTEP_TIME);
 			}
 		}
 		mstep_ = 1;
@@ -193,7 +198,7 @@ bool neuron_generator::next_step()
 	++mstep_; // increment macro step number
 
 	// --------- send new position to the robot (EDP) ---------------
-	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
+	position_matrix.set_from_xyz_angle_axis(position);
 	//send new position to the robot
 	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
 	// --------- send new position to the robot (EDP) (end) --------------
@@ -209,7 +214,7 @@ bool neuron_generator::next_step()
  * @brief Returns current robot position.
  * @return Current robot position.
  */
-double * neuron_generator::get_position()
+lib::Xyz_Angle_Axis_vector neuron_generator::get_position()
 {
 	return position;
 }
