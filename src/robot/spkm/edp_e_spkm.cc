@@ -19,7 +19,7 @@
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
 #include "base/lib/pvt.hpp"
-#include "base/lib/pavt_cartesian.hpp"
+#include "base/lib/pvat_cartesian.hpp"
 
 #include "robot/spkm/exceptions.h"
 
@@ -277,7 +277,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									// In operational space the previous cartesian pose is required.
 									if (!is_previous_cartesian_pose_known)
 										BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
-									// Rest of computations is performed elswhere...
+									// Rest of computations is performed elsewhere...
 								} else {
 									// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 									get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
@@ -410,17 +410,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Position, Velocity, Acceleration, Deacceleration - for all axes.
 						Matrix <double, 6, 1> P, V, A, D;
 
-						// Calculate time - currently I assume that time is 5s.
+						// Calculate time - currently the motion time is set to 5s.
 						// TODO: analyze required (desired) movement time -> III cases: t<t_req, t=t_req, t>t_req.
-						double t = 5;
+						double motion_time = 5;
 						// Constant time for one segment - 250ms.
-						double seq_t = 0.25;
+						double segment_time = 0.25;
 
-						// Number of interpolation poses (segments).
-						unsigned int n =  t/seq_t; // = 20
+						//
+						std::vector < double > time_slices;
+						mrrocpp::lib::pvat_divide_motion_time_into_constant_time_slices(time_slices, motion_time, segment_time);
 
-						// Compute interpolation poses.
-						double a = mrrocpp::lib::compute_cartesian_trajectory_interpolated_poses <6> (n, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						// Interpolate motor poses.
+						std::vector < Eigen::Matrix <double, 6, 1> > motor_interpolations;
+						mrrocpp::lib::pvat_interpolate_motor_poses <6> (motor_interpolations, motion_time, time_slices, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Perform movement.
 /*						if (!robot_test_mode) {
@@ -505,11 +507,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 		}
 
-		for (int i = 0; i < 6; ++i) {
+/*		for (int i = 0; i < 6; ++i) {
 			std::cout << "OLD     MOTOR[" << i << "]: " << desired_motor_pos_old[i] << std::endl;
 			std::cout << "CURRENT MOTOR[" << i << "]: " << current_motor_pos[i] << std::endl;
 			std::cout << "CURRENT JOINT[" << i << "]: " << current_joints[i] << std::endl;
-		}
+		}*/
 
 		// Hold the issued command.
 		desired_motor_pos_old = desired_motor_pos_new;
