@@ -22,10 +22,24 @@ namespace spkm {
 const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
 
 /*!
- * @brief SwarmItFix arallel Kinematic Machine total number of servos
+ * @brief SwarmItFix Parallel Kinematic Machine number of motors.
+ *
+ * The kinematics, as well as control of the whole PKM, is solved for 6DOF - three for PM and three for SW .
+ *
  * @ingroup spkm
  */
 const int NUM_OF_SERVOS = 6;
+
+
+/*!
+ * @brief Number of segments making up the whole PKM motion.
+ *
+ *
+ * @author tkornuta
+ * @ingroup spkm
+ */
+const unsigned int NUM_OF_MOTION_SEGMENTS = 5;
+
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
