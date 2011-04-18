@@ -421,12 +421,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						//double segment_time = 1;//0.25;
 
 						// Divide motion time into segments (time slices).
-						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, 1> time_slices;
-						pvat_divide_motion_time_into_constant_time_slices <lib::spkm::NUM_OF_MOTION_SEGMENTS> (time_slices, motion_time);
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, 1> time_deltas;
+						pvat_divide_motion_time_into_constant_time_deltas <lib::spkm::NUM_OF_MOTION_SEGMENTS> (time_deltas, motion_time);
 
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
-						pvat_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_slices, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						pvat_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Compute motor_deltas for segments.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_deltas_for_segments;
@@ -435,11 +435,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Compute tau coefficient matrix of the (1.48) equation.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_MOTION_SEGMENTS> tau_coefficients;
-						pvat_compute_tau_coefficients_matrix <lib::spkm::NUM_OF_MOTION_SEGMENTS> (tau_coefficients, time_slices);
+						pvat_compute_tau_coefficients_matrix <lib::spkm::NUM_OF_MOTION_SEGMENTS> (tau_coefficients, time_deltas);
 
 						// Compute right side vector of the (1.48) equation - for all motors!!
-//						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> right_side_coefficients;
-//						pvat_compute_right_side_coefficients_vector <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (right_side_coefficients, motor_interpolations, tau_coefficients);
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> right_side_coefficients;
+						pvat_compute_right_side_coefficients_vector <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (right_side_coefficients, motor_deltas_for_segments, time_deltas);
 
 						// Perform movement.
 						/*						if (!robot_test_mode) {

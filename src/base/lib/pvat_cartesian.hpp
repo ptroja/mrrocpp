@@ -38,12 +38,12 @@ USING_PART_OF_NAMESPACE_EIGEN
  *
  * @tparam N_SEGMENTS Number of motion segments.
  *
- * @param [out] time_slices_ Computed time slices (one for each segment).
+ * @param [out] time_deltas_ Computed time slices (one for each segment).
  * @param [in] motion_time_ Total motion time.
  */
 template <unsigned int N_SEGMENTS>
-void pvat_divide_motion_time_into_constant_time_slices(
-		Eigen::Matrix <double, N_SEGMENTS, 1> & time_slices_,
+void pvat_divide_motion_time_into_constant_time_deltas(
+		Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_,
 		const double motion_time_
 		)
 {
@@ -52,11 +52,11 @@ void pvat_divide_motion_time_into_constant_time_slices(
 	double segment_time = motion_time_ / N_SEGMENTS;
 
 	for (int i = 0; i < N_SEGMENTS; ++i) {
-		time_slices_(i) = segment_time;
+		time_deltas_(i) = segment_time;
 	}
 
 	for (int i = 0; i < N_SEGMENTS; ++i) {
-		std::cout<<" "<<time_slices_(i);
+		std::cout<<" "<<time_deltas_(i);
 	}
 	std::cout<<std::endl;
 }
@@ -76,7 +76,7 @@ void pvat_divide_motion_time_into_constant_time_slices(
  *
  * @param [out] motor_interpolations_ Matrix containing interpolated motor poses.
  * @param [in] motion_time_ Total motion time.
- * @param [in] time_slices_ Times of motion for one segment (may be different for each segment!).
+ * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  * @param [in] model_ Kinematic model required for inverse kinematics computations.
  * @param [in] desired_joints_old_ Desired joint values that were required by previously received SET command (threated as current position of joints).
  * @param [in] current_end_effector_frame_ Homogeneous matrix containing current end effector pose.
@@ -86,7 +86,7 @@ template <unsigned int N_POINTS, unsigned int N_AXES>
 void pvat_interpolate_motor_poses(
 		Eigen::Matrix <double, N_POINTS, N_AXES> & motor_interpolations_,
 		const double motion_time_,
-		const Eigen::Matrix <double, N_POINTS-1, 1> time_slices_,
+		const Eigen::Matrix <double, N_POINTS-1, 1> time_deltas_,
 		mrrocpp::kinematics::common::kinematic_model* model_,
 		const lib::JointArray desired_joints_old_,
 		const mrrocpp::lib::Homog_matrix& current_end_effector_frame_,
@@ -137,7 +137,7 @@ void pvat_interpolate_motor_poses(
 	motor_interpolations_.row(0) = int_motors.transpose();
 
 	// Temporary variables containing motion time from start to current position (sum of time slices).
-	double last_summed = time_slices_(0);
+	double last_summed = time_deltas_(0);
 	double total_time_factor = last_summed/motion_time_;
 
 	// Compute interpolation points in motor positions.
@@ -177,7 +177,7 @@ void pvat_interpolate_motor_poses(
 		// Add time slice related to this segment.
 		if (i < N_POINTS-2)
 		{
-			last_summed += time_slices_(i+1);
+			last_summed += time_deltas_(i+1);
 			total_time_factor = last_summed/motion_time_;
 		}
 	}
@@ -191,7 +191,7 @@ void pvat_interpolate_motor_poses(
 }
 
 /**
- * Compute motor_deltas for segments.
+ * @brief Compute motor_deltas for segments.
  *
  * Matrix in the form (equation 1.48) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
  *
@@ -222,50 +222,73 @@ void pvat_compute_motor_deltas_for_segments(
 
 
 /**
- * Computes matrix of the tau coefficients.
+ * @brief Computes matrix of the tau coefficients. The matrix is identical for every axis, thus is independent of axes number.
  *
  * Matrix in the form (equation 1.48) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
  *
  * @tparam N_SEGMENTS number of motion segments.
  *
  * @param [out] tau_coefficients_ Returned matrix.
- * @param [in] time_slices_ Times of motion for one segment (may be different for each segment!).
+ * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS>
 void pvat_compute_tau_coefficients_matrix(
 		Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> & tau_coefficients_,
-		Eigen::Matrix <double, N_SEGMENTS, 1> & time_slices_
+		Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_
 		)
 {
 	// Zero matrix.
 	tau_coefficients_ = Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS>::Zero();
 
 	// First row.
-	tau_coefficients_(0, 0) = time_slices_(0) * 2.0/3.0;
-	tau_coefficients_(0, 1) = time_slices_(0) / 3.0;
+	tau_coefficients_(0, 0) = time_deltas_(0) * 2.0/3.0;
+	tau_coefficients_(0, 1) = time_deltas_(0) / 3.0;
 	// Rows 2..n-2.
 	for (int i = 1; i < N_SEGMENTS-1; ++i) {
-		tau_coefficients_(i, i-1) = time_slices_(i-1) / 3.0;
-		tau_coefficients_(i, i) = (time_slices_(i) + time_slices_(i-1)) * 2.0/3.0;
-		tau_coefficients_(i, i+1) = time_slices_(i) / 3.0;
+		tau_coefficients_(i, i-1) = time_deltas_(i-1) / 3.0;
+		tau_coefficients_(i, i) = (time_deltas_(i) + time_deltas_(i-1)) * 2.0/3.0;
+		tau_coefficients_(i, i+1) = time_deltas_(i) / 3.0;
 	}
 	// Last row.
-	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-2) = time_slices_(N_SEGMENTS-2) / 3.0;
-	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-1) = time_slices_(N_SEGMENTS-2) * 2.0/3.0 + time_slices_(N_SEGMENTS-1) / 2.0;
+	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-2) = time_deltas_(N_SEGMENTS-2) / 3.0;
+	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-1) = time_deltas_(N_SEGMENTS-2) * 2.0/3.0 + time_deltas_(N_SEGMENTS-1) / 2.0;
 
-	std::cout<<tau_coefficients_<<std::endl;
+	std::cout<<"tau_coefficients:\n"<<tau_coefficients_<<std::endl;
 }
 
-
-
+/**
+ * @brief Computes matrix of the right side coefficients for every motor.
+ *
+ * Matrix in the form (equation 1.48) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_AXES Number of manipulator axes.
+ *
+ * @param [out] right_side_coefficients_ Returned matrix.
+ * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
+ */
 template <unsigned int N_SEGMENTS, unsigned int N_AXES>
 void pvat_compute_right_side_coefficients_vector(
-		Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> right_side_coefficients_,
-		Eigen::Matrix <double, N_SEGMENTS, N_AXES> motor_deltas_,
-		const Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> tau_coefficients_
+		Eigen::Matrix <double, N_SEGMENTS, N_AXES> & right_side_coefficients_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_AXES> motor_deltas_,
+		const Eigen::Matrix <double, N_SEGMENTS, 1> time_deltas_
 		)
 {
+	for (int motor = 0; motor < N_AXES; ++motor) {
+		// First segment.
+		right_side_coefficients_(0, motor) = motor_deltas_(0, motor) / time_deltas_(0);
+		// 1..n-1 segments.
+		for (int segment = 1; segment < N_SEGMENTS-1; ++segment) {
+			right_side_coefficients_(segment, motor) = (motor_deltas_(segment, motor))/ (time_deltas_(segment)) - (motor_deltas_(segment-1, motor))/ (time_deltas_(segment-1));
+		}
 
+		// Last segment.
+		right_side_coefficients_(N_SEGMENTS-1, motor) = (motor_deltas_(N_SEGMENTS-1, motor) * 3.0)/ (time_deltas_(N_SEGMENTS-1) * 2.0) - (motor_deltas_(N_SEGMENTS-2, motor))/ (time_deltas_(N_SEGMENTS-2));
+	}
+
+	std::cout<<"right_side_coefficients:\n"<<right_side_coefficients_<<std::endl;
 }
 
 
