@@ -54,13 +54,13 @@ bool visual_servo_manager::first_step()
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = motion_steps;
 	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
-
+	log_dbg("visual_servo_manager::first_step() begin1\n");
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	current_position_saved = false;
-
+	log_dbg("visual_servo_manager::first_step() begin2\n");
 	//	sigevent ev;
 	//	SIGEV_NONE_INIT(&ev);
 	//
@@ -76,11 +76,11 @@ bool visual_servo_manager::first_step()
 	angular_velocity.setZero();
 	acceleration.setZero();
 	angular_acceleration.setZero();
-
+	log_dbg("visual_servo_manager::first_step() begin3\n");
 	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
-
+	log_dbg("visual_servo_manager::first_step() begin4\n");
 	return true;
 }
 

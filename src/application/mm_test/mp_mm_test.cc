@@ -9,6 +9,25 @@
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 
+
+#include "base/mp/mp_task.h"
+#include "base/mp/MP_main_error.h"
+//#include "../edge_follow/mp_t_edge_follow_mr.h"
+#include "base/lib/mrmath/mrmath.h"
+
+#include "robot/irp6_tfg/dp_tfg.h"
+
+#include "application/edge_follow/ecp_mp_st_edge_follow.h"
+#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "subtask/ecp_mp_st_tff_nose_run.h"
+#include "generator/ecp/ecp_mp_g_tfg.h"
+
+#include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
+#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
+
+
+
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -25,12 +44,13 @@ void mmtest::create_robots()
 	//ACTIVATE_MP_ROBOT(irp6ot_m);
 
 	ACTIVATE_MP_ROBOT(irp6p_m);
+	ACTIVATE_MP_ROBOT(irp6p_tfg);
 
 
 }
 
 mmtest::mmtest(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 
 }
@@ -103,33 +123,149 @@ sr_ecp_msg->message("test1");
 
 void mmtest::main_task_algorithm(void)
 {
+	sr_ecp_msg->message("mp start");
+/*
+std::vector<Point> path;
+Point p;
+p.x=5;
+p.y=5;
+path.push_back(p);
 
-sr_ecp_msg->message("Nowa seria");
+p.x++;
+path.push_back(p);
+
+p.y++;
+path.push_back(p);
+
+p.x++;
+path.push_back(p);
+
+p.y--;
+path.push_back(p);
+
+p.y--;
+path.push_back(p);
+
+p.x++;
+path.push_back(p);
+
+p.x++;
+path.push_back(p);
+
+p.y--;
+path.push_back(p);
+
+p.x--;
+path.push_back(p);
+*/
+
+sr_ecp_msg->message("New edge_follow_mr series");
+
+std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+lib::Xyz_Euler_Zyz_vector rel_eu(0, 0, 0, -1.57, 1.57, 1.57);
+lib::Homog_matrix tmp_hm(rel_eu);
+lib::Xyz_Angle_Axis_vector rel_aa;
+tmp_hm.get_xyz_angle_axis(rel_aa);
+
+ss << rel_aa;
+
+sr_ecp_msg->message(ss.str().c_str());
+
+lib::robot_name_t manipulator_name;
+lib::robot_name_t gripper_name;
+
+//if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION))
+//{
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
+//	if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION))
+//	{
+		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
+//	}
+//}
+
+
+sr_ecp_msg->message("Pierwszy krok bezwgledny-szczeki");
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki.trj", 0, 1,
+	lib::irp6p_m::ROBOT_NAME.c_str());
+run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
+
+mp_ecp_command.desired_position = 0.077;
+memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+
+sr_ecp_msg->message("szczeki1");
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+sr_ecp_msg->message("szczeki1 end");
+
+wait_ms(3000);
+
+mp_ecp_command.desired_position = 0.074;
+memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+
+sr_ecp_msg->message("szczeki2");
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+sr_ecp_msg->message("szczeki2 end");
+
+wait_ms(3000);
+
+//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+//sr_ecp_msg->message("szczeki2");
+//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
+//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+//sr_ecp_msg->message("szczeki3");
+//set_next_ecps_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
+//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+
+
+
+/*
+sr_ecp_msg->message("Pierwszy krok bezwgledny");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz.trj", 0, 1,
 		lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-move_down(0.2);
+move_right(-0.15);
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+*/
 
-for(int i=0;i<10;i++)
+//move_down(0.2);
+//run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+/*
+double n=0.05;//szerokosc pola-5cm
+std::vector<Point>::reverse_iterator rit,prit;
+
+for ( prit=rit=path.rbegin(),rit++ ; rit < path.rend(); ++rit, ++prit )
 {
-	double n=0.03;
-
-	move_right(n);
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-	move_back(-n);
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-	move_right(-n);
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-	move_back(n);
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+	if((*rit).x<(*prit).x)
+	{
+		move_right(-n);
+		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+	}
+	if((*rit).x>(*prit).x)
+	{
+		move_right(n);
+		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+	}
+	if((*rit).y<(*prit).y)
+	{
+		move_back(n);
+		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+	}
+	if((*rit).y>(*prit).y)
+	{
+		move_back(-n);
+		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+	}
 }
-
-//runWaitFunction(5000);
-
-
-sr_ecp_msg->message("test end");
+*/
+sr_ecp_msg->message("mp end");
 }
 
 } // namespace task

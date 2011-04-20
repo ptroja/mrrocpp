@@ -11,6 +11,15 @@
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 
 
+
+#include <vector>
+
+struct Point
+{
+	int x;
+	int y;
+};
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -35,6 +44,7 @@ public:
 	void move_down(double mm);
 	void move_right(double mm);
 	void move_back(double mm);
+
 
 
 }; // end : class mp_task_fsautomat
