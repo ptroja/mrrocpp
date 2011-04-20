@@ -122,7 +122,6 @@ void servo_buffer::send_to_SERVO_GROUP()
 		sg_reply_rdy = false;
 	}
 
-
 	//   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
 	if ((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK)) {
@@ -167,7 +166,7 @@ void servo_buffer::operator()()
 
 	load_hardware_interface();
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 2);
+	lib::set_thread_priority(pthread_self(), 79);
 
 	// signal master thread to continue executing
 	thread_started.command();
@@ -262,9 +261,9 @@ SERVO_COMMAND servo_buffer::command_type() const
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
 
-			servo_command_rdy(false), sg_reply_rdy(false),
+	servo_command_rdy(false), sg_reply_rdy(false),
 
-			thread_started(), master(_master)
+	thread_started(), master(_master)
 {
 
 }
@@ -275,7 +274,6 @@ bool servo_buffer::get_command(void)
 	// Odczytanie polecenia z EDP_MASTER o ile zostalo przyslane
 	bool new_command_available = false;
 
-
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		if (servo_command_rdy) {
@@ -284,7 +282,6 @@ bool servo_buffer::get_command(void)
 			new_command_available = true;
 		}
 	}
-
 
 	if (new_command_available) { // jezeli jest nowa wiadomosc
 
@@ -538,7 +535,6 @@ void servo_buffer::ppp(void) const
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {
-
 
 	// Destruktor grupy regulatorow
 	// Zniszcyc regulatory

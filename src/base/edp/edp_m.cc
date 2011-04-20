@@ -16,7 +16,6 @@
 #include <cerrno>
 #include <sys/wait.h>
 
-
 #include <boost/exception/all.hpp>
 
 #include "config.h"
@@ -33,6 +32,7 @@
 #include "base/lib/sr/sr_edp.h"
 #include "base/edp/edp_effector.h"
 #include "edp_shell.h"
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -41,7 +41,6 @@ namespace common {
 effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
 
 shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
-
 
 
 /* Przechwycenie sygnalu */
@@ -86,8 +85,6 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-
-
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);
 		signal(SIGHUP, &edp::common::catch_signal);
@@ -111,8 +108,9 @@ int main(int argc, char *argv[])
 		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
 			perror("mlockall()");
 		}
-#endif /* HAVE_MLOCKALL */
 
+#endif /* HAVE_MLOCKALL */
+		lib::set_process_sched();
 		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->create_threads();
