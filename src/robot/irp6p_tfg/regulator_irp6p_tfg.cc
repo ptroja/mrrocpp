@@ -215,7 +215,7 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 #define PROP_I_REG 0.0
 #define INT_I_REG 0.4
 #define MAX_REG_CURRENT 15.0
-#define CURRENT_PRESCALER 0.1
+#define CURRENT_PRESCALER 0.08
 
 	switch (algorithm_no)
 	{

@@ -12,6 +12,7 @@
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "g_mm_test.h"
+#include "ecp_mp_g_g_mm_test.h"
 
 #include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
@@ -46,6 +47,8 @@ class mm_test: public task {
 
   protected:
 	 // common::generator::smooth* smoothgen2;
+	common::generator::g_mm_test* gen;
+
 	common::generator::newsmooth* sg;
 
   	shared_ptr<single_visual_servo_manager> sm;

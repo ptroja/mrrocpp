@@ -14,7 +14,7 @@
 //#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "t_mm_test.h"
 //#include "base/lib/datastr.h"
-
+#include "ecp_mp_g_g_mm_test.h"
 //#include "../defines.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
@@ -55,6 +55,8 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 	sg = new common::generator::newsmooth(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
+
+	gen = new common::generator::g_mm_test(*this);
 
 	/***/
 	// utworzenie podzadan
@@ -181,7 +183,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
 		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]<= '9' && ((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]>= '0')
-		{sr_ecp_msg->message("QQQ");
+		{
 			double t[2];
 			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 
@@ -210,6 +212,12 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		//sr_ecp_msg->message("noticed");
 
 	}
+
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
+	{
+		gen->Move();
+	}
+
 	sr_ecp_msg->message("HENDLER END");
 
 }
@@ -219,7 +227,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 void mm_test::main_task_algorithm(void ) {
 
 	sr_ecp_msg->message("max's test ready");
-
+*/
 	//get_next_state();
 	//sr_ecp_msg->message("rozkaz odebrany");
 	//std::string path(mrrocpp_network_path);

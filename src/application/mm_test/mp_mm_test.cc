@@ -25,7 +25,7 @@
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 
-
+#include "ecp_mp_g_g_mm_test.h"
 
 
 namespace mrrocpp {
@@ -56,12 +56,12 @@ mmtest::mmtest(lib::configurator &_config) :
 }
 
 
-
+/*
 void mmtest::runWaitFunction(int time)
 {
 wait_ms(time);
 }
-/*
+
 void mmtest::runEmptyGen()
 {
 run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
@@ -159,6 +159,7 @@ p.x--;
 path.push_back(p);
 */
 
+/*
 sr_ecp_msg->message("New edge_follow_mr series");
 
 std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -171,22 +172,23 @@ tmp_hm.get_xyz_angle_axis(rel_aa);
 ss << rel_aa;
 
 sr_ecp_msg->message(ss.str().c_str());
+*/
+//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
+//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+
+//set_next_ecps_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
+//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+
 
 lib::robot_name_t manipulator_name;
 lib::robot_name_t gripper_name;
 
-//if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION))
-//{
-		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-//	if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION))
-//	{
-		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
-//	}
-//}
+manipulator_name = lib::irp6p_m::ROBOT_NAME;
+gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 
 
-sr_ecp_msg->message("Pierwszy krok bezwgledny-szczeki");
-set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki.trj", 0, 1,
+sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
 	lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -197,39 +199,41 @@ lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 mp_ecp_command.desired_position = 0.077;
 memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 
-sr_ecp_msg->message("szczeki1");
+sr_ecp_msg->message("OTWORZ");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
-sr_ecp_msg->message("szczeki1 end");
 
-wait_ms(3000);
+wait_ms(1000);
 
-mp_ecp_command.desired_position = 0.074;
+mp_ecp_command.desired_position = 0.0715;
 memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 
-sr_ecp_msg->message("szczeki2");
+sr_ecp_msg->message("ZAMKNIJ");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
-sr_ecp_msg->message("szczeki2 end");
 
 wait_ms(3000);
 
-//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
-//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
-//sr_ecp_msg->message("szczeki2");
-//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
-//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
-//sr_ecp_msg->message("szczeki3");
-//set_next_ecps_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
-//run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
-
-
-/*
-sr_ecp_msg->message("Pierwszy krok bezwgledny");
+sr_ecp_msg->message("SZCZEKI W DOL");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz.trj", 0, 1,
 		lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+
+sr_ecp_msg->message("BIAS");
+set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+
+
+
+sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "", 0, 1,
+	lib::irp6p_m::ROBOT_NAME.c_str());
+run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+/*
 
 move_right(-0.15);
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());

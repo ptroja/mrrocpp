@@ -12,21 +12,18 @@
 //#include "lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
-
 namespace ecp {
-
-namespace irp6ot {
-
+namespace common {
 namespace generator {
 
 /**
- *  generator testowy. robot porusza sie po okregu
+ *  generator testowy.
  */
 
-class g_mm_test: public mrrocpp::ecp_mp::generator::generator//mrrocpp::ecp::common::generator::generator
+class g_mm_test: public common::generator::generator//mrrocpp::ecp::common::generator::generator
 {
 public:
-	g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task);
+	g_mm_test(common::task::task& _ecp_task);
 	virtual ~g_mm_test();
 	virtual bool first_step();
 	virtual bool next_step();
@@ -50,15 +47,11 @@ private:
 	double r;//promien
 	double k;//kat
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
-};
-
+};//end class
 
 } // namespace generator
-
-} // namespace irp6ot
-
+} // namespace common
 } // namespace ecp
-
 } // namespace mrrocpp
 
 
