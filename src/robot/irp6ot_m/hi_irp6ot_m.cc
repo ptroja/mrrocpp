@@ -51,9 +51,9 @@ uint64_t hardware_interface::read_write_hardware(void)
 		// przepisanie wartosci pradu
 		if (i < 6) // osie rezolwerowe
 		{
-			meassured_current[i] = irq_data.md.robot_status[i].adr_offset_plus_0 & 0x00FF;
+			measured_current[i] = irq_data.md.robot_status[i].adr_offset_plus_0 & 0x00FF;
 		} else {
-			meassured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
+			measured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
 		}
 
 		current_absolute_position[i] = irq_data.md.current_absolute_position[i];
