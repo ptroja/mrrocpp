@@ -39,6 +39,10 @@ add_library(mrrocpp
 	compat.c
 )
 
+add_executable(pvat_test
+	pvat_test.cc
+)
+
 target_link_libraries (mrrocpp sr)
 
 target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})

@@ -29,7 +29,6 @@ using namespace std;
 // import most common Eigen types
 USING_PART_OF_NAMESPACE_EIGEN
 
-
 /**
  * @brief Creates a vector containing time slices.
  *
@@ -43,10 +42,7 @@ USING_PART_OF_NAMESPACE_EIGEN
  * @param [in] motion_time_ Total motion time.
  */
 template <unsigned int N_SEGMENTS>
-void pvat_divide_motion_time_into_constant_time_deltas(
-		Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_,
-		const double motion_time_
-		)
+void pvat_divide_motion_time_into_constant_time_deltas(Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_, const double motion_time_)
 {
 	// There must be some segments (besides we cannot divide by zero).
 	assert (N_SEGMENTS!=0);
@@ -56,13 +52,13 @@ void pvat_divide_motion_time_into_constant_time_deltas(
 		time_deltas_(i) = segment_time;
 	}
 
+	// Display results.
+/*	cout<<"time deltas: ";
 	for (int i = 0; i < N_SEGMENTS; ++i) {
-		cout<<" "<<time_deltas_(i);
+		cout << " " << time_deltas_(i);
 	}
-	cout<<endl;
+	cout << endl;*/
 }
-
-
 
 /**
  * @brief Computes interpolation motor positions for the cartesian trajectory generation.
@@ -84,15 +80,8 @@ void pvat_divide_motion_time_into_constant_time_deltas(
  * @param [in] desired_end_effector_frame_ Homogeneous matrix containing desired end effector pose.
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
-void pvat_interpolate_motor_poses(
-		Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_,
-		const double motion_time_,
-		const Eigen::Matrix <double, N_POINTS-1, 1> time_deltas_,
-		mrrocpp::kinematics::common::kinematic_model* model_,
-		const lib::JointArray desired_joints_old_,
-		const mrrocpp::lib::Homog_matrix& current_end_effector_frame_,
-		const mrrocpp::lib::Homog_matrix& desired_end_effector_frame_
-		)
+void pvat_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
+		double, N_POINTS - 1, 1> time_deltas_, mrrocpp::kinematics::common::kinematic_model* model_, const lib::JointArray desired_joints_old_, const mrrocpp::lib::Homog_matrix& current_end_effector_frame_, const mrrocpp::lib::Homog_matrix& desired_end_effector_frame_)
 {
 	// Manipulator has got to have some axes.
 	assert (N_MOTORS>0);
@@ -101,7 +90,7 @@ void pvat_interpolate_motor_poses(
 	// Check model.
 	assert (model_);
 
-//	cout<<"Operational space: " << model->get_kinematic_model_label() << "\n";
+	//	cout<<"Operational space: " << model->get_kinematic_model_label() << "\n";
 
 	// Variable containing computed transformation from current end-effector post to the desired one.
 	lib::Homog_matrix desired_relative_end_effector_frame;
@@ -139,18 +128,19 @@ void pvat_interpolate_motor_poses(
 
 	// Temporary variables containing motion time from start to current position (sum of time slices).
 	double last_summed = time_deltas_(0);
-	double total_time_factor = last_summed/motion_time_;
+	double total_time_factor = last_summed / motion_time_;
 
 	// Compute interpolation points in motor positions.
-	for (int i = 0; i < N_POINTS-1; ++i) {
+	for (int i = 0; i < N_POINTS - 1; ++i) {
 		// Compute delta in the angle axis gamma representation.
 		delta_xyz_aa_gamma
-			// Px, Py, Pz.
-			<< relative_xyz_aa_gamma(0) * total_time_factor, relative_xyz_aa_gamma(1) * total_time_factor, relative_xyz_aa_gamma(2) * total_time_factor,
-			// vx, vy, vz (constant).
-			relative_xyz_aa_gamma(3), relative_xyz_aa_gamma(4), relative_xyz_aa_gamma(5),
-			// Gamma.
-			relative_xyz_aa_gamma(6) * total_time_factor;
+		// Px, Py, Pz.
+				<< relative_xyz_aa_gamma(0) * total_time_factor, relative_xyz_aa_gamma(1) * total_time_factor, relative_xyz_aa_gamma(2)
+				* total_time_factor,
+		// vx, vy, vz (constant).
+		relative_xyz_aa_gamma(3), relative_xyz_aa_gamma(4), relative_xyz_aa_gamma(5),
+		// Gamma.
+		relative_xyz_aa_gamma(6) * total_time_factor;
 
 		// Compute delta frame.
 		delta_ee_frame.set_from_xyz_angle_axis_gamma(delta_xyz_aa_gamma);
@@ -158,37 +148,34 @@ void pvat_interpolate_motor_poses(
 		// Compute desired interpolation end effector frame.
 		int_ee_frame = current_end_effector_frame_ * delta_ee_frame;
 
-//		cout << int_ee_frame << endl;
+		//		cout << int_ee_frame << endl;
 
 		// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 		model_->inverse_kinematics_transform(int_joints, int_joints_old, int_ee_frame);
 
-//		cout << int_joints << endl;
+		//		cout << int_joints << endl;
 
 		// Transform joints to motors (and check motors/joints values).
 		model_->i2mp_transform(int_motors, int_joints);
 
-//		cout << int_motors << endl;
+		//		cout << int_motors << endl;
 
 		// Add motors to vector.
-		motor_interpolations_.row(i+1) = int_motors.transpose();
+		motor_interpolations_.row(i + 1) = int_motors.transpose();
 
 		// Set last joint settings.
 		int_joints_old = int_joints;
 		// Add time slice related to this segment.
-		if (i < N_POINTS-2)
-		{
-			last_summed += time_deltas_(i+1);
-			total_time_factor = last_summed/motion_time_;
+		if (i < N_POINTS - 2) {
+			last_summed += time_deltas_(i + 1);
+			total_time_factor = last_summed / motion_time_;
 		}
 	}
 
 	// Display all motor interpolation poses.
-	for(unsigned int l = 0; l < N_POINTS; ++l)
-	{
-		cout<<"Motor interpolation point no "<<l<<": "<<motor_interpolations_.row(l)<<endl;
-	}
-
+/*	for (unsigned int l = 0; l < N_POINTS; ++l) {
+		cout << "Motor interpolation point no " << l << ": " << motor_interpolations_.row(l) << endl;
+	}*/
 }
 
 /**
@@ -205,22 +192,21 @@ void pvat_interpolate_motor_poses(
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
 void pvat_compute_motor_deltas_for_segments(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & motor_deltas_for_segments_,
-		const Eigen::Matrix <double, N_SEGMENTS+1, N_MOTORS> motor_interpolations_
+		const Eigen::Matrix <double, N_SEGMENTS + 1, N_MOTORS> motor_interpolations_
 		)
 {
 	for (int segment = 0; segment < N_SEGMENTS; ++segment) {
 		for (int axis = 0; axis < N_MOTORS; ++axis) {
-			motor_deltas_for_segments_(segment, axis) = motor_interpolations_(segment+1, axis) - motor_interpolations_(segment, axis);
+			motor_deltas_for_segments_(segment, axis) = motor_interpolations_(segment + 1, axis)
+					- motor_interpolations_(segment, axis);
 		}
 	}
 
 	// Display all motor increments.
-	for(unsigned int l = 0; l < N_SEGMENTS; ++l)
-	{
-		cout<<"Motor increments for segment "<<l<<": "<<motor_deltas_for_segments_.row(l)<<endl;
-	}
+/*	for (unsigned int l = 0; l < N_SEGMENTS; ++l) {
+		cout << "Motor increments for segment " << l << ": " << motor_deltas_for_segments_.row(l) << endl;
+	}*/
 }
-
 
 /**
  * @brief Computes matrix of the tau coefficients. The matrix is identical for every axis, thus is independent of axes number.
@@ -242,19 +228,20 @@ void pvat_compute_tau_coefficients_matrix(
 	tau_coefficients_ = Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS>::Zero();
 
 	// First row.
-	tau_coefficients_(0, 0) = time_deltas_(0) * 2.0/3.0;
+	tau_coefficients_(0, 0) = time_deltas_(0) * 2.0 / 3.0;
 	tau_coefficients_(0, 1) = time_deltas_(0) / 3.0;
 	// Rows 2..n-2.
-	for (int i = 1; i < N_SEGMENTS-1; ++i) {
-		tau_coefficients_(i, i-1) = time_deltas_(i-1) / 3.0;
-		tau_coefficients_(i, i) = (time_deltas_(i) + time_deltas_(i-1)) * 2.0/3.0;
-		tau_coefficients_(i, i+1) = time_deltas_(i) / 3.0;
+	for (int i = 1; i < N_SEGMENTS - 1; ++i) {
+		tau_coefficients_(i, i - 1) = time_deltas_(i - 1) / 3.0;
+		tau_coefficients_(i, i) = (time_deltas_(i) + time_deltas_(i - 1)) * 2.0 / 3.0;
+		tau_coefficients_(i, i + 1) = time_deltas_(i) / 3.0;
 	}
 	// Last row.
-	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-2) = time_deltas_(N_SEGMENTS-2) / 3.0;
-	tau_coefficients_(N_SEGMENTS-1, N_SEGMENTS-1) = time_deltas_(N_SEGMENTS-2) * 2.0/3.0 + time_deltas_(N_SEGMENTS-1) / 2.0;
+	tau_coefficients_(N_SEGMENTS - 1, N_SEGMENTS - 2) = time_deltas_(N_SEGMENTS - 2) / 3.0;
+	tau_coefficients_(N_SEGMENTS - 1, N_SEGMENTS - 1) = time_deltas_(N_SEGMENTS - 2) * 2.0 / 3.0
+			+ time_deltas_(N_SEGMENTS - 1) / 2.0;
 
-	cout<<"tau_coefficients:\n"<<tau_coefficients_<<endl;
+//	cout << "tau_coefficients:\n" << tau_coefficients_ << endl;
 }
 
 /**
@@ -271,96 +258,177 @@ void pvat_compute_tau_coefficients_matrix(
  * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_right_side_coefficients_vector(
-		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & right_side_coefficients_,
-		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> motor_deltas_,
-		const Eigen::Matrix <double, N_SEGMENTS, 1> time_deltas_
-		)
+void pvat_compute_right_side_coefficients_vector(Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & right_side_coefficients_, const Eigen::Matrix <
+		double, N_SEGMENTS, N_MOTORS> motor_deltas_, const Eigen::Matrix <double, N_SEGMENTS, 1> time_deltas_)
 {
 	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
 		// First segment.
 		right_side_coefficients_(0, mtr) = motor_deltas_(0, mtr) / time_deltas_(0);
 		// 1..n-1 segments.
-		for (int sgt = 1; sgt < N_SEGMENTS-1; ++sgt) {
-			right_side_coefficients_(sgt, mtr) = (motor_deltas_(sgt, mtr))/ (time_deltas_(sgt)) - (motor_deltas_(sgt-1, mtr))/ (time_deltas_(sgt-1));
+		for (int sgt = 1; sgt < N_SEGMENTS - 1; ++sgt) {
+			right_side_coefficients_(sgt, mtr) = (motor_deltas_(sgt, mtr)) / (time_deltas_(sgt)) - (motor_deltas_(sgt
+					- 1, mtr)) / (time_deltas_(sgt - 1));
 		}
 
 		// Last segment.
-		right_side_coefficients_(N_SEGMENTS-1, mtr) = (motor_deltas_(N_SEGMENTS-1, mtr) * 3.0)/ (time_deltas_(N_SEGMENTS-1) * 2.0) - (motor_deltas_(N_SEGMENTS-2, mtr))/ (time_deltas_(N_SEGMENTS-2));
+		right_side_coefficients_(N_SEGMENTS - 1, mtr) = (motor_deltas_(N_SEGMENTS - 1, mtr) * 3.0)
+				/ (time_deltas_(N_SEGMENTS - 1) * 2.0) - (motor_deltas_(N_SEGMENTS - 2, mtr))
+				/ (time_deltas_(N_SEGMENTS - 2));
 	}
 
-	cout<<"right_side_coefficients:\n"<<right_side_coefficients_<<endl;
+//	cout << "right_side_coefficients:\n" << right_side_coefficients_ << endl;
 }
 
-
 /**
- * @brief Computes 2w coefficients
+ * @brief Computes 2w coefficients.
  *
- * Matrix in the form (equation 1.48) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ * Solves the matrix equation in the form (equation 1.48) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
  *
  * @author tkornuta
  *
  * @tparam N_SEGMENTS number of motion segments.
  * @tparam N_MOTORS Number of manipulator motors.
  *
- * @param [out] m2w_ Vector with 2w coefficients.
+ * @param [out] m2w_ Matrix with 2w coefficients - for all segments and all motors respectively.
  * @param [in] a_ Matrix containing time (tau) coefficients.
  * @param [in] b_ Right side coefficients (motor deltas). (Computations will affect this parameters, thus it is not const!)
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
 void pvat_compute_motor_2w_polynomial_coefficients(
-		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w,
-		const Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> a_,
+		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w_,
+		Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> a_,
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> b_
 		)
 {
-	// TODO: Implementacja bez wykorzystania kopiowania macierzy tau:
-	// stworzenie dwóch "wektorów" przekształceń tej macierzy
-	// (takich samych dla wszystkich motorów! bo taka sama jest macież tau),
-	// a następnie przemielenie prawych stron współczynników. JESSS!
+	// TODO: REMOVE THIS after tests.
+	m2w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
 
-	cout<<"a_:\n"<<a_<<endl;
-	cout<<"b_:\n"<<b_<<endl;
+	// First step: substract equations, start from the last row.
+	for (int sgt = N_SEGMENTS - 1; sgt > 0; --sgt) {
+		// Compute fraction.
+		double frac = a_(sgt, sgt) / a_(sgt - 1, sgt);
+		// Multiply row sgt-1 by fraction.
+		a_.row(sgt - 1) *= frac;
+		b_.row(sgt - 1) *= frac;
+		// Substract row k from the modified row k-1.
+		a_.row(sgt - 1) -= a_.row(sgt);
+		b_.row(sgt - 1) -= b_.row(sgt);
+	}//: for all segments
 
-	// Perform the computations for all motors.
-	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
-	//int mtr =0;
-		// "Clone" the tau matrix - at the start it is the same for every motor.
-		Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> a_loc = a_;
-
-//		cout<<"a_loc at start: "<<a_loc<<endl;
-//		cout<<"b_ at start: "<<b_<<endl;
-
-		// First step: substract equations, start from the last row.
-		for (int sgt = N_SEGMENTS-1; sgt > 0; --sgt) {
-			// Compute fraction.
-			double frac = a_loc(sgt,sgt) / a_loc(sgt-1,sgt);
-//			cout<<"Row "<<sgt<<" frac = "<<frac<<endl;
-			// Multiply row sgt-1 by fraction.
-			for (int i = 0; i < N_SEGMENTS; ++i) {
-				a_loc(sgt-1,i) *= frac;
-			}
-			b_(sgt-1,mtr) *= frac;
-//			cout<<"a_loc after multiplication: "<<a_loc<<endl;
-//			cout<<"b_ after multiplication: "<<b_<<endl;
-			// Substract row k from the modified row k-1.
-			a_loc.row(sgt-1) -= a_loc.row(sgt);
-			b_(sgt-1,mtr) -= b_(sgt,mtr);
-
-//			cout<<"a_loc at end: "<<a_loc<<endl;
-//			cout<<"b_ at end: "<<b_<<endl;
-		}
-
-		// Second step: obtain rest of 2w, starting from first row (2w1).
-		m2w(0,mtr) = b_(0,mtr) / a_loc(0,0);
-		for (int i = 1; i < N_SEGMENTS; ++i) {
-			m2w(i,mtr) =  (b_(i,mtr) - a_loc(i,i-1)*m2w(i-1,mtr) )/ a_loc(i,i);
-		}
-	}//: for all motors
-	cout<<"2w:\n"<<m2w<<endl;
-
+	// Second step: obtain rest of 2w, starting from first row (2w1).
+	m2w_.row(0) = b_.row(0) / a_(0, 0);
+	for (int sgt = 1; sgt < N_SEGMENTS; ++sgt) {
+		m2w_.row(sgt) = (b_.row(sgt) - a_(sgt, sgt - 1) * m2w_.row(sgt - 1)) / a_(sgt, sgt);
+	}
+//	cout << "2w:\n" << m2w_ << endl;
 }
 
+
+/**
+ * @brief Computes 1w coefficients.
+ *
+ * Basing on the formulas (1.41 and 1.40) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [out] m1w_ Matrix with 1w coefficients - for all segments and all motors respectively.
+ * @param [in] m2w_ Matrix with 2w coefficients, utilized for 1w computations.
+ * @param [in] motor_deltas_ Motor position increments to be realized in given segment.
+ * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
+ */
+template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
+void pvat_compute_motor_1w_polynomial_coefficients(
+		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m1w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> m2w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> motor_deltas_,
+		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
+		)
+{
+	// TODO: REMOVE THIS after tests.
+	m1w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+
+	// Compute 1w for last segment.
+	m1w_.row(N_SEGMENTS-1) = motor_deltas_.row(N_SEGMENTS-1) * 3.0 / (taus_(N_SEGMENTS-1) *2.0) - m2w_.row(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) / 2.0;
+
+	// Compute 1w for other segments.
+	for (int sgt = 0; sgt < N_SEGMENTS-1; ++sgt) {
+		m1w_.row(sgt) = motor_deltas_.row(sgt) / taus_(sgt) - taus_(sgt) * (m2w_.row(sgt+1) + m2w_.row(sgt) * 2.0 ) / 3.0;
+	}
+	// According to the 1.36, the 1w1 should be equal to zero.
+
+//	cout << "1w:\n" << m1w_ << endl;
+}
+
+
+/**
+ * @brief Computes 3w coefficients.
+ *
+ * Basing on the formulas (1.42 and 1.38) from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [out] m3w_ Matrix with 3w coefficients - for all segments and all motors respectively.
+ * @param [in] m2w_ Matrix with 2w coefficients, utilized for 1w computations.
+ * @param [in] motor_deltas_ Motor position increments to be realized in given segment.
+ * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
+ */
+template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
+void pvat_compute_motor_3w_polynomial_coefficients(
+		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> m2w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> motor_deltas_,
+		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
+		)
+{
+	// TODO: REMOVE THIS after tests.
+	m3w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+
+	// Compute 3w for last segment.
+	m3w_.row(N_SEGMENTS-1) = - m2w_.row(N_SEGMENTS-1) / (taus_(N_SEGMENTS-1) *2.0) - motor_deltas_.row(N_SEGMENTS-1) / ( taus_(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) * 2.0);
+
+	// Compute 3w for other segments.
+	for (int sgt = 0; sgt < N_SEGMENTS-1; ++sgt) {
+		m3w_.row(sgt) = (m2w_.row(sgt+1) - m2w_.row(sgt)) / ( taus_(sgt) *3.0);
+	}
+
+//	cout << "3w:\n" << m3w_ << endl;
+}
+
+/**
+ * @brief Computes 0w coefficients.
+ *
+ * Basing on the (1.33) formula from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [out] m0w_ Matrix with 0w coefficients - for all segments and all motors respectively.
+ * @param [in] motor_interpolations_ Matrix containing interpolated motor poses.
+ */
+template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
+void pvat_compute_motor_0w_polynomial_coefficients(
+		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m0w_,
+		const Eigen::Matrix <double, N_SEGMENTS + 1, N_MOTORS> motor_interpolations_
+		)
+{
+	// TODO: REMOVE THIS after tests.
+	m0w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+
+	// Compute 03w for all segments.
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
+		m0w_.row(sgt) = motor_interpolations_.row(sgt);
+	}
+
+//	cout << "m0w:\n" << m0w_ << endl;
+}
 
 
 } // namespace lib
