@@ -10,7 +10,6 @@
 #include "pb_sac_visual_servo.h"
 
 using namespace logger;
-using namespace visual_servo_types;
 using namespace std;
 using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 

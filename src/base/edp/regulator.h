@@ -32,7 +32,7 @@ protected:
 	// ponizsze zmienne musza byc zawsze aktualizowany, ze wzgledu na
 	// "bezszelestne" przelaczanie algorytmow.
 
-	int meassured_current; // wartosc zmierzona pradu
+	int measured_current; // wartosc zmierzona pradu
 
 	double position_increment_old; // przedosatnio odczytany przyrost polozenie (delta y[k-2]
 	// -- mierzone w impulsach)
@@ -83,7 +83,7 @@ public:
 	double get_set_value(void) const;
 	double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
 	void insert_new_step(double ns);
-	void insert_meassured_current(int meassured_current_l);
+	void insert_measured_current(int measured_current_l);
 
 	double return_new_step() const;
 
@@ -91,7 +91,7 @@ public:
 
 	double get_position_inc(int tryb);
 
-	int get_meassured_current(void) const;
+	int get_measured_current(void) const;
 
 	int get_PWM_value(void) const;
 

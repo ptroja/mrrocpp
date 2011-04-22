@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-
+#include "robot/irp6p_m/const_irp6p_m.h"
 #include "base/kinematics/kinematics_manager.h"
 
 #include "robot/irp6p_m/const_irp6p_m.h"

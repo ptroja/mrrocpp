@@ -43,6 +43,7 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 
 	char config_section_name[] = { "[object_follower_pb]" };
 
+	log_enabled = true;
 	log_dbg_enabled = true;
 
 	shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
