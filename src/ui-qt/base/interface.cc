@@ -661,12 +661,12 @@ void Interface::UI_close(void)
 }
 
 void Interface::abort_threads()
-
 {
-	delete ui_sr_obj;
-	delete ui_ecp_obj;
-
-	delete meb_tid;
+	// Note: these originally were a pointers to a threaded objects,
+	// and they were deleted here.
+	ui_sr_obj.reset();
+	ui_ecp_obj.reset();
+	meb_tid.reset();
 }
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
@@ -1121,13 +1121,13 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
-	meb_tid = new feb_thread(*main_eb);
+	meb_tid = (boost::shared_ptr<feb_thread>) new feb_thread(*main_eb);
 
-	ui_ecp_obj = new ecp_buffer(*this);
+	ui_ecp_obj = (boost::shared_ptr<ecp_buffer>) new ecp_buffer(*this);
 
 	delay(1);
-	ui_sr_obj = new sr_buffer(*this);
 
+	ui_sr_obj = (boost::shared_ptr<sr_buffer>) new sr_buffer(*this);
 }
 
 int Interface::EDP_all_robots_create()
