@@ -58,18 +58,6 @@ public:
 	Homog_matrix();
 
 	/*!
-	 * Constructor
-	 *
-	 * @param[in] frame_tab data for initialization
-	 */
-	Homog_matrix(const frame_tab &);
-
-	/*!
-	 * Copy constructor
-	 */
-	Homog_matrix(const Homog_matrix &);
-
-	/*!
 	 * Constructor for translation matrix
 	 *
 	 * @param[in] x,y,z translation parameters

@@ -11,13 +11,17 @@
 #ifndef PAVT__CARTESIAN_HPP_
 #define PAVT__CARTESIAN_HPP_
 
-#include <Eigen/Core>
-#include <Eigen/Array>
 #include <cmath>
 #include <iostream>
 #include <cassert>
 //#include <vector>
+
 #include <boost/foreach.hpp>
+
+#include <Eigen/Core>
+#include <Eigen/Array>
+
+#include "base/lib/mrmath/Xyz_Angle_Axis_Gamma_vector.h"
 
 #include "base/kinematics/kinematic_model.h"
 
