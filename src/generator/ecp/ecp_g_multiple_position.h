@@ -169,11 +169,6 @@ protected:
 	//--------- VELOCITY AND ACCELERATION VECTORS END ---------
 
 	/**
-	 * Temporary homog matrix.
-	 */
-	lib::Homog_matrix homog_matrix;
-
-	/**
 	 * Sets up the start position vector of the first position in the trajectory chain.
 	 */
 	void get_initial_position()
@@ -473,8 +468,7 @@ public:
 					flushall();
 				}
 
-				homog_matrix.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
-				the_robot->ecp_command.arm.pf_def.arm_frame = homog_matrix;
+				the_robot->ecp_command.arm.pf_def.arm_frame.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(coordinates));
 
 				break;
 
@@ -495,8 +489,7 @@ public:
 					flushall();
 				}
 
-				homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
-				the_robot->ecp_command.arm.pf_def.arm_frame = homog_matrix;
+				the_robot->ecp_command.arm.pf_def.arm_frame.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(coordinates));
 
 				break;
 
