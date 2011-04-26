@@ -68,7 +68,7 @@ bool g_mm_test::next_step()
 
 	if(index==0)
 	{
-		currentFrame.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		currentFrame.get_translation_vector(first_trans_vect);//srodek okregu
 		//std::cout << currentFrame << std::endl;
@@ -104,7 +104,7 @@ bool g_mm_test::next_step()
 	nextFrame.set_translation_vector(trans_vect);
 	/*koniec modyfikacji*/
 
-	nextFrame.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	nextFrame = the_robot->ecp_command.arm.pf_def.arm_frame;
 	currentFrame = nextFrame;
 
 	if(k>1.5)

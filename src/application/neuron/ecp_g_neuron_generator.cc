@@ -101,7 +101,7 @@ bool neuron_generator::next_step()
 	}
 
 	// ------------ read the current robot position ----------
-	actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
 	if(breaking_){
