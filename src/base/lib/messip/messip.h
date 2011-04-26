@@ -35,9 +35,7 @@
 //#define USE_SRRMOD	1
 #endif /* __linux__ */
 
-#if defined(__QNXNTO__)
-//#define USE_QNXMSG	1
-#endif /* __QNXNTO__ */
+
 
 #ifdef USE_QNXMSG
 #include <sys/iofunc.h>
@@ -66,8 +64,6 @@
 #else
 #if defined(__linux__)
 #include <netinet/sctp.h>
-#elif defined(__QNXNTO__)
-#include <netinet/in.h>
 #endif
 #define MESSIP_SOCK_PROTO	IPPROTO_SCTP
 #define MESSIP_NODELAY_LEVEL	SOL_SCTP

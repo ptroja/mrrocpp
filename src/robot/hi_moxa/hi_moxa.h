@@ -34,7 +34,7 @@ const std::size_t WRITE_BYTES = 10;
 const std::size_t READ_BYTES = 8;
 const std::size_t MOXA_SERVOS_NR = 8;
 const int MAX_PARAM_SET_ATTEMPTS = 3;
-const int FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT = 2;
+const int FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT = 4;
 
 const unsigned long COMMCYCLE_TIME_NS = 2000000;
 

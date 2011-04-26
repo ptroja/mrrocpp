@@ -58,7 +58,7 @@ regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_ef
 	step_new_over_constraint_sum = 0.0;
 	previous_abs_position = 0.0;
 
-	meassured_current = 0; // prad zmierzony
+	measured_current = 0; // prad zmierzony
 	PWM_value = 0; // zadane wypelnienie PWM
 }
 /*-----------------------------------------------------------------------*/
@@ -79,10 +79,10 @@ void regulator::insert_new_step(double ns)
 	step_new = ns;
 }
 
-void regulator::insert_meassured_current(int meassured_current_l)
+void regulator::insert_measured_current(int measured_current_l)
 {
 	// wstawienie wartosci zmierzonej pradu
-	meassured_current = meassured_current_l;
+	measured_current = measured_current_l;
 }
 
 double regulator::return_new_step(void) const
@@ -114,10 +114,10 @@ double regulator::get_position_inc(int tryb)
 	return pins;
 }
 
-int regulator::get_meassured_current(void) const
+int regulator::get_measured_current(void) const
 {
 	// odczytanie rzeczywistego pradu - metoda konkretna
-	return meassured_current;
+	return measured_current;
 }
 
 int regulator::get_PWM_value(void) const
@@ -201,7 +201,7 @@ NL_regulator::NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double
 	integrator_off = 6;
 	counter = 0;
 
-	meassured_current = 0;
+	measured_current = 0;
 }
 /*-----------------------------------------------------------------------*/
 

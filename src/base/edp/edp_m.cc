@@ -15,9 +15,6 @@
 #include <csignal>
 #include <cerrno>
 #include <sys/wait.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif /* __QNXNTO__ */
 
 #include <boost/exception/all.hpp>
 
@@ -34,17 +31,17 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/sr_edp.h"
 #include "base/edp/edp_effector.h"
+#include "edp_shell.h"
+#include "base/lib/mis_fun.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace common {
 
-effector* master; // Bufor polecen i odpowiedzi EDP_MASTER
+effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
 
-#ifdef __QNXNTO__
-static _clockperiod old_cp;
-static const int TIME_SLICE = 500000; // by Y
-#endif /* __QNXNTO__ */
+shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
+
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
@@ -53,17 +50,20 @@ void catch_signal(int sig)
 	{
 		case SIGTERM:
 		case SIGHUP:
-#ifdef __QNXNTO__
-			ClockPeriod(CLOCK_REALTIME, &old_cp, NULL, 0);
-#endif /* __QNXNTO__ */
-			master->close_hardware_busy_file();
-			master->msg->message("edp terminated");
 
+			if (edp_shell) {
+				edp_shell->close_hardware_busy_file();
+			}
+			if (master) {
+				master->msg->message("edp terminated");
+			}
 			_exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
-			master->close_hardware_busy_file();
+			if (edp_shell) {
+				edp_shell->close_hardware_busy_file();
+			}
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	} // end: switch
@@ -85,15 +85,6 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-#ifdef __QNXNTO__
-
-		// zmniejszenie stalej czasowej ticksize dla szeregowania
-		_clockperiod new_cp;
-		new_cp.nsec = edp::common::TIME_SLICE;
-		new_cp.fract = 0;
-		ClockPeriod(CLOCK_REALTIME, &new_cp, &edp::common::old_cp, 0);
-#endif /* __QNXNTO__ */
-
 		// przechwycenie SIGTERM
 		signal(SIGTERM, &edp::common::catch_signal);
 		signal(SIGHUP, &edp::common::catch_signal);
@@ -106,13 +97,20 @@ int main(int argc, char *argv[])
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3]);
 
+		edp::common::edp_shell = new edp::common::shell(_config);
+
+		if (!edp::common::edp_shell->detect_hardware_busy()) {
+			return EXIT_FAILURE;
+		}
+
 #if defined(HAVE_MLOCKALL)
 		// Try to lock memory to avoid swapping whlie executing in real-time
 		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
 			perror("No real-time warrany: mlockall() failed");
 		}
-#endif /* HAVE_MLOCKALL */
 
+#endif /* HAVE_MLOCKALL */
+		lib::set_process_sched();
 		edp::common::master = edp::common::return_created_efector(_config);
 
 		edp::common::master->create_threads();

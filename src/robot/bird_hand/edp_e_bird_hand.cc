@@ -15,8 +15,6 @@
 #define PORT "/dev/ser"
 using namespace mrrocpp::lib::exception;
 
-#ifndef __QNXNTO__
-
 uint64_t timespec2nsec(const timespec *t)
 {
 	return t->tv_sec * 1000000 + t->tv_nsec;
@@ -27,8 +25,6 @@ void nsec2timespec(timespec *t, uint64_t nsec)
 	t->tv_sec = nsec / 1000000;
 	t->tv_nsec = nsec % 1000000;
 }
-
-#endif
 
 namespace mrrocpp {
 namespace edp {
@@ -215,7 +211,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				device.getStatus(i, status, pos, c, t);
 
 			desired_motor_pos_new_tmp[i] = (double) pos - synchro_position_motor[i];
-			edp_ecp_rbuffer.status_reply_structure.finger[i].meassured_current = c;
+			edp_ecp_rbuffer.status_reply_structure.finger[i].measured_current = c;
 			edp_ecp_rbuffer.status_reply_structure.finger[i].meassured_torque = t;
 
 			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_absolute_value_of_meassured_torque = status
@@ -224,7 +220,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					<< LOWER_LIMIT);
 			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_absolute_position = status & (1
 					<< UPPER_LIMIT);
-			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_meassured_current = status & (1
+			edp_ecp_rbuffer.status_reply_structure.finger[i].upper_limit_of_measured_current = status & (1
 					<< CURRENT_LIMIT);
 		}
 

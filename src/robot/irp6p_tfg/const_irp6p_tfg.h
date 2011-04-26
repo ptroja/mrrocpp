@@ -49,17 +49,15 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief IRp6 postument two finger gripper array of communication port names
  * @ingroup sarkofag
  */
-#ifndef __QNXNTO__
+
 const std::string ports_strings[] = {"/dev/ttyMI6"};
-#else
-const std::string ports_strings[] = {"/dev/ser8"};
-#endif
+
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const int MAX_CURRENT_0 = 150;
+const int MAX_CURRENT_0 = 200;
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]

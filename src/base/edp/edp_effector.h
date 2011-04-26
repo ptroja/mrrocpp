@@ -165,18 +165,6 @@ protected:
 	 */
 	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
-	/*!
-	 * \brief full path to the hardware busy file
-	 *
-	 */
-	std::string hardware_busy_file_fullpath;
-
-	/*!
-	 * \brief EDP pid
-	 *
-	 */
-	pid_t my_pid;
-
 public:
 	/*!
 	 * \brief Name of the robot
@@ -214,11 +202,6 @@ public:
 	 */
 	bool initialize_communication(void);
 
-	/*!
-	 * \brief Method to close hardware busy notification file
-	 *
-	 */
-	bool close_hardware_busy_file(void);
 
 	/*!
 	 * \brief Constructor.

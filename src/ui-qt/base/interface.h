@@ -96,10 +96,10 @@ public:
 
 	busy_flag communication_flag;
 
-	sr_buffer* ui_sr_obj;
-	ecp_buffer* ui_ecp_obj;
+	boost::shared_ptr<sr_buffer> ui_sr_obj;
+	boost::shared_ptr<ecp_buffer> ui_ecp_obj;
 
-	feb_thread* meb_tid;
+	boost::shared_ptr<feb_thread> meb_tid;
 
 	function_execution_buffer *main_eb;
 
@@ -186,6 +186,10 @@ public:
 
 	int MPup_int();
 	void reload_whole_configuration();
+
+	//! @bug: this call is not used. It should be deleted, since
+	//! thread objects are managed with boost::shared_ptr and deleted
+	//! automatically when a container object is deleted.
 	void abort_threads();
 	void fill_node_list(void);
 	int fill_section_list(const char *file_name_and_path);

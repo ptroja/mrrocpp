@@ -62,9 +62,7 @@ struct motor_data
 
 typedef struct _irq_data
 {
-#ifdef __QNXNTO__
-	struct sigevent event; // sygnalilzacja przerwania dla glownego watku
-#endif
+
 	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 } irq_data_t;
 

@@ -6,8 +6,6 @@ MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
 	endif(CONDITION_VALUE)
 ENDMACRO(TARGET_LINK_LIBRARY_IF)
 
-OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
-
 # the RPATH to be used when installing
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
@@ -56,36 +54,8 @@ option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
 option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
-
-# QNX is default MRROC++ target
-if (QNXNTO)
-	# QNX headers and libraries are kept in 'mrlib' repository
-	set(MRLIB "$ENV{QNX_TARGET}/mrlib")
-
-	# keep this flag until bug in QNX stack alignment is fixed
-	add_definitions (-DEIGEN_DONT_ALIGN)
-	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
-	set(LIBXML2_INCLUDE_DIR "${MRLIB}/include/libxml2")
-
-	# Boost is provided by mrlib repository
-	set(BOOST_ROOT "${MRLIB}")
-
-	# FIXME: define libxml2 libraries to use
-	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
-	set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
-	
-	# QNX provides networking with separate library
-
-	set (COMPATIBILITY_LIBRARIES socket m)
-
-	# warn about almost everything except:
-	# -Wcast-qual
-	# -Wshadow
-	# -Wsign-compare
-	# optimization option -O1 is required for the compiler to find uninitialized local variables.
-	set(CMAKE_CXX_FLAGS "-w9 -Wpointer-arith -Wwrite-strings -Wno-sign-compare -O1")
-elseif (UBUNTU32BIT)
-	# QNX headers and libraries are kept in 'mrlib' repository
+if (UBUNTU32BIT)
+	# 32-bit headers and libraries are kept in 'mrlib' repository
 	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.10-32bit")
 	set(MRLIB "${UBUNTU32BIT_ROOT}/usr")
 
@@ -132,7 +102,10 @@ elseif (UBUNTU32BIT)
 	# Tips for finding cross-libraries and headers
 	include_directories (${MRLIB}/include)
 	set(COMEDI_INSTALL "${MRLIB}")
-else (QNXNTO) # Linux, MacOS, etc.
+else (UBUNTU32BIT) # Linux, MacOS, etc.
+	# Build shared libraries by default
+	OPTION (BUILD_SHARED_LIBS "Build shared libraries." ON)
+
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
 
@@ -163,7 +136,7 @@ else (QNXNTO) # Linux, MacOS, etc.
 
 	# keep this flag until we fix alignment 'new' operator issue
 	add_definitions (-DEIGEN_DONT_ALIGN)
-endif (QNXNTO)
+endif (UBUNTU32BIT)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -177,11 +150,6 @@ include_directories (${MRROCPP_BINARY_DIR}/src)
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
-if (QNXNTO)
-	# include boost compatibility layer
-	include_directories ("${Boost_INCLUDE_DIRS}/boost/compatibility/cpp_c_headers") 
-endif (QNXNTO)
-
 include(FindComedi)
 
 # Make sure the compiler can find include files
@@ -191,9 +159,8 @@ include_directories (${Boost_INCLUDE_DIR})
 include_directories (${EIGEN2_INCLUDE_DIRS})
 
 
-	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
-	set(COMMON_LIBRARIES messip)
-
+include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
+set(COMMON_LIBRARIES messip)
 
 set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_THREAD_LIBRARY}
