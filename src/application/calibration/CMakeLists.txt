@@ -1,14 +1,9 @@
 # find the GSL
-if(NOT QNXNTO)
+
 	set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 	find_package(GSL)
 	include_directories (${GSL_INCLUDE_DIR})
-else(NOT QNXNTO)
-	find_library(GSL_LIBRARY gsl $ENV{QNX_TARGET}/mrlib/lib)
-	find_library(GSLCBLAS_LIBRARY gslcblas $ENV{QNX_TARGET}/mrlib/lib)
-	set(GSL_LIBRARIES ${GSL_LIBRARY} ${GSLCBLAS_LIBRARY})
-	# TODO: find a GSL headers
-endif(NOT QNXNTO)
+
 
 add_executable(ecp_t_axzb_eih
 	ecp_t_calib_axzb.cc

@@ -18,6 +18,7 @@
 #define SPKM_EXCEPTION_H_
 
 #include "base/lib/exception.h"
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace kinematics {
@@ -31,61 +32,73 @@ const std::string LOWER_LIMIT = "LOWER";
 
 
 //! Type of violated limit.
-typedef boost::error_info <struct limit, std::string> spkm_limit_type;
+typedef boost::error_info <struct spkm_limit, std::string> limit_type;
 
 //! Number of motor that caused the exception.
-typedef boost::error_info <struct motor_no, int> spkm_motor_number;
+typedef boost::error_info <struct spkm_motor_no, int> motor_number;
 
 //! Number of joint that caused the exception.
-typedef boost::error_info <struct joint_no, int> spkm_joint_number;
+typedef boost::error_info <struct spkm_joint_no, int> joint_number;
 
-//! Desired values that caused the exception.
-typedef boost::error_info <struct desired_value, double> spkm_desired_value;
+//! Desired value that caused the exception.
+typedef boost::error_info <struct spkm_desired_value, double> desired_value;
+
+//! Motion type.
+typedef boost::error_info <struct spkm_pose_specification, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
 
 /*!
  * \brief Exception thrown in case of motor limits violation.
  * \author tkornuta
  */
-struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct motor_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_motor_limit_error() throw () { }
+	~motor_limit_error() throw () { }
 };
 
 /*!
  * \brief Exception thrown in case of joint limits violation.
  * \author tkornuta
  */
-struct spkm_joint_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct joint_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_joint_limit_error() throw () { }
+	~joint_limit_error() throw () { }
 };
 
 /*!
  * \brief Exception thrown in case of invalid pose specification.
  * \author tkornuta
  */
-struct spkm_pose_specification_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct pose_specification_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_pose_specification_error() throw () { }
+	~pose_specification_error() throw () { }
 };
 
 /*!
  * \brief Exception thrown in case of invalid motion type.
  * \author tkornuta
  */
-struct spkm_motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_motion_type_error() throw () { }
+	~motion_type_error() throw () { }
+};
+
+/*!
+ * \brief Exception thrown when cartesian pose is required, but unknown.
+ * \author tkornuta
+ */
+struct current_cartesian_pose_unknown : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+{
+	~current_cartesian_pose_unknown() throw () { }
 };
 
 /*!
  * \brief Exception thrown when in an unsychronized robot state a command requiring synchronization is received.
  * \author tkornuta
  */
-struct spkm_unsynchronized_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
+struct unsynchronized_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
 {
-	~spkm_unsynchronized_error() throw () { }
+	~unsynchronized_error() throw () { }
 };
 
 

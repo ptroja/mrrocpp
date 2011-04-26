@@ -51,11 +51,9 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief IRp6 conveyor array of communication port names
  * @ingroup conveyor
  */
-#ifndef __QNXNTO__
+
 const std::string ports_strings[] = {"/dev/ttyMI7"};
-#else
-const std::string ports_strings[] = {"/dev/ser9"};
-#endif
+
 
 /*!
  * @brief Conveyor max encoder increment

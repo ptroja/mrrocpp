@@ -16,6 +16,9 @@ namespace lib {
 #include <pthread.h>
 #include <time.h>
 
+//! Set the process scheduler
+void set_process_sched();
+
 //! Set the priority of POSIX thread
 void set_thread_priority(pthread_t thread, int sched_priority_l);
 

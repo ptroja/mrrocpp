@@ -13,11 +13,13 @@
 #include "Reading.h"
 #include "HomogMatrix.h"
 
-namespace Processors {
+namespace Types {
+namespace Mrrocpp_Proxy {
 
-namespace VisualServoPB {
-
-class PBReading: public Proxies::Mrrocpp::Reading
+/**
+ *
+ */
+class PBReading: public Reading
 {
 public:
 	PBReading()
@@ -42,24 +44,10 @@ public:
 	bool objectVisible;
 	Types::HomogMatrix objectPosition;
 
-	virtual void printInfo()
-	{
-//		LOG(LNOTICE) << "PBReading::printInfo()\n";
-		std::stringstream ss;
-		if (objectVisible) {
-			for (int i = 0; i < 3; ++i) {
-				for (int j = 0; j < 4; ++j) {
-					ss << objectPosition(i,j) << "  ";
-				}
-
-				ss << "\n";
-			}
-		} else {
-			ss << "object not visible\n";
-		}
-
-//		LOG(LNOTICE) << "HomogMatrix:\n" << ss.str() << endl;
+	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
+		*ar<<*this;
 	}
+
 private:
 	friend class boost::serialization::access;
 	template <class Archive>
@@ -72,7 +60,7 @@ private:
 	}
 };
 
-} // namespace VisualServoPB
-} // namespace Processors
+}//namespace Mrrocpp_Proxy
+}//namespace Types
 
 #endif /* PBREADING_HPP_ */

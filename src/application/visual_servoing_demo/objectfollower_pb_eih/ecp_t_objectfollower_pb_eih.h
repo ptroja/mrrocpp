@@ -8,8 +8,8 @@
 #ifndef ECP_T_OBJECTFOLLOWER_PB_EIH_H_
 #define ECP_T_OBJECTFOLLOWER_PB_EIH_H_
 
-#include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
+#include "base/ecp/ecp_task.h"
 #include "base/lib/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
 

@@ -22,12 +22,10 @@ const int LAST_MOXA_PORT_NUM = 0;
  */
 //const std::string ports_strings[] = {"/dev/ser7","/dev/ser3"};
 
-#ifndef __QNXNTO__
+
 const std::string ports_strings[] =
 		{ "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5", "/dev/ttyMI6" };
-#else
-const std::string ports_strings[] = {"/dev/ser1","/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
-#endif
+
 
 /*!
  * @brief Conveyor robot label

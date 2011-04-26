@@ -10,6 +10,7 @@
 
 #include "single_visual_servo_manager.h"
 
+#include "ib_eih_visual_servo.h"
 #include "pb_eih_visual_servo.h"
 #include "pb_sac_visual_servo.h"
 

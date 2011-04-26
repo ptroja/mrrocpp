@@ -10,7 +10,6 @@
 #include <iostream>
 
 using namespace logger;
-using namespace visual_servo_types;
 using namespace std;
 
 namespace mrrocpp {

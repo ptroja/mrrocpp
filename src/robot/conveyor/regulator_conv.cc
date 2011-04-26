@@ -75,8 +75,6 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	
-	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -231,6 +229,7 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
 		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
 		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	// ograniczenie na sterowanie
@@ -238,7 +237,6 @@ uint8_t NL_regulator_1_conv::compute_set_value(void)
 		set_value_new = MAX_PWM;
 	if (set_value_new < -MAX_PWM)
 		set_value_new = -MAX_PWM;
-
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;

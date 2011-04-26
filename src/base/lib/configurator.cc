@@ -32,9 +32,7 @@
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-#if defined(__QNXNTO__)
-#include <sys/netmgr.h>
-#endif /* __QNXNTO__ */
+
 
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
@@ -159,16 +157,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			rsh_spawn_node = "localhost";
 		} else {
 			rsh_spawn_node = spawned_node_name;
-#if defined(__QNXNTO__)
-			/* This check works only with QNX and Qnet */
-			std::string opendir_path("/net/");
-			opendir_path += rsh_spawn_node;
 
-			if (access(opendir_path.c_str(), R_OK) != 0) {
-				printf("spawned node absent: %s\n", opendir_path.c_str());
-				//throw std::logic_error("spawned node absent: " + opendir_path);
-			}
-#endif /* __QNXNTO__ */
 		}
 	}
 
@@ -203,9 +192,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		}
 
 	} else {
-#if defined(__QNXNTO__)
-		snprintf(bin_path, sizeof(bin_path), "/net/%s%sbin/", node.c_str(), dir.c_str());
-#else
+
 		char* cwd;
 		char buff[PATH_MAX + 1];
 
@@ -214,7 +201,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			perror("Blad cwd w configurator");
 		}
 		strcpy(bin_path, cwd);
-#endif
+
 	}
 
 	if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
@@ -244,24 +231,22 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 
 		std::string username;
 
-		if (!exists("username", _section_name))
-		{
+		if (!exists("username", _section_name)) {
 			username = getenv("USER");
 		} else {
-			username = value<std::string>("username", _section_name);
+			username = value <std::string> ("username", _section_name);
 		}
 
-
-		if ((rsh_spawn_node == "localhost") && ( username == getenv("USER") )) {
-                        snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
-                        chdir(bin_path);
-                        execlp(process_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str(), NULL);
+		if ((rsh_spawn_node == "localhost") && (username == getenv("USER"))) {
+			snprintf(process_path, sizeof(process_path), "%s%s", bin_path, program_name.c_str());
+			chdir(bin_path);
+			execlp(process_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str(), NULL);
 		} else {
 			if (!use_ssh) {
 				execlp(rsh_cmd, rsh_cmd, "-l", username.c_str(), rsh_spawn_node.c_str(), process_path, NULL);
