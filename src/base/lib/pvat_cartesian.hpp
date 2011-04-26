@@ -561,6 +561,54 @@ void pvat_compute_motor_0w_polynomial_coefficients(
 //	cout << "m0w:\n" << m0w_ << endl;
 }
 
+/**
+ * @brief Computes PVT triplets for
+ *
+ * @author tkornuta
+ *
+ * @tparam N_POINTS Number of interpolation points.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [out] p_ Matrix containing interpolated 'motor position poses'.
+ * @param [out] v_ Matrix containing interpolated 'motor velocity poses'.
+ * @param [out] t_ Vector containing interpolated 'motor time poses'.
+ * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
+ * @param [in] m3w_ Matrix with 3w coefficients.
+ * @param [in] m2w_ Matrix with 2w coefficients.
+ * @param [in] m1w_ Matrix with 1w coefficients.
+ * @param [in] m0w_ Matrix with 0w coefficients.
+ */
+template <unsigned int N_POINTS, unsigned int N_MOTORS>
+void pvat_compute_pvt_triplets_for_epos(
+		Eigen::Matrix <double, N_POINTS, N_MOTORS> & p_,
+		Eigen::Matrix <double, N_POINTS, N_MOTORS> & v_,
+		Eigen::Matrix <double, N_POINTS, 1> & t_,
+		const Eigen::Matrix <double, N_POINTS-1, 1> taus_,
+		const Eigen::Matrix <double, N_POINTS-1, N_MOTORS> m3w_,
+		const Eigen::Matrix <double, N_POINTS-1, N_MOTORS> m2w_,
+		const Eigen::Matrix <double, N_POINTS-1, N_MOTORS> m1w_,
+		const Eigen::Matrix <double, N_POINTS-1, N_MOTORS> m0w_
+		)
+{
+	// Start point.
+	p_.row(0) = m0w_.row(0);
+	v_.row(0) = Eigen::Matrix <double, 1, N_MOTORS>::Zero();
+
+	// For all other interpolation points.
+	for (int i = 1; i < N_POINTS; ++i) {
+		p_.row(i) = m0w_.row(i-1) + m1w_.row(i-1)*taus_(i-1) + m2w_.row(i-1)*(taus_(i-1)*taus_(i-1)) + m3w_.row(i-1)*(taus_(i-1)*taus_(i-1)*taus_(i-1));
+		v_.row(i) = m1w_.row(i-1) + 2.0*m2w_.row(i-1)*taus_(i-1) + 3.0*m3w_.row(i-1)*(taus_(i-1)*taus_(i-1));
+		//  There are N_POINTS-1 segments, thus N_POINTS-1 'tau'.
+		t_(i-1) = taus_(i-1);
+	}
+	// Set last segment movement time.
+	t_(N_POINTS-1) = 0;
+
+/*	cout<<"p "<<p_;
+	cout<<"v "<<v_;
+	cout<<"t "<<t_;*/
+}
+
 
 } // namespace lib
 } // namespace mrrocpp

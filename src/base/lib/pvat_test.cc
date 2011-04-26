@@ -66,10 +66,9 @@ int main(int argc, char *argv[])
 	Eigen::Matrix <double, 10, 1> motor_0w;
 	pvat_compute_motor_0w_polynomial_coefficients <10, 1> (motor_0w, motor_interpolations);
 
-
-	cout << "time deltas:\n" << time_deltas << endl;
-	cout << "m0w:\n" << motor_0w << endl;
-	cout << "m1w:\n" << motor_1w << endl;
-	cout << "m2w:\n" << motor_2w << endl;
-	cout << "m3w:\n" << motor_3w << endl;
+	cout << "time deltas = [ \n" << time_deltas << "\n ]; \n";
+	cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
+	cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
+	cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
+	cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
 }

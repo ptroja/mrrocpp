@@ -38,7 +38,7 @@ const int NUM_OF_SERVOS = 6;
  * @author tkornuta
  * @ingroup spkm
  */
-const unsigned int NUM_OF_MOTION_SEGMENTS = 5;
+const unsigned int NUM_OF_MOTION_SEGMENTS = 60;
 
 
 /*!
