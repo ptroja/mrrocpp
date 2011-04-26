@@ -17,6 +17,7 @@ namespace spkm {
 
 // Initialization of parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
 const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.2515, 0.272, 0.2515, 0.0, 0.0, 0.0};
+// TODO: nowe wartości po zmianie sposobu synchronizacji -> 0.242, 0.265, 0.242
 
 // Initialization of parameters related to conversion from motor positions to joints.
 // Parameters for conversion for linear DOFs are:
