@@ -207,11 +207,15 @@ uint64_t HI_moxa::read_write_hardware(void)
 	}
 
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
+	//	write(fd[drive_number], "  ", 2);
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
+		write(fd[drive_number], "  ", 2);
 		bytes_received[drive_number] = 0;
 	}
 
 	receive_attempts++;
+
+//	std::cout << std::endl;
 
 	while (1) {
 		FD_ZERO(&rfds);
@@ -244,6 +248,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 					bytes_received[drive_number]
 							+= read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
 									+ bytes_received[drive_number], READ_BYTES - bytes_received[drive_number]);
+//					std::cout << "[comm] drive " << (int)drive_number << ", received " << bytes_received[drive_number] << std::endl;
+
 				}
 				if (bytes_received[drive_number] < READ_BYTES) {
 					all_hardware_read = false;

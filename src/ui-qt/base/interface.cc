@@ -661,12 +661,12 @@ void Interface::UI_close(void)
 }
 
 void Interface::abort_threads()
-
 {
-	delete ui_sr_obj;
-	delete ui_ecp_obj;
-
-	delete meb_tid;
+	// Note: these originally were a pointers to a threaded objects,
+	// and they were deleted here.
+	ui_sr_obj.reset();
+	ui_ecp_obj.reset();
+	meb_tid.reset();
 }
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
@@ -1121,13 +1121,13 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
-	meb_tid = new feb_thread(*main_eb);
+	meb_tid = (boost::shared_ptr<feb_thread>) new feb_thread(*main_eb);
 
-	ui_ecp_obj = new ecp_buffer(*this);
+	ui_ecp_obj = (boost::shared_ptr<ecp_buffer>) new ecp_buffer(*this);
 
 	delay(1);
-	ui_sr_obj = new sr_buffer(*this);
 
+	ui_sr_obj = (boost::shared_ptr<sr_buffer>) new sr_buffer(*this);
 }
 
 int Interface::EDP_all_robots_create()
@@ -1408,9 +1408,8 @@ int Interface::slay_all()
 		 #endif
 		 printf("aaa: %s\n", system_command);
 		 system(system_command);
-		 */delay(500);
+		 */delay(100);
 
-#if 1
 		if (program_node_user_list_iterator->is_qnx) {
 			sprintf(system_command, "rsh -l %s %s slay -v -f %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
@@ -1418,13 +1417,24 @@ int Interface::slay_all()
 			sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
 		}
-#else
-		sprintf(system_command, "killall -e -q -v %s", program_node_user_list_iterator->program_name.c_str());
-#endif
-		printf("bbb: %s\n", system_command);
-		system(system_command);
+
+		printf("slay_all: %s\n", system_command);
+		// przedniolsem wywolanie system do innego prceosu bo w procesie glownym czasem powoduje zawieszenie calego intefrejsu
+		pid_t child_pid = vfork();
+
+		if (child_pid == 0) {
+			system(system_command);
+			_exit(EXIT_SUCCESS);
+		} else if (child_pid > 0) {
+			//delay(5000);
+			printf("slay_all child %d created\n", child_pid);
+
+		} else {
+			perror("slay_all vfork()");
+		}
+
 	}
-	printf("za\n");
+	printf("slay_all end\n");
 	manage_interface();
 
 	return 1;

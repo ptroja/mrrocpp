@@ -84,8 +84,6 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	
-	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -217,12 +215,12 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 #define PROP_I_REG 0.0
 #define INT_I_REG 0.4
 #define MAX_REG_CURRENT 15.0
-#define CURRENT_PRESCALER 0.1
+#define CURRENT_PRESCALER 0.08
 
 	switch (algorithm_no)
 	{
 		case 0: // algorytm nr 0
-			//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
 
@@ -237,14 +235,14 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			current_desired = (MAX_REG_CURRENT * set_value_new) / MAX_PWM;
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
-//			if (set_value_new > 0)
-//				current_measured = (float) meassured_current;
-//			else
-//				current_measured = (float) (-meassured_current);
+			//			if (set_value_new > 0)
+			//				current_measured = (float) measured_current;
+			//			else
+			//				current_measured = (float) (-measured_current);
 
 			// HI_MOXA zwraca prad w mA, ze znakiem odpowiadajacym kierunkowi przeplywu
 			// Przeskalowanie na przedzial -15..15 = -150mA..150mA
-			current_measured = - ((float) meassured_current) * CURRENT_PRESCALER;
+			current_measured = -((float) measured_current) * CURRENT_PRESCALER;
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -274,27 +272,24 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			// wyznaczenie nowego sterowania
 			set_value_new = PROP_I_REG * current_error + int_current_error;
 
-			 display++;
-			 if ((display % 100) == 0)
-			 {
-//				 		std::cout << "[info]";
-//				 		std::cout << " current_desired = " << current_desired << ",";
-//				 		std::cout << " current_measured = " << current_measured << ",";
-//				 		std::cout << " int_current_error = " << int_current_error << ",";
-//				 		std::cout << " set_value_new = " << set_value_new << ",";
-//				 		std::cout << std::endl;
+			display++;
+			if ((display % 100) == 0) {
+				//				 		std::cout << "[info]";
+				//				 		std::cout << " current_desired = " << current_desired << ",";
+				//				 		std::cout << " current_measured = " << current_measured << ",";
+				//				 		std::cout << " int_current_error = " << int_current_error << ",";
+				//				 		std::cout << " set_value_new = " << set_value_new << ",";
+				//				 		std::cout << std::endl;
 
 
-			 //  display = 0;
-			 //printf("khm... joint 7:  current_desired = %f,  meassured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
-			 }
-
-
+				//  display = 0;
+				//printf("khm... joint 7:  current_desired = %f,  measured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
+			}
 
 			break;
 
 		case 1: // algorytm nr 1
-			//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
 			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old;
 
@@ -318,10 +313,10 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 				current_desired = 0;
 
 			// ustalenie znaku pradu zmierzonego na podstawie znaku pwm
-//			if (set_value_new > 0)
-				current_measured = (float) meassured_current;
-//			else
-//				current_measured = (float) (-meassured_current);
+			//			if (set_value_new > 0)
+			current_measured = (float) measured_current;
+			//			else
+			//				current_measured = (float) (-measured_current);
 
 			// wyznaczenie uchybu
 			current_error = current_desired - current_measured;
@@ -350,10 +345,10 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 			set_value_new = PROP_I_REG * current_error + int_current_error;
 
 			display++;
-//			if (display == 100) {
-//				display = 0;
-//				printf("joint 7:   meassured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
-//			}
+			//			if (display == 100) {
+			//				display = 0;
+			//				printf("joint 7:   measured_current = %f,    int_current_error = %f,     set_value_new = %f \n", current_measured, int_current_error, set_value_new);
+			//			}
 			// DUNG END
 			break;
 		default: // w tym miejscu nie powinien wystapic blad zwiazany z
@@ -384,10 +379,11 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[7] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[7] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	// if (set_value_new > 0.0) {
@@ -402,67 +398,67 @@ uint8_t NL_regulator_8_irp6p::compute_set_value(void)
 
 	PWM_value = (int) set_value_new;
 
-	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, meassured_current, reg_state, kk);
+	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, measured_current, reg_state, kk);
 
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
-/*
-	// wyznaczenie pradu na zalozonych horyzoncie wstecz
-	if (master.step_counter > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
-		sum_of_currents -= currents[current_index];
-	}
-	if (meassured_current > 0) {
-		sum_of_currents += meassured_current;
-	} else {
-		sum_of_currents -= meassured_current;
-	}
+	/*
+	 // wyznaczenie pradu na zalozonych horyzoncie wstecz
+	 if (master.step_counter > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS) {
+	 sum_of_currents -= currents[current_index];
+	 }
+	 if (measured_current > 0) {
+	 sum_of_currents += measured_current;
+	 } else {
+	 sum_of_currents -= measured_current;
+	 }
 
-	currents[current_index] = meassured_current;
+	 currents[current_index] = measured_current;
 
-	current_index = ((++current_index) % IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
+	 current_index = ((++current_index) % IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
 
-	//	printf("aa: %d, %d, %d\n",  sum_of_currents, meassured_current, kk);
-	//	printf("aa: %d\n", sum_of_currents);
+	 //	printf("aa: %d, %d, %d\n",  sum_of_currents, measured_current, kk);
+	 //	printf("aa: %d\n", sum_of_currents);
 
 
-	reg_state = next_reg_state;
+	 reg_state = next_reg_state;
 
-	switch (reg_state)
-	{
-		case lib::GRIPPER_START_STATE:
+	 switch (reg_state)
+	 {
+	 case lib::GRIPPER_START_STATE:
 
-			if (sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE) {
-				next_reg_state = lib::GRIPPER_BLOCKED_STATE;
-				gripper_blocked_start_time = master.step_counter;
-				// 				printf("gripper GRIPPER_BLOCKED_STATE state\n");
-			}
-			break;
+	 if (sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE) {
+	 next_reg_state = lib::GRIPPER_BLOCKED_STATE;
+	 gripper_blocked_start_time = master.step_counter;
+	 // 				printf("gripper GRIPPER_BLOCKED_STATE state\n");
+	 }
+	 break;
 
-		case lib::GRIPPER_BLOCKED_STATE:
+	 case lib::GRIPPER_BLOCKED_STATE:
 
-			if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
-					&& (!(sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE * 100))) {
-				//			printf("gripper GRIPPER_START_STATE state\n");
-				next_reg_state = lib::GRIPPER_START_STATE;
-			} else {
-				position_increment_old = 0;
-				position_increment_new = 0;
-				delta_eint_old = 0;
-				delta_eint = 0;
-				step_old_pulse = 0;
-				step_new_pulse = 0;
-				set_value_very_old = 0;
-				set_value_old = 0;
-				set_value_old = 0;
-				set_value_new = 0;
-			}
-			break;
+	 if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
+	 && (!(sum_of_currents > IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_MAX_VALUE * 100))) {
+	 //			printf("gripper GRIPPER_START_STATE state\n");
+	 next_reg_state = lib::GRIPPER_START_STATE;
+	 } else {
+	 position_increment_old = 0;
+	 position_increment_new = 0;
+	 delta_eint_old = 0;
+	 delta_eint = 0;
+	 step_old_pulse = 0;
+	 step_new_pulse = 0;
+	 set_value_very_old = 0;
+	 set_value_old = 0;
+	 set_value_old = 0;
+	 set_value_new = 0;
+	 }
+	 break;
 
-		default:
-			break;
-	}
+	 default:
+	 break;
+	 }
 
-	prev_reg_state = reg_state;
-*/
+	 prev_reg_state = reg_state;
+	 */
 	return alg_par_status;
 
 }

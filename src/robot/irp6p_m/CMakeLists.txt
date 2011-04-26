@@ -11,22 +11,19 @@ target_link_libraries(
 	edp hi_moxa ${COMMON_LIBRARIES}
 )
 
-if(QNXNTO)
-target_link_libraries(
-	edp_irp6p_m
-	ati6284
-)
-elseif(COMEDILIB_FOUND)
+if(COMEDILIB_FOUND)
 target_link_libraries(
         edp_irp6p_m
         ati6284KB
 )
-else(QNXNTO) # MacOS workaround
+else(COMEDILIB_FOUND)
+ # MacOS workaround
 target_link_libraries(
         edp_irp6p_m
-        ati3084MK
+        # TODO zrobcie pusty czujnik
+        ati3084KB
 )
-endif(QNXNTO)
+endif(COMEDILIB_FOUND)
 
 add_library(kinematicsirp6p_m
 	kinematic_model_calibrated_irp6p_with_wrist.cc

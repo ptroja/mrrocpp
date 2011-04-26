@@ -111,7 +111,7 @@ protected:
 
 	common::irq_data_t irq_data;
 
-	int meassured_current[lib::MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
+	int measured_current[lib::MAX_SERVOS_NR]; // by Y - zmierzona wartosc pradu
 	long int current_absolute_position[lib::MAX_SERVOS_NR]; // aktualne polozenia osi
 	long int previous_absolute_position[lib::MAX_SERVOS_NR]; // poprzednie polozenia osi
 	double current_position_inc[lib::MAX_SERVOS_NR]; // aktualny przyrost polozenia

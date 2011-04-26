@@ -381,7 +381,7 @@ int wgt_bird_hand_command::set_finger_status(int fingerId)
 
 	doubleSpinBox_curpos_Vector[fingerId]->setValue(joint_status[fingerId]->meassured_position);
 	doubleSpinBox_curtor_Vector[fingerId]->setValue(joint_status[fingerId]->meassured_torque);
-	doubleSpinBox_mcur_Vector[fingerId]->setValue(joint_status[fingerId]->meassured_current);
+	doubleSpinBox_mcur_Vector[fingerId]->setValue(joint_status[fingerId]->measured_current);
 
 	if (joint_status[fingerId]->lower_limit_of_absolute_position) {
 		chboxes[0]->setChecked(true);
@@ -425,7 +425,7 @@ int wgt_bird_hand_command::set_finger_status(int fingerId)
 		chboxes[6]->setChecked(false);
 	}
 
-	if (joint_status[fingerId]->upper_limit_of_meassured_current) {
+	if (joint_status[fingerId]->upper_limit_of_measured_current) {
 		chboxes[7]->setChecked(true);
 	} else {
 		chboxes[7]->setChecked(false);
