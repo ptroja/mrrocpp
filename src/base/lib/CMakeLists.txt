@@ -20,7 +20,8 @@ add_library(mrrocpp
 	mrmath/mathtr.cc
 	mrmath/k_vector.cc
 	mrmath/ft_v_vector.cc
-	mrmath/jacobian_matrix.cc	
+	mrmath/Xyz_Angle_Axis_Gamma_vector.cc
+	mrmath/jacobian_matrix.cc
 	configurator.cc
 	child.cc
 	c_buffer.cc r_buffer.cc
@@ -39,9 +40,12 @@ add_library(mrrocpp
 	compat.c
 )
 
+add_executable(pvat_test
+	pvat_test.cc
+)
+
 target_link_libraries (mrrocpp sr)
 
 target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
 
 install(TARGETS mrrocpp DESTINATION lib)
-

@@ -64,7 +64,7 @@ public:
     //! Vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist). An equivalent of <Hx,0,Hz>.
 	static const Vector3d P_S_P;
 
-    //! Transformation from P (middle of upper P platform)and S (middle of the spherical wrist).
+    //! Transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
 	static const Homog4d P_S_T;
 
     //! Transformation from W (SW end-effector) to S (middle of the spherical wrist).

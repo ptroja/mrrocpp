@@ -346,7 +346,7 @@ int wgt_spkm_inc::move_it()
 			}
 
 			else if (ui.radioButton_sync_polynomal->isChecked()) {
-				motion_variant = lib::epos::SYNC_POLYNOMAL;
+				motion_variant = lib::epos::SYNC_POLYNOMIAL;
 			}
 
 			else if (ui.radioButton_operational->isChecked()) {

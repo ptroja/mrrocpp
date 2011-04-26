@@ -359,16 +359,32 @@ void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2,
 	set_translation_vector(x, y, z);
 }
 
-void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector) // kat wliczony w os
+void Homog_matrix::set_from_xyz_angle_axis_gamma(const Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma)
 {
-	const double alfa = sqrt(l_vector[3] * l_vector[3] + l_vector[4] * l_vector[4] + l_vector[5] * l_vector[5]);
+	// Transform into the xyz_aa representation.
+	Xyz_Angle_Axis_vector xyz_aa;
+	for (int i = 0; i < 3; i++) {
+		// The translation.
+		xyz_aa[i] = xyz_aa_gamma[i];
+		// The rotation in the form of vector multiplied by angle.
+		xyz_aa[3+i] = xyz_aa_gamma[3+i] * xyz_aa_gamma[6];
+	}
+
+	// Set matrix on the base of x,y,z, vx,vy,vz.
+	set_from_xyz_angle_axis(xyz_aa);
+}
+
+
+void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa)
+{
+	const double alfa = sqrt(xyz_aa[3] * xyz_aa[3] + xyz_aa[4] * xyz_aa[4] + xyz_aa[5] * xyz_aa[5]);
 
 	double kx, ky, kz;
 
 	if (alfa > ALPHA_SENSITIVITY) {
-		kx = l_vector[3] / alfa;
-		ky = l_vector[4] / alfa;
-		kz = l_vector[5] / alfa;
+		kx = xyz_aa[3] / alfa;
+		ky = xyz_aa[4] / alfa;
+		kz = xyz_aa[5] / alfa;
 	} else {
 		kx = ky = kz = 0.0;
 	}
@@ -402,10 +418,11 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 	matrix_m[2][2] = kz * kz * v_alfa + c_alfa;
 
 	// uzupelnienie macierzy
-	set_translation_vector(l_vector[0], l_vector[1], l_vector[2]);
+	set_translation_vector(xyz_aa[0], xyz_aa[1], xyz_aa[2]);
 }
 
-void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
+
+void Homog_matrix::get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
 	static const double EPS = 1.0E-6;
@@ -425,9 +442,9 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		value = 1;
 
 	// kat obrotu
-	double alfa = acos(value);
+	double gamma = acos(value);
 
-	if ((alfa < M_PI + delta) && (alfa > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
+	if ((gamma < M_PI + delta) && (gamma > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
 	{
 
 		Kd[0] = sqrt((matrix_m[0][0] + 1) / (double) 2);
@@ -462,28 +479,41 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		}
 
 	}// end kat obrotu 180 stopni
-	else if ((alfa < ALPHA_SENSITIVITY) && (alfa > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
+	else if ((gamma < ALPHA_SENSITIVITY) && (gamma > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
 	{
 
 		for (int i = 0; i < 3; i++)
 			Kd[i] = 0;
 
-		alfa = 0;
+		gamma = 0;
 
 	} else // standardowe obliczenia
 	{
 		// sinus kata obrotu alfa
-		const double s_alfa = sin(alfa);
+		const double s_alfa = sin(gamma);
 
 		Kd[0] = (1 / (2 * s_alfa)) * (matrix_m[2][1] - matrix_m[1][2]);
 		Kd[1] = (1 / (2 * s_alfa)) * (matrix_m[0][2] - matrix_m[2][0]);
 		Kd[2] = (1 / (2 * s_alfa)) * (matrix_m[1][0] - matrix_m[0][1]);
 	}
 
-	// Przepisanie wyniku do tablicy
+	// Write the computed values in output parameter.
+	xyz_aa_gamma << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], Kd[0], Kd[1], Kd[2], gamma;
+}
+
+
+void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const
+{
+	Xyz_Angle_Axis_Gamma_vector xyz_aa_gamma;
+	// Compute x,y,z, vx,vy,vz, gamma.
+	get_xyz_angle_axis_gamma(xyz_aa_gamma);
+
+	// Copy results to table.
 	for (int i = 0; i < 3; i++) {
-		l_vector[i] = matrix_m[i][3];
-		l_vector[3 + i] = Kd[i] * alfa;
+		// The translation.
+		xyz_aa[i] = xyz_aa_gamma[i];
+		// The rotation in the form of vector multiplied by angle.
+		xyz_aa[3+i] = xyz_aa_gamma[3+i] * xyz_aa_gamma[6];
 	}
 }
 
