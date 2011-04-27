@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstdio>
 
 #include <boost/foreach.hpp>
@@ -411,11 +412,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
 
 						// Position, Velocity, Acceleration, Deacceleration - for all axes.
-						Matrix <double, 6, 1> P, V, A, D;
+						//Matrix <double, 6, 1> P, V, A, D;
 
 						// Calculate time - currently the motion time is set to 5s.
 						// TODO: analyze required (desired) movement time -> III cases: t<t_req, t=t_req, t>t_req.
-						double motion_time = 5;
+						double motion_time = 2;
 
 						// Constant time for one segment - 250ms.
 						//double segment_time = 1;//0.25;
@@ -440,11 +441,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> right_side_coefficients;
 						pvat_compute_right_side_coefficients_vector <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (right_side_coefficients, motor_deltas_for_segments, time_deltas);
 
-						// Compute 2w plynomial coefficients for all motors!!
+						// Compute 2w polynomial coefficients for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_2w;
 						pvat_compute_motor_2w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_2w, tau_coefficients, right_side_coefficients);
 
-						// Compute 1w plynomial coefficients for all motors!!
+						// Compute 1w polynomial coefficients for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_1w;
 						pvat_compute_motor_1w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_1w, motor_2w, motor_deltas_for_segments, time_deltas);
 
@@ -456,46 +457,84 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_0w;
 						pvat_compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
-						cout << "time deltas:\n" << time_deltas << endl;
-						cout << "m0w:\n" << motor_0w << endl;
-						cout << "m1w:\n" << motor_1w << endl;
-						cout << "m2w:\n" << motor_2w << endl;
-						cout << "m3w:\n" << motor_3w << endl;
+						cout << "time deltas = [ \n" << time_deltas << "\n ]; \n";
+						cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
+						cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
+						cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
+						cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
 
-						// Perform movement.
-						/*						if (!robot_test_mode) {
-						 // Setup motion parameters
-						 for (size_t i = 0; i < axes.size(); ++i) {
-						 if (Delta[i] != 0) {
-						 axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
-						 // TODO Wystawka dla PT: Cubic Spline Interpolation, coś znalazłem w dokumentacji EPOS  o 0x60C0,
-						 // ale pod dokładniejszym przyjrzeniu się myślę że to nie to...
-						 axes[i]->writePositionProfileType(0);
-						 axes[i]->writeProfileVelocity(Vnew[i] * epos::epos::SECONDS_PER_MINUTE);
-						 axes[i]->writeProfileAcceleration(Anew[i]);
-						 axes[i]->writeProfileDeceleration(Dnew[i]);
-						 axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
-						 }
-						 }
-						 }*/
+						// Compute PVT triplets for generated segments.
+						// Two additional points are added - first related to the start position and second it required by the EPOS (pos;0;0;).
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> p;
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> v;
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, 1> t;
+						pvat_compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_deltas, motor_3w, motor_2w, motor_1w, motor_0w);
 
-						/*						// Start motion
-						 for (size_t i = 0; i < axes.size(); ++i) {
-						 if (Delta[i] != 0) {
-						 if (is_synchronised()) {
-						 // Absolute motion
-						 if (!robot_test_mode) {
-						 axes[i]->startAbsoluteMotion();
-						 } else {
-						 current_joints[i] = desired_joints[i];
-						 current_motor_pos[i] = desired_motor_pos_new[i];
-						 }
-						 } else {
-						 // Throw non-fatal error - this mode requires synchronization.
-						 BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
-						 }
-						 }
-						 }*/
+						cout<<"p = [ \n"<<p << "\n ]; \n";
+						cout<<"v = [ \n"<<v << "\n ]; \n";
+						cout<<"t = [ \n"<<t << "\n ]; \n";
+
+						// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].
+						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
+							for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+								v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+							}
+							//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
+									kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];*/
+						}
+						// Recalculate time.
+						t *= 1000;
+
+						cout<<" !Values after units recalculations!\n";
+						cout<<"p = [ \n"<<p << "\n ]; \n";
+						cout<<"v = [ \n"<<v << "\n ]; \n";
+						cout<<"t = [ \n"<<t << "\n ]; \n";
+
+						// Execute motion
+						if (!robot_test_mode) {
+							// Setup motion parameters
+							for (size_t i = 0; i < axes.size(); ++i) {
+								axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
+								// TODO: setup acceleration and velocity limit values
+								axes[i]->clearPvtBuffer();
+								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+									axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
+								}
+
+								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
+
+								if (axes[i]->checkInterpolationBufferWarning(status) ||
+									axes[i]->checkInterpolationBufferError(status)) {
+									// FIXME: this should be done in a separate exception, which does not benlong
+									//        to the kinematics::spkm namespace.
+									printf("InterpolationBufferStatus for axis %d: 0x%02x\n", i, status);
+									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::pose_specification_error());
+								}
+							}
+						} else {
+							// Display the 2nd axis movement.
+							//ofstream myfile;
+							//myfile.open ("/home/ptrojane/korni/pkm2.csv");
+
+							cout<<"qc;rpm;ms;\r\n";
+							for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+								cout<< (int)p(pnt,1) <<";"<< (int)v(pnt,1) << ";"<< (int)t(pnt) << ";\r\n";
+							}
+	//						myfile<< (int)p(lib::spkm::NUM_OF_MOTION_SEGMENTS,1) <<";0;0;";
+							//myfile.close();
+						}
+
+						// Start motion
+						for (size_t i = 0; i < axes.size(); ++i) {
+							if (!robot_test_mode) {
+								// FIXME: this motion type should be initiated with a CAN broadcast message
+								axes[i]->startInterpolatedPositionMotion();
+							} else {
+								current_joints[i] = desired_joints[i];
+								current_motor_pos[i] = desired_motor_pos_new[i];
+							}
+						}
 					}
 						break;
 					default:

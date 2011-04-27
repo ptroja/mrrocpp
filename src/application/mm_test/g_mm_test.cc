@@ -20,12 +20,12 @@ namespace generator {
 
 const char g_mm_test::configSectionName[] = { "[g_mm_test]" };
 
-g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task):
-		common::generator::generator(_ecp_task)
+g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
+	common::generator::generator(_ecp_task)
 //:generator(_ecp_task), logEnabled(true)
 {
-	index=0;
-	r=0.08;
+	index = 0;
+	r = 0.06;
 	k = 0.0;
 }
 
@@ -37,16 +37,16 @@ bool g_mm_test::first_step()
 {
 	log("g_mm_test::first_step()\n");
 
-		the_robot->ecp_command.instruction_type = lib::GET;
-		the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
-		the_robot->ecp_command.set_type = ARM_DEFINITION;
-		the_robot->ecp_command.get_arm_type = lib::FRAME;
-		the_robot->ecp_command.set_arm_type = lib::FRAME;
+	the_robot->ecp_command.instruction_type = lib::GET;
+	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.set_type = ARM_DEFINITION;
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
+	the_robot->ecp_command.set_arm_type = lib::FRAME;
 
-		the_robot->ecp_command.interpolation_type = lib::TCIM;
-		the_robot->ecp_command.motion_steps = MOTION_STEPS;
-		the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
-		the_robot->ecp_command.motion_type = lib::ABSOLUTE;
+	the_robot->ecp_command.interpolation_type = lib::TCIM;
+	the_robot->ecp_command.motion_steps = MOTION_STEPS;
+	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 
 	log("g_mm_test::first_step() end\n");
 
@@ -66,16 +66,14 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;//polozenie od srodka postumenta
 
-	if(index==0)
-	{
+	if (index == 0) {
 		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		currentFrame.get_translation_vector(first_trans_vect);//srodek okregu
-		//std::cout << currentFrame << std::endl;
+		std::cout << currentFrame << std::endl;
 		index++;
 	}
-
-	log("g_mm_test::next_step() %d\n",index);
+	log("g_mm_test::next_step() %d\n", index);
 	lib::Homog_matrix nextFrame;
 	nextFrame = currentFrame;
 
@@ -83,12 +81,23 @@ bool g_mm_test::next_step()
 	//current_frame_wo_offset.remove_translation();
 
 	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
-	std::cout << "force: "<<std::endl;
-	std::cout<< force_torque << std::endl;
+
+	double fx = force_torque[0];
+	double fy = force_torque[1];
+	/*
+	 if(fx > 0.003 || fy > 0.003 || fx < -0.003 || fy < -0.003)
+	 std::cout<< " >0.003 !!!" << std::endl;
+	 else if(fx > 0.002 || fy > 0.002 || fx < -0.002 || fy < -0.002)
+	 std::cout<< " >0.002 !!" << std::endl;
+	 else if(fx > 0.001 || fy > 0.001 || fx < -0.001 || fy < -0.001)
+	 std::cout<< " >0.001" << std::endl;
+	 */
+
+	std::cout << "force: " << force_torque[0] << "   " << force_torque[1] << "   " << force_torque[3] << std::endl;
+	//std::cout<< force_torque << std::endl;
 
 
-
-	double trans_vect [3];
+	double trans_vect[3];
 
 	/*modyfikuj nextFrame*/
 	nextFrame.get_translation_vector(trans_vect);
@@ -96,7 +105,7 @@ bool g_mm_test::next_step()
 	//trans_vect[1]= first_trans_vect[1] + r*sin(k);
 	//trans_vect[0]= first_trans_vect[0] + r*cos(k) - r;// -r : aby zniwelowac podskok ze srodka okregu na okrag
 
-	trans_vect[1]= first_trans_vect[1] - r*k;
+	trans_vect[1] = first_trans_vect[1] - r * k;
 	//trans_vect[2]= first_trans_vect[2] - r*k;
 
 	k += 0.03;
@@ -107,7 +116,7 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if(k>1.5)
+	if (k > 1.5)
 		return false;
 
 	//std::cout << currentFrame << std::endl;
@@ -128,7 +137,7 @@ void g_mm_test::log(const char *fmt, ...)
 	}
 
 	vfprintf(stdout, fmt, ap);
-	fflush(stdout);
+	fflush( stdout);
 	va_end(ap);
 }
 

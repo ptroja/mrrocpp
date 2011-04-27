@@ -82,7 +82,7 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 
 
 
-
+/*
 	char config_section_name[] = { "[object_follower_ib]" };
 
 	log_dbg_enabled = true;
@@ -112,7 +112,7 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 	sm->configure();
 	log_dbg("ecp_t_objectfollower_ib_eih::ecp_t_objectfollower_ib_eih(): 6\n");
 
-
+*/
 
 	//my_generator = new generator::g_mm_test(*this);
 	sr_ecp_msg->message("ECP loaded mm_test");
@@ -215,7 +215,9 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
+		sr_ecp_msg->message("My gen move start");
 		gen->Move();
+		sr_ecp_msg->message("My gen move end");
 	}
 
 	sr_ecp_msg->message("HENDLER END");

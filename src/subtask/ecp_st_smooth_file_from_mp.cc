@@ -32,12 +32,8 @@ sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, 
 void sub_task_smooth_file_from_mp::conditional_execution()
 {
 	sgen->reset();
-
-	const char * path = ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
-
-	bool result = sgen->load_trajectory_from_file(path);
-
-	assert(result);
+	path = ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
+	sgen->load_trajectory_from_file(path.c_str());
 
 	if (detect_jerks) {
 		if (sgen->calculate_interpolate() && sgen->detect_jerks(1) == 0) {

@@ -911,7 +911,8 @@ typedef struct r_buffer_arm
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & type;
-
+// FIXME: With the following switch it does not work correctly
+#if 0
 		switch (type) {
 			case FRAME:
 				ar & pf_def.arm_frame;
@@ -920,6 +921,10 @@ typedef struct r_buffer_arm
 				ar & pf_def.arm_coordinates;
 				break;
 		}
+#else
+		ar & pf_def.arm_frame;
+		ar & pf_def.arm_coordinates;
+#endif
 
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & gripper_reg_state;
