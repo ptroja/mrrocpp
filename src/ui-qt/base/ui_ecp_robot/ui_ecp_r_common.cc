@@ -409,7 +409,7 @@ void EcpRobot::read_joints(double current_position[])
 
 	execute_motion();
 
-	for (int i = 0; i < ecp->number_of_servos; i++) // Przepisanie aktualnych polozen
+	for (int i = 0; i < ecp->number_of_servos; ++i) // Przepisanie aktualnych polozen
 		current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
 }
 // ---------------------------------------------------------------
