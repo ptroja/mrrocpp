@@ -83,8 +83,20 @@ bool g_mm_test::next_step()
 	//current_frame_wo_offset.remove_translation();
 
 	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
-	std::cout << "force: "<<std::endl;
-	std::cout<< force_torque << std::endl;
+
+	double fx = force_torque[0];
+	double fy = force_torque[1];
+/*
+	if(fx > 0.003 || fy > 0.003 || fx < -0.003 || fy < -0.003)
+		std::cout<< " >0.003 !!!" << std::endl;
+	else if(fx > 0.002 || fy > 0.002 || fx < -0.002 || fy < -0.002)
+		std::cout<< " >0.002 !!" << std::endl;
+	else if(fx > 0.001 || fy > 0.001 || fx < -0.001 || fy < -0.001)
+		std::cout<< " >0.001" << std::endl;
+*/
+
+	std::cout << "force: "<< force_torque[0]<<"   "<<force_torque[1]<<"   "<<force_torque[3]<<std::endl;
+	//std::cout<< force_torque << std::endl;
 
 
 
