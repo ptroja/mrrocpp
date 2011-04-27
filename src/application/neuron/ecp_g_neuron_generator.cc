@@ -101,7 +101,7 @@ bool neuron_generator::next_step()
 	}
 
 	// ------------ read the current robot position ----------
-	actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
 	if(breaking_){
@@ -200,7 +200,7 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(position);
 	//send new position to the robot
-	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = position_matrix;
 	// --------- send new position to the robot (EDP) (end) --------------
 
     if(breaking_ && (mstep_ > break_steps_)){

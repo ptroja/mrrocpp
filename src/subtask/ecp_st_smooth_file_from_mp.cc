@@ -17,9 +17,8 @@ namespace common {
 namespace sub_task {
 
 sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, bool _detect_jerks) :
-	sub_task(_ecp_t), detect_jerks(true)
+	sub_task(_ecp_t), detect_jerks(_detect_jerks)
 {
-	detect_jerks = _detect_jerks;
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:
@@ -31,17 +30,13 @@ sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, 
 			break;
 		default:
 			break;
-
 	}
-
 }
 
 void sub_task_smooth_file_from_mp::conditional_execution()
 {
-
-	path = std::string("");
 	sgen->reset();
-	path += ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
+	path = ecp_t.mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 	sgen->load_trajectory_from_file(path.c_str());
 
 	if (detect_jerks) {
@@ -49,7 +44,6 @@ void sub_task_smooth_file_from_mp::conditional_execution()
 			sgen->Move();
 		}
 	} else {
-
 		if (sgen->calculate_interpolate()) {
 			sgen->Move();
 		}

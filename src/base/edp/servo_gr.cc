@@ -150,7 +150,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 	}
 
 	// przepisanie stanu regulatora chwytaka
-	master.reply.arm.pf_def.gripper_reg_state = sg_reply.gripper_reg_state;
+	master.reply.arm.gripper_reg_state = sg_reply.gripper_reg_state;
 
 	// printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sg_reply.abs_position[4]);
 

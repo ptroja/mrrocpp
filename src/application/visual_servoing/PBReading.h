@@ -8,9 +8,10 @@
 #ifndef PBREADING_HPP_
 #define PBREADING_HPP_
 
+#include <sstream>
+
 #include "Reading.h"
 #include "HomogMatrix.h"
-#include <sstream>
 
 namespace Types {
 namespace Mrrocpp_Proxy {

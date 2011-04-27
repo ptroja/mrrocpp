@@ -68,7 +68,7 @@ bool y_edge_follow_force::first_step()
 	the_robot->ecp_command.motion_steps = td.internode_step_no;
 	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
+	the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
@@ -114,7 +114,7 @@ bool y_edge_follow_force::next_step()
 	for (int i = 0; i < 6; i++)
 		inc_delta[i] = -inc_delta[i];
 
-	tmp_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	tmp_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	tmp_matrix.get_xyz_euler_zyz(tmp_delta);
 
 	for (int i = 0; i < 6; i++)
@@ -171,7 +171,7 @@ bool y_edge_follow_force::next_step()
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
 
-		tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
+		the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 

@@ -46,7 +46,6 @@ acq_force::acq_force(task::task &_ecp_t) :
 
 	sub_task::sr_ecp_msg.message("ecp loaded kcz_force");
 }
-;
 
 void acq_force::conditional_execution()
 {
@@ -91,9 +90,9 @@ void acq_force::main_task_algorithm(void)
 		//(rotation matrix & meters)
 		for (j = 0; j < 3; j++)
 			for (t = 0; t < 3; t++)
-				gsl_matrix_set(K, j, t, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][t]);
+				gsl_matrix_set(K, j, t, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame(j,t));
 		for (j = 0; j < 3; j++)
-			gsl_vector_set(k, j, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame[j][3]);
+			gsl_vector_set(k, j, sub_task::ecp_t.ecp_m_robot->reply_package.arm.pf_def.arm_frame(j,3));
 		//pcbird (M,m)
 		//(degrees & meters)
 		//returns Euler angles:
@@ -170,7 +169,6 @@ void acq_force::main_task_algorithm(void)
 		 */
 	}
 }
-;
 
 } // namespace task
 } // namespace common
