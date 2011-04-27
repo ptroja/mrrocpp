@@ -593,6 +593,42 @@ public:
 	/*! Clear a buffer and reenable access to it */
 	void clearPvtBuffer();
 
+	//! write Interpolation Sub Mode Selection
+	void writeInterpolationSubModeSelection(INTEGER16 val);
+
+	//! read Interpolation Sub Mode Selection
+	INTEGER16 readInterpolationSubModeSelection();
+
+	//! write Interpolation Time Period Value
+	void writeInterpolationTimePeriod(UNSIGNED8 val);
+
+	//! read Interpolation Time Period Value
+	UNSIGNED8 readInterpolationTimePeriod();
+
+	//! write Interpolation Time Index
+	void writeInterpolationTimeIndex(INTEGER8 val);
+
+	//! read Interpolation Time Period Index
+	INTEGER8 readInterpolationTimeIndex();
+
+	//! write Interpolation data record
+	void writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time);
+
+	//! read Interpolation buffer status
+	UNSIGNED16 readInterpolationBufferStatus();
+
+	//! read Interpolation buffer underflow warning
+	UNSIGNED16 readInterpolationBufferUnderflowWarning();
+
+	//! write Interpolation buffer underflow warning
+	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 );
+
+	//! read Interpolation buffer overflow warning
+	UNSIGNED16 readInterpolationBufferOverflowWarning();
+
+	//! write Interpolation buffer overflow warning
+	void writeInterpolationBufferOverflowWarning(UNSIGNED16 );
+
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
