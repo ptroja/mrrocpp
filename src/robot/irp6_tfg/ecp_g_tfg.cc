@@ -100,7 +100,7 @@ bool tfg::next_step()
 	}
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
+	//lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	return true;
 
