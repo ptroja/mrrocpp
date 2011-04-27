@@ -83,6 +83,8 @@ namespace epos {
 #define PVT_STATUS_ACCELERATION_ERROR	E_BIT03
 #define PVT_STATUS_BUFFER_ENABLED		E_BIT14
 #define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15
+#define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)
+#define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)
 
 /************************************************************/
 /*           EPOS related constants                         */
@@ -1361,6 +1363,16 @@ UNSIGNED16 epos::readInterpolationBufferStatus()
 	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x01);
 }
 
+bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_WARNING);
+}
+
+bool epos::checkInterpolationBufferError(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_ERROR);
+}
+
 //! read Interpolation buffer underflow warning
 UNSIGNED16 epos::readInterpolationBufferUnderflowWarning()
 {
@@ -1383,6 +1395,11 @@ UNSIGNED16 epos::readInterpolationBufferOverflowWarning()
 void epos::writeInterpolationBufferOverflowWarning(UNSIGNED16 val)
 {
 	WriteObjectValue(0x20C4, 0x03, val);
+}
+
+void epos::startInterpolatedPositionMotion()
+{
+	writeControlword(0x1f);
 }
 
 /*! read Error register */

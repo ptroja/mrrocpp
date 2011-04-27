@@ -617,6 +617,12 @@ public:
 	//! read Interpolation buffer status
 	UNSIGNED16 readInterpolationBufferStatus();
 
+	//! check Interpolation Buffer warning
+	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
+
+	//! check Interpolation Buffer error
+	static bool checkInterpolationBufferError(UNSIGNED16 status);
+
 	//! read Interpolation buffer underflow warning
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();
 
