@@ -621,13 +621,16 @@ public:
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();
 
 	//! write Interpolation buffer underflow warning
-	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 );
+	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 val);
 
 	//! read Interpolation buffer overflow warning
 	UNSIGNED16 readInterpolationBufferOverflowWarning();
 
 	//! write Interpolation buffer overflow warning
-	void writeInterpolationBufferOverflowWarning(UNSIGNED16 );
+	void writeInterpolationBufferOverflowWarning(UNSIGNED16 val);
+
+	//! start Interpolated Position Mode motion
+	void startInterpolatedPositionMotion();
 
 	static const char * ErrorCodeMessage(UNSIGNED32 code);
 
