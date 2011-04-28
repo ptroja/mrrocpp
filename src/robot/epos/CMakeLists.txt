@@ -8,17 +8,13 @@ if(LibFTDI_FOUND)
 
     # Test utility
     add_executable(test test.cc)
-<<<<<<< HEAD
-    target_link_libraries (test epos) 
-=======
     target_link_libraries (test epos)
     
     add_executable(ipmtest ipmtest.cc)
     target_link_libraries (ipmtest epos rt) 
 
-    add_executable(cantest cantest.cc)
-    target_link_libraries (cantest epos) 
->>>>>>> 8a8d49a... ipmtest utility added
+    #add_executable(cantest cantest.cc)
+    #target_link_libraries (cantest epos) 
 else(LibFTDI_FOUND)
     add_library(epos
         	epos.cc

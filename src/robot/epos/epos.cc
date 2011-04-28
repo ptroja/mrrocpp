@@ -111,7 +111,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	writeMotorMaxSpeed(50000UL);
 	writeMaxProfileVelocity(50000UL);
 	writeGearRatioNumerator(0);
-
+#if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 			ProfileVelocity << ", " <<
 			ProfileAcceleration << ", " <<
@@ -126,6 +126,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 				readGearRatioNumerator() << "/" <<
 				readGearRatioDenominator() << " maximal speed " <<
 				readGearMaximalSpeed() << std::endl;
+#endif
 }
 
 /* read EPOS status word */
@@ -626,6 +627,12 @@ void epos::changeEPOSstate(state_t state)
 		default:
 			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
 	}
+}
+
+/* returns software version as HEX  --  14.1.33*/
+UNSIGNED8 epos::readNodeID()
+{
+	return ReadObjectValue<UNSIGNED8>(0x2000, 0x00);
 }
 
 /* returns software version as HEX  --  14.1.33*/
@@ -1904,23 +1911,31 @@ void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
  writing libEPOS functions. */
 void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
 {
-	WORD frame[6];
+	try {
+		WORD frame[6];
 
-	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
-	frame[1] = index;
-	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
-	// data to transmit
-	frame[3] = data[0];
-	frame[4] = data[1];
-	frame[5] = 0x00; // ZERO word, will be filled with checksum
+		frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
+		frame[1] = index;
+		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		// data to transmit
+		frame[3] = data[0];
+		frame[4] = data[1];
+		frame[5] = 0x00; // ZERO word, will be filled with checksum
 
-	device.sendCommand(frame);
+		device.sendCommand(frame);
 
-	// read response
-	WORD answer[8];
-	device.readAnswer(answer, 8);
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
 
-	checkEPOSerror(device.E_error);
+		checkEPOSerror(device.E_error);
+	}
+	catch (epos_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)

@@ -31,6 +31,15 @@ struct epos_error : virtual public std::exception, virtual public boost::excepti
 //! reason of an exception
 typedef boost::error_info <struct tag_reason, std::string> reason;
 
+//! index of the CANOpen object
+typedef boost::error_info <struct tag_index, uint16_t> dictionary_index;
+
+//! subindex of the CANOpen object
+typedef boost::error_info <struct tag_subindex, uint8_t> dictionary_subindex;
+
+//! CAN ID
+typedef boost::error_info <struct tag_canId, uint8_t> canId;
+
 //! errno code of a failed system call
 typedef boost::error_info <struct tag_errno_code, int> errno_code;
 
@@ -99,7 +108,7 @@ public:
 	 *  @param Length CAN Frame Data Length Code (DLC)
 	 *  @param Data CAN Frame Data
 	 */
-	virtual void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]) = 0;
+	virtual void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]) = 0;
 
 	//! Open device
 	virtual void open() = 0;

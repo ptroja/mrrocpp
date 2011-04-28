@@ -243,6 +243,9 @@ public:
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
 	void changeEPOSstate(state_t state);
 
+	/*! \brief read CAN Node ID */
+	UNSIGNED8 readNodeID();
+
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 readSWversion();
 
