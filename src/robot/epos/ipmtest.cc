@@ -13,52 +13,54 @@ int main(int argc, char *argv[])
 {
 	epos_access_usb gateway;
 
-	boost::array<epos *, 6> axis;
-
 	try {
+		// timestamps variables
+		struct timespec t1, t2;
+
 		gateway.open();
 
-		epos node1(gateway, 1);
-		epos node2(gateway, 2);
-		epos node3(gateway, 3);
-		epos node4(gateway, 4);
-		epos node5(gateway, 5);
-		epos node6(gateway, 6);
+		epos node(gateway, 4);
 
-		axis[0] = &node1;
-		axis[1] = &node2;
-		axis[2] = &node3;
-		axis[3] = &node4;
-		axis[4] = &node5;
-		axis[5] = &node6;
-
-		BOOST_FOREACH(epos * node, axis) {
-
-			node->printEPOSstate();
-//			node->SendNMTService(epos::Reset_Node);
+		node.printEPOSstate();
+//			node.SendNMTService(epos::Reset_Node);
 //			usleep(500000);
-//			node->SendNMTService(epos::Start_Remote_Node);
+//			node.SendNMTService(epos::Start_Remote_Node);
 //			usleep(500000);
 
-			// Check if in a FAULT state
-			if(node->checkEPOSstate() == 11) {
-				UNSIGNED8 errNum = node->readNumberOfErrors();
-				std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
-				for(UNSIGNED8 i = 1; i <= errNum; ++i) {
+		// Check if in a FAULT state
+		if(node.checkEPOSstate() == 11) {
+			UNSIGNED8 errNum = node.readNumberOfErrors();
+			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
+			for(UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-					UNSIGNED32 errCode = node->readErrorHistory(i);
+				UNSIGNED32 errCode = node.readErrorHistory(i);
 
-					std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
-				}
-				if (errNum > 0) {
-					node->clearNumberOfErrors();
-				}
-				node->changeEPOSstate(epos::FAULT_RESET);
+				std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
 			}
-
-			// Change to the operational mode
-			node->reset();
+			if (errNum > 0) {
+				node.clearNumberOfErrors();
+			}
+			node.changeEPOSstate(epos::FAULT_RESET);
 		}
+
+		// Change to the operational mode
+		node.reset();
+
+		node.clearPvtBuffer();
+
+		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
+
+		gateway.setDebugLevel(0);
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		node.writeInterpolationDataRecord(1, 2, 3);
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+//		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
+//		printf("%.9f\n", t);
+//		node.writeInterpolationDataRecord(1, 2, 3);
+//		node.writeInterpolationDataRecord(1, 2, 3);
+		gateway.setDebugLevel(0);
+
+		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
 
 		gateway.close();
 	} catch (epos_error & error) {

@@ -147,6 +147,20 @@ private:
 	int SegmentRead(WORD **ptr);
 #endif
 
+	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	 *
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 */
+	void InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+
+	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
+	 *
+	 * @param ptr pointer to data to be filled
+	 * @param len length of the data to write
+	 */
+	void SegmentedWrite(BYTE * ptr, std::size_t len);
+
 	/*! \brief write obect to EPOS
 	 *
 	 * @param index object entry index in a dictionary
@@ -174,6 +188,9 @@ private:
 
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
+
+	//! toggle bit used for segmented write
+	bool toggle;
 
 public:
 	/*! \brief create new USB EPOS object
