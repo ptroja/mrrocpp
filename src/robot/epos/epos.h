@@ -643,6 +643,8 @@ public:
 	//! check Interpolation Buffer error
 	static bool checkInterpolationBufferError(UNSIGNED16 status);
 
+	static void printInterpolationBufferStatus(UNSIGNED16 status);
+
 	//! read Interpolation buffer underflow warning
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();
 

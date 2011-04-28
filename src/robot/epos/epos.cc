@@ -1367,32 +1367,32 @@ void epos::printInterpolationBufferStatus(UNSIGNED16 status)
 		printf("Buffer overflow warning level is reached\n");
 	}
 	if (status & PVT_STATUS_VELOCITY_WARNING) {
-		printf("IPM velocity greater than profile velocity detected");
+		printf("IPM velocity greater than profile velocity detected\n");
 	}
 	if (status & PVT_STATUS_ACCELERATION_WARNING) {
-		printf("IPM acceleration greater than profile acceleration detected");
+		printf("IPM acceleration greater than profile acceleration detected\n");
 	}
 
 	// Error codes
 	if (status & PVT_STATUS_UNDERFLOW_ERROR) {
-		printf("Buffer underflow error (trajectory abort)");
+		printf("Buffer underflow error (trajectory abort)\n");
 	}
 	if (status & PVT_STATUS_OVERFLOW_ERROR) {
-		printf("Buffer overflow error (trajectory abort)");
+		printf("Buffer overflow error (trajectory abort)\n");
 	}
 	if (status & PVT_STATUS_VELOCITY_ERROR) {
-		printf("IPM velocity greater than profile velocity detected");
+		printf("IPM velocity greater than profile velocity detected\n");
 	}
 	if (status & PVT_STATUS_ACCELERATION_ERROR) {
-		printf("IPM acceleration greater than profile acceleration detected");
+		printf("IPM acceleration greater than profile acceleration detected\n");
 	}
 
 	// Status codes
 	if (status & PVT_STATUS_BUFFER_ENABLED) {
-		printf("Access to the input buffer enabled");
+		printf("Access to the input buffer enabled\n");
 	}
 	if (status & PVT_STATUS_IP_MODE_ACTIVE) {
-		printf("IP mode active");
+		printf("IP mode active\n");
 	}
 }
 

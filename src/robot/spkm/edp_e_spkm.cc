@@ -171,32 +171,32 @@ void effector::synchronise(void)
 
 	// switch to homing mode
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->setOperationMode(epos::epos::OMD_HOMING_MODE);
-				}
+	{
+		node->setOperationMode(epos::epos::OMD_HOMING_MODE);
+	}
 
 	// reset controller
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->reset();
-				}
+	{
+		node->reset();
+	}
 
 	// Do homing with preconfigured parameters
 	BOOST_FOREACH(epos::epos * node, axes)
-				{
-					node->startHoming();
-				}
+	{
+		node->startHoming();
+	}
 
 	// Loop until homing is finished
 	bool finished;
 	do {
 		finished = true;
 		BOOST_FOREACH(epos::epos * node, axes)
-					{
-						if (!node->isHomingFinished()) {
-							finished = false;
-						}
-					}
+		{
+			if (!node->isHomingFinished()) {
+				finished = false;
+			}
+		}
 	} while (!finished);
 
 	// Hardcoded safety values.
@@ -205,6 +205,12 @@ void effector::synchronise(void)
 		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 1);
 		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 1);
 	}
+
+	// Move the longest linear axis to the 'zero' position with a fast motion command
+	axisB->writeProfileVelocity(5000UL);
+	axisB->writeProfileAcceleration(1000UL);
+	axisB->writeProfileDeceleration(1000UL);
+	axisB->moveAbsolute(-57500);
 
 	// Just for testing if limits actually work
 	//	axisA->writeMinimalPositionLimit(-100000);
@@ -504,11 +510,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
-								if (axes[i]->checkInterpolationBufferWarning(status) ||
-									axes[i]->checkInterpolationBufferError(status)) {
+								if (axes[i]->checkInterpolationBufferWarning(status)) {
+									axes[i]->printInterpolationBufferStatus(status);
+								}
+
+								if (axes[i]->checkInterpolationBufferError(status)) {
 									// FIXME: this should be done in a separate exception, which does not benlong
 									//        to the kinematics::spkm namespace.
-									printf("InterpolationBufferStatus for axis %d: 0x%02x\n", i, status);
+									printf("InterpolationBufferStatus for axis %d: 0x%04X\n", i, status);
 									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::pose_specification_error());
 								}
 							}
