@@ -1316,13 +1316,13 @@ void epos::writeInterpolationTimeIndex(INTEGER8 val)
 void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time)
 {
 	// only 24 bits allowed for velocity
-	if (velocity > 0x00ffffff || velocity < 0xff000000) {
+	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
 		BOOST_THROW_EXCEPTION(epos_error() << reason("Only 24 bits allowed for velocity"));
 	}
 
 	// This array holds a manufacturer-specific 64 bit data record
 	// of a complex data structure; see Maxon documentation for details.
-	char pvt[8];
+	uint8_t pvt[8];
 
 	// The data layout is as follows:
 	// +------------------------------------------------------------------+
@@ -1333,35 +1333,15 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 
 	// note: velocity assignment is with 32-bit integer, so it has to
 	//       be done before assignment of time value to avoid overwrite
-	*((int32_t *) pvt[4]) = (velocity & 0x00ffffff);
+	*((int32_t *) &pvt[4]) = (velocity & 0x00ffffff);
 	pvt[7] = time;
-	*((int32_t *) pvt[0]) = position;
+	*((int32_t *) &pvt[0]) = position;
 
-	// custom WriteObject() for a 64bit complex data structure
-	{
-		const WORD index = 0x20C1;
-		const BYTE subindex = 0x00;
-
-		WORD frame[8];
-
-		frame[0] = 0x0611; // fixed: (len-1) == 3, WriteObject
-		frame[1] = index;
-		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
-		// data to transmit
-		frame[3] = *((WORD *) pvt[0]);
-		frame[4] = *((WORD *) pvt[2]);
-		frame[5] = *((WORD *) pvt[4]);
-		frame[6] = *((WORD *) pvt[6]);
-		frame[7] = 0x00; // ZERO word, will be filled with checksum
-
-		device.sendCommand(frame);
-
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-	}
+	// PVT record have to be transmitted in a Segmented Write mode
+	InitiateSementedWrite(0x20C1, 0x00, 8);
+	// Maxon splits the record into two CAN frames
+	SegmentedWrite(&pvt[0], 7);
+	SegmentedWrite(&pvt[7], 1);
 }
 
 //! read Interpolation buffer status
@@ -1728,65 +1708,42 @@ void epos::checkEPOSerror(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
-		case E_NOERR:
-			return;
-			break;
-		case E_ONOTEX:
-			msg = "requested object does not exist!";
-			break;
-		case E_SUBINEX:
-			msg = "requested subindex does not exist!";
-			break;
-		case E_OUTMEM:
-			msg= "out of memory!";
-			break;
-		case E_NOACCES:
-			msg= "unsupported access to an object!";
-			break;
-		case E_WRITEONLY:
-			msg= "attempt to read a write-only object!";
-			break;
-		case E_READONLY:
-			msg= "attempt to write a read-only object!";
-			break;
-		case E_PARAMINCOMP:
-			msg= "general parameter incompatibility!";
-			break;
-		case E_INTINCOMP:
-			msg= "general internal incompatibility in the device!";
-			break;
-		case E_HWERR:
-			msg= "access failed due to an HARDWARE ERROR!";
-			break;
-		case E_PRAGNEX:
-			msg= "value range of parameter exceeded!";
-			break;
-		case E_PARHIGH:
-			msg= "value of parameter written is too high!";
-			break;
-		case E_PARLOW:
-			msg= "value of parameter written is too low!";
-			break;
-		case E_PARREL:
-			msg= "maximum value is less than minimum value!";
-			break;
-		case E_NMTSTATE:
-			msg= "wrong NMT state!";
-			break;
-		case E_RS232:
-			msg= "rs232 command illegal!";
-			break;
-		case E_PASSWD:
-			msg= "password incorrect!";
-			break;
-		case E_NSERV:
-			msg= "device not in service mode!";
-			break;
-		case E_NODEID:
-			msg= "error in Node-ID!";
-			break;
+		//case 0x00000000: msg = "No Communication Error: RS232 communication successful"; break;
+		case 0x00000000: return;
+		case 0x05030000: msg = "Toggle Error: Toggle bit not alternated"; break;
+		case 0x05040000: msg = "SDO Time Out: SDO protocol timed out"; break;
+		case 0x05040001: msg = "Client / Server Specifier Error: Client / server command specifier not valid or unknown"; break;
+		case 0x05040005: msg = "Out of Memory Error: Out of memory"; break;
+		case 0x06010000: msg = "Access Error: Unsupported access to an object"; break;
+		case 0x06010001: msg = "Write Only: Read command to a write only object"; break;
+		case 0x06010002: msg = "Read Only: Write command to a read only object"; break;
+		case 0x06020000: msg = "Object does not exist Error: Last read or write command had wrong object index or subindex"; break;
+		case 0x06040041: msg = "PDO mapping Error: Object is not mappable to the PDO"; break;
+		case 0x06040042: msg = "PDO Length Error: Number and length of objects to be mapped would exceed PDO length"; break;
+		case 0x06040043: msg = "General Parameter Error: General parameter incompatibility"; break;
+		case 0x06040047: msg = "General internal Incompatibility Error: General internal incompatibility in device"; break;
+		case 0x06060000: msg = "Hardware Error: Access failed due to hardware error"; break;
+		case 0x06070010: msg = "Service Parameter Error: Data type does not match, length or service parameter does not match"; break;
+		case 0x06070012: msg = "Service Parameter too long Error: Data type does not match, length of service parameter too high"; break;
+		case 0x06070013: msg = "Service Parameter too short Error: Data type does not match, length of service parameter too low"; break;
+		case 0x06090011: msg = "Object Subindex Error: Last read or write command had wrong object subindex"; break;
+		case 0x06090030: msg = "Value Range Error: Value range of parameter exceeded"; break;
+		case 0x06090031: msg = "Value too high Error: Value of parameter written too high"; break;
+		case 0x06090032: msg = "Value too low Error: Value of parameter written too low"; break;
+		case 0x06090036: msg = "Maximum less Minimum Error: Maximum value is less than minimum value"; break;
+		case 0x08000000: msg = "General Error: General error"; break;
+		case 0x08000020: msg = "Transfer or store Error: Data cannot be transferred or stored"; break;
+		case 0x08000021: msg = "Local Control Error: Data cannot be transferred or stored to application because of local control"; break;
+		case 0x08000022: msg = "Wrong Device State: Data cannot be transferred or stored to application because of present device state"; break;
+		case 0x0F00FFC0: msg = "Wrong NMT State Error: Device is in wrong NMT state"; break;
+		case 0x0F00FFBF: msg = "Illegal Command Error: RS232 command is illegal (does not exist)"; break;
+		case 0x0F00FFBE: msg = "Password Error: Password is incorrect"; break;
+		case 0x0F00FFBC: msg = "Error Service Mode: Device is not in service mode"; break;
+		case 0x0F00FFB9: msg = "Error CAN ID: Wrong CAN ID"; break;
+
 		default:
 			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
+			printf("EPOS error code: 0x%08x\n", E_error);
 			break;
 	}
 
@@ -1799,6 +1756,16 @@ WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 	WORD shifter, c;
 	WORD carry;
 	WORD CRC = 0;
+
+	if (debug) {
+		int i = numberOfWords;
+		const WORD * ptr = pDataArray;
+		printf("CRC[%d]: ", numberOfWords);
+		while(i--) {
+			printf("0x%04X ", *ptr++);
+		}
+		printf("\n");
+	}
 
 	//Calculate pDataArray Word by Word
 	while (numberOfWords--) {
@@ -1816,7 +1783,9 @@ WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 		} while (shifter);
 	}
 
-	//printf("checksum == %#06x\n", CRC);
+	if (debug) {
+		printf("checksum == %#06x\n", CRC);
+	}
 	return CRC;
 }
 
@@ -1876,6 +1845,67 @@ static int SegmentRead(WORD **ptr) {
 	return(0);
 }
 #endif
+
+void epos::InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
+{
+	try {
+		WORD frame[6];
+
+		frame[0] = 0x0413; // fixed: (len-1) == 3, WriteObject
+		frame[1] = index;
+		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		// data to transmit
+		*((DWORD *) &frame[3]) = ObjectLength;
+		// frame[4] = << this is filled by the 32bit assignment above >>;
+		frame[5] = 0x00; // ZERO word, will be filled with checksum
+
+		device.sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
+
+		checkEPOSerror(device.E_error);
+
+		toggle = true;
+	}
+	catch (epos_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
+}
+
+void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
+{
+	if (len > 63) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Segmented write of > 63 bytes not allowed"));
+	}
+	try {
+		WORD frame[32+2];
+
+		memset(frame, 0, sizeof(frame));
+		frame[0] = ((1+len/2) << 8) | 0x15; // fixed: (len-1) == 3, WriteObject
+		frame[1] = len | (toggle ? (0x80) : 0x40);
+		memcpy(((char *)&frame[1]+1), ptr, len);
+
+		device.sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
+
+		checkEPOSerror(device.E_error);
+
+		// change the toggle flag value
+		toggle = (toggle) ? false : true;
+	}
+	catch (epos_error & e) {
+		e << canId(nodeId);
+		throw;
+	}
+}
 
 /* Low-level function to write an object to EPOS memory. Is called by
  writing libEPOS functions. */

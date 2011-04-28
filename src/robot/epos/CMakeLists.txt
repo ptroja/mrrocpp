@@ -11,7 +11,7 @@ if(LibFTDI_FOUND)
     target_link_libraries (test epos)
     
     add_executable(ipmtest ipmtest.cc)
-    target_link_libraries (ipmtest epos) 
+    target_link_libraries (ipmtest epos rt) 
 
     add_executable(cantest cantest.cc)
     target_link_libraries (cantest epos) 

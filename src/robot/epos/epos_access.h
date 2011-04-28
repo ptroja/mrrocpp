@@ -59,13 +59,16 @@ protected:
 	//! Flag indicating connection status
 	bool device_opened;
 
+	//! debug level
+	int debug;
+
 public:
 	//! EPOS error status
 	DWORD E_error;
 
 public:
 	//! Constructor
-	epos_access() : device_opened(false)
+	epos_access() : device_opened(false), debug(0)
 	{}
 
 	//! Destructor
@@ -120,7 +123,12 @@ public:
 	 * @param pDataArray pointer to data for checksum calculation
 	 * @param numberOfWords length of the data
 	 */
-	static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+	/*static*/ WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+
+	//! Set the debug level
+	void setDebugLevel(int level) {
+		debug = level;
+	}
 };
 
 } /* namespace epos */

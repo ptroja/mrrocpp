@@ -119,13 +119,13 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 		throw epos_error() << reason("no data returned");
 	}
 
-#if 0
-	printf("<< ");
-	for(int i=0; i<ret; i++) {
-		printf("0x%02x,", buf[i]);
+	if (debug) {
+		printf("<< ");
+		for(int i=0; i<ret; i++) {
+			printf("0x%02X ", buf[i]);
+		}
+		printf("\n");
 	}
-	printf("\n");
-#endif
 
 	// check DLE
 	if (buf[0] != DLE) {
@@ -162,7 +162,8 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 		if (buf[idx] == DLE) idx++;
 		ans[i] |= (buf[idx++] << 8);
 	}
-#ifdef DEBUG
+
+#ifdef DDEBUG
 	printf("<< ");
 	for(int i=0; i<= framelen+1; i++) {
 		printf("%04x ", ans[i]);
@@ -249,13 +250,13 @@ void epos_access_usb::sendCommand(WORD *frame)
 		datagram[idx++] = c;
 	}
 
-#if 0
-	printf(">> ");
-	for (unsigned int i=0; i<idx; ++i) {
-		printf( "0x%02x,", datagram[i] );
+	if (debug > 0) {
+		printf(">> ");
+		for (unsigned int i=0; i<idx; ++i) {
+			printf( "0x%02X ", datagram[i] );
+		}
+		printf("\n");
 	}
-	printf("\n");
-#endif
 
 	int w = ftdi_write_data(&ftdic, datagram, idx);
 
