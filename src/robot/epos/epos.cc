@@ -1339,11 +1339,17 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
+#if 1
 	// PVT record have to be transmitted in a Segmented Write mode
 	InitiateSementedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
 	SegmentedWrite(&pvt[0], 7);
 	SegmentedWrite(&pvt[7], 1);
+#else
+	// the cobID should be statically configured with a EPOS Studio for the TxPDO4
+	WORD cobID = 0x0500 | (nodeId);
+	device.SendCANFrame(cobID, 8, pvt);
+#endif
 }
 
 //! read Interpolation buffer status
