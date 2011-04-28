@@ -428,6 +428,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
 						pvat_cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						//pvat_linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Compute motor_deltas for segments.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_deltas_for_segments;
@@ -457,7 +458,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_0w;
 						pvat_compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
-						cout << "time deltas = [ \n" << time_deltas << "\n ]; \n";
+						cout << "time_deltas = [ \n" << time_deltas << "\n ]; \n";
 						cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
 						cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
 						cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
@@ -470,9 +471,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, 1> t;
 						pvat_compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_deltas, motor_3w, motor_2w, motor_1w, motor_0w);
 
-						cout<<"p = [ \n"<<p << "\n ]; \n";
+/*						cout<<"p = [ \n"<<p << "\n ]; \n";
 						cout<<"v = [ \n"<<v << "\n ]; \n";
-						cout<<"t = [ \n"<<t << "\n ]; \n";
+						cout<<"t = [ \n"<<t << "\n ]; \n";*/
 
 						// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
@@ -486,10 +487,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Recalculate time.
 						t *= 1000;
 
-						cout<<" !Values after units recalculations!\n";
+/*						cout<<" !Values after units recalculations!\n";
 						cout<<"p = [ \n"<<p << "\n ]; \n";
 						cout<<"v = [ \n"<<v << "\n ]; \n";
-						cout<<"t = [ \n"<<t << "\n ]; \n";
+						cout<<"t = [ \n"<<t << "\n ]; \n";*/
 
 						// Execute motion
 						if (!robot_test_mode) {
