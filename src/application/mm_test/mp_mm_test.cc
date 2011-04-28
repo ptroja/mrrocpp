@@ -185,7 +185,7 @@ lib::robot_name_t gripper_name;
 
 manipulator_name = lib::irp6p_m::ROBOT_NAME;
 gripper_name = lib::irp6p_tfg::ROBOT_NAME;
-
+/*
 
 sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
@@ -205,18 +205,18 @@ run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str()
 
 wait_ms(1000);
 
-mp_ecp_command.desired_position = 0.0715;
+mp_ecp_command.desired_position = 0.066;
 memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 
 sr_ecp_msg->message("ZAMKNIJ");
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
-wait_ms(3000);
+wait_ms(2000);
 
-
+*/
 sr_ecp_msg->message("SZCZEKI W DOL");
-set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz.trj", 0, 1,
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz2.trj", 0, 1,
 		lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
