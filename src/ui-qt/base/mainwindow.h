@@ -34,6 +34,7 @@ public:
 	void raise_process_control_window();
 	void raise_ui_ecp_window();
 	void get_lineEdit_position(double* val, int number_of_servos);
+	void start_on_timer();
 
 	Ui::MainWindow * get_ui();
 

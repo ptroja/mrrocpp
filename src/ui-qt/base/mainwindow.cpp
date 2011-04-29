@@ -52,7 +52,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	ui->setupUi(this);
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
-	timer->start(50);
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
@@ -61,6 +60,11 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
 	main_thread_id = pthread_self();
+}
+
+void MainWindow::start_on_timer()
+{
+	timer->start(50);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
