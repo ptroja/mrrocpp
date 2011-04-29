@@ -1121,13 +1121,15 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
-	meb_tid = (boost::shared_ptr<feb_thread>) new feb_thread(*main_eb);
+	meb_tid = (boost::shared_ptr <feb_thread>) new feb_thread(*main_eb);
 
-	ui_ecp_obj = (boost::shared_ptr<ecp_buffer>) new ecp_buffer(*this);
+	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
 	delay(1);
 
-	ui_sr_obj = (boost::shared_ptr<sr_buffer>) new sr_buffer(*this);
+	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
+	mw->start_on_timer();
+
 }
 
 int Interface::EDP_all_robots_create()
