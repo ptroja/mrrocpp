@@ -506,7 +506,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
 									axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
+									printf("\rsend: %2d/%d, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+									fflush(stdout);
 								}
+								printf("\n");
 
 								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
