@@ -22,6 +22,7 @@
 #include "base/lib/configurator.h"
 
 #include "base/lib/exception.h"
+#include "edp_shell.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -202,13 +203,12 @@ public:
 	 */
 	bool initialize_communication(void);
 
-
 	/*!
 	 * \brief Constructor.
 	 *
 	 * It connects to the existing channels of UI SR.
 	 */
-	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	effector(shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief Destructor.
@@ -245,7 +245,7 @@ public:
  *
  * It is implemented in specific effector file.
  */
-effector* return_created_efector(lib::configurator &_config);
+effector* return_created_efector(common::shell &_shell);
 
 } // namespace common
 } // namespace edp

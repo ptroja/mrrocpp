@@ -80,7 +80,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	/*!
 	 * @brief Method sets initial values of motor and joint positions.

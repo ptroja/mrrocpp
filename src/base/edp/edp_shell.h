@@ -38,6 +38,8 @@ namespace common {
 class shell
 {
 
+	friend class effector;
+
 private:
 
 	/*!

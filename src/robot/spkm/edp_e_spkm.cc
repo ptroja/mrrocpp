@@ -35,8 +35,8 @@ const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL,
 const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
-effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::spkm::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	manip_effector(_shell, lib::spkm::ROBOT_NAME)
 {
 	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;
@@ -700,9 +700,9 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 namespace common {
 
 // Create spkm effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new spkm::effector(_config);
+	return new spkm::effector(_shell);
 }
 
 } // namespace common

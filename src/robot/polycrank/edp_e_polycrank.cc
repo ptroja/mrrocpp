@@ -51,9 +51,9 @@ common::servo_buffer* effector::return_created_servo_buffer()
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	//manip_effector(_config, lib::polycrank::ROBOT_NAME)
-	motor_driven_effector(_config, lib::polycrank::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	//manip_effector(_shell, lib::polycrank::ROBOT_NAME)
+	motor_driven_effector(_shell, lib::polycrank::ROBOT_NAME)
 {
 	number_of_servos = lib::polycrank::NUM_OF_SERVOS;
 
@@ -128,9 +128,9 @@ void effector::create_kinematic_models_for_given_robot(void)
 namespace common {
 
 
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new polycrank::effector(_config);
+	return new polycrank::effector(_shell);
 }
 
 } // namespace common

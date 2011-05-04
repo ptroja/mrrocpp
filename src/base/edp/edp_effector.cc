@@ -31,8 +31,8 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config), robot_test_mode(true)
+effector::effector(shell &_shell, lib::robot_name_t l_robot_name) :
+	robot_name(l_robot_name), config(_shell.config), robot_test_mode(true)
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
