@@ -53,9 +53,8 @@ void catch_signal(int sig)
 
 			if (edp_shell) {
 				edp_shell->close_hardware_busy_file();
-			}
-			if (master) {
-				master->msg->message("edp terminated");
+
+				edp_shell->msg->message("edp terminated");
 			}
 			_exit(EXIT_SUCCESS);
 			break;

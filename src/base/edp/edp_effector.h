@@ -10,18 +10,6 @@
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
-#include <boost/shared_ptr.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/edp/edp_typedefs.h"
-
-#include "base/lib/sr/sr_edp.h"
-#include "base/lib/configurator.h"
-
-#include "base/lib/exception.h"
 #include "edp_shell.h"
 
 using namespace mrrocpp::lib::exception;
