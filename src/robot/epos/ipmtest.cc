@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
 		gateway.open();
 
-		epos node(gateway, 4);
+		epos node(gateway, 1);
 
 		node.printEPOSstate();
 //			node.SendNMTService(epos::Reset_Node);
@@ -48,14 +48,24 @@ int main(int argc, char *argv[])
 
 		node.clearPvtBuffer();
 
+		uint16_t status;
+
+		status = node.readStatusWord();
+		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
+
+		gateway.SendNMTService(1, epos_access::Start_Remote_Node);
+
+		status = node.readStatusWord();
+		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
+
 		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
 
 		gateway.setDebugLevel(0);
 		clock_gettime(CLOCK_MONOTONIC, &t1);
-		node.writeInterpolationDataRecord(1, 2, 3);
+		node.writeInterpolationDataRecord(0, 0, 0);
 		clock_gettime(CLOCK_MONOTONIC, &t2);
-//		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
-//		printf("%.9f\n", t);
+		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
+		printf("%.9f\n", t);
 //		node.writeInterpolationDataRecord(1, 2, 3);
 //		node.writeInterpolationDataRecord(1, 2, 3);
 		gateway.setDebugLevel(0);

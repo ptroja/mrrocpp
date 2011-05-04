@@ -317,7 +317,6 @@ void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data
 	epos::checkEPOSerror(E_error);
 }
 
-
 } /* namespace epos */
 } /* namespace edp */
 } /* namespace mrrocpp */
