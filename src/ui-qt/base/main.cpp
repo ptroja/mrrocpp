@@ -27,7 +27,7 @@ void catch_signal(int sig)
 			signal(SIGSEGV, SIG_DFL);
 			break;
 		case SIGCHLD:
-			child_pid = waitpid(-1, &status, 0);
+			child_pid = waitpid(-1, &status, WNOHANG);
 
 			if (child_pid == -1) {
 				//	int e = errno;

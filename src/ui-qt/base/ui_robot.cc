@@ -37,8 +37,10 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 
 void UiRobot::create_thread()
 {
-	assert(tid == NULL);
-	tid = new feb_thread(eb);
+	//	assert(tid == NULL);
+	if (!tid) {
+		tid = new feb_thread(eb);
+	}
 }
 
 void UiRobot::close_all_windows()
