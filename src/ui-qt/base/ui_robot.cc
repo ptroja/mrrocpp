@@ -57,7 +57,8 @@ int UiRobot::edp_create_int()
 
 			state.edp.is_synchronised = false;
 
-			if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
+			//	if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand"))
+			{
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
