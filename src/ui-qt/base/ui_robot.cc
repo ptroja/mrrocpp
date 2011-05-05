@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 #include "ui_robot.h"
 #include "interface.h"
+#include "base/ecp/ecp_robot.h"
 /* TR
  #include "ui/src/wnd_base.h"
  */
@@ -74,13 +75,13 @@ int UiRobot::edp_create_int()
 					create_ui_ecp_robot();
 				}
 
-				state.edp.pid = ui_ecp_robot->the_robot->get_EDP_pid();
+				state.edp.pid = ui_get_edp_pid();
 
 				if (state.edp.pid < 0) {
 
 					state.edp.state = 0;
 					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete ui_ecp_robot;
+					delete_ui_ecp_robot();
 				} else { // jesli spawn sie powiodl
 
 					state.edp.state = 1;
@@ -90,7 +91,7 @@ int UiRobot::edp_create_int()
 					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
 					lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
+					ui_get_controler_state(robot_controller_initial_state_tmp);
 
 					//state.edp.state = 1; // edp wlaczone reader czeka na start
 
@@ -233,7 +234,7 @@ void UiRobot::edp_create()
 
 int UiRobot::edp_create_int_extra_operations()
 {
-
+	return 1;
 }
 
 void UiRobot::pulse_ecp()

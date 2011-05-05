@@ -60,7 +60,6 @@ public:
 	int synchronise();
 	int synchronise_int();
 
-
 	int move_to_synchro_position();
 	int move_to_front_position();
 	int move_to_preset_position(int variant);
@@ -72,6 +71,9 @@ public:
 	int execute_stop_motor();
 	int create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
+	int ui_get_edp_pid();
+	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
+
 };
 
 }

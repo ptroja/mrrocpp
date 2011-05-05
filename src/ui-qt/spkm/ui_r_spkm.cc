@@ -41,14 +41,27 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
+int UiRobot::ui_get_edp_pid()
+{
+	return ui_ecp_robot->the_robot->get_EDP_pid();
+}
+
+void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
+{
+	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
+
+}
+
 int UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::spkm::EcpRobot(interface);
+	return 1;
 }
 
 int UiRobot::edp_create_int_extra_operations()
 {
 	wgt_inc->synchro_depended_init();
+	return 1;
 }
 
 int UiRobot::synchronise()
