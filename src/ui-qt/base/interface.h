@@ -21,6 +21,7 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "base/ecp/ecp_robot.h"
 #include "string"
 
 #include "ui.h"
@@ -243,6 +244,11 @@ public:
 	bool are_all_loaded_robots_synchronised();
 	bool is_any_loaded_robot_synchronised();
 
+	// default try catch handlers
+	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
+	void catch_ecp_error(ecp::common::robot::ECP_error & er);
+	void catch_std_exception(const std::exception & e);
+	void catch_tridot();
 	// windows
 
 	wgt_process_control* wgt_pc;

@@ -57,17 +57,7 @@ int UiRobot::edp_create_int()
 			state.edp.state = 0;
 			state.edp.is_synchronised = false;
 
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += state.edp.network_resourceman_attach_point;
-
-			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_bird_hand already exists");
-			} else if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
+			if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
