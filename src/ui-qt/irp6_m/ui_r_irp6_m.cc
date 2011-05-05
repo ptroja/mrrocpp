@@ -88,6 +88,7 @@ UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+
 }
 
 }

@@ -96,10 +96,10 @@ public:
 
 	busy_flag communication_flag;
 
-	boost::shared_ptr<sr_buffer> ui_sr_obj;
-	boost::shared_ptr<ecp_buffer> ui_ecp_obj;
+	boost::shared_ptr <sr_buffer> ui_sr_obj;
+	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
 
-	boost::shared_ptr<feb_thread> meb_tid;
+	boost::shared_ptr <feb_thread> meb_tid;
 
 	function_execution_buffer *main_eb;
 
@@ -181,6 +181,7 @@ public:
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
+	int wait_for_child_termiantion(pid_t pid);
 	int manage_interface(void);
 	void manage_pc(void);
 
