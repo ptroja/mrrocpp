@@ -87,6 +87,17 @@ if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 }
 }
 */
+void mmtest::rotate(double mm)
+{
+	sr_ecp_msg->message("test0");
+char str[10];
+sprintf (str, "4 %lf", mm);
+sr_ecp_msg->message("test1");
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, str, 0, 1,
+			lib::irp6p_m::ROBOT_NAME.c_str());
+	sr_ecp_msg->message("test2");
+
+}
 void mmtest::move_down(double mm)
 {
 	sr_ecp_msg->message("test0");
@@ -229,24 +240,32 @@ run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name
 
 
 sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
-/*
-set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "L", 0, 1,
+
+set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "R", 0, 1,
 	lib::irp6p_m::ROBOT_NAME.c_str());
+run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+rotate(1.57);
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "D", 0, 1,
 	lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-*/
+
+
+/*
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "R", 0, 1,
 	lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
+
+
 set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, "U", 0, 1,
 	lib::irp6p_m::ROBOT_NAME.c_str());
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-/*
+*/
 
+/*
 move_right(-0.15);
 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 */

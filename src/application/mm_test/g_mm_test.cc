@@ -27,6 +27,7 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 	index = 0;
 	r = 0.1;
 	k = 0.0;
+	direction = -1;
 }
 
 g_mm_test::~g_mm_test()
@@ -41,6 +42,8 @@ g_mm_test::~g_mm_test()
 */
 void g_mm_test::configure(int new_direction)
 {
+	index = 0;
+	k = 0.0;
 	direction = new_direction;
 }
 
@@ -81,16 +84,13 @@ bool g_mm_test::next_step()
 	if (index == 0) {
 		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
-		currentFrame.get_translation_vector(first_trans_vect);//srodek okregu
+		currentFrame.get_translation_vector(first_trans_vect);
 		std::cout << currentFrame << std::endl;
 		index++;
 	}
 	log("g_mm_test::next_step() %d\n", index);
 	lib::Homog_matrix nextFrame;
 	nextFrame = currentFrame;
-
-	//lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
-	//current_frame_wo_offset.remove_translation();
 
 	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
@@ -109,18 +109,22 @@ bool g_mm_test::next_step()
 	//move direction
 	if(direction==0)//up
 	{
+		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[0] = first_trans_vect[0] - r * k;
 	}
 	if(direction==1)//right
 	{
+		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[1] = first_trans_vect[1] + r * k;
 	}
 	if(direction==2)//down
 	{
+		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[0] = first_trans_vect[0] + r * k;
 	}
 	if(direction==3)//left
 	{
+		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[1] = first_trans_vect[1] - r * k;
 	}
 
@@ -132,7 +136,7 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if (k > 2.0)
+	if (k > 1.0)
 		return false;
 
 

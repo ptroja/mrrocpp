@@ -118,6 +118,24 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 	sr_ecp_msg->message("ECP loaded mm_test");
 };
 
+void mm_test::rotate(double mm)
+{
+	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+	actTrajectory->arm_type = lib::ECP_XYZ_ANGLE_AXIS;
+	for (int i=0;i<6;i++)
+	{
+		actTrajectory->v.push_back(0.09);
+		actTrajectory->a.push_back(0.12);
+	}
+	actTrajectory->coordinates.push_back(0);
+	actTrajectory->coordinates.push_back(0);
+	actTrajectory->coordinates.push_back(0);
+	actTrajectory->coordinates.push_back(0);
+	actTrajectory->coordinates.push_back(0);
+	actTrajectory->coordinates.push_back(mm);
+	sg->load_relative_pose((*actTrajectory));
+}
+
 void mm_test::move_down(double mm)
 {
 	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
@@ -187,6 +205,12 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			double t[2];
 			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 
+			if(t[0] > 3.5)
+			{
+				rotate(t[1]);
+			}
+
+			/*
 			if(t[0] < 1.5)
 			{
 				move_down(t[1]);
@@ -199,6 +223,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			{
 				move_right(t[1]);
 			}
+			*/
 		}
 		else
 		{
@@ -215,7 +240,6 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
-
 		//move direction
 		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'U')
 			gen->configure(0);
