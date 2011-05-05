@@ -16,6 +16,8 @@
 #include "interface.h"
 #include "ui_sr.h"
 #include "ui_ecp.h"
+#include "base/lib/ping.h"
+
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
@@ -671,37 +673,24 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
-	/*
-	 char buffer[50];
-	 char c[20];
-	 sprintf(buffer, "ping -c 3 %s | grep -c ms > a.txt", _node.c_str());
-	 system(buffer);
-	 FILE *p = fopen("a.txt", "r");
-	 fgets(c, 5, p);
-	 fclose(p);
-	 if (strcmp(c, "5\n") != 0) {
-	 std::string tmp(beginnig_of_message);
-	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+	bool r_val;
 
-	 return false;
-	 }
+	{
+		boost::unique_lock <boost::mutex> lock(process_creation_mtx);
+		r_val = lib::ping(_node);
+	}
 
-	 return true;
-	 */
-	/*
-	 std::string opendir_path("/net/");
-	 opendir_path += _node;
+	std::cout << "ping returned " << r_val << std::endl;
 
-	 if (access(opendir_path.c_str(), R_OK) != 0) {
-	 std::string tmp(beginnig_of_message);
-	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+	if (!r_val) {
 
-	 return false;
-	 }
-	 return true;
-	 */
+		std::string tmp(beginnig_of_message);
+		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+		ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+
+		return false;
+	}
+
 	return true;
 
 }
@@ -1121,13 +1110,15 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
-	meb_tid = (boost::shared_ptr<feb_thread>) new feb_thread(*main_eb);
+	meb_tid = (boost::shared_ptr <feb_thread>) new feb_thread(*main_eb);
 
-	ui_ecp_obj = (boost::shared_ptr<ecp_buffer>) new ecp_buffer(*this);
+	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
 	delay(1);
 
-	ui_sr_obj = (boost::shared_ptr<sr_buffer>) new sr_buffer(*this);
+	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
+	mw->start_on_timer();
+
 }
 
 int Interface::EDP_all_robots_create()

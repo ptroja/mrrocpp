@@ -53,9 +53,8 @@ void catch_signal(int sig)
 
 			if (edp_shell) {
 				edp_shell->close_hardware_busy_file();
-			}
-			if (master) {
-				master->msg->message("edp terminated");
+
+				edp_shell->msg->message("edp terminated");
 			}
 			_exit(EXIT_SUCCESS);
 			break;
@@ -105,13 +104,13 @@ int main(int argc, char *argv[])
 
 #if defined(HAVE_MLOCKALL)
 		// Try to lock memory to avoid swapping whlie executing in real-time
-		if(mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
+		if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
 			perror("No real-time warrany: mlockall() failed");
 		}
 
 #endif /* HAVE_MLOCKALL */
 		lib::set_process_sched();
-		edp::common::master = edp::common::return_created_efector(_config);
+		edp::common::master = edp::common::return_created_efector(*(edp::common::edp_shell));
 
 		edp::common::master->create_threads();
 
