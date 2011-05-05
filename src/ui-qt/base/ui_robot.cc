@@ -54,7 +54,7 @@ int UiRobot::edp_create_int()
 
 		// dla robota bird_hand
 		if (state.edp.state == 0) {
-			state.edp.state = 0;
+
 			state.edp.is_synchronised = false;
 
 			if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
@@ -92,7 +92,25 @@ int UiRobot::edp_create_int()
 
 	} // end try
 
-	CATCH_SECTION_UI
+	catch (ecp::common::robot::ECP_main_error & e) {
+		/* Obsluga bledow ECP */
+		close_edp_connections();
+
+	} /*end: catch */
+
+	catch (ecp::common::robot::ECP_error & er) {
+		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
+		interface.catch_ecp_error(er);
+	} /* end: catch */
+
+	catch (const std::exception & e) {
+		interface.catch_std_exception(e);
+	}
+
+	catch (...) { /* Dla zewnetrznej petli try*/
+		/* Wylapywanie niezdefiniowanych bledow*/
+		interface.catch_tridot();
+	} /*end: catch */
 
 	interface.manage_interface();
 	edp_create_int_extra_operations();
@@ -261,27 +279,35 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
+void UiRobot::close_edp_connections()
+{
+	if (state.edp.reader_fd != lib::invalid_fd) {
+
+		if (messip::port_disconnect(state.edp.reader_fd) != 0) {
+			fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
+		}
+
+	}
+	state.edp.reader_fd = lib::invalid_fd;
+
+	close_all_windows();
+
+	delete_ui_ecp_robot();
+
+	state.edp.state = 0; // edp wylaczone
+	state.edp.is_synchronised = false;
+
+	state.edp.pid = -1;
+}
+
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
-		if (state.edp.reader_fd != lib::invalid_fd) {
 
-			if (messip::port_disconnect(state.edp.reader_fd) != 0) {
-				fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
+		close_edp_connections();
 
-		}
-		state.edp.reader_fd = lib::invalid_fd;
-
-		close_all_windows();
-
-		delete_ui_ecp_robot();
 		interface.wait_for_child_termiantion((pid_t) state.edp.pid);
-		state.edp.state = 0; // edp wylaczone
-		state.edp.is_synchronised = false;
-
-		state.edp.pid = -1;
 
 		abort_thread();
 	}
