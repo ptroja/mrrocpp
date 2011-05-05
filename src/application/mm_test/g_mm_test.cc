@@ -25,12 +25,23 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 //:generator(_ecp_task), logEnabled(true)
 {
 	index = 0;
-	r = 0.06;
+	r = 0.1;
 	k = 0.0;
 }
 
 g_mm_test::~g_mm_test()
 {
+}
+/**
+ * direction to move:
+ * 0 - -Y up (robot)
+ * 1 -  X right
+ * 2 -  Y down (computer)
+ * 3 - -X left
+*/
+void g_mm_test::configure(int new_direction)
+{
+	direction = new_direction;
 }
 
 bool g_mm_test::first_step()
@@ -78,38 +89,42 @@ bool g_mm_test::next_step()
 	lib::Homog_matrix nextFrame;
 	nextFrame = currentFrame;
 
-	lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
+	//lib::Homog_matrix current_frame_wo_offset(the_robot->reply_package.arm.pf_def.arm_frame);
 	//current_frame_wo_offset.remove_translation();
 
 	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	double fx = force_torque[0];
 	double fy = force_torque[1];
-	/*
-	 if(fx > 0.003 || fy > 0.003 || fx < -0.003 || fy < -0.003)
-	 std::cout<< " >0.003 !!!" << std::endl;
-	 else if(fx > 0.002 || fy > 0.002 || fx < -0.002 || fy < -0.002)
-	 std::cout<< " >0.002 !!" << std::endl;
-	 else if(fx > 0.001 || fy > 0.001 || fx < -0.001 || fy < -0.001)
-	 std::cout<< " >0.001" << std::endl;
-	 */
+	//double fz = force_torque[2];
 
-	std::cout << "force: " << force_torque[0] << "   " << force_torque[1] << "   " << force_torque[3] << std::endl;
+	std::cout << fx << " " << fy << " " << std::endl;
 	//std::cout<< force_torque << std::endl;
-
 
 	double trans_vect[3];
 
 	/*modyfikuj nextFrame*/
 	nextFrame.get_translation_vector(trans_vect);
 
-	//trans_vect[1]= first_trans_vect[1] + r*sin(k);
-	//trans_vect[0]= first_trans_vect[0] + r*cos(k) - r;// -r : aby zniwelowac podskok ze srodka okregu na okrag
+	//move direction
+	if(direction==0)//up
+	{
+		trans_vect[0] = first_trans_vect[0] - r * k;
+	}
+	if(direction==1)//right
+	{
+		trans_vect[1] = first_trans_vect[1] + r * k;
+	}
+	if(direction==2)//down
+	{
+		trans_vect[0] = first_trans_vect[0] + r * k;
+	}
+	if(direction==3)//left
+	{
+		trans_vect[1] = first_trans_vect[1] - r * k;
+	}
 
-	trans_vect[1] = first_trans_vect[1] - r * k;
-	//trans_vect[2]= first_trans_vect[2] - r*k;
-
-	k += 0.03;
+	k += 0.1;
 
 	nextFrame.set_translation_vector(trans_vect);
 	/*koniec modyfikacji*/
@@ -117,11 +132,8 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if (k > 1.5)
+	if (k > 2.0)
 		return false;
-
-	//std::cout << currentFrame << std::endl;
-	//fflush(stdout);
 
 
 	return true;

@@ -29,6 +29,16 @@ public:
 	virtual bool next_step();
 
 	static const char configSectionName[];
+
+	/**
+	 * direction to move:
+	 * 0 - -Y up (robot)
+	 * 1 -  X right
+	 * 2 -  Y down (computer)
+	 * 3 - -X left
+	 */
+	void configure(int new_direction);
+
 protected:
 	/** Is log enabled*/
 	bool logEnabled;
@@ -47,6 +57,8 @@ private:
 	double r;//promien
 	double k;//kat
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
+
+	int direction;
 };//end class
 
 } // namespace generator

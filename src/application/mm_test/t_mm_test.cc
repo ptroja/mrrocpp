@@ -215,6 +215,17 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
+
+		//move direction
+		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'U')
+			gen->configure(0);
+		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'R')
+			gen->configure(1);
+		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'D')
+			gen->configure(2);
+		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'L')
+			gen->configure(3);
+
 		sr_ecp_msg->message("My gen move start");
 		gen->Move();
 		sr_ecp_msg->message("My gen move end");
