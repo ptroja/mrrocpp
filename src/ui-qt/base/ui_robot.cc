@@ -205,6 +205,7 @@ void UiRobot::EDP_slay_int()
 		close_all_windows();
 
 		delete_ui_ecp_robot();
+		interface.wait_for_child_termiantion((pid_t) state.edp.pid);
 		state.edp.state = 0; // edp wylaczone
 		state.edp.is_synchronised = false;
 

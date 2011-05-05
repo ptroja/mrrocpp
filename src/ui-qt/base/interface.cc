@@ -7,6 +7,7 @@
 #include <fstream>
 #include <boost/foreach.hpp>
 #include <dirent.h>
+#include <sys/wait.h>
 
 #include <QtGui/QApplication>
 
@@ -91,6 +92,44 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 
 	return 1;
 
+}
+
+int Interface::wait_for_child_termiantion(pid_t pid)
+{
+
+	int status;
+	pid_t child_pid;
+	child_pid = waitpid(pid, &status, 0);
+
+	if (child_pid == -1) {
+		//	int e = errno;
+		perror("UI: waitpid()");
+	} else if (child_pid == 0) {
+		fprintf(stderr, "UI: no child exited\n");
+	} else {
+		//fprintf(stderr, "UI: child %d...\n", child_pid);
+		if (WIFEXITED(status)) {
+			fprintf(stderr, "UI: child %d exited normally with status %d\n", child_pid, WEXITSTATUS(status));
+		}
+		if (WIFSIGNALED(status)) {
+#ifdef WCOREDUMP
+			if (WCOREDUMP(status)) {
+				fprintf(stderr, "UI: child %d terminated by signal %d (core dumped)\n", child_pid, WTERMSIG(status));
+			} else
+#endif /* WCOREDUMP */
+			{
+				fprintf(stderr, "UI: child %d terminated by signal %d\n", child_pid, WTERMSIG(status));
+			}
+		}
+		if (WIFSTOPPED(status)) {
+			fprintf(stderr, "UI: child %d stopped\n", child_pid);
+		}
+		if (WIFCONTINUED(status)) {
+			fprintf(stderr, "UI: child %d resumed\n", child_pid);
+		}
+	}
+
+	return status;
 }
 
 void Interface::init()
@@ -205,7 +244,7 @@ void Interface::init()
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 
-	signal(SIGCHLD, &catch_signal);
+	// signal(SIGCHLD, &catch_signal);
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -1199,6 +1238,7 @@ int Interface::MPslay()
 			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
 			//    			perror("waitpid()");
 			//    		}
+			wait_for_child_termiantion(mp.pid);
 		}
 
 		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
@@ -1401,28 +1441,12 @@ int Interface::slay_all()
 		 system(system_command);
 		 */delay(100);
 
-		if (program_node_user_list_iterator->is_qnx) {
-			sprintf(system_command, "rsh -l %s %s slay -v -f %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
-
-		} else {
-			sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
-
-		}
+		sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
 		printf("slay_all: %s\n", system_command);
 		// przedniolsem wywolanie system do innego prceosu bo w procesie glownym czasem powoduje zawieszenie calego intefrejsu
-		pid_t child_pid = vfork();
 
-		if (child_pid == 0) {
-			system(system_command);
-			_exit(EXIT_SUCCESS);
-		} else if (child_pid > 0) {
-			//delay(5000);
-			printf("slay_all child %d created\n", child_pid);
-
-		} else {
-			perror("slay_all vfork()");
-		}
+		system(system_command);
 
 	}
 	printf("slay_all end\n");
