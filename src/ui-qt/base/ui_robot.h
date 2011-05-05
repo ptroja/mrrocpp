@@ -72,8 +72,10 @@ public:
 	virtual int manage_interface() = 0;
 
 	virtual int synchronise() = 0;
-	virtual void edp_create() = 0;
-	virtual int edp_create_int() = 0;
+	virtual void edp_create();
+	virtual int edp_create_int();
+	virtual int create_ui_ecp_robot() = 0;
+	virtual int edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();

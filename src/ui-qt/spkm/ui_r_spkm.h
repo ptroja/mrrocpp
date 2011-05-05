@@ -59,8 +59,7 @@ public:
 	void delete_ui_ecp_robot();
 	int synchronise();
 	int synchronise_int();
-	void edp_create();
-	int edp_create_int();
+
 
 	int move_to_synchro_position();
 	int move_to_front_position();
@@ -71,6 +70,8 @@ public:
 
 	int execute_clear_fault();
 	int execute_stop_motor();
+	int create_ui_ecp_robot();
+	int edp_create_int_extra_operations();
 };
 
 }

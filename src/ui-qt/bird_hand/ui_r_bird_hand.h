@@ -33,7 +33,6 @@ namespace bird_hand {
 
 class EcpRobot;
 
-
 class UiRobot : public common::UiRobot
 {
 private:
@@ -43,15 +42,13 @@ public:
 	wgt_bird_hand_command *wgt_command_and_status;
 	WndConfiguration *wgt_configuration;
 
-
-
 	UiRobot(common::Interface& _interface);
 
 	int manage_interface();
 	void delete_ui_ecp_robot();
 	int synchronise();
 	void edp_create();
-	int edp_create_int();
+	int create_ui_ecp_robot();
 };
 
 }
