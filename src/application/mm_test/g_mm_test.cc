@@ -25,7 +25,7 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 //:generator(_ecp_task), logEnabled(true)
 {
 	index = 0;
-	r = 0.1;
+	r = 0.05;
 	k = 0.0;
 	direction = -1;
 }
@@ -109,22 +109,18 @@ bool g_mm_test::next_step()
 	//move direction
 	if(direction==0)//up
 	{
-		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[0] = first_trans_vect[0] - r * k;
 	}
 	if(direction==1)//right
 	{
-		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[1] = first_trans_vect[1] + r * k;
 	}
 	if(direction==2)//down
 	{
-		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[0] = first_trans_vect[0] + r * k;
 	}
 	if(direction==3)//left
 	{
-		std::cout<<"SET: "<<direction<<std::endl;
 		trans_vect[1] = first_trans_vect[1] - r * k;
 	}
 
