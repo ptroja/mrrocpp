@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <cerrno>
 #include <ctime>
+#include <exception>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
@@ -164,7 +165,17 @@ void servo_buffer::operator()()
 	// servo buffer has to be created before servo thread starts
 	//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
-	load_hardware_interface();
+	try {
+
+		load_hardware_interface();
+	}
+
+	catch (std::runtime_error & e) {
+		printf("servo group runtime error: %s \n", e.what());
+		master.msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		_exit(EXIT_SUCCESS);
+	}
 
 	lib::set_thread_priority(pthread_self(), 79);
 
