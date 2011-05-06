@@ -125,14 +125,13 @@ bool g_mm_test::next_step()
 	}
 
 	k += 0.1;
-
 	nextFrame.set_translation_vector(trans_vect);
 	/*koniec modyfikacji*/
 
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if (k > 1.0)
+	if (k > 1.3)
 		return false;
 
 
