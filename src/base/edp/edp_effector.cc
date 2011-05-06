@@ -32,7 +32,7 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 effector::effector(shell &_shell, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_shell.config), msg(_shell.msg), robot_test_mode(true)
+	edp_shell(_shell), robot_name(l_robot_name), config(_shell.config), msg(_shell.msg), robot_test_mode(true)
 {
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
