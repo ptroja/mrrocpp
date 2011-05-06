@@ -35,7 +35,7 @@ pb_sac_calibration::~pb_sac_calibration()
 
 lib::Homog_matrix pb_sac_calibration::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	lib::Homog_matrix C_T_G(reading.objectPosition.elements);
+	lib::Homog_matrix C_T_G(reading.objectPosition);
 
 //	log_dbg("pb_sac_calibration::compute_position_change\n");
 

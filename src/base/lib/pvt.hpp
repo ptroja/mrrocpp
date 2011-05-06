@@ -1,6 +1,6 @@
 /*!
  * @file pvt.hpp
- * @brief Position-Velocity-Time triples calculation for Maxon EPOS motino controller.
+ * @brief Position-Velocity-Time triples calculation for Maxon EPOS motion controller.
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  *
@@ -150,7 +150,7 @@ double ppm(
 			// Calculate new parameters if there is motion along an axis
 			if(delta) {
 				Anew(l,0) = 2*delta/(ta*(tt+td-ta));
-				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value without sign
+				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value (without sign)
 				Vnew(l,0) = Anew(l,0)*ta;
 			} else {
 				Anew(l,0) = Amax(l,0);
@@ -163,7 +163,7 @@ double ppm(
 		Anew = Dnew = Amax;
 	}
 
-	// Those assertions fail because of floating point inequalities
+	// These assertions fail because of floating point inequalities
 	//assert(Dnew(l,0)<=Amax(l,0));
 	//assert(Anew(l,0)<=Amax(l,0));
 	//assert(Vnew(l,0)<=Vmax(l,0));

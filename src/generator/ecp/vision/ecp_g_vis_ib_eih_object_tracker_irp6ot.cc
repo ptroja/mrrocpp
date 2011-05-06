@@ -169,7 +169,7 @@ bool ecp_vis_ib_eih_object_tracker_irp6ot::next_step_without_constraints()
 	}
 
 	homog_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(next_position));
-	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = homog_matrix;
 
 	//memcpy(the_robot->ecp_command.arm.pf_def.arm_frame, next_position,
 	//		6 * sizeof(double)); //zapisanie pozycji w angle axes

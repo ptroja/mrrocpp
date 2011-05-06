@@ -34,7 +34,7 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	void set_robot_model(const lib::c_buffer &);
 	void create_threads();

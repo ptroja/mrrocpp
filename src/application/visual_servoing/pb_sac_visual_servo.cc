@@ -31,7 +31,7 @@ pb_sac_visual_servo::~pb_sac_visual_servo()
 
 lib::Homog_matrix pb_sac_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-	lib::Homog_matrix C_T_G(reading.objectPosition.elements);
+	lib::Homog_matrix C_T_G(reading.objectPosition);
 	lib::Homog_matrix error_matrix;
 	lib::Homog_matrix E_T_O = !current_position;
 

@@ -12,6 +12,7 @@
 #define KINEMATIC_MODEL_SPKM_H_
 
 #include "base/kinematics/kinematic_model.h"
+#include "robot/spkm/const_spkm.h"
 #include "robot/spkm/kinematic_parameters_spkm.h"
 
 namespace mrrocpp {

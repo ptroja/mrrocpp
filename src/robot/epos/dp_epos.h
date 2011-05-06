@@ -14,6 +14,8 @@
 
 #include"base/lib/impconst.h"
 
+#include "base/lib/mrmath/homog_matrix.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace epos {
@@ -35,7 +37,7 @@ enum EPOS_GEN_PROFILE
 
 enum EPOS_MOTION_VARIANT
 {
-	NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, SYNC_POLYNOMAL, OPERATIONAL
+	NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, SYNC_POLYNOMIAL, OPERATIONAL
 };
 
 /*!
@@ -251,7 +253,7 @@ struct epos_operational_command
  */
 struct epos_reply
 {
-	mrrocpp::lib::frame_tab current_frame;
+	lib::Homog_matrix current_frame;
 	single_controller_epos_reply epos_controller[EPOS_DATA_PORT_SERVOS_NUMBER];
 	bool contact;
 
@@ -266,7 +268,7 @@ struct epos_reply
 		ar & epos_controller;
 		ar & contact;
 	}
-}__attribute__((__packed__));
+};
 
 } // namespace epos
 } // namespace lib

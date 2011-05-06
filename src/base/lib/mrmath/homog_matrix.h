@@ -14,10 +14,9 @@
 #include <cassert>
 #include <cmath>
 
-#include "base/lib/impconst.h"	// frame_tab
-#define delta_m (M_PI - 3.14154)
-#define zero_eps 1.0E-4
-#define ALFA_SENSITIVITY 0.00001
+#include <Eigen/Core>
+
+#include <boost/serialization/serialization.hpp>
 
 namespace mrrocpp {
 namespace lib {
@@ -25,6 +24,7 @@ namespace lib {
 // forward declarations
 class K_vector;
 class Xyz_Angle_Axis_vector;
+class Xyz_Angle_Axis_Gamma_vector;
 class Xyz_Euler_Zyz_vector;
 class Xyz_Rpy_vector;
 
@@ -44,30 +44,18 @@ class Homog_matrix
 {
 private:
 	//! Matrix placeholder
-	frame_tab matrix_m;
+	double matrix_m[3][4];
 
 	//! Eps for alpha representation
 	const static double ALPHA_SENSITIVITY;
 
 public:
-	/**
+	/*!
 	 * Constructor
 	 *
 	 * @brief creates an identity matrix
 	 */
 	Homog_matrix();
-
-	/**
-	 * Constructor
-	 *
-	 * @param[in] frame_tab data for initialization
-	 */
-	Homog_matrix(const frame_tab &);
-
-	/**
-	 * Copy constructor
-	 */
-	Homog_matrix(const Homog_matrix &);
 
 	/**
 	 * Constructor for translation matrix
@@ -76,50 +64,50 @@ public:
 	 */
 	Homog_matrix(double x, double y, double z);
 
-	/**
+	/*!
 	 * Constructor for a small-rotation around 3 axes
 	 *
 	 * @param[in] versor_x, versor_y, versor_z versors of X,Y,Z axes
 	 * @param[in] angles rotation around 3 axes
 	 */
-	Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
+			Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles);
 
-	/**
+	/*!
 	 * Constructor for a small-rotation around 3 axes
 	 *
 	 * @param[in] angles rotation around 3 axes
 	 */
 	Homog_matrix(const K_vector & angles);
 
-	/**
+	/*!
 	 * Constructor
 	 *
 	 * @param[in] l_vector
 	 */
 	Homog_matrix(const Xyz_Euler_Zyz_vector & l_vector);
 
-	/**
+	/*!
 	 * Constructor
 	 *
 	 * @param[in] l_vector
 	 */
 	Homog_matrix(const Xyz_Rpy_vector & l_vector);
 
-	/**
+	/*!
 	 * Constructor
 	 *
 	 * @param[in] l_vector
 	 */
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
-	/**
+	/*!
 	 * Constructor from Eigen matrix
 	 *
 	 * @param[in] eigen_matrix matrix for initialization
 	 */
 	Homog_matrix(const Eigen::Matrix <double, 3, 4> & eigen_matrix);
 
-	/**
+	/*!
 	 * Constructor from rotation and translation C-style arrays
 	 *
 	 * @param[in] r rotation matrix
@@ -127,21 +115,21 @@ public:
 	 */
 	Homog_matrix(const double r[3][3], const double t[3]);
 
-	/**
+	/*!
 	 * Constructor from values given in notation from Craig handbook
 	 *
 	 * @param[in] r??,t? rotation and translation matrix elements
 	 */
 			Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
 
-	/**
+	/*!
 	 * Get the matrix with removed translation
 	 *
 	 * @return Output matrix
 	 */
 	Homog_matrix return_with_with_removed_translation() const;
 
-	/**
+	/*!
 	 * Get the matrix with removed rotation
 	 *
 	 * @return Output matrix
@@ -149,50 +137,47 @@ public:
 	Homog_matrix return_with_with_removed_rotation() const;
 
 	/**
-	 * Get data to frame_tab array
-	 *
-	 * @param[out] frame output array
-	 */
-	void get_frame_tab(frame_tab frame) const;
-
-	/**
-	 * Set data from frame_tab array
-	 *
-	 * @param[in] frame output array
-	 */
-	void set_from_frame_tab(const frame_tab & frame);
-
-	/**
 	 * Get the XYZ_EULER_ZYZ representation
 	 *
-	 * @param[out] l_vector requested representation
+	 * @param[out] l_vector requested representation.
 	 */
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
 
-	/**
+	/*!
 	 * Set from the XYZ_EULER_ZYZ representation. Takes into consideration limits for beta <0, PI).
 	 *
-	 * @param[in] l_vector requested representation
+	 * @param[in] l_vector requested representation.
 	 */
 	void set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector);
 
-	/**
+	/*!
 	 * Set from the XYZ_EULER_ZYZ representation without limits for beta (it can vary from <-PI, PI)).
 	 *
-	 * @param[in] l_vector requested representation
+	 * @param[in] l_vector requested representation.
 	 */
 	void set_from_xyz_euler_zyz_without_limits(const Xyz_Euler_Zyz_vector & l_vector);
+
+	/*!
+	 * Computes the angle and axis values for given homogeneous matrix.
+	 * @param[out] xyz_aa Vector containing computed pose (x,y,z) and orientation (vx,vy,vz,gamma).
+	 */
+	void get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma) const;
+
+	//! Returns XYZ_ANGLE_AXIS representation (x,y,z, vx*gamma,vy*gamma,vz*gamma).
+	void get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const;
+
+	//! Sets the homogeneous matrix values on the base of given XYZ_ANGLE_AXIS vector.
+	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa);
+
+	//! Sets the homogeneous matrix values on the base of given XYZ_ANGLE_AXIS (x,y,z, vx,vy,vz,gamma) vector.
+	void set_from_xyz_angle_axis_gamma(const Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma);
+
 
 	//! Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
 	void get_xyz_rpy(Xyz_Rpy_vector & l_vector) const;
 
 	//! Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
 	void set_from_xyz_rpy(const Xyz_Rpy_vector & l_vector);
-
-	//! Przeksztalcenie do formy XYZ_ANGLE_AXIS i zwrocenie w tablicy.
-	void get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const;
-
-	void set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector); // kat wliczony w os
 
 	//! Operacje na kwaternionach
 	void set_from_xyz_quaternion(double eta, double eps1, double eps2, double eps3, double x, double y, double z);
@@ -237,8 +222,6 @@ public:
 		return matrix_m[i][j];
 	}
 
-	//! Operator przypisania.
-	Homog_matrix & operator=(const Homog_matrix &);
 	//! Mnozenie macierzy.
 	Homog_matrix operator*(const Homog_matrix &) const;
 	//! Odwracanie macierzy.
@@ -261,10 +244,14 @@ public:
 	bool is_valid() const;
 
 private:
-	//! Kopiowanie macierzy jednorodnej do DEST z SOURCE.
-	inline static void copy_frame_tab(frame_tab destination_frame, const frame_tab source_frame)
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
 	{
-		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
+		ar & matrix_m;
 	}
 };
 

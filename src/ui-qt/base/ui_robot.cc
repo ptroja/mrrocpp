@@ -3,6 +3,7 @@
 /*                                         Version 2.01  */
 #include "ui_robot.h"
 #include "interface.h"
+#include "base/ecp/ecp_robot.h"
 /* TR
  #include "ui/src/wnd_base.h"
  */
@@ -22,10 +23,10 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
-	activation_string = _activation_string;
+	//activation_string = _activation_string;
 
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
@@ -37,8 +38,85 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 
 void UiRobot::create_thread()
 {
-	assert(tid == NULL);
-	tid = new feb_thread(eb);
+	//	assert(tid == NULL);
+	if (!tid) {
+		tid = new feb_thread(eb);
+	}
+}
+
+int UiRobot::edp_create_int()
+
+{
+
+	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
+
+	try { // dla bledow robot :: ECP_error
+
+		// dla robota bird_hand
+		if (state.edp.state == 0) {
+
+			state.edp.is_synchronised = false;
+
+			if (interface.check_node_existence(state.edp.node_name, robot_name)) {
+
+				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
+				{
+					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
+					create_ui_ecp_robot();
+				}
+
+				state.edp.pid = ui_get_edp_pid();
+
+				if (state.edp.pid < 0) {
+
+					state.edp.state = 0;
+					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+					delete_ui_ecp_robot();
+				} else { // jesli spawn sie powiodl
+
+					state.edp.state = 1;
+
+					connect_to_reader();
+
+					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+					lib::controller_state_t robot_controller_initial_state_tmp;
+
+					ui_get_controler_state(robot_controller_initial_state_tmp);
+
+					//state.edp.state = 1; // edp wlaczone reader czeka na start
+
+					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+				}
+			}
+		}
+
+	} // end try
+
+	catch (ecp::common::robot::ECP_main_error & e) {
+		/* Obsluga bledow ECP */
+		close_edp_connections();
+
+	} /*end: catch */
+
+	catch (ecp::common::robot::ECP_error & er) {
+		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
+		interface.catch_ecp_error(er);
+	} /* end: catch */
+
+	catch (const std::exception & e) {
+		interface.catch_std_exception(e);
+	}
+
+	catch (...) { /* Dla zewnetrznej petli try*/
+		/* Wylapywanie niezdefiniowanych bledow*/
+		interface.catch_tridot();
+	} /*end: catch */
+
+	interface.manage_interface();
+	edp_create_int_extra_operations();
+
+	return 1;
+
 }
 
 void UiRobot::close_all_windows()
@@ -153,6 +231,20 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 	}
 }
 
+void UiRobot::edp_create()
+{
+	if (state.edp.state == 0) {
+		create_thread();
+
+		eb.command(boost::bind(&ui::common::UiRobot::edp_create_int, &(*this)));
+	}
+}
+
+int UiRobot::edp_create_int_extra_operations()
+{
+	return 1;
+}
+
 void UiRobot::pulse_ecp()
 {
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
@@ -187,26 +279,35 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
+void UiRobot::close_edp_connections()
+{
+	if (state.edp.reader_fd != lib::invalid_fd) {
+
+		if (messip::port_disconnect(state.edp.reader_fd) != 0) {
+			fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
+		}
+
+	}
+	state.edp.reader_fd = lib::invalid_fd;
+
+	close_all_windows();
+
+	delete_ui_ecp_robot();
+
+	state.edp.state = 0; // edp wylaczone
+	state.edp.is_synchronised = false;
+
+	state.edp.pid = -1;
+}
+
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
 	if (state.edp.state > 0) { // jesli istnieje EDP
-		if (state.edp.reader_fd != lib::invalid_fd) {
 
-			if (messip::port_disconnect(state.edp.reader_fd) != 0) {
-				fprintf(stderr, "UIRobot::EDP_slay_int@%s:%d: messip::port_disconnect(): %s\n", __FILE__, __LINE__, strerror(errno));
-			}
+		close_edp_connections();
 
-		}
-		state.edp.reader_fd = lib::invalid_fd;
-
-		close_all_windows();
-
-		delete_ui_ecp_robot();
-		state.edp.state = 0; // edp wylaczone
-		state.edp.is_synchronised = false;
-
-		state.edp.pid = -1;
+		interface.wait_for_child_termiantion((pid_t) state.edp.pid);
 
 		abort_thread();
 	}

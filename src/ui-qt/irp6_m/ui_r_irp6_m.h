@@ -44,7 +44,7 @@ public:
 
 	common::EcpRobot *ui_ecp_robot;
 
-			UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string);
+			UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos);
 
 	wgt_irp6_m_joints *wgt_joints;
 	wgt_irp6_m_motors *wgt_motors;

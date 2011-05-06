@@ -131,7 +131,6 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * @param trajectory to load
 		 */
 		bool load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose);
-
 };
 
 } // namespace generator

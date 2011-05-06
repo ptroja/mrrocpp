@@ -7,5 +7,4 @@ add_library(mp_generator_base
 	mp_g_extended_empty.cc
 )
 
-
-
+install(TARGETS mp_generator_base DESTINATION lib)

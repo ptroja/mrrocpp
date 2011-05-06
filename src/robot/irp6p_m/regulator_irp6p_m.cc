@@ -276,7 +276,7 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[0] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_measured = (measured_current - 128 - 3) * 0.035;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -299,10 +299,11 @@ uint8_t NL_regulator_2_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[1] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[1] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	//  	set_value_new=set_value_new;
@@ -495,7 +496,7 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[1] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_measured = (measured_current - 128 - 3) * 0.035;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -518,10 +519,11 @@ uint8_t NL_regulator_3_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[2] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[2] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[1] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[1] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[1] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[1] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[1] = measured_current;
 	}
 
 	// ograniczenie na sterowanie
@@ -592,7 +594,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 
 	// if (step_new!=0.0) printf(" 4 reg:%f\n", step_new);
 
-	//	printf("joint 3: %d   \n", meassured_current-128);
+	//	printf("joint 3: %d   \n", measured_current-128);
 
 	/*
 	 if (!ddd)
@@ -715,7 +717,7 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[2] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_measured = (measured_current - 128 - 3) * 0.035;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -738,10 +740,11 @@ uint8_t NL_regulator_4_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[3] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[3] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[2] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[2] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[2] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[2] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[2] = measured_current;
 		// master.rb_obj->step_data.uchyb[3]=(float) (step_new_pulse - position_increment_new);
 	}
 
@@ -930,7 +933,7 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[3] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_measured = (measured_current - 128 - 3) * 0.035;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -954,10 +957,11 @@ uint8_t NL_regulator_5_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[4] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[4] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[3] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[3] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[3] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[3] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[3] = measured_current;
 	}
 
 	// ograniczenie na sterowanie
@@ -1152,7 +1156,7 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[4] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.035;
+			current_measured = (measured_current - 128 - 3) * 0.035;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -1181,10 +1185,11 @@ uint8_t NL_regulator_6_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[5] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[5] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[4] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[4] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[4] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[4] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[4] = measured_current;
 	}
 
 	// if (set_value_new > 0.0) {
@@ -1378,7 +1383,7 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 		case 2: // algorytm nr 2 - sterowanie pradoweb0 =
 			// DUNG START
 			current_desired = 0.4 * 9.52 * (master.instruction.arm.pf_def.desired_torque[5] / 158);
-			current_measured = (meassured_current - 128 - 3) * 0.02;
+			current_measured = (measured_current - 128 - 3) * 0.02;
 			current_error = current_desired - current_measured;
 			int_current_error = int_current_error + current_error * 0.02; // 500Hz => 0.02s
 			//int_current_error = 0;
@@ -1411,10 +1416,11 @@ uint8_t NL_regulator_7_irp6p::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[6] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[6] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[5] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[5] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[5] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[5] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[5] = measured_current;
 	}
 
 	// if (set_value_new > 0.0) {

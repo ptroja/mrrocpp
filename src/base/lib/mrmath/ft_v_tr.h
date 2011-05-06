@@ -3,8 +3,6 @@
 
 #include <ostream>
 
-#include "base/lib/impconst.h"	// frame_tab
-
 namespace mrrocpp {
 namespace lib {
 

@@ -35,7 +35,7 @@ protected:
 
 public:
 	// Konstruktor.
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	void set_robot_model(const lib::c_buffer &instruction); // zmiana narzedzia
 
