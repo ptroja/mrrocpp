@@ -129,7 +129,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			single_motor::UiRobot(_interface, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, "is_irp6ot_tfg_active")
+			single_motor::UiRobot(_interface, lib::irp6ot_tfg::EDP_SECTION, lib::irp6ot_tfg::ECP_SECTION, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS)
 
 {
 
