@@ -451,6 +451,7 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 		}
 		usleep(2000);
 	}
+	throw std::runtime_error("HI_Moxa: Unable to communicate with motor controllers. Try switching the power on.");
 	return 1;
 }
 
