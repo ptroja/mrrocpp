@@ -234,6 +234,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			sg->load_relative_angle_axis_trajectory_pose(coordinates);
 
 
+
 			if(sg->calculate_interpolate())
 			{
 				sg->Move();
@@ -250,7 +251,6 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			sg->reset();
 			*/
 			std::cout<<"moved"<<std::endl;
-
 		}
 		else
 		{
@@ -261,14 +261,9 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			{
 				sg->Move();
 			}
-			std::cout<<"moved"<<std::endl;
 		}
 
 		sr_ecp_msg->message("moved");
-
-		//ecp_termination_notice();
-		//sr_ecp_msg->message("noticed");
-
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
@@ -283,10 +278,11 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			gen->configure(3);
 
 		gen->Move();
-		sr_ecp_msg->message("My gen move end");;
+		sr_ecp_msg->message("My gen move end");
 	}
 
 	sr_ecp_msg->message("HENDLER END");
+
 
 }
 

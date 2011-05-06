@@ -131,7 +131,7 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if (k > 1.3)
+	if (k > 1.0)
 		return false;
 
 
