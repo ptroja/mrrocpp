@@ -43,7 +43,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, "is_smb_active"),
+			common::UiRobot(_interface, lib::smb::EDP_SECTION, lib::smb::ECP_SECTION, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS),
 			ui_ecp_robot(NULL)
 {
 

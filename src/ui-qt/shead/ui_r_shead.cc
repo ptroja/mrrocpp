@@ -46,7 +46,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, "is_shead_active"),
+			common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS),
 			ui_ecp_robot(NULL)
 {
 

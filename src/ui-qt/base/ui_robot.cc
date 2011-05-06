@@ -23,10 +23,10 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
+UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
-	activation_string = _activation_string;
+	//activation_string = _activation_string;
 
 	state.edp.section_name = edp_section_name;
 	state.ecp.section_name = ecp_section_name;
@@ -57,7 +57,7 @@ int UiRobot::edp_create_int()
 
 			state.edp.is_synchronised = false;
 
-			if (interface.check_node_existence(state.edp.node_name, "edp_bird_hand")) {
+			if (interface.check_node_existence(state.edp.node_name, robot_name)) {
 
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
