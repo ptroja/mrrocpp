@@ -65,15 +65,20 @@ public:
 	void pulse_ecp(void);
 	void close_all_windows();
 	void EDP_slay_int();
+	void close_edp_connections();
 	void connect_to_reader(void);
 	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot() = 0;
+	virtual int ui_get_edp_pid() = 0;
+	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
 	virtual int manage_interface() = 0;
 
 	virtual int synchronise() = 0;
-	virtual void edp_create() = 0;
-	virtual int edp_create_int() = 0;
+	virtual void edp_create();
+	virtual int edp_create_int();
+	virtual int create_ui_ecp_robot() = 0;
+	virtual int edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
