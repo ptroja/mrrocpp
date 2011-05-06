@@ -107,6 +107,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileVelocity = readProfileVelocity();
 	ProfileAcceleration = readProfileAcceleration();
 	ProfileDeceleration = readProfileDeceleration();
+	remote = isRemoteOperationEnabled(readStatusWord());
 
 	// initialize MaxAcceleration to beyond the default limits
 	writeMaxAcceleration(25000UL);
@@ -392,6 +393,24 @@ int epos::checkEPOSstate()
 	//printEPOSstatusword(w);
 
 	return status2state(w);
+}
+
+bool epos::isRemoteOperationEnabled(WORD status)
+{
+	return (status & E_BIT09);
+}
+
+void epos::setRemoteOperation(bool enable)
+{
+	if (remote != enable) {
+		device.SendNMTService(nodeId,
+				(enable) ? epos_access::Start_Remote_Node : epos_access::Stop_Remote_Node);
+		remote = isRemoteOperationEnabled(readStatusWord());
+
+		if (remote != enable) {
+			BOOST_THROW_EXCEPTION(epos_error() << reason("Failed to change REMOTE state of the device"));
+		}
+	}
 }
 
 const char * epos::stateDescription(int state)
@@ -1339,11 +1358,18 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
+#if 0
 	// PVT record have to be transmitted in a Segmented Write mode
 	InitiateSementedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
 	SegmentedWrite(&pvt[0], 7);
 	SegmentedWrite(&pvt[7], 1);
+#else
+	setRemoteOperation(true);
+	// the cobID should be statically configured with a EPOS Studio for the TxPDO4
+	WORD cobID = 0x0500 | (nodeId);
+	device.SendCANFrame(cobID, 8, pvt);
+#endif
 }
 
 //! read Interpolation buffer status

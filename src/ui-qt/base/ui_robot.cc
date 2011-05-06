@@ -120,10 +120,6 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-	/*
-	 ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-	 */
-
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
