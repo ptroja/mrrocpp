@@ -31,6 +31,7 @@ void force::operator()()
 	catch (std::runtime_error & e) {
 		printf("force sensor runtime error: %s \n", e.what());
 		sr_msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
 		_exit(EXIT_SUCCESS);
 	}
 

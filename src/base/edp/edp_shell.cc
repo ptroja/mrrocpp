@@ -137,8 +137,7 @@ bool shell::detect_hardware_busy()
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
-			msg->message(lib::NON_FATAL_ERROR, "hardware busy while loading, closing automatically ...");
-			return false;
+				return false;
 		}
 
 	}
