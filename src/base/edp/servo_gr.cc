@@ -42,9 +42,34 @@ void servo_buffer::load_hardware_interface(void)
 	}
 }
 
+// obliczenie statystyk pradu
+void servo_buffer::compute_current_measurement_statistics()
+{
+	// dla  kazdej z osi
+	for (int k = 0; k < master.number_of_servos; k++) {
+		// pomiar pradu dla osi
+		int measured_current = hi->get_current(k);
+		master.reply.arm.measured_current.average_cubic[k] = 1;
+		master.reply.arm.measured_current.average_module[k] = 2;
+		master.reply.arm.measured_current.average_square[k] = 3;
+		master.reply.arm.measured_current.maksimum_module[k] = 4;
+		master.reply.arm.measured_current.minimum_module[k] = 5;
+		// dla pierwszego kroku
+		if (step_number_in_macrostep == 0) {
+
+			// dla pozostalych krokow
+		} else {
+
+		}
+
+	}
+}
+
 /*-----------------------------------------------------------------------*/
 uint8_t servo_buffer::Move_a_step(void)
 {
+	// obliczenie statystyk pradu
+	compute_current_measurement_statistics();
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
 
 	Move_1_step();
@@ -271,10 +296,7 @@ SERVO_COMMAND servo_buffer::command_type() const
 }
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
-
-	servo_command_rdy(false), sg_reply_rdy(false),
-
-	thread_started(), master(_master)
+	servo_command_rdy(false), sg_reply_rdy(false), step_number_in_macrostep(0), thread_started(), master(_master)
 {
 
 }
@@ -401,7 +423,7 @@ uint8_t servo_buffer::convert_error(void)
 void servo_buffer::Move_passive(void)
 { //
 	// stanie w miejscu - krok bierny
-
+	step_number_in_macrostep = 1;
 	for (int j = 0; j < master.number_of_servos; j++) {
 		regulator_ptr[j]->insert_new_step(0.0); // zerowy przyrost polozenia dla wszystkich napedow
 	}
@@ -425,7 +447,7 @@ void servo_buffer::Move_passive(void)
 /*-----------------------------------------------------------------------*/
 void servo_buffer::Move(void)
 {
-
+	step_number_in_macrostep = 0;
 	double new_increment[master.number_of_servos];
 
 	// wykonanie makrokroku ruchu
@@ -446,10 +468,10 @@ void servo_buffer::Move(void)
 	}
 
 	// realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
-	for (uint16_t j = 0; j < command.parameters.move.number_of_steps; j++) {
+	for (step_number_in_macrostep = 0; step_number_in_macrostep < command.parameters.move.number_of_steps; step_number_in_macrostep++) {
 		// by Y
 		// XXX by ptroja
-		if ((command.parameters.move.return_value_in_step_no == 0) && (j
+		if ((command.parameters.move.return_value_in_step_no == 0) && (step_number_in_macrostep
 				== command.parameters.move.return_value_in_step_no)) {
 			// czy juz wyslac info do EDP_MASTER?
 			// 	     std::cout<<"fsD\n";
@@ -467,13 +489,13 @@ void servo_buffer::Move(void)
 			regulator_ptr[k]->insert_new_step(new_increment[k]);
 			if (master.robot_test_mode) {
 				master.update_servo_current_motor_pos_abs(regulator_ptr[k]->previous_abs_position + new_increment[k]
-						* j, k);
+						* step_number_in_macrostep, k);
 			}
 		}
 
 		if (Move_a_step() == NO_ERROR_DETECTED) { // NO_ERROR_DETECTED
 			//  std::cout<<"NO_ERROR_DETECTED\n";
-			if ((command.parameters.move.return_value_in_step_no > 0) && (j
+			if ((command.parameters.move.return_value_in_step_no > 0) && (step_number_in_macrostep
 					== command.parameters.move.return_value_in_step_no - 1)) {
 				// czy juz wyslac info do EDP_MASTER?
 				if (reply_status.error0 || reply_status.error1) {
@@ -483,7 +505,7 @@ void servo_buffer::Move(void)
 			}
 		} else { // ERROR_DETECTED
 			//  std::cout<<"ERROR_DETECTED\n";
-			if (j > command.parameters.move.return_value_in_step_no - 1) {
+			if (step_number_in_macrostep > command.parameters.move.return_value_in_step_no - 1) {
 				reply_status.error0 = reply_status_tmp.error0 | SERVO_ERROR_IN_PHASE_2;
 				reply_status.error1 = reply_status_tmp.error1;
 				clear_reply_status_tmp();
