@@ -894,34 +894,34 @@ r_buffer_arm
 	} pf_def;
 
 	/*!
-	 *  Measured current macrostep statistics
+	 *  Measured current macrostep statistics of particular axis
 	 */
 	struct
 	{
 		/*!
 		 *  Average module
 		 */
-		unsigned short average_module;
+		unsigned short average_module[lib::MAX_SERVOS_NR];
 
 		/*!
 		 *  Minimum module
 		 */
-		unsigned short minimum_module;
+		unsigned short minimum_module[lib::MAX_SERVOS_NR];
 
 		/*!
 		 *  Maksimum module
 		 */
-		unsigned short maksimum_module;
+		unsigned short maksimum_module[lib::MAX_SERVOS_NR];
 
 		/*!
 		 *  Average square
 		 */
-		float average_square;
+		float average_square[lib::MAX_SERVOS_NR];
 
 		/*!
 		 *  Average cubic
 		 */
-		float average_cubic;
+		float average_cubic[lib::MAX_SERVOS_NR];
 
 	} measured_current;
 
