@@ -9,6 +9,8 @@
 #include <cstdio>
 #include <cstdarg>
 
+#include "base/lib/mrmath/homog_matrix.h"
+
 #include "logger.h"
 
 using namespace std;
@@ -48,7 +50,7 @@ void log_dbg(const char *fmt, ...)
 	va_end(ap);
 }
 
-void print_hm(const lib::Homog_matrix& hm)
+void print_hm(const mrrocpp::lib::Homog_matrix& hm)
 {
 	printf("[");
 	for (int i = 0; i < 3; ++i) {
@@ -65,14 +67,14 @@ void print_hm(const lib::Homog_matrix& hm)
 	fflush(stdout);
 }
 
-void log(const lib::Homog_matrix& hm)
+void log(const mrrocpp::lib::Homog_matrix& hm)
 {
 	if (log_enabled) {
 		print_hm(hm);
 	}
 }
 
-void log_dbg(const lib::Homog_matrix& hm)
+void log_dbg(const mrrocpp::lib::Homog_matrix& hm)
 {
 	if (log_dbg_enabled) {
 		print_hm(hm);

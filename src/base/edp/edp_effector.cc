@@ -31,12 +31,9 @@ namespace edp {
 namespace common {
 
 /*--------------------------------------------------------------------------*/
-effector::effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	robot_name(l_robot_name), config(_config), robot_test_mode(true)
+effector::effector(shell &_shell, lib::robot_name_t l_robot_name) :
+	edp_shell(_shell), robot_name(l_robot_name), config(_shell.config), msg(_shell.msg), robot_test_mode(true)
 {
-	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg
-			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str());
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
 		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);

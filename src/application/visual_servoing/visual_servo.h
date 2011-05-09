@@ -8,16 +8,43 @@
 #ifndef VISUAL_SERVO_H_
 #define VISUAL_SERVO_H_
 
+#include <boost/circular_buffer.hpp>
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+
 #include "base/lib/mrmath/mrmath.h"
 #include "sensor/discode/discode_sensor.h"
-#include <boost/shared_ptr.hpp>
 #include "visual_servo_regulator.h"
-
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace servovision {
+
+struct visual_servo_log_sample{
+	/** Time, when sample was taken. */
+	uint64_t sampleTimeSeconds;
+	uint64_t sampleTimeNanoseconds;
+
+	/** Time of reading. */
+	uint64_t readingTimeSeconds;
+	uint64_t readingTimeNanoseconds;
+
+	/** Time, when reading was sent to mrrocpp. */
+	uint64_t sendTimeSeconds;
+	uint64_t sendTimeNanoseconds;
+
+	/** Time, when reading was received in mrrocpp. */
+	uint64_t receivedTimeSeconds;
+	uint64_t receivedTimeNanoseconds;
+
+	/** Is object visible in latest reading. */
+	bool is_object_visible;
+
+	static void printHeader(std::ostream& os);
+	void print(std::ostream& os, uint64_t t0);
+};
+
 
 /** @addtogroup servovision
  *  @{
@@ -93,6 +120,10 @@ private:
 
 	int max_steps_without_reading;
 	int steps_without_reading;
+
+	boost::circular_buffer<visual_servo_log_sample> log_buffer;
+
+	void write_log();
 }; // class visual_servo
 
 /** @} */

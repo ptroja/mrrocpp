@@ -93,7 +93,7 @@ void HI_rydz::init()
 		robot_status[i].adr_offset_plus_2 = 0;
 		robot_status[i].adr_offset_plus_4 = 0;
 		robot_status[i].adr_offset_plus_6 = 0;
-		meassured_current[i] = 0;
+		measured_current[i] = 0;
 	}
 
 	// Zakaz pracy recznej we wszystkich osiach
@@ -144,7 +144,7 @@ void HI_rydz::insert_set_value(int drive_number, double set_value)
 // dla wybranej osi
 int HI_rydz::get_current(int drive_number)
 { // Pobranie pradu
-	return meassured_current[drive_number];
+	return measured_current[drive_number];
 }
 
 // Pobranie przyrostu polozenia wybranej osi
@@ -203,7 +203,7 @@ uint64_t HI_rydz::read_write_hardware(void)
 	for (int i = 0; i < master.number_of_servos; i++) {
 
 		// przepisanie wartosci pradu
-		meassured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
+		measured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
 
 		current_absolute_position[i] = irq_data.md.current_absolute_position[i];
 		current_position_inc[i] = current_absolute_position[i] - previous_absolute_position[i];

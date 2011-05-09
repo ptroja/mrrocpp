@@ -16,6 +16,7 @@
 #include "base/lib/mrmath/ft_v_vector.h"
 #include "base/lib/mrmath/ft_v_tr.h"
 #include "base/lib/mrmath/jacobian_matrix.h"
+#include "base/lib/mrmath/Xyz_Angle_Axis_Gamma_vector.h"
 #include "base/lib/mrmath/ForceTrans.h"
 #include "base/lib/mrmath/JointArray.h"
 #include "base/lib/mrmath/MotorArray.h"

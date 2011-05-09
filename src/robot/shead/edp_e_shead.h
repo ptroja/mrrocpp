@@ -46,7 +46,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.

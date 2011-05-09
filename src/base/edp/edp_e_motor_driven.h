@@ -253,7 +253,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief class destructor
@@ -485,7 +485,8 @@ public:
 	lib::c_buffer instruction;
 	lib::r_buffer reply;
 
-EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+};
 
 } // namespace common
 } // namespace edp

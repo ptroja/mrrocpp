@@ -6,8 +6,6 @@ MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
 	endif(CONDITION_VALUE)
 ENDMACRO(TARGET_LINK_LIBRARY_IF)
 
-OPTION (BUILD_SHARED_LIBS "Build shared libraries." OFF)
-
 # the RPATH to be used when installing
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
@@ -56,10 +54,8 @@ option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
 option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
-
-
 if (UBUNTU32BIT)
-	# QNX headers and libraries are kept in 'mrlib' repository
+	# 32-bit headers and libraries are kept in 'mrlib' repository
 	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.10-32bit")
 	set(MRLIB "${UBUNTU32BIT_ROOT}/usr")
 
@@ -107,6 +103,9 @@ if (UBUNTU32BIT)
 	include_directories (${MRLIB}/include)
 	set(COMEDI_INSTALL "${MRLIB}")
 else (UBUNTU32BIT) # Linux, MacOS, etc.
+	# Build shared libraries by default
+	OPTION (BUILD_SHARED_LIBS "Build shared libraries." ON)
+
 	# find dependency packages
 	set(BOOST_ROOT "/opt/boost")
 
@@ -151,8 +150,6 @@ include_directories (${MRROCPP_BINARY_DIR}/src)
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
-
-
 include(FindComedi)
 
 # Make sure the compiler can find include files
@@ -162,9 +159,8 @@ include_directories (${Boost_INCLUDE_DIR})
 include_directories (${EIGEN2_INCLUDE_DIRS})
 
 
-	include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
-	set(COMMON_LIBRARIES messip)
-
+include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
+set(COMMON_LIBRARIES messip)
 
 set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_THREAD_LIBRARY}

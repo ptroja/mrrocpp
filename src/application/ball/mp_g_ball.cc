@@ -74,7 +74,7 @@ void ball::setup_command(robot::robot & robot)
 
 	// define virtual tool position
 	const lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(robot.mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	robot.mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -123,13 +123,13 @@ bool ball::next_step()
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
 
-		irp6ot_start.set_from_frame_tab(irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
-		irp6p_start.set_from_frame_tab(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
+		irp6ot_start = irp6ot->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
+		irp6p_start = irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame;
 	}
 
 	// trajectory generation helper variables
-	lib::Homog_matrix hm;
 	lib::Xyz_Angle_Axis_vector aa_vector;
+
 	const double t = speedup * 2 * M_PI * node_counter / 800;
 
 	speedup += speedup_factor;
@@ -139,11 +139,8 @@ bool ball::next_step()
 
 	// IRP6 on track
 
-	// frame_tab -> homogeneous transformation matrix
-	hm = irp6ot_start;
-
 	// homogeneous transformation matrix -> angle axis vector
-	hm.get_xyz_angle_axis(aa_vector);
+	irp6ot_start.get_xyz_angle_axis(aa_vector);
 
 	// actual command
 	aa_vector[0] = 0.1 * sin(t);
@@ -153,18 +150,12 @@ bool ball::next_step()
 	//	std::cout << aa_vector << std::endl;
 
 	// angle axis vector -> homogeneous transformation matrix
-	hm.set_from_xyz_angle_axis(aa_vector);
-
-	// homogeneous transformation matrix -> frame_tab
-	hm.get_frame_tab(irp6ot->mp_command.instruction.arm.pf_def.arm_frame);
+	irp6ot->mp_command.instruction.arm.pf_def.arm_frame.set_from_xyz_angle_axis(aa_vector);
 
 	// IRP6 postument
 
-	// frame_tab -> homogeneous transformation matrix
-	hm = irp6p_start;
-
 	// homogeneous transformation matrix -> angle axis vector
-	hm.get_xyz_angle_axis(aa_vector);
+	irp6p_start.get_xyz_angle_axis(aa_vector);
 
 	// actual command
 	aa_vector[0] = -0.106 + 0.1 * sin(t);
@@ -174,10 +165,7 @@ bool ball::next_step()
 	//	std::cout << aa_vector << std::endl;
 
 	// angle axis vector -> homogeneous transformation matrix
-	hm.set_from_xyz_angle_axis(aa_vector);
-
-	// homogeneous transformation matrix -> frame_tab
-	hm.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
+	irp6p->mp_command.instruction.arm.pf_def.arm_frame.set_from_xyz_angle_axis(aa_vector);
 
 	return true;
 

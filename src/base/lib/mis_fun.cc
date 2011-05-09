@@ -9,6 +9,7 @@
 
 #include <pthread.h>
 #include <cstdio>
+#include <unistd.h>
 
 #include "base/lib/mis_fun.h"
 
@@ -21,6 +22,26 @@
 namespace mrrocpp {
 namespace lib {
 
+//! Set the process scheduler
+void set_process_sched()
+{
+
+	//	int policy;
+	struct sched_param param;
+
+	int policy_priority_min = sched_get_priority_min(SCHED_FIFO);
+	if (policy_priority_min == -1) {
+		perror("sched_get_priority_min() ");
+	}
+
+	param.sched_priority = policy_priority_min;
+
+	if (sched_setscheduler(getpid(), SCHED_FIFO, &param) == -1) {
+		perror("sched_setscheduler() ");
+	}
+
+}
+
 void set_thread_priority(pthread_t thread, int sched_priority_l)
 {
 	int policy;
@@ -30,23 +51,26 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	}
 
 	// check priority range
-	int policy_priority_min = sched_get_priority_min(SCHED_RR);
+	int policy_priority_min = sched_get_priority_min(SCHED_FIFO);
 	if (policy_priority_min == -1) {
 		perror("sched_get_priority_min() ");
 	}
 
-	int policy_priority_max = sched_get_priority_max(SCHED_RR);
+	int policy_priority_max = sched_get_priority_max(SCHED_FIFO);
 	if (policy_priority_max == -1) {
 		perror("sched_get_priority_max() ");
 	}
+
+	//pthread_setscheduler(thread, SCHED_FIFO, sched_priority_l);
+
 
 	if ((sched_priority_l < policy_priority_min) || (sched_priority_l > policy_priority_max)) {
 		fprintf(stderr, "requested thread priority (%d) not in <%d:%d> priority range\n", sched_priority_l, policy_priority_min, policy_priority_max);
 	} else {
 		param.sched_priority = sched_priority_l;
-		//                if (pthread_setschedparam(thread, SCHED_RR, &param)) {
-		//                        perror("pthread_setschedparam() ");
-		//		}
+		if (pthread_setschedparam(thread, SCHED_FIFO, &param)) {
+			perror("pthread_setschedparam() ");
+		}
 	}
 }
 

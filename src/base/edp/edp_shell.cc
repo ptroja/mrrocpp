@@ -35,6 +35,10 @@ namespace common {
 shell::shell(lib::configurator &_config) :
 	config(_config), hardware_busy_file_fullpath(""), my_pid(0)
 {
+	/* Lokalizacja procesu wywietlania komunikatow SR */
+	msg
+			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION).c_str());
+
 	my_pid = getpid();
 }
 
@@ -133,7 +137,7 @@ bool shell::detect_hardware_busy()
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
-			return false;
+				return false;
 		}
 
 	}

@@ -77,9 +77,8 @@ int UiRobot::synchronise_int()
 
 }
 
-UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string) :
-			common::UiRobot(_interface, edp_section_name, ecp_section_name, _robot_name, _number_of_servos, _activation_string),
-			ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
+	common::UiRobot(_interface, edp_section_name, ecp_section_name, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
 
 {
 
@@ -88,6 +87,7 @@ UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+
 }
 
 }

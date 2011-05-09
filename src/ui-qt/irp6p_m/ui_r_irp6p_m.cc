@@ -34,74 +34,27 @@ const std::string WGT_IRP6P_M_TOOL_EULER = "WGT_IRP6P_M_TOOL_EULER";
 //
 //
 
-
-void UiRobot::edp_create()
+int UiRobot::ui_get_edp_pid()
 {
-	if (state.edp.state == 0) {
-		create_thread();
-
-		eb.command(boost::bind(&ui::irp6p_m::UiRobot::edp_create_int, &(*this)));
-	}
+	return ui_ecp_robot->ecp->get_EDP_pid();
 }
 
-int UiRobot::edp_create_int()
-
+void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
-	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
+	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
 
-	try { // dla bledow robot :: ECP_error
+}
 
-		// dla robota irp6_postument
-		if (state.edp.state == 0) {
+int UiRobot::create_ui_ecp_robot()
+{
+	ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6p_m::ROBOT_NAME);
+	return 1;
+}
 
-			state.edp.state = 0;
-			state.edp.is_synchronised = false;
-
-			std::string tmp_string("/dev/name/global/");
-			tmp_string += state.edp.hardware_busy_attach_point;
-
-			std::string tmp2_string("/dev/name/global/");
-			tmp2_string += state.edp.network_resourceman_attach_point;
-
-			// sprawdzenie czy nie jest juz zarejestrowany zarzadca zasobow
-			if (((!(state.edp.test_mode)) && (access(tmp_string.c_str(), R_OK) == 0))
-					|| (access(tmp2_string.c_str(), R_OK) == 0)) {
-				interface.ui_msg->message(lib::NON_FATAL_ERROR, "edp_irp6_postument already exists");
-			} else if (interface.check_node_existence(state.edp.node_name, "edp_irp6_postument")) {
-				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
-
-				{
-					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-
-					ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6p_m::ROBOT_NAME);
-				}
-
-				state.edp.pid = ui_ecp_robot->ecp->get_EDP_pid();
-
-				if (state.edp.pid < 0) {
-					state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete ui_ecp_robot;
-				} else { // jesli spawn sie powiodl
-					state.edp.state = 1;
-					connect_to_reader();
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
-					ui_ecp_robot->get_controller_state(robot_controller_initial_state_tmp);
-
-					//state.edp.state = 1; // edp wlaczone reader czeka na start
-					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
-				}
-			}
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-	interface.manage_interface();
+int UiRobot::edp_create_int_extra_operations()
+{
 	wgt_motors->synchro_depended_init();
 	return 1;
-
 }
 
 int UiRobot::move_to_synchro_position()
@@ -148,7 +101,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			irp6_m::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS, "is_irp6p_m_active")
+			irp6_m::UiRobot(_interface, lib::irp6p_m::EDP_SECTION, lib::irp6p_m::ECP_SECTION, lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS)
 {
 	wgt_joints = new wgt_irp6_m_joints("Irp6p_m joints", interface, *this, interface.get_main_window());
 	wgt_motors = new wgt_irp6_m_motors("Irp6p_m motors", interface, *this, interface.get_main_window());

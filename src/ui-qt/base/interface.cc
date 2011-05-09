@@ -7,6 +7,7 @@
 #include <fstream>
 #include <boost/foreach.hpp>
 #include <dirent.h>
+#include <sys/wait.h>
 
 #include <QtGui/QApplication>
 
@@ -16,6 +17,8 @@
 #include "interface.h"
 #include "ui_sr.h"
 #include "ui_ecp.h"
+#include "base/lib/ping.h"
+
 #include "../spkm/ui_r_spkm.h"
 #include "../smb/ui_r_smb.h"
 #include "../shead/ui_r_shead.h"
@@ -89,6 +92,44 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 
 	return 1;
 
+}
+
+int Interface::wait_for_child_termiantion(pid_t pid)
+{
+
+	int status;
+	pid_t child_pid;
+	child_pid = waitpid(pid, &status, 0);
+
+	if (child_pid == -1) {
+		//	int e = errno;
+		perror("UI: waitpid()");
+	} else if (child_pid == 0) {
+		fprintf(stderr, "UI: no child exited\n");
+	} else {
+		//fprintf(stderr, "UI: child %d...\n", child_pid);
+		if (WIFEXITED(status)) {
+			fprintf(stderr, "UI: child %d exited normally with status %d\n", child_pid, WEXITSTATUS(status));
+		}
+		if (WIFSIGNALED(status)) {
+#ifdef WCOREDUMP
+			if (WCOREDUMP(status)) {
+				fprintf(stderr, "UI: child %d terminated by signal %d (core dumped)\n", child_pid, WTERMSIG(status));
+			} else
+#endif /* WCOREDUMP */
+			{
+				fprintf(stderr, "UI: child %d terminated by signal %d\n", child_pid, WTERMSIG(status));
+			}
+		}
+		if (WIFSTOPPED(status)) {
+			fprintf(stderr, "UI: child %d stopped\n", child_pid);
+		}
+		if (WIFCONTINUED(status)) {
+			fprintf(stderr, "UI: child %d resumed\n", child_pid);
+		}
+	}
+
+	return status;
 }
 
 void Interface::init()
@@ -203,7 +244,7 @@ void Interface::init()
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 
-	signal(SIGCHLD, &catch_signal);
+	// signal(SIGCHLD, &catch_signal);
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -661,47 +702,34 @@ void Interface::UI_close(void)
 }
 
 void Interface::abort_threads()
-
 {
-	delete ui_sr_obj;
-	delete ui_ecp_obj;
-
-	delete meb_tid;
+	// Note: these originally were a pointers to a threaded objects,
+	// and they were deleted here.
+	ui_sr_obj.reset();
+	ui_ecp_obj.reset();
+	meb_tid.reset();
 }
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
-	/*
-	 char buffer[50];
-	 char c[20];
-	 sprintf(buffer, "ping -c 3 %s | grep -c ms > a.txt", _node.c_str());
-	 system(buffer);
-	 FILE *p = fopen("a.txt", "r");
-	 fgets(c, 5, p);
-	 fclose(p);
-	 if (strcmp(c, "5\n") != 0) {
-	 std::string tmp(beginnig_of_message);
-	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+	bool r_val;
 
-	 return false;
-	 }
+	{
+		boost::unique_lock <boost::mutex> lock(process_creation_mtx);
+		r_val = lib::ping(_node);
+	}
 
-	 return true;
-	 */
-	/*
-	 std::string opendir_path("/net/");
-	 opendir_path += _node;
+	std::cout << "ping returned " << r_val << std::endl;
 
-	 if (access(opendir_path.c_str(), R_OK) != 0) {
-	 std::string tmp(beginnig_of_message);
-	 tmp += std::string(" node: ") + _node + std::string(" is unreachable");
-	 ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+	if (!r_val) {
 
-	 return false;
-	 }
-	 return true;
-	 */
+		std::string tmp(beginnig_of_message);
+		tmp += std::string(" node: ") + _node + std::string(" is unreachable");
+		ui_msg->message(lib::NON_FATAL_ERROR, tmp);
+
+		return false;
+	}
+
 	return true;
 
 }
@@ -1121,12 +1149,14 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
-	meb_tid = new feb_thread(*main_eb);
+	meb_tid = (boost::shared_ptr <feb_thread>) new feb_thread(*main_eb);
 
-	ui_ecp_obj = new ecp_buffer(*this);
+	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
 	delay(1);
-	ui_sr_obj = new sr_buffer(*this);
+
+	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
+	mw->start_on_timer();
 
 }
 
@@ -1208,6 +1238,7 @@ int Interface::MPslay()
 			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
 			//    			perror("waitpid()");
 			//    		}
+			wait_for_child_termiantion(mp.pid);
 		}
 
 		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
@@ -1410,28 +1441,12 @@ int Interface::slay_all()
 		 system(system_command);
 		 */delay(100);
 
-		if (program_node_user_list_iterator->is_qnx) {
-			sprintf(system_command, "rsh -l %s %s slay -v -f %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
-
-		} else {
-			sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
-
-		}
+		sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
 		printf("slay_all: %s\n", system_command);
 		// przedniolsem wywolanie system do innego prceosu bo w procesie glownym czasem powoduje zawieszenie calego intefrejsu
-		pid_t child_pid = vfork();
 
-		if (child_pid == 0) {
-			system(system_command);
-			_exit(EXIT_SUCCESS);
-		} else if (child_pid > 0) {
-			//delay(5000);
-			printf("slay_all child %d created\n", child_pid);
-
-		} else {
-			perror("slay_all vfork()");
-		}
+		system(system_command);
 
 	}
 	printf("slay_all end\n");
@@ -1542,6 +1557,54 @@ int Interface::all_robots_move_to_front_position()
 	}
 	return 1;
 
+}
+
+void Interface::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+
+{
+	if (e.error_class == lib::SYSTEM_ERROR)
+		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	ui_state = 2;
+}
+
+void Interface::catch_ecp_error(ecp::common::robot::ECP_error & er)
+
+{
+	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
+		perror("ecp lib::SYSTEM_ERROR in UI");
+		/* PtExit( EXIT_SUCCESS ); */
+	} else {
+		switch (er.error_no)
+		{
+			case INVALID_POSE_SPECIFICATION:
+			case INVALID_COMMAND_TO_EDP:
+			case EDP_ERROR:
+			case INVALID_ROBOT_MODEL_TYPE:
+				/* Komunikat o bledzie wysylamy do SR */
+				all_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
+				break;
+			default:
+				all_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
+				perror("Unidentified exception");
+		} /* end: switch */
+	}
+}
+
+void Interface::catch_std_exception(const std::exception & e)
+{
+
+	std::string tmp_string(" The following error has been detected: ");
+	tmp_string += e.what();
+	all_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+	std::cerr << "UI: The following error has been detected :\n\t" << e.what() << std::endl;
+}
+
+void Interface::catch_tridot()
+
+{
+	/* Wylapywanie niezdefiniowanych bledow*/
+	/* Komunikat o bledzie wysylamy do SR (?) */
+	fprintf(stderr, "unidentified error in UI\n");
 }
 
 }

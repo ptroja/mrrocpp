@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <cerrno>
 #include <ctime>
+#include <exception>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
@@ -122,7 +123,6 @@ void servo_buffer::send_to_SERVO_GROUP()
 		sg_reply_rdy = false;
 	}
 
-
 	//   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
 	if ((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK)) {
@@ -151,7 +151,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 	}
 
 	// przepisanie stanu regulatora chwytaka
-	master.reply.arm.pf_def.gripper_reg_state = sg_reply.gripper_reg_state;
+	master.reply.arm.gripper_reg_state = sg_reply.gripper_reg_state;
 
 	// printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sg_reply.abs_position[4]);
 
@@ -165,9 +165,19 @@ void servo_buffer::operator()()
 	// servo buffer has to be created before servo thread starts
 	//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
-	load_hardware_interface();
+	try {
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 2);
+		load_hardware_interface();
+	}
+
+	catch (std::runtime_error & e) {
+		printf("servo group runtime error: %s \n", e.what());
+		master.msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		_exit(EXIT_SUCCESS);
+	}
+
+	lib::set_thread_priority(pthread_self(), 79);
 
 	// signal master thread to continue executing
 	thread_started.command();
@@ -231,7 +241,7 @@ void servo_buffer::get_all_positions(void)
 
 		// przyrost polozenia w impulsach
 		servo_data.position[i] = regulator_ptr[i]->get_position_inc(1);
-		servo_data.current[i] = regulator_ptr[i]->get_meassured_current();
+		servo_data.current[i] = regulator_ptr[i]->get_measured_current();
 		servo_data.PWM_value[i] = regulator_ptr[i]->get_PWM_value();
 		servo_data.algorithm_no[i] = regulator_ptr[i]->get_algorithm_no();
 		servo_data.algorithm_parameters_no[i] = regulator_ptr[i]->get_algorithm_parameters_no();
@@ -262,9 +272,9 @@ SERVO_COMMAND servo_buffer::command_type() const
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
 
-			servo_command_rdy(false), sg_reply_rdy(false),
+	servo_command_rdy(false), sg_reply_rdy(false),
 
-			thread_started(), master(_master)
+	thread_started(), master(_master)
 {
 
 }
@@ -275,7 +285,6 @@ bool servo_buffer::get_command(void)
 	// Odczytanie polecenia z EDP_MASTER o ile zostalo przyslane
 	bool new_command_available = false;
 
-
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		if (servo_command_rdy) {
@@ -284,7 +293,6 @@ bool servo_buffer::get_command(void)
 			new_command_available = true;
 		}
 	}
-
 
 	if (new_command_available) { // jezeli jest nowa wiadomosc
 
@@ -539,7 +547,6 @@ void servo_buffer::ppp(void) const
 servo_buffer::~servo_buffer(void)
 {
 
-
 	// Destruktor grupy regulatorow
 	// Zniszcyc regulatory
 	for (int j = 0; j < master.number_of_servos; j++)
@@ -584,7 +591,7 @@ uint64_t servo_buffer::compute_all_set_values(void)
 			regulator_ptr[j]->insert_new_pos_increment(regulator_ptr[j]->return_new_step() * axe_inc_per_revolution[j]
 					/ (2 * M_PI));
 		} else {
-			regulator_ptr[j]->insert_meassured_current(hi->get_current(j));
+			regulator_ptr[j]->insert_measured_current(hi->get_current(j));
 			regulator_ptr[j]->insert_new_pos_increment(hi->get_increment(j));
 		}
 		// obliczenie nowej wartosci zadanej dla napedu

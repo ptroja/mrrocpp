@@ -55,9 +55,10 @@ void ATI3084_force::connect_to_hardware(void)
 
 	device = comedi_open(dev_name.c_str());
 
-	if (!device)
-		printf("unable to open device !!! \n");
-	//  throw runtime_error("Could not open device");
+	if (!device) {
+
+		throw std::runtime_error("Could not open device");
+	}
 
 	//char * file_path = comedi_get_default_calibration_path(device);
 	//comedi_calibration_t* calib = comedi_parse_calibration_file(file_path);
@@ -70,6 +71,10 @@ void ATI3084_force::connect_to_hardware(void)
 
 	//comedi_cleanup_calibration(calib);
 	//free(file_path);
+
+	comedi_dio_config(device, 2, 0, COMEDI_OUTPUT);
+	comedi_dio_config(device, 2, 1, COMEDI_OUTPUT);
+	comedi_dio_config(device, 2, 2, COMEDI_OUTPUT);
 
 	maxdata = comedi_get_maxdata(device, 0, 0);
 	rangetype = comedi_get_range(device, 0, 0, 0);

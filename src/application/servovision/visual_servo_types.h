@@ -76,7 +76,7 @@ struct position_based_reading
 	bool tracking;
 
 	/** Homogeneous matrix with object position with respect to the camera. */
-	double position[3][4];
+	lib::Homog_matrix position;
 };
 
 } //namespace visual_servo_types

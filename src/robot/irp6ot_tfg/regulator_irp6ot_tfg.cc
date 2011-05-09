@@ -73,15 +73,13 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-	
-	
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
-	// printf("bbb: %d\n",  meassured_current);
+	// printf("bbb: %d\n",  measured_current);
 
 
 	// if (step_new!=0.0) printf(" 8 reg:%f\n", step_new);
@@ -210,13 +208,13 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 		case 0: // algorytm nr 0
 
 
-			//	if (meassured_current != 0) fprintf(stdout,"alg 0: %d\n", meassured_current);
+			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 			/*
 			 display++;
 			 if (display >= 500)
 			 {
 			 display = 0;
-			 fprintf(stdout,"alg 0: %d\n", meassured_current);
+			 fprintf(stdout,"alg 0: %d\n", measured_current);
 			 }
 			 */
 
@@ -224,14 +222,14 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 			set_value_new = ((1 + a) * set_value_old - a * set_value_very_old + b0 * delta_eint - b1 * delta_eint_old);
 			break;
 		case 1: // algorytm nr 1
-			if (meassured_current != 0)
-				fprintf(stdout, "alg 1: %d\n", meassured_current);
+			if (measured_current != 0)
+				fprintf(stdout, "alg 1: %d\n", measured_current);
 			/*
 			 display++;
 			 if (display >= 500)
 			 {
 			 display = 0;
-			 fprintf(stdout,"alg 1: %d\n", meassured_current);
+			 fprintf(stdout,"alg 1: %d\n", measured_current);
 			 }
 			 */
 
@@ -263,15 +261,15 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
 
 
-
 	// scope-locked reader data update
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[7] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[7] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[7] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[7] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[0] = measured_current;
 	}
 
 	// if (set_value_new > 0.0) {
@@ -286,7 +284,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	set_value_old = set_value_new;
 	PWM_value = (int) set_value_new;
 
-	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, meassured_current, reg_state, kk);
+	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, measured_current, reg_state, kk);
 
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
 
@@ -295,15 +293,15 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 		sum_of_currents -= currents[current_index];
 	}
 
-	sum_of_currents += meassured_current;
+	sum_of_currents += measured_current;
 
-	currents[current_index] = meassured_current;
+	currents[current_index] = measured_current;
 
 	current_index = ((++current_index) % GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS);
 
 	reg_state = next_reg_state;
 
-	//	printf("aa: %d, %d, %d\n",  sum_of_currents, meassured_current, kk);
+	//	printf("aa: %d, %d, %d\n",  sum_of_currents, measured_current, kk);
 	//printf("aa: %d\n", sum_of_currents);
 
 	switch (reg_state)
@@ -318,7 +316,7 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 			break;
 
 		case lib::GRIPPER_BLOCKED_STATE:
-			//	fprintf(stdout,"GRIPPER_BLOCKED_STATE %d\n", meassured_current);
+			//	fprintf(stdout,"GRIPPER_BLOCKED_STATE %d\n", measured_current);
 			if (((master.step_counter - gripper_blocked_start_time) > GRIPPER_BLOCKED_TIME_PERIOD)
 					&& (!(sum_of_currents > GRIPPER_SUM_OF_CURRENTS_MAX_VALUE))) {
 				//			printf("gripper GRIPPER_START_STATE state\n");

@@ -57,7 +57,7 @@ const std::string ports_strings[] = {"/dev/ttyMI6"};
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const int MAX_CURRENT_0 = 150;
+const int MAX_CURRENT_0 = 200;
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]

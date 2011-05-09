@@ -72,6 +72,20 @@ namespace epos {
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
 
+// Interpolation buffer status bits
+#define PVT_STATUS_UNDERFLOW_WARNING	E_BIT00
+#define PVT_STATUS_OVERFLOW_WARNING		E_BIT01
+#define PVT_STATUS_VELOCITY_WARNING		E_BIT02
+#define PVT_STATUS_ACCELERATION_WARNING	E_BIT03
+#define PVT_STATUS_UNDERFLOW_ERROR		E_BIT08
+#define PVT_STATUS_OVERFLOW_ERROR		E_BIT09
+#define PVT_STATUS_VELOCITY_ERROR		E_BIT02
+#define PVT_STATUS_ACCELERATION_ERROR	E_BIT03
+#define PVT_STATUS_BUFFER_ENABLED		E_BIT14
+#define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15
+#define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)
+#define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)
+
 /************************************************************/
 /*           EPOS related constants                         */
 /************************************************************/
@@ -1259,6 +1273,133 @@ void epos::clearPvtBuffer()
 
 	// Enable access to the input buffer for the drive functions
 	WriteObjectValue(0x60C4, 0x06, 1);
+}
+
+INTEGER16 epos::readInterpolationSubModeSelection()
+{
+	return ReadObjectValue<INTEGER32> (0x60C0, 0x02);
+}
+
+void epos::writeInterpolationSubModeSelection(INTEGER16 val)
+{
+	WriteObjectValue(0x60C0, 0x00, val);
+}
+
+UNSIGNED8 epos::readInterpolationTimePeriod()
+{
+	return ReadObjectValue<UNSIGNED8> (0x60C2, 0x01);
+}
+
+void epos::writeInterpolationTimePeriod(UNSIGNED8 val)
+{
+	WriteObjectValue(0x60C2, 0x01, val);
+}
+
+INTEGER8 epos::readInterpolationTimeIndex()
+{
+	return ReadObjectValue<INTEGER8> (0x60C2, 0x02);
+}
+
+void epos::writeInterpolationTimeIndex(INTEGER8 val)
+{
+	WriteObjectValue(0x60C2, 0x02, val);
+}
+
+//! write Interpolation data record
+void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time)
+{
+	// only 24 bits allowed for velocity
+	if (velocity > 0x00ffffff || velocity < 0xff000000) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Only 24 bits allowed for velocity"));
+	}
+
+	// This array holds a manufacturer-specific 64 bit data record
+	// of a complex data structure; see Maxon documentation for details.
+	char pvt[8];
+
+	// The data layout is as follows:
+	// +------------------------------------------------------------------+
+	// | MSB                                                         LSB  |
+	// +------------------------------------------------------------------+
+	// | Time (unsigned8)  |  Velocity (signed24)  |  Position (signed32) |
+	// +------------------------------------------------------------------+
+
+	// note: velocity assignment is with 32-bit integer, so it has to
+	//       be done before assignment of time value to avoid overwrite
+	*((int32_t *) pvt[4]) = (velocity & 0x00ffffff);
+	pvt[7] = time;
+	*((int32_t *) pvt[0]) = position;
+
+	// custom WriteObject() for a 64bit complex data structure
+	{
+		const WORD index = 0x20C1;
+		const BYTE subindex = 0x00;
+
+		WORD frame[8];
+
+		frame[0] = 0x0611; // fixed: (len-1) == 3, WriteObject
+		frame[1] = index;
+		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		// data to transmit
+		frame[3] = *((WORD *) pvt[0]);
+		frame[4] = *((WORD *) pvt[2]);
+		frame[5] = *((WORD *) pvt[4]);
+		frame[6] = *((WORD *) pvt[6]);
+		frame[7] = 0x00; // ZERO word, will be filled with checksum
+
+		device.sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		device.readAnswer(answer, 8);
+
+		checkEPOSerror(device.E_error);
+	}
+}
+
+//! read Interpolation buffer status
+UNSIGNED16 epos::readInterpolationBufferStatus()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x01);
+}
+
+bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_WARNING);
+}
+
+bool epos::checkInterpolationBufferError(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_ERROR);
+}
+
+//! read Interpolation buffer underflow warning
+UNSIGNED16 epos::readInterpolationBufferUnderflowWarning()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x02);
+}
+
+//! write Interpolation buffer underflow warning
+void epos::writeInterpolationBufferUnderflowWarning(UNSIGNED16 val)
+{
+	WriteObjectValue(0x20C4, 0x02, val);
+}
+
+//! read Interpolation buffer overflow warning
+UNSIGNED16 epos::readInterpolationBufferOverflowWarning()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x03);
+}
+
+//! write Interpolation buffer overflow warning
+void epos::writeInterpolationBufferOverflowWarning(UNSIGNED16 val)
+{
+	WriteObjectValue(0x20C4, 0x03, val);
+}
+
+void epos::startInterpolatedPositionMotion()
+{
+	writeControlword(0x1f);
 }
 
 /*! read Error register */

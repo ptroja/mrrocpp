@@ -9,6 +9,8 @@
 #include <cstdio>
 #include <ctime>
 
+#include "base/lib/impconst.h"
+
 #include <boost/date_time/posix_time/posix_time.hpp> //include all types plus i/o
 #include <boost/thread/thread_time.hpp>
 

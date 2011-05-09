@@ -30,7 +30,11 @@ const std::string FATAL_ERROR = "FATAL ERROR";
 const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
 
 //! Number of motor that caused the exception.
-typedef boost::error_info <struct limit, std::string> mrrocpp_error_type;
+typedef boost::error_info <struct error_class, std::string> mrrocpp_error_class;
+
+//#define MRROCPP_THROW_SYSTEM_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(SYSTEM_ERROR))
+//#define MRROCPP_THROW_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(FATAL))
+//#define MRROCPP_THROW_NON_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(NON_FATAL_ERROR))
 
 /*!
  * \brief Base class for all system errors.
@@ -38,10 +42,15 @@ typedef boost::error_info <struct limit, std::string> mrrocpp_error_type;
  */
 struct mrrocpp_system_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+	mrrocpp_system_error()
 	{
-		return SYSTEM_ERROR.c_str();
+		*this << mrrocpp_error_class(SYSTEM_ERROR);
 	}
+
+	/*	virtual const char* what() const throw ()
+	 {
+	 return SYSTEM_ERROR.c_str();
+	 }*/
 
 	~mrrocpp_system_error() throw ()
 	{
@@ -54,10 +63,14 @@ struct mrrocpp_system_error : virtual public std::exception, virtual public boos
  */
 struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+	mrrocpp_fatal_error()
 	{
-		return FATAL_ERROR.c_str();
+		*this << mrrocpp_error_class(FATAL_ERROR);
 	}
+	/*	virtual const char* what() const throw ()
+	 {
+	 return FATAL_ERROR.c_str();
+	 }*/
 
 	~mrrocpp_fatal_error() throw ()
 	{
@@ -70,10 +83,14 @@ struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost
  */
 struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual const char* what() const throw ()
+	mrrocpp_non_fatal_error()
 	{
-		return NON_FATAL_ERROR.c_str();
+		*this << mrrocpp_error_class(NON_FATAL_ERROR);
 	}
+	/*	virtual const char* what() const throw ()
+	 {
+	 return NON_FATAL_ERROR.c_str();
+	 }*/
 
 	~mrrocpp_non_fatal_error() throw ()
 	{
