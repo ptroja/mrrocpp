@@ -180,36 +180,35 @@ struct ECP_message
 
 	//----------------------------------------------------------
 
-		/*! A comment for the command. */
-		char string[MSG_LENGTH];
+	/*! A comment for the command. */
+	char string[MSG_LENGTH];
 
-		//------------------------------------------------------
-		struct
-		{
-			double robot_position[lib::MAX_SERVOS_NR];
-			double sensor_reading[lib::MAX_SERVOS_NR];
-		}
-		/*! Robot positions + Sensor readings. */
-		RS;
-		//------------------------------------------------------
-		struct
-		{
-			double robot_position[lib::MAX_SERVOS_NR];
-			double digital_scales_sensor_reading[6];
-			double force_sensor_reading[6];
-		}
-		/*! Robot positions + 2 * (Sensor readings). */
-		R2S;
-		//------------------------------------------------------
-		struct
-		{
-			double robot_position[lib::MAX_SERVOS_NR];
-			double sensor_reading[6];
-			int32_t measure_number;
-		}
-		/*! Robot positions + Sensor readings + Measure number. */
-		MAM;
-
+	//------------------------------------------------------
+	struct
+	{
+		double robot_position[lib::MAX_SERVOS_NR];
+		double sensor_reading[lib::MAX_SERVOS_NR];
+	}
+	/*! Robot positions + Sensor readings. */
+	RS;
+	//------------------------------------------------------
+	struct
+	{
+		double robot_position[lib::MAX_SERVOS_NR];
+		double digital_scales_sensor_reading[6];
+		double force_sensor_reading[6];
+	}
+	/*! Robot positions + 2 * (Sensor readings). */
+	R2S;
+	//------------------------------------------------------
+	struct
+	{
+		double robot_position[lib::MAX_SERVOS_NR];
+		double sensor_reading[6];
+		int32_t measure_number;
+	}
+	/*! Robot positions + Sensor readings + Measure number. */
+	MAM;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -528,7 +527,8 @@ enum MOTION_TYPE
 enum INTERPOLATION_TYPE
 {
 	MIM, //! motor interpolated motion
-	TCIM //! task coordinates interpolated motion
+	TCIM
+//! task coordinates interpolated motion
 };
 
 //------------------------------------------------------------------------------
@@ -867,9 +867,7 @@ typedef struct _controller_state_t
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef
-
-struct
+typedef struct
 
 r_buffer_arm
 {
@@ -896,6 +894,38 @@ r_buffer_arm
 	} pf_def;
 
 	/*!
+	 *  Measured current macrostep statistics
+	 */
+	struct
+	{
+		/*!
+		 *  Average module
+		 */
+		unsigned short average_module;
+
+		/*!
+		 *  Minimum module
+		 */
+		unsigned short minimum_module;
+
+		/*!
+		 *  Maksimum module
+		 */
+		unsigned short maksimum_module;
+
+		/*!
+		 *  Average square
+		 */
+		float average_square;
+
+		/*!
+		 *  Average cubic
+		 */
+		float average_cubic;
+
+	} measured_current;
+
+	/*!
 	 *  Stan w ktorym znajduje sie regulator chwytaka.
 	 *  @todo Translate to English.
 	 */
@@ -913,15 +943,15 @@ r_buffer_arm
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & type;
-// FIXME: With the following switch it does not work correctly
+		// FIXME: With the following switch it does not work correctly
 #if 0
 		switch (type) {
 			case FRAME:
-				ar & pf_def.arm_frame;
-				break;
+			ar & pf_def.arm_frame;
+			break;
 			default:
-				ar & pf_def.arm_coordinates;
-				break;
+			ar & pf_def.arm_coordinates;
+			break;
 		}
 #else
 		ar & pf_def.arm_frame;
@@ -931,6 +961,13 @@ r_buffer_arm
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & gripper_reg_state;
 		ar & serialized_reply;
+
+		ar & measured_current.average_module;
+		ar & measured_current.minimum_module;
+		ar & measured_current.maksimum_module;
+		ar & measured_current.average_square;
+		ar & measured_current.average_cubic;
+
 	}
 } r_buffer_arm_t;
 
