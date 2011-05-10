@@ -153,10 +153,10 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
-
+	if (is_synchronised()) {
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+		get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
+	}
 	switch (instruction.get_arm_type)
 	{
 		case lib::FRAME:

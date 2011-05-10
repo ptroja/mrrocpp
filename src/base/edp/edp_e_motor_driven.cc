@@ -758,10 +758,10 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	//	printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	if (is_synchronised()) {
+		// dla pierwszego wypelnienia current_joints
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 

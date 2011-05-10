@@ -97,9 +97,9 @@ public:
 
 	busy_flag communication_flag;
 
+	//! pointers to threads
 	boost::shared_ptr <sr_buffer> ui_sr_obj;
 	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
-
 	boost::shared_ptr <feb_thread> meb_tid;
 
 	function_execution_buffer *main_eb;
