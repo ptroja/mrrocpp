@@ -34,7 +34,7 @@ public:
 
 	common::EcpRobot *ui_ecp_robot;
 	wgt_single_motor_move *wgt_move;
-			UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos, const std::string & _activation_string);
+			UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos);
 	void delete_ui_ecp_robot();
 };
 

@@ -21,6 +21,7 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
+#include "base/ecp/ecp_robot.h"
 #include "string"
 
 #include "ui.h"
@@ -96,10 +97,10 @@ public:
 
 	busy_flag communication_flag;
 
-	boost::shared_ptr<sr_buffer> ui_sr_obj;
-	boost::shared_ptr<ecp_buffer> ui_ecp_obj;
-
-	boost::shared_ptr<feb_thread> meb_tid;
+	//! pointers to threads
+	boost::shared_ptr <sr_buffer> ui_sr_obj;
+	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
+	boost::shared_ptr <feb_thread> meb_tid;
 
 	function_execution_buffer *main_eb;
 
@@ -129,7 +130,7 @@ public:
 	mp_state_def mp;
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
-	bool is_sr_thread_loaded;
+
 	UI_ALL_EDPS_STATE all_edps;
 	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
 	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro;
@@ -181,6 +182,7 @@ public:
 	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
+	int wait_for_child_termiantion(pid_t pid);
 	int manage_interface(void);
 	void manage_pc(void);
 
@@ -242,6 +244,11 @@ public:
 	bool are_all_loaded_robots_synchronised();
 	bool is_any_loaded_robot_synchronised();
 
+	// default try catch handlers
+	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
+	void catch_ecp_error(ecp::common::robot::ECP_error & er);
+	void catch_std_exception(const std::exception & e);
+	void catch_tridot();
 	// windows
 
 	wgt_process_control* wgt_pc;

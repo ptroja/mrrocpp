@@ -37,6 +37,7 @@ add_library(mrrocpp
 	trajectory_pose/constant_velocity_trajectory_pose.cc
 	periodic_timer.cc
 	compat.c
+	ping.cc
 )
 
 add_executable(pvat_test

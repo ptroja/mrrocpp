@@ -41,9 +41,7 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ui {
@@ -52,8 +50,6 @@ namespace common {
 void sr_buffer::operator()()
 {
 
-
-
 	lib::set_thread_name("sr");
 
 	lib::fd_server_t ch;
@@ -61,7 +57,7 @@ void sr_buffer::operator()()
 	ch = messip::port_create(interface.sr_attach_point);
 	assert(ch);
 
-	interface.is_sr_thread_loaded = true;
+	thread_started.command();
 	while (1) {
 		lib::sr_package_t sr_msg;
 
@@ -83,7 +79,7 @@ void sr_buffer::operator()()
 }
 
 sr_buffer::sr_buffer(Interface& _interface) :
-	interface(_interface), cb(UI_SR_BUFFER_LENGHT)
+	interface(_interface), cb(UI_SR_BUFFER_LENGHT), thread_started()
 {
 	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }

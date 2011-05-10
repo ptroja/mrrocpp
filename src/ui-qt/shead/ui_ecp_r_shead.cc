@@ -11,6 +11,8 @@ namespace mrrocpp {
 namespace ui {
 namespace shead {
 
+
+
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::Interface& _interface) :
 	EcpRobotDataPort(_interface)

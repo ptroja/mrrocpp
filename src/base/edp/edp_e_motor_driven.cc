@@ -84,7 +84,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 	// Copy requested arm specification type to the reply message.
 	// In case of unsupported request type it also will be returned to the caller.
-	reply.arm.type = instruction.get_arm_type;
+	//	reply.arm.type = instruction.get_arm_type;
 
 	// Przepisanie definicji koncowki danej w postaci
 	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
@@ -190,12 +190,17 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
+<<<<<<< HEAD
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
 <<<<<<< HEAD
 	effector(_config, l_robot_name), sb_loaded(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
 =======
 	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
 >>>>>>> wut
+=======
+motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
+	effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+>>>>>>> wut/master
 			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
 			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
 			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
@@ -469,6 +474,9 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 			// ustawi numer bledu
 			throw NonFatal_error_2(INVALID_INSTRUCTION_TYPE);
 	}
+
+	// by Y bug redmine 414
+	reply.arm.type = instruction.get_arm_type;
 
 	// printf("interpret instruction koniec\n");
 
@@ -762,10 +770,10 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	//	printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	if (is_synchronised()) {
+		// dla pierwszego wypelnienia current_joints
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 

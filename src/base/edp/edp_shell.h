@@ -38,6 +38,8 @@ namespace common {
 class shell
 {
 
+	friend class effector;
+
 private:
 
 	/*!
@@ -60,6 +62,14 @@ private:
 	pid_t my_pid;
 
 public:
+
+	/*!
+	 * \brief Pointer to object to communicate with UI SR thread outside the signal handlers.
+	 *
+	 * For the usage in asynchronous communication.
+	 */
+	boost::shared_ptr <lib::sr_edp> msg;
+
 	shell(lib::configurator &_config);
 	~shell();
 	bool detect_hardware_busy(void);

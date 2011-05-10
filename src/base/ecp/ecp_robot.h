@@ -138,7 +138,7 @@ class ecp_robot_base : public ecp_mp::robot
 	 * if the flag is set the EDP is spawned with robot object creation then killed with destruction\n
 	 * it is set when UI calls robot constructor
 	 */
-	const bool spawn_and_kill;
+	const bool is_created_by_ui;
 
 public:
 	/**

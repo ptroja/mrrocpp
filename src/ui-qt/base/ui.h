@@ -44,44 +44,21 @@ enum TEACHING_STATE
 
 #define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
-	if (e.error_class == lib::SYSTEM_ERROR) \
-		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
-		interface.ui_state=2; \
-	/*  exit(EXIT_FAILURE);*/ \
+		interface.catch_ecp_main_error(e); \
   } /*end: catch */ \
 \
 catch (ecp::common::robot::ECP_error & er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
-		perror("ecp lib::SYSTEM_ERROR in UI"); \
-		/* PtExit( EXIT_SUCCESS ); */ \
-	} else { \
-	switch ( er.error_no ) { \
-		case INVALID_POSE_SPECIFICATION: \
-		case INVALID_COMMAND_TO_EDP: \
-		case EDP_ERROR: \
-		case INVALID_ROBOT_MODEL_TYPE: \
-			/* Komunikat o bledzie wysylamy do SR */ \
-			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
-		break; \
-		default: \
-			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
-			perror("Unidentified exception"); \
-		} /* end: switch */ \
-	} \
+		interface.catch_ecp_error(er); \
 } /* end: catch */ \
 \
 catch(const std::exception & e){\
-	std::string tmp_string(" The following error has been detected: ");\
-	tmp_string += e.what(); \
-	interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
-   std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
+	interface.catch_std_exception(e); \
 }\
 \
 catch (...) {  /* Dla zewnetrznej petli try*/ \
 	/* Wylapywanie niezdefiniowanych bledow*/ \
-	/* Komunikat o bledzie wysylamy do SR (?) */ \
-	fprintf(stderr, "unidentified error in UI\n"); \
+		interface.catch_tridot(); \
 } /*end: catch */\
 
 
