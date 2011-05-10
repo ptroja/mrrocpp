@@ -35,6 +35,9 @@ namespace common {
 
 bool manip_effector::compute_servo_joints_and_frame(void)
 {
+
+	static bool force_sensor_post_synchro_configuration = false;
+
 	static int catch_nr = 0;
 	bool ret_val = true;
 	if (!(motor_driven_effector::compute_servo_joints_and_frame())) {
@@ -85,7 +88,8 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 			if (vs != NULL) {
 
 				boost::mutex::scoped_lock lock(vs->mtx);
-				if ((is_synchronised()) && (!(vs->is_sensor_configured))) {
+				if ((is_synchronised()) && (!(force_sensor_post_synchro_configuration))) {
+					force_sensor_post_synchro_configuration = true;
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
 				}
