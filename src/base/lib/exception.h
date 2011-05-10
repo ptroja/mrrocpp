@@ -21,16 +21,19 @@ namespace lib {
 namespace exception {
 
 //! Description used for diagnostic information in case of system errors.
-const std::string SYSTEM_ERROR = "SYSTEM ERROR";
+//const char * SYSTEM_ERROR = "SYSTEM ERROR";
 
 //! Description used for diagnostic information in case of fatal errors.
-const std::string FATAL_ERROR = "FATAL ERROR";
+//const char * FATAL_ERROR = "FATAL ERROR";
 
 //! Description used for diagnostic information in case of non fatal errors.
-const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
+//const char * NON_FATAL_ERROR = "NON FATAL ERROR";
 
-//! Number of motor that caused the exception.
-typedef boost::error_info <struct error_class, std::string> mrrocpp_error_class;
+//! MRROC++ error class - by default three types are denoted (SYSTEM, FATAL, NON-FATAL).
+typedef boost::error_info <struct mrrocpp_error_class_, char const *> mrrocpp_error_class;
+
+//! Description of the MRROC++ error - it will be sent (by default) to the SR.
+typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
 
 //#define MRROCPP_THROW_SYSTEM_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(SYSTEM_ERROR))
 //#define MRROCPP_THROW_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(FATAL))
@@ -44,13 +47,13 @@ struct mrrocpp_system_error : virtual public std::exception, virtual public boos
 {
 	mrrocpp_system_error()
 	{
-		*this << mrrocpp_error_class(SYSTEM_ERROR);
+		*this << mrrocpp_error_class("SYSTEM ERROR");
 	}
 
-	/*	virtual const char* what() const throw ()
-	 {
-	 return SYSTEM_ERROR.c_str();
-	 }*/
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_system_error() throw ()
 	{
@@ -65,12 +68,13 @@ struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost
 {
 	mrrocpp_fatal_error()
 	{
-		*this << mrrocpp_error_class(FATAL_ERROR);
+		*this << mrrocpp_error_class("FATAL ERROR");
 	}
-	/*	virtual const char* what() const throw ()
-	 {
-	 return FATAL_ERROR.c_str();
-	 }*/
+
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_fatal_error() throw ()
 	{
@@ -85,12 +89,13 @@ struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public b
 {
 	mrrocpp_non_fatal_error()
 	{
-		*this << mrrocpp_error_class(NON_FATAL_ERROR);
+		*this << mrrocpp_error_class("NON FATAL ERROR");
 	}
-	/*	virtual const char* what() const throw ()
-	 {
-	 return NON_FATAL_ERROR.c_str();
-	 }*/
+
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_non_fatal_error() throw ()
 	{

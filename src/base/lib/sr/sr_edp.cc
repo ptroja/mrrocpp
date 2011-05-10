@@ -8,6 +8,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/lib/sr/sr_edp.h"
 
 namespace mrrocpp {
@@ -272,7 +274,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_KINEMATIC_MODEL_NO");
 					break;
 				case EDP_UNIDENTIFIED_ERROR:
-					strcat(description, "edp_UNIDENTIFIED_ERROR");
+					strcat(description, "EDP_UNIDENTIFIED_ERROR");
 					break;
 				case NOT_A_NUMBER_JOINT_VALUE_D0:
 					strcat(description, "NOT_A_NUMBER_JOINT_VALUE_D0");
@@ -323,9 +325,57 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 			}
 			break;
 		default:
-			strcat(description, "edp UNIDENTIFIED ERROR");
+			strcat(description, "EDP UNIDENTIFIED ERROR");
 	}
 }
+
+
+void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
+	// TODO: write adequate exception handling.
+//	mrrocpp::lib::exception::mrrocpp_error_class c = boost::get_error_info <mrrocpp::lib::exception::error_class> (_e);
+	const int* pLine = boost::get_error_info<boost::throw_line>(_e);
+	std::cout<<"Linia: "<<*pLine<<std::endl;
+
+    std::string info = boost::diagnostic_information(_e);
+//    const char* sString = info.c_str();
+    std::cout<<"info: "<<info<<std::endl;
+
+//	const mrrocpp::lib::exception::error_class* c = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_class> (_e);
+
+    const char* const* pFile = boost::get_error_info<boost::throw_file>(_e);
+    const char* sFile= *pFile;
+    std::cout<<"file: "<<sFile<<std::endl;
+
+    const char* const* peclass = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_class>(_e);
+    const char* veclass = *peclass;
+    std::cout<<"class: "<<veclass<<std::endl;
+
+    const char* const* pdesc = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
+    const char* vdesc = *pdesc;
+    std::cout<<"description: "<<vdesc<<std::endl;
+
+    // Create message sent to SR.
+	sr_package sr_message;
+	sr_message.message_type = mrrocpp::lib::NON_FATAL_ERROR;
+	// Add error description.
+    const char* const* pdescription = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
+    sr_message.description[0] = '\0';
+    strcat(sr_message.description, *pdescription);
+	// Sent message.
+	send_package(sr_message);
+
+}
+
+
+void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+	// TODO: write adequate exception handling.
+}
+
+
+void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+	// TODO: write adequate exception handling.
+}
+
 
 } // namespace lib
 } // namespace mrrocpp

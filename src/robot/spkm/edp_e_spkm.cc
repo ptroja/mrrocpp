@@ -122,7 +122,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 						// Get the detailed error
 						uint32_t errCode = axes[i]->readErrorHistory(j);
 
-						msg->message(string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
 					}
 				} else {
 					notInFaultState++;
@@ -490,7 +490,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
 									kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];*/
 						}
-						// Recalculate time.
+						// Recalculate time to [ms].
 						t *= 1000;
 
 /*						cout<<" !Values after units recalculations!\n";
@@ -617,6 +617,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	} catch (exception::mrrocpp_non_fatal_error e_) {
 		is_previous_cartesian_pose_known = false;
 		cout << boost::current_exception_diagnostic_information() << endl;
+		msg->error_message(e_);
+		//msg->message(string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
+
 	}
 }
 

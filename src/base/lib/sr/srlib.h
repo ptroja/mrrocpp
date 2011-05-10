@@ -22,6 +22,8 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/Sender.h"
 
+#include "base/lib/exception.h"
+
 namespace mrrocpp {
 namespace lib {
 
@@ -35,9 +37,9 @@ namespace lib {
 //! @todo The solution is to make it std::string and use serialization
 static const unsigned int TEXT_LENGTH = 256;
 
-/* -------------------------------------------------------------------- */
-/* Paczka danych przesylanych do procesu SR                             */
-/* -------------------------------------------------------------------- */
+/*!
+ * Package sent to SR.
+ */
 typedef struct sr_package
 {
 	//! Message timestamp
@@ -78,9 +80,6 @@ void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 class sr : public boost::noncopyable
 {
 private:
-	//! Send default message package to the SR
-	void send_package(sr_package_t & sr_message);
-
 	//! Interpret the status code into a text message
 	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
 
@@ -95,6 +94,10 @@ private:
 
 	//! Cached hostname
 	char hostname[128];
+
+protected:
+	//! Send default message package to the SR
+	void send_package(sr_package_t & sr_message);
 
 public:
 	/**
@@ -130,6 +133,19 @@ public:
 	//! Send a message to SR
 	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, const std::string & text);
+
+	//! Sends a message to SR adequate for given non fatal error.
+	//! The method should be overloaded for every process.
+	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) = 0;
+
+	//! Sends a message to SR adequate for given fatal error.
+	//! The method should be overloaded for every process.
+	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) = 0;
+
+	//! Sends a message to SR adequate for given system error.
+	//! The method should be overloaded for every process.
+	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) = 0;
+
 };
 
 } // namespace lib

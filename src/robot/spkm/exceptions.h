@@ -46,60 +46,58 @@ typedef boost::error_info <struct spkm_desired_value, double> desired_value;
 //! Motion type.
 typedef boost::error_info <struct spkm_pose_specification, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
+/*!
+ * Macro for registration of MRROC++ errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param BASE_CLASS_NAME Name of the base class (without the namespace(s) scope).
+ * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ *
+ * \author tkornuta
+ */
+#define REGISTER_MRROCPP_ERROR(CLASS_NAME, BASE_CLASS_NAME, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::BASE_CLASS_NAME \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
+};
+
 
 /*!
  * \brief Exception thrown in case of motor limits violation.
  * \author tkornuta
  */
-struct motor_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~motor_limit_error() throw () { }
-};
+REGISTER_MRROCPP_ERROR(motor_limit_error, mrrocpp_non_fatal_error, "Motor limit exceeded")
 
 /*!
  * \brief Exception thrown in case of joint limits violation.
  * \author tkornuta
  */
-struct joint_limit_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~joint_limit_error() throw () { }
-};
+REGISTER_MRROCPP_ERROR(joint_limit_error, mrrocpp_non_fatal_error, "Joint limit exceeded")
 
 /*!
  * \brief Exception thrown in case of invalid pose specification.
  * \author tkornuta
  */
-struct pose_specification_error : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~pose_specification_error() throw () { }
-};
+REGISTER_MRROCPP_ERROR(pose_specification_error, mrrocpp_non_fatal_error, "Invalid pose specification")
 
 /*!
  * \brief Exception thrown in case of invalid motion type.
  * \author tkornuta
  */
-struct motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~motion_type_error() throw () { }
-};
+REGISTER_MRROCPP_ERROR(motion_type_error, mrrocpp_non_fatal_error, "Invalid motion type")
 
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
  * \author tkornuta
  */
-struct current_cartesian_pose_unknown : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~current_cartesian_pose_unknown() throw () { }
-};
+REGISTER_MRROCPP_ERROR(current_cartesian_pose_unknown, mrrocpp_non_fatal_error, "Required current cartesian pose is unknown")
 
 /*!
  * \brief Exception thrown when in an unsychronized robot state a command requiring synchronization is received.
  * \author tkornuta
  */
-struct unsynchronized_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~unsynchronized_error() throw () { }
-};
+REGISTER_MRROCPP_ERROR(unsynchronized_error, mrrocpp_non_fatal_error, "PKM unsynchronized")
 
 
 
