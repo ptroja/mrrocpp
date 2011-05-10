@@ -14,21 +14,17 @@
 #include <cassert>
 #include <cmath>
 
-#include "base/lib/impconst.h"	// frame_tab
-#include "base/lib/mrmath/Xyz_Angle_Axis_Gamma_vector.h"
+#include <Eigen/Core>
 
-#define delta_m (M_PI - 3.14154)
-#define zero_eps 1.0E-4
-#define ALFA_SENSITIVITY 0.00001
+#include <boost/serialization/serialization.hpp>
 
 namespace mrrocpp {
 namespace lib {
 
-//TK: A PO CO TO? CZEMU NIE INCLUDE...?
 // forward declarations
 class K_vector;
 class Xyz_Angle_Axis_vector;
-//class Xyz_Angle_Axis_Gamma_vector;
+class Xyz_Angle_Axis_Gamma_vector;
 class Xyz_Euler_Zyz_vector;
 class Xyz_Rpy_vector;
 
@@ -48,7 +44,7 @@ class Homog_matrix
 {
 private:
 	//! Matrix placeholder
-	frame_tab matrix_m;
+	double matrix_m[3][4];
 
 	//! Eps for alpha representation
 	const static double ALPHA_SENSITIVITY;
@@ -61,19 +57,7 @@ public:
 	 */
 	Homog_matrix();
 
-	/*!
-	 * Constructor
-	 *
-	 * @param[in] frame_tab data for initialization
-	 */
-	Homog_matrix(const frame_tab &);
-
-	/*!
-	 * Copy constructor
-	 */
-	Homog_matrix(const Homog_matrix &);
-
-	/*!
+	/**
 	 * Constructor for translation matrix
 	 *
 	 * @param[in] x,y,z translation parameters
@@ -152,23 +136,8 @@ public:
 	 */
 	Homog_matrix return_with_with_removed_rotation() const;
 
-	/*!
-	 * Get data to frame_tab array
-	 *
-	 * @param[out] frame output array
-	 */
-	void get_frame_tab(frame_tab frame) const;
-
-	/*!
-	 * Set data from frame_tab array
-	 *
-	 * @param[in] frame output array
-	 */
-	void set_from_frame_tab(const frame_tab & frame);
-
-
-	/*!
-	 * Get the XYZ_EULER_ZYZ representation.
+	/**
+	 * Get the XYZ_EULER_ZYZ representation
 	 *
 	 * @param[out] l_vector requested representation.
 	 */
@@ -253,8 +222,6 @@ public:
 		return matrix_m[i][j];
 	}
 
-	//! Operator przypisania.
-	Homog_matrix & operator=(const Homog_matrix &);
 	//! Mnozenie macierzy.
 	Homog_matrix operator*(const Homog_matrix &) const;
 	//! Odwracanie macierzy.
@@ -277,10 +244,14 @@ public:
 	bool is_valid() const;
 
 private:
-	//! Kopiowanie macierzy jednorodnej do DEST z SOURCE.
-	inline static void copy_frame_tab(frame_tab destination_frame, const frame_tab source_frame)
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
 	{
-		std::memcpy(destination_frame, source_frame, sizeof(frame_tab));
+		ar & matrix_m;
 	}
 };
 

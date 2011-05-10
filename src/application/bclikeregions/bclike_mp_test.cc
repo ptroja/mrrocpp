@@ -55,7 +55,6 @@ void bclike_mp_test::main_task_algorithm(void){
 	sr_ecp_msg->message("MP start");
 
 	char* tab;
-	char* tmp;
 	std::vector<double> vec;
 
 //	Set robot to start position (center)

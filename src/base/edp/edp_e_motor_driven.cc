@@ -82,22 +82,24 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
+	// Copy requested arm specification type to the reply message.
+	// In case of unsupported request type it also will be returned to the caller.
+	reply.arm.type = instruction.get_arm_type;
+
+	// Przepisanie definicji koncowki danej w postaci
+	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
+	// do wewnetrznych struktur danych REPLY_BUFFER
 	switch (instruction.get_arm_type)
 	{
 		case lib::JOINT:
 			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			// Przepisanie definicji koncowki danej w postaci
-			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-			reply.arm.type = lib::JOINT;
+
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
 			}
 			break;
 		case lib::MOTOR:
-			reply.arm.type = lib::MOTOR;
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
 			}
@@ -189,7 +191,11 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
+<<<<<<< HEAD
 	effector(_config, l_robot_name), sb_loaded(), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+=======
+	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+>>>>>>> wut
 			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
 			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
 			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),

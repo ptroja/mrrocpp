@@ -54,7 +54,7 @@ bool tff_rubik_grab::first_step()
 	td.value_in_step_no = td.internode_step_no - 2;
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
+	the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL

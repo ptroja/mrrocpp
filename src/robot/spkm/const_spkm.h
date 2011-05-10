@@ -11,6 +11,8 @@
 
 #include "robot/spkm/dp_spkm.h"
 
+#include "base/lib/mrmath/homog_matrix.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
@@ -38,7 +40,7 @@ const int NUM_OF_SERVOS = 6;
  * @author tkornuta
  * @ingroup spkm
  */
-const unsigned int NUM_OF_MOTION_SEGMENTS = 5;
+const unsigned int NUM_OF_MOTION_SEGMENTS = 64;
 
 
 /*!
@@ -116,7 +118,7 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::frame_tab current_frame;
+	lib::Homog_matrix current_frame;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 
@@ -131,7 +133,7 @@ struct rbuffer
 		ar & epos_controller;
 		ar & contact;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string

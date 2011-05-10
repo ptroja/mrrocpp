@@ -391,9 +391,9 @@ void epos_access_rs232::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifie
 	// Remark: no response with RS232
 }
 
-void epos_access_rs232::SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8])
+void epos_access_rs232::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
 {
-	WORD frame[4];
+	WORD frame[8];
 
 	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
 	frame[1] = Identifier;

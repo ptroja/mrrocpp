@@ -409,7 +409,7 @@ void EcpRobot::read_joints(double current_position[])
 
 	execute_motion();
 
-	for (int i = 0; i < ecp->number_of_servos; i++) // Przepisanie aktualnych polozen
+	for (int i = 0; i < ecp->number_of_servos; ++i) // Przepisanie aktualnych polozen
 		current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
 }
 // ---------------------------------------------------------------
@@ -424,9 +424,7 @@ void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_ve
 	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_angle_axis(tool_vector);
-	tmp.get_frame_tab(ecp->ecp_command.robot_model.tool_frame_def.tool_frame);
+	ecp->ecp_command.robot_model.tool_frame_def.tool_frame.set_from_xyz_angle_axis(tool_vector);
 
 	execute_motion();
 }
@@ -442,9 +440,7 @@ void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vect
 	ecp->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_euler_zyz(tool_vector);
-	tmp.get_frame_tab(ecp->ecp_command.robot_model.tool_frame_def.tool_frame);
+	ecp->ecp_command.robot_model.tool_frame_def.tool_frame.set_from_xyz_euler_zyz(tool_vector);
 
 	execute_motion();
 }
@@ -519,9 +515,7 @@ void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(final_position));
-	tmp.get_frame_tab(ecp->ecp_command.arm.pf_def.arm_frame);
+	ecp->ecp_command.arm.pf_def.arm_frame.set_from_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector(final_position));
 
 	execute_motion();
 
@@ -570,9 +564,7 @@ void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 	ecp->ecp_command.motion_steps = nr_of_steps;
 	ecp->ecp_command.value_in_step_no = nr_of_steps;
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
-	tmp.get_frame_tab(ecp->ecp_command.arm.pf_def.arm_frame);
+	ecp->ecp_command.arm.pf_def.arm_frame.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(final_position));
 
 	execute_motion();
 
@@ -611,7 +603,7 @@ void EcpRobot::move_xyz_angle_axis_relative(const double position_increment[7])
 
 	lib::Homog_matrix tmp;
 	tmp.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position_increment));
-	tmp.get_frame_tab(ecp->ecp_command.arm.pf_def.arm_frame);
+	ecp->ecp_command.arm.pf_def.arm_frame = tmp;
 
 	execute_motion();
 }
@@ -629,8 +621,7 @@ void EcpRobot::read_xyz_euler_zyz(double current_position[])
 
 	execute_motion();
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+	lib::Homog_matrix tmp = ecp->reply_package.arm.pf_def.arm_frame;
 	lib::Xyz_Euler_Zyz_vector tmp_vector;
 	tmp.get_xyz_euler_zyz(tmp_vector);
 	tmp_vector.to_table(current_position);
@@ -649,8 +640,7 @@ void EcpRobot::read_xyz_angle_axis(double current_position[])
 	ecp->ecp_command.interpolation_type = lib::MIM;
 	execute_motion();
 
-	lib::Homog_matrix tmp;
-	tmp.set_from_frame_tab(ecp->reply_package.arm.pf_def.arm_frame);
+	lib::Homog_matrix tmp = ecp->reply_package.arm.pf_def.arm_frame;
 	lib::Xyz_Angle_Axis_vector tmp_vector;
 	tmp.get_xyz_angle_axis(tmp_vector);
 	tmp_vector.to_table(current_position);

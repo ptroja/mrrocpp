@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
 	// Interpolate motor poses - equal to number of segments +1 (the start pose).
 	Eigen::Matrix <double, 10+1, 1> motor_interpolations;
-	//pvat_interpolate_motor_poses <3+1, 1> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+	//pvat_linear_interpolate_motor_poses <3+1, 1> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 	motor_interpolations << 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0;
 
 	// Compute motor_deltas for segments.
@@ -66,10 +66,9 @@ int main(int argc, char *argv[])
 	Eigen::Matrix <double, 10, 1> motor_0w;
 	pvat_compute_motor_0w_polynomial_coefficients <10, 1> (motor_0w, motor_interpolations);
 
-
-	cout << "time deltas:\n" << time_deltas << endl;
-	cout << "m0w:\n" << motor_0w << endl;
-	cout << "m1w:\n" << motor_1w << endl;
-	cout << "m2w:\n" << motor_2w << endl;
-	cout << "m3w:\n" << motor_3w << endl;
+	cout << "time deltas = [ \n" << time_deltas << "\n ]; \n";
+	cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
+	cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
+	cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
+	cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
 }
