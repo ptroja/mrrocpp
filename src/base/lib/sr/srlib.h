@@ -80,8 +80,8 @@ void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 class sr : public boost::noncopyable
 {
 private:
-	//! Interpret the status code into a text message
-	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
+	//! Send default message package to the SR
+	void send_package(sr_package_t & sr_message);
 
 	//! Sender class
 	Sender sender;
@@ -96,8 +96,17 @@ private:
 	char hostname[128];
 
 protected:
-	//! Send default message package to the SR
-	void send_package(sr_package_t & sr_message);
+	//! Interpret the status code into a text message
+	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
+
+	//! Interprets non fatal error.
+	virtual void interpret(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) = 0;
+
+	//! Interprets fatal error.
+	virtual void interpret(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) = 0;
+
+	//! Interprets system error.
+	virtual void interpret(const mrrocpp::lib::exception::mrrocpp_system_error & _e) = 0;
 
 public:
 	/**
@@ -136,15 +145,15 @@ public:
 
 	//! Sends a message to SR adequate for given non fatal error.
 	//! The method should be overloaded for every process.
-	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) = 0;
+	void error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) { };
 
 	//! Sends a message to SR adequate for given fatal error.
 	//! The method should be overloaded for every process.
-	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) = 0;
+	void error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) { };
 
 	//! Sends a message to SR adequate for given system error.
 	//! The method should be overloaded for every process.
-	virtual void error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) = 0;
+	void error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) { };
 
 };
 

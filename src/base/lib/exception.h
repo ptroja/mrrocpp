@@ -21,13 +21,13 @@ namespace lib {
 namespace exception {
 
 //! Description used for diagnostic information in case of system errors.
-//const char * SYSTEM_ERROR = "SYSTEM ERROR";
+const std:string SYSTEM_ERROR = "SYSTEM ERROR";
 
 //! Description used for diagnostic information in case of fatal errors.
-//const char * FATAL_ERROR = "FATAL ERROR";
+const std:string FATAL_ERROR = "FATAL ERROR";
 
 //! Description used for diagnostic information in case of non fatal errors.
-//const char * NON_FATAL_ERROR = "NON FATAL ERROR";
+const std:string NON_FATAL_ERROR = "NON FATAL ERROR";
 
 //! MRROC++ error class - by default three types are denoted (SYSTEM, FATAL, NON-FATAL).
 typedef boost::error_info <struct mrrocpp_error_class_, char const *> mrrocpp_error_class;

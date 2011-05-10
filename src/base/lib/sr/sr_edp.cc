@@ -100,7 +100,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_INSTRUCTION_TYPE");
 					break;
 				case INVALID_REPLY_TYPE:
-					strcat(description, "INVALID_REPLY_TYPE");
+					strcat(description, "INerror_messageVALID_REPLY_TYPE");
 					break;
 				case INVALID_SET_ROBOT_MODEL_TYPE:
 					strcat(description, "INVALID_SET_ROBOT_MODEL_TYPE");
@@ -330,7 +330,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 }
 
 
-void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
+void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
 	// TODO: write adequate exception handling.
 //	mrrocpp::lib::exception::mrrocpp_error_class c = boost::get_error_info <mrrocpp::lib::exception::error_class> (_e);
 	const int* pLine = boost::get_error_info<boost::throw_line>(_e);
@@ -367,12 +367,12 @@ void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_erro
 }
 
 
-void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
 	// TODO: write adequate exception handling.
 }
 
 
-void sr_edp::error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
 	// TODO: write adequate exception handling.
 }
 
