@@ -130,7 +130,7 @@ public:
 	mp_state_def mp;
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
-	bool is_sr_thread_loaded;
+
 	UI_ALL_EDPS_STATE all_edps;
 	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
 	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro;
