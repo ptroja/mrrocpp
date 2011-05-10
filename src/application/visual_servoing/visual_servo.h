@@ -27,16 +27,16 @@ struct visual_servo_log_sample{
 	uint64_t sampleTimeNanoseconds;
 
 	/** Time of reading. */
-	uint64_t readingTimeSeconds;
-	uint64_t readingTimeNanoseconds;
+	uint64_t imageSourceTimeSeconds;
+	uint64_t imageSourceTimeNanoseconds;
 
 	/** Time, when reading was sent to mrrocpp. */
 	uint64_t sendTimeSeconds;
 	uint64_t sendTimeNanoseconds;
 
 	/** Time, when reading was received in mrrocpp. */
-	uint64_t receivedTimeSeconds;
-	uint64_t receivedTimeNanoseconds;
+	uint64_t receiveTimeSeconds;
+	uint64_t receiveTimeNanoseconds;
 
 	/** Is object visible in latest reading. */
 	bool is_object_visible;

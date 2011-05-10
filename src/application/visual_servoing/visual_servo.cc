@@ -65,15 +65,15 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		steps_without_reading = 0;
 
 		mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
-		sample.readingTimeNanoseconds = rmh.readingTimeNanoseconds;
-		sample.readingTimeSeconds = rmh.readingTimeSeconds;
+		sample.imageSourceTimeNanoseconds = rmh.imageSourceTimeNanoseconds;
+		sample.imageSourceTimeSeconds = rmh.imageSourceTimeSeconds;
 		sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
 		sample.sendTimeSeconds = rmh.sendTimeSeconds;
 
 		struct timespec ts = sensor->get_receive_time();
 
-		sample.receivedTimeNanoseconds = ts.tv_nsec;
-		sample.receivedTimeSeconds = ts.tv_sec;
+		sample.receiveTimeNanoseconds = ts.tv_nsec;
+		sample.receiveTimeSeconds = ts.tv_sec;
 
 		retrieve_reading();
 	} else {
@@ -143,7 +143,7 @@ void visual_servo::write_log()
 	uint64_t t0 = 0;
 	for (it = log_buffer.begin(); it != log_buffer.end(); ++it) {
 		if (it == log_buffer.begin() || t0 == 0) {
-			t0 = it->readingTimeSeconds + it->readingTimeNanoseconds * 1e-9;
+			t0 = it->imageSourceTimeSeconds + it->imageSourceTimeNanoseconds * 1e-9;
 		}
 		it->print(os, t0);
 	}
@@ -155,15 +155,15 @@ void visual_servo::write_log()
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
 	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-	double readingTime = (readingTimeSeconds - t0) + readingTimeNanoseconds * 1e-9;
+	double readingTime = (imageSourceTimeSeconds - t0) + imageSourceTimeNanoseconds * 1e-9;
 	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
-	double receivedTime = (receivedTimeSeconds - t0) + receivedTimeNanoseconds * 1e-9;
+	double receivedTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
 
-	if (readingTimeSeconds > 0) {
+	if (imageSourceTimeSeconds > 0) {
 		os.precision(9);
 		os << fixed << readingTime << ";";
-		os << readingTimeSeconds << ";";
-		os << readingTimeNanoseconds << ";";
+		os << imageSourceTimeSeconds << ";";
+		os << imageSourceTimeNanoseconds << ";";
 	} else {
 		os << ";";
 		os << ";";
@@ -181,11 +181,11 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 		os << ";";
 	}
 
-	if (receivedTimeSeconds > 0) {
+	if (receiveTimeSeconds > 0) {
 		os.precision(9);
 		os << fixed << receivedTime << ";";
-		os << receivedTimeSeconds << ";";
-		os << receivedTimeNanoseconds << ";";
+		os << receiveTimeSeconds << ";";
+		os << receiveTimeNanoseconds << ";";
 	} else {
 		os << ";";
 		os << ";";
@@ -205,14 +205,14 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	os << is_object_visible << ";";
 
-	if(receivedTimeSeconds > 0 && sendTimeSeconds > 0){
+	if(receiveTimeSeconds > 0 && sendTimeSeconds > 0){
 		os.precision(9);
 		os << fixed << (receivedTime - sendTime) << ";";
 	} else {
 		os << ";";
 	}
 
-	if(sampleTimeSeconds > 0 && readingTimeSeconds > 0){
+	if(sampleTimeSeconds > 0 && imageSourceTimeSeconds > 0){
 		os.precision(9);
 		os << fixed << (sampleTime - readingTime) << ";";
 	} else {
