@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 #include "base/edp/edp_typedefs.h"
 #include "base/edp/edp_e_manip.h"
@@ -17,15 +18,21 @@ void force::operator()()
 	//	sr_msg->message("operator");
 
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
+	try {
+		if (!force_sensor_test_mode) {
+			connect_to_hardware();
+		}
 
-	if (!force_sensor_test_mode) {
-		connect_to_hardware();
+		thread_started.command();
+
+		configure_sensor();
 	}
 
-	thread_started.command();
-
-	try {
-		configure_sensor();
+	catch (std::runtime_error & e) {
+		printf("force sensor runtime error: %s \n", e.what());
+		sr_msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		_exit(EXIT_SUCCESS);
 	}
 
 	catch (lib::sensor::sensor_error & e) {

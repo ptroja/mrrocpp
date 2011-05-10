@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 		// allow for empty session name for easier valgrind/tcheck_cl launching
 		if (argc < 4) {
 			fprintf(stderr, "Usage: edp_m binaries_node_name mrrocpp_path edp_config_section [rsp_attach_name]\n");
-			exit(EXIT_FAILURE);
+			throw std::runtime_error("Usage: edp_m binaries_node_name mrrocpp_path edp_config_section [rsp_attach_name]");
 		}
 
 		// przechwycenie SIGTERM
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 		edp::common::edp_shell = new edp::common::shell(_config);
 
 		if (!edp::common::edp_shell->detect_hardware_busy()) {
-			return EXIT_FAILURE;
+			throw std::runtime_error("hardware busy while loading, closing automatically ...");
 		}
 
 #if defined(HAVE_MLOCKALL)
@@ -115,13 +115,24 @@ int main(int argc, char *argv[])
 		edp::common::master->create_threads();
 
 		if (!edp::common::master->initialize_communication()) {
-			return EXIT_FAILURE;
+			throw std::runtime_error("communication error");
 		}
 
 		//	printf("1\n");
 		//	delay (20000);
 		edp::common::master->main_loop();
 		//	printf("end\n");
+	}
+
+	catch (std::runtime_error & e) {
+		printf("edp master runtime error: %s \n", e.what());
+
+		if (edp::common::edp_shell) {
+			edp::common::edp_shell->close_hardware_busy_file();
+			edp::common::edp_shell->msg->message(lib::FATAL_ERROR, e.what());
+			edp::common::edp_shell->msg->message("edp terminated");
+		}
+		_exit(EXIT_SUCCESS);
 	}
 
 	catch (boost::exception & e) {

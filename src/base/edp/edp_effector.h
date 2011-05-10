@@ -155,6 +155,12 @@ protected:
 	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
 public:
+
+	/*!
+	 * \brief EDP shell
+	 */
+	shell &edp_shell;
+
 	/*!
 	 * \brief Name of the robot
 	 *
