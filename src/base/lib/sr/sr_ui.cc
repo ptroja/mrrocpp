@@ -32,18 +32,18 @@ void sr_ui::interpret(char * description, error_class_t message_type, uint64_t e
 }
 
 
-void sr_ui::error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_ui::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 
-void sr_ui::error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_ui::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 
-void sr_ui::error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_ui::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 } // namespace lib

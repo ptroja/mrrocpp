@@ -68,18 +68,18 @@ void sr_vsp::interpret(char * description, error_class_t message_type, uint64_t 
 }
 
 
-void sr_vsp::error_message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_vsp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 
-void sr_vsp::error_message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_vsp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 
-void sr_vsp::error_message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_vsp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 

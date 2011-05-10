@@ -9,6 +9,7 @@
 #include <cstring>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "base/lib/sr/sr_edp.h"
 
@@ -330,50 +331,59 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 }
 
 
-void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
-	// TODO: write adequate exception handling.
-//	mrrocpp::lib::exception::mrrocpp_error_class c = boost::get_error_info <mrrocpp::lib::exception::error_class> (_e);
-	const int* pLine = boost::get_error_info<boost::throw_line>(_e);
-	std::cout<<"Linia: "<<*pLine<<std::endl;
-
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
+/*
     std::string info = boost::diagnostic_information(_e);
-//    const char* sString = info.c_str();
-    std::cout<<"info: "<<info<<std::endl;
+    std::cout<<"Info: "<<info<<std::endl;
 
-//	const mrrocpp::lib::exception::error_class* c = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_class> (_e);
+	const int* pLine = boost::get_error_info<boost::throw_line>(_e);
+	std::cout<<"Line: "<<*pLine<<std::endl;
 
     const char* const* pFile = boost::get_error_info<boost::throw_file>(_e);
     const char* sFile= *pFile;
-    std::cout<<"file: "<<sFile<<std::endl;
+    std::cout<<"File: "<<sFile<<std::endl;
 
     const char* const* peclass = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_class>(_e);
     const char* veclass = *peclass;
-    std::cout<<"class: "<<veclass<<std::endl;
+    std::cout<<"Error lass: "<<veclass<<std::endl;
 
     const char* const* pdesc = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
     const char* vdesc = *pdesc;
-    std::cout<<"description: "<<vdesc<<std::endl;
-
-    // Create message sent to SR.
-	sr_package sr_message;
-	sr_message.message_type = mrrocpp::lib::NON_FATAL_ERROR;
-	// Add error description.
-    const char* const* pdescription = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
-    sr_message.description[0] = '\0';
-    strcat(sr_message.description, *pdescription);
-	// Sent message.
-	send_package(sr_message);
+    std::cout<<"Description: "<<vdesc<<std::endl;
+*/
+	// Get error code.
+	const uint64_t* pcode = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_code>(_e);
+    // Create different descriptions for different errors.
+    description[0] = '\0';
+    switch(*pcode){
+    	case mrrocpp::lib::exception::EDP_NFE_JOINT_LIMIT: {
+    	    const std::string* plimit_type = boost::get_error_info<mrrocpp::lib::exception::limit_type>(_e);
+    	    strcat(description, (*plimit_type).c_str());
+    	    strcat(description, " joint limit for motor ");
+    	    const int* pjoint_number = boost::get_error_info<mrrocpp::lib::exception::joint_number>(_e);
+    	    std::string joint_no = boost::lexical_cast<std::string>( *pjoint_number );
+    	    strcat(description, joint_no.c_str());
+    	    strcat(description, " exceeded");
+    	    break;
+    	}
+    	default: {
+    		// Default description.
+    	    const char* const* pdescription = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
+    	    strcat(description, *pdescription);
+    	    break;
+    	}
+    }
 
 }
 
 
-void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 
-void sr_edp::interpret(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
-	// TODO: write adequate exception handling.
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+	// TODO: write adequate error interpretation.
 }
 
 

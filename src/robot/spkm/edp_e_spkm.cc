@@ -265,7 +265,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
-								BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
+								BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_robot_unsynchronized());
 							}
 
 							break;
@@ -286,7 +286,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
 									// In operational space the previous cartesian pose is required.
 									if (!is_previous_cartesian_pose_known)
-										BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
+										BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 									// Rest of computations is performed elsewhere...
 								} else {
 									// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
@@ -300,16 +300,18 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								}
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
-								BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::unsynchronized_error());
+								BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_robot_unsynchronized());
 							}
 							break;
 						default:
 							// Throw non-fatal error - invalid pose specification.
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::pose_specification_error());
+							BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_pose_specification());
 							break;
 					}//: switch (ecp_edp_cbuffer.pose_specification)
 				} catch (boost::exception &e_) {
-					e_ << mrrocpp::kinematics::spkm::pose_specification(ecp_edp_cbuffer.pose_specification);
+					// TODO add other context informations that are available.
+					e_ << mrrocpp::edp::spkm::pose_specification(ecp_edp_cbuffer.pose_specification);
+					// Throw the catched exception.
 					throw;
 				}
 
@@ -415,7 +417,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
 						// This ins fact is done earlier, in the lib::spkm::POSE == FRAME section, but I'm leaving this here for the clearance of solution.
 						if (!is_previous_cartesian_pose_known)
-							BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::current_cartesian_pose_unknown());
+							BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 
 						// Position, Velocity, Acceleration, Deacceleration - for all axes.
 						//Matrix <double, 6, 1> P, V, A, D;
@@ -522,7 +524,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									// FIXME: this should be done in a separate exception, which does not benlong
 									//        to the kinematics::spkm namespace.
 									printf("InterpolationBufferStatus for axis %d: 0x%04X\n", i, status);
-									BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::pose_specification_error());
+									BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_pose_specification());
 								}
 							}
 						} else {
@@ -552,7 +554,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						break;
 					default:
 						// Throw non-fatal error - motion type not supported.
-						BOOST_THROW_EXCEPTION(mrrocpp::kinematics::spkm::motion_type_error());
+						BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_motion_type());
 						break;
 				}//: switch (ecp_edp_cbuffer.motion_variant)
 				break;
@@ -616,10 +618,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 is_previous_cartesian_pose_known = false;*/
 	} catch (exception::mrrocpp_non_fatal_error e_) {
 		is_previous_cartesian_pose_known = false;
-		cout << boost::current_exception_diagnostic_information() << endl;
-		msg->error_message(e_);
-		//msg->message(string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
-
+		HANDLE_NON_FATAL_ERROR(e_)
 	}
 }
 
