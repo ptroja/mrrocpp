@@ -14,7 +14,7 @@
 #include "robot/spkm/exceptions.h"
 #include "robot/spkm/kinematic_model_spkm.h"
 
-using namespace mrrocpp::edp::spkm;
+using namespace mrrocpp::edp::exception;
 
 namespace mrrocpp {
 namespace kinematics {
@@ -31,9 +31,9 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 	// Check upper limit for every motor.
 	for (int i = 0; i < 6; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << desired_value(motor_position[i]) << motor_number(i) << limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << desired_value(motor_position[i]) << motor_number(i) << limit_type(LOWER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT));
 	}
 }
 
@@ -42,9 +42,9 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 	// Check joint limit for every axis.
 	for (int i = 0; i < 6; ++i) {
 		if (q[i] > params.upper_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << desired_value(q[i]) << joint_number(i) << limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(UPPER_LIMIT));
 		else if (q[i] < params.lower_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << desired_value(q[i]) << joint_number(i) << limit_type(LOWER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT));
 	}
 }
 

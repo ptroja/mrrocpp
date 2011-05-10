@@ -4,6 +4,7 @@
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ * @author tkornuta
  *
  * @ingroup LIB
  */
@@ -14,7 +15,6 @@
 #include <stdint.h>
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-//#include <exception>
 
 namespace mrrocpp {
 namespace lib {
@@ -37,35 +37,6 @@ typedef boost::error_info <struct mrrocpp_error_code_, uint64_t> mrrocpp_error_c
 
 //! Description of the MRROC++ error - it will be sent (by default) to the SR.
 typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
-
-/*!
- * EDP non fatal errors.
- */
-typedef enum EDP_NON_FATAL_ERROR_CODE
-{
-	EDP_NFE_MOTOR_LIMIT,
-	EDP_NFE_JOINT_LIMIT,
-	EDP_NFE_POSE_SPECIFICATION,
-	EDP_NFE_MOTION_TYPE,
-	EDP_NFE_CURRENT_CARTESIAN_POSE_UNKNOWN,
-	EDP_NFE_ROBOT_UNSYNCHRONIZED
-} edp_nfe_error_code_t;
-
-//! Type of violated limit - upper.
-const std::string UPPER_LIMIT = "Upper";
-
-//! Type of violated limit - lower.
-const std::string LOWER_LIMIT = "Lower";
-
-//! Type of violated limit.
-typedef boost::error_info <struct limit_type_, std::string> limit_type;
-
-//! Number of motor that caused the exception.
-typedef boost::error_info <struct motor_number_, int> motor_number;
-
-//! Number of joint that caused the exception.
-typedef boost::error_info <struct joint_number_, int> joint_number;
-
 
 /*!
  * Macro for registration of MRROC++ system errors.
@@ -190,7 +161,6 @@ struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public b
 	{
 	}
 };
-
 
 
 /********************************** OLD MRROC++ ERRORS **********************************/

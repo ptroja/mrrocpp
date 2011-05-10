@@ -12,6 +12,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "base/lib/sr/sr_edp.h"
+#include "base/edp/edp_exceptions.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -353,10 +354,10 @@ void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocp
 	description[0] = '\0';
 	switch (*pcode)
 	{
-		case mrrocpp::lib::exception::EDP_NFE_MOTOR_LIMIT: {
+		case mrrocpp::edp::exception::NFE_MOTOR_LIMIT: {
 			// Get parameters.
-			const std::string* plimit_type = boost::get_error_info <mrrocpp::lib::exception::limit_type>(_e);
-			const int* pmotor_number = boost::get_error_info <mrrocpp::lib::exception::motor_number>(_e);
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::edp::exception::limit_type>(_e);
+			const int* pmotor_number = boost::get_error_info <mrrocpp::edp::exception::motor_number>(_e);
 			// Check retrieved pointers.
 			if ((plimit_type == 0) || (pmotor_number == 0))
 				break;
@@ -368,10 +369,10 @@ void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocp
 			strcat(description, " exceeded");
 			break;
 		}
-		case mrrocpp::lib::exception::EDP_NFE_JOINT_LIMIT: {
+		case mrrocpp::edp::exception::NFE_JOINT_LIMIT: {
 			// Get parameters.
-			const std::string* plimit_type = boost::get_error_info <mrrocpp::lib::exception::limit_type>(_e);
-			const int* pjoint_number = boost::get_error_info <mrrocpp::lib::exception::joint_number>(_e);
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::edp::exception::limit_type>(_e);
+			const int* pjoint_number = boost::get_error_info <mrrocpp::edp::exception::joint_number>(_e);
 			// Check retrieved pointers.
 			if ((plimit_type == 0) || (pjoint_number == 0))
 				break;

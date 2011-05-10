@@ -265,7 +265,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
-								BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_robot_unsynchronized());
+								BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 							}
 
 							break;
@@ -300,12 +300,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								}
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
-								BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_robot_unsynchronized());
+								BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 							}
 							break;
 						default:
 							// Throw non-fatal error - invalid pose specification.
-							BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_pose_specification());
+							BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 							break;
 					}//: switch (ecp_edp_cbuffer.pose_specification)
 				} catch (boost::exception &e_) {
@@ -524,7 +524,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									// FIXME: this should be done in a separate exception, which does not benlong
 									//        to the kinematics::spkm namespace.
 									printf("InterpolationBufferStatus for axis %d: 0x%04X\n", i, status);
-									BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_pose_specification());
+									BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 								}
 							}
 						} else {
@@ -554,7 +554,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						break;
 					default:
 						// Throw non-fatal error - motion type not supported.
-						BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_invalid_motion_type());
+						BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
 						break;
 				}//: switch (ecp_edp_cbuffer.motion_variant)
 				break;
@@ -616,7 +616,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 is_previous_cartesian_pose_known = true;
 		 else
 		 is_previous_cartesian_pose_known = false;*/
-	} catch (exception::mrrocpp_non_fatal_error e_) {
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
 		is_previous_cartesian_pose_known = false;
 		HANDLE_NON_FATAL_ERROR(e_)
 	}
