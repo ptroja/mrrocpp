@@ -84,7 +84,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 	// Copy requested arm specification type to the reply message.
 	// In case of unsupported request type it also will be returned to the caller.
-	reply.arm.type = instruction.get_arm_type;
+	//	reply.arm.type = instruction.get_arm_type;
 
 	// Przepisanie definicji koncowki danej w postaci
 	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
@@ -465,6 +465,9 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 			// ustawi numer bledu
 			throw NonFatal_error_2(INVALID_INSTRUCTION_TYPE);
 	}
+
+	// by Y bug redmine 414
+	reply.arm.type = instruction.get_arm_type;
 
 	// printf("interpret instruction koniec\n");
 
