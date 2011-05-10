@@ -330,62 +330,81 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 	}
 }
 
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e)
+{
+	// Retrieve default description.
+	const char* const * pdescription = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_description>(_e);
+	std::string default_description;
+	// Check whether description is present.
+	if (pdescription != 0)
+		default_description = *pdescription;
+	else
+		default_description = "Unidentified error";
 
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
-/*
-    std::string info = boost::diagnostic_information(_e);
-    std::cout<<"Info: "<<info<<std::endl;
-
-	const int* pLine = boost::get_error_info<boost::throw_line>(_e);
-	std::cout<<"Line: "<<*pLine<<std::endl;
-
-    const char* const* pFile = boost::get_error_info<boost::throw_file>(_e);
-    const char* sFile= *pFile;
-    std::cout<<"File: "<<sFile<<std::endl;
-
-    const char* const* peclass = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_class>(_e);
-    const char* veclass = *peclass;
-    std::cout<<"Error lass: "<<veclass<<std::endl;
-
-    const char* const* pdesc = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
-    const char* vdesc = *pdesc;
-    std::cout<<"Description: "<<vdesc<<std::endl;
-*/
 	// Get error code.
-	const uint64_t* pcode = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_code>(_e);
-    // Create different descriptions for different errors.
-    description[0] = '\0';
-    switch(*pcode){
-    	case mrrocpp::lib::exception::EDP_NFE_JOINT_LIMIT: {
-    	    const std::string* plimit_type = boost::get_error_info<mrrocpp::lib::exception::limit_type>(_e);
-    	    strcat(description, (*plimit_type).c_str());
-    	    strcat(description, " joint limit for motor ");
-    	    const int* pjoint_number = boost::get_error_info<mrrocpp::lib::exception::joint_number>(_e);
-    	    std::string joint_no = boost::lexical_cast<std::string>( *pjoint_number );
-    	    strcat(description, joint_no.c_str());
-    	    strcat(description, " exceeded");
-    	    break;
-    	}
-    	default: {
-    		// Default description.
-    	    const char* const* pdescription = boost::get_error_info<mrrocpp::lib::exception::mrrocpp_error_description>(_e);
-    	    strcat(description, *pdescription);
-    	    break;
-    	}
-    }
+	const uint64_t* pcode = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_code>(_e);
+	// Check retrieved code.
+	if (pcode == 0) {
+		strcat(description, default_description.c_str());
+		return;
+	}
+
+	// Create 'specialized' descriptions for selected errors.
+	description[0] = '\0';
+	switch (*pcode)
+	{
+		case mrrocpp::lib::exception::EDP_NFE_MOTOR_LIMIT: {
+			// Get parameters.
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::lib::exception::limit_type>(_e);
+			const int* pmotor_number = boost::get_error_info <mrrocpp::lib::exception::motor_number>(_e);
+			// Check retrieved pointers.
+			if ((plimit_type == 0) || (pmotor_number == 0))
+				break;
+			// Concatenate string.
+			strcat(description, (*plimit_type).c_str());
+			strcat(description, " limit for motor ");
+			std::string motor_no = boost::lexical_cast <std::string>(*pmotor_number);
+			strcat(description, motor_no.c_str());
+			strcat(description, " exceeded");
+			break;
+		}
+		case mrrocpp::lib::exception::EDP_NFE_JOINT_LIMIT: {
+			// Get parameters.
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::lib::exception::limit_type>(_e);
+			const int* pjoint_number = boost::get_error_info <mrrocpp::lib::exception::joint_number>(_e);
+			// Check retrieved pointers.
+			if ((plimit_type == 0) || (pjoint_number == 0))
+				break;
+			// Concatenate string.
+			strcat(description, (*plimit_type).c_str());
+			strcat(description, " limit for joint ");
+			std::string joint_no = boost::lexical_cast <std::string>(*pjoint_number);
+			strcat(description, joint_no.c_str());
+			strcat(description, " exceeded");
+			break;
+		}
+		default: {
+			// Set default description.
+			strcat(description, default_description.c_str());
+			break;
+		}
+	}//: switch
+	// Check whether description was created - if not, use the default one.
+	if (description[0] == '\0') {
+		strcat(description, default_description.c_str());
+	}
 
 }
 
-
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e)
+{
 	// TODO: write adequate error interpretation.
 }
 
-
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e)
+{
 	// TODO: write adequate error interpretation.
 }
-
 
 } // namespace lib
 } // namespace mrrocpp
