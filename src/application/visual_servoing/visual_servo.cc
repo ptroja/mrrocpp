@@ -155,13 +155,13 @@ void visual_servo::write_log()
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
 	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-	double readingTime = (imageSourceTimeSeconds - t0) + imageSourceTimeNanoseconds * 1e-9;
+	double imageSourceTime = (imageSourceTimeSeconds - t0) + imageSourceTimeNanoseconds * 1e-9;
 	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
-	double receivedTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
+	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
 
 	if (imageSourceTimeSeconds > 0) {
 		os.precision(9);
-		os << fixed << readingTime << ";";
+		os << fixed << imageSourceTime << ";";
 		os << imageSourceTimeSeconds << ";";
 		os << imageSourceTimeNanoseconds << ";";
 	} else {
@@ -183,7 +183,7 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	if (receiveTimeSeconds > 0) {
 		os.precision(9);
-		os << fixed << receivedTime << ";";
+		os << fixed << receiveTime << ";";
 		os << receiveTimeSeconds << ";";
 		os << receiveTimeNanoseconds << ";";
 	} else {
@@ -207,14 +207,14 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	if(receiveTimeSeconds > 0 && sendTimeSeconds > 0){
 		os.precision(9);
-		os << fixed << (receivedTime - sendTime) << ";";
+		os << fixed << (receiveTime - sendTime) << ";";
 	} else {
 		os << ";";
 	}
 
 	if(sampleTimeSeconds > 0 && imageSourceTimeSeconds > 0){
 		os.precision(9);
-		os << fixed << (sampleTime - readingTime) << ";";
+		os << fixed << (sampleTime - imageSourceTime) << ";";
 	} else {
 		os << ";";
 	}
@@ -224,17 +224,17 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
 {
-	os << "readingTime;";
-	os << "readingTime [s];";
-	os << "readingTime [ns];";
+	os << "imageSourceTime;";
+	os << "imageSourceTime [s];";
+	os << "imageSourceTime [ns];";
 
 	os << "sendTime;";
 	os << "sendTime [s];";
 	os << "sendTime [ns];";
 
-	os << "receivedTime;";
-	os << "receivedTime [s];";
-	os << "receivedTime [ns];";
+	os << "receiveTime;";
+	os << "receiveTime [s];";
+	os << "receiveTime [ns];";
 
 	os << "sampleTime;";
 	os << "sampleTime [s];";
