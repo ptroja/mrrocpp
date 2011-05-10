@@ -1149,13 +1149,12 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
+	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
+
 	meb_tid = (boost::shared_ptr <feb_thread>) new feb_thread(*main_eb);
 
 	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
-	delay(1);
-
-	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
 	mw->start_on_timer();
 
 }
