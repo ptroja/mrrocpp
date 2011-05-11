@@ -58,6 +58,8 @@ Interface::Interface() :
 
 	main_eb = new function_execution_buffer(*this);
 
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
@@ -73,6 +75,155 @@ Interface::Interface() :
 
 
 	mrrocpp_bin_to_root_path = "../../";
+
+}
+
+void Interface::start_on_timer()
+{
+	timer->start(50);
+}
+
+void Interface::on_timer_slot()
+{
+
+	//fprintf(stderr, "OnTimer()\n");
+
+	QTextCharFormat format;
+
+	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
+	static int Iteration_counter = 0; // licznik uruchomienia funkcji
+
+
+	Iteration_counter++;
+
+	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+
+		// 	printf("timer\n");
+
+		char current_line[400];
+		lib::sr_package_t sr_msg;
+
+		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+
+			ui_sr_obj->get_one_msg(sr_msg);
+
+			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+			strcat(current_line, "  ");
+			time_t time = sr_msg.tv.tv_sec;
+			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
+			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
+
+			switch (sr_msg.process_type)
+			{
+				case lib::EDP:
+					strcat(current_line, "edp: ");
+					break;
+				case lib::ECP:
+					strcat(current_line, "ecp: ");
+					break;
+				case lib::MP:
+					// printf("mp w ontimer\n");
+					strcat(current_line, "mp:  ");
+					break;
+				case lib::VSP:
+					strcat(current_line, "vsp: ");
+					break;
+				case lib::UI:
+					strcat(current_line, "UI:  ");
+					break;
+				default:
+					strcat(current_line, "???: ");
+					continue;
+			} // end: switch (message_buffer[reader_buf_position].process_type)
+
+			// FIXME: ?
+			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
+
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+
+			strcat(current_line, process_name_buffer);
+
+			switch (sr_msg.message_type)
+			{
+				case lib::FATAL_ERROR:
+					strcat(current_line, "FATAL_ERROR:     ");
+					format.setForeground(Qt::red);
+
+					break;
+				case lib::NON_FATAL_ERROR:
+
+					strcat(current_line, "NON_FATAL_ERROR: ");
+					format.setForeground(Qt::blue);
+
+					break;
+				case lib::SYSTEM_ERROR:
+					// printf("SYSTEM ERROR W ONTIMER\n");
+					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
+					strcat(current_line, "SYSTEM_ERROR:    ");
+					format.setForeground(Qt::magenta);
+
+					break;
+				case lib::NEW_MESSAGE:
+					strcat(current_line, "MESSAGE:         ");
+					format.setForeground(Qt::black);
+
+					break;
+				default:
+					strcat(current_line, "UNKNOWN ERROR:   ");
+					format.setForeground(Qt::yellow);
+
+			}; // end: switch (message.message_type)
+
+			strcat(current_line, sr_msg.description);
+
+			mw->get_ui()->plainTextEdit_sr->setCurrentCharFormat(format);
+			mw->get_ui()->plainTextEdit_sr->appendPlainText(current_line);
+			(*log_file_outfile) << current_line << std::endl;
+		}
+
+		(*log_file_outfile).flush();
+
+	}
+
+	if (ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
+		set_ui_state_notification(UI_N_EXITING);
+		// 	printf("w ontimer 2\n");
+		closing_delay_counter = 20;// opoznienie zamykania
+		ui_state = 3;
+		// 		delay(5000);
+
+		MPslay();
+
+		ui_msg->message("closing");
+	} else if (ui_state == 3) {// odliczanie
+		// 	printf("w ontimer 3\n");
+		if ((--closing_delay_counter) <= 0)
+			ui_state = 4;
+	} else if (ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
+		//	printf("w ontimer 4\n");
+		closing_delay_counter = 20;// opoznienie zamykania
+		ui_state = 5;
+
+		EDP_all_robots_slay();
+
+	} else if (ui_state == 5) {// odlcizanie do zamnkiecia
+		//	printf("w ontimer 5\n");
+		if ((--closing_delay_counter) <= 0)
+			ui_state = 6;
+	} else if (ui_state == 6) {// zakonczenie aplikacji
+		(*log_file_outfile).close();
+		delete log_file_outfile;
+		printf("UI CLOSED\n");
+		abort_threads();
+		get_main_window()->close();
+
+	} else {
+		if (!(communication_flag.is_busy())) {
+			set_ui_state_notification(UI_N_READY);
+		}
+
+	}
 
 }
 
@@ -1427,7 +1578,7 @@ void Interface::create_threads()
 
 	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
-	mw->start_on_timer();
+	start_on_timer();
 
 }
 
