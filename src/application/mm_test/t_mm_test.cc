@@ -150,59 +150,6 @@ void mm_test::rotate(double rot,double move, double dir)
 
 
 }
-
-void mm_test::move_down(double mm)
-{
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-	actTrajectory->arm_type = lib::ECP_XYZ_ANGLE_AXIS;
-	for (int i=0;i<6;i++)
-	{
-		actTrajectory->v.push_back(0.02);
-		actTrajectory->a.push_back(0.03);
-	}
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(mm);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	sg->load_relative_pose((*actTrajectory));
-}
-void mm_test::move_right(double mm)
-{
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-	actTrajectory->arm_type = lib::ECP_XYZ_ANGLE_AXIS;
-	for (int i=0;i<6;i++)
-	{
-		actTrajectory->v.push_back(0.02);
-		actTrajectory->a.push_back(0.03);
-	}
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(mm);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	sg->load_relative_pose((*actTrajectory));
-}
-
-void mm_test::move_back(double mm)
-{
-	ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-	actTrajectory->arm_type = lib::ECP_XYZ_ANGLE_AXIS;
-	for (int i=0;i<6;i++)
-	{
-		actTrajectory->v.push_back(0.02);
-		actTrajectory->a.push_back(0.03);
-	}
-	actTrajectory->coordinates.push_back(mm);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	actTrajectory->coordinates.push_back(0);
-	sg->load_relative_pose((*actTrajectory));
-}
 */
 void mm_test::mp_2_ecp_next_state_string_handler(void)
 {
@@ -293,26 +240,15 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		//move direction[0] and frames/duration
 		gen->configure(mp_args[0],mp_args[1]);
 
-		/*
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'U')
-			gen->configure(0);
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'R')
-			gen->configure(1);
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'D')
-			gen->configure(2);
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'L')
-			gen->configure(3);
-		 	*/
 		gen->Move();
 		sr_ecp_msg->message("My gen move end");
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_ROTATE)
 	{
-		double mp_args[2];
+		double mp_args[1];
 		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 		//move direction[0] and frames/duration
-		//rot_gen->configure(mp_args[0],mp_args[1]);
-
+		rot->configure(mp_args[0]);
 
 		rot->Move();
 		sr_ecp_msg->message("My rot_gen move end");

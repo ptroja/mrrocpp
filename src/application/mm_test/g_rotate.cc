@@ -12,6 +12,9 @@
 using namespace std;
 
 #define MOTION_STEPS 50
+#define EPS 0.03
+#define STP 0.03
+#define PI 3.14159
 
 namespace mrrocpp {
 namespace ecp {
@@ -25,10 +28,10 @@ g_rotate::g_rotate(mrrocpp::ecp::common::task::task & _ecp_task) :
 //:generator(_ecp_task), logEnabled(true)
 {
 	index = 0;
-	r = 0.05;
-	k = 0.0;
-	direction = -1;
-	k_max = 0.0;
+	//r = 0.05;
+	//k = 0.0;
+	//direction = -1;
+	//k_max = 0.0;
 }
 
 g_rotate::~g_rotate()
@@ -41,12 +44,13 @@ g_rotate::~g_rotate()
  * 2 -  Y down (computer)
  * 3 - -X left
 */
-void g_rotate::configure(int new_direction, double new_k_max)
+void g_rotate::configure(int new_rot_position)
 {
 	index = 0;
-	k = 0.0;
-	direction = new_direction;
-	k_max = new_k_max;
+	rot_position = new_rot_position;
+	//k = 0.0;
+	//direction = new_direction;
+	//k_max = new_k_max;
 }
 
 bool g_rotate::first_step()
@@ -88,18 +92,18 @@ bool g_rotate::next_step()
 
 		//currentFrame.get_translation_vector(first_trans_vect);
 		//std::cout << currentFrame << std::endl;
+
+		//mamy pozycje startowa!
 		for (size_t i = 0; i < lib::MAX_SERVOS_NR; ++i)
 		{
 			first_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		}
+
 		index++;
 	}
 
 	//lib::Homog_matrix nextFrame;
 	//nextFrame = currentFrame;
-
-		//q1 = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
-		//the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 
 	//double trans_vect[3];
 
@@ -134,17 +138,59 @@ bool g_rotate::next_step()
 	*/
 	/*koniec modyfikacji*/
 
-	//pobierz
+	//the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
+	//currentFrame = nextFrame;
+
+	//if (k > k_max)
+	//	return false;
+
+	//pobierz actual
 	for (size_t i = 0; i < lib::MAX_SERVOS_NR; ++i)
 	{
 		current_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 	}
 
-	//sprawdz czy ma ruszac sie jeszcze
-	if (current_arm_coordinates[5] <= first_arm_coordinates[5] - 0.785)
-			return false;
 
-	current_arm_coordinates[5] -= 0.01;
+	if(current_arm_coordinates[5] < rot_position + EPS && current_arm_coordinates[5] > rot_position - EPS)
+	{
+		return false;//nie trzeba skrecac
+	}
+	else if(current_arm_coordinates[5] >= rot_position + EPS)
+	{
+		current_arm_coordinates[5] -= STP;
+	}
+	else if(current_arm_coordinates[5] <= rot_position - EPS)
+	{
+		current_arm_coordinates[5] += STP;
+	}
+
+	//przesuwanie przy obkrecie
+	/*
+	if(index==1)
+	{
+		if(first_arm_coordinates[5] < -PI*3/4 + EPS)//x+
+		{
+			current_arm_coordinates[1] += 0.02;
+			current_arm_coordinates[2] += 0.02;
+		}
+		else if(first_arm_coordinates[5] < -PI/4 + EPS)//y-
+		{
+			current_arm_coordinates[1] += 0.02;
+			current_arm_coordinates[2] -= 0.02;
+		}
+		else if(first_arm_coordinates[5] < PI/4 + EPS)//x-
+		{
+			current_arm_coordinates[1] -= 0.02;
+			current_arm_coordinates[2] -= 0.02;
+		}
+		else if(first_arm_coordinates[5] < PI*3/4 + EPS)//y+
+		{
+			current_arm_coordinates[1] -= 0.02;
+			current_arm_coordinates[2] += 0.02;
+		}
+		index++;
+	}
+	 */
 
 	//przekaz rozkaz
 	for (size_t i = 0; i < lib::MAX_SERVOS_NR; ++i)
@@ -152,11 +198,7 @@ bool g_rotate::next_step()
 		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = current_arm_coordinates[i];
 	}
 
-	//the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
-	//currentFrame = nextFrame;
 
-	//if (k > k_max)
-	//	return false;
 
 
 	return true;

@@ -37,7 +37,7 @@ public:
 	 * 2 -  Y down (computer)
 	 * 3 - -X left
 	 */
-	void configure(int new_direction, double new_k_max);
+	void configure(int new_rot_position);
 
 protected:
 	/** Is log enabled*/
@@ -60,7 +60,7 @@ private:
 
 	double current_arm_coordinates[lib::MAX_SERVOS_NR];
 	double first_arm_coordinates[lib::MAX_SERVOS_NR];
-
+	double rot_position;
 	int direction;
 	double k_max;
 };//end class
