@@ -50,6 +50,7 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
@@ -63,6 +64,17 @@ Interface::Interface() :
 
 	mrrocpp_bin_to_root_path = "../../";
 
+}
+
+void Interface::raise_process_control_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_process_control_window_signal();
+}
+
+void Interface::raise_process_control_window_slot()
+{
+	wgt_pc->my_open();
 }
 
 //Interface * Interface::get_instance()
@@ -371,7 +383,7 @@ int Interface::MPup_int()
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
 
-				mw->raise_process_control_window();
+				raise_process_control_window();
 
 			} else {
 				fprintf(stderr, "mp spawn failed\n");

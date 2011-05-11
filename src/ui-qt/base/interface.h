@@ -85,14 +85,19 @@ private:
 
 signals:
 	void manage_interface_signal();
+	void raise_process_control_window_signal();
 
 private slots:
 
 	void manage_interface_slot();
+	void raise_process_control_window_slot();
 
 public:
 
 	Interface();
+
+	void raise_process_control_window();
+
 	//static Interface * get_instance();
 	MainWindow* get_main_window();
 	void print_on_sr(const char *buff, ...);

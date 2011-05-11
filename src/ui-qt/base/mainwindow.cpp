@@ -54,7 +54,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
@@ -175,12 +174,6 @@ void MainWindow::ui_notification()
 
 }
 
-void MainWindow::raise_process_control_window()
-{
-	//ui->notification_label->setText("GUGUGU");
-	emit raise_process_control_window_signal();
-}
-
 void MainWindow::raise_ui_ecp_window()
 {
 	//ui->notification_label->setText("GUGUGU");
@@ -208,11 +201,6 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 					j++;
 				}
 
-}
-
-void MainWindow::raise_process_control_window_slot()
-{
-	interface.wgt_pc->my_open();
 }
 
 void MainWindow::raise_ui_ecp_window_slot()
@@ -1220,7 +1208,7 @@ void MainWindow::on_actionMP_Unload_triggered()
 
 void MainWindow::on_actionProcess_Control_triggered()
 {
-	raise_process_control_window();
+	interface.raise_process_control_window();
 }
 
 void MainWindow::on_actionConfiguration_triggered()
