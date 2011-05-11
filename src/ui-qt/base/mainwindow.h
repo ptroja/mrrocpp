@@ -32,7 +32,7 @@ public:
 	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
 	//void disable_menu_item(int _num_of_menus, ...);
 
-	void raise_ui_ecp_window();
+
 	void get_lineEdit_position(double* val, int number_of_servos);
 	void start_on_timer();
 
@@ -52,7 +52,7 @@ signals:
 	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
 	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 
-	void raise_ui_ecp_window_signal();
+
 
 private slots:
 
@@ -60,7 +60,7 @@ private slots:
 
 	void ui_notification_slot();
 
-	void raise_ui_ecp_window_slot();
+
 	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
 	void enable_menu_item_slot(QAction *_menu_item, bool _active);
 	// menus

@@ -86,17 +86,21 @@ private:
 signals:
 	void manage_interface_signal();
 	void raise_process_control_window_signal();
+	void raise_ui_ecp_window_signal();
 
 private slots:
 
 	void manage_interface_slot();
 	void raise_process_control_window_slot();
 
+	void raise_ui_ecp_window_slot();
+
 public:
 
 	Interface();
 
 	void raise_process_control_window();
+	void raise_ui_ecp_window();
 
 	//static Interface * get_instance();
 	MainWindow* get_main_window();
