@@ -41,13 +41,13 @@ namespace ui {
 namespace common {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
-	interface(_interface), ecp(NULL)
+EcpRobot::EcpRobot(UiRobot& _ui_robot) :
+	ui_robot(_ui_robot), ecp(NULL)
 {
 
-	if (_robot_name == lib::irp6ot_m::ROBOT_NAME) {
+	if (ui_robot.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 
-		ecp = new ecp::irp6ot_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
+		ecp = new ecp::irp6ot_m::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.05;
@@ -66,8 +66,8 @@ EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 			END_EFFECTOR_STEP[j] = 0.0002;
 		}
 
-	} else if (_robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp = new ecp::irp6p_m::robot(*(_interface.config), *(_interface.all_ecp_msg));
+	} else if (ui_robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
+		ecp = new ecp::irp6p_m::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.05;
@@ -82,43 +82,43 @@ EcpRobot::EcpRobot(Interface& _interface, lib::robot_name_t _robot_name) :
 			END_EFFECTOR_STEP[j] = 0.0002;
 		}
 
-	} else if (_robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
+	} else if (ui_robot.robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
 
-		ecp = new ecp::irp6ot_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (_robot_name == lib::irp6p_tfg::ROBOT_NAME) {
-
-		ecp = new ecp::irp6p_tfg::robot(*(_interface.config), *(_interface.all_ecp_msg));
+		ecp = new ecp::irp6ot_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.4;
 			JOINT_STEP[j] = 0.00001;
 		}
 
-	} else if (_robot_name == lib::sarkofag::ROBOT_NAME) {
+	} else if (ui_robot.robot_name == lib::irp6p_tfg::ROBOT_NAME) {
 
-		ecp = new ecp::sarkofag::robot(*(_interface.config), *(_interface.all_ecp_msg));
+		ecp = new ecp::irp6p_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
+
+		for (int j = 0; j < ecp->number_of_servos; j++) {
+			MOTOR_STEP[j] = 0.4;
+			JOINT_STEP[j] = 0.00001;
+		}
+
+	} else if (ui_robot.robot_name == lib::sarkofag::ROBOT_NAME) {
+
+		ecp = new ecp::sarkofag::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.4;
 			JOINT_STEP[j] = 0.0001;
 		}
-	} else if (_robot_name == lib::conveyor::ROBOT_NAME) {
+	} else if (ui_robot.robot_name == lib::conveyor::ROBOT_NAME) {
 
-		ecp = new ecp::conveyor::robot(*(_interface.config), *(_interface.all_ecp_msg));
+		ecp = new ecp::conveyor::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.04;
 			JOINT_STEP[j] = 0.00004;
 		}
-	} else if (_robot_name == lib::polycrank::ROBOT_NAME) {
+	} else if (ui_robot.robot_name == lib::polycrank::ROBOT_NAME) {
 
-		ecp = new ecp::polycrank::robot(*(_interface.config), *(_interface.all_ecp_msg));
+		ecp = new ecp::polycrank::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.04;
 			JOINT_STEP[j] = 0.00004;
@@ -265,7 +265,7 @@ void EcpRobot::execute_motion(void)
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 
 
-	interface.set_ui_state_notification(UI_N_COMMUNICATION);
+	ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
 	// TODO: in QNX/Photon exceptions are handled at the main loop
 	// in GTK exceptions triggered signals cannot be handled in main loop

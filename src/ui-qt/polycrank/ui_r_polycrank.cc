@@ -69,7 +69,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(interface, lib::polycrank::ROBOT_NAME);
+	ui_ecp_robot = new ui::common::EcpRobot(*this);
 	return 1;
 }
 

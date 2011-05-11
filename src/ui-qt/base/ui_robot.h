@@ -77,15 +77,15 @@ class UiRobot
 {
 protected:
 
+public:
 	Interface& interface;
 
-public:
 	feb_thread* tid;
 	function_execution_buffer eb;
 
 	ecp_edp_ui_robot_def state;
 
-	boost::shared_ptr <lib::sr_ecp> msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
+	boost::shared_ptr <lib::sr_ecp> msg; // Wskaznik na obiekt do komunikacji z SR z funkcja ECP dla wszystkich robotow
 
 	/**
 	 * @brief Unique robot name
