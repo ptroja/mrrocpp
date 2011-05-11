@@ -81,6 +81,8 @@ Q_OBJECT
 private:
 	MainWindow* mw;
 
+	void create_robots();
+
 signals:
 	void manage_interface_signal();
 

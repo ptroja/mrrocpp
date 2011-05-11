@@ -132,6 +132,43 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
+void Interface::create_robots()
+{
+	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
+	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
+	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
+
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
+	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
+	polycrank = new polycrank::UiRobot(*this);
+	robot_m[polycrank->robot_name] = polycrank;
+
+	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
+
+	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
+	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
+	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
+	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
+}
+
 void Interface::init()
 {
 
@@ -173,39 +210,6 @@ void Interface::init()
 	if (cwd == NULL) {
 		perror("Blad cwd w UI");
 	}
-
-	spkm = new spkm::UiRobot(*this);
-	robot_m[spkm->robot_name] = spkm;
-
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
-
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
-
-	irp6ot_m = new irp6ot_m::UiRobot(*this);
-	robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
-	irp6p_m = new irp6p_m::UiRobot(*this);
-	robot_m[irp6p_m->robot_name] = irp6p_m;
-
-	polycrank = new polycrank::UiRobot(*this);
-	robot_m[polycrank->robot_name] = polycrank;
-
-	bird_hand = new bird_hand::UiRobot(*this);
-	robot_m[bird_hand->robot_name] = bird_hand;
-
-	sarkofag = new sarkofag::UiRobot(*this);
-	robot_m[sarkofag->robot_name] = sarkofag;
-
-	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	conveyor = new conveyor::UiRobot(*this);
-	robot_m[conveyor->robot_name] = conveyor;
-
-	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
 	ui_node_name = sysinfo.nodename;
 
@@ -263,6 +267,8 @@ void Interface::init()
 	}
 
 	create_threads();
+
+	create_robots();
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 

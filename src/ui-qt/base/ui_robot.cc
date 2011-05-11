@@ -34,6 +34,7 @@ UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, co
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
+	msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, robot_name, interface.network_sr_attach_point);
 }
 
 void UiRobot::create_thread()

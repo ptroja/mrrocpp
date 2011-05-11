@@ -9,6 +9,7 @@
 #define __UI_ROBOT_H
 
 #include "ui.h"
+#include "base/lib/sr/sr_ecp.h"
 
 class QDockWidget;
 
@@ -42,6 +43,8 @@ public:
 	function_execution_buffer eb;
 
 	ecp_edp_ui_robot_def state;
+
+	boost::shared_ptr <lib::sr_ecp> msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 
 	/**
 	 * @brief Unique robot name
