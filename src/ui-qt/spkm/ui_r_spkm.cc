@@ -54,7 +54,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::spkm::EcpRobot(interface);
+	ui_ecp_robot = new ui::spkm::EcpRobot(*this);
 	return 1;
 }
 

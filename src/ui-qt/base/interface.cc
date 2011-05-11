@@ -678,12 +678,6 @@ void Interface::reload_whole_configuration()
 					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
 		}
 
-		// inicjacja komunikacji z watkiem sr
-		if (all_ecp_msg == NULL) {
-			all_ecp_msg
-					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
-		}
-
 		// wypisanie komunikatu o odczytaniu konfiguracji
 		if (ui_msg) {
 			std::string msg(config_file);
