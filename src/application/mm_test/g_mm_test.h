@@ -37,7 +37,7 @@ public:
 	 * 2 -  Y down (computer)
 	 * 3 - -X left
 	 */
-	void configure(int new_direction);
+	void configure(int new_direction, double new_k_max);
 
 protected:
 	/** Is log enabled*/
@@ -59,6 +59,7 @@ private:
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
 
 	int direction;
+	double k_max;
 };//end class
 
 } // namespace generator

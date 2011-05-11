@@ -42,6 +42,11 @@ public:
 	void runEmptyGen(common::State &state);
 	void runWaitFunction(common::State &state);*/
 
+	void set_path();
+private:
+
+	std::vector<Point> path;
+
 }; // end : class mp_task_fsautomat
 
 } // namespace task

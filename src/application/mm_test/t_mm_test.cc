@@ -15,6 +15,7 @@
 #include "t_mm_test.h"
 //#include "base/lib/datastr.h"
 #include "ecp_mp_g_g_mm_test.h"
+#include "ecp_mp_g_g_rotate.h"
 //#include "../defines.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
@@ -57,6 +58,7 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 	sg = new common::generator::newsmooth(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 
 	gen = new common::generator::g_mm_test(*this);
+	rot = new common::generator::g_rotate(*this);
 
 	/***/
 	// utworzenie podzadan
@@ -117,7 +119,7 @@ mm_test::mm_test(lib::configurator &_config): common::task::task(_config)
 	//my_generator = new generator::g_mm_test(*this);
 	sr_ecp_msg->message("ECP loaded mm_test");
 };
-
+/*
 void mm_test::rotate(double rot,double move, double dir)
 {
 	//ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory = new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
@@ -132,7 +134,7 @@ void mm_test::rotate(double rot,double move, double dir)
 	coordinates[4] = 0.0;
 	coordinates[5] = rot;
 	sg->load_relative_angle_axis_trajectory_pose(coordinates);
-/*
+
 	for (int i=0;i<6;i++)
 	{
 		actTrajectory->v.push_back(0.02);
@@ -145,7 +147,7 @@ void mm_test::rotate(double rot,double move, double dir)
 	actTrajectory->coordinates.push_back(0);
 	actTrajectory->coordinates.push_back(rot);
 	sg->load_relative_pose((*actTrajectory));
-*/
+
 
 }
 
@@ -201,15 +203,14 @@ void mm_test::move_back(double mm)
 	actTrajectory->coordinates.push_back(0);
 	sg->load_relative_pose((*actTrajectory));
 }
-
+*/
 void mm_test::mp_2_ecp_next_state_string_handler(void)
 {
 	sr_ecp_msg->message("IN HENDLER");
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
-	{std::cout<<"smooth"<<std::endl;
+	{
 		//get_next_state();
-		sr_ecp_msg->message("rozkaz odebrany");
 		std::string path(mrrocpp_network_path);
 		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
 
@@ -218,22 +219,42 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			double t[4];
 			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
 
-			//if(t[0] > 3.5) //wywalic pierwsza dana [0]
-
 			sg->reset();
 			sg->set_relative();
 
 			std::vector <double> coordinates(6);
 
-			coordinates[0] =t[2];
-			coordinates[1] = t[2];
-			coordinates[2] = 0.0;
-			coordinates[3] = 0.0;
-			coordinates[4] = 0.0;
-			coordinates[5] = t[1];
-			sg->load_relative_angle_axis_trajectory_pose(coordinates);
 
-
+			if(t[0] < 1.5)//zakret z : patrzy w prawo skrec w prawo
+			{
+				coordinates[0] = t[2];
+				coordinates[1] = -t[2];
+				coordinates[2] = 0.0;
+				coordinates[3] = 0.0;
+				coordinates[4] = 0.0;
+				coordinates[5] = t[1];
+				sg->load_relative_angle_axis_trajectory_pose(coordinates);
+			}
+			else if (t[0] < 2.5)//zakret z : patrzy w dol skrec w prawo
+			{
+				coordinates[0] = t[2];
+				coordinates[1] = t[2];
+				coordinates[2] = 0.0;
+				coordinates[3] = 0.0;
+				coordinates[4] = 0.0;
+				coordinates[5] = t[1];
+				sg->load_relative_angle_axis_trajectory_pose(coordinates);
+			}
+			else if (t[0] < 3.5)//zakret z : patrzy w dol skrec w prawo
+			{
+				coordinates[0] = -t[2];
+				coordinates[1] = t[2];
+				coordinates[2] = 0.0;
+				coordinates[3] = 0.0;
+				coordinates[4] = 0.0;
+				coordinates[5] = t[1];
+				sg->load_relative_angle_axis_trajectory_pose(coordinates);
+			}
 
 			if(sg->calculate_interpolate())
 			{
@@ -267,7 +288,12 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
-		//move direction
+		double mp_args[2];
+		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		//move direction[0] and frames/duration
+		gen->configure(mp_args[0],mp_args[1]);
+
+		/*
 		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'U')
 			gen->configure(0);
 		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'R')
@@ -276,9 +302,20 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 			gen->configure(2);
 		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0] == 'L')
 			gen->configure(3);
-
+		 	*/
 		gen->Move();
 		sr_ecp_msg->message("My gen move end");
+	}
+	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_ROTATE)
+	{
+		double mp_args[2];
+		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		//move direction[0] and frames/duration
+		//rot_gen->configure(mp_args[0],mp_args[1]);
+
+
+		rot->Move();
+		sr_ecp_msg->message("My rot_gen move end");
 	}
 
 	sr_ecp_msg->message("HENDLER END");

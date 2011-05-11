@@ -7,6 +7,7 @@ add_executable(ecp_mm_test
 	../edge_follow/ecp_st_edge_follow.cc
     ../edge_follow/ecp_g_edge_follow.cc
     g_mm_test.cc
+    g_rotate.cc
 )
 
 target_link_libraries(ecp_mm_test 

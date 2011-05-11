@@ -28,6 +28,7 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 	r = 0.05;
 	k = 0.0;
 	direction = -1;
+	k_max = 0.0;
 }
 
 g_mm_test::~g_mm_test()
@@ -40,11 +41,12 @@ g_mm_test::~g_mm_test()
  * 2 -  Y down (computer)
  * 3 - -X left
 */
-void g_mm_test::configure(int new_direction)
+void g_mm_test::configure(int new_direction, double new_k_max)
 {
 	index = 0;
 	k = 0.0;
 	direction = new_direction;
+	k_max = new_k_max;
 }
 
 bool g_mm_test::first_step()
@@ -92,6 +94,13 @@ bool g_mm_test::next_step()
 	lib::Homog_matrix nextFrame;
 	nextFrame = currentFrame;
 
+	//q1 = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
+	//double current_arm_coordinates[lib::MAX_SERVOS_NR];
+	//for (size_t i = 0; i < lib::MAX_SERVOS_NR; ++i) {
+	//	current_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+	//		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+
+
 	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	double fx = force_torque[0];
@@ -107,21 +116,25 @@ bool g_mm_test::next_step()
 	nextFrame.get_translation_vector(trans_vect);
 
 	//move direction
-	if(direction==0)//up
+	if(direction==1)//up
 	{
 		trans_vect[0] = first_trans_vect[0] - r * k;
-	}
-	if(direction==1)//right
-	{
 		trans_vect[1] = first_trans_vect[1] + r * k;
 	}
-	if(direction==2)//down
+	if(direction==2)//right
 	{
+		trans_vect[1] = first_trans_vect[1] + r * k;
 		trans_vect[0] = first_trans_vect[0] + r * k;
 	}
-	if(direction==3)//left
+	if(direction==3)//down
+	{
+		trans_vect[0] = first_trans_vect[0] + r * k;
+		trans_vect[1] = first_trans_vect[1] - r * k;
+	}
+	if(direction==0)//left
 	{
 		trans_vect[1] = first_trans_vect[1] - r * k;
+		trans_vect[0] = first_trans_vect[0] - r * k;
 	}
 
 	k += 0.1;
@@ -131,7 +144,7 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;
 
-	if (k > 1.0)
+	if (k > k_max)
 		return false;
 
 
