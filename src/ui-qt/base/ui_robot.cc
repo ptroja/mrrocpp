@@ -62,31 +62,50 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					create_ui_ecp_robot();
+					try {
+						create_ui_ecp_robot();
+					}
+
+					catch (ecp::common::robot::ECP_main_error & e) {
+						/* Obsluga bledow ECP */
+						null_ui_ecp_robot();
+						throw ecp::common::robot::ECP_main_error(e.error_class, e.error_no);
+
+					} /*end: catch */
 				}
 
-				state.edp.pid = ui_get_edp_pid();
+				try {
+					state.edp.pid = ui_get_edp_pid();
 
-				if (state.edp.pid < 0) {
+					if (state.edp.pid < 0) {
 
-					state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete_ui_ecp_robot();
-				} else { // jesli spawn sie powiodl
+						state.edp.state = 0;
+						fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+						delete_ui_ecp_robot();
+					} else { // jesli spawn sie powiodl
 
-					state.edp.state = 1;
+						state.edp.state = 1;
 
-					connect_to_reader();
+						connect_to_reader();
 
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
+						// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+						lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_get_controler_state(robot_controller_initial_state_tmp);
+						ui_get_controler_state(robot_controller_initial_state_tmp);
 
-					//state.edp.state = 1; // edp wlaczone reader czeka na start
+						//state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					}
 				}
+
+				catch (ecp::common::robot::ECP_main_error & e) {
+					/* Obsluga bledow ECP */
+					close_edp_connections();
+					null_ui_ecp_robot();
+
+				} /*end: catch */
+
 			}
 		}
 
@@ -94,7 +113,6 @@ int UiRobot::edp_create_int()
 
 	catch (ecp::common::robot::ECP_main_error & e) {
 		/* Obsluga bledow ECP */
-		close_edp_connections();
 
 	} /*end: catch */
 
@@ -198,10 +216,6 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-	/*
-	 ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-	 */
-
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
@@ -281,6 +295,7 @@ bool UiRobot::deactivate_ecp_trigger()
 
 void UiRobot::close_edp_connections()
 {
+
 	if (state.edp.reader_fd != lib::invalid_fd) {
 
 		if (messip::port_disconnect(state.edp.reader_fd) != 0) {

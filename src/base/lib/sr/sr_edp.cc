@@ -8,7 +8,11 @@
 #include <cstdio>
 #include <cstring>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include "base/lib/sr/sr_edp.h"
+#include "base/edp/edp_exceptions.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -98,7 +102,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_INSTRUCTION_TYPE");
 					break;
 				case INVALID_REPLY_TYPE:
-					strcat(description, "INVALID_REPLY_TYPE");
+					strcat(description, "INerror_messageVALID_REPLY_TYPE");
 					break;
 				case INVALID_SET_ROBOT_MODEL_TYPE:
 					strcat(description, "INVALID_SET_ROBOT_MODEL_TYPE");
@@ -272,7 +276,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_KINEMATIC_MODEL_NO");
 					break;
 				case EDP_UNIDENTIFIED_ERROR:
-					strcat(description, "edp_UNIDENTIFIED_ERROR");
+					strcat(description, "EDP_UNIDENTIFIED_ERROR");
 					break;
 				case NOT_A_NUMBER_JOINT_VALUE_D0:
 					strcat(description, "NOT_A_NUMBER_JOINT_VALUE_D0");
@@ -323,8 +327,84 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 			}
 			break;
 		default:
-			strcat(description, "edp UNIDENTIFIED ERROR");
+			strcat(description, "EDP UNIDENTIFIED ERROR");
 	}
+}
+
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e)
+{
+	// Retrieve default description.
+	const char* const * pdescription = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_description>(_e);
+	std::string default_description;
+	// Check whether description is present.
+	if (pdescription != 0)
+		default_description = *pdescription;
+	else
+		default_description = "Unidentified error";
+
+	// Get error code.
+	const uint64_t* pcode = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_code>(_e);
+	// Check retrieved code.
+	if (pcode == 0) {
+		strcat(description, default_description.c_str());
+		return;
+	}
+
+	// Create 'specialized' descriptions for selected errors.
+	description[0] = '\0';
+	switch (*pcode)
+	{
+		case mrrocpp::edp::exception::NFE_MOTOR_LIMIT: {
+			// Get parameters.
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::edp::exception::limit_type>(_e);
+			const int* pmotor_number = boost::get_error_info <mrrocpp::edp::exception::motor_number>(_e);
+			// Check retrieved pointers.
+			if ((plimit_type == 0) || (pmotor_number == 0))
+				break;
+			// Concatenate string.
+			strcat(description, (*plimit_type).c_str());
+			strcat(description, " limit for motor ");
+			std::string motor_no = boost::lexical_cast <std::string>(*pmotor_number);
+			strcat(description, motor_no.c_str());
+			strcat(description, " exceeded");
+			break;
+		}
+		case mrrocpp::edp::exception::NFE_JOINT_LIMIT: {
+			// Get parameters.
+			const std::string* plimit_type = boost::get_error_info <mrrocpp::edp::exception::limit_type>(_e);
+			const int* pjoint_number = boost::get_error_info <mrrocpp::edp::exception::joint_number>(_e);
+			// Check retrieved pointers.
+			if ((plimit_type == 0) || (pjoint_number == 0))
+				break;
+			// Concatenate string.
+			strcat(description, (*plimit_type).c_str());
+			strcat(description, " limit for joint ");
+			std::string joint_no = boost::lexical_cast <std::string>(*pjoint_number);
+			strcat(description, joint_no.c_str());
+			strcat(description, " exceeded");
+			break;
+		}
+		default: {
+			// Set default description.
+			strcat(description, default_description.c_str());
+			break;
+		}
+	}//: switch
+	// Check whether description was created - if not, use the default one.
+	if (description[0] == '\0') {
+		strcat(description, default_description.c_str());
+	}
+
+}
+
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e)
+{
+	// TODO: write adequate error interpretation.
+}
+
+void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e)
+{
+	// TODO: write adequate error interpretation.
 }
 
 } // namespace lib

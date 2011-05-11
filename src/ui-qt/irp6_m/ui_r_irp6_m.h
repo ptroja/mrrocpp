@@ -55,6 +55,7 @@ public:
 	wgt_irp6_m_tool_euler *wgt_tool_euler;
 
 	void delete_ui_ecp_robot();
+	void null_ui_ecp_robot();
 	int synchronise_int();
 
 	int execute_motor_motion();

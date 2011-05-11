@@ -194,6 +194,12 @@ void UiRobot::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 }
 
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
+
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

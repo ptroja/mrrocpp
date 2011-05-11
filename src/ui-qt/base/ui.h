@@ -103,10 +103,6 @@ enum UI_ALL_EDPS_SYNCHRO_STATE
 // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
 // 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
 
-
-// czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
-static const useconds_t SIGALRM_TIMEOUT = 1000000;
-
 typedef enum _EDP_STATE
 {
 	INACTIVE = -1, OFF = 0, WAITING_TO_START_READER = 1, WAITING_TO_STOP_READER = 2
