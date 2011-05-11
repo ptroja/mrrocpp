@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 
 #include <QtGui/QApplication>
+#include <QFileDialog>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -31,6 +32,14 @@
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
 
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_euler.h"
+#include "../irp6_m/wgt_irp6_m_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_euler.h"
+
 extern void catch_signal(int sig);
 
 namespace mrrocpp {
@@ -50,6 +59,8 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
@@ -65,12 +76,272 @@ Interface::Interface() :
 
 }
 
+void Interface::raise_process_control_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_process_control_window_signal();
+}
+
+void Interface::raise_process_control_window_slot()
+{
+	wgt_pc->my_open();
+}
+
 //Interface * Interface::get_instance()
 //{
 //	static Interface *instance = new Interface();
 //	return instance;
 //}
 
+
+void Interface::raise_ui_ecp_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_ui_ecp_window_signal();
+}
+
+void Interface::raise_ui_ecp_window_slot()
+{
+	ui_msg->message("raise_ui_ecp_window_slot");
+
+	lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
+	lib::UI_reply &ui_rep = ui_ecp_obj->ui_rep;
+
+	switch (ecp_to_ui_msg.ecp_message)
+	{ // rodzaj polecenia z ECP
+		case lib::C_XYZ_ANGLE_AXIS: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_XYZ_EULER_ZYZ: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_JOINT: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_JOINT");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				irp6ot_m->wgt_joints->my_open();
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				irp6p_m->wgt_joints->my_open();
+			}
+
+		}
+			break;
+		case lib::C_MOTOR: {
+			//  printf("C_MOTOR\n");
+
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_MOTOR");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				irp6ot_m->wgt_motors->my_open();
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				irp6p_m->wgt_motors->my_open();
+			}
+
+		}
+			break;
+		case lib::YES_NO: {
+			Ui::wgt_yes_noClass* ui = wgt_yes_no_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_yes_no_obj->my_open();
+
+		}
+			break;
+		case lib::MESSAGE: {
+			Ui::wgt_messageClass* ui = wgt_message_obj->get_ui();
+			ui->label_message->setText(ecp_to_ui_msg.string);
+			wgt_message_obj->my_open();
+
+			ui_rep.reply = lib::ANSWER_YES;
+			ui_ecp_obj->synchroniser.command();
+		}
+			break;
+		case lib::DOUBLE_NUMBER: {
+
+			Ui::wgt_input_doubleClass* ui = wgt_input_double_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_input_double_obj->my_open();
+		}
+			break;
+		case lib::INTEGER_NUMBER: {
+
+			Ui::wgt_input_integerClass* ui = wgt_input_integer_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_input_integer_obj->my_open();
+
+		}
+			break;
+		case lib::CHOOSE_OPTION: {
+
+			Ui::wgt_choose_optionClass* ui = wgt_choose_option_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
+
+			if (ecp_to_ui_msg.nr_of_options == 2) {
+				ui->pushButton_3->hide();
+				ui->pushButton_4->hide();
+			} else if (ecp_to_ui_msg.nr_of_options == 3) {
+				ui->pushButton_3->show();
+				ui->pushButton_4->hide();
+			} else if (ecp_to_ui_msg.nr_of_options == 4) {
+				ui->pushButton_3->show();
+				ui->pushButton_4->show();
+			}
+
+			wgt_choose_option_obj->my_open();
+		}
+			break;
+		case lib::LOAD_FILE: {
+			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+
+			//    printf("lib::LOAD_FILE\n");
+
+
+			file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getOpenFileName(mw, tr("Choose file to load or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1] = '\0';
+
+					strncpy(ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_LOADED;
+				} else {
+					ui_rep.reply = lib::QUIT;
+				}
+				//std::string str_fullpath = fileName.toStdString();
+			}
+
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
+
+			ui_ecp_obj->synchroniser.command();
+
+		}
+			break;
+		case lib::SAVE_FILE: {
+
+			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::SAVE_FILE\n");
+
+			file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getSaveFileName(mw, tr("Choose file to save or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1] = '\0';
+
+					strncpy(ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_SAVED;
+				} else {
+					ui_rep.reply = lib::QUIT;
+				}
+				//std::string str_fullpath = fileName.toStdString();
+			}
+
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
+
+			ui_ecp_obj->synchroniser.command();
+
+		}
+			break;
+
+		default: {
+			perror("Strange ECP message");
+			ui_ecp_obj->synchroniser.command();
+		}
+			break;
+	}
+
+}
 
 MainWindow* Interface::get_main_window()
 {
@@ -371,7 +642,7 @@ int Interface::MPup_int()
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
 
-				mw->raise_process_control_window();
+				raise_process_control_window();
 
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
