@@ -132,6 +132,43 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
+void Interface::create_robots()
+{
+	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
+	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
+	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
+
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
+	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
+	polycrank = new polycrank::UiRobot(*this);
+	robot_m[polycrank->robot_name] = polycrank;
+
+	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
+
+	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
+	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
+	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
+	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
+}
+
 void Interface::init()
 {
 
@@ -174,41 +211,7 @@ void Interface::init()
 		perror("Blad cwd w UI");
 	}
 
-	spkm = new spkm::UiRobot(*this);
-	robot_m[spkm->robot_name] = spkm;
-
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
-
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
-
-	irp6ot_m = new irp6ot_m::UiRobot(*this);
-	robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
-	irp6p_m = new irp6p_m::UiRobot(*this);
-	robot_m[irp6p_m->robot_name] = irp6p_m;
-
-	polycrank = new polycrank::UiRobot(*this);
-	robot_m[polycrank->robot_name] = polycrank;
-
-	bird_hand = new bird_hand::UiRobot(*this);
-	robot_m[bird_hand->robot_name] = bird_hand;
-
-	sarkofag = new sarkofag::UiRobot(*this);
-	robot_m[sarkofag->robot_name] = sarkofag;
-
-	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	conveyor = new conveyor::UiRobot(*this);
-	robot_m[conveyor->robot_name] = conveyor;
-
-	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
-
 	ui_node_name = sysinfo.nodename;
-	is_sr_thread_loaded = false;
 
 	binaries_local_path = cwd;
 	mrrocpp_local_path = cwd;
@@ -264,6 +267,8 @@ void Interface::init()
 	}
 
 	create_threads();
+
+	create_robots();
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 
@@ -671,12 +676,6 @@ void Interface::reload_whole_configuration()
 		if (ui_msg == NULL) {
 			ui_msg
 					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
-		}
-
-		// inicjacja komunikacji z watkiem sr
-		if (all_ecp_msg == NULL) {
-			all_ecp_msg
-					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -1149,13 +1148,14 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 void Interface::create_threads()
 {
+	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
+
 	meb_tid = (boost::shared_ptr <feb_thread>) new feb_thread(*main_eb);
+
+	ui_sr_obj->thread_started.wait();
 
 	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
-	delay(1);
-
-	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
 	mw->start_on_timer();
 
 }
@@ -1557,54 +1557,6 @@ int Interface::all_robots_move_to_front_position()
 	}
 	return 1;
 
-}
-
-void Interface::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
-
-{
-	if (e.error_class == lib::SYSTEM_ERROR)
-		printf("ecp lib::SYSTEM_ERROR error in UI\n");
-	ui_state = 2;
-}
-
-void Interface::catch_ecp_error(ecp::common::robot::ECP_error & er)
-
-{
-	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
-		perror("ecp lib::SYSTEM_ERROR in UI");
-		/* PtExit( EXIT_SUCCESS ); */
-	} else {
-		switch (er.error_no)
-		{
-			case INVALID_POSE_SPECIFICATION:
-			case INVALID_COMMAND_TO_EDP:
-			case EDP_ERROR:
-			case INVALID_ROBOT_MODEL_TYPE:
-				/* Komunikat o bledzie wysylamy do SR */
-				all_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
-				break;
-			default:
-				all_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
-				perror("Unidentified exception");
-		} /* end: switch */
-	}
-}
-
-void Interface::catch_std_exception(const std::exception & e)
-{
-
-	std::string tmp_string(" The following error has been detected: ");
-	tmp_string += e.what();
-	all_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
-	std::cerr << "UI: The following error has been detected :\n\t" << e.what() << std::endl;
-}
-
-void Interface::catch_tridot()
-
-{
-	/* Wylapywanie niezdefiniowanych bledow*/
-	/* Komunikat o bledzie wysylamy do SR (?) */
-	fprintf(stderr, "unidentified error in UI\n");
 }
 
 }

@@ -4,6 +4,7 @@
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ * @author tkornuta
  *
  * @ingroup LIB
  */
@@ -14,7 +15,6 @@
 #include <stdint.h>
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-//#include <exception>
 
 namespace mrrocpp {
 namespace lib {
@@ -29,12 +29,75 @@ const std::string FATAL_ERROR = "FATAL ERROR";
 //! Description used for diagnostic information in case of non fatal errors.
 const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
 
-//! Number of motor that caused the exception.
-typedef boost::error_info <struct error_class, std::string> mrrocpp_error_class;
+//! MRROC++ error class - by default three types are denoted (SYSTEM, FATAL, NON-FATAL).
+typedef boost::error_info <struct mrrocpp_error_class_, char const *> mrrocpp_error_class;
 
-//#define MRROCPP_THROW_SYSTEM_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(SYSTEM_ERROR))
-//#define MRROCPP_THROW_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(FATAL))
-//#define MRROCPP_THROW_NON_FATAL_EXCEPTION(EXCEPTION) BOOST_THROW_EXCEPTION(EXCEPTION<<mrrocpp_error_class(NON_FATAL_ERROR))
+//! MRROC++ error code - code identifying given error.
+typedef boost::error_info <struct mrrocpp_error_code_, uint64_t> mrrocpp_error_code;
+
+//! Description of the MRROC++ error - it will be sent (by default) to the SR.
+typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
+
+/*!
+ * Macro for registration of MRROC++ system errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param ERROR_CODE Identifier of given error (of type uint64_t).
+ * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ *
+ * \author tkornuta
+ */
+#define REGISTER_SYSTEM_ERROR(CLASS_NAME, ERROR_CODE, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_system_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_code(ERROR_CODE) << mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
+};
+
+
+/*!
+ * Macro for registration of MRROC++ fatal errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param ERROR_CODE Identifier of given error (of type uint64_t).
+ * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ *
+ * \author tkornuta
+ */
+#define REGISTER_FATAL_ERROR(CLASS_NAME, ERROR_CODE, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_fatal_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_code(ERROR_CODE) <<mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
+};
+
+/*!
+ * Macro for registration of MRROC++ non fatal errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param ERROR_CODE Identifier of given error (of type uint64_t).
+ * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ *
+ * \author tkornuta
+ */
+#define REGISTER_NON_FATAL_ERROR(CLASS_NAME, ERROR_CODE, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_code(ERROR_CODE) <<mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
+};
+
+
+/*!
+ * Macro for handling MRROC++ non fatal errors.
+ *
+ * \param ERROR Exception derived from the mrrocpp_*_error classes.
+ *
+ * \author tkornuta
+ */
+#define HANDLE_NON_FATAL_ERROR(ERROR) \
+	std::cout << boost::current_exception_diagnostic_information() << std::endl; \
+	msg->message(ERROR);
 
 /*!
  * \brief Base class for all system errors.
@@ -44,13 +107,13 @@ struct mrrocpp_system_error : virtual public std::exception, virtual public boos
 {
 	mrrocpp_system_error()
 	{
-		*this << mrrocpp_error_class(SYSTEM_ERROR);
+		*this << mrrocpp_error_class(SYSTEM_ERROR.c_str());
 	}
 
-	/*	virtual const char* what() const throw ()
-	 {
-	 return SYSTEM_ERROR.c_str();
-	 }*/
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_system_error() throw ()
 	{
@@ -65,12 +128,13 @@ struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost
 {
 	mrrocpp_fatal_error()
 	{
-		*this << mrrocpp_error_class(FATAL_ERROR);
+		*this << mrrocpp_error_class(FATAL_ERROR.c_str());
 	}
-	/*	virtual const char* what() const throw ()
-	 {
-	 return FATAL_ERROR.c_str();
-	 }*/
+
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_fatal_error() throw ()
 	{
@@ -85,17 +149,22 @@ struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public b
 {
 	mrrocpp_non_fatal_error()
 	{
-		*this << mrrocpp_error_class(NON_FATAL_ERROR);
+		*this << mrrocpp_error_class(NON_FATAL_ERROR.c_str());
 	}
-	/*	virtual const char* what() const throw ()
-	 {
-	 return NON_FATAL_ERROR.c_str();
-	 }*/
+
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
 
 	~mrrocpp_non_fatal_error() throw ()
 	{
 	}
 };
+
+
+/********************************** OLD MRROC++ ERRORS **********************************/
+
 
 /**
  * System error (inter-process communication, filesystem, etc.)

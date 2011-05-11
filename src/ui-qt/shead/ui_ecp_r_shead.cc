@@ -11,13 +11,11 @@ namespace mrrocpp {
 namespace ui {
 namespace shead {
 
-
-
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface) :
-	EcpRobotDataPort(_interface)
+EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
+	EcpRobotDataPort(_ui_robot)
 {
-	the_robot = (boost::shared_ptr<robot_t>) new ecp::shead::robot(*(_interface.config), *(_interface.all_ecp_msg));
+	the_robot = (boost::shared_ptr <robot_t>) new ecp::shead::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 }
 
 }

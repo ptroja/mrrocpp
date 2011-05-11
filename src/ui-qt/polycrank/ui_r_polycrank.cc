@@ -69,7 +69,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(interface, lib::polycrank::ROBOT_NAME);
+	ui_ecp_robot = new ui::common::EcpRobot(*this);
 	return 1;
 }
 
@@ -99,7 +99,7 @@ int UiRobot::synchronise_int()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	// modyfikacje menu
 	interface.manage_interface();
@@ -192,6 +192,12 @@ int UiRobot::manage_interface()
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
+
 }
 
 }

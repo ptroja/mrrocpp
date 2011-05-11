@@ -31,7 +31,7 @@ int UiRobot::execute_motor_motion()
 		ui_ecp_robot->move_motors(desired_pos);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -43,7 +43,7 @@ int UiRobot::execute_joint_motion()
 		ui_ecp_robot->move_joints(desired_pos);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -66,7 +66,7 @@ int UiRobot::synchronise_int()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	// modyfikacje menu
 	interface.manage_interface();
@@ -87,6 +87,12 @@ UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
 
 }
 
