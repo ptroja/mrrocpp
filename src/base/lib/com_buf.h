@@ -911,7 +911,7 @@ r_buffer_arm
 		/*!
 		 *  Maksimum module
 		 */
-		unsigned short maksimum_module[lib::MAX_SERVOS_NR];
+		unsigned short maximum_module[lib::MAX_SERVOS_NR];
 
 		/*!
 		 *  Average square
@@ -960,7 +960,7 @@ r_buffer_arm
 
 		ar & measured_current.average_module;
 		ar & measured_current.minimum_module;
-		ar & measured_current.maksimum_module;
+		ar & measured_current.maximum_module;
 		ar & measured_current.average_square;
 		ar & measured_current.average_cubic;
 
