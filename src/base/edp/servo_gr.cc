@@ -44,46 +44,44 @@ void servo_buffer::load_hardware_interface(void)
 	}
 }
 
-
-
 // obliczenie statystyk pradu
 void servo_buffer::compute_current_measurement_statistics()
 {
-	uint16_t step_number=step_number_in_macrostep+1;
-	printf("\n---------------measurements statistics for: %d------------------\n",step_number);
+	uint16_t step_number = step_number_in_macrostep + 1;
+	//	printf("\n---------------measurements statistics for: %d------------------\n", step_number);
 	// dla  kazdej z osi
 	for (int k = 0; k < master.number_of_servos; k++) {
 		// pomiar pradu dla osi
 		int measured_current = hi->get_current(k);
-		printf("current: %d\n",measured_current);
+		//	printf("current: %d\n", measured_current);
 
 		// dla pierwszego kroku
 		if (step_number == 1) {
-			master.reply.arm.measured_current.average_cubic[k] = pow(measured_current,3);
+			master.reply.arm.measured_current.average_cubic[k] = pow(measured_current, 3);
 			master.reply.arm.measured_current.average_module[k] = abs(measured_current);
-			master.reply.arm.measured_current.average_square[k] = pow(measured_current,2);
+			master.reply.arm.measured_current.average_square[k] = pow(measured_current, 2);
 			master.reply.arm.measured_current.maximum_module[k] = abs(measured_current);
 			master.reply.arm.measured_current.minimum_module[k] = abs(measured_current);
 			// dla pozostalych krokow
 		} else {
 			float average_cubic = master.reply.arm.measured_current.average_cubic[k];
 			float average_square = master.reply.arm.measured_current.average_square[k];
-			unsigned short average_module= master.reply.arm.measured_current.average_module[k];
-			unsigned short minimum_module= master.reply.arm.measured_current.minimum_module[k];
-			unsigned short maximum_module= master.reply.arm.measured_current.maximum_module[k];
+			unsigned short average_module = master.reply.arm.measured_current.average_module[k];
+			unsigned short minimum_module = master.reply.arm.measured_current.minimum_module[k];
+			unsigned short maximum_module = master.reply.arm.measured_current.maximum_module[k];
 
 			average_cubic = ADD_NEXT_VALUE_TO_AVERAGE(average_cubic, step_number, pow(measured_current, 3));
 			average_square = ADD_NEXT_VALUE_TO_AVERAGE(average_square, step_number, pow(measured_current,2));
 			average_module = ADD_NEXT_VALUE_TO_AVERAGE(average_module, step_number, abs(measured_current));
-			minimum_module = minimum_module>abs(measured_current) ? abs(measured_current) : minimum_module;
-			maximum_module = maximum_module<abs(measured_current) ? abs(measured_current) : maximum_module;
-
-			printf("%f %f\n",master.reply.arm.measured_current.average_cubic[k],average_cubic);
-			printf("%d %d\n",master.reply.arm.measured_current.average_module[k],average_module);
-			printf("%f %f\n",master.reply.arm.measured_current.average_square[k],average_square);
-			printf("%d %d\n",master.reply.arm.measured_current.minimum_module[k],minimum_module);
-			printf("%d %d\n",master.reply.arm.measured_current.maximum_module[k],maximum_module);
-
+			minimum_module = minimum_module > abs(measured_current) ? abs(measured_current) : minimum_module;
+			maximum_module = maximum_module < abs(measured_current) ? abs(measured_current) : maximum_module;
+			/*
+			 printf("%f %f\n", master.reply.arm.measured_current.average_cubic[k], average_cubic);
+			 printf("%d %d\n", master.reply.arm.measured_current.average_module[k], average_module);
+			 printf("%f %f\n", master.reply.arm.measured_current.average_square[k], average_square);
+			 printf("%d %d\n", master.reply.arm.measured_current.minimum_module[k], minimum_module);
+			 printf("%d %d\n", master.reply.arm.measured_current.maximum_module[k], maximum_module);
+			 */
 			master.reply.arm.measured_current.average_cubic[k] = average_cubic;
 			master.reply.arm.measured_current.average_module[k] = average_module;
 			master.reply.arm.measured_current.average_square[k] = average_square;
@@ -164,12 +162,12 @@ void servo_buffer::send_to_SERVO_GROUP()
 	 */
 
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		servo_command_rdy = true;
 	}
 
 	{
-		boost::unique_lock <boost::mutex> lock(sg_reply_mtx);
+		boost::unique_lock < boost::mutex > lock(sg_reply_mtx);
 		while (!sg_reply_rdy) {
 			sg_reply_cond.wait(sg_reply_mtx);
 		}
@@ -227,7 +225,7 @@ void servo_buffer::operator()()
 		printf("servo group runtime error: %s \n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
 		master.edp_shell.close_hardware_busy_file();
-		_exit(EXIT_SUCCESS);
+		_exit( EXIT_SUCCESS);
 	}
 
 	lib::set_thread_priority(pthread_self(), 79);
@@ -336,7 +334,7 @@ bool servo_buffer::get_command(void)
 	bool new_command_available = false;
 
 	{
-		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+		boost::lock_guard < boost::mutex > lock(servo_command_mtx);
 		if (servo_command_rdy) {
 			command = servo_command;
 			servo_command_rdy = false;
@@ -451,7 +449,7 @@ uint8_t servo_buffer::convert_error(void)
 void servo_buffer::Move_passive(void)
 { //
 	// stanie w miejscu - krok bierny
-	step_number_in_macrostep = 1;
+	step_number_in_macrostep = 0;
 	for (int j = 0; j < master.number_of_servos; j++) {
 		regulator_ptr[j]->insert_new_step(0.0); // zerowy przyrost polozenia dla wszystkich napedow
 	}
@@ -568,7 +566,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 	// Wyslac informacje do EDP_MASTER
 
 	{
-		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
+		boost::lock_guard < boost::mutex > lock(sg_reply_mtx);
 
 		sg_reply = servo_data;
 		sg_reply_rdy = true;
