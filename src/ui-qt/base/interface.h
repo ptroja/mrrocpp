@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QDockWidget>
 
@@ -82,6 +83,7 @@ private:
 	MainWindow* mw;
 
 	void create_robots();
+	QTimer *timer;
 
 signals:
 	void manage_interface_signal();
@@ -92,8 +94,8 @@ private slots:
 
 	void manage_interface_slot();
 	void raise_process_control_window_slot();
-
 	void raise_ui_ecp_window_slot();
+	void on_timer_slot();
 
 public:
 
@@ -101,6 +103,7 @@ public:
 
 	void raise_process_control_window();
 	void raise_ui_ecp_window();
+	void start_on_timer();
 
 	//static Interface * get_instance();
 	MainWindow* get_main_window();

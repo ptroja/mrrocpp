@@ -34,7 +34,7 @@ public:
 
 
 	void get_lineEdit_position(double* val, int number_of_servos);
-	void start_on_timer();
+
 
 	Ui::MainWindow * get_ui();
 
@@ -43,7 +43,6 @@ public:
 private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
-	QTimer *timer;
 
 	pthread_t main_thread_id;
 
@@ -52,14 +51,11 @@ signals:
 	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
 	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 
-
-
 private slots:
 
-	void on_timer_slot();
+
 
 	void ui_notification_slot();
-
 
 	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
 	void enable_menu_item_slot(QAction *_menu_item, bool _active);

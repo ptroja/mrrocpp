@@ -62,9 +62,6 @@ void cxx::create_robots()
 	ACTIVATE_MP_ROBOT(irp6p_m);
 	ACTIVATE_MP_ROBOT(sarkofag);
 
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
-
 }
 
 void cxx::main_task_algorithm(void)

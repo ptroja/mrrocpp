@@ -50,8 +50,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
 {
 	ui->setupUi(this);
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
@@ -60,10 +58,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	main_thread_id = pthread_self();
 }
 
-void MainWindow::start_on_timer()
-{
-	timer->start(50);
-}
+
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -270,149 +265,6 @@ void MainWindow::ui_notification_slot()
 	}
 }
 
-void MainWindow::on_timer_slot()
-{
-
-	//fprintf(stderr, "OnTimer()\n");
-
-	QTextCharFormat format;
-
-	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
-	static int Iteration_counter = 0; // licznik uruchomienia funkcji
-
-
-	Iteration_counter++;
-
-	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
-
-		// 	printf("timer\n");
-
-		char current_line[400];
-		lib::sr_package_t sr_msg;
-
-		while (!(interface.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
-
-			interface.ui_sr_obj->get_one_msg(sr_msg);
-
-			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
-			strcat(current_line, "  ");
-			time_t time = sr_msg.tv.tv_sec;
-			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
-
-			switch (sr_msg.process_type)
-			{
-				case lib::EDP:
-					strcat(current_line, "edp: ");
-					break;
-				case lib::ECP:
-					strcat(current_line, "ecp: ");
-					break;
-				case lib::MP:
-					// printf("mp w ontimer\n");
-					strcat(current_line, "mp:  ");
-					break;
-				case lib::VSP:
-					strcat(current_line, "vsp: ");
-					break;
-				case lib::UI:
-					strcat(current_line, "UI:  ");
-					break;
-				default:
-					strcat(current_line, "???: ");
-					continue;
-			} // end: switch (message_buffer[reader_buf_position].process_type)
-
-			// FIXME: ?
-			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
-
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
-
-			strcat(current_line, process_name_buffer);
-
-			switch (sr_msg.message_type)
-			{
-				case lib::FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
-					format.setForeground(Qt::red);
-
-					break;
-				case lib::NON_FATAL_ERROR:
-
-					strcat(current_line, "NON_FATAL_ERROR: ");
-					format.setForeground(Qt::blue);
-
-					break;
-				case lib::SYSTEM_ERROR:
-					// printf("SYSTEM ERROR W ONTIMER\n");
-					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-					strcat(current_line, "SYSTEM_ERROR:    ");
-					format.setForeground(Qt::magenta);
-
-					break;
-				case lib::NEW_MESSAGE:
-					strcat(current_line, "MESSAGE:         ");
-					format.setForeground(Qt::black);
-
-					break;
-				default:
-					strcat(current_line, "UNKNOWN ERROR:   ");
-					format.setForeground(Qt::yellow);
-
-			}; // end: switch (message.message_type)
-
-			strcat(current_line, sr_msg.description);
-
-			ui->plainTextEdit_sr->setCurrentCharFormat(format);
-			ui->plainTextEdit_sr->appendPlainText(current_line);
-			(*interface.log_file_outfile) << current_line << std::endl;
-		}
-
-		(*interface.log_file_outfile).flush();
-
-	}
-
-	if (interface.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
-		interface.set_ui_state_notification(UI_N_EXITING);
-		// 	printf("w ontimer 2\n");
-		closing_delay_counter = 20;// opoznienie zamykania
-		interface.ui_state = 3;
-		// 		delay(5000);
-
-		interface.MPslay();
-
-		interface.ui_msg->message("closing");
-	} else if (interface.ui_state == 3) {// odliczanie
-		// 	printf("w ontimer 3\n");
-		if ((--closing_delay_counter) <= 0)
-			interface.ui_state = 4;
-	} else if (interface.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
-		//	printf("w ontimer 4\n");
-		closing_delay_counter = 20;// opoznienie zamykania
-		interface.ui_state = 5;
-
-		interface.EDP_all_robots_slay();
-
-	} else if (interface.ui_state == 5) {// odlcizanie do zamnkiecia
-		//	printf("w ontimer 5\n");
-		if ((--closing_delay_counter) <= 0)
-			interface.ui_state = 6;
-	} else if (interface.ui_state == 6) {// zakonczenie aplikacji
-		(*interface.log_file_outfile).close();
-		delete interface.log_file_outfile;
-		printf("UI CLOSED\n");
-		interface.abort_threads();
-		interface.get_main_window()->close();
-
-	} else {
-		if (!(interface.communication_flag.is_busy())) {
-			interface.set_ui_state_notification(UI_N_READY);
-		}
-
-	}
-
-}
 
 // menus
 
