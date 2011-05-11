@@ -10,6 +10,7 @@
 
 #include "ui.h"
 #include "base/lib/sr/sr_ecp.h"
+#include "base/ecp/ecp_robot.h"
 
 class QDockWidget;
 
@@ -91,6 +92,12 @@ public:
 	virtual int move_to_synchro_position();
 	virtual int move_to_front_position();
 	virtual int move_to_preset_position(int variant);
+
+	// default try catch handlers
+	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
+	void catch_ecp_error(ecp::common::robot::ECP_error & er);
+	void catch_std_exception(const std::exception & e);
+	void catch_tridot();
 
 };
 

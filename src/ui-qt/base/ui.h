@@ -42,23 +42,43 @@ enum TEACHING_STATE
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
 };
 
-#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
+#define CATCH_SECTION_IN_ROBOT catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
-		interface.catch_ecp_main_error(e); \
+		catch_ecp_main_error(e); \
   } /*end: catch */ \
 \
 catch (ecp::common::robot::ECP_error & er) { \
 	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		interface.catch_ecp_error(er); \
+		catch_ecp_error(er); \
 } /* end: catch */ \
 \
 catch(const std::exception & e){\
-	interface.catch_std_exception(e); \
+	catch_std_exception(e); \
 }\
 \
 catch (...) {  /* Dla zewnetrznej petli try*/ \
 	/* Wylapywanie niezdefiniowanych bledow*/ \
-		interface.catch_tridot(); \
+		catch_tridot(); \
+} /*end: catch */\
+
+
+#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
+	/* Obsluga bledow ECP */ \
+		robot.catch_ecp_main_error(e); \
+  } /*end: catch */ \
+\
+catch (ecp::common::robot::ECP_error & er) { \
+	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
+		robot.catch_ecp_error(er); \
+} /* end: catch */ \
+\
+catch(const std::exception & e){\
+	robot.catch_std_exception(e); \
+}\
+\
+catch (...) {  /* Dla zewnetrznej petli try*/ \
+	/* Wylapywanie niezdefiniowanych bledow*/ \
+		robot.catch_tridot(); \
 } /*end: catch */\
 
 
