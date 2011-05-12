@@ -31,7 +31,7 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-#define ADD_NEXT_VALUE_TO_AVERAGE(average, count, nextValue) ((average)+(1/(count))*((nextValue)-(average)))
+#define ADD_NEXT_VALUE_TO_AVERAGE(average, count, nextValue) ((average)+(1.0/(count))*((nextValue)-(average)))
 
 void servo_buffer::load_hardware_interface(void)
 {
@@ -48,12 +48,12 @@ void servo_buffer::load_hardware_interface(void)
 void servo_buffer::compute_current_measurement_statistics()
 {
 	uint16_t step_number = step_number_in_macrostep + 1;
-	//	printf("\n---------------measurements statistics for: %d------------------\n", step_number);
+//		printf("\n---------------measurements statistics for: %d------------------\n", step_number);
 	// dla  kazdej z osi
 	for (int k = 0; k < master.number_of_servos; k++) {
 		// pomiar pradu dla osi
 		int measured_current = hi->get_current(k);
-		//	printf("current: %d\n", measured_current);
+
 
 		// dla pierwszego kroku
 		if (step_number == 1) {
@@ -64,6 +64,7 @@ void servo_buffer::compute_current_measurement_statistics()
 			master.reply.arm.measured_current.minimum_module[k] = abs(measured_current);
 			// dla pozostalych krokow
 		} else {
+//			printf(">>>>current for %d : %d\n", k, measured_current);
 			float average_cubic = master.reply.arm.measured_current.average_cubic[k];
 			float average_square = master.reply.arm.measured_current.average_square[k];
 			unsigned short average_module = master.reply.arm.measured_current.average_module[k];
@@ -75,13 +76,13 @@ void servo_buffer::compute_current_measurement_statistics()
 			average_module = ADD_NEXT_VALUE_TO_AVERAGE(average_module, step_number, abs(measured_current));
 			minimum_module = minimum_module > abs(measured_current) ? abs(measured_current) : minimum_module;
 			maximum_module = maximum_module < abs(measured_current) ? abs(measured_current) : maximum_module;
-			/*
-			 printf("%f %f\n", master.reply.arm.measured_current.average_cubic[k], average_cubic);
-			 printf("%d %d\n", master.reply.arm.measured_current.average_module[k], average_module);
-			 printf("%f %f\n", master.reply.arm.measured_current.average_square[k], average_square);
-			 printf("%d %d\n", master.reply.arm.measured_current.minimum_module[k], minimum_module);
-			 printf("%d %d\n", master.reply.arm.measured_current.maximum_module[k], maximum_module);
-			 */
+
+//			printf("avg^1 %d %d\n", master.reply.arm.measured_current.average_module[k], average_module);
+//			printf("avg^2 %f %f\n", master.reply.arm.measured_current.average_square[k], average_square);
+//			printf("avg^3 %f %f\n", master.reply.arm.measured_current.average_cubic[k], average_cubic);
+//			printf("min    %d %d\n", master.reply.arm.measured_current.minimum_module[k], minimum_module);
+//			printf("max    %d %d\n", master.reply.arm.measured_current.maximum_module[k], maximum_module);
+
 			master.reply.arm.measured_current.average_cubic[k] = average_cubic;
 			master.reply.arm.measured_current.average_module[k] = average_module;
 			master.reply.arm.measured_current.average_square[k] = average_square;
