@@ -42,26 +42,6 @@ enum TEACHING_STATE
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
 };
 
-#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-		interface.catch_ecp_main_error(e); \
-  } /*end: catch */ \
-\
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		interface.catch_ecp_error(er); \
-} /* end: catch */ \
-\
-catch(const std::exception & e){\
-	interface.catch_std_exception(e); \
-}\
-\
-catch (...) {  /* Dla zewnetrznej petli try*/ \
-	/* Wylapywanie niezdefiniowanych bledow*/ \
-		interface.catch_tridot(); \
-} /*end: catch */\
-
-
 enum TEACHING_STATE_ENUM
 {
 	FSTRAJECTORY, FSCONFIG
@@ -102,10 +82,6 @@ enum UI_ALL_EDPS_SYNCHRO_STATE
 
 // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
 // 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
-
-
-// czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
-static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
 typedef enum _EDP_STATE
 {

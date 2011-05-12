@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QDockWidget>
 
@@ -81,16 +82,29 @@ Q_OBJECT
 private:
 	MainWindow* mw;
 
+	void create_robots();
+	QTimer *timer;
+
 signals:
 	void manage_interface_signal();
+	void raise_process_control_window_signal();
+	void raise_ui_ecp_window_signal();
 
 private slots:
 
 	void manage_interface_slot();
+	void raise_process_control_window_slot();
+	void raise_ui_ecp_window_slot();
+	void on_timer_slot();
 
 public:
 
 	Interface();
+
+	void raise_process_control_window();
+	void raise_ui_ecp_window();
+	void start_on_timer();
+
 	//static Interface * get_instance();
 	MainWindow* get_main_window();
 	void print_on_sr(const char *buff, ...);
@@ -124,7 +138,6 @@ public:
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
 	lib::configurator* config;
-	boost::shared_ptr <lib::sr_ecp> all_ecp_msg; // Wskaznik na obiekt do komunikacji z SR z fukcja ECP dla wszystkich robotow
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 	mp_state_def mp;
@@ -244,11 +257,6 @@ public:
 	bool are_all_loaded_robots_synchronised();
 	bool is_any_loaded_robot_synchronised();
 
-	// default try catch handlers
-	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
-	void catch_ecp_error(ecp::common::robot::ECP_error & er);
-	void catch_std_exception(const std::exception & e);
-	void catch_tridot();
 	// windows
 
 	wgt_process_control* wgt_pc;

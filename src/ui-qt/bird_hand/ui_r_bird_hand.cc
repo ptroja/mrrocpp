@@ -45,7 +45,7 @@ void UiRobot::edp_create()
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::bird_hand::EcpRobot(interface);
+	ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
 	return 1;
 }
 
@@ -158,6 +158,12 @@ int UiRobot::manage_interface()
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
 
 }
 

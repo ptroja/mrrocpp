@@ -9,24 +9,17 @@
 #define _UI_ECP_R_COMMON_H
 
 #include "../ui.h"
+#include "../ui_robot.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp/ecp_robot.h"
 
-
-
-
-
-
-
-
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
-class Interface;
+class UiRobot;
 // ---------------------------------------------------------------
 class EcpRobot
 {
@@ -44,11 +37,11 @@ protected:
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
-	Interface& interface;
+	UiRobot& ui_robot;
 	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(Interface& _interface, lib::robot_name_t _robot_name); // Konstruktor
+	EcpRobot(UiRobot& _ui_robot); // Konstruktor
 
 	void init();
 

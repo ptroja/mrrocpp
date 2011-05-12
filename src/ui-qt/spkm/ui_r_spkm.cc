@@ -54,7 +54,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::spkm::EcpRobot(interface);
+	ui_ecp_robot = new ui::spkm::EcpRobot(*this);
 	return 1;
 }
 
@@ -92,7 +92,7 @@ int UiRobot::synchronise_int()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	// modyfikacje menu
 	interface.manage_interface();
@@ -208,7 +208,7 @@ int UiRobot::execute_motor_motion()
 		ui_ecp_robot->move_motors(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -220,7 +220,7 @@ int UiRobot::execute_joint_motion()
 		ui_ecp_robot->move_joints(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -232,7 +232,7 @@ int UiRobot::execute_clear_fault()
 		ui_ecp_robot->clear_fault();
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -244,9 +244,15 @@ int UiRobot::execute_stop_motor()
 		ui_ecp_robot->stop_motors();
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
+
 }
 
 }
