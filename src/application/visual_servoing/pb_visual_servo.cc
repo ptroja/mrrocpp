@@ -19,7 +19,7 @@ using namespace mrrocpp::ecp_mp::sensor::discode;
 
 pb_visual_servo::pb_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator, sensor)
+	visual_servo(regulator, sensor, section_name, configurator)
 {
 	reading.objectVisible = false;
 	//log_dbg("pb_visual_servo::pb_visual_servo() begin\n");

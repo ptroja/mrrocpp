@@ -147,30 +147,30 @@ void Interface::on_timer_slot()
 			switch (sr_msg.message_type)
 			{
 				case lib::FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
+					strcat(current_line, "FE:   ");
 					format.setForeground(Qt::red);
 
 					break;
 				case lib::NON_FATAL_ERROR:
 
-					strcat(current_line, "NON_FATAL_ERROR: ");
+					strcat(current_line, "NFE:  ");
 					format.setForeground(Qt::blue);
 
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-					strcat(current_line, "SYSTEM_ERROR:    ");
+					strcat(current_line, "SE:   ");
 					format.setForeground(Qt::magenta);
 
 					break;
 				case lib::NEW_MESSAGE:
-					strcat(current_line, "MESSAGE:         ");
+					strcat(current_line, "MSG:  ");
 					format.setForeground(Qt::black);
 
 					break;
 				default:
-					strcat(current_line, "UNKNOWN ERROR:   ");
+					strcat(current_line, "UE:   ");
 					format.setForeground(Qt::yellow);
 
 			}; // end: switch (message.message_type)
