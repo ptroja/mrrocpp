@@ -17,21 +17,6 @@ namespace mrrocpp {
 namespace edp {
 namespace exception {
 
-/*!
- * EDP non fatal errors - utilized in boost::exception-based error handling.
- * \author tkornuta
- */
-/*typedef enum NON_FATAL_ERROR_CODE
-{
-	NFE_MOTOR_LIMIT,
-	NFE_JOINT_LIMIT,
-	NFE_ROBOT_UNSYNCHRONIZED,
-	NFE_POSE_SPECIFICATION,
-	NFE_MOTION_TYPE,
-	NFE_CURRENT_CARTESIAN_POSE_UNKNOWN
-} NFE_error_code_t;*/
-
-
 //! Type of violated limit - upper.
 const std::string UPPER_LIMIT = "Upper";
 

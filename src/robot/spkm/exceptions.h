@@ -24,7 +24,6 @@ typedef boost::error_info <struct desired_value_, double> desired_value;
 //! Pose specification type.
 typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
-
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
  * \author tkornuta

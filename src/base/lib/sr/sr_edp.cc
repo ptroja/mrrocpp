@@ -331,26 +331,5 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 	}
 }
 
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e)
-{
-	// Retrieve default description.
-	const char* const * pdescription = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_description>(_e);
-	// Check whether description is present.
-	if (pdescription != 0)
-		strcat(description, (*pdescription));
-	else
-		strcat(description, "Unidentified error");
-}
-
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e)
-{
-	// TODO: write adequate error interpretation.
-}
-
-void sr_edp::interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e)
-{
-	// TODO: write adequate error interpretation.
-}
-
 } // namespace lib
 } // namespace mrrocpp

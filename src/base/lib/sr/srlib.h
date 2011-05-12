@@ -43,7 +43,8 @@ static const unsigned int TEXT_LENGTH = 256;
 typedef struct sr_package
 {
 	//! Message timestamp
-	struct _portable_timeval {
+	struct _portable_timeval
+	{
 		unsigned long tv_sec;
 		unsigned int tv_usec;
 	} tv;
@@ -64,16 +65,16 @@ typedef struct sr_package
 	char description[TEXT_LENGTH];
 } sr_package_t;
 
-template<class Archive>
+template <class Archive>
 void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 {
-    ar & p.tv.tv_sec;
-    ar & p.tv.tv_usec;
-    ar & p.process_type;
-    ar & p.message_type;
-    ar & p.process_name;
-    ar & p.host_name;
-    ar & p.description;
+	ar & p.tv.tv_sec;
+	ar & p.tv.tv_usec;
+	ar & p.process_type;
+	ar & p.message_type;
+	ar & p.process_name;
+	ar & p.host_name;
+	ar & p.description;
 }
 
 //! System reporting (SR)
@@ -98,18 +99,6 @@ private:
 protected:
 	//! Interpret the status code into a text message
 	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
-
-	//! Interprets non fatal error.
-	//! The method should be overloaded for every process.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) = 0;
-
-	//! Interprets fatal error.
-	//! The method should be overloaded for every process.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) = 0;
-
-	//! Interprets system error.
-	//! The method should be overloaded for every process.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e) = 0;
 
 public:
 	/**
@@ -146,14 +135,38 @@ public:
 	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, const std::string & text);
 
-	//! Sends a message to SR adequate for given non fatal error.
-	void message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e);
+	/*!
+	 * Sends a message to SR containing information about given MRROC++ error.
+	 * \author tkornuta
+	 * \date 12.05.2011
+	 */
+	template <error_class_t ercl>
+	void message(const mrrocpp::lib::exception::mrrocpp_error <ercl> & e_)
+	{
+		// A message that will be sent to SR.
+		sr_package sr_message;
 
-	//! Sends a message to SR adequate for given fatal error.
-	void message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e);
+		// Set error type.
+		sr_message.message_type = e_.error_class;
 
-	//! Sends a message to SR adequate for given system error.
-	void message(const mrrocpp::lib::exception::mrrocpp_system_error & _e);
+		// Copy error description and diagnostics to message description.
+		// Retrieve default description.
+		const char* const * pdescription = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_description>(e_);
+		// Check whether description is present.
+		if (pdescription != 0)
+			strcpy(sr_message.description, (*pdescription));
+		else
+			strcpy(sr_message.description, "Unidentified error");
+
+		// Add diagnostic information.
+		//strcat(sr_message.description, "\n");
+		//strcat(sr_message.description, e_.what());
+		// TODO: Uncomment lines when UI won't crash anymore;)
+
+		// Send message.
+		send_package(sr_message);
+
+	}
 
 };
 

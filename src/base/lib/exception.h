@@ -4,7 +4,7 @@
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  * @author Tomasz Winiarski <tomrobotics@gmail.com>
- * @author tkornuta
+ * @author tkornuta <tkornuta@ia.pw.edu.com>
  *
  * @ingroup LIB
  */
@@ -19,9 +19,11 @@
 
 namespace mrrocpp {
 namespace lib {
-// TODO Move to the mrrocpp::lib::exception namespace.
 
-/*! Error classes. */
+// TODO: Move to the mrrocpp::lib::exception namespace.
+/*!
+ * Classes of errors in the MRROC++ framework.
+ */
 typedef enum _ERROR_CLASS_T
 {
 	NEW_MESSAGE, SYSTEM_ERROR, FATAL_ERROR, NON_FATAL_ERROR
@@ -34,27 +36,13 @@ namespace mrrocpp {
 namespace lib {
 namespace exception {
 
-//! Description used for diagnostic information in case of system errors.
-//const std::string SYSTEM_ERROR = "SYSTEM ERROR";
-
-//! Description used for diagnostic information in case of fatal errors.
-//const std::string FATAL_ERROR = "FATAL ERROR";
-
-//! Description used for diagnostic information in case of non fatal errors.
-//const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
-
-//! MRROC++ error class - by default three types are denoted (SYSTEM, FATAL, NON-FATAL).
-//typedef boost::error_info <struct mrrocpp_error_class_, char const *> mrrocpp_error_class;
-
-//! MRROC++ error code - code identifying given error.
-//typedef boost::error_info <struct mrrocpp_error_code_, uint64_t> mrrocpp_error_code;
-
-//! Description of the MRROC++ error - it will be sent (by default) to the SR.
+//! A single line description of error.
 typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
 
 /*!
  * \brief Base class for all system exceptions/errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
 template <error_class_t ercl>
 class mrrocpp_error : virtual public std::exception, virtual public boost::exception
@@ -95,19 +83,23 @@ public:
 /*!
  * \brief Base class for all system errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
 typedef mrrocpp_error <SYSTEM_ERROR> mrrocpp_system_error;
 /*!
  * \brief Base class for all fatal errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
 typedef mrrocpp_error <FATAL_ERROR> mrrocpp_fatal_error;
 
 /*!
  * \brief Base class for all non fatal errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
 typedef mrrocpp_error <NON_FATAL_ERROR> mrrocpp_non_fatal_error;
+
 
 /*!
  * Macro for registration of MRROC++ system errors.
@@ -116,6 +108,7 @@ typedef mrrocpp_error <NON_FATAL_ERROR> mrrocpp_non_fatal_error;
  * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
  *
  * \author tkornuta
+ * \date 12.05.2011
  */
 #define REGISTER_SYSTEM_ERROR(CLASS_NAME, DESCRIPTION) \
 struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_system_error \
@@ -131,6 +124,7 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_system_error \
  * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
  *
  * \author tkornuta
+ * \date 12.05.2011
  */
 #define REGISTER_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
 struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_fatal_error \
@@ -146,6 +140,7 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_fatal_error \
  * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
  *
  * \author tkornuta
+ * \date 12.05.2011
  */
 #define REGISTER_NON_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
 struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
@@ -157,13 +152,18 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 /*!
  * Macro for handling MRROC++ non fatal errors.
  *
- * \param ERROR Exception derived from the mrrocpp_*_error classes.
+ * \param ERROR Exception derived from the mrrocpp_error classes.
  *
  * \author tkornuta
+ * \date 12.05.2011
  */
-#define HANDLE_NON_FATAL_ERROR(ERROR) \
-	std::cout << boost::current_exception_diagnostic_information() << std::endl; \
+#define HANDLE_MRROCPP_ERROR(ERROR) \
+	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR);
+//	std::cout << boost::current_exception_diagnostic_information() << std::endl; \
+
+
+
 
 /********************************** OLD MRROC++ ERRORS **********************************/
 
