@@ -89,8 +89,7 @@ bool neuron_generator::first_step()
  */
 bool neuron_generator::next_step()
 {
-	printf("next step\n");
-	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 	flushall();
 
 	//Check if stop button in VSP was pressed

@@ -186,7 +186,7 @@ void neuron_sensor::get_reading()
 
 	//copy data from packet to variables
 	memcpy(&command, buff, 1);
-	printf("command from VSP %d %x\n",command,command);
+	//printf("command from VSP %d %x\n",command,command);
 	switch (command)
 	{
 		case VSP_START:
@@ -211,7 +211,6 @@ void neuron_sensor::get_reading()
 			memcpy(&(coordinates.x), buff + 1, 8);
 			memcpy(&(coordinates.y), buff + 9, 8);
 			memcpy(&(coordinates.z), buff + 17, 8);
-			printf("first_Coordinates - %lf %lf %lf\n", coordinates.x, coordinates.y, coordinates.z);
 			break;
 
 		case START_BREAKING:
@@ -228,7 +227,7 @@ void neuron_sensor::get_reading()
 		default:
 			printf("unknown command %d\n", command);
 	}
-	printf("data received\n");
+	//printf("data received\n");
 }
 
 /*===============================stop=====================================*//**
