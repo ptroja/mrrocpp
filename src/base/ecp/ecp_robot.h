@@ -16,9 +16,7 @@
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mis_fun.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 class ui_common_robot;
 
@@ -189,7 +187,7 @@ public:
 	/**
 	 * @brief the configuration file section name of associated EDP process
 	 */
-	const std::string edp_section;
+	std::string edp_section;
 
 	/**
 	 * @brief file descriptor of EDP communication channel
@@ -211,7 +209,7 @@ public:
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+			ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 
 	/**
 	 * @brief constructor called from ECP
@@ -220,7 +218,7 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task_base& _ecp_object);
+	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief returns EDP_MASTER_Pid - EDP pid
@@ -247,8 +245,9 @@ public:
 	bool is_synchronised(void) const;
 };
 
-template<typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
-class _ecp_robot : public ecp_robot_base {
+template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
+class _ecp_robot : public ecp_robot_base
+{
 public:
 	friend class ecp::common::generator::transparent;
 
@@ -284,9 +283,10 @@ public:
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp_robot_base(_robot_name, _number_of_servos, _edp_section, _config, _sr_ecp)
-	{}
+	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
+		ecp_robot_base(_robot_name, _number_of_servos, _config, _sr_ecp)
+	{
+	}
 
 	/**
 	 * @brief constructor called from ECP
@@ -295,9 +295,10 @@ public:
 	 * @param _edp_section associated EDP configuration file section
 	 * @param _ecp_object ecp tak object reference
 	 */
-	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task_base& _ecp_object) :
-		ecp_robot_base(_robot_name, _number_of_servos, _edp_section, _ecp_object)
-	{}
+	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object) :
+		ecp_robot_base(_robot_name, _number_of_servos, _ecp_object)
+	{
+	}
 
 	/**
 	 * @brief desctructor
@@ -305,7 +306,8 @@ public:
 	 * Calls base class destructor
 	 */
 	virtual ~_ecp_robot()
-	{}
+	{
+	}
 
 	/**
 	 * @brief command to EDP
@@ -333,7 +335,8 @@ public:
 	 * currently it is executed only in sporadically coordinated robots using data_ports
 	 */
 	virtual void create_command()
-	{}
+	{
+	}
 
 	/**
 	 * @brief set the data_port structures from EDP reply buffer
@@ -341,7 +344,8 @@ public:
 	 * currently it is executed only in sporadically coordinated robots using data_ports
 	 */
 	virtual void get_reply()
-	{}
+	{
+	}
 
 	/**
 	 * @brief executed the communication sequence with EDP: set and query with error handling
@@ -383,8 +387,7 @@ public:
 
 	void send()
 	{
-		if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1)
-		{
+		if (messip::port_send(EDP_fd, 0, 0, ecp_command, reply_package) == -1) {
 			int e = errno; // kod bledu systemowego
 			perror("ecp: Send to EDP_MASTER error");
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send to EDP_MASTER error");
@@ -406,7 +409,7 @@ public:
 	}
 };
 
-typedef _ecp_robot<> ecp_robot;
+typedef _ecp_robot <> ecp_robot;
 
 } // namespace robot
 } // namespace common

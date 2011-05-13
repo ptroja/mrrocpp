@@ -30,10 +30,10 @@ namespace ui {
 namespace spkm {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface) :
-	EcpRobotDataPort(_interface)
+EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
+	EcpRobotDataPort(_ui_robot)
 {
-	the_robot = (boost::shared_ptr<robot_t>) new ecp::spkm::robot(*(_interface.config), *(_interface.all_ecp_msg));
+	the_robot = (boost::shared_ptr <robot_t>) new ecp::spkm::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 }
 
 void EcpRobot::move_motors(const double final_position[lib::spkm::NUM_OF_SERVOS], lib::epos::EPOS_MOTION_VARIANT motion_variant)

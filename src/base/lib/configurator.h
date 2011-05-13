@@ -72,6 +72,12 @@ public:
 	const std::string section_name;
 
 	/**
+	 * Configuration robot_name
+	 * it can be extracted from the section names for ecp and edp sections
+	 */
+	std::string robot_name;
+
+	/**
 	 * Check if key non-zero key exist in the configuration file
 	 * @bug does not protect from changing configuration during check
 	 * @param key

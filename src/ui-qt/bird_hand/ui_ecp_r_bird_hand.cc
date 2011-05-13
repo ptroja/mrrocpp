@@ -12,11 +12,11 @@ namespace ui {
 namespace bird_hand {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(common::Interface& _interface) :
-	EcpRobotDataPort(_interface)
+EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
+	EcpRobotDataPort(_ui_robot)
 {
 
-	the_robot = (boost::shared_ptr<robot_t>) new ecp::bird_hand::robot(*(_interface.config), *(_interface.all_ecp_msg));
+	the_robot = (boost::shared_ptr <robot_t>) new ecp::bird_hand::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
 	bird_hand_command_data_port
 			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);

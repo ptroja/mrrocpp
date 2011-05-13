@@ -30,7 +30,7 @@ class EcpRobot : public common::EcpRobotDataPort
 public:
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(common::Interface& _interface); // Konstruktor
+	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
 
 };
 

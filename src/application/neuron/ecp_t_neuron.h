@@ -17,7 +17,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace common {
 namespace task {
 
 /**
@@ -26,39 +26,40 @@ namespace task {
  * flow on the MRROC++ side. It engages different generators to accomplish
  * the task.
  */
-class Neuron: public common::task::task{
+class Neuron : public task
+{
 
-	private:
-		/**
-		 * @brief Smooth trajectory generator.
-		 * @detials Smooth generator used for moving a manipulator to proper
-		 * position which is the first position from a trajectory read from
-		 * VSP. The trajectory itself is also stored in VSP.
-		 */
-		common::generator::newsmooth* smoothGenerator;
+private:
+	/**
+	 * @brief Smooth trajectory generator.
+	 * @detials Smooth generator used for moving a manipulator to proper
+	 * position which is the first position from a trajectory read from
+	 * VSP. The trajectory itself is also stored in VSP.
+	 */
+	common::generator::newsmooth* smoothGenerator;
 
-		/**
-		 * @brief Trajectory generator for position from neuron VSP.
-		 * @details The generator is started just after smooth generator
-		 * reaches first position of a trajectory, and works until appropriate
-		 * signal from VSP is sent START_BREAKING which indicate the moment
-		 * when braking occurs and stops execution of generator.
-		 */
-		common::generator::neuron_generator* neuronGenerator;
+	/**
+	 * @brief Trajectory generator for position from neuron VSP.
+	 * @details The generator is started just after smooth generator
+	 * reaches first position of a trajectory, and works until appropriate
+	 * signal from VSP is sent START_BREAKING which indicate the moment
+	 * when braking occurs and stops execution of generator.
+	 */
+	common::generator::neuron_generator* neuronGenerator;
 
-		/**
-		 * @brief Communication manager between VSP and MRROC++.
-		 * @details Neuron sensor from the point of view of this class is used
-		 * to control MRROC++ form VSP side. Mainly to start entire system and
-		 * sent information when the system stops working.
-		 */
-		ecp_mp::sensor::neuron_sensor* neuronSensor;
+	/**
+	 * @brief Communication manager between VSP and MRROC++.
+	 * @details Neuron sensor from the point of view of this class is used
+	 * to control MRROC++ form VSP side. Mainly to start entire system and
+	 * sent information when the system stops working.
+	 */
+	ecp_mp::sensor::neuron_sensor* neuronSensor;
 
-	public:
-		Neuron(lib::configurator &_config);
-		~Neuron();
-		void mp_2_ecp_next_state_string_handler(void);
-		void ecp_stop_accepted_handler();
+public:
+	Neuron(lib::configurator &_config);
+	~Neuron();
+	void mp_2_ecp_next_state_string_handler(void);
+	void ecp_stop_accepted_handler();
 };
 
 } // namespace task

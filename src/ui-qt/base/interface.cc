@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 
 #include <QtGui/QApplication>
+#include <QFileDialog>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -31,6 +32,14 @@
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
 
+#include "../irp6_m/wgt_irp6_m_joints.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
+#include "../irp6_m/wgt_irp6_m_euler.h"
+#include "../irp6_m/wgt_irp6_m_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
+#include "../irp6_m/wgt_irp6_m_tool_euler.h"
+
 extern void catch_signal(int sig);
 
 namespace mrrocpp {
@@ -49,7 +58,11 @@ Interface::Interface() :
 
 	main_eb = new function_execution_buffer(*this);
 
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 
 	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
@@ -65,12 +78,421 @@ Interface::Interface() :
 
 }
 
+void Interface::start_on_timer()
+{
+	timer->start(50);
+}
+
+void Interface::on_timer_slot()
+{
+
+	//fprintf(stderr, "OnTimer()\n");
+
+	QTextCharFormat format;
+
+	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
+	static int Iteration_counter = 0; // licznik uruchomienia funkcji
+
+
+	Iteration_counter++;
+
+	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+
+		// 	printf("timer\n");
+
+		char current_line[400];
+		lib::sr_package_t sr_msg;
+
+		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+
+			ui_sr_obj->get_one_msg(sr_msg);
+
+			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+			strcat(current_line, "  ");
+			time_t time = sr_msg.tv.tv_sec;
+			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
+			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
+
+			switch (sr_msg.process_type)
+			{
+				case lib::EDP:
+					strcat(current_line, "edp: ");
+					break;
+				case lib::ECP:
+					strcat(current_line, "ecp: ");
+					break;
+				case lib::MP:
+					// printf("mp w ontimer\n");
+					strcat(current_line, "mp:  ");
+					break;
+				case lib::VSP:
+					strcat(current_line, "vsp: ");
+					break;
+				case lib::UI:
+					strcat(current_line, "UI:  ");
+					break;
+				default:
+					strcat(current_line, "???: ");
+					continue;
+			} // end: switch (message_buffer[reader_buf_position].process_type)
+
+			// FIXME: ?
+			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
+
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+
+			strcat(current_line, process_name_buffer);
+
+			switch (sr_msg.message_type)
+			{
+				case lib::FATAL_ERROR:
+					strcat(current_line, "FE:   ");
+					format.setForeground(Qt::red);
+
+					break;
+				case lib::NON_FATAL_ERROR:
+
+					strcat(current_line, "NFE:  ");
+					format.setForeground(Qt::blue);
+
+					break;
+				case lib::SYSTEM_ERROR:
+					// printf("SYSTEM ERROR W ONTIMER\n");
+					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
+					strcat(current_line, "SE:   ");
+					format.setForeground(Qt::magenta);
+
+					break;
+				case lib::NEW_MESSAGE:
+					strcat(current_line, "MSG:  ");
+					format.setForeground(Qt::black);
+
+					break;
+				default:
+					strcat(current_line, "UE:   ");
+					format.setForeground(Qt::yellow);
+
+			}; // end: switch (message.message_type)
+
+			strcat(current_line, sr_msg.description);
+
+			mw->get_ui()->plainTextEdit_sr->setCurrentCharFormat(format);
+			mw->get_ui()->plainTextEdit_sr->appendPlainText(current_line);
+			(*log_file_outfile) << current_line << std::endl;
+		}
+
+		(*log_file_outfile).flush();
+
+	}
+
+	if (ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
+		set_ui_state_notification(UI_N_EXITING);
+		// 	printf("w ontimer 2\n");
+		closing_delay_counter = 20;// opoznienie zamykania
+		ui_state = 3;
+		// 		delay(5000);
+
+		MPslay();
+
+		ui_msg->message("closing");
+	} else if (ui_state == 3) {// odliczanie
+		// 	printf("w ontimer 3\n");
+		if ((--closing_delay_counter) <= 0)
+			ui_state = 4;
+	} else if (ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
+		//	printf("w ontimer 4\n");
+		closing_delay_counter = 20;// opoznienie zamykania
+		ui_state = 5;
+
+		EDP_all_robots_slay();
+
+	} else if (ui_state == 5) {// odlcizanie do zamnkiecia
+		//	printf("w ontimer 5\n");
+		if ((--closing_delay_counter) <= 0)
+			ui_state = 6;
+	} else if (ui_state == 6) {// zakonczenie aplikacji
+		(*log_file_outfile).close();
+		delete log_file_outfile;
+		printf("UI CLOSED\n");
+		abort_threads();
+		get_main_window()->close();
+
+	} else {
+		if (!(communication_flag.is_busy())) {
+			set_ui_state_notification(UI_N_READY);
+		}
+
+	}
+
+}
+
+void Interface::raise_process_control_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_process_control_window_signal();
+}
+
+void Interface::raise_process_control_window_slot()
+{
+	wgt_pc->my_open();
+}
+
 //Interface * Interface::get_instance()
 //{
 //	static Interface *instance = new Interface();
 //	return instance;
 //}
 
+
+void Interface::raise_ui_ecp_window()
+{
+	//ui->notification_label->setText("GUGUGU");
+	emit raise_ui_ecp_window_signal();
+}
+
+void Interface::raise_ui_ecp_window_slot()
+{
+	ui_msg->message("raise_ui_ecp_window_slot");
+
+	lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
+	lib::UI_reply &ui_rep = ui_ecp_obj->ui_rep;
+
+	switch (ecp_to_ui_msg.ecp_message)
+	{ // rodzaj polecenia z ECP
+		case lib::C_XYZ_ANGLE_AXIS: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_XYZ_EULER_ZYZ: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				/* TR
+				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
+				 */
+			}
+
+		}
+			break;
+		case lib::C_JOINT: {
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_JOINT");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				irp6ot_m->wgt_joints->my_open();
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				irp6p_m->wgt_joints->my_open();
+			}
+
+		}
+			break;
+		case lib::C_MOTOR: {
+			//  printf("C_MOTOR\n");
+
+			if (teachingstate == ui::common::MP_RUNNING) {
+				teachingstate = ui::common::ECP_TEACHING;
+			}
+
+			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+
+			ui->label_message->setText("C_MOTOR");
+
+			wgt_teaching_obj->my_open();
+
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				irp6ot_m->wgt_motors->my_open();
+			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				irp6p_m->wgt_motors->my_open();
+			}
+
+		}
+			break;
+		case lib::YES_NO: {
+			Ui::wgt_yes_noClass* ui = wgt_yes_no_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_yes_no_obj->my_open();
+
+		}
+			break;
+		case lib::MESSAGE: {
+			Ui::wgt_messageClass* ui = wgt_message_obj->get_ui();
+			ui->label_message->setText(ecp_to_ui_msg.string);
+			wgt_message_obj->my_open();
+
+			ui_rep.reply = lib::ANSWER_YES;
+			ui_ecp_obj->synchroniser.command();
+		}
+			break;
+		case lib::DOUBLE_NUMBER: {
+
+			Ui::wgt_input_doubleClass* ui = wgt_input_double_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_input_double_obj->my_open();
+		}
+			break;
+		case lib::INTEGER_NUMBER: {
+
+			Ui::wgt_input_integerClass* ui = wgt_input_integer_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			wgt_input_integer_obj->my_open();
+
+		}
+			break;
+		case lib::CHOOSE_OPTION: {
+
+			Ui::wgt_choose_optionClass* ui = wgt_choose_option_obj->get_ui();
+
+			ui->label_message->setText(ecp_to_ui_msg.string);
+
+			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
+
+			if (ecp_to_ui_msg.nr_of_options == 2) {
+				ui->pushButton_3->hide();
+				ui->pushButton_4->hide();
+			} else if (ecp_to_ui_msg.nr_of_options == 3) {
+				ui->pushButton_3->show();
+				ui->pushButton_4->hide();
+			} else if (ecp_to_ui_msg.nr_of_options == 4) {
+				ui->pushButton_3->show();
+				ui->pushButton_4->show();
+			}
+
+			wgt_choose_option_obj->my_open();
+		}
+			break;
+		case lib::LOAD_FILE: {
+			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+
+			//    printf("lib::LOAD_FILE\n");
+
+
+			file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getOpenFileName(mw, tr("Choose file to load or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1] = '\0';
+
+					strncpy(ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_LOADED;
+				} else {
+					ui_rep.reply = lib::QUIT;
+				}
+				//std::string str_fullpath = fileName.toStdString();
+			}
+
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
+
+			ui_ecp_obj->synchroniser.command();
+
+		}
+			break;
+		case lib::SAVE_FILE: {
+
+			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
+			//    printf("lib::SAVE_FILE\n");
+
+			file_window_mode = ui::common::FSTRAJECTORY;
+
+			try {
+				QString fileName;
+
+				fileName
+						= QFileDialog::getSaveFileName(mw, tr("Choose file to save or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+
+				if (fileName.length() > 0) {
+
+					strncpy(ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
+							- 1);
+					ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1] = '\0';
+
+					strncpy(ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/')));
+					ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
+							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
+
+					ui_rep.reply = lib::FILE_SAVED;
+				} else {
+					ui_rep.reply = lib::QUIT;
+				}
+				//std::string str_fullpath = fileName.toStdString();
+			}
+
+			catch (...) {
+				ui_rep.reply = lib::QUIT;
+			}
+
+			ui_ecp_obj->synchroniser.command();
+
+		}
+			break;
+
+		default: {
+			perror("Strange ECP message");
+			ui_ecp_obj->synchroniser.command();
+		}
+			break;
+	}
+
+}
 
 MainWindow* Interface::get_main_window()
 {
@@ -132,6 +554,43 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
+void Interface::create_robots()
+{
+	spkm = new spkm::UiRobot(*this);
+	robot_m[spkm->robot_name] = spkm;
+
+	smb = new smb::UiRobot(*this);
+	robot_m[smb->robot_name] = smb;
+
+	shead = new shead::UiRobot(*this);
+	robot_m[shead->robot_name] = shead;
+
+	irp6ot_m = new irp6ot_m::UiRobot(*this);
+	robot_m[irp6ot_m->robot_name] = irp6ot_m;
+
+	irp6p_m = new irp6p_m::UiRobot(*this);
+	robot_m[irp6p_m->robot_name] = irp6p_m;
+
+	polycrank = new polycrank::UiRobot(*this);
+	robot_m[polycrank->robot_name] = polycrank;
+
+	bird_hand = new bird_hand::UiRobot(*this);
+	robot_m[bird_hand->robot_name] = bird_hand;
+
+	sarkofag = new sarkofag::UiRobot(*this);
+	robot_m[sarkofag->robot_name] = sarkofag;
+
+	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
+	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
+
+	conveyor = new conveyor::UiRobot(*this);
+	robot_m[conveyor->robot_name] = conveyor;
+
+	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
+	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
+}
+
 void Interface::init()
 {
 
@@ -173,39 +632,6 @@ void Interface::init()
 	if (cwd == NULL) {
 		perror("Blad cwd w UI");
 	}
-
-	spkm = new spkm::UiRobot(*this);
-	robot_m[spkm->robot_name] = spkm;
-
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
-
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
-
-	irp6ot_m = new irp6ot_m::UiRobot(*this);
-	robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
-	irp6p_m = new irp6p_m::UiRobot(*this);
-	robot_m[irp6p_m->robot_name] = irp6p_m;
-
-	polycrank = new polycrank::UiRobot(*this);
-	robot_m[polycrank->robot_name] = polycrank;
-
-	bird_hand = new bird_hand::UiRobot(*this);
-	robot_m[bird_hand->robot_name] = bird_hand;
-
-	sarkofag = new sarkofag::UiRobot(*this);
-	robot_m[sarkofag->robot_name] = sarkofag;
-
-	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	conveyor = new conveyor::UiRobot(*this);
-	robot_m[conveyor->robot_name] = conveyor;
-
-	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
 	ui_node_name = sysinfo.nodename;
 
@@ -263,6 +689,8 @@ void Interface::init()
 	}
 
 	create_threads();
+
+	create_robots();
 
 	// Zablokowanie domyslnej obslugi sygnalu SIGINT w watkach UI_SR i UI_COMM
 
@@ -365,7 +793,7 @@ int Interface::MPup_int()
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
 
-				mw->raise_process_control_window();
+				raise_process_control_window();
 
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
@@ -670,12 +1098,6 @@ void Interface::reload_whole_configuration()
 		if (ui_msg == NULL) {
 			ui_msg
 					= (boost::shared_ptr <lib::sr_ui>) new lib::sr_ui(lib::UI, ui_attach_point.c_str(), network_sr_attach_point);
-		}
-
-		// inicjacja komunikacji z watkiem sr
-		if (all_ecp_msg == NULL) {
-			all_ecp_msg
-					= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_all_ecp", network_sr_attach_point);
 		}
 
 		// wypisanie komunikatu o odczytaniu konfiguracji
@@ -1156,7 +1578,7 @@ void Interface::create_threads()
 
 	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
-	mw->start_on_timer();
+	start_on_timer();
 
 }
 
@@ -1557,54 +1979,6 @@ int Interface::all_robots_move_to_front_position()
 	}
 	return 1;
 
-}
-
-void Interface::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
-
-{
-	if (e.error_class == lib::SYSTEM_ERROR)
-		printf("ecp lib::SYSTEM_ERROR error in UI\n");
-	ui_state = 2;
-}
-
-void Interface::catch_ecp_error(ecp::common::robot::ECP_error & er)
-
-{
-	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
-		perror("ecp lib::SYSTEM_ERROR in UI");
-		/* PtExit( EXIT_SUCCESS ); */
-	} else {
-		switch (er.error_no)
-		{
-			case INVALID_POSE_SPECIFICATION:
-			case INVALID_COMMAND_TO_EDP:
-			case EDP_ERROR:
-			case INVALID_ROBOT_MODEL_TYPE:
-				/* Komunikat o bledzie wysylamy do SR */
-				all_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
-				break;
-			default:
-				all_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
-				perror("Unidentified exception");
-		} /* end: switch */
-	}
-}
-
-void Interface::catch_std_exception(const std::exception & e)
-{
-
-	std::string tmp_string(" The following error has been detected: ");
-	tmp_string += e.what();
-	all_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
-	std::cerr << "UI: The following error has been detected :\n\t" << e.what() << std::endl;
-}
-
-void Interface::catch_tridot()
-
-{
-	/* Wylapywanie niezdefiniowanych bledow*/
-	/* Komunikat o bledzie wysylamy do SR (?) */
-	fprintf(stderr, "unidentified error in UI\n");
 }
 
 }

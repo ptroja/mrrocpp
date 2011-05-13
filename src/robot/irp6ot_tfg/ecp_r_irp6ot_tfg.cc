@@ -14,14 +14,14 @@ namespace ecp {
 namespace irp6ot_tfg {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _config, _sr_ecp)
+	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, _config, _sr_ecp)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, lib::irp6ot_tfg::EDP_SECTION, _ecp_object)
+	ecp::common::robot::ecp_robot(lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS, _ecp_object)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();

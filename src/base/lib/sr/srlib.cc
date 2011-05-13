@@ -105,49 +105,6 @@ void sr::message(error_class_t message_type, uint64_t error_code0, uint64_t erro
 }
 
 
-void sr::message(const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e) {
-    // A message that will be sent to SR.
-    sr_package sr_message;
-
-    // Set error type.
-    sr_message.message_type = mrrocpp::lib::NON_FATAL_ERROR;
-
-    // Interpret error - create a proper description.
-	interpret(sr_message.description, _e);
-
-    // Send message.
-    send_package(sr_message);
-}
-
-
-void sr::message(const mrrocpp::lib::exception::mrrocpp_fatal_error & _e) {
-    // A message that will be sent to SR.
-    sr_package sr_message;
-
-    // Set error type.
-    sr_message.message_type = mrrocpp::lib::FATAL_ERROR;
-
-    // Interpret error - create a proper description.
-	interpret(sr_message.description, _e);
-
-    // Send message.
-    send_package(sr_message);
-}
-
-
-void sr::message(const mrrocpp::lib::exception::mrrocpp_system_error & _e) {
-    // A message that will be sent to SR.
-    sr_package sr_message;
-
-    // Set error type.
-    sr_message.message_type = mrrocpp::lib::SYSTEM_ERROR;
-
-    // Interpret error - create a proper description.
-	interpret(sr_message.description, _e);
-
-    // Send message.
-    send_package(sr_message);
-}
 
 } // namespace lib
 } // namespace mrrocpp
