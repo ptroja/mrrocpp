@@ -95,6 +95,18 @@ public:
 	//! returns ecp_section of the robot
 	std::string get_edp_hardware_busy_file() const;
 
+	//! returns ecp_section of the robot
+	std::string get_edp_reader_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_reader_attach_point() const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_resourceman_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_resourceman_attach_point() const;
+
 	/**
 	 * Get network path to the installed MRROC++ system
 	 * @return folder path

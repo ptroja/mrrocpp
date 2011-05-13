@@ -180,6 +180,26 @@ std::string configurator::get_edp_hardware_busy_file() const
 	return get_edp_hardware_busy_file(robot_name);
 }
 
+std::string configurator::get_edp_reader_attach_point(const robot_name_t _robot_name) const
+{
+	return "edp_reader_" + _robot_name;
+}
+
+std::string configurator::get_edp_reader_attach_point() const
+{
+	return get_edp_reader_attach_point(robot_name);
+}
+
+std::string configurator::get_edp_resourceman_attach_point(const robot_name_t _robot_name) const
+{
+	return "edp_" + _robot_name;
+}
+
+std::string configurator::get_edp_resourceman_attach_point() const
+{
+	return get_edp_resourceman_attach_point(robot_name);
+}
+
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;
