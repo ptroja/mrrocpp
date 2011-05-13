@@ -77,6 +77,18 @@ public:
 	//! returns ecp_section of the robot
 	std::string get_ecp_section() const;
 
+	//! returns ecp_section of the robot
+	std::string get_ecp_trigger_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_trigger_attach_point() const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_attach_point() const;
+
 	/**
 	 * Get network path to the installed MRROC++ system
 	 * @return folder path

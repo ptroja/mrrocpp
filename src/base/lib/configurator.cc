@@ -150,6 +150,26 @@ std::string configurator::get_ecp_section() const
 	return get_ecp_section(robot_name);
 }
 
+std::string configurator::get_ecp_trigger_attach_point(const robot_name_t _robot_name) const
+{
+	return "ecp_trigger_" + _robot_name;
+}
+
+std::string configurator::get_ecp_trigger_attach_point() const
+{
+	return get_ecp_trigger_attach_point(robot_name);
+}
+
+std::string configurator::get_ecp_attach_point(const robot_name_t _robot_name) const
+{
+	return "ecp_" + _robot_name;
+}
+
+std::string configurator::get_ecp_attach_point() const
+{
+	return get_ecp_attach_point(robot_name);
+}
+
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;

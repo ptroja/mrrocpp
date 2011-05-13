@@ -365,8 +365,7 @@ int UiRobot::reload_configuration()
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {
-			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name("trigger_attach_point", state.ecp.section_name);
+			state.ecp.network_trigger_attach_point = interface.config->get_ecp_trigger_attach_point(robot_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = lib::invalid_fd;

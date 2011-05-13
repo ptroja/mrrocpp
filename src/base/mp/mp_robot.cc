@@ -37,8 +37,7 @@ robot::robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _numbe
 
 	std::string ecp_section_name = mp_object.config.get_ecp_section(robot_name);
 
-	std::string
-			ecp_attach_point(mp_object.config.return_attach_point_name("ecp_attach_point", ecp_section_name));
+	std::string ecp_attach_point(mp_object.config.get_ecp_attach_point(robot_name));
 
 	ECP_pid = mp_object.config.process_spawn(ecp_section_name);
 

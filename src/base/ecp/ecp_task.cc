@@ -91,11 +91,11 @@ void task_base::initialize_communication()
 {
 	std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
-	std::string ecp_attach_point = config.return_attach_point_name("ecp_attach_point");
+	std::string ecp_attach_point = config.get_ecp_attach_point();
 	std::string sr_net_attach_point = config.get_sr_attach_point();
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point);
+	sr_ecp_msg = new lib::sr_ecp(lib::ECP, config.robot_name, sr_net_attach_point);
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
@@ -118,7 +118,7 @@ void task_base::initialize_communication()
 		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	std::string trigger_attach_point = config.return_attach_point_name("trigger_attach_point");
+	std::string trigger_attach_point = config.get_ecp_trigger_attach_point();
 
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
 
