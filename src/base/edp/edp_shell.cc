@@ -52,7 +52,7 @@ bool shell::detect_hardware_busy()
 
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 
-	const std::string hardware_busy_attach_point = config.value <std::string> ("hardware_busy_attach_point");
+	const std::string hardware_busy_attach_point = config.get_edp_hardware_busy_file();
 
 	hardware_busy_file_fullpath = "/tmp/.";
 
@@ -137,7 +137,7 @@ bool shell::detect_hardware_busy()
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
-				return false;
+			return false;
 		}
 
 	}

@@ -170,6 +170,16 @@ std::string configurator::get_ecp_attach_point() const
 	return get_ecp_attach_point(robot_name);
 }
 
+std::string configurator::get_edp_hardware_busy_file(const robot_name_t _robot_name) const
+{
+	return "edp_hardware_busy_" + _robot_name;
+}
+
+std::string configurator::get_edp_hardware_busy_file() const
+{
+	return get_edp_hardware_busy_file(robot_name);
+}
+
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;
