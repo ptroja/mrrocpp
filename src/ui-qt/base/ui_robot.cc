@@ -23,13 +23,13 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
+UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	//activation_string = _activation_string;
 
-	state.edp.section_name = edp_section_name;
-	state.ecp.section_name = ecp_section_name;
+	state.edp.section_name = lib::get_edp_section(robot_name);
+	state.ecp.section_name = lib::get_ecp_section(robot_name);
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;

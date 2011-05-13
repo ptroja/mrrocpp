@@ -86,7 +86,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			single_motor::UiRobot(_interface, lib::conveyor::EDP_SECTION, lib::conveyor::ECP_SECTION, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS)
+	single_motor::UiRobot(_interface, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS)
 {
 
 	wgt_move = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
