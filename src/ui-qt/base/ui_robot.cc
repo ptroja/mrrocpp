@@ -439,8 +439,7 @@ int UiRobot::reload_configuration()
 				state.edp.network_resourceman_attach_point
 						= interface.config->return_attach_point_name("resourceman_attach_point", state.edp.section_name);
 
-				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name("reader_attach_point", state.edp.section_name);
+				state.edp.network_reader_attach_point = interface.config->get_edp_reader_attach_point(robot_name);
 
 				if (!interface.config->exists("node_name", state.edp.section_name)) {
 					state.edp.node_name = "localhost";
