@@ -17,7 +17,6 @@ namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
 
-
 /*!
  * @brief Bird Hand robot label
  * @ingroup bird_hand
@@ -69,14 +68,6 @@ struct rbuffer
 		single_joint_configuration finger[NUM_OF_SERVOS];
 	} configuration_reply_structure;
 }__attribute__((__packed__));
-
-
-
-/*!
- * @brief configuration file ECP Bird Hand section string
- * @ingroup bird_hand
- */
-const std::string ECP_SECTION = "[ecp_bird_hand]";
 
 } // namespace bird_hand
 } // namespace lib

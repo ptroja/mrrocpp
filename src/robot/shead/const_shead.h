@@ -56,12 +56,6 @@ struct rbuffer
 }__attribute__((__packed__));
 
 /*!
- * @brief configuration file ECP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string ECP_SECTION = "[ecp_shead]";
-
-/*!
  * @brief SwarmItFix Head total number of servos
  * @ingroup shead
  */

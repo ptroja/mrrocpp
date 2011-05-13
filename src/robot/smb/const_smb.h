@@ -59,12 +59,6 @@ struct rbuffer
 	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
 }__attribute__((__packed__));
 
-/*!
- * @brief configuration file ECP SwarmItFix Mobile Base section string
- * @ingroup smb
- */
-const std::string ECP_SECTION = "[ecp_smb]";
-
 } // namespace smb
 } // namespace lib
 } // namespace mrrocpp

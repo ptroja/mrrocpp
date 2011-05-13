@@ -22,12 +22,6 @@ namespace irp6p_tfg {
 const robot_name_t ROBOT_NAME = "irp6p_tfg";
 
 /*!
- * @brief configuration file ECP IRp6 postument two finger gripper section string
- * @ingroup irp6p_tfg
- */
-const std::string ECP_SECTION = "[ecp_irp6p_tfg]";
-
-/*!
  * @brief IRp6 postument two finger gripper total number of servos
  * @ingroup irp6p_tfg
  */

@@ -21,11 +21,11 @@ acq_eih::acq_eih(task::task &_ecp_t) :
 	printf("acq_eih::acq_eih() 1\n");
 	fflush(stdout);
 	// Create an adequate robot. - depending on the ini section name.
-	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (sub_task::ecp_t.config.section_name == lib::get_ecp_section(lib::irp6ot_m::ROBOT_NAME)) {
 		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6ot loaded");
 		robot = TRACK;
-	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (sub_task::ecp_t.config.section_name == lib::get_ecp_section(lib::irp6p_m::ROBOT_NAME)) {
 		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6p loaded");
 		robot = POSTUMENT;

@@ -133,12 +133,6 @@ struct rbuffer
 	}
 };
 
-/*!
- * @brief configuration file ECP SwarmItFix Parallel Kinematic Machine section string
- * @ingroup spkm
- */
-const std::string ECP_SECTION = "[ecp_spkm]";
-
 } // namespace spkm
 } // namespace lib
 } // namespace mrrocpp

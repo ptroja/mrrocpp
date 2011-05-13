@@ -8,8 +8,6 @@ namespace mrrocpp {
 namespace lib {
 namespace polycrank {
 
-const std::string ECP_SECTION = "[ecp_polycrank]";
-
 const int NUM_OF_SERVOS = 7;
 const int LAST_MOXA_PORT_NUM = 0;
 

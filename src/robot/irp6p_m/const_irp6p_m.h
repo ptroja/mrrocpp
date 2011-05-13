@@ -24,12 +24,6 @@ namespace irp6p_m {
 const robot_name_t ROBOT_NAME = "irp6p_m";
 
 /*!
- * @brief configuration file ECP IRp6 postument manipulator section string
- * @ingroup irp6p_m
- */
-const std::string ECP_SECTION = "[ecp_irp6p_m]";
-
-/*!
  * @brief IRp6 postument manipulator total number of servos
  * @ingroup irp6p_m
  */

@@ -23,12 +23,6 @@ namespace conveyor {
 const robot_name_t ROBOT_NAME = "conveyor";
 
 /*!
- * @brief configuration file ECP Conveyor section string
- * @ingroup conveyor
- */
-const std::string ECP_SECTION = "[ecp_conveyor]";
-
-/*!
  * @brief Conveyor total number of servos
  * @ingroup conveyor
  */
