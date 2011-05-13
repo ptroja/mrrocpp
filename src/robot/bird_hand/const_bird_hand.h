@@ -70,11 +70,7 @@ struct rbuffer
 	} configuration_reply_structure;
 }__attribute__((__packed__));
 
-/*!
- * @brief configuration file EDP Bird Hand section string
- * @ingroup bird_hand
- */
-const std::string EDP_SECTION = "[edp_bird_hand]";
+
 
 /*!
  * @brief configuration file ECP Bird Hand section string

@@ -23,12 +23,6 @@ namespace sarkofag {
 const robot_name_t ROBOT_NAME = "sarkofag";
 
 /*!
- * @brief configuration file EDP Sarkofag section string
- * @ingroup sarkofag
- */
-const std::string EDP_SECTION = "[edp_sarkofag]";
-
-/*!
  * @brief configuration file ECP Sarkofag section string
  * @ingroup sarkofag
  */

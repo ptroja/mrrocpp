@@ -17,7 +17,6 @@ namespace mrrocpp {
 namespace lib {
 namespace shead {
 
-
 /*!
  * @brief SwarmItFix Head robot label
  * @ingroup shead
@@ -55,12 +54,6 @@ struct rbuffer
 {
 	reply shead_reply;
 }__attribute__((__packed__));
-
-/*!
- * @brief configuration file EDP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string EDP_SECTION = "[edp_shead]";
 
 /*!
  * @brief configuration file ECP SwarmItFix Head section string

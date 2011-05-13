@@ -134,12 +134,6 @@ struct rbuffer
 };
 
 /*!
- * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string
- * @ingroup spkm
- */
-const std::string EDP_SECTION = "[edp_spkm]";
-
-/*!
  * @brief configuration file ECP SwarmItFix Parallel Kinematic Machine section string
  * @ingroup spkm
  */

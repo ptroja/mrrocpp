@@ -60,12 +60,6 @@ struct rbuffer
 }__attribute__((__packed__));
 
 /*!
- * @brief configuration file EDP SwarmItFix Mobile Base section string
- * @ingroup smb
- */
-const std::string EDP_SECTION = "[edp_smb]";
-
-/*!
  * @brief configuration file ECP SwarmItFix Mobile Base section string
  * @ingroup smb
  */

@@ -16,18 +16,11 @@ namespace mrrocpp {
 namespace lib {
 namespace conveyor {
 
-
 /*!
  * @brief Conveyor robot label
  * @ingroup conveyor
  */
 const robot_name_t ROBOT_NAME = "conveyor";
-
-/*!
- * @brief configuration file EDP Conveyor section string
- * @ingroup conveyor
- */
-static const std::string EDP_SECTION = "[edp_conveyor]";
 
 /*!
  * @brief configuration file ECP Conveyor section string
@@ -41,7 +34,6 @@ const std::string ECP_SECTION = "[ecp_conveyor]";
  */
 const int NUM_OF_SERVOS = 1;
 
-
 /*!
  * @brief IRp6 conveyor last Moxa port number [0..7]
  * @ingroup conveyor
@@ -53,14 +45,13 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup conveyor
  */
 
-const std::string ports_strings[] = {"/dev/ttyMI7"};
-
+const std::string ports_strings[] = { "/dev/ttyMI7" };
 
 /*!
  * @brief Conveyor max encoder increment
  * @ingroup conveyor
  */
-const double MAX_INCREMENT[] = {0};
+const double MAX_INCREMENT[] = { 0 };
 
 } // namespace conveyor
 } // namespace lib
