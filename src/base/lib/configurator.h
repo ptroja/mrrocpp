@@ -61,6 +61,9 @@ public:
 	//! returns ui attach point
 	std::string get_ui_attach_point() const;
 
+	//! returns mp_pulse_attach_point point
+	std::string get_mp_pulse_attach_point() const;
+
 	//! returns edp_section of the robot
 	std::string get_edp_section(const std::string _robot_name) const;
 

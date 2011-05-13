@@ -125,6 +125,13 @@ std::string configurator::get_ui_attach_point() const
 	return "ui";
 }
 
+std::string configurator::get_mp_pulse_attach_point() const
+{
+	return "mp_pulse";
+}
+
+
+
 std::string configurator::get_edp_section(const std::string _robot_name) const
 {
 	return "[edp_" + _robot_name + "]";

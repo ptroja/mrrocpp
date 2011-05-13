@@ -89,7 +89,7 @@ bool task_base::pulse_check()
 // ---------------------------------------------------------------
 void task_base::initialize_communication()
 {
-	std::string mp_pulse_attach_point = config.return_attach_point_name("mp_pulse_attach_point", lib::MP_SECTION);
+	std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
 	std::string ecp_attach_point = config.return_attach_point_name("ecp_attach_point");
 	std::string sr_net_attach_point = config.get_sr_attach_point();

@@ -1082,7 +1082,7 @@ void Interface::reload_whole_configuration()
 		// zczytanie konfiguracji MP
 
 		if (is_mp_and_ecps_active) {
-			mp.network_pulse_attach_point = config->return_attach_point_name("mp_pulse_attach_point", lib::MP_SECTION);
+			mp.network_pulse_attach_point = config->get_mp_pulse_attach_point();
 
 			if (!config->exists("node_name", lib::MP_SECTION)) {
 				mp.node_name = "localhost";
