@@ -25,7 +25,7 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 //:generator(_ecp_task), logEnabled(true)
 {
 	index = 0;
-	r = 0.05;
+	//r = 0.05;
 	k = 0.0;
 	direction = -1;
 	k_max = 0.0;
@@ -107,8 +107,13 @@ bool g_mm_test::next_step()
 	double fy = force_torque[1];
 	//double fz = force_torque[2];
 
+	double stop = 4.0;
+
 	std::cout << fx << " " << fy << " " << std::endl;
-	//std::cout<< force_torque << std::endl;
+
+	//if(fx>stop || fx<-stop || fy>stop || fy<-stop)
+	//	return false;
+
 
 	double trans_vect[3];
 
@@ -118,26 +123,26 @@ bool g_mm_test::next_step()
 	//move direction
 	if(direction==1)//up
 	{
-		trans_vect[0] = first_trans_vect[0] - r * k;
-		trans_vect[1] = first_trans_vect[1] + r * k;
+		trans_vect[0] = first_trans_vect[0] - k;
+		trans_vect[1] = first_trans_vect[1] + k;
 	}
 	if(direction==2)//right
 	{
-		trans_vect[1] = first_trans_vect[1] + r * k;
-		trans_vect[0] = first_trans_vect[0] + r * k;
+		trans_vect[1] = first_trans_vect[1] + k;
+		trans_vect[0] = first_trans_vect[0] + k;
 	}
 	if(direction==3)//down
 	{
-		trans_vect[0] = first_trans_vect[0] + r * k;
-		trans_vect[1] = first_trans_vect[1] - r * k;
+		trans_vect[0] = first_trans_vect[0] + k;
+		trans_vect[1] = first_trans_vect[1] - k;
 	}
 	if(direction==0)//left
 	{
-		trans_vect[1] = first_trans_vect[1] - r * k;
-		trans_vect[0] = first_trans_vect[0] - r * k;
+		trans_vect[1] = first_trans_vect[1] - k;
+		trans_vect[0] = first_trans_vect[0] - k;
 	}
 
-	k += 0.1;
+	k += 0.001;
 	nextFrame.set_translation_vector(trans_vect);
 	/*koniec modyfikacji*/
 

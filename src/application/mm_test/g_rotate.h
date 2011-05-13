@@ -37,7 +37,7 @@ public:
 	 * 2 -  Y down (computer)
 	 * 3 - -X left
 	 */
-	void configure(int new_rot_position);
+	void configure(double new_rot_position);
 
 protected:
 	/** Is log enabled*/
@@ -52,9 +52,9 @@ protected:
 	 */
 private:
 	lib::Homog_matrix currentFrame;
-	double currentGripperCoordinate;
+	//double currentGripperCoordinate;
 	int index;
-	double r;//promien
+	//double r;//promien
 	double k;//kat
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
 
