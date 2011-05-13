@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <cstdio>
 #include <unistd.h>
+#include <string>
 
 #include "base/lib/mis_fun.h"
 
@@ -21,6 +22,16 @@
 
 namespace mrrocpp {
 namespace lib {
+
+std::string get_edp_section(const std::string _robot_name)
+{
+	return "[edp_" + _robot_name + "]";
+}
+
+std::string get_ecp_section(const std::string _robot_name)
+{
+	return "[ecp_" + _robot_name + "]";
+}
 
 //! Set the process scheduler
 void set_process_sched()

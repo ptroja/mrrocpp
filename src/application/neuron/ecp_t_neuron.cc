@@ -6,7 +6,7 @@
  * @date 13.05.2010
  */
 
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "ecp_t_neuron.h"
 #include "neuron_sensor.h"
 #include "ecp_mp_t_neuron.h"
@@ -14,7 +14,7 @@
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot {
+namespace common {
 namespace task {
 
 /*==============================Constructor===============================*//**
@@ -24,8 +24,8 @@ namespace task {
 Neuron::Neuron(lib::configurator &_config) :
 	common::task::task(_config)
 {
-	ecp_m_robot= (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this); //initialization of robot
-	smoothGenerator=new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this); //initialization of robot
+	smoothGenerator = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sr_ecp_msg->message("ECP loaded Neuron");
 }
 
@@ -33,7 +33,8 @@ Neuron::Neuron(lib::configurator &_config) :
  * @brief Destructor.
  * @details Cleans it own shit.
  */
-Neuron::~Neuron(){
+Neuron::~Neuron()
+{
 	delete neuronGenerator;
 	delete smoothGenerator;
 }
@@ -43,49 +44,76 @@ Neuron::~Neuron(){
  * @details Method that handles main algorithm and information flow for Neuron
  * task. Starts generators and waits for start and stop signal from VSP.
  */
-void Neuron::mp_2_ecp_next_state_string_handler(void){
+void Neuron::mp_2_ecp_next_state_string_handler(void)
+{
 	sr_ecp_msg->message("poczatek");
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_T_NEURON) {
+
+		/*smoothGenerator->reset();
+		smoothGenerator->set_absolute();
+		std::vector <double> coordinates1(6);
+		coordinates1[0] = 0.530;
+		coordinates1[1] = 1.706;
+		coordinates1[2] = 0.178;
+		coordinates1[3] = 1.368;
+		coordinates1[4] = -1.120;
+		coordinates1[5] = 0.104;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0] = 0.530;
+		coordinates1[1] = 2.106;
+		coordinates1[2] = 0.178;
+		coordinates1[3] = 1.368;
+		coordinates1[4] = -1.120;
+		coordinates1[5] = 0.104;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		//Interpolate trajectory and run generator.
+		smoothGenerator->set_debug(true);
+		if (smoothGenerator->calculate_interpolate())
+			smoothGenerator->Move();
+		*/
+
 		//Initalizing all needed items: sensors and generators.
 		neuronSensor = new ecp_mp::sensor::neuron_sensor(config);
 		sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR] = neuronSensor;
 		neuronGenerator = new common::generator::neuron_generator(*this);
-		neuronGenerator->sensor_m=sensor_m;
+		neuronGenerator->sensor_m = sensor_m;
 
 		//coordinates sent from VSP to MRROC++;
-		std::vector<double> coordinates1(6);
+		std::vector <double> coordinates1(6);
 		ecp_mp::sensor::Coordinates coordinates;
 
 		//loop that enables starting and stopping work of MRROC++ from VSP.
-		while(true){
+		while (true) {
 			sr_ecp_msg->message("czekam na start");
 			//Waits for Start command from VSP.
 			neuronSensor->waitForVSPStart();
 
 			//loop that executes one trajectory currently managed by VSP at
 			//one time. Loop loops until VSP has another trajectory to process.
-			while(true){
+			while (true) {
 				//Obtain first coordinates from VSP for smooth generator.
-				coordinates=neuronSensor->getFirstCoordinates();
+				coordinates = neuronSensor->getFirstCoordinates();
 
-				printf("coordinates received: %f %f %f\n",coordinates.x, coordinates.y, coordinates.z);
+				printf("coordinates received: %f %f %f\n", coordinates.x, coordinates.y, coordinates.z);
 
 				smoothGenerator->reset();
 				smoothGenerator->set_absolute();
 
 				//set coordinates for smooth generator.
 
-				coordinates1[0]=coordinates.x;
-				coordinates1[1]=coordinates.y;
-				coordinates1[2]=coordinates.z;
-				coordinates1[3]=1.203;
-				coordinates1[4]=-1.447;
-				coordinates1[5]=-0.294;
+				coordinates1[0] = coordinates.x;
+				coordinates1[1] = coordinates.y;
+				coordinates1[2] = coordinates.z;
+				coordinates1[3] = 1.203;
+				coordinates1[4] = -1.447;
+				coordinates1[5] = -0.294;
 				smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 				//Interpolate trajectory and run generator.
 				smoothGenerator->set_debug(false);
-				if(smoothGenerator->calculate_interpolate())
+				if (smoothGenerator->calculate_interpolate())
 					smoothGenerator->Move();
 
 				//starts Neuron generator.
@@ -95,11 +123,11 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
 				//If Stop button in VSP was pressed, stop processing
 				//more trajectories and wait at the beginning of first
 				//loop for another start signal.
-				if(neuronSensor->stop())
+				if (neuronSensor->stop())
 					break;
 
 				double overshoot;
-				overshoot=neuronGenerator->get_overshoot();
+				overshoot = neuronGenerator->get_overshoot();
 				neuronSensor->sendOvershoot(overshoot);
 			}
 		}
@@ -116,26 +144,28 @@ void Neuron::mp_2_ecp_next_state_string_handler(void){
  * MRROC++ is no longer available for work therefore neuron sensor is deleted
  * from the map of sensors.
  */
-void Neuron::ecp_stop_accepted_handler(){
+void Neuron::ecp_stop_accepted_handler()
+{
 	sr_ecp_msg->message("mp_stop_pressed");
 	neuronSensor->sendCommunicationFinished();
 	delete sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	sensor_m.erase(ecp_mp::sensor::ECP_MP_NEURON_SENSOR);
 }
 
-}  //namespace task
+} //namespace task
 } // namespace irp6ot
 
 namespace common {
 namespace task {
 
 /*============================return_created_ecp_taks=====================*//**
-* @brief returns inherited task pointer.
-* @param _config configurator object reference.
-* @return inherited task pointer.
-*/
-task_base* return_created_ecp_task(lib::configurator &_config){
-	return new irp6ot::task::Neuron(_config);
+ * @brief returns inherited task pointer.
+ * @param _config configurator object reference.
+ * @return inherited task pointer.
+ */
+task_base* return_created_ecp_task(lib::configurator &_config)
+{
+	return new common::task::Neuron(_config);
 }
 
 } // namespace task

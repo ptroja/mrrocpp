@@ -10,7 +10,7 @@
 #ifndef SENSOR_ERROR_H_
 #define SENSOR_ERROR_H_
 
-#include <exception>
+#include "base/lib/exception.h"
 
 namespace mrrocpp {
 namespace lib {

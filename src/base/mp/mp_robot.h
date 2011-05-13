@@ -137,7 +137,7 @@ public:
 	 * @param mp_object_l mp task object reference
 	 * @param _number_of_servos number of robot servos (joints)
 	 */
-			robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos);
+	robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _number_of_servos);
 
 	/**
 	 * @brief destructor

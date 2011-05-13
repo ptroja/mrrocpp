@@ -59,8 +59,6 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-	MainWindow *mw = interface.get_main_window();
-
 	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
@@ -86,7 +84,7 @@ void ecp_buffer::operator()()
 		// tu wyemitowac sygnal (wywqaolac odpowiednia metode mainwindow)
 
 		//dalszy kod do obslugi slotu
-		mw->raise_ui_ecp_window();
+		interface.raise_ui_ecp_window();
 
 		synchroniser.wait();
 

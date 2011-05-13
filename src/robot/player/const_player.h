@@ -15,17 +15,13 @@ namespace mrrocpp {
 namespace lib {
 namespace electron {
 
-const robot_name_t ROBOT_NAME = "ROBOT_ELECTRON";
-
-const std::string ECP_SECTION = "[ecp_electron]";
+const robot_name_t ROBOT_NAME = "electron";
 
 } // namespace electron
 
 namespace speechrecognition {
 
-const robot_name_t ROBOT_NAME = "ROBOT_SPEECHRECOGNITION";
-
-const std::string ECP_SECTION = "[ecp_speechrecognition]";
+const robot_name_t ROBOT_NAME = "speechrecognition";
 
 } // namespace speechrecognition
 } // namespace lib

@@ -22,15 +22,6 @@ protected:
 	//! Interpret the status code into a text message
 	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
 
-	//! Interprets non fatal error.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_non_fatal_error & _e);
-
-	//! Interprets fatal error.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_fatal_error & _e);
-
-	//! Interprets system error.
-	virtual void interpret(char * description, const mrrocpp::lib::exception::mrrocpp_system_error & _e);
-
 public:
 	/**
 	 * Constructor

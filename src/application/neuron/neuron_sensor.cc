@@ -111,6 +111,9 @@ namespace sensor {
  */
 #define OVERSHOOT				0x26
 
+//TODO: comments
+#define STATISTICS				0x27
+
 /*==================================Constructor===========================*//**
  * @brief Constructor, creates and initalizes a communication with VSP.
  * @param _configurator MRROC++ configurator.
@@ -186,7 +189,7 @@ void neuron_sensor::get_reading()
 
 	//copy data from packet to variables
 	memcpy(&command, buff, 1);
-	printf("command %d %x\n",command,command);
+	//printf("command from VSP %d %x\n",command,command);
 	switch (command)
 	{
 		case VSP_START:
@@ -227,7 +230,7 @@ void neuron_sensor::get_reading()
 		default:
 			printf("unknown command %d\n", command);
 	}
-	printf("data received\n");
+	//printf("data received\n");
 }
 
 /*===============================stop=====================================*//**
@@ -490,6 +493,27 @@ void neuron_sensor::stopReceivingData()
 double neuron_sensor::getRadius()
 {
 	return radius;
+}
+
+//TODO: comments
+void neuron_sensor::sendStatistics(double currents_sum, double max){
+	char buff[17];
+	uint8_t temp_command = STATISTICS;
+	memcpy(buff, &temp_command, 1);
+	memcpy(buff + 1, &currents_sum, 8);
+	memcpy(buff + 9, &max, 8);
+
+	//printf("neuron_sensor->sendData command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+
+	int result = write(socketDescriptor, buff, sizeof(buff));
+
+	if (result < 0) {
+		throw std::runtime_error(std::string("write() failed: ") + strerror(errno));
+	}
+
+	if (result != sizeof(buff)) {
+		throw std::runtime_error("write() failed: result != sizeof(buff)");
+	}
 }
 
 } //sensor

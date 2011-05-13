@@ -23,17 +23,18 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
+UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	//activation_string = _activation_string;
 
-	state.edp.section_name = edp_section_name;
-	state.ecp.section_name = ecp_section_name;
+	state.edp.section_name = lib::get_edp_section(robot_name);
+	state.ecp.section_name = lib::get_ecp_section(robot_name);
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
+	msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, robot_name, interface.network_sr_attach_point);
 }
 
 void UiRobot::create_thread()
@@ -118,16 +119,16 @@ int UiRobot::edp_create_int()
 
 	catch (ecp::common::robot::ECP_error & er) {
 		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
-		interface.catch_ecp_error(er);
+		catch_ecp_error(er);
 	} /* end: catch */
 
 	catch (const std::exception & e) {
-		interface.catch_std_exception(e);
+		catch_std_exception(e);
 	}
 
 	catch (...) { /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow*/
-		interface.catch_tridot();
+		catch_tridot();
 	} /*end: catch */
 
 	interface.manage_interface();
@@ -474,6 +475,54 @@ int UiRobot::reload_configuration()
 	} // end irp6_on_track
 
 	return 1;
+}
+
+void UiRobot::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+
+{
+	if (e.error_class == lib::SYSTEM_ERROR)
+		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	interface.ui_state = 2;
+}
+
+void UiRobot::catch_ecp_error(ecp::common::robot::ECP_error & er)
+
+{
+	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
+		perror("ecp lib::SYSTEM_ERROR in UI");
+		/* PtExit( EXIT_SUCCESS ); */
+	} else {
+		switch (er.error_no)
+		{
+			case INVALID_POSE_SPECIFICATION:
+			case INVALID_COMMAND_TO_EDP:
+			case EDP_ERROR:
+			case INVALID_ROBOT_MODEL_TYPE:
+				/* Komunikat o bledzie wysylamy do SR */
+				msg->message(lib::NON_FATAL_ERROR, er.error_no);
+				break;
+			default:
+				msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
+				perror("Unidentified exception");
+		} /* end: switch */
+	}
+}
+
+void UiRobot::catch_std_exception(const std::exception & e)
+{
+
+	std::string tmp_string(" The following error has been detected: ");
+	tmp_string += e.what();
+	msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+	std::cerr << "UI: The following error has been detected :\n\t" << e.what() << std::endl;
+}
+
+void UiRobot::catch_tridot()
+
+{
+	/* Wylapywanie niezdefiniowanych bledow*/
+	/* Komunikat o bledzie wysylamy do SR (?) */
+	fprintf(stderr, "unidentified error in UI\n");
 }
 
 }
