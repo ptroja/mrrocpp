@@ -17,7 +17,7 @@ namespace ecp {
 namespace shead {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _config, _sr_ecp),
+	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
@@ -27,7 +27,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, lib::shead::EDP_SECTION, _ecp_object),
+	ecp::common::robot::ecp_robot(lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS, _ecp_object),
 			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
 			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
