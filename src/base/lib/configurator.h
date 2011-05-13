@@ -28,6 +28,7 @@
 #include <boost/property_tree/exceptions.hpp>
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -65,10 +66,16 @@ public:
 	std::string get_mp_pulse_attach_point() const;
 
 	//! returns edp_section of the robot
-	std::string get_edp_section(const std::string _robot_name) const;
+	std::string get_edp_section(const robot_name_t _robot_name) const;
+
+	//! returns edp_section of the robot
+	std::string get_edp_section() const;
 
 	//! returns ecp_section of the robot
-	std::string get_ecp_section(const std::string _robot_name) const;
+	std::string get_ecp_section(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_section() const;
 
 	/**
 	 * Get network path to the installed MRROC++ system

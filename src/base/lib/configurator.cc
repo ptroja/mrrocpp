@@ -130,16 +130,24 @@ std::string configurator::get_mp_pulse_attach_point() const
 	return "mp_pulse";
 }
 
-
-
-std::string configurator::get_edp_section(const std::string _robot_name) const
+std::string configurator::get_edp_section(const robot_name_t _robot_name) const
 {
 	return "[edp_" + _robot_name + "]";
 }
 
-std::string configurator::get_ecp_section(const std::string _robot_name) const
+std::string configurator::get_edp_section() const
+{
+	return get_edp_section(robot_name);
+}
+
+std::string configurator::get_ecp_section(const robot_name_t _robot_name) const
 {
 	return "[ecp_" + _robot_name + "]";
+}
+
+std::string configurator::get_ecp_section() const
+{
+	return get_ecp_section(robot_name);
 }
 
 std::string configurator::return_mrrocpp_network_path() const
