@@ -44,9 +44,17 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	node(_node), dir(_dir), section_name(_section_name)
 {
 	// jesli nazwa sekcji rozpoczyna sie od [ecp lub [edp to wyekstrahuj nazwe robota
+	// w przeciwnym razie podstawia pusta
+	robot_name = section_name;
+	robot_name.erase(section_name.rfind("]"), 1);
 
-	// w przeciwnym razie podstaw pusta
-	robot_name = "";
+	if (robot_name.find("[edp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else if (robot_name.find("[ecp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else {
+		robot_name = "";
+	}
 
 	if (uname(&sysinfo) == -1) {
 		perror("uname");

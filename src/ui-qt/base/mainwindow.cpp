@@ -58,8 +58,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	main_thread_id = pthread_self();
 }
 
-
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 
@@ -264,7 +262,6 @@ void MainWindow::ui_notification_slot()
 		qApp->processEvents();
 	}
 }
-
 
 // menus
 
