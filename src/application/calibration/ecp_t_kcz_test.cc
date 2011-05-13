@@ -19,11 +19,11 @@ namespace task {
 //Constructors
 kcz_test::kcz_test(lib::configurator &_config): common::task::task(_config)
 {
-    if (config.section_name == lib::get_ecp_section(lib::irp6ot_m::ROBOT_NAME))
+    if (config.robot_name == lib::irp6ot_m::ROBOT_NAME)
     {
         ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot (*this);
     }
-    else if (config.section_name == lib::get_ecp_section(lib::irp6p_m::ROBOT_NAME))
+    else if (config.robot_name == lib::irp6p_m::ROBOT_NAME)
     {
         ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot (*this);
     }
