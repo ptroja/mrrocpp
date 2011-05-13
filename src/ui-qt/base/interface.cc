@@ -102,8 +102,6 @@ void Interface::on_timer_slot()
 
 		char current_line[400];
 
-		QString html_line;
-
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -111,8 +109,6 @@ void Interface::on_timer_slot()
 			ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
-
-			html_line = "<font color=\"kolor\">" + QString(current_line) + "</font>";
 
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
@@ -181,12 +177,26 @@ void Interface::on_timer_slot()
 
 			}; // end: switch (message.message_type)
 
-			strcat(current_line, sr_msg.description);
-
 			mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
-			mw->get_ui()->textEdit_sr->append(current_line);
-			//mw->get_ui()->textEdit_sr->appendPlainText(html_line);
-			(*log_file_outfile) << current_line << std::endl;
+
+			std::string text(sr_msg.description);
+
+			boost::char_separator <char> sep("\n");
+			boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+
+			bool first_it = true;
+			BOOST_FOREACH(std::string t, tokens)
+						{
+							if (first_it) {
+								first_it = false;
+							} else {
+								strcpy(current_line, "                                                     ");
+							}
+							strcat(current_line, t.c_str());
+
+							mw->get_ui()->textEdit_sr->append(current_line);
+							(*log_file_outfile) << current_line << std::endl;
+						}
 		}
 
 		(*log_file_outfile).flush();
