@@ -101,6 +101,9 @@ void Interface::on_timer_slot()
 		// 	printf("timer\n");
 
 		char current_line[400];
+
+		QString html_line;
+
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -108,6 +111,9 @@ void Interface::on_timer_slot()
 			ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+
+			html_line = "<font color=\"kolor\">" + QString(current_line) + "</font>";
+
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
@@ -177,8 +183,9 @@ void Interface::on_timer_slot()
 
 			strcat(current_line, sr_msg.description);
 
-			mw->get_ui()->plainTextEdit_sr->setCurrentCharFormat(format);
-			mw->get_ui()->plainTextEdit_sr->appendPlainText(current_line);
+			mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
+			mw->get_ui()->textEdit_sr->append(current_line);
+			//mw->get_ui()->textEdit_sr->appendPlainText(html_line);
 			(*log_file_outfile) << current_line << std::endl;
 		}
 
