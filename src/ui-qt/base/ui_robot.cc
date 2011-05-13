@@ -437,7 +437,7 @@ int UiRobot::reload_configuration()
 				state.edp.hardware_busy_attach_point = interface.config->get_edp_hardware_busy_file(robot_name);
 
 				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name("resourceman_attach_point", state.edp.section_name);
+						= interface.config->get_edp_resourceman_attach_point(robot_name);
 
 				state.edp.network_reader_attach_point = interface.config->get_edp_reader_attach_point(robot_name);
 
