@@ -140,7 +140,7 @@ void Interface::on_timer_slot()
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
