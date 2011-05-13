@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QCloseEvent>
 #include <pthread.h>
+#include "wgt_base.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,9 @@ public:
 	//void enable_menu_item(bool _active, QWidget *_menu_item);
 	void enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...);
 	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
+
+	void open_new_window(wgt_base *window, wgt_base::my_open_ptr func);
+
 	//void disable_menu_item(int _num_of_menus, ...);
 	void raise_process_control_window();
 	void raise_ui_ecp_window();
@@ -51,6 +55,9 @@ signals:
 	void ui_notification_signal();
 	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
 	void enable_menu_item_signal(QAction *_menu_item, bool _active);
+
+	void open_new_window_signal(wgt_base *window, wgt_base::my_open_ptr func);
+
 	void raise_process_control_window_signal();
 	void raise_ui_ecp_window_signal();
 
@@ -63,6 +70,8 @@ private slots:
 	void raise_ui_ecp_window_slot();
 	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
 	void enable_menu_item_slot(QAction *_menu_item, bool _active);
+
+	void open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func);
 	// menus
 
 	// file menu

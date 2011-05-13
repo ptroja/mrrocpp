@@ -23,6 +23,8 @@ public:
 	virtual void my_open();
 	void my_close();
 
+	typedef void (wgt_base::*my_open_ptr)();
+
 	QString widget_label;
 	QDockWidget* dwgt;
 	//QVBoxLayout* vl;

@@ -58,6 +58,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
+	connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
 
 	main_thread_id = pthread_self();
 }
@@ -141,6 +142,20 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 	}
 
 	va_end(menu_items);
+}
+
+
+void MainWindow::open_new_window(wgt_base *window, wgt_base::my_open_ptr func)
+{
+	emit open_new_window_signal(window, func);
+	//open_new_window_slot(window, func);
+	interface.print_on_sr("emit");
+}
+
+void MainWindow::open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func)
+{
+	interface.print_on_sr("slot");
+	(*window.*func)();
 }
 
 //void MainWindow::disable_menu_item(int _num_of_menus, ...)
@@ -716,7 +731,11 @@ void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
 
 void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
 {
-	interface.irp6ot_m->wgt_motors->my_open();
+	//interface.irp6ot_m->wgt_motors->my_open();
+	wgt_base::my_open_ptr func = &wgt_base::my_open;
+
+	open_new_window(interface.irp6ot_m->wgt_motors, func);
+	interface.print_on_sr("on action");
 }
 
 void MainWindow::on_actionirp6ot_m_Joints_triggered()
