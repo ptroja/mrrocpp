@@ -399,6 +399,9 @@
          <pointsize>9</pointsize>
         </font>
        </property>
+       <property name="lineWrapMode">
+        <enum>QPlainTextEdit::NoWrap</enum>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -558,9 +561,6 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
-       <zorder>label_all_edps_synchro_notification</zorder>
-       <zorder>label_7</zorder>
-       <zorder>frame_3</zorder>
       </widget>
      </item>
      <item row="2" column="3">
@@ -631,10 +631,6 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
-       <zorder>label_mp_notification</zorder>
-       <zorder>label_3</zorder>
-       <zorder>frame_5</zorder>
-       <zorder>frame_5</zorder>
       </widget>
      </item>
      <item row="2" column="4">
