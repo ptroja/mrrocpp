@@ -36,7 +36,7 @@ effector::effector(shell &_shell, lib::robot_name_t l_robot_name) :
 {
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
-		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
+		robot_test_mode = config.exists_and_true(lib::ROBOT_TEST_MODE.c_str());
 	}
 
 	if (robot_test_mode) {
