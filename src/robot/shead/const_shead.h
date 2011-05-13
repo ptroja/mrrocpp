@@ -17,23 +17,12 @@ namespace mrrocpp {
 namespace lib {
 namespace shead {
 
-/*!
- * @brief Bird Hand robot label lower case
- * @ingroup shead
- */
-const robot_name_t ROBOT_NAME_LC = "shead";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup shead
- */
-const robot_name_t ROBOT_NAME_UC = "SHEAD";
 
 /*!
  * @brief SwarmItFix Head robot label
  * @ingroup shead
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SHEAD";
+const robot_name_t ROBOT_NAME = "shead";
 
 /*!
  * @brief SwarmItFix Head EDP command buffer variant enum

@@ -17,22 +17,10 @@ namespace lib {
 namespace sarkofag {
 
 /*!
- * @brief Bird Hand robot label lower case
- * @ingroup sarkofag
- */
-const robot_name_t ROBOT_NAME_LC = "sarkofag";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup sarkofag
- */
-const robot_name_t ROBOT_NAME_UC = "SARKOFAG";
-
-/*!
  * @brief Sarkofag robot label
  * @ingroup sarkofag
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SARKOFAG";
+const robot_name_t ROBOT_NAME = "sarkofag";
 
 /*!
  * @brief configuration file EDP Sarkofag section string

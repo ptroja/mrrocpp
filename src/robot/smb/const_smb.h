@@ -18,22 +18,10 @@ namespace lib {
 namespace smb {
 
 /*!
- * @brief Bird Hand robot label lower case
- * @ingroup smb
- */
-const robot_name_t ROBOT_NAME_LC = "smb";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup smb
- */
-const robot_name_t ROBOT_NAME_UC = "SMB";
-
-/*!
  * @brief SwarmItFix Mobile Base robot label
  * @ingroup smb
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SMB";
+const robot_name_t ROBOT_NAME = "smb";
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer variant enum

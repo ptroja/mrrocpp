@@ -17,23 +17,12 @@ namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
 
-/*!
- * @brief Bird Hand robot label lower case
- * @ingroup bird_hand
- */
-const robot_name_t ROBOT_NAME_LC = "bird_hand";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup bird_hand
- */
-const robot_name_t ROBOT_NAME_UC = "BIRD_HAND";
 
 /*!
  * @brief Bird Hand robot label
  * @ingroup bird_hand
  */
-const robot_name_t ROBOT_NAME = "ROBOT_BIRD_HAND";
+const robot_name_t ROBOT_NAME = "bird_hand";
 
 /*!
  * @brief Bird Hand EDP command buffer

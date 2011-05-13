@@ -8,8 +8,6 @@ namespace mrrocpp {
 namespace lib {
 namespace polycrank {
 
-const robot_name_t ROBOT_NAME = "ROBOT_POLYCRANK";
-
 const std::string EDP_SECTION = "[edp_polycrank]";
 const std::string ECP_SECTION = "[ecp_polycrank]";
 
@@ -20,13 +18,7 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief Bird Hand robot label lower case
  * @ingroup polycrank
  */
-const robot_name_t ROBOT_NAME_LC = "polycrank";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup polycrank
- */
-const robot_name_t ROBOT_NAME_UC = "POLYCRANK";
+const robot_name_t ROBOT_NAME = "polycrank";
 
 /*!
  * @brief IRp6 conveyor array of communication port names

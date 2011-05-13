@@ -15,7 +15,7 @@ namespace mrrocpp {
 namespace lib {
 namespace electron {
 
-const robot_name_t ROBOT_NAME = "ROBOT_ELECTRON";
+const robot_name_t ROBOT_NAME = "electron";
 
 const std::string ECP_SECTION = "[ecp_electron]";
 

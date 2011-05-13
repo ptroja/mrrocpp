@@ -18,22 +18,10 @@ namespace lib {
 namespace spkm {
 
 /*!
- * @brief Bird Hand robot label lower case
- * @ingroup spkm
- */
-const robot_name_t ROBOT_NAME_LC = "spkm";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup spkm
- */
-const robot_name_t ROBOT_NAME_UC = "SPKM";
-
-/*!
  * @brief SwarmItFix Parallel Kinematic Machine robot label
  * @ingroup spkm
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
+const robot_name_t ROBOT_NAME = "spkm";
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine number of motors.

@@ -17,23 +17,12 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6p_m {
 
-/*!
- * @brief Bird Hand robot label lower case
- * @ingroup irp6p_m
- */
-const robot_name_t ROBOT_NAME_LC = "irp6p_m";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup irp6p_m
- */
-const robot_name_t ROBOT_NAME_UC = "IRP6P_M";
 
 /*!
  * @brief IRp6 postument manipulator robot label
  * @ingroup irp6p_m
  */
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_M";
+const robot_name_t ROBOT_NAME = "irp6p_m";
 
 /*!
  * @brief configuration file EDP IRp6 postument manipulator section string

@@ -16,23 +16,10 @@ namespace lib {
 namespace irp6p_tfg {
 
 /*!
- * @brief Bird Hand robot label lower case
- * @ingroup irp6p_tfg
- */
-const robot_name_t ROBOT_NAME_LC = "irp6p_tfg";
-
-/*!
- * @brief Bird Hand robot label upper case
- * @ingroup irp6p_tfg
- */
-const robot_name_t ROBOT_NAME_UC = "IRP6P_TFG";
-
-
-/*!
  * @brief IRp6 postument two finger gripper robot label
  * @ingroup irp6p_tfg
  */
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_TFG";
+const robot_name_t ROBOT_NAME = "irp6p_tfg";
 
 /*!
  * @brief configuration file EDP IRp6 postument two finger gripper section string
@@ -63,8 +50,7 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup sarkofag
  */
 
-const std::string ports_strings[] = {"/dev/ttyMI6"};
-
+const std::string ports_strings[] = { "/dev/ttyMI6" };
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
@@ -76,7 +62,7 @@ const int MAX_CURRENT_0 = 200;
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const double MAX_INCREMENT[] = {100};
+const double MAX_INCREMENT[] = { 100 };
 
 }
 } // namespace lib
