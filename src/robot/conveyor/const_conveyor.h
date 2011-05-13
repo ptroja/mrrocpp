@@ -17,6 +17,19 @@ namespace lib {
 namespace conveyor {
 
 /*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup conveyor
+ */
+const robot_name_t ROBOT_NAME_LC = "conveyor";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup conveyor
+ */
+const robot_name_t ROBOT_NAME_UC = "CONVEYOR";
+
+
+/*!
  * @brief Conveyor robot label
  * @ingroup conveyor
  */

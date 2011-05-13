@@ -16,7 +16,6 @@
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 
-
 namespace mrrocpp {
 namespace lib {
 
@@ -56,7 +55,8 @@ public:
 	/*!
 	 * Constructor.
 	 */
-	mrrocpp_error() : error_class(ercl)
+	mrrocpp_error() :
+		error_class(ercl)
 	{
 		//*this << mrrocpp_error_class(SYSTEM_ERROR.c_str());
 	}
@@ -99,7 +99,6 @@ typedef mrrocpp_error <FATAL_ERROR> mrrocpp_fatal_error;
  * \date 12.05.2011
  */
 typedef mrrocpp_error <NON_FATAL_ERROR> mrrocpp_non_fatal_error;
-
 
 /*!
  * Macro for registration of MRROC++ system errors.
@@ -157,12 +156,11 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
  * \author tkornuta
  * \date 12.05.2011
  */
+
 #define HANDLE_MRROCPP_ERROR(ERROR) \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR);
-//	std::cout << boost::current_exception_diagnostic_information() << std::endl; \
-
-
+//	std::cout << boost::current_exception_diagnostic_information() << std::endl;
 
 
 /********************************** OLD MRROC++ ERRORS **********************************/

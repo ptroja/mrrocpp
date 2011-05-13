@@ -18,6 +18,18 @@ namespace lib {
 namespace spkm {
 
 /*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup spkm
+ */
+const robot_name_t ROBOT_NAME_LC = "spkm";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup spkm
+ */
+const robot_name_t ROBOT_NAME_UC = "SPKM";
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine robot label
  * @ingroup spkm
  */
@@ -32,7 +44,6 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
  */
 const int NUM_OF_SERVOS = 6;
 
-
 /*!
  * @brief Number of segments making up the whole PKM motion.
  *
@@ -42,16 +53,13 @@ const int NUM_OF_SERVOS = 6;
  */
 const unsigned int NUM_OF_MOTION_SEGMENTS = 64;
 
-
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
  * @ingroup spkm
  */
 enum CBUFFER_VARIANT
 {
-	POSE,
-	QUICKSTOP,
-	CLEAR_FAULT
+	POSE, QUICKSTOP, CLEAR_FAULT
 };
 
 /*!
@@ -90,10 +98,12 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant) {
+		switch (variant)
+		{
 			case POSE:
 				ar & pose_specification;
-				switch (pose_specification) {
+				switch (pose_specification)
+				{
 					case FRAME:
 						ar & goal_pos;
 						break;

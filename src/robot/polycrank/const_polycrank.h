@@ -17,6 +17,18 @@ const int NUM_OF_SERVOS = 7;
 const int LAST_MOXA_PORT_NUM = 0;
 
 /*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup polycrank
+ */
+const robot_name_t ROBOT_NAME_LC = "polycrank";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup polycrank
+ */
+const robot_name_t ROBOT_NAME_UC = "POLYCRANK";
+
+/*!
  * @brief IRp6 conveyor array of communication port names
  * @ingroup conveyor
  */
@@ -25,7 +37,6 @@ const int LAST_MOXA_PORT_NUM = 0;
 
 const std::string ports_strings[] =
 		{ "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5", "/dev/ttyMI6" };
-
 
 /*!
  * @brief Conveyor robot label

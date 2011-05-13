@@ -15,6 +15,19 @@ namespace mrrocpp {
 namespace lib {
 namespace irp6ot_m {
 
+
+/*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup irp6ot_m
+ */
+const robot_name_t ROBOT_NAME_LC = "irp6ot_m";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup irp6ot_m
+ */
+const robot_name_t ROBOT_NAME_UC = "IRP6OT_M";
+
 /*!
  * @brief IRp6 on track manipulator robot label
  * @ingroup irp6ot_m

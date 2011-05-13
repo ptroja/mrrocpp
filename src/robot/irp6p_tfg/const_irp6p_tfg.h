@@ -16,6 +16,19 @@ namespace lib {
 namespace irp6p_tfg {
 
 /*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup irp6p_tfg
+ */
+const robot_name_t ROBOT_NAME_LC = "irp6p_tfg";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup irp6p_tfg
+ */
+const robot_name_t ROBOT_NAME_UC = "IRP6P_TFG";
+
+
+/*!
  * @brief IRp6 postument two finger gripper robot label
  * @ingroup irp6p_tfg
  */

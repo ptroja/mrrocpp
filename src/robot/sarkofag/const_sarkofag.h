@@ -17,6 +17,18 @@ namespace lib {
 namespace sarkofag {
 
 /*!
+ * @brief Bird Hand robot label lower case
+ * @ingroup sarkofag
+ */
+const robot_name_t ROBOT_NAME_LC = "sarkofag";
+
+/*!
+ * @brief Bird Hand robot label upper case
+ * @ingroup sarkofag
+ */
+const robot_name_t ROBOT_NAME_UC = "SARKOFAG";
+
+/*!
  * @brief Sarkofag robot label
  * @ingroup sarkofag
  */
@@ -51,8 +63,7 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup sarkofag
  */
 
-const std::string ports_strings[] = {"/dev/ttyMI0"};
-
+const std::string ports_strings[] = { "/dev/ttyMI0" };
 
 /*!
  * @brief Sarkofag overcurrent threshold [mA]
@@ -64,7 +75,7 @@ const int MAX_CURRENT_0 = 20000;
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup sarkofag
  */
-const double MAX_INCREMENT[] = {0};
+const double MAX_INCREMENT[] = { 0 };
 
 }
 } // namespace lib
