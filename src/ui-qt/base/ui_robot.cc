@@ -366,7 +366,7 @@ int UiRobot::reload_configuration()
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {
 			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+					= interface.config->return_attach_point_name("trigger_attach_point", state.ecp.section_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = lib::invalid_fd;
@@ -437,10 +437,10 @@ int UiRobot::reload_configuration()
 						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
 
 				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name("resourceman_attach_point", state.edp.section_name);
 
 				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+						= interface.config->return_attach_point_name("reader_attach_point", state.edp.section_name);
 
 				if (!interface.config->exists("node_name", state.edp.section_name)) {
 					state.edp.node_name = "localhost";

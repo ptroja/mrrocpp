@@ -120,12 +120,6 @@ public:
 	 */
 	static int return_node_number(const std::string & node_name_l);
 
-	//! Path types of the network resources
-	typedef enum _config_path_type
-	{
-		CONFIG_RESOURCEMAN_LOCAL, CONFIG_RESOURCEMAN_GLOBAL, CONFIG_SERVER
-	} config_path_type_t;
-
 	/**
 	 * Return network attach point
 	 * @param _type type of the network path
@@ -134,7 +128,7 @@ public:
 	 * @return network path
 	 */
 	std::string
-	return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name = NULL) const;
+	return_attach_point_name(const char* _key, const char* __section_name = NULL) const;
 
 	/**
 	 * Return network attach point
@@ -143,9 +137,9 @@ public:
 	 * @param __section_name section name
 	 * @return network path
 	 */
-	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & __section_name) const
+	std::string return_attach_point_name(const std::string & _key, const std::string & __section_name) const
 	{
-		return return_attach_point_name(_type, _key.c_str(), __section_name.c_str());
+		return return_attach_point_name(_key.c_str(), __section_name.c_str());
 	}
 
 	/**

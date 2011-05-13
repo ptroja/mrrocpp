@@ -604,15 +604,15 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 void task::initialize_communication()
 {
 	const std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+			config.return_attach_point_name("sr_attach_point", lib::UI_SECTION);
 	const std::string mp_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
+			config.return_attach_point_name("mp_attach_point");
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
 
 	const std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+			config.return_attach_point_name("mp_pulse_attach_point");
 
 	// Rejestracja kanalu dla pulsow z procesu UI
 	if (!mp_pulse_attach) {

@@ -99,31 +99,12 @@ int configurator::return_node_number(const std::string & node_name_l)
 	return ND_LOCAL_NODE;
 }
 
-std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
+std::string configurator::return_attach_point_name(const char* _key, const char* __section_name) const
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	std::string name;
-
-	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
-		name = "/dev/";
-		name += value <std::string> (_key, _section_name);
-
-	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL) {
-		name = "/net/";
-		name += value <std::string> ("node_name", _section_name);
-		name += "/dev/";
-		name += value <std::string> (_key, _section_name);
-
-	} else if (_type == CONFIG_SERVER) {
-		name = value <std::string> (_key, _section_name);
-
-	} else {
-		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
-		throw;
-	}
 
 	// Zwrocenie atach_point'a.
-	return (name);
+	return value <std::string> (_key, _section_name);
 }
 
 std::string configurator::return_default_reader_measures_path() const

@@ -77,7 +77,7 @@ void ecp_robot_base::connect_to_edp(lib::configurator &config)
 	EDP_MASTER_Pid = (is_created_by_ui) ? config.process_spawn(edp_section) : -1;
 
 	const std::string edp_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
+			config.return_attach_point_name("resourceman_attach_point", edp_section);
 
 	printf("connect_to_edp");
 	fflush(stdout);

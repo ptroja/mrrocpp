@@ -169,7 +169,7 @@ void reader_buffer::operator()()
 	lib::fd_server_t my_attach;
 
 	if ((my_attach
-			= messip::port_create(master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
+			= messip::port_create(master.config.return_attach_point_name("reader_attach_point")))
 			== NULL) {
 
 		perror("Failed to attach pulse chanel for READER");

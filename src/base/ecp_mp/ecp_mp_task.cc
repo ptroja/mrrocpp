@@ -41,7 +41,7 @@ task::task(lib::configurator &_config) :
 	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	const std::string ui_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
+			config.return_attach_point_name("ui_attach_point", lib::UI_SECTION);
 
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	unsigned int tmp = 0;
