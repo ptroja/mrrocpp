@@ -221,6 +221,25 @@ public:
 		return exists(_key.c_str(), __section_name.c_str());
 	}
 
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const std::string & _key, const std::string & __section_name) const
+	{
+		return exists_and_true(_key.c_str(), __section_name.c_str());
+	}
+
 	//! Destructor
 	~configurator();
 

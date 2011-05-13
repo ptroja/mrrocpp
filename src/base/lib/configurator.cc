@@ -152,6 +152,17 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	return true;
 }
 
+bool configurator::exists_and_true(const char* _key, const char* __section_name) const
+{
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
+
+	if (exists(_key, _section_name)) {
+		return value <bool> (_key, _section_name);
+	} else {
+		return false;
+	}
+}
+
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
 	const std::string program_name = value <std::string> ("program_name", _section_name);
@@ -242,7 +253,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) -1) {
+		if (setsid() == (pid_t) - 1) {
 			perror("setsid()");
 		}
 
