@@ -116,17 +116,17 @@ void Interface::on_timer_slot()
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
-					strcat(current_line, "edp: ");
+					strcat(current_line, "EDP: ");
 					break;
 				case lib::ECP:
-					strcat(current_line, "ecp: ");
+					strcat(current_line, "ECP: ");
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "mp:  ");
+					strcat(current_line, "MP:  ");
 					break;
 				case lib::VSP:
-					strcat(current_line, "vsp: ");
+					strcat(current_line, "VSP: ");
 					break;
 				case lib::UI:
 					strcat(current_line, "UI:  ");
