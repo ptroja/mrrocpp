@@ -115,6 +115,16 @@ std::string configurator::return_default_reader_measures_path() const
 	return path;
 }
 
+std::string configurator::get_sr_attach_point() const
+{
+	return "sr";
+}
+
+std::string configurator::get_ui_attach_point() const
+{
+	return "ui";
+}
+
 std::string configurator::get_edp_section(const std::string _robot_name) const
 {
 	return "[edp_" + _robot_name + "]";

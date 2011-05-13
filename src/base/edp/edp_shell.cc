@@ -37,7 +37,7 @@ shell::shell(lib::configurator &_config) :
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg
-			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.return_attach_point_name("sr_attach_point", lib::UI_SECTION).c_str());
+			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.value <std::string> ("resourceman_attach_point").c_str(), config.get_sr_attach_point().c_str());
 
 	my_pid = getpid();
 }

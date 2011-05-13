@@ -604,7 +604,7 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 void task::initialize_communication()
 {
 	const std::string sr_net_attach_point =
-			config.return_attach_point_name("sr_attach_point", lib::UI_SECTION);
+			config.get_sr_attach_point();
 	const std::string mp_attach_point =
 			config.return_attach_point_name("mp_attach_point");
 

@@ -55,6 +55,12 @@ private:
 
 public:
 
+	//! returns sr attach point
+	std::string get_sr_attach_point() const;
+
+	//! returns ui attach point
+	std::string get_ui_attach_point() const;
+
 	//! returns edp_section of the robot
 	std::string get_edp_section(const std::string _robot_name) const;
 

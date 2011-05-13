@@ -1415,7 +1415,7 @@ int Interface::initiate_configuration()
 		}
 		config = new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
-		std::string attach_point = config->return_attach_point_name("sr_attach_point", lib::UI_SECTION);
+		std::string attach_point = config->get_sr_attach_point();
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -1440,9 +1440,9 @@ int Interface::initiate_configuration()
 
 	}
 
-	ui_attach_point = config->return_attach_point_name("ui_attach_point", lib::UI_SECTION);
-	sr_attach_point = config->return_attach_point_name("sr_attach_point", lib::UI_SECTION);
-	network_sr_attach_point = config->return_attach_point_name("sr_attach_point", lib::UI_SECTION);
+	ui_attach_point = config->get_ui_attach_point();
+	sr_attach_point = config->get_sr_attach_point();
+	network_sr_attach_point = config->get_sr_attach_point();
 
 	clear_all_configuration_lists();
 
