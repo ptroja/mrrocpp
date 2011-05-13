@@ -32,8 +32,6 @@
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-
-
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
 #include "base/lib/typedefs.h"
@@ -45,6 +43,11 @@ namespace lib {
 configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name) :
 	node(_node), dir(_dir), section_name(_section_name)
 {
+	// jesli nazwa sekcji rozpoczyna sie od [ecp lub [edp to wyekstrahuj nazwe robota
+
+	// w przeciwnym razie podstaw pusta
+	robot_name = "";
+
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
@@ -231,7 +234,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) - 1) {
+		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 
