@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 bird_hand::bird_hand(task::task &mp_object_l) :
-	robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::ECP_SECTION, mp_object_l, lib::bird_hand::NUM_OF_SERVOS)
+	robot(lib::bird_hand::ROBOT_NAME, mp_object_l, lib::bird_hand::NUM_OF_SERVOS)
 {
 }
 
