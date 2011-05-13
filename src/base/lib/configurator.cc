@@ -134,6 +134,16 @@ std::string configurator::return_default_reader_measures_path() const
 	return path;
 }
 
+std::string configurator::get_edp_section(const std::string _robot_name) const
+{
+	return "[edp_" + _robot_name + "]";
+}
+
+std::string configurator::get_ecp_section(const std::string _robot_name) const
+{
+	return "[ecp_" + _robot_name + "]";
+}
+
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;

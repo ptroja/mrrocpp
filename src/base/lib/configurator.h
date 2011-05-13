@@ -54,6 +54,13 @@ private:
 	messip_channel_t *ch;
 
 public:
+
+	//! returns edp_section of the robot
+	std::string get_edp_section(const std::string _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_section(const std::string _robot_name) const;
+
 	/**
 	 * Get network path to the installed MRROC++ system
 	 * @return folder path
