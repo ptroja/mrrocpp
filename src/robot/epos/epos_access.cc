@@ -11,8 +11,6 @@ namespace mrrocpp {
 namespace edp {
 namespace epos {
 
-
-
 /*
  *************************************************************
  check EPOS error code
