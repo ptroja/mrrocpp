@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -71,4 +70,3 @@ WORD SocketCAN_SendMsg(int skt, struct can_frame *frame);
 WORD SocketCAN_SendMsgWithResend(int skt, struct can_frame *frame, DWORD resend_count);
 WORD SocketCAN_ReceiveMsg(int skt, struct can_frame *frame);  
 WORD SocketCAN_ReceiveMsgNoWait(int skt, struct can_frame *frame);
-

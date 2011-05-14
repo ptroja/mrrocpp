@@ -12,8 +12,8 @@
 
 struct socketcanconf
 {
-        int icmd;
-        unsigned char key[32];
+	int icmd;
+	unsigned char key[32];
 	unsigned int ven_dev_id;
 	unsigned int sub_ven_dev_id;
 };
