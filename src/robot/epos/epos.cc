@@ -1056,8 +1056,8 @@ void epos::saveParameters()
 	WORD dw[2];
 
 	// write sensor type
-	dw[0] = (WORD) (0x6173);
-	dw[1] = (WORD) (0x6576);
+	dw[0] = ('s') | ('a' << 8);
+	dw[1] = ('v') | ('e' << 8);
 
 	WriteObject(0x1010, 0x01, dw);
 }
