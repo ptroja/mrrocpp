@@ -1053,13 +1053,8 @@ void epos::writeIcurrent(INTEGER16 val)
 /* save all parameters home; 14.1.55 */
 void epos::saveParameters()
 {
-	WORD dw[2];
-
-	// write sensor type
-	dw[0] = ('s') | ('a' << 8);
-	dw[1] = ('v') | ('e' << 8);
-
-	WriteObject(0x1010, 0x01, dw);
+	// this is an alias for the original libepos API
+	Store();
 }
 
 // by Martí Morta
