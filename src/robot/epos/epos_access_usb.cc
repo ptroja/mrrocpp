@@ -266,11 +266,164 @@ void epos_access_usb::sendCommand(WORD *frame)
 	}
 }
 
+unsigned int epos_access_usb::ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex)
+{
+	WORD frame[4];
+
+	frame[0] = (2 << 8) | (ReadObject_Op);
+	frame[1] = index;
+	/*
+	 * high BYTE: 0x00(Node-ID == 0)
+	 * low BYTE: subindex
+	 */
+	frame[2] = ((nodeId << 8 ) | subindex);
+	frame[3] = 0x0000;
+
+	sendCommand(frame);
+
+	// read response
+	unsigned int ret = readAnswer(ans, ans_len);
+
+	// check error code
+	checkEPOSerror(E_error);
+
+	return ret;
+}
+
+#if 0
+/*! NOT USED IN libEPOS so far -> untested!
+ */
+static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
+
+	WORD frame[4], **ptr;
+
+	frame[0] = 0x1201; // fixed, opCode==0x12, (len-1) == 1
+	frame[1] = index;
+	frame[2] = 0x0000 | subindex; /* high BYTE: 0x00 (Node-ID == 0)
+	 low BYTE: subindex */
+	frame[3] = 0x000; // ZERO word, will be filled with checksum
+
+	sendCommand(frame);
+
+	// read response
+	return( readAnswer(ptr) ); // answer contains only DWORD ErrorCode
+	// here...
+}
+
+/*! NOT USED IN libEPOS so far -> untested! */
+static int SegmentRead(WORD **ptr) {
+
+	WORD frame[3];
+	int n;
+
+	frame[0] = 0x1400; // fixed, opCode==0x14, (len-1) == 0
+	frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
+	frame[2] = 0x0000; // ZERO word, will be filled with checksum
+
+	sendCommand(frame);
+
+	readAnswer(ptr);
+
+	return(0);
+}
+#endif
+
+void epos_access_usb::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uint32_t data)
+{
+	try {
+		WORD frame[6];
+
+		// fixed: (Len << 8) | OpCode
+		frame[0] = (4 << 8) | (epos_access::SegmentedWrite_Op);
+		frame[1] = index;
+		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		// data to transmit
+		frame[3] = (data & 0x0000FFFF);
+		frame[4] = (data >> 16);
+		frame[5] = 0x00; // ZERO word, will be filled with checksum
+
+		sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		readAnswer(answer, 8);
+
+		checkEPOSerror(E_error);
+	}
+	catch (epos_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
+}
+
+void epos_access_usb::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength)
+{
+	try {
+		WORD frame[6];
+
+		frame[0] = (4 << 8) | (epos_access::InitiateSegmentedWrite_Op); // fixed: (len-1) == 3, WriteObject
+		frame[1] = index;
+		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		// data to transmit
+		*((DWORD *) &frame[3]) = ObjectLength;
+		// frame[4] = << this is filled by the 32bit assignment above >>;
+		frame[5] = 0x00; // ZERO word, will be filled with checksum
+
+		sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		readAnswer(answer, 8);
+
+		checkEPOSerror(E_error);
+
+		toggle = true;
+	}
+	catch (epos_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
+}
+
+void epos_access_usb::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
+{
+	if (len > 63) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Segmented write of > 63 bytes not allowed"));
+	}
+	try {
+		WORD frame[32+2];
+
+		memset(frame, 0, sizeof(frame));
+		frame[0] = ((1+len/2) << 8) | (epos_access::SegmentedWrite_Op); // fixed: (len-1) == 3, WriteObject
+		frame[1] = len | (toggle ? (0x80) : 0x40);
+		memcpy(((char *)&frame[1]+1), ptr, len);
+
+		sendCommand(frame);
+
+		// read response
+		WORD answer[8];
+		readAnswer(answer, 8);
+
+		checkEPOSerror(E_error);
+
+		// change the toggle flag value
+		toggle = (toggle) ? false : true;
+	}
+	catch (epos_error & e) {
+		e << canId(nodeId);
+		throw;
+	}
+}
+
 void epos_access_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 {
 	WORD frame[4];
 
-	frame[0] = (2 << 8) | 0x0E; // (len << 8) | OpCode
+	frame[0] = (2 << 8) | (epos_access::SendNMTService_Op); // (len << 8) | OpCode
 	frame[1] = nodeId;
 	frame[2] = CmdSpecifier;
 	frame[3] = 0x00; // ZERO word, will be filled with checksum
@@ -281,7 +434,7 @@ void epos_access_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 	WORD answer[8];
 	readAnswer(answer, 8);
 
-	epos::checkEPOSerror(E_error);
+	checkEPOSerror(E_error);
 }
 
 void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
@@ -314,7 +467,7 @@ void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data
 		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected answer"));
 	}
 
-	epos::checkEPOSerror(E_error);
+	checkEPOSerror(E_error);
 }
 
 } /* namespace epos */

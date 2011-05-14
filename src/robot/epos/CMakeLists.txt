@@ -1,7 +1,7 @@
 if(LibFTDI_FOUND)
     include_directories (${LibFTDI_INCLUDE_DIRS})
     add_library(epos
-    	epos.cc
+    	epos.cc epos_access.cc
     	epos_access_rs232.cc epos_access_usb.cc)
     	
     target_link_libraries(epos ${LibFTDI_LDFLAGS})
@@ -17,7 +17,7 @@ if(LibFTDI_FOUND)
     target_link_libraries (cantest epos) 
 else(LibFTDI_FOUND)
     add_library(epos
-        	epos.cc
+        	epos.cc epos_access.cc
         	epos_access_rs232.cc)    	
 endif(LibFTDI_FOUND)	
 
