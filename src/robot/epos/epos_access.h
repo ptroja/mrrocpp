@@ -76,12 +76,15 @@ public:
 
 	typedef enum _CanOpen_OpCode {
 		Response_Op = 0x00,
+
 		ReadObject_Op = 0x10,
 		InitiateSegmentedRead_Op = 0x12,
 		SegmentedRead_Op = 0x14,
+
 		WriteObject_Op = 0x11,
 		InitiateSegmentedWrite_Op = 0x13,
 		SegmentedWrite_Op = 0x15,
+
 		SendNMTService_Op = 0x0E,
 		SendCANFrame_Op = 0x20,
 		RequestCANFrame_Op = 0x21,
