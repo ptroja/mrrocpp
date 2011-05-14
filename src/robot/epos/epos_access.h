@@ -114,7 +114,7 @@ public:
 	int SegmentRead(WORD **ptr);
 #endif
 
-	/*! \brief write object value to EPOS
+	/*! \brief write object value to EPOS (for up to 4 bytes)
 	 *
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
@@ -128,6 +128,7 @@ public:
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength length of the object to write
 	 */
 	virtual void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength) = 0;
 
@@ -150,12 +151,14 @@ public:
 	} NMT_COMMAND_t;
 
 	/*! \brief Send a NMT service to, for example, change NMT state or reset the device.
+	 *
 	 *  \param nodeId CAN node ID
 	 *  \param CmdSpecifier command specifier
 	 */
 	virtual void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier) = 0;
 
-	/*! Send CAN frame the the CAN bus
+	/*! \brief Send CAN frame the the CAN bus
+	 *
 	 *  @param Identifier CAN Frame 11-bit Identifier
 	 *  @param Length CAN Frame Data Length Code (DLC)
 	 *  @param Data CAN Frame Data

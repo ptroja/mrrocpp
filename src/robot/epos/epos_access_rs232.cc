@@ -541,11 +541,7 @@ void epos_access_rs232::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifie
 
 	sendCommand(frame);
 
-	// read response
-	WORD answer[8];
-	readAnswer(answer, 8);
-
-	checkEPOSerror(E_error);
+	// no response with RS232
 }
 
 void epos_access_rs232::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
@@ -569,16 +565,7 @@ void epos_access_rs232::SendCANFrame(WORD Identifier, WORD Length, const BYTE Da
 
 	sendCommand(frame);
 
-	// read response
-	WORD answer[8];
-
-	unsigned int a = readAnswer(answer, 8);
-
-	if (a != 2) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected answer"));
-	}
-
-	checkEPOSerror(E_error);
+	// no response with RS232
 }
 
 } /* namespace epos */
