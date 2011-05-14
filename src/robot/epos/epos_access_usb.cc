@@ -8,7 +8,6 @@
 #include <cstdio>
 
 #include "epos_access_usb.h"
-#include "epos.h"
 
 namespace mrrocpp {
 namespace edp {
