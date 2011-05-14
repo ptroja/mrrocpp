@@ -8,6 +8,10 @@
 #ifndef EPOS_ACCESS_SOCKETCAN_H_
 #define EPOS_ACCESS_SOCKETCAN_H_
 
+#include <string>
+
+#include <linux/can.h>
+
 #include "epos_access.h"
 
 namespace mrrocpp {
@@ -18,6 +22,21 @@ class epos_access_socketcan : public epos_access {
 private:
 	//! toggle bit used for segmented write
 	bool toggle;
+
+	//! interface name
+	const std::string iface;
+
+	//! socket descriptor
+	int sock;
+
+	//! write CAN data frame to the network interface
+	void writeToWire(const struct can_frame & frame);
+
+	//! read CAN data frame from the network interface
+	canid_t readFromWire(struct can_frame & frame);
+
+	//! handle the CanOpen protocol management messages
+	void handleCanOpenMgmt(const struct can_frame & frame);
 
 public:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
@@ -65,7 +84,7 @@ public:
 	 *
 	 * @param iface SocketCAN interface to use (i.e. "can0")
 	 */
-	epos_access_socketcan(const char *iface);
+	epos_access_socketcan(const std::string & iface);
 
 	//! Destructor
 	~epos_access_socketcan();

@@ -440,7 +440,7 @@ void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data
 {
 	WORD frame[8];
 
-	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
+	frame[0] = (6 << 8) | (epos_access::SendCANFrame_Op); // (len << 8) | OpCode
 	frame[1] = Identifier;
 	frame[2] = Length;
 
