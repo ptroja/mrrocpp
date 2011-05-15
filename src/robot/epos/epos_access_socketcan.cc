@@ -142,6 +142,15 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	 * 000 <= Upload Domain Segment
 	 */
 
+	// check for Abort Transfer message
+	if (SCS(frame.data[0]) == 4) {
+		E_error = *((uint32_t*) &frame.data[4]);
+		// ??? do we also need to check the reply address (index, subindex)?
+		BOOST_THROW_EXCEPTION(epos_error() << reason("SDO transfer aborted"));
+	} else {
+		E_error = 0;
+	}
+
 	// check the reply SCS
 	if (SCS(frame.data[0]) != 2) {
 		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected SCS (server command specifier) received"));
@@ -155,6 +164,14 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	// check the size indicator
 	if (SIZE_INDICATOR(frame.data[0]) != SIZE_INDICATED) {
 		BOOST_THROW_EXCEPTION(epos_error() << reason("object data size not indicated in reply"));
+	}
+
+	// adress (index, subindex) of the reply object
+	WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+	BYTE r_subindex = (frame.data[3]);
+
+	if ((r_index != index) || (r_subindex != subindex)) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected reply object address (index, subindex)"));
 	}
 
 	switch (BYTES_WITHOUT_DATA(frame.data[0])) {
@@ -227,7 +244,40 @@ void epos_access_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subinde
 
 	writeToWire(frame);
 
-	// TODO: read reply
+	// wait for reply
+	while(readFromWire(frame) != (0x580 + nodeId)) {
+		handleCanOpenMgmt(frame);
+	}
+
+	/*
+	 * SCS: server command specifier replies
+	 * 011 <= Initiate Domain Download (WriteObject)
+	 * 001 <= Download Domain Segment
+	 * 010 <= Initiate Domain Upload (ReadObject)
+	 * 000 <= Upload Domain Segment
+	 */
+
+	// check for Abort Transfer message
+	if (SCS(frame.data[0]) == 4) {
+		E_error = *((uint32_t*) &frame.data[4]);
+		// ??? do we also need to check the reply address (index, subindex)?
+		BOOST_THROW_EXCEPTION(epos_error() << reason("SDO transfer aborted"));
+	} else {
+		E_error = 0;
+	}
+
+	// check the reply SCS
+	if (SCS(frame.data[0]) != 3) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected SCS (server command specifier) received"));
+	}
+
+	// adress (index, subindex) of the reply object
+	WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+	BYTE r_subindex = (frame.data[3]);
+
+	if ((r_index != index) || (r_subindex != subindex)) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected reply object address (index, subindex)"));
+	}
 }
 
 void epos_access_socketcan::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength)
