@@ -94,6 +94,21 @@ void epos_access_socketcan::writeToWire(const struct can_frame & frame)
     }
 }
 
+#define CCS(x)				((x) >> 5)		// client command specifier
+#define SCS(x)				((x) >> 5)		// server command specifier
+
+#define TRANSFER_TYPE(x)	((x) & 0x02)	// set if expedited transfer mode
+#define	TRANSFER_NORMAL		(0x00)			// flag not set in normal transfer mode
+#define	TRANSFER_EXPEDITED	(0x02)			// flag set in expedited transfer mode
+
+#define SIZE_INDICATOR(x)	((x) & 0x01)	// set if data set size is indicated
+#define	SIZE_NOT_INDICATED	(0x00)			// flag not set in normal transfer mode
+#define	SIZE_INDICATED		(0x01)			// flag set in expedited transfer mode
+
+// number of bytes, which do not contain data;
+// valid only in expedited transfer mode AND size indicator flag set
+#define BYTES_WITHOUT_DATA(x)	(((x) >> 2) & 0x03)
+
 void epos_access_socketcan::handleCanOpenMgmt(const struct can_frame & frame)
 {
 
@@ -104,7 +119,7 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	struct can_frame frame;
 
 	frame.can_id = 0x600 + nodeId;
-
+	frame.can_dlc = 8;
 	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
 	frame.data[1] = (index & 0xFF); // index high BYTE
 	frame.data[2] = (index >> 8);   // index low BYTE
@@ -114,7 +129,49 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	frame.data[6] = 0;
 	frame.data[7] = 0;
 
-	return 0;
+	// wait for reply
+	while(readFromWire(frame) != (0x580 + nodeId)) {
+		handleCanOpenMgmt(frame);
+	}
+
+	/*
+	 * SCS: server command specifier replies
+	 * 011 <= Initiate Domain Download (WriteObject)
+	 * 001 <= Download Domain Segment
+	 * 010 <= Initiate Domain Upload (ReadObject)
+	 * 000 <= Upload Domain Segment
+	 */
+
+	// check the reply SCS
+	if (SCS(frame.data[0]) != 2) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected SCS (server command specifier) received"));
+	}
+
+	// check the reply "expedited" field
+	if (TRANSFER_TYPE(frame.data[0]) == TRANSFER_EXPEDITED) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("expedited reply message expected"));
+	}
+
+	// check the size indicator
+	if (SIZE_INDICATOR(frame.data[0]) != SIZE_INDICATED) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("object data size not indicated in reply"));
+	}
+
+	switch (BYTES_WITHOUT_DATA(frame.data[0])) {
+		case 0:
+			*((DWORD *) ans) = *((DWORD *) &frame.data[4]);
+			return 4;
+		case 1:
+			*ans = *((WORD *) &frame.data[4]);
+			break;
+		case 4:
+			*ans = frame.data[4];
+			break;
+		default:
+			BOOST_THROW_EXCEPTION(epos_error() << reason("unsupported reply data size"));
+	}
+
+	return (4 - BYTES_WITHOUT_DATA(frame.data[0]));
 }
 
 #if 0
@@ -160,31 +217,23 @@ void epos_access_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subinde
 	struct can_frame frame;
 
 	frame.can_id = 0x600 + nodeId;
-
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
+	frame.can_dlc = 8;
+	frame.data[0] = 0x22;	// Initiate Domain Download, expedited transfer, client => server,
 	frame.data[1] = (index & 0xFF); // index high BYTE
 	frame.data[2] = (index >> 8);   // index low BYTE
 	frame.data[3] = subindex;
-	frame.data[4] = 0;	// don't care, should be zero
-	frame.data[5] = 0;
-	frame.data[6] = 0;
-	frame.data[7] = 0;
+
+	*((uint32_t *) &frame.data[4]) = data;
+
+	writeToWire(frame);
+
+	// TODO: read reply
 }
 
 void epos_access_socketcan::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength)
 {
 	struct can_frame frame;
-
-	frame.can_id = 0x600 + nodeId;
-
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
-	frame.data[1] = (index & 0xFF); // index high BYTE
-	frame.data[2] = (index >> 8);   // index low BYTE
-	frame.data[3] = subindex;
-	frame.data[4] = 0;	// don't care, should be zero
-	frame.data[5] = 0;
-	frame.data[6] = 0;
-	frame.data[7] = 0;
+	frame.can_dlc = 8;
 }
 
 void epos_access_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
@@ -196,6 +245,7 @@ void epos_access_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size
 	struct can_frame frame;
 
 	frame.can_id = 0x600 + nodeId;
+	frame.can_dlc = 8;
 
 	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
 }
@@ -204,19 +254,24 @@ void epos_access_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpec
 {
 	struct can_frame frame;
 
-	frame.can_id = 0x600 + nodeId;
-
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
+	frame.can_id = 0x0000;
+	frame.can_dlc = 2;
+	frame.data[0] = (uint8_t) CmdSpecifier;
+	frame.data[1] = nodeId;
 
 	writeToWire(frame);
 }
 
 void epos_access_socketcan::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
 {
+	if (Length > 8) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Segmented write of > 63 bytes not allowed"));
+	}
+
 	struct can_frame frame;
 
 	frame.can_id = Identifier;
-
+	frame.can_dlc = Length;
 	memcpy(frame.data, Data, Length);
 
 	writeToWire(frame);
