@@ -50,6 +50,9 @@ typedef boost::error_info <struct segment_number_, int> segment_number;
 //! Desired value that caused the exception.
 typedef boost::error_info <struct desired_value_, double> desired_value;
 
+//! Constraint value that caused the exception.
+typedef boost::error_info <struct desired_value_, double> constraint_value;
+
 /*!
  * \brief Exception thrown when motor velocity constraint exceeded.
  * \author tkornuta
@@ -648,9 +651,9 @@ void check_velocities(
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
 		for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
 		if (v_extremum(sgt, mtr) > vmax_[mtr])
-			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(vmax_[mtr]) << desired_value(v_extremum(sgt, mtr)));
 		else if (v_extremum(sgt, mtr) < vmin_[mtr])
-			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(vmin_[mtr]) << desired_value(v_extremum(sgt, mtr)));
 		}
 }
 
@@ -705,10 +708,14 @@ void check_accelerations(
 	// Check conditions for all segments and motors.
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
 		for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
-		if ((a_start(sgt, mtr) > amax_[mtr]) || (a_final(sgt, mtr) > amax_[mtr]))
-			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
-		else if ((a_start(sgt, mtr) < amin_[mtr]) || (a_final(sgt, mtr) > amin_[mtr]))
-			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+		if (a_start(sgt, mtr) > amax_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(amax_[mtr]) << desired_value(a_start(sgt, mtr)));
+		else if (a_final(sgt, mtr) > amax_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(amax_[mtr]) << desired_value(a_final(sgt, mtr)));
+		else if (a_start(sgt, mtr) < amin_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(amin_[mtr]) << desired_value(a_start(sgt, mtr)));
+		else if (a_final(sgt, mtr) < amin_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mtr) << segment_number(sgt) << constraint_value(amin_[mtr]) << desired_value(a_final(sgt, mtr)));
 		}
 }
 
