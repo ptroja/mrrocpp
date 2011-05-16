@@ -1358,7 +1358,7 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
-#if 0
+#if 1
 	// PVT record have to be transmitted in a Segmented Write mode
 	InitiateSementedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
