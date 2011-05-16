@@ -729,8 +729,7 @@ void compute_pvt_triplets_for_epos(
 	}
 	// Set last segment movement time - in fact t his value isn't takein into consideration by the EPOS2 controller.
 	// (The last triplet is in the form of < P,V,- >).
-	p_.row(N_POINTS - 1) = m0w_.row(i) + m1w_.row(i) * taus_(i) + m2w_.row(i) * (taus_(i) * taus_(i))
-			+ m3w_.row(i) * (taus_(i) * taus_(i) * taus_(i));
+	p_.row(N_POINTS - 1) = p_.row(N_POINTS - 2);
 	v_.row(N_POINTS - 1) = Eigen::Matrix <double, 1, N_MOTORS>::Zero(1, N_MOTORS);
 	t_(N_POINTS - 1) = 0;
 

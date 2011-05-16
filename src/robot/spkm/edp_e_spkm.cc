@@ -36,8 +36,8 @@ const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 
 const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
-const uint32_t effector::Vmax[lib::spkm::NUM_OF_SERVOS] = { 10000UL, 10000UL, 10000UL, 10000UL, 10000UL, 10000UL };
-const uint32_t effector::Amax[lib::spkm::NUM_OF_SERVOS] = { 20000UL, 20000UL, 20000UL, 20000UL, 20000UL, 20000UL };
+const uint32_t effector::MotorVmax[lib::spkm::NUM_OF_SERVOS] = { 10000UL, 10000UL, 10000UL, 10000UL, 10000UL, 10000UL };
+const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 25000UL, 25000UL, 25000UL, 25000UL, 25000UL, 25000UL };
 
 
 
@@ -498,8 +498,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						double vmin[lib::spkm::NUM_OF_SERVOS];
 						double vmax[lib::spkm::NUM_OF_SERVOS];
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-							vmin[mtr] = (-1.0) * Vmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
-							vmax[mtr] = Vmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							vmin[mtr] = (-1.0) * MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							vmax[mtr] = MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
 						}
 						// Check extreme velocities for all segments and motors.
 						check_velocities <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (vmin, vmax, motor_3w, motor_2w, motor_1w);
@@ -509,8 +509,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						double amin[lib::spkm::NUM_OF_SERVOS];
 						double amax[lib::spkm::NUM_OF_SERVOS];
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-							amin[mtr] = (-1.0) * Amax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
-							amax[mtr] = Amax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							amin[mtr] = (-1.0) * MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							amax[mtr] = MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
 						}
 						// Check extreme velocities for all segments and motors.
 						check_accelerations <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (amin, amax, motor_3w, motor_2w, time_invervals);
@@ -552,9 +552,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Setup motion parameters
 							for (size_t i = 0; i < axes.size(); ++i) {
 								axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
-								axes[i]->writeProfileVelocity(Vmax[i]);
-								axes[i]->writeProfileAcceleration(Amax[i]);
-								axes[i]->writeProfileDeceleration(Amax[i]);
+								axes[i]->writeProfileVelocity(MotorVmax[i]);
+								axes[i]->writeProfileAcceleration(MotorAmax[i]);
+								axes[i]->writeProfileDeceleration(MotorAmax[i]);
 								// TODO: setup acceleration and velocity limit values
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
@@ -563,7 +563,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									fflush(stdout);
 								}
 								printf("\n");
-								axes[i]->writeInterpolationDataRecord((int32_t) p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (int32_t) v(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (uint8_t)0);
+								//axes[i]->writeInterpolationDataRecord((int32_t) p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (int32_t) v(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (uint8_t)0);
 
 								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
