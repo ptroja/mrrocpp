@@ -254,9 +254,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << endl;
 							}
 
-							// Check desired joint values if they are absolute.
 							if (is_synchronised()) {
-								get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+								// Check the desired motor (only motors!) values if they are absolute.
+								get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 							}
 							break;
 						case lib::spkm::JOINT:
@@ -267,8 +267,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							}
 
 							if (is_synchronised()) {
+								// Precondition - check whether the desired joint position is valid.
+								get_current_kinematic_model()->check_joints(desired_joints);
 								// Transform desired joint to motors (and check motors/joints values).
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+								// Postcondition - check whether the desired motor position is valid.
+								get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
 								BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
@@ -295,11 +299,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 									// Rest of computations is performed elsewhere...
 								} else {
+
 									// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 									get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
-									// Transform joints to motors (and check motors/joints values).
+									// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
+									// TODO get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
+									get_current_kinematic_model()->check_joints(desired_joints);
+
+									// Transform joints to motors.
 									get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+
+									// Postcondition II  - check whether the desired motor position is valid.
+									get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 
 									// Remember the currently desired joints as old.
 									desired_joints_old = desired_joints;

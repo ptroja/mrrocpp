@@ -32,6 +32,10 @@ protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
 
+public:
+	//! Constructor.
+	model(void);
+
 	/**
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
@@ -43,10 +47,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Constructor.
-	model(void);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.
