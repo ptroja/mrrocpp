@@ -1157,6 +1157,23 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="11">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_estimated_time">
+     <property name="decimals">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="11">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Estimated time [s]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
