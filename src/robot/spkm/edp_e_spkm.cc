@@ -31,9 +31,9 @@ namespace spkm {
 using namespace mrrocpp::lib;
 using namespace std;
 
-const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
-const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
 
 effector::effector(common::shell &_shell) :
 	manip_effector(_shell, lib::spkm::ROBOT_NAME)
@@ -471,6 +471,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
 						cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
 						cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
+
+						// Recalculate extreme velocities taking into consideration required units
+						// (Vdefault is given in [rpm], and on the base of w0..3 coefficients we can compute v in [turns per second])
+						double vmin[lib::spkm::NUM_OF_SERVOS];
+						double vmax[lib::spkm::NUM_OF_SERVOS];
+						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
+							vmin[mtr] = (-1.0) * Vdefault[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							vmax[mtr] = Vdefault[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+						}
+						// Check extreme velocities for all segments and motors.
+						pvat_check_velocities <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (vmin, vmax, motor_3w, motor_2w, motor_1w);
 
 						// Compute PVT triplets for generated segments.
 						// Two additional points are added - first related to the start position and second it required by the EPOS (pos;0;0;).

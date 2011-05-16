@@ -36,19 +36,19 @@ private:
 	//! PKM axes
 	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	boost::array<std::string, 6> axesNames;
+	boost::array<std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
 
 	//! Axes container
-	boost::array<epos::epos *, 6> axes;
+	boost::array<epos::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Default axis velocity [rpm]
-	static const uint32_t Vdefault[6];
+	static const uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Default axis acceleration [rpm/s]
-	static const uint32_t Adefault[6];
+	static const uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Default axis deceleration [rpm/s]
-	static const uint32_t Ddefault[6];
+	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.

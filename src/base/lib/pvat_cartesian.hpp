@@ -563,6 +563,55 @@ void pvat_compute_motor_0w_polynomial_coefficients(
 }
 
 /**
+ * @brief Checks velocities constraints for all segments and motors.
+ *
+ * Computations based on the (1.51) formula from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [in] vmin_ Vector with minimum velocities of all motors.
+ * @param [in] vmax_ Vector with maximum velocities of all motors.
+ * @param [in] m3w_ Matrix with 3w coefficients - for all segments and all motors respectively.
+ * @param [in] m2w_ Matrix with 2w coefficients - for all segments and all motors respectively.
+ * @param [in] m1w_ Matrix with 1w coefficients - for all segments and all motors respectively.
+ */
+template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
+void pvat_check_velocities(
+		const double vmin_[N_MOTORS],
+		const double vmax_[N_MOTORS],
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m1w_
+		)
+{
+	// Compute extreme velocities for all segments and motors (at once! - mi low eigen;)).
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> v_extremum =
+			(m2w_.cwise() * m2w_).cwise() / (3.0 * m3w_) + m1w_;
+
+	cout << "vmin:\n";
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		cout<< vmin_[mtr]<<" ";
+	}
+	cout<< endl;
+	cout << "vmax:\n";
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		cout<< vmax_[mtr]<<" ";
+	}
+	cout<< endl;
+
+	cout << "v_extremum:\n" << v_extremum << endl;
+
+	// Check extremum for all segments and motors.
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
+		// TODO
+	}
+
+}
+
+/**
  * @brief Computes PVT triplets for
  *
  * @author tkornuta
