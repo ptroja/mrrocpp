@@ -19,7 +19,7 @@
 USING_PART_OF_NAMESPACE_EIGEN
 
 using namespace std;
-using namespace mrrocpp::lib;
+using namespace mrrocpp::lib::pvat;
 
 int main(int argc, char *argv[])
 {

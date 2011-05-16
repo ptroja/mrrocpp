@@ -8,8 +8,8 @@
  *
  * @ingroup LIB
  */
-#ifndef PAVT__CARTESIAN_HPP_
-#define PAVT__CARTESIAN_HPP_
+#ifndef PVAT__CARTESIAN_HPP_
+#define PVAT__CARTESIAN_HPP_
 
 #include <cmath>
 #include <iostream>
@@ -21,14 +21,47 @@
 
 #include "base/lib/mrmath/Xyz_Angle_Axis_Gamma_vector.h"
 #include "base/kinematics/kinematic_model.h"
+#include "base/edp/edp_exceptions.h"
 
 namespace mrrocpp {
 namespace lib {
+namespace pvat {
 
 using namespace std;
 
 // import most common Eigen types
 USING_PART_OF_NAMESPACE_EIGEN
+
+//! Name of violated constraint - maximum.
+const std::string MAXIMUM_CONSTRAINT = "Maximum";
+
+//! Name of violated constraint - minimum.
+const std::string MINIMUM_CONSTRAINT = "Minimum";
+
+//! Type of violated constraint.
+typedef boost::error_info <struct constraint_type_, std::string> constraint_type;
+
+//! Number of motor that caused the exception.
+typedef boost::error_info <struct motor_number_, int> motor_number;
+
+//! Desired value that caused the exception.
+typedef boost::error_info <struct desired_value_, double> desired_value;
+
+/*!
+ * \brief Exception thrown when motor velocity constraint exceeded.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_motor_velocity_constraint_exceeded, "Motor velocity constraint exceeded")
+
+/*!
+ * \brief Exception thrown when motor velocity constraint exceeded.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_motor_acceleration_constraint_exceeded, "Motor acceleration constraint exceeded")
+
+
+
+
 
 /**
  * @brief Creates a vector containing time slices.
@@ -43,7 +76,7 @@ USING_PART_OF_NAMESPACE_EIGEN
  * @param [in] motion_time_ Total motion time.
  */
 template <unsigned int N_SEGMENTS>
-void pvat_divide_motion_time_into_constant_time_deltas(Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_, const double motion_time_)
+void divide_motion_time_into_constant_time_deltas(Eigen::Matrix <double, N_SEGMENTS, 1> & time_deltas_, const double motion_time_)
 {
 	// There must be some segments (besides we cannot divide by zero).
 	assert (N_SEGMENTS!=0);
@@ -83,7 +116,7 @@ void pvat_divide_motion_time_into_constant_time_deltas(Eigen::Matrix <double, N_
  * @param [in] desired_end_effector_frame_ Homogeneous matrix containing desired end effector pose.
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
-void pvat_linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
+void linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
 		double, N_POINTS - 1, 1> time_deltas_, mrrocpp::kinematics::common::kinematic_model* model_, const lib::JointArray desired_joints_old_, const mrrocpp::lib::Homog_matrix& current_end_effector_frame_, const mrrocpp::lib::Homog_matrix& desired_end_effector_frame_)
 {
 	// Manipulator has got to have some axes.
@@ -205,7 +238,7 @@ void pvat_linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTO
  * @param [in] desired_end_effector_frame_ Homogeneous matrix containing desired end effector pose.
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
-void pvat_cubic_polynomial_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
+void cubic_polynomial_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
 		double, N_POINTS - 1, 1> time_deltas_, mrrocpp::kinematics::common::kinematic_model* model_, const lib::JointArray desired_joints_old_, const mrrocpp::lib::Homog_matrix& current_end_effector_frame_, const mrrocpp::lib::Homog_matrix& desired_end_effector_frame_)
 {
 	// Manipulator has got to have some axes.
@@ -322,7 +355,7 @@ void pvat_cubic_polynomial_interpolate_motor_poses(Eigen::Matrix <double, N_POIN
  * @param [in] motor_interpolations_ Matrix containing interpolated motor poses.
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_motor_deltas_for_segments(
+void compute_motor_deltas_for_segments(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & motor_deltas_for_segments_,
 		const Eigen::Matrix <double, N_SEGMENTS + 1, N_MOTORS> motor_interpolations_
 		)
@@ -351,13 +384,13 @@ void pvat_compute_motor_deltas_for_segments(
  * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS>
-void pvat_compute_tau_coefficients_matrix(
+void compute_tau_coefficients_matrix(
 		Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> & tau_coefficients_,
 		const Eigen::Matrix <double, N_SEGMENTS, 1> time_deltas_
 		)
 {
-	// Zero matrix.
-	tau_coefficients_ = Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS>::Zero();
+	// Zero all matrix coefficients.
+	tau_coefficients_ = Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS>::Zero(N_SEGMENTS, N_SEGMENTS);
 
 	// First row.
 	tau_coefficients_(0, 0) = time_deltas_(0) * 2.0 / 3.0;
@@ -390,7 +423,7 @@ void pvat_compute_tau_coefficients_matrix(
  * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_right_side_coefficients_vector(Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & right_side_coefficients_, const Eigen::Matrix <
+void compute_right_side_coefficients_vector(Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & right_side_coefficients_, const Eigen::Matrix <
 		double, N_SEGMENTS, N_MOTORS> motor_deltas_, const Eigen::Matrix <double, N_SEGMENTS, 1> time_deltas_)
 {
 	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
@@ -426,14 +459,14 @@ void pvat_compute_right_side_coefficients_vector(Eigen::Matrix <double, N_SEGMEN
  * @param [in] b_ Right side coefficients (motor deltas). (Computations will affect this parameters, thus it is not const!)
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_motor_2w_polynomial_coefficients(
+void compute_motor_2w_polynomial_coefficients(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w_,
 		Eigen::Matrix <double, N_SEGMENTS, N_SEGMENTS> a_,
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> b_
 		)
 {
-	// TODO: REMOVE THIS after tests.
-	m2w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+	// Zero all matrix coefficients.
+	m2w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero(N_SEGMENTS, N_MOTORS);
 
 	// First step: substract equations, start from the last row.
 	for (int sgt = N_SEGMENTS - 1; sgt > 0; --sgt) {
@@ -472,15 +505,15 @@ void pvat_compute_motor_2w_polynomial_coefficients(
  * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_motor_1w_polynomial_coefficients(
+void compute_motor_1w_polynomial_coefficients(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m1w_,
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> m2w_,
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> motor_deltas_,
 		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
 		)
 {
-	// TODO: REMOVE THIS after tests.
-	m1w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+	// Zero all matrix coefficients.
+	m1w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero(N_SEGMENTS, N_MOTORS);
 
 	// Compute 1w for last segment.
 	m1w_.row(N_SEGMENTS-1) = motor_deltas_.row(N_SEGMENTS-1) * 3.0 / (taus_(N_SEGMENTS-1) *2.0) - m2w_.row(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) / 2.0;
@@ -511,15 +544,15 @@ void pvat_compute_motor_1w_polynomial_coefficients(
  * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_motor_3w_polynomial_coefficients(
+void compute_motor_3w_polynomial_coefficients(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> m2w_,
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> motor_deltas_,
 		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
 		)
 {
-	// TODO: REMOVE THIS after tests.
-	m3w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+	// Zero all matrix coefficients.
+	m3w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero(N_SEGMENTS, N_MOTORS);
 
 	// Compute 3w for last segment.
 	m3w_.row(N_SEGMENTS-1) = - m2w_.row(N_SEGMENTS-1) / (taus_(N_SEGMENTS-1) *2.0) - motor_deltas_.row(N_SEGMENTS-1) / ( taus_(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) * taus_(N_SEGMENTS-1) * 2.0);
@@ -546,13 +579,13 @@ void pvat_compute_motor_3w_polynomial_coefficients(
  * @param [in] motor_interpolations_ Matrix containing interpolated motor poses.
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_compute_motor_0w_polynomial_coefficients(
+void compute_motor_0w_polynomial_coefficients(
 		Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m0w_,
 		const Eigen::Matrix <double, N_SEGMENTS + 1, N_MOTORS> motor_interpolations_
 		)
 {
-	// TODO: REMOVE THIS after tests.
-	m0w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero();
+	// Zero all matrix coefficients.
+	m0w_ = Eigen::Matrix <double, N_SEGMENTS, N_MOTORS>::Zero(N_SEGMENTS, N_MOTORS);
 
 	// Compute 03w for all segments.
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
@@ -579,7 +612,7 @@ void pvat_compute_motor_0w_polynomial_coefficients(
  * @param [in] m1w_ Matrix with 1w coefficients - for all segments and all motors respectively.
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_check_velocities(
+void check_velocities(
 		const double vmin_[N_MOTORS],
 		const double vmax_[N_MOTORS],
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
@@ -599,12 +632,21 @@ void pvat_check_velocities(
 	cout<< endl;
 
 	// Compute extreme velocities for all segments and motors (at once! - mi low eigen;)).
-	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> v_extremum =
-			(m2w_.cwise() * m2w_).cwise() / (3.0 * m3w_) + m1w_;
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> v_extremum = (m2w_.cwise() * m2w_).cwise() / (3.0 * m3w_) + m1w_;
+	// Correct all NANs.
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
+		for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+			if (m3w_(sgt, mtr) == 0.0)
+				v_extremum(sgt, mtr) = m1w_ (sgt, mtr);
+		}
+
+
 	cout << "v_extremum:\n" << v_extremum << endl;
 
 	// Check conditions for all segments and motors.
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
+		// Throw non-fatal error - this mode requires synchronization.
+//		BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded());
 		// TODO check!
 	}
 }
@@ -620,16 +662,16 @@ void pvat_check_velocities(
  * @tparam N_SEGMENTS number of motion segments.
  * @tparam N_MOTORS Number of manipulator motors.
  *
- * @param [in] amin_ Vector with minimum accelerations (deaccelerations) of all motors.
- * @param [in] amax_ Vector with maximum accelerations of all motors.
+ * @param [in] amin_ Vector with minimum accelerations (deaccelerations) of all motors [turns per second^2].
+ * @param [in] amax_ Vector with maximum accelerations of all motors [turns per second^2].
  * @param [in] m3w_ Matrix with 3w coefficients - for all segments and all motors respectively.
  * @param [in] m2w_ Matrix with 2w coefficients - for all segments and all motors respectively.
- * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
+ * @param [in] taus_ Times of motion for segments (may be different for each segment!).
  */
 template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
-void pvat_check_accelerations(
-		const double vmin_[N_MOTORS],
-		const double vmax_[N_MOTORS],
+void check_accelerations(
+		const double amin_[N_MOTORS],
+		const double amax_[N_MOTORS],
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w_,
 		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
@@ -651,7 +693,10 @@ void pvat_check_accelerations(
 	cout << "a_start:\n" << a_start << endl;
 
 	// Compute acceleration values at the segment end.
-	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> a_final = 6.0 * (m2w_.cwise() *taus_) + 2.0 * * m2w_;
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> a_final;
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		a_final.col(mtr) = 6.0 * (m3w_.col(mtr).cwise() * taus_) + 2.0 * m2w_.col(mtr);
+	}
 	cout << "a_final:\n" << a_final << endl;
 
 	// Check conditions for all segments and motors.
@@ -662,7 +707,9 @@ void pvat_check_accelerations(
 }
 
 /**
- * @brief Computes PVT triplets for
+ * @brief Computes PVT triplets for n segments, thus n+1 points.
+ *
+ * First point is the start position (pos, 0, tau) and the last (required by the EPOS) is (pos;0;0;).
  *
  * @author tkornuta
  *
@@ -679,7 +726,7 @@ void pvat_check_accelerations(
  * @param [in] m0w_ Matrix with 0w coefficients.
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
-void pvat_compute_pvt_triplets_for_epos(
+void compute_pvt_triplets_for_epos(
 		Eigen::Matrix <double, N_POINTS, N_MOTORS> & p_,
 		Eigen::Matrix <double, N_POINTS, N_MOTORS> & v_,
 		Eigen::Matrix <double, N_POINTS, 1> & t_,
@@ -692,7 +739,7 @@ void pvat_compute_pvt_triplets_for_epos(
 {
 	// Start point.
 	p_.row(0) = m0w_.row(0);
-	v_.row(0) = Eigen::Matrix <double, 1, N_MOTORS>::Zero();
+	v_.row(0) = Eigen::Matrix <double, 1, N_MOTORS>::Zero(1, N_MOTORS);
 
 	// For all other interpolation points.
 	for (int i = 1; i < N_POINTS; ++i) {
@@ -709,9 +756,9 @@ void pvat_compute_pvt_triplets_for_epos(
 	cout<<"t "<<t_;*/
 }
 
-
+} // namespace pvat
 } // namespace lib
 } // namespace mrrocpp
 
-#endif /* PAVT__CARTESIAN_HPP_ */
+#endif /* PVAT__CARTESIAN_HPP_ */
 
