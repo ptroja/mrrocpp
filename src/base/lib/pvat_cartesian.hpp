@@ -572,8 +572,8 @@ void pvat_compute_motor_0w_polynomial_coefficients(
  * @tparam N_SEGMENTS number of motion segments.
  * @tparam N_MOTORS Number of manipulator motors.
  *
- * @param [in] vmin_ Vector with minimum velocities of all motors.
- * @param [in] vmax_ Vector with maximum velocities of all motors.
+ * @param [in] vmin_ Vector with minimum velocities of all motors [turns per second].
+ * @param [in] vmax_ Vector with maximum velocities of all motors [turns per second].
  * @param [in] m3w_ Matrix with 3w coefficients - for all segments and all motors respectively.
  * @param [in] m2w_ Matrix with 2w coefficients - for all segments and all motors respectively.
  * @param [in] m1w_ Matrix with 1w coefficients - for all segments and all motors respectively.
@@ -587,10 +587,6 @@ void pvat_check_velocities(
 		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m1w_
 		)
 {
-	// Compute extreme velocities for all segments and motors (at once! - mi low eigen;)).
-	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> v_extremum =
-			(m2w_.cwise() * m2w_).cwise() / (3.0 * m3w_) + m1w_;
-
 	cout << "vmin:\n";
 	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
 		cout<< vmin_[mtr]<<" ";
@@ -602,11 +598,65 @@ void pvat_check_velocities(
 	}
 	cout<< endl;
 
+	// Compute extreme velocities for all segments and motors (at once! - mi low eigen;)).
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> v_extremum =
+			(m2w_.cwise() * m2w_).cwise() / (3.0 * m3w_) + m1w_;
 	cout << "v_extremum:\n" << v_extremum << endl;
 
-	// Check extremum for all segments and motors.
+	// Check conditions for all segments and motors.
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
-		// TODO
+		// TODO check!
+	}
+}
+
+
+/**
+ * @brief Checks velocities constraints for all segments and motors.
+ *
+ * Computations based on the (1.51) formula from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * @author tkornuta
+ *
+ * @tparam N_SEGMENTS number of motion segments.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [in] amin_ Vector with minimum accelerations (deaccelerations) of all motors.
+ * @param [in] amax_ Vector with maximum accelerations of all motors.
+ * @param [in] m3w_ Matrix with 3w coefficients - for all segments and all motors respectively.
+ * @param [in] m2w_ Matrix with 2w coefficients - for all segments and all motors respectively.
+ * @param [in] taus_ Times of motion for one segment (may be different for each segment!).
+ */
+template <unsigned int N_SEGMENTS, unsigned int N_MOTORS>
+void pvat_check_accelerations(
+		const double vmin_[N_MOTORS],
+		const double vmax_[N_MOTORS],
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m3w_,
+		const Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> & m2w_,
+		const Eigen::Matrix <double, N_SEGMENTS, 1> taus_
+		)
+{
+	cout << "amin:\n";
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		cout<< amin_[mtr]<<" ";
+	}
+	cout<< endl;
+	cout << "amax:\n";
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		cout<< amax_[mtr]<<" ";
+	}
+	cout<< endl;
+
+	// Compute acceleration values at segment beginning.
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> a_start = 2.0 * m2w_;
+	cout << "a_start:\n" << a_start << endl;
+
+	// Compute acceleration values at the segment end.
+	Eigen::Matrix <double, N_SEGMENTS, N_MOTORS> a_final = 6.0 * (m2w_.cwise() *taus_) + 2.0 * * m2w_;
+	cout << "a_final:\n" << a_final << endl;
+
+	// Check conditions for all segments and motors.
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
+		// TODO check!
 	}
 
 }
