@@ -44,6 +44,9 @@ typedef boost::error_info <struct constraint_type_, std::string> constraint_type
 //! Number of motor that caused the exception.
 typedef boost::error_info <struct motor_number_, int> motor_number;
 
+//! Segment in which a constraint was exceeded.
+typedef boost::error_info <struct segment_number_, int> segment_number;
+
 //! Desired value that caused the exception.
 typedef boost::error_info <struct desired_value_, double> desired_value;
 
@@ -639,16 +642,16 @@ void check_velocities(
 			if (m3w_(sgt, mtr) == 0.0)
 				v_extremum(sgt, mtr) = m1w_ (sgt, mtr);
 		}
-
-
 	cout << "v_extremum:\n" << v_extremum << endl;
 
 	// Check conditions for all segments and motors.
-	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
-		// Throw non-fatal error - this mode requires synchronization.
-//		BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded());
-		// TODO check!
-	}
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
+		for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		if (v_extremum(sgt, mtr) > vmax_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+		else if (v_extremum(sgt, mtr) < vmin_[mtr])
+			BOOST_THROW_EXCEPTION(nfe_motor_velocity_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+		}
 }
 
 
@@ -700,10 +703,13 @@ void check_accelerations(
 	cout << "a_final:\n" << a_final << endl;
 
 	// Check conditions for all segments and motors.
-	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt) {
-		// TODO check!
-	}
-
+	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
+		for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		if ((a_start(sgt, mtr) > amax_[mtr]) || (a_final(sgt, mtr) > amax_[mtr]))
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MAXIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+		else if ((a_start(sgt, mtr) < amin_[mtr]) || (a_final(sgt, mtr) > amin_[mtr]))
+			BOOST_THROW_EXCEPTION(nfe_motor_acceleration_constraint_exceeded() << constraint_type(MINIMUM_CONSTRAINT) << motor_number(mgr) << segment_number(sgt));
+		}
 }
 
 /**
