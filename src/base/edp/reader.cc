@@ -94,7 +94,7 @@ void reader_buffer::operator()()
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	std::string robot_filename = master.config.value <std::string> ("reader_attach_point");
+	std::string robot_filename = master.config.get_edp_reader_attach_point();
 
 	if (master.config.exists("reader_samples"))
 		nr_of_samples = master.config.value <int> ("reader_samples");
@@ -126,6 +126,9 @@ void reader_buffer::operator()()
 
 		sprintf(tmp_string, "current_joints_%d", j);
 		reader_cnf.current_joints[j] = master.config.check_config(tmp_string);
+
+		sprintf(tmp_string, "measured_current_%d", j);
+		reader_cnf.measured_current[j] = master.config.check_config(tmp_string);
 
 		if (j < 6) {
 			sprintf(tmp_string, "force_%d", j);
@@ -165,10 +168,7 @@ void reader_buffer::operator()()
 
 	lib::fd_server_t my_attach;
 
-
-		if ((my_attach = messip::port_create(
-								master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
-				== NULL) {
+	if ((my_attach = messip::port_create(master.config.get_edp_reader_attach_point())) == NULL) {
 
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
@@ -250,9 +250,9 @@ void reader_buffer::operator()()
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary
 		time_of_day = time(NULL);
-		strftime(file_date, 40, "%g%m%d_%H-%M-%S", localtime(&time_of_day));
+		strftime(file_date, 40, "%Y-%m-%d_%H-%M-%S", localtime(&time_of_day));
 
-		sprintf(file_name, "/%s_%s_pomiar-%d", file_date, robot_filename.c_str(), ++file_counter);
+		sprintf(file_name, "/%s_%s_pomiar-%d.csv", file_date, robot_filename.c_str(), ++file_counter);
 		strcpy(config_file_with_dir, reader_meassures_dir.c_str());
 
 		strcat(config_file_with_dir, file_name);
@@ -314,6 +314,8 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 			outfile << data.desired_inc[j] << " ";
 		if (reader_cnf.current_inc[j])
 			outfile << data.current_inc[j] << " ";
+		if (reader_cnf.measured_current[j])
+			outfile << data.measured_current[j] << " ";
 		if (reader_cnf.pwm[j])
 			outfile << data.pwm[j] << " ";
 		if (reader_cnf.uchyb[j])
@@ -385,6 +387,8 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 			outfile << "desired_inc[" << j << "];";
 		if (reader_cnf.current_inc[j])
 			outfile << "current_inc[" << j << "];";
+		if (reader_cnf.measured_current[j])
+			outfile << "measured_current[" << j << "];";
 		if (reader_cnf.pwm[j])
 			outfile << "pwm[" << j << "];";
 		if (reader_cnf.uchyb[j])
@@ -442,6 +446,8 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 			outfile << data.desired_inc[j] << ";";
 		if (reader_cnf.current_inc[j])
 			outfile << data.current_inc[j] << ";";
+		if (reader_cnf.measured_current[j])
+			outfile << data.measured_current[j] << ";";
 		if (reader_cnf.pwm[j])
 			outfile << data.pwm[j] << ";";
 		if (reader_cnf.uchyb[j])

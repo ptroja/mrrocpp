@@ -19,19 +19,7 @@ namespace irp6p_tfg {
  * @brief IRp6 postument two finger gripper robot label
  * @ingroup irp6p_tfg
  */
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_TFG";
-
-/*!
- * @brief configuration file EDP IRp6 postument two finger gripper section string
- * @ingroup irp6p_tfg
- */
-const std::string EDP_SECTION = "[edp_irp6p_tfg]";
-
-/*!
- * @brief configuration file ECP IRp6 postument two finger gripper section string
- * @ingroup irp6p_tfg
- */
-const std::string ECP_SECTION = "[ecp_irp6p_tfg]";
+const robot_name_t ROBOT_NAME = "irp6p_tfg";
 
 /*!
  * @brief IRp6 postument two finger gripper total number of servos
@@ -50,20 +38,19 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup sarkofag
  */
 
-const std::string ports_strings[] = {"/dev/ttyMI6"};
-
-
-/*!
- * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
- * @ingroup irp6p_tfg
- */
-const int MAX_CURRENT_0 = 150;
+const std::string ports_strings[] = { "/dev/ttyMI6" };
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const double MAX_INCREMENT[] = {100};
+const int MAX_CURRENT_0 = 200;
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const double MAX_INCREMENT[] = { 100 };
 
 }
 } // namespace lib

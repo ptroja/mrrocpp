@@ -20,6 +20,7 @@ add_library(mrrocpp
 	mrmath/mathtr.cc
 	mrmath/k_vector.cc
 	mrmath/ft_v_vector.cc
+	mrmath/Xyz_Angle_Axis_Gamma_vector.cc
 	mrmath/jacobian_matrix.cc
 	configurator.cc
 	c_buffer.cc r_buffer.cc
@@ -36,6 +37,11 @@ add_library(mrrocpp
 	trajectory_pose/constant_velocity_trajectory_pose.cc
 	periodic_timer.cc
 	compat.c
+	ping.cc
+)
+
+add_executable(pvat_test
+	pvat_test.cc
 )
 
 target_link_libraries (mrrocpp sr)

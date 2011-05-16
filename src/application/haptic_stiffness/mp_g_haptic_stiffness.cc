@@ -101,7 +101,7 @@ bool haptic_stiffness::first_step()
 	}
 
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
-	tool_frame.get_frame_tab(irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	irp6ot->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	irp6p->mp_command.command = lib::NEXT_POSE;
 	irp6p->mp_command.instruction.instruction_type = lib::GET;
@@ -116,7 +116,7 @@ bool haptic_stiffness::first_step()
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
 	irp6p->mp_command.instruction.value_in_step_no = td.value_in_step_no;
 
-	tool_frame.get_frame_tab(irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame);
+	irp6p->mp_command.instruction.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	for (int i = 0; i < 3; i++) {
 		irp6p->mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;
@@ -189,7 +189,7 @@ bool haptic_stiffness::next_step()
 	lib::Homog_matrix irp6p_current_arm_frame(irp6p->ecp_reply_package.reply_package.arm.pf_def.arm_frame);
 
 	lib::Homog_matrix irp6p_goal_frame(global_base * irp6ot_current_arm_frame);
-	irp6p_goal_frame.get_frame_tab(irp6p->mp_command.instruction.arm.pf_def.arm_frame);
+	irp6p->mp_command.instruction.arm.pf_def.arm_frame = irp6p_goal_frame;
 
 	lib::Homog_matrix irp6ot_goal_frame;
 

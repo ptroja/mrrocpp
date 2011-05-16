@@ -30,9 +30,7 @@
 #include "base/mp/generator/mp_g_extended_empty.h"
 #include "base/mp/mp_robot.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace mp {
@@ -40,9 +38,7 @@ namespace task {
 
 using namespace std;
 
-
 lib::fd_server_t task::mp_pulse_attach = NULL;
-
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
@@ -50,7 +46,6 @@ task::task(lib::configurator &_config) :
 {
 	// initialize communication with other processes
 	initialize_communication();
-
 }
 
 task::~task()
@@ -219,7 +214,6 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 	va_end(arguments); // Cleans up the list
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
 				{
 
@@ -320,7 +314,6 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 	//va_end ( arguments );              // Cleans up the list
 
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
 				{
 
@@ -382,7 +375,7 @@ void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int num
 
 int task::wait_for_name_open(void)
 {
-	while(1) {
+	while (1) {
 		int32_t type, subtype;
 		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype);
 
@@ -400,12 +393,14 @@ int task::wait_for_name_open(void)
 				ui_pulse_code = type;
 			}
 
-			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
-					robot_node.second->new_pulse = true;
-					robot_node.second->ecp_pulse_code = type;
-				}
-			}
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+						{
+							if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid
+									== mp_pulse_attach->lastmsg_sockfd) {
+								robot_node.second->new_pulse = true;
+								robot_node.second->ecp_pulse_code = type;
+							}
+						}
 		} else if (rcvid == MESSIP_MSG_CONNECTING) {
 			return mp_pulse_attach->lastmsg_sockfd;
 		}
@@ -439,8 +434,9 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 
 	while (!exit_from_while) {
 		int32_t type, subtype;
-		int rcvid = messip::port_receive_pulse(mp_pulse_attach, type, subtype,
-				(current_wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
+		int
+				rcvid =
+						messip::port_receive_pulse(mp_pulse_attach, type, subtype, (current_wait_mode == BLOCK) ? MESSIP_NOTIMEOUT : 0);
 
 		if (rcvid == -1) {
 			int e = errno;
@@ -471,28 +467,29 @@ bool task::check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process
 				continue;
 			}
 
-			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m) {
-				if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid == mp_pulse_attach->lastmsg_sockfd) {
-					robot_node.second->new_pulse = true;
-					robot_node.second->ecp_pulse_code = type;
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+						{
+							if (robot_node.second->ecp_opened && robot_node.second->ecp_scoid
+									== mp_pulse_attach->lastmsg_sockfd) {
+								robot_node.second->new_pulse = true;
+								robot_node.second->ecp_pulse_code = type;
 
-					if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time))
-							== -1) {
-						perror("clock_gettime()");
-					}
+								if (clock_gettime(CLOCK_REALTIME, &(robot_node.second->ecp_pulse_receive_time)) == -1) {
+									perror("clock_gettime()");
+								}
 
-					if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
-						if (!(robot_node.second->new_pulse_checked)) {
-							desired_pulse_found = true;
-							if (current_wait_mode == BLOCK) {
-								exit_from_while = true;
+								if ((process_type == NEW_ECP_PULSE) || (process_type == NEW_UI_OR_ECP_PULSE)) {
+									if (!(robot_node.second->new_pulse_checked)) {
+										desired_pulse_found = true;
+										if (current_wait_mode == BLOCK) {
+											exit_from_while = true;
+										}
+									}
+								}
+								// can we get out of this loop?
+								//	fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
 							}
 						}
-					}
-					// can we get out of this loop?
-					//	fprintf(stderr, "new %s pulse type %d received\n", lib::toString(robot_node.second->robot_name).c_str(), type);
-				}
-			}
 		}
 
 	}
@@ -604,24 +601,18 @@ void task::mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::ge
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-	std::cerr << "mp 3a" << std::endl;
-	const std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
-	const std::string mp_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
+	const std::string sr_net_attach_point = config.get_sr_attach_point();
+
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
+	sr_ecp_msg = new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
 
-	const std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
 	// Rejestracja kanalu dla pulsow z procesu UI
 	if (!mp_pulse_attach) {
 
-		if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL)
-
-		{
+		if ((mp_pulse_attach = messip::port_create(mp_pulse_attach_point)) == NULL) {
 			uint64_t e = errno; // kod bledu systemowego
 			perror("Failed to attach UI Pulse chanel for Master Process");
 			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "mp: Failed to attach UI Pulse channel");
@@ -631,10 +622,10 @@ void task::initialize_communication()
 	}
 
 	ui_scoid = wait_for_name_open();
+
 	// unexepected possible resolution of bug 1526
-	usleep(100*1000);
+	usleep(100 * 1000);
 	ui_opened = true;
-	std::cerr << "mp 3z" << std::endl;
 }
 // -------------------------------------------------------------------
 

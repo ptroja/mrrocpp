@@ -57,14 +57,9 @@ private:
 	lib::Homog_matrix position_matrix;
 
 	/**
-	 * @brief Temporary angle vector used while reading the current robot position.
+	 * @brief Measured position of the robot.
 	 */
-	lib::Xyz_Angle_Axis_vector angle_axis_vector;
-
-	/**
-	 * @brief Current position of the robot.
-	 */
-	double actual_position[6];
+	lib::Xyz_Angle_Axis_vector msr_position;
 
 	/**
 	 * @brief Desired position received from vsp.
@@ -74,7 +69,7 @@ private:
 	/**
 	 * @brief Array filled with coordinates send to the robot.
 	 */
-	double position[6];
+	lib::Xyz_Angle_Axis_vector position;
 
 	/**
 	 * @brief Provides information whether start breaking or not.
@@ -122,7 +117,11 @@ private:
 	 * @brief interpolation polynomial coefficients
 	 */
 	double coeff_[6][6];
+
 	double vel_[6];
+
+	lib::Xyz_Angle_Axis_vector msr_position_old;
+	lib::Xyz_Angle_Axis_vector msr_velocity;
 
 	void velocityProfileLinear(double *coeff, double pos1, double pos2, double t);
 	void velocityProfileSpline(double *coeff, double pos1, double vel1, double pos2, double vel2, double time);
@@ -134,7 +133,7 @@ public:
 	virtual bool next_step();
 
 	double get_breaking_time();
-	double * get_position();
+	lib::Xyz_Angle_Axis_vector get_position();
 	double get_overshoot();
 	void reset();
 };

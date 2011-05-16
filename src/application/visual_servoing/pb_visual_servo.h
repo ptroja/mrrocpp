@@ -9,11 +9,7 @@
 #define PB_VISUAL_SERVO_H_
 
 #include "visual_servo.h"
-#include "visual_servo_types.h"
 #include "PBReading.h"
-
-using visual_servo_types::position_based_configuration;
-using visual_servo_types::position_based_reading;
 
 namespace mrrocpp {
 
@@ -38,7 +34,7 @@ protected:
 	virtual void retrieve_reading();
 	virtual bool is_object_visible_in_latest_reading();
 
-	Processors::VisualServoPB::PBReading reading;
+	Types::Mrrocpp_Proxy::PBReading reading;
 
 	lib::Homog_matrix G_T_E_desired;
 };

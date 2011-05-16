@@ -98,7 +98,7 @@ bool visual_servo_manager::first_step()
 bool visual_servo_manager::next_step()
 {
 	if (!current_position_saved) { // save first position
-		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		current_position = the_robot->reply_package.arm.pf_def.arm_frame;
 		current_position_saved = true;
 	}
 
@@ -122,7 +122,7 @@ bool visual_servo_manager::next_step()
 
 	// prepare command to EDP
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-	next_position.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
 
 	// save next position
 	current_position = next_position;

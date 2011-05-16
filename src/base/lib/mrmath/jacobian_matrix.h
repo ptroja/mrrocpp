@@ -9,8 +9,6 @@
 #ifndef __JACOBIAN_MATRIX_H
 #define __JACOBIAN_MATRIX_H
 
-#include "base/lib/impconst.h"	// frame_tab
-
 namespace mrrocpp {
 namespace lib {
 

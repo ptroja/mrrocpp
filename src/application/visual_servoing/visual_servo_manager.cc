@@ -54,13 +54,13 @@ bool visual_servo_manager::first_step()
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = motion_steps;
 	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
-
+	log_dbg("visual_servo_manager::first_step() begin1\n");
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	current_position_saved = false;
-
+	log_dbg("visual_servo_manager::first_step() begin2\n");
 	//	sigevent ev;
 	//	SIGEV_NONE_INIT(&ev);
 	//
@@ -76,11 +76,11 @@ bool visual_servo_manager::first_step()
 	angular_velocity.setZero();
 	acceleration.setZero();
 	angular_acceleration.setZero();
-
+	log_dbg("visual_servo_manager::first_step() begin3\n");
 	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
-
+	log_dbg("visual_servo_manager::first_step() begin4\n");
 	return true;
 }
 
@@ -98,7 +98,7 @@ bool visual_servo_manager::first_step()
 bool visual_servo_manager::next_step()
 {
 	if (!current_position_saved) { // save first position
-		current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		current_position = the_robot->reply_package.arm.pf_def.arm_frame;
 		current_position_saved = true;
 	}
 
@@ -122,7 +122,7 @@ bool visual_servo_manager::next_step()
 
 	// prepare command to EDP
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-	next_position.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
 
 	// save next position
 	current_position = next_position;

@@ -22,14 +22,12 @@ namespace generator {
 const double MIN_VELOCITY = 0.05;
 const double MSTEP_TIME = 0.002 * 10.0;
 
-
 static inline void generatePowers(int n, double x, double* powers)
 {
-  powers[0] = 1.0;
-  for (int i=1; i<=n; i++)
-  {
-    powers[i] = powers[i-1]*x;
-  }
+	powers[0] = 1.0;
+	for (int i = 1; i <= n; i++) {
+		powers[i] = powers[i - 1] * x;
+	}
 }
 
 /*================================Constructor=============================*//**
@@ -72,11 +70,11 @@ bool neuron_generator::first_step()
 	//get neuron sensor and send information about starting new trajectory.
 	neuron_sensor = (ecp_mp::sensor::neuron_sensor*) sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR];
 	neuron_sensor->startGettingTrajectory();
-	macroSteps=neuron_sensor->getMacroStepsNumber();
-	radius=neuron_sensor->getRadius();
+	macroSteps = neuron_sensor->getMacroStepsNumber();
+	radius = neuron_sensor->getRadius();
 	neuron_sensor->get_reading();
-	printf("macroStep: %d\n",macroSteps);
-	printf("radius: %f\n",radius);
+	printf("macroStep: %d\n", macroSteps);
+	printf("radius: %f\n", radius);
 
 	mstep_ = 0;
 
@@ -91,7 +89,7 @@ bool neuron_generator::first_step()
  */
 bool neuron_generator::next_step()
 {
-	the_robot->ecp_command.instruction_type = lib::SET;
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
 	flushall();
 
 	//Check if stop button in VSP was pressed
@@ -101,26 +99,30 @@ bool neuron_generator::next_step()
 	}
 
 	// ------------ read the current robot position ----------
-	actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-	actual_position_matrix.get_xyz_angle_axis(angle_axis_vector);
-	angle_axis_vector.to_table(actual_position);
+	actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
+	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
-	if(breaking_){
+	if (breaking_) {
 		double tmp;
 
-		tmp = normalized_vector[0] * (actual_position[0] - desired_position[0]) +
-			  normalized_vector[1] * (actual_position[1] - desired_position[1]) +
-			  normalized_vector[2] * (actual_position[2] - desired_position[2] );
-		if(tmp < overshoot_){
+		tmp = normalized_vector[0] * (msr_position[0] - desired_position[0]) + normalized_vector[1] * (msr_position[1]
+				- desired_position[1]) + normalized_vector[2] * (msr_position[2] - desired_position[2]);
+		if (tmp < overshoot_) {
 			overshoot_ = tmp;
-		} 
+		}
 	}
-	//printf("position: %f %f %f\n",actual_position[0],actual_position[1],actual_position[2]);
-	if (neuron_sensor->positionRequested()  && !breaking_) {
-		//printf("position requested inside\n");
-		neuron_sensor->sendCurrentPosition(actual_position[0], actual_position[1], actual_position[2]);
+	//printf("position: %f %f %f\n",msr_position[0],msr_position[1],msr_position[2]);
+	if (neuron_sensor->positionRequested() && !breaking_) {
+
+		msr_velocity = msr_position - msr_position_old;
+		msr_velocity /= MSTEP_TIME;
+
+		neuron_sensor->sendRobotState(msr_position[0], msr_position[1], msr_position[2], msr_velocity[0], msr_velocity[1], msr_velocity[2]);
+
 		neuron_sensor->get_reading();
 	}
+
+	msr_position_old = msr_position;
 
 	if (neuron_sensor->newData() && !breaking_) {
 		//printf("\n-------- new interpolation point ----------\n");
@@ -131,27 +133,26 @@ bool neuron_generator::next_step()
 		desired_position[0] = neuron_sensor->getCoordinates().x;
 		desired_position[1] = neuron_sensor->getCoordinates().y;
 		desired_position[2] = neuron_sensor->getCoordinates().z;
-		desired_position[3] = position[3] = actual_position[3];
-		desired_position[4] = position[4] = actual_position[4];
-		desired_position[5] = position[5] = actual_position[5];
+		desired_position[3] = position[3] = msr_position[3];
+		desired_position[4] = position[4] = msr_position[4];
+		desired_position[5] = position[5] = msr_position[5];
 
 		normalized_vector[0] = neuron_sensor->getLastButOne().x;
 		normalized_vector[1] = neuron_sensor->getLastButOne().y;
 		normalized_vector[2] = neuron_sensor->getLastButOne().z;
 
-        if(neuron_sensor->startBraking()) {
-        	double time;
-        	neuron_sensor->stopReceivingData();
+		if (neuron_sensor->startBraking()) {
+			double time;
+			neuron_sensor->stopReceivingData();
 			breaking_ = true;
 
 			//printf("\n-------- breking ----------\n");
 			flushall();
 
-            if( sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]) < MIN_VELOCITY)
-			{
+			if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
 				time = radius / (2 * MIN_VELOCITY);
 			} else {
-                		time = radius / (2 * sqrt(vel_[0]*vel_[0] + vel_[1]*vel_[1] + vel_[2]*vel_[2]));
+				time = radius / (2 * sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
 			}
 
 			break_steps_ = time / MSTEP_TIME;
@@ -160,45 +161,39 @@ bool neuron_generator::next_step()
 			//printf("vel: %f %f %f \n", vel_[0], vel_[1], vel_[2]);
 			//printf("stop position %f %f %f %f %f %f \n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 
-			for(int i = 0; i < 3; i++)
-			{
-				velocityProfileSpline(coeff_[i], actual_position[i], vel_[i], desired_position[i], 0.0, time);
+			for (int i = 0; i < 3; i++) {
+				velocityProfileSpline(coeff_[i], msr_position[i], vel_[i], desired_position[i], 0.0, time);
 				//printf("coeff : %f %f %f %f \n", coeff_[i][0], coeff_[i][1], coeff_[i][2], coeff_[i][3]);
-				
+
 			}
 		} else {
-			for(int i = 0; i < 3; i++)
-			{
-				velocityProfileLinear(coeff_[i], actual_position[i], desired_position[i], (double)macroSteps * MSTEP_TIME);
-                		vel_[i] = (desired_position[i] - actual_position[i]) / ((double)macroSteps * MSTEP_TIME);
+			for (int i = 0; i < 3; i++) {
+				velocityProfileLinear(coeff_[i], msr_position[i], desired_position[i], (double) macroSteps * MSTEP_TIME);
+				vel_[i] = (desired_position[i] - msr_position[i]) / ((double) macroSteps * MSTEP_TIME);
 			}
 		}
 		mstep_ = 1;
 	}
 
 	//for all of the axes...
-	double time = (double)mstep_ * MSTEP_TIME;
+	double time = (double) mstep_ * MSTEP_TIME;
 	double t[6];
 	generatePowers(5, time, t);
 	for (int i = 0; i < 3; i++) {
-		position[i] = t[0]*coeff_[i][0] +
-                              t[1]*coeff_[i][1] +
-                              t[2]*coeff_[i][2] +
-                              t[3]*coeff_[i][3] +
-                              t[4]*coeff_[i][4] +
-                              t[5]*coeff_[i][5];
+		position[i] = t[0] * coeff_[i][0] + t[1] * coeff_[i][1] + t[2] * coeff_[i][2] + t[3] * coeff_[i][3] + t[4]
+				* coeff_[i][4] + t[5] * coeff_[i][5];
 	}
 	//printf("mstep : %d  setpoint: %f %f %f\n", mstep_, position[0],position[1],position[2]);
 
 	++mstep_; // increment macro step number
 
 	// --------- send new position to the robot (EDP) ---------------
-	position_matrix.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(position));
+	position_matrix.set_from_xyz_angle_axis(position);
 	//send new position to the robot
-	position_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = position_matrix;
 	// --------- send new position to the robot (EDP) (end) --------------
 
-    if(breaking_ && (mstep_ > break_steps_)){
+	if (breaking_ && (mstep_ > break_steps_)) {
 		return false;
 	} else {
 		return true;
@@ -209,7 +204,7 @@ bool neuron_generator::next_step()
  * @brief Returns current robot position.
  * @return Current robot position.
  */
-double * neuron_generator::get_position()
+lib::Xyz_Angle_Axis_vector neuron_generator::get_position()
 {
 	return position;
 }
@@ -242,7 +237,7 @@ void neuron_generator::reset()
 	t = 0.02;
 	overshoot_ = 1000000;
 
-    	breaking_ = false;
+	breaking_ = false;
 	break_steps_ = 1;
 }
 
@@ -263,8 +258,8 @@ void neuron_generator::velocityProfileSpline(double *coeff, double pos1, double 
 
 	coeff[0] = pos1;
 	coeff[1] = vel1;
-	coeff[2] = (-3.0*pos1 + 3.0*pos2 - 2.0*vel1*t[1] - vel2*t[1]) / t[2];
-	coeff[3] = (2.0*pos1 - 2.0*pos2 + vel1*t[1] + vel2*t[1]) / t[3];
+	coeff[2] = (-3.0 * pos1 + 3.0 * pos2 - 2.0 * vel1 * t[1] - vel2 * t[1]) / t[2];
+	coeff[3] = (2.0 * pos1 - 2.0 * pos2 + vel1 * t[1] + vel2 * t[1]) / t[3];
 	coeff[4] = 0.0;
 	coeff[5] = 0.0;
 }

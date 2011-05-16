@@ -11,6 +11,8 @@
 
 #include "robot/spkm/dp_spkm.h"
 
+#include "base/lib/mrmath/homog_matrix.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
@@ -19,7 +21,25 @@ namespace spkm {
  * @brief SwarmItFix Parallel Kinematic Machine robot label
  * @ingroup spkm
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
+const robot_name_t ROBOT_NAME = "spkm";
+
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine number of motors.
+ *
+ * The kinematics, as well as control of the whole PKM, is solved for 6DOF - three for PM and three for SW .
+ *
+ * @ingroup spkm
+ */
+const int NUM_OF_SERVOS = 6;
+
+/*!
+ * @brief Number of segments making up the whole PKM motion.
+ *
+ *
+ * @author tkornuta
+ * @ingroup spkm
+ */
+const unsigned int NUM_OF_MOTION_SEGMENTS = 64;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
@@ -27,12 +47,13 @@ const robot_name_t ROBOT_NAME = "ROBOT_SPKM";
  */
 enum CBUFFER_VARIANT
 {
-	POSE,
-	QUICKSTOP,
-	CLEAR_FAULT
+	POSE, QUICKSTOP, CLEAR_FAULT
 };
 
-//! Pose specification variants
+/*!
+ * Pose specification variants
+ * @ingroup spkm
+ */
 typedef enum _POSE_SPECIFICATION
 {
 	FRAME, JOINT, MOTOR
@@ -65,10 +86,12 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant) {
+		switch (variant)
+		{
 			case POSE:
 				ar & pose_specification;
-				switch (pose_specification) {
+				switch (pose_specification)
+				{
 					case FRAME:
 						ar & goal_pos;
 						break;
@@ -93,7 +116,7 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::frame_tab current_frame;
+	lib::Homog_matrix current_frame;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 
@@ -108,19 +131,7 @@ struct rbuffer
 		ar & epos_controller;
 		ar & contact;
 	}
-}__attribute__((__packed__));
-
-/*!
- * @brief configuration file EDP SwarmItFix Parallel Kinematic Machine section string
- * @ingroup spkm
- */
-const std::string EDP_SECTION = "[edp_spkm]";
-
-/*!
- * @brief configuration file ECP SwarmItFix Parallel Kinematic Machine section string
- * @ingroup spkm
- */
-const std::string ECP_SECTION = "[ecp_spkm]";
+};
 
 } // namespace spkm
 } // namespace lib
