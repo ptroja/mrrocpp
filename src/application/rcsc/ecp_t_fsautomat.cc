@@ -259,7 +259,8 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			if (operator_reaction("Save?"))
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
+		}
+		 else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
 				if (ecpLevel) {
 					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
@@ -305,7 +306,7 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-			//double gen_args[2];
+			//double gen_args[2];//TODO@ askubis zmienic spowrotem
 			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 
