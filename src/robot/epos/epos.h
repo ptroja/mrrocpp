@@ -90,16 +90,6 @@ private:
 	/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
 	/* [ one simplification: Node-ID is always 0] */
 
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
-	 *
-	 * @param ans answer buffer
-	 * @param length of answer buffer
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @return answer array from the controller
-	 */
-	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex);
-
 	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param index object entry index in a dictionary
@@ -110,10 +100,7 @@ private:
 	T ReadObjectValue(WORD index, BYTE subindex)
 	{
 		WORD answer[8];
-		ReadObject(answer, 8, index, subindex);
-
-		// check error code
-		checkEPOSerror(device.E_error);
+		device.ReadObject(answer, 8, nodeId, index, subindex);
 
 #ifdef DEBUG
 		T val;
@@ -132,20 +119,17 @@ private:
 		}
 	}
 
-#if 0
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2
+	/*! \brief write object value to EPOS
 	 *
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param data object data
 	 */
-	int InitiateSegmentedRead(WORD index, BYTE subindex );
-
-	/*! \brief read data segment of the object initiated with 'InitiateSegmentedRead()'
-	 *
-	 * @param ptr pointer to data to be filled
-	 */
-	int SegmentRead(WORD **ptr);
-#endif
+	template<class T>
+	void WriteObjectValue(WORD index, BYTE subindex, T data)
+	{
+		device.WriteObject(nodeId, index, subindex, (uint32_t) data);
+	}
 
 	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
 	 *
@@ -161,23 +145,6 @@ private:
 	 */
 	void SegmentedWrite(BYTE * ptr, std::size_t len);
 
-	/*! \brief write obect to EPOS
-	 *
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
-	 */
-	void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
-
-	/*! \brief write object value to EPOS
-	 *
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @param data0 first WORD of the object
-	 * @param data1 second WORD of the object
-	 */
-	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
-
 	/*! \brief compare two 16bit bitmasks
 	 *
 	 * @return result of comparison */
@@ -189,9 +156,6 @@ private:
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
 
-	//! toggle bit used for segmented write
-	bool toggle;
-
 	//! remote operation enable bit
 	bool remote;
 
@@ -202,9 +166,6 @@ public:
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
-
-	/*! \brief check global variable E_error for EPOS error code */
-	static void checkEPOSerror(DWORD E_error);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();

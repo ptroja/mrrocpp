@@ -54,7 +54,7 @@ bool effector::initialize_communication()
 {
 
 	const std::string
-			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
+			server_attach_point(config.get_edp_resourceman_attach_point());
 
 	// nawiazywanie komunikacji
 

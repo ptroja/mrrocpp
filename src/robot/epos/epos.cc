@@ -774,12 +774,7 @@ void epos::startRelativeMotion()
 void epos::setOperationMode(operational_mode_t m)
 {
 	if(OpMode != m) {
-		WORD dw[2];
-
-		dw[1] = 0x0000; // high WORD of DWORD is not used here
-		dw[0] = (int8_t) m;
-
-		WriteObject(0x6060, 0x00, dw);
+		WriteObjectValue(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
 	}
@@ -1053,13 +1048,8 @@ void epos::writeIcurrent(INTEGER16 val)
 /* save all parameters home; 14.1.55 */
 void epos::saveParameters()
 {
-	WORD dw[2];
-
-	// write sensor type
-	dw[0] = (WORD) (0x6173);
-	dw[1] = (WORD) (0x6576);
-
-	WriteObject(0x1010, 0x01, dw);
+	// this is an alias for the original libepos API
+	Store();
 }
 
 // by Martí Morta
@@ -1167,7 +1157,7 @@ void epos::writeTargetPosition(INTEGER32 val)
 std::string epos::readDeviceName()
 {
 	WORD answer[8];
-	unsigned int r = ReadObject(answer, 8, 0x1008, 0x00);
+	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
 
 	char name[16];
 
@@ -1653,24 +1643,26 @@ void epos::monitorStatus()
 
 void epos::Store()
 {
-	WORD dw[2];
-
 	// *save* data
-	dw[0] = ('s') | ('a' << 8);
-	dw[1] = ('v') | ('e' << 8);
+	uint32_t save;
+	save = ('s');
+	save |= ('a' << 8);
+	save |= ('v' << 16);
+	save |= ('e' << 24);
 
-	WriteObject(0x1010, 0x01, dw);
+	WriteObjectValue(0x1010, 0x01, save);
 }
 
 void epos::Restore()
 {
-	WORD dw[2];
-
 	// *load* data
-	dw[0] = ('l') | ('o' << 8);
-	dw[1] = ('a') | ('d' << 8);
+	uint32_t load;
+	load = ('l');
+	load |= ('o' << 8);
+	load |= ('a' << 16);
+	load |= ('d' << 24);
 
-	WriteObject(0x1011, 0x01, dw);
+	WriteObjectValue(0x1011, 0x01, load);
 }
 
 bool epos::isReferenced()
@@ -1764,258 +1756,6 @@ int epos::waitForTarget(unsigned int t)
 	return (0);
 }
 
-/*
- *************************************************************
- check EPOS error code
- ****************************************************************
- */
-
-/* check the global variable E_error for EPOS error code */
-void epos::checkEPOSerror(DWORD E_error)
-{
-	const char *msg;
-	switch (E_error) {
-		//case 0x00000000: msg = "No Communication Error: RS232 communication successful"; break;
-		case 0x00000000: return;
-		case 0x05030000: msg = "Toggle Error: Toggle bit not alternated"; break;
-		case 0x05040000: msg = "SDO Time Out: SDO protocol timed out"; break;
-		case 0x05040001: msg = "Client / Server Specifier Error: Client / server command specifier not valid or unknown"; break;
-		case 0x05040005: msg = "Out of Memory Error: Out of memory"; break;
-		case 0x06010000: msg = "Access Error: Unsupported access to an object"; break;
-		case 0x06010001: msg = "Write Only: Read command to a write only object"; break;
-		case 0x06010002: msg = "Read Only: Write command to a read only object"; break;
-		case 0x06020000: msg = "Object does not exist Error: Last read or write command had wrong object index or subindex"; break;
-		case 0x06040041: msg = "PDO mapping Error: Object is not mappable to the PDO"; break;
-		case 0x06040042: msg = "PDO Length Error: Number and length of objects to be mapped would exceed PDO length"; break;
-		case 0x06040043: msg = "General Parameter Error: General parameter incompatibility"; break;
-		case 0x06040047: msg = "General internal Incompatibility Error: General internal incompatibility in device"; break;
-		case 0x06060000: msg = "Hardware Error: Access failed due to hardware error"; break;
-		case 0x06070010: msg = "Service Parameter Error: Data type does not match, length or service parameter does not match"; break;
-		case 0x06070012: msg = "Service Parameter too long Error: Data type does not match, length of service parameter too high"; break;
-		case 0x06070013: msg = "Service Parameter too short Error: Data type does not match, length of service parameter too low"; break;
-		case 0x06090011: msg = "Object Subindex Error: Last read or write command had wrong object subindex"; break;
-		case 0x06090030: msg = "Value Range Error: Value range of parameter exceeded"; break;
-		case 0x06090031: msg = "Value too high Error: Value of parameter written too high"; break;
-		case 0x06090032: msg = "Value too low Error: Value of parameter written too low"; break;
-		case 0x06090036: msg = "Maximum less Minimum Error: Maximum value is less than minimum value"; break;
-		case 0x08000000: msg = "General Error: General error"; break;
-		case 0x08000020: msg = "Transfer or store Error: Data cannot be transferred or stored"; break;
-		case 0x08000021: msg = "Local Control Error: Data cannot be transferred or stored to application because of local control"; break;
-		case 0x08000022: msg = "Wrong Device State: Data cannot be transferred or stored to application because of present device state"; break;
-		case 0x0F00FFC0: msg = "Wrong NMT State Error: Device is in wrong NMT state"; break;
-		case 0x0F00FFBF: msg = "Illegal Command Error: RS232 command is illegal (does not exist)"; break;
-		case 0x0F00FFBE: msg = "Password Error: Password is incorrect"; break;
-		case 0x0F00FFBC: msg = "Error Service Mode: Device is not in service mode"; break;
-		case 0x0F00FFB9: msg = "Error CAN ID: Wrong CAN ID"; break;
-
-		default:
-			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
-			printf("EPOS error code: 0x%08x\n", E_error);
-			break;
-	}
-
-	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
-}
-
-/* copied from EPOS Communication Guide, p.8 */
-WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
-{
-	WORD shifter, c;
-	WORD carry;
-	WORD CRC = 0;
-
-	if (debug) {
-		int i = numberOfWords;
-		const WORD * ptr = pDataArray;
-		printf("CRC[%d]: ", numberOfWords);
-		while(i--) {
-			printf("0x%04X ", *ptr++);
-		}
-		printf("\n");
-	}
-
-	//Calculate pDataArray Word by Word
-	while (numberOfWords--) {
-		shifter = 0x8000; //Initialize BitX to Bit15
-		c = *pDataArray++; //Copy next DataWord to c
-		do {
-			carry = CRC & 0x8000; //Check if Bit15 of CRC is set
-			CRC <<= 1; //CRC = CRC * 2
-			if (c & shifter)
-				CRC++; //CRC = CRC + 1, if BitX is set in c
-			if (carry)
-				CRC ^= 0x1021; //CRC = CRC XOR G(x), if carry is true
-			shifter >>= 1; //Set BitX to next lower Bit,
-			//shifter = shifter/2
-		} while (shifter);
-	}
-
-	if (debug) {
-		printf("checksum == %#06x\n", CRC);
-	}
-	return CRC;
-}
-
-unsigned int epos::ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex)
-{
-	WORD frame[4];
-
-	frame[0] = 0x0210;
-	frame[1] = index;
-	/*
-	 * high BYTE: 0x00(Node-ID == 0)
-	 * low BYTE: subindex
-	 */
-	frame[2] = ((nodeId << 8 ) | subindex);
-	frame[3] = 0x0000;
-
-	device.sendCommand(frame);
-
-	// read response
-	return (device.readAnswer(ans, ans_len));
-}
-
-#if 0
-/*! NOT USED IN libEPOS so far -> untested!
- */
-static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
-
-	WORD frame[4], **ptr;
-
-	frame[0] = 0x1201; // fixed, opCode==0x12, (len-1) == 1
-	frame[1] = index;
-	frame[2] = 0x0000 | subindex; /* high BYTE: 0x00 (Node-ID == 0)
-	 low BYTE: subindex */
-	frame[3] = 0x000; // ZERO word, will be filled with checksum
-
-	sendCommand(frame);
-
-	// read response
-	return( readAnswer(ptr) ); // answer contains only DWORD ErrorCode
-	// here...
-}
-
-/*! NOT USED IN libEPOS so far -> untested! */
-static int SegmentRead(WORD **ptr) {
-
-	WORD frame[3];
-	int n;
-
-	frame[0] = 0x1400; // fixed, opCode==0x14, (len-1) == 0
-	frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
-	frame[2] = 0x0000; // ZERO word, will be filled with checksum
-
-	sendCommand(frame);
-
-	readAnswer(ptr);
-
-	return(0);
-}
-#endif
-
-void epos::InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
-{
-	try {
-		WORD frame[6];
-
-		frame[0] = 0x0413; // fixed: (len-1) == 3, WriteObject
-		frame[1] = index;
-		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
-		// data to transmit
-		*((DWORD *) &frame[3]) = ObjectLength;
-		// frame[4] = << this is filled by the 32bit assignment above >>;
-		frame[5] = 0x00; // ZERO word, will be filled with checksum
-
-		device.sendCommand(frame);
-
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-
-		toggle = true;
-	}
-	catch (epos_error & e) {
-		e << dictionary_index(index);
-		e << dictionary_subindex(subindex);
-		e << canId(nodeId);
-		throw;
-	}
-}
-
-void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
-{
-	if (len > 63) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Segmented write of > 63 bytes not allowed"));
-	}
-	try {
-		WORD frame[32+2];
-
-		memset(frame, 0, sizeof(frame));
-		frame[0] = ((1+len/2) << 8) | 0x15; // fixed: (len-1) == 3, WriteObject
-		frame[1] = len | (toggle ? (0x80) : 0x40);
-		memcpy(((char *)&frame[1]+1), ptr, len);
-
-		device.sendCommand(frame);
-
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-
-		// change the toggle flag value
-		toggle = (toggle) ? false : true;
-	}
-	catch (epos_error & e) {
-		e << canId(nodeId);
-		throw;
-	}
-}
-
-/* Low-level function to write an object to EPOS memory. Is called by
- writing libEPOS functions. */
-void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
-{
-	try {
-		WORD frame[6];
-
-		frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
-		frame[1] = index;
-		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
-		// data to transmit
-		frame[3] = data[0];
-		frame[4] = data[1];
-		frame[5] = 0x00; // ZERO word, will be filled with checksum
-
-		device.sendCommand(frame);
-
-		// read response
-		WORD answer[8];
-		device.readAnswer(answer, 8);
-
-		checkEPOSerror(device.E_error);
-	}
-	catch (epos_error & e) {
-		e << dictionary_index(index);
-		e << dictionary_subindex(subindex);
-		e << canId(nodeId);
-		throw;
-	}
-}
-
-void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)
-{
-	WORD dw[2];
-
-	// write data
-	dw[0] = (WORD) (data & 0x0000FFFF);
-	dw[1] = (WORD) (data >> 16);
-
-	WriteObject(index, subindex, dw);
-}
-
 /* compare WORD a with WORD b bitwise */
 bool epos::bitcmp(WORD a, WORD b)
 {
@@ -2027,4 +1767,3 @@ bool epos::bitcmp(WORD a, WORD b)
 } /* namespace epos */
 } /* namespace edp */
 } /* namespace mrrocpp */
-
