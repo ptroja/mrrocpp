@@ -1390,6 +1390,7 @@ bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
 
 void epos::printInterpolationBufferStatus(UNSIGNED16 status)
 {
+	printf("IPM buffer status = 0x%04X\n", status);
 	// Warning codes
 	if (status & PVT_STATUS_UNDERFLOW_WARNING) {
 		printf("Buffer underflow warning level is reached\n");

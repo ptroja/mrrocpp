@@ -704,14 +704,18 @@ void check_accelerations(const double amin_[N_MOTORS], const double amax_[N_MOTO
  * @param [in] m0w_ Matrix with 0w coefficients.
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
-void compute_pvt_triplets_for_epos(Eigen::Matrix <double, N_POINTS, N_MOTORS> & p_, Eigen::Matrix <double, N_POINTS,
-		N_MOTORS> & v_, Eigen::Matrix <double, N_POINTS, 1> & t_, const Eigen::Matrix <double, N_POINTS - 1, 1> taus_, const Eigen::Matrix <
-		double, N_POINTS - 1, N_MOTORS> m3w_, const Eigen::Matrix <double, N_POINTS - 1, N_MOTORS> m2w_, const Eigen::Matrix <
+void compute_pvt_triplets_for_epos(
+		Eigen::Matrix <double, N_POINTS, N_MOTORS> & p_,
+		Eigen::Matrix <double, N_POINTS, N_MOTORS> & v_,
+		Eigen::Matrix <double, N_POINTS, 1> & t_,
+		const Eigen::Matrix <double, N_POINTS - 1, 1> taus_,
+		const Eigen::Matrix <double, N_POINTS - 1, N_MOTORS> m3w_, const Eigen::Matrix <double, N_POINTS - 1, N_MOTORS> m2w_, const Eigen::Matrix <
 		double, N_POINTS - 1, N_MOTORS> m1w_, const Eigen::Matrix <double, N_POINTS - 1, N_MOTORS> m0w_)
 {
 	// Start point.
 	p_.row(0) = m0w_.row(0);
 	v_.row(0) = Eigen::Matrix <double, 1, N_MOTORS>::Zero(1, N_MOTORS);
+	t_(0) = taus_(0);
 
 	// For all other interpolation points.
 	for (int i = 1; i < N_POINTS; ++i) {
@@ -720,11 +724,12 @@ void compute_pvt_triplets_for_epos(Eigen::Matrix <double, N_POINTS, N_MOTORS> & 
 		v_.row(i) = m1w_.row(i - 1) + 2.0 * m2w_.row(i - 1) * taus_(i - 1) + 3.0 * m3w_.row(i - 1) * (taus_(i - 1)
 				* taus_(i - 1));
 		//  There are N_POINTS-1 segments, thus N_POINTS-1 'tau'.
-		t_(i - 1) = taus_(i - 1);
+		if(i<N_POINTS-1)
+			t_(i) = taus_(i);
 	}
 	// Set last segment movement time - in fact t his value isn't takein into consideration by the EPOS2 controller.
 	// (The last triplet is in the form of < P,V,- >).
-	t_(N_POINTS - 1) = 0;
+	t_(N_POINTS - 1) = taus_(N_POINTS - 2);
 
 	/*	cout<<"p "<<p_;
 	 cout<<"v "<<v_;

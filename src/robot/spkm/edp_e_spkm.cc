@@ -442,7 +442,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Calculate time - currently the motion time is set to 5s.
 						// TODO: analyze required (desired) movement time -> III cases: t<t_req, t=t_req, t>t_req.
-						double motion_time = 1;
+						double motion_time = ecp_edp_cbuffer.estimated_time;
 
 						// Constant time for one segment - 250ms.
 						//double segment_time = 1;//0.25;
@@ -552,6 +552,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Setup motion parameters
 							for (size_t i = 0; i < axes.size(); ++i) {
 								axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
+								axes[i]->writeProfileVelocity(Vmax[i]);
+								axes[i]->writeProfileAcceleration(Amax[i]);
+								axes[i]->writeProfileDeceleration(Amax[i]);
 								// TODO: setup acceleration and velocity limit values
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
@@ -560,6 +563,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									fflush(stdout);
 								}
 								printf("\n");
+								axes[i]->writeInterpolationDataRecord((int32_t) p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (int32_t) v(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (uint8_t)0);
 
 								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
@@ -664,7 +668,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 else
 		 is_previous_cartesian_pose_known = false;*/
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
-		is_previous_cartesian_pose_known = false;
+		// TODO - be sure that this (forget about the cartesian pose in case of error) won't be necessary.
+		// is_previous_cartesian_pose_known = false;
 		HANDLE_MRROCPP_ERROR(e_)
 	}
 }

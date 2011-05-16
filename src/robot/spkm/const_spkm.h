@@ -74,6 +74,7 @@ struct cbuffer
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
+	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
 	int32_t motor_pos[NUM_OF_SERVOS];
