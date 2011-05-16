@@ -128,7 +128,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 						// Get the detailed error
 						uint32_t errCode = axes[i]->readErrorHistory(j);
 
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": " + epos::epos::ErrorCodeMessage(errCode));
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": " + axes[i]->ErrorCodeMessage(errCode));
 					}
 				} else {
 					notInFaultState++;
@@ -629,7 +629,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 										epos::UNSIGNED32 errCode = node->readErrorHistory(i);
 
-										cerr << epos::epos::ErrorCodeMessage(errCode) << endl;
+										cerr << node->ErrorCodeMessage(errCode) << endl;
 									}
 									if (errNum > 0) {
 										node->clearNumberOfErrors();

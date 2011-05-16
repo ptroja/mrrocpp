@@ -670,7 +670,7 @@ public:
 	//! start Interpolated Position Mode motion
 	void startInterpolatedPositionMotion();
 
-	static const char * ErrorCodeMessage(UNSIGNED32 code);
+	/*static*/ const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
 	typedef enum _homing_method
