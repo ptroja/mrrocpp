@@ -33,8 +33,8 @@ using namespace mrrocpp::lib::pvat;
 using namespace std;
 
 const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
-const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 4000UL, 4000UL, 4000UL, 4000UL, 4000UL, 4000UL };
+const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 4000UL, 4000UL, 4000UL, 4000UL, 4000UL, 4000UL };
 
 effector::effector(common::shell &_shell) :
 	manip_effector(_shell, lib::spkm::ROBOT_NAME)
@@ -531,7 +531,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
 									axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
-									printf("\rsend: %2d/%d, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+									printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
 									fflush(stdout);
 								}
 								printf("\n");
@@ -545,7 +545,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								if (axes[i]->checkInterpolationBufferError(status)) {
 									// FIXME: this should be done in a separate exception, which does not benlong
 									//        to the kinematics::spkm namespace.
-									printf("InterpolationBufferStatus for axis %d: 0x%04X\n", i, status);
+									printf("InterpolationBufferStatus for axis %zu: 0x%04X\n", i, status);
 									BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 								}
 							}
