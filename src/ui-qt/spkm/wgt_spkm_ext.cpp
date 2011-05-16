@@ -300,6 +300,8 @@ int wgt_spkm_ext::move_it()
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
+			double estimated_time = ui.doubleSpinBox_estimated_time->value();
+
 			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
 				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 			}
@@ -316,7 +318,7 @@ int wgt_spkm_ext::move_it()
 				motion_variant = lib::epos::OPERATIONAL;
 			}
 
-			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant);
+			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant, estimated_time);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				for (int i = 0; i < 6; i++) {

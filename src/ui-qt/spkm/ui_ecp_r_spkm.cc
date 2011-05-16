@@ -61,9 +61,10 @@ void EcpRobot::move_joints(const double final_position[lib::spkm::NUM_OF_SERVOS]
 	execute_motion();
 }
 
-void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant)
+void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant, const double _estimated_time)
 {
 	the_robot->epos_external_command_data_port.data.motion_variant = motion_variant;
+	the_robot->epos_external_command_data_port.data.estimated_time = _estimated_time;
 
 	for (int i = 0; i < 6; ++i) {
 		the_robot->epos_external_command_data_port.data.desired_position[i] = final_position[i];
