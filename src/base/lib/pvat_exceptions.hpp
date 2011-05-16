@@ -36,15 +36,21 @@ typedef boost::error_info <struct desired_value_, double> desired_value;
 typedef boost::error_info <struct desired_value_, double> constraint_value;
 
 /*!
- * \brief Exception thrown when motor velocity constraint exceeded.
+ * \brief Exception thrown when motor velocity constraint for given motion segment is exceeded.
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_motor_velocity_constraint_exceeded, "Motor velocity constraint exceeded")
 
 /*!
- * \brief Exception thrown when motor velocity constraint exceeded.
+ * \brief Exception thrown when motor velocity constraint for given motion segment is exceeded.
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_motor_acceleration_constraint_exceeded, "Motor acceleration constraint exceeded")
+
+/*!
+ * \brief Exception thrown when time interval for given motion segment is invalid (too small or big).
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_invalid_time_inverval, "Invalid time inverval")
 
 #endif /* PVAT_EXCEPTIONS_HPP_ */
