@@ -29,11 +29,17 @@ namespace edp {
 namespace spkm {
 
 using namespace mrrocpp::lib;
+using namespace mrrocpp::lib::pvat;
 using namespace std;
 
-const uint32_t effector::Vdefault[6] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
-const uint32_t effector::Ddefault[6] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+
+const uint32_t effector::Vmax[lib::spkm::NUM_OF_SERVOS] = { 10000UL, 10000UL, 10000UL, 10000UL, 10000UL, 10000UL };
+const uint32_t effector::Amax[lib::spkm::NUM_OF_SERVOS] = { 20000UL, 20000UL, 20000UL, 20000UL, 20000UL, 20000UL };
+
+
 
 effector::effector(common::shell &_shell) :
 	manip_effector(_shell, lib::spkm::ROBOT_NAME)
@@ -248,9 +254,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << endl;
 							}
 
-							// Check desired joint values if they are absolute.
 							if (is_synchronised()) {
-								get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+								// Check the desired motor (only motors!) values if they are absolute.
+								get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 							}
 							break;
 						case lib::spkm::JOINT:
@@ -261,8 +267,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							}
 
 							if (is_synchronised()) {
+								// Precondition - check whether the desired joint position is valid.
+								get_current_kinematic_model()->check_joints(desired_joints);
 								// Transform desired joint to motors (and check motors/joints values).
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+								// Postcondition - check whether the desired motor position is valid.
+								get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
 								BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
@@ -289,11 +299,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 									// Rest of computations is performed elsewhere...
 								} else {
+
 									// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 									get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
-									// Transform joints to motors (and check motors/joints values).
+									// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
+									// TODO get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
+									get_current_kinematic_model()->check_joints(desired_joints);
+
+									// Transform joints to motors.
 									get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+
+									// Postcondition II  - check whether the desired motor position is valid.
+									get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 
 									// Remember the currently desired joints as old.
 									desired_joints_old = desired_joints;
@@ -424,64 +442,88 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Calculate time - currently the motion time is set to 5s.
 						// TODO: analyze required (desired) movement time -> III cases: t<t_req, t=t_req, t>t_req.
-						double motion_time = 2;
+						double motion_time = 1;
 
 						// Constant time for one segment - 250ms.
 						//double segment_time = 1;//0.25;
 
 						// Divide motion time into segments (time slices).
-						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, 1> time_deltas;
-						pvat_divide_motion_time_into_constant_time_deltas <lib::spkm::NUM_OF_MOTION_SEGMENTS> (time_deltas, motion_time);
+						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, 1> time_invervals;
+						divide_motion_time_into_constant_time_deltas <lib::spkm::NUM_OF_MOTION_SEGMENTS> (time_invervals, motion_time);
+
+						// Check time intervals.
+						check_time_distances <lib::spkm::NUM_OF_MOTION_SEGMENTS> (time_invervals);
 
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
-						pvat_cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-						//pvat_linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						//linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Compute motor_deltas for segments.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_deltas_for_segments;
-						pvat_compute_motor_deltas_for_segments <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_deltas_for_segments, motor_interpolations);
+						compute_motor_deltas_for_segments <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_deltas_for_segments, motor_interpolations);
 
 						// Compute tau coefficient matrix of the (1.48) equation.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_MOTION_SEGMENTS> tau_coefficients;
-						pvat_compute_tau_coefficients_matrix <lib::spkm::NUM_OF_MOTION_SEGMENTS> (tau_coefficients, time_deltas);
+						compute_tau_coefficients_matrix <lib::spkm::NUM_OF_MOTION_SEGMENTS> (tau_coefficients, time_invervals);
 
 						// Compute right side vector of the (1.48) equation - for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> right_side_coefficients;
-						pvat_compute_right_side_coefficients_vector <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (right_side_coefficients, motor_deltas_for_segments, time_deltas);
+						compute_right_side_coefficients_vector <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (right_side_coefficients, motor_deltas_for_segments, time_invervals);
 
 						// Compute 2w polynomial coefficients for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_2w;
-						pvat_compute_motor_2w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_2w, tau_coefficients, right_side_coefficients);
+						compute_motor_2w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_2w, tau_coefficients, right_side_coefficients);
 
 						// Compute 1w polynomial coefficients for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_1w;
-						pvat_compute_motor_1w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_1w, motor_2w, motor_deltas_for_segments, time_deltas);
+						compute_motor_1w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_1w, motor_2w, motor_deltas_for_segments, time_invervals);
 
 						// Compute 3w polynomial coefficients for all motors!!
 						Eigen::Matrix <double,lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_3w;
-						pvat_compute_motor_3w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_3w, motor_2w, motor_deltas_for_segments, time_deltas);
+						compute_motor_3w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_3w, motor_2w, motor_deltas_for_segments, time_invervals);
 
 						// Compute 0w polynomial coefficients for all motors!!
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_0w;
-						pvat_compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
+						compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
-						cout << "time_deltas = [ \n" << time_deltas << "\n ]; \n";
+						cout << "time_deltas = [ \n" << time_invervals << "\n ]; \n";
 						cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
 						cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
 						cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
 						cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
 
-						// Compute PVT triplets for generated segments.
-						// Two additional points are added - first related to the start position and second it required by the EPOS (pos;0;0;).
+						// Recalculate extreme velocities taking into consideration required units
+						// (Vdefault is given in [rpm], and on the base of w0..3 coefficients we can compute v in [turns per second])
+						double vmin[lib::spkm::NUM_OF_SERVOS];
+						double vmax[lib::spkm::NUM_OF_SERVOS];
+						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
+							vmin[mtr] = (-1.0) * Vmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							vmax[mtr] = Vmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+						}
+						// Check extreme velocities for all segments and motors.
+						check_velocities <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (vmin, vmax, motor_3w, motor_2w, motor_1w);
+
+						// Recalculate extreme accelerations taking into consideration required units
+						// (A- and Ddefault are given in [rpm/s], and on the base of w0..3 coefficients we can compute A and D in [turns per second^2])
+						double amin[lib::spkm::NUM_OF_SERVOS];
+						double amax[lib::spkm::NUM_OF_SERVOS];
+						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
+							amin[mtr] = (-1.0) * Amax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+							amax[mtr] = Amax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]/ 60.0;
+						}
+						// Check extreme velocities for all segments and motors.
+						check_accelerations <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (amin, amax, motor_3w, motor_2w, time_invervals);
+
+						// Compute PVT triplets for generated segments (thus n+1 points).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> p;
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> v;
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, 1> t;
-						pvat_compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_deltas, motor_3w, motor_2w, motor_1w, motor_0w);
+						compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
-/*						cout<<"p = [ \n"<<p << "\n ]; \n";
+						cout<<"p = [ \n"<<p << "\n ]; \n";
 						cout<<"v = [ \n"<<v << "\n ]; \n";
-						cout<<"t = [ \n"<<t << "\n ]; \n";*/
+						cout<<"t = [ \n"<<t << "\n ]; \n";
 
 						// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
@@ -500,6 +542,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						cout<<"v = [ \n"<<v << "\n ]; \n";
 						cout<<"t = [ \n"<<t << "\n ]; \n";*/
 
+						cout<<"qc;rpm;ms;\r\n";
+						for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+							cout<< (int)p(pnt,1) <<";"<< (int)v(pnt,1) << ";"<< (int)t(pnt) << ";\r\n";
+						}
+
 						// Execute motion
 						if (!robot_test_mode) {
 							// Setup motion parameters
@@ -509,7 +556,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
 									axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
-									printf("\rsend: %2d/%d, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+									printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
 									fflush(stdout);
 								}
 								printf("\n");
@@ -523,7 +570,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								if (axes[i]->checkInterpolationBufferError(status)) {
 									// FIXME: this should be done in a separate exception, which does not benlong
 									//        to the kinematics::spkm namespace.
-									printf("InterpolationBufferStatus for axis %d: 0x%04X\n", i, status);
+									printf("InterpolationBufferStatus for axis %zu: 0x%04X\n", i, status);
 									BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 								}
 							}
