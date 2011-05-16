@@ -20,7 +20,7 @@ namespace edp {
 namespace epos {
 
 epos_access_socketcan::epos_access_socketcan(const std::string & _iface) :
-	iface(iface)
+	iface(_iface), sock(-1)
 {
 	if(iface.length() >= IFNAMSIZ) {
 		throw epos_error() << reason("name of CAN device too long");
@@ -35,7 +35,7 @@ epos_access_socketcan::~epos_access_socketcan()
 void epos_access_socketcan::open()
 {
 	/* Create the socket */
-	int sock = ::socket(PF_CAN, SOCK_RAW, CAN_RAW);
+	sock = ::socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
 	if (sock == -1) {
 		perror("socket()");
@@ -53,6 +53,7 @@ void epos_access_socketcan::open()
 	struct sockaddr_can addr;
 	addr.can_family = AF_CAN;
 	addr.can_ifindex = ifr.ifr_ifindex;
+
 	if(::bind(sock, (struct sockaddr*) &addr, sizeof(addr)) == -1) {
 		perror("bind()");
 		throw epos_error() << reason("failed to bind to a CAN interface");
@@ -129,6 +130,8 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	frame.data[6] = 0;
 	frame.data[7] = 0;
 
+	writeToWire(frame);
+
 	// wait for reply
 	while(readFromWire(frame) != (0x580 + nodeId)) {
 		handleCanOpenMgmt(frame);
@@ -157,7 +160,7 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	}
 
 	// check the reply "expedited" field
-	if (TRANSFER_TYPE(frame.data[0]) == TRANSFER_EXPEDITED) {
+	if (TRANSFER_TYPE(frame.data[0]) != TRANSFER_EXPEDITED) {
 		BOOST_THROW_EXCEPTION(epos_error() << reason("expedited reply message expected"));
 	}
 
@@ -175,14 +178,17 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 	}
 
 	switch (BYTES_WITHOUT_DATA(frame.data[0])) {
+		// answer is 32 bit long
 		case 0:
-			*((DWORD *) ans) = *((DWORD *) &frame.data[4]);
+			*((DWORD *) &ans[3]) = *((DWORD *) &frame.data[4]);
 			return 4;
-		case 1:
-			*ans = *((WORD *) &frame.data[4]);
+		// answer is 16 bit long
+		case 2:
+			ans[3] = *((WORD *) &frame.data[4]);
 			break;
-		case 4:
-			*ans = frame.data[4];
+		// answer is 8 bit long
+		case 3:
+			ans[3] = frame.data[4];
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(epos_error() << reason("unsupported reply data size"));

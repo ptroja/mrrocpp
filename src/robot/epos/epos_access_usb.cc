@@ -333,7 +333,7 @@ void epos_access_usb::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uin
 		WORD frame[6];
 
 		// fixed: (Len << 8) | OpCode
-		frame[0] = (4 << 8) | (epos_access::SegmentedWrite_Op);
+		frame[0] = (4 << 8) | (epos_access::WriteObject_Op);
 		frame[1] = index;
 		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 		// data to transmit

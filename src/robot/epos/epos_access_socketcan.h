@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include <sys/socket.h>
 #include <linux/can.h>
 
 #include "epos_access.h"
