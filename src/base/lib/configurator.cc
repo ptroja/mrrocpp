@@ -32,8 +32,6 @@
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-
-
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
 #include "base/lib/typedefs.h"
@@ -45,6 +43,19 @@ namespace lib {
 configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name) :
 	node(_node), dir(_dir), section_name(_section_name)
 {
+	// jesli nazwa sekcji rozpoczyna sie od [ecp lub [edp to wyekstrahuj nazwe robota
+	// w przeciwnym razie podstawia pusta
+	robot_name = section_name;
+	robot_name.erase(section_name.rfind("]"), 1);
+
+	if (robot_name.find("[edp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else if (robot_name.find("[ecp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else {
+		robot_name = "";
+	}
+
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
@@ -88,31 +99,12 @@ int configurator::return_node_number(const std::string & node_name_l)
 	return ND_LOCAL_NODE;
 }
 
-std::string configurator::return_attach_point_name(config_path_type_t _type, const char* _key, const char* __section_name) const
+std::string configurator::return_attach_point_name(const char* _key, const char* __section_name) const
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
-	std::string name;
-
-	if (_type == CONFIG_RESOURCEMAN_LOCAL) {
-		name = "/dev/";
-		name += value <std::string> (_key, _section_name);
-
-	} else if (_type == CONFIG_RESOURCEMAN_GLOBAL) {
-		name = "/net/";
-		name += value <std::string> ("node_name", _section_name);
-		name += "/dev/";
-		name += value <std::string> (_key, _section_name);
-
-	} else if (_type == CONFIG_SERVER) {
-		name = value <std::string> (_key, _section_name);
-
-	} else {
-		fprintf(stderr, "Nieznany argument w metodzie configuratora return_attach_point_name\n");
-		throw;
-	}
 
 	// Zwrocenie atach_point'a.
-	return (name);
+	return value <std::string> (_key, _section_name);
 }
 
 std::string configurator::return_default_reader_measures_path() const
@@ -121,6 +113,91 @@ std::string configurator::return_default_reader_measures_path() const
 	path += "../msr/";
 
 	return path;
+}
+
+std::string configurator::get_sr_attach_point() const
+{
+	return "sr";
+}
+
+std::string configurator::get_ui_attach_point() const
+{
+	return "ui";
+}
+
+std::string configurator::get_mp_pulse_attach_point() const
+{
+	return "mp_pulse";
+}
+
+std::string configurator::get_edp_section(const robot_name_t _robot_name) const
+{
+	return "[edp_" + _robot_name + "]";
+}
+
+std::string configurator::get_edp_section() const
+{
+	return get_edp_section(robot_name);
+}
+
+std::string configurator::get_ecp_section(const robot_name_t _robot_name) const
+{
+	return "[ecp_" + _robot_name + "]";
+}
+
+std::string configurator::get_ecp_section() const
+{
+	return get_ecp_section(robot_name);
+}
+
+std::string configurator::get_ecp_trigger_attach_point(const robot_name_t _robot_name) const
+{
+	return "ecp_trigger_" + _robot_name;
+}
+
+std::string configurator::get_ecp_trigger_attach_point() const
+{
+	return get_ecp_trigger_attach_point(robot_name);
+}
+
+std::string configurator::get_ecp_attach_point(const robot_name_t _robot_name) const
+{
+	return "ecp_" + _robot_name;
+}
+
+std::string configurator::get_ecp_attach_point() const
+{
+	return get_ecp_attach_point(robot_name);
+}
+
+std::string configurator::get_edp_hardware_busy_file(const robot_name_t _robot_name) const
+{
+	return "edp_hardware_busy_" + _robot_name;
+}
+
+std::string configurator::get_edp_hardware_busy_file() const
+{
+	return get_edp_hardware_busy_file(robot_name);
+}
+
+std::string configurator::get_edp_reader_attach_point(const robot_name_t _robot_name) const
+{
+	return "edp_reader_" + _robot_name;
+}
+
+std::string configurator::get_edp_reader_attach_point() const
+{
+	return get_edp_reader_attach_point(robot_name);
+}
+
+std::string configurator::get_edp_resourceman_attach_point(const robot_name_t _robot_name) const
+{
+	return "edp_" + _robot_name;
+}
+
+std::string configurator::get_edp_resourceman_attach_point() const
+{
+	return get_edp_resourceman_attach_point(robot_name);
 }
 
 std::string configurator::return_mrrocpp_network_path() const
@@ -139,6 +216,17 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	}
 
 	return true;
+}
+
+bool configurator::exists_and_true(const char* _key, const char* __section_name) const
+{
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
+
+	if (exists(_key, _section_name)) {
+		return value <bool> (_key, _section_name);
+	} else {
+		return false;
+	}
 }
 
 pid_t configurator::process_spawn(const std::string & _section_name)

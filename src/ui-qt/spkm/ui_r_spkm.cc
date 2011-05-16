@@ -26,8 +26,7 @@ namespace spkm {
 
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::spkm::EDP_SECTION, lib::spkm::ECP_SECTION, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS),
-			ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 	wgt_inc = new wgt_spkm_inc(interface, *this, interface.get_main_window());

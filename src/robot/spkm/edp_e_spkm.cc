@@ -616,9 +616,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 is_previous_cartesian_pose_known = true;
 		 else
 		 is_previous_cartesian_pose_known = false;*/
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error e_) {
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		is_previous_cartesian_pose_known = false;
-		HANDLE_NON_FATAL_ERROR(e_)
+		HANDLE_MRROCPP_ERROR(e_)
 	}
 }
 

@@ -24,12 +24,11 @@ typedef boost::error_info <struct desired_value_, double> desired_value;
 //! Pose specification type.
 typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
-
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
  * \author tkornuta
  */
-REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, mrrocpp::edp::exception::NFE_CURRENT_CARTESIAN_POSE_UNKNOWN, "Required current cartesian pose is unknown")
+REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
 
 } // namespace spkm
 } // namespace edp

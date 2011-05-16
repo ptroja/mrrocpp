@@ -21,8 +21,8 @@ namespace single_motor {
 //
 
 
-UiRobot::UiRobot(common::Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
-	common::UiRobot(_interface, edp_section_name, ecp_section_name, _robot_name, _number_of_servos)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
+	common::UiRobot(_interface, _robot_name, _number_of_servos)
 {
 
 }

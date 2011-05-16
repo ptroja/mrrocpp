@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <cstdio>
 #include <unistd.h>
+#include <string>
 
 #include "base/lib/mis_fun.h"
 

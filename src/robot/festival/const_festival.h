@@ -15,9 +15,7 @@ namespace mrrocpp {
 namespace lib {
 namespace festival {
 
-const robot_name_t ROBOT_NAME = "ROBOT_FESTIVAL";
-
-const std::string ECP_SECTION = "[ecp_festival]";
+const robot_name_t ROBOT_NAME = "festival";
 
 } // namespace festival
 } // namespace lib

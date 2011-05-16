@@ -26,10 +26,10 @@ namespace sub_task {
 acq_force::acq_force(task::task &_ecp_t) :
 	acquisition(_ecp_t)
 {
-	if (sub_task::ecp_t.config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (sub_task::ecp_t.config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6ot loaded");
-	} else if (sub_task::ecp_t.config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (sub_task::ecp_t.config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sub_task::ecp_t.ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(_ecp_t);
 		sub_task::sr_ecp_msg.message("IRp6p loaded");
 	}

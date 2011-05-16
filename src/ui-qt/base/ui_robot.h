@@ -96,7 +96,7 @@ public:
 
 	common::WndBase_t wndbase_m;
 
-			UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos);
+	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 
 	void create_thread();
 	void abort_thread();

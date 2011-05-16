@@ -94,7 +94,7 @@ void reader_buffer::operator()()
 		reader_meassures_dir = master.config.return_default_reader_measures_path();
 	}
 
-	std::string robot_filename = master.config.value <std::string> ("reader_attach_point");
+	std::string robot_filename = master.config.get_edp_reader_attach_point();
 
 	if (master.config.exists("reader_samples"))
 		nr_of_samples = master.config.value <int> ("reader_samples");
@@ -168,9 +168,7 @@ void reader_buffer::operator()()
 
 	lib::fd_server_t my_attach;
 
-	if ((my_attach
-			= messip::port_create(master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point")))
-			== NULL) {
+	if ((my_attach = messip::port_create(master.config.get_edp_reader_attach_point())) == NULL) {
 
 		perror("Failed to attach pulse chanel for READER");
 		master.msg->message("Failed to attach pulse chanel for READER");
