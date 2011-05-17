@@ -286,7 +286,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 				   || (servo_data[drive_number].current_position_inc < - ridiculous_increment[drive_number]))
 			{
 				hardware_panic = true;
-				master.msg->message(lib::FATAL_ERROR, "Ridiculous encoder read");
+				std::stringstream temp_message;
+				temp_message << "[error] ridiculous increment on (" << (int)drive_number << "): read = "
+						<< servo_data[drive_number].current_position_inc << ", max = "
+						<< ridiculous_increment[drive_number] << std::endl;
+				master.msg->message(lib::FATAL_ERROR, temp_message.str());
 				std::cout << "[error] ridiculous increment on (" << (int)drive_number << "): read = "
 						<< servo_data[drive_number].current_position_inc << ", max = "
 						<< ridiculous_increment[drive_number] << std::endl;
