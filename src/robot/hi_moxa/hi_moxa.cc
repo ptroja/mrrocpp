@@ -292,7 +292,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 		// Sprawdzenie, czy wlasnie nastapila synchronizacja kolejnej osi
 		if(last_synchro_state[drive_number] == 0 && servo_data[drive_number].drive_status.isSynchronized != 0)
+		{
 			servo_data[drive_number].first_hardware_reads =  FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
+			last_synchro_state[drive_number] = 1;
+		}
 
 		// W pierwszych odczytach danych z napedu przyrost pozycji musi byc 0.
 		if ((servo_data[drive_number].first_hardware_reads > 0) && hardware_read_ok) {
