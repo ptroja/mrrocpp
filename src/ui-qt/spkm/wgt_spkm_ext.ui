@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>843</width>
+    <width>845</width>
     <height>363</height>
    </rect>
   </property>
@@ -1161,6 +1161,9 @@
     <widget class="QDoubleSpinBox" name="doubleSpinBox_estimated_time">
      <property name="decimals">
       <number>3</number>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
