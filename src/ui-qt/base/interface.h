@@ -95,7 +95,7 @@ private slots:
 	void manage_interface_slot();
 	void raise_process_control_window_slot();
 	void raise_ui_ecp_window_slot();
-	void on_timer_slot();
+	void timer_slot();
 
 public:
 

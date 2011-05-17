@@ -59,7 +59,7 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
@@ -83,7 +83,7 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
-void Interface::on_timer_slot()
+void Interface::timer_slot()
 {
 
 	//fprintf(stderr, "OnTimer()\n");
@@ -693,7 +693,7 @@ void Interface::init()
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui a" << std::endl;
+
 		initiate_configuration();
 		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
@@ -715,7 +715,7 @@ void Interface::init()
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui b" << std::endl;
+
 		reload_whole_configuration();
 
 	} else {
@@ -724,7 +724,7 @@ void Interface::init()
 		 PtExit(EXIT_SUCCESS);
 		 */
 	}
-	std::cerr << "ui c" << std::endl;
+
 	// inicjacja pliku z logami sr
 	check_gns();
 
@@ -1414,8 +1414,6 @@ int Interface::clear_all_configuration_lists()
 
 int Interface::initiate_configuration()
 {
-
-	std::cerr << "ui 1" << std::endl;
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
