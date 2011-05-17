@@ -94,7 +94,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 		// TODO: throw, robot unsupported
 		return;
 	}
-
+std::cout<<"INICJACJA ECP"<<std::endl;
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
@@ -228,6 +228,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 //TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
+	std::cout<<"MAIN_TASK ECP"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
@@ -242,9 +243,9 @@ void fsautomat::main_task_algorithm(void)
 		sr_ecp_msg->message("Waiting for MP order");
 
 
-
+std::cout<<"przed_next_state"<<std::endl;
 		get_next_state();
-
+std::cout<<"po_next_state"<<std::endl;
 		sr_ecp_msg->message("Order received");
 
 		subtasks_conditional_execution();

@@ -378,8 +378,10 @@ if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, 1,
 			(state.getRobot()).c_str());
 } else {
+	std::cout<<"MP loading from file start"<<state.getStringArgument()<<std::endl;
 	set_next_ecps_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument(), 0, 1,
 			(state.getRobot()).c_str());
+	std::cout<<"MP loading from file ended"<<state.getStringArgument()<<std::endl;
 }
 }
 
