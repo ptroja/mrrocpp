@@ -174,6 +174,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	static int error_msg_power_stage = 0;
 	static int error_msg_hardware_panic = 0;
 	static int error_msg_overcurrent = 0;
+	static int last_synchro_state[] = {0,0,0,0,0,0,0,0};
 	static int comm_timeouts[] = {0,0,0,0,0,0,0,0};
 	static int synchro_switch_filter[] = {0,0,0,0,0,0,0,0};
 	const int synchro_switch_filter_th = 2;
@@ -267,7 +268,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 		}
 	}
 
-	// Wypelnienie pol odebranymi danymi
+	// Inicjalizacja flag
+	robot_synchronized = true;
+	power_fault = false;
+
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 
 		// Wypelnienie pol odebranymi danymi
@@ -276,12 +280,27 @@ uint64_t HI_moxa::read_write_hardware(void)
 			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
 		}
 
+		// Ustawienie flagi wlaczonej mocy
+		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
+			power_fault = true;
+		}
+
+		// Ustawienie flagi synchronizacji
+		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
+			robot_synchronized = false;
+		}
+
+		// Sprawdzenie, czy wlasnie nastapila synchronizacja kolejnej osi
+		if(last_synchro_state[drive_number] == 0 && servo_data[drive_number].drive_status.isSynchronized != 0)
+			servo_data[drive_number].first_hardware_reads =  FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
+
 		// W pierwszych odczytach danych z napedu przyrost pozycji musi byc 0.
 		if ((servo_data[drive_number].first_hardware_reads > 0) && hardware_read_ok) {
 			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
 			servo_data[drive_number].first_hardware_reads --;
 		}
 
+		// Sprawdzenie przyrostu pozycji enkodera
 		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position
 				- servo_data[drive_number].previous_absolute_position);
 
@@ -300,6 +319,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 			}
 		}
 
+		// Sprawdzenie ograniczenia nadpradowego
 		if (servo_data[drive_number].drive_status.overcurrent == 1) {
 			if (error_msg_overcurrent == 0) {
 				master.msg->message(lib::NON_FATAL_ERROR, "Overcurrent");
@@ -309,6 +329,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 			}
 		}
 
+		// Wykrywanie sekwencji timeoutow komunikacji
 		if(comm_timeouts[drive_number] >= MAX_COMM_TIMEOUTS)
 		{
 			hardware_panic = true;
@@ -319,17 +340,6 @@ uint64_t HI_moxa::read_write_hardware(void)
 			std::cout << temp_message.str();
 		}
 
-	}
-
-	robot_synchronized = true;
-	power_fault = false;
-	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
-			power_fault = true;
-		}
-		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
-			robot_synchronized = false;
-		}
 	}
 
 	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
