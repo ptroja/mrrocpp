@@ -58,7 +58,7 @@ const int MAX_CURRENT_5 = 10000;
  * @brief IRp6 postument max encoder increment
  * @ingroup irp6p_m
  */
-const double MAX_INCREMENT[] = { 40, 40, 40, 40, 40, 40 };
+const double MAX_INCREMENT[] = { 100, 100, 100, 100, 100, 100 };
 
 } // namespace irp6p_m
 } // namespace lib
