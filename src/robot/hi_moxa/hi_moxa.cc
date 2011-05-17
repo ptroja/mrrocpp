@@ -176,7 +176,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	static int error_msg_overcurrent = 0;
 	static int synchro_switch_filter[] = {0,0,0,0,0,0,0,0};
 	const int synchro_switch_filter_th = 2;
-	bool robot_synchronized = false;
+	bool robot_synchronized = true;
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
@@ -281,6 +281,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 		if((robot_synchronized) && (ridiculous_increment[drive_number] != 0))
 		{
+
 			if((servo_data[drive_number].current_position_inc > ridiculous_increment[drive_number])
 				   || (servo_data[drive_number].current_position_inc < - ridiculous_increment[drive_number]))
 			{
