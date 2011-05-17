@@ -69,7 +69,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 2);
 
 	server_attach = messip::port_create(server_attach_point);
 
