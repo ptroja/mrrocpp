@@ -85,6 +85,8 @@ private:
 	void create_robots();
 	QTimer *timer;
 
+	bool html_it(std::string &_input, std::string &_output);
+
 signals:
 	void manage_interface_signal();
 	void raise_process_control_window_signal();

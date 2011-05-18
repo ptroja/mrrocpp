@@ -87,6 +87,28 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
+bool Interface::html_it(std::string &_input, std::string &_output)
+{
+
+	try {
+		// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+		boost::regex pattern("(<)|(>)|( )|(&)");
+		// Format stringu odpowiadający podmienianemu dopasowaniu.
+		std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
+
+		std::ostringstream t(std::ios::out | std::ios::binary);
+		std::ostream_iterator <char> oi(t);
+		boost::regex_merge(oi, _input.begin(), _input.end(), pattern, fmt, boost::match_default | boost::format_all);
+
+		_output = t.str();
+
+	} catch (std::exception &ex) {
+		std::cout << "blad" << ex.what() << std::endl;
+	}
+
+	return true;
+}
+
 void Interface::timer_slot()
 {
 
@@ -125,24 +147,8 @@ void Interface::timer_slot()
 			std::string input(current_line);
 
 			std::string output;
-			try {
-				// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
-				boost::regex pattern("(<)|(>)|( )|(&)");
-				// Format stringu odpowiadający podmienianemu dopasowaniu.
-				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
 
-				std::ostringstream t(std::ios::out | std::ios::binary);
-				std::ostream_iterator <char> oi(t);
-				boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
-						| boost::format_all);
-
-				output = t.str();
-
-			} catch (std::exception &ex) {
-				std::cout << "blad" << ex.what() << std::endl;
-			}
-
-			std::cout << output << std::endl;
+			html_it(input, output);
 
 			html_line = "<font face=\"Monospace\" color=\"black\">" + output
 					+ "</font><font face=\"Monospace\" color=\"";
@@ -186,24 +192,7 @@ void Interface::timer_slot()
 
 			input = std::string(process_name_buffer);
 
-			try {
-				// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
-				boost::regex pattern("(<)|(>)|( )|(&)");
-				// Format stringu odpowiadający podmienianemu dopasowaniu.
-				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
-
-				std::ostringstream t(std::ios::out | std::ios::binary);
-				std::ostream_iterator <char> oi(t);
-				boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
-						| boost::format_all);
-
-				output = t.str();
-
-			} catch (std::exception &ex) {
-				std::cout << "blad" << ex.what() << std::endl;
-			}
-
-			std::cout << output << std::endl;
+			html_it(input, output);
 
 			html_line += "<font face=\"Monospace\" color=\"black\">" + output
 					+ "</font><font face=\"Monospace\" color=\"";
@@ -253,24 +242,7 @@ void Interface::timer_slot()
 
 							input = t.c_str();
 
-							try {
-								// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
-								boost::regex pattern("(<)|(>)|( )|(&)");
-								// Format stringu odpowiadający podmienianemu dopasowaniu.
-								std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
-
-								std::ostringstream t(std::ios::out | std::ios::binary);
-								std::ostream_iterator <char> oi(t);
-								boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
-										| boost::format_all);
-
-								output = t.str();
-
-							} catch (std::exception &ex) {
-								std::cout << "blad" << ex.what() << std::endl;
-							}
-
-							std::cout << output << std::endl;
+							html_it(input, output);
 
 							if (first_it) {
 								first_it = false;
