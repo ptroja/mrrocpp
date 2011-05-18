@@ -845,7 +845,7 @@ void MainWindow::on_actionConfiguration_triggered()
 
 void MainWindow::on_actionClear_Console_triggered()
 {
-	ui->plainTextEdit_sr->clear();
+	ui->textEdit_sr->clear();
 }
 
 void MainWindow::on_actionUnload_All_triggered()

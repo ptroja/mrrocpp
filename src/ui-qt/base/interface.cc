@@ -59,7 +59,7 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
@@ -83,7 +83,7 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
-void Interface::on_timer_slot()
+void Interface::timer_slot()
 {
 
 	//fprintf(stderr, "OnTimer()\n");
@@ -101,6 +101,7 @@ void Interface::on_timer_slot()
 		// 	printf("timer\n");
 
 		char current_line[400];
+
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -108,6 +109,7 @@ void Interface::on_timer_slot()
 			ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
@@ -116,17 +118,17 @@ void Interface::on_timer_slot()
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
-					strcat(current_line, "edp: ");
+					strcat(current_line, "EDP: ");
 					break;
 				case lib::ECP:
-					strcat(current_line, "ecp: ");
+					strcat(current_line, "ECP: ");
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "mp:  ");
+					strcat(current_line, "MP:  ");
 					break;
 				case lib::VSP:
-					strcat(current_line, "vsp: ");
+					strcat(current_line, "VSP: ");
 					break;
 				case lib::UI:
 					strcat(current_line, "UI:  ");
@@ -140,7 +142,7 @@ void Interface::on_timer_slot()
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -175,11 +177,26 @@ void Interface::on_timer_slot()
 
 			}; // end: switch (message.message_type)
 
-			strcat(current_line, sr_msg.description);
+			mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
 
-			mw->get_ui()->plainTextEdit_sr->setCurrentCharFormat(format);
-			mw->get_ui()->plainTextEdit_sr->appendPlainText(current_line);
-			(*log_file_outfile) << current_line << std::endl;
+			std::string text(sr_msg.description);
+
+			boost::char_separator <char> sep("\n");
+			boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+
+			bool first_it = true;
+			BOOST_FOREACH(std::string t, tokens)
+						{
+							if (first_it) {
+								first_it = false;
+							} else {
+								strcpy(current_line, "                                                     ");
+							}
+							strcat(current_line, t.c_str());
+
+							mw->get_ui()->textEdit_sr->append(current_line);
+							(*log_file_outfile) << current_line << std::endl;
+						}
 		}
 
 		(*log_file_outfile).flush();
@@ -676,7 +693,7 @@ void Interface::init()
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui a" << std::endl;
+
 		initiate_configuration();
 		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
@@ -698,7 +715,7 @@ void Interface::init()
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui b" << std::endl;
+
 		reload_whole_configuration();
 
 	} else {
@@ -707,7 +724,7 @@ void Interface::init()
 		 PtExit(EXIT_SUCCESS);
 		 */
 	}
-	std::cerr << "ui c" << std::endl;
+
 	// inicjacja pliku z logami sr
 	check_gns();
 
@@ -1031,7 +1048,7 @@ void Interface::reload_whole_configuration()
 
 		config->change_config_file("../" + config_file);
 
-		is_mp_and_ecps_active = config->value <int> ("is_active", "[mp]");
+		is_mp_and_ecps_active = config->exists_and_true("is_active", "[mp]");
 
 		switch (all_edps)
 		{
@@ -1082,8 +1099,7 @@ void Interface::reload_whole_configuration()
 		// zczytanie konfiguracji MP
 
 		if (is_mp_and_ecps_active) {
-			mp.network_pulse_attach_point
-					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
+			mp.network_pulse_attach_point = config->get_mp_pulse_attach_point();
 
 			if (!config->exists("node_name", lib::MP_SECTION)) {
 				mp.node_name = "localhost";
@@ -1399,8 +1415,6 @@ int Interface::clear_all_configuration_lists()
 int Interface::initiate_configuration()
 {
 
-	std::cerr << "ui 1" << std::endl;
-
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = mrrocpp_bin_to_root_path + "configs/common.ini";
@@ -1416,8 +1430,7 @@ int Interface::initiate_configuration()
 		}
 		config = new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
-		std::string attach_point =
-				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+		std::string attach_point = config->get_sr_attach_point();
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -1442,12 +1455,9 @@ int Interface::initiate_configuration()
 
 	}
 
-	ui_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
-	sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
-	network_sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+	ui_attach_point = config->get_ui_attach_point();
+	sr_attach_point = config->get_sr_attach_point();
+	network_sr_attach_point = config->get_sr_attach_point();
 
 	clear_all_configuration_lists();
 

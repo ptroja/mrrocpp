@@ -20,7 +20,7 @@ sensor_interface::sensor_interface(lib::configurator &_config) :
 	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	// SR localization -  initialization of the VSP-UI communication.
-	sr_msg = (boost::shared_ptr<lib::sr_vsp>) new lib::sr_vsp(lib::VSP, config.value <std::string> ("resourceman_attach_point"), config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION));
+	sr_msg = (boost::shared_ptr<lib::sr_vsp>) new lib::sr_vsp(lib::VSP, config.value <std::string> ("resourceman_attach_point"), config.get_sr_attach_point(););
 
 	sr_msg->message("Communication with SR ready");
 }

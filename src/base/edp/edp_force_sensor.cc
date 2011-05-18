@@ -143,13 +143,14 @@ force::force(common::manip_effector &_master) :
 			is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
 {
 	/*! Lokalizacja procesu wywietlania komunikatow SR */
+
 	sr_msg
-			= boost::shared_ptr <lib::sr_vsp>(new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION)));
+			= boost::shared_ptr <lib::sr_vsp>(new lib::sr_vsp(lib::EDP, "f_" + master.config.robot_name, master.config.get_sr_attach_point()));
 
 	sr_msg->message("force");
 
 	if (master.config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
-		force_sensor_test_mode = master.config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
+		force_sensor_test_mode = master.config.exists_and_true(lib::FORCE_SENSOR_TEST_MODE.c_str());
 	}
 
 	if (force_sensor_test_mode) {

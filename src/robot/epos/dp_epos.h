@@ -188,6 +188,7 @@ struct epos_simple_command
 {
 	EPOS_MOTION_VARIANT motion_variant;
 	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
+	double estimated_time;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -198,6 +199,7 @@ struct epos_simple_command
 	{
 		ar & motion_variant;
 		ar & desired_position;
+		ar & estimated_time;
 	}
 }__attribute__((__packed__));
 
