@@ -8,6 +8,7 @@
 #include <boost/foreach.hpp>
 #include <dirent.h>
 #include <sys/wait.h>
+#include <boost/regex.hpp>
 
 #include <QtGui/QApplication>
 #include <QFileDialog>
@@ -102,6 +103,8 @@ void Interface::timer_slot()
 
 		char current_line[400];
 
+		std::string html_line;
+
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -114,10 +117,11 @@ void Interface::timer_slot()
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
 			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
-
+			html_line = "<font face=\"Monospace\" color=\"black\">" + std::string(current_line) + "</font>";
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
+
 					strcat(current_line, "EDP: ");
 					break;
 				case lib::ECP:
@@ -189,12 +193,15 @@ void Interface::timer_slot()
 						{
 							if (first_it) {
 								first_it = false;
+
+								mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
+
 							} else {
 								strcpy(current_line, "                                                     ");
 							}
 							strcat(current_line, t.c_str());
 
-							mw->get_ui()->textEdit_sr->append(current_line);
+							//	mw->get_ui()->textEdit_sr->append(current_line);
 							(*log_file_outfile) << current_line << std::endl;
 						}
 		}
