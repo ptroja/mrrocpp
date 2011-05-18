@@ -279,7 +279,8 @@ void Interface::timer_slot()
 
 							} else {
 								html_line
-										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
 											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
 												+ output + "</font>";
 
@@ -1214,7 +1215,7 @@ void Interface::reload_whole_configuration()
 		// wypisanie komunikatu o odczytaniu konfiguracji
 		if (ui_msg) {
 			std::string msg(config_file);
-			msg += " config file loaded \n sdfsdf \n asedff";
+			msg += " config file loaded";
 			ui_msg->message(msg.c_str());
 		}
 		mw->get_ui()->label_config_file_notification->setText(config_file.c_str());
