@@ -157,16 +157,16 @@ void Interface::timer_slot()
 				case lib::EDP:
 
 					strcat(current_line, "EDP: ");
-					html_line += "red\">EDP&#160;&#160;";
+					html_line += "#767639\">EDP&#160;&#160;";
 					break;
 				case lib::ECP:
 					strcat(current_line, "ECP: ");
-					html_line += "blue\">ECP&#160;&#160;";
+					html_line += "Slate Blue\">ECP&#160;&#160;";
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
 					strcat(current_line, "MP:  ");
-					html_line += "purple\">MP&#160;&#160;&#160;";
+					html_line += "#a54e8f\">MP&#160;&#160;&#160;";
 					break;
 				case lib::VSP:
 					strcat(current_line, "VSP: ");
@@ -174,7 +174,7 @@ void Interface::timer_slot()
 					break;
 				case lib::UI:
 					strcat(current_line, "UI:  ");
-					html_line += "green\">UI&#160;&#160;&#160;";
+					html_line += "brown\">UI&#160;&#160;&#160;";
 					break;
 				default:
 					strcat(current_line, "???: ");
@@ -202,19 +202,19 @@ void Interface::timer_slot()
 				case lib::FATAL_ERROR:
 					strcat(current_line, "FE:   ");
 					//	format.setForeground(Qt::red);
-					html_line += "red\">FE:&#160;&#160;&#160;";
+					html_line += "black\" style=\"background-color:'#ffc6c6';\">FE:&#160;&#160;&#160;";
 					break;
 				case lib::NON_FATAL_ERROR:
 					strcat(current_line, "NFE:  ");
 					//	format.setForeground(Qt::blue);
-					html_line += "blue\">NFE:&#160;&#160;";
+					html_line += "black\" style=\"background-color:'#c6e7ff';\">NFE:&#160;&#160;";
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
 					strcat(current_line, "SE:   ");
 					//	format.setForeground(Qt::magenta);
-					html_line += "magenta\">SE:&#160;&#160;&#160;";
+					html_line += "black\" style=\"background-color:'#ffc6ef';\">SE:&#160;&#160;&#160;";
 
 					break;
 				case lib::NEW_MESSAGE:
@@ -228,7 +228,7 @@ void Interface::timer_slot()
 					//	format.setForeground(Qt::yellow);
 
 			}; // end: switch (message.message_type)
-			html_line += "</font>";
+			//	html_line += "</font>";
 			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
 
 			std::string text(sr_msg.description);
@@ -247,7 +247,7 @@ void Interface::timer_slot()
 							if (first_it) {
 								first_it = false;
 
-								html_line += "<font face=\"Monospace\" color=\"black\">" + output + "</font>";
+								html_line += output + "</font>";
 
 							} else {
 								html_line
