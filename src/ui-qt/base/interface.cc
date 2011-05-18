@@ -9,6 +9,9 @@
 #include <dirent.h>
 #include <sys/wait.h>
 #include <boost/regex.hpp>
+#include <map>
+#include <string>
+#include <iostream>
 
 #include <QtGui/QApplication>
 #include <QFileDialog>
@@ -89,6 +92,7 @@ void Interface::timer_slot()
 
 	//fprintf(stderr, "OnTimer()\n");
 
+
 	QTextCharFormat format;
 
 	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
@@ -117,7 +121,30 @@ void Interface::timer_slot()
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
 			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
-			html_line = "<font face=\"Monospace\" color=\"black\">" + std::string(current_line) + "</font>";
+
+			std::string input(current_line);
+
+			std::string output;
+			try {
+				// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+				boost::regex pattern("(<)|(>)|( )");
+				// Format stringu odpowiadający podmienianemu dopasowaniu.
+				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)");
+
+				std::ostringstream t(std::ios::out | std::ios::binary);
+				std::ostream_iterator <char> oi(t);
+				boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
+						| boost::format_all);
+
+				output = t.str();
+
+			} catch (std::exception &ex) {
+				std::cout << "blad" << ex.what() << std::endl;
+			}
+
+			std::cout << output << std::endl;
+
+			html_line = "<font face=\"Monospace\" color=\"black\">" + output + "</font>";
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
