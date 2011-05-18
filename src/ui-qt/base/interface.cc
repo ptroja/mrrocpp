@@ -127,9 +127,9 @@ void Interface::timer_slot()
 			std::string output;
 			try {
 				// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
-				boost::regex pattern("(<)|(>)|( )");
+				boost::regex pattern("(<)|(>)|( )|(&)");
 				// Format stringu odpowiadający podmienianemu dopasowaniu.
-				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)");
+				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
 
 				std::ostringstream t(std::ios::out | std::ios::binary);
 				std::ostream_iterator <char> oi(t);
@@ -144,31 +144,38 @@ void Interface::timer_slot()
 
 			std::cout << output << std::endl;
 
-			html_line = "<font face=\"Monospace\" color=\"black\">" + output + "</font>";
+			html_line = "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
 
 					strcat(current_line, "EDP: ");
+					html_line += "red\">EDP&#160;&#160;";
 					break;
 				case lib::ECP:
 					strcat(current_line, "ECP: ");
+					html_line += "blue\">ECP&#160;&#160;";
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
 					strcat(current_line, "MP:  ");
+					html_line += "purple\">MP&#160;&#160;&#160;";
 					break;
 				case lib::VSP:
 					strcat(current_line, "VSP: ");
+					html_line += "brown\">VSP&#160;&#160;";
 					break;
 				case lib::UI:
 					strcat(current_line, "UI:  ");
+					html_line += "green\">UI&#160;&#160;&#160;";
 					break;
 				default:
 					strcat(current_line, "???: ");
+					html_line += "magenta\">???&#160;&#160;";
 					continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
-
+			html_line += "</font>";
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
@@ -177,38 +184,63 @@ void Interface::timer_slot()
 
 			strcat(current_line, process_name_buffer);
 
+			input = std::string(process_name_buffer);
+
+			try {
+				// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+				boost::regex pattern("(<)|(>)|( )|(&)");
+				// Format stringu odpowiadający podmienianemu dopasowaniu.
+				std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
+
+				std::ostringstream t(std::ios::out | std::ios::binary);
+				std::ostream_iterator <char> oi(t);
+				boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
+						| boost::format_all);
+
+				output = t.str();
+
+			} catch (std::exception &ex) {
+				std::cout << "blad" << ex.what() << std::endl;
+			}
+
+			std::cout << output << std::endl;
+
+			html_line += "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
+
 			switch (sr_msg.message_type)
 			{
 				case lib::FATAL_ERROR:
 					strcat(current_line, "FE:   ");
-					format.setForeground(Qt::red);
-
+					//	format.setForeground(Qt::red);
+					html_line += "red\">FE:&#160;&#160;&#160;";
 					break;
 				case lib::NON_FATAL_ERROR:
-
 					strcat(current_line, "NFE:  ");
-					format.setForeground(Qt::blue);
-
+					//	format.setForeground(Qt::blue);
+					html_line += "blue\">NFE:&#160;&#160;";
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
 					strcat(current_line, "SE:   ");
-					format.setForeground(Qt::magenta);
+					//	format.setForeground(Qt::magenta);
+					html_line += "magenta\">SE:&#160;&#160;&#160;";
 
 					break;
 				case lib::NEW_MESSAGE:
 					strcat(current_line, "MSG:  ");
-					format.setForeground(Qt::black);
-
+					//	format.setForeground(Qt::black);
+					html_line += "black\">MSG:&#160;&#160;";
 					break;
 				default:
 					strcat(current_line, "UE:   ");
-					format.setForeground(Qt::yellow);
+					html_line += "yellow\">UE:&#160;&#160;&#160;";
+					//	format.setForeground(Qt::yellow);
 
 			}; // end: switch (message.message_type)
-
-			mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
+			html_line += "</font>";
+			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
 
 			std::string text(sr_msg.description);
 
@@ -218,15 +250,44 @@ void Interface::timer_slot()
 			bool first_it = true;
 			BOOST_FOREACH(std::string t, tokens)
 						{
+
+							input = t.c_str();
+
+							try {
+								// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+								boost::regex pattern("(<)|(>)|( )|(&)");
+								// Format stringu odpowiadający podmienianemu dopasowaniu.
+								std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
+
+								std::ostringstream t(std::ios::out | std::ios::binary);
+								std::ostream_iterator <char> oi(t);
+								boost::regex_merge(oi, input.begin(), input.end(), pattern, fmt, boost::match_default
+										| boost::format_all);
+
+								output = t.str();
+
+							} catch (std::exception &ex) {
+								std::cout << "blad" << ex.what() << std::endl;
+							}
+
+							std::cout << output << std::endl;
+
 							if (first_it) {
 								first_it = false;
 
-								mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
+								html_line += "<font face=\"Monospace\" color=\"black\">" + output + "</font>";
 
 							} else {
+								html_line
+										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+												+ output + "</font>";
+
 								strcpy(current_line, "                                                     ");
 							}
 							strcat(current_line, t.c_str());
+
+							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
 
 							//	mw->get_ui()->textEdit_sr->append(current_line);
 							(*log_file_outfile) << current_line << std::endl;
@@ -1153,7 +1214,7 @@ void Interface::reload_whole_configuration()
 		// wypisanie komunikatu o odczytaniu konfiguracji
 		if (ui_msg) {
 			std::string msg(config_file);
-			msg += " config file loaded";
+			msg += " config file loaded \n sdfsdf \n asedff";
 			ui_msg->message(msg.c_str());
 		}
 		mw->get_ui()->label_config_file_notification->setText(config_file.c_str());
