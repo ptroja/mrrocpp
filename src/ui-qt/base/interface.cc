@@ -156,29 +156,29 @@ void Interface::timer_slot()
 			{
 				case lib::EDP:
 
-					strcat(current_line, "EDP: ");
-					html_line += "#767639\">EDP&#160;&#160;";
+					strcat(current_line, "D: ");
+					html_line += "#767639\">D:&#160;";
 					break;
 				case lib::ECP:
-					strcat(current_line, "ECP: ");
-					html_line += "Slate Blue\">ECP&#160;&#160;";
+					strcat(current_line, "C: ");
+					html_line += "Slate Blue\">C:&#160;";
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "MP:  ");
-					html_line += "#a54e8f\">MP&#160;&#160;&#160;";
+					strcat(current_line, "M:  ");
+					html_line += "#a54e8f\">M:&#160;";
 					break;
 				case lib::VSP:
-					strcat(current_line, "VSP: ");
-					html_line += "brown\">VSP&#160;&#160;";
+					strcat(current_line, "S: ");
+					html_line += "brown\">S:&#160;";
 					break;
 				case lib::UI:
-					strcat(current_line, "UI:  ");
-					html_line += "brown\">UI&#160;&#160;&#160;";
+					strcat(current_line, "I:  ");
+					html_line += "brown\">I:&#160;";
 					break;
 				default:
-					strcat(current_line, "???: ");
-					html_line += "magenta\">???&#160;&#160;";
+					strcat(current_line, "?: ");
+					html_line += "magenta\">?:&#160;";
 					continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
 			html_line += "</font>";
@@ -220,7 +220,7 @@ void Interface::timer_slot()
 				case lib::NEW_MESSAGE:
 					strcat(current_line, "MSG:  ");
 					//	format.setForeground(Qt::black);
-					html_line += "black\">MSG:&#160;&#160;";
+					html_line += "black\">msg:&#160;&#160;";
 					break;
 				default:
 					strcat(current_line, "UE:   ");
