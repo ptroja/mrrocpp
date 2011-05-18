@@ -111,13 +111,29 @@ run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name
 void mmtest::set_path()
 {
 	Point p;
-	p.x=2;
-	p.y=2;
+	p.x=3;
+	p.y=3;
 	path.push_back(p);
 
-	//p.y--;	path.push_back(p);
-	//p.y--;	path.push_back(p);
+	p.x--;	path.push_back(p);
+	p.y--;	path.push_back(p);
+//	p.x--;	path.push_back(p);
 
+
+	p.x--;	path.push_back(p);
+	p.y++;	path.push_back(p);
+	p.y++;	path.push_back(p);
+	p.x++;	path.push_back(p);
+	p.y--;	path.push_back(p);
+	p.x++;	path.push_back(p);
+	p.y++;	path.push_back(p);
+	p.y++;	path.push_back(p);
+	p.x--;	path.push_back(p);
+
+
+
+
+	/*
 	p.x--;	path.push_back(p);
 	p.x--;	path.push_back(p);
 	p.x--;	path.push_back(p);
@@ -132,8 +148,7 @@ void mmtest::set_path()
 	p.x++;	path.push_back(p);
 
 	p.y++;	path.push_back(p);
-	//start ->
-	//p.x--;	path.push_back(p);
+*/
 }
 
 void mmtest::main_task_algorithm(void)

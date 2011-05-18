@@ -15,6 +15,7 @@ using namespace std;
 #define EPS 0.02
 #define STP 0.02
 #define MV 0.0012
+#define CORR 0.0//004 korekcja zawodzi-tzn nie jest uzywana symetrycznie ze wzgledu na opor scian!
 #define ROT 0.04
 #define PI 3.14159
 
@@ -30,6 +31,7 @@ g_rotate::g_rotate(mrrocpp::ecp::common::task::task & _ecp_task) :
 //:generator(_ecp_task), logEnabled(true)
 {
 	index = 0;
+	sekcja = -1;
 	//r = 0.05;
 	//k = 0.0;
 	//direction = -1;
@@ -50,6 +52,7 @@ void g_rotate::configure(double new_rot_position)
 {
 	index = 0;
 	rot_position = new_rot_position;
+	sekcja = -1;
 	//k = 0.0;
 	//direction = new_direction;
 	//k_max = new_k_max;
@@ -139,11 +142,39 @@ bool g_rotate::next_step()
 	{
 		//current_arm_coordinates[5] -= STP;
 		l_vector[5] -= ROT;
+
+		//sekcja do obrotu o 270stopni
+		if(current_arm_coordinates[5] < -PI/4)
+		{
+			sekcja = 3;
+		}
+		else if(current_arm_coordinates[5] < PI/4)
+		{
+			sekcja = 2;
+		}
+		else if(current_arm_coordinates[5] < PI*3/4)
+		{
+			sekcja = 1;
+		}
 	}
 	else if(current_arm_coordinates[5] <= rot_position - EPS - theta)
 	{
 		//current_arm_coordinates[5] += STP;
 		l_vector[5] += ROT;
+
+		//sekcja do obrotu o 270stopni
+		if(current_arm_coordinates[5] > PI/4)
+		{
+			sekcja = 3;
+		}
+		else if(current_arm_coordinates[5] > -PI/4)
+		{
+			sekcja = 2;
+		}
+		else if(current_arm_coordinates[5] > -PI*3/4)
+		{
+			sekcja = 1;
+		}
 	}
 
 	//***PRZESUNIECIE jezeli nie ma duzego oporu
@@ -163,57 +194,83 @@ bool g_rotate::next_step()
 	}
 	else
 	{
-		if(first_arm_coordinates[5] < -PI*3/4 + EPS)//x+
+		if(first_arm_coordinates[5] < -PI*3/4 + 2*EPS)//x+
 		{
 			if(rot_position < 0)//cwierc obrotu
 			{
-				//trans_vect[1] -= MV;
+				std::cout <<"z -3/4 w prawo - lewo skreca"<< std::endl;
 				l_vector[0] -= MV;
 			}
 			else //3/4 obrotu
 			{
-				//trans_vect[0] += MV;
-				//l_vector[1] -= MV;
+				if(sekcja==1)
+				{
+					std::cout <<"z -3/4 w (lewo) s1"<< std::endl;
+					l_vector[0] -= MV + CORR;
+				}
+				else if(sekcja==2)
+				{
+					std::cout <<"z -3/4 w (lewo) s2"<< std::endl;
+					l_vector[1] += MV;
+				}
+				else if(sekcja==3)
+				{
+					std::cout <<"z -3/4 w (lewo) s3"<< std::endl;
+					l_vector[0] += MV - CORR;
+				}
 			}
 		}
-		else if(first_arm_coordinates[5] < -PI/4 + EPS)//y-
+		else if(first_arm_coordinates[5] < -PI/4 + 2*EPS)//y-
 		{
-			if(first_arm_coordinates[5] < rot_position)//w prawo
+			if(first_arm_coordinates[5] < rot_position)//lewo
 			{
-				//trans_vect[0] += MV;
+				std::cout <<"z -1/4 w lewo obkrec - ruch w prawo"<< std::endl;
 				l_vector[1] += MV;
 			}
-			else //w lewo
+			else//prawo
 			{
-				//trans_vect[1] += MV;
+				std::cout <<"z -1/4 w prawo obkrec - ruch w lewo"<< std::endl;
 				l_vector[0] += MV;
 			}
 
 		}
-		else if(first_arm_coordinates[5] < PI/4 + EPS)//x-
+		else if(first_arm_coordinates[5] < PI/4 + 2*EPS)//x-
 		{
-			if(first_arm_coordinates[5] < rot_position)//w prawo
+			if(first_arm_coordinates[5] < rot_position)
 			{
-				//trans_vect[0] -= MV;
+				std::cout <<"z 1/4 w lewo obkrec - ruch w prawo"<< std::endl;
 				l_vector[0] += MV;
 			}
-			else //w lewo
+			else
 			{
-				//trans_vect[1] += MV;
+				std::cout <<"z 1/4 w prawo obkrec - ruch w lewo"<< std::endl;
 				l_vector[1] -= MV;
 			}
 		}
-		else if(first_arm_coordinates[5] < PI*3/4 + EPS)//y+
+		else// if(first_arm_coordinates[5] < PI*3/4 + EPS)//y+
 		{
-			if(rot_position > 0)//cwierc obrotu
+			if(rot_position > 0)//cwierc obrotu w lewo
 			{
-				//trans_vect[1] -= MV;
+				std::cout <<"z 3/4 w lewo - prawo skreca"<< std::endl;
 				l_vector[0] -= MV;
 			}
 			else //3/4 obrotu
 			{
-				//trans_vect[0] -= MV;
-				//l_vector[1] += MV;
+				if(sekcja==1)
+				{
+					std::cout <<"z 3/4 w (prawo) s1"<< std::endl;
+					l_vector[0] -= MV + CORR;
+				}
+				else if(sekcja==2)
+				{
+					std::cout <<"z 3/4 w (prawo) s2"<< std::endl;
+					l_vector[1] -= MV;
+				}
+				else if(sekcja==3)
+				{
+					std::cout <<"z 3/4 w (prawo) s3"<< std::endl;
+					l_vector[0] += MV - CORR;
+				}
 			}
 		}
 	}

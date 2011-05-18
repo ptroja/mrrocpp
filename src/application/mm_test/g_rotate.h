@@ -63,6 +63,7 @@ private:
 	double rot_position;
 	int direction;
 	double k_max;
+	int sekcja;
 };//end class
 
 } // namespace generator
