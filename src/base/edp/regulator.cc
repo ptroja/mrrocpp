@@ -27,8 +27,8 @@ namespace common {
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master) :
-	master(_master)
+regulator::regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master) :
+	axis_number(_axis_number), master(_master)
 {
 	// Konstruktor abstrakcyjnego regulatora
 	// Inicjuje zmienne, ktore kazdy regulator konkretny musi miec i aktualizowac,
@@ -188,8 +188,8 @@ void regulator::clear_regulator()
 }
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	regulator(reg_no, reg_par_no, _master)
+NL_regulator::NL_regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	regulator(_axis_number, reg_no, reg_par_no, _master)
 {
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
