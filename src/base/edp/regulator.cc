@@ -16,6 +16,8 @@
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"
+#include "base/edp/edp_e_motor_driven.h"
+#include "base/edp/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -75,6 +77,8 @@ double regulator::get_set_value(void) const
 
 void regulator::insert_new_step(double ns)
 {
+
+	//master.sb->set_hi_panic();
 	// wstawienie nowej wartosci zadanej - metoda konkretna
 	step_new = ns;
 }
@@ -100,7 +104,7 @@ void regulator::insert_new_pos_increment(double inc)
 
 double regulator::get_position_inc(int tryb)
 { // by Y: 0 dla servo i 1 dla paczki dla edp;
-	// odczytanie zrealizowanego przyrostu polozenia w makrokroku - metoda konkretna
+// odczytanie zrealizowanego przyrostu polozenia w makrokroku - metoda konkretna
 	double pins;
 	if (tryb == 1) {
 		pins = pos_increment_new_sum;
