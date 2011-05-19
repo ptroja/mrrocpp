@@ -77,11 +77,26 @@ double regulator::get_set_value(void) const
 
 void regulator::insert_new_step(double ns)
 {
+	static bool new_desired_velocity_error = true;
 
-	//master.sb->set_hi_panic();
-	//blad z numerem osi
-	// wstawienie nowej wartosci zadanej - metoda konkretna
-	step_new = ns;
+	if (fabs(ns) <= desired_velocity_limit * master.velocity_limit_global_factor) {
+		step_new = ns;
+	} else {
+		step_new = 0.0;
+		// wymus stop awaryjny
+		master.sb->set_hi_panic();
+		//blad z numerem osi
+		if (new_desired_velocity_error) {
+			std::stringstream temp_message;
+			temp_message << "desired velocity exceeded on axis (" << (int) axis_number << "): desired value = " << ns
+					<< ", velocity_limit = " << desired_velocity_limit << ", global factor = "
+					<< master.velocity_limit_global_factor << std::endl;
+			master.msg->message(lib::FATAL_ERROR, temp_message.str());
+			std::cout << temp_message.str();
+			new_desired_velocity_error = false;
+		}
+
+	}
 }
 
 void regulator::insert_measured_current(int measured_current_l)

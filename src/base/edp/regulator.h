@@ -69,6 +69,8 @@ protected:
 
 	lib::GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
 
+	// maksymalny predkosc zadana (przyrost na jeden krok) w radianach na wale silnika
+	double desired_velocity_limit;
 
 public:
 	// samoświadomości osi
