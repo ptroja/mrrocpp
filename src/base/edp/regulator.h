@@ -72,9 +72,9 @@ protected:
 	// maksymalny predkosc zadana (przyrost na jeden krok) w radianach na wale silnika
 	double desired_velocity_limit;
 
-	bool new_desired_velocity_error;
-
 public:
+
+	bool new_desired_velocity_error;
 	// samoświadomości osi
 	uint8_t axis_number;
 

@@ -77,7 +77,7 @@ double regulator::get_set_value(void) const
 
 void regulator::insert_new_step(double ns)
 {
-	if (fabs(ns) < desired_velocity_limit * master.velocity_limit_global_factor) {
+	if (fabs(ns) <= desired_velocity_limit * master.velocity_limit_global_factor) {
 		step_new = ns;
 	} else {
 		step_new = 0.0;
@@ -91,6 +91,7 @@ void regulator::insert_new_step(double ns)
 					<< master.velocity_limit_global_factor << std::endl;
 			master.msg->message(lib::FATAL_ERROR, temp_message.str());
 			std::cout << temp_message.str();
+
 			new_desired_velocity_error = false;
 		}
 

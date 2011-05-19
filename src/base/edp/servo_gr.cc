@@ -484,13 +484,9 @@ void servo_buffer::Move(void)
 	else
 		send_after_last_step = false;
 
-	/*
-	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/AXIS_0_TO_5_INC_PER_REVOLUTION) /
-	 command.parameters.move.number_of_steps));
-	 */
-
 	for (int k = 0; k < master.number_of_servos; k++) {
 		new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
+		regulator_ptr[k]->new_desired_velocity_error = true;
 	}
 
 	// realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
