@@ -28,7 +28,7 @@ namespace common {
 
 /*-----------------------------------------------------------------------*/
 regulator::regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master) :
-	axis_number(_axis_number), master(_master)
+	new_desired_velocity_error(true), axis_number(_axis_number), master(_master)
 {
 	// Konstruktor abstrakcyjnego regulatora
 	// Inicjuje zmienne, ktore kazdy regulator konkretny musi miec i aktualizowac,
@@ -77,9 +77,7 @@ double regulator::get_set_value(void) const
 
 void regulator::insert_new_step(double ns)
 {
-	static bool new_desired_velocity_error = true;
-
-	if (fabs(ns) <= desired_velocity_limit * master.velocity_limit_global_factor) {
+	if (fabs(ns) < desired_velocity_limit * master.velocity_limit_global_factor) {
 		step_new = ns;
 	} else {
 		step_new = 0.0;
