@@ -196,7 +196,7 @@ void force::get_reading(void)
 
 			bool overforce = false;
 			for (int i = 0; i < 6; i++) {
-				if (fabs(ft_table[i]) > force_constraints[i]) {
+				if ((fabs(ft_table[i]) > force_constraints[i]) || (!(std::isfinite(ft_table[i])))) {
 					overforce = true;
 
 				}
