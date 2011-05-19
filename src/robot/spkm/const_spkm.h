@@ -74,6 +74,8 @@ struct cbuffer
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
+	double estimated_time;
+
 	int32_t motor_pos[NUM_OF_SERVOS];
 	double joint_pos[NUM_OF_SERVOS];
 	double goal_pos[6];
@@ -103,6 +105,7 @@ struct cbuffer
 						break;
 				}
 				ar & motion_variant;
+				ar & estimated_time;
 				break;
 			default:
 				break;

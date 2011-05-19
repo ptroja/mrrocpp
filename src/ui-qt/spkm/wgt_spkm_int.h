@@ -47,7 +47,7 @@ private:
 	QTimer *timer;
 
 private slots:
-	void on_timer_slot();
+	void timer_slot();
 	void on_pushButton_read_clicked();
 	void on_pushButton_export_clicked();
 	void on_pushButton_import_clicked();

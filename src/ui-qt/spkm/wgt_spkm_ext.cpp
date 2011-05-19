@@ -40,12 +40,12 @@ wgt_spkm_ext::wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 	radioButton_mip_Vector.append(ui.radioButton_mip_5);
 
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 }
 
-void wgt_spkm_ext::on_timer_slot()
+void wgt_spkm_ext::timer_slot()
 {
 	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();
@@ -300,6 +300,8 @@ int wgt_spkm_ext::move_it()
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
+			double estimated_time = ui.doubleSpinBox_estimated_time->value();
+
 			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
 				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 			}
@@ -316,7 +318,7 @@ int wgt_spkm_ext::move_it()
 				motion_variant = lib::epos::OPERATIONAL;
 			}
 
-			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant);
+			robot.ui_ecp_robot->move_external(robot.desired_pos, motion_variant, estimated_time);
 
 			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
 				for (int i = 0; i < 6; i++) {
