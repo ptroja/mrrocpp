@@ -34,6 +34,10 @@ struct visual_servo_log_sample{
 	uint64_t sendTimeSeconds;
 	uint64_t sendTimeNanoseconds;
 
+	/** Time, when request for reading was sent from mrrocpp to discode. */
+	uint64_t requestSentTimeNanoseconds;
+	uint64_t requestSentTimeSeconds;
+
 	/** Time, when reading was received in mrrocpp. */
 	uint64_t receiveTimeSeconds;
 	uint64_t receiveTimeNanoseconds;
