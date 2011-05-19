@@ -79,6 +79,7 @@ void regulator::insert_new_step(double ns)
 {
 
 	//master.sb->set_hi_panic();
+	//blad z numerem osi
 	// wstawienie nowej wartosci zadanej - metoda konkretna
 	step_new = ns;
 }
