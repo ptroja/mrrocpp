@@ -11,6 +11,8 @@ add_library(visual_servoing
     termination_condition.cc
     timeout_termination_condition.cc
     visual_servo_manager.cc
+    visual_servo_regulator.cc
+    visual_servo_regulator_p.cc
     visual_servo_regulator_pid.cc
     visual_servo.cc
 )
