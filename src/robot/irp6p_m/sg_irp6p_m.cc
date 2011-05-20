@@ -68,9 +68,11 @@ void servo_buffer::load_hardware_interface(void)
 	//		INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
 
 
-	const std::vector<std::string> ports_vector(mrrocpp::lib::irp6p_m::ports_strings,
-			mrrocpp::lib::irp6p_m::ports_strings+mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_m::MAX_INCREMENT);
+	const std::vector <std::string>
+			ports_vector(mrrocpp::lib::irp6p_m::ports_strings, mrrocpp::lib::irp6p_m::ports_strings
+					+ mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM + 1);
+	hi
+			= new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_m::MAX_INCREMENT);
 	hi->init();
 
 	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_m::MAX_CURRENT_0);
@@ -85,15 +87,15 @@ void servo_buffer::load_hardware_interface(void)
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
 	// kolumna dla irp6 postument
-	regulator_ptr[0] = new NL_regulator_2_irp6p(0, 0, 0.429, 6.834, 6.606, 0.35, master); // kolumna dla irp6 postument
-	regulator_ptr[1] = new NL_regulator_3_irp6p(0, 0, 0.64, 9.96 / 4, 9.54 / 4, 0.35, master);
+	regulator_ptr[0] = new NL_regulator_2_irp6p(0, 0, 0, 0.429, 6.834, 6.606, 0.35, master); // kolumna dla irp6 postument
+	regulator_ptr[1] = new NL_regulator_3_irp6p(1, 0, 0, 0.64, 9.96 / 4, 9.54 / 4, 0.35, master);
 	// regulator_ptr[3] = new NL_regulator_4 (0, 0, 0.62, 9.85/4, 9.39/4, 0.35);
-	regulator_ptr[2] = new NL_regulator_4_irp6p(0, 0, 0.333, 5.693, 5.427, 0.35, master);
-	regulator_ptr[3] = new NL_regulator_5_irp6p(0, 0, 0.56, 7.98 / 2, 7.55 / 2, 0.35, master);
+	regulator_ptr[2] = new NL_regulator_4_irp6p(2, 0, 0, 0.333, 5.693, 5.427, 0.35, master);
+	regulator_ptr[3] = new NL_regulator_5_irp6p(3, 0, 0, 0.56, 7.98 / 2, 7.55 / 2, 0.35, master);
 	// regulator_ptr[5] = new NL_regulator_6 (0, 0, 0.3079*2, 0.6, 0.6, 0.35);
-	regulator_ptr[4] = new NL_regulator_6_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[4] = new NL_regulator_6_irp6p(4, 0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 	// regulator_ptr[0] = new NL_regulator_1 (0, 0, 0.64, 16.61/5., 15.89/5., 0.35);
-	regulator_ptr[5] = new NL_regulator_7_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[5] = new NL_regulator_7_irp6p(5, 0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 

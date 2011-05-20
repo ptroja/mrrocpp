@@ -155,7 +155,7 @@ void reader_buffer::operator()()
 	}
 
 	// ustawienie priorytetu watku
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MIN_PRIORITY);
 
 	// NOTE: readed buffer has to be allocated on heap (using "new" operator) due to huge size
 	// boost::scoped_array takes care of deallocating in case of exception
@@ -177,11 +177,12 @@ void reader_buffer::operator()()
 
 	// GLOWNA PETLA Z OCZEKIWANIEM NA ZLECENIE POMIAROW
 	for (;;) {
+		// TODO: why, Leo? Why?
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
+		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MIN_PRIORITY);
 
 		// ustawienie priorytetu watku
-		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
+//		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 10);
 
 		start = false; // okresla czy odebrano juz puls rozpoczecia pomiarow
 
@@ -202,7 +203,8 @@ void reader_buffer::operator()()
 
 		master.msg->message("measures started");
 
-		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY + 1);
+		// TODO: why, Leo? Why?
+		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY);
 
 		// dopoki nie przyjdzie puls stopu
 		do {
@@ -245,7 +247,7 @@ void reader_buffer::operator()()
 
 		} while (!stop); // dopoki nie przyjdzie puls stopu
 
-		lib::set_thread_priority(pthread_self(), 1);// Najnizszy priorytet podczas proby zapisu do pliku
+		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MIN_PRIORITY);// Najnizszy priorytet podczas proby zapisu do pliku
 		master.msg->message("measures stopped");
 
 		// przygotowanie nazwy pliku do ktorego beda zapisane pomiary

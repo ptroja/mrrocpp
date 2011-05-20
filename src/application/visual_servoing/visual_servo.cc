@@ -31,10 +31,11 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 	string log_enabled_name = "vs_log_enabled";
 	string log_buffer_size_name = "vs_log_buffer_size";
 
-	if( configurator.exists(log_enabled_name, section_name) && configurator.value<bool>(log_enabled_name, section_name) ){
+	if (configurator.exists(log_enabled_name, section_name)
+			&& configurator.value <bool> (log_enabled_name, section_name)) {
 		log_enabled = true;
-		if(configurator.exists(log_buffer_size_name, section_name)){
-			log_buffer.set_capacity(configurator.value<unsigned int>(log_buffer_size_name, section_name));
+		if (configurator.exists(log_buffer_size_name, section_name)) {
+			log_buffer.set_capacity(configurator.value <unsigned int> (log_buffer_size_name, section_name));
 		} else {
 			log_buffer.set_capacity(log_buffer_default_capacity);
 		}
@@ -47,7 +48,7 @@ visual_servo::~visual_servo()
 
 lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-//	log_dbg("visual_servo::get_position_change(): begin\n");
+	//	log_dbg("visual_servo::get_position_change(): begin\n");
 
 	visual_servo_log_sample sample;
 	memset(&sample, 0, sizeof(visual_servo_log_sample));
@@ -70,10 +71,13 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
 		sample.sendTimeSeconds = rmh.sendTimeSeconds;
 
-		struct timespec ts = sensor->get_receive_time();
-
+		struct timespec ts = sensor->get_reading_received_time();
 		sample.receiveTimeNanoseconds = ts.tv_nsec;
 		sample.receiveTimeSeconds = ts.tv_sec;
+
+		ts = sensor->get_request_sent_time();
+		sample.requestSentTimeNanoseconds = ts.tv_nsec;
+		sample.requestSentTimeSeconds = ts.tv_sec;
 
 		retrieve_reading();
 	} else {
@@ -92,11 +96,13 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	sample.is_object_visible = object_visible;
 
 	if (object_visible) {
-//		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
+		//		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
 		delta_position = compute_position_change(current_position, dt);
+	} else {
+		notify_object_considered_not_visible();
 	}
 
-	if(log_enabled){
+	if (log_enabled) {
 		log_buffer.push_back(sample);
 		if (log_buffer.size() % 100 == 0) {
 			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
@@ -106,7 +112,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		}
 	}
 
-//	log_dbg("visual_servo::get_position_change(): end\n");
+	//	log_dbg("visual_servo::get_position_change(): end\n");
 	return delta_position;
 } // get_position_change
 
@@ -125,6 +131,11 @@ boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_serv
 	return sensor;
 }
 
+void visual_servo::notify_object_considered_not_visible()
+{
+	regulator->reset();
+}
+
 void visual_servo::write_log()
 {
 	log("visual_servo::write_log() begin\n");
@@ -132,7 +143,8 @@ void visual_servo::write_log()
 	time_t timep = time(NULL);
 	struct tm* time_split = localtime(&timep);
 	char time_log_filename[128];
-	sprintf(time_log_filename, "../../msr/%04d-%02d-%02d_%02d-%02d-%02d_VS.csv", time_split->tm_year + 1900, time_split->tm_mon + 1, time_split->tm_mday, time_split->tm_hour, time_split->tm_min, time_split->tm_sec);
+	sprintf(time_log_filename, "../../msr/%04d-%02d-%02d_%02d-%02d-%02d_VS.csv", time_split->tm_year + 1900, time_split->tm_mon
+			+ 1, time_split->tm_mday, time_split->tm_hour, time_split->tm_min, time_split->tm_sec);
 
 	ofstream os;
 	os.open(time_log_filename, ofstream::out | ofstream::trunc);
@@ -157,6 +169,7 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
 	double imageSourceTime = (imageSourceTimeSeconds - t0) + imageSourceTimeNanoseconds * 1e-9;
 	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
 	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
 
 	if (imageSourceTimeSeconds > 0) {
@@ -175,6 +188,17 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 		os << fixed << sendTime << ";";
 		os << sendTimeSeconds << ";";
 		os << sendTimeNanoseconds << ";";
+	} else {
+		os << ";";
+		os << ";";
+		os << ";";
+	}
+
+	if (requestSentTimeSeconds > 0) {
+		os.precision(9);
+		os << fixed << requestSentTime << ";";
+		os << requestSentTimeSeconds << ";";
+		os << requestSentTimeNanoseconds << ";";
 	} else {
 		os << ";";
 		os << ";";
@@ -205,14 +229,14 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	os << is_object_visible << ";";
 
-	if(receiveTimeSeconds > 0 && sendTimeSeconds > 0){
+	if (receiveTimeSeconds > 0 && sendTimeSeconds > 0) {
 		os.precision(9);
 		os << fixed << (receiveTime - sendTime) << ";";
 	} else {
 		os << ";";
 	}
 
-	if(sampleTimeSeconds > 0 && imageSourceTimeSeconds > 0){
+	if (sampleTimeSeconds > 0 && imageSourceTimeSeconds > 0) {
 		os.precision(9);
 		os << fixed << (sampleTime - imageSourceTime) << ";";
 	} else {
@@ -231,6 +255,10 @@ void visual_servo_log_sample::printHeader(std::ostream& os)
 	os << "sendTime;";
 	os << "sendTime [s];";
 	os << "sendTime [ns];";
+
+	os << "requestSentTime;";
+	os << "requestSentTime [s];";
+	os << "requestSentTime [ns];";
 
 	os << "receiveTime;";
 	os << "receiveTime [s];";

@@ -120,6 +120,9 @@ private:
 
 	double vel_[6];
 
+	double current_sum;
+	double current_max;
+
 	lib::Xyz_Angle_Axis_vector msr_position_old;
 	lib::Xyz_Angle_Axis_vector msr_velocity;
 

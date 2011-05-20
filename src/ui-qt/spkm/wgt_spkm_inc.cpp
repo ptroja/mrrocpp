@@ -40,7 +40,7 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 	radioButton_mip_Vector.append(ui.radioButton_mip_5);
 
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
@@ -58,7 +58,7 @@ void wgt_spkm_inc::synchro_depended_init()
 	emit synchro_depended_init_signal();
 }
 
-void wgt_spkm_inc::on_timer_slot()
+void wgt_spkm_inc::timer_slot()
 {
 	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();

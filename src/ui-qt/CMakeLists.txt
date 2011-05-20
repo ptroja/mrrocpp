@@ -161,6 +161,7 @@ TARGET_LINK_LIBRARIES(
 	ecp_robots ecp_mp
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
+	boost_regex
 )
 
 install(

@@ -16,6 +16,8 @@
 #include "base/edp/reader.h"
 #include "base/edp/HardwareInterface.h"
 #include "base/edp/regulator.h"
+#include "base/edp/edp_e_motor_driven.h"
+#include "base/edp/servo_gr.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -25,8 +27,8 @@ namespace common {
 
 
 /*-----------------------------------------------------------------------*/
-regulator::regulator(uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master) :
-	master(_master)
+regulator::regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, common::motor_driven_effector &_master) :
+	new_desired_velocity_error(true), axis_number(_axis_number), master(_master)
 {
 	// Konstruktor abstrakcyjnego regulatora
 	// Inicjuje zmienne, ktore kazdy regulator konkretny musi miec i aktualizowac,
@@ -75,8 +77,26 @@ double regulator::get_set_value(void) const
 
 void regulator::insert_new_step(double ns)
 {
-	// wstawienie nowej wartosci zadanej - metoda konkretna
-	step_new = ns;
+	if (fabs(ns) <= desired_velocity_limit * master.velocity_limit_global_factor) {
+		step_new = ns;
+	} else {
+		step_new = 0.0;
+		// wymus stop awaryjny
+		master.sb->set_hi_panic();
+		//blad z numerem osi
+		if (new_desired_velocity_error) {
+			std::stringstream temp_message;
+			temp_message << "desired velocity exceeded on axis (" << (int) axis_number << "): desired value = " << ns
+					<< ", multiplied velocity limit = " << desired_velocity_limit * master.velocity_limit_global_factor
+					<< ", velocity_limit = " << desired_velocity_limit << ", global factor = "
+					<< master.velocity_limit_global_factor << std::endl;
+			master.msg->message(lib::FATAL_ERROR, temp_message.str());
+			std::cout << temp_message.str();
+
+			new_desired_velocity_error = false;
+		}
+
+	}
 }
 
 void regulator::insert_measured_current(int measured_current_l)
@@ -100,7 +120,7 @@ void regulator::insert_new_pos_increment(double inc)
 
 double regulator::get_position_inc(int tryb)
 { // by Y: 0 dla servo i 1 dla paczki dla edp;
-	// odczytanie zrealizowanego przyrostu polozenia w makrokroku - metoda konkretna
+// odczytanie zrealizowanego przyrostu polozenia w makrokroku - metoda konkretna
 	double pins;
 	if (tryb == 1) {
 		pins = pos_increment_new_sum;
@@ -184,8 +204,8 @@ void regulator::clear_regulator()
 }
 
 /*-----------------------------------------------------------------------*/
-NL_regulator::NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	regulator(reg_no, reg_par_no, _master)
+NL_regulator::NL_regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	regulator(_axis_number, reg_no, reg_par_no, _master)
 {
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly

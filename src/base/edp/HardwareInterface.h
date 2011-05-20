@@ -68,6 +68,10 @@ typedef struct _irq_data
 
 class HardwareInterface
 {
+
+protected:
+	bool hardware_panic;
+
 public:
 	HardwareInterface(motor_driven_effector &_master) :
 		master(_master)
@@ -77,6 +81,11 @@ public:
 	virtual ~HardwareInterface()
 	{
 
+	}
+
+	void set_hardware_panic()
+	{
+		hardware_panic = true;
 	}
 
 	motor_driven_effector &master;
