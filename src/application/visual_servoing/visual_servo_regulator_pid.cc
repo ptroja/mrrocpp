@@ -21,6 +21,7 @@ using namespace std;
 regulator_pid::regulator_pid(const lib::configurator & config, const std::string& config_section_name) :
 	visual_servo_regulator(config, config_section_name)
 {
+	cout<<"================= regulator_pid::regulator_pid() begin\n\n";
 	error_t_1.setZero();
 	error_integral.setZero();
 
