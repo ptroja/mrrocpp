@@ -210,6 +210,21 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
 	//#endif
+	float _velocity_limit_global_factor;
+
+	if (config.exists("velocity_limit_global_factor")) {
+		_velocity_limit_global_factor = config.value <float> ("velocity_limit_global_factor");
+		if ((_velocity_limit_global_factor > 0) && (_velocity_limit_global_factor <= 1)) {
+			velocity_limit_global_factor = _velocity_limit_global_factor;
+		} else {
+			msg->message(lib::NON_FATAL_ERROR, "bad velocity_limit_global_factor, defaults loaded");
+			velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		}
+	} else {
+		velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		msg->message(lib::NON_FATAL_ERROR, "no velocity_limit_global_factor defined, defaults loaded");
+	}
+
 }
 
 motor_driven_effector::~motor_driven_effector()

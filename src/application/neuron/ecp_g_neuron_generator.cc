@@ -116,9 +116,11 @@ bool neuron_generator::next_step()
 
 	for(int i = 0; i < 6; i++)
 	{
-		current_sum += the_robot->reply_package.arm.measured_current.average_square[i];
+		current_sum += the_robot->reply_package.arm.measured_current.average_module[i];
 
-		double current_norm = the_robot->reply_package.arm.measured_current.average_square[i] / current_ref[i];
+		double ref3 = current_ref[i]*current_ref[i]*current_ref[i];
+
+		double current_norm = the_robot->reply_package.arm.measured_current.average_cubic[i] / ref3;
 
 		if(current_max < current_norm)
 		{

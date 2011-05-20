@@ -78,7 +78,7 @@ private:
 
 	void write_read(int fd, char* buf, unsigned int w_len, unsigned int r_len);
 
-	bool hardware_panic;
+
 	const std::size_t last_drive_number;
 	//std::vector<double> ridiculous_increment;
 	std::vector<std::string> port_names;
