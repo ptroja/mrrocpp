@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  Created on: Mar 3, 2010
  *      Author: mboryn
  */
@@ -63,14 +61,6 @@ bool visual_servo_manager::first_step()
 
 	current_position_saved = false;
 	log_dbg("visual_servo_manager::first_step() begin2\n");
-	//	sigevent ev;
-	//	SIGEV_NONE_INIT(&ev);
-	//
-	//	if (timer_create(CLOCK_REALTIME, &ev, &timerek) < 0) {
-	//		log("timer_create(CLOCK_REALTIME, ev, timerek) < 0: %d\n", errno);
-	//	}
-	//
-	//	setup_timer();
 
 	prev_velocity.setZero();
 	prev_angular_velocity.setZero();
@@ -85,17 +75,6 @@ bool visual_servo_manager::first_step()
 	log_dbg("visual_servo_manager::first_step() begin4\n");
 	return true;
 }
-
-//void visual_servo_manager::setup_timer()
-//{
-//	max_t.it_value.tv_sec = 1;
-//	max_t.it_value.tv_nsec = 0;
-//	timer_settime(timerek, 0, &max_t, NULL);
-//}
-
-//	timer_gettime(timerek, &curr_t);
-//	log("timer_gettime(timerek, &curr_t): %d.%09d\n", curr_t.it_value.tv_sec, curr_t.it_value.tv_nsec);
-//	setup_timer();
 
 bool visual_servo_manager::next_step()
 {

@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  Created on: Mar 3, 2010
  *      Author: mboryn
  */
@@ -178,12 +176,6 @@ private:
 	 * @param position_change
 	 */
 	void constrain_speed_accel(lib::Homog_matrix & position_change);
-
-	//	timer_t timerek;
-	//	itimerspec max_t;
-	//	itimerspec curr_t;
-	//
-	//	void setup_timer();
 };
 
 /** @} */
