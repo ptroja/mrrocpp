@@ -503,7 +503,7 @@ void neuron_sensor::sendStatistics(double currents_sum, double max){
 	memcpy(buff + 1, &currents_sum, 8);
 	memcpy(buff + 9, &max, 8);
 
-	//printf("neuron_sensor->sendData command : %d x:%lf y:%lf z:%lf\n",temp_command,x,y,z);
+	printf("neuron_sensor->sendStatistics : %lf :%lf \n",currents_sum, max);
 
 	int result = write(socketDescriptor, buff, sizeof(buff));
 

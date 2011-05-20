@@ -87,6 +87,7 @@ void regulator::insert_new_step(double ns)
 		if (new_desired_velocity_error) {
 			std::stringstream temp_message;
 			temp_message << "desired velocity exceeded on axis (" << (int) axis_number << "): desired value = " << ns
+					<< ", multiplied velocity limit = " << desired_velocity_limit * master.velocity_limit_global_factor
 					<< ", velocity_limit = " << desired_velocity_limit << ", global factor = "
 					<< master.velocity_limit_global_factor << std::endl;
 			master.msg->message(lib::FATAL_ERROR, temp_message.str());
