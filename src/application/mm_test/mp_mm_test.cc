@@ -1,6 +1,7 @@
 
 #include <cstdio>
 #include <unistd.h>
+#include <string.h>
 #include <cstring>
 #include <iostream>
 
@@ -28,9 +29,17 @@
 #include "ecp_mp_g_g_mm_test.h"
 #include "ecp_mp_g_g_rotate.h"
 
+#include "sensor/discode/discode_sensor.h"
+#include <boost/shared_ptr.hpp>
+
+#include "LReading.hpp"
+
 #define PI 3.14159
 #define K_MAX 0.0365
 
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
+
+using namespace std;
 
 namespace mrrocpp {
 namespace mp {
@@ -57,6 +66,13 @@ mmtest::mmtest(lib::configurator &_config) :
 		task(_config)
 {
 
+	sr_ecp_msg->message("DS test");
+	char config_section_name[] = { "[DS Labirynth]" };
+	ds = boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor>(new mrrocpp::ecp_mp::sensor::discode::discode_sensor(config, config_section_name));
+
+	sr_ecp_msg->message("before ds.configure_sensor()\n");
+	ds->configure_sensor();
+	sr_ecp_msg->message("after ds.configure_sensor()\n");
 }
 
 
@@ -155,7 +171,29 @@ void mmtest::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("mp start");
 
-	set_path();
+	//set_path();
+
+	Types::Mrrocpp_Proxy::LReading lr;
+	sr_ecp_msg->message("LR init");
+	lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
+	sr_ecp_msg->message("LR received");
+	std::cout<<"LReading info: "<<lr.info<<std::endl;
+
+	while(true)
+	{
+		lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
+		sr_ecp_msg->message("LR received");
+		std::cout<<"LReading info: "<<lr.info<<std::endl;
+		if(lr.info!=0.0)
+			break;
+		sleep(1);
+	}
+
+	//mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, &ds);
+	//sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
+	//g.Move();
+	//sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm(): 5\n");
+	/**********/
 
 
 	lib::robot_name_t manipulator_name;

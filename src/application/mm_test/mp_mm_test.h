@@ -10,7 +10,10 @@
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 
+#include "sensor/discode/discode_sensor.h"
+#include <boost/shared_ptr.hpp>
 
+using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 #include <vector>
 
@@ -44,6 +47,8 @@ public:
 
 	void set_path();
 private:
+
+	boost::shared_ptr<discode_sensor> ds;
 
 	std::vector<Point> path;
 

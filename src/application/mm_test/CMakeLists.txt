@@ -17,9 +17,10 @@ target_link_libraries(ecp_mm_test
 	visual_servoing
 	ecp_generators
 	ecp_subtasks
+	discode_sensor
 )
 
-target_link_libraries(mp_mm_test mp)
+target_link_libraries(mp_mm_test mp discode_sensor)
 
 
 install(TARGETS mp_mm_test ecp_mm_test DESTINATION bin)
