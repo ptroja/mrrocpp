@@ -10,6 +10,9 @@ if(LibFTDI_FOUND)
     add_executable(test test.cc)
     target_link_libraries (test epos)
     
+    add_executable(sctest sctest.cc)
+    target_link_libraries (sctest epos rt)
+    
     add_executable(ipmtest ipmtest.cc)
     target_link_libraries (ipmtest epos rt) 
 

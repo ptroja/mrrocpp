@@ -182,7 +182,12 @@ const char * epos::ErrorCodeMessage(UNSIGNED32 code) {
 		case 0xFF09: return "Software Position Limit Error";
 		case 0xFF0A: return "Position Sensor Breach";
 		case 0xFF0B: return "System Overloaded";
-		case 0xFF0C: return "Interpolated Position Mode Error";
+		case 0xFF0C:
+		{
+			UNSIGNED16 status = readInterpolationBufferStatus();
+			printInterpolationBufferStatus(status);
+			return "Interpolated Position Mode Error";
+		}
 		case 0xFF0D: return "Auto Tuning Identification Error";
 		default: return "Unknown error";
 	}

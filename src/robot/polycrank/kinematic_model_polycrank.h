@@ -22,15 +22,15 @@ protected:
 	double motor_to_intext_ratio;
 	//! Method responsible for kinematic parameters setting.
 	virtual void set_kinematic_parameters(void);
-	//Checks whether given motor increments are valid.
-	//otor_position Motor position to be validated.
-	virtual void check_motor_position(const lib::MotorArray & motor_position) const;
-	//Checks whether given internal coordinates are valid.
-	virtual void check_joints(const lib::JointArray & q) const;
 
 public:
 	//! Constructor.
 	model(void);
+
+	//Checks whether given motor increments are valid.
+	virtual void check_motor_position(const lib::MotorArray & motor_position) const;
+	//Checks whether given internal coordinates are valid.
+	virtual void check_joints(const lib::JointArray & q) const;
 
 	//Computes internal coordinates for given the motor increments (position) values.
 	//[in] local_current_motor_pos Motor increments.
