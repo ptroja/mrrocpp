@@ -8,6 +8,10 @@
 #include <boost/foreach.hpp>
 #include <dirent.h>
 #include <sys/wait.h>
+#include <boost/regex.hpp>
+#include <map>
+#include <string>
+#include <iostream>
 
 #include <QtGui/QApplication>
 #include <QFileDialog>
@@ -83,10 +87,33 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
+bool Interface::html_it(std::string &_input, std::string &_output)
+{
+
+	try {
+		// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+		boost::regex pattern("(<)|(>)|( )|(&)");
+		// Format stringu odpowiadający podmienianemu dopasowaniu.
+		std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
+
+		std::ostringstream t(std::ios::out | std::ios::binary);
+		std::ostream_iterator <char> oi(t);
+		boost::regex_merge(oi, _input.begin(), _input.end(), pattern, fmt, boost::match_default | boost::format_all);
+
+		_output = t.str();
+
+	} catch (std::exception &ex) {
+		std::cout << "blad" << ex.what() << std::endl;
+	}
+
+	return true;
+}
+
 void Interface::timer_slot()
 {
 
 	//fprintf(stderr, "OnTimer()\n");
+
 
 	QTextCharFormat format;
 
@@ -102,6 +129,8 @@ void Interface::timer_slot()
 
 		char current_line[400];
 
+		std::string html_line;
+
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -115,29 +144,44 @@ void Interface::timer_slot()
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
 			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
 
+			std::string input(current_line);
+
+			std::string output;
+
+			html_it(input, output);
+
+			html_line = "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
-					strcat(current_line, "EDP: ");
+
+					strcat(current_line, "D: ");
+					html_line += "#767639\">D:&#160;";
 					break;
 				case lib::ECP:
-					strcat(current_line, "ECP: ");
+					strcat(current_line, "C: ");
+					html_line += "Slate Blue\">C:&#160;";
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "MP:  ");
+					strcat(current_line, "M: ");
+					html_line += "#a54e8f\">M:&#160;";
 					break;
 				case lib::VSP:
-					strcat(current_line, "VSP: ");
+					strcat(current_line, "S: ");
+					html_line += "brown\">S:&#160;";
 					break;
 				case lib::UI:
-					strcat(current_line, "UI:  ");
+					strcat(current_line, "I: ");
+					html_line += "brown\">I:&#160;";
 					break;
 				default:
-					strcat(current_line, "???: ");
+					strcat(current_line, "?: ");
+					html_line += "magenta\">?:&#160;";
 					continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
-
+			html_line += "</font>";
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
@@ -146,38 +190,46 @@ void Interface::timer_slot()
 
 			strcat(current_line, process_name_buffer);
 
+			input = std::string(process_name_buffer);
+
+			html_it(input, output);
+
+			html_line += "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
+
 			switch (sr_msg.message_type)
 			{
 				case lib::FATAL_ERROR:
 					strcat(current_line, "FE:   ");
-					format.setForeground(Qt::red);
-
+					//	format.setForeground(Qt::red);
+					html_line += "black\" style=\"background-color:'#ffc6c6';\">FE:&#160;&#160;&#160;";
 					break;
 				case lib::NON_FATAL_ERROR:
-
 					strcat(current_line, "NFE:  ");
-					format.setForeground(Qt::blue);
-
+					//	format.setForeground(Qt::blue);
+					html_line += "black\" style=\"background-color:'#c6e7ff';\">NFE:&#160;&#160;";
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
 					strcat(current_line, "SE:   ");
-					format.setForeground(Qt::magenta);
+					//	format.setForeground(Qt::magenta);
+					html_line += "black\" style=\"background-color:'#ffc6ef';\">SE:&#160;&#160;&#160;";
 
 					break;
 				case lib::NEW_MESSAGE:
 					strcat(current_line, "MSG:  ");
-					format.setForeground(Qt::black);
-
+					//	format.setForeground(Qt::black);
+					html_line += "black\">msg:&#160;&#160;";
 					break;
 				default:
 					strcat(current_line, "UE:   ");
-					format.setForeground(Qt::yellow);
+					html_line += "yellow\">UE:&#160;&#160;&#160;";
+					//	format.setForeground(Qt::yellow);
 
 			}; // end: switch (message.message_type)
-
-			mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
+			//	html_line += "</font>";
+			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
 
 			std::string text(sr_msg.description);
 
@@ -187,14 +239,30 @@ void Interface::timer_slot()
 			bool first_it = true;
 			BOOST_FOREACH(std::string t, tokens)
 						{
+
+							input = t.c_str();
+
+							html_it(input, output);
+
 							if (first_it) {
 								first_it = false;
+
+								html_line += output + "</font>";
+
 							} else {
+								html_line
+										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+												+ output + "</font>";
+
 								strcpy(current_line, "                                                     ");
 							}
 							strcat(current_line, t.c_str());
 
-							mw->get_ui()->textEdit_sr->append(current_line);
+							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
+
+							//	mw->get_ui()->textEdit_sr->append(current_line);
 							(*log_file_outfile) << current_line << std::endl;
 						}
 		}
