@@ -1,5 +1,0 @@
-add_subdirectory(objectfollower_ib)
-add_subdirectory(objectfollower_pb_eih)
-add_subdirectory(objectfollower_pb_sac)
-add_subdirectory(visualservo_tester)
-add_subdirectory(tutorial)
