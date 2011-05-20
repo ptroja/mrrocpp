@@ -8,6 +8,7 @@
 namespace Types {
 namespace Mrrocpp_Proxy {
 
+
 /**
  *
  */
@@ -20,7 +21,11 @@ public:
 
 	LReading(const LReading& o)
 	{
-		info = o.info;
+		path_exists = o.path_exists;
+
+		for(int i=0;i<9;i++)
+			for(int j=0;j<9;j++)
+				path[i][j] = o.path[i][j];
 	}
 
 	virtual ~LReading()
@@ -32,7 +37,8 @@ public:
 		return new LReading(*this);
 	}
 
-	double info;
+	bool path_exists;
+	int path [9][9];
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
 		*ar<<*this;
@@ -44,9 +50,9 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object <Reading>(*this);
-		//LOG(LTRACE) << "LReading::serialize()\n";
 
-		ar & info;
+		ar & path_exists;
+		ar & path;
 	}
 };
 

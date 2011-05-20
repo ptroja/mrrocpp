@@ -171,29 +171,59 @@ void mmtest::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("mp start");
 
-	//set_path();
+	/** SET PATH : READ FROM DISCODE */
 
 	Types::Mrrocpp_Proxy::LReading lr;
 	sr_ecp_msg->message("LR init");
 	lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
 	sr_ecp_msg->message("LR received");
-	std::cout<<"LReading info: "<<lr.info<<std::endl;
 
-	while(true)
+	std::cout<<"LReading info: "<<lr.path_exists<<std::endl;
+
+	int max_step=-1;
+	for(int i=0;i<9;i++)
 	{
-		lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
-		sr_ecp_msg->message("LR received");
-		std::cout<<"LReading info: "<<lr.info<<std::endl;
-		if(lr.info!=0.0)
-			break;
-		sleep(1);
+		for(int j=0;j<9;j++)
+		{
+			std::cout<<lr.path[i][j]<<" ";
+			if(max_step < lr.path[i][j])
+			{
+				max_step = lr.path[i][j];
+			}
+
+		}
+		std::cout<<std::endl;
+	}
+	std::cout<<"max_step: "<<max_step<<std::endl;
+
+	int temp_step=0;
+	while(temp_step <= max_step)
+	{
+		for(int i=0;i<9;i++)
+		{
+			for(int j=0;j<9;j++)
+			{
+				if(lr.path[i][j] == temp_step)
+				{
+					Point p;
+					p.x=i;
+					p.y=j;
+					path.push_back(p);
+
+					temp_step++;
+				}
+			}
+		}
+	}
+	std::cout<<"step_last: "<<temp_step<<std::endl;
+
+	if(!lr.path_exists)
+	{
+		sr_ecp_msg->message("FROM DISCODE: PATH DOESNOT EXIST");
+		return;
 	}
 
-	//mrrocpp::ecp::common::generator::ecp_g_discode_sensor_test g(*this, &ds);
-	//sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
-	//g.Move();
-	//sr_ecp_msg->message("ecp_t_discode_sensor_test::main_task_algorithm(): 5\n");
-	/**********/
+	/** SET PATH : READ FROM DISCODE **END** */
 
 
 	lib::robot_name_t manipulator_name;
@@ -202,7 +232,7 @@ void mmtest::main_task_algorithm(void)
 	manipulator_name = lib::irp6p_m::ROBOT_NAME;
 	gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 
-/*
+
 	sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
 		lib::irp6p_m::ROBOT_NAME.c_str());
@@ -229,7 +259,7 @@ void mmtest::main_task_algorithm(void)
 	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	wait_ms(2000);
-
+/*
 
 */
 	/*
@@ -245,7 +275,7 @@ void mmtest::main_task_algorithm(void)
 					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 	}
-	*/
+
 
 	sr_ecp_msg->message("SZCZEKI W DOL");
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0, 1,
@@ -257,11 +287,6 @@ void mmtest::main_task_algorithm(void)
 				lib::irp6p_m::ROBOT_NAME.c_str());
 		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-	sr_ecp_msg->message("BIAS");
-	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
-
-
 	sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
 
 
@@ -272,6 +297,11 @@ void mmtest::main_task_algorithm(void)
 	for ( prit=rit=path.rbegin(),rit++ ; rit < path.rend(); ++rit, ++prit )
 	{
 		std::cout<<"POINT: "<<(*rit).x<<","<<(*rit).y<<std::endl;
+
+		sr_ecp_msg->message("BIAS");
+		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+		run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+
 
 		if((*rit).x<(*prit).x)//x-
 		{
@@ -320,7 +350,7 @@ void mmtest::main_task_algorithm(void)
 			lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-
+*/
 
 sr_ecp_msg->message("mp end");
 }
