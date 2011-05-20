@@ -66,10 +66,10 @@ discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::st
 	base_period = current_period = 1;
 
 	// read sensor settings from config.
-	discode_port = config.value<uint16_t> ("discode_port", section_name);
-	discode_node_name = config.value<string> ("discode_node_name", section_name);
-	reading_timeout = config.value<double> ("discode_reading_timeout", section_name);
-	rpc_call_timeout = config.value<double> ("discode_rpc_call_timeout", section_name);
+	discode_port = config.value <uint16_t> ("discode_port", section_name);
+	discode_node_name = config.value <string> ("discode_node_name", section_name);
+	reading_timeout = config.value <double> ("discode_reading_timeout", section_name);
+	rpc_call_timeout = config.value <double> ("discode_rpc_call_timeout", section_name);
 
 	// determine size of rmh after serialization
 	header_oarchive << rmh;
@@ -111,8 +111,7 @@ void discode_sensor::configure_sensor()
 	hostent * server = gethostbyname(discode_node_name.c_str());
 	if (server == NULL) {
 		state = DSS_ERROR;
-		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(
-				hstrerror(h_errno)));
+		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(hstrerror(h_errno)));
 	}
 
 	// Data with address of connection
@@ -152,22 +151,24 @@ void discode_sensor::get_reading()
 		if (is_data_available()) {
 			// reading has been received.
 			receive_buffers_from_discode();
+			save_reading_received_time();
 			state = DSS_READING_RECEIVED;
 		} else {
 			// no data received - too long for receiving reading from Discode.
 			// there must be something wrong with connection to discode.
-			throw ds_timeout_exception(
-					"discode_sensor: Timeout while waiting for reading. Check connection to DisCODe and task running on DisCODe.");
+			throw ds_timeout_exception("discode_sensor: Timeout while waiting for reading. Check connection to DisCODe and task running on DisCODe.");
 		}
 	} else if (state == DSS_CONNECTED || state == DSS_READING_RECEIVED) {
 		// send request to DisCODe.
 		imh.data_size = 0;
 		imh.is_rpc_call = false;
 		oarchive.clear_buffer();
+		save_request_sent_time();
 		send_buffers_to_discode();
 		if (is_data_available(reading_timeout)) {
 			// reading has just been received
 			receive_buffers_from_discode();
+			save_reading_received_time();
 			state = DSS_READING_RECEIVED;
 		} else {
 			// timeout, try receiving in next call to get_reading()
@@ -188,8 +189,7 @@ void discode_sensor::get_reading()
 void discode_sensor::terminate()
 {
 	if (!(state == DSS_CONNECTED || state == DSS_ERROR)) {
-		throw ds_wrong_state_exception(
-				"discode_sensor::terminate(): !(state == DSS_CONNECTED || state == DSS_ERROR)");
+		throw ds_wrong_state_exception("discode_sensor::terminate(): !(state == DSS_CONNECTED || state == DSS_ERROR)");
 	}
 	close(sockfd);
 	state = DSS_NOT_CONNECTED;
@@ -212,7 +212,7 @@ bool discode_sensor::is_data_available(double sec)
 	tv.tv_sec = floor(sec);
 	tv.tv_usec = round(fmod(sec, 1) * 1e6);
 
-//	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
+	//	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
 
 	retval = select(sockfd + 1, &rfds, NULL, NULL, &tv);
 
@@ -226,14 +226,6 @@ bool discode_sensor::is_data_available(double sec)
 void discode_sensor::receive_buffers_from_discode()
 {
 	//	logger::log("discode_sensor::receive_buffers_from_discode() 1\n");
-	struct timespec ts;
-	if(clock_gettime(CLOCK_REALTIME, &ts) == 0){
-		reading_received_time = ts;
-	} else {
-		reading_received_time.tv_sec = 0;
-		reading_received_time.tv_nsec = 0;
-	}
-
 
 	header_iarchive.clear_buffer();
 	int nread = read(sockfd, header_iarchive.get_buffer(), reading_message_header_size);
@@ -289,8 +281,7 @@ void discode_sensor::send_buffers_to_discode()
 		throw ds_connection_exception("writev(sockfd, iov, 2) == -1");
 	}
 	if (nwritten != (int) (header_oarchive.getArchiveSize() + oarchive.getArchiveSize())) {
-		throw ds_connection_exception(
-				"writev(sockfd, iov, 2) != header_oarchive.getArchiveSize() + oarchive.getArchiveSize()");
+		throw ds_connection_exception("writev(sockfd, iov, 2) != header_oarchive.getArchiveSize() + oarchive.getArchiveSize()");
 	}
 
 	oarchive.clear_buffer();
@@ -301,8 +292,7 @@ void discode_sensor::timer_init()
 	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
 		timer.print_last_status();
 		fflush(stdout);
-		throw logic_error(
-				"discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
+		throw logic_error("discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
 }
 
@@ -331,12 +321,40 @@ void discode_sensor::timer_show(const char *str)
 	}
 }
 
-reading_message_header discode_sensor::get_rmh() const{
+reading_message_header discode_sensor::get_rmh() const
+{
 	return rmh;
 }
 
-struct timespec discode_sensor::get_receive_time() const{
+struct timespec discode_sensor::get_request_sent_time() const
+{
+	return request_sent_time;
+}
+
+struct timespec discode_sensor::get_reading_received_time() const
+{
 	return reading_received_time;
+}
+
+void discode_sensor::save_request_sent_time()
+{
+	struct timespec ts;
+	if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
+		request_sent_time = ts;
+	} else {
+		request_sent_time.tv_sec = 0;
+		request_sent_time.tv_nsec = 0;
+	}
+}
+void discode_sensor::save_reading_received_time()
+{
+	struct timespec ts;
+	if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
+		reading_received_time = ts;
+	} else {
+		reading_received_time.tv_sec = 0;
+		reading_received_time.tv_nsec = 0;
+	}
 }
 
 } // namespace discode
