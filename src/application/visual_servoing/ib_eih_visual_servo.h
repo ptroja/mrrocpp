@@ -33,7 +33,7 @@ public:
 protected:
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual bool is_object_visible_in_latest_reading();
-	virtual void retrieve_reading();
+	virtual Types::Mrrocpp_Proxy::IBReading* retrieve_reading();
 
 	lib::Homog_matrix e_T_c_position;
 private:

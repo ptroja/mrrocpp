@@ -66,8 +66,6 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		steps_without_reading = 0;
 
 		mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
-		sample.imageSourceTimeNanoseconds = rmh.imageSourceTimeNanoseconds;
-		sample.imageSourceTimeSeconds = rmh.imageSourceTimeSeconds;
 		sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
 		sample.sendTimeSeconds = rmh.sendTimeSeconds;
 
@@ -79,7 +77,12 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		sample.requestSentTimeNanoseconds = ts.tv_nsec;
 		sample.requestSentTimeSeconds = ts.tv_sec;
 
-		retrieve_reading();
+		Types::Mrrocpp_Proxy::Reading* reading = retrieve_reading();
+		sample.processingStartSeconds = reading->processingStartSeconds;
+		sample.processingStartNanoseconds = reading->processingStartNanoseconds;
+
+		sample.processingEndSeconds = reading->processingEndSeconds;
+		sample.processingEndNanoseconds = reading->processingEndNanoseconds;
 	} else {
 		// Maybe there is a valid reading
 		steps_without_reading++;
@@ -155,7 +158,7 @@ void visual_servo::write_log()
 	uint64_t t0 = 0;
 	for (it = log_buffer.begin(); it != log_buffer.end(); ++it) {
 		if (it == log_buffer.begin() || t0 == 0) {
-			t0 = it->imageSourceTimeSeconds + it->imageSourceTimeNanoseconds * 1e-9;
+			t0 = it->processingStartSeconds + it->processingStartNanoseconds * 1e-9;
 		}
 		it->print(os, t0);
 	}
@@ -166,114 +169,122 @@ void visual_servo::write_log()
 
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
-	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-	double imageSourceTime = (imageSourceTimeSeconds - t0) + imageSourceTimeNanoseconds * 1e-9;
-	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
-	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
-	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
+//	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
+//	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9;
+//	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9;
+//	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+//	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
+//	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
+//
+//	if (processingStartSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << processingStart << ";";
+//	} else {
+//		os << ";";
+//	}
+//	if (processingEndSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << processingEnd << ";";
+//	} else {
+//		os << ";";
+//	}
+//
+//	if (sendTimeSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << sendTime << ";";
+//	} else {
+//		os << ";";
+//	}
+//
+//	if (requestSentTimeSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << requestSentTime << ";";
+//	} else {
+//		os << ";";
+//	}
+//
+//	if (receiveTimeSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << receiveTime << ";";
+//	} else {
+//		os << ";";
+//	}
+//
+//	if (sampleTimeSeconds > 0) {
+//		os.precision(9);
+//		os << fixed << sampleTime << ";";
+//	} else {
+//		os << ";";
+//	}
+//
+//	os << is_object_visible << ";";
+//
+//	os << "\n";
 
-	if (imageSourceTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << imageSourceTime << ";";
-		os << imageSourceTimeSeconds << ";";
-		os << imageSourceTimeNanoseconds << ";";
-	} else {
-		os << ";";
-		os << ";";
-		os << ";";
-	}
 
-	if (sendTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << sendTime << ";";
-		os << sendTimeSeconds << ";";
-		os << sendTimeNanoseconds << ";";
-	} else {
-		os << ";";
-		os << ";";
-		os << ";";
-	}
 
-	if (requestSentTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << requestSentTime << ";";
-		os << requestSentTimeSeconds << ";";
-		os << requestSentTimeNanoseconds << ";";
-	} else {
-		os << ";";
-		os << ";";
-		os << ";";
-	}
+	os << processingStartSeconds<<";";
+	os << processingStartNanoseconds << ";";
 
-	if (receiveTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << receiveTime << ";";
-		os << receiveTimeSeconds << ";";
-		os << receiveTimeNanoseconds << ";";
-	} else {
-		os << ";";
-		os << ";";
-		os << ";";
-	}
+	os << processingEndSeconds << ";";
+	os << processingEndNanoseconds << ";";
 
-	if (sampleTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << sampleTime << ";";
-		os << sampleTimeSeconds << ";";
-		os << sampleTimeNanoseconds << ";";
-	} else {
-		os << ";";
-		os << ";";
-		os << ";";
-	}
+	os << requestSentTimeSeconds << ";";
+	os << requestSentTimeNanoseconds << ";";
 
+	os << sendTimeSeconds << ";";
+	os << sendTimeNanoseconds << ";";
+
+	os << receiveTimeSeconds << ";";
+	os << receiveTimeNanoseconds << ";";
+
+	os << sampleTimeSeconds << ";";
+	os << sampleTimeNanoseconds << ";";
 	os << is_object_visible << ";";
-
-	if (receiveTimeSeconds > 0 && sendTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << (receiveTime - sendTime) << ";";
-	} else {
-		os << ";";
-	}
-
-	if (sampleTimeSeconds > 0 && imageSourceTimeSeconds > 0) {
-		os.precision(9);
-		os << fixed << (sampleTime - imageSourceTime) << ";";
-	} else {
-		os << ";";
-	}
-
 	os << "\n";
+
 }
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
 {
-	os << "imageSourceTime;";
-	os << "imageSourceTime [s];";
-	os << "imageSourceTime [ns];";
+//	os << "processingStart;";
+//
+//	os << "processingEnd;";
+//
+//	os << "sendTime;";
+//
+//	os << "requestSentTime;";
+//
+//	os << "receiveTime;";
+//
+//	os << "sampleTime;";
+//
+//	os << "is_object_visible;";
+//
+//	os << "\n";
 
-	os << "sendTime;";
+	os << "processingStart [s];";
+	os << "processingStart [ns];";
+
+	os << "processingEnd [s];";
+	os << "processingEnd [ns];";
+
 	os << "sendTime [s];";
 	os << "sendTime [ns];";
 
-	os << "requestSentTime;";
 	os << "requestSentTime [s];";
 	os << "requestSentTime [ns];";
 
-	os << "receiveTime;";
 	os << "receiveTime [s];";
 	os << "receiveTime [ns];";
 
-	os << "sampleTime;";
 	os << "sampleTime [s];";
 	os << "sampleTime [ns];";
 
 	os << "is_object_visible;";
 
-	os << "communication delay [s];";
-	os << "transport delay [s];";
-
 	os << "\n";
+
 }
 
 } // namespace servovision

@@ -16,31 +16,41 @@
 #include "sensor/discode/discode_sensor.h"
 #include "visual_servo_regulator.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
+#include "Reading.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace servovision {
 
-struct visual_servo_log_sample{
-	/** Time, when sample was taken. */
-	uint64_t sampleTimeSeconds;
-	uint64_t sampleTimeNanoseconds;
+struct visual_servo_log_sample
+{
+	/**
+	 * Timestamp when processing in Discode starts (taken just after camera source).
+	 */
+	uint64_t processingStartSeconds;
+	uint64_t processingStartNanoseconds;
 
-	/** Time of reading. */
-	uint64_t imageSourceTimeSeconds;
-	uint64_t imageSourceTimeNanoseconds;
+	/**
+	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
+	 */
+	uint64_t processingEndSeconds;
+	uint64_t processingEndNanoseconds;
+
+	/** Time, when request for reading was sent from mrrocpp to discode. */
+	uint64_t requestSentTimeSeconds;
+	uint64_t requestSentTimeNanoseconds;
 
 	/** Time, when reading was sent to mrrocpp. */
 	uint64_t sendTimeSeconds;
 	uint64_t sendTimeNanoseconds;
 
-	/** Time, when request for reading was sent from mrrocpp to discode. */
-	uint64_t requestSentTimeNanoseconds;
-	uint64_t requestSentTimeSeconds;
-
 	/** Time, when reading was received in mrrocpp. */
 	uint64_t receiveTimeSeconds;
 	uint64_t receiveTimeNanoseconds;
+
+	/** Time, when sample was taken. */
+	uint64_t sampleTimeSeconds;
+	uint64_t sampleTimeNanoseconds;
 
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
@@ -48,7 +58,6 @@ struct visual_servo_log_sample{
 	static void printHeader(std::ostream& os);
 	void print(std::ostream& os, uint64_t t0);
 };
-
 
 /** @addtogroup servovision
  *  @{
@@ -88,7 +97,8 @@ public:
 	 */
 	const Eigen::Matrix <double, 6, 1> & get_error();
 protected:
-	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
+			visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
+					mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 
 	/**
 	 * This method should compute position to be passed to the robot.
@@ -108,7 +118,7 @@ protected:
 	/**
 	 * This method should retrieve reading from discode_sensor and store it for later use.
 	 */
-	virtual void retrieve_reading() = 0;
+	virtual Types::Mrrocpp_Proxy::Reading* retrieve_reading() = 0;
 
 	/**
 	 * This method should check latest reading, if object in that reading is visible.
@@ -132,7 +142,7 @@ private:
 	int max_steps_without_reading;
 	int steps_without_reading;
 
-	boost::circular_buffer<visual_servo_log_sample> log_buffer;
+	boost::circular_buffer <visual_servo_log_sample> log_buffer;
 	static const int log_buffer_default_capacity = 500;
 
 	void write_log();
