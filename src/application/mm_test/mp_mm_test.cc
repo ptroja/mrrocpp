@@ -179,49 +179,34 @@ void mmtest::main_task_algorithm(void)
 	sr_ecp_msg->message("LR received");
 
 	std::cout<<"LReading info: "<<lr.path_exists<<std::endl;
-
-	int max_step=-1;
-	for(int i=0;i<9;i++)
-	{
-		for(int j=0;j<9;j++)
-		{
-			std::cout<<lr.path[i][j]<<" ";
-			if(max_step < lr.path[i][j])
-			{
-				max_step = lr.path[i][j];
-			}
-
-		}
-		std::cout<<std::endl;
-	}
-	std::cout<<"max_step: "<<max_step<<std::endl;
-
-	int temp_step=0;
-	while(temp_step <= max_step)
-	{
-		for(int i=0;i<9;i++)
-		{
-			for(int j=0;j<9;j++)
-			{
-				if(lr.path[i][j] == temp_step)
-				{
-					Point p;
-					p.x=i;
-					p.y=j;
-					path.push_back(p);
-
-					temp_step++;
-				}
-			}
-		}
-	}
-	std::cout<<"step_last: "<<temp_step<<std::endl;
-
 	if(!lr.path_exists)
 	{
 		sr_ecp_msg->message("FROM DISCODE: PATH DOESNOT EXIST");
 		return;
 	}
+
+
+	for(int i=0;i<50;i++)
+	{
+		if(lr.path[i][0]!=-1 && lr.path[i][1]!=-1)
+		{
+			Point p;
+			p.x=lr.path[i][0];
+			p.y=lr.path[i][1];
+			path.push_back(p);
+		}
+	}
+
+
+	std::vector<Point>::reverse_iterator xrit,xprit;
+
+	for ( xprit=xrit=path.rbegin(),xrit++ ; xrit < path.rend(); ++xrit, ++xprit )
+	{
+		std::cout<<"POINT: "<<(*xrit).x<<","<<(*xrit).y<<std::endl;
+	}
+
+
+
 
 	/** SET PATH : READ FROM DISCODE **END** */
 
@@ -231,7 +216,7 @@ void mmtest::main_task_algorithm(void)
 
 	manipulator_name = lib::irp6p_m::ROBOT_NAME;
 	gripper_name = lib::irp6p_tfg::ROBOT_NAME;
-
+	/*
 
 	sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
@@ -259,7 +244,7 @@ void mmtest::main_task_algorithm(void)
 	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
 	wait_ms(2000);
-/*
+
 
 */
 	/*
@@ -275,12 +260,65 @@ void mmtest::main_task_algorithm(void)
 					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 	}
-
+*/
 
 	sr_ecp_msg->message("SZCZEKI W DOL");
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0, 1,
 			lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+	//w mp:
+	//strcmp(robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command, "KONIEC") != 0;
+	std::cout<<"ECP REPLY 0: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0]<<std::endl;
+	std::cout<<"ECP REPLY 1: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[1]<<std::endl;
+	std::cout<<"ECP REPLY 2: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[2]<<std::endl;
+	std::cout<<"ECP REPLY 3: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[3]<<std::endl;
+
+
+	/* POZYCJA POCZATKOWA ZANIM SZCZEKI W DOL! */ /* liczona z (3,3) */
+
+	char temp_str[20];//args to ecp
+
+	int sx=3,sy=3;
+	int x = path[0].x;
+	int y = path[0].y;
+
+	while(sx!=x && sy!=y)
+	{
+
+		if(sx<x)
+		{
+			sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			sx++;
+		}
+		if(sx>x)
+		{
+			sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			sx--;
+		}
+		if(sy<y)
+		{
+			sprintf (temp_str, "%lf %lf", 0.0, K_MAX);//direction, duration in k in arg in frames in time
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			sy++;
+		}
+		if(sy>y)
+		{
+			sprintf (temp_str, "%lf %lf", 2.0, K_MAX);//direction, duration in k in arg in frames in time
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			sy--;
+		}
+
+	}
+
+	/* USTAWIONY */
 
 	sr_ecp_msg->message("SZCZEKI W DOL2");
 		set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_dol.trj", 0, 1,
@@ -289,10 +327,7 @@ void mmtest::main_task_algorithm(void)
 
 	sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
 
-
-	//double n=0.05;//szerokosc pola-5cm
 	std::vector<Point>::reverse_iterator rit,prit;
-	char temp_str[20];//args to ecp
 
 	for ( prit=rit=path.rbegin(),rit++ ; rit < path.rend(); ++rit, ++prit )
 	{
@@ -350,7 +385,7 @@ void mmtest::main_task_algorithm(void)
 			lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-*/
+//*/
 
 sr_ecp_msg->message("mp end");
 }

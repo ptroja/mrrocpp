@@ -155,6 +155,11 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 {
 	sr_ecp_msg->message("IN HENDLER");
 
+	ecp_reply.recognized_command[0] = '0';
+	ecp_reply.recognized_command[1] = '1';
+	ecp_reply.recognized_command[2] = '2';
+
+
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 	{
 		//get_next_state();

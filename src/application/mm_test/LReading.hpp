@@ -5,6 +5,8 @@
 
 #include "application/visual_servoing/Reading.h"
 
+#define MAX_LAB_LENGTH 50
+
 namespace Types {
 namespace Mrrocpp_Proxy {
 
@@ -23,8 +25,8 @@ public:
 	{
 		path_exists = o.path_exists;
 
-		for(int i=0;i<9;i++)
-			for(int j=0;j<9;j++)
+		for(int i=0;i<MAX_LAB_LENGTH;i++)
+			for(int j=0;j<2;j++)
 				path[i][j] = o.path[i][j];
 	}
 
@@ -38,7 +40,7 @@ public:
 	}
 
 	bool path_exists;
-	int path [9][9];
+	int path [MAX_LAB_LENGTH][2];
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
 		*ar<<*this;
