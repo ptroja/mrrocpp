@@ -24,6 +24,8 @@
 
 #include "robot/spkm/exceptions.h"
 
+#include "robot/epos/ipm_executor.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
@@ -81,12 +83,17 @@ effector::effector(common::shell &_shell) :
 		axesNames[4] = "2";
 		axes[5] = &(*axis3);
 		axesNames[5] = "3";
+
+		// Setup the axis array for the IPM handler
+		{
+			boost::unique_lock<boost::mutex> lock(ipm_handler.mtx);
+			ipm_handler.axes = this->axes;
+		}
 	}
 }
 
 void effector::reset_variables()
 {
-
 	// Zero all variables related to motor positions.
 	for (int i = 0; i < number_of_servos; ++i) {
 		current_motor_pos[i] = 0;

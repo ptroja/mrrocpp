@@ -16,6 +16,7 @@
 #include "base/edp/edp_e_manip.h"
 #include "robot/spkm/const_spkm.h"
 #include "robot/epos/epos.h"
+#include "robot/epos/ipm_executor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -66,6 +67,9 @@ private:
 
 	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
 	bool is_previous_cartesian_pose_known;
+
+	//! Handler for the asynchronous execution of the interpolated profile motion
+	epos::ipm_executor<lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
