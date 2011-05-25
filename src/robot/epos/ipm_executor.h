@@ -104,6 +104,29 @@ struct ipm_executor {
 				}
 			}
 
+			// Start motion
+			for (size_t i = 0; i < axes.size(); ++i) {
+				// FIXME: this motion type should be initiated with a CAN broadcast message
+				axes[i]->startInterpolatedPositionMotion();
+			}
+
+			// continuously upload the rest of the trajectory
+			for (int pnt = 2; pnt < NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+
+				/** Wait until there is free space in the EPOS data FIFO.
+				 *  Note: we check only the first axis.
+				 */
+				while(axes[0]->readActualBufferSize() == 0) {
+					// do nothing
+				}
+
+				for (size_t i = 0; i < axes.size(); ++i) {
+					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
+					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+					fflush(stdout);
+				}
+			}
+
 			// motion completed
 			job_to_do = false;
 
