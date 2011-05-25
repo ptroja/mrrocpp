@@ -122,7 +122,7 @@ public:
 	 * @param ... robots labels
 	 */
 	void
-	set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
 
 	/**
 	 * @brief sends end motion command to ECP's
