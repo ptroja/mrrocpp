@@ -31,11 +31,14 @@ public:
 
 	virtual const Eigen::Matrix <double, 6, 1>
 			& compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt);
+
+	virtual void reset();
 protected:
-	//Eigen::Matrix <double, 6, 6> Kp, Ki, Kd;
-	Eigen::Matrix <double, 6, 6> Kp, Ti_1, Td;
+	Eigen::Matrix <double, 6, 6> Kp, Ki, Kd;
 	Eigen::Matrix <double, 6, 1> error_t_1;
-	Eigen::Matrix <double, 6, 1> error_t_2;
+	Eigen::Matrix <double, 6, 1> error_integral;
+	Eigen::Matrix <double, 6, 1> max_error_integral;
+	Eigen::Matrix <double, 6, 1> min_error_integral;
 };
 
 /** @} */

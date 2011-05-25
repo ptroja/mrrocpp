@@ -15,6 +15,7 @@
 #include "pb_sac_visual_servo.h"
 
 #include "visual_servo_regulator_p.h"
+#include "visual_servo_regulator_pid.h"
 
 #include "cubic_constraint.h"
 

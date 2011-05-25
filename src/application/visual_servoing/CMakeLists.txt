@@ -1,18 +1,24 @@
 # add library for visual servoing
 add_library(visual_servoing
-    cubic_constraint.cc
+    visual_servo_manager.cc
+    single_visual_servo_manager.cc
+    
+    visual_servo.cc
     ib_eih_visual_servo.cc
-    object_reached_termination_condition.cc
+    pb_visual_servo.cc
     pb_eih_visual_servo.cc
     pb_sac_visual_servo.cc
-    pb_visual_servo.cc
-    position_constraint.cc
-    single_visual_servo_manager.cc
-    termination_condition.cc
-    timeout_termination_condition.cc
-    visual_servo_manager.cc
+    
+    visual_servo_regulator.cc
+    visual_servo_regulator_p.cc
     visual_servo_regulator_pid.cc
-    visual_servo.cc
+    
+    position_constraint.cc
+    cubic_constraint.cc
+    
+    termination_condition.cc
+    object_reached_termination_condition.cc
+    timeout_termination_condition.cc
 )
 
 # link with discode_sensor

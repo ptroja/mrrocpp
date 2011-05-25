@@ -15,8 +15,8 @@ add_library(ecp_generators
 	velocity_profile_calculator/constant_velocity_profile.cc
 	trajectory_interpolator/constant_velocity_interpolator.cc
 	trajectory_interpolator/bang_bang_interpolator.cc
-	vision/ecp_g_vis_ib_eih_planar_irp6ot.cc
-	vision/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
+#	vision/ecp_g_vis_ib_eih_planar_irp6ot.cc
+#	vision/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
 )
 
 target_link_libraries(ecp_generators ecp_generators_force mrrocpp ecp)

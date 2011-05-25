@@ -99,6 +99,13 @@ protected:
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt) = 0;
 
 	/**
+	 * This method is called by get_position_change() when object is considered no longer visible.
+	 * This usually happens, when object hasn't been recognized for a few macrosteps (determined by max_steps_without_reading parameter).
+	 * Implemented method should reset regulator.
+	 */
+	virtual void notify_object_considered_not_visible();
+
+	/**
 	 * This method should retrieve reading from discode_sensor and store it for later use.
 	 */
 	virtual void retrieve_reading() = 0;
