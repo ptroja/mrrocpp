@@ -169,121 +169,119 @@ void visual_servo::write_log()
 
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
-//	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-//	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9;
-//	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9;
-//	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
-//	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
-//	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
-//
-//	if (processingStartSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << processingStart << ";";
-//	} else {
-//		os << ";";
-//	}
-//	if (processingEndSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << processingEnd << ";";
-//	} else {
-//		os << ";";
-//	}
-//
-//	if (sendTimeSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << sendTime << ";";
-//	} else {
-//		os << ";";
-//	}
-//
-//	if (requestSentTimeSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << requestSentTime << ";";
-//	} else {
-//		os << ";";
-//	}
-//
-//	if (receiveTimeSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << receiveTime << ";";
-//	} else {
-//		os << ";";
-//	}
-//
-//	if (sampleTimeSeconds > 0) {
-//		os.precision(9);
-//		os << fixed << sampleTime << ";";
-//	} else {
-//		os << ";";
-//	}
-//
-//	os << is_object_visible << ";";
-//
-//	os << "\n";
+	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
+	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9;
+	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9;
+	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
+	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
 
+	if (processingStartSeconds > 0) {
+		os.precision(9);
+		os << fixed << processingStart << ";";
+	} else {
+		os << ";";
+	}
+	if (processingEndSeconds > 0) {
+		os.precision(9);
+		os << fixed << processingEnd << ";";
+	} else {
+		os << ";";
+	}
 
+	if (sendTimeSeconds > 0) {
+		os.precision(9);
+		os << fixed << sendTime << ";";
+	} else {
+		os << ";";
+	}
 
-	os << processingStartSeconds<<";";
-	os << processingStartNanoseconds << ";";
+	if (requestSentTimeSeconds > 0) {
+		os.precision(9);
+		os << fixed << requestSentTime << ";";
+	} else {
+		os << ";";
+	}
 
-	os << processingEndSeconds << ";";
-	os << processingEndNanoseconds << ";";
+	if (receiveTimeSeconds > 0) {
+		os.precision(9);
+		os << fixed << receiveTime << ";";
+	} else {
+		os << ";";
+	}
 
-	os << requestSentTimeSeconds << ";";
-	os << requestSentTimeNanoseconds << ";";
+	if (sampleTimeSeconds > 0) {
+		os.precision(9);
+		os << fixed << sampleTime << ";";
+	} else {
+		os << ";";
+	}
 
-	os << sendTimeSeconds << ";";
-	os << sendTimeNanoseconds << ";";
-
-	os << receiveTimeSeconds << ";";
-	os << receiveTimeNanoseconds << ";";
-
-	os << sampleTimeSeconds << ";";
-	os << sampleTimeNanoseconds << ";";
 	os << is_object_visible << ";";
+
 	os << "\n";
+
+//	os << processingStartSeconds<<";";
+//	os << processingStartNanoseconds << ";";
+//
+//	os << processingEndSeconds << ";";
+//	os << processingEndNanoseconds << ";";
+//
+//	os << requestSentTimeSeconds << ";";
+//	os << requestSentTimeNanoseconds << ";";
+//
+//	os << sendTimeSeconds << ";";
+//	os << sendTimeNanoseconds << ";";
+//
+//	os << receiveTimeSeconds << ";";
+//	os << receiveTimeNanoseconds << ";";
+//
+//	os << sampleTimeSeconds << ";";
+//	os << sampleTimeNanoseconds << ";";
+//	os << is_object_visible << ";";
+//	os << "\n";
 
 }
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
 {
-//	os << "processingStart;";
-//
-//	os << "processingEnd;";
-//
-//	os << "sendTime;";
-//
-//	os << "requestSentTime;";
-//
-//	os << "receiveTime;";
-//
-//	os << "sampleTime;";
-//
-//	os << "is_object_visible;";
-//
-//	os << "\n";
+	os << "processingStart;";
 
-	os << "processingStart [s];";
-	os << "processingStart [ns];";
+	os << "processingEnd;";
 
-	os << "processingEnd [s];";
-	os << "processingEnd [ns];";
+	os << "sendTime;";
 
-	os << "sendTime [s];";
-	os << "sendTime [ns];";
+	os << "requestSentTime;";
 
-	os << "requestSentTime [s];";
-	os << "requestSentTime [ns];";
+	os << "receiveTime;";
 
-	os << "receiveTime [s];";
-	os << "receiveTime [ns];";
-
-	os << "sampleTime [s];";
-	os << "sampleTime [ns];";
+	os << "sampleTime;";
 
 	os << "is_object_visible;";
 
 	os << "\n";
+
+//	os << "processingStart [s];";
+//	os << "processingStart [ns];";
+//
+//	os << "processingEnd [s];";
+//	os << "processingEnd [ns];";
+//
+//	os << "sendTime [s];";
+//	os << "sendTime [ns];";
+//
+//	os << "requestSentTime [s];";
+//	os << "requestSentTime [ns];";
+//
+//	os << "receiveTime [s];";
+//	os << "receiveTime [ns];";
+//
+//	os << "sampleTime [s];";
+//	os << "sampleTime [ns];";
+//
+//	os << "is_object_visible;";
+//
+//	os << "\n";
 
 }
 
