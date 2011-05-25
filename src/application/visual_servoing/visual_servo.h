@@ -27,30 +27,30 @@ struct visual_servo_log_sample
 	/**
 	 * Timestamp when processing in Discode starts (taken just after camera source).
 	 */
-	uint64_t processingStartSeconds;
-	uint64_t processingStartNanoseconds;
+	uint32_t processingStartSeconds;
+	uint32_t processingStartNanoseconds;
 
 	/**
 	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
 	 */
-	uint64_t processingEndSeconds;
-	uint64_t processingEndNanoseconds;
+	uint32_t processingEndSeconds;
+	uint32_t processingEndNanoseconds;
 
 	/** Time, when request for reading was sent from mrrocpp to discode. */
-	uint64_t requestSentTimeSeconds;
-	uint64_t requestSentTimeNanoseconds;
+	uint32_t requestSentTimeSeconds;
+	uint32_t requestSentTimeNanoseconds;
 
 	/** Time, when reading was sent to mrrocpp. */
-	uint64_t sendTimeSeconds;
-	uint64_t sendTimeNanoseconds;
+	uint32_t sendTimeSeconds;
+	uint32_t sendTimeNanoseconds;
 
 	/** Time, when reading was received in mrrocpp. */
-	uint64_t receiveTimeSeconds;
-	uint64_t receiveTimeNanoseconds;
+	uint32_t receiveTimeSeconds;
+	uint32_t receiveTimeNanoseconds;
 
 	/** Time, when sample was taken. */
-	uint64_t sampleTimeSeconds;
-	uint64_t sampleTimeNanoseconds;
+	uint32_t sampleTimeSeconds;
+	uint32_t sampleTimeNanoseconds;
 
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
