@@ -65,16 +65,16 @@ task::~task()
 {
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					delete robot_node.second;
-				}
+	{
+		delete robot_node.second;
+	}
 
 	// TODO: check for error
-	if (mp_pulse_attach) {
+	if (mp_pulse_attach != lib::invalid_fd) {
 
 		messip::port_delete(mp_pulse_attach);
 
-		mp_pulse_attach = NULL;
+		mp_pulse_attach = lib::invalid_fd;
 	}
 }
 
