@@ -39,7 +39,7 @@ namespace task {
 lib::fd_server_t task::mp_pulse_attach = lib::invalid_fd;
 
 //! Utility function to put robot from va_list to STL map
-static void va_to_robot_map(int num, va_list arguments, common::robots_t & from, common::robots_t & to)
+static void va_to_robot_map(int num, va_list arguments, const common::robots_t & from, common::robots_t & to)
 {
 	for (int i = 0; i < num; ++i) // Loop until all numbers are added
 	{
@@ -47,7 +47,8 @@ static void va_to_robot_map(int num, va_list arguments, common::robots_t & from,
 		if (from.count(robot_l) == 0) {
 			std::cerr << "usunieto nadmiarowe roboty" << std::endl;
 		} else {
-			to[robot_l] = from[robot_l];
+			// find() is allowed on the 'const' reference and operator[] is not
+			to[robot_l] = from.find(robot_l)->second;
 		}
 	}
 }
