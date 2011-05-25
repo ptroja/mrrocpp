@@ -77,6 +77,7 @@ public:
 	lib::MP_COMMAND_PACKAGE mp_command;
 
 	//! Data buffer with messages from the ECP
+	//! TODO: users should not use this data directly, only the 'const ecp_reply_package'.
 	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
@@ -98,7 +99,6 @@ public:
 	/**
 	 * @brief constructor
 	 * @param l_robot_name robot label
-	 * @param _section_name ECP configuration file section
 	 * @param mp_object_l mp task object reference
 	 * @param _number_of_servos number of robot servos (joints)
 	 */

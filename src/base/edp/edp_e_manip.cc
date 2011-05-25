@@ -92,13 +92,6 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
 				}
-
-			boost::mutex::scoped_lock lock(vs->mtx);
-			if ((is_synchronised()) && (!(vs->is_sensor_configured))) {
-				vs->new_edp_command = true;
-				vs->command = FORCE_CONFIGURE;
-			}
-
 		}
 
 		catch_nr = 0;

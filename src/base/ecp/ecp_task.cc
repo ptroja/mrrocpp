@@ -92,19 +92,16 @@ bool task_base::pulse_check()
 // ---------------------------------------------------------------
 void task_base::initialize_communication()
 {
-	const std::string ecp_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
+	const std::string ecp_attach_point = config.get_ecp_attach_point();
 
-	const std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+	const std::string sr_net_attach_point = config.get_sr_attach_point();
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point);
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
-	const std::string trigger_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
+	const std::string trigger_attach_point = config.get_ecp_trigger_attach_point();
 
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
 	{

@@ -399,9 +399,8 @@ void task::initialize_communication()
 {
 	const std::string sr_net_attach_point = config.get_sr_attach_point();
 
-
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
+	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
 
 	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 

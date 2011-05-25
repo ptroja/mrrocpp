@@ -107,11 +107,6 @@ std::string configurator::return_attach_point_name(const char* _key, const char*
 	return value <std::string> (_key, _section_name);
 }
 
-std::string configurator::return_attach_point_name(config_path_type_t _type, const std::string & _key) const
-{
-	return return_attach_point_name(_type, _key, section_name);
-}
-
 std::string configurator::return_default_reader_measures_path() const
 {
 	std::string path(mrrocpp_network_path);
@@ -135,7 +130,7 @@ std::string configurator::get_mp_pulse_attach_point() const
 	return "mp_pulse";
 }
 
-std::string configurator::get_edp_section(const robot_name_t _robot_name) const
+std::string configurator::get_edp_section(const robot_name_t & _robot_name) const
 {
 	return "[edp_" + _robot_name + "]";
 }
@@ -145,7 +140,7 @@ std::string configurator::get_edp_section() const
 	return get_edp_section(robot_name);
 }
 
-std::string configurator::get_ecp_section(const robot_name_t _robot_name) const
+std::string configurator::get_ecp_section(const robot_name_t & _robot_name) const
 {
 	return "[ecp_" + _robot_name + "]";
 }
@@ -155,7 +150,7 @@ std::string configurator::get_ecp_section() const
 	return get_ecp_section(robot_name);
 }
 
-std::string configurator::get_ecp_trigger_attach_point(const robot_name_t _robot_name) const
+std::string configurator::get_ecp_trigger_attach_point(const robot_name_t & _robot_name) const
 {
 	return "ecp_trigger_" + _robot_name;
 }
@@ -165,7 +160,7 @@ std::string configurator::get_ecp_trigger_attach_point() const
 	return get_ecp_trigger_attach_point(robot_name);
 }
 
-std::string configurator::get_ecp_attach_point(const robot_name_t _robot_name) const
+std::string configurator::get_ecp_attach_point(const robot_name_t & _robot_name) const
 {
 	return "ecp_" + _robot_name;
 }
@@ -175,7 +170,7 @@ std::string configurator::get_ecp_attach_point() const
 	return get_ecp_attach_point(robot_name);
 }
 
-std::string configurator::get_edp_hardware_busy_file(const robot_name_t _robot_name) const
+std::string configurator::get_edp_hardware_busy_file(const robot_name_t & _robot_name) const
 {
 	return "edp_hardware_busy_" + _robot_name;
 }
@@ -185,7 +180,7 @@ std::string configurator::get_edp_hardware_busy_file() const
 	return get_edp_hardware_busy_file(robot_name);
 }
 
-std::string configurator::get_edp_reader_attach_point(const robot_name_t _robot_name) const
+std::string configurator::get_edp_reader_attach_point(const robot_name_t & _robot_name) const
 {
 	return "edp_reader_" + _robot_name;
 }
@@ -195,7 +190,7 @@ std::string configurator::get_edp_reader_attach_point() const
 	return get_edp_reader_attach_point(robot_name);
 }
 
-std::string configurator::get_edp_resourceman_attach_point(const robot_name_t _robot_name) const
+std::string configurator::get_edp_resourceman_attach_point(const robot_name_t & _robot_name) const
 {
 	return "edp_" + _robot_name;
 }
@@ -208,6 +203,17 @@ std::string configurator::get_edp_resourceman_attach_point() const
 std::string configurator::return_mrrocpp_network_path() const
 {
 	return mrrocpp_network_path;
+}
+
+bool configurator::exists(const std::string & _key) const
+{
+	try {
+		value <std::string> (_key, section_name);
+	} catch (boost::property_tree::ptree_error & e) {
+		return false;
+	}
+
+	return true;
 }
 
 bool configurator::exists(const std::string & _key, const std::string & _section_name) const
