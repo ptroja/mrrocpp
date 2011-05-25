@@ -103,7 +103,8 @@ public:
 	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 
 	reading_message_header get_rmh() const;
-	struct timespec get_receive_time() const;
+	struct timespec get_reading_received_time() const;
+	struct timespec get_request_sent_time() const;
 private:
 	discode_sensor_state state;
 	uint16_t discode_port;
@@ -151,8 +152,11 @@ private:
 
 	double reading_timeout;
 	double rpc_call_timeout;
-	struct timespec initiate_sent_time;
+	struct timespec request_sent_time;
 	struct timespec reading_received_time;
+
+	void save_request_sent_time();
+	void save_reading_received_time();
 
 	// timer stuff, TODO: remove after discode_sensor is considered bug-free.
 	mrrocpp::lib::timer timer;

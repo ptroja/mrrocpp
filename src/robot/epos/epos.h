@@ -192,6 +192,9 @@ private:
 	//! toggle bit used for segmented write
 	bool toggle;
 
+	//! remote operation enable bit
+	bool remote;
+
 public:
 	/*! \brief create new USB EPOS object
 	 *
@@ -213,8 +216,15 @@ public:
 	//! Find EPOS state corresponding to given status word
 	static int status2state(WORD w);
 
+	//! Check if the remote operation is enabled
+	//! @param status status word
+	static bool isRemoteOperationEnabled(WORD status);
+
 	//! Utility routine to pretty print device state
 	static const char * stateDescription(int state);
+
+	//! Change the state of the remote (CAN) operation, required for the PDO requests
+	void setRemoteOperation(bool enable);
 
 	/*! \brief pretty-print EPOS state
 	 *
@@ -642,6 +652,8 @@ public:
 
 	//! check Interpolation Buffer error
 	static bool checkInterpolationBufferError(UNSIGNED16 status);
+
+	static void printInterpolationBufferStatus(UNSIGNED16 status);
 
 	//! read Interpolation buffer underflow warning
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();

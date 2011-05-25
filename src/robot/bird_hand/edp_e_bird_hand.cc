@@ -89,8 +89,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::bird_hand::ROBOT_NAME), macrostep_end_time(0), query_time(0)
+effector::effector(common::shell &_shell) :
+	manip_effector(_shell, lib::bird_hand::ROBOT_NAME), macrostep_end_time(0), query_time(0)
 {
 	number_of_servos = lib::bird_hand::NUM_OF_SERVOS;
 	synchro_position_motor.resize(number_of_servos);
@@ -313,9 +313,9 @@ void effector::reply_serialization(void)
 namespace common {
 
 // Stworzenie obiektu edp_bird_hand_effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new bird_hand::effector(_config);
+	return new bird_hand::effector(_shell);
 }
 
 } // namespace common

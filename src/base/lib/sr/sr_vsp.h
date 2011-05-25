@@ -18,6 +18,10 @@ namespace lib {
 //! SR class for use in VSP
 class sr_vsp : public sr
 {
+protected:
+	//! Interpret the status code into a text message
+	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
+
 public:
 	/**
 	 * Constructor
@@ -28,9 +32,6 @@ public:
 	 */
 	sr_vsp(process_type_t process_type, const std::string & process_name, const std::string & sr_channel_name);
 
-protected:
-	//! Interpret the status code into a text message
-	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1);
 };
 
 } // namespace lib

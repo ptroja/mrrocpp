@@ -8,6 +8,8 @@
 #ifndef VISUAL_SERVO_REGULATOR_PID_H_
 #define VISUAL_SERVO_REGULATOR_PID_H_
 
+#include <Eigen/Eigen>
+
 #include "visual_servo_regulator.h"
 
 namespace mrrocpp {
@@ -29,10 +31,14 @@ public:
 
 	virtual const Eigen::Matrix <double, 6, 1>
 			& compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt);
+
+	virtual void reset();
 protected:
 	Eigen::Matrix <double, 6, 6> Kp, Ki, Kd;
 	Eigen::Matrix <double, 6, 1> error_t_1;
-	Eigen::Matrix <double, 6, 1> error_t_2;
+	Eigen::Matrix <double, 6, 1> error_integral;
+	Eigen::Matrix <double, 6, 1> max_error_integral;
+	Eigen::Matrix <double, 6, 1> min_error_integral;
 };
 
 /** @} */

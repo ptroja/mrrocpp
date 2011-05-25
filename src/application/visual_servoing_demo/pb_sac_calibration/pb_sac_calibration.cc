@@ -23,7 +23,7 @@ using namespace logger;
 pb_sac_calibration::pb_sac_calibration(boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
 	pb_visual_servo(boost::shared_ptr <visual_servo_regulator>(), sensor, section_name, configurator)
 {
-	log_enabled = true;
+	logger::log_enabled = true;
 	log_dbg("pb_sac_calibration::pb_sac_calibration() begin: section_name=%s\n", section_name.c_str());
 	E_T_G = configurator.value <3, 4> ("E_T_G", section_name);
 	log_dbg("pb_sac_calibration::pb_sac_calibration() end\n");

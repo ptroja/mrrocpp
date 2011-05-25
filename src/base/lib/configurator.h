@@ -28,6 +28,7 @@
 
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
+#include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -54,6 +55,58 @@ private:
 	messip_channel_t *ch;
 
 public:
+
+	//! returns sr attach point
+	std::string get_sr_attach_point() const;
+
+	//! returns ui attach point
+	std::string get_ui_attach_point() const;
+
+	//! returns mp_pulse_attach_point point
+	std::string get_mp_pulse_attach_point() const;
+
+	//! returns edp_section of the robot
+	std::string get_edp_section(const robot_name_t _robot_name) const;
+
+	//! returns edp_section of the robot
+	std::string get_edp_section() const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_section(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_section() const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_trigger_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_trigger_attach_point() const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_ecp_attach_point() const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_hardware_busy_file(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_hardware_busy_file() const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_reader_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_reader_attach_point() const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_resourceman_attach_point(const robot_name_t _robot_name) const;
+
+	//! returns ecp_section of the robot
+	std::string get_edp_resourceman_attach_point() const;
+
 	/**
 	 * Get network path to the installed MRROC++ system
 	 * @return folder path
@@ -70,6 +123,12 @@ public:
 	 * Configuration section name
 	 */
 	const std::string section_name;
+
+	/**
+	 * Configuration robot_name
+	 * it can be extracted from the section names for ecp and edp sections
+	 */
+	std::string robot_name;
 
 	/**
 	 * Check if key non-zero key exist in the configuration file
@@ -107,30 +166,26 @@ public:
 	 */
 	static int return_node_number(const std::string & node_name_l);
 
-	//! Path types of the network resources
-	typedef enum _config_path_type
+	/**
+	 * Return network attach point
+	 * @param _type type of the network path
+	 * @param _key configuration key
+	 * @param __section_name section name
+	 * @return network path
+	 */
+	std::string	return_attach_point_name(const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Return network attach point
+	 * @param _type type of the network path
+	 * @param _key configuration key
+	 * @param __section_name section name
+	 * @return network path
+	 */
+	std::string return_attach_point_name(const std::string & _key, const std::string & __section_name) const
 	{
-		CONFIG_RESOURCEMAN_LOCAL, CONFIG_RESOURCEMAN_GLOBAL, CONFIG_SERVER
-	} config_path_type_t;
-
-	/**
-	 * Return network attach point
-	 * @param _type type of the network path
-	 * @param _key configuration key
-	 * @param __section_name section name
-	 * @return network path
-	 */
-	std::string
-	return_attach_point_name(config_path_type_t _type, const std::string & _key, const std::string & _section_name) const;
-
-	/**
-	 * Return network attach point
-	 * @param _type type of the network path
-	 * @param _key configuration key
-	 * @param __section_name section name
-	 * @return network path
-	 */
-	std::string return_attach_point_name(config_path_type_t _type, const std::string & _key) const;
+		return return_attach_point_name(_key.c_str(), __section_name.c_str());
+	}
 
 	/**
 	 * Get value from the configuration
@@ -207,7 +262,29 @@ public:
 	 * @param __section_name section name
 	 * @return true if the non-zero value exists
 	 */
-	bool exists(const std::string & _key, const std::string & __section_name) const;
+	bool exists(const std::string & _key, const std::string & __section_name) const
+	{
+		return exists(_key.c_str(), __section_name.c_str());
+	}
+
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const std::string & _key, const std::string & __section_name) const
+	{
+		return exists_and_true(_key.c_str(), __section_name.c_str());
+	}
 
 	//! Destructor
 	~configurator();

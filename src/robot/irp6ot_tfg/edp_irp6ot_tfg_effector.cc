@@ -36,8 +36,8 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::irp6ot_tfg::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	motor_driven_effector(_shell, lib::irp6ot_tfg::ROBOT_NAME)
 {
 
 	number_of_servos = lib::irp6ot_tfg::NUM_OF_SERVOS;
@@ -125,9 +125,9 @@ void effector::create_kinematic_models_for_given_robot(void)
 namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new irp6ot_tfg::effector(_config);
+	return new irp6ot_tfg::effector(_shell);
 }
 
 } // namespace common

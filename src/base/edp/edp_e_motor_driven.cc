@@ -84,7 +84,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 	// Copy requested arm specification type to the reply message.
 	// In case of unsupported request type it also will be returned to the caller.
-	reply.arm.type = instruction.get_arm_type;
+	//	reply.arm.type = instruction.get_arm_type;
 
 	// Przepisanie definicji koncowki danej w postaci
 	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
@@ -190,8 +190,8 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
-motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
+	effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
 			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
 			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
 			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
@@ -210,6 +210,20 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
 	//#endif
+	float _velocity_limit_global_factor;
+
+	if (config.exists("velocity_limit_global_factor")) {
+		_velocity_limit_global_factor = config.value <float> ("velocity_limit_global_factor");
+		if ((_velocity_limit_global_factor > 0) && (_velocity_limit_global_factor <= 1)) {
+			velocity_limit_global_factor = _velocity_limit_global_factor;
+		} else {
+			msg->message(lib::NON_FATAL_ERROR, "bad velocity_limit_global_factor, defaults loaded");
+			velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		}
+	} else {
+		velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		msg->message(lib::NON_FATAL_ERROR, "no velocity_limit_global_factor defined, defaults loaded");
+	}
 
 }
 
@@ -338,6 +352,10 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
+
+	// by Y bug redmine 414
+	reply.arm.type = instruction.get_arm_type;
+
 	// Wykonanie instrukcji
 	switch (instruction.instruction_type)
 	{
@@ -758,10 +776,10 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	//	printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	if (is_synchronised()) {
+		// dla pierwszego wypelnienia current_joints
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 

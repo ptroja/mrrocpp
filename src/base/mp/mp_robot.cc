@@ -19,6 +19,7 @@
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_robot.h"
+#include "base/lib/mis_fun.h"
 
 #include "base/lib/agent/RemoteAgent.h"
 #include "base/lib/messip/messip_dataport.h"

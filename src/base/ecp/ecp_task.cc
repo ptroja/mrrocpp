@@ -143,11 +143,11 @@ void task_base::termination_notice(void)
 void task_base::subtasks_conditional_execution()
 {
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-	{
-		if (mp_2_ecp_next_state_string == subtask_node.first) {
-			subtask_node.second->conditional_execution();
-		}
-	}
+				{
+					if (mp_2_ecp_next_state_string == subtask_node.first) {
+						subtask_node.second->conditional_execution();
+					}
+				}
 }
 
 // Petla odbierania wiadomosci.

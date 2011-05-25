@@ -112,7 +112,6 @@ class servo_buffer : public boost::noncopyable
 	// Obiekt z algorytmem regulacji
 private:
 
-
 protected:
 	boost::thread *thread_id;
 
@@ -146,7 +145,6 @@ protected:
 
 	void clear_reply_status_tmp(void);
 
-
 	bool servo_command_rdy;
 	boost::mutex servo_command_mtx;
 
@@ -154,6 +152,12 @@ protected:
 	boost::mutex sg_reply_mtx;
 	boost::condition sg_reply_cond;
 
+	//! numer kroku w makrokroku
+	//~ numeracja od 0
+	uint16_t step_number_in_macrostep;
+
+	// obliczenie statystyk pradu
+	void compute_current_measurement_statistics();
 
 public:
 	lib::condition_synchroniser thread_started;
@@ -204,7 +208,11 @@ public:
 	void Change_algorithm(void);
 
 	//! synchronizacja
+
 	virtual void synchronise(void);
+
+	//! ustawia flage w hardware interfejs powodujaca stop awaryjny
+	void set_hi_panic(void);
 
 	//! wybor osi
 	void synchro_choose_axis_to_move(common::regulator* &crp, int j);
@@ -226,6 +234,7 @@ public:
 
 	//! wydruk - do celow uruchomieniowych !!!
 	void ppp(void) const;
+
 };
 /*-----------------------------------------------------------------------*/
 

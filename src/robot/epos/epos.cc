@@ -54,6 +54,7 @@ namespace epos {
 #define E_PASSWD        0x0f00ffbe   ///< Error code: password incorrect
 #define E_NSERV         0x0f00ffbc   ///< Error code: device not in service mode
 #define E_NODEID        0x0f00fb9    ///< Error code: error in Node-ID
+
 /* EPOS Statusword -- singe bits, see firmware spec 14.1.58 */
 #define E_BIT15        0x8000      ///< bit code: position referenced to home position
 #define E_BIT14        0x4000      ///< bit code: refresh cycle of power stage
@@ -79,8 +80,8 @@ namespace epos {
 #define PVT_STATUS_ACCELERATION_WARNING	E_BIT03
 #define PVT_STATUS_UNDERFLOW_ERROR		E_BIT08
 #define PVT_STATUS_OVERFLOW_ERROR		E_BIT09
-#define PVT_STATUS_VELOCITY_ERROR		E_BIT02
-#define PVT_STATUS_ACCELERATION_ERROR	E_BIT03
+#define PVT_STATUS_VELOCITY_ERROR		E_BIT10
+#define PVT_STATUS_ACCELERATION_ERROR	E_BIT11
 #define PVT_STATUS_BUFFER_ENABLED		E_BIT14
 #define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15
 #define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)
@@ -90,6 +91,7 @@ namespace epos {
 /*           EPOS related constants                         */
 /************************************************************/
 
+// FIXME: this value should be 60, but it has to be tested
 const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 
 /************************************************************/
@@ -105,6 +107,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileVelocity = readProfileVelocity();
 	ProfileAcceleration = readProfileAcceleration();
 	ProfileDeceleration = readProfileDeceleration();
+	remote = isRemoteOperationEnabled(readStatusWord());
 
 	// initialize MaxAcceleration to beyond the default limits
 	writeMaxAcceleration(25000UL);
@@ -390,6 +393,24 @@ int epos::checkEPOSstate()
 	//printEPOSstatusword(w);
 
 	return status2state(w);
+}
+
+bool epos::isRemoteOperationEnabled(WORD status)
+{
+	return (status & E_BIT09);
+}
+
+void epos::setRemoteOperation(bool enable)
+{
+	if (remote != enable) {
+		device.SendNMTService(nodeId,
+				(enable) ? epos_access::Start_Remote_Node : epos_access::Stop_Remote_Node);
+		remote = isRemoteOperationEnabled(readStatusWord());
+
+		if (remote != enable) {
+			BOOST_THROW_EXCEPTION(epos_error() << reason("Failed to change REMOTE state of the device"));
+		}
+	}
 }
 
 const char * epos::stateDescription(int state)
@@ -1337,11 +1358,18 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
+#if 0
 	// PVT record have to be transmitted in a Segmented Write mode
 	InitiateSementedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
 	SegmentedWrite(&pvt[0], 7);
 	SegmentedWrite(&pvt[7], 1);
+#else
+	setRemoteOperation(true);
+	// the cobID should be statically configured with a EPOS Studio for the TxPDO4
+	WORD cobID = 0x0500 | (nodeId);
+	device.SendCANFrame(cobID, 8, pvt);
+#endif
 }
 
 //! read Interpolation buffer status
@@ -1353,6 +1381,45 @@ UNSIGNED16 epos::readInterpolationBufferStatus()
 bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
 {
 	return (status & PVT_STATUS_WARNING);
+}
+
+void epos::printInterpolationBufferStatus(UNSIGNED16 status)
+{
+	// Warning codes
+	if (status & PVT_STATUS_UNDERFLOW_WARNING) {
+		printf("Buffer underflow warning level is reached\n");
+	}
+	if (status & PVT_STATUS_OVERFLOW_WARNING) {
+		printf("Buffer overflow warning level is reached\n");
+	}
+	if (status & PVT_STATUS_VELOCITY_WARNING) {
+		printf("IPM velocity greater than profile velocity detected\n");
+	}
+	if (status & PVT_STATUS_ACCELERATION_WARNING) {
+		printf("IPM acceleration greater than profile acceleration detected\n");
+	}
+
+	// Error codes
+	if (status & PVT_STATUS_UNDERFLOW_ERROR) {
+		printf("Buffer underflow error (trajectory abort)\n");
+	}
+	if (status & PVT_STATUS_OVERFLOW_ERROR) {
+		printf("Buffer overflow error (trajectory abort)\n");
+	}
+	if (status & PVT_STATUS_VELOCITY_ERROR) {
+		printf("IPM velocity greater than profile velocity detected\n");
+	}
+	if (status & PVT_STATUS_ACCELERATION_ERROR) {
+		printf("IPM acceleration greater than profile acceleration detected\n");
+	}
+
+	// Status codes
+	if (status & PVT_STATUS_BUFFER_ENABLED) {
+		printf("Access to the input buffer enabled\n");
+	}
+	if (status & PVT_STATUS_IP_MODE_ACTIVE) {
+		printf("IP mode active\n");
+	}
 }
 
 bool epos::checkInterpolationBufferError(UNSIGNED16 status)

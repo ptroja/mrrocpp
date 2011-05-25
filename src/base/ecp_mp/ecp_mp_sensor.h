@@ -153,7 +153,7 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 
 
 
-	VSP_NAME = config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", _section_name);
+	VSP_NAME = config.return_attach_point_name("resourceman_attach_point", _section_name);
 
 	// cout<<"vsp_NAME = "<<VSP_NAME<<endl;
 

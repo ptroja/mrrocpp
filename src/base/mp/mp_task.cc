@@ -52,7 +52,6 @@ static void va_to_robot_map(int num, va_list arguments, common::robots_t & from,
 	}
 }
 
-
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
 	ecp_mp::task::task(_config),
@@ -66,9 +65,9 @@ task::~task()
 {
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		delete robot_node.second;
-	}
+				{
+					delete robot_node.second;
+				}
 
 	// TODO: check for error
 	if (mp_pulse_attach) {
@@ -295,6 +294,7 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 		mp_ext_empty_gen.Move();
 
 	} while (true);
+
 }
 
 //
@@ -397,16 +397,13 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 // -------------------------------------------------------------------
 void task::initialize_communication()
 {
-	const std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
-	const std::string mp_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_attach_point");
+	const std::string sr_net_attach_point = config.get_sr_attach_point();
+
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::MP, mp_attach_point, sr_net_attach_point); // Obiekt do komuniacji z SR
 
-	const std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point");
+	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
 	// Rejestracja kanalu dla pulsow z procesu UI
 	registerBuffer(ui_pulse);

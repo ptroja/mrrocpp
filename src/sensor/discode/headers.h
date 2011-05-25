@@ -38,8 +38,8 @@ struct reading_message_header
 	bool is_rpc_call;
 
 	/** Time of reading. */
-	uint64_t readingTimeSeconds;
-	uint64_t readingTimeNanoseconds;
+	uint64_t imageSourceTimeSeconds;
+	uint64_t imageSourceTimeNanoseconds;
 
 	/** Time, when reading was sent to mrrocpp */
 	uint64_t sendTimeSeconds;
@@ -50,8 +50,8 @@ struct reading_message_header
 	{
 		ar & data_size;
 		ar & is_rpc_call;
-		ar & readingTimeSeconds;
-		ar & readingTimeNanoseconds;
+		ar & imageSourceTimeSeconds;
+		ar & imageSourceTimeNanoseconds;
 		ar & sendTimeSeconds;
 		ar & sendTimeNanoseconds;
 	}

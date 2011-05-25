@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <cerrno>
 #include <ctime>
+#include <exception>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/mis_fun.h"
@@ -30,6 +31,8 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
+#define ADD_NEXT_VALUE_TO_AVERAGE(average, count, nextValue) ((average)+(1.0/(count))*((nextValue)-(average)))
+
 void servo_buffer::load_hardware_interface(void)
 {
 	send_after_last_step = false;
@@ -41,9 +44,58 @@ void servo_buffer::load_hardware_interface(void)
 	}
 }
 
+// obliczenie statystyk pradu
+void servo_buffer::compute_current_measurement_statistics()
+{
+	uint16_t step_number = step_number_in_macrostep + 1;
+	//		printf("\n---------------measurements statistics for: %d------------------\n", step_number);
+	// dla  kazdej z osi
+	for (int k = 0; k < master.number_of_servos; k++) {
+		// pomiar pradu dla osi
+		int measured_current = hi->get_current(k);
+
+		// dla pierwszego kroku
+		if (step_number == 1) {
+			master.reply.arm.measured_current.average_cubic[k] = pow(measured_current, 3);
+			master.reply.arm.measured_current.average_module[k] = abs(measured_current);
+			master.reply.arm.measured_current.average_square[k] = pow(measured_current, 2);
+			master.reply.arm.measured_current.maximum_module[k] = abs(measured_current);
+			master.reply.arm.measured_current.minimum_module[k] = abs(measured_current);
+			// dla pozostalych krokow
+		} else {
+			//			printf(">>>>current for %d : %d\n", k, measured_current);
+			float average_cubic = master.reply.arm.measured_current.average_cubic[k];
+			float average_square = master.reply.arm.measured_current.average_square[k];
+			unsigned short average_module = master.reply.arm.measured_current.average_module[k];
+			unsigned short minimum_module = master.reply.arm.measured_current.minimum_module[k];
+			unsigned short maximum_module = master.reply.arm.measured_current.maximum_module[k];
+
+			average_cubic = ADD_NEXT_VALUE_TO_AVERAGE(average_cubic, step_number, pow(measured_current, 3));
+			average_square = ADD_NEXT_VALUE_TO_AVERAGE(average_square, step_number, pow(measured_current,2));
+			average_module = ADD_NEXT_VALUE_TO_AVERAGE(average_module, step_number, abs(measured_current));
+			minimum_module = minimum_module > abs(measured_current) ? abs(measured_current) : minimum_module;
+			maximum_module = maximum_module < abs(measured_current) ? abs(measured_current) : maximum_module;
+
+			//			printf("avg^1 %d %d\n", master.reply.arm.measured_current.average_module[k], average_module);
+			//			printf("avg^2 %f %f\n", master.reply.arm.measured_current.average_square[k], average_square);
+			//			printf("avg^3 %f %f\n", master.reply.arm.measured_current.average_cubic[k], average_cubic);
+			//			printf("min    %d %d\n", master.reply.arm.measured_current.minimum_module[k], minimum_module);
+			//			printf("max    %d %d\n", master.reply.arm.measured_current.maximum_module[k], maximum_module);
+
+			master.reply.arm.measured_current.average_cubic[k] = average_cubic;
+			master.reply.arm.measured_current.average_module[k] = average_module;
+			master.reply.arm.measured_current.average_square[k] = average_square;
+			master.reply.arm.measured_current.maximum_module[k] = maximum_module;
+			master.reply.arm.measured_current.minimum_module[k] = minimum_module;
+		}
+	}
+}
+
 /*-----------------------------------------------------------------------*/
 uint8_t servo_buffer::Move_a_step(void)
 {
+	// obliczenie statystyk pradu
+	compute_current_measurement_statistics();
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
 
 	Move_1_step();
@@ -164,7 +216,17 @@ void servo_buffer::operator()()
 	// servo buffer has to be created before servo thread starts
 	//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
-	load_hardware_interface();
+	try {
+
+		load_hardware_interface();
+	}
+
+	catch (std::runtime_error & e) {
+		printf("servo group runtime error: %s \n", e.what());
+		master.msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		_exit(EXIT_SUCCESS);
+	}
 
 	lib::set_thread_priority(pthread_self(), 79);
 
@@ -260,10 +322,7 @@ SERVO_COMMAND servo_buffer::command_type() const
 }
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
-
-	servo_command_rdy(false), sg_reply_rdy(false),
-
-	thread_started(), master(_master)
+	servo_command_rdy(false), sg_reply_rdy(false), step_number_in_macrostep(0), thread_started(), master(_master)
 {
 
 }
@@ -390,7 +449,7 @@ uint8_t servo_buffer::convert_error(void)
 void servo_buffer::Move_passive(void)
 { //
 	// stanie w miejscu - krok bierny
-
+	step_number_in_macrostep = 0;
 	for (int j = 0; j < master.number_of_servos; j++) {
 		regulator_ptr[j]->insert_new_step(0.0); // zerowy przyrost polozenia dla wszystkich napedow
 	}
@@ -414,7 +473,7 @@ void servo_buffer::Move_passive(void)
 /*-----------------------------------------------------------------------*/
 void servo_buffer::Move(void)
 {
-
+	step_number_in_macrostep = 0;
 	double new_increment[master.number_of_servos];
 
 	// wykonanie makrokroku ruchu
@@ -425,20 +484,16 @@ void servo_buffer::Move(void)
 	else
 		send_after_last_step = false;
 
-	/*
-	 regulator_ptr[0]->insert_new_step((command.parameters.move.abs_position[0] - hi->get_position(0)*(2*M_PI)/AXIS_0_TO_5_INC_PER_REVOLUTION) /
-	 command.parameters.move.number_of_steps));
-	 */
-
 	for (int k = 0; k < master.number_of_servos; k++) {
 		new_increment[k] = command.parameters.move.macro_step[k] / command.parameters.move.number_of_steps;
+		regulator_ptr[k]->new_desired_velocity_error = true;
 	}
 
 	// realizacja makrokroku przez wszystkie napedy;  i - licznik krokow ruchu
-	for (uint16_t j = 0; j < command.parameters.move.number_of_steps; j++) {
+	for (step_number_in_macrostep = 0; step_number_in_macrostep < command.parameters.move.number_of_steps; step_number_in_macrostep++) {
 		// by Y
 		// XXX by ptroja
-		if ((command.parameters.move.return_value_in_step_no == 0) && (j
+		if ((command.parameters.move.return_value_in_step_no == 0) && (step_number_in_macrostep
 				== command.parameters.move.return_value_in_step_no)) {
 			// czy juz wyslac info do EDP_MASTER?
 			// 	     std::cout<<"fsD\n";
@@ -456,13 +511,13 @@ void servo_buffer::Move(void)
 			regulator_ptr[k]->insert_new_step(new_increment[k]);
 			if (master.robot_test_mode) {
 				master.update_servo_current_motor_pos_abs(regulator_ptr[k]->previous_abs_position + new_increment[k]
-						* j, k);
+						* step_number_in_macrostep, k);
 			}
 		}
 
 		if (Move_a_step() == NO_ERROR_DETECTED) { // NO_ERROR_DETECTED
 			//  std::cout<<"NO_ERROR_DETECTED\n";
-			if ((command.parameters.move.return_value_in_step_no > 0) && (j
+			if ((command.parameters.move.return_value_in_step_no > 0) && (step_number_in_macrostep
 					== command.parameters.move.return_value_in_step_no - 1)) {
 				// czy juz wyslac info do EDP_MASTER?
 				if (reply_status.error0 || reply_status.error1) {
@@ -472,7 +527,7 @@ void servo_buffer::Move(void)
 			}
 		} else { // ERROR_DETECTED
 			//  std::cout<<"ERROR_DETECTED\n";
-			if (j > command.parameters.move.return_value_in_step_no - 1) {
+			if (step_number_in_macrostep > command.parameters.move.return_value_in_step_no - 1) {
 				reply_status.error0 = reply_status_tmp.error0 | SERVO_ERROR_IN_PHASE_2;
 				reply_status.error1 = reply_status_tmp.error1;
 				clear_reply_status_tmp();
@@ -591,6 +646,11 @@ uint64_t servo_buffer::compute_all_set_values(void)
 	return status;
 }
 /*-----------------------------------------------------------------------*/
+
+void servo_buffer::set_hi_panic()
+{
+	hi->set_hardware_panic();
+}
 
 /*-----------------------------------------------------------------------*/
 

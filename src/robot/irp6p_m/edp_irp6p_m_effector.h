@@ -36,7 +36,7 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 	common::servo_buffer *return_created_servo_buffer();
 
 	void set_robot_model(const lib::c_buffer &);

@@ -17,7 +17,7 @@ namespace ecp {
 namespace spkm {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _config, _sr_ecp),
+	ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, _config, _sr_ecp),
 			epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
@@ -32,7 +32,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-			ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, lib::spkm::EDP_SECTION, _ecp_object),
+	ecp::common::robot::ecp_robot(lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS, _ecp_object),
 			epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 			epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
 			epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
@@ -82,8 +82,9 @@ void robot::create_command()
 		ecp_edp_cbuffer.pose_specification = lib::spkm::MOTOR;
 
 		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
 
-		for(int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
+		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
 		}
 
@@ -98,8 +99,8 @@ void robot::create_command()
 		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
 
 		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
-
-		for(int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
+		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
+		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
 
@@ -114,8 +115,9 @@ void robot::create_command()
 		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
 
-		for(int i = 0; i < 6; ++i) {
+		for (int i = 0; i < 6; ++i) {
 			ecp_edp_cbuffer.goal_pos[i] = epos_external_command_data_port.data.desired_position[i];
 		}
 
@@ -137,9 +139,9 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 		if (!is_synchronised()) {
-				ecp_command.motion_type = lib::RELATIVE;
-				ecp_command.set_arm_type = lib::MOTOR;
-			}
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
 		ecp_edp_cbuffer.variant = lib::spkm::CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
