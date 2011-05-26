@@ -116,7 +116,9 @@ struct ipm_executor {
 				/** Wait until there is free space in the EPOS data FIFO.
 				 *  Note: we check only the first axis.
 				 */
-				while(axes[0]->readActualBufferSize() == 0) {
+				while(! epos::checkInterpolationBufferUnderflowWarning(
+						axes[i]->readInterpolationBufferStatus()
+						)) {
 					// do nothing
 				}
 

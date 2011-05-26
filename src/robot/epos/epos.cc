@@ -1378,6 +1378,11 @@ bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
 	return (status & PVT_STATUS_WARNING);
 }
 
+bool epos::checkInterpolationBufferUnderflowWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_UNDERFLOW_WARNING);
+}
+
 void epos::printInterpolationBufferStatus(UNSIGNED16 status)
 {
 	// Warning codes
