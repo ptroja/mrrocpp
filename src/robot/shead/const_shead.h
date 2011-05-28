@@ -21,7 +21,7 @@ namespace shead {
  * @brief SwarmItFix Head robot label
  * @ingroup shead
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SHEAD";
+const robot_name_t ROBOT_NAME = "shead";
 
 /*!
  * @brief SwarmItFix Head EDP command buffer variant enum
@@ -54,18 +54,6 @@ struct rbuffer
 {
 	reply shead_reply;
 }__attribute__((__packed__));
-
-/*!
- * @brief configuration file EDP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string EDP_SECTION = "[edp_shead]";
-
-/*!
- * @brief configuration file ECP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string ECP_SECTION = "[ecp_shead]";
 
 /*!
  * @brief SwarmItFix Head total number of servos

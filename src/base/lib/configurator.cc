@@ -32,8 +32,6 @@
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 
-
-
 #include "base/lib/impconst.h"
 #include "base/lib/configurator.h"
 #include "base/lib/typedefs.h"
@@ -45,6 +43,19 @@ namespace lib {
 configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name) :
 	node(_node), dir(_dir), section_name(_section_name)
 {
+	// jesli nazwa sekcji rozpoczyna sie od [ecp lub [edp to wyekstrahuj nazwe robota
+	// w przeciwnym razie podstawia pusta
+	robot_name = section_name;
+	robot_name.erase(section_name.rfind("]"), 1);
+
+	if (robot_name.find("[edp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else if (robot_name.find("[ecp_") != std::string::npos) {
+		robot_name.erase(0, 5);
+	} else {
+		robot_name = "";
+	}
+
 	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
@@ -139,6 +150,17 @@ bool configurator::exists(const char* _key, const char* __section_name) const
 	}
 
 	return true;
+}
+
+bool configurator::exists_and_true(const char* _key, const char* __section_name) const
+{
+	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
+
+	if (exists(_key, _section_name)) {
+		return value <bool> (_key, _section_name);
+	} else {
+		return false;
+	}
 }
 
 pid_t configurator::process_spawn(const std::string & _section_name)

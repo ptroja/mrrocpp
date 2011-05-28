@@ -86,9 +86,9 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
-	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw, robot unsupported

@@ -16,6 +16,12 @@ namespace lib {
 #include <pthread.h>
 #include <time.h>
 
+//! returns edp_section of the robot
+std::string get_edp_section(const std::string _robot_name);
+
+//! returns ecp_section of the robot
+std::string get_ecp_section(const std::string _robot_name);
+
 //! Set the process scheduler
 void set_process_sched();
 

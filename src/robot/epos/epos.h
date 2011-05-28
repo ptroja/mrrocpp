@@ -147,6 +147,20 @@ private:
 	int SegmentRead(WORD **ptr);
 #endif
 
+	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	 *
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 */
+	void InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+
+	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
+	 *
+	 * @param ptr pointer to data to be filled
+	 * @param len length of the data to write
+	 */
+	void SegmentedWrite(BYTE * ptr, std::size_t len);
+
 	/*! \brief write obect to EPOS
 	 *
 	 * @param index object entry index in a dictionary
@@ -175,6 +189,12 @@ private:
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
 
+	//! toggle bit used for segmented write
+	bool toggle;
+
+	//! remote operation enable bit
+	bool remote;
+
 public:
 	/*! \brief create new USB EPOS object
 	 *
@@ -196,8 +216,15 @@ public:
 	//! Find EPOS state corresponding to given status word
 	static int status2state(WORD w);
 
+	//! Check if the remote operation is enabled
+	//! @param status status word
+	static bool isRemoteOperationEnabled(WORD status);
+
 	//! Utility routine to pretty print device state
 	static const char * stateDescription(int state);
+
+	//! Change the state of the remote (CAN) operation, required for the PDO requests
+	void setRemoteOperation(bool enable);
 
 	/*! \brief pretty-print EPOS state
 	 *
@@ -225,6 +252,9 @@ public:
 
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
 	void changeEPOSstate(state_t state);
+
+	/*! \brief read CAN Node ID */
+	UNSIGNED8 readNodeID();
 
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 readSWversion();
@@ -622,6 +652,8 @@ public:
 
 	//! check Interpolation Buffer error
 	static bool checkInterpolationBufferError(UNSIGNED16 status);
+
+	static void printInterpolationBufferStatus(UNSIGNED16 status);
 
 	//! read Interpolation buffer underflow warning
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();

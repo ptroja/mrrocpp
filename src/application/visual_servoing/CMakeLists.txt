@@ -18,6 +18,7 @@ add_library(visual_servoing
 # link with discode_sensor
 target_link_libraries(visual_servoing
 	discode_sensor
+	${COMMON_LIBRARIES}
 )
 
 install(TARGETS visual_servoing DESTINATION lib)

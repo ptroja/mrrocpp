@@ -15,11 +15,11 @@ namespace ecp {
 namespace conveyor {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, lib::conveyor::EDP_SECTION, _config, _sr_ecp)
+	ecp::common::robot::ecp_robot(lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, _config, _sr_ecp)
 {
 }
 robot::robot(common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, lib::conveyor::EDP_SECTION, _ecp_object)
+	ecp::common::robot::ecp_robot(lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS, _ecp_object)
 {
 }
 

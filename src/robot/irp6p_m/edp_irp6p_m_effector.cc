@@ -68,8 +68,10 @@ void effector::create_threads()
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
-	vs->thread_started.wait();
 
+	//vs->thread_started.wait();
+	//zeby miec pewnosc, ze zostal wykonany pierwszy pomiar
+	vs->edp_vsp_synchroniser.wait();
 	motor_driven_effector::hi_create_threads();
 }
 

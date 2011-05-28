@@ -33,7 +33,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::shead::EcpRobot(interface);
+	ui_ecp_robot = new ui::shead::EcpRobot(*this);
 	return 1;
 }
 
@@ -46,8 +46,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::shead::EDP_SECTION, lib::shead::ECP_SECTION, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS),
-			ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 }
@@ -140,6 +139,12 @@ int UiRobot::manage_interface()
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
+
 }
 
 }

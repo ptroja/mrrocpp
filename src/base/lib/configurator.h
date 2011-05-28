@@ -72,6 +72,12 @@ public:
 	const std::string section_name;
 
 	/**
+	 * Configuration robot_name
+	 * it can be extracted from the section names for ecp and edp sections
+	 */
+	std::string robot_name;
+
+	/**
 	 * Check if key non-zero key exist in the configuration file
 	 * @bug does not protect from changing configuration during check
 	 * @param key
@@ -213,6 +219,25 @@ public:
 	bool exists(const std::string & _key, const std::string & __section_name) const
 	{
 		return exists(_key.c_str(), __section_name.c_str());
+	}
+
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const char* _key, const char* __section_name = NULL) const;
+
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @param __section_name section name
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const std::string & _key, const std::string & __section_name) const
+	{
+		return exists_and_true(_key.c_str(), __section_name.c_str());
 	}
 
 	//! Destructor

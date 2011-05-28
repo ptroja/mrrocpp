@@ -21,19 +21,7 @@ namespace irp6p_m {
  * @brief IRp6 postument manipulator robot label
  * @ingroup irp6p_m
  */
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_M";
-
-/*!
- * @brief configuration file EDP IRp6 postument manipulator section string
- * @ingroup irp6p_m
- */
-const std::string EDP_SECTION = "[edp_irp6p_m]";
-
-/*!
- * @brief configuration file ECP IRp6 postument manipulator section string
- * @ingroup irp6p_m
- */
-const std::string ECP_SECTION = "[ecp_irp6p_m]";
+const robot_name_t ROBOT_NAME = "irp6p_m";
 
 /*!
  * @brief IRp6 postument manipulator total number of servos
@@ -54,7 +42,6 @@ const int LAST_MOXA_PORT_NUM = 5;
 
 const std::string ports_strings[] =
 		{ "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
-
 
 /*!
  * @brief IRp6 postument overcurrent threshold [mA]

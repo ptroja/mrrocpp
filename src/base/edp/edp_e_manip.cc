@@ -35,6 +35,9 @@ namespace common {
 
 bool manip_effector::compute_servo_joints_and_frame(void)
 {
+
+	static bool force_sensor_post_synchro_configuration = false;
+
 	static int catch_nr = 0;
 	bool ret_val = true;
 	if (!(motor_driven_effector::compute_servo_joints_and_frame())) {
@@ -85,7 +88,8 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 			if (vs != NULL) {
 
 				boost::mutex::scoped_lock lock(vs->mtx);
-				if ((is_synchronised()) && (!(vs->is_sensor_configured))) {
+				if ((is_synchronised()) && (!(force_sensor_post_synchro_configuration))) {
+					force_sensor_post_synchro_configuration = true;
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
 				}
@@ -153,10 +157,10 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 
 	// okreslenie rodzaju wspolrzednych, ktore maja by odczytane
 	// oraz adekwatne wypelnienie bufora odpowiedzi
-
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
-
+	if (is_synchronised()) {
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+		get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
+	}
 	switch (instruction.get_arm_type)
 	{
 		case lib::FRAME:

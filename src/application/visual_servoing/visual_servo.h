@@ -27,16 +27,16 @@ struct visual_servo_log_sample{
 	uint64_t sampleTimeNanoseconds;
 
 	/** Time of reading. */
-	uint64_t readingTimeSeconds;
-	uint64_t readingTimeNanoseconds;
+	uint64_t imageSourceTimeSeconds;
+	uint64_t imageSourceTimeNanoseconds;
 
 	/** Time, when reading was sent to mrrocpp. */
 	uint64_t sendTimeSeconds;
 	uint64_t sendTimeNanoseconds;
 
 	/** Time, when reading was received in mrrocpp. */
-	uint64_t receivedTimeSeconds;
-	uint64_t receivedTimeNanoseconds;
+	uint64_t receiveTimeSeconds;
+	uint64_t receiveTimeNanoseconds;
 
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
@@ -84,7 +84,7 @@ public:
 	 */
 	const Eigen::Matrix <double, 6, 1> & get_error();
 protected:
-	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor);
+	visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 
 	/**
 	 * This method should compute position to be passed to the robot.
@@ -122,8 +122,11 @@ private:
 	int steps_without_reading;
 
 	boost::circular_buffer<visual_servo_log_sample> log_buffer;
+	static const int log_buffer_default_capacity = 500;
 
 	void write_log();
+
+	bool log_enabled;
 }; // class visual_servo
 
 /** @} */

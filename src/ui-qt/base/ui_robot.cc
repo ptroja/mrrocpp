@@ -23,17 +23,18 @@ namespace common {
 //
 
 
-UiRobot::UiRobot(Interface& _interface, const std::string & edp_section_name, const std::string & ecp_section_name, lib::robot_name_t _robot_name, int _number_of_servos) :
+UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	//activation_string = _activation_string;
 
-	state.edp.section_name = edp_section_name;
-	state.ecp.section_name = ecp_section_name;
+	state.edp.section_name = lib::get_edp_section(robot_name);
+	state.ecp.section_name = lib::get_ecp_section(robot_name);
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
+	msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, robot_name, interface.network_sr_attach_point);
 }
 
 void UiRobot::create_thread()
@@ -62,31 +63,50 @@ int UiRobot::edp_create_int()
 				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
-					create_ui_ecp_robot();
+					try {
+						create_ui_ecp_robot();
+					}
+
+					catch (ecp::common::robot::ECP_main_error & e) {
+						/* Obsluga bledow ECP */
+						null_ui_ecp_robot();
+						throw ecp::common::robot::ECP_main_error(e.error_class, e.error_no);
+
+					} /*end: catch */
 				}
 
-				state.edp.pid = ui_get_edp_pid();
+				try {
+					state.edp.pid = ui_get_edp_pid();
 
-				if (state.edp.pid < 0) {
+					if (state.edp.pid < 0) {
 
-					state.edp.state = 0;
-					fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
-					delete_ui_ecp_robot();
-				} else { // jesli spawn sie powiodl
+						state.edp.state = 0;
+						fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
+						delete_ui_ecp_robot();
+					} else { // jesli spawn sie powiodl
 
-					state.edp.state = 1;
+						state.edp.state = 1;
 
-					connect_to_reader();
+						connect_to_reader();
 
-					// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
-					lib::controller_state_t robot_controller_initial_state_tmp;
+						// odczytanie poczatkowego stanu robota (komunikuje sie z EDP)
+						lib::controller_state_t robot_controller_initial_state_tmp;
 
-					ui_get_controler_state(robot_controller_initial_state_tmp);
+						ui_get_controler_state(robot_controller_initial_state_tmp);
 
-					//state.edp.state = 1; // edp wlaczone reader czeka na start
+						//state.edp.state = 1; // edp wlaczone reader czeka na start
 
-					state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
+					}
 				}
+
+				catch (ecp::common::robot::ECP_main_error & e) {
+					/* Obsluga bledow ECP */
+					close_edp_connections();
+					null_ui_ecp_robot();
+
+				} /*end: catch */
+
 			}
 		}
 
@@ -94,22 +114,21 @@ int UiRobot::edp_create_int()
 
 	catch (ecp::common::robot::ECP_main_error & e) {
 		/* Obsluga bledow ECP */
-		close_edp_connections();
 
 	} /*end: catch */
 
 	catch (ecp::common::robot::ECP_error & er) {
 		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
-		interface.catch_ecp_error(er);
+		catch_ecp_error(er);
 	} /* end: catch */
 
 	catch (const std::exception & e) {
-		interface.catch_std_exception(e);
+		catch_std_exception(e);
 	}
 
 	catch (...) { /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow*/
-		interface.catch_tridot();
+		catch_tridot();
 	} /*end: catch */
 
 	interface.manage_interface();
@@ -198,10 +217,6 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	// kilka sekund  (~1) na otworzenie urzadzenia
 	// zabezpieczenie przed zawieszeniem poprzez wyslanie sygnalu z opoznieniem
 
-	/*
-	 ualarm(ui::common::SIGALRM_TIMEOUT, 0);
-	 */
-
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
@@ -281,6 +296,7 @@ bool UiRobot::deactivate_ecp_trigger()
 
 void UiRobot::close_edp_connections()
 {
+
 	if (state.edp.reader_fd != lib::invalid_fd) {
 
 		if (messip::port_disconnect(state.edp.reader_fd) != 0) {
@@ -346,7 +362,7 @@ int UiRobot::reload_configuration()
 	//	printf("final_position: %lf, %lf, %lf, %lf, %lf, %lf\n ", final_position[0], final_position[1], final_position[2], final_position[3], final_position[4], final_position[5]);
 
 	// jesli IRP6 on_track ma byc aktywne
-	if ((state.is_active = interface.config->value <int> ("is_active", state.edp.section_name)) == 1) {
+	if ((state.is_active = interface.config->exists_and_true("is_active", state.edp.section_name)) == 1) {
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {
@@ -459,6 +475,54 @@ int UiRobot::reload_configuration()
 	} // end irp6_on_track
 
 	return 1;
+}
+
+void UiRobot::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+
+{
+	if (e.error_class == lib::SYSTEM_ERROR)
+		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	interface.ui_state = 2;
+}
+
+void UiRobot::catch_ecp_error(ecp::common::robot::ECP_error & er)
+
+{
+	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
+		perror("ecp lib::SYSTEM_ERROR in UI");
+		/* PtExit( EXIT_SUCCESS ); */
+	} else {
+		switch (er.error_no)
+		{
+			case INVALID_POSE_SPECIFICATION:
+			case INVALID_COMMAND_TO_EDP:
+			case EDP_ERROR:
+			case INVALID_ROBOT_MODEL_TYPE:
+				/* Komunikat o bledzie wysylamy do SR */
+				msg->message(lib::NON_FATAL_ERROR, er.error_no);
+				break;
+			default:
+				msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
+				perror("Unidentified exception");
+		} /* end: switch */
+	}
+}
+
+void UiRobot::catch_std_exception(const std::exception & e)
+{
+
+	std::string tmp_string(" The following error has been detected: ");
+	tmp_string += e.what();
+	msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+	std::cerr << "UI: The following error has been detected :\n\t" << e.what() << std::endl;
+}
+
+void UiRobot::catch_tridot()
+
+{
+	/* Wylapywanie niezdefiniowanych bledow*/
+	/* Komunikat o bledzie wysylamy do SR (?) */
+	fprintf(stderr, "unidentified error in UI\n");
 }
 
 }

@@ -14,6 +14,7 @@
 
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
+#include "base/lib/condition_synchroniser.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -30,6 +31,7 @@ private:
 	static const int UI_SR_BUFFER_LENGHT = 50;
 
 public:
+	lib::condition_synchroniser thread_started;
 	sr_buffer(Interface& _interface);
 
 	~sr_buffer();

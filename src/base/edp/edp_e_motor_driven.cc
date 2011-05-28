@@ -84,7 +84,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 	// Copy requested arm specification type to the reply message.
 	// In case of unsupported request type it also will be returned to the caller.
-	reply.arm.type = instruction.get_arm_type;
+	//	reply.arm.type = instruction.get_arm_type;
 
 	// Przepisanie definicji koncowki danej w postaci
 	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
@@ -210,7 +210,6 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
 	//#endif
-
 }
 
 motor_driven_effector::~motor_driven_effector()
@@ -338,6 +337,10 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
+
+	// by Y bug redmine 414
+	reply.arm.type = instruction.get_arm_type;
+
 	// Wykonanie instrukcji
 	switch (instruction.instruction_type)
 	{
@@ -758,10 +761,10 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	//	printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	if (is_synchronised()) {
+		// dla pierwszego wypelnienia current_joints
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 

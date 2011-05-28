@@ -13,25 +13,26 @@
 #include "base/ecp/ecp_robot.h"
 
 #include "../ui.h"
+#include "../ui_robot.h"
 #include "../interface.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
-template<typename ECP_ROBOT_T>
+template <typename ECP_ROBOT_T>
 class _EcpRobotDataPort
 {
 public:
 	//! Type of the template instance itself
-	typedef _EcpRobotDataPort<ECP_ROBOT_T> EcpRobotDataPort;
+	typedef _EcpRobotDataPort <ECP_ROBOT_T> EcpRobotDataPort;
 
 	//! Type of the robot class
 	typedef ECP_ROBOT_T robot_t;
 
-	Interface& interface;
+	UiRobot& ui_robot;
 
-	boost::shared_ptr<ECP_ROBOT_T> the_robot;
+	boost::shared_ptr <ECP_ROBOT_T> the_robot;
 
 	// do odczytu stanu poczatkowego robota
 	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
@@ -50,7 +51,7 @@ public:
 	{
 		//printf("EcpRobotDataPort::execute_motion by pthread_t = %lu\n", pthread_self());
 
-		interface.set_ui_state_notification(UI_N_COMMUNICATION);
+		ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
 		the_robot->create_command();
 
@@ -59,8 +60,8 @@ public:
 		the_robot->get_reply();
 	}
 
-	_EcpRobotDataPort(Interface& _interface)
-		: interface(_interface)
+	_EcpRobotDataPort(UiRobot& _ui_robot) :
+		ui_robot(_ui_robot)
 	{
 	}
 
@@ -69,7 +70,7 @@ public:
 	}
 };
 
-typedef _EcpRobotDataPort<ecp::common::robot::ecp_robot> EcpRobotDataPort;
+typedef _EcpRobotDataPort <ecp::common::robot::ecp_robot> EcpRobotDataPort;
 
 }
 } //namespace ui

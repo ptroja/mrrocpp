@@ -35,7 +35,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(interface, lib::irp6p_tfg::ROBOT_NAME);
+	ui_ecp_robot = new ui::common::EcpRobot(*this);
 	return 1;
 
 }
@@ -85,7 +85,7 @@ int UiRobot::execute_motor_motion()
 		ui_ecp_robot->move_motors(desired_pos);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -97,7 +97,7 @@ int UiRobot::execute_joint_motion()
 		ui_ecp_robot->move_joints(desired_pos);
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	return 1;
 }
@@ -120,7 +120,7 @@ int UiRobot::synchronise_int()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_IN_ROBOT
 
 	// modyfikacje menu
 	interface.manage_interface();
@@ -131,7 +131,7 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			single_motor::UiRobot(_interface, lib::irp6p_tfg::EDP_SECTION, lib::irp6p_tfg::ECP_SECTION, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS)
+			single_motor::UiRobot(_interface, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS)
 
 {
 

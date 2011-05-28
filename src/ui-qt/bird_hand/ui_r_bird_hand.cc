@@ -45,7 +45,7 @@ void UiRobot::edp_create()
 
 int UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::bird_hand::EcpRobot(interface);
+	ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
 	return 1;
 }
 
@@ -58,8 +58,7 @@ int UiRobot::synchronise()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::bird_hand::EDP_SECTION, lib::bird_hand::ECP_SECTION, lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS),
-			ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 	wgt_command_and_status = new wgt_bird_hand_command(interface, *this, interface.get_main_window());
@@ -158,6 +157,12 @@ int UiRobot::manage_interface()
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
+
+}
+
+void UiRobot::null_ui_ecp_robot()
+{
+	ui_ecp_robot = NULL;
 
 }
 
