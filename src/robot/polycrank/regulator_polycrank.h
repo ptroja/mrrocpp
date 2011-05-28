@@ -25,7 +25,7 @@ class NL_regulator_polycrank : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_polycrank(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_polycrank(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

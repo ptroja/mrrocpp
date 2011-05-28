@@ -59,7 +59,7 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 

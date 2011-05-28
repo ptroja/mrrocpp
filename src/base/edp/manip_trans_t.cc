@@ -30,7 +30,7 @@ manip_trans_t::manip_trans_t(motor_driven_effector& _master):
 
 void manip_trans_t::operator()()
 {
-    lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY);
+    lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY);
 
     while(1)
     {

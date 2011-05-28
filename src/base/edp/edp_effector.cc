@@ -54,7 +54,7 @@ bool effector::initialize_communication()
 {
 
 	const std::string
-			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
+			server_attach_point(config.get_edp_resourceman_attach_point());
 
 	// nawiazywanie komunikacji
 
@@ -69,7 +69,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 2);
 
 	server_attach = messip::port_create(server_attach_point);
 

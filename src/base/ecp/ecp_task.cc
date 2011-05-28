@@ -89,16 +89,13 @@ bool task_base::pulse_check()
 // ---------------------------------------------------------------
 void task_base::initialize_communication()
 {
-	std::string mp_pulse_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
+	std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
-	std::string ecp_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point");
-	std::string sr_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+	std::string ecp_attach_point = config.get_ecp_attach_point();
+	std::string sr_net_attach_point = config.get_sr_attach_point();
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point);
+	sr_ecp_msg = new lib::sr_ecp(lib::ECP, config.robot_name, sr_net_attach_point);
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
@@ -121,8 +118,7 @@ void task_base::initialize_communication()
 		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
 
-	std::string trigger_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point");
+	std::string trigger_attach_point = config.get_ecp_trigger_attach_point();
 
 	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
 
@@ -170,11 +166,11 @@ void task_base::send_pulse_to_mp(int pulse_code, int pulse_value)
 void task_base::subtasks_conditional_execution()
 {
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-	{
-		if (mp_2_ecp_next_state_string == subtask_node.first) {
-			subtask_node.second->conditional_execution();
-		}
-	}
+				{
+					if (mp_2_ecp_next_state_string == subtask_node.first) {
+						subtask_node.second->conditional_execution();
+					}
+				}
 }
 
 // Petla odbierania wiadomosci.
@@ -199,8 +195,7 @@ void task_base::ecp_wait_for_stop(void)
 	}
 
 	// Wyslanie odpowiedzi.
-	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-	{
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
@@ -249,8 +244,7 @@ void task_base::ecp_wait_for_start(void)
 			break;
 	}
 
-	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-	{
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");
@@ -302,8 +296,7 @@ void task_base::get_next_state(void)
 			break;
 	}
 
-	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0)
-	{
+	if (messip::port_reply(ecp_attach, caller, 0, ecp_reply) < 0) {
 		uint64_t e = errno; // kod bledu systemowego
 		perror("ecp: Reply to MP failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Reply to MP failed");

@@ -27,14 +27,15 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	//activation_string = _activation_string;
-
-	state.edp.section_name = lib::get_edp_section(robot_name);
-	state.ecp.section_name = lib::get_ecp_section(robot_name);
+	state.edp.section_name = interface.config->get_edp_section(robot_name);
+	state.ecp.section_name = interface.config->get_ecp_section(robot_name);
 	state.edp.state = -1; // edp nieaktywne
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
-	msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, robot_name, interface.network_sr_attach_point);
+
+	msg
+			= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 }
 
 void UiRobot::create_thread()
@@ -366,8 +367,7 @@ int UiRobot::reload_configuration()
 		// ini_con->create_ecp_irp6_on_track (ini_con->ui->ECP_SECTION);
 		//ui_state.is_any_edp_active = true;
 		if (interface.is_mp_and_ecps_active) {
-			state.ecp.network_trigger_attach_point
-					= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "trigger_attach_point", state.ecp.section_name);
+			state.ecp.network_trigger_attach_point = interface.config->get_ecp_trigger_attach_point(robot_name);
 
 			state.ecp.pid = -1;
 			state.ecp.trigger_fd = lib::invalid_fd;
@@ -434,14 +434,12 @@ int UiRobot::reload_configuration()
 				else
 					state.edp.test_mode = 0;
 
-				state.edp.hardware_busy_attach_point
-						= interface.config->value <std::string> ("hardware_busy_attach_point", state.edp.section_name);
+				state.edp.hardware_busy_attach_point = interface.config->get_edp_hardware_busy_file(robot_name);
 
 				state.edp.network_resourceman_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", state.edp.section_name);
+						= interface.config->get_edp_resourceman_attach_point(robot_name);
 
-				state.edp.network_reader_attach_point
-						= interface.config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "reader_attach_point", state.edp.section_name);
+				state.edp.network_reader_attach_point = interface.config->get_edp_reader_attach_point(robot_name);
 
 				if (!interface.config->exists("node_name", state.edp.section_name)) {
 					state.edp.node_name = "localhost";

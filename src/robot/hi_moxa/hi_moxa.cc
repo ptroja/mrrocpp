@@ -174,9 +174,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 	static int error_msg_power_stage = 0;
 	static int error_msg_hardware_panic = 0;
 	static int error_msg_overcurrent = 0;
+	static int last_synchro_state[] = {0,0,0,0,0,0,0,0};
+	static int comm_timeouts[] = {0,0,0,0,0,0,0,0};
 	static int synchro_switch_filter[] = {0,0,0,0,0,0,0,0};
 	const int synchro_switch_filter_th = 2;
-	bool robot_synchronized = false;
+	bool robot_synchronized = true;
 	bool power_fault;
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
@@ -236,7 +238,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 			for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 				if (bytes_received[drive_number] < READ_BYTES)
+				{
 					std::cout << " " << (int) drive_number << "(" << READ_BYTES - bytes_received[drive_number] << ")";
+					comm_timeouts[drive_number] ++;
+				}
 			}
 			std::cout << std::endl;
 			hardware_read_ok = false;
@@ -244,24 +249,29 @@ uint64_t HI_moxa::read_write_hardware(void)
 		} else {
 			all_hardware_read = true;
 			for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
+
 				if (FD_ISSET(fd[drive_number], &rfds)) {
 					bytes_received[drive_number]
 							+= read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
 									+ bytes_received[drive_number], READ_BYTES - bytes_received[drive_number]);
 //					std::cout << "[comm] drive " << (int)drive_number << ", received " << bytes_received[drive_number] << std::endl;
-
 				}
 				if (bytes_received[drive_number] < READ_BYTES) {
 					all_hardware_read = false;
 				}
 			}
 			if (all_hardware_read) {
+				for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+					comm_timeouts[drive_number] = 0;
 				break;
 			}
 		}
 	}
 
-	// Wypelnienie pol odebranymi danymi
+	// Inicjalizacja flag
+	robot_synchronized = true;
+	power_fault = false;
+
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 
 		// Wypelnienie pol odebranymi danymi
@@ -270,12 +280,30 @@ uint64_t HI_moxa::read_write_hardware(void)
 			servo_data[drive_number].current_absolute_position = servo_data[drive_number].drive_status.position;
 		}
 
+		// Ustawienie flagi wlaczonej mocy
+		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
+			power_fault = true;
+		}
+
+		// Ustawienie flagi synchronizacji
+		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
+			robot_synchronized = false;
+		}
+
+		// Sprawdzenie, czy wlasnie nastapila synchronizacja kolejnej osi
+		if(last_synchro_state[drive_number] == 0 && servo_data[drive_number].drive_status.isSynchronized != 0)
+		{
+			servo_data[drive_number].first_hardware_reads =  FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT;
+			last_synchro_state[drive_number] = 1;
+		}
+
 		// W pierwszych odczytach danych z napedu przyrost pozycji musi byc 0.
 		if ((servo_data[drive_number].first_hardware_reads > 0) && hardware_read_ok) {
 			servo_data[drive_number].previous_absolute_position = servo_data[drive_number].current_absolute_position;
 			servo_data[drive_number].first_hardware_reads --;
 		}
 
+		// Sprawdzenie przyrostu pozycji enkodera
 		servo_data[drive_number].current_position_inc = (double) (servo_data[drive_number].current_absolute_position
 				- servo_data[drive_number].previous_absolute_position);
 
@@ -285,13 +313,16 @@ uint64_t HI_moxa::read_write_hardware(void)
 				   || (servo_data[drive_number].current_position_inc < - ridiculous_increment[drive_number]))
 			{
 				hardware_panic = true;
-				master.msg->message(lib::FATAL_ERROR, "Ridiculous encoder read");
-				std::cout << "[error] ridiculous increment on (" << (int)drive_number << "): read = "
+				std::stringstream temp_message;
+				temp_message << "[error] ridiculous increment on (" << (int)drive_number << "): read = "
 						<< servo_data[drive_number].current_position_inc << ", max = "
 						<< ridiculous_increment[drive_number] << std::endl;
+				master.msg->message(lib::FATAL_ERROR, temp_message.str());
+				std::cout << temp_message.str();
 			}
 		}
 
+		// Sprawdzenie ograniczenia nadpradowego
 		if (servo_data[drive_number].drive_status.overcurrent == 1) {
 			if (error_msg_overcurrent == 0) {
 				master.msg->message(lib::NON_FATAL_ERROR, "Overcurrent");
@@ -301,17 +332,17 @@ uint64_t HI_moxa::read_write_hardware(void)
 			}
 		}
 
-	}
+		// Wykrywanie sekwencji timeoutow komunikacji
+		if(comm_timeouts[drive_number] >= MAX_COMM_TIMEOUTS)
+		{
+			hardware_panic = true;
+			std::stringstream temp_message;
+			temp_message << "[error] multiple communication timeouts on (" << (int)drive_number << "): limit = "
+					<< MAX_COMM_TIMEOUTS << std::endl;
+			master.msg->message(lib::FATAL_ERROR, temp_message.str());
+			std::cout << temp_message.str();
+		}
 
-	robot_synchronized = true;
-	power_fault = false;
-	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-		if (servo_data[drive_number].drive_status.powerStageFault != 0) {
-			power_fault = true;
-		}
-		if (servo_data[drive_number].drive_status.isSynchronized == 0) {
-			robot_synchronized = false;
-		}
 	}
 
 	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
@@ -440,6 +471,9 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 			timeout.tv_sec = (time_t) 0;
 			timeout.tv_usec = 500;
 			int select_retval = select(fd[drive_number] + 1, &rfds, NULL, NULL, &timeout);
+			// hardware panic; do not print error information
+			if(parameter == PARAM_DRIVER_MODE && new_value == PARAM_DRIVER_MODE_ERROR)
+				return 0;
 			if (select_retval == 0) {
 				std::cout << "[error] param set ack timeout for drive (" << drive_number << ")" << std::endl;
 			} else {

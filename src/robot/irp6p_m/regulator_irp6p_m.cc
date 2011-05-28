@@ -31,9 +31,10 @@ namespace irp6p_m {
 
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -43,9 +44,10 @@ NL_regulator_2_irp6p::NL_regulator_2_irp6p(uint8_t reg_no, uint8_t reg_par_no, d
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -55,9 +57,10 @@ NL_regulator_3_irp6p::NL_regulator_3_irp6p(uint8_t reg_no, uint8_t reg_par_no, d
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -67,9 +70,10 @@ NL_regulator_4_irp6p::NL_regulator_4_irp6p(uint8_t reg_no, uint8_t reg_par_no, d
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -81,9 +85,10 @@ NL_regulator_5_irp6p::NL_regulator_5_irp6p(uint8_t reg_no, uint8_t reg_par_no, d
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
@@ -93,9 +98,10 @@ NL_regulator_6_irp6p::NL_regulator_6_irp6p(uint8_t reg_no, uint8_t reg_par_no, d
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-NL_regulator_7_irp6p::NL_regulator_7_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+NL_regulator_7_irp6p::NL_regulator_7_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
+	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
+	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
 	// Przy inicjacji nalezy dopilnowac, zeby numery algorytmu regulacji oraz zestawu jego parametrow byly
 	// zgodne z faktycznie przekazywanym zestawem parametrow inicjujacych.
