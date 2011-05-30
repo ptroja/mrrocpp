@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <sys/time.h>
+#include <boost/lexical_cast.hpp>
 
 #include <Eigen/Core>
 
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
 	 cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
 	 */
 
-	Matrix<double,2,2> m;
+/*	Matrix<double,2,2> m;
 	Matrix<double,2,2> n;
 	Matrix<double,2,2> result;
 
@@ -89,7 +91,8 @@ int main(int argc, char *argv[])
 	result = (m.cwise() * m);
 	cout << "-- cwise m*m: --" << endl << result << endl << endl;
 	result = (m.cwise() * m).cwise() / (3.0 * n);
-	cout << "-- cwise (m*m)/n: --" << endl << result << endl << endl;
+	cout << "-- cwise (m*m)/n: --" << endl << result << endl << endl;*/
+
 
 /*
 	Eigen::Matrix <double, 2, 1> m;
@@ -106,4 +109,16 @@ int main(int argc, char *argv[])
 	result = ((m.cwise() / n).cwise());
 	cout << "-- cwise m/n: --" << endl << result << endl << endl;
 */
+
+
+	struct timeval tv;
+	if(gettimeofday(&tv, NULL) == -1) {
+		perror("gettimeofday()");
+	}
+
+	std::string name;
+	name = boost::lexical_cast <std::string>(tv.tv_sec);
+	//tv_usec = tv.tv_usec;
+	std::cout << name << std::endl;
+
 }

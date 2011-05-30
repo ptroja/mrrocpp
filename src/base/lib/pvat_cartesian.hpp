@@ -237,7 +237,7 @@ void linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> &
  * @param [in] motion_time_ Total motion time.
  * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
  * @param [in] model_ Kinematic model required for inverse kinematics computations.
- * @param [in] desired_joints_old_ Desired joint values that were required by previously received SET command (threated as current position of joints).
+ * @param [in] desired_joints_old_ Desired joint values that were required by previously received SET command (treated as current position of joints). Required by the SW inverse kinematics.
  * @param [in] current_end_effector_frame_ Homogeneous matrix containing current end effector pose.
  * @param [in] desired_end_effector_frame_ Homogeneous matrix containing desired end effector pose.
  */

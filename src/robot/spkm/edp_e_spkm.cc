@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-
+#include <sys/stat.h>
+//<sys/types.h>
 #include <boost/foreach.hpp>
 
 #include "base/lib/typedefs.h"
@@ -23,6 +24,7 @@
 #include "base/lib/pvat_cartesian.hpp"
 
 #include "robot/spkm/exceptions.h"
+#include "robot/epos/epos_exceptions.hpp"
 
 namespace mrrocpp {
 namespace edp {
@@ -305,15 +307,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								// Postcondition II  - check whether the desired motor position is valid.
 								get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 
-								// Remember the currently desired joints as old.
-								desired_joints_old = desired_joints;
-
 								// Check the motion type.
 								if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
 									// In operational space the previous cartesian pose is required.
 									if (!is_previous_cartesian_pose_known)
 										BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 									// Rest of computations is performed elsewhere...
+								} else {
+									// Remember the currently desired joints as old.
+									// Because the OLD ones are used in the OPERATIONAL motion once again, thus don't remember them in this case.
+									desired_joints_old = desired_joints;
 								}
 							} else {
 								// Throw non-fatal error - this mode requires synchronization.
@@ -486,11 +489,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_0w;
 						compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
+#if 0
 						cout << "time_deltas = [ \n" << time_invervals << "\n ]; \n";
 						cout << "m0w = [\n" << motor_0w <<  "\n ]; \n";
 						cout << "m1w = [\n" << motor_1w <<  "\n ]; \n";
 						cout << "m2w = [\n" << motor_2w <<  "\n ]; \n";
 						cout << "m3w = [\n" << motor_3w <<  "\n ]; \n";
+#endif
 
 						// Recalculate extreme velocities taking into consideration required units
 						// (Vdefault is given in [rpm], and on the base of w0..3 coefficients we can compute v in [turns per second])
@@ -520,9 +525,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS+1, 1> t;
 						compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
+#if 0
 						cout<<"p = [ \n"<<p << "\n ]; \n";
 						cout<<"v = [ \n"<<v << "\n ]; \n";
 						cout<<"t = [ \n"<<t << "\n ]; \n";
+#endif
 
 						// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
@@ -536,20 +543,84 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Recalculate time to [ms].
 						t *= 1000;
 
-/*						cout<<" !Values after units recalculations!\n";
+#if 1
+						cout<<" !Values after units recalculations!\n";
 						cout<<"p = [ \n"<<p << "\n ]; \n";
 						cout<<"v = [ \n"<<v << "\n ]; \n";
-						cout<<"t = [ \n"<<t << "\n ]; \n";*/
+						cout<<"t = [ \n"<<t << "\n ]; \n";
+#endif
 
-						cout<<"qc;rpm;ms;\r\n";
-						for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
-							cout<< (int)p(pnt,1) <<";"<< (int)v(pnt,1) << ";"<< (int)t(pnt) << ";\r\n";
-						}
+#if 1
+						bool error = false;
+						struct timeval tv;
+						std::string dir;
+						// Get time of day.
+						if(gettimeofday(&tv, NULL) == -1) {
+							perror("gettimeofday()");
+							error = true;
+						} else {
+							// Create unique directory.
+							dir = "/home/tkornuta/pkm_measures/" + boost::lexical_cast <std::string>(tv.tv_sec);
+							if(mkdir(dir.c_str(),0777)==-1){
+								perror("mkdir()");
+								dir = "/home/tkornuta/pkm_measures/" + boost::lexical_cast <std::string>(tv.tv_sec) + "_";
+							} else
+								dir += "/";
+							// Generate unique name.
+							std::string filename = dir + "description.txt";
+							ofstream myfile;
+							myfile.open(filename.c_str());
+
+							// Write motion description.
+							// All values were previously computed in switch (ecp_edp_cbuffer.variant) - the lib::spkm::FRAME case.
+
+							// Motion time and number of interpolation points.
+							myfile<< "Motion time: "<< motion_time <<endl;
+							myfile<< "Interpolation points: "<< (lib::spkm::NUM_OF_MOTION_SEGMENTS+1) <<endl;
+
+							// Cartesian poses.
+							myfile<< "Current (assumed) end-effector pose:\n" << current_end_effector_frame << endl;
+							myfile<< "Desired end-effector pose:\n" << desired_end_effector_frame << endl;
+							// Joints.
+							myfile<< "Current (assumed) joints:\t" << desired_joints_old.transpose() << endl;
+							myfile<< "Desired joints:\t\t\t" << desired_joints.transpose() << endl;
+							// Motors.
+							myfile<< "Current (assumed) motors:\t" << current_motor_pos.transpose() << endl;
+							myfile<< "Desired motors:\t\t\t" << desired_motor_pos_new.transpose() << endl;
+
+							myfile.close();
+							cout<<"Motion description was written to file: "<<filename<<endl;
+
+							// Write triplets to files - one file for every axis.
+							for (size_t i = 0; i < axes.size(); ++i) {
+								// Generate unique name.
+								std::string filename = dir + "axis" +
+										boost::lexical_cast <std::string>(i) +".csv";
+								ofstream myfile;
+								myfile.open(filename.c_str());
+								// Write header.
+								myfile<<"qc;rpm;ms;\r\n";
+								// Write triplets.
+								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+									myfile<< (int)p(pnt,i) <<";"<< (int)v(pnt,i) << ";"<< (int)t(pnt) << ";\r\n";
+								}//: for segments
+								// Close file for given axis.
+								myfile.close();
+								cout<<"PVT for axis "<<i<<" were written to file: "<<filename<<endl;
+							}//: for axes
+						}//: else
+#endif
 
 						// Execute motion
 						if (!robot_test_mode) {
 							// Setup motion parameters
 							for (size_t i = 0; i < axes.size(); ++i) {
+
+								// If no translocation is required for given axis - skip the motion (in order to save time).
+								if (p(0,i) == p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i))
+									continue;
+
+								// Set motion parameters.
 								axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
 								axes[i]->writeProfileVelocity(MotorVmax[i]);
 								axes[i]->writeProfileAcceleration(MotorAmax[i]);
@@ -562,7 +633,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									fflush(stdout);
 								}
 								printf("\n");
-								//axes[i]->writeInterpolationDataRecord((int32_t) p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (int32_t) v(lib::spkm::NUM_OF_MOTION_SEGMENTS,i), (uint8_t)0);
 
 								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
@@ -571,24 +641,21 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								}
 
 								if (axes[i]->checkInterpolationBufferError(status)) {
-									// FIXME: this should be done in a separate exception, which does not benlong
+									// FIXME: this should be done in a separate exception, which does not belong
 									//        to the kinematics::spkm namespace.
 									printf("InterpolationBufferStatus for axis %zu: 0x%04X\n", i, status);
-									BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
+									BOOST_THROW_EXCEPTION(mrrocpp::edp::epos::nfe_epos_interpolation_buffer()<<motor_number(i));
 								}
 							}
 						} else {
-							// Display the 2nd axis movement.
-							//ofstream myfile;
-							//myfile.open ("/home/ptrojane/korni/pkm2.csv");
-
-							cout<<"qc;rpm;ms;\r\n";
-							for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
-								cout<< (int)p(pnt,1) <<";"<< (int)v(pnt,1) << ";"<< (int)t(pnt) << ";\r\n";
-							}
-	//						myfile<< (int)p(lib::spkm::NUM_OF_MOTION_SEGMENTS,1) <<";0;0;";
-							//myfile.close();
-						}
+							// Display axes movement.
+							for (size_t i = 0; i < axes.size(); ++i) {
+								cout<<"Axis "<<i<<": qc;rpm;ms;\r\n";
+								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+									cout << (int)p(pnt,i) <<";"<< (int)v(pnt,i) << ";"<< (int)t(pnt) << ";\r\n";
+								}//: for segments
+							}//: for axes
+						}//: end robot_test_mode
 
 						// Start motion
 						for (size_t i = 0; i < axes.size(); ++i) {
@@ -600,6 +667,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								current_motor_pos[i] = desired_motor_pos_new[i];
 							}
 						}
+						// Remember the currently desired joints as old.
+						desired_joints_old = desired_joints;
 					}
 						break;
 					default:

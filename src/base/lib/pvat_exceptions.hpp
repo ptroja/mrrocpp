@@ -2,17 +2,20 @@
  * @file pvat_exceptions.hpp
  * @brief Errors based on boost::exception thrown during the Cartesian trajectory generation.
  *
- *
  * @author tkornuta
  * @date 16-05-2011
  *
  * @ingroup LIB
  */
 
-#include "base/edp/edp_exceptions.h"
+#include "base/lib/exception.h"
 
 #ifndef PVAT_EXCEPTIONS_HPP_
 #define PVAT_EXCEPTIONS_HPP_
+
+namespace mrrocpp {
+namespace lib {
+namespace pvat {
 
 //! Name of violated constraint - maximum.
 const std::string MAXIMUM_CONSTRAINT = "Maximum";
@@ -52,5 +55,9 @@ REGISTER_NON_FATAL_ERROR(nfe_motor_acceleration_constraint_exceeded, "Motor acce
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_invalid_time_inverval, "Invalid time inverval")
+
+} // namespace pvat
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* PVAT_EXCEPTIONS_HPP_ */
