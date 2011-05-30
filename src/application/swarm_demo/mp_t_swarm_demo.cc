@@ -61,6 +61,7 @@ void swarm_demo::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+
 	/*
 	 sr_ecp_msg->message("Postument Angle axis");
 
