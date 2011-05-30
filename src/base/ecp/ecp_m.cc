@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->reply.Set(ecp::common::ecp_t->ecp_reply);
+					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				default:
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->reply.Set(ecp::common::ecp_t->ecp_reply);
+					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				case ECP_STOP_ACCEPTED:
 					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");

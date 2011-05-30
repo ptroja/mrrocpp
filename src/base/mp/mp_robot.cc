@@ -53,12 +53,12 @@ void robot::start_ecp(void)
 {
 	mp_command.command = lib::START_TASK;
 
-	command.Set(mp_command);
+	command.Send(mp_command);
 }
 
 void robot::execute_motion(void)
 {
-	command.Set(mp_command);
+	command.Send(mp_command);
 }
 
 void robot::terminate_ecp(void)
@@ -66,7 +66,7 @@ void robot::terminate_ecp(void)
 	// zlecenie STOP zakonczenia ruchu
 	mp_command.command = lib::STOP;
 
-	command.Set(mp_command);
+	command.Send(mp_command);
 }
 
 MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :

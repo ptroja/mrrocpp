@@ -64,7 +64,7 @@ public:
 };
 
 template <class T>
-class RemoteBuffer {
+class OutputBuffer {
 private:
 	//! name of the buffer
 	const std::string name;
@@ -74,13 +74,13 @@ private:
 
 public:
 	//! Construct remote buffer proxy
-	RemoteBuffer(RemoteAgent & _owner, const std::string & _name)
+	OutputBuffer(RemoteAgent & _owner, const std::string & _name)
 		: name(_name), owner(_owner)
 	{
 	}
 
 	//! Set the contents of the remove buffer
-	void Set(const T & data) {
+	void Send(const T & data) {
 		xdr_oarchive<> oa;
 		oa << name;
 		oa << data;

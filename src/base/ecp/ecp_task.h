@@ -97,7 +97,7 @@ public:
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
 	//! Data buffer in the MP
-	RemoteBuffer<lib::ECP_REPLY_PACKAGE> reply;
+	OutputBuffer<lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief ECP subtasks container

@@ -133,7 +133,7 @@ void task_base::termination_notice(void)
 	if (mp_command_type() != lib::END_MOTION) {
 
 		set_ecp_reply(lib::TASK_TERMINATED);
-		reply.Set(ecp_reply);
+		reply.Send(ecp_reply);
 	}
 }
 
@@ -175,7 +175,7 @@ void task_base::wait_for_start(void)
 				set_ecp_reply(lib::TASK_TERMINATED);
 
 				// Reply with ACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 
 				// OK, ready to start!
 				start_received = true;
@@ -184,13 +184,13 @@ void task_base::wait_for_start(void)
 			case lib::STOP:
 				set_ecp_reply(lib::TASK_TERMINATED);
 				// Reply with ACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 				// Reply with NACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 				break;
 		}
@@ -216,19 +216,19 @@ void task_base::get_next_state(void)
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				// Reply with ACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 				next_state_received = true;
 				break;
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				// Reply with ACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 				// Reply with NACK
-				reply.Set(ecp_reply);
+				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 				break;
 		}

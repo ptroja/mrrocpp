@@ -135,7 +135,7 @@ typedef struct
 	std::string network_pulse_attach_point;
 	int node_nr;
 	RemoteAgent * MP;
-	RemoteBuffer<char> * pulse;
+	OutputBuffer<char> * pulse;
 	UI_MP_STATE state;
 	UI_MP_STATE last_process_control_state;
 	UI_MP_STATE last_manage_interface_state;

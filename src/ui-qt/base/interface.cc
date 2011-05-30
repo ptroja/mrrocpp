@@ -863,7 +863,7 @@ int Interface::MPup_int()
 			if (mp.pid > 0) {
 
 				mp.MP = new RemoteAgent(lib::MP_SECTION);
-				mp.pulse = new RemoteBuffer<char>(*mp.MP, "MP_PULSE");
+				mp.pulse = new OutputBuffer<char>(*mp.MP, "MP_PULSE");
 
 				teachingstate = ui::common::MP_RUNNING;
 
@@ -1622,7 +1622,7 @@ int Interface::execute_mp_pulse(char pulse_code)
 
 	// printf("w send pulse\n");
 	if (mp.pulse) {
-		mp.pulse->Set(pulse_code);
+		mp.pulse->Send(pulse_code);
 	}
 
 	return 1;

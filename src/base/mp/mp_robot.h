@@ -48,7 +48,7 @@ private:
 	RemoteAgent ecp;
 
 	//! Remote agent's data buffer
-	RemoteBuffer <lib::MP_COMMAND_PACKAGE> command;
+	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 protected:
 	/**
