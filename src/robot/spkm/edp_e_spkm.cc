@@ -208,15 +208,15 @@ void effector::synchronise(void)
 	// Hardcoded safety values.
 	// TODO: move to configuration file?
 	for (size_t i = 0; i < axes.size(); ++i) {
-		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 1);
-		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 1);
+		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 100);
+		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 100);
 	}
 
 	// Move the longest linear axis to the 'zero' position with a fast motion command
-	axisB->writeProfileVelocity(5000UL);
+/*	axisB->writeProfileVelocity(5000UL);
 	axisB->writeProfileAcceleration(1000UL);
 	axisB->writeProfileDeceleration(1000UL);
-	axisB->moveAbsolute(-57500);
+	axisB->moveAbsolute(-57500);*/
 
 	// Just for testing if limits actually work
 	//	axisA->writeMinimalPositionLimit(-100000);
