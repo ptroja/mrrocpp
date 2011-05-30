@@ -80,8 +80,9 @@ template <unsigned int N_SEGMENTS>
 void check_time_distances(const Eigen::Matrix <double, N_SEGMENTS, 1> taus_)
 {
 	// Values taken from the EPOS2 documentation.
-	const double min_td = 0.001;
 	const double max_td = 0.255;
+	// Originally min time is 1ms, but because of the PVT transmition time via USB segments must be bigger than 40 ms.
+	const double min_td = 0.040;
 
 	// Check conditions for all segments - movement .
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)

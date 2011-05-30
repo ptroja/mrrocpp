@@ -568,27 +568,32 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								dir += "/";
 							// Generate unique name.
 							std::string filename = dir + "description.txt";
-							ofstream myfile;
-							myfile.open(filename.c_str());
+							ofstream descfile;
+							descfile.open(filename.c_str());
 
 							// Write motion description.
 							// All values were previously computed in switch (ecp_edp_cbuffer.variant) - the lib::spkm::FRAME case.
 
 							// Motion time and number of interpolation points.
-							myfile<< "Motion time: "<< motion_time <<endl;
-							myfile<< "Interpolation points: "<< (lib::spkm::NUM_OF_MOTION_SEGMENTS+1) <<endl;
+							descfile<< "Motion time: "<< motion_time <<endl;
+							descfile<< "Number of segments: "<< lib::spkm::NUM_OF_MOTION_SEGMENTS <<endl;
 
 							// Cartesian poses.
-							myfile<< "Current (assumed) end-effector pose:\n" << current_end_effector_frame << endl;
-							myfile<< "Desired end-effector pose:\n" << desired_end_effector_frame << endl;
+							descfile<< "Current (assumed) end-effector pose:\n" << current_end_effector_frame << endl;
+							descfile<< "Desired end-effector pose:\n" << desired_end_effector_frame << endl;
 							// Joints.
-							myfile<< "Current (assumed) joints:\t" << desired_joints_old.transpose() << endl;
-							myfile<< "Desired joints:\t\t\t" << desired_joints.transpose() << endl;
+							descfile<< "Current (assumed) joints:\t" << desired_joints_old.transpose() << endl;
+							descfile<< "Desired joints:\t\t\t" << desired_joints.transpose() << endl;
 							// Motors.
-							myfile<< "Current (assumed) motors:\t" << current_motor_pos.transpose() << endl;
-							myfile<< "Desired motors:\t\t\t" << desired_motor_pos_new.transpose() << endl;
+							descfile<< "Current (assumed) motors:\t" << current_motor_pos.transpose() << endl;
+							descfile<< "Desired motors:\t\t\t" << desired_motor_pos_new.transpose() << endl;
 
-							myfile.close();
+							// Check which axis is going to be moved.
+							for (size_t i = 0; i < axes.size(); ++i) {
+								descfile <<"Axis " << i << ": " <<((p(0,i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i)) ? "moving" : "not moving") << endl;
+							}
+
+							descfile.close();
 							cout<<"Motion description was written to file: "<<filename<<endl;
 
 							// Write triplets to files - one file for every axis.
@@ -596,16 +601,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								// Generate unique name.
 								std::string filename = dir + "axis" +
 										boost::lexical_cast <std::string>(i) +".csv";
-								ofstream myfile;
-								myfile.open(filename.c_str());
+								ofstream axefile;
+								axefile.open(filename.c_str());
 								// Write header.
-								myfile<<"qc;rpm;ms;\r\n";
+								axefile<<"qc;rpm;ms;\r\n";
 								// Write triplets.
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
-									myfile<< (int)p(pnt,i) <<";"<< (int)v(pnt,i) << ";"<< (int)t(pnt) << ";\r\n";
+									axefile<< (int)p(pnt,i) <<";"<< (int)v(pnt,i) << ";"<< (int)t(pnt) << ";\r\n";
 								}//: for segments
 								// Close file for given axis.
-								myfile.close();
+								axefile.close();
 								cout<<"PVT for axis "<<i<<" were written to file: "<<filename<<endl;
 							}//: for axes
 						}//: else
@@ -659,6 +664,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Start motion
 						for (size_t i = 0; i < axes.size(); ++i) {
+							// If no translocation is required for given axis - skip the motion (in order to save time).
+							if (p(0,i) == p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i))
+								continue;
+
 							if (!robot_test_mode) {
 								// FIXME: this motion type should be initiated with a CAN broadcast message
 								axes[i]->startInterpolatedPositionMotion();

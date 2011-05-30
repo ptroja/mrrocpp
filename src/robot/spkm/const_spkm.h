@@ -39,7 +39,7 @@ const int NUM_OF_SERVOS = 6;
  * @author tkornuta
  * @ingroup spkm
  */
-const unsigned int NUM_OF_MOTION_SEGMENTS = 10;
+const unsigned int NUM_OF_MOTION_SEGMENTS = 20;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
