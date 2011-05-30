@@ -55,8 +55,7 @@ static void va_to_robot_map(int num, va_list arguments, const common::robots_t &
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config),
-	ui_pulse("MP_PULSE")
+	ecp_mp::task::task(_config), ui_pulse("MP_PULSE")
 {
 	// initialize communication with other processes
 	initialize_communication();
@@ -66,9 +65,9 @@ task::~task()
 {
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		delete robot_node.second;
-	}
+				{
+					delete robot_node.second;
+				}
 
 	// TODO: check for error
 	if (mp_pulse_attach != lib::invalid_fd) {
@@ -244,12 +243,12 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 {
 	// sprawdzenie czy zbior robots_to_wait_for_task_termination nie zawiera robotow, ktorych nie ma w zbiorze robots_to_move
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
-	{
-		if (robots_to_move.count(robot_node.first) == 0) {
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
-			throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
-		}
-	}
+				{
+					if (robots_to_move.count(robot_node.first) == 0) {
+						sr_ecp_msg->message(lib::SYSTEM_ERROR, 0, "run_ext_empty_gen_for_set_of_robots_... wrong execution arguments");
+						throw common::MP_main_error(lib::SYSTEM_ERROR, 0);
+					}
+				}
 
 	// GLOWNA PETLA
 
@@ -262,11 +261,11 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 
 		// sprawdzenie zbioru robots_to_wait_for_task_termination
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_wait_for_task_termination)
-		{
-			if (robot_node.second->ecp_reply_package.reply != lib::TASK_TERMINATED) {
-				all_robots_terminated = false;
-			}
-		}
+					{
+						if (robot_node.second->ecp_reply_package.reply != lib::TASK_TERMINATED) {
+							all_robots_terminated = false;
+						}
+					}
 
 		// sprawdzenie czy wszystkie roboty są w stanie TASK_TERMINATED
 		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
@@ -278,11 +277,11 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 
 		// sprawdzenie zbioru robots_to_move
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_move_tmp)
-		{
-			if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-				robots_to_move.erase(robot_node.first);
-			}
-		}
+					{
+						if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+							robots_to_move.erase(robot_node.first);
+						}
+					}
 
 		// powolanie generatora i jego konfiguracja
 		generator::extended_empty mp_ext_empty_gen(*this);
@@ -375,13 +374,13 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 
 			if (the_generator.wait_for_ECP_pulse) {
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->reply.isFresh()) {
-						robot_node.second->reply.markAsUsed();
-						//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
-						ecp_exit_from_while = true;
-					}
-				}
+							{
+								if (robot_node.second->reply.isFresh()) {
+									robot_node.second->reply.markAsUsed();
+									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
+									ecp_exit_from_while = true;
+								}
+							}
 			} else {
 				ecp_exit_from_while = true;
 			}
@@ -401,7 +400,7 @@ void task::initialize_communication()
 	const std::string sr_net_attach_point = config.get_sr_attach_point();
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
+	sr_ecp_msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
 
 	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
@@ -435,67 +434,71 @@ void task::start_all(const common::robots_t & _robot_m)
 {
 	// Wystartowanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
-	{
-		robot_node.second->start_ecp();
-	}
+				{
+					robot_node.second->start_ecp();
+				}
 
 	// Container for awaiting acknowledgements
 	common::robots_t not_confirmed = _robot_m;
 
-//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-//	{
-//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
-//	}
+	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	//	{
+	//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
+	//	}
 
 	// Wait for ACK from all the robots
-	while(!not_confirmed.empty()) {
+	while (!not_confirmed.empty()) {
 		ReceiveSingleMessage(true);
 
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-		{
-			if(robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply == lib::TASK_TERMINATED) {
-				not_confirmed.erase(robot_node.first);
-			}
-		}
+					{
+						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+								== lib::TASK_TERMINATED) {
+							robot_node.second->reply.markAsUsed();
+							not_confirmed.erase(robot_node.first);
+
+						}
+					}
 	}
 }
 
 void task::execute_all(const common::robots_t & _robot_m)
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
-	{
-		if (robot_node.second->communicate_with_ecp) {
-			if ((robot_node.second->mp_command.command == lib::STOP) ||
-				(robot_node.second->mp_command.command == lib::END_MOTION) ||
-				(robot_node.second->mp_command.command == lib::NEXT_STATE) ||
-				(robot_node.second->continuous_coordination)) {
-				robot_node.second->execute_motion();
-			}
-		}
-	}
+				{
+					if (robot_node.second->communicate_with_ecp) {
+						if ((robot_node.second->mp_command.command == lib::STOP)
+								|| (robot_node.second->mp_command.command == lib::END_MOTION)
+								|| (robot_node.second->mp_command.command == lib::NEXT_STATE)
+								|| (robot_node.second->continuous_coordination)) {
+							robot_node.second->execute_motion();
+						}
+					}
+				}
 }
 
 void task::terminate_all(const common::robots_t & _robot_m)
 {
 	// Zatrzymanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
-	{
-		//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
-		robot_node.second->terminate_ecp();
-	}
+				{
+					//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
+					robot_node.second->terminate_ecp();
+				}
 
 	common::robots_t not_confirmed = _robot_m;
 
 	// Wait for ACK from all the robots
-	while(!not_confirmed.empty()) {
+	while (!not_confirmed.empty()) {
 		ReceiveSingleMessage(true);
 
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-		{
-			if(robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply == lib::TASK_TERMINATED) {
-				not_confirmed.erase(robot_node.first);
-			}
-		}
+					{
+						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+								== lib::TASK_TERMINATED) {
+							not_confirmed.erase(robot_node.first);
+						}
+					}
 	}
 }
 
