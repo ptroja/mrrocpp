@@ -237,7 +237,7 @@ private:
 	/**
 	 * @brief pulse from UI
 	 */
-	DataBuffer<char> ui_pulse;
+	InputBuffer<char> ui_pulse;
 
 	/**
 	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach

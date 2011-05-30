@@ -69,7 +69,7 @@ private:
 	 *
 	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
 	 */
-	DataBuffer<lib::MP_COMMAND_PACKAGE> command;
+	InputBuffer<lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief Returns MP command type

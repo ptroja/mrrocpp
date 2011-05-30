@@ -11,7 +11,7 @@
 #include "Agent.h"
 
 template <class T>
-class DataBuffer : public DataBufferBase {
+class InputBuffer : public DataBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
@@ -43,7 +43,7 @@ private:
 
 public:
 	//! Constructor
-	DataBuffer(const std::string & _name, const T & _default_value = T())
+	InputBuffer(const std::string & _name, const T & _default_value = T())
 		: DataBufferBase(_name), data(_default_value),
 		fresh(false), access(data)
 	{

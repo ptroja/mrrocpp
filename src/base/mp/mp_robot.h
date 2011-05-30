@@ -78,7 +78,7 @@ public:
 
 	//! Data buffer with messages from the ECP
 	//! TODO: users should not use this data directly, only the 'const ecp_reply_package'.
-	DataBuffer<lib::ECP_REPLY_PACKAGE> reply;
+	InputBuffer<lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief reply buffer from ecp
