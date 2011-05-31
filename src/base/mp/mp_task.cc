@@ -253,6 +253,7 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 	// GLOWNA PETLA
 
 	do {
+		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "run_extended_empty_gen_and_wait do iteration");
 		// aktualizacja ziorow robotow i sprawdzenie czy zbior robots_to_wait_for_task_termination nie jest juz pusty
 		// wtedy wyjscie z petli
 
@@ -269,8 +270,9 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 
 		// sprawdzenie czy wszystkie roboty są w stanie TASK_TERMINATED
 		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
-		if (all_robots_terminated)
+		if (all_robots_terminated) {
 			break;
+		}
 
 		// przygotowanie zapasowych list robotow
 		common::robots_t robots_to_move_tmp = robots_to_move;
@@ -280,6 +282,13 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 					{
 						if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
 							robots_to_move.erase(robot_node.first);
+
+							/* DEBUG START*/
+							std::stringstream temp_message;
+							temp_message << "TASK_TERMINATED robot (" << robot_node.second->robot_name << ")"
+									<< std::endl;
+							sr_ecp_msg->message(lib::NON_FATAL_ERROR, temp_message.str());
+							/* DEBUG END*/
 						}
 					}
 

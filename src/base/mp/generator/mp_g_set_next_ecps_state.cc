@@ -33,7 +33,7 @@ void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, i
 	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
 		if (str_len == 0) {
-			strcpy(reinterpret_cast<char*>(ecp_next_state.string_data), l_mp_2_ecp_next_state_string);
+			strcpy(reinterpret_cast <char*> (ecp_next_state.string_data), l_mp_2_ecp_next_state_string);
 		} else {
 			memcpy(ecp_next_state.string_data, l_mp_2_ecp_next_state_string, str_len);
 		}
@@ -53,11 +53,11 @@ void set_next_ecps_state::configure(const lib::playerpos_goal_t &_goal)
 bool set_next_ecps_state::first_step()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->mp_command.command = lib::NEXT_STATE;
-		robot_node.second->mp_command.ecp_next_state = ecp_next_state;
-		robot_node.second->communicate_with_ecp = true;
-	}
+				{
+					robot_node.second->mp_command.command = lib::NEXT_STATE;
+					robot_node.second->mp_command.ecp_next_state = ecp_next_state;
+					robot_node.second->communicate_with_ecp = true;
+				}
 
 	return true;
 }
@@ -68,6 +68,22 @@ bool set_next_ecps_state::first_step()
 
 bool set_next_ecps_state::next_step()
 {
+	// tutuaj oczekujemy aż wszystkie roboty potwierdzą otrzymanie rozkazu przez ecp_acknowledge
+	// korzystamy ze zbioru robot_m
+	// najpierw wylaczamy wysylanie czegokolwiek do robotow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->communicate_with_ecp = false;
+				}
+	// nastepnie sprawdzamy czy ktorys z robotow jeszcze nie wyslal potwierdzenia
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
+						return true;
+					}
+				}
+	// w przeciwnym razie konczymy generator (wszystkei roboty odtrzymaly polecenie i potwierdzily to)
 	return false;
 }
 

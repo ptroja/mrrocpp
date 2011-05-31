@@ -62,62 +62,61 @@ void swarm_demo::main_task_algorithm(void)
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	/*
-	 sr_ecp_msg->message("Postument Angle axis");
+	sr_ecp_msg->message("Postument Angle axis");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle_p1.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle_p1.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Postument Force approach");
+	sr_ecp_msg->message("Postument Force approach");
 
-	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Track Joint");
+	sr_ecp_msg->message("Track Joint");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_joint_p1.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_joint_p1.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Track angle axis");
+	sr_ecp_msg->message("Track angle axis");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle_p1a.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle_p1a.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Track Force approach");
+	sr_ecp_msg->message("Track Force approach");
 
-	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Postument angle axis2");
+	sr_ecp_msg->message("Postument angle axis2");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle_p2.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle_p2.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Postument Force approach");
+	sr_ecp_msg->message("Postument Force approach");
 
-	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Track angle axis2");
+	sr_ecp_msg->message("Track angle axis2");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle_p2.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle_p2.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Track Force approach");
+	sr_ecp_msg->message("Track Force approach");
 
-	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	 sr_ecp_msg->message("Wait");
+	sr_ecp_msg->message("Wait");
 
-	 wait_ms(2000);
+	wait_ms(2000);
 
-	 sr_ecp_msg->message("Both angle axis");
+	sr_ecp_msg->message("Both angle axis");
 
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	 set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	 run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
-	 */
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_angle.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_angle.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+
 	sr_ecp_msg->message("Swarm Demo END");
 
 }
