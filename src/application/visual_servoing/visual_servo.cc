@@ -220,27 +220,6 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 	os << is_object_visible << ";";
 
 	os << "\n";
-
-//	os << processingStartSeconds<<";";
-//	os << processingStartNanoseconds << ";";
-//
-//	os << processingEndSeconds << ";";
-//	os << processingEndNanoseconds << ";";
-//
-//	os << requestSentTimeSeconds << ";";
-//	os << requestSentTimeNanoseconds << ";";
-//
-//	os << sendTimeSeconds << ";";
-//	os << sendTimeNanoseconds << ";";
-//
-//	os << receiveTimeSeconds << ";";
-//	os << receiveTimeNanoseconds << ";";
-//
-//	os << sampleTimeSeconds << ";";
-//	os << sampleTimeNanoseconds << ";";
-//	os << is_object_visible << ";";
-//	os << "\n";
-
 }
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
@@ -260,29 +239,6 @@ void visual_servo_log_sample::printHeader(std::ostream& os)
 	os << "is_object_visible;";
 
 	os << "\n";
-
-//	os << "processingStart [s];";
-//	os << "processingStart [ns];";
-//
-//	os << "processingEnd [s];";
-//	os << "processingEnd [ns];";
-//
-//	os << "sendTime [s];";
-//	os << "sendTime [ns];";
-//
-//	os << "requestSentTime [s];";
-//	os << "requestSentTime [ns];";
-//
-//	os << "receiveTime [s];";
-//	os << "receiveTime [ns];";
-//
-//	os << "sampleTime [s];";
-//	os << "sampleTime [ns];";
-//
-//	os << "is_object_visible;";
-//
-//	os << "\n";
-
 }
 
 } // namespace servovision
