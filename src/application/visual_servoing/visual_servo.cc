@@ -61,31 +61,37 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	lib::Homog_matrix delta_position;
 
-	if (sensor->get_state() == discode_sensor::DSS_READING_RECEIVED) {
-		// There's a reading, reset the counter.
-		steps_without_reading = 0;
+	switch (sensor->get_state())
+	{
+		case discode_sensor::DSS_READING_RECEIVED: {
+			// There's a reading, reset the counter.
+			steps_without_reading = 0;
 
-		mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
-		sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
-		sample.sendTimeSeconds = rmh.sendTimeSeconds;
+			mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
+			sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
+			sample.sendTimeSeconds = rmh.sendTimeSeconds;
 
-		struct timespec ts = sensor->get_reading_received_time();
-		sample.receiveTimeNanoseconds = ts.tv_nsec;
-		sample.receiveTimeSeconds = ts.tv_sec;
+			struct timespec ts = sensor->get_reading_received_time();
+			sample.receiveTimeNanoseconds = ts.tv_nsec;
+			sample.receiveTimeSeconds = ts.tv_sec;
 
-		ts = sensor->get_request_sent_time();
-		sample.requestSentTimeNanoseconds = ts.tv_nsec;
-		sample.requestSentTimeSeconds = ts.tv_sec;
+			ts = sensor->get_request_sent_time();
+			sample.requestSentTimeNanoseconds = ts.tv_nsec;
+			sample.requestSentTimeSeconds = ts.tv_sec;
 
-		Types::Mrrocpp_Proxy::Reading* reading = retrieve_reading();
-		sample.processingStartSeconds = reading->processingStartSeconds;
-		sample.processingStartNanoseconds = reading->processingStartNanoseconds;
+			Types::Mrrocpp_Proxy::Reading* reading = retrieve_reading();
+			sample.processingStartSeconds = reading->processingStartSeconds;
+			sample.processingStartNanoseconds = reading->processingStartNanoseconds;
 
-		sample.processingEndSeconds = reading->processingEndSeconds;
-		sample.processingEndNanoseconds = reading->processingEndNanoseconds;
-	} else {
-		// Maybe there is a valid reading
-		steps_without_reading++;
+			sample.processingEndSeconds = reading->processingEndSeconds;
+			sample.processingEndNanoseconds = reading->processingEndNanoseconds;
+
+		}
+			break;
+		case discode_sensor::DSS_CONNECTED: // processing in DisCODe hasn't finished yet
+		case discode_sensor::DSS_REQUEST_SENT: // communication or synchronisation in DisCODe took too long
+			steps_without_reading++;
+			break;
 	}
 
 	if (steps_without_reading > max_steps_without_reading) {
@@ -219,6 +225,8 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	os << is_object_visible << ";";
 
+	os << is_reading_repreated << ";";
+
 	os << "\n";
 }
 
@@ -237,6 +245,8 @@ void visual_servo_log_sample::printHeader(std::ostream& os)
 	os << "sampleTime;";
 
 	os << "is_object_visible;";
+
+	os << "is_reading_repreated;";
 
 	os << "\n";
 }

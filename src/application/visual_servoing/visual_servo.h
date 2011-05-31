@@ -55,6 +55,8 @@ struct visual_servo_log_sample
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
 
+	bool is_reading_repreated;
+
 	static void printHeader(std::ostream& os);
 	void print(std::ostream& os, uint64_t t0);
 };

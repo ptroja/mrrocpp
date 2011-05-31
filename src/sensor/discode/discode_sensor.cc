@@ -152,7 +152,7 @@ void discode_sensor::get_reading()
 			// reading has been received.
 			receive_buffers_from_discode();
 			save_reading_received_time();
-			state = DSS_READING_RECEIVED;
+			state = rmh.data_size > 0 ? DSS_READING_RECEIVED : DSS_CONNECTED;
 		} else {
 			// no data received - too long for receiving reading from Discode.
 			// there must be something wrong with connection to discode.
@@ -169,7 +169,7 @@ void discode_sensor::get_reading()
 			// reading has just been received
 			receive_buffers_from_discode();
 			save_reading_received_time();
-			state = DSS_READING_RECEIVED;
+			state = rmh.data_size > 0 ? DSS_READING_RECEIVED : DSS_CONNECTED;
 		} else {
 			// timeout, try receiving in next call to get_reading()
 			log_dbg("discode_sensor::get_reading(): timeout, state = DSS_REQUEST_SENT\n");
@@ -247,17 +247,6 @@ void discode_sensor::receive_buffers_from_discode()
 		char txt[128];
 		sprintf(txt, "read() failed: nread(%d) != rmh.data_size(%d)", nread, rmh.data_size);
 		throw ds_connection_exception(txt);
-	}
-	//	if (rmh.is_rpc_call) {
-	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
-	//	}
-	//	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
-
-	if (rmh.data_size > 0) {
-		state = DSS_READING_RECEIVED;
-	} else {
-		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
-		state = DSS_CONNECTED;
 	}
 }
 
