@@ -203,8 +203,13 @@ void task_base::get_next_state(void)
 
 	while (!next_state_received) {
 		while (!command.isFresh()) {
+			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 1");
+
 			ReceiveSingleMessage(true);
+			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 2");
+
 		}
+		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 3");
 
 		command.markAsUsed();
 
@@ -212,7 +217,7 @@ void task_base::get_next_state(void)
 		{
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state ECP_ACKNOWLEDGE");
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::NEXT_STATE");
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
@@ -220,12 +225,16 @@ void task_base::get_next_state(void)
 				break;
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
+
 				// Reply with ACK
 				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
+
 				// Reply with NACK
 				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
@@ -244,8 +253,34 @@ bool task_base::peek_mp_message()
 
 	if (ReceiveSingleMessage(false)) {
 		if (command.isFresh()) {
-			return (mp_command.command == lib::END_MOTION);
+
+			switch (mp_command.command)
+			{
+				case lib::END_MOTION:
+
+					return true;
+
+					break;
+
+				case lib::STOP:
+					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
+
+					// Reply with ACK
+					reply.Send(ecp_reply);
+					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+					break;
+				default:
+					set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
+
+					// Reply with NACK
+					reply.Send(ecp_reply);
+					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+					break;
+			}
 		}
+
 	}
 
 	return false;
