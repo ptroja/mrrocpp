@@ -318,6 +318,17 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
 void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 {
+
+	// najpierw kasujemy znacznik swiezosci buforow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->reply.isFresh()) {
+
+						robot_node.second->reply.markAsUsed();
+
+					}
+				}
+
 	enum MP_STATE_ENUM
 	{
 		MP_RUNNING, MP_PAUSED
@@ -394,7 +405,6 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 								if (robot_node.second->reply.isFresh()) {
 									sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
 
-									robot_node.second->reply.markAsUsed();
 									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 									ecp_exit_from_while = true;
 								}
@@ -558,8 +568,6 @@ void task::resume_all()
 	 }
 	 */
 }
-
-
 
 void task::terminate_all()
 {
