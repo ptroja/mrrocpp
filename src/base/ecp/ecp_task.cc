@@ -223,6 +223,14 @@ void task_base::get_next_state(void)
 				reply.Send(ecp_reply);
 				next_state_received = true;
 				break;
+			case lib::PAUSE_TASK:
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::PAUSE_TASK");
+
+				// Reply with ACK
+				reply.Send(ecp_reply);
+				wait_for_resume();
+				break;
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
@@ -264,15 +272,23 @@ bool task_base::peek_mp_message()
 
 				case lib::STOP:
 					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::STOP");
 
 					// Reply with ACK
 					reply.Send(ecp_reply);
 					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					break;
+				case lib::PAUSE_TASK:
+					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::PAUSE_TASK");
+
+					// Reply with ACK
+					reply.Send(ecp_reply);
+					wait_for_resume();
+					break;
 				default:
 					set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::INCORRECT_MP_COMMAND");
 
 					// Reply with NACK
 					reply.Send(ecp_reply);
@@ -284,6 +300,41 @@ bool task_base::peek_mp_message()
 	}
 
 	return false;
+}
+
+void task_base::wait_for_resume()
+{
+	if (ReceiveSingleMessage(true)) {
+		command.markAsUsed();
+		switch (mp_command.command)
+		{
+			case lib::STOP:
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::STOP");
+
+				// Reply with ACK
+				reply.Send(ecp_reply);
+				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+				break;
+			case lib::RESUME_TASK:
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::RESUME_TASK");
+
+				// Reply with ACK
+				reply.Send(ecp_reply);
+				break;
+			default:
+				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::INCORRECT_MP_COMMAND");
+
+				// Reply with NACK
+				reply.Send(ecp_reply);
+				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+				break;
+		}
+
+	}
+
 }
 
 } // namespace task

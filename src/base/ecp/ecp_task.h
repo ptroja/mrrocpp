@@ -69,7 +69,7 @@ private:
 	 *
 	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
 	 */
-	InputBuffer<lib::MP_COMMAND_PACKAGE> command;
+	InputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief Returns MP command type
@@ -97,7 +97,7 @@ public:
 	lib::ECP_REPLY_PACKAGE ecp_reply;
 
 	//! Data buffer in the MP
-	OutputBuffer<lib::ECP_REPLY_PACKAGE> reply;
+	OutputBuffer <lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief ECP subtasks container
@@ -190,9 +190,14 @@ public:
 	 * @return true if the END_MOTION has been received
 	 */
 	bool peek_mp_message();
+
+	/**
+	 * @brief waits for resume os stop command from MP
+	 */
+	void wait_for_resume();
 };
 
-template<typename ECP_ROBOT_T>
+template <typename ECP_ROBOT_T>
 class _task : public task_base
 {
 public:
@@ -200,14 +205,17 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	_task(lib::configurator &_config) : task_base(_config)
-	{}
+	_task(lib::configurator &_config) :
+		task_base(_config)
+	{
+	}
 
 	/**
 	 * @brief Destructor
 	 */
 	virtual ~_task()
-	{}
+	{
+	}
 
 	/**
 	 * @brief Type of the associated robot
@@ -217,15 +225,15 @@ public:
 	/**
 	 * @brief Type of the specialized task class itself
 	 */
-	typedef _task<ECP_ROBOT_T> task_t;
+	typedef _task <ECP_ROBOT_T> task_t;
 
 	/**
 	 * @brief Associated single robot object shared pointer
 	 */
-	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
+	boost::shared_ptr <ECP_ROBOT_T> ecp_m_robot;
 };
 
-typedef _task<robot::ecp_robot> task;
+typedef _task <robot::ecp_robot> task;
 
 task_base* return_created_ecp_task(lib::configurator &_config);
 
