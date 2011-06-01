@@ -52,9 +52,16 @@ void swarm_demo::main_task_algorithm(void)
 	sr_ecp_msg->message("Swarm Demo (MP) START");
 
 	sr_ecp_msg->message("Both Joint");
+	sr_ecp_msg->message("set_next_ecps_state track");
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_track_joint.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+
+	sr_ecp_msg->message("set_next_ecps_state postument");
+
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/swarm_demo/trajectory_postument_joint.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+	sr_ecp_msg->message("run_extended_empty_gen_and_wait");
+
 	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Both Bias");

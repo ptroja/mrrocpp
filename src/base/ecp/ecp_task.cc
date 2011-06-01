@@ -32,12 +32,8 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config),
-	MP(lib::MP_SECTION),
-	command("command"),
-	reply(MP, _config.section_name),
-	mp_command(command.access),
-	continuous_coordination(false)
+	ecp_mp::task::task(_config), MP(lib::MP_SECTION), command("command"), reply(MP, _config.section_name),
+			mp_command(command.access), continuous_coordination(false)
 {
 	initialize_communication();
 }
@@ -97,14 +93,13 @@ void task_base::initialize_communication()
 	const std::string sr_net_attach_point = config.get_sr_attach_point();
 
 	// Obiekt do komuniacji z SR
-	sr_ecp_msg = (boost::shared_ptr<lib::sr_ecp>) new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point);
+	sr_ecp_msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, ecp_attach_point, sr_net_attach_point);
 
 	//	std::cout << "ecp: Opening MP pulses channel at '" << mp_pulse_attach_point << "'" << std::endl;
 
 	const std::string trigger_attach_point = config.get_ecp_trigger_attach_point();
 
-	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL)
-	{
+	if ((trigger_attach = messip::port_create(trigger_attach_point)) == NULL) {
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
@@ -150,7 +145,7 @@ void task_base::subtasks_conditional_execution()
 // Petla odbierania wiadomosci.
 void task_base::wait_for_stop(void)
 {
-	while(command.Get().command != lib::STOP) {
+	while (command.Get().command != lib::STOP) {
 		ReceiveSingleMessage(true);
 	}
 }
@@ -161,8 +156,8 @@ void task_base::wait_for_start(void)
 	// Awaiting for the START command
 	bool start_received = false;
 
-	while(!start_received) {
-		while(!command.isFresh()) {
+	while (!start_received) {
+		while (!command.isFresh()) {
 			ReceiveSingleMessage(true);
 		}
 
@@ -202,10 +197,12 @@ void task_base::wait_for_start(void)
 // Oczekiwanie na kolejne zlecenie od MP
 void task_base::get_next_state(void)
 {
+	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state poczatek");
+
 	bool next_state_received = false;
 
-	while(!next_state_received) {
-		while(!command.isFresh()) {
+	while (!next_state_received) {
+		while (!command.isFresh()) {
 			ReceiveSingleMessage(true);
 		}
 
@@ -215,6 +212,8 @@ void task_base::get_next_state(void)
 		{
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state ECP_ACKNOWLEDGE");
+
 				// Reply with ACK
 				reply.Send(ecp_reply);
 				next_state_received = true;
@@ -243,7 +242,7 @@ bool task_base::peek_mp_message()
 {
 	command.markAsUsed();
 
-	if(ReceiveSingleMessage(false)) {
+	if (ReceiveSingleMessage(false)) {
 		if (command.isFresh()) {
 			return (mp_command.command == lib::END_MOTION);
 		}

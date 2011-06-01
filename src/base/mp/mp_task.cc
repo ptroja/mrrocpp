@@ -271,6 +271,7 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 		// sprawdzenie czy wszystkie roboty są w stanie TASK_TERMINATED
 		// Jesli tak => wyjscie z petli i w konsekwencji wyjscie z calej metody
 		if (all_robots_terminated) {
+			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "run_extended_empty_gen_and_wait break");
 			break;
 		}
 
@@ -330,7 +331,7 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 	// 1 0 -> enter
 	// 1 1 -> not enter
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
-
+		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message loop");
 		bool block;
 
 		if (mp_state == MP_RUNNING) {
@@ -344,6 +345,7 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 		if (ReceiveSingleMessage(block)) {
 			// UI Pulse arrived
 			if (ui_pulse.isFresh()) {
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse ui_pulse.isFresh()");
 
 				ui_pulse.markAsUsed();
 
@@ -382,9 +384,13 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
+				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_pulse");
+
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 							{
 								if (robot_node.second->reply.isFresh()) {
+									sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
+
 									robot_node.second->reply.markAsUsed();
 									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 									ecp_exit_from_while = true;
@@ -399,6 +405,8 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 			}
 		}
 	}
+	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message end");
+
 }
 
 // -------------------------------------------------------------------
@@ -423,6 +431,11 @@ void task::wait_for_start()
 
 	while (ui_pulse.Get() != MP_START) {
 		ReceiveSingleMessage(true);
+
+		if (ui_pulse.isFresh()) {
+			ui_pulse.markAsUsed();
+		}
+
 	}
 
 	sr_ecp_msg->message("mp user program is running");
@@ -436,6 +449,9 @@ void task::wait_for_stop(void)
 
 	while (ui_pulse.Get() != MP_STOP) {
 		ReceiveSingleMessage(true);
+		if (ui_pulse.isFresh()) {
+			ui_pulse.markAsUsed();
+		}
 	}
 }
 
