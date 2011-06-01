@@ -59,8 +59,7 @@ bool haptic_stiffness::first_step()
 	irp6ot->communicate_with_ecp = true;
 	irp6p->communicate_with_ecp = true;
 
-	irp6ot->continuous_coordination = true;
-	irp6p->continuous_coordination = true;
+
 
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;

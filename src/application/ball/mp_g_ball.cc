@@ -91,8 +91,7 @@ bool ball::first_step()
 	irp6ot->communicate_with_ecp = true;
 	irp6p->communicate_with_ecp = true;
 
-	irp6ot->continuous_coordination = true;
-	irp6p->continuous_coordination = true;
+
 
 	setup_command(*irp6ot);
 	setup_command(*irp6p);

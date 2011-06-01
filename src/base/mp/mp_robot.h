@@ -62,12 +62,6 @@ public:
 	 */
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
-	/**
-	 * @brief continuous coordination flag
-	 *
-	 * if it set it causes every macrostep communication with ECP
-	 */
-	bool continuous_coordination;
 
 	/**
 	 * @brief command buffer for ecp
