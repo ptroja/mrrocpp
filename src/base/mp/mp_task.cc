@@ -499,29 +499,30 @@ void task::pause_all(const common::robots_t & _robot_m)
 				{
 					robot_node.second->pause_ecp();
 				}
+	/*
+	 // Container for awaiting acknowledgements
+	 common::robots_t not_confirmed = _robot_m;
 
-	// Container for awaiting acknowledgements
-	common::robots_t not_confirmed = _robot_m;
+	 //	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	 //	{
+	 //		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
+	 //	}
 
-	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-	//	{
-	//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
-	//	}
+	 // Wait for ACK from all the robots
+	 while (!not_confirmed.empty()) {
+	 ReceiveSingleMessage(true);
 
-	// Wait for ACK from all the robots
-	while (!not_confirmed.empty()) {
-		ReceiveSingleMessage(true);
+	 BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	 {
+	 if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+	 == lib::ECP_ACKNOWLEDGE) {
+	 robot_node.second->reply.markAsUsed();
+	 not_confirmed.erase(robot_node.first);
 
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-					{
-						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
-								== lib::ECP_ACKNOWLEDGE) {
-							robot_node.second->reply.markAsUsed();
-							not_confirmed.erase(robot_node.first);
-
-						}
-					}
-	}
+	 }
+	 }
+	 }
+	 */
 }
 
 void task::resume_all(const common::robots_t & _robot_m)
@@ -532,28 +533,30 @@ void task::resume_all(const common::robots_t & _robot_m)
 					robot_node.second->resume_ecp();
 				}
 
-	// Container for awaiting acknowledgements
-	common::robots_t not_confirmed = _robot_m;
+	/*
+	 // Container for awaiting acknowledgements
+	 common::robots_t not_confirmed = _robot_m;
 
-	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-	//	{
-	//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
-	//	}
+	 //	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	 //	{
+	 //		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
+	 //	}
 
-	// Wait for ACK from all the robots
-	while (!not_confirmed.empty()) {
-		ReceiveSingleMessage(true);
+	 // Wait for ACK from all the robots
+	 while (!not_confirmed.empty()) {
+	 ReceiveSingleMessage(true);
 
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-					{
-						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
-								== lib::ECP_ACKNOWLEDGE) {
-							robot_node.second->reply.markAsUsed();
-							not_confirmed.erase(robot_node.first);
+	 BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	 {
+	 if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+	 == lib::ECP_ACKNOWLEDGE) {
+	 robot_node.second->reply.markAsUsed();
+	 not_confirmed.erase(robot_node.first);
 
-						}
-					}
-	}
+	 }
+	 }
+	 }
+	 */
 }
 
 void task::execute_all(const common::robots_t & _robot_m)
