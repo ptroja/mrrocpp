@@ -453,6 +453,8 @@ void task::wait_for_stop(void)
 			ui_pulse.markAsUsed();
 		}
 	}
+	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_stop koniec");
+
 }
 
 void task::start_all(const common::robots_t & _robot_m)
@@ -504,6 +506,7 @@ void task::execute_all(const common::robots_t & _robot_m)
 
 void task::terminate_all(const common::robots_t & _robot_m)
 {
+	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all poczatek");
 	// Zatrzymanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
 				{
@@ -515,12 +518,16 @@ void task::terminate_all(const common::robots_t & _robot_m)
 
 	// Wait for ACK from all the robots
 	while (!not_confirmed.empty()) {
+		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all not_confirmed.empty() poczatek");
 		ReceiveSingleMessage(true);
+		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all not_confirmed.empty() za receive ReceiveSingleMessage");
 
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
 					{
 						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
-								== lib::TASK_TERMINATED) {
+								== lib::ECP_ACKNOWLEDGE) {
+							sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all not_confirmed.empty() lib::TASK_TERMINATED");
+
 							not_confirmed.erase(robot_node.first);
 						}
 					}
