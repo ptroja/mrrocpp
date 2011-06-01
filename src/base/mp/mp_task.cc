@@ -86,7 +86,7 @@ void task::stop_and_terminate()
 	} catch (common::MP_main_error & e) {
 		exit(EXIT_FAILURE);
 	}
-	terminate_all(robot_m);
+	terminate_all();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
@@ -316,7 +316,7 @@ void task::run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, co
 //     1) block for ECP pulse and react to UI pulses
 // otherwise
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
-void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator & the_generator)
+void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 {
 	enum MP_STATE_ENUM
 	{
@@ -352,12 +352,12 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 				switch (ui_pulse.Get())
 				{
 					case MP_STOP:
-						terminate_all(_robot_m);
+						terminate_all();
 						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					case MP_PAUSE:
 
 						mp_state = MP_PAUSED;
-						pause_all(_robot_m);
+						pause_all();
 						ui_exit_from_while = false;
 						continue;
 					default:
@@ -367,7 +367,7 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 				if (mp_state == MP_PAUSED) {// oczekujemy na resume
 					if (ui_pulse.Get() == MP_RESUME) { // odebrano resume
 						mp_state = MP_RUNNING;
-						resume_all(_robot_m);
+						resume_all();
 						ui_exit_from_while = true;
 					}
 				} else {
@@ -460,16 +460,16 @@ void task::wait_for_stop(void)
 
 }
 
-void task::start_all(const common::robots_t & _robot_m)
+void task::start_all()
 {
 	// Wystartowanie wszystkich ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->start_ecp();
 				}
 
 	// Container for awaiting acknowledgements
-	common::robots_t not_confirmed = _robot_m;
+	common::robots_t not_confirmed = robot_m;
 
 	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
 	//	{
@@ -492,10 +492,10 @@ void task::start_all(const common::robots_t & _robot_m)
 	}
 }
 
-void task::pause_all(const common::robots_t & _robot_m)
+void task::pause_all()
 {
 	// Wystartowanie wszystkich ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->pause_ecp();
 				}
@@ -525,10 +525,10 @@ void task::pause_all(const common::robots_t & _robot_m)
 	 */
 }
 
-void task::resume_all(const common::robots_t & _robot_m)
+void task::resume_all()
 {
 	// Wystartowanie wszystkich ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->resume_ecp();
 				}
@@ -559,32 +559,19 @@ void task::resume_all(const common::robots_t & _robot_m)
 	 */
 }
 
-void task::execute_all(const common::robots_t & _robot_m)
-{
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
-				{
-					if (robot_node.second->communicate_with_ecp) {
-						if ((robot_node.second->mp_command.command == lib::STOP)
-								|| (robot_node.second->mp_command.command == lib::END_MOTION)
-								|| (robot_node.second->mp_command.command == lib::NEXT_STATE)
-								|| (robot_node.second->continuous_coordination)) {
-							robot_node.second->execute_motion();
-						}
-					}
-				}
-}
 
-void task::terminate_all(const common::robots_t & _robot_m)
+
+void task::terminate_all()
 {
 	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all poczatek");
 	// Zatrzymanie wszystkich ECP
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
 					robot_node.second->terminate_ecp();
 				}
 
-	common::robots_t not_confirmed = _robot_m;
+	common::robots_t not_confirmed = robot_m;
 
 	// Wait for ACK from all the robots
 	while (!not_confirmed.empty()) {

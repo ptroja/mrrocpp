@@ -37,19 +37,33 @@ void generator::Move()
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate_with_ecp')
-		mp_t.execute_all(robot_m);
+		execute_all();
 
 		// odczytanie danych z wszystkich czujnikow
 		mp_t.all_sensors_get_reading(sensor_m);
 
 		// oczekiwanie na puls z ECP lub UI
-		mp_t.receive_ui_or_ecp_message(mp_t.robot_m, *this);
+		mp_t.receive_ui_or_ecp_message(*this);
 
 		node_counter++;
 	} while (next_step());
 }
 // ------------------------------------------------------------------------
 
+void generator::execute_all()
+{
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->communicate_with_ecp) {
+						if ((robot_node.second->mp_command.command == lib::STOP)
+								|| (robot_node.second->mp_command.command == lib::END_MOTION)
+								|| (robot_node.second->mp_command.command == lib::NEXT_STATE)
+								|| (robot_node.second->continuous_coordination)) {
+							robot_node.second->execute_motion();
+						}
+					}
+				}
+}
 
 MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
 	error_class(err0), error_no(err1)

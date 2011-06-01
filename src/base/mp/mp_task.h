@@ -202,30 +202,25 @@ public:
 	 * @brief starts all ECP's
 	 * it sends special MP command
 	 */
-	void start_all(const common::robots_t & _robot_m);
+	void start_all();
 
 	/**
 	 * @brief pause all ECP's
 	 * it sends special MP command
 	 */
-	void pause_all(const common::robots_t & _robot_m);
+	void pause_all();
 
 	/**
 	 * @brief resume all ECP's
 	 * it sends special MP command
 	 */
-	void resume_all(const common::robots_t & _robot_m);
+	void resume_all();
 
 	/**
 	 * @brief termianted all ECP's
 	 * it sends special MP command
 	 */
-	void terminate_all(const common::robots_t & _robot_m);
-
-	/**
-	 * @brief communicates with all ECP's that are set to communicate
-	 */
-	void execute_all(const common::robots_t & _robot_m);
+	void terminate_all();
 
 	/**
 	 * @brief main task algorithm
@@ -241,7 +236,7 @@ public:
 	/**
 	 * @brief receives pulse from UI or ECP
 	 */
-	void receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::generator& the_generator);
+	void receive_ui_or_ecp_message(generator::generator& the_generator);
 
 private:
 	friend class robot::robot;
