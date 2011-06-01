@@ -78,7 +78,7 @@ public:
 
 	//! Data buffer with messages from the ECP
 	//! TODO: users should not use this data directly, only the 'const ecp_reply_package'.
-	InputBuffer<lib::ECP_REPLY_PACKAGE> reply;
+	InputBuffer <lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief reply buffer from ecp
@@ -127,6 +127,16 @@ public:
 	 * @brief sends a message to start ECP task with error handling
 	 */
 	void start_ecp(void);
+
+	/**
+	 * @brief sends a message to pause ECP task
+	 */
+	void pause_ecp(void);
+
+	/**
+	 * @brief sends a message to resume ECP task
+	 */
+	void resume_ecp(void);
 };
 
 /*!

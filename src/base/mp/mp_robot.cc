@@ -51,6 +51,20 @@ void robot::start_ecp(void)
 	command.Send(mp_command);
 }
 
+void robot::pause_ecp(void)
+{
+	mp_command.command = lib::PAUSE_TASK;
+
+	command.Send(mp_command);
+}
+
+void robot::resume_ecp(void)
+{
+	mp_command.command = lib::RESUME_TASK;
+
+	command.Send(mp_command);
+}
+
 void robot::execute_motion(void)
 {
 	command.Send(mp_command);

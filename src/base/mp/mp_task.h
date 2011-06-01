@@ -92,8 +92,7 @@ public:
 	 */
 	typedef enum _MP_RECEIVE_PULSE_ENUM
 	{
-		NONBLOCK = 0,
-		BLOCK = 1
+		NONBLOCK = 0, BLOCK = 1
 	} RECEIVE_PULSE_MODE;
 
 	/**
@@ -122,7 +121,7 @@ public:
 	 * @param ... robots labels
 	 */
 	void
-	set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+			set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -170,7 +169,7 @@ public:
 	 * @param robotsWaitingForTaskTermination robot to wait list
 	 */
 	void
-	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
+			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 	/**
 	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
@@ -179,7 +178,7 @@ public:
 	 * @param wait_robots container with robots to wait for task termination
 	 */
 	void
-	run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, common::robots_t & robots_to_wait_for_task_termination);
+			run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, common::robots_t & robots_to_wait_for_task_termination);
 
 	/**
 	 * @brief executes delay
@@ -198,11 +197,24 @@ public:
 	 */
 	void wait_for_stop(void);// by Y&W dodany tryb
 
+
 	/**
 	 * @brief starts all ECP's
 	 * it sends special MP command
 	 */
 	void start_all(const common::robots_t & _robot_m);
+
+	/**
+	 * @brief pause all ECP's
+	 * it sends special MP command
+	 */
+	void pause_all(const common::robots_t & _robot_m);
+
+	/**
+	 * @brief resume all ECP's
+	 * it sends special MP command
+	 */
+	void resume_all(const common::robots_t & _robot_m);
 
 	/**
 	 * @brief termianted all ECP's
@@ -237,7 +249,7 @@ private:
 	/**
 	 * @brief pulse from UI
 	 */
-	InputBuffer<char> ui_pulse;
+	InputBuffer <char> ui_pulse;
 
 	/**
 	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
@@ -246,7 +258,7 @@ private:
 	 * @return desired pulse found
 	 */
 	bool
-	check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
 };
 
 /**

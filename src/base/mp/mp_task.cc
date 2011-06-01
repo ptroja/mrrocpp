@@ -355,7 +355,9 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 						terminate_all(_robot_m);
 						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 					case MP_PAUSE:
+
 						mp_state = MP_PAUSED;
+						pause_all(_robot_m);
 						ui_exit_from_while = false;
 						continue;
 					default:
@@ -365,6 +367,7 @@ void task::receive_ui_or_ecp_message(common::robots_t & _robot_m, generator::gen
 				if (mp_state == MP_PAUSED) {// oczekujemy na resume
 					if (ui_pulse.Get() == MP_RESUME) { // odebrano resume
 						mp_state = MP_RUNNING;
+						resume_all(_robot_m);
 						ui_exit_from_while = true;
 					}
 				} else {
@@ -480,7 +483,71 @@ void task::start_all(const common::robots_t & _robot_m)
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
 					{
 						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
-								== lib::TASK_TERMINATED) {
+								== lib::ECP_ACKNOWLEDGE) {
+							robot_node.second->reply.markAsUsed();
+							not_confirmed.erase(robot_node.first);
+
+						}
+					}
+	}
+}
+
+void task::pause_all(const common::robots_t & _robot_m)
+{
+	// Wystartowanie wszystkich ECP
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+				{
+					robot_node.second->pause_ecp();
+				}
+
+	// Container for awaiting acknowledgements
+	common::robots_t not_confirmed = _robot_m;
+
+	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	//	{
+	//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
+	//	}
+
+	// Wait for ACK from all the robots
+	while (!not_confirmed.empty()) {
+		ReceiveSingleMessage(true);
+
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+					{
+						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+								== lib::ECP_ACKNOWLEDGE) {
+							robot_node.second->reply.markAsUsed();
+							not_confirmed.erase(robot_node.first);
+
+						}
+					}
+	}
+}
+
+void task::resume_all(const common::robots_t & _robot_m)
+{
+	// Wystartowanie wszystkich ECP
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, _robot_m)
+				{
+					robot_node.second->resume_ecp();
+				}
+
+	// Container for awaiting acknowledgements
+	common::robots_t not_confirmed = _robot_m;
+
+	//	BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+	//	{
+	//		robot_node.second->ecp_reply_package.reply = lib::INCORRECT_MP_COMMAND;
+	//	}
+
+	// Wait for ACK from all the robots
+	while (!not_confirmed.empty()) {
+		ReceiveSingleMessage(true);
+
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
+					{
+						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
+								== lib::ECP_ACKNOWLEDGE) {
 							robot_node.second->reply.markAsUsed();
 							not_confirmed.erase(robot_node.first);
 
@@ -526,7 +593,7 @@ void task::terminate_all(const common::robots_t & _robot_m)
 					{
 						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
 								== lib::ECP_ACKNOWLEDGE) {
-							sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all not_confirmed.empty() lib::TASK_TERMINATED");
+							sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all not_confirmed.empty() lib::ECP_ACKNOWLEDGE");
 
 							not_confirmed.erase(robot_node.first);
 						}

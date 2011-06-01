@@ -167,7 +167,7 @@ void task_base::wait_for_start(void)
 		{
 			case lib::START_TASK:
 				// by Y - ECP_ACKNOWLEDGE zamienione na lib::TASK_TERMINATED w celu uproszczenia oprogramowania zadan wielorobotowych
-				set_ecp_reply(lib::TASK_TERMINATED);
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
