@@ -407,6 +407,9 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 
 									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 									ecp_exit_from_while = true;
+
+									robot_node.second->ecp_errors_handler();
+
 								}
 							}
 			} else {

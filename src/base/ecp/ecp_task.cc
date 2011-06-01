@@ -177,7 +177,7 @@ void task_base::wait_for_start(void)
 
 				break;
 			case lib::STOP:
-				set_ecp_reply(lib::TASK_TERMINATED);
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				// Reply with ACK
 				reply.Send(ecp_reply);
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);

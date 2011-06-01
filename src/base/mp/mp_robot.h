@@ -62,6 +62,10 @@ public:
 	 */
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
+	/**
+	 * @brief ecp_errorrs_handler and detector
+	 */
+	void ecp_errors_handler();
 
 	/**
 	 * @brief command buffer for ecp

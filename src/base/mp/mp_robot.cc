@@ -32,9 +32,8 @@ robot::robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _numbe
 	ecp_mp::robot(l_robot_name), number_of_servos(_number_of_servos),
 			ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)),
 			ecp(mp_object_l.config.get_ecp_section(robot_name)), command(ecp, "command"), mp_object(mp_object_l),
-			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-			reply(mp_object_l.config.get_ecp_section(robot_name)), ecp_reply_package(reply.access),
-			communicate_with_ecp(true)
+			sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), reply(mp_object_l.config.get_ecp_section(robot_name)),
+			ecp_reply_package(reply.access), communicate_with_ecp(true)
 {
 	mp_object.registerBuffer(reply);
 }
@@ -49,6 +48,7 @@ void robot::start_ecp(void)
 	mp_command.command = lib::START_TASK;
 
 	command.Send(mp_command);
+
 }
 
 void robot::pause_ecp(void)
@@ -56,6 +56,7 @@ void robot::pause_ecp(void)
 	mp_command.command = lib::PAUSE_TASK;
 
 	command.Send(mp_command);
+
 }
 
 void robot::resume_ecp(void)
@@ -77,6 +78,15 @@ void robot::terminate_ecp(void)
 	sr_ecp_msg.message(lib::NON_FATAL_ERROR, "terminate_ecp");
 
 	command.Send(mp_command);
+}
+
+void robot::ecp_errors_handler()
+{
+
+	if (reply.Get().reply == lib::ERROR_IN_ECP) {
+		// Odebrano od ECP informacje o bledzie
+		throw MP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);
+	}
 }
 
 MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
