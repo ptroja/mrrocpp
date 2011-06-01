@@ -79,7 +79,9 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 			sample.requestSentTimeNanoseconds = ts.tv_nsec;
 			sample.requestSentTimeSeconds = ts.tv_sec;
 
-			Types::Mrrocpp_Proxy::Reading* reading = retrieve_reading();
+			retrieve_reading();
+			Types::Mrrocpp_Proxy::Reading* reading = get_reading();
+
 			sample.processingStartSeconds = reading->processingStartSeconds;
 			sample.processingStartNanoseconds = reading->processingStartNanoseconds;
 
@@ -91,7 +93,10 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		case discode_sensor::DSS_CONNECTED: // processing in DisCODe hasn't finished yet
 		case discode_sensor::DSS_REQUEST_SENT: // communication or synchronisation in DisCODe took too long
 			steps_without_reading++;
+			sample.is_reading_repreated = true;
 			break;
+		default: // error
+			log_dbg("visual_servo::get_position_change(): error\n");
 	}
 
 	if (steps_without_reading > max_steps_without_reading) {

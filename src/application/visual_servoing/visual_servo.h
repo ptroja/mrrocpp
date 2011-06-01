@@ -120,7 +120,9 @@ protected:
 	/**
 	 * This method should retrieve reading from discode_sensor and store it for later use.
 	 */
-	virtual Types::Mrrocpp_Proxy::Reading* retrieve_reading() = 0;
+	virtual void retrieve_reading() = 0;
+
+	virtual Types::Mrrocpp_Proxy::Reading* get_reading() = 0;
 
 	/**
 	 * This method should check latest reading, if object in that reading is visible.

@@ -31,7 +31,8 @@ public:
 					mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
 	virtual ~pb_visual_servo();
 protected:
-	virtual Types::Mrrocpp_Proxy::PBReading* retrieve_reading();
+	virtual void retrieve_reading();
+	virtual Types::Mrrocpp_Proxy::PBReading* get_reading();
 	virtual bool is_object_visible_in_latest_reading();
 
 	Types::Mrrocpp_Proxy::PBReading reading;
