@@ -27,14 +27,20 @@ namespace epos {
  */
 template<int NUM_OF_MOTION_SEGMENTS, int NUM_OF_SERVOS>
 struct ipm_executor {
-	//! Parameterized self type
-	typedef ipm_executor<NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
 
+private:
 	//! Thread id
 	boost::thread tid;
 
+public:
+	//! Parameterized self type
+	typedef ipm_executor<NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
+
 	//! Axes container
 	boost::array<epos::epos *, NUM_OF_SERVOS> axes;
+
+	//! Check if there is a motion request for a given axis
+	Eigen::Matrix <bool, 1, NUM_OF_SERVOS> is_moving;
 
 	//! Position data vector
 	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS+1, NUM_OF_SERVOS> p;
@@ -54,6 +60,7 @@ struct ipm_executor {
 	//! Flag to be set by the client
 	bool job_to_do;
 
+	//! Constructor
 	ipm_executor() :
 		job_to_do(false)
 	{
@@ -62,11 +69,16 @@ struct ipm_executor {
 		);
 	}
 
+	//! Destructor
 	~ipm_executor()
 	{
 		tid.interrupt();
 		tid.join();
 	}
+
+private:
+	//! Node to query about motion status
+	int queryNodeId;
 
 	//! Main thread routine
 	void operator()()
@@ -78,8 +90,24 @@ struct ipm_executor {
 				cond.wait(lock);
 			}
 
+			//! Find the node, which is executing a motion
+			queryNodeId = -1;
+			for(int i = 0; i < NUM_OF_SERVOS; ++i) {
+				if (is_moving(0,i)) {
+					queryNodeId = i;
+					break;
+				}
+			}
+
+			if (queryNodeId == -1)
+				continue;
+
 			// Setup motion parameters
 			for (size_t i = 0; i < axes.size(); ++i) {
+				// Skip axes, which will be not executing a motion
+				if(!is_moving(0,i))
+					continue;
+
 				axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
 				// TODO: setup acceleration and velocity limit values
 				axes[i]->clearPvtBuffer();
@@ -107,7 +135,9 @@ struct ipm_executor {
 			// Start motion
 			for (size_t i = 0; i < axes.size(); ++i) {
 				// FIXME: this motion type should be initiated with a CAN broadcast message
-				axes[i]->startInterpolatedPositionMotion();
+				if(is_moving(0,i)) {
+					axes[i]->startInterpolatedPositionMotion();
+				}
 			}
 
 			// continuously upload the rest of the trajectory
@@ -117,12 +147,17 @@ struct ipm_executor {
 				 *  Note: we check only the first axis.
 				 */
 				while(! epos::checkInterpolationBufferUnderflowWarning(
-						axes[0]->readInterpolationBufferStatus()
+						axes[queryNodeId]->readInterpolationBufferStatus()
 						)) {
 					// do nothing
 				}
 
 				for (size_t i = 0; i < axes.size(); ++i) {
+					// Skip axes, which will be not executing a motion
+					if(!is_moving(0,i))
+						continue;
+
+					// Send the data
 					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
 					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
 					fflush(stdout);
