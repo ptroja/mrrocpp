@@ -615,6 +615,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							}//: for axes
 						}//: else
 #endif
+						// Check which motor moves.
+						Eigen::Matrix <bool, 1, lib::spkm::NUM_OF_SERVOS> change;
+						check_pvt_translocation <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (p, change);
 
 						// Execute motion
 						if (!robot_test_mode) {
@@ -622,7 +625,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							for (size_t i = 0; i < axes.size(); ++i) {
 
 								// If no translocation is required for given axis - skip the motion (in order to save time).
-								if (p(0,i) == p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i))
+								if (!change(i))
 									continue;
 
 								// Set motion parameters.
@@ -665,7 +668,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Start motion
 						for (size_t i = 0; i < axes.size(); ++i) {
 							// If no translocation is required for given axis - skip the motion (in order to save time).
-							if (p(0,i) == p(lib::spkm::NUM_OF_MOTION_SEGMENTS,i))
+							if (!change(i))
 								continue;
 
 							if (!robot_test_mode) {
