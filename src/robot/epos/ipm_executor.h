@@ -40,7 +40,7 @@ public:
 	boost::array<epos::epos *, NUM_OF_SERVOS> axes;
 
 	//! Check if there is a motion request for a given axis
-	Eigen::Matrix <bool, 1, NUM_OF_SERVOS> is_moving;
+	boost::array<bool, NUM_OF_SERVOS> is_moving;
 
 	//! Position data vector
 	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS+1, NUM_OF_SERVOS> p;
@@ -93,7 +93,7 @@ private:
 			//! Find the node, which is executing a motion
 			queryNodeId = -1;
 			for(int i = 0; i < NUM_OF_SERVOS; ++i) {
-				if (is_moving(0,i)) {
+				if (is_moving[i]) {
 					queryNodeId = i;
 					break;
 				}
@@ -105,7 +105,7 @@ private:
 			// Setup motion parameters
 			for (size_t i = 0; i < axes.size(); ++i) {
 				// Skip axes, which will be not executing a motion
-				if(!is_moving(0,i))
+				if(!is_moving[i])
 					continue;
 
 				axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
@@ -135,7 +135,7 @@ private:
 			// Start motion
 			for (size_t i = 0; i < axes.size(); ++i) {
 				// FIXME: this motion type should be initiated with a CAN broadcast message
-				if(is_moving(0,i)) {
+				if(is_moving[i]) {
 					axes[i]->startInterpolatedPositionMotion();
 				}
 			}
@@ -154,7 +154,7 @@ private:
 
 				for (size_t i = 0; i < axes.size(); ++i) {
 					// Skip axes, which will be not executing a motion
-					if(!is_moving(0,i))
+					if(!is_moving[i])
 						continue;
 
 					// Send the data
