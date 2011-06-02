@@ -47,6 +47,16 @@ void generator::Move()
 
 		node_counter++;
 	} while (next_step());
+
+	// kasujemy znacznik swiezosci buforow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
+				{
+					if (robot_node.second->reply.isFresh()) {
+
+						robot_node.second->reply.markAsUsed();
+
+					}
+				}
 }
 // ------------------------------------------------------------------------
 

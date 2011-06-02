@@ -59,22 +59,20 @@ bool continously_coordinated::next_step()
 		// wlacz komunikacje ze wszystkimi robotami
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 					{
-						if (robot_node.second->reply.isFresh()) {
 
-							robot_node.second->communicate_with_ecp = true;
-						}
+						robot_node.second->communicate_with_ecp = true;
+
 					}
 
 		return next_step_inside();
-		// w pzeciwnym wypadku wylaczamy komuniakacje (w sensie wysylania rozkazu wiadomosci)
+		// w przeciwnym wypadku wylaczamy komuniakacje (w sensie wysylania rozkazu wiadomosci)
 	} else {
 		// wylacz komunikacje ze wszystkimi robotami
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 					{
-						if (robot_node.second->reply.isFresh()) {
 
-							robot_node.second->communicate_with_ecp = false;
-						}
+						robot_node.second->communicate_with_ecp = false;
+
 					}
 	}
 	return true;
