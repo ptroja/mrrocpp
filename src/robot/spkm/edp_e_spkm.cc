@@ -37,11 +37,11 @@ using namespace mrrocpp::lib::pvat;
 using namespace std;
 
 const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
-const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 2000UL, 2000UL, 2000UL, 2000UL, 2000UL, 2000UL };
+const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
+const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
 
-const uint32_t effector::MotorVmax[lib::spkm::NUM_OF_SERVOS] = { 10000UL, 10000UL, 10000UL, 10000UL, 10000UL, 10000UL };
-const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 25000UL, 25000UL, 25000UL, 25000UL, 25000UL, 25000UL };
+const uint32_t effector::MotorVmax[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
 
 
 
