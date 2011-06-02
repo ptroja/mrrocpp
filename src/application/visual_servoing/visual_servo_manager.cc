@@ -3,6 +3,8 @@
  *      Author: mboryn
  */
 
+#include <algorithm>
+
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 
@@ -10,6 +12,7 @@
 
 using namespace logger;
 using namespace mrrocpp::ecp::servovision;
+using namespace std;
 
 namespace mrrocpp {
 
@@ -19,12 +22,19 @@ namespace common {
 
 namespace generator {
 
+const int visual_servo_manager::motion_steps_default = 30;
+const int visual_servo_manager::motion_steps_min = 10;
+const int visual_servo_manager::motion_steps_max = 60;
+const int visual_servo_manager::motion_steps_value_in_step_no = 3;
+const double visual_servo_manager::step_time = 0.002;
+
 visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
-		common::generator::generator(ecp_task), current_position_saved(false), max_speed(0), max_angular_speed(0),
+	common::generator::generator(ecp_task), current_position_saved(false), max_speed(0), max_angular_speed(0),
 			max_acceleration(0), max_angular_acceleration(0)
 {
 
-	motion_steps = ecp_task.config.exists("motion_steps", section_name) ? ecp_task.config.value<unsigned int>("motion_steps", section_name) : motion_steps_default;
+	motion_steps
+			= ecp_task.config.exists("motion_steps", section_name) ? ecp_task.config.value <unsigned int> ("motion_steps", section_name) : motion_steps_default;
 
 	dt = motion_steps * step_time;
 
@@ -43,7 +53,7 @@ visual_servo_manager::~visual_servo_manager()
 
 bool visual_servo_manager::first_step()
 {
-	log_dbg("visual_servo_manager::first_step() begin\n");
+	motion_steps = motion_steps_default;
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
@@ -53,14 +63,14 @@ bool visual_servo_manager::first_step()
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = motion_steps;
-	the_robot->ecp_command.value_in_step_no = motion_steps - 3;
-	log_dbg("visual_servo_manager::first_step() begin1\n");
+	the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	dt = motion_steps * step_time;
+
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
 	current_position_saved = false;
-	log_dbg("visual_servo_manager::first_step() begin2\n");
 
 	prev_velocity.setZero();
 	prev_angular_velocity.setZero();
@@ -68,11 +78,11 @@ bool visual_servo_manager::first_step()
 	angular_velocity.setZero();
 	acceleration.setZero();
 	angular_acceleration.setZero();
-	log_dbg("visual_servo_manager::first_step() begin3\n");
+
 	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
-	log_dbg("visual_servo_manager::first_step() begin4\n");
+	log_dbg("visual_servo_manager::first_step() end\n");
 	return true;
 }
 
@@ -101,10 +111,6 @@ bool visual_servo_manager::next_step()
 	// update next position, because it may have changed by velocity and acceleration constraints
 	next_position = current_position * position_change;
 
-	// prepare command to EDP
-	the_robot->ecp_command.instruction_type = lib::SET_GET;
-	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
-
 	// save next position
 	current_position = next_position;
 
@@ -116,6 +122,15 @@ bool visual_servo_manager::next_step()
 			any_condition_met = true;
 		}
 	}
+
+	// prepare command to EDP
+	motion_steps = new_motion_steps;
+
+	the_robot->ecp_command.instruction_type = lib::SET_GET;
+	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
+	the_robot->ecp_command.motion_steps = motion_steps;
+	the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	dt = motion_steps * step_time;
 
 	return !any_condition_met;
 } // next_step()
@@ -134,7 +149,7 @@ void visual_servo_manager::constrain_position(lib::Homog_matrix & new_position)
 
 		double d = translation.norm();
 
-		if(nearest_allowed_area_distance > d){
+		if (nearest_allowed_area_distance > d) {
 			nearest_allowed_area_distance = d;
 			constrained_position = c1;
 		}
@@ -237,6 +252,28 @@ double visual_servo_manager::get_angular_acceleration() const
 const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& visual_servo_manager::get_servos() const
 {
 	return servos;
+}
+
+double visual_servo_manager::get_dt() const
+{
+	return dt;
+}
+
+void visual_servo_manager::set_new_motion_steps(int new_motion_steps)
+{
+	this->new_motion_steps = min(new_motion_steps, motion_steps_max);
+	this->new_motion_steps = max(new_motion_steps, motion_steps_min);
+	log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d", this->new_motion_steps);
+}
+
+int visual_servo_manager::get_new_motion_steps() const
+{
+	return new_motion_steps;
+}
+
+int visual_servo_manager::get_motion_steps() const
+{
+	return motion_steps;
 }
 
 } // namespace generator

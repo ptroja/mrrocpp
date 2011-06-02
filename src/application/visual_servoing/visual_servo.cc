@@ -92,6 +92,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 			break;
 		case discode_sensor::DSS_CONNECTED: // processing in DisCODe hasn't finished yet
 		case discode_sensor::DSS_REQUEST_SENT: // communication or synchronisation in DisCODe took too long
+			predict_reading();
 			steps_without_reading++;
 			sample.is_reading_repreated = true;
 			break;

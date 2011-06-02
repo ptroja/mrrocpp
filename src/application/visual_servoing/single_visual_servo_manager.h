@@ -34,6 +34,9 @@ public:
 protected:
 	virtual lib::Homog_matrix get_aggregated_position_change();
 	virtual void configure_all_servos();
+
+private:
+	void update_motion_steps(double discode_processing_time, double discode_synchronization_delay, double discode_total_time);
 };
 
 /** @} */

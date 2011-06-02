@@ -112,22 +112,32 @@ protected:
 	std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> > servos;
 	const lib::Homog_matrix& get_current_position() const;
 
-	/** Time between next_step() calls */
-	double dt;
+	/** Time for single step () */
+	static const double step_time;
+
+	double get_dt() const;
+	void set_new_motion_steps(int new_motion_steps);
+	int get_new_motion_steps() const;
+	int get_motion_steps() const;
 private:
-	lib::Homog_matrix current_position;
-	bool current_position_saved;
+	/** Default number of steps for macrostep. */
+	static const int motion_steps_default;
+	static const int motion_steps_min;
+	static const int motion_steps_max;
+	static const int motion_steps_value_in_step_no;
 
 	/** Number of steps for macrostep.
 	 * If present, this value is read from config, otherwise is set to motion_steps_default
 	 */
 	int motion_steps;
 
-	/** Default number of steps for macrostep. */
-	static const int motion_steps_default = 30;
+	int new_motion_steps;
 
-	/** Time for single step () */
-	static const double step_time = 0.002;
+	/** Time between next_step() calls */
+	double dt;
+
+	lib::Homog_matrix current_position;
+	bool current_position_saved;
 
 	std::vector <boost::shared_ptr <servovision::position_constraint> > position_constraints;
 	std::vector <boost::shared_ptr <servovision::termination_condition> > termination_conditions;
