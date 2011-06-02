@@ -65,13 +65,6 @@ private:
 	RemoteAgent MP;
 
 	/**
-	 * Data buffer with command from MP
-	 *
-	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
-	 */
-	InputBuffer <lib::MP_COMMAND_PACKAGE> command;
-
-	/**
 	 * @brief Returns MP command type
 	 * @return mp command variant
 	 */
@@ -98,6 +91,13 @@ public:
 
 	//! Data buffer in the MP
 	OutputBuffer <lib::ECP_REPLY_PACKAGE> reply;
+
+	/**
+	 * Data buffer with command from MP
+	 *
+	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
+	 */
+	InputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief ECP subtasks container

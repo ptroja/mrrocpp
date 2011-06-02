@@ -27,7 +27,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-template<typename ECP_ROBOT_T>
+template <typename ECP_ROBOT_T>
 class _generator : public ecp_mp::generator::generator
 {
 protected:
@@ -39,12 +39,12 @@ protected:
 	/**
 	 * @brief ECP task object type
 	 */
-	typedef common::task::_task<ECP_ROBOT_T> task_t;
+	typedef common::task::_task <ECP_ROBOT_T> task_t;
 
 	/**
 	 * @brief ECP generator itself object type
 	 */
-	typedef _generator<ECP_ROBOT_T> generator_t;
+	typedef _generator <ECP_ROBOT_T> generator_t;
 
 	/**
 	 * @brief ECP task object reference
@@ -67,7 +67,7 @@ public:
 
 		// realizacja ruchu
 		do {
-			if(ecp_t.peek_mp_message()) {
+			if (ecp_t.peek_mp_message()) {
 				// END_MOTION received
 				break;
 			}
@@ -100,12 +100,14 @@ public:
 			}
 
 		} while (next_step());
+		ecp_t.command.markAsUsed();
 	}
 
 	/**
 	 * @brief communicates with EDP
 	 */
-	virtual void execute_motion(void) {
+	virtual void execute_motion(void)
+	{
 		the_robot->execute_motion();
 	}
 
@@ -140,11 +142,11 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	_generator(common::task::_task<ECP_ROBOT_T> & _ecp_task) :
+	_generator(common::task::_task <ECP_ROBOT_T> & _ecp_task) :
 		ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task)//, the_robot(ecp_t.ecp_m_robot)
 	{
-		if(ecp_t.ecp_m_robot.get()) {
-			the_robot = dynamic_cast<ECP_ROBOT_T *> (ecp_t.ecp_m_robot.get());
+		if (ecp_t.ecp_m_robot.get()) {
+			the_robot = dynamic_cast <ECP_ROBOT_T *> (ecp_t.ecp_m_robot.get());
 		}
 	}
 
@@ -152,7 +154,8 @@ public:
 	 * @brief Desstructor
 	 */
 	virtual ~_generator()
-	{}
+	{
+	}
 
 	/**
 	 * @brief single trajectory node
@@ -160,7 +163,7 @@ public:
 	lib::trajectory_description td;
 };
 
-typedef _generator<robot::ecp_robot> generator;
+typedef _generator <robot::ecp_robot> generator;
 
 } // namespace generator
 } // namespace common

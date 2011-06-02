@@ -282,7 +282,7 @@ bool task_base::peek_mp_message()
 					break;
 
 				case lib::END_MOTION:
-
+					command.markAsUsed();
 					return true;
 
 					break;
@@ -290,7 +290,7 @@ bool task_base::peek_mp_message()
 				case lib::STOP:
 					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::STOP");
-
+					command.markAsUsed();
 					// Reply with ACK
 					reply.Send(ecp_reply);
 					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
@@ -306,7 +306,7 @@ bool task_base::peek_mp_message()
 				default:
 					set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::INCORRECT_MP_COMMAND");
-
+					command.markAsUsed();
 					// Reply with NACK
 					reply.Send(ecp_reply);
 					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);

@@ -88,9 +88,9 @@ void haptic::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_h_gen.Move();
-	/*
-	 send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
-	 */
+
+	send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+
 	sr_ecp_msg->message("MP HAPTIC END");
 }
 
