@@ -27,7 +27,7 @@ namespace epos {
  */
 template<int NUM_OF_MOTION_SEGMENTS, int NUM_OF_SERVOS>
 struct ipm_executor {
-	//! Parametrized self type
+	//! Parameterized self type
 	typedef ipm_executor<NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
 
 	//! Thread id
@@ -97,7 +97,7 @@ struct ipm_executor {
 				}
 
 				if (axes[i]->checkInterpolationBufferError(status)) {
-					// FIXME: this should be done in a separate exception, which does not benlong
+					// FIXME: this should be done in a separate exception, which does not belong
 					//        to the kinematics::spkm namespace.
 					printf("InterpolationBufferStatus for axis %zu: 0x%04X\n", i, status);
 					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
