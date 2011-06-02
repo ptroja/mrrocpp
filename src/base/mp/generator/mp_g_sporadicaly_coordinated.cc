@@ -24,8 +24,8 @@ namespace generator {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-sporadicaly_coordinated::sporadicaly_coordinated(task::task& _mp_task) :
-	generator(_mp_task)
+continously_coordinated::continously_coordinated(task::task& _mp_task) :
+	generator(_mp_task), cycle_counter(0)
 {
 }
 
@@ -33,9 +33,14 @@ sporadicaly_coordinated::sporadicaly_coordinated(task::task& _mp_task) :
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool sporadicaly_coordinated::next_step()
+bool continously_coordinated::next_step()
 {
+	// cykl oznacza odebranie danych od wszystkich robotow
 
+	// sprawdza czy wszystkie roboty
+
+
+	cycle_counter++;
 
 	return next_step_inside();
 }

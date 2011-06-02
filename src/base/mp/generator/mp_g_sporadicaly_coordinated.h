@@ -22,16 +22,18 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-class sporadicaly_coordinated : public generator
+class continously_coordinated : public generator
 {
 
 public:
+
+	long cycle_counter;
 
 	/**
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	sporadicaly_coordinated(task::task& _mp_task);
+	continously_coordinated(task::task& _mp_task);
 
 	bool next_step();
 

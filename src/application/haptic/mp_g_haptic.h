@@ -23,7 +23,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class haptic : public sporadicaly_coordinated
+class haptic : public continously_coordinated
 {
 protected:
 	robot::robot *irp6ot, *irp6p;

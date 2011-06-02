@@ -28,7 +28,7 @@ namespace mp {
 namespace generator {
 
 haptic::haptic(task::task& _mp_task, int step) :
-	sporadicaly_coordinated(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	continously_coordinated(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
