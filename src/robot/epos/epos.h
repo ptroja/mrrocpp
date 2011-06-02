@@ -136,7 +136,7 @@ private:
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 */
-	void InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+	void InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
 
 	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
 	 *

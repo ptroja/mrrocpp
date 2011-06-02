@@ -117,7 +117,7 @@ struct ipm_executor {
 				 *  Note: we check only the first axis.
 				 */
 				while(! epos::checkInterpolationBufferUnderflowWarning(
-						axes[i]->readInterpolationBufferStatus()
+						axes[0]->readInterpolationBufferStatus()
 						)) {
 					// do nothing
 				}

@@ -1350,7 +1350,7 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 
 #if 1
 	// PVT record have to be transmitted in a Segmented Write mode
-	InitiateSementedWrite(0x20C1, 0x00, 8);
+	InitiateSegmentedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
 	SegmentedWrite(&pvt[0], 7);
 	SegmentedWrite(&pvt[7], 1);
@@ -1760,6 +1760,16 @@ int epos::waitForTarget(unsigned int t)
 
 
 	return (0);
+}
+
+void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
+{
+	device.InitiateSementedWrite(nodeId, index, subindex, ObjectLength);
+}
+
+void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
+{
+	device.SegmentedWrite(nodeId, ptr, len);
 }
 
 /* compare WORD a with WORD b bitwise */
