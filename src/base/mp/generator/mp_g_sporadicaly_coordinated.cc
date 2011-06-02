@@ -30,52 +30,14 @@ sporadicaly_coordinated::sporadicaly_coordinated(task::task& _mp_task) :
 }
 
 // ----------------------------------------------------------------------------------------------
-// ---------------------------------    metoda	first_step -------------------------------------
-// ----------------------------------------------------------------------------------------------
-
-bool sporadicaly_coordinated::first_step()
-{
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// Inicjacja generatora trajektorii
-	// printf("mp first step\n");
-	// wait_for_ECP_pulse = true;
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::NEXT_POSE;
-					robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-					robot_node.second->communicate_with_ecp = true;
-				}
-
-	return true;
-}
-
-// ----------------------------------------------------------------------------------------------
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
 bool sporadicaly_coordinated::next_step()
 {
 
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
-	// skonczono zadanie uzytkownika
 
-	// obrazu danych wykorzystywanych przez generator
-
-	// 	if (trigger) printf("Yh\n"); else printf("N\n");
-	// printf("mp next step\n");
-	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						sr_ecp_msg.message("w mp task terminated");
-						return false;
-					}
-				}
-
-	return true;
+	return next_step_inside();
 }
 
 } // namespace generator

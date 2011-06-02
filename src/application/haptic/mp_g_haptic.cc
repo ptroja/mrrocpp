@@ -9,7 +9,6 @@
 #include <iostream>
 
 #include <boost/date_time/posix_time/posix_time.hpp> //include all types plus i/o
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -29,7 +28,7 @@ namespace mp {
 namespace generator {
 
 haptic::haptic(task::task& _mp_task, int step) :
-	generator(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+	sporadicaly_coordinated(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -48,8 +47,6 @@ bool haptic::first_step()
 
 	irp6ot->communicate_with_ecp = true;
 	irp6p->communicate_with_ecp = true;
-
-
 
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -148,7 +145,7 @@ bool haptic::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool haptic::next_step()
+bool haptic::next_step_inside()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -192,7 +189,8 @@ bool haptic::next_step()
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
 
-	const lib::Ft_vector & irp6p_ECPtoMP_force_xyz_torque_xyz = irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz;
+	const lib::Ft_vector & irp6p_ECPtoMP_force_xyz_torque_xyz =
+			irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz;
 
 	irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz = -irp6p_ECPtoMP_force_xyz_torque_xyz;
 
@@ -212,17 +210,16 @@ bool haptic::next_step()
 	std::cout << time_interval << std::endl;
 
 	/*
-	if ((node_counter % 10) == 0) {
+	 if ((node_counter % 10) == 0) {
 	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	 << time_interval << std::endl << irp6p_goal_frame << std::endl;
 	 //	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;
 
-	}
-	*/
+	 }
+	 */
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) ||
-		(irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED))
-	{
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
+			== lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	}

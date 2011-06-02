@@ -33,9 +33,9 @@ public:
 	 */
 	sporadicaly_coordinated(task::task& _mp_task);
 
-	bool first_step();
-
 	bool next_step();
+
+	virtual bool next_step_inside(void) = 0;
 
 };
 
