@@ -156,9 +156,6 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	sr_ecp_msg->message("IN HENDLER");
 
 	ecp_reply.recognized_command[0] = '0';
-	ecp_reply.recognized_command[1] = '1';
-	ecp_reply.recognized_command[2] = '2';
-
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH)
 	{
@@ -246,6 +243,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		gen->configure(mp_args[0],mp_args[1]);
 
 		gen->Move();
+		ecp_reply.recognized_command[0] = gen->GEN_REPLY;
 		sr_ecp_msg->message("My gen move end");
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_ROTATE)
@@ -256,6 +254,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		rot->configure(mp_args[0]);
 
 		rot->Move();
+		ecp_reply.recognized_command[0] = rot->GEN_REPLY;
 		sr_ecp_msg->message("My rot_gen move end");
 	}
 

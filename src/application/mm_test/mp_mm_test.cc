@@ -35,7 +35,7 @@
 #include "LReading.hpp"
 
 #define PI 3.14159
-#define K_MAX 0.0365
+#define K_MAX 0.0365//0.0365
 
 using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
@@ -73,6 +73,8 @@ mmtest::mmtest(lib::configurator &_config) :
 	sr_ecp_msg->message("before ds.configure_sensor()\n");
 	ds->configure_sensor();
 	sr_ecp_msg->message("after ds.configure_sensor()\n");
+
+	ERROR = false;
 }
 
 
@@ -131,20 +133,25 @@ void mmtest::set_path()
 	p.y=3;
 	path.push_back(p);
 
-	p.x--;	path.push_back(p);
-	p.y--;	path.push_back(p);
+//	p.x--;	path.push_back(p);
+//	p.y--;	path.push_back(p);
 //	p.x--;	path.push_back(p);
 
-
-	p.x--;	path.push_back(p);
-	p.y++;	path.push_back(p);
-	p.y++;	path.push_back(p);
 	p.x++;	path.push_back(p);
+	p.y++;	path.push_back(p);
+	p.x--;	path.push_back(p);
 	p.y--;	path.push_back(p);
-	p.x++;	path.push_back(p);
-	p.y++;	path.push_back(p);
-	p.y++;	path.push_back(p);
-	p.x--;	path.push_back(p);
+
+//	p.x--;	path.push_back(p);
+//	p.y++;	path.push_back(p);
+//	p.y++;	path.push_back(p);
+//	p.x++;	path.push_back(p);
+//	p.y--;	path.push_back(p);
+//	p.x++;	path.push_back(p);
+//	p.y++;	path.push_back(p);
+//	p.y++;	path.push_back(p);
+//	p.x++;	path.push_back(p);
+//	p.x++;	path.push_back(p);
 
 
 
@@ -173,212 +180,272 @@ void mmtest::main_task_algorithm(void)
 
 	/** SET PATH : READ FROM DISCODE */
 
-	Types::Mrrocpp_Proxy::LReading lr;
-	sr_ecp_msg->message("LR init");
-	lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
-	sr_ecp_msg->message("LR received");
-
-	std::cout<<"LReading info: "<<lr.path_exists<<std::endl;
-	if(!lr.path_exists)
+	while(true)
 	{
-		sr_ecp_msg->message("FROM DISCODE: PATH DOESNOT EXIST");
-		return;
-	}
+		ERROR = false;
 
+		Types::Mrrocpp_Proxy::LReading lr;
+		sr_ecp_msg->message("LR init");
+		lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
+		sr_ecp_msg->message("LR received");
 
-	for(int i=0;i<50;i++)
-	{
-		if(lr.path[i][0]!=-1 && lr.path[i][1]!=-1)
+		std::cout<<"LReading info: "<<lr.path_exists<<std::endl;
+		if(!lr.path_exists)
 		{
-			Point p;
-			p.x=lr.path[i][0];
-			p.y=lr.path[i][1];
-			path.push_back(p);
+			sr_ecp_msg->message("PROBLEM FROM DISCODE: PATH DOESNOT EXIST");
+			return;
 		}
-	}
 
 
-	std::vector<Point>::reverse_iterator xrit,xprit;
+		for(int i=49;i>=0;i--)
+		{
+			if(lr.path[i][0]!=-1 && lr.path[i][1]!=-1)
+			{
+				Point p;
+				p.x=lr.path[i][0];
+				p.y=lr.path[i][1];
+				path.push_back(p);
+			}
+		}
 
-	for ( xprit=xrit=path.rbegin(),xrit++ ; xrit < path.rend(); ++xrit, ++xprit )
-	{
-		std::cout<<"POINT: "<<(*xrit).x<<","<<(*xrit).y<<std::endl;
-	}
-
-
-
-
-	/** SET PATH : READ FROM DISCODE **END** */
-
-
-	lib::robot_name_t manipulator_name;
-	lib::robot_name_t gripper_name;
-
-	manipulator_name = lib::irp6p_m::ROBOT_NAME;
-	gripper_name = lib::irp6p_tfg::ROBOT_NAME;
-	/*
-
-	sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
-		lib::irp6p_m::ROBOT_NAME.c_str());
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+		//set_path();
 
 
-	char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
-	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
+		std::vector<Point>::reverse_iterator xrit,xprit;
 
-	mp_ecp_command.desired_position = 0.077;
-	memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
-
-	sr_ecp_msg->message("OTWORZ");
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
-
-	wait_ms(1000);
-
-	mp_ecp_command.desired_position = 0.066;
-	memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
-
-	sr_ecp_msg->message("ZAMKNIJ");
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
-
-	wait_ms(2000);
+		for ( xprit=xrit=path.rbegin(),xrit++ ; xrit < path.rend(); ++xrit, ++xprit )
+		{
+			std::cout<<"POINT: "<<(*xrit).x<<","<<(*xrit).y<<std::endl;
+		}
 
 
-*/
-	/*
-	for(int i=0;i<10;i++)
-	{
-		sr_ecp_msg->message("SZCZEKI W DOL");
+
+
+		/** SET PATH : READ FROM DISCODE **END** */
+
+
+		lib::robot_name_t manipulator_name;
+		lib::robot_name_t gripper_name;
+
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
+		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
+		/*
+
+		sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
+		set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
+			lib::irp6p_m::ROBOT_NAME.c_str());
+		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+		char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+		lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
+
+		mp_ecp_command.desired_position = 0.077;
+		memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+
+		sr_ecp_msg->message("OTWORZ");
+		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+		run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+
+		wait_ms(1000);
+
+		mp_ecp_command.desired_position = 0.066;
+		memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+
+		sr_ecp_msg->message("ZAMKNIJ");
+		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+		run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+
+		wait_ms(2000);
+
+
+	*/
+		/*
+		for(int i=0;i<10;i++)
+		{
+			sr_ecp_msg->message("SZCZEKI W DOL");
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0, 1,
+					lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+			char temp_str[20];//args to ecp
+			sprintf (temp_str, "%lf %lf", 2.0, K_MAX+i*0.005);//direction, duration in k in arg in frames in time
+						set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+						run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+		}
+	*/
+
+
+		sr_ecp_msg->message("SZCZEKI W DOL - ladna pozycja nad labiryntem");
 		set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0, 1,
 				lib::irp6p_m::ROBOT_NAME.c_str());
 		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-		char temp_str[20];//args to ecp
-		sprintf (temp_str, "%lf %lf", 2.0, K_MAX+i*0.005);//direction, duration in k in arg in frames in time
-					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-	}
-*/
 
-	sr_ecp_msg->message("SZCZEKI W DOL");
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0, 1,
-			lib::irp6p_m::ROBOT_NAME.c_str());
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+		/* POZYCJA POCZATKOWA ZANIM SZCZEKI W DOL! */ /* liczona z (3,3) */
 
-
-	//w mp:
-	//strcmp(robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command, "KONIEC") != 0;
-	std::cout<<"ECP REPLY 0: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0]<<std::endl;
-	std::cout<<"ECP REPLY 1: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[1]<<std::endl;
-	std::cout<<"ECP REPLY 2: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[2]<<std::endl;
-	std::cout<<"ECP REPLY 3: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[3]<<std::endl;
-
-
-	/* POZYCJA POCZATKOWA ZANIM SZCZEKI W DOL! */ /* liczona z (3,3) */
-
-	char temp_str[20];//args to ecp
-
-	int sx=3,sy=3;
-	int x = path[0].x;
-	int y = path[0].y;
-
-	while(sx!=x && sy!=y)
-	{
-
-		if(sx<x)
-		{
-			sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-			sx++;
-		}
-		if(sx>x)
-		{
-			sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-			sx--;
-		}
-		if(sy<y)
-		{
-			sprintf (temp_str, "%lf %lf", 0.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-			sy++;
-		}
-		if(sy>y)
-		{
-			sprintf (temp_str, "%lf %lf", 2.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-			sy--;
-		}
-
-	}
-
-	/* USTAWIONY */
-
-	sr_ecp_msg->message("SZCZEKI W DOL2");
-		set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_dol.trj", 0, 1,
-				lib::irp6p_m::ROBOT_NAME.c_str());
+		//DODATKOWY OBROT ZEBY NIE BYLO MOZLIWOSCI OBROTU DO TYLU
+		char str[20];//args to ecp
+		sprintf (str, "%lf", -PI*3/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
+		set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-	sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
+		int sx=3,sy=3;
+		int x = lr.path[0][0];//path[0].x;
+		int y = lr.path[0][1];//path[0].y;
 
-	std::vector<Point>::reverse_iterator rit,prit;
+		std::cout<<"x "<<x<<" y "<<y<<std::endl;
+		std::cout<<"sx "<<sx<<" sy "<<sy<<std::endl;
 
-	for ( prit=rit=path.rbegin(),rit++ ; rit < path.rend(); ++rit, ++prit )
-	{
-		std::cout<<"POINT: "<<(*rit).x<<","<<(*rit).y<<std::endl;
-
-		sr_ecp_msg->message("BIAS");
-		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
-		run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
-
-
-		if((*rit).x<(*prit).x)//x-
+		while(sx!=x || sy!=y)
 		{
-			sprintf (temp_str, "%lf", PI/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			char temp[20];//args to ecp
+
+			if(sx<x)
+			{
+				sprintf (temp, "%lf %lf", 2.0, K_MAX);//direction, duration in k in arg in frames in time
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				sx++;
+				std::cout<<"x "<<x<<" y "<<y<<std::endl;
+				std::cout<<"sx "<<sx<<" sy "<<sy<<std::endl;
+			}
+			if(sx>x)
+			{
+				sprintf (temp, "%lf %lf", 0.0, K_MAX);//direction, duration in k in arg in frames in time
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				sx--;
+				std::cout<<"x "<<x<<" y "<<y<<std::endl;
+				std::cout<<"sx "<<sx<<" sy "<<sy<<std::endl;
+			}
+			if(sy<y)
+			{
+				sprintf (temp, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				sy++;
+				std::cout<<"x "<<x<<" y "<<y<<std::endl;
+				std::cout<<"sx "<<sx<<" sy "<<sy<<std::endl;
+			}
+			if(sy>y)
+			{
+				sprintf (temp, "%lf %lf", 1.0, K_MAX);//direction, duration in k in arg in frames in time
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				sy--;
+				std::cout<<"x "<<x<<" y "<<y<<std::endl;
+				std::cout<<"sx "<<sx<<" sy "<<sy<<std::endl;
+			}
+		}
+
+
+		/* USTAWIONY */
+
+		sr_ecp_msg->message("SZCZEKI W DOL2");
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_dol.trj", 0, 1,
+					lib::irp6p_m::ROBOT_NAME.c_str());
 			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
-			sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-		}
-		if((*rit).x>(*prit).x)//x+
+
+		//std::cout<<"ECP REPLY: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0]<<std::endl;
+
+
+		sr_ecp_msg->message("MOJ GENERATOR POPYCHAJACY");
+
+		std::vector<Point>::reverse_iterator rit,prit;
+
+		for ( prit=rit=path.rbegin(),rit++ ; rit < path.rend(); ++rit, ++prit )
 		{
-			sprintf (temp_str, "%lf", -PI*3/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			std::cout<<"POINT: "<<(*rit).x<<","<<(*rit).y<<std::endl;
 
-			sprintf (temp_str, "%lf %lf", 1.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-		}
-		if((*rit).y<(*prit).y)//y-
-		{
-			sprintf (temp_str, "%lf", -PI/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			sr_ecp_msg->message("BIAS");
+			set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+			run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
 
-			sprintf (temp_str, "%lf %lf", 2.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
-		}
-		if((*rit).y>(*prit).y)//y+
-		{
-			sprintf (temp_str, "%lf", PI*3/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			char temp_str[20];//args to ecp
 
-			sprintf (temp_str, "%lf %lf", 0.0, K_MAX);//direction, duration in k in arg in frames in time
-			set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+			if((*rit).y>(*prit).y)//((*rit).x<(*prit).x)//x-
+			{
+				sprintf (temp_str, "%lf", PI/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E')
+				{
+					sprintf (temp_str, "%lf %lf", 3.0, K_MAX);//direction, duration in k in arg in frames in time
+					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				}
+			}
+			else if((*rit).y<(*prit).y)//((*rit).x>(*prit).x)//x+
+			{
+				sprintf (temp_str, "%lf", -PI*3/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E')
+				{
+					sprintf (temp_str, "%lf %lf", 1.0, K_MAX);//direction, duration in k in arg in frames in time
+					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				}
+
+			}
+			else if((*rit).x>(*prit).x)//((*rit).y<(*prit).y)//y-
+			{
+				sprintf (temp_str, "%lf", -PI/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E')
+				{
+					sprintf (temp_str, "%lf %lf", 2.0, K_MAX);//direction, duration in k in arg in frames in time
+					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				}
+			}
+			else if((*rit).x<(*prit).x)//((*rit).y>(*prit).y)//y+
+			{
+				sprintf (temp_str, "%lf", PI*3/4);//-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E')
+				{
+					sprintf (temp_str, "%lf %lf", 0.0, K_MAX);//direction, duration in k in arg in frames in time
+					set_next_ecps_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+					run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				}
+			}
+
+			if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] == 'E')
+			{
+				std::cout<<"EEEEEE BLAD EEEEEEEE"<<std::endl;
+				ERROR = true;
+
+				//PODNIES SIE
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, 1,
+						lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, 1,
+						lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				//WYJEDZ
+				sr_ecp_msg->message("WYJEDZ");
+				set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_powtorz.trj", 0, 1,
+						lib::irp6p_m::ROBOT_NAME.c_str());
+				run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+
+				std::cout<<"POWTORZ!"<<std::endl;
+				break;
+			}
+
 		}
-	}
+		if(ERROR==false)
+			break;//ZAKONCZ
+	}//while()
 
 	//PODNIES SIE
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, 1,

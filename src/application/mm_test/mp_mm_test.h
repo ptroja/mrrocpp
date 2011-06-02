@@ -52,6 +52,8 @@ private:
 
 	std::vector<Point> path;
 
+	bool ERROR;
+
 }; // end : class mp_task_fsautomat
 
 } // namespace task

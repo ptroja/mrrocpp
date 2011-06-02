@@ -30,13 +30,8 @@ public:
 
 	static const char configSectionName[];
 
-	/**
-	 * direction to move:
-	 * 0 - -Y up (robot)
-	 * 1 -  X right
-	 * 2 -  Y down (computer)
-	 * 3 - -X left
-	 */
+	char GEN_REPLY;
+
 	void configure(int new_direction, double new_k_max);
 
 protected:

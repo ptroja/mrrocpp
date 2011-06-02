@@ -34,13 +34,7 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 g_mm_test::~g_mm_test()
 {
 }
-/**
- * direction to move:
- * 0 - -Y up (robot)
- * 1 -  X right
- * 2 -  Y down (computer)
- * 3 - -X left
-*/
+
 void g_mm_test::configure(int new_direction, double new_k_max)
 {
 	index = 0;
@@ -88,6 +82,9 @@ bool g_mm_test::next_step()
 
 		currentFrame.get_translation_vector(first_trans_vect);
 		std::cout << currentFrame << std::endl;
+
+		GEN_REPLY = 'M';
+
 		index++;
 	}
 	log("g_mm_test::next_step() %d\n", index);
@@ -107,12 +104,16 @@ bool g_mm_test::next_step()
 	double fy = force_torque[1];
 	//double fz = force_torque[2];
 
-	double stop = 4.0;
+	double stop = 5.0;
 
 	std::cout << fx << " " << fy << " " << std::endl;
 
-	//if(fx>stop || fx<-stop || fy>stop || fy<-stop)
-	//	return false;
+	if(fx>stop || fx<-stop || fy>stop || fy<-stop)
+	{
+		GEN_REPLY = 'E';
+		return false;
+	}
+
 
 
 	double trans_vect[3];
@@ -150,8 +151,10 @@ bool g_mm_test::next_step()
 	currentFrame = nextFrame;
 
 	if (k > k_max)
+	{
+		GEN_REPLY = 'N';
 		return false;
-
+	}
 
 	return true;
 } // next_step()

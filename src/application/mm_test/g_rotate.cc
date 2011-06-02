@@ -105,6 +105,9 @@ bool g_rotate::next_step()
 			first_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
 		}
 
+		GEN_REPLY = 'R';
+
+
 		index++;
 	}
 
@@ -136,6 +139,7 @@ bool g_rotate::next_step()
 
 	if(current_arm_coordinates[5] < rot_position + EPS - theta && current_arm_coordinates[5] > rot_position - EPS - theta)
 	{
+		GEN_REPLY = 'N';
 		return false;//bez skretu
 	}
 	else if(current_arm_coordinates[5] >= rot_position + EPS - theta)
@@ -184,11 +188,23 @@ bool g_rotate::next_step()
 	double fy = force_torque[1];
 	//double fz = force_torque[2];
 
-	double stop = 4.0;
+
+	double stop = 7.0;
+
+	std::cout << fx << " " << fy << " " << std::endl;
+
+	if(fx>stop || fx<-stop || fy>stop || fy<-stop)
+	{
+		GEN_REPLY = 'E';
+		return false;
+	}
+
+
+	double wait = 3.0;
 
 	//std::cout << fx << " " << fy << " " << std::endl;
 
-	if(fx>stop || fx<-stop || fy>stop || fy<-stop)
+	if(fx>wait || fx<-wait || fy>wait || fy<-wait)
 	{
 		//return false;
 	}

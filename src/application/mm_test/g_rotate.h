@@ -30,6 +30,8 @@ public:
 
 	static const char configSectionName[];
 
+	char GEN_REPLY;
+
 	/**
 	 * direction to move:
 	 * 0 - -Y up (robot)
