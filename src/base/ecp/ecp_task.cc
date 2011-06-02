@@ -258,12 +258,29 @@ void task_base::get_next_state(void)
 bool task_base::peek_mp_message()
 {
 	command.markAsUsed();
+	bool block;
 
-	if (ReceiveSingleMessage(false)) {
+	if (continuous_coordination) {
+		block = true;
+	} else {
+		block = false;
+	}
+	if (ReceiveSingleMessage(block)) {
 		if (command.isFresh()) {
 
 			switch (mp_command.command)
 			{
+
+				case lib::NEXT_POSE:
+
+					if (continuous_coordination) {
+						reply.Send(ecp_reply);
+					} else {
+						sr_ecp_msg->message(lib::NON_FATAL_ERROR, "STRANGE COMMAND (NEXT_POSE) for non continuous_coordination");
+					}
+
+					break;
+
 				case lib::END_MOTION:
 
 					return true;
