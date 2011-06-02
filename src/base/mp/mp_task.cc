@@ -342,7 +342,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 	// 1 0 -> enter
 	// 1 1 -> not enter
 	while (!(ui_exit_from_while && ecp_exit_from_while)) {
-		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message loop");
+		//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message loop");
 		bool block;
 
 		if (mp_state == MP_RUNNING) {
@@ -403,7 +403,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 							{
 								if (robot_node.second->reply.isFresh()) {
-									sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
+									//					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
 
 									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 									ecp_exit_from_while = true;
@@ -421,7 +421,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 			}
 		}
 	}
-	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message end");
+	//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message end");
 
 }
 

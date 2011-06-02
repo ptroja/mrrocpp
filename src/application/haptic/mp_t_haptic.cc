@@ -83,12 +83,12 @@ void haptic::main_task_algorithm(void)
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+	// mp_h_gen.sensor_m = sensor_m;
+
+	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
+	mp_h_gen.Move();
 	/*
-	 // mp_h_gen.sensor_m = sensor_m;
-
-	 sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
-	 mp_h_gen.Move();
-
 	 send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	 */
 	sr_ecp_msg->message("MP HAPTIC END");
