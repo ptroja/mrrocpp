@@ -208,7 +208,11 @@ public:
 	void Change_algorithm(void);
 
 	//! synchronizacja
+
 	virtual void synchronise(void);
+
+	//! ustawia flage w hardware interfejs powodujaca stop awaryjny
+	void set_hi_panic(void);
 
 	//! wybor osi
 	void synchro_choose_axis_to_move(common::regulator* &crp, int j);

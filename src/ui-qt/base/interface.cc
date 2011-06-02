@@ -165,7 +165,7 @@ void Interface::timer_slot()
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "M:  ");
+					strcat(current_line, "M: ");
 					html_line += "#a54e8f\">M:&#160;";
 					break;
 				case lib::VSP:
@@ -173,7 +173,7 @@ void Interface::timer_slot()
 					html_line += "brown\">S:&#160;";
 					break;
 				case lib::UI:
-					strcat(current_line, "I:  ");
+					strcat(current_line, "I: ");
 					html_line += "brown\">I:&#160;";
 					break;
 				default:

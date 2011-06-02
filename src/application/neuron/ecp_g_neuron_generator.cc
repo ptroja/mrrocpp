@@ -19,7 +19,7 @@ namespace ecp {
 namespace common {
 namespace generator {
 
-const double MIN_VELOCITY = 0.05;
+const double MIN_TIME = 3.0;
 const double MSTEP_TIME = 0.002 * 10.0;
 
 const double current_ref[] = {15000.0, 18000.0, 10000.0, 10000.0, 10000.0, 10000.0};
@@ -116,9 +116,11 @@ bool neuron_generator::next_step()
 
 	for(int i = 0; i < 6; i++)
 	{
-		current_sum += the_robot->reply_package.arm.measured_current.average_square[i];
+		current_sum += the_robot->reply_package.arm.measured_current.average_module[i];
 
-		double current_norm = the_robot->reply_package.arm.measured_current.average_square[i] / current_ref[i];
+		double ref3 = current_ref[i]*current_ref[i]*current_ref[i];
+
+		double current_norm = the_robot->reply_package.arm.measured_current.average_cubic[i] / ref3;
 
 		if(current_max < current_norm)
 		{
@@ -170,10 +172,14 @@ bool neuron_generator::next_step()
 			//printf("\n-------- breking ----------\n");
 			flushall();
 
-			if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
-				time = radius / (2 * MIN_VELOCITY);
-			} else {
-				time = radius / (2 * sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			//if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
+			//	time = 2 * radius / (2 * MIN_VELOCITY);
+			//} else {
+			time = 2 * radius / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			//}
+
+			if(time < MIN_TIME){
+				time = MIN_TIME;
 			}
 
 			break_steps_ = time / MSTEP_TIME;
