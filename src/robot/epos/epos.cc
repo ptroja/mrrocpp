@@ -109,11 +109,6 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileDeceleration = readProfileDeceleration();
 	remote = isRemoteOperationEnabled(readStatusWord());
 
-	// initialize MaxAcceleration to beyond the default limits
-	writeMaxAcceleration(25000UL);
-	writeMotorMaxSpeed(50000UL);
-	writeMaxProfileVelocity(50000UL);
-	writeGearRatioNumerator(0);
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 			ProfileVelocity << ", " <<
