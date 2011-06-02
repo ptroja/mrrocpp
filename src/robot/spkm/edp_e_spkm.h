@@ -51,11 +51,11 @@ private:
 	//! Default axis deceleration [rpm/s]
 	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Maximal axis velocity [rpm]
-	static const uint32_t Vmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	//! Maximal motor velocity [rpm].
+	static const uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Max axis acceleration [rpm/s]
-	static const uint32_t Amax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	//! Max motor acceleration [rpm/s].
+	static const uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.

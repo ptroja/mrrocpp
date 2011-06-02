@@ -39,7 +39,7 @@ const int NUM_OF_SERVOS = 6;
  * @author tkornuta
  * @ingroup spkm
  */
-const unsigned int NUM_OF_MOTION_SEGMENTS = 10;
+const unsigned int NUM_OF_MOTION_SEGMENTS = 20;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
@@ -74,6 +74,7 @@ struct cbuffer
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
+	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
 	int32_t motor_pos[NUM_OF_SERVOS];

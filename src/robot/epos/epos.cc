@@ -1348,7 +1348,7 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
-#if 0
+#if 1
 	// PVT record have to be transmitted in a Segmented Write mode
 	InitiateSementedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
@@ -1380,6 +1380,7 @@ bool epos::checkInterpolationBufferUnderflowWarning(UNSIGNED16 status)
 
 void epos::printInterpolationBufferStatus(UNSIGNED16 status)
 {
+	printf("IPM buffer status = 0x%04X\n", status);
 	// Warning codes
 	if (status & PVT_STATUS_UNDERFLOW_WARNING) {
 		printf("Buffer underflow warning level is reached\n");
