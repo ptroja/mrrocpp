@@ -15,6 +15,8 @@
 #include <iostream>
 #include <cassert>
 
+#include <boost/array.hpp>
+
 #include <Eigen/Core>
 #include <Eigen/Array>
 
@@ -776,6 +778,44 @@ void compute_pvt_triplets_for_epos(
 	cout<<"t "<<t_;
 #endif
 }
+
+
+
+/**
+ * @brief Checks given motor path (represented by set of P from the PVT triplets) - if the motor doesn't move, returns 0 in the change_ array, othervise return 1.
+ *
+ * @author tkornuta
+ *
+ * @tparam N_POINTS Number of interpolation points.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [in] p_ Matrix containing interpolated 'motor position poses'.
+ * @param [out] change_ Values determining whether position of given motor changes (for the whole trajectory).
+ */
+template <unsigned int N_POINTS, unsigned int N_MOTORS>
+void check_pvt_translocation(
+		Eigen::Matrix <double, N_POINTS, N_MOTORS> & p_,
+		Eigen::Matrix <bool, 1, N_MOTORS> & change_
+		)
+{
+	change_ = Eigen::Matrix <bool, 1, N_MOTORS>::Zero(1, N_MOTORS);
+
+	// Check for all motors.
+	for (int mtr = 0; mtr < N_MOTORS; ++mtr) {
+		// Check for all segments.
+		for (int i = 1; i < N_POINTS-1; ++i) {
+			if ((int32_t)p_(0,mtr) != (int32_t)p_(i,mtr)) {
+				change_(mtr) = true;
+				break;
+			}
+		}
+	}
+
+#if 1
+	cout<<"change "<<change_;
+#endif
+}
+
 
 } // namespace pvat
 } // namespace lib
