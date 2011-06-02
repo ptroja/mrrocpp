@@ -25,6 +25,13 @@ namespace generator {
 class continously_coordinated : public generator
 {
 
+protected:
+	/*!
+	 * @brief stl map of all mp robots that have not reply
+	 */
+	common::robots_t robots_to_reply;
+
+
 public:
 
 	long cycle_counter;

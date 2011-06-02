@@ -153,7 +153,7 @@ bool haptic::next_step_inside()
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
 	//	cout << "next_step" << endl;
 
-	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
+	if (cycle_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
 	}
 
@@ -161,7 +161,7 @@ bool haptic::next_step_inside()
 		return false;
 	}
 
-	if (node_counter == 3) {
+	if (cycle_counter == 3) {
 
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -210,7 +210,7 @@ bool haptic::next_step_inside()
 	std::cout << time_interval << std::endl;
 
 	/*
-	 if ((node_counter % 10) == 0) {
+	 if ((cycle_counter % 10) == 0) {
 	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	 << time_interval << std::endl << irp6p_goal_frame << std::endl;
 	 //	std::cout << "irp6p_goal_xyz_angle_axis_increment_in_end_effector\n" << irp6p_goal_xyz_angle_axis_increment_in_end_effector << std::endl;

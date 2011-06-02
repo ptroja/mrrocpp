@@ -37,12 +37,30 @@ bool continously_coordinated::next_step()
 {
 	// cykl oznacza odebranie danych od wszystkich robotow
 
-	// sprawdza czy wszystkie roboty
 
+	// wpisujemy liste robotow do odpowiedzi o ile byla pusta
+	if (robots_to_reply.empty()) {
+		robots_to_reply = robot_m;
+	}
 
-	cycle_counter++;
+	// usuwamy te roboty, ktore juz odpoweidzialy
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
+				{
+					if (robot_node.second->reply.isFresh()) {
 
-	return next_step_inside();
+						robots_to_reply.erase(robot_node.first);
+
+					}
+				}
+
+	// jezeli wszystkie odpowiedzialy to mozemy odaplic wlasciwy kod generatora trajetktorii
+	if (robots_to_reply.empty()) {
+		cycle_counter++;
+		return next_step_inside();
+
+	}
+	return true;
+
 }
 
 } // namespace generator
