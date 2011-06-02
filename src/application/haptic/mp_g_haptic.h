@@ -9,7 +9,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/mp/generator/mp_g_sporadicaly_coordinated.h"
+#include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
 namespace mp {

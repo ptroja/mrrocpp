@@ -14,7 +14,7 @@
 #include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
-#include "base/mp/generator/mp_g_sporadicaly_coordinated.h"
+#include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
 namespace mp {
