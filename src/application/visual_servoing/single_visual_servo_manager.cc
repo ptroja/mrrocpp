@@ -32,7 +32,9 @@ single_visual_servo_manager::single_visual_servo_manager(mrrocpp::ecp::common::t
 
 	image_sampling_period = ecp_task.config.exists("image_sampling_period", section_name) ? ecp_task.config.value <
 			double> ("image_sampling_period", section_name) : image_sampling_period_default;
-	txtiter=0;
+
+	txtiter = 0;
+	txtbuf.reserve(50000);
 }
 
 single_visual_servo_manager::~single_visual_servo_manager()
@@ -59,19 +61,10 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 		double discode_synchronization_delay;
 		double discode_total_time;
 		double image_mrroc_delay;
-		char txt[1024];
-
-
-		sprintf(txt, "rmh.sendTimeSeconds = %d    rmh.sendTimeNanoseconds = %d    \n", rmh.sendTimeSeconds, rmh.sendTimeNanoseconds);
-		txtbuf += txt;
-
-		sprintf(txt, "reading->processingStartSeconds = %d    reading->processingStartNanoseconds = %d    \n", reading->processingStartSeconds, reading->processingStartNanoseconds);
-		txtbuf += txt;
-
-		sprintf(txt, "reading->processingEndSeconds = %d    reading->processingEndNanoseconds = %d    \n", reading->processingEndSeconds, reading->processingEndNanoseconds);
-		txtbuf += txt;
 
 		int seconds, nanoseconds;
+
+		double mrroc_discode_time_offset = servos[0]->get_sensor()->get_mrroc_discode_time_offset();
 
 		seconds = rmh.sendTimeSeconds - reading->processingEndSeconds;
 		nanoseconds = rmh.sendTimeNanoseconds - reading->processingEndNanoseconds;
@@ -87,17 +80,33 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 
 		struct timespec ts;
 		clock_gettime(CLOCK_REALTIME, &ts);
-		sprintf(txt, "ts.tv_sec = %d    ts.tv_nsec = %d    \n", ts.tv_sec, ts.tv_nsec);
-		txtbuf += txt;
 
 		seconds = ts.tv_sec - reading->processingStartSeconds;
 		nanoseconds = ts.tv_nsec - reading->processingStartNanoseconds;
-		image_mrroc_delay = seconds + 1e-9*nanoseconds;
+		image_mrroc_delay = seconds + 1e-9 * nanoseconds;
+		image_mrroc_delay -= mrroc_discode_time_offset;
+
+		char txt[1000];
+
+		sprintf(txt, "mrroc_discode_time_offset = %g\n", mrroc_discode_time_offset);
+		txtbuf += txt;
+
+		sprintf(txt, "rmh.sendTimeSeconds = %d    rmh.sendTimeNanoseconds = %d    \n", rmh.sendTimeSeconds, rmh.sendTimeNanoseconds);
+		txtbuf += txt;
+
+		sprintf(txt, "reading->processingStartSeconds = %d    reading->processingStartNanoseconds = %d    \n", reading->processingStartSeconds, reading->processingStartNanoseconds);
+		txtbuf += txt;
+
+		sprintf(txt, "reading->processingEndSeconds = %d    reading->processingEndNanoseconds = %d    \n", reading->processingEndSeconds, reading->processingEndNanoseconds);
+		txtbuf += txt;
+
+		sprintf(txt, "ts.tv_sec = %d    ts.tv_nsec = %d    \n", ts.tv_sec, ts.tv_nsec);
+		txtbuf += txt;
 
 		update_motion_steps(discode_processing_time, discode_synchronization_delay, discode_total_time, image_mrroc_delay);
 
 		txtiter++;
-		if(txtiter > 100){
+		if (txtiter > 100) {
 			log("\n\n\nHEHEHEHE:\n%s\n\n", txtbuf.c_str());
 			throw runtime_error("HEHEHEEHEH");
 		}
@@ -155,12 +164,12 @@ void single_visual_servo_manager::update_motion_steps(double discode_processing_
 	//	} else {
 	double e = fmod(image_mrroc_delay, image_sampling_period);
 
-//	if (e > image_sampling_period / 2) {
-//		e -= image_sampling_period;
-//	}
+	//	if (e > image_sampling_period / 2) {
+	//		e -= image_sampling_period;
+	//	}
 
-	char txt[30];
-	sprintf(txt, "e = %g\n", e);
+	char txt[200];
+	sprintf(txt, "e = %g          image_mrroc_delay = %g\n", e, image_mrroc_delay);
 	txtbuf += txt;
 
 	//		double eee = image_sampling_period/20;

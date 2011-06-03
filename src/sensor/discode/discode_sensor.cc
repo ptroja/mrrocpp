@@ -346,6 +346,24 @@ void discode_sensor::save_reading_received_time()
 	}
 }
 
+double discode_sensor::get_mrroc_discode_time_offset() const
+{
+	int seconds, nanoseconds;
+	seconds = (reading_received_time.tv_sec + request_sent_time.tv_sec) / 2 - rmh.sendTimeSeconds;
+	nanoseconds = (reading_received_time.tv_nsec + request_sent_time.tv_nsec) / 2 - rmh.sendTimeNanoseconds;
+	double offset = seconds + 1e-9 * nanoseconds;
+
+	seconds = reading_received_time.tv_sec - request_sent_time.tv_sec;
+	nanoseconds = reading_received_time.tv_nsec - request_sent_time.tv_nsec;
+	double comm_time = (seconds + 1e-9 * nanoseconds);
+
+	if (comm_time > 0.01) { // check if there was communication timeout (there was one macrostep between sending request and receiving reply)
+		log_dbg("discode_sensor::get_mrroc_discode_time_offset(): comm_time > 0.01\n");
+	}
+
+	return offset;
+}
+
 } // namespace discode
 
 } // namespace mrrocpp

@@ -105,6 +105,7 @@ public:
 	reading_message_header get_rmh() const;
 	struct timespec get_reading_received_time() const;
 	struct timespec get_request_sent_time() const;
+	double get_mrroc_discode_time_offset() const;
 private:
 	discode_sensor_state state;
 	uint16_t discode_port;
