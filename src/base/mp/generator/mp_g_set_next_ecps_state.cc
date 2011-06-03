@@ -53,15 +53,14 @@ void set_next_ecps_state::configure(const lib::playerpos_goal_t &_goal)
 
 bool set_next_ecps_state::first_step()
 {
-
 	robots_to_reply = robot_m;
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::NEXT_STATE;
-					robot_node.second->mp_command.ecp_next_state = ecp_next_state;
-					robot_node.second->communicate_with_ecp = true;
-				}
+	{
+		robot_node.second->mp_command.command = lib::NEXT_STATE;
+		robot_node.second->mp_command.ecp_next_state = ecp_next_state;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
 	return true;
 }
