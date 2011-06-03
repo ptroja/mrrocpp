@@ -32,7 +32,7 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config), MP(lib::MP_SECTION), command("command"), reply(MP, _config.section_name),
+	ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"),
 			mp_command(command.access), continuous_coordination(false)
 {
 	initialize_communication();

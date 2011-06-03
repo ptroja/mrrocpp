@@ -99,6 +99,7 @@ public:
 	 */
 	InputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
+
 	/**
 	 * @brief ECP subtasks container
 	 */
