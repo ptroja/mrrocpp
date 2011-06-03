@@ -826,6 +826,8 @@ void Interface::init()
 
 	manage_interface();
 
+	mw->get_ui()->textEdit_sr->setFocus();
+
 }
 
 //void Interface::print_on_sr(const std::string &text)

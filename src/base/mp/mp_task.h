@@ -223,6 +223,11 @@ public:
 	void terminate_all();
 
 	/**
+	 * @brief waits for acknowledge reply from all robots
+	 */
+	void wait_for_all_robots_acknowledge();
+
+	/**
 	 * @brief main task algorithm
 	 * to implement ni inherited classes
 	 */
