@@ -398,7 +398,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 			}
 
 			if (the_generator.wait_for_ECP_pulse) {
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_pulse");
+			//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_pulse");
 
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 							{

@@ -863,7 +863,7 @@ int Interface::MPup_int()
 			if (mp.pid > 0) {
 
 				mp.MP = new RemoteAgent(lib::MP_SECTION);
-				mp.pulse = new OutputBuffer<char>(*mp.MP, "MP_PULSE");
+				mp.pulse = new OutputBuffer <char> (*mp.MP, "MP_PULSE");
 
 				teachingstate = ui::common::MP_RUNNING;
 
@@ -947,6 +947,15 @@ void Interface::manage_interface_slot()
 
 	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
 			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
+
+		if (((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) && ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state
+				== UI_MP_PERMITED_TO_RUN))) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionConfiguration);
+
+		} else {
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionConfiguration);
+
+		}
 
 		switch (all_edps)
 		{
@@ -1702,13 +1711,13 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		if(mp.pulse) {
+		if (mp.pulse) {
 			delete mp.pulse;
 		} else {
 			std::cerr << "MP pulse not connected?" << std::endl;
 		}
 
-		if(mp.MP) {
+		if (mp.MP) {
 			delete mp.MP;
 		} else {
 			std::cerr << "MP not connected?" << std::endl;
@@ -1741,9 +1750,9 @@ int Interface::MPslay()
 	mp.MP = NULL;
 
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->deactivate_ecp_trigger();
-	}
+				{
+					robot_node.second->deactivate_ecp_trigger();
+				}
 
 	// modyfikacja menu
 	manage_interface();
