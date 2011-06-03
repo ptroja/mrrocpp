@@ -55,6 +55,9 @@ private:
 
 	int direction;
 	double k_max;
+
+	int licznik_uderzen;
+	bool zgubiona_pilka;
 };//end class
 
 } // namespace generator

@@ -32,6 +32,9 @@
 #include "sensor/discode/discode_sensor.h"
 #include <boost/shared_ptr.hpp>
 
+#include <boost/thread.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include "LReading.hpp"
 
 #define PI 3.14159
@@ -75,6 +78,7 @@ mmtest::mmtest(lib::configurator &_config) :
 	sr_ecp_msg->message("after ds.configure_sensor()\n");
 
 	ERROR = false;
+	path.clear();
 }
 
 
@@ -180,14 +184,27 @@ void mmtest::main_task_algorithm(void)
 
 	/** SET PATH : READ FROM DISCODE */
 
+	double param = 0.0;
+
 	while(true)
 	{
 		ERROR = false;
+		path.clear();
 
 		Types::Mrrocpp_Proxy::LReading lr;
+
 		sr_ecp_msg->message("LR init");
-		lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double (1.5));
+		lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(param);
 		sr_ecp_msg->message("LR received");
+
+		while(lr.waiting==true)
+		{
+			boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+			sr_ecp_msg->message("LR restart - waiting");
+			lr = ds->call_remote_procedure<Types::Mrrocpp_Proxy::LReading>(double(0.0));
+			sr_ecp_msg->message("LR received - waiting");
+
+		}
 
 		std::cout<<"LReading info: "<<lr.path_exists<<std::endl;
 		if(!lr.path_exists)
@@ -231,33 +248,35 @@ void mmtest::main_task_algorithm(void)
 		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		/*
 
-		sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
-		set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
-			lib::irp6p_m::ROBOT_NAME.c_str());
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
+		if(param<1.0)
+		{
+			sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0, 1,
+				lib::irp6p_m::ROBOT_NAME.c_str());
+			run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(),lib::irp6p_m::ROBOT_NAME.c_str());
 
 
-		char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
-		lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
+			char tmp_string[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+			lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
-		mp_ecp_command.desired_position = 0.077;
-		memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+			mp_ecp_command.desired_position = 0.077;
+			memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 
-		sr_ecp_msg->message("OTWORZ");
-		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
-		run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+			sr_ecp_msg->message("OTWORZ");
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+			run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
-		wait_ms(1000);
+			wait_ms(1000);
 
-		mp_ecp_command.desired_position = 0.066;
-		memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
+			mp_ecp_command.desired_position = 0.066;
+			memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 
-		sr_ecp_msg->message("ZAMKNIJ");
-		set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
-		run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+			sr_ecp_msg->message("ZAMKNIJ");
+			set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+			run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
 
-		wait_ms(2000);
-
+			wait_ms(2000);
+		}
 
 	*/
 		/*
@@ -423,6 +442,7 @@ void mmtest::main_task_algorithm(void)
 			{
 				std::cout<<"EEEEEE BLAD EEEEEEEE"<<std::endl;
 				ERROR = true;
+				param = param + 1.0;
 
 				//PODNIES SIE
 				set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, 1,

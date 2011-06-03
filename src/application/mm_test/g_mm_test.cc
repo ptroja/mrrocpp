@@ -29,6 +29,8 @@ g_mm_test::g_mm_test(mrrocpp::ecp::common::task::task & _ecp_task) :
 	k = 0.0;
 	direction = -1;
 	k_max = 0.0;
+	licznik_uderzen=0;
+	zgubiona_pilka=false;
 }
 
 g_mm_test::~g_mm_test()
@@ -41,6 +43,8 @@ void g_mm_test::configure(int new_direction, double new_k_max)
 	k = 0.0;
 	direction = new_direction;
 	k_max = new_k_max;
+	licznik_uderzen=0;
+	zgubiona_pilka=false;
 }
 
 bool g_mm_test::first_step()
@@ -77,16 +81,17 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;//polozenie od srodka postumenta
 
 
-	if (index == 0) {
+	if (index == 0)
+	{
 		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		currentFrame.get_translation_vector(first_trans_vect);
 		std::cout << currentFrame << std::endl;
 
 		GEN_REPLY = 'M';
-
-		index++;
 	}
+	index++;
+
 	log("g_mm_test::next_step() %d\n", index);
 	lib::Homog_matrix nextFrame;
 	nextFrame = currentFrame;
@@ -103,10 +108,36 @@ bool g_mm_test::next_step()
 	double fx = force_torque[0];
 	double fy = force_torque[1];
 	//double fz = force_torque[2];
-
-	double stop = 5.0;
-
 	std::cout << fx << " " << fy << " " << std::endl;
+
+	/*obecnosc pilki*/
+	double granica = 1.2;
+
+	if(abs(fx)>granica || abs(fy)>granica)
+	{
+		std::cout <<"JEST PILKA"<<std::endl;
+		licznik_uderzen+=1;
+	}
+
+	if(index > 10)//ustawic, nie za male bo na starcie bedzie sie cofal
+	{
+		if(licznik_uderzen>1)
+		{
+			zgubiona_pilka=false;
+			std::cout <<"JEST PILKA po 10 index"<<std::endl;
+			index=1;
+		}
+		else
+		{
+			zgubiona_pilka=true;
+			std::cout <<"NIE MA  KULKI"<<std::endl;
+			GEN_REPLY = 'E';
+			return false;
+		}
+	}
+
+	/*silne zderzenie ze sciana*/
+	double stop = 5.0;
 
 	if(fx>stop || fx<-stop || fy>stop || fy<-stop)
 	{
