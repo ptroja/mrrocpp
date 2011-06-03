@@ -22,7 +22,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
@@ -49,8 +48,7 @@ graspit::graspit(lib::configurator &_config) :
 void graspit::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
-	
-	
+
 	ACTIVATE_MP_ROBOT(polycrank);
 	ACTIVATE_MP_ROBOT(bird_hand);
 	ACTIVATE_MP_ROBOT(spkm);
@@ -159,11 +157,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), 1, gripper_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	//last IRp6 position from GraspI
 	for (int i = 0; i < 6; ++i)
@@ -179,13 +177,13 @@ void graspit::main_task_algorithm(void)
 	mp_ecp_bird_hand_command.ring_f[2].desired_position = 0.45 - trgraspit->from_va.grasp_joint[14] - delta_pos;
 
 	//check if adding delta_pos didn't cause out-of-boundary move
-	for (int i=0; i<2; ++i)
+	for (int i = 0; i < 2; ++i)
 		if (mp_ecp_bird_hand_command.thumb_f[i].desired_position < 0.0)
 			mp_ecp_bird_hand_command.thumb_f[i].desired_position = 0.0;
-	for (int i=0; i<3; ++i)
+	for (int i = 0; i < 3; ++i)
 		if (mp_ecp_bird_hand_command.index_f[i].desired_position < 0.0)
 			mp_ecp_bird_hand_command.index_f[i].desired_position = 0.0;
-	for (int i=0; i<3; ++i)
+	for (int i = 0; i < 3; ++i)
 		if (mp_ecp_bird_hand_command.ring_f[i].desired_position < 0.0)
 			mp_ecp_bird_hand_command.ring_f[i].desired_position = 0.0;
 
@@ -194,12 +192,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), 1, gripper_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
-
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
 	//debugging
 	//	std::stringstream ss(std::stringstream::in | std::stringstream::out);

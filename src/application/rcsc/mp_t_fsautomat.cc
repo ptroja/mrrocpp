@@ -364,38 +364,8 @@ void fsautomat::runEmptyGen(const common::State &state)
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
-	std::cout<<"MP in emptyGEN"<<std::endl;
-	lib::robot_name_t robots_to_move[state.robotSet->firstSet.size() +1000];
-	lib::robot_name_t robots_waiting[state.robotSet->secondSet.size() +1000];
-	std::cout<<"MP FIRST SIZE"<<state.robotSet->firstSet.size()<<std::endl;
-	std::list<lib::robot_name_t>::const_iterator it1, it2;
-	int i;
-	std::cout<<"MP in emptyGEN2"<<std::endl;
-	it1=state.robotSet->firstSet.begin();
-	it2=state.robotSet->firstSet.end();
-	for(i = 0;it1!=it2;i++, it1++)
-	{
-		std::cout<<"MP KOPYTKO "<<(it1==state.robotSet->firstSet.begin())<<" "<< (it1==it2)<< (*it1)<<std::endl;
-		std::cout<<"XXX"<<std::endl;
-		robots_to_move[i]=(*it1);
-		std::cout<<"XXX2"<<std::endl;
-		std::cout<<"MP KOPYTKO 2"<<(it1==state.robotSet->firstSet.begin())<<" "<< (it1==it2)<< (*it1)<<std::endl;
-	}
-	std::cout<<"MP in emptyGEN3"<<std::endl;
-	it1=state.robotSet->secondSet.begin();
-	it2=state.robotSet->secondSet.end();
-	for(i = 0;it1!=it2;i++, it1++)
-	{
-		std::cout<<"MP KOPYTKO "<<(it1==state.robotSet->firstSet.begin())<<" "<< (it1==it2)<< (*it1)<<std::endl;
-		std::cout<<"XXX"<<std::endl;
-		robots_to_move[i]=(*it1);
-		std::cout<<"XXX2"<<std::endl;
-		std::cout<<"MP KOPYTKO 2"<<(it1==state.robotSet->firstSet.begin())<<" "<< (it1==it2)<< (*it1)<<std::endl;
-	}
-std::cout<<"MP before emptyGEN"<<std::endl;
-	//run_extended_empty_gen_and_wait(state.robotSet->firstSet.size(), state.robotSet->secondSet.size(), state.robotSet->firstSet, state.robotSet->secondSet);
-	run_extended_empty_gen_and_wait(state.robotSet->firstSet.size(), state.robotSet->secondSet.size(), robots_to_move, robots_waiting);
-	std::cout<<"MP after emptyGEN"<<std::endl;
+	// TODO
+	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)
@@ -817,7 +787,7 @@ void fsautomat::main_task_algorithm(void)
 
 		const std::string & currentStateType = stateMap[nextState].getType();
 
-		std::cout << "MP TYP STANU:" << currentStateType << std::endl;
+		std::cout << "TYP STANU:" << currentStateType << std::endl;
 
 		if (currentStateType == "runGenerator") {
 			executeMotion(stateMap[nextState]);

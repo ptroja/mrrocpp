@@ -1,9 +1,9 @@
-#ifndef MP_GEN_EXTENDED_EMPTY_H_
-#define MP_GEN_EXTENDED_EMPTY_H_
+#ifndef MP_GEN_WAIT_FOR_TASK_TERMINATION_H_
+#define MP_GEN_WAIT_FOR_TASK_TERMINATION_H_
 
 /*!
  * @file
- * @brief File contains mp extended_empty generator declaration
+ * @brief File contains mp empty generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup mp
@@ -11,23 +11,19 @@
 
 #include "base/mp/generator/mp_generator.h"
 
-// generator for setting the next ecps state
-
 namespace mrrocpp {
 namespace mp {
 namespace generator {
 
 /*!
- * @brief Generator waiting for ECP task termination message of any robot coordinated
- * it optionally can be finished by sending MP trigger from UI
+ * @brief Generator waiting for ECP task termination message of any robot coordinated.
  * the trajectory is generated in ECPs
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-class extended_empty : public generator
+class wait_for_task_termination : public generator
 {
-
 protected:
 
 	/**
@@ -37,11 +33,13 @@ protected:
 
 public:
 
+	bool check_task_termination_in_first_step;
+
 	/**
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	extended_empty(task::task& _mp_task);
+	wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step = true);
 
 	/**
 	 * @brief sets desired total time to pass
@@ -50,7 +48,9 @@ public:
 	void configure(bool l_activate_trigger);
 
 	bool first_step();
+
 	bool next_step();
+
 };
 
 } // namespace generator
