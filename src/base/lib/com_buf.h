@@ -1100,8 +1100,16 @@ struct MP_COMMAND_PACKAGE
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & command;
-		ar & ecp_next_state;
-		ar & instruction;
+		switch (command) {
+			case NEXT_STATE:
+				ar & ecp_next_state;
+				break;
+			case NEXT_POSE:
+				ar & instruction;
+				break;
+			default:
+				break;
+		}
 	}
 };
 
