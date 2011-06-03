@@ -7,19 +7,20 @@
  * @date 02.07.2010
  */
 
+#include <ctime>
+
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
-#include <ctime>
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
 
-const double MIN_VELOCITY = 0.05;
+const double MIN_TIME = 3.0;
 const double MSTEP_TIME = 0.002 * 10.0;
 
 const double current_ref[] = {15000.0, 18000.0, 10000.0, 10000.0, 10000.0, 10000.0};
@@ -172,10 +173,14 @@ bool neuron_generator::next_step()
 			//printf("\n-------- breking ----------\n");
 			flushall();
 
-			if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
-				time = radius / (2 * MIN_VELOCITY);
-			} else {
-				time = radius / (2 * sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			//if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
+			//	time = 2 * radius / (2 * MIN_VELOCITY);
+			//} else {
+			time = 2 * radius / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			//}
+
+			if(time < MIN_TIME){
+				time = MIN_TIME;
 			}
 
 			break_steps_ = time / MSTEP_TIME;

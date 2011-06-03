@@ -98,6 +98,8 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	if (object_visible) {
 		//		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
 		delta_position = compute_position_change(current_position, dt);
+	} else {
+		notify_object_considered_not_visible();
 	}
 
 	if (log_enabled) {
@@ -127,6 +129,11 @@ const Eigen::Matrix <double, 6, 1> & visual_servo::get_error()
 boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_servo::get_sensor()
 {
 	return sensor;
+}
+
+void visual_servo::notify_object_considered_not_visible()
+{
+	regulator->reset();
 }
 
 void visual_servo::write_log()

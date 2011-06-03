@@ -25,17 +25,18 @@ namespace generator {
 set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
 	generator(_mp_task)
 {
+	wait_for_ECP_pulse = true;
 }
 
-void set_next_ecps_state::configure(std::string l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len)
+void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len)
 {
 	strcpy(ecp_next_state.mp_2_ecp_next_state, l_mp_2_ecp_next_state.c_str());
-	ecp_next_state.mp_2_ecp_next_state_variant = l_mp_2_ecp_next_state_variant;
+	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
 		if (str_len == 0) {
-			strcpy(reinterpret_cast<char*>(ecp_next_state.mp_2_ecp_next_state_string), l_mp_2_ecp_next_state_string);
+			strcpy(reinterpret_cast <char*> (ecp_next_state.string_data), l_mp_2_ecp_next_state_string);
 		} else {
-			memcpy(ecp_next_state.mp_2_ecp_next_state_string, l_mp_2_ecp_next_state_string, str_len);
+			memcpy(ecp_next_state.string_data, l_mp_2_ecp_next_state_string, str_len);
 		}
 	}
 }
@@ -68,6 +69,29 @@ bool set_next_ecps_state::first_step()
 
 bool set_next_ecps_state::next_step()
 {
+	sr_ecp_msg.message(lib::NON_FATAL_ERROR, "set_next_ecps_state::next_step");
+
+	// tutuaj oczekujemy aż wszystkie roboty potwierdzą otrzymanie rozkazu przez ecp_acknowledge
+	// korzystamy ze zbioru robot_m
+	// najpierw wylaczamy wysylanie czegokolwiek do robotow
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->communicate_with_ecp = false;
+				}
+	// nastepnie sprawdzamy czy ktorys z robotow jeszcze nie wyslal potwierdzenia
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
+						/* DEBUG START*/
+						std::stringstream temp_message;
+						temp_message << "set_next_ecps_state != lib::ECP_ACKNOWLEDGE robot ("
+								<< robot_node.second->robot_name << ")" << std::endl;
+						sr_ecp_msg.message(lib::NON_FATAL_ERROR, temp_message.str());
+						/* DEBUG END*/
+						return true;
+					}
+				}
+	// w przeciwnym razie konczymy generator (wszystkei roboty odtrzymaly polecenie i potwierdzily to)
 	return false;
 }
 

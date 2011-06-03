@@ -261,9 +261,7 @@ void EcpRobot::move_joints(const double final_position[])
 
 void EcpRobot::execute_motion(void)
 {
-
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-
 
 	ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
@@ -358,7 +356,6 @@ void EcpRobot::set_kinematic(uint8_t kinematic_model_no)
 // ---------------------------------------------------------------
 void EcpRobot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no[])
 {
-
 	// Zlecenie zapisu numerow algorytmow i zestawow parametrow
 	// Przepisanie zadanych numerow algorytmow i zestawow parametrow
 	memcpy(ecp->ecp_command.robot_model.servo_algorithm.servo_algorithm_no, algorithm_no, ecp->number_of_servos
@@ -459,8 +456,7 @@ void EcpRobot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector
 
 	execute_motion();
 
-	lib::Homog_matrix tmp(ecp->reply_package.robot_model.tool_frame_def.tool_frame);
-	tmp.get_xyz_angle_axis(tool_vector);
+	ecp->reply_package.robot_model.tool_frame_def.tool_frame.get_xyz_angle_axis(tool_vector);
 }
 // ---------------------------------------------------------------
 
@@ -476,9 +472,8 @@ void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 	ecp->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 
 	execute_motion();
-	lib::Homog_matrix tmp(ecp->reply_package.robot_model.tool_frame_def.tool_frame);
 
-	tmp.get_xyz_euler_zyz(tool_vector);
+	ecp->reply_package.robot_model.tool_frame_def.tool_frame.get_xyz_euler_zyz(tool_vector);
 }
 // ---------------------------------------------------------------
 

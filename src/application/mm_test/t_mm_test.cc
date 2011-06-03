@@ -161,12 +161,17 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	{
 		//get_next_state();
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*)mp_command.ecp_next_state.string_data;
 
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]<= '9' && ((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]>= '0')
+		if(((char*)mp_command.ecp_next_state.string_data)[0]<= '9' && ((char*)mp_command.ecp_next_state.string_data)[0]>= '0')
 		{
+<<<<<<< HEAD
 			double t[4];
 			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+=======
+			double t[2];
+			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.string_data);
+>>>>>>> b07f8f592b9737b4cf9ef8da468b148ab1fa7b15
 
 			sg->reset();
 			sg->set_relative();

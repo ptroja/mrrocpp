@@ -12,7 +12,7 @@ class DoubleWriter : public Agent
 {
 private:
 	RemoteAgent reader;
-	RemoteBuffer<double> DoubleBuf;
+	OutputBuffer<double> DoubleBuf;
 	double cnt;
 public:
 
@@ -27,7 +27,7 @@ public:
 	void operator()()
 	{
 		std::cout << "Writer: " << cnt << std::endl;
-		DoubleBuf.Set(cnt);
+		DoubleBuf.Send(cnt);
 		cnt += 1.0;
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}

@@ -1,10 +1,12 @@
 #include <iostream>
 #include <cstring>
-#include <cstdlib>
 #include <cstdio>
 
-#include "base/lib/datastr.h"
+#include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include "State.h"
+#include "base/lib/datastr.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
@@ -26,66 +28,9 @@ namespace mp {
 namespace common {
 
 State::State()
+	: numArgument(0)
 {
-	numArgument = 0;
-	robotSet = NULL;
-	stateTransitions = new std::list <Transition>();
 }
-//-----------------------------------------------------------------------------------------------------------
-State::State(const State &state)
-{
-	this->numArgument = state.numArgument;
-	this->id = state.id;
-	this->type = state.type;
-	this->stringArgument = state.stringArgument;
-	robot = state.robot;
-	generatorType = state.generatorType;
-	if (state.robotSet)
-		this->robotSet = new RobotSets(*(state.robotSet));
-	else
-		robotSet = NULL;
-	this->stateTransitions = new std::list <Transition>(*(state.stateTransitions));
-}
-
-//-----------------------------------------------------------------------------------------------------------
-
-State::~State()
-{
-	if (stateTransitions)
-		delete stateTransitions;
-	if (robotSet)
-		delete robotSet;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::RobotSets()
-{
-	firstSetCount = 0;
-	secondSetCount = 0;
-	firstSet = NULL;
-	secondSet = NULL;
-}
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::RobotSets(const RobotSets &robotSets)
-{
-	this->firstSetCount = robotSets.firstSetCount;
-	this->secondSetCount = robotSets.secondSetCount;
-	this->firstSet = new lib::robot_name_t[firstSetCount];
-	for (int i = 0; i < firstSetCount; i++)
-		this->firstSet[i] = robotSets.firstSet[i];
-	this->secondSet = new lib::robot_name_t[secondSetCount];
-	for (int i = 0; i < secondSetCount; i++)
-		this->secondSet[i] = robotSets.secondSet[i];
-}
-//-----------------------------------------------------------------------------------------------------------
-State::RobotSets::~RobotSets()
-{
-	if (firstSet)
-		delete[] firstSet;
-	if (secondSet)
-		delete[] secondSet;
-}
-//-----------------------------------------------------------------------------------------------------------
 
 void State::setStateID(const std::string & stateID)
 {
@@ -99,9 +44,9 @@ const char* State::getStateID() const
 
 //-----------------------------------------------------------------------------------------------------------
 
-void State::setNumArgument(const char *numArgument)
+void State::setNumArgument(const std::string & numArgument)
 {
-	this->numArgument = atoi(numArgument);
+	this->numArgument = boost::lexical_cast<int>(numArgument);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -120,9 +65,9 @@ void State::setType(const std::string & _type)
 
 //-----------------------------------------------------------------------------------------------------------
 
-const char * State::getType() const
+const std::string & State::getType() const
 {
-	return type.c_str();
+	return type;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -189,24 +134,24 @@ void State::setStringArgument(const std::string & trajFilePath)
 
 //----------------------------------------------------------------------------------------------------------
 
-const char* State::getStringArgument() const
+const std::string & State::getStringArgument() const
 {
-	return stringArgument.c_str();
+	return stringArgument;
 }
 
 //----------------------------------------------------------------------------------------------------------
 
-void State::setTransition(const char *cond, const char *target, lib::configurator &_config)
+void State::setTransition(const std::string & cond, const std::string & target, lib::configurator &_config)
 {
 	Transition *tempTr = new Transition(cond, target, _config);
-	stateTransitions->push_back(*tempTr);
+	stateTransitions.push_back(*tempTr);
 }
 
 //----------------------------------------------------------------------------------------------------------
 
 void State::setProperTransitionResult(bool result)
 {
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		if (((*it).getConditionDescription()) == "stateOperationResult")
 			(*it).setConditionResult(result);
 	}
@@ -214,7 +159,7 @@ void State::setProperTransitionResult(bool result)
 
 //----------------------------------------------------------------------------------------------------------
 
-std::list <Transition> * State::getTransitions() const
+const std::list <Transition> & State::getTransitions() const
 {
 	return stateTransitions;
 }
@@ -222,7 +167,7 @@ std::list <Transition> * State::getTransitions() const
 //----------------------------------------------------------------------------------------------------------
 const char * State::returnNextStateID(StateHeap &sh)
 {
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		if ((*it).getConditionResult())
 			return (*it).getTargetID(sh);
 	}
@@ -234,17 +179,21 @@ const char * State::returnNextStateID(StateHeap &sh)
 void State::showStateContent() const
 {
 	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl;//<<stringArgument<<std::endl;
-	if (robotSet != NULL) {
-		std::cout << "\nFirst set count: " << robotSet->firstSetCount << " = ";
-		for (int i = 0; i < robotSet->firstSetCount; i++)
-			std::cout << robotSet->firstSet[i] << "; ";
-		std::cout << "\nSecond set count: " << robotSet->secondSetCount << " = ";
-		for (int i = 0; i < robotSet->secondSetCount; i++)
-			std::cout << robotSet->secondSet[i] << "; ";
+	if (robotSet.is_initialized()) {
+		std::cout << "\nFirst set count: " << robotSet->firstSet.size() << " = ";
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet) {
+			std::cout << name << "; ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "\nSecond set count: " << robotSet->secondSet.size() << " = ";
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet) {
+			std::cout << name << "; ";
+		}
 		std::cout << std::endl;
 	}
-	std::cout << "Transitions count: " << stateTransitions->size() << std::endl;
-	for (std::list <Transition>::iterator it = stateTransitions->begin(); it != stateTransitions->end(); ++it) {
+	std::cout << "Transitions count: " << stateTransitions.size() << std::endl;
+	for (std::list <Transition>::const_iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		std::cout << "----- Transition ------" << std::endl;
 		(*it).showContent();
 	}

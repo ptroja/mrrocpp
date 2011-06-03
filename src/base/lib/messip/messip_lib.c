@@ -1355,7 +1355,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	}
 
 	/*--- Channel deletion failed ? ---*/
-	return reply.ok;
+	return (reply.ok == MESSIP_OK) ? 0 : -1;
 
 }								// messip_channel_disconnect
 

@@ -13,6 +13,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
+#include "base/ecp/ECP_error.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
@@ -235,7 +236,8 @@ protected:
 			}
 		} else if (motion_type == lib::RELATIVE && angle_axis_absolute_transformed_into_relative == true) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
-				if (inter.interpolate_angle_axis_absolute_pose_transformed_into_relative(pose_vector_iterator, coordinate_vector, mc) == false) {
+				if (inter.interpolate_angle_axis_absolute_pose_transformed_into_relative(pose_vector_iterator, coordinate_vector, mc)
+						== false) {
 					trueFlag = false;
 				}
 				pose_vector_iterator++;
@@ -574,103 +576,104 @@ public:
 	 * @param max_acc maximal allowed acceleration
 	 * @return -1 if the trajectory was not interpolated before, 0 if the jerks were not detected, if yes, the number of the coordinate where the jerk was detected is returned
 	 */
-    virtual int detect_jerks(double max_acc)
+	virtual int detect_jerks(double max_acc)
 	{
-    	if (debug) {
-    		printf("##################################### detect_jerks #####################################\n");
+		if (debug) {
+			printf("##################################### detect_jerks #####################################\n");
 		}
 
-    	if (!interpolated) {
-    		return -1;
-    	}
-
-		coordinate_vector_iterator = coordinate_vector.begin();
-		std::vector<double> temp1 = pose_vector.begin()->start_position;
-		std::vector<double> temp2 = (*coordinate_vector_iterator);
-
-		std::size_t i, j;//loop counters
-
-		for (i = 0; i < axes_num; i++) {
-			if (motion_type == lib::ABSOLUTE) {
-				if ((2*fabs(temp2[i]-temp1[i]))/(mc*mc) > max_acc) {
-					sr_ecp_msg.message("Possible jerk detected!");
-					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
-						//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
-						flushall();
-					}
-					return 1; //jerk in the first macrostep
-				}
-			} else if (motion_type == lib::RELATIVE) {
-				if ((2*fabs(temp2[i]))/(mc*mc) > max_acc) {
-					sr_ecp_msg.message("Possible jerk detected!");
-					if (debug) {
-						printf("Jerk detected in coordinates: 1\t axis: %zd\n",i);
-						//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
-						flushall();
-					}
-					return 1; //jerk in the first macrostep
-				}
-			} else {
-				sr_ecp_msg.message("Wrong motion type");
-				throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
-			}
+		if (!interpolated) {
+			return -1;
 		}
+		if (!coordinate_vector.empty()) {
+			coordinate_vector_iterator = coordinate_vector.begin();
 
-		coordinate_vector_iterator++;
+			std::vector <double> temp1 = pose_vector.begin()->start_position;
+			std::vector <double> temp2 = (*coordinate_vector_iterator);
 
-		for (i = 1; i < coordinate_vector.size(); i++) {
+			std::size_t i, j;//loop counters
 
-			j = 0;
-			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+			for (i = 0; i < axes_num; i++) {
 				if (motion_type == lib::ABSOLUTE) {
-					if (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc  > max_acc) {
+					if ((2 * fabs(temp2[i] - temp1[i])) / (mc * mc) > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
-							//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
+							printf("Jerk detected in coordinates: 1\t axis: %zd\n", i);
+							//printf("acc: %f\n", (2*fabs(temp2[i]-temp1[i]))/(mc*mc));
 							flushall();
 						}
-						return i+1;
+						return 1; //jerk in the first macrostep
 					}
 				} else if (motion_type == lib::RELATIVE) {
-					if (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc  > max_acc) {
+					if ((2 * fabs(temp2[i])) / (mc * mc) > max_acc) {
 						sr_ecp_msg.message("Possible jerk detected!");
 						if (debug) {
-							printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i+1, j);
-							//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
+							printf("Jerk detected in coordinates: 1\t axis: %zd\n", i);
+							//printf("acc: %f\n", (2*fabs(temp2[i]))/(mc*mc));
 							flushall();
 						}
-						return i+1;
+						return 1; //jerk in the first macrostep
 					}
 				} else {
 					sr_ecp_msg.message("Wrong motion type");
 					throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
 				}
-
-				j++;
 			}
 
-			temp1 = temp2;
-			temp2 = *coordinate_vector_iterator;
-
 			coordinate_vector_iterator++;
+
+			for (i = 1; i < coordinate_vector.size(); i++) {
+
+				j = 0;
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+					if (motion_type == lib::ABSOLUTE) {
+						if (fabs((fabs(temp1[j] - temp2[j]) / mc) - (fabs(temp2[j] - *tempIter) / mc)) / mc > max_acc) {
+							sr_ecp_msg.message("Possible jerk detected!");
+							if (debug) {
+								printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i + 1, j);
+								//printf("acc: %f\n", (fabs((fabs(temp1[j] - temp2[j])/mc) - (fabs(temp2[j] - *tempIter)/mc)) / mc));
+								flushall();
+							}
+							return i + 1;
+						}
+					} else if (motion_type == lib::RELATIVE) {
+						if (fabs((fabs(temp2[j]) / mc) - (fabs(*tempIter) / mc)) / mc > max_acc) {
+							sr_ecp_msg.message("Possible jerk detected!");
+							if (debug) {
+								printf("Jerk detected in coordinates: %zd\t axis: %zd\n", i + 1, j);
+								//printf("acc: %f\n", (fabs((fabs(temp2[j])/mc) - (fabs(*tempIter)/mc)) / mc));
+								flushall();
+							}
+							return i + 1;
+						}
+					} else {
+						sr_ecp_msg.message("Wrong motion type");
+						throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+					}
+
+					j++;
+				}
+
+				temp1 = temp2;
+				temp2 = *coordinate_vector_iterator;
+
+				coordinate_vector_iterator++;
+			}
+
+			flushall();
 		}
-
-		flushall();
-
 		return 0;
 	}
-    /**
-     * Method load the relative trajectory_pose object to the pose_vector.
-     * @param trajectory_pose pose to load
-     */
-    virtual bool load_relative_pose(Pos & trajectory_pose) = 0;
-    /**
-     * Method load the absolute trajectory_pose object to the pose_vector.
-     * @param trajectory_pose pose to load
-     */
-    virtual bool load_absolute_pose(Pos & trajectory_pose) = 0;
+	/**
+	 * Method load the relative trajectory_pose object to the pose_vector.
+	 * @param trajectory_pose pose to load
+	 */
+	virtual bool load_relative_pose(Pos & trajectory_pose) = 0;
+	/**
+	 * Method load the absolute trajectory_pose object to the pose_vector.
+	 * @param trajectory_pose pose to load
+	 */
+	virtual bool load_absolute_pose(Pos & trajectory_pose) = 0;
 };
 
 } // namespace generator

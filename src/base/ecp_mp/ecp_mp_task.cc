@@ -17,6 +17,7 @@
 #include <csignal>
 
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -28,6 +29,7 @@
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/ecp/ECP_main_error.h"
+#include "base/lib/agent/Agent.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -35,10 +37,12 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
 
-lib::sr_ecp* task::sr_ecp_msg = NULL;
+boost::shared_ptr<lib::sr_ecp> task::sr_ecp_msg;
 
 task::task(lib::configurator &_config) :
-	config(_config), mrrocpp_network_path(config.return_mrrocpp_network_path())
+	Agent(_config.section_name),
+	config(_config),
+	mrrocpp_network_path(config.return_mrrocpp_network_path())
 {
 	const std::string ui_net_attach_point = config.get_ui_attach_point();
 
@@ -64,9 +68,9 @@ task::~task()
 {
 	// Zabicie wszystkich procesow VSP
 	BOOST_FOREACH(sensor_item_t & sensor_item, sensor_m)
-				{
-					delete sensor_item.second;
-				}
+	{
+		delete sensor_item.second;
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -212,12 +216,7 @@ void task::all_sensors_get_reading(sensors_t & _sensor_m)
 				}
 }
 
-bool task::str_cmp::operator()(char const *a, char const *b) const
-{
-	return strcmp(a, b) < 0;
-}
-
-std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
+std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> task::createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num)
 {
 	xmlChar * coordinateType = xmlGetProp(actNode, (const xmlChar *) "coordinateType");
 	xmlChar * m_type = xmlGetProp(actNode, (const xmlChar *) "motionType");

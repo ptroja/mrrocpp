@@ -80,9 +80,13 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;//polozenie od srodka postumenta
 
+<<<<<<< HEAD
 
 	if (index == 0)
 	{
+=======
+	if (index == 0) {
+>>>>>>> b07f8f592b9737b4cf9ef8da468b148ab1fa7b15
 		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		currentFrame.get_translation_vector(first_trans_vect);
