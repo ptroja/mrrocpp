@@ -164,7 +164,6 @@ public:
 	 */
 	void wait_for_stop(void);// by Y&W dodany tryb
 
-
 	/**
 	 * @brief starts all ECP's
 	 * it sends special MP command
@@ -216,16 +215,7 @@ private:
 	/**
 	 * @brief pulse from UI
 	 */
-	InputBuffer <char> ui_pulse;
-
-	/**
-	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
-	 * @param process_type - process type to wait for the pulses
-	 * @param desired_wait_mode - decides if the method should wait for desired pulse or not
-	 * @return desired pulse found
-	 */
-	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	InputBuffer<char> ui_pulse;
 };
 
 /**
