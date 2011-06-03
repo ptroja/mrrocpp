@@ -161,17 +161,12 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	{
 		//get_next_state();
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.string_data;
+		path += (char*)mp_command.ecp_next_state.string_data;//mp_2_ecp_next_state_string;
 
 		if(((char*)mp_command.ecp_next_state.string_data)[0]<= '9' && ((char*)mp_command.ecp_next_state.string_data)[0]>= '0')
 		{
-<<<<<<< HEAD
 			double t[4];
-			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
-=======
-			double t[2];
 			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.string_data);
->>>>>>> b07f8f592b9737b4cf9ef8da468b148ab1fa7b15
 
 			sg->reset();
 			sg->set_relative();
@@ -243,7 +238,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_MM_TEST)
 	{
 		double mp_args[2];
-		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.string_data);
 		//move direction[0] and frames/duration
 		gen->configure(mp_args[0],mp_args[1]);
 
@@ -254,7 +249,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_ROTATE)
 	{
 		double mp_args[1];
-		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+		lib::setValuesInArray(mp_args,(char*)mp_command.ecp_next_state.string_data);
 		//move direction[0] and frames/duration
 		rot->configure(mp_args[0]);
 
