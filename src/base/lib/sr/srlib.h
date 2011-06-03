@@ -43,6 +43,7 @@ static const unsigned int TEXT_LENGTH = 256;
 typedef struct sr_package
 {
 	//! Message timestamp
+	//! @todo use boost::posix_time instead
 	struct _portable_timeval
 	{
 		unsigned long tv_sec;

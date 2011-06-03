@@ -31,9 +31,17 @@ add_library(mp_robots
 	sarkofag/mp_r_sarkofag.cc
 )
 
-add_library(ecp_robots
+add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
 )
+
+add_library(ecp_robots)
+
+SET_TARGET_PROPERTIES(ecp_robots PROPERTIES LINKER_LANGUAGE CXX)
+
+target_link_libraries(ecp_robot ecp_mp)
+
+target_link_libraries(ecp_robots ecp_robot)
 
 # enable conditional inclusion to ecp_robots
 target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_robots ecp_r_irp6ot_m)
@@ -48,5 +56,5 @@ target_link_library_if(ROBOT_SHEAD ecp_robots ecp_r_shead)
 target_link_library_if(ROBOT_SMB ecp_robots ecp_r_smb)
 target_link_library_if(ROBOT_SPKM ecp_robots ecp_r_spkm)
 
-install(TARGETS mp_robots ecp_robots DESTINATION lib)
+install(TARGETS mp_robots ecp_robot ecp_robots DESTINATION lib)
 

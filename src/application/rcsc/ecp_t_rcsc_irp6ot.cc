@@ -24,10 +24,11 @@
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "subtask/ecp_mp_st_gripper_opening.h"
-#include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
+/*
+ #include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
 
-using namespace mrrocpp::ecp::servovision;
-
+ using namespace mrrocpp::ecp::servovision;
+ */
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
@@ -37,7 +38,7 @@ rcsc::rcsc(lib::configurator &_config) :
 	common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
@@ -60,15 +61,19 @@ rcsc::rcsc(lib::configurator &_config) :
 		p2(2, 0) = 0.3;
 
 		//shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
-
-		reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
-		vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
-		term_cond = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(_config, fradia_config_section_name));
-		sm
-				= shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, fradia_config_section_name, vs));
+		/*
+		 reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
+		 vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
+		 term_cond
+		 = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(_config, fradia_config_section_name));
+		 sm
+		 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, fradia_config_section_name, vs));
+		 */
 		//sm->add_position_constraint(cube);
-		sm->add_termination_condition(term_cond);
-		sm->configure();
+		/*
+		 sm->add_termination_condition(term_cond);
+		 sm->configure();
+		 */
 	}
 
 	go_st = new common::sub_task::gripper_opening(*this);
@@ -111,11 +116,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 		wmg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
 				rgg->configure(0.072, 0.00005, 0, false);
@@ -144,11 +149,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		rgg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.01, 1000,-10);
+		gag->configure(0.01, 1000, -10);
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
-		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_CCL_90:
 				rfrg->configure(-90.0);
@@ -168,7 +173,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		rfrg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_GO_VAR_1:
 				go_st->configure(0.002, 1000);
@@ -184,7 +189,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*) mp_command.ecp_next_state.string_data;
 
 		tig->flush_pose_list();
 		tig->load_file_with_path(path.c_str());
@@ -195,9 +200,9 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*) mp_command.ecp_next_state.string_data;
 
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RELATIVE:
 				//sg->set_relative();
@@ -211,10 +216,10 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 		//sg->load_file_with_path(path.c_str());
 		//sg->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_IB_EIH) {
-		sm->Move();
-
+		/*
+		 } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_IB_EIH) {
+		 sm->Move();
+		 */
 	}
 
 }

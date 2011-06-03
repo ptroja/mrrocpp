@@ -26,7 +26,7 @@
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 #include "robot/festival/const_festival.h"
-#include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
+//#include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_force_tool_change.h"
@@ -38,7 +38,6 @@
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-
 
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
@@ -248,8 +247,6 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	printf("SEQ FROM VIS : %s\n", cube_tab_send);
 
 	//reszta
-	// struktura pomiocnicza
-	common::SingleManipulation single_manipulation;
 
 	// czyszczenie listy
 	manipulation_list.clear();
@@ -357,9 +354,8 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	//pocztaek ukladania
 	// dodawanie manipulacji do listy
 	for (unsigned int char_i = 0; char_i < strlen(manipulation_sequence) - 1; char_i += 2) {
-		single_manipulation.set_state(common::read_cube_color(manipulation_sequence[char_i]), common::read_cube_turn_angle(manipulation_sequence[char_i
-				+ 1]));
-		manipulation_list.push_back(single_manipulation);
+		manipulation_list.push_back(common::SingleManipulation(common::read_cube_color(manipulation_sequence[char_i]), common::read_cube_turn_angle(manipulation_sequence[char_i
+				+ 1])));
 	}
 
 	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "juZ ukl/adam", 0, 1, lib::festival::ROBOT_NAME.c_str());
@@ -757,9 +753,10 @@ void rubik_cube_solver::approach_op(int mode)
 
 	run_extended_empty_gen_and_wait(3, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	//generator sledzacy kostke
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-
+	/*
+	 //generator sledzacy kostke
+	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	 */
 	run_extended_empty_gen_and_wait(3, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// docisniecie chwytaka tracka do kostki
@@ -867,8 +864,7 @@ void rubik_cube_solver::create_robots()
 {
 
 	ACTIVATE_MP_ROBOT(conveyor);
-	
-	
+
 	ACTIVATE_MP_ROBOT(polycrank);
 	ACTIVATE_MP_ROBOT(bird_hand);
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);

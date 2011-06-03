@@ -1,158 +1,127 @@
-
+#include <string>
 #include <cstring>
 #include <cstdlib>
-#include <cstdio>
 
 #include "Condition.h"
 
+#include "base/lib/configurator.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace common {
 
 
-/*Condition::Condition()
+Condition::Condition(const std::string & _condDesc, const lib::configurator &_config)
+	: condition(_condDesc), config(_config)
 {
-	this->condition = NULL;
-	this->lhValue = NULL;
-	this->rhValue = NULL;
-}
-*/
-
-Condition::Condition(const char *condDesc, lib::configurator &_config)
-	: config(_config)
-{
-	this->condition = NULL;
-	this->lhValue = NULL;
-	this->rhValue = NULL;
-	int size = strlen(condDesc) + 1;
-	this->condition = new char[size];
-	strcpy(this->condition, condDesc);
 	operationType = splitCondExpr();
 //	checkContext(condition);
 //	char *fileName = config.value<std::string>("xml_file", "[xml_settings]");
 //	printf("from config: %s\n", fileName);
 }
 
-Condition::Condition(const Condition &cond)
-	: config(cond.config)
-{
-	this->condition = NULL;
-	this->lhValue = NULL;
-	this->rhValue = NULL;
-	int size = strlen(cond.condition) + 1;
-	this->condition = new char[size];
-	strcpy(this->condition, cond.condition);
-	if(cond.lhValue != NULL)
-	{
-		size = strlen(cond.lhValue) + 1;
-		this->lhValue = new char[size];
-		strcpy(this->lhValue, cond.lhValue);
-	}
-	if(cond.rhValue != NULL)
-	{
-		size = strlen(cond.rhValue) + 1;
-		this->rhValue = new char[size];
-		strcpy(this->rhValue, cond.rhValue);
-	}
-	this->operationType = cond.operationType;
-}
-
-Condition::~Condition()
-{
-	if(condition != NULL)
-		delete[] condition;
-	if(lhValue != NULL)
-		delete[] lhValue;
-	if(rhValue != NULL)
-		delete[] rhValue;
-}
-
 Condition::RELATIONAL_OPERATOR Condition::splitCondExpr()
 {
-	const char *opc[] = {"==", "!=", "<=", ">=", "<", ">"};
-	char *temp;
+	// TODO: rewrite with boost::tokenize
+	char *myExpr = strdup(condition.c_str());
 
-	// TODO: memory leak
-	char *myExpr = strdup(condition);
-	char *res;
+	char *ptr = myExpr;
 
 	if(myExpr != NULL)
 	{
 		for(int i=0; i<6; i++)
 		{
+			const char *opc[] = {"==", "!=", "<=", ">=", "<", ">"};
+			char *res;
+
 			if((res = strstr(myExpr, opc[i])) != NULL)
 			{
 				if(strlen(opc[i]) == 2)
 					strncpy(res, "  ", 2);
 				else
 					strncpy(res, " ", 1);
-				temp = strtok(myExpr, " ");
-				lhValue = new char[strlen(temp)];
-				strcpy(lhValue, temp);
+				char * temp = strtok(myExpr, " ");
+				lhValue = temp;
 				temp = strtok(NULL, " ");
-				rhValue = new char[strlen(temp)];
-				strcpy(rhValue, temp);
+				rhValue = temp;
 				//printf("lv: %s\nrv: %s\n", lhValue, rhValue);
+
+				// free allcated memory
+				free(ptr);
+
 				return (Condition::RELATIONAL_OPERATOR)i;
 			}
 		}
 	}
+
+	if(ptr) {
+		// free allcated memory
+		free(ptr);
+	}
+
 	return Condition::WITHOUT_OP;
 }
 
-const char * Condition::getCondDesc() const
+const std::string & Condition::getCondDesc() const
 {
 	return condition;
 }
 
 bool Condition::checkCompareResult()
 {
-	if(!strcmp(condition, "true") || !strcmp(condition, "TRUE"))
+	if(condition == "true" || condition == "TRUE")
 		return true;
 
-	if(!strcmp(condition, "stateOperationResult"))
+	if(condition == "stateOperationResult")
 		return result;
 
-	if(strstr(condition, ".") != NULL)
+	if(strstr(condition.c_str(), ".") != NULL)
 	{
-		bool result = checkContext(condition);
-		return result;
+		return checkContext(condition);
 	}
-	else
-		return false;
+
+	// defalt to false
+	return false;
 }
 
-bool Condition::checkContext(const char *toCheck)
+bool Condition::checkContext(const std::string & toCheck)
 {
-	const char *iniFile = "iniFile";
-	if(strstr(toCheck, ".")!=NULL)
+	if(strstr(toCheck.c_str(), ".")!=NULL)
 	{
-		std::list<const char *> *args = returnSplitedStr(toCheck);
-		std::list<const char *>::iterator it = args->begin();
-		if(!strcmp(iniFile, (*it)))
+		std::list<std::string> args = returnSplitedStr(toCheck);
+		std::list<std::string>::iterator it = args.begin();
+		if((*it) == "iniFile")
 		{
-			if(config.exists(*(++it)))
+			++it;
+			if(config.exists((*it).c_str())) {
 				return (bool)config.value<int>(*it);
-			return false;
+			}
 		}
 		//for(std::list<char *>::iterator it = args->begin(); it != args->end(); ++it)
 		//	printf("Element: %s\n", (*it));
 	}
+
+	// default to false
 	return false;
 }
 
-std::list<const char *> * Condition::returnSplitedStr(const char *toSplit)
+std::list<std::string> Condition::returnSplitedStr(const std::string & toSplit)
 {
-	// TODO: memory leak - change from char * to std::string implementation
-	char *dataStr = strdup(toSplit);
-	char *element;
-	std::list<const char *> *splitedStr = new std::list<const char *>();
+	// TODO: rewrite with boost::tokenize
+	char *dataStr = strdup(toSplit.c_str());
 
-	element = strtok(dataStr, ".");
-	splitedStr->push_back(element);
+	// pointer to the allocated memory
+	char *ptr = dataStr;
+
+	std::list<std::string> splitedStr;
+
+	char *element = strtok(dataStr, ".");
+	splitedStr.push_back(element);
 	while((element = strtok(NULL, ".")) != NULL)
-		splitedStr->push_back(element);
+		splitedStr.push_back(element);
+
+	// free allocated memory
+	free(ptr);
 
 	return splitedStr;
 }

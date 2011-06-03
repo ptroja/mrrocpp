@@ -46,7 +46,7 @@ void CubeState::set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front
 	right = right_is;
 }
 
-void CubeState::set_state(CubeState &cubeState, int turnAngle)
+void CubeState::set_state(const CubeState &cubeState, int turnAngle)
 {
 	switch(turnAngle)
 	{

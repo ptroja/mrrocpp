@@ -6,6 +6,6 @@ add_library(ecp_mp
 	Trajectory.cc
 )
 
-target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES})
+target_link_libraries(ecp_mp ${LIBXML2_LIBRARIES} ${COMMON_LIBRARIES} agent)
 
 install(TARGETS ecp_mp DESTINATION lib)

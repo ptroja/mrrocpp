@@ -10,16 +10,14 @@ ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
 
 add_library(ecp
 	ECP_main_error.cc
+	ECP_error.cc
 	ecp_m.cc
 	ecp_task.cc
 	ecp_sub_task.cc
-	ecp_generator.cc
 	ecp_taught_in_pose.cc
 	ecp_g_transparent.cc
 )
 
-target_link_libraries(ecp
-	ecp_robots ecp_mp)
+target_link_libraries(ecp ecp_robot ecp_mp)
 	
 install(TARGETS ecp DESTINATION lib)
-	

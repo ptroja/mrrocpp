@@ -1,4 +1,3 @@
-
 #if !defined(_TRANSITION_H_)
 #define _TRANSITION_H_
 
@@ -14,19 +13,19 @@ class Transition
 {
 	public:
 		//Transition();
-		Transition(const char *cond, const char *targetID, lib::configurator &_config);
+		Transition(const std::string & cond, const std::string & targetID, lib::configurator &_config);
 		Transition(const Transition &transition);
 		~Transition();
 
-		void showContent();
+		void showContent() const;
 		bool getConditionResult();
 		void setConditionResult(bool result);
 		const char * getTargetID(StateHeap &sh) const;
-		std::string getConditionDescription() const;
+		const std::string & getConditionDescription() const;
 
 	private:
-		char *targetID;
-		Condition *condition;
+		std::string targetID;
+		Condition * condition;
 };
 
 } // namespace common

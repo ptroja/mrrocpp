@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
 
 		gateway.setDebugLevel(0);
 		clock_gettime(CLOCK_MONOTONIC, &t1);
+
 		node.writeInterpolationDataRecord(0, 0, 0);
 		clock_gettime(CLOCK_MONOTONIC, &t2);
 		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);

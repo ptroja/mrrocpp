@@ -66,7 +66,6 @@ bool g_mm_test::next_step()
 	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;//polozenie od srodka postumenta
 
-
 	if (index == 0) {
 		currentFrame = the_robot->reply_package.arm.pf_def.arm_frame;
 
