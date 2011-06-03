@@ -40,6 +40,9 @@ private:
 
 	double image_sampling_period;
 	static const double image_sampling_period_default;
+	int motion_steps_base;
+
+
 	std::string txtbuf;
 	int txtiter;
 };

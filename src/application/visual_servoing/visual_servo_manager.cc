@@ -265,7 +265,7 @@ void visual_servo_manager::set_new_motion_steps(int new_motion_steps)
 {
 	this->new_motion_steps = min(new_motion_steps, motion_steps_max);
 	this->new_motion_steps = max(new_motion_steps, motion_steps_min);
-	log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d\n", this->new_motion_steps);
+	//log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d\n", this->new_motion_steps);
 }
 
 int visual_servo_manager::get_new_motion_steps() const

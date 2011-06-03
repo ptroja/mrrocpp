@@ -119,75 +119,36 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 
 void single_visual_servo_manager::configure_all_servos()
 {
+	motion_steps_base = get_motion_steps();
+	log_dbg("single_visual_servo_manager::configure_all_servos(): motion_steps_base = %d\n", motion_steps_base);
 }
 
 void single_visual_servo_manager::update_motion_steps(double discode_processing_time, double discode_synchronization_delay, double discode_total_time, double image_mrroc_delay)
 {
-
-	//
-	//log_dbg("t_p = %g    t_w = %g    t_p + t_w = %g\n", discode_processing_time, discode_synchronization_delay, discode_total_time);
-	//
-	//	if (discode_synchronization_delay > image_sampling_period) {
-	//		//set_new_motion_steps(get_motion_steps() - image_sampling_period / step_time);
-	//		set_new_motion_steps(get_motion_steps() - 1);
-	//	} else {
-	//		if (discode_total_time > n * image_sampling_period) {
-	//			set_new_motion_steps(get_motion_steps() - 1);
-	//		}
-	//		if (discode_total_time < n * image_sampling_period) {
-	//			set_new_motion_steps(get_motion_steps() + 1);
-	//		}
-	//	}
-
-	//	int n = discode_processing_time / image_sampling_period + 1;
-	//
-	//	double desired_macrostep_time = image_sampling_period * n;
-	//	double current_macrostep_time = get_motion_steps() * step_time;
-	//	if (fabs(desired_macrostep_time - current_macrostep_time) > image_sampling_period) {
-	//		set_new_motion_steps(desired_macrostep_time / step_time);
-	//	} else {
-	//		if (discode_total_time > n * image_sampling_period) {
-	//			set_new_motion_steps(get_motion_steps() - 1);
-	//		}
-	//		if (discode_total_time < n * image_sampling_period) {
-	//			set_new_motion_steps(get_motion_steps() + 1);
-	//		}
-	//	}
-
-
-	//	int n = discode_processing_time / image_sampling_period + 1;
-	//
-	//	double desired_macrostep_time = image_sampling_period * n;
-	//	double current_macrostep_time = get_motion_steps() * step_time;
-	//	if (fabs(desired_macrostep_time - current_macrostep_time) > 2*image_sampling_period) {
-	//		set_new_motion_steps(desired_macrostep_time / step_time);
-	//	} else {
 	double e = fmod(image_mrroc_delay, image_sampling_period);
 
-	//	if (e > image_sampling_period / 2) {
-	//		e -= image_sampling_period;
-	//	}
+	if (e > image_sampling_period / 2) {
+		e -= image_sampling_period;
+	}
+
+	double eee = image_sampling_period/20;
+
+	int ms;
+
+	if(e > eee){
+		ms = motion_steps_base - 1;
+	}
+	else if(e < -eee){
+		ms = motion_steps_base + 1;
+	} else {
+		ms = motion_steps_base;
+	}
+
+	set_new_motion_steps(ms);
 
 	char txt[200];
-	sprintf(txt, "e = %g          image_mrroc_delay = %g\n", e, image_mrroc_delay);
+	sprintf(txt, "e = %g          image_mrroc_delay = %g     ms = %d\n", e, image_mrroc_delay, ms);
 	txtbuf += txt;
-
-	//		double eee = image_sampling_period/20;
-	//		if(e > eee){
-	//			set_new_motion_steps(get_motion_steps() + 1);
-	//		} else if (e < -eee){
-	//
-	//		}
-	//		if (e > image_sampling_period / 2) {
-	//			e -= image_sampling_period;
-	//		}
-	//
-	//		int new_step = get_motion_steps() + 0.1 * (e / step_time);
-	//
-	//		log_dbg("e = %g     new_step = %d\n", e, new_step);
-	//
-	//		set_new_motion_steps(new_step);
-	//	}
 }
 
 }//namespace generator
