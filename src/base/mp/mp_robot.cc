@@ -17,6 +17,7 @@
 #include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_robot.h"
+#include "base/lib/mis_fun.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -27,17 +28,18 @@ namespace mp {
 namespace robot {
 
 // -------------------------------------------------------------------
-robot::robot(lib::robot_name_t l_robot_name, const std::string & _section_name, task::task &mp_object_l, int _number_of_servos) :
+robot::robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _number_of_servos) :
 	ecp_mp::robot(l_robot_name), number_of_servos(_number_of_servos), mp_object(mp_object_l),
 			continuous_coordination(false), communicate_with_ecp(true), sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 			ecp_scoid(0), ecp_opened(false), ecp_pulse_code(0), new_pulse(false), new_pulse_checked(false)
 {
 	mp_command.pulse_to_ecp_sent = false;
 
-	std::string
-			ecp_attach_point(mp_object.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "ecp_attach_point", _section_name));
+	std::string ecp_section_name = mp_object.config.get_ecp_section(robot_name);
 
-	ECP_pid = mp_object.config.process_spawn(_section_name);
+	std::string ecp_attach_point(mp_object.config.get_ecp_attach_point(robot_name));
+
+	ECP_pid = mp_object.config.process_spawn(ecp_section_name);
 
 	if (ECP_pid < 0) {
 		uint64_t e = errno; // kod bledu

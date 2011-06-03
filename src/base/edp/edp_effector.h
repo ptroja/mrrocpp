@@ -10,18 +10,7 @@
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
-#include <boost/shared_ptr.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/edp/edp_typedefs.h"
-
-#include "base/lib/sr/sr_edp.h"
-#include "base/lib/configurator.h"
-
-#include "base/lib/exception.h"
+#include "edp_shell.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -166,6 +155,12 @@ protected:
 	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
 public:
+
+	/*!
+	 * \brief EDP shell
+	 */
+	shell &edp_shell;
+
 	/*!
 	 * \brief Name of the robot
 	 *
@@ -202,13 +197,12 @@ public:
 	 */
 	bool initialize_communication(void);
 
-
 	/*!
 	 * \brief Constructor.
 	 *
 	 * It connects to the existing channels of UI SR.
 	 */
-	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	effector(shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief Destructor.
@@ -245,7 +239,7 @@ public:
  *
  * It is implemented in specific effector file.
  */
-effector* return_created_efector(lib::configurator &_config);
+effector* return_created_efector(common::shell &_shell);
 
 } // namespace common
 } // namespace edp

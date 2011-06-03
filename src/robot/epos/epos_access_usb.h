@@ -35,7 +35,7 @@ public:
 	void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier);
 
 	//! Send CAN frame the the CAN bus
-	void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]);
+	void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]);
 
 	/*! \brief create new USB EPOS object
 	 *

@@ -16,11 +16,10 @@ namespace sub_task {
 
 class sub_task_smooth_file_from_mp : public sub_task
 {
-
 private:
 	generator::newsmooth * sgen;
 	std::string path;
-	bool detect_jerks;
+	const bool detect_jerks;
 
 public:
 	sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, bool _detect_jerks);

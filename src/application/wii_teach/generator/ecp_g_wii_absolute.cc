@@ -33,9 +33,9 @@ void wii_absolute::set_position(bool changed)
 	double old_translation[3];
 
 	if (the_robot->ecp_command.instruction_type == lib::GET) {
-		homog_matrix.set_from_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+		homog_matrix = the_robot->ecp_command.arm.pf_def.arm_frame;
 	} else {
-		homog_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		homog_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	}
 
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
@@ -68,7 +68,7 @@ void wii_absolute::set_position(bool changed)
 	old_translation[2] += translation[2];
 	homog_matrix.set_translation_vector(old_translation);
 
-	homog_matrix.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+	the_robot->ecp_command.arm.pf_def.arm_frame = homog_matrix;
 }
 
 bool wii_absolute::first_step()

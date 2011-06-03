@@ -8,13 +8,12 @@
 
 #include "robot/smb/mp_r_smb.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 smb::smb(task::task &mp_object_l) :
-	robot(lib::smb::ROBOT_NAME, lib::smb::ECP_SECTION, mp_object_l, lib::smb::NUM_OF_SERVOS)
+	robot(lib::smb::ROBOT_NAME, mp_object_l, lib::smb::NUM_OF_SERVOS)
 {
 }
 

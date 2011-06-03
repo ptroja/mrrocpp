@@ -9,7 +9,7 @@
  * @ingroup ecp
  */
 
-#include "base/lib/com_buf.h"
+#include "base/lib/exception.h"
 
 namespace mrrocpp {
 namespace ecp {

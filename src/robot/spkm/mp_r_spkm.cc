@@ -8,13 +8,12 @@
 
 #include "robot/spkm/mp_r_spkm.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 spkm::spkm(task::task &mp_object_l) :
-	robot(lib::spkm::ROBOT_NAME, lib::spkm::ECP_SECTION, mp_object_l, lib::spkm::NUM_OF_SERVOS)
+	robot(lib::spkm::ROBOT_NAME, mp_object_l, lib::spkm::NUM_OF_SERVOS)
 {
 }
 

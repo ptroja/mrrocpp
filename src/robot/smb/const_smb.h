@@ -21,7 +21,7 @@ namespace smb {
  * @brief SwarmItFix Mobile Base robot label
  * @ingroup smb
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SMB";
+const robot_name_t ROBOT_NAME = "smb";
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer variant enum
@@ -58,18 +58,6 @@ struct rbuffer
 	multi_leg_reply_td multi_leg_reply;
 	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
 }__attribute__((__packed__));
-
-/*!
- * @brief configuration file EDP SwarmItFix Mobile Base section string
- * @ingroup smb
- */
-const std::string EDP_SECTION = "[edp_smb]";
-
-/*!
- * @brief configuration file ECP SwarmItFix Mobile Base section string
- * @ingroup smb
- */
-const std::string ECP_SECTION = "[ecp_smb]";
 
 } // namespace smb
 } // namespace lib

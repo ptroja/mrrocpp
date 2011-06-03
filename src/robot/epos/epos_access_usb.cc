@@ -119,13 +119,13 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 		throw epos_error() << reason("no data returned");
 	}
 
-#if 0
-	printf("<< ");
-	for(int i=0; i<ret; i++) {
-		printf("0x%02x,", buf[i]);
+	if (debug) {
+		printf("<< ");
+		for(int i=0; i<ret; i++) {
+			printf("0x%02X ", buf[i]);
+		}
+		printf("\n");
 	}
-	printf("\n");
-#endif
 
 	// check DLE
 	if (buf[0] != DLE) {
@@ -162,7 +162,8 @@ unsigned int epos_access_usb::readAnswer(WORD *ans, unsigned int ans_len)
 		if (buf[idx] == DLE) idx++;
 		ans[i] |= (buf[idx++] << 8);
 	}
-#ifdef DEBUG
+
+#ifdef DDEBUG
 	printf("<< ");
 	for(int i=0; i<= framelen+1; i++) {
 		printf("%04x ", ans[i]);
@@ -249,13 +250,13 @@ void epos_access_usb::sendCommand(WORD *frame)
 		datagram[idx++] = c;
 	}
 
-#if 0
-	printf(">> ");
-	for (unsigned int i=0; i<idx; ++i) {
-		printf( "0x%02x,", datagram[i] );
+	if (debug > 0) {
+		printf(">> ");
+		for (unsigned int i=0; i<idx; ++i) {
+			printf( "0x%02X ", datagram[i] );
+		}
+		printf("\n");
 	}
-	printf("\n");
-#endif
 
 	int w = ftdi_write_data(&ftdic, datagram, idx);
 
@@ -283,28 +284,38 @@ void epos_access_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 	epos::checkEPOSerror(E_error);
 }
 
-void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8])
+void epos_access_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
 {
-	WORD frame[4];
+	WORD frame[8];
 
 	frame[0] = (6 << 8) | 0x20; // (len << 8) | OpCode
 	frame[1] = Identifier;
 	frame[2] = Length;
-	frame[3] = (Data[1] << 8)| Data[0];
-	frame[4] = (Data[3] << 8)| Data[2];
-	frame[5] = (Data[5] << 8)| Data[4];
-	frame[6] = (Data[7] << 8)| Data[6];
+
+	if(Length > 0) frame[3] = Data[0];
+	if(Length > 1) frame[3] |= (Data[1] << 8);
+	if(Length > 2) frame[4] = Data[2];
+	if(Length > 3) frame[4] |= (Data[3] << 8);
+	if(Length > 4) frame[5] = Data[4];
+	if(Length > 5) frame[5] |= (Data[5] << 8);
+	if(Length > 6) frame[6] = Data[6];
+	if(Length > 7) frame[6] |= (Data[7] << 8);
+
 	frame[7] = 0x00; // ZERO word, will be filled with checksum
 
 	sendCommand(frame);
 
 	// read response
 	WORD answer[8];
-	readAnswer(answer, 8);
+
+	unsigned int a = readAnswer(answer, 8);
+
+	if (a != 2) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("unexpected answer"));
+	}
 
 	epos::checkEPOSerror(E_error);
 }
-
 
 } /* namespace epos */
 } /* namespace edp */

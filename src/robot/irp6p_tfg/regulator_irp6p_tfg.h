@@ -41,7 +41,7 @@ class NL_regulator_8_irp6p : public common::NL_regulator
 	int currents[MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS];
 
 public:
-			NL_regulator_8_irp6p(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_8_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

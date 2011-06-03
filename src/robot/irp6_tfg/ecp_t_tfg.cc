@@ -23,10 +23,10 @@ tfg::tfg(lib::configurator &_config) :
 	common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	if (config.section_name == lib::irp6ot_tfg::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_tfg::robot(*this);
-	} else if (config.section_name == lib::irp6p_tfg::ECP_SECTION) {
-		ecp_m_robot = (boost::shared_ptr<ecp::common::robot::ecp_robot>) new irp6p_tfg::robot(*this);
+	if (config.robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_tfg::robot(*this);
+	} else if (config.robot_name == lib::irp6p_tfg::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <ecp::common::robot::ecp_robot>) new irp6p_tfg::robot(*this);
 	} else {
 		// TODO: throw
 	}

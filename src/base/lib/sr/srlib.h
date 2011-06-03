@@ -22,6 +22,8 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/Sender.h"
 
+#include "base/lib/exception.h"
+
 namespace mrrocpp {
 namespace lib {
 
@@ -35,13 +37,14 @@ namespace lib {
 //! @todo The solution is to make it std::string and use serialization
 static const unsigned int TEXT_LENGTH = 256;
 
-/* -------------------------------------------------------------------- */
-/* Paczka danych przesylanych do procesu SR                             */
-/* -------------------------------------------------------------------- */
+/*!
+ * Package sent to SR.
+ */
 typedef struct sr_package
 {
 	//! Message timestamp
-	struct _portable_timeval {
+	struct _portable_timeval
+	{
 		unsigned long tv_sec;
 		unsigned int tv_usec;
 	} tv;
@@ -62,16 +65,16 @@ typedef struct sr_package
 	char description[TEXT_LENGTH];
 } sr_package_t;
 
-template<class Archive>
+template <class Archive>
 void serialize(Archive & ar, sr_package_t & p, const unsigned int version)
 {
-    ar & p.tv.tv_sec;
-    ar & p.tv.tv_usec;
-    ar & p.process_type;
-    ar & p.message_type;
-    ar & p.process_name;
-    ar & p.host_name;
-    ar & p.description;
+	ar & p.tv.tv_sec;
+	ar & p.tv.tv_usec;
+	ar & p.process_type;
+	ar & p.message_type;
+	ar & p.process_name;
+	ar & p.host_name;
+	ar & p.description;
 }
 
 //! System reporting (SR)
@@ -80,9 +83,6 @@ class sr : public boost::noncopyable
 private:
 	//! Send default message package to the SR
 	void send_package(sr_package_t & sr_message);
-
-	//! Interpret the status code into a text message
-	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
 
 	//! Sender class
 	Sender sender;
@@ -95,6 +95,10 @@ private:
 
 	//! Cached hostname
 	char hostname[128];
+
+protected:
+	//! Interpret the status code into a text message
+	virtual void interpret(char * description, error_class_t message_type, uint64_t error_code0, uint64_t error_code1 = 0) = 0;
 
 public:
 	/**
@@ -130,6 +134,40 @@ public:
 	//! Send a message to SR
 	//! @bug these methods should be overloaded
 	void message(error_class_t message_type, const std::string & text);
+
+	/*!
+	 * Sends a message to SR containing information about given MRROC++ error.
+	 * \author tkornuta
+	 * \date 12.05.2011
+	 */
+	template <error_class_t ercl>
+	void message(const mrrocpp::lib::exception::mrrocpp_error <ercl> & e_)
+	{
+		// A message that will be sent to SR.
+		sr_package sr_message;
+
+		// Set error type.
+		sr_message.message_type = e_.error_class;
+
+		// Copy error description and diagnostics to message description.
+		// Retrieve default description.
+		const char* const * pdescription = boost::get_error_info <mrrocpp::lib::exception::mrrocpp_error_description>(e_);
+		// Check whether description is present.
+		if (pdescription != 0)
+			strcpy(sr_message.description, (*pdescription));
+		else
+			strcpy(sr_message.description, "Unidentified error");
+
+		// Add diagnostic information.
+		//strcat(sr_message.description, "\n");
+		//strcat(sr_message.description, e_.what());
+		// TODO: Uncomment lines when UI won't crash anymore;)
+
+		// Send message.
+		send_package(sr_message);
+
+	}
+
 };
 
 } // namespace lib

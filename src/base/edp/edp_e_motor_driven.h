@@ -25,6 +25,9 @@
 #include <boost/function.hpp>
 //#endif
 
+
+static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
+
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
@@ -79,6 +82,7 @@ protected:
 	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
 	//#endif
+
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -201,6 +205,13 @@ public:
 	//#endif
 
 	/*!
+	 * \brief The velocity limit global factor
+	 *
+	 * (0..1> default value is VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT
+	 */
+	float velocity_limit_global_factor;
+
+	/*!
 	 * \brief object to store output and input data
 	 *
 	 * It is used for the purpose of governing of input data form the hardware
@@ -253,7 +264,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief class destructor
@@ -485,7 +496,8 @@ public:
 	lib::c_buffer instruction;
 	lib::r_buffer reply;
 
-EIGEN_MAKE_ALIGNED_OPERATOR_NEW};
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+};
 
 } // namespace common
 } // namespace edp

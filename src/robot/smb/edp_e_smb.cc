@@ -59,8 +59,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::smb::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	motor_driven_effector(_shell, lib::smb::ROBOT_NAME)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
@@ -197,9 +197,9 @@ void effector::reply_serialization(void)
 namespace common {
 
 
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new smb::effector(_config);
+	return new smb::effector(_shell);
 }
 
 } // namespace common

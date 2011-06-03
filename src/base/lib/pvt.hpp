@@ -1,6 +1,6 @@
 /*!
  * @file pvt.hpp
- * @brief Position-Velocity-Time triples calculation for Maxon EPOS motino controller.
+ * @brief Position-Velocity-Time triples calculation for Maxon EPOS motion controller.
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  *

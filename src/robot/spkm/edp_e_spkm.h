@@ -50,8 +50,16 @@ private:
 	//! Default axis deceleration [rpm/s]
 	static const uint32_t Ddefault[6];
 
-	//! "Desired" joint values that were required by previously received SET command. It is threated as current position of joints - which can be retrieved from the hardware only by the GET command.
+	/*!
+	 * \brief "Desired" joint values that were required by previously received SET command.
+	 *
+	 *	It is threated as current position of joints - which can be retrieved from the hardware only by the GET command.
+	 *
+	 */
 	lib::JointArray desired_joints_old;
+
+	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
+	bool is_previous_cartesian_pose_known;
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
@@ -72,7 +80,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	/*!
 	 * @brief Method sets initial values of motor and joint positions.

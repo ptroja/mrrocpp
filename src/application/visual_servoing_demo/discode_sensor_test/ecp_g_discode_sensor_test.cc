@@ -64,9 +64,8 @@ bool ecp_g_discode_sensor_test::first_step()
 bool ecp_g_discode_sensor_test::next_step()
 {
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-	lib::Homog_matrix current_position;
-	current_position.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
-	current_position.get_frame_tab(the_robot->ecp_command.arm.pf_def.arm_frame);
+
+	the_robot->ecp_command.arm.pf_def.arm_frame = the_robot->reply_package.arm.pf_def.arm_frame;
 
 //	log_dbg("bool ecp_g_discode_sensor_test::next_step()\n");
 
@@ -85,12 +84,11 @@ bool ecp_g_discode_sensor_test::next_step()
 	//		ds.get_oarchive()->clear_buffer();
 	//	}
 	if (ds->get_state() == discode_sensor::DSS_READING_RECEIVED) {
-		Processors::VisualServoPB::PBReading r = ds->retreive_reading <Processors::VisualServoPB::PBReading> ();
+		Types::Mrrocpp_Proxy::PBReading r = ds->retreive_reading <Types::Mrrocpp_Proxy::PBReading> ();
 		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int)r.objectVisible);
 		if(r.objectVisible){
-			lib::Homog_matrix hm(r.objectPosition.elements);
 			cout<<"Object position:\n";
-			cout<<hm<<endl;
+			cout<<r.objectPosition<<endl;
 			cout.flush();
 		}
 	} else {
