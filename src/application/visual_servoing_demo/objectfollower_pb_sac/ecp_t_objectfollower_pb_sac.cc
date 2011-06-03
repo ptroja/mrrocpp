@@ -75,7 +75,7 @@ void ecp_t_objectfollower_pb_sac::main_task_algorithm()
 		}
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 } // namespace task

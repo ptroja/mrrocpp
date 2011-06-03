@@ -6,14 +6,10 @@
  * @ingroup mp
  */
 
-#include <cstring>
-
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
 #include "base/mp/generator/mp_g_extended_empty.h"
 
 namespace mrrocpp {
@@ -25,9 +21,8 @@ namespace generator {
 // ###############################################################
 
 extended_empty::extended_empty(task::task& _mp_task) :
-	generator(_mp_task)
+	generator(_mp_task), activate_trigger(true)
 {
-	activate_trigger = true;
 }
 
 void extended_empty::configure(bool l_activate_trigger)
@@ -43,11 +38,11 @@ bool extended_empty::first_step()
 {
 	wait_for_ECP_pulse = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::NEXT_POSE;
-					robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-					robot_node.second->communicate_with_ecp = false;
-				}
+	{
+		robot_node.second->mp_command.command = lib::NEXT_POSE;
+		robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
+		robot_node.second->communicate_with_ecp = false;
+	}
 
 	return true;
 }
@@ -72,17 +67,12 @@ bool extended_empty::next_step()
 	}
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->communicate_with_ecp = (robot_node.second->new_pulse);
-				}
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						//  sr_ecp_msg.message("w mp task terminated");
-						return false;
-					}
-				}
+	{
+		if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+			//  sr_ecp_msg.message("w mp task terminated");
+			return false;
+		}
+	}
 
 	return true;
 }
@@ -90,4 +80,3 @@ bool extended_empty::next_step()
 } // namespace generator
 } // namespace mp
 } // namespace mrrocpp
-
