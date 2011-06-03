@@ -34,8 +34,9 @@ r_buffer::r_buffer (void) :
 //  robot_model.tool_frame_def.address_byte = 0;
 }
 
-char* ecp_next_state_t::get_mp_2_ecp_next_state_string(){
-	return reinterpret_cast<char*>(mp_2_ecp_next_state_string);
+const char * ecp_next_state_t::get_mp_2_ecp_next_state_string() const
+{
+	return reinterpret_cast<const char*>(string_data);
 }
 
 } // namespace lib

@@ -180,12 +180,12 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		//get_next_state();
 		sr_ecp_msg->message("rozkaz odebrany");
 		std::string path(mrrocpp_network_path);
-		path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path += (char*)mp_command.ecp_next_state.string_data;
 
-		if(((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]<= '9' && ((char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string)[0]>= '0')
+		if(((char*)mp_command.ecp_next_state.string_data)[0]<= '9' && ((char*)mp_command.ecp_next_state.string_data)[0]>= '0')
 		{
 			double t[2];
-			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(t,(char*)mp_command.ecp_next_state.string_data);
 
 			if(t[0] < 1.5)
 			{

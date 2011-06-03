@@ -5,7 +5,7 @@ add_executable(ecp_neuron
 )
 
 target_link_libraries(ecp_neuron
-	ecp_r_irp6ot_m
+	ecp_r_irp6p_m
 	ecp_generators
 )
 

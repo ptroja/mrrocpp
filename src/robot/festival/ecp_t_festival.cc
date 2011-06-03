@@ -33,16 +33,16 @@ void task::main_task_algorithm(void)
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_FESTIVAL) {
 
 			if (isTest)
-				sr_ecp_msg->message(reinterpret_cast<char*>(mp_command.ecp_next_state.mp_2_ecp_next_state_string));
+				sr_ecp_msg->message(reinterpret_cast<const char*>(mp_command.ecp_next_state.string_data));
 			else {
-				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.variant);
 				fg.set_phrase(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
 				fg.Move();
 			}
 
 		}
 
-		ecp_termination_notice();
+		termination_notice();
 	}
 }
 

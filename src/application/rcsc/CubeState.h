@@ -36,7 +36,7 @@ public:
 	// okresla jak sciany kostki sa zorientowane wzgledem chwytaka truck'a z punkltu widzenia chwytaka
 	void set_state(CUBE_COLOR up_is, CUBE_COLOR down_is, CUBE_COLOR front_is,
 		CUBE_COLOR rear_is, CUBE_COLOR left_is, CUBE_COLOR right_is);
-	void set_state(CubeState &cubeState, int turnAngle);
+	void set_state(const CubeState &cubeState, int turnAngle);
 
 	void print_face_color(CUBE_COLOR face_name);
 	void print_cube_colors();

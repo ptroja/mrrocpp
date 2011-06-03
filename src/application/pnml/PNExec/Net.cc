@@ -69,7 +69,7 @@ bool Net::ExecuteStep(mrrocpp::mp::common::robots_t & _robots)
 
 	// place a mark in Places where robot has finished a job
 	BOOST_FOREACH(mrrocpp::mp::common::robot_pair_t & robot_node, _robots) {
-		if (robot_node.second->new_pulse && robot_node.second->pulse_code == ECP_WAIT_FOR_NEXT_STATE) {
+		if (robot_node.second->new_pulse && robot_node.second->pulse_code == 0 /*ECP_WAIT_FOR_NEXT_STATE*/) {
 //			robot_node.second->new_pulse = false;
 			Place * p = workers[robot_node.second->robot_name];
 			if (p){

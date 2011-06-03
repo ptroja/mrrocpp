@@ -9,7 +9,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/mp/generator/mp_generator.h"
+#include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -36,7 +36,7 @@ enum HAPTIC_STIFFNESS_STATES
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class haptic_stiffness : public generator
+class haptic_stiffness : public continously_coordinated
 {
 protected:
 	robot::robot *irp6ot, *irp6p;
@@ -63,8 +63,8 @@ public:
 
 	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step_inside();
 
 }; // end : class haptic_stiffness
 

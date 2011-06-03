@@ -24,8 +24,8 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/thread/mutex.hpp>
-
 #include <boost/property_tree/exceptions.hpp>
+
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/config_types.h"
 #include "base/lib/impconst.h"
@@ -66,43 +66,43 @@ public:
 	std::string get_mp_pulse_attach_point() const;
 
 	//! returns edp_section of the robot
-	std::string get_edp_section(const robot_name_t _robot_name) const;
+	std::string get_edp_section(const robot_name_t & _robot_name) const;
 
 	//! returns edp_section of the robot
 	std::string get_edp_section() const;
 
 	//! returns ecp_section of the robot
-	std::string get_ecp_section(const robot_name_t _robot_name) const;
+	std::string get_ecp_section(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_ecp_section() const;
 
 	//! returns ecp_section of the robot
-	std::string get_ecp_trigger_attach_point(const robot_name_t _robot_name) const;
+	std::string get_ecp_trigger_attach_point(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_ecp_trigger_attach_point() const;
 
 	//! returns ecp_section of the robot
-	std::string get_ecp_attach_point(const robot_name_t _robot_name) const;
+	std::string get_ecp_attach_point(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_ecp_attach_point() const;
 
 	//! returns ecp_section of the robot
-	std::string get_edp_hardware_busy_file(const robot_name_t _robot_name) const;
+	std::string get_edp_hardware_busy_file(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_edp_hardware_busy_file() const;
 
 	//! returns ecp_section of the robot
-	std::string get_edp_reader_attach_point(const robot_name_t _robot_name) const;
+	std::string get_edp_reader_attach_point(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_edp_reader_attach_point() const;
 
 	//! returns ecp_section of the robot
-	std::string get_edp_resourceman_attach_point(const robot_name_t _robot_name) const;
+	std::string get_edp_resourceman_attach_point(const robot_name_t & _robot_name) const;
 
 	//! returns ecp_section of the robot
 	std::string get_edp_resourceman_attach_point() const;
@@ -173,8 +173,7 @@ public:
 	 * @param __section_name section name
 	 * @return network path
 	 */
-	std::string
-	return_attach_point_name(const char* _key, const char* __section_name = NULL) const;
+	std::string	return_attach_point_name(const char* _key, const char* __section_name = NULL) const;
 
 	/**
 	 * Return network attach point
@@ -255,7 +254,7 @@ public:
 	 * @param __section_name section name
 	 * @return true if the non-zero value exists
 	 */
-	bool exists(const char* _key, const char* __section_name = NULL) const;
+	bool exists(const std::string & _key) const;
 
 	/**
 	 * Check is non-zero configuration value exist
@@ -263,10 +262,7 @@ public:
 	 * @param __section_name section name
 	 * @return true if the non-zero value exists
 	 */
-	bool exists(const std::string & _key, const std::string & __section_name) const
-	{
-		return exists(_key.c_str(), __section_name.c_str());
-	}
+	bool exists(const std::string & _key, const std::string & __section_name) const;
 
 	/**
 	 * Check is non-zero configuration value exist and is true

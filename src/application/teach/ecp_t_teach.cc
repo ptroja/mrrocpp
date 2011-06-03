@@ -72,7 +72,7 @@ void teach::main_task_algorithm(void)
 	tig->Move();
 	// 	 printf("w ecp for za move\n");
 	// Oczekiwanie na STOP
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

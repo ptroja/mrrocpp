@@ -36,6 +36,11 @@ private:
 	 */
 	task::task& mp_t;
 
+	/**
+	 * @brief communicates with all ECP's that are set to communicate
+	 */
+	void execute_all();
+
 protected:
 	/**
 	 * @brief the number of idle macrosteps without communication with ECP
