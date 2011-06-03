@@ -66,7 +66,7 @@ void bclike_mp_i::main_task_algorithm(void){
 
 	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 	sr_ecp_msg->message("MOVE left");
-	run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	wait_for_task_termination(false, 1,  actual_robot.c_str());
 
 	//Setup end position
 	vec.clear();
@@ -76,7 +76,7 @@ void bclike_mp_i::main_task_algorithm(void){
 	//Start moving
 	set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 	sr_ecp_msg->message("MOVE right");
-	run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	wait_for_task_termination(false, 1,  actual_robot.c_str());
 
 
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
@@ -97,18 +97,18 @@ void bclike_mp_i::main_task_algorithm(void){
 				//Go to code
 				tmp = msg.robotPositionToString(vec);
 				set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
-				run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+				wait_for_task_termination(false, 1,  actual_robot.c_str());
 
 				//Get back to previous position
 				tmp = msg.robotPositionToString(pos);
 				set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
-				run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+				wait_for_task_termination(false, 1,  actual_robot.c_str());
 			}
 		}
 
 		set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
 		sr_ecp_msg->message("MOVE right");
-		run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+		wait_for_task_termination(false, 1, actual_robot.c_str());
 	}
 
 	sr_ecp_msg->message("KONIEC");

@@ -53,6 +53,9 @@ void set_next_ecps_state::configure(const lib::playerpos_goal_t &_goal)
 
 bool set_next_ecps_state::first_step()
 {
+
+	robots_to_reply = robot_m;
+
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->mp_command.command = lib::NEXT_STATE;
@@ -78,21 +81,28 @@ bool set_next_ecps_state::next_step()
 				{
 					robot_node.second->communicate_with_ecp = false;
 				}
-	// nastepnie sprawdzamy czy ktorys z robotow jeszcze nie wyslal potwierdzenia
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+
+	// usuwamy te roboty, ktore juz odpoweidzialy
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
 				{
-					if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
-						/* DEBUG START*/
-						std::stringstream temp_message;
-						temp_message << "set_next_ecps_state != lib::ECP_ACKNOWLEDGE robot ("
-								<< robot_node.second->robot_name << ")" << std::endl;
-						sr_ecp_msg.message(lib::NON_FATAL_ERROR, temp_message.str());
-						/* DEBUG END*/
-						return true;
+					if (robot_node.second->reply.isFresh()) {
+						if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
+							std::stringstream temp_message;
+							temp_message << "set_next_ecps_state != lib::ECP_ACKNOWLEDGE robot ("
+									<< robot_node.second->robot_name << ")" << std::endl;
+							sr_ecp_msg.message(lib::NON_FATAL_ERROR, temp_message.str());
+
+						}
+						robots_to_reply.erase(robot_node.first);
+
 					}
 				}
-	// w przeciwnym razie konczymy generator (wszystkei roboty odtrzymaly polecenie i potwierdzily to)
-	return false;
+
+	if (robots_to_reply.empty()) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 } // namespace generator
