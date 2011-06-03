@@ -155,11 +155,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
@@ -190,11 +190,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 

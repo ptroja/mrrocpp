@@ -117,11 +117,9 @@ public:
 	 * @param l_variant variant value sent to ECP
 	 * @param l_string optional string sent to ECP
 	 * @param str_len string length
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
+	 * @param robot_name robot to receive a command
 	 */
-	void
-			set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name);
 
 	/**
 	 * @brief sends end motion command to ECP's

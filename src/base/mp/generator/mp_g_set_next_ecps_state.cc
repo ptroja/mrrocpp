@@ -78,31 +78,25 @@ bool set_next_ecps_state::next_step()
 	// korzystamy ze zbioru robot_m
 	// najpierw wylaczamy wysylanie czegokolwiek do robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->communicate_with_ecp = false;
-				}
+	{
+		robot_node.second->communicate_with_ecp = false;
+	}
 
 	// usuwamy te roboty, ktore juz odpoweidzialy
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
-				{
-					if (robot_node.second->reply.isFresh()) {
-						if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
-							std::stringstream temp_message;
-							temp_message << "set_next_ecps_state != lib::ECP_ACKNOWLEDGE robot ("
-									<< robot_node.second->robot_name << ")" << std::endl;
-							sr_ecp_msg.message(lib::NON_FATAL_ERROR, temp_message.str());
-
-						}
-						robots_to_reply.erase(robot_node.first);
-
-					}
-				}
-
-	if (robots_to_reply.empty()) {
-		return false;
-	} else {
-		return true;
+	{
+		if (robot_node.second->reply.isFresh()) {
+			if (robot_node.second->ecp_reply_package.reply != lib::ECP_ACKNOWLEDGE) {
+				std::stringstream temp_message;
+				temp_message << "set_next_ecps_state != lib::ECP_ACKNOWLEDGE robot ("
+						<< robot_node.second->robot_name << ")" << std::endl;
+				sr_ecp_msg.message(lib::NON_FATAL_ERROR, temp_message.str());
+			}
+			robots_to_reply.erase(robot_node.first);
+		}
 	}
+
+	return (robots_to_reply.empty() ? false : true);
 }
 
 } // namespace generator

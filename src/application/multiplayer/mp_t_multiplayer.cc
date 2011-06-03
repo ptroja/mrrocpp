@@ -100,25 +100,25 @@ void multiplayer::main_task_algorithm(void)
 #endif
 #if 1
 	// USTAWIENIE POCZATKOWE
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "inicjalizuje~ zadanie", 0, 1, lib::festival::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "inicjalizuje~ zadanie", 0, lib::festival::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
-	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 #endif
 #if 1
 	// OCZEKIWANIE NA POLECENIE (komuikat z festivala)
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "oczekuje~ na polecenie", 0, 1, lib::festival::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "oczekuje~ na polecenie", 0, lib::festival::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
 	bool komenda_rozpoznana = false;
 	do {
 		// OCZEKIWANIE NA POLECENIE (faktyczne oczekiwanie)
-		set_next_ecps_state(ecp_mp::task::ECP_GEN_SPEECHRECOGNITION, 0, NULL, 0, 1, lib::speechrecognition::ROBOT_NAME.c_str());
+		set_next_ecp_state(ecp_mp::task::ECP_GEN_SPEECHRECOGNITION, 0, NULL, 0, lib::speechrecognition::ROBOT_NAME);
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 		wait_for_task_termination(false, 1, lib::speechrecognition::ROBOT_NAME.c_str());
 
@@ -135,7 +135,7 @@ void multiplayer::main_task_algorithm(void)
 		}
 
 		// komuikat z festivala
-		set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, komunikat, 0, 1, lib::festival::ROBOT_NAME.c_str());
+		set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, komunikat, 0, lib::festival::ROBOT_NAME);
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 		wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 	} while (komenda_rozpoznana == false);
@@ -144,8 +144,8 @@ void multiplayer::main_task_algorithm(void)
 	goal.forward(1.2);
 
 	set_next_playerpos_goal(lib::electron::ROBOT_NAME.c_str(), goal);
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jade~ przekazac~ kostke~", 0, 1, lib::festival::ROBOT_NAME.c_str());
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_grab.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jade~ przekazac~ kostke~", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_grab.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 3, lib::electron::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
@@ -162,13 +162,13 @@ void multiplayer::main_task_algorithm(void)
 	wait_for_task_termination(false, 1, lib::electron::ROBOT_NAME.c_str());
 
 	// FAZA PRZECHWYTYWANIA KOSTKI
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "drugi robot podniesie kostke~", 0, 1, lib::festival::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "drugi robot podniesie kostke~", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
 	//biasowanie czujnika sily
-	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
 	//oczekiwanie na ustalenie balansu bieli w kamerze
 	wait_ms(7000);
@@ -177,42 +177,42 @@ void multiplayer::main_task_algorithm(void)
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//podjazd do chwytu obiektu przez serwowizje
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_TAKE_FROM_ROVER, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_TAKE_FROM_ROVER, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//chwycenie
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_GRAB_FROM_ROVER, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_GRAB_FROM_ROVER, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//RUCH DO GORY
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_up.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_up.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//DOJEZDZANIE DO POZYCJI PRZEKAZANIA KOSTKI
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_pass.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_pass.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1,  lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//ROZWARCIE SZCZEK
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_wide.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_wide.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 1,  lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// FAZA ODBIERANIA KOSTKI
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE, 0, NULL, 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "prosze~ odbierz kostke~", 0, 1, lib::festival::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE, 0, NULL, 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "prosze~ odbierz kostke~", 0, lib::festival::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 
 	// FAZA POWROTU DO USTAWIENIA POCZATKOWEGO
 
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "zadanie wykonane", 0, 1, lib::festival::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_init.trj", 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "zadanie wykonane", 0, lib::festival::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
 	wait_for_task_termination(false, 2, lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 
