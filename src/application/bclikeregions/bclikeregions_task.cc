@@ -48,7 +48,7 @@ void bclikeregions_task::main_task_algorithm(void){
 //			"/home/kszkudla/workspace/mrrocpp/src/application/bclikeregions/trj/trj_left.trj");
 	bc_smooth->Move();
 	bc_smooth->reset();
-	ecp_termination_notice();
+	termination_notice();
 
 }
 
@@ -126,7 +126,7 @@ task* return_created_ecp_task(lib::configurator &config){
 //void bclikeregions_task::main_task_algorithm(void){
 //
 ////	gen1->Move();
-////	ecp_termination_notice();
+////	termination_notice();
 //
 //}
 //

@@ -72,16 +72,16 @@ void edge_follow_mr::main_task_algorithm(void)
 	lib::robot_name_t gripper_name;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
+	if (config.exists_and_true("is_active", "[edp_irp6ot_m]")) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
+		if (config.exists_and_true("is_active", "[edp_irp6ot_tfg]")) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+	} else if (config.exists_and_true("is_active", "[edp_irp6p_m]")) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
+		if (config.exists_and_true("is_active", "[edp_irp6p_tfg]")) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw

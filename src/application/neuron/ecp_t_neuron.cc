@@ -139,7 +139,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 }
 
 /*==========================ecp_stop_accepted_handler=====================*//**
- * @brief Handler for stop button in MRROC++ taks panel.
+ * @brief Handler for stop button in MRROC++ task panel.
  * @details After pressing stop button in MRROC++ it sends message to VSP, that
  * MRROC++ is no longer available for work therefore neuron sensor is deleted
  * from the map of sensors.

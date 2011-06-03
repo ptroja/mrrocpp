@@ -9,7 +9,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/mp/generator/mp_generator.h"
+#include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -23,7 +23,7 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class ball : public generator
+class ball : public continously_coordinated
 {
 private:
 	robot::robot *irp6ot, *irp6p;
@@ -53,8 +53,8 @@ public:
 
 	void configure(bool l_irp6ot_con, bool l_irp6p_con);
 
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step_inside();
 }; // end : class ball
 
 /** @} */// end of edge_following

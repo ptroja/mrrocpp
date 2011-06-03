@@ -1,3 +1,4 @@
+#include <string>
 
 #include <cstdio>
 #include <cstring>
@@ -9,32 +10,26 @@ namespace mp {
 namespace common {
 
 
-Transition::Transition(const char *cond, const char *targetID, lib::configurator &_config)
+Transition::Transition(const std::string & cond, const std::string & _targetID, lib::configurator &_config) :
+	targetID(_targetID)
 {
-	int size = strlen(targetID) + 1;
-	this->targetID = new char[size];
-	strcpy(this->targetID, targetID);
 	this->condition = new Condition(cond, _config);
 }
 
-Transition::Transition(const Transition &transition)
+Transition::Transition(const Transition &transition) :
+	targetID(transition.targetID)
 {
-	int size = strlen(transition.targetID) + 1;
-	this->targetID = new char[size];
-	strcpy(this->targetID, transition.targetID);
 	this->condition = new Condition(*(transition.condition));
 }
 
 Transition::~Transition()
 {
 	delete condition;
-	delete[] targetID;
 }
 
 bool Transition::getConditionResult()
 {
-	bool result = condition->checkCompareResult();
-	return result;
+	return condition->checkCompareResult();;
 }
 
 void Transition::setConditionResult(bool result)
@@ -46,27 +41,29 @@ const char * Transition::getTargetID(StateHeap &sh) const
 {
 	// TODO: reimplement ">>" operator as XML element
 	const char *sp = ">>";
-	if(strstr(targetID, sp) != NULL)
+	if(strstr(targetID.c_str(), sp) != NULL)
 	{
-		char *nextState = strtok(targetID, sp);
+		// @bug possible memory corruption
+		char * tmp = strdup(targetID.c_str());
+		char *nextState = strtok(tmp, sp);
 		sh.pushTargetName(strtok(NULL, sp));
+		free(tmp);
 		return nextState;
 	}
 	else
-		return targetID;
+		return targetID.c_str();
 }
 
-std::string Transition::getConditionDescription() const
+const std::string & Transition::getConditionDescription() const
 {
-	return std::string(condition->getCondDesc());
+	return condition->getCondDesc();
 }
 
-void Transition::showContent()
+void Transition::showContent() const
 {
-	printf(">> Condition: #%s#\n>> Target state: #%s#\n", condition->getCondDesc(), targetID);
-	printf(">> Codition result: %d\n", condition->checkCompareResult());
-//	std::cout<<">> Condition: "<<condition<<std::endl<<
-//		">> Target State: "<<targetID<<std::endl;
+	std::cerr << ">> Condition: #" << condition->getCondDesc() << "#" << std::endl;
+	std::cerr << "Target state: #" << targetID << "#" << std::endl;
+	std::cerr << ">> Condition result: " << condition->checkCompareResult() << std::endl;
 }
 
 } // namespace common

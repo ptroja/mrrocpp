@@ -4,12 +4,14 @@
 #include <vector>
 #include <ostream>
 
+#include <boost/thread/thread_time.hpp>
+
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
 #include "Agent.h"
 
 template <class T>
-class DataBuffer : public DataBufferBase {
+class InputBuffer : public DataBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
@@ -19,6 +21,9 @@ private:
 
 	//! flag indicating that the new data has not been getted yet
 	bool fresh;
+
+	//! Timestamp of the last message received
+	boost::system_time timestamp;
 
 	/**
 	 * Store data in the buffer
@@ -31,13 +36,16 @@ private:
  			std::cerr << "Warning: data overwrite at buffer '" << getName() << "'" << std::endl;
  		}
 		fresh = true;
+
+		// Record the timestamp
+		timestamp = boost::get_system_time();
 	}
 
 public:
 	//! Constructor
-	DataBuffer(const std::string & _name, const T & _default_value = T())
+	InputBuffer(const std::string & _name, const T & _default_value = T())
 		: DataBufferBase(_name), data(_default_value),
-		fresh(false)
+		fresh(false), access(data)
 	{
 	}
 
@@ -66,6 +74,19 @@ public:
 	{
 		return fresh;
 	}
+
+	/**
+	 * Get the timestamp of the last message
+	 */
+	boost::system_time getTimestamp()
+	{
+		return timestamp;
+	}
+
+	/**
+	 * Read-only direct access to the data buffer
+	 */
+	const T & access;
 };
 
 #endif /* _DATABUFFER_H */

@@ -27,6 +27,8 @@ transparent::transparent(common::task::task& _ecp_task) :
 
 bool transparent::first_step()
 {
+	//sr_ecp_msg.message(lib::NON_FATAL_ERROR, "transparent::first_step()");
+
 	if (the_robot)
 		the_robot->communicate_with_edp = false;
 	ecp_t.continuous_coordination = true;
@@ -39,6 +41,7 @@ bool transparent::first_step()
 
 bool transparent::next_step()
 {
+	//sr_ecp_msg.message(lib::NON_FATAL_ERROR, "transparent::next_step()");
 	// Kopiowanie danych z bufora przyslanego z EDP do
 	// obrazu danych wykorzystywanych przez generator
 	// the_robot->get_reply();
