@@ -37,6 +37,9 @@ protected:
 
 private:
 	void update_motion_steps(double discode_processing_time, double discode_synchronization_delay, double discode_total_time);
+
+	double image_sampling_period;
+	static const double image_sampling_period_default;
 };
 
 /** @} */

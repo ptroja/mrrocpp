@@ -33,7 +33,7 @@ visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ec
 			max_acceleration(0), max_angular_acceleration(0)
 {
 
-	motion_steps
+	new_motion_steps = motion_steps
 			= ecp_task.config.exists("motion_steps", section_name) ? ecp_task.config.value <unsigned int> ("motion_steps", section_name) : motion_steps_default;
 
 	dt = motion_steps * step_time;
@@ -125,6 +125,8 @@ bool visual_servo_manager::next_step()
 
 	// prepare command to EDP
 	motion_steps = new_motion_steps;
+
+//	log_dbg("motion_steps = %d\n", motion_steps);
 
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
@@ -263,7 +265,7 @@ void visual_servo_manager::set_new_motion_steps(int new_motion_steps)
 {
 	this->new_motion_steps = min(new_motion_steps, motion_steps_max);
 	this->new_motion_steps = max(new_motion_steps, motion_steps_min);
-	log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d", this->new_motion_steps);
+	log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d\n", this->new_motion_steps);
 }
 
 int visual_servo_manager::get_new_motion_steps() const
