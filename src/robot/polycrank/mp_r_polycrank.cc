@@ -6,7 +6,7 @@ namespace mp {
 namespace robot {
 
 polycrank::polycrank(task::task &mp_object_l) :
-	robot(lib::polycrank::ROBOT_NAME, mp_object_l, lib::polycrank::NUM_OF_SERVOS)
+	mp::robot::robot(lib::polycrank::ROBOT_NAME, mp_object_l, lib::polycrank::NUM_OF_SERVOS)
 {
 }
 

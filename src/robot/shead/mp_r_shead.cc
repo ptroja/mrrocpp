@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 shead::shead(task::task &mp_object_l) :
-	robot(lib::shead::ROBOT_NAME, mp_object_l, lib::shead::NUM_OF_SERVOS)
+	mp::robot::robot(lib::shead::ROBOT_NAME, mp_object_l, lib::shead::NUM_OF_SERVOS)
 {
 }
 

@@ -63,6 +63,11 @@ private:
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
+	 * @brief send a single command to the ECP
+	 */
+	void send_command(lib::MP_COMMAND);
+
+	/**
 	 * @brief executes the communication sequence with ECP with error handling
 	 *
 	 * called from move_method
@@ -128,7 +133,7 @@ public:
 	 * @param mp_object_l mp task object reference
 	 * @param _number_of_servos number of robot servos (joints)
 	 */
-	robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _number_of_servos);
+	robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, int _number_of_servos);
 
 	/**
 	 * @brief destructor
