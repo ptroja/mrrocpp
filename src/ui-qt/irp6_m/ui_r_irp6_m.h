@@ -58,6 +58,8 @@ public:
 	void null_ui_ecp_robot();
 	int synchronise_int();
 
+	virtual int synchronise();
+
 	int execute_motor_motion();
 	int execute_joint_motion();
 };

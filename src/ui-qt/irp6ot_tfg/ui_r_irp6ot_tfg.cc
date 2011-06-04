@@ -22,6 +22,47 @@ const std::string WGT_IRP6OT_TFG_MOVE = "WGT_IRP6OT_TFG_MOVE";
 //
 //
 
+void UiRobot::on_actionirp6ot_tfg_EDP_Load_triggered()
+{
+	interface.get_main_window()->ui_robot_action(this, &UiRobot::edp_create);
+}
+
+void UiRobot::on_actionirp6ot_tfg_EDP_Unload_triggered()
+{
+	interface.get_main_window()->ui_robot_action(this, &UiRobot::EDP_slay_int);
+}
+
+//void UiRobot::on_actionirp6ot_tfg_Synchronization_triggered()
+//{
+//	interface.get_main_window()->ui_robot_action(this, &UiRobot::synchronise);
+//}
+
+void UiRobot::on_actionirp6ot_tfg_Move_triggered()
+{
+	interface.get_main_window()->open_new_window(wgt_move, &wgt_base::my_open);
+}
+
+//void UiRobot::on_actionirp6ot_tfg_Synchro_Position_triggered()
+//{
+//	interface.get_main_window()->ui_robot_action(this, &UiRobot::move_to_synchro_position);
+//}
+
+//void UiRobot::on_actionirp6ot_tfg_Position_0_triggered()
+//{
+//	interface.get_main_window()->ui_robot_action(this, &UiRobot::move_to_preset_position, 0);
+//}
+//
+//void UiRobot::on_actionirp6ot_tfg_Position_1_triggered()
+//{
+//	interface.get_main_window()->ui_robot_action(this, &UiRobot::move_to_preset_position, 1);
+//}
+//
+//void UiRobot::on_actionirp6ot_tfg_Position_2_triggered()
+//{
+//	interface.get_main_window()->ui_robot_action(this, &UiRobot::move_to_preset_position, 2);
+//}
+
+
 int UiRobot::ui_get_edp_pid()
 {
 	return ui_ecp_robot->ecp->get_EDP_pid();
@@ -132,10 +173,18 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	single_motor::UiRobot(_interface, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS)
 
 {
-
 	wgt_move = new wgt_single_motor_move("Irp6ot_tfg moves", interface, *this, interface.get_main_window());
 	wndbase_m[WGT_IRP6OT_TFG_MOVE] = wgt_move->dwgt;
 
+
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Load, 			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Load_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Unload, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Unload_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchronization, 	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchronization_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Move, 				SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Move_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchro_Position,	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchro_Position_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_0, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_0_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_1,			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_1_triggered()), Qt::AutoCompatConnection);
+	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_2, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_2_triggered()), Qt::AutoCompatConnection);
 }
 
 int UiRobot::manage_interface()

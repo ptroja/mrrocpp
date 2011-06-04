@@ -4,8 +4,14 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QCloseEvent>
+#include <QSignalMapper>
 #include <pthread.h>
 #include "wgt_base.h"
+#include "../irp6_m/wgt_irp6_m_motors.h"
+#include "ui_robot.h"
+#include "signal_dispatcher.h"
+//#include "../irp6ot_m/ui_r_irp6ot_m.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -15,9 +21,18 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class SignalDispatcher;
 }
 }
 }
+
+//namespace mrrocpp {
+//namespace ui {
+//namespace irp6ot_m {
+//class UiRobot;
+//}
+//}
+//}
 
 class MainWindow : public QMainWindow
 {
@@ -35,7 +50,10 @@ public:
 	void open_new_window(wgt_base *window, wgt_base::my_open_ptr func);
 	void open_new_window(wgt_base *window);
 
-	//void disable_menu_item(int _num_of_menus, ...);
+	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer pointer);
+	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument);
+	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer pointer);
+	//void ui_robot_action(mrrocpp::ui::irp6ot_m::UiRobot* &robot, mrrocpp::ui::irp6ot_m::UiRobot::intUiRobotFunctionPointer pointer);
 
 
 	void get_lineEdit_position(double* val, int number_of_servos);
@@ -45,13 +63,22 @@ public:
 
 	void closeEvent(QCloseEvent * event);
 
+	wgt_base::my_open_ptr getFunctionPointer();
+	mrrocpp::ui::common::SignalDispatcher* getSignalDispatcher();
+
 private:
 	Ui::MainWindow *ui;
 	mrrocpp::ui::common::Interface& interface;
+	mrrocpp::ui::common::SignalDispatcher *signalDispatcher;
 
 	pthread_t main_thread_id;
 
 	QSignalMapper robotsSignalMapper;
+
+	wgt_base::my_open_ptr openFunctionPointer;
+	mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer uiRobotFunctionPtr;
+	mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt uiRobotFunctionPtrInt;
+	mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer intUiRobotFunctionPtr;
 
 signals:
 	void ui_notification_signal();
@@ -61,6 +88,8 @@ signals:
 
 	void open_new_window_signal(wgt_base *window, wgt_base::my_open_ptr func);
 	void open_new_window_signal(wgt_base *window);
+	void ui_robot_signal(mrrocpp::ui::common::UiRobot *robot);
+	void ui_robot_signal(mrrocpp::ui::common::UiRobot *robot, int argument);
 
 	void raise_process_control_window_signal();
 	void raise_ui_ecp_window_signal();
@@ -77,6 +106,9 @@ private slots:
 
 	void open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func);
 	void open_new_window_slot(wgt_base *window);
+	void ui_robot_slot(mrrocpp::ui::common::UiRobot *robot);
+	void ui_robot_slot(mrrocpp::ui::common::UiRobot *robot, int argument);
+
 	// menus
 
 	// file menu
@@ -85,62 +117,13 @@ private slots:
 	// robot menu
 
 	//irp6ot_m menu
-	void on_actionirp6ot_m_EDP_Load_triggered();
-	void on_actionirp6ot_m_EDP_Unload_triggered();
 
-	void on_actionirp6ot_m_Synchronisation_triggered();
-	void on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered();
-
-	void on_actionirp6ot_m_Absolute_Moves_Motors_triggered();
-	void on_actionirp6ot_m_Joints_triggered();
-	void on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
-
-	void on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered();
-
-	void on_actionirp6ot_m_Synchro_Position_triggered();
-	void on_actionirp6ot_m_Front_Position_triggered();
-	void on_actionirp6ot_m_Position_0_triggered();
-	void on_actionirp6ot_m_Position_1_triggered();
-	void on_actionirp6ot_m_Position_2_triggered();
-
-	void on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered();
 
 	//irp6ot_tfg
-	void on_actionirp6ot_tfg_EDP_Load_triggered();
-	void on_actionirp6ot_tfg_EDP_Unload_triggered();
 
-	void on_actionirp6ot_tfg_Synchronization_triggered();
-	void on_actionirp6ot_tfg_Move_triggered();
-
-	void on_actionirp6ot_tfg_Synchro_Position_triggered();
-	void on_actionirp6ot_tfg_Position_0_triggered();
-	void on_actionirp6ot_tfg_Position_1_triggered();
-	void on_actionirp6ot_tfg_Position_2_triggered();
 
 	//irp6p_m menu
-	void on_actionirp6p_m_EDP_Load_triggered();
-	void on_actionirp6p_m_EDP_Unload_triggered();
 
-	void on_actionirp6p_m_Synchronisation_triggered();
-	void on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered();
-
-	void on_actionirp6p_m_Absolute_Moves_Motors_triggered();
-	void on_actionirp6p_m_Joints_triggered();
-	void on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered();
-
-	void on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered();
-
-	void on_actionirp6p_m_Synchro_Position_triggered();
-	void on_actionirp6p_m_Front_Position_triggered();
-	void on_actionirp6p_m_Position_0_triggered();
-	void on_actionirp6p_m_Position_1_triggered();
-	void on_actionirp6p_m_Position_2_triggered();
-
-	void on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered();
-	void on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered();
 
 	//irp6p_tfg
 	void on_actionirp6p_tfg_EDP_Load_triggered();

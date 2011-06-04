@@ -22,7 +22,7 @@ namespace irp6_m {
 // KLASA UiRobot
 //
 //
-
+int UiRobot::synchronise(){return 1;}
 
 int UiRobot::execute_motor_motion()
 {

@@ -80,6 +80,8 @@ protected:
 public:
 	Interface& interface;
 
+	const lib::robot_name_t getName();
+
 	feb_thread* tid;
 	function_execution_buffer eb;
 
@@ -138,6 +140,11 @@ public:
 	void catch_ecp_error(ecp::common::robot::ECP_error & er);
 	void catch_std_exception(const std::exception & e);
 	void catch_tridot();
+
+
+	typedef void (UiRobot::*uiRobotFunctionPointer)();
+	typedef void (UiRobot::*uiRobotFunctionPointerInt)(int);
+	typedef int (UiRobot::*intUiRobotFunctionPointer)();
 
 };
 

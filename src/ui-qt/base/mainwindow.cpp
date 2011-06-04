@@ -9,6 +9,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+//#include "signal_dispatcher.h"
 
 #include "ui.h"
 #include "interface.h"
@@ -43,8 +44,18 @@
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
+
+//namespace mrrocpp {
+//namespace ui {
+//namespace irp6ot_m {
+//class UiRobot;
+//}
+//}
+//}
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
@@ -56,10 +67,25 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *)), this, SLOT(open_new_window_slot(wgt_base *)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 
-	robotSignalMapper = new QSignalMapper();
+
+	signalDispatcher = new mrrocpp::ui::common::SignalDispatcher(interface);
+	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
+
+	//robotsSignalMapper = new QSignalMapper();
+
 	//open_new_window_signal(wgt_base *window);
 	main_thread_id = pthread_self();
+
+}
+
+//void MainWindow::
+
+mrrocpp::ui::common::SignalDispatcher* MainWindow::getSignalDispatcher()
+{
+	return signalDispatcher;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -77,18 +103,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 MainWindow::~MainWindow()
 {
 	delete ui;
+	delete signalDispatcher;
 }
 
 Ui::MainWindow * MainWindow::get_ui()
 {
 	return ui;
 }
-
-//void MainWindow::enable_menu_item(bool _active, QWidget *_menu_item)
-//{
-//	interface.print_on_sr("signal");
-//	emit enable_menu_item_signal(_menu_item, _active);
-//}
 
 
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
@@ -138,10 +159,51 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 	va_end(menu_items);
 }
 
+void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer pointer)
+{
+	printf("ui robot action void");
+	uiRobotFunctionPtr = pointer;
+	emit ui_robot_signal(robot);
+	printf("ui robot action void 2");
+}
+
+void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument)
+{
+	interface.print_on_sr("ui robot action void arg int");
+	uiRobotFunctionPtrInt = pointer;
+	emit ui_robot_signal(robot, argument);
+}
+
+void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer pointer)
+{
+	interface.print_on_sr("ui robot action int");
+	intUiRobotFunctionPtr = pointer;
+	emit ui_robot_signal(robot);
+}
+
+//void MainWindow::ui_robot_action(mrrocpp::ui::irp6ot::UiRobot * &robot, mrrocpp::ui::irp6ot::UiRobot::intUiRobotFunctionPointer pointer)
+//{
+//	intUiRobotFunctionPtr = pointer;
+//	emit ui_robot_signal(robot);
+//}
+
+
+void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot)
+{
+	printf("ui robot slot");
+	(*robot.*uiRobotFunctionPtr)();
+}
+
+void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot, int argument)
+{
+	(*robot.*uiRobotFunctionPtrInt)(argument);
+}
+
 
 void MainWindow::open_new_window(wgt_base *window, wgt_base::my_open_ptr func)
 {
-	emit open_new_window_signal(window, func);
+	openFunctionPointer = func;
+	emit open_new_window_signal(window);
 	//open_new_window_slot(window, func);
 	interface.print_on_sr("emit 1");
 }
@@ -149,7 +211,7 @@ void MainWindow::open_new_window(wgt_base *window, wgt_base::my_open_ptr func)
 void MainWindow::open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func)
 {
 	interface.print_on_sr("slot 1");
-	//(*window.*func)();
+	(*window.*func)();
 }
 
 
@@ -160,10 +222,21 @@ void MainWindow::open_new_window(wgt_base *window)
 	interface.print_on_sr("emit 2");
 }
 
+//void MainWindow::open_new_window(wgt_irp6_m_motors *window)
+//{
+//	emit open_new_window_signal(window);
+//	//open_new_window_slot(window, func);
+//	interface.print_on_sr("emit 2222");
+//}
+
 void MainWindow::open_new_window_slot(wgt_base *window)
 {
 	interface.print_on_sr("slot 2");
-	window->my_open();
+
+	//wgt_base::my_open_ptr func2=;
+
+	(*window.*openFunctionPointer)();
+	//window->my_open();
 }
 
 
@@ -211,6 +284,8 @@ void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
 {
 	//interface.print_on_sr("menu coloring slot");
 	_menu_item->setDisabled(!_active);
+	//if(!_active) _menu_item->hide();
+	// _menu_item->setShown(!_active);
 }
 
 void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
@@ -297,215 +372,215 @@ void MainWindow::on_actionQuit_triggered()
 
 // irp6ot_m menu
 
-void MainWindow::on_actionirp6ot_m_EDP_Load_triggered()
-{
-	interface.irp6ot_m->edp_create();
-}
+//void MainWindow::on_actionirp6ot_m_EDP_Load_triggered()
+//{
+//	interface.irp6ot_m->edp_create();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_EDP_Unload_triggered()
+//{
+//	interface.irp6ot_m->EDP_slay_int();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
+//{
+//	interface.irp6ot_m->synchronise();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
+//{
+//	interface.irp6ot_m->wgt_motors->my_open();
+//}
 
-void MainWindow::on_actionirp6ot_m_EDP_Unload_triggered()
-{
-	interface.irp6ot_m->EDP_slay_int();
-}
+//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
+//{
+//	//interface.irp6ot_m->wgt_motors->my_open();
+//
+//
+//	//open_new_window(interface.irp6ot_m->wgt_motors, func);
+//	open_new_window(interface.irp6ot_m->wgt_motors);
+//	interface.print_on_sr("on action");
+//}
 
-void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
-{
-	interface.irp6ot_m->synchronise();
-}
-
-void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
-{
-	interface.irp6ot_m->wgt_motors->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
-{
-	//interface.irp6ot_m->wgt_motors->my_open();
-	wgt_base::my_open_ptr func = &wgt_base::my_open;
-
-	open_new_window(interface.irp6ot_m->wgt_motors, func);
-	open_new_window(interface.irp6ot_m->wgt_motors);
-	interface.print_on_sr("on action");
-}
-
-void MainWindow::on_actionirp6ot_m_Joints_triggered()
-{
-	interface.irp6ot_m->wgt_joints->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6ot_m->wgt_euler->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6ot_m->wgt_angle_axis->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6ot_m->wgt_relative_angle_axis->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
-{
-	interface.irp6ot_m->move_to_synchro_position();
-}
-
-void MainWindow::on_actionirp6ot_m_Front_Position_triggered()
-{
-	interface.irp6ot_m->move_to_front_position();
-}
-
-void MainWindow::on_actionirp6ot_m_Position_0_triggered()
-{
-	interface.irp6ot_m->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionirp6ot_m_Position_1_triggered()
-{
-	interface.irp6ot_m->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionirp6ot_m_Position_2_triggered()
-{
-	interface.irp6ot_m->move_to_preset_position(2);
-}
-
-void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6ot_m->wgt_tool_euler->my_open();
-}
-
-void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6ot_m->wgt_tool_angle_axis->my_open();
-}
+//void MainWindow::on_actionirp6ot_m_Joints_triggered()
+//{
+//	interface.irp6ot_m->wgt_joints->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+//{
+//	interface.irp6ot_m->wgt_euler->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+//{
+//	interface.irp6ot_m->wgt_angle_axis->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
+//{
+//	interface.irp6ot_m->wgt_relative_angle_axis->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
+//{
+//	interface.irp6ot_m->move_to_synchro_position();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Front_Position_triggered()
+//{
+//	interface.irp6ot_m->move_to_front_position();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Position_0_triggered()
+//{
+//	interface.irp6ot_m->move_to_preset_position(0);
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Position_1_triggered()
+//{
+//	interface.irp6ot_m->move_to_preset_position(1);
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Position_2_triggered()
+//{
+//	interface.irp6ot_m->move_to_preset_position(2);
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
+//{
+//	interface.irp6ot_m->wgt_tool_euler->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
+//{
+//	interface.irp6ot_m->wgt_tool_angle_axis->my_open();
+//}
 
 //irp6ot_tfg
 
-void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
-{
-	interface.irp6ot_tfg->edp_create();
-}
-
-void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
-{
-	interface.irp6ot_tfg->EDP_slay_int();
-}
-
-void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
-{
-	interface.irp6ot_tfg->synchronise();
-}
-
-void MainWindow::on_actionirp6ot_tfg_Move_triggered()
-{
-	interface.irp6ot_tfg->wgt_move->my_open();
-}
-
-void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
-{
-	interface.irp6ot_tfg->move_to_synchro_position();
-}
-
-void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
-{
-	interface.irp6ot_tfg->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionirp6ot_tfg_Position_1_triggered()
-{
-	interface.irp6ot_tfg->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionirp6ot_tfg_Position_2_triggered()
-{
-	interface.irp6ot_tfg->move_to_preset_position(2);
-}
+//void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
+//{
+//	interface.irp6ot_tfg->edp_create();
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
+//{
+//	interface.irp6ot_tfg->EDP_slay_int();
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
+//{
+//	interface.irp6ot_tfg->synchronise();
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Move_triggered()
+//{
+//	interface.irp6ot_tfg->wgt_move->my_open();
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
+//{
+//	interface.irp6ot_tfg->move_to_synchro_position();
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
+//{
+//	interface.irp6ot_tfg->move_to_preset_position(0);
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Position_1_triggered()
+//{
+//	interface.irp6ot_tfg->move_to_preset_position(1);
+//}
+//
+//void MainWindow::on_actionirp6ot_tfg_Position_2_triggered()
+//{
+//	interface.irp6ot_tfg->move_to_preset_position(2);
+//}
 
 // irp6p_m menu
 
-
-void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
-{
-	interface.irp6p_m->edp_create();
-}
-
-void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
-{
-	interface.irp6p_m->EDP_slay_int();
-}
-
-void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
-{
-	interface.irp6p_m->synchronise();
-}
-
-void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
-{
-	interface.irp6p_m->wgt_motors->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
-{
-	interface.irp6p_m->wgt_motors->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Joints_triggered()
-{
-	interface.irp6p_m->wgt_joints->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6p_m->wgt_euler->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_angle_axis->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_relative_angle_axis->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
-{
-	interface.irp6p_m->move_to_synchro_position();
-}
-
-void MainWindow::on_actionirp6p_m_Front_Position_triggered()
-{
-	interface.irp6p_m->move_to_front_position();
-}
-
-void MainWindow::on_actionirp6p_m_Position_0_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionirp6p_m_Position_1_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionirp6p_m_Position_2_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(2);
-}
-
-void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6p_m->wgt_tool_euler->my_open();
-}
-
-void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_tool_angle_axis->my_open();
-}
+//
+//void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
+//{
+//	interface.irp6p_m->edp_create();
+//}
+//
+//void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
+//{
+//	interface.irp6p_m->EDP_slay_int();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
+//{
+//	interface.irp6p_m->synchronise();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
+//{
+//	interface.irp6p_m->wgt_motors->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
+//{
+//	interface.irp6p_m->wgt_motors->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Joints_triggered()
+//{
+//	interface.irp6p_m->wgt_joints->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+//{
+//	interface.irp6p_m->wgt_euler->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+//{
+//	interface.irp6p_m->wgt_angle_axis->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
+//{
+//	interface.irp6p_m->wgt_relative_angle_axis->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
+//{
+//	interface.irp6p_m->move_to_synchro_position();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Front_Position_triggered()
+//{
+//	interface.irp6p_m->move_to_front_position();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Position_0_triggered()
+//{
+//	interface.irp6p_m->move_to_preset_position(0);
+//}
+//
+//void MainWindow::on_actionirp6p_m_Position_1_triggered()
+//{
+//	interface.irp6p_m->move_to_preset_position(1);
+//}
+//
+//void MainWindow::on_actionirp6p_m_Position_2_triggered()
+//{
+//	interface.irp6p_m->move_to_preset_position(2);
+//}
+//
+//void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
+//{
+//	interface.irp6p_m->wgt_tool_euler->my_open();
+//}
+//
+//void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
+//{
+//	interface.irp6p_m->wgt_tool_angle_axis->my_open();
+//}
 
 //irp6p_tfg
 

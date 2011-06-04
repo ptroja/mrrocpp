@@ -639,6 +639,11 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
+common::robots_t Interface::getRobots()
+{
+	return robot_m;
+}
+
 void Interface::create_robots()
 {
 	spkm = new spkm::UiRobot(*this);

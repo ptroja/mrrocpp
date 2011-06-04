@@ -94,6 +94,10 @@ SET(GUI_MOC_SRCS
     irp6_m/wgt_irp6_m_relative_angle_axis.h
     irp6_m/wgt_irp6_m_tool_angle_axis.h
     irp6_m/wgt_irp6_m_tool_euler.h
+    irp6ot_m/ui_r_irp6ot_m.h
+	irp6ot_tfg/ui_r_irp6ot_tfg.h
+	irp6p_m/ui_r_irp6p_m.h
+	base/signal_dispatcher.h
 )
 
 # Generate MOC files
@@ -153,6 +157,7 @@ ADD_EXECUTABLE(
 	base/ui.cc
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
+	base/signal_dispatcher.cpp
 )
 
 # Link executable with QT libraries

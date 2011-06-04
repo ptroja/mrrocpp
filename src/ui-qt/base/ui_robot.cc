@@ -22,7 +22,6 @@ namespace common {
 //
 //
 
-
 UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
@@ -137,6 +136,11 @@ int UiRobot::edp_create_int()
 
 	return 1;
 
+}
+
+const lib::robot_name_t UiRobot::getName()
+{
+	return robot_name;
 }
 
 void UiRobot::close_all_windows()

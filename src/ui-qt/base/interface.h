@@ -23,7 +23,7 @@
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
-#include "string"
+//#include "string"
 
 #include "ui.h"
 
@@ -176,13 +176,18 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 
+	common::robots_t getRobots();
+
 	common::robots_t robot_m;
 
 	spkm::UiRobot *spkm;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
 
+
+
 	irp6ot_m::UiRobot *irp6ot_m;
+	//common::UiRobot *irp6ot_m;
 	irp6p_m::UiRobot *irp6p_m;
 	polycrank::UiRobot *polycrank;
 	bird_hand::UiRobot *bird_hand;
