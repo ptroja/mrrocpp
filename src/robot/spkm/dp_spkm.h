@@ -38,8 +38,8 @@ typedef struct _segment
 
 	//! True if the contact is expected during the motion.
 	//! The NACK will be replied if:
-	//! - the contact was expected and did not happend
-	//! - OR the contact was NOT expected and did happend.
+	//! - the contact was expected and did not happened
+	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
 	//! Serialization of the data structure
