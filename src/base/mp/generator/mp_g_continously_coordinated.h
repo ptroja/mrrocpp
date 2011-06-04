@@ -1,5 +1,5 @@
-#ifndef MP_GEN_EMPTY_H_
-#define MP_GEN_EMPTY_H_
+#ifndef MP_GEN_SPORADICALY_COORDINATED_H_
+#define MP_GEN_SPORADICALY_COORDINATED_H_
 
 /*!
  * @file
@@ -22,20 +22,29 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-class empty : public generator
+class continously_coordinated : public generator
 {
 
+protected:
+	/*!
+	 * @brief stl map of all mp robots that have not reply
+	 */
+	common::robots_t robots_to_reply;
+
+
 public:
+
+	long cycle_counter;
 
 	/**
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	empty(task::task& _mp_task);
-
-	bool first_step();
+	continously_coordinated(task::task& _mp_task);
 
 	bool next_step();
+
+	virtual bool next_step_inside(void) = 0;
 
 };
 

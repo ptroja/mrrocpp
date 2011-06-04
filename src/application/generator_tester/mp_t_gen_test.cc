@@ -67,14 +67,14 @@ void gen_test::main_task_algorithm(void)
 
 		//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
-		//run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+		//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 		//------------------- CONSTANT VELOCITY GENERATOR END -------------------
 
 		//------------------- SMOOTH GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 		//------------------- SMOOTH GENERATOR END -------------------
 	}
 
@@ -84,13 +84,13 @@ void gen_test::main_task_algorithm(void)
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		//run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 		//------------------- CONSTANT VELOCITY GENERATOR END -------------------
 
 		//------------------- SMOOTH GENERATOR -------------------
 		//set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		//run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 		//------------------- SMOOTH GENERATOR END -------------------
 	}
 
@@ -100,13 +100,13 @@ void gen_test::main_task_algorithm(void)
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::polycrank::ROBOT_NAME.c_str());
 
-		run_extended_empty_gen_and_wait(1, 1, lib::polycrank::ROBOT_NAME.c_str(), lib::polycrank::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::polycrank::ROBOT_NAME.c_str());
 		//------------------- CONSTANT VELOCITY GENERATOR END -------------------
 
 		//------------------- SMOOTH GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, 1, lib::polycrank::ROBOT_NAME.c_str());
 
-		run_extended_empty_gen_and_wait(1, 1, lib::polycrank::ROBOT_NAME.c_str(), lib::polycrank::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::polycrank::ROBOT_NAME.c_str());
 		//------------------- SMOOTH GENERATOR END -------------------
 	}
 
@@ -116,13 +116,13 @@ void gen_test::main_task_algorithm(void)
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, 1, lib::conveyor::ROBOT_NAME.c_str());
 
-		run_extended_empty_gen_and_wait(1, 1, lib::conveyor::ROBOT_NAME.c_str(), lib::conveyor::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::conveyor::ROBOT_NAME.c_str());
 		//------------------- CONSTANT VELOCITY GENERATOR END -------------------
 
 		//------------------- SMOOTH GENERATOR -------------------
 		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, 1, lib::conveyor::ROBOT_NAME.c_str());
 
-		run_extended_empty_gen_and_wait(1, 1, lib::conveyor::ROBOT_NAME.c_str(), lib::conveyor::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::conveyor::ROBOT_NAME.c_str());
 		//------------------- SMOOTH GENERATOR END -------------------
 	}
 

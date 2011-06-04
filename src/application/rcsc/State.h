@@ -9,6 +9,8 @@
 
 #include <list>
 
+#include <boost/optional.hpp>
+
 #include "ecp_mp_t_fsautomat.h"
 #include "base/lib/impconst.h"
 #include "Transition.h"
@@ -23,29 +25,20 @@ class State
 {
 public:
 	State();
-	State(const State &state);
-	~State();
 
 	struct RobotSets
 	{
-		RobotSets();
-		RobotSets(const RobotSets & robotSets);
-		~RobotSets();
-
-		int firstSetCount;
-		int secondSetCount;
-		lib::robot_name_t *firstSet;
-		lib::robot_name_t *secondSet;
+		std::list<lib::robot_name_t> firstSet, secondSet;
 	};
 
 	void setStateID(const std::string & stateID);
 	const char * getStateID() const;
 
-	void setNumArgument(const char *time);
+	void setNumArgument(const std::string & time);
 	int getNumArgument() const;
 
 	void setType(const std::string & _type);
-	const char * getType() const;
+	const std::string & getType() const;
 
 	void setRobot(const std::string & _robot);
 	lib::robot_name_t getRobot() const;
@@ -54,17 +47,17 @@ public:
 	std::string getGeneratorType() const;
 
 	void setStringArgument(const std::string & trajFilePath);
-	const char * getStringArgument() const;
+	const std::string & getStringArgument() const;
 
-	void setTransition(const char *cond, const char *target, lib::configurator &_config);
+	void setTransition(const std::string & cond, const std::string & target, lib::configurator &_config);
 	void setProperTransitionResult(bool result);
 
 	const char *returnNextStateID(StateHeap &sh);
-	std::list <Transition> * getTransitions() const;
+	const std::list <Transition> & getTransitions() const;
 
 	void showStateContent() const;
 
-	RobotSets *robotSet;
+	boost::optional<RobotSets> robotSet;
 
 private:
 	int numArgument;
@@ -74,7 +67,7 @@ private:
 	std::string generatorType;
 	std::string stringArgument;
 
-	std::list <Transition> *stateTransitions;
+	std::list <Transition> stateTransitions;
 };
 
 } // namespace common

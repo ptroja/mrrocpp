@@ -67,7 +67,7 @@ void axxb_eih::main_task_algorithm(void)
 
 	calib_axxb::main_task_algorithm();
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

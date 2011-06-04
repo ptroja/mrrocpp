@@ -75,8 +75,8 @@ void neuron::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Neuron task initialization");
 
-	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, (int) 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecps_state(ecp_mp::task::ECP_T_NEURON, 5, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 }

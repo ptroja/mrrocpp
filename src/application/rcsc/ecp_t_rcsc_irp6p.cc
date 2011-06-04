@@ -67,11 +67,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
 				rgg->configure(0.072, 0.00005, 0, false);
@@ -106,7 +106,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
-		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_CCL_90:
 				rfrg->configure(-90.0);
@@ -126,7 +126,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		rfrg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RCSC_GO_VAR_1:
 				go_st->configure(0.002, 1000);
@@ -142,7 +142,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
-		path +=(char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path +=(char*) mp_command.ecp_next_state.string_data;
 
 		tig->flush_pose_list();
 		tig->load_file_with_path(path.c_str());
@@ -153,9 +153,9 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
-		path +=(char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+		path +=(char*) mp_command.ecp_next_state.string_data;
 
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RELATIVE:
 				//sg->set_relative();

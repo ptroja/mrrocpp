@@ -57,7 +57,7 @@ public:
 	 */
 	Homog_matrix();
 
-	/**
+	/*!
 	 * Constructor for translation matrix
 	 *
 	 * @param[in] x,y,z translation parameters

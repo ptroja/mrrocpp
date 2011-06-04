@@ -31,6 +31,11 @@ protected:
 	 */
 	lib::ecp_next_state_t ecp_next_state;
 
+	/*!
+	 * @brief stl map of all mp robots that have not reply
+	 */
+	common::robots_t robots_to_reply;
+
 public:
 
 	/**
@@ -47,7 +52,7 @@ public:
 	 * @param str_len above string length
 	 */
 	void
-			configure(std::string l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len);
+			configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len);
 
 	/**
 	 * @brief sets ecp_next_state structure (player variant)

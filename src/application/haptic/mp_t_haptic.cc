@@ -36,6 +36,7 @@ task* return_created_mp_task(lib::configurator &_config)
 haptic::haptic(lib::configurator &_config) :
 	task(_config)
 {
+
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -58,11 +59,11 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
 	}
 
 	if ((configure_track) && (!configure_postument)) {
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	} else if ((!configure_track) && (configure_postument)) {
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	} else if ((configure_track) && (configure_postument)) {
-		run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	}
 }
 
@@ -72,20 +73,25 @@ void haptic::main_task_algorithm(void)
 	mp_h_gen.robot_m = robot_m;
 
 	sr_ecp_msg->message("New series");
+
 	//pierwsza konfiguracja czujnikow
 	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
+	//	delay(1000);
+	//	sr_ecp_msg->message("set_next_ecps_state");
 
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	// mp_h_gen.sensor_m = sensor_m;
-	mp_h_gen.configure(1, 0);
+
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_h_gen.Move();
 
 	send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+
+	sr_ecp_msg->message("MP HAPTIC END");
 }
 
 } // namespace task

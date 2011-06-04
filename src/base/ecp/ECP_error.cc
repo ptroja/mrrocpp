@@ -6,9 +6,7 @@
  * @ingroup ecp
  */
 
-#include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_robot.h"
-#include "base/ecp/ecp_generator.h"
+#include "base/ecp/ECP_error.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -72,16 +72,16 @@ void edge_follow_mr::main_task_algorithm(void)
 	lib::robot_name_t gripper_name;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
+	if (config.exists_and_true("is_active", "[edp_irp6ot_m]")) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
+		if (config.exists_and_true("is_active", "[edp_irp6ot_tfg]")) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+	} else if (config.exists_and_true("is_active", "[edp_irp6p_m]")) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
+		if (config.exists_and_true("is_active", "[edp_irp6p_tfg]")) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
@@ -103,7 +103,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
 
-	 run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	 wait_for_task_termination(false, 1, gripper_name.c_str());
 
 	 */
 
@@ -111,15 +111,15 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	set_next_ecps_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	sr_ecp_msg->message("END");
 

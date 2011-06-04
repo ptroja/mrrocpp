@@ -29,6 +29,11 @@ public:
 	virtual bool next_step();
 
 	static const char configSectionName[];
+
+	char GEN_REPLY;
+
+	void configure(int new_direction, double new_k_max);
+
 protected:
 	/** Is log enabled*/
 	bool logEnabled;
@@ -47,6 +52,12 @@ private:
 	double r;//promien
 	double k;//kat
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
+
+	int direction;
+	double k_max;
+
+	int licznik_uderzen;
+	bool zgubiona_pilka;
 };//end class
 
 } // namespace generator
