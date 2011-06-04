@@ -32,8 +32,12 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"),
-			mp_command(command.access), continuous_coordination(false)
+	ecp_mp::task::task(_config),
+	MP(lib::MP_SECTION),
+	reply(MP, _config.section_name),
+	command("command"),
+	mp_command(command.access),
+	continuous_coordination(false)
 {
 	initialize_communication();
 }
@@ -319,7 +323,7 @@ void task_base::wait_for_resume()
 {
 	if (ReceiveSingleMessage(true)) {
 		command.markAsUsed();
-		switch (mp_command.command)
+		switch (command.Get().command)
 		{
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);

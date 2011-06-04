@@ -58,7 +58,7 @@ void irp6_grasp::main_task_algorithm(void)
 
 			sr_ecp_msg->message("ECP_GEN_IRP6");
 
-			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.string_data, sizeof(mp_ecp_irp6_command));
+			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.data, sizeof(mp_ecp_irp6_command));
 			//ignore first DOF of IRp6_on_track, not used in GraspIt
 			coordinates1[0] = 0.0;
 			for (int i = 0; i < 6; ++i)

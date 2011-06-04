@@ -1062,7 +1062,7 @@ struct ecp_next_state_t
 {
 	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
 	int variant;
-	uint32_t string_data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
@@ -1078,7 +1078,7 @@ struct ecp_next_state_t
 	{
 		ar & mp_2_ecp_next_state;
 		ar & variant;
-		ar & string_data;
+		ar & data;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };
