@@ -135,11 +135,11 @@ void task_base::termination_notice(void)
 void task_base::subtasks_conditional_execution()
 {
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-				{
-					if (mp_2_ecp_next_state_string == subtask_node.first) {
-						subtask_node.second->conditional_execution();
-					}
-				}
+	{
+		if (mp_2_ecp_next_state_string == subtask_node.first) {
+			subtask_node.second->conditional_execution();
+		}
+	}
 }
 
 // Petla odbierania wiadomosci.
@@ -258,13 +258,9 @@ void task_base::get_next_state(void)
 bool task_base::peek_mp_message()
 {
 	command.markAsUsed();
-	bool block;
 
-	if (continuous_coordination) {
-		block = true;
-	} else {
-		block = false;
-	}
+	const bool block = continuous_coordination;
+
 	if (ReceiveSingleMessage(block)) {
 		if (command.isFresh()) {
 
@@ -349,9 +345,7 @@ void task_base::wait_for_resume()
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 				break;
 		}
-
 	}
-
 }
 
 } // namespace task
