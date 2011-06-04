@@ -1085,11 +1085,11 @@ struct ecp_next_state_t
 
 //------------------------------------------------------------------------------
 /*! MP to ECP command. */
-struct MP_COMMAND_PACKAGE
+template<class NEXT_STATE_T>
+struct _MP_COMMAND_PACKAGE
 {
-
 	MP_COMMAND command;
-	ecp_next_state_t ecp_next_state;
+	NEXT_STATE_T ecp_next_state;
 	c_buffer instruction;
 
 	//! Give access to boost::serialization framework
@@ -1112,6 +1112,8 @@ struct MP_COMMAND_PACKAGE
 		}
 	}
 };
+
+typedef struct _MP_COMMAND_PACKAGE<ecp_next_state_t> MP_COMMAND_PACKAGE;
 
 //------------------------------------------------------------------------------
 /*! ECP to MP reply. */
