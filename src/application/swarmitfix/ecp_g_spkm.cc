@@ -30,65 +30,78 @@ spkm_pose::spkm_pose(task_t & _ecp_task) :
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
 
-void spkm_pose::create_ecp_mp_reply()
+void spkm_pose::request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment)
 {
+	// Copy the motion type
+	robot.epos_external_command_data_port.data.motion_variant = segment.motion_type;
 
-}
+	// Translate the Homog_matrix pose to POD XYZ-euler-ZYZ representation
+	lib::Xyz_Euler_Zyz_vector tmp;
+	segment.goal_pose.get_xyz_euler_zyz(tmp);
+	tmp.to_table(robot.epos_external_command_data_port.data.desired_position);
 
-void spkm_pose::get_mp_ecp_command()
-{
-	//	memcpy(&mp_ecp_epos_gen_parameters_structure, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_epos_gen_parameters_structure));
-
-	//	printf("aaaaa: %lf\n", mp_ecp_epos_gen_parameters_structure.dm[4]);
+	// Mark the current buffer as active
+	robot.epos_external_command_data_port.set();
 }
 
 bool spkm_pose::first_step()
 {
-	// parameters copying
-	get_mp_ecp_command();
+	sr_ecp_msg.message("spkm_pose: first_step");
 
-	sr_ecp_msg.message("epos first_step");
+	// skip the empty command sequence
+	if (ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.empty())
+		return false;
 
-	// Fill the goal_pos data
-	the_robot->epos_joint_command_data_port.data.desired_position[0] = 0;
-	//the_robot->epos_joint_command_data_port.data.desired_position[1] = ...;
+	// set the iterator to the first command
+	segment_iterator = ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.begin();
 
-	// Mark the current buffer as used
-	the_robot->epos_joint_command_data_port.set();
+	// Prepare command for execution of a single motion segment
+	request_segment_execution(*the_robot, *segment_iterator);
 
 	return true;
 }
 
 bool spkm_pose::next_step()
 {
-	sr_ecp_msg.message("epos next_step");
-#if 0
-	if (epos_reply_data_request_port->get() == mrrocpp::lib::NewData) {
+	sr_ecp_msg.message("spkm_pose: next_step");
+
+	// A co to jest??? (ptroja)
+	if (the_robot->epos_reply_data_request_port.get() == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << epos_reply_data_request_port->data.epos_controller[3].position;
+		ss << "licznik: " << the_robot->epos_reply_data_request_port.data.epos_controller[3].position;
 
-		sr_ecp_msg.message(ss.str().c_str());
-
+		sr_ecp_msg.message(ss.str());
 	}
 
+	// Check motion status of the PKM
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 6; i++) {
-		if (epos_reply_data_request_port->data.epos_controller[i].motion_in_progress == true) {
+		if (the_robot->epos_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
 	}
 
+	// Check if the commanded motion is already completed
 	if (motion_in_progress) {
-		epos_reply_data_request_port->set_request();
+		// Request new status data
+		the_robot->epos_reply_data_request_port.set_request();
 		return true;
-	} else {
-		return false;
 	}
-#endif
 
+	// Increment the segment iterator
+	++segment_iterator;
+
+	// Check if the motion sequence is finished
+	if(segment_iterator == ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.end())
+		return false;
+
+	// Prepare command for execution of a single motion segment
+	request_segment_execution(*the_robot, *segment_iterator);
+
+	// Continue
 	return true;
 }
 

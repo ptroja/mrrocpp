@@ -23,15 +23,20 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
+#include <vector>
+
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "base/lib/impconst.h"
 #include "base/lib/typedefs.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/ft_v_vector.h"
+
+#include "robot/spkm/dp_spkm.h"
 
 #include "base/lib/messip/messip.h"
 
@@ -1069,6 +1074,10 @@ struct ecp_next_state_t
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
+	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
+
+	spkm_segment_sequence_t spkm_segment_sequence;
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -1079,6 +1088,7 @@ struct ecp_next_state_t
 		ar & next_state;
 		ar & variant;
 		ar & data;
+		ar & spkm_segment_sequence;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };

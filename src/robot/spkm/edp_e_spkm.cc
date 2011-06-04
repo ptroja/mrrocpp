@@ -803,7 +803,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			case lib::FRAME: {
 				msg->message("EDP get_arm_position FRAME");
 
-				edp_ecp_rbuffer.current_frame = lib::Homog_matrix();
+				edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
 			}
 				break;
 			default:

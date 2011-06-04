@@ -240,7 +240,7 @@ void robot::get_reply()
 		}
 		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
-		epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_frame;
+		epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
 
 		epos_external_reply_data_request_port.set();
 	}
