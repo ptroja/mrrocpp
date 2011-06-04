@@ -161,9 +161,12 @@ void task_base::wait_for_start(void)
 	bool start_received = false;
 
 	while (!start_received) {
-		while (!command.isFresh()) {
-			ReceiveSingleMessage(true);
-		}
+		// wait for a new message
+		ReceiveSingleMessage(true);
+
+		// ignore non-MP commands
+		if (!command.isFresh())
+			continue;
 
 		command.markAsUsed();
 
@@ -321,8 +324,20 @@ bool task_base::peek_mp_message()
 
 void task_base::wait_for_resume()
 {
-	if (ReceiveSingleMessage(true)) {
+	// Awaiting for the RESUME command
+	bool resume_received = false;
+
+	while (!resume_received) {
+
+		// wait for a new message
+		ReceiveSingleMessage(true);
+
+		// ignore non-MP messages
+		if(!command.isFresh())
+			continue;
+
 		command.markAsUsed();
+
 		switch (command.Get().command)
 		{
 			case lib::STOP:
@@ -339,6 +354,9 @@ void task_base::wait_for_resume()
 
 				// Reply with ACK
 				//	reply.Send(ecp_reply);
+
+				// leave the receive loop
+				resume_received = true;
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
