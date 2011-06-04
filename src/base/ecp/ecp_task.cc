@@ -258,7 +258,7 @@ void task_base::get_next_state(void)
 	}
 
 	// Extract the next command to the local variable
-	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
+	mp_2_ecp_next_state_string = mp_command.ecp_next_state.next_state;
 }
 
 // Receive a message from MP

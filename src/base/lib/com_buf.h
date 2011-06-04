@@ -1060,23 +1060,23 @@ public:
  */
 struct ecp_next_state_t
 {
-	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	char next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
 	int variant;
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
 
+	const char * get_mp_2_ecp_next_state_string() const;
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
-
-	const char * get_mp_2_ecp_next_state_string() const;
 
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & mp_2_ecp_next_state;
+		ar & next_state;
 		ar & variant;
 		ar & data;
 		// ar & playerpos_goal; // this is not needed at this moment

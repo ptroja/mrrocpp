@@ -32,9 +32,9 @@ generator::generator(common::task::task& _ecp_task) :
 	sock = -1;
 }
 
-char * generator::set_phrase(const char *text)
+void generator::set_phrase(const std::string & text)
 {
-	return strncpy(phrase, text, sizeof(phrase));
+	phrase = text;
 }
 
 bool generator::set_voice(VOICE voice_id)
