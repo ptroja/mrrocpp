@@ -66,10 +66,10 @@ discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::st
 	base_period = current_period = 1;
 
 	// read sensor settings from config.
-	discode_port = config.value <uint16_t> ("discode_port", section_name);
-	discode_node_name = config.value <string> ("discode_node_name", section_name);
-	reading_timeout = config.value <double> ("discode_reading_timeout", section_name);
-	rpc_call_timeout = config.value <double> ("discode_rpc_call_timeout", section_name);
+	discode_port = config.value<uint16_t> ("discode_port", section_name);
+	discode_node_name = config.value<string> ("discode_node_name", section_name);
+	reading_timeout = config.value<double> ("discode_reading_timeout", section_name);
+	rpc_call_timeout = config.value<double> ("discode_rpc_call_timeout", section_name);
 
 	// determine size of rmh after serialization
 	header_oarchive << rmh;
@@ -111,7 +111,8 @@ void discode_sensor::configure_sensor()
 	hostent * server = gethostbyname(discode_node_name.c_str());
 	if (server == NULL) {
 		state = DSS_ERROR;
-		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(hstrerror(h_errno)));
+		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(
+				hstrerror(h_errno)));
 	}
 
 	// Data with address of connection
@@ -156,7 +157,8 @@ void discode_sensor::get_reading()
 		} else {
 			// no data received - too long for receiving reading from Discode.
 			// there must be something wrong with connection to discode.
-			throw ds_timeout_exception("discode_sensor: Timeout while waiting for reading. Check connection to DisCODe and task running on DisCODe.");
+			throw ds_timeout_exception(
+					"discode_sensor: Timeout while waiting for reading. Check connection to DisCODe and task running on DisCODe.");
 		}
 	} else if (state == DSS_CONNECTED || state == DSS_READING_RECEIVED) {
 		// send request to DisCODe.
@@ -189,7 +191,8 @@ void discode_sensor::get_reading()
 void discode_sensor::terminate()
 {
 	if (!(state == DSS_CONNECTED || state == DSS_ERROR)) {
-		throw ds_wrong_state_exception("discode_sensor::terminate(): !(state == DSS_CONNECTED || state == DSS_ERROR)");
+		throw ds_wrong_state_exception(
+				"discode_sensor::terminate(): !(state == DSS_CONNECTED || state == DSS_ERROR)");
 	}
 	close(sockfd);
 	state = DSS_NOT_CONNECTED;
@@ -270,7 +273,8 @@ void discode_sensor::send_buffers_to_discode()
 		throw ds_connection_exception("writev(sockfd, iov, 2) == -1");
 	}
 	if (nwritten != (int) (header_oarchive.getArchiveSize() + oarchive.getArchiveSize())) {
-		throw ds_connection_exception("writev(sockfd, iov, 2) != header_oarchive.getArchiveSize() + oarchive.getArchiveSize()");
+		throw ds_connection_exception(
+				"writev(sockfd, iov, 2) != header_oarchive.getArchiveSize() + oarchive.getArchiveSize()");
 	}
 
 	oarchive.clear_buffer();
@@ -281,7 +285,8 @@ void discode_sensor::timer_init()
 	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
 		timer.print_last_status();
 		fflush(stdout);
-		throw logic_error("discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
+		throw logic_error(
+				"discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
 }
 
@@ -312,6 +317,11 @@ void discode_sensor::timer_show(const char *str)
 
 reading_message_header discode_sensor::get_rmh() const
 {
+	if (state != DSS_READING_RECEIVED) {
+		state = DSS_ERROR;
+		throw ds_wrong_state_exception(
+				"discode_sensor::retreive_reading(): state != DSS_READING_RECEIVED");
+	}
 	return rmh;
 }
 
@@ -350,7 +360,8 @@ double discode_sensor::get_mrroc_discode_time_offset() const
 {
 	int seconds, nanoseconds;
 	seconds = (reading_received_time.tv_sec + request_sent_time.tv_sec) / 2 - rmh.sendTimeSeconds;
-	nanoseconds = (reading_received_time.tv_nsec + request_sent_time.tv_nsec) / 2 - rmh.sendTimeNanoseconds;
+	nanoseconds = (reading_received_time.tv_nsec + request_sent_time.tv_nsec) / 2
+			- rmh.sendTimeNanoseconds;
 	double offset = seconds + 1e-9 * nanoseconds;
 
 	seconds = reading_received_time.tv_sec - request_sent_time.tv_sec;

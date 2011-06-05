@@ -107,7 +107,7 @@ public:
 	struct timespec get_request_sent_time() const;
 	double get_mrroc_discode_time_offset() const;
 private:
-	discode_sensor_state state;
+	mutable discode_sensor_state state;
 	uint16_t discode_port;
 	std::string discode_node_name;
 

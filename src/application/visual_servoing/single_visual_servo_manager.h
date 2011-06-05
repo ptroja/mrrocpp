@@ -36,15 +36,14 @@ protected:
 	virtual void configure_all_servos();
 
 private:
-	void update_motion_steps(double discode_processing_time, double discode_synchronization_delay, double discode_total_time, double image_mrroc_delay);
-
 	double image_sampling_period;
 	static const double image_sampling_period_default;
 	int motion_steps_base;
 
-
 	std::string txtbuf;
 	int txtiter;
+
+	void update_motion_steps();
 };
 
 /** @} */
