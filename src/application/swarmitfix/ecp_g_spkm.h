@@ -40,13 +40,14 @@ public:
 class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>
 {
 public:
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! Constructor
+	spkm_quickstop(task_t & _ecp_task);
 
-	spkm_quickstop(task_t & _ecp_task); //constructor
+	//! first step generation
+	bool first_step();
 
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! next step generation
+	bool next_step();
 };
 
 } // namespace generator

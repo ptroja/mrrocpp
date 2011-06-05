@@ -52,10 +52,10 @@ bool spkm_pose::first_step()
 	if (ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.empty())
 		return false;
 
-	// set the iterator to the first command
+	// set iterator to the first command
 	segment_iterator = ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.begin();
 
-	// Prepare command for execution of a single motion segment
+	// Prepare command for execution of the first motion segment
 	request_segment_execution(*the_robot, *segment_iterator);
 
 	return true;
@@ -94,11 +94,11 @@ bool spkm_pose::next_step()
 	// Increment the segment iterator
 	++segment_iterator;
 
-	// Check if the motion sequence is finished
+	// Check if the motion sequence is completed
 	if(segment_iterator == ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.end())
 		return false;
 
-	// Prepare command for execution of a single motion segment
+	// Prepare command for execution of a next motion segment
 	request_segment_execution(*the_robot, *segment_iterator);
 
 	// Continue
@@ -118,18 +118,6 @@ spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
 	generator_t(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
-}
-
-void spkm_quickstop::create_ecp_mp_reply()
-{
-
-}
-
-void spkm_quickstop::get_mp_ecp_command()
-{
-	//	memcpy(&mp_ecp_epos_gen_parameters_structure, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_epos_gen_parameters_structure));
-
-	//	printf("aaaaa: %lf\n", mp_ecp_epos_gen_parameters_structure.dm[4]);
 }
 
 bool spkm_quickstop::first_step()
