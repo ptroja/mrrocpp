@@ -24,14 +24,12 @@ namespace generator {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-wait_for_task_termination::wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step =
-		true) :
+wait_for_task_termination::wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step) :
 	generator(_mp_task), activate_trigger(true), check_task_termination_in_first_step(true)
 {
 	check_task_termination_in_first_step = _check_task_termination_in_first_step;
 	wait_for_ECP_pulse = true;
 }
-
 
 void wait_for_task_termination::configure(bool l_activate_trigger)
 {

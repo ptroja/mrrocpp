@@ -147,6 +147,23 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 }
 
 // send_end_motion
+void task::wait_for_task_termination(int number_of_robots, ...)
+{
+	generator::wait_for_task_termination wtf_gen(*this);
+
+	va_list arguments; // A place to store the list of arguments
+
+	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+
+	// Copy given robots to the map container
+	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
+
+	va_end(arguments); // Cleans up the list
+
+	wtf_gen.Move();
+}
+
+// send_end_motion
 void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
 {
 	generator::send_end_motion_to_ecps mp_semte_gen(*this);

@@ -39,7 +39,7 @@ public:
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step);
+	wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step = true);
 
 	/**
 	 * @brief sets desired total time to pass

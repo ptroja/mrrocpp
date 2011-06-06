@@ -132,6 +132,14 @@ public:
 	void send_end_motion_to_ecps(int number_of_robots, ...);
 
 	/**
+	 * @brief waits for task termination reply from set of robots ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots number of robots to receive command
+	 * @param ... robots labels
+	 */
+	void wait_for_task_termination(int number_of_robots, ...);
+
+	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param number_of_robots number of robots to receive command
