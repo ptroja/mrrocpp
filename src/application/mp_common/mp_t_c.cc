@@ -83,6 +83,7 @@ void cxx::main_task_algorithm(void)
 
 	// Zlecenie wykonania kolejnego makrokroku
 	wtf_gen.Move();
+
 }
 
 } // namespace task

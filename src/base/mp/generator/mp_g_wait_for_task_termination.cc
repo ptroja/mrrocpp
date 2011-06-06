@@ -38,9 +38,6 @@ wait_for_task_termination::wait_for_task_termination(task::task& _mp_task, bool 
 
 bool wait_for_task_termination::first_step()
 {
-
-	robots_to_reply = robot_m;
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->communicate_with_ecp = false;
@@ -48,14 +45,14 @@ bool wait_for_task_termination::first_step()
 
 	if (check_task_termination_in_first_step) {
 		// usuwamy te roboty, ktore juz odpoweidzialy
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 					{
 						if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-							robots_to_reply.erase(robot_node.first);
+							robot_m.erase(robot_node.first);
 						}
 					}
 
-		if (robots_to_reply.empty()) {
+		if (robot_m.empty()) {
 			return false;
 		} else {
 			return true;
@@ -71,17 +68,20 @@ bool wait_for_task_termination::first_step()
 
 bool wait_for_task_termination::next_step()
 {
+
 	// usuwamy te roboty, ktore juz odpoweidzialy
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						robots_to_reply.erase(robot_node.first);
+						robot_m.erase(robot_node.first);
 					}
 				}
 
-	if (robots_to_reply.empty()) {
+	if (robot_m.empty()) {
+
 		return false;
 	} else {
+
 		return true;
 	}
 }

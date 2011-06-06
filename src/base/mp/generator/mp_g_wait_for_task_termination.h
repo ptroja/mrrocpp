@@ -24,12 +24,6 @@ namespace generator {
  */
 class wait_for_task_termination : public generator
 {
-protected:
-
-	/*!
-	 * @brief stl map of all mp robots that have not reply
-	 */
-	common::robots_t robots_to_reply;
 
 public:
 
