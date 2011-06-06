@@ -24,14 +24,22 @@ namespace generator {
  */
 class wait_for_task_termination : public generator
 {
+protected:
+
+	/*!
+	 * @brief stl map of all mp robots that have not reply
+	 */
+	common::robots_t robots_to_reply;
 
 public:
+
+	bool check_task_termination_in_first_step;
 
 	/**
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	wait_for_task_termination(task::task& _mp_task);
+	wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step);
 
 	bool first_step();
 

@@ -16,7 +16,7 @@
 
 #include "base/mp/MP_main_error.h"
 #include "mp_t_c.h"
-#include "base/mp/generator/mp_g_extended_empty.h"
+#include "base/mp/generator/mp_g_wait_for_task_termination.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -68,20 +68,21 @@ void cxx::create_robots()
 void cxx::main_task_algorithm(void)
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		// Drop the 'const' qualifier
-		lib::ECP_REPLY_PACKAGE & ecp_reply_package = const_cast<lib::ECP_REPLY_PACKAGE&> (robot_node.second->ecp_reply_package);
+				{
+					// Drop the 'const' qualifier
+					lib::ECP_REPLY_PACKAGE & ecp_reply_package =
+							const_cast <lib::ECP_REPLY_PACKAGE&> (robot_node.second->ecp_reply_package);
 
-		// NOTE: this does write to the INPUT buffer (?!)
-		// Probably this should be solved with a proper initialization.
-		ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
-	}
+					// NOTE: this does write to the INPUT buffer (?!)
+					// Probably this should be solved with a proper initialization.
+					ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
+				}
 
-	generator::extended_empty empty_gen(*this); // "Pusty" generator
-	empty_gen.robot_m = robot_m;
+	generator::wait_for_task_termination wtf_gen(*this, false); // "Pusty" generator
+	wtf_gen.robot_m = robot_m;
 
 	// Zlecenie wykonania kolejnego makrokroku
-	empty_gen.Move();
+	wtf_gen.Move();
 }
 
 } // namespace task

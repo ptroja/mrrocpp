@@ -24,9 +24,12 @@ namespace generator {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-wait_for_task_termination::wait_for_task_termination(task::task& _mp_task) :
-	generator(_mp_task)
+wait_for_task_termination::wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step =
+		true) :
+	generator(_mp_task), check_task_termination_in_first_step(true)
 {
+	check_task_termination_in_first_step = _check_task_termination_in_first_step;
+	wait_for_ECP_pulse = true;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -35,17 +38,29 @@ wait_for_task_termination::wait_for_task_termination(task::task& _mp_task) :
 
 bool wait_for_task_termination::first_step()
 {
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// Inicjacja generatora trajektorii
-	// printf("mp first step\n");
-	// wait_for_ECP_pulse = true;
+
+	robots_to_reply = robot_m;
+
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
-					robot_node.second->mp_command.command = lib::NEXT_POSE;
-					robot_node.second->mp_command.instruction.instruction_type = lib::QUERY;
-					robot_node.second->communicate_with_ecp = true;
+					robot_node.second->communicate_with_ecp = false;
 				}
+
+	if (check_task_termination_in_first_step) {
+		// usuwamy te roboty, ktore juz odpoweidzialy
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
+					{
+						if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+							robots_to_reply.erase(robot_node.first);
+						}
+					}
+
+		if (robots_to_reply.empty()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	return true;
 }
@@ -56,25 +71,19 @@ bool wait_for_task_termination::first_step()
 
 bool wait_for_task_termination::next_step()
 {
-	// Funkcja zwraca false gdy koniec generacji trajektorii
-	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
-	// Na podstawie ecp_reply dla poszczegolnych robotow nalezy okreslic czy
-	// skonczono zadanie uzytkownika
-
-	// obrazu danych wykorzystywanych przez generator
-
-	// 	if (trigger) printf("Yh\n"); else printf("N\n");
-	// printf("mp next step\n");
-	// UWAGA: dzialamy na jednoelementowej liscie robotow
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	// usuwamy te roboty, ktore juz odpoweidzialy
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robots_to_reply)
 				{
 					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						sr_ecp_msg.message("w mp task terminated");
-						return false;
+						robots_to_reply.erase(robot_node.first);
 					}
 				}
 
-	return true;
+	if (robots_to_reply.empty()) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 } // namespace generator
