@@ -25,15 +25,14 @@ namespace generator {
 const int visual_servo_manager::motion_steps_default = 30;
 const int visual_servo_manager::motion_steps_min = 10;
 const int visual_servo_manager::motion_steps_max = 60;
-const int visual_servo_manager::motion_steps_value_in_step_no = 3;
+//const int visual_servo_manager::motion_steps_value_in_step_no = 4;
 const double visual_servo_manager::step_time = 0.002;
 
 visual_servo_manager::visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
 	common::generator::generator(ecp_task), current_position_saved(false), max_speed(0), max_angular_speed(0),
 			max_acceleration(0), max_angular_acceleration(0)
 {
-
-	new_motion_steps = motion_steps
+	new_motion_steps = motion_steps = motion_steps_base
 			= ecp_task.config.exists("motion_steps", section_name) ? ecp_task.config.value <unsigned int> ("motion_steps", section_name) : motion_steps_default;
 
 	dt = motion_steps * step_time;
@@ -53,7 +52,8 @@ visual_servo_manager::~visual_servo_manager()
 
 bool visual_servo_manager::first_step()
 {
-	motion_steps = motion_steps_default;
+	new_motion_steps = motion_steps = motion_steps_base;
+	value_in_step_no = motion_steps_base - 4;
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
@@ -63,7 +63,8 @@ bool visual_servo_manager::first_step()
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = motion_steps;
-	the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	//the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	the_robot->ecp_command.value_in_step_no = value_in_step_no;
 	dt = motion_steps * step_time;
 
 	for (int i = 0; i < 6; i++) {
@@ -83,11 +84,35 @@ bool visual_servo_manager::first_step()
 		termination_conditions[i]->reset();
 	}
 	log_dbg("visual_servo_manager::first_step() end\n");
+
+//	clock_gettime(CLOCK_REALTIME, &prev_timestamp);
+//	c = 0;
+
 	return true;
 }
 
 bool visual_servo_manager::next_step()
 {
+//	clock_gettime(CLOCK_REALTIME, &current_timestamp);
+//	int sec = current_timestamp.tv_sec - prev_timestamp.tv_sec;
+//	int nsec = current_timestamp.tv_nsec - prev_timestamp.tv_nsec;
+//
+//	double next_step_time = sec + 1e-9*nsec;
+//
+//	ss << "next_step_time = " << next_step_time << "\n";
+//	if(next_step_time < 0.005){
+//		ss << "----------------------------------------- next_step_time < 0.005\n";
+//	}
+//
+//	if(++c > 100){
+//		c = 0;
+//		cout<<"====================\n"<<ss.str()<<"=================\n";
+//		ss.str("");
+//	}
+//
+//	prev_timestamp = current_timestamp;
+
+
 	if (!current_position_saved) { // save first position
 		current_position = the_robot->reply_package.arm.pf_def.arm_frame;
 		current_position_saved = true;
@@ -131,7 +156,9 @@ bool visual_servo_manager::next_step()
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
 	the_robot->ecp_command.arm.pf_def.arm_frame = next_position;
 	the_robot->ecp_command.motion_steps = motion_steps;
-	the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	//the_robot->ecp_command.value_in_step_no = motion_steps - motion_steps_value_in_step_no;
+	the_robot->ecp_command.value_in_step_no = value_in_step_no;
+
 	dt = motion_steps * step_time;
 
 	return !any_condition_met;
@@ -263,6 +290,7 @@ double visual_servo_manager::get_dt() const
 
 void visual_servo_manager::set_new_motion_steps(int new_motion_steps)
 {
+//	ss<<"new_motion_steps = "<<new_motion_steps<<"\n";
 	this->new_motion_steps = min(new_motion_steps, motion_steps_max);
 	this->new_motion_steps = max(new_motion_steps, motion_steps_min);
 	//log_dbg("visual_servo_manager::set_new_motion_steps(): this->new_motion_steps = %d\n", this->new_motion_steps);
@@ -276,6 +304,10 @@ int visual_servo_manager::get_new_motion_steps() const
 int visual_servo_manager::get_motion_steps() const
 {
 	return motion_steps;
+}
+
+int visual_servo_manager::get_motion_steps_base() const{
+	return motion_steps_base;
 }
 
 } // namespace generator

@@ -36,8 +36,8 @@ single_visual_servo_manager::single_visual_servo_manager(
 					double> ("image_sampling_period", section_name)
 					: image_sampling_period_default;
 
-	txtiter = 0;
-	txtbuf.reserve(50000);
+//	txtiter = 0;
+//	txtbuf.reserve(50000);
 }
 
 single_visual_servo_manager::~single_visual_servo_manager()
@@ -47,15 +47,19 @@ single_visual_servo_manager::~single_visual_servo_manager()
 lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 {
 	bool reading_received = false;
+	ecp_mp::sensor::discode::reading_message_header rmh;
 	if (servos[0]->get_sensor()->get_state()
 			== ecp_mp::sensor::discode::discode_sensor::DSS_READING_RECEIVED) {
+		rmh = servos[0]->get_sensor()->get_rmh();
 		reading_received = true;
 	}
 
 	lib::Homog_matrix pc = servos[0]->get_position_change(get_current_position(), get_dt());
 
 	if(reading_received){
-		update_motion_steps();
+		update_motion_steps(rmh);
+	} else {
+		set_new_motion_steps(get_motion_steps_base());
 	}
 
 	return pc;
@@ -63,14 +67,10 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 
 void single_visual_servo_manager::configure_all_servos()
 {
-	motion_steps_base = get_motion_steps();
-	log_dbg("single_visual_servo_manager::configure_all_servos(): motion_steps_base = %d\n",
-			motion_steps_base);
 }
 
-void single_visual_servo_manager::update_motion_steps()
+void single_visual_servo_manager::update_motion_steps(ecp_mp::sensor::discode::reading_message_header rmh)
 {
-	ecp_mp::sensor::discode::reading_message_header rmh = servos[0]->get_sensor()->get_rmh();
 	Types::Mrrocpp_Proxy::Reading* reading = servos[0]->get_reading();
 
 	struct timespec ts;
@@ -81,7 +81,7 @@ void single_visual_servo_manager::update_motion_steps()
 	double image_mrroc_delay = seconds + 1e-9 * nanoseconds;
 	image_mrroc_delay -= servos[0]->get_sensor()->get_mrroc_discode_time_offset();
 
-	char txt[1000];
+//	char txt[1000];
 
 //	sprintf(txt, "mrroc_discode_time_offset = %g\n", mrroc_discode_time_offset);
 //	txtbuf += txt;
@@ -101,8 +101,8 @@ void single_visual_servo_manager::update_motion_steps()
 //			reading->processingEndSeconds, reading->processingEndNanoseconds);
 //	txtbuf += txt;
 
-	sprintf(txt, "ts.tv_sec = %ld    ts.tv_nsec = %ld    \n", ts.tv_sec, ts.tv_nsec);
-	txtbuf += txt;
+//	sprintf(txt, "ts.tv_sec = %ld    ts.tv_nsec = %ld    \n", ts.tv_sec, ts.tv_nsec);
+//	txtbuf += txt;
 
 	double offset = fmod(image_mrroc_delay, image_sampling_period);
 
@@ -115,23 +115,23 @@ void single_visual_servo_manager::update_motion_steps()
 	int ms;
 
 	if (offset > offset_threshold) {
-		ms = motion_steps_base - 1;
+		ms = get_motion_steps_base() - 1;
 	} else if (offset < -offset_threshold) {
-		ms = motion_steps_base + 1;
+		ms = get_motion_steps_base() + 1;
 	} else {
-		ms = motion_steps_base;
+		ms = get_motion_steps_base();
 	}
 
 	set_new_motion_steps(ms);
 
-	sprintf(txt, "e = %g          image_mrroc_delay = %g     ms = %d\n", offset, image_mrroc_delay, ms);
-	txtbuf += txt;
+//	sprintf(txt, "e = %g          image_mrroc_delay = %g     ms = %d\n", offset, image_mrroc_delay, ms);
+//	txtbuf += txt;
 
-	txtiter++;
-	if (txtiter > 100) {
-		log("\n\n\nHEHEHEHE:\n%s\n\n", txtbuf.c_str());
-		throw runtime_error("HEHEHEEHEH");
-	}
+//	txtiter++;
+//	if (txtiter > 100) {
+//		log("\n\n\nHEHEHEHE:\n%s\n\n", txtbuf.c_str());
+//		throw runtime_error("HEHEHEEHEH");
+//	}
 }
 
 }//namespace generator

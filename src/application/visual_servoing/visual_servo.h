@@ -52,6 +52,8 @@ struct visual_servo_log_sample
 	uint32_t sampleTimeSeconds;
 	uint32_t sampleTimeNanoseconds;
 
+	double mrroc_discode_time_offset;
+
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
 

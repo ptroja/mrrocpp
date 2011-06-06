@@ -17,6 +17,7 @@
 
 #include <csignal>
 #include <ctime>
+#include <sstream>
 
 namespace mrrocpp {
 
@@ -119,17 +120,26 @@ protected:
 	void set_new_motion_steps(int new_motion_steps);
 	int get_new_motion_steps() const;
 	int get_motion_steps() const;
+	int get_motion_steps_base() const;
+
+//	struct timespec current_timestamp;
+//	struct timespec prev_timestamp;
+//	std::stringstream ss;
+//	int c;
 private:
 	/** Default number of steps for macrostep. */
 	static const int motion_steps_default;
 	static const int motion_steps_min;
 	static const int motion_steps_max;
-	static const int motion_steps_value_in_step_no;
+//	static const int motion_steps_value_in_step_no;
+	int value_in_step_no;
 
 	/** Number of steps for macrostep.
 	 * If present, this value is read from config, otherwise is set to motion_steps_default
 	 */
 	int motion_steps;
+
+	int motion_steps_base;
 
 	int new_motion_steps;
 

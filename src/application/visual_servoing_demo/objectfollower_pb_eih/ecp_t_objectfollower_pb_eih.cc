@@ -53,15 +53,14 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
 
 		if(config.exists_and_true("use_pid_regulator", config_section_name)){
-			log_dbg("ecp_t_objectfollower_ib: using PID regulator\n");
+			sr_ecp_msg->message("Using PID regulator");
 			reg = shared_ptr <visual_servo_regulator> (new regulator_pid(config, config_section_name));
 		} else {
-			log_dbg("ecp_t_objectfollower_ib: using P regulator\n");
+			sr_ecp_msg->message("Using P regulator");
 			reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 		}
 
-
-		log_dbg("ecp_t_objectfollower_pb: creating DisCODe sensor\n");
+		sr_ecp_msg->message("Creating DisCODe sensor");
 		boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
 		vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
 

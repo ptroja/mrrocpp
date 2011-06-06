@@ -320,7 +320,7 @@ reading_message_header discode_sensor::get_rmh() const
 	if (state != DSS_READING_RECEIVED) {
 		state = DSS_ERROR;
 		throw ds_wrong_state_exception(
-				"discode_sensor::retreive_reading(): state != DSS_READING_RECEIVED");
+				"discode_sensor::get_rmh(): state != DSS_READING_RECEIVED");
 	}
 	return rmh;
 }

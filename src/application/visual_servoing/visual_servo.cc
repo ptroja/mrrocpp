@@ -79,6 +79,8 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 			sample.requestSentTimeNanoseconds = ts.tv_nsec;
 			sample.requestSentTimeSeconds = ts.tv_sec;
 
+			sample.mrroc_discode_time_offset = sensor->get_mrroc_discode_time_offset();
+
 			retrieve_reading();
 			Types::Mrrocpp_Proxy::Reading* reading = get_reading();
 
@@ -119,9 +121,9 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	if (log_enabled) {
 		log_buffer.push_back(sample);
-		if (log_buffer.size() % 100 == 0) {
-			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
-		}
+		//		if (log_buffer.size() % 100 == 0) {
+		//			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
+		//		}
 		if (log_buffer.full()) {
 			write_log();
 		}
@@ -182,11 +184,17 @@ void visual_servo::write_log()
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
 	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9;
-	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9;
-	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9
+			+ mrroc_discode_time_offset;
+	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9 + mrroc_discode_time_offset;
+	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9 + mrroc_discode_time_offset;
 	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
 	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
+
+	if (!is_reading_repreated) {
+		os << mrroc_discode_time_offset;
+	}
+	os << ";";
 
 	if (processingStartSeconds > 0) {
 		os.precision(9);
@@ -238,6 +246,8 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
 {
+	os << "mrroc_discode_time_offset;";
+
 	os << "processingStart;";
 
 	os << "processingEnd;";
