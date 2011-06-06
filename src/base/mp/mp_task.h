@@ -137,7 +137,7 @@ public:
 	 * @param number_of_robots number of robots to receive command
 	 * @param ... robots labels
 	 */
-	void wait_for_task_termination(int number_of_robots, ...);
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version

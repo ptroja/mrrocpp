@@ -147,7 +147,7 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 }
 
 // send_end_motion
-void task::wait_for_task_termination(int number_of_robots, ...)
+void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, ...)
 {
 	generator::wait_for_task_termination wtf_gen(*this);
 
@@ -157,6 +157,8 @@ void task::wait_for_task_termination(int number_of_robots, ...)
 
 	// Copy given robots to the map container
 	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
+
+	wtf_gen.configure(activate_trigger);
 
 	va_end(arguments); // Cleans up the list
 
