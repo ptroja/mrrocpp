@@ -147,14 +147,6 @@ public:
 	 */
 	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);
 
-	/**
-	 * @brief runs extended empty generator
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param activate_trigger determines if mp_trigger finishes generator execution
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
-	 */
-	void run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...);
 
 	/**
 	 * @brief runs extended empty generator and waits for task termination

@@ -158,9 +158,9 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	// Copy given robots to the map container
 	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
 
-	wtf_gen.configure(activate_trigger);
-
 	va_end(arguments); // Cleans up the list
+
+	wtf_gen.configure(activate_trigger);
 
 	wtf_gen.Move();
 }
@@ -177,24 +177,6 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 	}
 
 	mp_semte_gen.Move();
-}
-
-void task::run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...)
-{
-	generator::extended_empty mp_ext_empty_gen(*this);
-
-	va_list arguments; // A place to store the list of arguments
-
-	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-
-	// Copy given robots to the map container
-	va_to_robot_map(number_of_robots, arguments, robot_m, mp_ext_empty_gen.robot_m);
-
-	va_end(arguments); // Cleans up the list
-
-	mp_ext_empty_gen.configure(activate_trigger);
-
-	mp_ext_empty_gen.Move();
 }
 
 void task::run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...)
