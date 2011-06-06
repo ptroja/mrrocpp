@@ -365,7 +365,7 @@ void fsautomat::runEmptyGen(const common::State &state)
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
 	// TODO
-	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
+	//wait_for_task_termination(false, state.robotSet->secondSetCount, state.robotSet->secondSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)
