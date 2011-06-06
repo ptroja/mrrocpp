@@ -36,6 +36,18 @@ void extended_empty::configure(bool l_activate_trigger)
 
 bool extended_empty::first_step()
 {
+
+	// najpierw budujemy tymczasowa liste robots_to_reply
+
+//	potem sprawdzamy, ktore z robotow sa juz w task_terminated
+
+	// potem o ikle ktores jeszcze pozostaly czekamy na kolejny wiasdomosc od ecp
+
+
+	// w przeciwny razie odbieramy klejene wiadonosci w next_state
+
+
+
 	wait_for_ECP_pulse = true;
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{

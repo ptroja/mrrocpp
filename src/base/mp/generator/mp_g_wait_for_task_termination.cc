@@ -14,7 +14,7 @@
 #include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
-#include "base/mp/generator/mp_g_empty.h"
+#include "base/mp/generator/mp_g_wait_for_task_termination.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -24,7 +24,7 @@ namespace generator {
 // Generator pusty. Faktyczna generacja trajektorii odbywa sie w ECP
 // ###############################################################
 
-empty::empty(task::task& _mp_task) :
+wait_for_task_termination::wait_for_task_termination(task::task& _mp_task) :
 	generator(_mp_task)
 {
 }
@@ -33,7 +33,7 @@ empty::empty(task::task& _mp_task) :
 // ---------------------------------    metoda	first_step -------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool empty::first_step()
+bool wait_for_task_termination::first_step()
 {
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -54,7 +54,7 @@ bool empty::first_step()
 // -----------------------------------  metoda	next_step --------------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool empty::next_step()
+bool wait_for_task_termination::next_step()
 {
 	// Funkcja zwraca false gdy koniec generacji trajektorii
 	// Funkcja zwraca true gdy generacja trajektorii bedzie kontynuowana
@@ -66,7 +66,6 @@ bool empty::next_step()
 	// 	if (trigger) printf("Yh\n"); else printf("N\n");
 	// printf("mp next step\n");
 	// UWAGA: dzialamy na jednoelementowej liscie robotow
-
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {

@@ -1,5 +1,5 @@
-#ifndef MP_GEN_EMPTY_H_
-#define MP_GEN_EMPTY_H_
+#ifndef MP_GEN_WAIT_FOR_TASK_TERMINATION_H_
+#define MP_GEN_WAIT_FOR_TASK_TERMINATION_H_
 
 /*!
  * @file
@@ -22,7 +22,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-class empty : public generator
+class wait_for_task_termination : public generator
 {
 
 public:
@@ -31,7 +31,7 @@ public:
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	empty(task::task& _mp_task);
+	wait_for_task_termination(task::task& _mp_task);
 
 	bool first_step();
 
