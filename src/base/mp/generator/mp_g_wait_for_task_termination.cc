@@ -26,10 +26,16 @@ namespace generator {
 
 wait_for_task_termination::wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step =
 		true) :
-	generator(_mp_task), check_task_termination_in_first_step(true)
+	generator(_mp_task), activate_trigger(true), check_task_termination_in_first_step(true)
 {
 	check_task_termination_in_first_step = _check_task_termination_in_first_step;
 	wait_for_ECP_pulse = true;
+}
+
+
+void wait_for_task_termination::configure(bool l_activate_trigger)
+{
+	activate_trigger = l_activate_trigger;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -68,6 +74,10 @@ bool wait_for_task_termination::first_step()
 
 bool wait_for_task_termination::next_step()
 {
+
+	if (check_and_null_trigger() && activate_trigger) {
+		return false;
+	}
 
 	// usuwamy te roboty, ktore juz odpoweidzialy
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)

@@ -24,6 +24,12 @@ namespace generator {
  */
 class wait_for_task_termination : public generator
 {
+protected:
+
+	/**
+	 * @brief if flag is set mp_trigger finishes generator execution
+	 */
+	bool activate_trigger;
 
 public:
 
@@ -34,6 +40,12 @@ public:
 	 * @param _mp_task mp task object reference.
 	 */
 	wait_for_task_termination(task::task& _mp_task, bool _check_task_termination_in_first_step);
+
+	/**
+	 * @brief sets desired total time to pass
+	 * @param l_activate_trigger set activate_trigger flag
+	 */
+	void configure(bool l_activate_trigger);
 
 	bool first_step();
 
