@@ -32,7 +32,7 @@ pb_visual_servo::~pb_visual_servo()
 {
 }
 
-Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::retrieve_reading()
+void pb_visual_servo::retrieve_reading()
 {
 	try{
 //		log_dbg("pb_visual_servo::retrieve_reading()\n");
@@ -43,6 +43,15 @@ Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::retrieve_reading()
 	} catch(exception &ex) {
 		log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());
 	}
+}
+
+void pb_visual_servo::predict_reading()
+{
+
+}
+
+Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::get_reading()
+{
 	return &reading;
 }
 

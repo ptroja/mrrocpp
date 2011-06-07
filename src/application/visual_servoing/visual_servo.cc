@@ -61,31 +61,45 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	lib::Homog_matrix delta_position;
 
-	if (sensor->get_state() == discode_sensor::DSS_READING_RECEIVED) {
-		// There's a reading, reset the counter.
-		steps_without_reading = 0;
+	switch (sensor->get_state())
+	{
+		case discode_sensor::DSS_READING_RECEIVED: {
+			// There's a reading, reset the counter.
+			steps_without_reading = 0;
 
-		mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
-		sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
-		sample.sendTimeSeconds = rmh.sendTimeSeconds;
+			mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
+			sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
+			sample.sendTimeSeconds = rmh.sendTimeSeconds;
 
-		struct timespec ts = sensor->get_reading_received_time();
-		sample.receiveTimeNanoseconds = ts.tv_nsec;
-		sample.receiveTimeSeconds = ts.tv_sec;
+			struct timespec ts = sensor->get_reading_received_time();
+			sample.receiveTimeNanoseconds = ts.tv_nsec;
+			sample.receiveTimeSeconds = ts.tv_sec;
 
-		ts = sensor->get_request_sent_time();
-		sample.requestSentTimeNanoseconds = ts.tv_nsec;
-		sample.requestSentTimeSeconds = ts.tv_sec;
+			ts = sensor->get_request_sent_time();
+			sample.requestSentTimeNanoseconds = ts.tv_nsec;
+			sample.requestSentTimeSeconds = ts.tv_sec;
 
-		Types::Mrrocpp_Proxy::Reading* reading = retrieve_reading();
-		sample.processingStartSeconds = reading->processingStartSeconds;
-		sample.processingStartNanoseconds = reading->processingStartNanoseconds;
+			sample.mrroc_discode_time_offset = sensor->get_mrroc_discode_time_offset();
 
-		sample.processingEndSeconds = reading->processingEndSeconds;
-		sample.processingEndNanoseconds = reading->processingEndNanoseconds;
-	} else {
-		// Maybe there is a valid reading
-		steps_without_reading++;
+			retrieve_reading();
+			Types::Mrrocpp_Proxy::Reading* reading = get_reading();
+
+			sample.processingStartSeconds = reading->processingStartSeconds;
+			sample.processingStartNanoseconds = reading->processingStartNanoseconds;
+
+			sample.processingEndSeconds = reading->processingEndSeconds;
+			sample.processingEndNanoseconds = reading->processingEndNanoseconds;
+
+		}
+			break;
+		case discode_sensor::DSS_CONNECTED: // processing in DisCODe hasn't finished yet
+		case discode_sensor::DSS_REQUEST_SENT: // communication or synchronisation in DisCODe took too long
+			predict_reading();
+			steps_without_reading++;
+			sample.is_reading_repreated = true;
+			break;
+		default: // error
+			log_dbg("visual_servo::get_position_change(): error\n");
 	}
 
 	if (steps_without_reading > max_steps_without_reading) {
@@ -107,9 +121,9 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	if (log_enabled) {
 		log_buffer.push_back(sample);
-		if (log_buffer.size() % 100 == 0) {
-			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
-		}
+		//		if (log_buffer.size() % 100 == 0) {
+		//			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
+		//		}
 		if (log_buffer.full()) {
 			write_log();
 		}
@@ -170,11 +184,17 @@ void visual_servo::write_log()
 void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 {
 	double sampleTime = (sampleTimeSeconds - t0) + sampleTimeNanoseconds * 1e-9;
-	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9;
-	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9;
-	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9;
+	double processingStart = (processingStartSeconds - t0) + processingStartNanoseconds * 1e-9
+			+ mrroc_discode_time_offset;
+	double processingEnd = (processingEndSeconds - t0) + processingEndNanoseconds * 1e-9 + mrroc_discode_time_offset;
+	double sendTime = (sendTimeSeconds - t0) + sendTimeNanoseconds * 1e-9 + mrroc_discode_time_offset;
 	double requestSentTime = (requestSentTimeSeconds - t0) + requestSentTimeNanoseconds * 1e-9;
 	double receiveTime = (receiveTimeSeconds - t0) + receiveTimeNanoseconds * 1e-9;
+
+	if (!is_reading_repreated) {
+		os << mrroc_discode_time_offset;
+	}
+	os << ";";
 
 	if (processingStartSeconds > 0) {
 		os.precision(9);
@@ -219,32 +239,15 @@ void visual_servo_log_sample::print(std::ostream& os, uint64_t t0)
 
 	os << is_object_visible << ";";
 
+	os << is_reading_repreated << ";";
+
 	os << "\n";
-
-//	os << processingStartSeconds<<";";
-//	os << processingStartNanoseconds << ";";
-//
-//	os << processingEndSeconds << ";";
-//	os << processingEndNanoseconds << ";";
-//
-//	os << requestSentTimeSeconds << ";";
-//	os << requestSentTimeNanoseconds << ";";
-//
-//	os << sendTimeSeconds << ";";
-//	os << sendTimeNanoseconds << ";";
-//
-//	os << receiveTimeSeconds << ";";
-//	os << receiveTimeNanoseconds << ";";
-//
-//	os << sampleTimeSeconds << ";";
-//	os << sampleTimeNanoseconds << ";";
-//	os << is_object_visible << ";";
-//	os << "\n";
-
 }
 
 void visual_servo_log_sample::printHeader(std::ostream& os)
 {
+	os << "mrroc_discode_time_offset;";
+
 	os << "processingStart;";
 
 	os << "processingEnd;";
@@ -259,30 +262,9 @@ void visual_servo_log_sample::printHeader(std::ostream& os)
 
 	os << "is_object_visible;";
 
+	os << "is_reading_repreated;";
+
 	os << "\n";
-
-//	os << "processingStart [s];";
-//	os << "processingStart [ns];";
-//
-//	os << "processingEnd [s];";
-//	os << "processingEnd [ns];";
-//
-//	os << "sendTime [s];";
-//	os << "sendTime [ns];";
-//
-//	os << "requestSentTime [s];";
-//	os << "requestSentTime [ns];";
-//
-//	os << "receiveTime [s];";
-//	os << "receiveTime [ns];";
-//
-//	os << "sampleTime [s];";
-//	os << "sampleTime [ns];";
-//
-//	os << "is_object_visible;";
-//
-//	os << "\n";
-
 }
 
 } // namespace servovision

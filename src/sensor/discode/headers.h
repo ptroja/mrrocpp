@@ -38,8 +38,8 @@ struct reading_message_header
 	bool is_rpc_call;
 
 	/** Time, when reading is sent to mrrocpp */
-	uint64_t sendTimeSeconds;
-	uint64_t sendTimeNanoseconds;
+	uint32_t sendTimeSeconds;
+	uint32_t sendTimeNanoseconds;
 
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)

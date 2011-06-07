@@ -52,8 +52,12 @@ struct visual_servo_log_sample
 	uint32_t sampleTimeSeconds;
 	uint32_t sampleTimeNanoseconds;
 
+	double mrroc_discode_time_offset;
+
 	/** Is object visible in latest reading. */
 	bool is_object_visible;
+
+	bool is_reading_repreated;
 
 	static void printHeader(std::ostream& os);
 	void print(std::ostream& os, uint64_t t0);
@@ -84,6 +88,8 @@ public:
 	 * @return
 	 */
 	boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> get_sensor();
+
+	virtual Types::Mrrocpp_Proxy::Reading* get_reading() = 0;
 
 	/**
 	 * Returns object visibility.
@@ -117,8 +123,15 @@ protected:
 
 	/**
 	 * This method should retrieve reading from discode_sensor and store it for later use.
+	 * This method is called only when there is new reading available.
 	 */
-	virtual Types::Mrrocpp_Proxy::Reading* retrieve_reading() = 0;
+	virtual void retrieve_reading() = 0;
+
+	/**
+	 * This method should predict reading when there was no reading available from vision sensor.
+	 * This method is called when there is no fresh data available from vision sensor.
+	 */
+	virtual void predict_reading() = 0;
 
 	/**
 	 * This method should check latest reading, if object in that reading is visible.

@@ -87,7 +87,7 @@ bool ib_eih_visual_servo::is_object_visible_in_latest_reading()
 	return reading.objectVisible;
 }
 
-Types::Mrrocpp_Proxy::IBReading* ib_eih_visual_servo::retrieve_reading()
+void ib_eih_visual_servo::retrieve_reading()
 {
 	try {
 		//		log_dbg("pb_visual_servo::retrieve_reading()\n");
@@ -98,6 +98,15 @@ Types::Mrrocpp_Proxy::IBReading* ib_eih_visual_servo::retrieve_reading()
 	} catch (exception &ex) {
 		log("pb_visual_servo::retrieve_reading(): %s\n", ex.what());
 	}
+}
+
+void ib_eih_visual_servo::predict_reading()
+{
+
+}
+
+Types::Mrrocpp_Proxy::IBReading* ib_eih_visual_servo::get_reading()
+{
 	return &reading;
 }
 
