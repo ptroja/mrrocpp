@@ -2,6 +2,7 @@
 #include <ostream>
 
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 
 #include "base/lib/mrmath/mrmath.h"
 
@@ -290,7 +291,8 @@ void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 
 	// The beta angle is reduced to <0,PI).
 	//	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
-	Xyz_Euler_Zyz_vector l_reduced(l_vector[0], l_vector[1], l_vector[2], l_vector[3], reduce(l_vector[4], 0, M_PI, M_PI), l_vector[5]);
+	Xyz_Euler_Zyz_vector
+			l_reduced(l_vector[0], l_vector[1], l_vector[2], l_vector[3], reduce(l_vector[4], 0, M_PI, M_PI), l_vector[5]);
 
 	// Compute the homogenous matrix coefficients.
 	set_from_xyz_euler_zyz_without_limits(l_reduced);
@@ -367,13 +369,12 @@ void Homog_matrix::set_from_xyz_angle_axis_gamma(const Xyz_Angle_Axis_Gamma_vect
 		// The translation.
 		xyz_aa[i] = xyz_aa_gamma[i];
 		// The rotation in the form of vector multiplied by angle.
-		xyz_aa[3+i] = xyz_aa_gamma[3+i] * xyz_aa_gamma[6];
+		xyz_aa[3 + i] = xyz_aa_gamma[3 + i] * xyz_aa_gamma[6];
 	}
 
 	// Set matrix on the base of x,y,z, vx,vy,vz.
 	set_from_xyz_angle_axis(xyz_aa);
 }
-
 
 void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa)
 {
@@ -420,7 +421,6 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa)
 	// uzupelnienie macierzy
 	set_translation_vector(xyz_aa[0], xyz_aa[1], xyz_aa[2]);
 }
-
 
 void Homog_matrix::get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma) const
 {
@@ -501,7 +501,6 @@ void Homog_matrix::get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa
 	xyz_aa_gamma << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], Kd[0], Kd[1], Kd[2], gamma;
 }
 
-
 void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const
 {
 	Xyz_Angle_Axis_Gamma_vector xyz_aa_gamma;
@@ -513,7 +512,7 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const
 		// The translation.
 		xyz_aa[i] = xyz_aa_gamma[i];
 		// The rotation in the form of vector multiplied by angle.
-		xyz_aa[3+i] = xyz_aa_gamma[3+i] * xyz_aa_gamma[6];
+		xyz_aa[3 + i] = xyz_aa_gamma[3 + i] * xyz_aa_gamma[6];
 	}
 }
 
@@ -850,6 +849,49 @@ void Homog_matrix::get_rotation_matrix(double r[3][3]) const
 	for (int j = 0; j < 3; j++)
 		for (int i = 0; i < 3; i++)
 			r[j][i] = matrix_m[j][i];
+}
+
+void Homog_matrix::get_rotation_matrix(Eigen::Matrix3d& rot) const
+{
+	for(int i=0; i<3; ++i){
+		for(int j=0; j<3; ++j){
+			rot(i,j) = this->operator ()(i, j);
+		}
+	}
+}
+
+void Homog_matrix::set_rotation_matrix(const Eigen::Matrix3d& rot)
+{
+	for(int i=0; i<3; ++i){
+		for(int j=0; j<3; ++j){
+			this->operator ()(i, j) = rot(i,j);
+		}
+	}
+}
+
+Homog_matrix Homog_matrix::interpolate(double t, const Homog_matrix& other)
+{
+	Eigen::Matrix3d rot0, rot1;
+
+	this->get_rotation_matrix(rot0);
+	other.get_rotation_matrix(rot1);
+
+	Eigen::Quaterniond q0(rot0), q1(rot1);
+
+	Eigen::Quaterniond q_p = q0.slerp(t, q1);
+
+	Homog_matrix hm_p;
+
+	double x0 = operator()(0, 3), y0 = operator()(1, 3), z0 = operator()(2, 3);
+	double x1 = other(0, 3), y1 = other(1, 3), z1 = other(2, 3);
+	double x, y, z;
+	x = x0 + t * (x1 - x0);
+	y = y0 + t * (y1 - y0);
+	z = z0 + t * (z1 - z0);
+
+	hm_p.set_translation_vector(x, y, z);
+	hm_p.set_rotation_matrix(q_p.toRotationMatrix());
+	return hm_p;
 }
 
 } // namespace lib
