@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 smb::smb(task::task &mp_object_l) :
-	robot(lib::smb::ROBOT_NAME, mp_object_l, lib::smb::NUM_OF_SERVOS)
+	mp::robot::robot(lib::smb::ROBOT_NAME, mp_object_l, lib::smb::NUM_OF_SERVOS)
 {
 }
 

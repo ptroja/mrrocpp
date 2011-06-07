@@ -23,15 +23,20 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
+#include <vector>
+
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "base/lib/impconst.h"
 #include "base/lib/typedefs.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/ft_v_vector.h"
+
+#include "robot/spkm/dp_spkm.h"
 
 #include "base/lib/messip/messip.h"
 
@@ -1060,36 +1065,41 @@ public:
  */
 struct ecp_next_state_t
 {
-	char mp_2_ecp_next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	char next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
 	int variant;
-	uint32_t string_data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
 	playerpos_goal_t playerpos_goal;
 
+	const char * get_mp_2_ecp_next_state_string() const;
+
+	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
+
+	spkm_segment_sequence_t spkm_segment_sequence;
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
-
-	const char * get_mp_2_ecp_next_state_string() const;
 
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & mp_2_ecp_next_state;
+		ar & next_state;
 		ar & variant;
-		ar & string_data;
+		ar & data;
+		ar & spkm_segment_sequence;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };
 
 //------------------------------------------------------------------------------
 /*! MP to ECP command. */
-struct MP_COMMAND_PACKAGE
+template<class NEXT_STATE_T>
+struct _MP_COMMAND_PACKAGE
 {
-
 	MP_COMMAND command;
-	ecp_next_state_t ecp_next_state;
+	NEXT_STATE_T ecp_next_state;
 	c_buffer instruction;
 
 	//! Give access to boost::serialization framework
@@ -1112,6 +1122,8 @@ struct MP_COMMAND_PACKAGE
 		}
 	}
 };
+
+typedef struct _MP_COMMAND_PACKAGE<ecp_next_state_t> MP_COMMAND_PACKAGE;
 
 //------------------------------------------------------------------------------
 /*! ECP to MP reply. */
