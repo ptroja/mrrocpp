@@ -164,6 +164,20 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	wtf_gen.Move();
 }
 
+void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet)
+{
+	generator::wait_for_task_termination wtf_gen(*this);
+
+	BOOST_FOREACH(lib::robot_name_t robotName, robotSet)  {
+		wtf_gen.robot_m[robotName] = robot_m[robotName];
+	}
+
+	wtf_gen.configure(activate_trigger);
+
+	wtf_gen.Move();
+}
+
+
 // send_end_motion
 void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
 {

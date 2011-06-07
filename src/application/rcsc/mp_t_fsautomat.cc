@@ -349,7 +349,7 @@ void fsautomat::stopProperGen(const common::State &state)
 	if (!state.robotSet)
 		send_end_motion_to_ecps(1, (state.getRobot()).c_str());
 	// TODO
-	//send_end_motion_to_ecps(state.robotSet->firstSetCount, state.robotSet->firstSet);
+	//send_end_motion_to_ecps(state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::runWaitFunction(const common::State &state)
@@ -359,13 +359,16 @@ void fsautomat::runWaitFunction(const common::State &state)
 
 void fsautomat::runEmptyGen(const common::State &state)
 {
-	run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
+	//TODO
+	//run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
+	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
-	// TODO
+	//TODO
 	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
+	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)
