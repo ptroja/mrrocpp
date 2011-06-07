@@ -70,7 +70,7 @@ void visualservo_tester::main_task_algorithm(void)
 {
 	if (run_vs) {
 		sr_ecp_msg->message("Starting visual servo");
-		set_next_ecps_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, 1, ROBOT_NAME_MB.c_str());
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, ROBOT_NAME_MB);
 		sr_ecp_msg->message("Visual servo started.");
 
 		char txt[128];
@@ -86,7 +86,7 @@ void visualservo_tester::main_task_algorithm(void)
 	if (run_conveyor) {
 		sr_ecp_msg->message("Starting conveyor");
 
-		set_next_ecps_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", 0, 1, lib::conveyor::ROBOT_NAME.c_str());
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", 0, lib::conveyor::ROBOT_NAME);
 
 		sr_ecp_msg->message("Conveyor started.");
 	}

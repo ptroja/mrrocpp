@@ -37,6 +37,10 @@ protected:
 	{
 	}
 
+public:
+	//! Constructor.
+	kinematic_model_bird_hand(void);
+
 	/**
 	 * @brief Checks whether given motor increments are valid.
 	 *
@@ -53,10 +57,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Constructor.
-	kinematic_model_bird_hand(void);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.

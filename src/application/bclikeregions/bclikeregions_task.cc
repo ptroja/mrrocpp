@@ -133,11 +133,11 @@ task* return_created_ecp_task(lib::configurator &config){
 //void bclikeregions_task::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 //{
 //	if (configure_track) {
-//		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6OT_M.c_str());
+//		set_next_ecp_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::ROBOT_IRP6OT_M);
 //	}
 //
 //	if (configure_postument) {
-//		set_next_ecps_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::ROBOT_IRP6P_M.c_str());
+//		set_next_ecp_state(ecp_mp::task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::ROBOT_IRP6P_M);
 //	}
 //
 //}

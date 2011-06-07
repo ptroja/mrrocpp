@@ -30,14 +30,14 @@ playerpos::~playerpos()
 void playerpos::mp_2_ecp_next_state_string_handler(void)
 {
 
-	switch ((ecp_mp::task::ECP_PLAYER_STATES) mp_command.ecp_next_state.mp_2_ecp_next_state)
+	switch ((ecp_mp::task::ECP_PLAYER_STATES) mp_command.ecp_next_state.next_state)
 	{
 		case ecp_mp::task::ECP_GEN_PLAYERPOS:
 			ppg->set_goal(mp_command.ecp_next_state.playerpos_goal);
 			ppg->Move();
 			break;
 		default:
-			fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.mp_2_ecp_next_state);
+			fprintf(stderr, "invalid ecp_next_state.mp_2_ecp_next_state (%d)\n", mp_command.ecp_next_state.next_state);
 			break;
 	}
 

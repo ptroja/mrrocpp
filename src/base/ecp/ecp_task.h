@@ -81,29 +81,35 @@ protected:
 	 */
 	void get_next_state(void);
 
+	//! Type of the ECP to MP reply package
+	typedef lib::ECP_REPLY_PACKAGE ecp_reply_t;
+
+	//! Type of the MP to ECP command package
+	typedef lib::MP_COMMAND_PACKAGE mp_command_t;
+
 public:
 	// TODO: following packages should be 'protected'
 	/**
 	 * @brief Reply to MP
 	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
-	lib::ECP_REPLY_PACKAGE ecp_reply;
+	ecp_reply_t ecp_reply;
 
 	//! Data buffer in the MP
-	OutputBuffer <lib::ECP_REPLY_PACKAGE> reply;
+	OutputBuffer <ecp_reply_t> reply;
 
 	/**
 	 * Data buffer with command from MP
 	 *
 	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
 	 */
-	InputBuffer <lib::MP_COMMAND_PACKAGE> command;
-
+	InputBuffer <mp_command_t> command;
 
 	/**
-	 * @brief ECP subtasks container
+	 * @brief buffered MP command
+	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
-	subtasks_t subtask_m;
+	const mp_command_t & mp_command;
 
 	/**
 	 * @brief buffered next state label sent by MP
@@ -111,10 +117,9 @@ public:
 	std::string mp_2_ecp_next_state_string;
 
 	/**
-	 * @brief buffered MP command
-	 * @note This data type is task dependent, so it should be a parameter of a template class
+	 * @brief ECP subtasks container
 	 */
-	const lib::MP_COMMAND_PACKAGE & mp_command;
+	subtasks_t subtask_m;
 
 	/**
 	 * @brief continuous coordination flag

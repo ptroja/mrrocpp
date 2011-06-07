@@ -102,19 +102,13 @@ void task::set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerp
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...)
+void task::set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
 
-	va_list arguments; // A place to store the list of arguments
-
-	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-
 	// Copy given robots to the map container
-	va_to_robot_map(number_of_robots, arguments, robot_m, mp_snes_gen.robot_m);
-
-	va_end(arguments); // Cleans up the list
+	mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
 
 	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
 	mp_snes_gen.Move();
