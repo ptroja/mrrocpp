@@ -35,9 +35,6 @@ single_visual_servo_manager::single_visual_servo_manager(
 			= ecp_task.config.exists("image_sampling_period", section_name) ? ecp_task.config.value<
 					double> ("image_sampling_period", section_name)
 					: image_sampling_period_default;
-
-//	txtiter = 0;
-//	txtbuf.reserve(50000);
 }
 
 single_visual_servo_manager::~single_visual_servo_manager()
@@ -81,29 +78,6 @@ void single_visual_servo_manager::update_motion_steps(ecp_mp::sensor::discode::r
 	double image_mrroc_delay = seconds + 1e-9 * nanoseconds;
 	image_mrroc_delay -= servos[0]->get_sensor()->get_mrroc_discode_time_offset();
 
-//	char txt[1000];
-
-//	sprintf(txt, "mrroc_discode_time_offset = %g\n", mrroc_discode_time_offset);
-//	txtbuf += txt;
-//
-//	sprintf(txt, "rmh.sendTimeSeconds = %d    rmh.sendTimeNanoseconds = %d    \n",
-//			rmh.sendTimeSeconds, rmh.sendTimeNanoseconds);
-//	txtbuf += txt;
-//
-//	sprintf(
-//			txt,
-//			"reading->processingStartSeconds = %d    reading->processingStartNanoseconds = %d    \n",
-//			reading->processingStartSeconds, reading->processingStartNanoseconds);
-//	txtbuf += txt;
-//
-//	sprintf(txt,
-//			"reading->processingEndSeconds = %d    reading->processingEndNanoseconds = %d    \n",
-//			reading->processingEndSeconds, reading->processingEndNanoseconds);
-//	txtbuf += txt;
-
-//	sprintf(txt, "ts.tv_sec = %ld    ts.tv_nsec = %ld    \n", ts.tv_sec, ts.tv_nsec);
-//	txtbuf += txt;
-
 	double offset = fmod(image_mrroc_delay, image_sampling_period);
 
 	if (offset > image_sampling_period / 2) {
@@ -123,15 +97,6 @@ void single_visual_servo_manager::update_motion_steps(ecp_mp::sensor::discode::r
 	}
 
 	set_new_motion_steps(ms);
-
-//	sprintf(txt, "e = %g          image_mrroc_delay = %g     ms = %d\n", offset, image_mrroc_delay, ms);
-//	txtbuf += txt;
-
-//	txtiter++;
-//	if (txtiter > 100) {
-//		log("\n\n\nHEHEHEHE:\n%s\n\n", txtbuf.c_str());
-//		throw runtime_error("HEHEHEEHEH");
-//	}
 }
 
 }//namespace generator

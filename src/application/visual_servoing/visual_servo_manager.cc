@@ -87,6 +87,7 @@ bool visual_servo_manager::first_step()
 
 //	clock_gettime(CLOCK_REALTIME, &prev_timestamp);
 //	c = 0;
+//	ss << "motion_steps = " << motion_steps <<"\n";
 
 	return true;
 }
@@ -99,19 +100,18 @@ bool visual_servo_manager::next_step()
 //
 //	double next_step_time = sec + 1e-9*nsec;
 //
-//	ss << "next_step_time = " << next_step_time << "\n";
+//	ss << "\nnext_step_time = " << next_step_time << "\n";
 //	if(next_step_time < 0.005){
 //		ss << "----------------------------------------- next_step_time < 0.005\n";
 //	}
 //
-//	if(++c > 100){
+//	if(++c > 200){
 //		c = 0;
 //		cout<<"====================\n"<<ss.str()<<"=================\n";
 //		ss.str("");
 //	}
 //
 //	prev_timestamp = current_timestamp;
-
 
 	if (!current_position_saved) { // save first position
 		current_position = the_robot->reply_package.arm.pf_def.arm_frame;
