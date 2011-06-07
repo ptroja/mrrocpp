@@ -28,7 +28,7 @@ public:
 
 	struct RobotSets
 	{
-		std::list<lib::robot_name_t> firstSet, secondSet;
+		std::vector<lib::robot_name_t> firstSet, secondSet;
 	};
 
 	void setStateID(const std::string & stateID);

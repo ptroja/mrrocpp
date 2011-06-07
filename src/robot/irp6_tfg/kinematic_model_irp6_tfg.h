@@ -70,6 +70,10 @@ protected:
 	//! Variable related to the computations of the gripper spread.
 	double inv_d_7;
 
+public:
+	//! Constructor.
+	kinematic_model_irp6_tfg(void);
+
 	/**
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
@@ -81,10 +85,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Constructor.
-	kinematic_model_irp6_tfg(void);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.

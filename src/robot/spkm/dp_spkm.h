@@ -38,18 +38,18 @@ typedef struct _segment
 
 	//! True if the contact is expected during the motion.
 	//! The NACK will be replied if:
-	//! - the contact was expected and did not happend
-	//! - OR the contact was NOT expected and did happend.
+	//! - the contact was expected and did not happened
+	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & goal_pose;
-		ar & motion_type;
-		ar & duration;
-		ar & guarded_motion;
+		ar & BOOST_SERIALIZATION_NVP(goal_pose);
+		ar & BOOST_SERIALIZATION_NVP(motion_type);
+		ar & BOOST_SERIALIZATION_NVP(duration);
+		ar & BOOST_SERIALIZATION_NVP(guarded_motion) ;
 	}
 } segment_t;
 

@@ -63,11 +63,11 @@ mrrocpp::lib::robot_name_t TrajectoryTask::execute(mrrocpp::mp::common::robots_t
 	std::cerr << "executing for " << lib::toString(_robot.robot_name) << std::endl; fflush(stderr);
 
 	_robot.mp_command.command = lib::NEXT_STATE;
-	_robot.mp_command.ecp_next_state.mp_2_ecp_next_state = mrrocpp::ecp_mp::generator::ECP_GEN_SMOOTH;
+	_robot.mp_command.ecp_next_state.next_state = mrrocpp::ecp_mp::generator::ECP_GEN_SMOOTH;
 
-	strncpy(_robot.mp_command.ecp_next_state.string_data,
+	strncpy(_robot.mp_command.ecp_next_state.data,
 			file.c_str(),
-			sizeof(_robot.mp_command.ecp_next_state.string_data));
+			sizeof(_robot.mp_command.ecp_next_state.data));
 
 	_robot.mp_command.command = lib::NEXT_STATE;
 	_robot.communicate = true;
