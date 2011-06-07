@@ -12,7 +12,9 @@
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "g_mm_test.h"
+#include "g_rotate.h"
 #include "ecp_mp_g_g_mm_test.h"
+#include "ecp_mp_g_g_rotate.h"
 
 #include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
@@ -48,6 +50,7 @@ class mm_test: public task {
   protected:
 	 // common::generator::smooth* smoothgen2;
 	common::generator::g_mm_test* gen;
+	common::generator::g_rotate* rot;
 
 	common::generator::newsmooth* sg;
 
@@ -58,6 +61,7 @@ class mm_test: public task {
 
 	public:
 		mm_test(lib::configurator &_config);
+		//void rotate(double rot,double move, double dir);
 		void move_down(double mm);
 		void move_right(double mm);
 		void move_back(double mm);

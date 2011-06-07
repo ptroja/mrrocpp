@@ -1,12 +1,12 @@
 /*
- * g_mm_test.h
+ * g_rotate.h
  *
  *  Created on: Apr 13, 2010
  *      Author: mmichnie
  */
 
-#ifndef G_MM_TEST_H_
-#define G_MM_TEST_H_
+#ifndef G_ROTATE_H_
+#define G_ROTATE_H_
 
 #include "../../base/ecp/ecp_generator.h"
 //#include "lib/mrmath/mrmath.h"
@@ -20,11 +20,11 @@ namespace generator {
  *  generator testowy.
  */
 
-class g_mm_test: public common::generator::generator//mrrocpp::ecp::common::generator::generator
+class g_rotate: public common::generator::generator//mrrocpp::ecp::common::generator::generator
 {
 public:
-	g_mm_test(common::task::task& _ecp_task);
-	virtual ~g_mm_test();
+	g_rotate(common::task::task& _ecp_task);
+	virtual ~g_rotate();
 	virtual bool first_step();
 	virtual bool next_step();
 
@@ -32,7 +32,14 @@ public:
 
 	char GEN_REPLY;
 
-	void configure(int new_direction, double new_k_max);
+	/**
+	 * direction to move:
+	 * 0 - -Y up (robot)
+	 * 1 -  X right
+	 * 2 -  Y down (computer)
+	 * 3 - -X left
+	 */
+	void configure(double new_rot_position);
 
 protected:
 	/** Is log enabled*/
@@ -47,17 +54,18 @@ protected:
 	 */
 private:
 	lib::Homog_matrix currentFrame;
-	double currentGripperCoordinate;
+	//double currentGripperCoordinate;
 	int index;
-	double r;//promien
+	//double r;//promien
 	double k;//kat
 	double first_trans_vect [3];//polozenie poczatkowe - srodek okregu
 
+	double current_arm_coordinates[lib::MAX_SERVOS_NR];
+	double first_arm_coordinates[lib::MAX_SERVOS_NR];
+	double rot_position;
 	int direction;
 	double k_max;
-
-	int licznik_uderzen;
-	bool zgubiona_pilka;
+	int sekcja;
 };//end class
 
 } // namespace generator
@@ -68,4 +76,4 @@ private:
 
 
 
-#endif /* G_MM_TEST_H_ */
+#endif /* G_ROTATE_H_ */

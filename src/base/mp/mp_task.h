@@ -132,53 +132,20 @@ public:
 	void send_end_motion_to_ecps(int number_of_robots, ...);
 
 	/**
+	 * @brief waits for task termination reply from set of robots ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots number of robots to receive command
+	 * @param ... robots labels
+	 */
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
+
+	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param number_of_robots number of robots to receive command
 	 * @param properRobotsSet pointer to robot list
 	 */
 	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);
-
-	/**
-	 * @brief runs extended empty generator
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param activate_trigger determines if mp_trigger finishes generator execution
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
-	 */
-	void run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param ... robots labels - first set, then second set
-	 */
-	void
-	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param robotsToMove robot to move list
-	 * @param robotsWaitingForTaskTermination robot to wait list
-	 */
-	void
-			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param move_robots container with robots to move
-	 * @param wait_robots container with robots to wait for task termination
-	 */
-	void
-			run_extended_empty_gen_and_wait(common::robots_t & robots_to_move, common::robots_t & robots_to_wait_for_task_termination);
 
 	/**
 	 * @brief executes delay
