@@ -74,7 +74,7 @@ void ecp_t_pb_sac_calibration::main_task_algorithm()
 
 	log_dbg("\necp_t_pb_sac_calibration::main_task_algorithm() end\n");
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 } // namespace task

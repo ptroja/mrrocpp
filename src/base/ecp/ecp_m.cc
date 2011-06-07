@@ -19,6 +19,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ECP_main_error.h"
+#include "base/ecp/ECP_error.h"
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
 
 		ecp::common::ecp_t = (boost::shared_ptr<ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 
-		lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 3);
+		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 3);
 
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);
@@ -115,18 +116,20 @@ int main(int argc, char *argv[])
 		try {
 			ecp::common::ecp_t->sr_ecp_msg->message("Press START");
 			//	std::cerr << "ecp 1" << std::endl;
-			ecp::common::ecp_t->ecp_wait_for_start();
+			ecp::common::ecp_t->wait_for_start();
 			//	std::cerr << "ecp 2" << std::endl;
 			ecp::common::ecp_t->main_task_algorithm();
 
-			ecp::common::ecp_t->ecp_wait_for_stop();
+			ecp::common::ecp_t->wait_for_stop();
 			ecp::common::ecp_t->sr_ecp_msg->message("Press STOP");
 		}
 
 		catch (ecp_mp::task::ECP_MP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
-		} catch (ecp::common::ECP_main_error & e) {
+		}
+
+		catch (ecp::common::ECP_main_error & e) {
 			if (e.error_class == lib::SYSTEM_ERROR)
 				exit(EXIT_FAILURE);
 		}
@@ -147,7 +150,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->mp_buffer_receive_and_send();
+					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				default:
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
@@ -176,7 +179,7 @@ int main(int argc, char *argv[])
 					/*Komunikat o bledzie wysylamy do SR */
 					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
-					ecp::common::ecp_t->mp_buffer_receive_and_send();
+					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				case ECP_STOP_ACCEPTED:
 					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
@@ -192,12 +195,14 @@ int main(int argc, char *argv[])
 		catch (lib::sensor::sensor_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		} catch (ecp_mp::transmitter::transmitter_error & e) {
+		}
+
+		catch (ecp_mp::transmitter::transmitter_error & e) {
 			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
 			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 
-		catch (const std::exception& e) {
+		catch (const std::exception & e) {
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
 			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());

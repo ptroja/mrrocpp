@@ -12,6 +12,7 @@
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
+#include "base/lib/agent/DataBuffer.h"
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
@@ -32,14 +33,14 @@ namespace task {
  */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
-		if (config.value <int> ("is_active", "[edp_" #__robot_name "]")) {\
+		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
 			robot::robot* created_robot = new robot::__robot_name(*this);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
 		}
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-		if (config.value <int> ("is_active", "[edp_" #__robot_name "]")) {\
-			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
+		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
+			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
 		}
 
@@ -87,10 +88,11 @@ public:
 
 	/**
 	 * @brief Enum of two possible pulse receive variants (BLOCK/NONBLOCK)
+	 * @note it is assumend, that values of this enum equals to "block?" predicate.
 	 */
 	typedef enum _MP_RECEIVE_PULSE_ENUM
 	{
-		NONBLOCK, BLOCK
+		NONBLOCK = 0, BLOCK = 1
 	} RECEIVE_PULSE_MODE;
 
 	/**
@@ -115,11 +117,9 @@ public:
 	 * @param l_variant variant value sent to ECP
 	 * @param l_string optional string sent to ECP
 	 * @param str_len string length
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
+	 * @param robot_name robot to receive a command
 	 */
-	void
-			set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name);
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -130,44 +130,22 @@ public:
 	void send_end_motion_to_ecps(int number_of_robots, ...);
 
 	/**
+	 * @brief waits for task termination reply from set of robots ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots number of robots to receive command
+	 * @param ... robots labels
+	 */
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
+
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet);
+
+	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param number_of_robots number of robots to receive command
 	 * @param properRobotsSet pointer to robot list
 	 */
 	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);
-
-	/**
-	 * @brief runs extended empty generator
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param activate_trigger determines if mp_trigger finishes generator execution
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
-	 */
-	void run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param ... robots labels - first set, then second set
-	 */
-	void
-	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param robotsToMove robot to move list
-	 * @param robotsWaitingForTaskTermination robot to wait list
-	 */
-	void
-			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 	/**
 	 * @brief executes delay
@@ -190,23 +168,30 @@ public:
 	 * @brief starts all ECP's
 	 * it sends special MP command
 	 */
-	void start_all(const common::robots_t & _robot_m);
+	void start_all();
+
+	/**
+	 * @brief pause all ECP's
+	 * it sends special MP command
+	 */
+	void pause_all();
+
+	/**
+	 * @brief resume all ECP's
+	 * it sends special MP command
+	 */
+	void resume_all();
 
 	/**
 	 * @brief termianted all ECP's
 	 * it sends special MP command
 	 */
-	void terminate_all(const common::robots_t & _robot_m);
+	void terminate_all();
 
 	/**
-	 * @brief sends communication request pulse to ECP
+	 * @brief waits for acknowledge reply from all robots
 	 */
-	void request_communication_with_robots(const common::robots_t & _robot_m);
-
-	/**
-	 * @brief communicates with all ECP's that are set to communicate
-	 */
-	void execute_all(const common::robots_t & _robot_m);
+	void wait_for_all_robots_acknowledge();
 
 	/**
 	 * @brief main task algorithm
@@ -222,45 +207,15 @@ public:
 	/**
 	 * @brief receives pulse from UI or ECP
 	 */
-	void mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator);
+	void receive_ui_or_ecp_message(generator::generator& the_generator);
 
 private:
 	friend class robot::robot;
 
 	/**
-	 * @brief wait until ECP/UI calls name_open() to pulse channel;]
-	 * @return identifier (scoid/QNET or socket/messip) of the next connected process
+	 * @brief pulse from UI
 	 */
-	int wait_for_name_open(void);
-
-	/**
-	 * @brief A server connection ID identifying UI
-	 */
-	int ui_scoid;
-
-	/**
-	 * @brief flag indicating opened pulse connection from UI
-	 */
-	bool ui_opened;
-
-	/**
-	 * @brief code of the pulse received from UI
-	 */
-	char ui_pulse_code;
-
-	/**
-	 * @brief new UI pulse flaf
-	 */
-	bool ui_new_pulse;
-
-	/**
-	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
-	 * @param process_type - process type to wait for the pulses
-	 * @param desired_wait_mode - decides if the method should wait for desired pulse or not
-	 * @return desired pulse found
-	 */
-	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	InputBuffer<char> ui_pulse;
 };
 
 /**

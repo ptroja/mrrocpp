@@ -21,9 +21,9 @@ namespace task {
 irp6_grasp::irp6_grasp(lib::configurator &_config) :
 	common::task::task(_config)
 {
-	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
-	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	}
 
@@ -58,7 +58,7 @@ void irp6_grasp::main_task_algorithm(void)
 
 			sr_ecp_msg->message("ECP_GEN_IRP6");
 
-			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_irp6_command));
+			memcpy(&mp_ecp_irp6_command, mp_command.ecp_next_state.data, sizeof(mp_ecp_irp6_command));
 			//ignore first DOF of IRp6_on_track, not used in GraspIt
 			coordinates1[0] = 0.0;
 			for (int i = 0; i < 6; ++i)
@@ -71,12 +71,11 @@ void irp6_grasp::main_task_algorithm(void)
 				cvgenjoint->Move();
 		}
 
-		ecp_termination_notice();
+		termination_notice();
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
-;
 
 } // namespace task
 } // namespace common

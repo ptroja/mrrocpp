@@ -38,17 +38,8 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-/* W wersji dla okien Photon Builder'a
- UiRobot::UiRobot(common::Interface& _interface) :
- common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS, "is_polycrank_active"),
- is_wind_polycrank_int_open(false), ui_ecp_robot(NULL)
- {
- }
- */
-
 UiRobot::UiRobot(common::Interface& _interface) :
-			common::UiRobot(_interface, lib::polycrank::EDP_SECTION, lib::polycrank::ECP_SECTION, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS),
-			ui_ecp_robot(NULL)
+	common::UiRobot(_interface, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 	wgt_int = new wgt_polycrank_int(interface, *this, interface.get_main_window());

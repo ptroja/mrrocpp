@@ -28,7 +28,7 @@ namespace mp {
 namespace common {
 
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-boost::shared_ptr<task::task> mp_t;
+boost::shared_ptr <task::task> mp_t;
 
 void catch_signal_in_mp(int sig)
 {
@@ -91,19 +91,19 @@ int main(int argc, char *argv[], char **arge)
 	// zewnetrzne try
 	try {
 		// This block is from where the configurator is supposed to be accessible
-		boost::shared_ptr<lib::configurator> _config;
+		boost::shared_ptr <lib::configurator> _config;
 
 		try {
-			_config = (boost::shared_ptr<lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
+			_config = (boost::shared_ptr <lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
 
-			mp::common::mp_t = (boost::shared_ptr<mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
+			mp::common::mp_t = (boost::shared_ptr <mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
 
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
 			mp::common::mp_t->create_robots();
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
-			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
+			lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 
@@ -180,7 +180,7 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->wait_for_start();
 
 				// Wyslanie START do wszystkich ECP
-				mp::common::mp_t->start_all(mp::common::mp_t->robot_m);
+				mp::common::mp_t->start_all();
 
 				mp::common::mp_t->main_task_algorithm();
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->wait_for_stop();
 
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-				mp::common::mp_t->terminate_all(mp::common::mp_t->robot_m);
+				mp::common::mp_t->terminate_all();
 			} // end: try
 
 			catch (ecp_mp::task::ECP_MP_main_error & e) {

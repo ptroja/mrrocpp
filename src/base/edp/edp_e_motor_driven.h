@@ -25,6 +25,9 @@
 #include <boost/function.hpp>
 //#endif
 
+
+static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
+
 namespace mrrocpp {
 namespace edp {
 namespace sensor {
@@ -79,6 +82,7 @@ protected:
 	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
 	//#endif
+
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -199,6 +203,13 @@ public:
 	void onReaderStarted();
 	void onReaderStopped();
 	//#endif
+
+	/*!
+	 * \brief The velocity limit global factor
+	 *
+	 * (0..1> default value is VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT
+	 */
+	float velocity_limit_global_factor;
 
 	/*!
 	 * \brief object to store output and input data

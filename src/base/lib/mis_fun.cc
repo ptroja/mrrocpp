@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <cstdio>
 #include <unistd.h>
+#include <string>
 
 #include "base/lib/mis_fun.h"
 
@@ -69,6 +70,7 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	} else {
 		param.sched_priority = sched_priority_l;
 		if (pthread_setschedparam(thread, SCHED_FIFO, &param)) {
+			fprintf(stderr, "pthread_setschedparam(%lu, SCHED_FIFO, %d) failed\n", thread, sched_priority_l);
 			perror("pthread_setschedparam() ");
 		}
 	}

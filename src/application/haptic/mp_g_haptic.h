@@ -9,7 +9,7 @@
 
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/mp/generator/mp_generator.h"
+#include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -23,13 +23,11 @@ namespace generator {
 // --------------------------------------------------------------------------
 // Generator trajektorii dla zadan z wodzeniem za nos w tff ze zmiana orientacji
 
-class haptic : public generator
+class haptic : public continously_coordinated
 {
 protected:
 	robot::robot *irp6ot, *irp6p;
 
-	// do konfiguracji pracy generatora
-	unsigned short irp6ot_con, irp6p_con;
 	const lib::Homog_matrix global_base;
 
 	lib::trajectory_description td;
@@ -40,10 +38,8 @@ public:
 	// konstruktor
 	haptic(task::task& _mp_task, int step = 0);
 
-	void configure(unsigned short l_irp6ot_con, unsigned short l_irp6p_con);
-
-	virtual bool first_step();
-	virtual bool next_step();
+	bool first_step();
+	bool next_step_inside();
 
 }; // end : class haptic
 

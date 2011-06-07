@@ -20,48 +20,32 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	common::task::task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
-	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
-	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
+		throw std::runtime_error("Robot not supported");
 	}
 
 	// utworzenie generatorow
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 
 	// utworzenie podzadan
-
-
-	{
-		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-	}
-
-	{
-		sub_task::sub_task_smooth_file_from_mp* ecpst;
-
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = ecpst;
-
-		ecpst = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
-		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = ecpst;
-	}
+	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);;
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
 	sr_ecp_msg->message("ecp SWARM DEMO loaded");
 }
 
 void swarm_demo::mp_2_ecp_next_state_string_handler(void)
 {
-
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
 		gag->configure(0.02, 300, 3);
 		gag->Move();
-
 	}
-
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

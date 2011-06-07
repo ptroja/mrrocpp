@@ -59,7 +59,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
 	// kolumna dla sarkofag
-	regulator_ptr[0] = new NL_regulator_8_sarkofag(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[0] = new NL_regulator_8_sarkofag(0, 0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 

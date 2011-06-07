@@ -60,7 +60,7 @@ void axzb_force::main_task_algorithm(void)
 	fclose(FP);
 
 	calib_axzb::main_task_algorithm();
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

@@ -114,6 +114,7 @@ public:
 	bool positionRequested();
 	void stopReceivingData();
 	double getRadius();
+	void sendStatistics(double currents_sum, double max);
 };
 
 } //sensor

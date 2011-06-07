@@ -36,7 +36,7 @@ effector::effector(shell &_shell, lib::robot_name_t l_robot_name) :
 {
 
 	if (config.exists(lib::ROBOT_TEST_MODE.c_str())) {
-		robot_test_mode = config.value <int> (lib::ROBOT_TEST_MODE);
+		robot_test_mode = config.exists_and_true(lib::ROBOT_TEST_MODE.c_str());
 	}
 
 	if (robot_test_mode) {
@@ -54,7 +54,7 @@ bool effector::initialize_communication()
 {
 
 	const std::string
-			server_attach_point(config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point"));
+			server_attach_point(config.get_edp_resourceman_attach_point());
 
 	// nawiazywanie komunikacji
 
@@ -69,7 +69,7 @@ bool effector::initialize_communication()
 
 	/* Ustawienie priorytetu procesu */
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 2);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 2);
 
 	server_attach = messip::port_create(server_attach_point);
 

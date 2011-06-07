@@ -213,7 +213,7 @@ void Draughts::main_task_algorithm(void)
 	//takeDynamicPawn(31);
 
 	fradiaControl(NONE);
-	ecp_termination_notice();
+	termination_notice();
 }
 
 /*===============================makeAIMove========================================*/

@@ -48,6 +48,32 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 {
 	sr_ecp_msg->message("poczatek");
 	if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_T_NEURON) {
+
+		/*smoothGenerator->reset();
+		smoothGenerator->set_absolute();
+		std::vector <double> coordinates1(6);
+		coordinates1[0] = 0.530;
+		coordinates1[1] = 1.706;
+		coordinates1[2] = 0.178;
+		coordinates1[3] = 1.368;
+		coordinates1[4] = -1.120;
+		coordinates1[5] = 0.104;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0] = 0.530;
+		coordinates1[1] = 2.106;
+		coordinates1[2] = 0.178;
+		coordinates1[3] = 1.368;
+		coordinates1[4] = -1.120;
+		coordinates1[5] = 0.104;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		//Interpolate trajectory and run generator.
+		smoothGenerator->set_debug(true);
+		if (smoothGenerator->calculate_interpolate())
+			smoothGenerator->Move();
+		*/
+
 		//Initalizing all needed items: sensors and generators.
 		neuronSensor = new ecp_mp::sensor::neuron_sensor(config);
 		sensor_m[ecp_mp::sensor::ECP_MP_NEURON_SENSOR] = neuronSensor;
@@ -113,7 +139,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 }
 
 /*==========================ecp_stop_accepted_handler=====================*//**
- * @brief Handler for stop button in MRROC++ taks panel.
+ * @brief Handler for stop button in MRROC++ task panel.
  * @details After pressing stop button in MRROC++ it sends message to VSP, that
  * MRROC++ is no longer available for work therefore neuron sensor is deleted
  * from the map of sensors.

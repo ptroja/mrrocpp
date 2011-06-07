@@ -385,25 +385,6 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="5">
-      <widget class="QPlainTextEdit" name="plainTextEdit_sr">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Monospace</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0" colspan="5">
       <widget class="QLineEdit" name="lineEdit_position">
        <property name="minimumSize">
@@ -558,9 +539,6 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
-       <zorder>label_all_edps_synchro_notification</zorder>
-       <zorder>label_7</zorder>
-       <zorder>frame_3</zorder>
       </widget>
      </item>
      <item row="2" column="3">
@@ -631,10 +609,6 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
-       <zorder>label_mp_notification</zorder>
-       <zorder>label_3</zorder>
-       <zorder>frame_5</zorder>
-       <zorder>frame_5</zorder>
       </widget>
      </item>
      <item row="2" column="4">
@@ -775,6 +749,22 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="5">
+      <widget class="QTextEdit" name="textEdit_sr">
+       <property name="font">
+        <font>
+         <family>Monospace</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="lineWrapMode">
+        <enum>QTextEdit::NoWrap</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>

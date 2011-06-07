@@ -8,6 +8,10 @@
 #include <boost/foreach.hpp>
 #include <dirent.h>
 #include <sys/wait.h>
+#include <boost/regex.hpp>
+#include <map>
+#include <string>
+#include <iostream>
 
 #include <QtGui/QApplication>
 #include <QFileDialog>
@@ -59,7 +63,7 @@ Interface::Interface() :
 	main_eb = new function_execution_buffer(*this);
 
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
@@ -83,10 +87,33 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
-void Interface::on_timer_slot()
+bool Interface::html_it(std::string &_input, std::string &_output)
+{
+
+	try {
+		// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
+		boost::regex pattern("(<)|(>)|( )|(&)");
+		// Format stringu odpowiadający podmienianemu dopasowaniu.
+		std::string fmt("(?1&lt;)(?2&gt;)(?3&#160;)(?4&amp;)");
+
+		std::ostringstream t(std::ios::out | std::ios::binary);
+		std::ostream_iterator <char> oi(t);
+		boost::regex_merge(oi, _input.begin(), _input.end(), pattern, fmt, boost::match_default | boost::format_all);
+
+		_output = t.str();
+
+	} catch (std::exception &ex) {
+		std::cout << "blad" << ex.what() << std::endl;
+	}
+
+	return true;
+}
+
+void Interface::timer_slot()
 {
 
 	//fprintf(stderr, "OnTimer()\n");
+
 
 	QTextCharFormat format;
 
@@ -101,6 +128,9 @@ void Interface::on_timer_slot()
 		// 	printf("timer\n");
 
 		char current_line[400];
+
+		std::string html_line;
+
 		lib::sr_package_t sr_msg;
 
 		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
@@ -108,78 +138,133 @@ void Interface::on_timer_slot()
 			ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
+
 			strcat(current_line, "  ");
 			time_t time = sr_msg.tv.tv_sec;
 			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
 			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
 
+			std::string input(current_line);
+
+			std::string output;
+
+			html_it(input, output);
+
+			html_line = "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
 			switch (sr_msg.process_type)
 			{
 				case lib::EDP:
-					strcat(current_line, "edp: ");
+
+					strcat(current_line, "D: ");
+					html_line += "#767639\">D:&#160;";
 					break;
 				case lib::ECP:
-					strcat(current_line, "ecp: ");
+					strcat(current_line, "C: ");
+					html_line += "Slate Blue\">C:&#160;";
 					break;
 				case lib::MP:
 					// printf("mp w ontimer\n");
-					strcat(current_line, "mp:  ");
+					strcat(current_line, "M: ");
+					html_line += "#a54e8f\">M:&#160;";
 					break;
 				case lib::VSP:
-					strcat(current_line, "vsp: ");
+					strcat(current_line, "S: ");
+					html_line += "brown\">S:&#160;";
 					break;
 				case lib::UI:
-					strcat(current_line, "UI:  ");
+					strcat(current_line, "I: ");
+					html_line += "brown\">I:&#160;";
 					break;
 				default:
-					strcat(current_line, "???: ");
+					strcat(current_line, "?: ");
+					html_line += "magenta\">?:&#160;";
 					continue;
 			} // end: switch (message_buffer[reader_buf_position].process_type)
-
+			html_line += "</font>";
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
 			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
+
+			input = std::string(process_name_buffer);
+
+			html_it(input, output);
+
+			html_line += "<font face=\"Monospace\" color=\"black\">" + output
+					+ "</font><font face=\"Monospace\" color=\"";
 
 			switch (sr_msg.message_type)
 			{
 				case lib::FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
-					format.setForeground(Qt::red);
-
+					strcat(current_line, "FE:   ");
+					//	format.setForeground(Qt::red);
+					html_line += "black\" style=\"background-color:'#ffc6c6';\">FE:&#160;&#160;&#160;";
 					break;
 				case lib::NON_FATAL_ERROR:
-
-					strcat(current_line, "NON_FATAL_ERROR: ");
-					format.setForeground(Qt::blue);
-
+					strcat(current_line, "NFE:  ");
+					//	format.setForeground(Qt::blue);
+					html_line += "black\" style=\"background-color:'#c6e7ff';\">NFE:&#160;&#160;";
 					break;
 				case lib::SYSTEM_ERROR:
 					// printf("SYSTEM ERROR W ONTIMER\n");
 					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-					strcat(current_line, "SYSTEM_ERROR:    ");
-					format.setForeground(Qt::magenta);
+					strcat(current_line, "SE:   ");
+					//	format.setForeground(Qt::magenta);
+					html_line += "black\" style=\"background-color:'#ffc6ef';\">SE:&#160;&#160;&#160;";
 
 					break;
 				case lib::NEW_MESSAGE:
-					strcat(current_line, "MESSAGE:         ");
-					format.setForeground(Qt::black);
-
+					strcat(current_line, "MSG:  ");
+					//	format.setForeground(Qt::black);
+					html_line += "black\">msg:&#160;&#160;";
 					break;
 				default:
-					strcat(current_line, "UNKNOWN ERROR:   ");
-					format.setForeground(Qt::yellow);
+					strcat(current_line, "UE:   ");
+					html_line += "yellow\">UE:&#160;&#160;&#160;";
+					//	format.setForeground(Qt::yellow);
 
 			}; // end: switch (message.message_type)
+			//	html_line += "</font>";
+			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
 
-			strcat(current_line, sr_msg.description);
+			std::string text(sr_msg.description);
 
-			mw->get_ui()->plainTextEdit_sr->setCurrentCharFormat(format);
-			mw->get_ui()->plainTextEdit_sr->appendPlainText(current_line);
-			(*log_file_outfile) << current_line << std::endl;
+			boost::char_separator <char> sep("\n");
+			boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+
+			bool first_it = true;
+			BOOST_FOREACH(std::string t, tokens)
+						{
+
+							input = t.c_str();
+
+							html_it(input, output);
+
+							if (first_it) {
+								first_it = false;
+
+								html_line += output + "</font>";
+
+							} else {
+								html_line
+										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+												+ output + "</font>";
+
+								strcpy(current_line, "                                                     ");
+							}
+							strcat(current_line, t.c_str());
+
+							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
+
+							//	mw->get_ui()->textEdit_sr->append(current_line);
+							(*log_file_outfile) << current_line << std::endl;
+						}
 		}
 
 		(*log_file_outfile).flush();
@@ -676,7 +761,7 @@ void Interface::init()
 	// pierwsze zczytanie pliku konfiguracyjnego (aby pobrac nazwy dla pozostalych watkow UI)
 	if (get_default_configuration_file_name() >= 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui a" << std::endl;
+
 		initiate_configuration();
 		// sprawdza czy sa postawione gns's i ew. stawia je
 		// uwaga serwer musi byc wczesniej postawiony
@@ -698,7 +783,7 @@ void Interface::init()
 	// kolejne zczytanie pliku konfiguracyjnego
 	if (get_default_configuration_file_name() == 1) // zczytaj nazwe pliku konfiguracyjnego
 	{
-		std::cerr << "ui b" << std::endl;
+
 		reload_whole_configuration();
 
 	} else {
@@ -707,7 +792,7 @@ void Interface::init()
 		 PtExit(EXIT_SUCCESS);
 		 */
 	}
-	std::cerr << "ui c" << std::endl;
+
 	// inicjacja pliku z logami sr
 	check_gns();
 
@@ -740,6 +825,8 @@ void Interface::init()
 	//ui_msg->message("closing");
 
 	manage_interface();
+
+	mw->get_ui()->textEdit_sr->setFocus();
 
 }
 
@@ -777,24 +864,14 @@ int Interface::MPup_int()
 
 			if (mp.pid > 0) {
 
-				unsigned tmp = 0;
-				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
-					if ((tmp++) < lib::CONNECT_RETRY) {
-						usleep(lib::CONNECT_DELAY);
-					} else {
-						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
-						break;
-					}
-				}
+				mp.MP = new RemoteAgent(lib::MP_SECTION);
+				mp.pulse = new OutputBuffer <char> (*mp.MP, "MP_PULSE");
 
 				teachingstate = ui::common::MP_RUNNING;
 
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
-
 				raise_process_control_window();
-
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
 			}
@@ -872,6 +949,15 @@ void Interface::manage_interface_slot()
 
 	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
 			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
+
+		if (((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) && ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state
+				== UI_MP_PERMITED_TO_RUN))) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
+			mw->enable_menu_item(true, 1, mw->get_ui()->actionConfiguration);
+
+		} else {
+			mw->enable_menu_item(false, 1, mw->get_ui()->actionConfiguration);
+
+		}
 
 		switch (all_edps)
 		{
@@ -1031,7 +1117,7 @@ void Interface::reload_whole_configuration()
 
 		config->change_config_file("../" + config_file);
 
-		is_mp_and_ecps_active = config->value <int> ("is_active", "[mp]");
+		is_mp_and_ecps_active = config->exists_and_true("is_active", "[mp]");
 
 		switch (all_edps)
 		{
@@ -1082,8 +1168,7 @@ void Interface::reload_whole_configuration()
 		// zczytanie konfiguracji MP
 
 		if (is_mp_and_ecps_active) {
-			mp.network_pulse_attach_point
-					= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "mp_pulse_attach_point", lib::MP_SECTION);
+			mp.network_pulse_attach_point = config->get_mp_pulse_attach_point();
 
 			if (!config->exists("node_name", lib::MP_SECTION)) {
 				mp.node_name = "localhost";
@@ -1399,8 +1484,6 @@ int Interface::clear_all_configuration_lists()
 int Interface::initiate_configuration()
 {
 
-	std::cerr << "ui 1" << std::endl;
-
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
 		fprintf(stderr, "Wrong entry in default_file.cfg - load another configuration than: %s\n", config_file_relativepath.c_str());
 		config_file_relativepath = mrrocpp_bin_to_root_path + "configs/common.ini";
@@ -1416,8 +1499,7 @@ int Interface::initiate_configuration()
 		}
 		config = new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
-		std::string attach_point =
-				config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+		std::string attach_point = config->get_sr_attach_point();
 
 		// wykrycie identycznych nazw sesji
 		wyjscie = true;
@@ -1442,12 +1524,9 @@ int Interface::initiate_configuration()
 
 	}
 
-	ui_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "ui_attach_point", lib::UI_SECTION);
-	sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
-	network_sr_attach_point
-			= config->return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION);
+	ui_attach_point = config->get_ui_attach_point();
+	sr_attach_point = config->get_sr_attach_point();
+	network_sr_attach_point = config->get_sr_attach_point();
 
 	clear_all_configuration_lists();
 
@@ -1553,16 +1632,8 @@ int Interface::execute_mp_pulse(char pulse_code)
 {
 
 	// printf("w send pulse\n");
-	if (mp.pulse_fd > 0) {
-		long pulse_value = 1;
-
-		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
-
-		{
-			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
-			delay(1000);
-		}
+	if (mp.pulse) {
+		mp.pulse->Send(pulse_code);
 	}
 
 	return 1;
@@ -1642,10 +1713,16 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		if (mp.pulse_fd != lib::invalid_fd) {
-			messip::port_disconnect(mp.pulse_fd);
+		if (mp.pulse) {
+			delete mp.pulse;
 		} else {
 			std::cerr << "MP pulse not connected?" << std::endl;
+		}
+
+		if (mp.MP) {
+			delete mp.MP;
+		} else {
+			std::cerr << "MP not connected?" << std::endl;
 		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
@@ -1670,7 +1747,10 @@ int Interface::MPslay()
 	// 	kill(mp_pid,SIGTERM);
 	// 	printf("mp pupa po kill\n");
 	mp.pid = -1;
-	mp.pulse_fd = lib::invalid_fd;
+
+	mp.pulse = NULL;
+	mp.MP = NULL;
+
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->deactivate_ecp_trigger();
@@ -1863,7 +1943,7 @@ int Interface::slay_all()
 		 system(system_command);
 		 */delay(100);
 
-		sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
+		sprintf(system_command, "rsh -l %s %s killall -9 -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
 		printf("slay_all: %s\n", system_command);
 		// przedniolsem wywolanie system do innego prceosu bo w procesie glownym czasem powoduje zawieszenie calego intefrejsu

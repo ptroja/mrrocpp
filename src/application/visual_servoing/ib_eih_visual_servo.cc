@@ -23,7 +23,7 @@ namespace servovision {
 
 ib_eih_visual_servo::ib_eih_visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string & section_name, mrrocpp::lib::configurator& configurator) :
-	visual_servo(regulator, sensor)
+	visual_servo(regulator, sensor, section_name, configurator)
 {
 	desired_position = configurator.value <4, 1> ("desired_position", section_name);
 
