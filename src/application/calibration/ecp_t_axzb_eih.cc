@@ -81,7 +81,7 @@ void axzb_eih::main_task_algorithm(void)
 	printf("void axzb_eih::main_task_algorithm(void) 4\n");
 	fflush(stdout);
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

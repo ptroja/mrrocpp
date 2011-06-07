@@ -7,12 +7,13 @@
  * @date 02.07.2010
  */
 
+#include <ctime>
+
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
-#include <ctime>
 
 namespace mrrocpp {
 namespace ecp {

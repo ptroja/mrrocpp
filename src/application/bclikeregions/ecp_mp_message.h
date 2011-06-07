@@ -51,7 +51,7 @@ public:
 	 * @param str pointer to matrix first element
 	 * @return vector with read position
 	 */
-	std::vector<double> stringToRobotPosition(uint32_t* str);
+	std::vector<double> stringToRobotPosition(const uint32_t* str);
 	/**
 	 * Method converting MRROC++<->FraDIA communication structure and
 	 * actual robot position to matrix of char
@@ -75,7 +75,7 @@ public:
 	 * @param vec std::vector to which regions data will be written
 	 * @return vecotr containing robot's position
 	 */
-	std::vector<double> stringToECPOrder(char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> > &vec);
+	std::vector<double> stringToECPOrder(const char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> > &vec);
 
 };
 

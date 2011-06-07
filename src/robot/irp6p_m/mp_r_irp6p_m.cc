@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 irp6p_m::irp6p_m(task::task &mp_object_l) :
-	robot(lib::irp6p_m::ROBOT_NAME, mp_object_l, lib::irp6p_m::NUM_OF_SERVOS)
+	mp::robot::robot(lib::irp6p_m::ROBOT_NAME, mp_object_l, lib::irp6p_m::NUM_OF_SERVOS)
 {
 }
 

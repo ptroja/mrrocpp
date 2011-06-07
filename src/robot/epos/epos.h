@@ -136,7 +136,7 @@ private:
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 */
-	void InitiateSementedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+	void InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
 
 	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
 	 *
@@ -610,6 +610,9 @@ public:
 
 	//! check Interpolation Buffer warning
 	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
+
+	//! check Interpolation Buffer underflow warning
+	static bool checkInterpolationBufferUnderflowWarning(UNSIGNED16 status);
 
 	//! check Interpolation Buffer error
 	static bool checkInterpolationBufferError(UNSIGNED16 status);

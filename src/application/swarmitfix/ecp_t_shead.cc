@@ -44,13 +44,13 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
+		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		std::string path(mrrocpp_network_path);
 		path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
 
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
+		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RELATIVE:
 				//sg->set_relative();
@@ -65,7 +65,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 		//sg->load_file_with_path(path.c_str());
 		//sg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
-		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+		g_sleep->init_time(mp_command.ecp_next_state.variant);
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_HEAD_SOLDIFY) {
 		g_head_soldify->Move();

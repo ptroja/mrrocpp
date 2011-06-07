@@ -666,7 +666,7 @@ void wii_teach::main_task_algorithm(void)
 	}
 
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 }

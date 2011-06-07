@@ -109,11 +109,6 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileDeceleration = readProfileDeceleration();
 	remote = isRemoteOperationEnabled(readStatusWord());
 
-	// initialize MaxAcceleration to beyond the default limits
-	writeMaxAcceleration(25000UL);
-	writeMotorMaxSpeed(50000UL);
-	writeMaxProfileVelocity(50000UL);
-	writeGearRatioNumerator(0);
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 			ProfileVelocity << ", " <<
@@ -1353,9 +1348,9 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 	pvt[7] = time;
 	*((int32_t *) &pvt[0]) = position;
 
-#if 0
+#if 1
 	// PVT record have to be transmitted in a Segmented Write mode
-	InitiateSementedWrite(0x20C1, 0x00, 8);
+	InitiateSegmentedWrite(0x20C1, 0x00, 8);
 	// Maxon splits the record into two CAN frames
 	SegmentedWrite(&pvt[0], 7);
 	SegmentedWrite(&pvt[7], 1);
@@ -1378,8 +1373,14 @@ bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
 	return (status & PVT_STATUS_WARNING);
 }
 
+bool epos::checkInterpolationBufferUnderflowWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_UNDERFLOW_WARNING);
+}
+
 void epos::printInterpolationBufferStatus(UNSIGNED16 status)
 {
+	printf("IPM buffer status = 0x%04X\n", status);
 	// Warning codes
 	if (status & PVT_STATUS_UNDERFLOW_WARNING) {
 		printf("Buffer underflow warning level is reached\n");
@@ -1759,6 +1760,16 @@ int epos::waitForTarget(unsigned int t)
 
 
 	return (0);
+}
+
+void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
+{
+	device.InitiateSementedWrite(nodeId, index, subindex, ObjectLength);
+}
+
+void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
+{
+	device.SegmentedWrite(nodeId, ptr, len);
 }
 
 /* compare WORD a with WORD b bitwise */

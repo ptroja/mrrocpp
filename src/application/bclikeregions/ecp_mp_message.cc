@@ -5,8 +5,9 @@
  * \author Kacper Szkudlarek
  */
 
-#include "ecp_mp_message.h"
 #include <iostream>
+
+#include "ecp_mp_message.h"
 
 namespace mrrocpp {
 
@@ -60,7 +61,7 @@ char* ecp_mp_message::robotPositionToString(double& par0, double& par1, double& 
 }
 
 
-std::vector<double> ecp_mp_message::stringToRobotPosition(uint32_t* str){
+std::vector<double> ecp_mp_message::stringToRobotPosition(const uint32_t* str){
 
 	std::cout << "STRING TO DOUBLE TRANSFORM" << std::endl;
 
@@ -70,7 +71,7 @@ std::vector<double> ecp_mp_message::stringToRobotPosition(uint32_t* str){
 
 	std::vector<double> ret;
 
-	double* tab = reinterpret_cast<double*>(str);
+	const double* tab = reinterpret_cast<const double*>(str);
 
 	ret.clear();
 
@@ -159,13 +160,13 @@ std::vector<double> ecp_mp_message::stringToFradiaOrder(char* str, task::fradia_
 }
 
 
-std::vector<double> ecp_mp_message::stringToECPOrder(char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >& vec){
+std::vector<double> ecp_mp_message::stringToECPOrder(const char* str, std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >& vec){
 
 	task::mrrocpp_regions tmp;
 
 	std::vector<double> ret;
 
-	double *tab = reinterpret_cast<double *>(str);
+	const double *tab = reinterpret_cast<const double *>(str);
 
 	int size = (int)tab[0] + 1 ;
 

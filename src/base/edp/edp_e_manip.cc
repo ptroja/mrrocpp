@@ -35,78 +35,76 @@ namespace common {
 
 bool manip_effector::compute_servo_joints_and_frame(void)
 {
-
 	static bool force_sensor_post_synchro_configuration = false;
 
-	static int catch_nr = 0;
-	bool ret_val = true;
 	if (!(motor_driven_effector::compute_servo_joints_and_frame())) {
-		ret_val = false;
-	} else {
-		// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
-		try {
+		return false;
+	}
 
-			lib::Homog_matrix local_matrix;
+	static int catch_nr = 0;
 
-			// Obliczenie lokalnej macierzy oraz obliczenie polozenia robota we wsp. zewnetrznych.
-			get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
-			// Pobranie wsp. zewnetrznych w ukladzie
+	// wyznaczenie nowych wartosci joints and frame dla obliczen w servo
+	try {
 
-			lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-			local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
+		lib::Homog_matrix local_matrix;
 
-			//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
+		// Obliczenie lokalnej macierzy oraz obliczenie polozenia robota we wsp. zewnetrznych.
+		get_current_kinematic_model()->i2e_transform(servo_current_joints, local_matrix);
+		// Pobranie wsp. zewnetrznych w ukladzie
 
-			// @bug race condition (issue #69)
-			while (!sb) {
-				std::cerr << "Race condition detected! (" << __FILE__ << ":" << __LINE__ << ")" << std::endl;
-				usleep(1000);
-			}
+		lib::Xyz_Euler_Zyz_vector servo_real_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+		local_matrix.get_xyz_euler_zyz(servo_real_kartez_pos);
 
-			lib::MotorArray servo_desired_motor_pos(sb->command.parameters.move.abs_position, number_of_servos);
+		//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
 
-			lib::JointArray servo_desired_joints(number_of_servos);
+		// @bug race condition (issue #69)
+		while(!sb) {
+			std::cerr << "Race condition detected! (" << __FILE__ << ":" << __LINE__ << ")" << std::endl;
+			usleep(1000);
+		}
 
-			get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
-			get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
-			// Pobranie wsp. zewnetrznych w ukladzie
+		lib::MotorArray servo_desired_motor_pos(sb->command.parameters.move.abs_position, number_of_servos);
 
-			lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
-			local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
+		lib::JointArray servo_desired_joints(number_of_servos);
 
-			// scope-locked reader data update
-			{
-				boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
+		get_current_kinematic_model()->mp2i_transform(servo_desired_motor_pos, servo_desired_joints);
+		get_current_kinematic_model()->i2e_transform(servo_desired_joints, local_matrix);
+		// Pobranie wsp. zewnetrznych w ukladzie
 
-				servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
-				servo_desired_kartez_pos.to_table(rb_obj->step_data.desired_cartesian_position);
-			}
+		lib::Xyz_Euler_Zyz_vector servo_desired_kartez_pos; // by Y polozenie we wspolrzednych xyz_euler_zyz obliczane co krok servo   XXXXX
+		local_matrix.get_xyz_euler_zyz(servo_desired_kartez_pos);
 
-			// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
-			((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
+		// scope-locked reader data update
+		{
+			boost::mutex::scoped_lock lock(rb_obj->reader_mutex);
 
-			if (vs != NULL) {
+			servo_real_kartez_pos.to_table(rb_obj->step_data.real_cartesian_position);
+			servo_desired_kartez_pos.to_table(rb_obj->step_data.desired_cartesian_position);
+		}
 
+		// Obliczenie polozenia robota we wsp. zewnetrznych bez narzedzia.
+		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
+
+		if (vs != NULL) {
 				boost::mutex::scoped_lock lock(vs->mtx);
 				if ((is_synchronised()) && (!(force_sensor_post_synchro_configuration))) {
 					force_sensor_post_synchro_configuration = true;
 					vs->new_edp_command = true;
 					vs->command = FORCE_CONFIGURE;
 				}
+		}
 
-			}
+		catch_nr = 0;
 
-			catch_nr = 0;
+	}//: try
+	catch (...) {
+		if ((++catch_nr) == 1) {
+			std::cout << "servo thread compute_servo_joints_and_frame throw catch exception" << std::endl;
+		}
+		return false;
+	}//: catch
 
-		}//: try
-		catch (...) {
-			if ((++catch_nr) == 1)
-				printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
-			ret_val = false;
-		}//: catch
-	}
-
-	return ret_val;
+	return true;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -118,10 +116,6 @@ manip_effector::manip_effector(shell &_shell, lib::robot_name_t l_robot_name) :
 /*--------------------------------------------------------------------------*/
 void manip_effector::set_robot_model_with_sb(const lib::c_buffer &instruction)
 {
-	// uint8_t previous_model;
-	// uint8_t previous_corrector;
-
-	//printf(" SET ROBOT_MODEL: ");
 	switch (instruction.robot_model.type)
 	{
 		case lib::SERVO_ALGORITHM:
@@ -172,8 +166,6 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 			reply.arm.pf_def.arm_frame = current_end_effector_frame;
 
 			// dla robotow track i postument - oblicz chwytak
-
-
 			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
@@ -194,9 +186,7 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 	// sprowadzenie sil z ukladu bazowego do ukladu kisci
 	// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-	lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force);
-	current_force_torque.to_table(reply.arm.pf_def.force_xyz_torque_xyz);
-
+	reply.arm.pf_def.force_xyz_torque_xyz = ft_tr_inv_tool_matrix * ft_tr_inv_current_frame_matrix * current_force;
 }
 /*--------------------------------------------------------------------------*/
 
@@ -577,7 +567,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			// Sprawdzenie poprawnosci macierzy
 			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.robot_model.tool_frame_def.tool_frame));
 		{
-			lib::Homog_matrix hm(instruction.robot_model.tool_frame_def.tool_frame);
+			const lib::Homog_matrix & hm = instruction.robot_model.tool_frame_def.tool_frame;
 
 			if (!(hm.is_valid())) {
 				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);

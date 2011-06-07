@@ -10,8 +10,11 @@
 #define MP_ROBOT_H_
 
 #include "base/lib/configurator.h"
+#include "base/lib/child.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
+#include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/DataBuffer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -19,6 +22,9 @@ namespace mp {
 namespace task {
 class task;
 } // namespace task
+namespace generator {
+class generator;
+} // namespace generator
 
 namespace robot {
 
@@ -30,6 +36,10 @@ namespace robot {
  */
 class robot : public ecp_mp::robot
 {
+	// Both the generator and task have access to private methods
+	friend class mrrocpp::mp::generator::generator;
+	friend class mrrocpp::mp::task::task;
+
 private:
 	/**
 	 * @brief nummber of servos (joints)
@@ -39,66 +49,13 @@ private:
 	/**
 	 * @brief pid of spawned ECP process
 	 */
-	pid_t ECP_pid;
+	lib::child ECP_pid;
 
-	/**
-	 * @brief main ECP communication channel descriptor
-	 */
-	lib::fd_client_t ECP_fd;
+	//! Pointer to the remote agent proxy
+	RemoteAgent ecp;
 
-protected:
-	/**
-	 * @brief mp taks object reference
-	 */
-	task::task &mp_object;
-
-public:
-	/**
-	 * @brief continuous coordination flag
-	 *
-	 * if it set it causes every macrostep communication with ECP
-	 */
-	bool continuous_coordination;
-
-	/**
-	 * @brief sends pulse to ecp
-	 *
-	 * sends communication request etc.
-	 * @param[in] pulse_code pulse code
-	 * @param[in] pulse_value pusle value - default = -1
-	 */
-	void send_pulse_to_ecp(int pulse_code, int pulse_value = 1);
-
-	/**
-	 * @brief command buffer for ecp
-	 *
-	 * it is send during communication with ECP
-	 */
-	lib::MP_COMMAND_PACKAGE mp_command;
-
-	/**
-	 * @brief reply buffer from ecp
-	 *
-	 * it is received during communication with ECP
-	 */
-	lib::ECP_REPLY_PACKAGE ecp_reply_package;
-
-	/**
-	 * @brief ECP pulse receive time
-	 *
-	 * it is used to diversify macrostep length in multi continous coordination
-	 * taking into account differences in communication readiness pulse receive time from different ECP's
-	 */
-	struct timespec ecp_pulse_receive_time;
-
-	/**
-	 * @brief the communication with EDP flag
-	 *
-	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
-	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP\n
-	 * in the following iterations of Move
-	 */
-	bool communicate_with_ecp;
+	//! Remote agent's data buffer
+	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
@@ -106,45 +63,9 @@ public:
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
-	 * @brief A server connection ID identifying ECP
+	 * @brief send a single command to the ECP
 	 */
-	int ecp_scoid;
-
-	/**
-	 * @brief flag indicating opened pulse connection from ECP
-	 */
-	bool ecp_opened;
-
-	/**
-	 * @brief pulse code from ECP
-	 */
-	char ecp_pulse_code;
-
-	/**
-	 * @brief new pulse from ecp flag
-	 */
-	bool new_pulse;
-
-	/**
-	 * @brief new pulse from ecp checked flag
-	 */
-	bool new_pulse_checked;
-
-	/**
-	 * @brief constructor
-	 * @param l_robot_name robot label
-	 * @param _section_name ECP configuration file section
-	 * @param mp_object_l mp task object reference
-	 * @param _number_of_servos number of robot servos (joints)
-	 */
-	robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _number_of_servos);
-
-	/**
-	 * @brief destructor
-	 *
-	 * it closes communication channels and kills ECP process
-	 */
-	virtual ~robot();
+	void send_command(lib::MP_COMMAND);
 
 	/**
 	 * @brief executes the communication sequence with ECP with error handling
@@ -162,6 +83,64 @@ public:
 	 * @brief sends a message to start ECP task with error handling
 	 */
 	void start_ecp(void);
+
+	/**
+	 * @brief sends a message to pause ECP task
+	 */
+	void pause_ecp(void);
+
+	/**
+	 * @brief sends a message to resume ECP task
+	 */
+	void resume_ecp(void);
+
+	/**
+	 * @brief ecp_errorrs_handler and detector
+	 */
+	void ecp_errors_handler();
+
+public:
+	/**
+	 * @brief command buffer for ecp
+	 *
+	 * it is send during communication with ECP
+	 */
+	lib::MP_COMMAND_PACKAGE mp_command;
+
+	//! Data buffer with messages from the ECP
+	//! TODO: users should not use this data directly, only the 'const ecp_reply_package'.
+	InputBuffer <lib::ECP_REPLY_PACKAGE> reply;
+
+	/**
+	 * @brief reply buffer from ecp
+	 *
+	 * it is received during communication with ECP
+	 */
+	const lib::ECP_REPLY_PACKAGE & ecp_reply_package;
+
+	/**
+	 * @brief the communication with EDP flag
+	 *
+	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
+	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP\n
+	 * in the following iterations of Move
+	 */
+	bool communicate_with_ecp;
+
+	/**
+	 * @brief constructor
+	 * @param l_robot_name robot label
+	 * @param mp_object_l mp task object reference
+	 * @param _number_of_servos number of robot servos (joints)
+	 */
+	robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, int _number_of_servos);
+
+	/**
+	 * @brief destructor
+	 *
+	 * it closes communication channels and kills ECP process
+	 */
+	virtual ~robot();
 };
 
 /*!

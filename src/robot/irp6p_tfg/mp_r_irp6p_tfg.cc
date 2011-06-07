@@ -13,7 +13,7 @@ namespace mp {
 namespace robot {
 
 irp6p_tfg::irp6p_tfg(task::task &mp_object_l) :
-	robot(lib::irp6p_tfg::ROBOT_NAME, mp_object_l, lib::irp6p_tfg::NUM_OF_SERVOS)
+	mp::robot::robot(lib::irp6p_tfg::ROBOT_NAME, mp_object_l, lib::irp6p_tfg::NUM_OF_SERVOS)
 {
 }
 

@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <iostream>
 
+#include <boost/date_time/posix_time/posix_time_types.hpp> //no i/o just types
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -18,7 +19,7 @@
 #include "base/mp/mp_robot.h"
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "base/mp/generator/mp_g_empty.h"
+#include "base/mp/generator/mp_g_wait_for_task_termination.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 
@@ -27,9 +28,9 @@ namespace mp {
 namespace generator {
 
 haptic_stiffness::haptic_stiffness(task::task& _mp_task, int step) :
-	generator(_mp_task), irp6p_state(HS_LOW_FORCE), total_irp6p_stiffness(0.0), last_irp6p_stiffness(0.0),
-			initial_irp6p_force(0.0), initial_irp6p_position(0.0), intermediate_irp6p_force(0.0),
-			intermediate_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
+	continously_coordinated(_mp_task), irp6p_state(HS_LOW_FORCE), total_irp6p_stiffness(0.0),
+			last_irp6p_stiffness(0.0), initial_irp6p_force(0.0), initial_irp6p_position(0.0),
+			intermediate_irp6p_force(0.0), intermediate_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
 			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
@@ -56,9 +57,6 @@ bool haptic_stiffness::first_step()
 
 	irp6ot->communicate_with_ecp = true;
 	irp6p->communicate_with_ecp = true;
-
-	irp6ot->continuous_coordination = true;
-	irp6p->continuous_coordination = true;
 
 	td.internode_step_no = step_no;
 	td.value_in_step_no = td.internode_step_no - 2;
@@ -156,7 +154,7 @@ bool haptic_stiffness::first_step()
 // -----------------------------------  metoda	next_step -----------------------------------
 // ----------------------------------------------------------------------------------------------
 
-bool haptic_stiffness::next_step()
+bool haptic_stiffness::next_step_inside()
 {
 	// Generacja trajektorii prostoliniowej o zadany przyrost polozenia i orientacji
 	// Funkcja zwraca false gdy koniec generacji trajektorii
@@ -170,7 +168,7 @@ bool haptic_stiffness::next_step()
 	double current_irp6ot_force;
 	double current_irp6ot_position;
 
-	if (node_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
+	if (cycle_counter < 3) { // Oczekiwanie na odczyt aktualnego polozenia koncowki
 		return true;
 	}
 
@@ -178,7 +176,7 @@ bool haptic_stiffness::next_step()
 		return false;
 	}
 
-	if (node_counter == 3) {
+	if (cycle_counter == 3) {
 
 		irp6ot->mp_command.instruction.instruction_type = lib::SET_GET;
 		irp6p->mp_command.instruction.instruction_type = lib::SET_GET;
@@ -216,10 +214,9 @@ bool haptic_stiffness::next_step()
 	// modyfikacja dlugosci makrokroku postumenta na podstawie analizy wyprzedzenia pulse z ECP postumenta wzgledem pulsu z ECP traka
 	// sam proces korekty jest konieczny ze wzgledu na to ze przerwanie w EDP traka dochodzi co okolo 2,08 ms zamiast 2ms w postumecie i calosc sie rozjezdza.
 
-	float time_interval = (irp6ot->ecp_pulse_receive_time.tv_sec + irp6ot->ecp_pulse_receive_time.tv_nsec / 1e9)
-			- (irp6p->ecp_pulse_receive_time.tv_sec + irp6p->ecp_pulse_receive_time.tv_nsec / 1e9);
+	boost::posix_time::time_duration time_interval = irp6ot->reply.getTimestamp() - irp6p->reply.getTimestamp();
 
-	if (time_interval > 0.002) {
+	if (time_interval > boost::posix_time::millisec(2)) {
 		irp6p->mp_command.instruction.motion_steps = step_no + 1;
 		irp6p->mp_command.instruction.value_in_step_no = step_no + 1 - 4;
 	} else {
@@ -345,7 +342,7 @@ bool haptic_stiffness::next_step()
 	// wypiski
 
 
-	//	if ((node_counter % 10) == 0) {
+	//	if ((cycle_counter % 10) == 0) {
 	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
 			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << ", irp6ot_f: "
 			<< current_irp6ot_force << ", irp6ot_p: " << current_irp6ot_position << std::endl;

@@ -16,6 +16,7 @@
 #include "base/edp/edp_e_manip.h"
 #include "robot/spkm/const_spkm.h"
 #include "robot/epos/epos.h"
+#include "robot/epos/ipm_executor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -50,11 +51,11 @@ private:
 	//! Default axis deceleration [rpm/s]
 	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Maximal axis velocity [rpm]
-	static const uint32_t Vmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	//! Maximal motor velocity [rpm].
+	static const uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Max axis acceleration [rpm/s]
-	static const uint32_t Amax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+	//! Max motor acceleration [rpm/s].
+	static const uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
@@ -66,6 +67,9 @@ private:
 
 	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
 	bool is_previous_cartesian_pose_known;
+
+	//! Handler for the asynchronous execution of the interpolated profile motion
+	epos::ipm_executor<lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
