@@ -29,6 +29,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/nvp.hpp>
 
 #include "base/lib/impconst.h"
 #include "base/lib/typedefs.h"
@@ -1088,7 +1089,7 @@ struct ecp_next_state_t
 		ar & next_state;
 		ar & variant;
 		ar & data;
-		ar & spkm_segment_sequence;
+		// ar & spkm_segment_sequence;
 		// ar & playerpos_goal; // this is not needed at this moment
 	}
 };
