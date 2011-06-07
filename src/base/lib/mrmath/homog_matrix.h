@@ -17,6 +17,7 @@
 #include <Eigen/Core>
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/nvp.hpp>
 
 namespace mrrocpp {
 namespace lib {

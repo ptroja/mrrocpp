@@ -64,7 +64,7 @@ public:
 
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
     xdr_iarchive &load_a_type(boost::serialization::collection_size_type &t, boost::mpl::true_) {
-        unsigned long long b;
+        uint64_t b;
         if(!xdr_u_longlong_t(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (std::size_t) b;
         return *this;
