@@ -16,6 +16,9 @@ int main(int argc, char *argv[])
 	boost::array<epos *, 6> axis;
 
 	try {
+		// timestamps variables
+		struct timespec t1, t2;
+
 		gateway.open();
 
 		epos node1(gateway, 1);
@@ -59,6 +62,12 @@ int main(int argc, char *argv[])
 			// Change to the operational mode
 			node->reset();
 		}
+
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		axis[3]->readSWversion();
+		clock_gettime(CLOCK_MONOTONIC, &t2);
+		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
+		printf("%.9f\n", t);
 
 		gateway.close();
 	} catch (epos_error & error) {
