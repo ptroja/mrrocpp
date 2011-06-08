@@ -102,19 +102,13 @@ void task::set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerp
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...)
+void task::set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
 
-	va_list arguments; // A place to store the list of arguments
-
-	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
-
 	// Copy given robots to the map container
-	va_to_robot_map(number_of_robots, arguments, robot_m, mp_snes_gen.robot_m);
-
-	va_end(arguments); // Cleans up the list
+	mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
 
 	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
 	mp_snes_gen.Move();
@@ -158,6 +152,20 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
 
 	va_end(arguments); // Cleans up the list
+
+	wtf_gen.configure(activate_trigger);
+
+	wtf_gen.Move();
+}
+
+void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector <lib::robot_name_t> & robotSet)
+{
+	generator::wait_for_task_termination wtf_gen(*this);
+
+	BOOST_FOREACH(lib::robot_name_t robotName, robotSet)
+				{
+					wtf_gen.robot_m[robotName] = robot_m[robotName];
+				}
 
 	wtf_gen.configure(activate_trigger);
 
@@ -339,7 +347,7 @@ void task::wait_for_stop(void)
 			ui_pulse.markAsUsed();
 		}
 	}
-	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_stop koniec");
+	//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_stop koniec");
 
 }
 
@@ -355,8 +363,9 @@ void task::wait_for_all_robots_acknowledge()
 
 	// Wait for ACK from all the robots
 	while (!not_confirmed.empty()) {
+		//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_all_robots_acknowledge przed receive");
 		ReceiveSingleMessage(true);
-
+		//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_all_robots_acknowledge za receive");
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
 					{
 						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply

@@ -64,7 +64,7 @@ void bclike_mp_i::main_task_algorithm(void){
 	vec.assign(ecp::common::task::left, ecp::common::task::left + VEC_SIZE);
 	tab = msg.robotPositionToString(vec);
 
-	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+	set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE left");
 	wait_for_task_termination(false, 1,  actual_robot.c_str());
 
@@ -74,7 +74,7 @@ void bclike_mp_i::main_task_algorithm(void){
 	tab = msg.robotPositionToString(vec);
 
 	//Start moving
-	set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+	set_next_ecp_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE right");
 	wait_for_task_termination(false, 1,  actual_robot.c_str());
 
@@ -96,17 +96,17 @@ void bclike_mp_i::main_task_algorithm(void){
 
 				//Go to code
 				tmp = msg.robotPositionToString(vec);
-				set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+				set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 				wait_for_task_termination(false, 1,  actual_robot.c_str());
 
 				//Get back to previous position
 				tmp = msg.robotPositionToString(pos);
-				set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+				set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 				wait_for_task_termination(false, 1,  actual_robot.c_str());
 			}
 		}
 
-		set_next_ecps_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+		set_next_ecp_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 		sr_ecp_msg->message("MOVE right");
 		wait_for_task_termination(false, 1, actual_robot.c_str());
 	}

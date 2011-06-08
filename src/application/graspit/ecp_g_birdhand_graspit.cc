@@ -38,8 +38,7 @@ void bird_hand::create_ecp_mp_reply()
 
 void bird_hand::get_mp_ecp_command()
 {
-
-	memcpy(&bird_hand_command_data_port->data, ecp_t.mp_command.ecp_next_state.string_data, sizeof(bird_hand_command_data_port->data));
+	memcpy(&bird_hand_command_data_port->data, ecp_t.mp_command.ecp_next_state.data, sizeof(bird_hand_command_data_port->data));
 }
 
 bool bird_hand::first_step()

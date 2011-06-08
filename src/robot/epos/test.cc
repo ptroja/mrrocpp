@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
 					UNSIGNED32 errCode = node->readErrorHistory(i);
 
-					std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+					std::cout << node->ErrorCodeMessage(errCode) << std::endl;
 				}
 				if (errNum > 0) {
 					node->clearNumberOfErrors();

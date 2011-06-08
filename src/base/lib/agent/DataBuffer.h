@@ -53,7 +53,7 @@ public:
 	 * Get data from the buffer
 	 * @return current data
 	 */
-	T Get() const
+	const T & Get() const
 	{
 		return data;
 	}

@@ -168,7 +168,7 @@ ADD_EXECUTABLE(
 # Link executable with QT libraries
 TARGET_LINK_LIBRARIES(
 	ui-qt
-	ecp_robots ecp_mp
+	ecp_robot
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
 	boost_regex

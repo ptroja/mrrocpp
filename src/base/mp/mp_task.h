@@ -117,11 +117,9 @@ public:
 	 * @param l_variant variant value sent to ECP
 	 * @param l_string optional string sent to ECP
 	 * @param str_len string length
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
+	 * @param robot_name robot to receive a command
 	 */
-	void
-			set_next_ecps_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name);
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -138,6 +136,8 @@ public:
 	 * @param ... robots labels
 	 */
 	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
+
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
@@ -163,7 +163,6 @@ public:
 	 * @brief waits for STOP pulse from UI
 	 */
 	void wait_for_stop(void);// by Y&W dodany tryb
-
 
 	/**
 	 * @brief starts all ECP's
@@ -216,16 +215,7 @@ private:
 	/**
 	 * @brief pulse from UI
 	 */
-	InputBuffer <char> ui_pulse;
-
-	/**
-	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
-	 * @param process_type - process type to wait for the pulses
-	 * @param desired_wait_mode - decides if the method should wait for desired pulse or not
-	 * @return desired pulse found
-	 */
-	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	InputBuffer<char> ui_pulse;
 };
 
 /**

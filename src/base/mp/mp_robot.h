@@ -22,6 +22,9 @@ namespace mp {
 namespace task {
 class task;
 } // namespace task
+namespace generator {
+class generator;
+} // namespace generator
 
 namespace robot {
 
@@ -33,6 +36,10 @@ namespace robot {
  */
 class robot : public ecp_mp::robot
 {
+	// Both the generator and task have access to private methods
+	friend class mrrocpp::mp::generator::generator;
+	friend class mrrocpp::mp::task::task;
+
 private:
 	/**
 	 * @brief nummber of servos (joints)
@@ -50,23 +57,49 @@ private:
 	//! Remote agent's data buffer
 	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
-protected:
-	/**
-	 * @brief mp taks object reference
-	 */
-	task::task &mp_object;
-
-public:
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
 	 */
 	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
+	 * @brief send a single command to the ECP
+	 */
+	void send_command(lib::MP_COMMAND);
+
+	/**
+	 * @brief executes the communication sequence with ECP with error handling
+	 *
+	 * called from move_method
+	 */
+	void execute_motion(void);
+
+	/**
+	 * @brief sends a message to terminate ECP task with error handling
+	 */
+	void terminate_ecp(void);
+
+	/**
+	 * @brief sends a message to start ECP task with error handling
+	 */
+	void start_ecp(void);
+
+	/**
+	 * @brief sends a message to pause ECP task
+	 */
+	void pause_ecp(void);
+
+	/**
+	 * @brief sends a message to resume ECP task
+	 */
+	void resume_ecp(void);
+
+	/**
 	 * @brief ecp_errorrs_handler and detector
 	 */
 	void ecp_errors_handler();
 
+public:
 	/**
 	 * @brief command buffer for ecp
 	 *
@@ -100,7 +133,7 @@ public:
 	 * @param mp_object_l mp task object reference
 	 * @param _number_of_servos number of robot servos (joints)
 	 */
-	robot(lib::robot_name_t l_robot_name, task::task &mp_object_l, int _number_of_servos);
+	robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, int _number_of_servos);
 
 	/**
 	 * @brief destructor
@@ -108,33 +141,6 @@ public:
 	 * it closes communication channels and kills ECP process
 	 */
 	virtual ~robot();
-
-	/**
-	 * @brief executes the communication sequence with ECP with error handling
-	 *
-	 * called from move_method
-	 */
-	void execute_motion(void);
-
-	/**
-	 * @brief sends a message to terminate ECP task with error handling
-	 */
-	void terminate_ecp(void);
-
-	/**
-	 * @brief sends a message to start ECP task with error handling
-	 */
-	void start_ecp(void);
-
-	/**
-	 * @brief sends a message to pause ECP task
-	 */
-	void pause_ecp(void);
-
-	/**
-	 * @brief sends a message to resume ECP task
-	 */
-	void resume_ecp(void);
 };
 
 /*!

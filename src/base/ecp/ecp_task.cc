@@ -148,6 +148,10 @@ void task_base::wait_for_stop(void)
 	while (command.Get().command != lib::STOP) {
 		ReceiveSingleMessage(true);
 	}
+	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+
+	// Reply with ACK
+	reply.Send(ecp_reply);
 }
 
 // Oczekiwanie na polecenie START od MP
@@ -157,9 +161,12 @@ void task_base::wait_for_start(void)
 	bool start_received = false;
 
 	while (!start_received) {
-		while (!command.isFresh()) {
-			ReceiveSingleMessage(true);
-		}
+		// wait for a new message
+		ReceiveSingleMessage(true);
+
+		// ignore non-MP commands
+		if (!command.isFresh())
+			continue;
 
 		command.markAsUsed();
 
@@ -251,20 +258,16 @@ void task_base::get_next_state(void)
 	}
 
 	// Extract the next command to the local variable
-	mp_2_ecp_next_state_string = mp_command.ecp_next_state.mp_2_ecp_next_state;
+	mp_2_ecp_next_state_string = mp_command.ecp_next_state.next_state;
 }
 
 // Receive a message from MP
 bool task_base::peek_mp_message()
 {
 	command.markAsUsed();
-	bool block;
 
-	if (continuous_coordination) {
-		block = true;
-	} else {
-		block = false;
-	}
+	const bool block = continuous_coordination;
+
 	if (ReceiveSingleMessage(block)) {
 		if (command.isFresh()) {
 
@@ -321,9 +324,21 @@ bool task_base::peek_mp_message()
 
 void task_base::wait_for_resume()
 {
-	if (ReceiveSingleMessage(true)) {
+	// Awaiting for the RESUME command
+	bool resume_received = false;
+
+	while (!resume_received) {
+
+		// wait for a new message
+		ReceiveSingleMessage(true);
+
+		// ignore non-MP messages
+		if (!command.isFresh())
+			continue;
+
 		command.markAsUsed();
-		switch (mp_command.command)
+
+		switch (command.Get().command)
 		{
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -339,6 +354,9 @@ void task_base::wait_for_resume()
 
 				// Reply with ACK
 				//	reply.Send(ecp_reply);
+
+				// leave the receive loop
+				resume_received = true;
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
@@ -349,9 +367,7 @@ void task_base::wait_for_resume()
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
 				break;
 		}
-
 	}
-
 }
 
 } // namespace task
