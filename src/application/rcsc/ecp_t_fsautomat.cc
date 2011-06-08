@@ -284,7 +284,6 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 				{
 					path += (char*)mp_command.ecp_next_state.string_data;
 				}
-
 				//std::cout<<"WCZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 				//std::cout<<"STATE:  "<<mp_command.ecp_next_state.mp_2_ecp_next_state<<" STRING:  "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());

@@ -36,7 +36,7 @@ r_buffer::r_buffer (void) :
 
 const char * ecp_next_state_t::get_mp_2_ecp_next_state_string() const
 {
-	return reinterpret_cast<const char*>(string_data);
+	return reinterpret_cast<const char*>(data);
 }
 
 } // namespace lib

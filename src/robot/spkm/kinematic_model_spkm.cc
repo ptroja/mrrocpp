@@ -48,10 +48,16 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 	}
 }
 
+void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) const
+{
+	// TODO Compute angles related to the inner and outer gimbals.
+}
+
+
 void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
 	// Precondition - check whether the desired position is valid.
-	check_joints(local_desired_joints);
+	//check_joints(local_desired_joints);
 
 	// Compute desired motor positions for linear axes.
 	for (int i = 0; i < 3; ++i) {
@@ -65,13 +71,13 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 	}
 
 	// Postcondition
-	check_motor_position(local_desired_motor_pos_new);
+	//check_motor_position(local_desired_motor_pos_new);
 }
 
 void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
-	// Precondition
-	check_motor_position(local_current_motor_pos);
+	// Precondition - check whether the desired motor position is valid.
+	//check_motor_position(local_current_motor_pos);
 
 	// Linear axes
 	for (int i = 0; i < 3; ++i) {
@@ -85,7 +91,7 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 	}
 
 	// Postcondition
-	check_joints(local_current_joints);
+	//check_joints(local_current_joints);
 }
 
 
@@ -107,7 +113,7 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	Vector3d PKM_joints = PM_inverse_from_e(e);
 
 	// Compute upper platform pose.
-	Homog4d O_P_T = PM_O_P_T_from_e(e);
+	O_P_T = PM_O_P_T_from_e(e);
 //	std::cout <<"Computed upper platform pose:\n" << O_P_T << std::endl;
 
 	// Compute the pose of wrist (S) on the base of upper platform pose.

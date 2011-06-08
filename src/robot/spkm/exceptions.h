@@ -1,5 +1,5 @@
 /*!
- * @file spkm_exception.h
+ * @file exception.h
  * @brief File containing consts, types and classes related to exceptions specific to SPKM.
  *
  * @author tkornuta

@@ -101,7 +101,7 @@ void edge_follow_mr::main_task_algorithm(void)
 	memcpy(tmp_string, &mp_ecp_command, sizeof(mp_ecp_command));
 	/*
 
-	 set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string, sizeof(mp_ecp_command), gripper_name);
 
 	 wait_for_task_termination(false, 1, gripper_name.c_str());
 
@@ -109,15 +109,15 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	// sekwencja generator na wybranym manipulatorze
 
-	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
