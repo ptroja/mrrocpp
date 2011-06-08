@@ -229,7 +229,7 @@ void Interface::timer_slot()
 
 			}; // end: switch (message.message_type)
 			//	html_line += "</font>";
-			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
+			//	mw->getMenuBar()->textEdit_sr->setCurrentCharFormat(format);
 
 			std::string text(sr_msg.description);
 
@@ -403,6 +403,7 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+//				irp6ot_m->getWgtByName("wgt_joints")->my_open();
 				irp6ot_m->wgt_joints->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				irp6p_m->wgt_joints->my_open();
@@ -424,8 +425,10 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+//				irp6ot_m->getWgtByName("wgt_motors")->my_open();
 				irp6ot_m->wgt_motors->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+//				irp6p_m->getWgtByName("wgt_motors")->my_open();
 				irp6p_m->wgt_motors->my_open();
 			}
 
@@ -658,6 +661,8 @@ void Interface::create_robots()
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	robot_m[irp6ot_m->robot_name] = irp6ot_m;
 
+	printf("IRP6OT CREATED");
+
 	irp6p_m = new irp6p_m::UiRobot(*this);
 	robot_m[irp6p_m->robot_name] = irp6p_m;
 
@@ -679,6 +684,7 @@ void Interface::create_robots()
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
+	mw->setMenu();
 }
 
 void Interface::init()
@@ -829,7 +835,7 @@ void Interface::init()
 
 	//ui_msg->message("closing");
 
-	manage_interface();
+	//manage_interface();
 
 	mw->get_ui()->textEdit_sr->setFocus();
 
@@ -968,41 +974,41 @@ void Interface::manage_interface_slot()
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
 
 				break;
 			case UI_ALL_EDPS_NONE_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
 				//print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Load);
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
 
 				break;
 			case UI_ALL_EDPS_SOME_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
-				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
 
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 						break;
 					default:
@@ -1013,48 +1019,48 @@ void Interface::manage_interface_slot()
 
 			case UI_ALL_EDPS_ALL_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("ALL_LOADED		");
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
 
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Load);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
 
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 						switch (mp.state)
 						{
 							case common::UI_MP_NOT_PERMITED_TO_RUN:
-								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_PERMITED_TO_RUN:
 
-								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_WAITING_FOR_START_PULSE:
 
-								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
-								mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
+								mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_TASK_RUNNING:
 							case common::UI_MP_TASK_PAUSED:
 
-								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
-								mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							default:
 								break;

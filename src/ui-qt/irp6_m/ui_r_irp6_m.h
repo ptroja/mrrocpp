@@ -41,18 +41,13 @@ public:
 	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
 	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
 
+	virtual void makeConnections(){};
 
 	common::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 
-	wgt_irp6_m_joints *wgt_joints;
-	wgt_irp6_m_motors *wgt_motors;
-	wgt_irp6_m_angle_axis *wgt_angle_axis;
-	wgt_irp6_m_euler *wgt_euler;
-	wgt_irp6_m_relative_angle_axis *wgt_relative_angle_axis;
-	wgt_irp6_m_tool_angle_axis *wgt_tool_angle_axis;
-	wgt_irp6_m_tool_euler *wgt_tool_euler;
+
 
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
@@ -62,6 +57,16 @@ public:
 
 	int execute_motor_motion();
 	int execute_joint_motion();
+
+private:
+//	wgt_base *wgt_joints;
+//	wgt_base *wgt_motors;
+//
+//	wgt_base *wgt_angle_axis;
+//	wgt_base *wgt_euler;
+//	wgt_base *wgt_relative_angle_axis;
+//	wgt_base *wgt_tool_angle_axis;
+//	wgt_base *wgt_tool_euler;
 };
 
 }

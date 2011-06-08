@@ -1,10 +1,12 @@
 #include "wgt_base.h"
 #include "interface.h"
+#include "mainwindow.h"
+#include <QMainWindow>
 
 wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QWidget(parent), widget_label(_widget_label), interface(_interface)
 {
-	dwgt = new QDockWidget(interface.get_main_window());
+	dwgt = new QDockWidget((QMainWindow *) interface.get_main_window());
 	//dwgt_pc->setAllowedAreas(Qt::TopDockWidgetArea);
 	dwgt->setWindowTitle(widget_label);
 

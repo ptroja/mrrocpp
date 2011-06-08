@@ -46,6 +46,7 @@ SET(GUI_CXX_SRCS
 	base/interface.cc	
     base/main.cpp
     base/mainwindow.cpp
+    base/menu_bar.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
     base/ui_ecp_dialogs/wgt_yes_no.cpp
@@ -98,6 +99,8 @@ SET(GUI_MOC_SRCS
 	irp6ot_tfg/ui_r_irp6ot_tfg.h
 	irp6p_m/ui_r_irp6p_m.h
 	base/signal_dispatcher.h
+	base/menu_bar.h
+	base/MenuBarAction.h
 )
 
 # Generate MOC files
@@ -158,6 +161,8 @@ ADD_EXECUTABLE(
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
 	base/signal_dispatcher.cpp
+	base/menu_bar.cpp
+	base/MenuBarAction.cpp
 )
 
 # Link executable with QT libraries

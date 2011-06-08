@@ -10,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
 #include "wgt_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
 #include "ui_ecp_dialogs/wgt_message.h"
@@ -28,6 +28,12 @@
 #include "ui.h"
 
 #include "base/lib/messip/messip_dataport.h"
+
+//namespace Ui{
+class MainWindow;
+//}
+
+
 
 namespace mrrocpp {
 namespace ui {
@@ -73,6 +79,7 @@ typedef robots_t::value_type robot_pair_t;
 
 class sr_buffer;
 class ecp_buffer;
+
 
 // super klasa agregujaca porozrzucane struktury
 
@@ -186,7 +193,7 @@ public:
 
 
 
-	irp6ot_m::UiRobot *irp6ot_m;
+	common::UiRobot *irp6ot_m;
 	//common::UiRobot *irp6ot_m;
 	irp6p_m::UiRobot *irp6p_m;
 	polycrank::UiRobot *polycrank;

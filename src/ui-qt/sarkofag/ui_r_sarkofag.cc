@@ -119,49 +119,48 @@ UiRobot::UiRobot(common::Interface& _interface) :
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuSarkofag);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuSarkofag);
 
 			break;
 		case 0:
-			mw->enable_menu_item(false, 4, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-			mw->enable_menu_item(true, 1, ui->menuSarkofag);
-			mw->enable_menu_item(true, 1, ui->actionsarkofag_EDP_Load);
-			mw->enable_menu_item(false, 1, ui->menusarkofag_Preset_Positions);
+			mw->enable_menu_item(false, 4, mw->getMenuBar()->actionsarkofag_EDP_Unload, mw->getMenuBar()->actionsarkofag_Synchronisation, mw->getMenuBar()->actionsarkofag_Move, mw->getMenuBar()->actionsarkofag_Servo_Algorithm);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuSarkofag);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionsarkofag_EDP_Load);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menusarkofag_Preset_Positions);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuSarkofag);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuSarkofag);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->actionsarkofag_Synchronisation);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionsarkofag_Synchronisation);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 3, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
-						mw->enable_menu_item(true, 1, ui->menusarkofag_Preset_Positions);
+						mw->enable_menu_item(true, 3, mw->getMenuBar()->actionsarkofag_EDP_Unload, mw->getMenuBar()->actionsarkofag_Move, mw->getMenuBar()->actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionsarkofag_EDP_Load);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menusarkofag_Preset_Positions);
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 2, ui->actionsarkofag_EDP_Load, ui->actionsarkofag_EDP_Unload);
-						mw->enable_menu_item(true, 1, ui->menusarkofag_Preset_Positions);
+						mw->enable_menu_item(true, 2, mw->getMenuBar()->actionsarkofag_Move, mw->getMenuBar()->actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionsarkofag_EDP_Load, mw->getMenuBar()->actionsarkofag_EDP_Unload);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menusarkofag_Preset_Positions);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, ui->actionsarkofag_Move, ui->actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 1, ui->menusarkofag_Preset_Positions);
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionsarkofag_Move, mw->getMenuBar()->actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menusarkofag_Preset_Positions);
 
 						break;
 					default:
@@ -169,8 +168,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, ui->actionsarkofag_EDP_Unload, ui->actionsarkofag_Synchronisation, ui->actionsarkofag_Move);
-				mw->enable_menu_item(false, 1, ui->actionsarkofag_EDP_Load);
+				mw->enable_menu_item(true, 3, mw->getMenuBar()->actionsarkofag_EDP_Unload, mw->getMenuBar()->actionsarkofag_Synchronisation, mw->getMenuBar()->actionsarkofag_Move);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionsarkofag_EDP_Load);
 
 			}
 			break;

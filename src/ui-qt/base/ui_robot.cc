@@ -32,9 +32,7 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
-
-	msg
-			= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
+	msg	= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 }
 
 void UiRobot::create_thread()
@@ -44,6 +42,22 @@ void UiRobot::create_thread()
 		tid = new feb_thread(eb);
 	}
 }
+
+
+//wgt_base* UiRobot::getWgtByName(QString name)
+//{
+////	wgt_finder = ;
+////	(*wgts_finder).second;
+//	if((*wgts.find(name)).second==NULL)
+//		printf("(*wgts.find(name)).second NULL!");
+//	else
+//		printf("(*wgts.find(name)).second ok");
+//
+//	return (*wgts.find(name)).second;
+//}
+
+
+
 
 int UiRobot::edp_create_int()
 

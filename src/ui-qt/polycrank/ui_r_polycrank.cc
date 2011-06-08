@@ -102,20 +102,20 @@ int UiRobot::synchronise_int()
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
+
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuPolycrank);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuPolycrank);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, ui->actionpolycrank_EDP_Unload);
-			mw->enable_menu_item(true, 1, ui->actionpolycrank_EDP_Load);
-			mw->enable_menu_item(true, 1, ui->menuPolycrank);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionpolycrank_EDP_Unload);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionpolycrank_EDP_Load);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuPolycrank);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
@@ -123,7 +123,7 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuPolycrank);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuPolycrank);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
 			 */
@@ -138,15 +138,15 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, ui->actionpolycrank_EDP_Unload);
-						mw->enable_menu_item(false, 1, ui->actionpolycrank_EDP_Load);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionpolycrank_EDP_Unload);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionpolycrank_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, ui->actionpolycrank_EDP_Unload, ui->actionpolycrank_EDP_Load);
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionpolycrank_EDP_Unload, mw->getMenuBar()->actionpolycrank_EDP_Load);
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
@@ -164,8 +164,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, ui->actionpolycrank_EDP_Unload);
-				mw->enable_menu_item(false, 1, ui->actionpolycrank_EDP_Load);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionpolycrank_EDP_Unload);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionpolycrank_EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);

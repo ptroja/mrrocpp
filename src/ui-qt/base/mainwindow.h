@@ -10,29 +10,34 @@
 #include "../irp6_m/wgt_irp6_m_motors.h"
 #include "ui_robot.h"
 #include "signal_dispatcher.h"
-//#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "menu_bar.h"
+#include "../irp6ot_m/ui_r_irp6ot_m.h"
+
 
 
 namespace Ui {
 class MainWindow;
+class SignalDispatcher;
 }
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
-class SignalDispatcher;
+//class UiRobot;
 }
 }
 }
 
-//namespace mrrocpp {
-//namespace ui {
-//namespace irp6ot_m {
-//class UiRobot;
-//}
-//}
-//}
+namespace mrrocpp {
+namespace ui {
+namespace irp6ot_m {
+class UiRobot;
+}
+}
+}
+
+
 
 class MainWindow : public QMainWindow
 {
@@ -42,18 +47,18 @@ public:
 	explicit MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~MainWindow();
 
+
 	void ui_notification();
 	//void enable_menu_item(bool _active, QWidget *_menu_item);
-	void enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...);
+	void enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_item, ...);
 	void enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...);
 
 	void open_new_window(wgt_base *window, wgt_base::my_open_ptr func);
 	void open_new_window(wgt_base *window);
 
 	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer pointer);
-	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument);
 	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer pointer);
-	//void ui_robot_action(mrrocpp::ui::irp6ot_m::UiRobot* &robot, mrrocpp::ui::irp6ot_m::UiRobot::intUiRobotFunctionPointer pointer);
+	void ui_robot_action(mrrocpp::ui::common::UiRobot* robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointerInt pointer, int argument);
 
 
 	void get_lineEdit_position(double* val, int number_of_servos);
@@ -64,25 +69,32 @@ public:
 	void closeEvent(QCloseEvent * event);
 
 	wgt_base::my_open_ptr getFunctionPointer();
-	mrrocpp::ui::common::SignalDispatcher* getSignalDispatcher();
+	Ui::SignalDispatcher* getSignalDispatcher();
+
+	Ui::MenuBar* getMenuBar();
+
+	mrrocpp::ui::common::Interface* getInterface();
+	void setMenu();
 
 private:
 	Ui::MainWindow *ui;
+	Ui::MenuBar *menuBar;
 	mrrocpp::ui::common::Interface& interface;
-	mrrocpp::ui::common::SignalDispatcher *signalDispatcher;
+	Ui::SignalDispatcher *signalDispatcher;
 
 	pthread_t main_thread_id;
-
-	QSignalMapper robotsSignalMapper;
 
 	wgt_base::my_open_ptr openFunctionPointer;
 	mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer uiRobotFunctionPtr;
 	mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt uiRobotFunctionPtrInt;
 	mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer intUiRobotFunctionPtr;
+	mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointerInt intUiRobotFunctionPtrInt;
+
+	// void (mrrocpp::ui::irp6ot_m::UiRobot::*intUiRobotIrp6FunctionPointer)();
 
 signals:
 	void ui_notification_signal();
-	void enable_menu_item_signal(QWidget *_menu_item, bool _active);
+	void enable_menu_item_signal(QMenu *_menu_item, bool _active);
 	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 
 
@@ -96,12 +108,9 @@ signals:
 
 
 private slots:
-
-
-
 	void ui_notification_slot();
 
-	void enable_menu_item_slot(QWidget *_menu_item, bool _active);
+	void enable_menu_item_slot(QMenu *_menu_item, bool _active);
 	void enable_menu_item_slot(QAction *_menu_item, bool _active);
 
 	void open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func);
@@ -225,5 +234,6 @@ private slots:
 	void on_actionSlay_All_triggered();
 
 };
+
 
 #endif // MAINWINDOW_H

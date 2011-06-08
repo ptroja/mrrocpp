@@ -8,9 +8,12 @@
 #ifndef __UI_ROBOT_H
 #define __UI_ROBOT_H
 
+//#include <QObject>
 #include "ui.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
+#include "wgt_base.h"
+
 
 class QDockWidget;
 
@@ -75,7 +78,6 @@ typedef WndBase_t::value_type WndBase_pair_t;
 
 class UiRobot
 {
-protected:
 
 public:
 	Interface& interface;
@@ -120,6 +122,13 @@ public:
 	virtual int ui_get_edp_pid() = 0;
 	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
 	virtual int manage_interface() = 0;
+	virtual void makeConnections(){};
+
+	//wgt_base* getWgtByName(QString name);
+
+	virtual int	process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger){return 0;}
+	virtual double* getCurrentPos(){return NULL;}
+	virtual double* getDesiredPos(){return NULL;}
 
 	virtual int synchronise() = 0;
 	virtual void edp_create();
@@ -144,7 +153,27 @@ public:
 
 	typedef void (UiRobot::*uiRobotFunctionPointer)();
 	typedef void (UiRobot::*uiRobotFunctionPointerInt)(int);
+	typedef int (UiRobot::*intUiRobotFunctionPointerInt)(int);
 	typedef int (UiRobot::*intUiRobotFunctionPointer)();
+
+	typedef std::map <QString, wgt_base*> wgt_t;
+	typedef wgt_t::value_type wgt_pair_t;
+
+	wgt_base * getWgtMotors()
+		{
+		return wgt_motors;
+		}
+
+	wgt_base *wgt_joints;
+	wgt_base *wgt_motors;
+
+	wgt_base *wgt_angle_axis;
+	wgt_base *wgt_euler;
+	wgt_base *wgt_relative_angle_axis;
+	wgt_base *wgt_tool_angle_axis;
+	wgt_base *wgt_tool_euler;
+
+	wgt_t wgts;
 
 };
 

@@ -24,12 +24,12 @@ const std::string WGT_IRP6OT_TFG_MOVE = "WGT_IRP6OT_TFG_MOVE";
 
 void UiRobot::on_actionirp6ot_tfg_EDP_Load_triggered()
 {
-	interface.get_main_window()->ui_robot_action(this, &UiRobot::edp_create);
+	//interface.get_main_window()->ui_robot_action(this, &UiRobot::edp_create);
 }
 
 void UiRobot::on_actionirp6ot_tfg_EDP_Unload_triggered()
 {
-	interface.get_main_window()->ui_robot_action(this, &UiRobot::EDP_slay_int);
+	//interface.get_main_window()->ui_robot_action(this, &UiRobot::EDP_slay_int);
 }
 
 //void UiRobot::on_actionirp6ot_tfg_Synchronization_triggered()
@@ -177,63 +177,62 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	wndbase_m[WGT_IRP6OT_TFG_MOVE] = wgt_move->dwgt;
 
 
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Load, 			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Load_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Unload, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Unload_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchronization, 	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchronization_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Move, 				SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Move_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchro_Position,	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchro_Position_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_0, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_0_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_1,			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_1_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_2, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_2_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Load, 			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Load_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_EDP_Unload, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_EDP_Unload_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchronization, 	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchronization_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Move, 				SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Move_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Synchro_Position,	SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Synchro_Position_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_0, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_0_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_1,			SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_1_triggered()), Qt::AutoCompatConnection);
+//	connect(interface.get_main_window()->get_ui()->actionirp6ot_tfg_Position_2, 		SIGNAL(triggered()), this, SLOT(on_actionirp6ot_tfg_Position_2_triggered()), Qt::AutoCompatConnection);
 }
 
 int UiRobot::manage_interface()
 {
 
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuIrp6ot_tfg);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuIrp6ot_tfg);
 
 			break;
 		case 0:
-			mw->enable_menu_item(false, 3, ui->actionirp6ot_tfg_EDP_Unload, ui->actionirp6ot_tfg_Synchronization, ui->actionirp6ot_tfg_Move);
-			mw->enable_menu_item(false, 1, ui->menuirp6ot_tfg_Preset_Positions);
-			mw->enable_menu_item(true, 1, ui->menuIrp6ot_tfg);
-			mw->enable_menu_item(true, 1, ui->actionirp6ot_tfg_EDP_Load);
+			mw->enable_menu_item(false, 3, mw->getMenuBar()->actionirp6ot_tfg_EDP_Unload, mw->getMenuBar()->actionirp6ot_tfg_Synchronization, mw->getMenuBar()->actionirp6ot_tfg_Move);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuirp6ot_tfg_Preset_Positions);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuIrp6ot_tfg);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionirp6ot_tfg_EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuIrp6ot_tfg);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuIrp6ot_tfg);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->actionirp6ot_tfg_Synchronization);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6ot_tfg_Synchronization);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, ui->actionirp6ot_tfg_EDP_Unload, ui->actionirp6ot_tfg_Move);
-						mw->enable_menu_item(true, 1, ui->menuirp6ot_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 1, ui->actionirp6ot_tfg_EDP_Load);
+						mw->enable_menu_item(true, 2, mw->getMenuBar()->actionirp6ot_tfg_EDP_Unload, mw->getMenuBar()->actionirp6ot_tfg_Move);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuirp6ot_tfg_Preset_Positions);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6ot_tfg_EDP_Load);
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, ui->actionirp6ot_tfg_Move);
-						mw->enable_menu_item(true, 1, ui->menuirp6ot_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 2, ui->actionirp6ot_tfg_EDP_Load, ui->actionirp6ot_tfg_EDP_Unload);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionirp6ot_tfg_Move);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuirp6ot_tfg_Preset_Positions);
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionirp6ot_tfg_EDP_Load, mw->getMenuBar()->actionirp6ot_tfg_EDP_Unload);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, ui->menuirp6ot_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 1, ui->actionirp6ot_tfg_Move);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuirp6ot_tfg_Preset_Positions);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6ot_tfg_Move);
 
 						break;
 					default:
@@ -241,8 +240,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, ui->actionirp6ot_tfg_EDP_Unload, ui->actionirp6ot_tfg_Synchronization, ui->actionirp6ot_tfg_Move);
-				mw->enable_menu_item(false, 1, ui->actionirp6ot_tfg_EDP_Load);
+				mw->enable_menu_item(true, 3, mw->getMenuBar()->actionirp6ot_tfg_EDP_Unload, mw->getMenuBar()->actionirp6ot_tfg_Synchronization, mw->getMenuBar()->actionirp6ot_tfg_Move);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6ot_tfg_EDP_Load);
 
 			}
 			break;

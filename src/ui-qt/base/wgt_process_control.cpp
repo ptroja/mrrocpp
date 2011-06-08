@@ -105,7 +105,9 @@ int wgt_process_control::init()
 
 	// Dla irp6_on_track
 
-	interface.irp6ot_m->process_control_window_irp6ot_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+
+
+	interface.irp6ot_m->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// Dla irp6_postument
 

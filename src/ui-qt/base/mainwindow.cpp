@@ -16,7 +16,7 @@
 #include "ui_sr.h"
 #include "ui_ecp.h"
 
-#include "../irp6ot_m/ui_r_irp6ot_m.h"
+//#include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
@@ -44,18 +44,14 @@
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
-#include "../irp6ot_m/ui_r_irp6ot_m.h"
+
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 
-//namespace mrrocpp {
-//namespace ui {
-//namespace irp6ot_m {
-//class UiRobot;
-//}
-//}
-//}
+
+
+
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
@@ -63,29 +59,51 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	ui->setupUi(this);
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
+	connect(this, SIGNAL(enable_menu_item_signal(QMenu *, bool)), this, SLOT(enable_menu_item_slot(QMenu *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *)), this, SLOT(open_new_window_slot(wgt_base *)), Qt::QueuedConnection);
+	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
+
+	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::irp6ot_m::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::irp6ot_m::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 
+	menuBar = new Ui::MenuBar(&interface, this);
 
-	signalDispatcher = new mrrocpp::ui::common::SignalDispatcher(interface);
+
+	signalDispatcher = new Ui::SignalDispatcher(interface);
 	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
 
 	//robotsSignalMapper = new QSignalMapper();
 
+
 	//open_new_window_signal(wgt_base *window);
 	main_thread_id = pthread_self();
 
+	//while(menuBar->actionirp6ot_m_EDP_Load==NULL)
+	//{printf("wait");}
+
+
+
+}
+
+void MainWindow::setMenu()
+{
+	menuBar->setupMenuBar(this);
+	interface.irp6ot_m->makeConnections();
 }
 
 //void MainWindow::
 
-mrrocpp::ui::common::SignalDispatcher* MainWindow::getSignalDispatcher()
+Ui::SignalDispatcher* MainWindow::getSignalDispatcher()
 {
 	return signalDispatcher;
+}
+
+mrrocpp::ui::common::Interface* MainWindow::getInterface()
+{
+	return &interface;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -106,13 +124,18 @@ MainWindow::~MainWindow()
 	delete signalDispatcher;
 }
 
+Ui::MenuBar* MainWindow::getMenuBar()
+{
+	return menuBar;
+}
+
 Ui::MainWindow * MainWindow::get_ui()
 {
 	return ui;
 }
 
 
-void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
+void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_item, ...)
 {
 	va_list menu_items;
 	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
@@ -127,9 +150,9 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 		//interface.print_on_sr("signal");
 		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 		/*
-		 emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		 emit enable_menu_item_signal(va_arg(menu_items, QMenu *), _enable);
 		 */
-		enable_menu_item_slot(va_arg(menu_items, QWidget *), _enable);
+		enable_menu_item_slot(va_arg(menu_items, QMenu *), _enable);
 	}
 
 	va_end(menu_items);
@@ -167,10 +190,10 @@ void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::
 	printf("ui robot action void 2");
 }
 
-void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument)
+void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointerInt pointer, int argument)
 {
 	interface.print_on_sr("ui robot action void arg int");
-	uiRobotFunctionPtrInt = pointer;
+	intUiRobotFunctionPtrInt = pointer;
 	emit ui_robot_signal(robot, argument);
 }
 
@@ -179,13 +202,10 @@ void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::
 	interface.print_on_sr("ui robot action int");
 	intUiRobotFunctionPtr = pointer;
 	emit ui_robot_signal(robot);
+
+
 }
 
-//void MainWindow::ui_robot_action(mrrocpp::ui::irp6ot::UiRobot * &robot, mrrocpp::ui::irp6ot::UiRobot::intUiRobotFunctionPointer pointer)
-//{
-//	intUiRobotFunctionPtr = pointer;
-//	emit ui_robot_signal(robot);
-//}
 
 
 void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot)
@@ -196,7 +216,8 @@ void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot)
 
 void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot, int argument)
 {
-	(*robot.*uiRobotFunctionPtrInt)(argument);
+	printf("ui robot slot int\n");
+	(*robot.*intUiRobotFunctionPtrInt)(argument);
 }
 
 
@@ -280,10 +301,11 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 
 }
 
-void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
+void MainWindow::enable_menu_item_slot(QMenu *_menu_item, bool _active)
 {
 	//interface.print_on_sr("menu coloring slot");
-	_menu_item->setDisabled(!_active);
+	//_menu_item->setDisabled(!_active);
+	_menu_item->menuAction()->setVisible(_active);
 	//if(!_active) _menu_item->hide();
 	// _menu_item->setShown(!_active);
 }
@@ -291,7 +313,7 @@ void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
 void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
 {
 	//interface.print_on_sr("menu coloring slot");
-	_menu_item->setDisabled(!_active);
+	_menu_item->setVisible(_active); //setDisabled(!_active);
 }
 
 void MainWindow::ui_notification_slot()
@@ -955,4 +977,6 @@ void MainWindow::on_actionSlay_All_triggered()
 {
 	interface.slay_all();
 }
+
+
 

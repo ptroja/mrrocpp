@@ -104,55 +104,54 @@ int UiRobot::synchronise_int()
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuSpkm);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuSpkm);
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Unload);
-			mw->enable_menu_item(false, 1, ui->actionspkm_Clear_Fault);
-			mw->enable_menu_item(false, 3, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
-			mw->enable_menu_item(true, 1, ui->menuSpkm);
-			mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Load);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionspkm_EDP_Unload);
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionspkm_Clear_Fault);
+			mw->enable_menu_item(false, 3, mw->getMenuBar()->menuspkm_Pre_synchro_moves, mw->getMenuBar()->menuspkm_Preset_positions, mw->getMenuBar()->menuspkm_Post_synchro_moves);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuSpkm);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionspkm_EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuSpkm);
-			mw->enable_menu_item(true, 1, ui->actionspkm_Clear_Fault);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuSpkm);
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionspkm_Clear_Fault);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
-						mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload); //???
-						mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
+						mw->enable_menu_item(true, 2, mw->getMenuBar()->menuspkm_Preset_positions, mw->getMenuBar()->menuspkm_Post_synchro_moves);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionspkm_EDP_Unload); //???
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionspkm_EDP_Load);
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);//???
-						mw->enable_menu_item(false, 2, ui->actionspkm_EDP_Load, ui->actionspkm_EDP_Unload);
+						mw->enable_menu_item(true, 2, mw->getMenuBar()->menuspkm_Preset_positions, mw->getMenuBar()->menuspkm_Post_synchro_moves);//???
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionspkm_EDP_Load, mw->getMenuBar()->actionspkm_EDP_Unload);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
+						mw->enable_menu_item(false, 2, mw->getMenuBar()->menuspkm_Preset_positions, mw->getMenuBar()->menuspkm_Post_synchro_moves);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload);
-				mw->enable_menu_item(true, 1, ui->menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionspkm_EDP_Unload);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionspkm_EDP_Load);
 			}
 			break;
 		default:
