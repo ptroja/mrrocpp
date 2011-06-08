@@ -35,11 +35,17 @@ void catch_signal_in_ecp(int sig)
 	{
 		// print info message
 		case SIGTERM:
-			ecp_t->sr_ecp_msg->message("ecp terminated");
+			if (ecp_t) {
+				ecp_t->sr_ecp_msg->message("ecp terminated");
+			}
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
-			fprintf(stderr, "Segmentation fault in ECP process %s\n", ecp_t->config.section_name.c_str());
+			if (ecp_t) {
+				fprintf(stderr, "Segmentation fault in ECP process %s\n", ecp_t->config.section_name.c_str());
+			} else {
+				fprintf(stderr, "Segmentation fault (no ecp_task constructed)\n");
+			}
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	}
@@ -81,34 +87,51 @@ int main(int argc, char *argv[])
 		{
 			case lib::SYSTEM_ERROR:
 			case lib::FATAL_ERROR:
-				ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				exit(EXIT_FAILURE);
+				if (ecp::common::ecp_t) {
+					ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+				}
+
 				break;
 			default:
 				break;
 		}
+		exit(EXIT_FAILURE);
 	} catch (ecp::common::generator::ECP_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+		}
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
 	} catch (lib::sensor::sensor_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+		}
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
 	} catch (ecp_mp::transmitter::transmitter_error & e) {
-		ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
+		}
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
 	}
 
 	catch (const std::exception& e) {
 		std::string tmp_string(" The following error has been detected: ");
 		tmp_string += e.what();
-		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+		}
 		std::cerr << "ecp: The following error has been detected :\n\t" << e.what() << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	catch (...) { /* Dla zewnetrznej petli try*/
 		/* Wylapywanie niezdefiniowanych bledow*/
 		/*Komunikat o bledzie wysylamy do SR*/
-		ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, ECP_UNIDENTIFIED_ERROR);
+		}
 		exit(EXIT_FAILURE);
 	} /*end: catch */
 
