@@ -332,9 +332,9 @@ void fsautomat::configureProperSensor(const char *propSensor)
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-				{
-					sensor_item.second->configure_sensor();
-				}
+	{
+		sensor_item.second->configure_sensor();
+	}
 }
 
 void fsautomat::configureProperTransmitter(const char *propTrans)
@@ -349,7 +349,7 @@ void fsautomat::stopProperGen(const common::State &state)
 	if (!state.robotSet)
 		send_end_motion_to_ecps(1, (state.getRobot()).c_str());
 	// TODO
-	//send_end_motion_to_ecps(state.robotSet->firstSetCount, state.robotSet->firstSet);
+	//send_end_motion_to_ecps(state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::runWaitFunction(const common::State &state)
@@ -359,13 +359,16 @@ void fsautomat::runWaitFunction(const common::State &state)
 
 void fsautomat::runEmptyGen(const common::State &state)
 {
-	//	run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
+	//TODO
+	//run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
+	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
-	// TODO
-	//wait_for_task_termination(false, state.robotSet->secondSetCount, state.robotSet->secondSet);
+	//TODO
+	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
+	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)
@@ -686,8 +689,11 @@ void fsautomat::communicate_with_windows_solver(common::State &state)
 	//pocztaek ukladania
 	// dodawanie manipulacji do listy
 	for (unsigned int char_i = 0; char_i < strlen(manipulation_sequence) - 1; char_i += 2) {
-		manipulation_list.push_back(common::SingleManipulation(common::read_cube_color(manipulation_sequence[char_i]), common::read_cube_turn_angle(manipulation_sequence[char_i
-				+ 1])));
+		manipulation_list.push_back(common::SingleManipulation(
+				common::read_cube_color(manipulation_sequence[char_i]),
+				common::read_cube_turn_angle(manipulation_sequence[char_i + 1])
+				)
+			);
 	}
 	//manipulation_sequence_computed = true;
 	state.setProperTransitionResult(true);
@@ -697,57 +703,55 @@ void fsautomat::translateManipulationSequence(common::StateHeap &sh)
 {
 	std::list <const char *> scenario;
 
-	BOOST_FOREACH(const common::SingleManipulation & manipulation, manipulation_list)
-				{
-					if (manipulation.face_to_turn == cube_state.getUp()) {
-						scenario.push_back("fco_CL_90_1");
-						changeCubeState(90);
-					} else if (manipulation.face_to_turn == cube_state.getDown()) {
-						scenario.push_back("fco_CCL_90_1");
-						changeCubeState(270);
-					} else if (manipulation.face_to_turn == cube_state.getFront()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-						scenario.push_back("fto_CL_0_1");
-						scenario.push_back("fco_CL_90_1");
-						changeCubeState(90);
-					} else if (manipulation.face_to_turn == cube_state.getRear()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-						scenario.push_back("fto_CL_0_1");
-						scenario.push_back("fco_CCL_90_1");
-						changeCubeState(270);
-					} else if (manipulation.face_to_turn == cube_state.getLeft()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-					} else if (manipulation.face_to_turn == cube_state.getRight()) {
-						scenario.push_back("fco_CL_180_1");
-						changeCubeState(180);
-					}
-					switch (manipulation.turn_angle)
-					{
-						case common::CL_90:
-							scenario.push_back("fto_CL_90_1");
-							break;
-						case common::CL_0:
-							scenario.push_back("fto_CL_0_1");
-							break;
-						case common::CCL_90:
-							scenario.push_back("fto_CCL_90_1");
-							break;
-						case common::CL_180:
-							scenario.push_back("fto_CL_180_1");
-							break;
-						default:
-							break;
-					}
-				}
+	BOOST_FOREACH(const common::SingleManipulation & manipulation, manipulation_list) {
+		if (manipulation.face_to_turn == cube_state.getUp()) {
+			scenario.push_back("fco_CL_90_1");
+			changeCubeState(90);
+		} else if (manipulation.face_to_turn == cube_state.getDown()) {
+			scenario.push_back("fco_CCL_90_1");
+			changeCubeState(270);
+		} else if (manipulation.face_to_turn == cube_state.getFront()) {
+			scenario.push_back("fco_CL_0_1");
+			changeCubeState(0);
+			scenario.push_back("fto_CL_0_1");
+			scenario.push_back("fco_CL_90_1");
+			changeCubeState(90);
+		} else if (manipulation.face_to_turn == cube_state.getRear()) {
+			scenario.push_back("fco_CL_0_1");
+			changeCubeState(0);
+			scenario.push_back("fto_CL_0_1");
+			scenario.push_back("fco_CCL_90_1");
+			changeCubeState(270);
+		} else if (manipulation.face_to_turn == cube_state.getLeft()) {
+			scenario.push_back("fco_CL_0_1");
+			changeCubeState(0);
+		} else if (manipulation.face_to_turn == cube_state.getRight()) {
+			scenario.push_back("fco_CL_180_1");
+			changeCubeState(180);
+		}
+		switch (manipulation.turn_angle)
+		{
+			case common::CL_90:
+				scenario.push_back("fto_CL_90_1");
+				break;
+			case common::CL_0:
+				scenario.push_back("fto_CL_0_1");
+				break;
+			case common::CCL_90:
+				scenario.push_back("fto_CCL_90_1");
+				break;
+			case common::CL_180:
+				scenario.push_back("fto_CL_180_1");
+				break;
+			default:
+				break;
+		}
+	}
 
 	scenario.reverse();
-	BOOST_FOREACH(const char * ptr, scenario)
-				{
-					sh.pushTargetName(ptr);
-				}
+	BOOST_FOREACH(const char * ptr, scenario) {
+		sh.pushTargetName(ptr);
+	}
 	sh.showHeapContent();
 }
 
@@ -770,9 +774,9 @@ void fsautomat::main_task_algorithm(void)
 
 	// temporary sensor config in this place
 	BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m)
-				{
-					s.second->configure_sensor();
-				}
+	{
+		s.second->configure_sensor();
+	}
 
 	for (; nextState != "_STOP_"; nextState = stateMap[nextState].returnNextStateID(sh)) {
 
@@ -792,52 +796,64 @@ void fsautomat::main_task_algorithm(void)
 			executeMotion(stateMap[nextState]);
 			std::cout << "TESTmotion" << std::endl;
 			std::cout << nextState << " -> zakonczony" << std::endl;
-		} else if (currentStateType == "emptyGenForSet") {
+		}
+		else if (currentStateType == "emptyGenForSet") {
 			runEmptyGenForSet(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "emptyGen") {
+		}
+		else if (currentStateType == "emptyGen") {
 			runEmptyGen(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "wait") {
+		}
+		else if (currentStateType == "wait") {
 			runWaitFunction(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "stopGen") {
+		}
+		else if (currentStateType == "stopGen") {
 			stopProperGen(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "systemInitialization") {
+		}
+		else if (currentStateType == "systemInitialization") {
 			std::cout << "In system initialization.." << std::endl;
 			sensorInitialization();
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "cubeStateInit") {
+		}
+		else if (currentStateType == "cubeStateInit") {
 			initializeCubeState(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "initiateSensorReading") {
+		}
+		else if (currentStateType == "initiateSensorReading") {
 			initiateSensorReading(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "getSensorReading") {
+		}
+		else if (currentStateType == "getSensorReading") {
 			getSensorReading(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "cubeStateWriting") {
+		}
+		else if (currentStateType == "cubeStateWriting") {
 			writeCubeState(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "cubeStateChange") {
+		}
+		else if (currentStateType == "cubeStateChange") {
 			changeCubeState(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "communicateWithSolver") {
+		}
+		else if (currentStateType == "communicateWithSolver") {
 			communicate_with_windows_solver(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "manipulationSeqTranslation") {
+		}
+		else if (currentStateType == "manipulationSeqTranslation") {
 			translateManipulationSequence(sh);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 		}

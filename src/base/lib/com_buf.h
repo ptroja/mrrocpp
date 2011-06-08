@@ -29,6 +29,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/nvp.hpp>
 
 #include "base/lib/impconst.h"
 #include "base/lib/typedefs.h"

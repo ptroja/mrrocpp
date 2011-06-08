@@ -8,7 +8,7 @@ if(LibFTDI_FOUND)
 
     # Test utilities
     add_executable(test test.cc)
-    target_link_libraries (test epos)
+    target_link_libraries (test epos rt)
     
     add_executable(sctest sctest.cc)
     target_link_libraries (sctest epos rt)

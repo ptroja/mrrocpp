@@ -56,7 +56,7 @@ option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
 if (UBUNTU32BIT)
 	# 32-bit headers and libraries are kept in 'mrlib' repository
-	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.10-32bit")
+	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.04-32bit")
 	set(MRLIB "${UBUNTU32BIT_ROOT}/usr")
 
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 
