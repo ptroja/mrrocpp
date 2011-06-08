@@ -26,7 +26,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 
-boost::shared_ptr<common::task::task_base> ecp_t;
+boost::shared_ptr <common::task::task_base> ecp_t;
 
 void catch_signal_in_ecp(int sig)
 {
@@ -62,7 +62,8 @@ int main(int argc, char *argv[])
 		// configuration read
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3]);
 
-		ecp::common::ecp_t = (boost::shared_ptr<ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
+		ecp::common::ecp_t
+				= (boost::shared_ptr <ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 
 		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 3);
 
@@ -119,9 +120,9 @@ int main(int argc, char *argv[])
 			ecp::common::ecp_t->wait_for_start();
 			//	std::cerr << "ecp 2" << std::endl;
 			ecp::common::ecp_t->main_task_algorithm();
-
-			ecp::common::ecp_t->wait_for_stop();
 			ecp::common::ecp_t->sr_ecp_msg->message("Press STOP");
+			ecp::common::ecp_t->wait_for_stop();
+
 		}
 
 		catch (ecp_mp::task::ECP_MP_main_error & e) {
