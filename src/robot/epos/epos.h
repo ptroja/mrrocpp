@@ -90,16 +90,6 @@ private:
 	/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
 	/* [ one simplification: Node-ID is always 0] */
 
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
-	 *
-	 * @param ans answer buffer
-	 * @param length of answer buffer
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @return answer array from the controller
-	 */
-	unsigned int ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex);
-
 	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param index object entry index in a dictionary
@@ -110,10 +100,7 @@ private:
 	T ReadObjectValue(WORD index, BYTE subindex)
 	{
 		WORD answer[8];
-		ReadObject(answer, 8, index, subindex);
-
-		// check error code
-		checkEPOSerror(device.E_error);
+		device.ReadObject(answer, 8, nodeId, index, subindex);
 
 #ifdef DEBUG
 		T val;
@@ -132,37 +119,31 @@ private:
 		}
 	}
 
-#if 0
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2
-	 *
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 */
-	int InitiateSegmentedRead(WORD index, BYTE subindex );
-
-	/*! \brief read data segment of the object initiated with 'InitiateSegmentedRead()'
-	 *
-	 * @param ptr pointer to data to be filled
-	 */
-	int SegmentRead(WORD **ptr);
-#endif
-
-	/*! \brief write obect to EPOS
-	 *
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @param data pointer to a 2 WORDs array (== 4 BYTES) holding data to transmit
-	 */
-	void WriteObject(WORD index, BYTE subindex, const WORD data[2]);
-
 	/*! \brief write object value to EPOS
 	 *
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
-	 * @param data0 first WORD of the object
-	 * @param data1 second WORD of the object
+	 * @param data object data
 	 */
-	void WriteObjectValue(WORD index, BYTE subindex, uint32_t data);
+	template<class T>
+	void WriteObjectValue(WORD index, BYTE subindex, T data)
+	{
+		device.WriteObject(nodeId, index, subindex, (uint32_t) data);
+	}
+
+	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	 *
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 */
+	void InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+
+	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
+	 *
+	 * @param ptr pointer to data to be filled
+	 * @param len length of the data to write
+	 */
+	void SegmentedWrite(BYTE * ptr, std::size_t len);
 
 	/*! \brief compare two 16bit bitmasks
 	 *
@@ -175,6 +156,9 @@ private:
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
 
+	//! remote operation enable bit
+	bool remote;
+
 public:
 	/*! \brief create new USB EPOS object
 	 *
@@ -182,9 +166,6 @@ public:
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
-
-	/*! \brief check global variable E_error for EPOS error code */
-	static void checkEPOSerror(DWORD E_error);
 
 	/*! \brief check if the connection to EPOS is alive */
 	//		int checkEPOS();
@@ -196,8 +177,15 @@ public:
 	//! Find EPOS state corresponding to given status word
 	static int status2state(WORD w);
 
+	//! Check if the remote operation is enabled
+	//! @param status status word
+	static bool isRemoteOperationEnabled(WORD status);
+
 	//! Utility routine to pretty print device state
 	static const char * stateDescription(int state);
+
+	//! Change the state of the remote (CAN) operation, required for the PDO requests
+	void setRemoteOperation(bool enable);
 
 	/*! \brief pretty-print EPOS state
 	 *
@@ -225,6 +213,9 @@ public:
 
 	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
 	void changeEPOSstate(state_t state);
+
+	/*! \brief read CAN Node ID */
+	UNSIGNED8 readNodeID();
 
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 readSWversion();
@@ -593,7 +584,57 @@ public:
 	/*! Clear a buffer and reenable access to it */
 	void clearPvtBuffer();
 
-	static const char * ErrorCodeMessage(UNSIGNED32 code);
+	//! write Interpolation Sub Mode Selection
+	void writeInterpolationSubModeSelection(INTEGER16 val);
+
+	//! read Interpolation Sub Mode Selection
+	INTEGER16 readInterpolationSubModeSelection();
+
+	//! write Interpolation Time Period Value
+	void writeInterpolationTimePeriod(UNSIGNED8 val);
+
+	//! read Interpolation Time Period Value
+	UNSIGNED8 readInterpolationTimePeriod();
+
+	//! write Interpolation Time Index
+	void writeInterpolationTimeIndex(INTEGER8 val);
+
+	//! read Interpolation Time Period Index
+	INTEGER8 readInterpolationTimeIndex();
+
+	//! write Interpolation data record
+	void writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time);
+
+	//! read Interpolation buffer status
+	UNSIGNED16 readInterpolationBufferStatus();
+
+	//! check Interpolation Buffer warning
+	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
+
+	//! check Interpolation Buffer underflow warning
+	static bool checkInterpolationBufferUnderflowWarning(UNSIGNED16 status);
+
+	//! check Interpolation Buffer error
+	static bool checkInterpolationBufferError(UNSIGNED16 status);
+
+	static void printInterpolationBufferStatus(UNSIGNED16 status);
+
+	//! read Interpolation buffer underflow warning
+	UNSIGNED16 readInterpolationBufferUnderflowWarning();
+
+	//! write Interpolation buffer underflow warning
+	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 val);
+
+	//! read Interpolation buffer overflow warning
+	UNSIGNED16 readInterpolationBufferOverflowWarning();
+
+	//! write Interpolation buffer overflow warning
+	void writeInterpolationBufferOverflowWarning(UNSIGNED16 val);
+
+	//! start Interpolated Position Mode motion
+	void startInterpolatedPositionMotion();
+
+	/*static*/ const char * ErrorCodeMessage(UNSIGNED32 code);
 
 	//! Homing method
 	typedef enum _homing_method

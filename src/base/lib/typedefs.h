@@ -10,20 +10,6 @@
 #if !defined(__TYPEDEFS_H)
 #define __TYPEDEFS_H
 
-#if defined(__QNXNTO__)
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-
-typedef struct _pulse msg_header_t;
-
-//! Pulse data structure
-typedef struct
-{
-	msg_header_t hdr;
-	int data; // TODO: this probably is not needed anymore
-} _pulse_msg;
-
-#else
 /* --- Symbolic names of the error return conditions --- */
 
 #define EOK              0  /* No error */
@@ -79,17 +65,17 @@ typedef int clockid_t;
 #   define TIMER_ABSTIME        1
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-int clock_gettime( clockid_t clock_id, struct timespec * tp );
+	int clock_gettime( clockid_t clock_id, struct timespec * tp );
 
-/* declaration only; not replaced yet, but this is used only for robot hardware drivers */
-int clock_nanosleep(clockid_t clock_id, int flags,
-       const struct timespec *rqtp, struct timespec *rmtp);
+	/* declaration only; not replaced yet, but this is used only for robot hardware drivers */
+	int clock_nanosleep(clockid_t clock_id, int flags,
+			const struct timespec *rqtp, struct timespec *rmtp);
 
 #ifdef __cplusplus
- }
+}
 #endif
 
 #define	out8(port,val)	(void) 0
@@ -98,7 +84,5 @@ int clock_nanosleep(clockid_t clock_id, int flags,
 #define	in16(port)		0
 
 #endif
-
-#endif /* ! __QNXNTO__ */
 
 #endif /* __TYPEDEFS_H */

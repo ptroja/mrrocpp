@@ -28,7 +28,7 @@ namespace mp {
 namespace common {
 
 // obiekt z metodami i polami dla procesu MP (polimorficzny)
-boost::shared_ptr<task::task> mp_t;
+boost::shared_ptr <task::task> mp_t;
 
 void catch_signal_in_mp(int sig)
 {
@@ -39,7 +39,9 @@ void catch_signal_in_mp(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
-			mp_t->sr_ecp_msg->message("mp terminated");
+			if (mp_t) {
+				mp_t->sr_ecp_msg->message("mp terminated");
+			}
 			// restore default (none) handler for SIGCHLD
 			signal(SIGCHLD, SIG_DFL);
 			exit(EXIT_SUCCESS);
@@ -91,19 +93,19 @@ int main(int argc, char *argv[], char **arge)
 	// zewnetrzne try
 	try {
 		// This block is from where the configurator is supposed to be accessible
-		boost::shared_ptr<lib::configurator> _config;
+		boost::shared_ptr <lib::configurator> _config;
 
 		try {
-			_config = (boost::shared_ptr<lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
+			_config = (boost::shared_ptr <lib::configurator>) new lib::configurator(argv[1], argv[2], lib::MP_SECTION);
 
-			mp::common::mp_t = (boost::shared_ptr<mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
+			mp::common::mp_t = (boost::shared_ptr <mrrocpp::mp::task::task>) mp::task::return_created_mp_task(*_config);
 
 			// Utworzenie listy robotow, powolanie procesow ECP i nawiazanie komunikacji z nimi
 			mp::common::mp_t->create_robots();
 
 			mp::common::mp_t->sr_ecp_msg->message("mp loaded");
 
-			lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 4);
+			lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 4);
 
 			signal(SIGTERM, &(mp::common::catch_signal_in_mp));
 
@@ -131,43 +133,62 @@ int main(int argc, char *argv[], char **arge)
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 				case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-					mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					if (mp::common::mp_t) {
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					}
 					break;
 				default:
 					perror("Message to SR has been already sent");
 			}/* end:switch */
-			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
+			}
+			exit(EXIT_FAILURE);
 		}
 
 		catch (lib::sensor::sensor_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			}
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (mp::generator::MP_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+			}
 			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (ecp_mp::transmitter::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
+			}
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (const std::exception& e) {
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+			}
 			std::cerr << "mp: The following error has been detected :\n\t" << e.what() << std::endl;
+			exit(EXIT_FAILURE);
 		}
 
 		catch (...) { /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+			}
 			exit(EXIT_FAILURE);
 		}
 
@@ -180,7 +201,7 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->wait_for_start();
 
 				// Wyslanie START do wszystkich ECP
-				mp::common::mp_t->start_all(mp::common::mp_t->robot_m);
+				mp::common::mp_t->start_all();
 
 				mp::common::mp_t->main_task_algorithm();
 
@@ -188,7 +209,7 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->wait_for_stop();
 
 				// Wyslanie STOP do wszystkich ECP po zakonczeniu programu uzytkownika
-				mp::common::mp_t->terminate_all(mp::common::mp_t->robot_m);
+				mp::common::mp_t->terminate_all();
 			} // end: try
 
 			catch (ecp_mp::task::ECP_MP_main_error & e) {

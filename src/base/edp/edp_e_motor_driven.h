@@ -16,6 +16,7 @@
 #include <boost/thread/condition.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include "base/lib/condition_synchroniser.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
@@ -23,6 +24,9 @@
 //#ifdef DOCENT_SENSOR
 #include <boost/function.hpp>
 //#endif
+
+
+static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
 
 namespace mrrocpp {
 namespace edp {
@@ -78,6 +82,7 @@ protected:
 	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
 	//#endif
+
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -200,12 +205,24 @@ public:
 	//#endif
 
 	/*!
+	 * \brief The velocity limit global factor
+	 *
+	 * (0..1> default value is VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT
+	 */
+	float velocity_limit_global_factor;
+
+	/*!
 	 * \brief object to store output and input data
 	 *
 	 * It is used for the purpose of governing of input data form the hardware
 	 * and transmission of output data to the hardware
 	 */
 	in_out_buffer in_out_obj;
+
+	/*!
+	 * \brief to wait for servo_buffer load in servo
+	 */
+	lib::condition_synchroniser sb_loaded;
 
 	/*!
 	 * \brief object to handle measurements
@@ -247,7 +264,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief class destructor

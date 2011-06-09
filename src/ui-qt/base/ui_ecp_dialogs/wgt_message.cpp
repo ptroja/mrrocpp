@@ -11,7 +11,7 @@ wgt_message::wgt_message(mrrocpp::ui::common::Interface& _interface, QWidget *pa
 
 wgt_message::~wgt_message()
 {
-
+	delete ui;
 }
 
 Ui::wgt_messageClass * wgt_message::get_ui()

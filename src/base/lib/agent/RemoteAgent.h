@@ -2,13 +2,17 @@
 #define __REMOTE_AGENT_H
 
 #include <string>
+#include <unistd.h>
 
 #include <boost/serialization/string.hpp>
 
 #include "AgentBase.h"
 #include "base/lib/xdr/xdr_oarchive.hpp"
+#include "base/lib/impconst.h"
 
 #include "../messip/messip.h"
+// TODO: rewrite with messip dataport wrapper
+#include "../messip/messip_dataport.h"
 
 class RemoteAgent : public AgentBase {
 private:
@@ -28,31 +32,39 @@ public:
 				oa.get_buffer(), oa.getArchiveSize(),
 				NULL, NULL, -1, MESSIP_NOTIMEOUT);
 
-		// TODO: check for results
-		if (ret != 0) throw;
+		if (ret != 0) {
+			throw std::logic_error("Could not send to remote agent");
+		}
 	};
 
 	RemoteAgent(const std::string & _name) :
 		AgentBase(_name)
 	{
-		channel = messip_channel_connect(NULL, getName().c_str(), MESSIP_NOTIMEOUT);
-		if(channel == NULL) {
-			// TODO: check for results
-			throw;
+		// nawiazanie komunikacji z ECP
+		unsigned int tmp = 0;
+		// kilka sekund  (~1) na otworzenie urzadzenia
+
+		while ((channel = messip::port_connect(_name)) == NULL) {
+			if ((tmp++) < lib::CONNECT_RETRY) {
+				usleep(lib::CONNECT_DELAY);
+			} else {
+				fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
+				throw std::logic_error("Connect from remote agent failed");
+			}
 		}
 	}
 
 	virtual ~RemoteAgent()
 	{
-		if(messip_channel_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
+		if(messip::port_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
 			// TODO: check for results
-			throw;
+			throw std::logic_error("Disconnect from remote agent failed");
 		}
 	}
 };
 
 template <class T>
-class RemoteBuffer {
+class OutputBuffer {
 private:
 	//! name of the buffer
 	const std::string name;
@@ -62,13 +74,13 @@ private:
 
 public:
 	//! Construct remote buffer proxy
-	RemoteBuffer(RemoteAgent & _owner, const std::string & _name)
+	OutputBuffer(RemoteAgent & _owner, const std::string & _name)
 		: name(_name), owner(_owner)
 	{
 	}
 
 	//! Set the contents of the remove buffer
-	void Set(const T & data) {
+	void Send(const T & data) {
 		xdr_oarchive<> oa;
 		oa << name;
 		oa << data;

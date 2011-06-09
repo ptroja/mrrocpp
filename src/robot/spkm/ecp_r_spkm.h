@@ -109,7 +109,6 @@ public:
 	 * basing on edp reply buffer
 	 */
 	void get_reply();
-
 };
 } // namespace spkm
 } // namespace ecp

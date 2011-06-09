@@ -128,5 +128,6 @@ void sr_ecp::interpret(char * description, error_class_t message_type, uint64_t 
 	} // end: switch (message_type)
 }
 
+
 } // namespace lib
 } // namespace mrrocpp

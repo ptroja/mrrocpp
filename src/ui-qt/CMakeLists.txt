@@ -43,6 +43,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Source files
 SET(GUI_CXX_SRCS
+	base/interface.cc	
     base/main.cpp
     base/mainwindow.cpp
     base/wgt_base.cpp
@@ -70,6 +71,7 @@ SET(GUI_CXX_SRCS
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
+	base/interface.h	
     base/mainwindow.h
     base/wgt_base.h
     base/wgt_process_control.h
@@ -131,7 +133,6 @@ ADD_EXECUTABLE(
 	${GUI_CXX_SRCS}
 	base/ui_sr.cc
 	base/ui_ecp.cc
-	base/interface.cc
 	base/ui_ecp_robot/ui_ecp_r_common.cc
 	irp6ot_m/ui_r_irp6ot_m.cc
 	irp6p_m/ui_r_irp6p_m.cc
@@ -157,9 +158,10 @@ ADD_EXECUTABLE(
 # Link executable with QT libraries
 TARGET_LINK_LIBRARIES(
 	ui-qt
-	ecp_robots ecp_mp
+	ecp_robot
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
+	boost_regex
 )
 
 install(

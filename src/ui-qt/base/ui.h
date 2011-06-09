@@ -22,6 +22,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/lib/messip/messip_dataport.h"
+#include "base/lib/agent/RemoteAgent.h"
 
 enum UI_NOTIFICATION_STATE_ENUM
 {
@@ -41,49 +42,6 @@ enum TEACHING_STATE
 {
 	ECP_TEACHING, MP_RUNNING, MP_PAUSED, MP_PAUSED_H
 };
-
-#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-	if (e.error_class == lib::SYSTEM_ERROR) \
-		printf("ecp lib::SYSTEM_ERROR error in UI\n"); \
-		interface.ui_state=2; \
-	/*  exit(EXIT_FAILURE);*/ \
-  } /*end: catch */ \
-\
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-	if ( er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */ \
-		perror("ecp lib::SYSTEM_ERROR in UI"); \
-		/* PtExit( EXIT_SUCCESS ); */ \
-	} else { \
-	switch ( er.error_no ) { \
-		case INVALID_POSE_SPECIFICATION: \
-		case INVALID_COMMAND_TO_EDP: \
-		case EDP_ERROR: \
-		case INVALID_ROBOT_MODEL_TYPE: \
-			/* Komunikat o bledzie wysylamy do SR */ \
-			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, er.error_no); \
-		break; \
-		default: \
-			interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception"); \
-			perror("Unidentified exception"); \
-		} /* end: switch */ \
-	} \
-} /* end: catch */ \
-\
-catch(const std::exception & e){\
-	std::string tmp_string(" The following error has been detected: ");\
-	tmp_string += e.what(); \
-	interface.all_ecp_msg->message (lib::NON_FATAL_ERROR, tmp_string.c_str());\
-   std::cerr<<"UI: The following error has been detected :\n\t"<<e.what()<<std::endl;\
-}\
-\
-catch (...) {  /* Dla zewnetrznej petli try*/ \
-	/* Wylapywanie niezdefiniowanych bledow*/ \
-	/* Komunikat o bledzie wysylamy do SR (?) */ \
-	fprintf(stderr, "unidentified error in UI\n"); \
-} /*end: catch */\
-
 
 enum TEACHING_STATE_ENUM
 {
@@ -107,19 +65,24 @@ enum UI_MP_STATE
 
 enum UI_ALL_EDPS_STATE
 {
-	UI_ALL_EDPS_NONE_EDP_ACTIVATED,
-	UI_ALL_EDPS_NONE_EDP_LOADED,
-	UI_ALL_EDPS_THERE_IS_EDP_LOADED_BUT_NOT_ALL_ARE_LOADED,
-	UI_ALL_EDPS_LOADED_BUT_NOT_SYNCHRONISED,
-	UI_ALL_EDPS_LOADED_AND_SYNCHRONISED
+	UI_ALL_EDPS_STATE_NOT_KNOWN,
+	UI_ALL_EDPS_NONE_ACTIVATED,
+	UI_ALL_EDPS_NONE_LOADED,
+	UI_ALL_EDPS_SOME_LOADED,
+	UI_ALL_EDPS_ALL_LOADED,
+};
+
+enum UI_ALL_EDPS_SYNCHRO_STATE
+{
+	UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN,
+	UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED,
+	UI_ALL_EDPS_NONE_SYNCHRONISED,
+	UI_ALL_EDPS_SOME_SYNCHRONISED,
+	UI_ALL_EDPS_ALL_SYNCHRONISED
 };
 
 // -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
 // 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
-
-
-// czas jaki uplywa przed wyslaniem sygnalu w funkcji ualarm w mikrosekundach
-static const useconds_t SIGALRM_TIMEOUT = 1000000;
 
 typedef enum _EDP_STATE
 {
@@ -171,16 +134,20 @@ typedef struct
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	lib::fd_client_t pulse_fd;
+	RemoteAgent * MP;
+	OutputBuffer<char> * pulse;
 	UI_MP_STATE state;
-	UI_MP_STATE last_state;
+	UI_MP_STATE last_process_control_state;
+	UI_MP_STATE last_manage_interface_state;
 } mp_state_def;
 
 typedef struct
 {
 	std::string program_name;
 	std::string node_name;
-} program_node_def;
+	std::string user_name;
+	bool is_qnx;
+} program_node_user_def;
 
 class function_execution_buffer
 {

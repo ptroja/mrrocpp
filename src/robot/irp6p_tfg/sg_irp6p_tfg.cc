@@ -47,14 +47,16 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//int max_current[lib::irp6p_tfg::NUM_OF_SERVOS] = { AXIS_7_MAX_CURRENT };
 
-	const std::vector<std::string> ports_vector(mrrocpp::lib::irp6p_tfg::ports_strings,
-				mrrocpp::lib::irp6p_tfg::ports_strings+mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_tfg::MAX_INCREMENT);
+	const std::vector <std::string>
+			ports_vector(mrrocpp::lib::irp6p_tfg::ports_strings, mrrocpp::lib::irp6p_tfg::ports_strings
+					+ mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM + 1);
+	hi
+			= new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6p_tfg::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6p_tfg::MAX_INCREMENT);
 	hi->init();
 
 	//Ustawienie zwlocznego ograniczenia pradowego - dlugotrwale przekroczenie ustawionej wartosci
 	//spowoduje wlaczenie stopu awaryjnego przez sterownik
-		hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_tfg::MAX_CURRENT_0);
+	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6p_tfg::MAX_CURRENT_0);
 	//	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, 0);
 
 	// utworzenie tablicy regulatorow
@@ -62,7 +64,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	// regulator_ptr[1] = new NL_regulator_2 (0, 0, 0.71, 13./4, 12.57/4, 0.35);
 	// kolumna dla irp6 postument
-	regulator_ptr[0] = new NL_regulator_8_irp6p(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[0] = new NL_regulator_8_irp6p(0, 0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 
@@ -79,15 +81,7 @@ void servo_buffer::get_all_positions(void)
 }
 /*-----------------------------------------------------------------------*/
 
-} // namespace irp6p
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new irp6p_tfg::servo_buffer((irp6p_tfg::effector &) (_master));
-}
-
-} // namespace common
+} // namespace irp6p_tfg
 } // namespace edp
 } // namespace mrrocpp
 

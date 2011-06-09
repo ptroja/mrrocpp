@@ -51,7 +51,7 @@ void ecp_t_conveyor_uniform_acceleration::main_task_algorithm(void)
 		}
 	}
 
-	ecp_termination_notice();
+	termination_notice();
 }
 
 } //namespace task

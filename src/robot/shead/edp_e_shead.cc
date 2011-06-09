@@ -27,8 +27,8 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::shead::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	motor_driven_effector(_shell, lib::shead::ROBOT_NAME)
 {
 
 	number_of_servos = lib::shead::NUM_OF_SERVOS;
@@ -160,9 +160,9 @@ void effector::reply_serialization(void)
 namespace common {
 
 
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new shead::effector(_config);
+	return new shead::effector(_shell);
 }
 
 } // namespace common

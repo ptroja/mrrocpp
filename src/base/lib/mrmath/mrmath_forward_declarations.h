@@ -19,6 +19,7 @@ class Ft_vector;
 class Xyz_Rpy_vector;
 class Xyz_Angle_Axis_vector;
 class Xyz_Euler_Zyz_vector;
+class Xyz_Angle_Axis_Gamma_vector;
 class Ft_tr;
 class V_tr;
 class Ft_v_tr;

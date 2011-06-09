@@ -21,19 +21,7 @@ namespace irp6p_m {
  * @brief IRp6 postument manipulator robot label
  * @ingroup irp6p_m
  */
-const robot_name_t ROBOT_NAME = "ROBOT_IRP6P_M";
-
-/*!
- * @brief configuration file EDP IRp6 postument manipulator section string
- * @ingroup irp6p_m
- */
-const std::string EDP_SECTION = "[edp_irp6p_m]";
-
-/*!
- * @brief configuration file ECP IRp6 postument manipulator section string
- * @ingroup irp6p_m
- */
-const std::string ECP_SECTION = "[ecp_irp6p_m]";
+const robot_name_t ROBOT_NAME = "irp6p_m";
 
 /*!
  * @brief IRp6 postument manipulator total number of servos
@@ -51,18 +39,16 @@ const int LAST_MOXA_PORT_NUM = 5;
  * @brief IRp6 postument array of communication port names
  * @ingroup irp6p_m
  */
-#ifndef __QNXNTO__
-const std::string ports_strings[] = {"/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5"};
-#else
-const std::string ports_strings[] = {"/dev/ser2", "/dev/ser3", "/dev/ser4", "/dev/ser5", "/dev/ser6", "/dev/ser7"};
-#endif
+
+const std::string ports_strings[] =
+		{ "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
 
 /*!
  * @brief IRp6 postument overcurrent threshold [mA]
  * @ingroup irp6p_m
  */
-const int MAX_CURRENT_0 = 10000;
-const int MAX_CURRENT_1 = 10000;
+const int MAX_CURRENT_0 = 15000;
+const int MAX_CURRENT_1 = 18000;
 const int MAX_CURRENT_2 = 10000;
 const int MAX_CURRENT_3 = 10000;
 const int MAX_CURRENT_4 = 10000;
@@ -72,7 +58,7 @@ const int MAX_CURRENT_5 = 10000;
  * @brief IRp6 postument max encoder increment
  * @ingroup irp6p_m
  */
-const double MAX_INCREMENT[] = {100, 100, 100, 100, 100, 100};
+const double MAX_INCREMENT[] = { 150, 200, 150, 150, 150, 200 };
 
 } // namespace irp6p_m
 } // namespace lib

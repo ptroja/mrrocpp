@@ -86,15 +86,15 @@ fsautomat::fsautomat(lib::configurator &_config) :
 	tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
-	if (config.section_name == lib::irp6ot_m::ECP_SECTION) {
+	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
-	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw, robot unsupported
 		return;
 	}
-
+std::cout<<"INICJACJA ECP"<<std::endl;
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 	std::string filePath(mrrocpp_network_path);
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
@@ -228,6 +228,7 @@ fsautomat::fsautomat(lib::configurator &_config) :
 //TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
+	std::cout<<"MAIN_TASK ECP"<<std::endl;
 	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
 	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
 	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
@@ -242,16 +243,16 @@ void fsautomat::main_task_algorithm(void)
 		sr_ecp_msg->message("Waiting for MP order");
 
 
-
+std::cout<<"przed_next_state"<<std::endl;
 		get_next_state();
-
+std::cout<<"po_next_state"<<std::endl;
 		sr_ecp_msg->message("Order received");
 
 		subtasks_conditional_execution();
 std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
-			path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+			path += (char*)mp_command.ecp_next_state.data;
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
 			//tig->initiate_pose_list();
@@ -259,22 +260,30 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			if (operator_reaction("Save?"))
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
+		}
+		 else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
 				if (ecpLevel) {
-					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string]);
+					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.data<<std::endl;
+					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.data<<std::endl;
+					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.data]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
-					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.data);
 				}
 			}//if
 		else //moj przypadekl -> z pliku
 			{
 				std::string path(mrrocpp_network_path);
-				path += (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string;
+				if(((char*)mp_command.ecp_next_state.data)[0]=='/')
+				{
+					path = (char*)mp_command.ecp_next_state.data;
+				}
+				else
+				{
+					path += (char*)mp_command.ecp_next_state.data;
+				}
 				//std::cout<<"WCZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 				//std::cout<<"STATE:  "<<mp_command.ecp_next_state.mp_2_ecp_next_state<<" STRING:  "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());
@@ -293,7 +302,7 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
 			if (size > 3)
 				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
 			else
@@ -301,11 +310,11 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-			//double gen_args[2];
+			//double gen_args[2];//TODO@ askubis zmienic spowrotem
 			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 			//std::cout<<"gag"<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 
@@ -318,12 +327,12 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			//lib::STOP czyli 2 powinien byc a jest 4...
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string);
+			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
 			go_st->configure(gen_args[0], (int) gen_args[1]);
 			go_st->execute();
 		}
 
-		ecp_termination_notice();
+		termination_notice();
 	} //end for
 
 

@@ -31,7 +31,7 @@ class effector: public common::motor_driven_effector //manip_effector// Klasa re
 protected:
 	virtual void create_kinematic_models_for_given_robot(void); // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie
 public:
-	effector(lib::configurator &_config); // Konstruktor
+	effector(common::shell &_shell); // Konstruktor
 
 	void set_robot_model(const lib::c_buffer &instruction); // Zmiana narzedzia
 	//void get_controller_state(lib::c_buffer &instruction);
@@ -59,7 +59,7 @@ class effector : public common::motor_driven_effector
 protected:
 	virtual void create_kinematic_models_for_given_robot(void); // Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie
 public:
-	effector(lib::configurator &_config); // Konstruktor
+	effector(common::shell &_shell); // Konstruktor
 
 	void set_robot_model(const lib::c_buffer &instruction); // Zmiana narzedzia
 

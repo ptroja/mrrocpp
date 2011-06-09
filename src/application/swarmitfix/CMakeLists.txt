@@ -9,8 +9,7 @@ add_executable(ecp_spkm
 	ecp_t_spkm.cc
 )
 
-target_link_libraries(ecp_spkm
-	ecp_generators
+target_link_libraries(ecp_spkm ecp_r_spkm ecp 
 )
 
 #add_executable(ecp_smb

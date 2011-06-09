@@ -11,7 +11,7 @@ wgt_yes_no::wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 wgt_yes_no::~wgt_yes_no()
 {
-
+	delete ui;
 }
 
 void wgt_yes_no::hideEvent(QHideEvent *event)

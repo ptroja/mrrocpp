@@ -11,7 +11,7 @@ wgt_choose_option::wgt_choose_option(mrrocpp::ui::common::Interface& _interface,
 
 wgt_choose_option::~wgt_choose_option()
 {
-
+	delete ui;
 }
 
 void wgt_choose_option::hideEvent(QHideEvent *event)

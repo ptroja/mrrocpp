@@ -1,4 +1,3 @@
-
 #if !defined(_STATE_HEAP_H_)
 #define _STATE_HEAP_H_
 
@@ -8,26 +7,20 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-
 class StateHeap
 {
 	public:
-		StateHeap();
-		~StateHeap();
-
-		void pushTargetName(const char * stateName);
-		const char * popTargetName();
+		void pushTargetName(const std::string & stateName);
+		const std::string popTargetName();
 
 		void showHeapContent();
 
 	private:
-		std::list<const char *> *targetsHeap;
+		std::list<std::string> targetsHeap;
 };
 
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp
 
-
 #endif
-

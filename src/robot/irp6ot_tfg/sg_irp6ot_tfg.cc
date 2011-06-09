@@ -44,7 +44,7 @@ void servo_buffer::load_hardware_interface(void)
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
-	regulator_ptr[0] = new NL_regulator_8_irp6ot(0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
+	regulator_ptr[0] = new NL_regulator_8_irp6ot(0, 0, 0, 0.39, 8.62 / 2., 7.89 / 2., 0.35, master);
 
 	common::servo_buffer::load_hardware_interface();
 }
@@ -61,15 +61,5 @@ void servo_buffer::get_all_positions(void)
 /*-----------------------------------------------------------------------*/
 
 } // namespace irp6ot
-
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new irp6ot_tfg::servo_buffer((irp6ot_tfg::effector &) (_master));
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp

@@ -54,6 +54,7 @@ namespace epos {
 #define E_PASSWD        0x0f00ffbe   ///< Error code: password incorrect
 #define E_NSERV         0x0f00ffbc   ///< Error code: device not in service mode
 #define E_NODEID        0x0f00fb9    ///< Error code: error in Node-ID
+
 /* EPOS Statusword -- singe bits, see firmware spec 14.1.58 */
 #define E_BIT15        0x8000      ///< bit code: position referenced to home position
 #define E_BIT14        0x4000      ///< bit code: refresh cycle of power stage
@@ -72,10 +73,25 @@ namespace epos {
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
 
+// Interpolation buffer status bits
+#define PVT_STATUS_UNDERFLOW_WARNING	E_BIT00
+#define PVT_STATUS_OVERFLOW_WARNING		E_BIT01
+#define PVT_STATUS_VELOCITY_WARNING		E_BIT02
+#define PVT_STATUS_ACCELERATION_WARNING	E_BIT03
+#define PVT_STATUS_UNDERFLOW_ERROR		E_BIT08
+#define PVT_STATUS_OVERFLOW_ERROR		E_BIT09
+#define PVT_STATUS_VELOCITY_ERROR		E_BIT10
+#define PVT_STATUS_ACCELERATION_ERROR	E_BIT11
+#define PVT_STATUS_BUFFER_ENABLED		E_BIT14
+#define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15
+#define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)
+#define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)
+
 /************************************************************/
 /*           EPOS related constants                         */
 /************************************************************/
 
+// FIXME: this value should be 60, but it has to be tested
 const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 
 /************************************************************/
@@ -91,13 +107,9 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 	ProfileVelocity = readProfileVelocity();
 	ProfileAcceleration = readProfileAcceleration();
 	ProfileDeceleration = readProfileDeceleration();
+	remote = isRemoteOperationEnabled(readStatusWord());
 
-	// initialize MaxAcceleration to beyond the default limits
-	writeMaxAcceleration(25000UL);
-	writeMotorMaxSpeed(50000UL);
-	writeMaxProfileVelocity(50000UL);
-	writeGearRatioNumerator(0);
-
+#if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 			ProfileVelocity << ", " <<
 			ProfileAcceleration << ", " <<
@@ -112,6 +124,7 @@ epos::epos(epos_access & _device, uint8_t _nodeId) :
 				readGearRatioNumerator() << "/" <<
 				readGearRatioDenominator() << " maximal speed " <<
 				readGearMaximalSpeed() << std::endl;
+#endif
 }
 
 /* read EPOS status word */
@@ -164,7 +177,12 @@ const char * epos::ErrorCodeMessage(UNSIGNED32 code) {
 		case 0xFF09: return "Software Position Limit Error";
 		case 0xFF0A: return "Position Sensor Breach";
 		case 0xFF0B: return "System Overloaded";
-		case 0xFF0C: return "Interpolated Position Mode Error";
+		case 0xFF0C:
+		{
+			UNSIGNED16 status = readInterpolationBufferStatus();
+			printInterpolationBufferStatus(status);
+			return "Interpolated Position Mode Error";
+		}
 		case 0xFF0D: return "Auto Tuning Identification Error";
 		default: return "Unknown error";
 	}
@@ -375,6 +393,24 @@ int epos::checkEPOSstate()
 	//printEPOSstatusword(w);
 
 	return status2state(w);
+}
+
+bool epos::isRemoteOperationEnabled(WORD status)
+{
+	return (status & E_BIT09);
+}
+
+void epos::setRemoteOperation(bool enable)
+{
+	if (remote != enable) {
+		device.SendNMTService(nodeId,
+				(enable) ? epos_access::Start_Remote_Node : epos_access::Stop_Remote_Node);
+		remote = isRemoteOperationEnabled(readStatusWord());
+
+		if (remote != enable) {
+			BOOST_THROW_EXCEPTION(epos_error() << reason("Failed to change REMOTE state of the device"));
+		}
+	}
 }
 
 const char * epos::stateDescription(int state)
@@ -615,6 +651,12 @@ void epos::changeEPOSstate(state_t state)
 }
 
 /* returns software version as HEX  --  14.1.33*/
+UNSIGNED8 epos::readNodeID()
+{
+	return ReadObjectValue<UNSIGNED8>(0x2000, 0x00);
+}
+
+/* returns software version as HEX  --  14.1.33*/
 UNSIGNED16 epos::readSWversion()
 {
 	return ReadObjectValue<UNSIGNED16>(0x2003, 0x01);
@@ -732,12 +774,7 @@ void epos::startRelativeMotion()
 void epos::setOperationMode(operational_mode_t m)
 {
 	if(OpMode != m) {
-		WORD dw[2];
-
-		dw[1] = 0x0000; // high WORD of DWORD is not used here
-		dw[0] = (int8_t) m;
-
-		WriteObject(0x6060, 0x00, dw);
+		WriteObjectValue(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
 	}
@@ -1011,13 +1048,8 @@ void epos::writeIcurrent(INTEGER16 val)
 /* save all parameters home; 14.1.55 */
 void epos::saveParameters()
 {
-	WORD dw[2];
-
-	// write sensor type
-	dw[0] = (WORD) (0x6173);
-	dw[1] = (WORD) (0x6576);
-
-	WriteObject(0x1010, 0x01, dw);
+	// this is an alias for the original libepos API
+	Store();
 }
 
 // by Martí Morta
@@ -1125,7 +1157,7 @@ void epos::writeTargetPosition(INTEGER32 val)
 std::string epos::readDeviceName()
 {
 	WORD answer[8];
-	unsigned int r = ReadObject(answer, 8, 0x1008, 0x00);
+	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
 
 	char name[16];
 
@@ -1259,6 +1291,165 @@ void epos::clearPvtBuffer()
 
 	// Enable access to the input buffer for the drive functions
 	WriteObjectValue(0x60C4, 0x06, 1);
+}
+
+INTEGER16 epos::readInterpolationSubModeSelection()
+{
+	return ReadObjectValue<INTEGER32> (0x60C0, 0x02);
+}
+
+void epos::writeInterpolationSubModeSelection(INTEGER16 val)
+{
+	WriteObjectValue(0x60C0, 0x00, val);
+}
+
+UNSIGNED8 epos::readInterpolationTimePeriod()
+{
+	return ReadObjectValue<UNSIGNED8> (0x60C2, 0x01);
+}
+
+void epos::writeInterpolationTimePeriod(UNSIGNED8 val)
+{
+	WriteObjectValue(0x60C2, 0x01, val);
+}
+
+INTEGER8 epos::readInterpolationTimeIndex()
+{
+	return ReadObjectValue<INTEGER8> (0x60C2, 0x02);
+}
+
+void epos::writeInterpolationTimeIndex(INTEGER8 val)
+{
+	WriteObjectValue(0x60C2, 0x02, val);
+}
+
+//! write Interpolation data record
+void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time)
+{
+	// only 24 bits allowed for velocity
+	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Only 24 bits allowed for velocity"));
+	}
+
+	// This array holds a manufacturer-specific 64 bit data record
+	// of a complex data structure; see Maxon documentation for details.
+	uint8_t pvt[8];
+
+	// The data layout is as follows:
+	// +------------------------------------------------------------------+
+	// | MSB                                                         LSB  |
+	// +------------------------------------------------------------------+
+	// | Time (unsigned8)  |  Velocity (signed24)  |  Position (signed32) |
+	// +------------------------------------------------------------------+
+
+	// note: velocity assignment is with 32-bit integer, so it has to
+	//       be done before assignment of time value to avoid overwrite
+	*((int32_t *) &pvt[4]) = (velocity & 0x00ffffff);
+	pvt[7] = time;
+	*((int32_t *) &pvt[0]) = position;
+
+#if 1
+	// PVT record have to be transmitted in a Segmented Write mode
+	InitiateSegmentedWrite(0x20C1, 0x00, 8);
+	// Maxon splits the record into two CAN frames
+	SegmentedWrite(&pvt[0], 7);
+	SegmentedWrite(&pvt[7], 1);
+#else
+	setRemoteOperation(true);
+	// the cobID should be statically configured with a EPOS Studio for the TxPDO4
+	WORD cobID = 0x0500 | (nodeId);
+	device.SendCANFrame(cobID, 8, pvt);
+#endif
+}
+
+//! read Interpolation buffer status
+UNSIGNED16 epos::readInterpolationBufferStatus()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x01);
+}
+
+bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_WARNING);
+}
+
+bool epos::checkInterpolationBufferUnderflowWarning(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_UNDERFLOW_WARNING);
+}
+
+void epos::printInterpolationBufferStatus(UNSIGNED16 status)
+{
+	printf("IPM buffer status = 0x%04X\n", status);
+	// Warning codes
+	if (status & PVT_STATUS_UNDERFLOW_WARNING) {
+		printf("Buffer underflow warning level is reached\n");
+	}
+	if (status & PVT_STATUS_OVERFLOW_WARNING) {
+		printf("Buffer overflow warning level is reached\n");
+	}
+	if (status & PVT_STATUS_VELOCITY_WARNING) {
+		printf("IPM velocity greater than profile velocity detected\n");
+	}
+	if (status & PVT_STATUS_ACCELERATION_WARNING) {
+		printf("IPM acceleration greater than profile acceleration detected\n");
+	}
+
+	// Error codes
+	if (status & PVT_STATUS_UNDERFLOW_ERROR) {
+		printf("Buffer underflow error (trajectory abort)\n");
+	}
+	if (status & PVT_STATUS_OVERFLOW_ERROR) {
+		printf("Buffer overflow error (trajectory abort)\n");
+	}
+	if (status & PVT_STATUS_VELOCITY_ERROR) {
+		printf("IPM velocity greater than profile velocity detected\n");
+	}
+	if (status & PVT_STATUS_ACCELERATION_ERROR) {
+		printf("IPM acceleration greater than profile acceleration detected\n");
+	}
+
+	// Status codes
+	if (status & PVT_STATUS_BUFFER_ENABLED) {
+		printf("Access to the input buffer enabled\n");
+	}
+	if (status & PVT_STATUS_IP_MODE_ACTIVE) {
+		printf("IP mode active\n");
+	}
+}
+
+bool epos::checkInterpolationBufferError(UNSIGNED16 status)
+{
+	return (status & PVT_STATUS_ERROR);
+}
+
+//! read Interpolation buffer underflow warning
+UNSIGNED16 epos::readInterpolationBufferUnderflowWarning()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x02);
+}
+
+//! write Interpolation buffer underflow warning
+void epos::writeInterpolationBufferUnderflowWarning(UNSIGNED16 val)
+{
+	WriteObjectValue(0x20C4, 0x02, val);
+}
+
+//! read Interpolation buffer overflow warning
+UNSIGNED16 epos::readInterpolationBufferOverflowWarning()
+{
+	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x03);
+}
+
+//! write Interpolation buffer overflow warning
+void epos::writeInterpolationBufferOverflowWarning(UNSIGNED16 val)
+{
+	WriteObjectValue(0x20C4, 0x03, val);
+}
+
+void epos::startInterpolatedPositionMotion()
+{
+	writeControlword(0x1f);
 }
 
 /*! read Error register */
@@ -1458,24 +1649,26 @@ void epos::monitorStatus()
 
 void epos::Store()
 {
-	WORD dw[2];
-
 	// *save* data
-	dw[0] = ('s') | ('a' << 8);
-	dw[1] = ('v') | ('e' << 8);
+	uint32_t save;
+	save = ('s');
+	save |= ('a' << 8);
+	save |= ('v' << 16);
+	save |= ('e' << 24);
 
-	WriteObject(0x1010, 0x01, dw);
+	WriteObjectValue(0x1010, 0x01, save);
 }
 
 void epos::Restore()
 {
-	WORD dw[2];
-
 	// *load* data
-	dw[0] = ('l') | ('o' << 8);
-	dw[1] = ('a') | ('d' << 8);
+	uint32_t load;
+	load = ('l');
+	load |= ('o' << 8);
+	load |= ('a' << 16);
+	load |= ('d' << 24);
 
-	WriteObject(0x1011, 0x01, dw);
+	WriteObjectValue(0x1011, 0x01, load);
 }
 
 bool epos::isReferenced()
@@ -1569,198 +1762,14 @@ int epos::waitForTarget(unsigned int t)
 	return (0);
 }
 
-/*
- *************************************************************
- check EPOS error code
- ****************************************************************
- */
-
-/* check the global variable E_error for EPOS error code */
-void epos::checkEPOSerror(DWORD E_error)
+void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {
-	const char *msg;
-	switch (E_error) {
-		case E_NOERR:
-			return;
-			break;
-		case E_ONOTEX:
-			msg = "requested object does not exist!";
-			break;
-		case E_SUBINEX:
-			msg = "requested subindex does not exist!";
-			break;
-		case E_OUTMEM:
-			msg= "out of memory!";
-			break;
-		case E_NOACCES:
-			msg= "unsupported access to an object!";
-			break;
-		case E_WRITEONLY:
-			msg= "attempt to read a write-only object!";
-			break;
-		case E_READONLY:
-			msg= "attempt to write a read-only object!";
-			break;
-		case E_PARAMINCOMP:
-			msg= "general parameter incompatibility!";
-			break;
-		case E_INTINCOMP:
-			msg= "general internal incompatibility in the device!";
-			break;
-		case E_HWERR:
-			msg= "access failed due to an HARDWARE ERROR!";
-			break;
-		case E_PRAGNEX:
-			msg= "value range of parameter exceeded!";
-			break;
-		case E_PARHIGH:
-			msg= "value of parameter written is too high!";
-			break;
-		case E_PARLOW:
-			msg= "value of parameter written is too low!";
-			break;
-		case E_PARREL:
-			msg= "maximum value is less than minimum value!";
-			break;
-		case E_NMTSTATE:
-			msg= "wrong NMT state!";
-			break;
-		case E_RS232:
-			msg= "rs232 command illegal!";
-			break;
-		case E_PASSWD:
-			msg= "password incorrect!";
-			break;
-		case E_NSERV:
-			msg= "device not in service mode!";
-			break;
-		case E_NODEID:
-			msg= "error in Node-ID!";
-			break;
-		default:
-			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
-			break;
-	}
-
-	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
+	device.InitiateSementedWrite(nodeId, index, subindex, ObjectLength);
 }
 
-/* copied from EPOS Communication Guide, p.8 */
-WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+void epos::SegmentedWrite(BYTE * ptr, std::size_t len)
 {
-	WORD shifter, c;
-	WORD carry;
-	WORD CRC = 0;
-
-	//Calculate pDataArray Word by Word
-	while (numberOfWords--) {
-		shifter = 0x8000; //Initialize BitX to Bit15
-		c = *pDataArray++; //Copy next DataWord to c
-		do {
-			carry = CRC & 0x8000; //Check if Bit15 of CRC is set
-			CRC <<= 1; //CRC = CRC * 2
-			if (c & shifter)
-				CRC++; //CRC = CRC + 1, if BitX is set in c
-			if (carry)
-				CRC ^= 0x1021; //CRC = CRC XOR G(x), if carry is true
-			shifter >>= 1; //Set BitX to next lower Bit,
-			//shifter = shifter/2
-		} while (shifter);
-	}
-
-	//printf("checksum == %#06x\n", CRC);
-	return CRC;
-}
-
-unsigned int epos::ReadObject(WORD *ans, unsigned int ans_len, WORD index, BYTE subindex)
-{
-	WORD frame[4];
-
-	frame[0] = 0x0210;
-	frame[1] = index;
-	/*
-	 * high BYTE: 0x00(Node-ID == 0)
-	 * low BYTE: subindex
-	 */
-	frame[2] = ((nodeId << 8 ) | subindex);
-	frame[3] = 0x0000;
-
-	device.sendCommand(frame);
-
-	// read response
-	return (device.readAnswer(ans, ans_len));
-}
-
-#if 0
-/*! NOT USED IN libEPOS so far -> untested!
- */
-static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
-
-	WORD frame[4], **ptr;
-
-	frame[0] = 0x1201; // fixed, opCode==0x12, (len-1) == 1
-	frame[1] = index;
-	frame[2] = 0x0000 | subindex; /* high BYTE: 0x00 (Node-ID == 0)
-	 low BYTE: subindex */
-	frame[3] = 0x000; // ZERO word, will be filled with checksum
-
-	sendCommand(frame);
-
-	// read response
-	return( readAnswer(ptr) ); // answer contains only DWORD ErrorCode
-	// here...
-}
-
-/*! NOT USED IN libEPOS so far -> untested! */
-static int SegmentRead(WORD **ptr) {
-
-	WORD frame[3];
-	int n;
-
-	frame[0] = 0x1400; // fixed, opCode==0x14, (len-1) == 0
-	frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
-	frame[2] = 0x0000; // ZERO word, will be filled with checksum
-
-	sendCommand(frame);
-
-	readAnswer(ptr);
-
-	return(0);
-}
-#endif
-
-/* Low-level function to write an object to EPOS memory. Is called by
- writing libEPOS functions. */
-void epos::WriteObject(WORD index, BYTE subindex, const WORD data[2])
-{
-	WORD frame[6];
-
-	frame[0] = 0x0411; // fixed: (len-1) == 3, WriteObject
-	frame[1] = index;
-	frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
-	// data to transmit
-	frame[3] = data[0];
-	frame[4] = data[1];
-	frame[5] = 0x00; // ZERO word, will be filled with checksum
-
-	device.sendCommand(frame);
-
-	// read response
-	WORD answer[8];
-	device.readAnswer(answer, 8);
-
-	checkEPOSerror(device.E_error);
-}
-
-void epos::WriteObjectValue(WORD index, BYTE subindex, uint32_t data)
-{
-	WORD dw[2];
-
-	// write data
-	dw[0] = (WORD) (data & 0x0000FFFF);
-	dw[1] = (WORD) (data >> 16);
-
-	WriteObject(index, subindex, dw);
+	device.SegmentedWrite(nodeId, ptr, len);
 }
 
 /* compare WORD a with WORD b bitwise */
@@ -1774,4 +1783,3 @@ bool epos::bitcmp(WORD a, WORD b)
 } /* namespace epos */
 } /* namespace edp */
 } /* namespace mrrocpp */
-

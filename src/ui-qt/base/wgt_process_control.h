@@ -7,6 +7,8 @@
 #include "ui_wgt_process_control.h"
 #include "wgt_base.h"
 
+
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -27,20 +29,24 @@ public:
 
 	void my_open();
 
+	Ui::wgt_process_controlClass * get_ui();
+
 private:
-	Ui::wgt_process_controlClass ui;
+	Ui::wgt_process_controlClass* ui;
 
 	// aktualizacja ustawien przyciskow
-	int init(bool do_it);
+	int init();
 	int block_all_ecp_trigger_widgets();
 	int unblock_all_ecp_trigger_widgets();
 
 signals:
 	void process_control_window_init_signal();
 
+public slots:
+	void process_control_window_init_slot();
+
 private slots:
 	// MP
-	void process_control_window_init_slot();
 	void on_mp_start_pushButton_clicked();
 	void on_mp_stop_pushButton_clicked();
 	void on_mp_pause_pushButton_clicked();

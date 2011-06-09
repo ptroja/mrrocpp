@@ -57,14 +57,9 @@ private:
 	lib::Homog_matrix position_matrix;
 
 	/**
-	 * @brief Temporary angle vector used while reading the current robot position.
+	 * @brief Measured position of the robot.
 	 */
-	lib::Xyz_Angle_Axis_vector angle_axis_vector;
-
-	/**
-	 * @brief Current position of the robot.
-	 */
-	double actual_position[6];
+	lib::Xyz_Angle_Axis_vector msr_position;
 
 	/**
 	 * @brief Desired position received from vsp.
@@ -74,7 +69,7 @@ private:
 	/**
 	 * @brief Array filled with coordinates send to the robot.
 	 */
-	double position[6];
+	lib::Xyz_Angle_Axis_vector position;
 
 	/**
 	 * @brief Provides information whether start breaking or not.
@@ -84,75 +79,9 @@ private:
 	bool breaking_;
 
 	/**
-	 * @brief Current velocity in all axes.
-	 */
-	double v[6];
-
-	/**
-	 * @brief Maximal allowed acceleration in all axes.
-	 */
-	double a_max[6];
-
-	/**
-	 * @brief Maximal allowed velocity in all axes.
-	 */
-	double v_max[6];
-
-	/**
-	 * @brief Node counter used for breaking.
-	 * @details When generator knows that it should start breaking, it
-	 * calculates how many macro steps its going to need to stop. The
-	 * member describes in which breaking macro step according to
-	 * calculated one it is.
-	 */
-	int breaking_node;
-
-	/**
-	 * @brief Informs whether desired position is reach or not.
-	 * @details Set to true if robot reached desired position for each axes
-	 * for currently processed trajectory.
-	 */
-	bool reached[6];
-
-	/**
-	 * @brief Motion direction.
-	 */
-	int k[6];
-
-	/**
-	 * @brief Acceleration while breaking
-	 */
-	double a;
-
-	/**
-	 * @brief Distance covered in the set of five macrosteps.
-	 */
-	double s[6];
-
-	/**
-	 * @brief Set to true if change of the direction is needed.
-	 */
-	bool change[6];
-
-	/**
-	 * @brief Current position error.
-	 */
-	double u[6];
-
-	/**
 	 * @brief Time of a macrostep.
 	 */
 	double t;
-
-	/**
-	 * @brief Flag set to true if final breaking begins.
-	 */
-	bool almost_reached[6];
-
-	/**
-	 * @brief Flag set to true if breaking without overshoot is possible.
-	 */
-	bool breaking_possible[6];
 
 	/**
 	 * @brief Difference between last and last but one position.
@@ -165,7 +94,7 @@ private:
 	 * @details Overshoot is a maximal distance from the perpendicular hyperplane to
 	 * normalized vector.
 	 */
-	double overshoot;
+	double overshoot_;
 
 	/**
 	 * @brief Number of macro steps between consequtive data.
@@ -174,6 +103,9 @@ private:
 
 	uint8_t mstep_;
 
+	/**
+	 * @brief length of breking
+	 */
 	uint8_t break_steps_;
 
 	/**
@@ -181,8 +113,18 @@ private:
 	 */
 	double radius;
 
+	/**
+	 * @brief interpolation polynomial coefficients
+	 */
 	double coeff_[6][6];
+
 	double vel_[6];
+
+	double current_sum;
+	double current_max;
+
+	lib::Xyz_Angle_Axis_vector msr_position_old;
+	lib::Xyz_Angle_Axis_vector msr_velocity;
 
 	void velocityProfileLinear(double *coeff, double pos1, double pos2, double t);
 	void velocityProfileSpline(double *coeff, double pos1, double vel1, double pos2, double vel2, double time);
@@ -194,7 +136,7 @@ public:
 	virtual bool next_step();
 
 	double get_breaking_time();
-	double * get_position();
+	lib::Xyz_Angle_Axis_vector get_position();
 	double get_overshoot();
 	void reset();
 };

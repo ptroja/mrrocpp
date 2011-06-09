@@ -8,7 +8,11 @@
 #include <cstdio>
 #include <cstring>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
+
 #include "base/lib/sr/sr_edp.h"
+#include "base/edp/edp_exceptions.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -98,7 +102,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_INSTRUCTION_TYPE");
 					break;
 				case INVALID_REPLY_TYPE:
-					strcat(description, "INVALID_REPLY_TYPE");
+					strcat(description, "INerror_messageVALID_REPLY_TYPE");
 					break;
 				case INVALID_SET_ROBOT_MODEL_TYPE:
 					strcat(description, "INVALID_SET_ROBOT_MODEL_TYPE");
@@ -272,7 +276,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "INVALID_KINEMATIC_MODEL_NO");
 					break;
 				case EDP_UNIDENTIFIED_ERROR:
-					strcat(description, "edp_UNIDENTIFIED_ERROR");
+					strcat(description, "EDP_UNIDENTIFIED_ERROR");
 					break;
 				case NOT_A_NUMBER_JOINT_VALUE_D0:
 					strcat(description, "NOT_A_NUMBER_JOINT_VALUE_D0");
@@ -323,7 +327,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 			}
 			break;
 		default:
-			strcat(description, "edp UNIDENTIFIED ERROR");
+			strcat(description, "EDP UNIDENTIFIED ERROR");
 	}
 }
 

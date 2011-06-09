@@ -35,7 +35,6 @@ void trapezoid_velocity_task::main_task_algorithm()
 	sr_ecp_msg->message("Starting motion...");
 	trapezoid_gen->Move();
 	sr_ecp_msg->message("Motion finished.");
-	ecp_termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &config)

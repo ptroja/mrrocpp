@@ -32,7 +32,7 @@ protected:
 	// ponizsze zmienne musza byc zawsze aktualizowany, ze wzgledu na
 	// "bezszelestne" przelaczanie algorytmow.
 
-	int meassured_current; // wartosc zmierzona pradu
+	int measured_current; // wartosc zmierzona pradu
 
 	double position_increment_old; // przedosatnio odczytany przyrost polozenie (delta y[k-2]
 	// -- mierzone w impulsach)
@@ -69,11 +69,17 @@ protected:
 
 	lib::GRIPPER_STATE_ENUM reg_state, next_reg_state, prev_reg_state; // stany w ktorych moze byc regulator
 
+	// maksymalny predkosc zadana (przyrost na jeden krok) w radianach na wale silnika
+	double desired_velocity_limit;
 
 public:
 
+	bool new_desired_velocity_error;
+	// samoświadomości osi
+	uint8_t axis_number;
+
 	motor_driven_effector &master;
-	regulator(uint8_t reg_no, uint8_t reg_par_no, motor_driven_effector &_master); // konstruktor
+	regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, motor_driven_effector &_master); // konstruktor
 
 	virtual ~regulator();
 
@@ -83,7 +89,7 @@ public:
 	double get_set_value(void) const;
 	double previous_abs_position; // poprzednia pozycja absolutna dla potrzeb trybu testowego
 	void insert_new_step(double ns);
-	void insert_meassured_current(int meassured_current_l);
+	void insert_measured_current(int measured_current_l);
 
 	double return_new_step() const;
 
@@ -91,7 +97,7 @@ public:
 
 	double get_position_inc(int tryb);
 
-	int get_meassured_current(void) const;
+	int get_measured_current(void) const;
 
 	int get_PWM_value(void) const;
 
@@ -135,7 +141,7 @@ protected:
 
 public:
 
-			NL_regulator(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master);
+			NL_regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master);
 
 	virtual uint8_t compute_set_value(void) = 0;
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna

@@ -18,9 +18,6 @@
 #include <sys/types.h>
 #include <cerrno>
 #include <pthread.h>
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
@@ -85,22 +82,24 @@ void motor_driven_effector::get_arm_position_read_hardware_sb()
 void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
+	// Copy requested arm specification type to the reply message.
+	// In case of unsupported request type it also will be returned to the caller.
+	//	reply.arm.type = instruction.get_arm_type;
+
+	// Przepisanie definicji koncowki danej w postaci
+	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
+	// do wewnetrznych struktur danych REPLY_BUFFER
 	switch (instruction.get_arm_type)
 	{
 		case lib::JOINT:
 			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
 			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			// Przepisanie definicji koncowki danej w postaci
-			// JOINTS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
-			reply.arm.type = lib::JOINT;
+
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
 			}
 			break;
 		case lib::MOTOR:
-			reply.arm.type = lib::MOTOR;
 			for (int i = 0; i < number_of_servos; i++) {
 				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
 			}
@@ -191,11 +190,12 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
-motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::robot_name_t l_robot_name) :
-	effector(_config, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
-	servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR),
-	desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR),
-	current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
+motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
+	effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
+			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
+			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
+			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
+			number_of_servos(-1)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
@@ -210,10 +210,21 @@ motor_driven_effector::motor_driven_effector(lib::configurator &_config, lib::ro
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
 	//#endif
+	float _velocity_limit_global_factor;
 
-#ifdef __QNXNTO__
-	ThreadCtl(_NTO_TCTL_IO, NULL);
-#endif
+	if (config.exists("velocity_limit_global_factor")) {
+		_velocity_limit_global_factor = config.value <float> ("velocity_limit_global_factor");
+		if ((_velocity_limit_global_factor > 0) && (_velocity_limit_global_factor <= 1)) {
+			velocity_limit_global_factor = _velocity_limit_global_factor;
+		} else {
+			msg->message(lib::NON_FATAL_ERROR, "bad velocity_limit_global_factor, defaults loaded");
+			velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		}
+	} else {
+		velocity_limit_global_factor = VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT;
+		msg->message(lib::NON_FATAL_ERROR, "no velocity_limit_global_factor defined, defaults loaded");
+	}
+
 }
 
 motor_driven_effector::~motor_driven_effector()
@@ -232,11 +243,11 @@ void motor_driven_effector::master_joints_read(double output[])
 
 void motor_driven_effector::hi_create_threads()
 {
-	rb_obj = (boost::shared_ptr<reader_buffer>) new reader_buffer(*this);
-	mt_tt_obj = (boost::shared_ptr<manip_trans_t>) new manip_trans_t(*this);
-	vis_obj = (boost::shared_ptr<vis_server>) new vis_server(*this);
-	sb = (boost::shared_ptr<servo_buffer>) return_created_servo_buffer();
-
+	rb_obj = (boost::shared_ptr <reader_buffer>) new reader_buffer(*this);
+	mt_tt_obj = (boost::shared_ptr <manip_trans_t>) new manip_trans_t(*this);
+	vis_obj = (boost::shared_ptr <vis_server>) new vis_server(*this);
+	sb = (boost::shared_ptr <servo_buffer>) return_created_servo_buffer();
+	sb_loaded.command();
 	// wait for initialization of servo thread
 	sb->thread_started.wait();
 }
@@ -341,6 +352,10 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	rep_type(instruction); // okreslenie typu odpowiedzi
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
+
+	// by Y bug redmine 414
+	reply.arm.type = instruction.get_arm_type;
+
 	// Wykonanie instrukcji
 	switch (instruction.instruction_type)
 	{
@@ -761,10 +776,10 @@ void motor_driven_effector::get_controller_state(lib::c_buffer &instruction)
 	//	printf("get_arm_position read_hardware\n");
 
 	sb->send_to_SERVO_GROUP();
-
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	if (is_synchronised()) {
+		// dla pierwszego wypelnienia current_joints
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 

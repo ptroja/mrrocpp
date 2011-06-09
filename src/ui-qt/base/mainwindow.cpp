@@ -50,13 +50,8 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
 {
 	ui->setupUi(this);
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_timer_slot()));
-	timer->start(50);
 
-	connect(this, SIGNAL(ui_notification_signal(QString, QColor)), this, SLOT(ui_notification_slot(QString, QColor)), Qt::QueuedConnection);
-	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QWidget *, bool)), this, SLOT(enable_menu_item_slot(QWidget *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 
@@ -95,15 +90,21 @@ Ui::MainWindow * MainWindow::get_ui()
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
-
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QWidget *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QWidget *), _enable);
 	}
 
 	va_end(menu_items);
@@ -112,15 +113,22 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QWidget *_men
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
 {
 	va_list menu_items;
-
-	emit
-	enable_menu_item_signal(_menu_item, _enable);
+	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+	/*
+	 emit
+	 enable_menu_item_signal(_menu_item, _enable);
+	 */
+	enable_menu_item_slot(_menu_item, _enable);
 
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
-		emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
+		/*
+		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+		 */
+		enable_menu_item_slot(va_arg(menu_items, QAction *), _enable);
 	}
 
 	va_end(menu_items);
@@ -142,32 +150,20 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 //	va_end(menu_items);
 //}
 
-void MainWindow::ui_notification(QString _string, QColor _color)
+void MainWindow::ui_notification()
 {
 
 	if (main_thread_id == pthread_self()) {
 		// jeśli wątek główny
 		//	interface.ui_msg->message("same thread");
-		ui_notification_slot(_string, _color);
+		ui_notification_slot();
 
 	} else {
 		//jeśli inny wątek niż główny
 		//	interface.ui_msg->message("different thread");
-		emit ui_notification_signal(_string, _color);
+		emit ui_notification_signal();
 	}
 
-}
-
-void MainWindow::raise_process_control_window()
-{
-	//ui->notification_label->setText("GUGUGU");
-	emit raise_process_control_window_signal();
-}
-
-void MainWindow::raise_ui_ecp_window()
-{
-	//ui->notification_label->setText("GUGUGU");
-	emit raise_ui_ecp_window_signal();
 }
 
 void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
@@ -193,256 +189,6 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 
 }
 
-void MainWindow::raise_process_control_window_slot()
-{
-	interface.wgt_pc->my_open();
-}
-
-void MainWindow::raise_ui_ecp_window_slot()
-{
-	interface.ui_msg->message("raise_ui_ecp_window_slot");
-
-	lib::ECP_message &ecp_to_ui_msg = interface.ui_ecp_obj->ecp_to_ui_msg;
-	lib::UI_reply &ui_rep = interface.ui_ecp_obj->ui_rep;
-
-	switch (ecp_to_ui_msg.ecp_message)
-	{ // rodzaj polecenia z ECP
-		case lib::C_XYZ_ANGLE_AXIS: {
-			if (interface.teachingstate == ui::common::MP_RUNNING) {
-				interface.teachingstate = ui::common::ECP_TEACHING;
-			}
-
-			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
-
-			interface.wgt_teaching_obj->my_open();
-
-			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			}
-
-		}
-			break;
-		case lib::C_XYZ_EULER_ZYZ: {
-			if (interface.teachingstate == ui::common::MP_RUNNING) {
-				interface.teachingstate = ui::common::ECP_TEACHING;
-			}
-
-			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_EULER_ZYZ");
-
-			interface.wgt_teaching_obj->my_open();
-
-			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			}
-
-		}
-			break;
-		case lib::C_JOINT: {
-			if (interface.teachingstate == ui::common::MP_RUNNING) {
-				interface.teachingstate = ui::common::ECP_TEACHING;
-			}
-
-			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_JOINT");
-
-			interface.wgt_teaching_obj->my_open();
-
-			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				interface.irp6ot_m->wgt_joints->my_open();
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				interface.irp6p_m->wgt_joints->my_open();
-			}
-
-		}
-			break;
-		case lib::C_MOTOR: {
-			//  printf("C_MOTOR\n");
-
-			if (interface.teachingstate == ui::common::MP_RUNNING) {
-				interface.teachingstate = ui::common::ECP_TEACHING;
-			}
-
-			Ui::wgt_teachingClass* ui = interface.wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_MOTOR");
-
-			interface.wgt_teaching_obj->my_open();
-
-			if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				interface.irp6ot_m->wgt_motors->my_open();
-			} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				interface.irp6p_m->wgt_motors->my_open();
-			}
-
-		}
-			break;
-		case lib::YES_NO: {
-			Ui::wgt_yes_noClass* ui = interface.wgt_yes_no_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			interface.wgt_yes_no_obj->my_open();
-
-		}
-			break;
-		case lib::MESSAGE: {
-			Ui::wgt_messageClass* ui = interface.wgt_message_obj->get_ui();
-			ui->label_message->setText(ecp_to_ui_msg.string);
-			interface.wgt_message_obj->my_open();
-
-			ui_rep.reply = lib::ANSWER_YES;
-			interface.ui_ecp_obj->synchroniser.command();
-		}
-			break;
-		case lib::DOUBLE_NUMBER: {
-
-			Ui::wgt_input_doubleClass* ui = interface.wgt_input_double_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			interface.wgt_input_double_obj->my_open();
-		}
-			break;
-		case lib::INTEGER_NUMBER: {
-
-			Ui::wgt_input_integerClass* ui = interface.wgt_input_integer_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			interface.wgt_input_integer_obj->my_open();
-
-		}
-			break;
-		case lib::CHOOSE_OPTION: {
-
-			Ui::wgt_choose_optionClass* ui = interface.wgt_choose_option_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
-
-			if (ecp_to_ui_msg.nr_of_options == 2) {
-				ui->pushButton_3->hide();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->show();
-			}
-
-			interface.wgt_choose_option_obj->my_open();
-		}
-			break;
-		case lib::LOAD_FILE: {
-			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-
-			//    printf("lib::LOAD_FILE\n");
-
-
-			interface.file_window_mode = ui::common::FSTRAJECTORY;
-
-			try {
-				QString fileName;
-
-				fileName
-						= QFileDialog::getOpenFileName(this, tr("Choose file to load or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
-
-				if (fileName.length() > 0) {
-
-					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
-							- 1);
-					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
-							= '\0';
-
-					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
-							- strlen(rindex(fileName.toStdString().c_str(), '/')));
-					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
-							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
-
-					ui_rep.reply = lib::FILE_LOADED;
-				} else {
-					ui_rep.reply = lib::QUIT;
-				}
-				//std::string str_fullpath = fileName.toStdString();
-			}
-
-			catch (...) {
-				ui_rep.reply = lib::QUIT;
-			}
-
-			interface.ui_ecp_obj->synchroniser.command();
-
-		}
-			break;
-		case lib::SAVE_FILE: {
-
-			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
-			//    printf("lib::SAVE_FILE\n");
-
-			interface.file_window_mode = ui::common::FSTRAJECTORY;
-
-			try {
-				QString fileName;
-
-				fileName
-						= QFileDialog::getSaveFileName(this, tr("Choose file to save or die"), interface.mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
-
-				if (fileName.length() > 0) {
-
-					strncpy(interface.ui_ecp_obj->ui_rep.filename, rindex(fileName.toStdString().c_str(), '/') + 1, strlen(rindex(fileName.toStdString().c_str(), '/'))
-							- 1);
-					interface.ui_ecp_obj->ui_rep.filename[strlen(rindex(fileName.toStdString().c_str(), '/')) - 1]
-							= '\0';
-
-					strncpy(interface.ui_ecp_obj->ui_rep.path, fileName.toStdString().c_str(), strlen(fileName.toStdString().c_str())
-							- strlen(rindex(fileName.toStdString().c_str(), '/')));
-					interface.ui_ecp_obj->ui_rep.path[strlen(fileName.toStdString().c_str())
-							- strlen(rindex(fileName.toStdString().c_str(), '/'))] = '\0';
-
-					ui_rep.reply = lib::FILE_SAVED;
-				} else {
-					ui_rep.reply = lib::QUIT;
-				}
-				//std::string str_fullpath = fileName.toStdString();
-			}
-
-			catch (...) {
-				ui_rep.reply = lib::QUIT;
-			}
-
-			interface.ui_ecp_obj->synchroniser.command();
-
-		}
-			break;
-
-		default: {
-			perror("Strange ECP message");
-			interface.ui_ecp_obj->synchroniser.command();
-		}
-			break;
-	}
-
-}
-
 void MainWindow::enable_menu_item_slot(QWidget *_menu_item, bool _active)
 {
 	//interface.print_on_sr("menu coloring slot");
@@ -455,163 +201,66 @@ void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
 	_menu_item->setDisabled(!_active);
 }
 
-void MainWindow::ui_notification_slot(QString _string, QColor _color)
-{
-	QPalette pal;
-	pal.setColor(QPalette::Text, _color);
-	pal.setColor(QPalette::Foreground, _color);
-
-	ui->notification_label->setPalette(pal);
-
-	ui->notification_label->setText(_string);
-	ui->notification_label->repaint();
-	ui->notification_label->update();
-	qApp->processEvents();
-
-}
-
-void MainWindow::on_timer_slot()
+void MainWindow::ui_notification_slot()
 {
 
-	//fprintf(stderr, "OnTimer()\n");
+	if (interface.next_notification != interface.notification_state) {
 
-	QTextCharFormat format;
+		QString _string;
+		QColor _color;
 
-	static int closing_delay_counter; // do odliczania czasu do zamkniecia aplikacji
-	static int Iteration_counter = 0; // licznik uruchomienia funkcji
+		interface.notification_state = interface.next_notification;
 
+		switch (interface.next_notification)
+		{
+			case UI_N_STARTING:
+				_string = "STARTING";
+				_color = Qt::magenta;
 
-	Iteration_counter++;
+				break;
+			case UI_N_READY:
+				_string = "READY";
+				_color = Qt::blue;
 
-	if (!(interface.ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
+				break;
+			case UI_N_BUSY:
+				_string = "BUSY";
+				_color = Qt::red;
 
-		// 	printf("timer\n");
+				break;
+			case UI_N_EXITING:
+				_string = "EXITING";
+				_color = Qt::magenta;
 
-		char current_line[400];
-		lib::sr_package_t sr_msg;
+				break;
+			case UI_N_COMMUNICATION:
+				_string = "COMMUNICATION";
+				_color = Qt::red;
 
-		while (!(interface.ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+				break;
+			case UI_N_SYNCHRONISATION:
+				_string = "SYNCHRONISATION";
+				_color = Qt::red;
 
-			interface.ui_sr_obj->get_one_msg(sr_msg);
+				break;
+			case UI_N_PROCESS_CREATION:
+				_string = "PROCESS CREATION";
+				_color = Qt::red;
 
-			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
-			strcat(current_line, "  ");
-			time_t time = sr_msg.tv.tv_sec;
-			strftime(current_line + 12, 100, "%H:%M:%S", localtime(&time));
-			sprintf(current_line + 20, ".%03u   ", (sr_msg.tv.tv_usec / 1000));
-
-			switch (sr_msg.process_type)
-			{
-				case lib::EDP:
-					strcat(current_line, "edp: ");
-					break;
-				case lib::ECP:
-					strcat(current_line, "ecp: ");
-					break;
-				case lib::MP:
-					// printf("mp w ontimer\n");
-					strcat(current_line, "mp:  ");
-					break;
-				case lib::VSP:
-					strcat(current_line, "vsp: ");
-					break;
-				case lib::UI:
-					strcat(current_line, "UI:  ");
-					break;
-				default:
-					strcat(current_line, "???: ");
-					continue;
-			} // end: switch (message_buffer[reader_buf_position].process_type)
-
-			// FIXME: ?
-			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
-
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-21s", sr_msg.process_name);
-
-			strcat(current_line, process_name_buffer);
-
-			switch (sr_msg.message_type)
-			{
-				case lib::FATAL_ERROR:
-					strcat(current_line, "FATAL_ERROR:     ");
-					format.setForeground(Qt::red);
-
-					break;
-				case lib::NON_FATAL_ERROR:
-
-					strcat(current_line, "NON_FATAL_ERROR: ");
-					format.setForeground(Qt::blue);
-
-					break;
-				case lib::SYSTEM_ERROR:
-					// printf("SYSTEM ERROR W ONTIMER\n");
-					// Informacja do UI o koniecznosci zmiany stanu na INITIAL_STATE
-					strcat(current_line, "SYSTEM_ERROR:    ");
-					format.setForeground(Qt::magenta);
-
-					break;
-				case lib::NEW_MESSAGE:
-					strcat(current_line, "MESSAGE:         ");
-					format.setForeground(Qt::black);
-
-					break;
-				default:
-					strcat(current_line, "UNKNOWN ERROR:   ");
-					format.setForeground(Qt::yellow);
-
-			}; // end: switch (message.message_type)
-
-			strcat(current_line, sr_msg.description);
-
-			ui->plainTextEdit_sr->setCurrentCharFormat(format);
-			ui->plainTextEdit_sr->appendPlainText(current_line);
-			(*interface.log_file_outfile) << current_line;
+				break;
 		}
 
-		(*interface.log_file_outfile).flush();
+		QPalette pal;
+		pal.setColor(QPalette::Text, _color);
+		pal.setColor(QPalette::Foreground, _color);
 
+		ui->notification_label->setPalette(pal);
+
+		ui->notification_label->setText(_string);
+		ui->notification_label->repaint();
+		ui->notification_label->update();
+		qApp->processEvents();
 	}
-
-	if (interface.ui_state == 2) {// jesli ma nastapic zamkniecie z aplikacji
-		interface.set_ui_state_notification(UI_N_EXITING);
-		// 	printf("w ontimer 2\n");
-		closing_delay_counter = 20;// opoznienie zamykania
-		interface.ui_state = 3;
-		// 		delay(5000);
-
-		interface.MPslay();
-
-		interface.ui_msg->message("closing");
-	} else if (interface.ui_state == 3) {// odliczanie
-		// 	printf("w ontimer 3\n");
-		if ((--closing_delay_counter) <= 0)
-			interface.ui_state = 4;
-	} else if (interface.ui_state == 4) {// jesli ma nastapic zamkniecie aplikacji
-		//	printf("w ontimer 4\n");
-		closing_delay_counter = 20;// opoznienie zamykania
-		interface.ui_state = 5;
-
-		interface.EDP_all_robots_slay();
-
-	} else if (interface.ui_state == 5) {// odlcizanie do zamnkiecia
-		//	printf("w ontimer 5\n");
-		if ((--closing_delay_counter) <= 0)
-			interface.ui_state = 6;
-	} else if (interface.ui_state == 6) {// zakonczenie aplikacji
-		(*interface.log_file_outfile).close();
-		delete interface.log_file_outfile;
-		printf("UI CLOSED\n");
-		interface.abort_threads();
-		interface.get_main_window()->close();
-
-	} else {
-		if (!(interface.communication_flag.is_busy())) {
-			interface.set_ui_state_notification(UI_N_READY);
-		}
-
-	}
-
 }
 
 // menus
@@ -931,7 +580,7 @@ void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 
 void MainWindow::on_actionbirdhand_Command_triggered()
 {
-	interface.bird_hand->wnd_command_and_status->my_open();
+	interface.bird_hand->wgt_command_and_status->my_open();
 }
 
 void MainWindow::on_actionbirdhand_Configuration_triggered()
@@ -1156,7 +805,7 @@ void MainWindow::on_actionMP_Unload_triggered()
 
 void MainWindow::on_actionProcess_Control_triggered()
 {
-	raise_process_control_window();
+	interface.raise_process_control_window();
 }
 
 void MainWindow::on_actionConfiguration_triggered()
@@ -1196,7 +845,7 @@ void MainWindow::on_actionConfiguration_triggered()
 
 void MainWindow::on_actionClear_Console_triggered()
 {
-	ui->plainTextEdit_sr->clear();
+	ui->textEdit_sr->clear();
 }
 
 void MainWindow::on_actionUnload_All_triggered()

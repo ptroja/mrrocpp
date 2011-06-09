@@ -5,8 +5,9 @@
  * @ingroup generators
  */
 
-#include "generator/ecp/ecp_g_newsmooth.h"
 #include <fstream>
+
+#include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -439,9 +440,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name) {
 	lib::MOTION_TYPE mt; //type of the commanded motion (relative or absolute)
 	int number_of_poses = 0; //number of poses to be read
 	int i, j; //loop counters
-	std::vector <double> v(axes_num); //vector of read velocities
-	std::vector <double> a(axes_num); //vector of read accelerations
-	std::vector <double> coordinates(axes_num); //vector of read coordinates
+
 
 	std::ifstream from_file(file_name); // open the file
 	if (!from_file.good()) {
@@ -516,6 +515,9 @@ int num = lib::setValuesInArray(tab,line);
 this->set_axes_num(num);
 from_file.seekg(pos);
 
+std::vector <double> v(axes_num); //vector of read velocities
+std::vector <double> a(axes_num); //vector of read accelerations
+std::vector <double> coordinates(axes_num); //vector of read coordinates
 
 	for (i = 0; i < number_of_poses; i++) {
 		for (j = 0; j < axes_num; j++) {

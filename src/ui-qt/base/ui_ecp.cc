@@ -45,7 +45,7 @@ namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
-	interface(_interface), communication_state(UI_ECP_AFTER_REPLY), synchroniser()
+	interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
 {
 	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
@@ -59,9 +59,7 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-	MainWindow *mw = interface.get_main_window();
-
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 5);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 
@@ -86,7 +84,7 @@ void ecp_buffer::operator()()
 		// tu wyemitowac sygnal (wywqaolac odpowiednia metode mainwindow)
 
 		//dalszy kod do obslugi slotu
-		mw->raise_ui_ecp_window();
+		interface.raise_ui_ecp_window();
 
 		synchroniser.wait();
 

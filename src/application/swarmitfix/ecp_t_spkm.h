@@ -1,10 +1,10 @@
 #if !defined(_ECP_T_SPKM_SWARMITFIX_H)
 #define _ECP_T_SPKM_SWARMITFIX_H
 
+#include <boost/shared_ptr.hpp>
+
 #include "robot/spkm/ecp_r_spkm.h"
-
 #include "base/ecp/ecp_task.h"
-
 #include "ecp_g_spkm.h"
 
 namespace mrrocpp {
@@ -16,10 +16,10 @@ class swarmitfix : public common::task::_task<ecp::spkm::robot>
 {
 protected:
 	//! Move the robot the the specified pose
-	generator::spkm_pose * g_pose;
+	boost::shared_ptr<generator::spkm_pose> g_pose;
 
 	//! Stop the robot in case of emergency
-	generator::spkm_quickstop * g_quickstop;
+	boost::shared_ptr<generator::spkm_quickstop> g_quickstop;
 
 public:
 	//! Constructor

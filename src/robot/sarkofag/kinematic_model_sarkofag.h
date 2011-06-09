@@ -47,15 +47,16 @@ protected:
 
 	// Sprawdzenie ograniczen na polozenia katowe walow silnikow
 	void check_motor_position(const lib::MotorArray & motor_position) const;
+
+public:
+	// Konstruktor.
+	model(void);
+
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne
 	void check_joints(const lib::JointArray & q) const;
 
 	// Ustawienie parametrow kinematycznych.
 	void set_kinematic_parameters(void);
-
-public:
-	// Konstruktor.
-	model(void);
 
 	// Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne.
 	void mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints);

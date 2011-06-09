@@ -11,7 +11,7 @@ wgt_input_integer::wgt_input_integer(mrrocpp::ui::common::Interface& _interface,
 
 wgt_input_integer::~wgt_input_integer()
 {
-
+	delete ui;
 }
 
 void wgt_input_integer::hideEvent(QHideEvent *event)

@@ -100,7 +100,7 @@ bool tfg::next_step()
 	}
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
+	//lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
 
 	return true;
 
@@ -113,7 +113,7 @@ void tfg::create_ecp_mp_reply()
 
 void tfg::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_command, ecp_t.mp_command.ecp_next_state.mp_2_ecp_next_state_string, sizeof(mp_ecp_command));
+	memcpy(&mp_ecp_command, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_command));
 
 }
 

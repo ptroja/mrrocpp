@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 #include "base/edp/edp_typedefs.h"
 #include "base/edp/edp_e_manip.h"
@@ -16,16 +17,22 @@ void force::operator()()
 {
 	//	sr_msg->message("operator");
 
-	lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 1);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 1);
+	try {
+		if (!force_sensor_test_mode) {
+			connect_to_hardware();
+		}
 
-	if (!force_sensor_test_mode) {
-		connect_to_hardware();
+		thread_started.command();
+
+		configure_sensor();
 	}
 
-	thread_started.command();
-
-	try {
-		configure_sensor();
+	catch (std::runtime_error & e) {
+		printf("force sensor runtime error: %s \n", e.what());
+		sr_msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		_exit(EXIT_SUCCESS);
 	}
 
 	catch (lib::sensor::sensor_error & e) {
@@ -42,13 +49,13 @@ void force::operator()()
 		}
 		sr_msg->message(lib::FATAL_ERROR, e.error_no);
 
-	} //!< end CATCH
+	}
 
 	catch (...) {
 		std::cerr << "unidentified error force thread w EDP" << std::endl;
 	}
-	//sr_msg->message("dupa 1");
-	if(clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
+
+	if (clock_gettime(CLOCK_MONOTONIC, &wake_time) == -1) {
 		perror("clock_gettime()");
 	}
 
@@ -130,22 +137,20 @@ void force::operator()()
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
-		force_sensor_test_mode(true),
-		is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-		is_right_turn_frame(true), gravity_transformation(NULL),
-		master(_master),
-		TERMINATE(false),
-		is_sensor_configured(false),
-		new_edp_command(false) //!< czujnik niezainicjowany
+	force_sensor_test_mode(true),
+	is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
+	is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false),
+	is_sensor_configured(false), new_edp_command(false) //!< czujnik niezainicjowany
 {
 	/*! Lokalizacja procesu wywietlania komunikatow SR */
+
 	sr_msg
-			= boost::shared_ptr<lib::sr_vsp> (new lib::sr_vsp(lib::EDP, master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "edp_vsp_attach_point"), master.config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "sr_attach_point", lib::UI_SECTION)));
+			= boost::shared_ptr <lib::sr_vsp>(new lib::sr_vsp(lib::EDP, "f_" + master.config.robot_name, master.config.get_sr_attach_point()));
 
 	sr_msg->message("force");
 
 	if (master.config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
-		force_sensor_test_mode = master.config.value <int> (lib::FORCE_SENSOR_TEST_MODE);
+		force_sensor_test_mode = master.config.exists_and_true(lib::FORCE_SENSOR_TEST_MODE.c_str());
 	}
 
 	if (force_sensor_test_mode) {
@@ -175,7 +180,6 @@ void force::wait_for_event()
 /***************************** odczyt z czujnika *****************************/
 void force::get_reading(void)
 {
-
 	if (!is_sensor_configured) {
 		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
 	}
@@ -188,8 +192,38 @@ void force::get_reading(void)
 		if (gravity_transformation) {
 			lib::Homog_matrix frame = master.return_current_frame(common::WITH_TRANSLATION);
 			// lib::Homog_matrix frame(master.force_current_end_effector_frame);
-			lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
-			master.force_msr_upload(output);
+
+			bool overforce = false;
+			for (int i = 0; i < 6; i++) {
+				if ((fabs(ft_table[i]) > force_constraints[i]) || (!(std::isfinite(ft_table[i])))) {
+					overforce = true;
+
+				}
+			}
+			/*
+			 std::stringstream buffero(std::stringstream::in | std::stringstream::out);
+			 buffero << "over_force detected step: " << master.step_counter << " ";
+			 for (int i = 0; i < 6; i++) {
+			 buffero << i << ": " << ft_table[i] << " ";
+			 }
+
+			 std::cout << buffero.str() << std::endl;
+			 */
+			if (!overforce) {
+				lib::Ft_vector output = gravity_transformation->getForce(ft_table, frame);
+				// wykrywanie przekroczenia sily granciznej
+
+
+				master.force_msr_upload(output);
+			} else {
+				std::stringstream buffer(std::stringstream::in | std::stringstream::out);
+				buffer << "over_force detected step: " << master.step_counter << " ";
+				for (int i = 0; i < 6; i++) {
+					buffer << i << ": " << ft_table[i] << " ";
+				}
+
+				sr_msg->message(lib::NON_FATAL_ERROR, buffer.str());
+			}
 		}
 
 	} else {
@@ -215,12 +249,25 @@ void force::configure_sensor(void)
 	// lib::Homog_matrix frame(master.force_current_end_effector_frame); // pobranie aktualnej ramki
 	if (!gravity_transformation) // nie powolano jeszcze obiektu
 	{
+
+		// zczytanie sil maksymalnych
+		if (master.config.exists("force_constraints")) {
+			char *tmp = strdup(master.config.value <std::string> ("force_constraints").c_str());
+			char* toDel = tmp;
+			for (int i = 0; i < 6; i++) {
+				force_constraints[i] = strtod(tmp, &tmp);
+			}
+			free(toDel);
+			// std::cout<<sensor_frame<<std::endl;
+		}
+
 		lib::Xyz_Angle_Axis_vector tab;
 		if (master.config.exists("sensor_in_wrist")) {
 			char *tmp = strdup(master.config.value <std::string> ("sensor_in_wrist").c_str());
 			char* toDel = tmp;
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 6; i++) {
 				tab[i] = strtod(tmp, &tmp);
+			}
 			sensor_frame = lib::Homog_matrix(tab);
 			free(toDel);
 			// std::cout<<sensor_frame<<std::endl;

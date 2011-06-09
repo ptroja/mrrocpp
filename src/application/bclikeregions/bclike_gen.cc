@@ -116,7 +116,7 @@ bool bclike_gen::next_step(){
 	reading = bcl_ecp.vsp_fradia->get_reading_message();
 
 	//Get actual robot's position
-	actual_pos.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	actual_pos = the_robot->reply_package.arm.pf_def.arm_frame;
 	std::vector<double> vec;
 	vec.assign(the_robot->reply_package.arm.pf_def.arm_coordinates, the_robot->reply_package.arm.pf_def.arm_coordinates + VEC_SIZE);
 

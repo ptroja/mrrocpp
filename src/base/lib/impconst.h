@@ -35,8 +35,6 @@ const unsigned int CONNECT_RETRY = 200;
 const unsigned int CONNECT_DELAY = 10000;
 
 // ----------------------- PRZYDATNE STALE ---------------------------
-typedef double frame_tab[3][4];
-
 const std::string MP_SECTION = "[mp]";
 const std::string UI_SECTION = "[ui]";
 
@@ -68,7 +66,8 @@ const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
 
-const int QNX_MAX_PRIORITY = 30;
+const int PTHREAD_MAX_PRIORITY = 10;
+const int PTHREAD_MIN_PRIORITY = 1;
 
 // STALE PULSOW MP, ECP, READER
 
@@ -78,18 +77,11 @@ const int QNX_MAX_PRIORITY = 30;
 #define MP_RESUME (_PULSE_CODE_MINAVAIL + 4)
 #define MP_TRIGGER (_PULSE_CODE_MINAVAIL + 5)
 
-#define MP_TO_ECP_COMMUNICATION_REQUEST (_PULSE_CODE_MINAVAIL + 6)
-
 #define ECP_TRIGGER (_PULSE_CODE_MINAVAIL + 1)
 
 #define READER_START (_PULSE_CODE_MINAVAIL + 1)
 #define READER_STOP (_PULSE_CODE_MINAVAIL + 2)
 #define READER_TRIGGER (_PULSE_CODE_MINAVAIL + 3)
-
-#define ECP_WAIT_FOR_START (_PULSE_CODE_MINAVAIL + 2)
-#define ECP_WAIT_FOR_STOP (_PULSE_CODE_MINAVAIL + 3)
-#define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
-#define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
 
 } // namespace lib
 } // namespace mrrocpp

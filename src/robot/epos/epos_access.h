@@ -31,6 +31,15 @@ struct epos_error : virtual public std::exception, virtual public boost::excepti
 //! reason of an exception
 typedef boost::error_info <struct tag_reason, std::string> reason;
 
+//! index of the CANOpen object
+typedef boost::error_info <struct tag_index, uint16_t> dictionary_index;
+
+//! subindex of the CANOpen object
+typedef boost::error_info <struct tag_subindex, uint8_t> dictionary_subindex;
+
+//! CAN ID
+typedef boost::error_info <struct tag_canId, uint8_t> canId;
+
 //! errno code of a failed system call
 typedef boost::error_info <struct tag_errno_code, int> errno_code;
 
@@ -50,30 +59,89 @@ protected:
 	//! Flag indicating connection status
 	bool device_opened;
 
-public:
+	//! debug level
+	int debug;
+
 	//! EPOS error status
 	DWORD E_error;
 
 public:
 	//! Constructor
-	epos_access() : device_opened(false)
+	epos_access() : device_opened(false), debug(0)
 	{}
 
 	//! Destructor
 	virtual ~epos_access()
 	{}
 
-	/*! \brief  send command to EPOS, taking care of all necessary 'ack' and checksum tests
-	 *
-	 * @param frame array of WORDs to write
-	 */
-	virtual void sendCommand(WORD *frame) = 0;
+	typedef enum _CanOpen_OpCode {
+		Response_Op = 0x00,
 
-	/*! \brief  read an answer frame from EPOS
+		ReadObject_Op = 0x10,
+		InitiateSegmentedRead_Op = 0x12,
+		SegmentedRead_Op = 0x14,
+
+		WriteObject_Op = 0x11,
+		InitiateSegmentedWrite_Op = 0x13,
+		SegmentedWrite_Op = 0x15,
+
+		SendNMTService_Op = 0x0E,
+		SendCANFrame_Op = 0x20,
+		RequestCANFrame_Op = 0x21,
+		SendLSSFrame_Op = 0x30,
+		ReadLSSFrame_Op = 0x31
+	} CanOpen_OpCode_t;
+
+	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
+	 * @param ans answer buffer
+	 * @param length of answer buffer
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
 	 */
-	virtual unsigned int readAnswer(WORD *ans, unsigned int ans_len) = 0;
+	virtual unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex) = 0;
+
+#if 0
+	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2
+	 *
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 */
+	int InitiateSegmentedRead(WORD index, BYTE subindex );
+
+	/*! \brief read data segment of the object initiated with 'InitiateSegmentedRead()'
+	 *
+	 * @param ptr pointer to data to be filled
+	 */
+	int SegmentRead(WORD **ptr);
+#endif
+
+	/*! \brief write object value to EPOS (for up to 4 bytes)
+	 *
+	 * @param nodeId CAN node ID
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 * @param data 32bit object data
+	 */
+	virtual void WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uint32_t data) = 0;
+
+	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	 *
+	 * @param nodeId CAN node ID
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength length of the object to write
+	 */
+	virtual void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength) = 0;
+
+	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
+	 *
+	 * @param nodeId CAN node ID
+	 * @param ptr pointer to data to be filled
+	 * @param len length of the data to write
+	 */
+	virtual void SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len) = 0;
 
 	//! CAN Network Management Commands
 	typedef enum _NMT_Command
@@ -86,23 +154,31 @@ public:
 	} NMT_COMMAND_t;
 
 	/*! \brief Send a NMT service to, for example, change NMT state or reset the device.
+	 *
 	 *  \param nodeId CAN node ID
 	 *  \param CmdSpecifier command specifier
 	 */
 	virtual void SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier) = 0;
 
-	/*! Send CAN frame the the CAN bus
+	/*! \brief Send CAN frame the the CAN bus
+	 *
 	 *  @param Identifier CAN Frame 11-bit Identifier
 	 *  @param Length CAN Frame Data Length Code (DLC)
 	 *  @param Data CAN Frame Data
 	 */
-	virtual void SendCANFrame(WORD Identifier, WORD Length, BYTE Data[8]) = 0;
+	virtual void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]) = 0;
 
 	//! Open device
 	virtual void open() = 0;
 
 	//! Close device
 	virtual void close() = 0;
+
+	/*! \brief check for EPOS error code
+	 *
+	 * @param E_error epos error code
+	 */
+	static void checkEPOSerror(DWORD E_error);
 
 	/*! \brief Checksum calculation
 	 *
@@ -111,7 +187,12 @@ public:
 	 * @param pDataArray pointer to data for checksum calculation
 	 * @param numberOfWords length of the data
 	 */
-	static WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+	/*static*/ WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+
+	//! Set the debug level
+	void setDebugLevel(int level) {
+		debug = level;
+	}
 };
 
 } /* namespace epos */

@@ -90,7 +90,7 @@ private:
 	short int currentPeriod;
 
 	void sendCommand(uint8_t command);
-	void sendCoordinates(uint8_t command, double x, double y, double z);
+	void sendData(uint8_t command, double x, double y, double z, double vx, double vy, double vz);
 
 public:
 	neuron_sensor(mrrocpp::lib::configurator& _configurator);
@@ -109,11 +109,12 @@ public:
 	void waitForVSPStart();
 	bool startBraking();
 	void sendOvershoot(double overshoot);
-	void sendCurrentPosition(double x, double y, double z);
+	void sendRobotState(double x, double y, double z, double vx, double vy, double vz);
 	bool newData();
 	bool positionRequested();
 	void stopReceivingData();
 	double getRadius();
+	void sendStatistics(double currents_sum, double max);
 };
 
 } //sensor

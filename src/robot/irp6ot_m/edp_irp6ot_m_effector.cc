@@ -51,23 +51,24 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-#ifdef __QNXNTO__
+
 	// jesli wlaczono obsluge sily
 
-	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = (boost::shared_ptr <sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
-	vs->thread_started.wait();
+	//vs->thread_started.wait();
+	//zeby miec pewnosc, ze zostal wykonany pierwszy pomiar
+	vs->edp_vsp_synchroniser.wait();
 
-#endif
 	motor_driven_effector::hi_create_threads();
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::irp6ot_m::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+	manip_effector(_shell, lib::irp6ot_m::ROBOT_NAME)
 {
 	number_of_servos = lib::irp6ot_m::NUM_OF_SERVOS;
 
@@ -105,9 +106,9 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new irp6ot_m::effector(_config);
+	return new irp6ot_m::effector(_shell);
 }
 
 } // namespace common

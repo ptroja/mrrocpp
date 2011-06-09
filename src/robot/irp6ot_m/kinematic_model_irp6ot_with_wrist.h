@@ -102,6 +102,10 @@ protected:
 	//! Method responsible for kinematic parameters setting.
 	virtual void set_kinematic_parameters(void);
 
+public:
+	//! Number of degrees of freedom (thus joints and servos).
+	int number_of_servos;
+
 	/**
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
@@ -113,10 +117,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Number of degrees of freedom (thus joints and servos).
-	int number_of_servos;
 
 	/**
 	 * @brief Constructor.
