@@ -32,12 +32,8 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config),
-	MP(lib::MP_SECTION),
-	reply(MP, _config.section_name),
-	command("command"),
-	mp_command(command.access),
-	continuous_coordination(false)
+	ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"),
+			mp_command(command.access), continuous_coordination(false)
 {
 	initialize_communication();
 }
@@ -139,11 +135,11 @@ void task_base::termination_notice(void)
 void task_base::subtasks_conditional_execution()
 {
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-	{
-		if (mp_2_ecp_next_state_string == subtask_node.first) {
-			subtask_node.second->conditional_execution();
-		}
-	}
+				{
+					if (mp_2_ecp_next_state_string == subtask_node.first) {
+						subtask_node.second->conditional_execution();
+					}
+				}
 }
 
 // Petla odbierania wiadomosci.
@@ -152,6 +148,10 @@ void task_base::wait_for_stop(void)
 	while (command.Get().command != lib::STOP) {
 		ReceiveSingleMessage(true);
 	}
+	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+
+	// Reply with ACK
+	reply.Send(ecp_reply);
 }
 
 // Oczekiwanie na polecenie START od MP
@@ -333,7 +333,7 @@ void task_base::wait_for_resume()
 		ReceiveSingleMessage(true);
 
 		// ignore non-MP messages
-		if(!command.isFresh())
+		if (!command.isFresh())
 			continue;
 
 		command.markAsUsed();
