@@ -21,7 +21,7 @@
 	<State id="approach_1" type="runGenerator">
 		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" motionType="Absolute">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
