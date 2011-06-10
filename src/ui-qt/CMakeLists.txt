@@ -98,9 +98,18 @@ SET(GUI_MOC_SRCS
     irp6ot_m/ui_r_irp6ot_m.h
 	irp6ot_tfg/ui_r_irp6ot_tfg.h
 	irp6p_m/ui_r_irp6p_m.h
+	irp6p_tfg/ui_r_irp6p_tfg.h
+	polycrank/ui_r_polycrank.h
 	base/signal_dispatcher.h
 	base/menu_bar.h
-	base/MenuBarAction.h
+	base/menu_bar_action.h
+	bird_hand/ui_r_bird_hand.h
+	spkm/ui_r_spkm.h
+	smb/ui_r_smb.h
+	shead/ui_r_shead.h
+	sarkofag/ui_r_sarkofag.h
+	conveyor/ui_r_conveyor.h
+	
 )
 
 # Generate MOC files
@@ -162,7 +171,7 @@ ADD_EXECUTABLE(
 	base/ui_r_single_motor.cc
 	base/signal_dispatcher.cpp
 	base/menu_bar.cpp
-	base/MenuBarAction.cpp
+	base/menu_bar_action.cpp
 )
 
 # Link executable with QT libraries

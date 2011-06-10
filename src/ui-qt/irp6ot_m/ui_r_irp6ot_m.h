@@ -15,6 +15,10 @@
 #include "../irp6_m/ui_r_irp6_m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 
+namespace Ui{
+class MenuBar;
+class MenuBarAction;
+}
 
 namespace mrrocpp {
 namespace ui {
@@ -60,10 +64,34 @@ public:
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-	//typedef int (mrrocpp::ui::irp6ot_m::UiRobot::*intUiRobotFunctionPointer)();
 
-	typedef int (UiRobot::*intUiRobotIrpFunctionPointer)();
-	void makeConnections();
+	void make_connections();
+	void setup_menubar();
+
+private:
+    QAction *actionirp6ot_m_Synchronisation;
+    QAction *actionirp6ot_m_Synchro_Position;
+    QAction *actionirp6ot_m_Front_Position;
+    QAction *actionirp6ot_m_Position_0;
+    QAction *actionirp6ot_m_Position_1;
+    QAction *actionirp6ot_m_Position_2;
+    QAction *actionirp6ot_m_Pre_Synchro_Moves_Motors;
+    QAction *actionirp6ot_m_Absolute_Moves_Motors;
+    QAction *actionirp6ot_m_Joints;
+    QAction *actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz;
+    QAction *actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis;
+    QAction *actionirp6ot_m_Relative_Xyz_Angle_Axis;
+    QAction *actionirp6ot_m_Tool_Xyz_Euler_Zyz;
+    QAction *actionirp6ot_m_Tool_Xyz_Angle_Axis;
+    QAction *actionirp6ot_m_EDP_Load;
+    QAction *actionirp6ot_m_EDP_Unload;
+
+    QMenu *menuIrp6ot_m;
+    QMenu *menuirp6ot_m_Pre_Synchro_Moves;
+    QMenu *menuirp6ot_m_Preset_Positions;
+    QMenu *menuirp6ot_m_Absolute_moves;
+    QMenu *menuIrp6ot_m_Relative_Moves;
+    QMenu *menuirp6ot_m_Tool;
 
 };
 

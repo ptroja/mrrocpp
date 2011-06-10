@@ -18,6 +18,9 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "../base/menu_bar.h"
+#include "../base/menu_bar_action.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace irp6p_m {
@@ -151,23 +154,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 		wndbase_m[WGT_IRP6P_M_RELATIVE_ANGLE_AXIS] = wgt_relative_angle_axis->dwgt;
 		wndbase_m[WGT_IRP6P_M_TOOL_ANGLE_AXIS] = wgt_tool_angle_axis->dwgt;
 		wndbase_m[WGT_IRP6P_M_TOOL_EULER] = wgt_tool_euler->dwgt;
-
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_EDP_Load, 						SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_EDP_Load_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_EDP_Unload, 					SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_EDP_Unload_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Synchronisation, 				SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Synchronisation_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Pre_Synchro_Moves_Motors, 		SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Absolute_Moves_Motors, 		SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Absolute_Moves_Motors_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Joints, 						SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Joints_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz, 	SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis,	SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Xyz_Relative_Moves_Angle_Axis, SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Synchro_Position, 				SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Synchro_Position_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Front_Position, 				SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Front_Position_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Position_0, 					SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Position_0_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Position_1, 					SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Position_1_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Position_2, 					SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Position_2_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Tool_Xyz_Euler_Zyz, 			SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()), Qt::AutoCompatConnection);
-	connect(interface.get_main_window()->getMenuBar()->actionirp6p_m_Tool_Xyz_Angle_Axis, 			SIGNAL(triggered()), this, SLOT(on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()), Qt::AutoCompatConnection);
 }
 
 int UiRobot::manage_interface()
@@ -178,42 +164,42 @@ int UiRobot::manage_interface()
 	{
 
 		case -1:
-			mw->enable_menu_item(false, 1, mw->getMenuBar()->menuIrp6p_m);
+			mw->enable_menu_item(false, 1, menuIrp6p_m);
 			break;
 		case 0:
-			mw->enable_menu_item(false, 5, mw->getMenuBar()->menuirp6p_m_Pre_Synchro_Moves, mw->getMenuBar()->menuirp6p_m_Absolute_Moves, mw->getMenuBar()->menuirp6p_m_Preset_Positions, mw->getMenuBar()->menuirp6p_m_Relative_Moves, mw->getMenuBar()->menuirp6p_m_Tool);
-			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6p_m_EDP_Unload);
-			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuIrp6p_m);
-			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionirp6p_m_EDP_Load);
+			mw->enable_menu_item(false, 5, menuirp6p_m_Pre_Synchro_Moves, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
+			mw->enable_menu_item(false, 1, actionirp6p_m_EDP_Unload);
+			mw->enable_menu_item(true, 1, menuIrp6p_m);
+			mw->enable_menu_item(true, 1, actionirp6p_m_EDP_Load);
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, mw->getMenuBar()->menuIrp6p_m);
+			mw->enable_menu_item(true, 1, menuIrp6p_m);
 			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
 
 			//ApModifyItemState( &all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_edp_unload, NULL);
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuirp6p_m_Pre_Synchro_Moves);
+				mw->enable_menu_item(false, 1, menuirp6p_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 4, mw->getMenuBar()->menuirp6p_m_Absolute_Moves, mw->getMenuBar()->menuirp6p_m_Preset_Positions, mw->getMenuBar()->menuirp6p_m_Relative_Moves, mw->getMenuBar()->menuirp6p_m_Tool);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionirp6p_m_EDP_Unload);
-						mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6p_m_EDP_Load);
+						mw->enable_menu_item(true, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
+						mw->enable_menu_item(true, 1, actionirp6p_m_EDP_Unload);
+						mw->enable_menu_item(false, 1, actionirp6p_m_EDP_Load);
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 4, mw->getMenuBar()->menuirp6p_m_Absolute_Moves, mw->getMenuBar()->menuirp6p_m_Preset_Positions, mw->getMenuBar()->menuirp6p_m_Relative_Moves, mw->getMenuBar()->menuirp6p_m_Tool);
-						mw->enable_menu_item(false, 2, mw->getMenuBar()->actionirp6p_m_EDP_Unload, mw->getMenuBar()->actionirp6p_m_EDP_Load);
+						mw->enable_menu_item(true, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
+						mw->enable_menu_item(false, 2, actionirp6p_m_EDP_Unload, actionirp6p_m_EDP_Load);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 4, mw->getMenuBar()->menuirp6p_m_Absolute_Moves, mw->getMenuBar()->menuirp6p_m_Preset_Positions, mw->getMenuBar()->menuirp6p_m_Relative_Moves, mw->getMenuBar()->menuirp6p_m_Tool);
+						mw->enable_menu_item(false, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
 
 						break;
 					default:
@@ -222,9 +208,9 @@ int UiRobot::manage_interface()
 
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuirp6p_m_Pre_Synchro_Moves);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionirp6p_m_EDP_Unload);
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionirp6p_m_EDP_Load);
+				mw->enable_menu_item(true, 1, menuirp6p_m_Pre_Synchro_Moves);
+				mw->enable_menu_item(true, 1, actionirp6p_m_EDP_Unload);
+				mw->enable_menu_item(false, 1, actionirp6p_m_EDP_Load);
 
 			}
 			break;
@@ -238,7 +224,7 @@ int UiRobot::manage_interface()
 }
 
 // aktualizacja ustawien przyciskow
-void UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 
 	if (state.edp.state <= 0) {// edp wylaczone
@@ -265,89 +251,119 @@ void UiRobot::process_control_window_irp6p_section_init(bool &wlacz_PtButton_wnd
 	}
 
 	state.edp.last_state = state.edp.state;
+	return 0;
 }
 
-
-
-void UiRobot::on_actionirp6p_m_EDP_Load_triggered()
+void UiRobot::make_connections()
 {
-	//interface.get_main_window()->ui_robot_action(this, &UiRobot::edp_create);
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+	connect(actionirp6p_m_EDP_Load, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
+	connect(actionirp6p_m_EDP_Unload, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),					Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Synchronisation, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Pre_Synchro_Moves_Motors, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Pre_Synchro_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Absolute_Moves_Motors, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Joints, 						SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Joints_triggered(mrrocpp::ui::common::UiRobot*)), 						Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Xyz_Relative_Moves_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Relative_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Synchro_Position, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Front_Position, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Position_0, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Position_1, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Position_2, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Tool_Xyz_Euler_Zyz, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
+	connect(actionirp6p_m_Tool_Xyz_Angle_Axis, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
+
 }
 
-void UiRobot::on_actionirp6p_m_EDP_Unload_triggered()
+
+void UiRobot::setup_menubar()
 {
-	//interface.get_main_window()->ui_robot_action(this, &UiRobot::EDP_slay_int);
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+
+    actionirp6p_m_EDP_Load 						= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+    actionirp6p_m_EDP_Unload 					= new Ui::MenuBarAction(QString("EDP &Unload"),this, menuBar);
+    actionirp6p_m_Synchronisation 				= new Ui::MenuBarAction(QString("&Synchronisation"),this, menuBar);
+    actionirp6p_m_Synchro_Position 				= new Ui::MenuBarAction(QString("&Synchro Position"),this, menuBar);
+    actionirp6p_m_Front_Position 				= new Ui::MenuBarAction(QString("&Front Position"),this, menuBar);
+    actionirp6p_m_Position_0 					= new Ui::MenuBarAction(QString("Position &0"),this, menuBar);
+    actionirp6p_m_Position_1 					= new Ui::MenuBarAction(QString("Position &1"),this, menuBar);
+    actionirp6p_m_Position_2 					= new Ui::MenuBarAction(QString("Position &2"),this, menuBar);
+    actionirp6p_m_Pre_Synchro_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
+	actionirp6p_m_Absolute_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
+	actionirp6p_m_Joints 						= new Ui::MenuBarAction(QString("&Joints"),this, menuBar);
+	actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz 	= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),this, menuBar);
+	actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
+	actionirp6p_m_Tool_Xyz_Euler_Zyz 			= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),this, menuBar);
+	actionirp6p_m_Tool_Xyz_Angle_Axis 			= new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
+	actionirp6p_m_Motors						= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
+	actionirp6p_m_Xyz_Relative_Moves_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
+
+	menuIrp6p_m = new QMenu(menuBar->menuRobot);
+	menuIrp6p_m->setObjectName(QString::fromUtf8("menuIrp6p_m"));
+	menuIrp6p_m->setEnabled(true);
+	menuirp6p_m_Pre_Synchro_Moves = new QMenu(menuIrp6p_m);
+	menuirp6p_m_Pre_Synchro_Moves->setObjectName(QString::fromUtf8("menuirp6p_m_Pre_Synchro_Moves"));
+	menuirp6p_m_Preset_Positions = new QMenu(menuIrp6p_m);
+	menuirp6p_m_Preset_Positions->setObjectName(QString::fromUtf8("menuirp6p_m_Preset_Positions"));
+	menuirp6p_m_Absolute_Moves = new QMenu(menuIrp6p_m);
+	menuirp6p_m_Absolute_Moves->setObjectName(QString::fromUtf8("menuirp6p_m_Absolute_Moves"));
+	menuirp6p_m_Relative_Moves = new QMenu(menuIrp6p_m);
+	menuirp6p_m_Relative_Moves->setObjectName(QString::fromUtf8("menuirp6p_m_Relative_Moves"));
+	menuirp6p_m_Tool = new QMenu(menuIrp6p_m);
+	menuirp6p_m_Tool->setObjectName(QString::fromUtf8("menuirp6p_m_Tool"));
+	menuBar->menuRobot->addAction(menuIrp6p_m->menuAction());
+
+	menuIrp6p_m->addAction(actionirp6p_m_EDP_Load);
+	menuIrp6p_m->addAction(actionirp6p_m_EDP_Unload);
+	menuIrp6p_m->addSeparator();
+	menuIrp6p_m->addAction(menuirp6p_m_Pre_Synchro_Moves->menuAction());
+	menuIrp6p_m->addAction(menuirp6p_m_Absolute_Moves->menuAction());
+	menuIrp6p_m->addAction(menuirp6p_m_Relative_Moves->menuAction());
+	menuIrp6p_m->addAction(menuirp6p_m_Preset_Positions->menuAction());
+	menuIrp6p_m->addSeparator();
+	menuIrp6p_m->addAction(menuirp6p_m_Tool->menuAction());
+	menuirp6p_m_Pre_Synchro_Moves->addAction(actionirp6p_m_Synchronisation);
+	menuirp6p_m_Pre_Synchro_Moves->addAction(actionirp6p_m_Pre_Synchro_Moves_Motors);
+	menuirp6p_m_Preset_Positions->addAction(actionirp6p_m_Synchro_Position);
+	menuirp6p_m_Preset_Positions->addAction(actionirp6p_m_Front_Position);
+	menuirp6p_m_Preset_Positions->addAction(actionirp6p_m_Position_0);
+	menuirp6p_m_Preset_Positions->addAction(actionirp6p_m_Position_1);
+	menuirp6p_m_Preset_Positions->addAction(actionirp6p_m_Position_2);
+	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Motors);
+	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Joints);
+	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz);
+	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis);
+	menuirp6p_m_Relative_Moves->addAction(actionirp6p_m_Xyz_Relative_Moves_Angle_Axis);
+	menuirp6p_m_Tool->addAction(actionirp6p_m_Tool_Xyz_Euler_Zyz);
+	menuirp6p_m_Tool->addAction(actionirp6p_m_Tool_Xyz_Angle_Axis);
+
+    actionirp6p_m_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Synchronisation->setText(QApplication::translate("MainWindow", "&Synchronisation", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Front_Position->setText(QApplication::translate("MainWindow", "&Front Position", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Pre_Synchro_Moves_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Joints->setText(QApplication::translate("MainWindow", "&Joints", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz->setText(QApplication::translate("MainWindow", "Xyz &Euler Zyz", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis->setText(QApplication::translate("MainWindow", "Xyz &Angle Axis", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Xyz_Relative_Moves_Angle_Axis->setText(QApplication::translate("MainWindow", "Xyz &Angle Axis", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Tool_Xyz_Euler_Zyz->setText(QApplication::translate("MainWindow", "Xyz &Euler Zyz", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Tool_Xyz_Angle_Axis->setText(QApplication::translate("MainWindow", "Xyz &Angle Axis", 0, QApplication::UnicodeUTF8));
+    actionirp6p_m_Absolute_Moves_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
+    menuIrp6p_m->setTitle(QApplication::translate("MainWindow", "Irp6&p_m", 0, QApplication::UnicodeUTF8));
+    menuirp6p_m_Pre_Synchro_Moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
+    menuirp6p_m_Preset_Positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
+    menuirp6p_m_Absolute_Moves->setTitle(QApplication::translate("MainWindow", "A&bsolute moves", 0, QApplication::UnicodeUTF8));
+    menuirp6p_m_Relative_Moves->setTitle(QApplication::translate("MainWindow", "Re&lative moves", 0, QApplication::UnicodeUTF8));
+    menuirp6p_m_Tool->setTitle(QApplication::translate("MainWindow", "&Tool", 0, QApplication::UnicodeUTF8));
 }
 
-//void UiRobot::on_actionirp6p_m_Synchronisation_triggered()
-//{
-//	interface.get_main_window()->ui_robot_action(this, &UiRobot::synchronise());
-//}
-
-void UiRobot::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
-{
-	interface.irp6p_m->wgt_motors->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
-{
-	interface.irp6p_m->wgt_motors->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Joints_triggered()
-{
-	interface.irp6p_m->wgt_joints->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6p_m->wgt_euler->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_angle_axis->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_relative_angle_axis->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Synchro_Position_triggered()
-{
-	interface.irp6p_m->move_to_synchro_position();
-}
-
-void UiRobot::on_actionirp6p_m_Front_Position_triggered()
-{
-	interface.irp6p_m->move_to_front_position();
-}
-
-void UiRobot::on_actionirp6p_m_Position_0_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(0);
-}
-
-void UiRobot::on_actionirp6p_m_Position_1_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(1);
-}
-
-void UiRobot::on_actionirp6p_m_Position_2_triggered()
-{
-	interface.irp6p_m->move_to_preset_position(2);
-}
-
-void UiRobot::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
-{
-	interface.irp6p_m->wgt_tool_euler->my_open();
-}
-
-void UiRobot::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
-{
-	interface.irp6p_m->wgt_tool_angle_axis->my_open();
-}
 
 
 }

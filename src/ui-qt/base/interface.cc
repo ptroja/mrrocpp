@@ -582,6 +582,15 @@ void Interface::raise_ui_ecp_window_slot()
 
 }
 
+void Interface::setRobotsMenu()
+{
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+	{
+		robot_node.second->setup_menubar();
+		robot_node.second->make_connections();
+	}
+}
+
 MainWindow* Interface::get_main_window()
 {
 	return mw;
@@ -661,8 +670,6 @@ void Interface::create_robots()
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	robot_m[irp6ot_m->robot_name] = irp6ot_m;
 
-	printf("IRP6OT CREATED");
-
 	irp6p_m = new irp6p_m::UiRobot(*this);
 	robot_m[irp6p_m->robot_name] = irp6p_m;
 
@@ -684,7 +691,9 @@ void Interface::create_robots()
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
 
-	mw->setMenu();
+	//mw->setMenu();
+	setRobotsMenu();
+
 }
 
 void Interface::init()
@@ -981,7 +990,6 @@ void Interface::manage_interface_slot()
 				break;
 			case UI_ALL_EDPS_NONE_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
-				//print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
 				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Load);
 				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);

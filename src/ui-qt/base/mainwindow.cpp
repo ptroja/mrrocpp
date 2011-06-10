@@ -67,10 +67,14 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::irp6ot_m::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::irp6ot_m::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
-	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_robot_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_robot_int_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
+	connect(this, SIGNAL(ui_robot_int_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_int_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
+
+
 
 	menuBar = new Ui::MenuBar(&interface, this);
-
+	menuBar->setupMenuBar(this);
 
 	signalDispatcher = new Ui::SignalDispatcher(interface);
 	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
@@ -91,10 +95,9 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 void MainWindow::setMenu()
 {
 	menuBar->setupMenuBar(this);
-	interface.irp6ot_m->makeConnections();
 }
 
-//void MainWindow::
+
 
 Ui::SignalDispatcher* MainWindow::getSignalDispatcher()
 {
@@ -139,19 +142,19 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_
 {
 	va_list menu_items;
 	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-	/*
-	 emit
-	 enable_menu_item_signal(_menu_item, _enable);
-	 */
+
+//	 emit
+//	 enable_menu_item_signal(_menu_item, _enable);
+
 	enable_menu_item_slot(_menu_item, _enable);
 	va_start(menu_items, _menu_item);
 
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
 		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-		/*
-		 emit enable_menu_item_signal(va_arg(menu_items, QMenu *), _enable);
-		 */
+
+//		 emit enable_menu_item_signal(va_arg(menu_items, QMenu *), _enable);
+
 		enable_menu_item_slot(va_arg(menu_items, QMenu *), _enable);
 	}
 
@@ -162,10 +165,10 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 {
 	va_list menu_items;
 	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-	/*
-	 emit
-	 enable_menu_item_signal(_menu_item, _enable);
-	 */
+
+//	 emit
+//	 enable_menu_item_signal(_menu_item, _enable);
+
 	enable_menu_item_slot(_menu_item, _enable);
 
 	va_start(menu_items, _menu_item);
@@ -173,9 +176,9 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 	for (int i = 1; i < _num_of_menus; i++) {
 		//interface.print_on_sr("signal");
 		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-		/*
-		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
-		 */
+
+//		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
+
 		enable_menu_item_slot(va_arg(menu_items, QAction *), _enable);
 	}
 
@@ -187,37 +190,55 @@ void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::
 	printf("ui robot action void");
 	uiRobotFunctionPtr = pointer;
 	emit ui_robot_signal(robot);
-	printf("ui robot action void 2");
+
 }
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointerInt pointer, int argument)
 {
 	interface.print_on_sr("ui robot action void arg int");
 	intUiRobotFunctionPtrInt = pointer;
-	emit ui_robot_signal(robot, argument);
+	emit ui_robot_int_signal_int(robot, argument);
 }
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer pointer)
 {
 	interface.print_on_sr("ui robot action int");
 	intUiRobotFunctionPtr = pointer;
-	emit ui_robot_signal(robot);
-
-
+	emit ui_robot_int_signal(robot);
 }
+
+void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument)
+{
+	interface.print_on_sr("ui robot action int");
+	uiRobotFunctionPtrInt = pointer;
+	emit ui_robot_signal_int(robot, argument);
+}
+
 
 
 
 void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot)
 {
-	printf("ui robot slot");
+	interface.print_on_sr("ui robot slot void");
 	(*robot.*uiRobotFunctionPtr)();
 }
 
-void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot, int argument)
+void MainWindow::ui_robot_slot_int(mrrocpp::ui::common::UiRobot *robot, int argument)
 {
-	printf("ui robot slot int\n");
+	interface.print_on_sr("ui robot int slot int\n");
+	(*robot.*uiRobotFunctionPtrInt)(argument);
+}
+
+void MainWindow::ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *robot, int argument)
+{
+	interface.print_on_sr("ui robot slot void");
 	(*robot.*intUiRobotFunctionPtrInt)(argument);
+}
+
+void MainWindow::ui_robot_int_slot(mrrocpp::ui::common::UiRobot *robot)
+{
+	interface.print_on_sr("ui robot int slot int\n");
+	(*robot.*intUiRobotFunctionPtr)();
 }
 
 
@@ -289,31 +310,37 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 
 	int j = 0;
 	BOOST_FOREACH(std::string t, tokens)
-				{
+	{
 
-					val[j] = boost::lexical_cast <double>(t);
+		val[j] = boost::lexical_cast <double>(t);
 
-					if (j == number_of_servos) {
-						break;
-					}
-					j++;
-				}
+		if (j == number_of_servos)
+		{
+			break;
+		}
+		j++;
+	}
 
 }
 
-void MainWindow::enable_menu_item_slot(QMenu *_menu_item, bool _active)
+void MainWindow::enable_menu_item_slot(QMenu *_menu_item, bool &_active)
 {
 	//interface.print_on_sr("menu coloring slot");
 	//_menu_item->setDisabled(!_active);
-	_menu_item->menuAction()->setVisible(_active);
+	if(_menu_item!=NULL)
+//	_menu_item->menuAction()->setVisible(_active); //setDisabled(!_active);//setVisible(_active);
+	_menu_item->menuAction()->setDisabled(!_active);
 	//if(!_active) _menu_item->hide();
-	// _menu_item->setShown(!_active);
+
 }
 
-void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
+void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool &_active)
 {
 	//interface.print_on_sr("menu coloring slot");
-	_menu_item->setVisible(_active); //setDisabled(!_active);
+
+	if(_menu_item!=NULL)
+//	_menu_item->setVisible(_active); //setDisabled(!_active);//
+	_menu_item->setDisabled(!_active);//
 }
 
 void MainWindow::ui_notification_slot()
@@ -389,484 +416,164 @@ void MainWindow::on_actionQuit_triggered()
 
 }
 
-// robot menu
 
-
-// irp6ot_m menu
-
-//void MainWindow::on_actionirp6ot_m_EDP_Load_triggered()
+//// conveyor menu
+//void MainWindow::on_actionconveyor_EDP_Load_triggered()
 //{
-//	interface.irp6ot_m->edp_create();
+//	interface.conveyor->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_EDP_Unload_triggered()
+//void MainWindow::on_actionconveyor_EDP_Unload_triggered()
 //{
-//	interface.irp6ot_m->EDP_slay_int();
+//	interface.conveyor->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Synchronisation_triggered()
+//void MainWindow::on_actionconveyor_Synchronization_triggered()
 //{
-//	interface.irp6ot_m->synchronise();
+//	interface.conveyor->synchronise();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Pre_Synchro_Moves_Motors_triggered()
+//void MainWindow::on_actionconveyor_Move_triggered()
 //{
-//	interface.irp6ot_m->wgt_motors->my_open();
-//}
-
-//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Motors_triggered()
-//{
-//	//interface.irp6ot_m->wgt_motors->my_open();
-//
-//
-//	//open_new_window(interface.irp6ot_m->wgt_motors, func);
-//	open_new_window(interface.irp6ot_m->wgt_motors);
-//	interface.print_on_sr("on action");
-//}
-
-//void MainWindow::on_actionirp6ot_m_Joints_triggered()
-//{
-//	interface.irp6ot_m->wgt_joints->my_open();
+//	interface.conveyor->wgt_move->my_open();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+//void MainWindow::on_actionconveyor_Synchro_Position_triggered()
 //{
-//	interface.irp6ot_m->wgt_euler->my_open();
+//	interface.conveyor->move_to_synchro_position();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+//void MainWindow::on_actionconveyor_Position_0_triggered()
 //{
-//	interface.irp6ot_m->wgt_angle_axis->my_open();
+//	interface.conveyor->move_to_preset_position(0);
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Relative_Xyz_Angle_Axis_triggered()
+//void MainWindow::on_actionconveyor_Position_1_triggered()
 //{
-//	interface.irp6ot_m->wgt_relative_angle_axis->my_open();
+//	interface.conveyor->move_to_preset_position(1);
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Synchro_Position_triggered()
+//void MainWindow::on_actionconveyor_Position_2_triggered()
 //{
-//	interface.irp6ot_m->move_to_synchro_position();
+//	interface.conveyor->move_to_preset_position(2);
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Front_Position_triggered()
+//// birdhand menu
+//void MainWindow::on_actionbirdhand_EDP_Load_triggered()
 //{
-//	interface.irp6ot_m->move_to_front_position();
+//	interface.bird_hand->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Position_0_triggered()
+//void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
 //{
-//	interface.irp6ot_m->move_to_preset_position(0);
+//	interface.bird_hand->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Position_1_triggered()
+//void MainWindow::on_actionbirdhand_Command_triggered()
 //{
-//	interface.irp6ot_m->move_to_preset_position(1);
+//	interface.bird_hand->wgt_command_and_status->my_open();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Position_2_triggered()
+//void MainWindow::on_actionbirdhand_Configuration_triggered()
 //{
-//	interface.irp6ot_m->move_to_preset_position(2);
+//
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Tool_Xyz_Euler_Zyz_triggered()
+//// sarkofag menu
+//void MainWindow::on_actionsarkofag_EDP_Load_triggered()
 //{
-//	interface.irp6ot_m->wgt_tool_euler->my_open();
+//	interface.sarkofag->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6ot_m_Tool_Xyz_Angle_Axis_triggered()
+//void MainWindow::on_actionsarkofag_EDP_Unload_triggered()
 //{
-//	interface.irp6ot_m->wgt_tool_angle_axis->my_open();
-//}
-
-//irp6ot_tfg
-
-//void MainWindow::on_actionirp6ot_tfg_EDP_Load_triggered()
-//{
-//	interface.irp6ot_tfg->edp_create();
+//	interface.sarkofag->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_EDP_Unload_triggered()
+//void MainWindow::on_actionsarkofag_Synchronisation_triggered()
 //{
-//	interface.irp6ot_tfg->EDP_slay_int();
+//	interface.sarkofag->synchronise();
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Synchronization_triggered()
+//void MainWindow::on_actionsarkofag_Move_triggered()
 //{
-//	interface.irp6ot_tfg->synchronise();
+//	interface.sarkofag->wgt_move->my_open();
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Move_triggered()
+//void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
 //{
-//	interface.irp6ot_tfg->wgt_move->my_open();
+//	interface.sarkofag->move_to_synchro_position();
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Synchro_Position_triggered()
+//void MainWindow::on_actionsarkofag_Front_Position_triggered()
 //{
-//	interface.irp6ot_tfg->move_to_synchro_position();
+//	interface.sarkofag->move_to_front_position();
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Position_0_triggered()
+//void MainWindow::on_actionsarkofag_Position_0_triggered()
 //{
-//	interface.irp6ot_tfg->move_to_preset_position(0);
+//	interface.sarkofag->move_to_preset_position(0);
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Position_1_triggered()
+//void MainWindow::on_actionsarkofag_Position_1_triggered()
 //{
-//	interface.irp6ot_tfg->move_to_preset_position(1);
+//	interface.sarkofag->move_to_preset_position(1);
 //}
 //
-//void MainWindow::on_actionirp6ot_tfg_Position_2_triggered()
+//void MainWindow::on_actionsarkofag_Position_2_triggered()
 //{
-//	interface.irp6ot_tfg->move_to_preset_position(2);
-//}
-
-// irp6p_m menu
-
-//
-//void MainWindow::on_actionirp6p_m_EDP_Load_triggered()
-//{
-//	interface.irp6p_m->edp_create();
+//	interface.sarkofag->move_to_preset_position(2);
 //}
 //
-//void MainWindow::on_actionirp6p_m_EDP_Unload_triggered()
+//void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
 //{
-//	interface.irp6p_m->EDP_slay_int();
+//
 //}
 //
-//void MainWindow::on_actionirp6p_m_Synchronisation_triggered()
+//// spkm menu
+//
+//
+//// smb menu
+//
+//void MainWindow::on_actionsmb_EDP_Load_triggered()
 //{
-//	interface.irp6p_m->synchronise();
+//	interface.smb->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Pre_Synchro_Moves_Motors_triggered()
+//void MainWindow::on_actionsmb_EDP_Unload_triggered()
 //{
-//	interface.irp6p_m->wgt_motors->my_open();
+//	interface.smb->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Absolute_Moves_Motors_triggered()
+//// shead menu
+//
+//void MainWindow::on_actionshead_EDP_Load_triggered()
 //{
-//	interface.irp6p_m->wgt_motors->my_open();
+//	interface.shead->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Joints_triggered()
+//void MainWindow::on_actionshead_EDP_Unload_triggered()
 //{
-//	interface.irp6p_m->wgt_joints->my_open();
+//	interface.shead->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz_triggered()
+//// polycrank menu
+//
+//void MainWindow::on_actionpolycrank_EDP_Load_triggered()
 //{
-//	interface.irp6p_m->wgt_euler->my_open();
+//	interface.polycrank->edp_create();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis_triggered()
+//void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
 //{
-//	interface.irp6p_m->wgt_angle_axis->my_open();
+//	interface.polycrank->EDP_slay_int();
 //}
 //
-//void MainWindow::on_actionirp6p_m_Xyz_Relative_Moves_Angle_Axis_triggered()
+//void MainWindow::on_actionpolycrank_Move_Joints_triggered()
 //{
-//	interface.irp6p_m->wgt_relative_angle_axis->my_open();
-//}
 //
-//void MainWindow::on_actionirp6p_m_Synchro_Position_triggered()
-//{
-//	interface.irp6p_m->move_to_synchro_position();
+//	interface.polycrank->wgt_int->my_open();
 //}
-//
-//void MainWindow::on_actionirp6p_m_Front_Position_triggered()
-//{
-//	interface.irp6p_m->move_to_front_position();
-//}
-//
-//void MainWindow::on_actionirp6p_m_Position_0_triggered()
-//{
-//	interface.irp6p_m->move_to_preset_position(0);
-//}
-//
-//void MainWindow::on_actionirp6p_m_Position_1_triggered()
-//{
-//	interface.irp6p_m->move_to_preset_position(1);
-//}
-//
-//void MainWindow::on_actionirp6p_m_Position_2_triggered()
-//{
-//	interface.irp6p_m->move_to_preset_position(2);
-//}
-//
-//void MainWindow::on_actionirp6p_m_Tool_Xyz_Euler_Zyz_triggered()
-//{
-//	interface.irp6p_m->wgt_tool_euler->my_open();
-//}
-//
-//void MainWindow::on_actionirp6p_m_Tool_Xyz_Angle_Axis_triggered()
-//{
-//	interface.irp6p_m->wgt_tool_angle_axis->my_open();
-//}
-
-//irp6p_tfg
-
-void MainWindow::on_actionirp6p_tfg_EDP_Load_triggered()
-{
-	interface.irp6p_tfg->edp_create();
-}
-
-void MainWindow::on_actionirp6p_tfg_EDP_Unload_triggered()
-{
-	interface.irp6p_tfg->EDP_slay_int();
-}
-
-void MainWindow::on_actionirp6p_tfg_Synchronization_triggered()
-{
-	interface.irp6p_tfg->synchronise();
-}
-
-void MainWindow::on_actionirp6p_tfg_Move_triggered()
-{
-	interface.irp6p_tfg->wgt_move->my_open();
-}
-
-void MainWindow::on_actionirp6p_tfg_Synchro_Position_triggered()
-{
-	interface.irp6p_tfg->move_to_synchro_position();
-}
-
-void MainWindow::on_actionirp6p_tfg_Position_0_triggered()
-{
-	interface.irp6p_tfg->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionirp6p_tfg_Position_1_triggered()
-{
-	interface.irp6p_tfg->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionirp6p_tfg_Position_2_triggered()
-{
-	interface.irp6p_tfg->move_to_preset_position(2);
-}
-
-// conveyor menu
-void MainWindow::on_actionconveyor_EDP_Load_triggered()
-{
-	interface.conveyor->edp_create();
-}
-
-void MainWindow::on_actionconveyor_EDP_Unload_triggered()
-{
-	interface.conveyor->EDP_slay_int();
-}
-
-void MainWindow::on_actionconveyor_Synchronization_triggered()
-{
-	interface.conveyor->synchronise();
-}
-
-void MainWindow::on_actionconveyor_Move_triggered()
-{
-	interface.conveyor->wgt_move->my_open();
-}
-
-void MainWindow::on_actionconveyor_Synchro_Position_triggered()
-{
-	interface.conveyor->move_to_synchro_position();
-}
-
-void MainWindow::on_actionconveyor_Position_0_triggered()
-{
-	interface.conveyor->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionconveyor_Position_1_triggered()
-{
-	interface.conveyor->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionconveyor_Position_2_triggered()
-{
-	interface.conveyor->move_to_preset_position(2);
-}
-
-// birdhand menu
-void MainWindow::on_actionbirdhand_EDP_Load_triggered()
-{
-	interface.bird_hand->edp_create();
-}
-
-void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
-{
-	interface.bird_hand->EDP_slay_int();
-}
-
-void MainWindow::on_actionbirdhand_Command_triggered()
-{
-	interface.bird_hand->wgt_command_and_status->my_open();
-}
-
-void MainWindow::on_actionbirdhand_Configuration_triggered()
-{
-
-}
-
-// sarkofag menu
-void MainWindow::on_actionsarkofag_EDP_Load_triggered()
-{
-	interface.sarkofag->edp_create();
-}
-
-void MainWindow::on_actionsarkofag_EDP_Unload_triggered()
-{
-	interface.sarkofag->EDP_slay_int();
-}
-
-void MainWindow::on_actionsarkofag_Synchronisation_triggered()
-{
-	interface.sarkofag->synchronise();
-}
-
-void MainWindow::on_actionsarkofag_Move_triggered()
-{
-	interface.sarkofag->wgt_move->my_open();
-}
-
-void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
-{
-	interface.sarkofag->move_to_synchro_position();
-}
-
-void MainWindow::on_actionsarkofag_Front_Position_triggered()
-{
-	interface.sarkofag->move_to_front_position();
-}
-
-void MainWindow::on_actionsarkofag_Position_0_triggered()
-{
-	interface.sarkofag->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionsarkofag_Position_1_triggered()
-{
-	interface.sarkofag->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionsarkofag_Position_2_triggered()
-{
-	interface.sarkofag->move_to_preset_position(2);
-}
-
-void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
-{
-
-}
-
-// spkm menu
-
-void MainWindow::on_actionspkm_EDP_Load_triggered()
-{
-	interface.spkm->edp_create();
-}
-
-void MainWindow::on_actionspkm_EDP_Unload_triggered()
-{
-	interface.spkm->EDP_slay_int();
-}
-
-void MainWindow::on_actionspkm_Synchronisation_triggered()
-{
-	interface.spkm->synchronise();
-}
-
-void MainWindow::on_actionspkm_Motors_triggered()
-{
-	interface.spkm->wgt_inc->my_open();
-}
-
-void MainWindow::on_actionspkm_Motors_post_triggered()
-{
-	interface.spkm->wgt_inc->my_open();
-}
-
-void MainWindow::on_actionspkm_Joints_triggered()
-{
-	interface.spkm->wgt_int->my_open();
-}
-
-void MainWindow::on_actionspkm_External_triggered()
-{
-	interface.spkm->wgt_ext->my_open();
-}
-
-void MainWindow::on_actionspkm_Synchro_Position_triggered()
-{
-	interface.spkm->move_to_synchro_position();
-}
-
-void MainWindow::on_actionspkm_Front_Position_triggered()
-{
-	interface.spkm->move_to_front_position();
-}
-
-void MainWindow::on_actionspkm_Position_0_triggered()
-{
-	interface.spkm->move_to_preset_position(0);
-}
-
-void MainWindow::on_actionspkm_Position_1_triggered()
-{
-	interface.spkm->move_to_preset_position(1);
-}
-
-void MainWindow::on_actionspkm_Position_2_triggered()
-{
-	interface.spkm->move_to_preset_position(2);
-}
-
-void MainWindow::on_actionspkm_Clear_Fault_triggered()
-{
-	interface.spkm->execute_clear_fault();
-}
-
-// smb menu
-
-void MainWindow::on_actionsmb_EDP_Load_triggered()
-{
-	interface.smb->edp_create();
-}
-
-void MainWindow::on_actionsmb_EDP_Unload_triggered()
-{
-	interface.smb->EDP_slay_int();
-}
-
-// shead menu
-
-void MainWindow::on_actionshead_EDP_Load_triggered()
-{
-	interface.shead->edp_create();
-}
-
-void MainWindow::on_actionshead_EDP_Unload_triggered()
-{
-	interface.shead->EDP_slay_int();
-}
-
-// polycrank menu
-
-void MainWindow::on_actionpolycrank_EDP_Load_triggered()
-{
-	interface.polycrank->edp_create();
-}
-
-void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
-{
-	interface.polycrank->EDP_slay_int();
-}
-
-void MainWindow::on_actionpolycrank_Move_Joints_triggered()
-{
-
-	interface.polycrank->wgt_int->my_open();
-}
 
 // all robots menu
 

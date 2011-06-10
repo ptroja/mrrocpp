@@ -94,6 +94,8 @@ private:
 
 	bool html_it(std::string &_input, std::string &_output);
 
+	void setRobotsMenu();
+
 signals:
 	void manage_interface_signal();
 	void raise_process_control_window_signal();
@@ -194,15 +196,16 @@ public:
 
 
 	common::UiRobot *irp6ot_m;
-	//common::UiRobot *irp6ot_m;
-	irp6p_m::UiRobot *irp6p_m;
-	polycrank::UiRobot *polycrank;
-	bird_hand::UiRobot *bird_hand;
+	common::UiRobot *irp6p_m;
+	common::UiRobot *irp6p_tfg;
+	common::UiRobot *irp6ot_tfg;
+	common::UiRobot *polycrank;
+	common::UiRobot *bird_hand;
 	sarkofag::UiRobot *sarkofag;
-	irp6p_tfg::UiRobot *irp6p_tfg;
+
 	conveyor::UiRobot *conveyor;
 
-	irp6ot_tfg::UiRobot *irp6ot_tfg;
+
 
 	const int position_refresh_interval;
 

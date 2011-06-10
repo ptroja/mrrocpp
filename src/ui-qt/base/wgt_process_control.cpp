@@ -111,11 +111,11 @@ int wgt_process_control::init()
 
 	// Dla irp6_postument
 
-	interface.irp6p_m->process_control_window_irp6p_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	interface.irp6p_m->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// Dla conveyor
 
-	interface.conveyor->process_control_window_conveyor_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	interface.conveyor->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
