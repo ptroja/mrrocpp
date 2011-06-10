@@ -70,7 +70,7 @@ void pb_visual_servo::predict_reading()
 	struct timespec ts;
 	clock_gettime(CLOCK_REALTIME, &ts);
 
-	log_dbg("pb_visual_servo::predict_reading(): predicting reading\n");
+//	log_dbg("pb_visual_servo::predict_reading(): predicting reading\n");
 	lib::Homog_matrix hm0 = reading_t_minus_2.objectPosition;
 	lib::Homog_matrix hm1 = reading_t_minus_1.objectPosition;
 
@@ -89,7 +89,7 @@ void pb_visual_servo::predict_reading()
 	reading.objectVisible = true;
 	reading.objectPosition = hm_p;
 
-	log_dbg("pb_visual_servo::predict_reading() end");
+//	log_dbg("pb_visual_servo::predict_reading() end");
 }
 
 Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::get_reading()
