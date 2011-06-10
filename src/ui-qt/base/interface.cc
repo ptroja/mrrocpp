@@ -132,9 +132,14 @@ void Interface::timer_slot()
 		std::string html_line;
 
 		lib::sr_package_t sr_msg;
+		int iterator = sr_buffer::UI_SR_BUFFER_LENGHT;
 
-		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while ((!(ui_sr_obj->buffer_empty())) && ((iterator--) > 0)) { // dopoki mamy co wypisywac
 
+
+			if (iterator < 2) {
+				std::cout << "UI - bufor sr przepelniony" << std::endl;
+			}
 			ui_sr_obj->get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
