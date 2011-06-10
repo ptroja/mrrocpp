@@ -301,7 +301,7 @@ bool task_base::peek_mp_message()
 				case lib::PAUSE_TASK:
 					//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::PAUSE_TASK");
-
+					command.markAsUsed();
 					// Reply with ACK
 					//reply.Send(ecp_reply);
 					wait_for_resume();
