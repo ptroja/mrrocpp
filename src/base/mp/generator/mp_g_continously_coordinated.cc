@@ -39,6 +39,13 @@ bool continously_coordinated::next_step()
 	// cykl oznacza odebranie danych od wszystkich robotow
 
 
+	// wszystkim ustawiamy rozkaz na next_pose
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+
+					robot_node.second->mp_command.command = lib::NEXT_POSE;
+				}
+
 	// wpisujemy liste robotow do odpowiedzi o ile byla pusta
 	if (robots_to_reply.empty()) {
 		robots_to_reply = robot_m;

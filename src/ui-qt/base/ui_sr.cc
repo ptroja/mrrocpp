@@ -110,10 +110,37 @@ void sr_buffer::get_one_msg(lib::sr_package_t& new_msg)
 	return;
 }
 
+void sr_buffer::inter_get_one_msg(lib::sr_package_t& new_msg)
+{
+	new_msg = cb_inter.front();
+	cb_inter.pop_front();
+
+	return;
+}
+
+void sr_buffer::copy_buffers()
+{
+	boost::mutex::scoped_lock lock(mtx);
+	cb_inter = cb;
+
+}
+
+void sr_buffer::clear_buffer()
+{
+	boost::mutex::scoped_lock lock(mtx);
+	cb.clear();
+
+}
+
 bool sr_buffer::buffer_empty() // sprawdza czy bufor jest pusty
 {
 	boost::mutex::scoped_lock lock(mtx);
 	return cb.empty();
+}
+
+bool sr_buffer::inter_buffer_empty() // sprawdza czy bufor inter jest pusty
+{
+	return cb_inter.empty();
 }
 
 }
