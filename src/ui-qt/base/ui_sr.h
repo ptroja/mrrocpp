@@ -28,9 +28,10 @@ private:
 	boost::circular_buffer <lib::sr_package_t> cb;
 	boost::mutex mtx;
 
+public:
+
 	static const int UI_SR_BUFFER_LENGHT = 50;
 
-public:
 	lib::condition_synchroniser thread_started;
 	sr_buffer(Interface& _interface);
 

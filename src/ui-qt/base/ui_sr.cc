@@ -63,13 +63,14 @@ void sr_buffer::operator()()
 
 		int32_t type, subtype;
 		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
+		//	printf("SR received: %d\n", licznik);
 
 		if (rcvid != MESSIP_MSG_NOREPLY)
 			continue;
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
-			flushall();
+			//	flushall();
 
 			put_one_msg(sr_msg);
 		} else {
