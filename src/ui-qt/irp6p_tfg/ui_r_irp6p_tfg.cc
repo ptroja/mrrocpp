@@ -180,19 +180,21 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 2, actionirp6p_tfg_EDP_Unload, actionirp6p_tfg_Move);
 						mw->enable_menu_item(true, 1, menuirp6p_tfg_Preset_Positions);
 						mw->enable_menu_item(false, 1, actionirp6p_tfg_EDP_Load);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, actionirp6p_tfg_Move);
 						mw->enable_menu_item(true, 1, menuirp6p_tfg_Preset_Positions);
 						mw->enable_menu_item(false, 2, actionirp6p_tfg_EDP_Load, actionirp6p_tfg_EDP_Unload);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 1, menuirp6p_tfg_Preset_Positions);
 						mw->enable_menu_item(false, 1, actionirp6p_tfg_Move);
-
+						block_ecp_trigger();
 						break;
 					default:
 						break;

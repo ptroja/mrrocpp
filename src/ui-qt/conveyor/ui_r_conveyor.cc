@@ -131,19 +131,21 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 2, actionconveyor_EDP_Unload, actionconveyor_Move);
 						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, actionconveyor_EDP_Load);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, actionconveyor_Move);
 						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
 						mw->enable_menu_item(false, 1, actionconveyor_EDP_Load, actionconveyor_EDP_Unload);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(true, 1, actionconveyor_Move);
 						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-
+						block_ecp_trigger();
 						break;
 					default:
 						break;

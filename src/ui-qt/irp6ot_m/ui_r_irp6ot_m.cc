@@ -221,7 +221,7 @@ void UiRobot::setup_menubar()
     menuirp6ot_m_Tool->setObjectName(QString::fromUtf8("menuirp6ot_m_Tool"));
 
 	menuBar->menuRobot->addAction(menuIrp6ot_m->menuAction());
-
+	//menuBar->menuRobot->remo
 	menuIrp6ot_m->addAction(actionirp6ot_m_EDP_Load);
 	menuIrp6ot_m->addAction(actionirp6ot_m_EDP_Unload);
 	menuIrp6ot_m->addSeparator();
@@ -316,17 +316,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 4, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool, menuirp6ot_m_Preset_Positions);
 						mw->enable_menu_item(true, 1, actionirp6ot_m_EDP_Unload);
 						mw->enable_menu_item(false, 1, actionirp6ot_m_EDP_Load);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 4, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool, menuirp6ot_m_Preset_Positions);
 						mw->enable_menu_item(false, 2, actionirp6ot_m_EDP_Load, actionirp6ot_m_EDP_Unload);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 4, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool, menuirp6ot_m_Preset_Positions);
-
+						block_ecp_trigger();
 						break;
 					default:
 						break;
@@ -347,6 +349,7 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
+
 
 // aktualizacja ustawien przyciskow
 int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)

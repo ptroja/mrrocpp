@@ -70,6 +70,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(ui_robot_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_int_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_int_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_int_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
+	connect(this, SIGNAL(clear_console_signal()), this, SLOT(clear_console_slot()), Qt::QueuedConnection);
 
 
 
@@ -137,6 +138,16 @@ Ui::MainWindow * MainWindow::get_ui()
 	return ui;
 }
 
+void MainWindow::clear_console()
+{
+	emit clear_console_signal();
+}
+
+void MainWindow::clear_console_slot()
+{
+	get_ui()->textEdit_sr->clear();
+}
+
 
 void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_item, ...)
 {
@@ -145,7 +156,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_
 
 //	 emit
 //	 enable_menu_item_signal(_menu_item, _enable);
-
+	if(_menu_item)
 	enable_menu_item_slot(_menu_item, _enable);
 	va_start(menu_items, _menu_item);
 
@@ -154,8 +165,9 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_
 		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 
 //		 emit enable_menu_item_signal(va_arg(menu_items, QMenu *), _enable);
-
-		enable_menu_item_slot(va_arg(menu_items, QMenu *), _enable);
+		QMenu *action = va_arg(menu_items, QMenu *);
+		if(action)
+		enable_menu_item_slot(action, _enable);
 	}
 
 	va_end(menu_items);
@@ -169,6 +181,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 //	 emit
 //	 enable_menu_item_signal(_menu_item, _enable);
 
+	if(_menu_item)
 	enable_menu_item_slot(_menu_item, _enable);
 
 	va_start(menu_items, _menu_item);
@@ -178,8 +191,9 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
 
 //		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
-
-		enable_menu_item_slot(va_arg(menu_items, QAction *), _enable);
+		QAction *action = va_arg(menu_items, QAction *);
+		if(action)
+		enable_menu_item_slot(action, _enable);
 	}
 
 	va_end(menu_items);
@@ -330,7 +344,12 @@ void MainWindow::enable_menu_item_slot(QMenu *_menu_item, bool &_active)
 	if(_menu_item!=NULL)
 //	_menu_item->menuAction()->setVisible(_active); //setDisabled(!_active);//setVisible(_active);
 	_menu_item->menuAction()->setDisabled(!_active);
-	//if(!_active) _menu_item->hide();
+
+//	if(_menu_item!=NULL && _active && !_menu_item->menuAction()->isVisible())
+//		_menu_item->menuAction()->setVisible(true); //setDisabled(!_active);//
+//	else if(_menu_item!=NULL && !_active && _menu_item->menuAction()->isVisible())
+//		_menu_item->menuAction()->setVisible(false);
+//	//if(!_active) _menu_item->hide();
 
 }
 
@@ -338,8 +357,11 @@ void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool &_active)
 {
 	//interface.print_on_sr("menu coloring slot");
 
+//	if(_menu_item!=NULL && _active && !_menu_item->isVisible())
+//		_menu_item->setVisible(true); //setDisabled(!_active);//
+//	else if(_menu_item!=NULL && !_active && _menu_item->isVisible())
+//		_menu_item->setVisible(false);
 	if(_menu_item!=NULL)
-//	_menu_item->setVisible(_active); //setDisabled(!_active);//
 	_menu_item->setDisabled(!_active);//
 }
 
@@ -408,15 +430,6 @@ void MainWindow::ui_notification_slot()
 // menus
 
 // file menu
-
-void MainWindow::on_actionQuit_triggered()
-{
-
-	interface.UI_close();
-
-}
-
-
 //// conveyor menu
 //void MainWindow::on_actionconveyor_EDP_Load_triggered()
 //{
@@ -578,112 +591,7 @@ void MainWindow::on_actionQuit_triggered()
 // all robots menu
 
 
-void MainWindow::on_actionall_EDP_Load_triggered()
-{
-	interface.EDP_all_robots_create();
-}
 
-void MainWindow::on_actionall_EDP_Unload_triggered()
-{
-	interface.EDP_all_robots_slay();
-}
-
-void MainWindow::on_actionall_Synchronisation_triggered()
-{
-	interface.EDP_all_robots_synchronise();
-}
-
-void MainWindow::on_actionall_Synchro_Position_triggered()
-{
-	interface.all_robots_move_to_synchro_position();
-}
-
-void MainWindow::on_actionall_Front_Position_triggered()
-{
-	interface.all_robots_move_to_front_position();
-}
-
-void MainWindow::on_actionall_Position_0_triggered()
-{
-	interface.all_robots_move_to_preset_position_0();
-}
-
-void MainWindow::on_actionall_Position_1_triggered()
-{
-	interface.all_robots_move_to_preset_position_1();
-}
-
-void MainWindow::on_actionall_Position_2_triggered()
-{
-	interface.all_robots_move_to_preset_position_2();
-}
-
-// task menu
-
-void MainWindow::on_actionMP_Load_triggered()
-{
-	interface.MPup();
-}
-
-void MainWindow::on_actionMP_Unload_triggered()
-{
-	interface.MPslay();
-}
-
-void MainWindow::on_actionProcess_Control_triggered()
-{
-	interface.raise_process_control_window();
-}
-
-void MainWindow::on_actionConfiguration_triggered()
-{
-	/*
-	 QFileDialog dialog;
-	 if (dialog.exec()) {
-	 // ...
-	 }
-	 */
-	try {
-		QString fileName;
-
-		std::string mrrocpp_current_config_full_path = interface.mrrocpp_root_local_path + interface.config_file;
-		interface.ui_msg->message(mrrocpp_current_config_full_path);
-
-		fileName
-				= QFileDialog::getOpenFileName(this, tr("Choose configuration file or die"), mrrocpp_current_config_full_path.c_str(), tr("Image Files (*.ini)"));
-		if (fileName.length() > 0) {
-			std::string str_fullpath = fileName.toStdString();
-
-			interface.config_file = str_fullpath.substr(str_fullpath.rfind(interface.mrrocpp_root_local_path)
-					+ interface.mrrocpp_root_local_path.length());
-			interface.reload_whole_configuration();
-			interface.set_default_configuration_file_name();
-		}
-	}
-
-	catch (...) {
-
-	}
-
-}
-
-// special menu
-
-
-void MainWindow::on_actionClear_Console_triggered()
-{
-	ui->textEdit_sr->clear();
-}
-
-void MainWindow::on_actionUnload_All_triggered()
-{
-	interface.unload_all();
-}
-
-void MainWindow::on_actionSlay_All_triggered()
-{
-	interface.slay_all();
-}
 
 
 

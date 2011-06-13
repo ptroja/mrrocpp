@@ -68,6 +68,8 @@ public:
 	void make_connections();
 	void setup_menubar();
 
+	void set_robot_process_control_window(wgt_robot_process_control *);
+
 private:
     QAction *actionirp6ot_m_Synchronisation;
     QAction *actionirp6ot_m_Synchro_Position;

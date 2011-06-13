@@ -117,6 +117,7 @@ int UiRobot::manage_interface()
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 3, actionbirdhand_EDP_Unload, actionbirdhand_Command, actionbirdhand_Configuration);
 						mw->enable_menu_item(false, 1, actionbirdhand_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, NULL);
@@ -125,14 +126,18 @@ int UiRobot::manage_interface()
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, actionbirdhand_Command, actionbirdhand_Configuration);
 						mw->enable_menu_item(false, 2, actionbirdhand_EDP_Unload, actionbirdhand_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_edp_unload, NULL);
 						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, actionbirdhand_Command, actionbirdhand_Configuration);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
@@ -188,9 +193,6 @@ void UiRobot::setup_menubar()
  	menuBirdhand->addSeparator();
  	menuBirdhand->addAction(actionbirdhand_Command);
  	menuBirdhand->addAction(actionbirdhand_Configuration);
-
-
-
 
     actionbirdhand_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
     actionbirdhand_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));

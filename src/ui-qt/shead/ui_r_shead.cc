@@ -98,6 +98,7 @@ int UiRobot::manage_interface()
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 1, actionshead_EDP_Unload);
 						mw->enable_menu_item(false, 1, actionshead_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
@@ -105,6 +106,7 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(false, 2, actionshead_EDP_Unload, actionshead_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
 
@@ -113,7 +115,10 @@ int UiRobot::manage_interface()
 						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 NULL);

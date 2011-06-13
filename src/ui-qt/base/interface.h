@@ -2,7 +2,7 @@
 #define __INTERFACE_H
 
 #include <iostream>
-
+#include <vector>
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
@@ -12,6 +12,7 @@
 
 //#include "mainwindow.h"
 #include "wgt_process_control.h"
+#include "wgt_robot_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
@@ -259,6 +260,14 @@ public:
 	int pulse_stop_all_reader();
 	int pulse_trigger_all_reader();
 
+	//ECP pulse
+	int pulse_trigger_ecp(common::UiRobot *robot);
+
+	//Reader pulse
+	int pulse_start_reader(common::UiRobot *robot);
+	int pulse_stop_reader(common::UiRobot *robot);
+	int pulse_trigger_reader(common::UiRobot *robot);
+
 	int unload_all();
 	int slay_all();
 
@@ -274,6 +283,13 @@ public:
 	bool are_all_loaded_robots_synchronised();
 	bool is_any_loaded_robot_synchronised();
 
+	void open_process_control_windows();
+
+	wgt_process_control* get_wgt_pc()
+	{
+		return wgt_pc;
+	}
+
 	// windows
 
 	wgt_process_control* wgt_pc;
@@ -283,6 +299,8 @@ public:
 	wgt_input_double* wgt_input_double_obj;
 	wgt_choose_option* wgt_choose_option_obj;
 	wgt_teaching* wgt_teaching_obj;
+
+	std::vector<wgt_robot_process_control *> wgt_robots_pc;
 };
 
 }

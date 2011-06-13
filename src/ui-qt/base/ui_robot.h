@@ -16,6 +16,7 @@
 
 
 class QDockWidget;
+class wgt_robot_process_control;
 
 namespace mrrocpp {
 namespace ui {
@@ -101,6 +102,7 @@ public:
 	common::WndBase_t wndbase_m;
 
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
+	~UiRobot();
 
 	void create_thread();
 	void abort_thread();
@@ -109,6 +111,9 @@ public:
 	bool pulse_reader_start_exec_pulse(void);
 	bool pulse_reader_stop_exec_pulse(void);
 	bool pulse_reader_trigger_exec_pulse(void);
+
+	bool is_process_control_window_created();
+	void indicate_process_control_window_creation();
 
 	void pulse_ecp(void);
 	void close_all_windows();
@@ -136,6 +141,14 @@ public:
 	virtual void edp_create();
 	virtual int edp_create_int();
 	virtual int create_ui_ecp_robot() = 0;
+
+	void set_robot_process_control_window(wgt_robot_process_control *);
+	wgt_robot_process_control * get_wgt_robot_pc();
+	void delete_robot_process_control_window();
+
+	void block_ecp_trigger();
+	void unblock_ecp_trigger();
+
 	virtual int edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
@@ -185,9 +198,11 @@ public:
 	wgt_base *wgt_inc;	//spkm
 	//wgt_spkm_int *wgt_int;
 	wgt_base *wgt_ext;
-
+	wgt_robot_process_control *wgt_robot_pc;
 
 	wgt_t wgts;
+
+	bool process_control_window_created;
 
 };
 

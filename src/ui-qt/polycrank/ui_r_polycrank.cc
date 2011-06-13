@@ -145,6 +145,7 @@ int UiRobot::manage_interface()
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 1, actionpolycrank_EDP_Unload);
 						mw->enable_menu_item(false, 1, actionpolycrank_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
@@ -152,13 +153,17 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(false, 2, actionpolycrank_EDP_Unload, actionpolycrank_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
 						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
+						block_ecp_trigger();
 						/* TR
 						 //ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_internal, NULL);// modyfikacja menu - ruchy reczne zakazane
@@ -207,6 +212,8 @@ void UiRobot::setup_menubar()
 	menuPolycrank->addAction(actionpolycrank_EDP_Unload);
 	menuPolycrank->addSeparator();
 	menuPolycrank->addAction(actionpolycrank_Move_Joints);
+
+	menuBar->menuRobot->addAction(menuPolycrank->menuAction());
 
 	actionpolycrank_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
 	actionpolycrank_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));

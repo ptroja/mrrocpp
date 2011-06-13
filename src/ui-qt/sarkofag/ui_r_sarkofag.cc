@@ -154,19 +154,21 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 3, actionsarkofag_EDP_Unload, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 1, actionsarkofag_EDP_Load);
 						mw->enable_menu_item(true, 1, menusarkofag_Preset_Positions);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 2, actionsarkofag_EDP_Load, actionsarkofag_EDP_Unload);
 						mw->enable_menu_item(true, 1, menusarkofag_Preset_Positions);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 1, menusarkofag_Preset_Positions);
-
+						block_ecp_trigger();
 						break;
 					default:
 						break;

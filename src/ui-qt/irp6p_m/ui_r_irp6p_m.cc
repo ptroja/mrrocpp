@@ -190,17 +190,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
 						mw->enable_menu_item(true, 1, actionirp6p_m_EDP_Unload);
 						mw->enable_menu_item(false, 1, actionirp6p_m_EDP_Load);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
 						mw->enable_menu_item(false, 2, actionirp6p_m_EDP_Unload, actionirp6p_m_EDP_Load);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 4, menuirp6p_m_Absolute_Moves, menuirp6p_m_Preset_Positions, menuirp6p_m_Relative_Moves, menuirp6p_m_Tool);
-
+						block_ecp_trigger();
 						break;
 					default:
 						break;

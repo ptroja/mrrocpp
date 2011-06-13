@@ -30,6 +30,7 @@ public:
 	QString widget_label;
 	QDockWidget* dwgt;
 	//QVBoxLayout* vl;
+
 	virtual void synchro_depended_init(){}
 	virtual void init_and_copy(){}
 

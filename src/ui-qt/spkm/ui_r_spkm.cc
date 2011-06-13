@@ -139,15 +139,19 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
 						mw->enable_menu_item(true, 1, actionspkm_EDP_Unload); //???
 						mw->enable_menu_item(false, 1, actionspkm_EDP_Load);
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);//???
 						mw->enable_menu_item(false, 2, actionspkm_EDP_Load, actionspkm_EDP_Unload);
-
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
+						block_ecp_trigger();
 						break;
 					default:
 						break;

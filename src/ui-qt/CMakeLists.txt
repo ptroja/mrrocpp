@@ -49,6 +49,7 @@ SET(GUI_CXX_SRCS
     base/menu_bar.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
+	base/wgt_robot_process_control.cpp
     base/ui_ecp_dialogs/wgt_yes_no.cpp
     base/ui_ecp_dialogs/wgt_message.cpp
     base/ui_ecp_dialogs/wgt_input_integer.cpp
@@ -76,6 +77,7 @@ SET(GUI_MOC_SRCS
     base/mainwindow.h
     base/wgt_base.h
     base/wgt_process_control.h
+	base/wgt_robot_process_control.h
     base/ui_ecp_dialogs/wgt_yes_no.h
     base/ui_ecp_dialogs/wgt_message.h
     base/ui_ecp_dialogs/wgt_input_integer.h
@@ -119,6 +121,7 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 SET(GUI_UI
     base/mainwindow.ui
     base/wgt_process_control.ui
+    base/wgt_robot_process_control.ui
     base/ui_ecp_dialogs/wgt_yes_no.ui
     base/ui_ecp_dialogs/wgt_message.ui
     base/ui_ecp_dialogs/wgt_input_integer.ui
@@ -147,6 +150,8 @@ QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
+	base/menu_bar.cpp
+	base/menu_bar_action.cpp
 	base/ui_sr.cc
 	base/ui_ecp.cc
 	base/ui_ecp_robot/ui_ecp_r_common.cc
@@ -170,8 +175,6 @@ ADD_EXECUTABLE(
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
 	base/signal_dispatcher.cpp
-	base/menu_bar.cpp
-	base/menu_bar_action.cpp
 )
 
 # Link executable with QT libraries
