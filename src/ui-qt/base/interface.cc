@@ -126,16 +126,24 @@ void Interface::timer_slot()
 	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
+		ui_sr_obj->copy_buffers();
+
+		ui_sr_obj->clear_buffer();
 
 		char current_line[400];
 
 		std::string html_line;
 
 		lib::sr_package_t sr_msg;
+		int iterator = sr_buffer::UI_SR_BUFFER_LENGHT;
 
-		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while ((!(ui_sr_obj->inter_buffer_empty())) && ((iterator--) > 0)) { // dopoki mamy co wypisywac
 
-			ui_sr_obj->get_one_msg(sr_msg);
+
+			if (iterator < 2) {
+				std::cout << "UI - bufor sr przepelniony" << std::endl;
+			}
+			ui_sr_obj->inter_get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 
@@ -262,7 +270,6 @@ void Interface::timer_slot()
 
 							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
 
-							//	mw->get_ui()->textEdit_sr->append(current_line);
 							(*log_file_outfile) << current_line << std::endl;
 						}
 		}
