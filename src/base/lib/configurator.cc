@@ -254,7 +254,6 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			rsh_spawn_node = "localhost";
 		} else {
 			rsh_spawn_node = spawned_node_name;
-
 		}
 	}
 
@@ -285,7 +284,6 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			strcpy(bin_path, cwd);
 		} else {
 			strcpy(bin_path, _bin_path.c_str());
-
 		}
 
 	} else {
@@ -298,7 +296,6 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 			perror("Blad cwd w configurator");
 		}
 		strcpy(bin_path, cwd);
-
 	}
 
 	if (strlen(bin_path) && bin_path[strlen(bin_path) - 1] != '/') {
