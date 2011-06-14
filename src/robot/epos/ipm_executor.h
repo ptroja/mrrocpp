@@ -25,8 +25,9 @@ namespace epos {
 /**
  * Interpolated profile motion mode execution thread
  */
-template<int NUM_OF_MOTION_SEGMENTS, int NUM_OF_SERVOS>
-struct ipm_executor {
+template <int NUM_OF_MOTION_SEGMENTS, int NUM_OF_SERVOS>
+struct ipm_executor
+{
 
 private:
 	//! Thread id
@@ -34,22 +35,22 @@ private:
 
 public:
 	//! Parameterized self type
-	typedef ipm_executor<NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
+	typedef ipm_executor <NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
 
 	//! Axes container
 	boost::array<epos *, NUM_OF_SERVOS> axes;
 
 	//! Check if there is a motion request for a given axis
-	Eigen::Matrix<bool, 1, NUM_OF_SERVOS> is_moving;
+	Eigen::Matrix <bool, 1, NUM_OF_SERVOS> is_moving;
 
 	//! Position data vector
-	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS+1, NUM_OF_SERVOS> p;
+	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS + 1, NUM_OF_SERVOS> p;
 
 	//! Velocity data vector
-	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS+1, NUM_OF_SERVOS> v;
+	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS + 1, NUM_OF_SERVOS> v;
 
 	//! Time data vector
-	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS+1, 1> t;
+	Eigen::Matrix <double, NUM_OF_MOTION_SEGMENTS + 1, 1> t;
 
 	//! Active command condition
 	boost::condition_variable cond;
@@ -64,9 +65,7 @@ public:
 	ipm_executor() :
 		job_to_do(false)
 	{
-		tid = boost::thread(
-				boost::bind(&ipm_executor::operator(), this)
-		);
+		tid = boost::thread(boost::bind(&ipm_executor::operator(), this));
 	}
 
 	//! Destructor
@@ -83,16 +82,16 @@ private:
 	//! Main thread routine
 	void operator()()
 	{
-		while(true) {
+		while (true) {
 			boost::unique_lock <boost::mutex> lock(mtx);
 
-			while(!job_to_do) {
+			while (!job_to_do) {
 				cond.wait(lock);
 			}
 
 			//! Find the node, which is executing a motion
 			queryNodeId = -1;
-			for(int i = 0; i < NUM_OF_SERVOS; ++i) {
+			for (int i = 0; i < NUM_OF_SERVOS; ++i) {
 				if (is_moving(i)) {
 					queryNodeId = i;
 					break;
@@ -105,14 +104,14 @@ private:
 			// Setup motion parameters
 			for (size_t i = 0; i < axes.size(); ++i) {
 				// Skip axes, which will be not executing a motion
-				if(!is_moving(i))
+				if (!is_moving(i))
 					continue;
 
 				axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
 				// TODO: setup acceleration and velocity limit values
 				axes[i]->clearPvtBuffer();
 				for (int pnt = 0; pnt < 2; ++pnt) {
-					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
+					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
 					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
 					fflush(stdout);
 				}
@@ -135,30 +134,28 @@ private:
 			// Start motion
 			for (size_t i = 0; i < axes.size(); ++i) {
 				// FIXME: this motion type should be initiated with a CAN broadcast message
-				if(is_moving(i)) {
+				if (is_moving(i)) {
 					axes[i]->startInterpolatedPositionMotion();
 				}
 			}
 
 			// continuously upload the rest of the trajectory
-			for (int pnt = 2; pnt < NUM_OF_MOTION_SEGMENTS+1; ++pnt) {
+			for (int pnt = 2; pnt < NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 
 				/** Wait until there is free space in the EPOS data FIFO.
 				 *  Note: we check only the first axis.
 				 */
-				while(! epos::checkInterpolationBufferUnderflowWarning(
-						axes[queryNodeId]->readInterpolationBufferStatus()
-						)) {
+				while (!epos::checkInterpolationBufferUnderflowWarning(axes[queryNodeId]->readInterpolationBufferStatus())) {
 					// do nothing
 				}
 
 				for (size_t i = 0; i < axes.size(); ++i) {
 					// Skip axes, which will be not executing a motion
-					if(!is_moving(i))
+					if (!is_moving(i))
 						continue;
 
 					// Send the data
-					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt,i), (int32_t) v(pnt,i), (uint8_t) t(pnt));
+					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
 					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
 					fflush(stdout);
 				}

@@ -158,19 +158,19 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	wtf_gen.Move();
 }
 
-void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet)
+void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector <lib::robot_name_t> & robotSet)
 {
 	generator::wait_for_task_termination wtf_gen(*this);
 
-	BOOST_FOREACH(lib::robot_name_t robotName, robotSet)  {
-		wtf_gen.robot_m[robotName] = robot_m[robotName];
-	}
+	BOOST_FOREACH(lib::robot_name_t robotName, robotSet)
+				{
+					wtf_gen.robot_m[robotName] = robot_m[robotName];
+				}
 
 	wtf_gen.configure(activate_trigger);
 
 	wtf_gen.Move();
 }
-
 
 // send_end_motion
 void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
@@ -347,7 +347,7 @@ void task::wait_for_stop(void)
 			ui_pulse.markAsUsed();
 		}
 	}
-	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_stop koniec");
+	//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_stop koniec");
 
 }
 
@@ -363,8 +363,9 @@ void task::wait_for_all_robots_acknowledge()
 
 	// Wait for ACK from all the robots
 	while (!not_confirmed.empty()) {
+		//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_all_robots_acknowledge przed receive");
 		ReceiveSingleMessage(true);
-
+		//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_all_robots_acknowledge za receive");
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
 					{
 						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
