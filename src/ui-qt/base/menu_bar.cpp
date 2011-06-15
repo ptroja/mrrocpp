@@ -239,6 +239,7 @@ void MenuBar::makeConnections()
 	connect(actionClear_Console, 		SIGNAL(triggered()), this, SLOT(on_actionClear_Console_triggered()), 		Qt::QueuedConnection);
 	connect(actionUnload_All, 			SIGNAL(triggered()), this, SLOT(on_actionUnload_All_triggered()), 			Qt::QueuedConnection);
 	connect(actionSlay_All, 			SIGNAL(triggered()), this, SLOT(on_actionSlay_All_triggered()), 			Qt::QueuedConnection);
+	connect(actionQuit, 				SIGNAL(triggered()), this, SLOT(on_actionQuit_triggered()), 				Qt::QueuedConnection);
 }
 
 

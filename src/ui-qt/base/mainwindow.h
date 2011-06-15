@@ -96,8 +96,8 @@ private:
 signals:
 	void ui_notification_signal();
 	void clear_console_signal();
-	void enable_menu_item_signal(QMenu *_menu_item, bool &_active);
-	void enable_menu_item_signal(QAction *_menu_item, bool &_active);
+	void enable_menu_item_signal(QMenu *_menu_item, bool _active);
+	void enable_menu_item_signal(QAction *_menu_item, bool _active);
 
 
 	void open_new_window_signal(wgt_base *window, wgt_base::my_open_ptr func);
@@ -117,8 +117,8 @@ private slots:
 
 	void clear_console_slot();
 
-	void enable_menu_item_slot(QMenu *_menu_item, bool &_active);
-	void enable_menu_item_slot(QAction *_menu_item, bool &_active);
+	void enable_menu_item_slot(QMenu *_menu_item, bool _active);
+	void enable_menu_item_slot(QAction *_menu_item, bool _active);
 
 	void open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func);
 	void open_new_window_slot(wgt_base *window);
