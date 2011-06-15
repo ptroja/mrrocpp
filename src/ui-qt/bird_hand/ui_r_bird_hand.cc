@@ -184,7 +184,6 @@ void UiRobot::setup_menubar()
     actionbirdhand_Configuration 				= new Ui::MenuBarAction(QString("Co&Nfiguration"), this, menuBar);
 
     menuBirdhand = new QMenu(menuBar->menuRobot);
-    menuBirdhand->setObjectName(QString::fromUtf8("menuBirdhand"));
 
  	menuBar->menuRobot->addAction(menuBirdhand->menuAction());
 
@@ -193,6 +192,8 @@ void UiRobot::setup_menubar()
  	menuBirdhand->addSeparator();
  	menuBirdhand->addAction(actionbirdhand_Command);
  	menuBirdhand->addAction(actionbirdhand_Configuration);
+
+
 
     actionbirdhand_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
     actionbirdhand_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));

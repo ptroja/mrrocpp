@@ -329,11 +329,11 @@ void Interface::raise_process_control_window()
 
 void Interface::raise_process_control_window_slot()
 {
-	wgt_pc->my_open();
+	wgt_pc->my_open(true);
 
 
 	open_process_control_windows();
-
+	wgt_pc->dwgt->raise();
 }
 
 void Interface::open_process_control_windows()
@@ -953,7 +953,7 @@ void Interface::manage_pc(void)
 		}
 	}
 
-
+	wgt_pc->dwgt->raise();
 //	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
 //	{
 //		wgt_robot->process_control_window_init();
@@ -986,7 +986,7 @@ void Interface::manage_interface_slot()
 		}
 	}
 
-
+	wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -1850,7 +1850,7 @@ int Interface::MPslay()
 			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 		}
 	}
-
+	wgt_pc->dwgt->raise();
 	return 1;
 
 }
@@ -1879,7 +1879,7 @@ int Interface::pulse_start_mp()
 				robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 			}
 		}
-
+		wgt_pc->dwgt->raise();
 		manage_interface();
 	}
 

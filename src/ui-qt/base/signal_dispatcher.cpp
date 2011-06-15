@@ -139,9 +139,9 @@ void SignalDispatcher::on_Position_2_triggered(mrrocpp::ui::common::UiRobot *rob
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::move_to_preset_position, 2);
 }
 
-void SignalDispatcher::open_new_window(wgt_base *window)
+void SignalDispatcher::open_new_window(wgt_base *window, bool set_on_top)
 {
-	interface.get_main_window()->open_new_window(window, &wgt_base::my_open);
+	interface.get_main_window()->open_new_window(window, &wgt_base::my_open, set_on_top);
 }
 
 

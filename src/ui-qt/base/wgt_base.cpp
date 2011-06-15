@@ -20,7 +20,7 @@ wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _inter
 	interface.get_main_window()->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
-void wgt_base::my_open()
+void wgt_base::my_open(bool set_on_top)
 {
 	MainWindow *mw = interface.get_main_window();
 	if (!(dwgt->isVisible())) {
@@ -29,7 +29,9 @@ void wgt_base::my_open()
 		}
 	}
 	dwgt->show();
-	dwgt->raise();
+
+	if(set_on_top)
+		dwgt->raise();
 }
 
 void wgt_base::my_close()

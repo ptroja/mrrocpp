@@ -95,11 +95,11 @@ void UiRobot::set_robot_process_control_window(wgt_robot_process_control *wgt_pc
 		wgt_robot_pc->my_open();
 }
 
-//void UiRobot::open_robot_process_control_window()
-//{
-//	if(wgt_robot_pc)
-//		wgt_robot_pc->my_open();
-//}
+void UiRobot::open_robot_process_control_window()
+{
+	if(wgt_robot_pc)
+		wgt_robot_pc->my_open();
+}
 
 void UiRobot::delete_robot_process_control_window()
 {

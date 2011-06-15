@@ -145,6 +145,7 @@ public:
 	void set_robot_process_control_window(wgt_robot_process_control *);
 	wgt_robot_process_control * get_wgt_robot_pc();
 	void delete_robot_process_control_window();
+	void open_robot_process_control_window();
 
 	void block_ecp_trigger();
 	void unblock_ecp_trigger();
@@ -164,6 +165,8 @@ public:
 	void catch_ecp_error(ecp::common::robot::ECP_error & er);
 	void catch_std_exception(const std::exception & e);
 	void catch_tridot();
+
+	//void
 
 
 
@@ -201,6 +204,8 @@ public:
 	wgt_robot_process_control *wgt_robot_pc;
 
 	wgt_t wgts;
+
+	QAction *actionwgt_robot_process_control;
 
 	bool process_control_window_created;
 
