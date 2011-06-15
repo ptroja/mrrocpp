@@ -22,7 +22,7 @@ namespace irp6_m {
 // KLASA UiRobot
 //
 //
-
+int UiRobot::synchronise(){return 1;}
 
 int UiRobot::execute_motor_motion()
 {
@@ -81,8 +81,17 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 	common::UiRobot(_interface, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
 
 {
-
+//	wgts["wgt_joints"] = wgt_joints;
+//	wgts["wgt_motors"] = wgt_motors;
+//
+//	wgts["wgt_angle_axis"] = wgt_angle_axis;
+//	wgts["wgt_euler"] = wgt_euler;
+//	wgts["wgt_relative_angle_axis"] = wgt_relative_angle_axis;
+//	wgts["wgt_tool_angle_axis"] = wgt_tool_angle_axis;
+//	wgts["wgt_tool_euler"] = wgt_tool_euler;
 }
+
+
 
 void UiRobot::delete_ui_ecp_robot()
 {

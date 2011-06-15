@@ -45,6 +45,16 @@ void pb_visual_servo::retrieve_reading()
 	}
 }
 
+void pb_visual_servo::predict_reading()
+{
+
+}
+
+Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::get_reading()
+{
+	return &reading;
+}
+
 bool pb_visual_servo::is_object_visible_in_latest_reading()
 {
 //	log_dbg("pb_visual_servo::is_object_visible_in_latest_reading(): reading.objectVisible = %d\n", (int)reading.objectVisible);
