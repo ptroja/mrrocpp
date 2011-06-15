@@ -39,7 +39,9 @@ void catch_signal_in_mp(int sig)
 	switch (sig)
 	{
 		case SIGTERM:
-			mp_t->sr_ecp_msg->message("mp terminated");
+			if (mp_t) {
+				mp_t->sr_ecp_msg->message("mp terminated");
+			}
 			// restore default (none) handler for SIGCHLD
 			signal(SIGCHLD, SIG_DFL);
 			exit(EXIT_SUCCESS);
@@ -131,43 +133,62 @@ int main(int argc, char *argv[], char **arge)
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 				case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-					mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					if (mp::common::mp_t) {
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+					}
 					break;
 				default:
 					perror("Message to SR has been already sent");
 			}/* end:switch */
-			mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
+			}
+			exit(EXIT_FAILURE);
 		}
 
 		catch (lib::sensor::sensor_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			}
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (mp::generator::MP_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+			}
 			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (ecp_mp::transmitter::transmitter_error & e) {
 			/* Wyswietlenie komunikatu. */
-			mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
+			}
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
 		}
 
 		catch (const std::exception& e) {
 			std::string tmp_string(" The following error has been detected: ");
 			tmp_string += e.what();
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, tmp_string.c_str());
+			}
 			std::cerr << "mp: The following error has been detected :\n\t" << e.what() << std::endl;
+			exit(EXIT_FAILURE);
 		}
 
 		catch (...) { /* Dla zewnetrznej petli try*/
 			/*   Wylapywanie niezdfiniowanych bledow  */
 			/*  Komunikat o bledzie wysylamy do SR */
-			mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, MP_UNIDENTIFIED_ERROR);
+			}
 			exit(EXIT_FAILURE);
 		}
 

@@ -28,15 +28,20 @@ namespace edp {
 namespace common {
 
 /**************************** trans_t *****************************/
-template<typename COMMAND_T = lib::c_buffer>
+template <typename COMMAND_T = lib::c_buffer>
 class trans_t : public boost::noncopyable
 {
 protected:
 	boost::thread thread_id;
 
-	MT_ORDER trans_t_task;
-	int trans_t_tryb;
-	COMMAND_T instruction;
+	typedef struct _master_to_transformer_cmd
+	{
+		MT_ORDER trans_t_task;
+		int trans_t_tryb;
+		COMMAND_T instruction;
+	} master_to_transformer_cmd_t;
+
+	master_to_transformer_cmd_t tmp_cmd, current_cmd;
 
 	virtual void operator()() = 0;
 
@@ -50,13 +55,14 @@ public:
 	void* error_pointer;
 
 	virtual ~trans_t()
-	{}
+	{
+	}
 
 	void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const COMMAND_T& _instruction)
 	{
-		trans_t_task = nm_task; // force, arm etc.
-		trans_t_tryb = nm_tryb; // tryb dla zadania
-		instruction = _instruction;
+		tmp_cmd.trans_t_task = nm_task; // force, arm etc.
+		tmp_cmd.trans_t_tryb = nm_tryb; // tryb dla zadania
+		tmp_cmd.instruction = _instruction;
 
 		// odwieszenie watku transformation
 		master_to_trans_synchroniser.command();
