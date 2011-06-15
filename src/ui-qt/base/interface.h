@@ -119,6 +119,8 @@ public:
 
 	//static Interface * get_instance();
 	MainWindow* get_main_window();
+	wgt_process_control* get_process_control_window();
+
 	void print_on_sr(const char *buff, ...);
 
 	busy_flag communication_flag;
