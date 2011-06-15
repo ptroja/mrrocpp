@@ -1,6 +1,7 @@
 #include "wgt_input_double.h"
 #include "../interface.h"
 #include "../ui_ecp.h"
+#include <QHideEvent>
 
 wgt_input_double::wgt_input_double(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	wgt_base("Input Double Dialog", _interface, parent), ui(new Ui::wgt_input_doubleClass)

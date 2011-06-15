@@ -13,6 +13,8 @@ class Interface;
 }
 }
 
+
+
 class wgt_base : public QWidget
 {
 Q_OBJECT
@@ -23,9 +25,14 @@ public:
 	virtual void my_open();
 	void my_close();
 
+	typedef void (wgt_base::*my_open_ptr)();
+
 	QString widget_label;
 	QDockWidget* dwgt;
 	//QVBoxLayout* vl;
+
+	virtual void synchro_depended_init(){}
+	virtual void init_and_copy(){}
 
 protected:
 	mrrocpp::ui::common::Interface& interface;

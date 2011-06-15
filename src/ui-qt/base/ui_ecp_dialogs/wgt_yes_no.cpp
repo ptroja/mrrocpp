@@ -1,6 +1,7 @@
 #include "wgt_yes_no.h"
 #include "../interface.h"
 #include "../ui_ecp.h"
+#include <QHideEvent>
 
 wgt_yes_no::wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	wgt_base("Yes No Dialog", _interface, parent), ui(new Ui::wgt_yes_noClass)

@@ -12,6 +12,8 @@
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 
+#include "wgt_robot_process_control.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -21,7 +23,6 @@ namespace common {
 // KLASA UiRobot
 //
 //
-
 
 UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
@@ -33,9 +34,15 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
+	msg	= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 
-	msg
-			= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
+	process_control_window_created = false;
+	wgt_robot_pc = 0L;
+}
+
+UiRobot::~UiRobot()
+{
+	delete wgt_robot_pc;
 }
 
 void UiRobot::create_thread()
@@ -44,6 +51,67 @@ void UiRobot::create_thread()
 	if (!tid) {
 		tid = new feb_thread(eb);
 	}
+}
+
+
+//wgt_base* UiRobot::getWgtByName(QString name)
+//{
+////	wgt_finder = ;
+////	(*wgts_finder).second;
+//	if((*wgts.find(name)).second==NULL)
+//		printf("(*wgts.find(name)).second NULL!");
+//	else
+//		printf("(*wgts.find(name)).second ok");
+//
+//	return (*wgts.find(name)).second;
+//}
+
+bool UiRobot::is_process_control_window_created()
+{
+	return process_control_window_created;
+}
+
+void UiRobot::indicate_process_control_window_creation()
+{
+	process_control_window_created = true;
+}
+
+void UiRobot::block_ecp_trigger()
+{
+	if(wgt_robot_pc)
+		wgt_robot_pc->block_all_ecp_trigger_widgets();
+}
+
+void UiRobot::unblock_ecp_trigger()
+{
+	if(wgt_robot_pc)
+		wgt_robot_pc->unblock_all_ecp_trigger_widgets();
+}
+
+void UiRobot::set_robot_process_control_window(wgt_robot_process_control *wgt_pc)
+{
+	wgt_robot_pc = wgt_pc;
+	if(interface.get_wgt_pc()->isVisible())
+		wgt_robot_pc->my_open();
+}
+
+//void UiRobot::open_robot_process_control_window()
+//{
+//	if(wgt_robot_pc)
+//		wgt_robot_pc->my_open();
+//}
+
+void UiRobot::delete_robot_process_control_window()
+{
+	if(wgt_robot_pc)
+		wgt_robot_pc->my_close();
+	delete wgt_robot_pc;
+	wgt_robot_pc = NULL;
+}
+
+wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
+{
+	return wgt_robot_pc;
 }
 
 int UiRobot::edp_create_int()
@@ -137,6 +205,11 @@ int UiRobot::edp_create_int()
 
 	return 1;
 
+}
+
+const lib::robot_name_t UiRobot::getName()
+{
+	return robot_name;
 }
 
 void UiRobot::close_all_windows()
