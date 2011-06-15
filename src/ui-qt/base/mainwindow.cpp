@@ -62,7 +62,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	connect(this, SIGNAL(enable_menu_item_signal(QMenu *, bool)), this, SLOT(enable_menu_item_slot(QMenu *, bool)), Qt::QueuedConnection);
 	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
 	//connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
-	connect(this, SIGNAL(open_new_window_signal(wgt_base *)), this, SLOT(open_new_window_slot(wgt_base *)), Qt::QueuedConnection);
+	connect(this, SIGNAL(open_new_window_signal(wgt_base *, bool)), this, SLOT(open_new_window_slot(wgt_base *, bool)), Qt::QueuedConnection);
 	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
 
 	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::irp6ot_m::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::irp6ot_m::UiRobot *)), Qt::QueuedConnection);
@@ -201,7 +201,7 @@ void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_men
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer pointer)
 {
-	printf("ui robot action void");
+	//printf("ui robot action void");
 	uiRobotFunctionPtr = pointer;
 	emit ui_robot_signal(robot);
 
@@ -209,21 +209,21 @@ void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointerInt pointer, int argument)
 {
-	interface.print_on_sr("ui robot action void arg int");
+	//interface.print_on_sr("ui robot action void arg int");
 	intUiRobotFunctionPtrInt = pointer;
 	emit ui_robot_int_signal_int(robot, argument);
 }
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::intUiRobotFunctionPointer pointer)
 {
-	interface.print_on_sr("ui robot action int");
+	//interface.print_on_sr("ui robot action int");
 	intUiRobotFunctionPtr = pointer;
 	emit ui_robot_int_signal(robot);
 }
 
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointerInt pointer, int argument)
 {
-	interface.print_on_sr("ui robot action int");
+	//interface.print_on_sr("ui robot action int");
 	uiRobotFunctionPtrInt = pointer;
 	emit ui_robot_signal_int(robot, argument);
 }
@@ -233,49 +233,49 @@ void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::
 
 void MainWindow::ui_robot_slot(mrrocpp::ui::common::UiRobot *robot)
 {
-	interface.print_on_sr("ui robot slot void");
+	//interface.print_on_sr("ui robot slot void");
 	(*robot.*uiRobotFunctionPtr)();
 }
 
 void MainWindow::ui_robot_slot_int(mrrocpp::ui::common::UiRobot *robot, int argument)
 {
-	interface.print_on_sr("ui robot int slot int\n");
+	//interface.print_on_sr("ui robot int slot int\n");
 	(*robot.*uiRobotFunctionPtrInt)(argument);
 }
 
 void MainWindow::ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *robot, int argument)
 {
-	interface.print_on_sr("ui robot slot void");
+	//interface.print_on_sr("ui robot slot void");
 	(*robot.*intUiRobotFunctionPtrInt)(argument);
 }
 
 void MainWindow::ui_robot_int_slot(mrrocpp::ui::common::UiRobot *robot)
 {
-	interface.print_on_sr("ui robot int slot int\n");
+	//interface.print_on_sr("ui robot int slot int\n");
 	(*robot.*intUiRobotFunctionPtr)();
 }
 
 
-void MainWindow::open_new_window(wgt_base *window, wgt_base::my_open_ptr func)
+void MainWindow::open_new_window(wgt_base *window, wgt_base::my_open_ptr func, bool set_on_top)
 {
 	openFunctionPointer = func;
-	emit open_new_window_signal(window);
+	emit open_new_window_signal(window, set_on_top);
 	//open_new_window_slot(window, func);
-	interface.print_on_sr("emit 1");
+	//interface.print_on_sr("emit 1");
 }
 
-void MainWindow::open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func)
-{
-	interface.print_on_sr("slot 1");
-	(*window.*func)();
-}
+//void MainWindow::open_new_window_slot(wgt_base *window, wgt_base::my_open_ptr func)
+//{
+//	//interface.print_on_sr("slot 1");
+//	(*window.*func)();
+//}
 
 
-void MainWindow::open_new_window(wgt_base *window)
+void MainWindow::open_new_window(wgt_base *window, bool set_on_top)
 {
-	emit open_new_window_signal(window);
+	emit open_new_window_signal(window, set_on_top);
 	//open_new_window_slot(window, func);
-	interface.print_on_sr("emit 2");
+	//interface.print_on_sr("emit 2");
 }
 
 //void MainWindow::open_new_window(wgt_irp6_m_motors *window)
@@ -285,13 +285,13 @@ void MainWindow::open_new_window(wgt_base *window)
 //	interface.print_on_sr("emit 2222");
 //}
 
-void MainWindow::open_new_window_slot(wgt_base *window)
+void MainWindow::open_new_window_slot(wgt_base *window, bool set_on_top)
 {
-	interface.print_on_sr("slot 2");
+	//interface.print_on_sr("slot 2");
 
 	//wgt_base::my_open_ptr func2=;
 
-	(*window.*openFunctionPointer)();
+	(*window.*openFunctionPointer)(set_on_top);
 	//window->my_open();
 }
 
@@ -426,171 +426,6 @@ void MainWindow::ui_notification_slot()
 		qApp->processEvents();
 	}
 }
-
-// menus
-
-// file menu
-//// conveyor menu
-//void MainWindow::on_actionconveyor_EDP_Load_triggered()
-//{
-//	interface.conveyor->edp_create();
-//}
-//
-//void MainWindow::on_actionconveyor_EDP_Unload_triggered()
-//{
-//	interface.conveyor->EDP_slay_int();
-//}
-//
-//void MainWindow::on_actionconveyor_Synchronization_triggered()
-//{
-//	interface.conveyor->synchronise();
-//}
-//
-//void MainWindow::on_actionconveyor_Move_triggered()
-//{
-//	interface.conveyor->wgt_move->my_open();
-//}
-//
-//void MainWindow::on_actionconveyor_Synchro_Position_triggered()
-//{
-//	interface.conveyor->move_to_synchro_position();
-//}
-//
-//void MainWindow::on_actionconveyor_Position_0_triggered()
-//{
-//	interface.conveyor->move_to_preset_position(0);
-//}
-//
-//void MainWindow::on_actionconveyor_Position_1_triggered()
-//{
-//	interface.conveyor->move_to_preset_position(1);
-//}
-//
-//void MainWindow::on_actionconveyor_Position_2_triggered()
-//{
-//	interface.conveyor->move_to_preset_position(2);
-//}
-//
-//// birdhand menu
-//void MainWindow::on_actionbirdhand_EDP_Load_triggered()
-//{
-//	interface.bird_hand->edp_create();
-//}
-//
-//void MainWindow::on_actionbirdhand_EDP_Unload_triggered()
-//{
-//	interface.bird_hand->EDP_slay_int();
-//}
-//
-//void MainWindow::on_actionbirdhand_Command_triggered()
-//{
-//	interface.bird_hand->wgt_command_and_status->my_open();
-//}
-//
-//void MainWindow::on_actionbirdhand_Configuration_triggered()
-//{
-//
-//}
-//
-//// sarkofag menu
-//void MainWindow::on_actionsarkofag_EDP_Load_triggered()
-//{
-//	interface.sarkofag->edp_create();
-//}
-//
-//void MainWindow::on_actionsarkofag_EDP_Unload_triggered()
-//{
-//	interface.sarkofag->EDP_slay_int();
-//}
-//
-//void MainWindow::on_actionsarkofag_Synchronisation_triggered()
-//{
-//	interface.sarkofag->synchronise();
-//}
-//
-//void MainWindow::on_actionsarkofag_Move_triggered()
-//{
-//	interface.sarkofag->wgt_move->my_open();
-//}
-//
-//void MainWindow::on_actionsarkofag_Synchro_Position_triggered()
-//{
-//	interface.sarkofag->move_to_synchro_position();
-//}
-//
-//void MainWindow::on_actionsarkofag_Front_Position_triggered()
-//{
-//	interface.sarkofag->move_to_front_position();
-//}
-//
-//void MainWindow::on_actionsarkofag_Position_0_triggered()
-//{
-//	interface.sarkofag->move_to_preset_position(0);
-//}
-//
-//void MainWindow::on_actionsarkofag_Position_1_triggered()
-//{
-//	interface.sarkofag->move_to_preset_position(1);
-//}
-//
-//void MainWindow::on_actionsarkofag_Position_2_triggered()
-//{
-//	interface.sarkofag->move_to_preset_position(2);
-//}
-//
-//void MainWindow::on_actionsarkofag_Servo_Algorithm_triggered()
-//{
-//
-//}
-//
-//// spkm menu
-//
-//
-//// smb menu
-//
-//void MainWindow::on_actionsmb_EDP_Load_triggered()
-//{
-//	interface.smb->edp_create();
-//}
-//
-//void MainWindow::on_actionsmb_EDP_Unload_triggered()
-//{
-//	interface.smb->EDP_slay_int();
-//}
-//
-//// shead menu
-//
-//void MainWindow::on_actionshead_EDP_Load_triggered()
-//{
-//	interface.shead->edp_create();
-//}
-//
-//void MainWindow::on_actionshead_EDP_Unload_triggered()
-//{
-//	interface.shead->EDP_slay_int();
-//}
-//
-//// polycrank menu
-//
-//void MainWindow::on_actionpolycrank_EDP_Load_triggered()
-//{
-//	interface.polycrank->edp_create();
-//}
-//
-//void MainWindow::on_actionpolycrank_EDP_Unload_triggered()
-//{
-//	interface.polycrank->EDP_slay_int();
-//}
-//
-//void MainWindow::on_actionpolycrank_Move_Joints_triggered()
-//{
-//
-//	interface.polycrank->wgt_int->my_open();
-//}
-
-// all robots menu
-
-
 
 
 

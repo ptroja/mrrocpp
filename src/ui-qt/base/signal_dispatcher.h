@@ -64,7 +64,7 @@ public slots:
 	void on_Tool_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot *robot);
 	void on_Tool_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot *robot);
 
-	void open_new_window(wgt_base *window);
+	void open_new_window(wgt_base *window, bool set_on_top=true);
 
 private:
 	mrrocpp::ui::common::Interface &interface;

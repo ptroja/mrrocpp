@@ -35,9 +35,9 @@ void wgt_process_control::process_control_window_init_slot()
 	init();
 }
 
-void wgt_process_control::my_open()
+void wgt_process_control::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	process_control_window_init();
 }
 

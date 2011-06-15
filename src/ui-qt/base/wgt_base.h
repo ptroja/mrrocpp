@@ -22,10 +22,10 @@ Q_OBJECT
 public:
 	wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_base();
-	virtual void my_open();
+	virtual void my_open(bool set_on_top=false);
 	void my_close();
 
-	typedef void (wgt_base::*my_open_ptr)();
+	typedef void (wgt_base::*my_open_ptr)(bool set_on_top);
 
 	QString widget_label;
 	QDockWidget* dwgt;
