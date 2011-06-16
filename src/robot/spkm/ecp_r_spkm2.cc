@@ -13,13 +13,13 @@ namespace ecp {
 namespace spkm2 {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	spkm::robot(lib::spkm::ROBOT_NAME, _config, _sr_ecp)
+	spkm::robot(lib::spkm2::ROBOT_NAME, _config, _sr_ecp)
 {
 
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-	spkm::robot(lib::spkm::ROBOT_NAME, _ecp_object)
+	spkm::robot(lib::spkm2::ROBOT_NAME, _ecp_object)
 {
 
 }

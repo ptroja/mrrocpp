@@ -9,7 +9,9 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/ecp_r_spkm.h"
+#include "const_spkm2.h"
+
+#include "ecp_r_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
