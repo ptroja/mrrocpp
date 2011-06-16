@@ -41,13 +41,13 @@ effector::effector(common::shell &_shell) :
 
 
 namespace common {
-/*
- // Create spkm effector.
- effector* return_created_efector(common::shell &_shell)
- {
- return new spkm2::effector(_shell);
- }
- */
+
+// Create spkm effector.
+effector* return_created_efector(common::shell &_shell)
+{
+	return new spkm2::effector(_shell);
+}
+
 } // namespace common
 } // namespace edp
 } // namespace mrrocpp
