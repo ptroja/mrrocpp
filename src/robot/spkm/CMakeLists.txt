@@ -15,8 +15,17 @@ add_executable(edp_spkm1
 
 target_link_libraries(edp_spkm1 kinematicsspkm epos edp
 	${COMMON_LIBRARIES})
+	
+	
+add_executable(edp_spkm2
+	edp_e_spkm2.cc
+	edp_e_spkm.cc
+)
 
-install(TARGETS edp_spkm edp_spkm1 DESTINATION bin)
+target_link_libraries(edp_spkm2 kinematicsspkm epos edp
+	${COMMON_LIBRARIES})	
+
+install(TARGETS edp_spkm edp_spkm1 edp_spkm2 DESTINATION bin)
 endif(LibFTDI_FOUND)
 
 add_library(kinematicsspkm
