@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  Created on: Mar 3, 2010
  *      Author: mboryn
  */
@@ -19,6 +17,7 @@
 
 #include <csignal>
 #include <ctime>
+#include <sstream>
 
 namespace mrrocpp {
 
@@ -114,12 +113,41 @@ protected:
 	std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> > servos;
 	const lib::Homog_matrix& get_current_position() const;
 
+	/** Time for single step () */
+	static const double step_time;
+
+	double get_dt() const;
+	void set_new_motion_steps(int new_motion_steps);
+	int get_new_motion_steps() const;
+	int get_motion_steps() const;
+	int get_motion_steps_base() const;
+
+//	struct timespec current_timestamp;
+//	struct timespec prev_timestamp;
+//	std::stringstream ss;
+//	int c;
+private:
+	/** Default number of steps for macrostep. */
+	static const int motion_steps_default;
+	static const int motion_steps_min;
+	static const int motion_steps_max;
+//	static const int motion_steps_value_in_step_no;
+	int value_in_step_no;
+
+	/** Number of steps for macrostep.
+	 * If present, this value is read from config, otherwise is set to motion_steps_default
+	 */
+	int motion_steps;
+
+	int motion_steps_base;
+
+	int new_motion_steps;
+
 	/** Time between next_step() calls */
 	double dt;
-private:
+
 	lib::Homog_matrix current_position;
 	bool current_position_saved;
-	int motion_steps;
 
 	std::vector <boost::shared_ptr <servovision::position_constraint> > position_constraints;
 	std::vector <boost::shared_ptr <servovision::termination_condition> > termination_conditions;
@@ -168,12 +196,6 @@ private:
 	 * @param position_change
 	 */
 	void constrain_speed_accel(lib::Homog_matrix & position_change);
-
-	//	timer_t timerek;
-	//	itimerspec max_t;
-	//	itimerspec curr_t;
-	//
-	//	void setup_timer();
 };
 
 /** @} */

@@ -8,8 +8,15 @@
 #ifndef __UI_R_SHEAD_H
 #define __UI_R_SHEAD_H
 
+#include <QObject>
+#include <QMenu>
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
+
+namespace Ui{
+class MenuBar;
+class MenuBarAction;
+}
 
 namespace mrrocpp {
 namespace ui {
@@ -27,9 +34,9 @@ class EcpRobot;
 //
 
 
-class UiRobot : public common::UiRobot
+class UiRobot : public QObject, public common::UiRobot
 {
-private:
+	Q_OBJECT
 
 public:
 
@@ -44,6 +51,15 @@ public:
 	int create_ui_ecp_robot();
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
+
+	void make_connections();
+	void setup_menubar();
+
+private:
+    QAction *actionshead_EDP_Load;
+    QAction *actionshead_EDP_Unload;
+
+    QMenu *menuShead;
 
 };
 

@@ -24,12 +24,6 @@ public:
 	{
 	}
 
-	IBReading(const IBReading& o)
-	{
-		objectVisible = o.objectVisible;
-		imagePosition = o.imagePosition;
-	}
-
 	virtual ~IBReading()
 	{
 	}
@@ -43,7 +37,6 @@ public:
 	Types::ImagePosition imagePosition;
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar){
-//		LOG(LNOTICE) << "IBReading::send(): hehehehe\n";
 		*ar<<*this;
 	}
 private:
@@ -51,8 +44,9 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <Reading>(*this);
 //		LOG(LTRACE) << "IBReading::serialize()\n";
+		ar & boost::serialization::base_object <Reading>(*this);
+
 		ar & objectVisible;
 		ar & imagePosition;
 	}

@@ -34,6 +34,15 @@ public:
 protected:
 	virtual lib::Homog_matrix get_aggregated_position_change();
 	virtual void configure_all_servos();
+
+private:
+	double image_sampling_period;
+	static const double image_sampling_period_default;
+
+//	std::string txtbuf;
+//	int txtiter;
+
+	void update_motion_steps(ecp_mp::sensor::discode::reading_message_header rmh);
 };
 
 /** @} */

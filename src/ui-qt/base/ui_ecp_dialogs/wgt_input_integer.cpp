@@ -1,6 +1,7 @@
 #include "wgt_input_integer.h"
 #include "../interface.h"
 #include "../ui_ecp.h"
+#include <QHideEvent>
 
 wgt_input_integer::wgt_input_integer(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	wgt_base("Input Integer Dialog", _interface, parent), ui(new Ui::wgt_input_integerClass)
