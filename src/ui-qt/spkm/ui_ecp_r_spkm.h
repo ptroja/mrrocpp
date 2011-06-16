@@ -13,7 +13,7 @@
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
-#include "robot/spkm/ecp_r_spkm.h"
+#include "robot/spkm/ecp_r_spkm1.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_data_port.h"
 
 namespace mrrocpp {
