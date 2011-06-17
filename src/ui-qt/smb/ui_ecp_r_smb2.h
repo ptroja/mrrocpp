@@ -5,33 +5,28 @@
 // Ostatnia modyfikacja: 16.04.98
 // -------------------------------------------------------------------------
 
-#ifndef _UI_ECP_R_SMB_H
-#define _UI_ECP_R_SMB_H
+#ifndef _UI_ECP_R_SMB2_H
+#define _UI_ECP_R_SMB2_H
 
 #include "../base/ui.h"
 // Konfigurator.
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
-#include "robot/smb/ecp_r_smb.h"
+#include "robot/smb/ecp_r_smb2.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_data_port.h"
+#include "ui_ecp_r_smb.h"
 
 namespace mrrocpp {
 namespace ui {
-namespace common {
-class Interface;
-}
-namespace smb {
+namespace smb2 {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobotDataPort
+class EcpRobot : public smb::EcpRobot
 {
-
 public:
-
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
-
 };
 
 }

@@ -11,8 +11,6 @@
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
 
-
-
 namespace mrrocpp {
 namespace ui {
 namespace smb {
@@ -35,12 +33,6 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
-{
-	ui_ecp_robot = new ui::smb::EcpRobot(*this);
-	return 1;
-}
-
 int UiRobot::synchronise()
 
 {
@@ -49,8 +41,8 @@ int UiRobot::synchronise()
 
 }
 
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 }
@@ -149,27 +141,27 @@ void UiRobot::make_connections()
 {
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionsmb_EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
-	connect(actionsmb_EDP_Unload, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+	connect(actionsmb_EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionsmb_EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-    actionsmb_EDP_Load 		= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-    actionsmb_EDP_Unload	= new Ui::MenuBarAction(QString("EDP &Unload"),this, menuBar);
+	actionsmb_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+	actionsmb_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
 
-    menuSmb = new QMenu(menuBar->menuRobot);
-    menuSmb->setObjectName(QString::fromUtf8("menuSmb"));
+	menuSmb = new QMenu(menuBar->menuRobot);
+	menuSmb->setObjectName(QString::fromUtf8("menuSmb"));
 	menuSmb->addAction(actionsmb_EDP_Load);
 	menuSmb->addAction(actionsmb_EDP_Unload);
 
 	menuBar->menuRobot->addAction(menuSmb->menuAction());
 
-    actionsmb_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-    actionsmb_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-    menuSmb->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
+	actionsmb_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
+	actionsmb_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
+	menuSmb->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
 }
 
 void UiRobot::delete_ui_ecp_robot()

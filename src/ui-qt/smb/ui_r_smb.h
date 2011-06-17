@@ -42,13 +42,13 @@ public:
 
 	EcpRobot *ui_ecp_robot;
 
-	UiRobot(common::Interface& _interface);
+	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name);
 
 	int manage_interface();
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise();
-	int create_ui_ecp_robot();
+
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 

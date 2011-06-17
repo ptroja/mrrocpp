@@ -25,7 +25,7 @@
 #include "base/lib/ping.h"
 
 #include "../spkm/ui_r_spkm1.h"
-#include "../smb/ui_r_smb.h"
+#include "../smb/ui_r_smb1.h"
 #include "../shead/ui_r_shead.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
@@ -697,8 +697,8 @@ void Interface::create_robots()
 	spkm1 = new spkm1::UiRobot(*this);
 	robot_m[spkm1->robot_name] = spkm1;
 
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
+	smb1 = new smb1::UiRobot(*this);
+	robot_m[smb1->robot_name] = smb1;
 
 	shead = new shead::UiRobot(*this);
 	robot_m[shead->robot_name] = shead;
