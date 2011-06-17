@@ -108,6 +108,7 @@ SET(GUI_MOC_SRCS
 	bird_hand/ui_r_bird_hand.h
 	spkm/ui_r_spkm.h
 	spkm/ui_r_spkm1.h
+	spkm/ui_r_spkm2.h
 	smb/ui_r_smb.h
 	shead/ui_r_shead.h
 	sarkofag/ui_r_sarkofag.h
@@ -167,8 +168,10 @@ ADD_EXECUTABLE(
 	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_ecp_r_spkm1.cc
+	spkm/ui_ecp_r_spkm2.cc
 	spkm/ui_r_spkm.cc
 	spkm/ui_r_spkm1.cc
+	spkm/ui_r_spkm2.cc
 	smb/ui_ecp_r_smb.cc
 	smb/ui_r_smb.cc
 	shead/ui_ecp_r_shead.cc
