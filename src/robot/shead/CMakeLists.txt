@@ -21,7 +21,7 @@ add_library(kinematicsshead
 
 target_link_libraries(kinematicsshead kinematics)
 	
-add_library(ecp_r_shead ecp_r_shead.cc)	
+add_library(ecp_r_shead ecp_r_shead.cc ecp_r_shead1.cc ecp_r_shead2.cc)	
 	
 target_link_libraries(ecp_r_shead kinematicsshead)
 

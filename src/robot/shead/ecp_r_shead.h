@@ -60,13 +60,13 @@ public:
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 
 	/**
 	 * @brief constructor called from ECP
 	 * @param _ecp_object ecp tak object reference
 	 */
-	robot(common::task::task_base& _ecp_object);
+	robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief set the edp command buffer
