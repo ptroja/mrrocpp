@@ -18,12 +18,6 @@ namespace lib {
 namespace spkm {
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine robot label
- * @ingroup spkm
- */
-const robot_name_t ROBOT_NAME = "spkm";
-
-/*!
  * @brief SwarmItFix Parallel Kinematic Machine number of motors.
  *
  * The kinematics, as well as control of the whole PKM, is solved for 6DOF - three for PM and three for SW .
