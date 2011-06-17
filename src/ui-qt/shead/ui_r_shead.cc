@@ -36,12 +36,6 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
-{
-	ui_ecp_robot = new ui::shead::EcpRobot(*this);
-	return 1;
-}
-
 int UiRobot::synchronise()
 
 {
@@ -50,8 +44,8 @@ int UiRobot::synchronise()
 
 }
 
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::shead::ROBOT_NAME, lib::shead::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::UiRobot(_interface, _robot_name, lib::shead::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 }
@@ -145,32 +139,31 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-
 void UiRobot::make_connections()
 {
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionshead_EDP_Load, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionshead_EDP_Unload,			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+	connect(actionshead_EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionshead_EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-    actionshead_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-    actionshead_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
+	actionshead_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+	actionshead_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
 
-    menuShead = new QMenu(menuBar->menuRobot);
+	menuShead = new QMenu(menuBar->menuRobot);
 
-    menuBar->menuRobot->addAction(menuShead->menuAction());
+	menuBar->menuRobot->addAction(menuShead->menuAction());
 
 	menuShead->addAction(actionshead_EDP_Load);
 	menuShead->addAction(actionshead_EDP_Unload);
 
-    actionshead_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-    actionshead_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-    menuShead->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
+	actionshead_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
+	actionshead_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
+	menuShead->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
 }
 
 void UiRobot::delete_ui_ecp_robot()

@@ -192,7 +192,7 @@ public:
 
 	spkm::UiRobot *spkm1;
 	smb::UiRobot *smb1;
-	shead::UiRobot *shead;
+	shead::UiRobot *shead1;
 
 	common::UiRobot *irp6ot_m;
 	common::UiRobot *irp6p_m;

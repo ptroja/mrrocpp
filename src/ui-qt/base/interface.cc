@@ -26,7 +26,7 @@
 
 #include "../spkm/ui_r_spkm1.h"
 #include "../smb/ui_r_smb1.h"
-#include "../shead/ui_r_shead.h"
+#include "../shead/ui_r_shead1.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -700,8 +700,8 @@ void Interface::create_robots()
 	smb1 = new smb1::UiRobot(*this);
 	robot_m[smb1->robot_name] = smb1;
 
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
+	shead1 = new shead1::UiRobot(*this);
+	robot_m[shead1->robot_name] = shead1;
 
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	robot_m[irp6ot_m->robot_name] = irp6ot_m;

@@ -113,6 +113,8 @@ SET(GUI_MOC_SRCS
 	smb/ui_r_smb1.h
 	smb/ui_r_smb2.h
 	shead/ui_r_shead.h
+	shead/ui_r_shead1.h
+	shead/ui_r_shead2.h
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
 	
@@ -181,7 +183,11 @@ ADD_EXECUTABLE(
 	smb/ui_r_smb1.cc
 	smb/ui_r_smb2.cc
 	shead/ui_ecp_r_shead.cc
+	shead/ui_ecp_r_shead1.cc
+	shead/ui_ecp_r_shead2.cc
 	shead/ui_r_shead.cc
+	shead/ui_r_shead1.cc
+	shead/ui_r_shead2.cc
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
