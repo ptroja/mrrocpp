@@ -35,7 +35,6 @@ class MainWindow;
 //}
 
 
-
 namespace mrrocpp {
 namespace ui {
 namespace spkm {
@@ -80,7 +79,6 @@ typedef robots_t::value_type robot_pair_t;
 
 class sr_buffer;
 class ecp_buffer;
-
 
 // super klasa agregujaca porozrzucane struktury
 
@@ -192,11 +190,9 @@ public:
 
 	common::robots_t robot_m;
 
-	spkm::UiRobot *spkm;
+	spkm::UiRobot *spkm1;
 	smb::UiRobot *smb;
 	shead::UiRobot *shead;
-
-
 
 	common::UiRobot *irp6ot_m;
 	common::UiRobot *irp6p_m;
@@ -207,8 +203,6 @@ public:
 	sarkofag::UiRobot *sarkofag;
 
 	conveyor::UiRobot *conveyor;
-
-
 
 	const int position_refresh_interval;
 
@@ -302,7 +296,7 @@ public:
 	wgt_choose_option* wgt_choose_option_obj;
 	wgt_teaching* wgt_teaching_obj;
 
-	std::vector<wgt_robot_process_control *> wgt_robots_pc;
+	std::vector <wgt_robot_process_control *> wgt_robots_pc;
 };
 
 }

@@ -30,8 +30,8 @@ namespace spkm {
 //
 
 
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 	wgt_inc = new wgt_spkm_inc(interface, *this, interface.get_main_window());
@@ -54,12 +54,6 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 {
 	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
 
-}
-
-int UiRobot::create_ui_ecp_robot()
-{
-	ui_ecp_robot = new ui::spkm::EcpRobot(*this);
-	return 1;
 }
 
 int UiRobot::edp_create_int_extra_operations()
@@ -174,45 +168,44 @@ void UiRobot::make_connections()
 {
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionspkm_EDP_Load, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_EDP_Unload, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-	connect(actionspkm_Motors, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Motors_post, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Joints, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_External, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_External_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Synchro_Position,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Front_Position, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Position_0, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Position_1, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionspkm_Clear_Fault, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+	connect(actionspkm_EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Motors, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Motors_post, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Joints, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_External, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_External_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Synchro_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Front_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_0, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_1, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_2, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
-
 
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-	actionspkm_EDP_Load			= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-	actionspkm_EDP_Unload		= new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
-	actionspkm_Synchronisation	= new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
-	actionspkm_Motors			= new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
-	actionspkm_Motors_post		= new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
-	actionspkm_Joints			= new Ui::MenuBarAction(QString("&Joints"), this, menuBar);
-	actionspkm_External			= new Ui::MenuBarAction(QString("&External"), this, menuBar);
-	actionspkm_Synchro_Position	= new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
-	actionspkm_Front_Position	= new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
-	actionspkm_Position_0		= new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
-	actionspkm_Position_1		= new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
-	actionspkm_Position_2		= new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
-	actionspkm_Clear_Fault		= new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
+	actionspkm_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+	actionspkm_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
+	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
+	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
+	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
+	actionspkm_Joints = new Ui::MenuBarAction(QString("&Joints"), this, menuBar);
+	actionspkm_External = new Ui::MenuBarAction(QString("&External"), this, menuBar);
+	actionspkm_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
+	actionspkm_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
+	actionspkm_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
+	actionspkm_Position_1 = new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
+	actionspkm_Position_2 = new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
+	actionspkm_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
 
-    menuSpkm = new QMenu(menuBar->menuRobot);
+	menuSpkm = new QMenu(menuBar->menuRobot);
 
-    menuspkm_Pre_synchro_moves = new QMenu(menuSpkm);
-    menuspkm_Post_synchro_moves = new QMenu(menuSpkm);
-    menuspkm_Preset_positions = new QMenu(menuSpkm);
+	menuspkm_Pre_synchro_moves = new QMenu(menuSpkm);
+	menuspkm_Post_synchro_moves = new QMenu(menuSpkm);
+	menuspkm_Preset_positions = new QMenu(menuSpkm);
 
 	menuBar->menuRobot->addAction(menuSpkm->menuAction());
 
@@ -235,26 +228,25 @@ void UiRobot::setup_menubar()
 	menuspkm_Preset_positions->addAction(actionspkm_Position_1);
 	menuspkm_Preset_positions->addAction(actionspkm_Position_2);
 
-    actionspkm_EDP_Load->setText(QApplication::translate("mainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-    actionspkm_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-    actionspkm_Synchronisation->setText(QApplication::translate("MainWindow", "&Synchronisation", 0, QApplication::UnicodeUTF8));
-    actionspkm_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-    actionspkm_Motors_post->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-    actionspkm_Joints->setText(QApplication::translate("MainWindow", "&Joints", 0, QApplication::UnicodeUTF8));
-    actionspkm_External->setText(QApplication::translate("MainWindow", "&External", 0, QApplication::UnicodeUTF8));
-    actionspkm_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
-    actionspkm_Front_Position->setText(QApplication::translate("MainWindow", "&Front Position", 0, QApplication::UnicodeUTF8));
-    actionspkm_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
-    actionspkm_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
-    actionspkm_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
+	actionspkm_EDP_Load->setText(QApplication::translate("mainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
+	actionspkm_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
+	actionspkm_Synchronisation->setText(QApplication::translate("MainWindow", "&Synchronisation", 0, QApplication::UnicodeUTF8));
+	actionspkm_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
+	actionspkm_Motors_post->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
+	actionspkm_Joints->setText(QApplication::translate("MainWindow", "&Joints", 0, QApplication::UnicodeUTF8));
+	actionspkm_External->setText(QApplication::translate("MainWindow", "&External", 0, QApplication::UnicodeUTF8));
+	actionspkm_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
+	actionspkm_Front_Position->setText(QApplication::translate("MainWindow", "&Front Position", 0, QApplication::UnicodeUTF8));
+	actionspkm_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
+	actionspkm_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
+	actionspkm_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
 
-    actionspkm_Clear_Fault->setText(QApplication::translate("MainWindow", "&Clear Fault", 0, QApplication::UnicodeUTF8));
-    menuSpkm->setTitle(QApplication::translate("MainWindow", "Sp&km", 0, QApplication::UnicodeUTF8));
-    menuspkm_Pre_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
-    menuspkm_Post_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&ost Synchro Moves", 0, QApplication::UnicodeUTF8));
-    menuspkm_Preset_positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
+	actionspkm_Clear_Fault->setText(QApplication::translate("MainWindow", "&Clear Fault", 0, QApplication::UnicodeUTF8));
+	menuSpkm->setTitle(QApplication::translate("MainWindow", "Sp&km", 0, QApplication::UnicodeUTF8));
+	menuspkm_Pre_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
+	menuspkm_Post_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&ost Synchro Moves", 0, QApplication::UnicodeUTF8));
+	menuspkm_Preset_positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
 }
-
 
 void UiRobot::delete_ui_ecp_robot()
 {
