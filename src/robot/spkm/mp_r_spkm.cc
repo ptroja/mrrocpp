@@ -6,7 +6,7 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/mp_r_spkm.h"
+#include "mp_r_spkm.h"
 
 namespace mrrocpp {
 namespace mp {

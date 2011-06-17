@@ -9,7 +9,7 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/dp_spkm.h"
+#include "dp_spkm.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
 

@@ -10,7 +10,7 @@
  */
 
 #include "base/mp/mp_robot.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {

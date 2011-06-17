@@ -10,7 +10,7 @@
 #ifndef __EDP_E_SPKM2_H
 #define __EDP_E_SPKM2_H
 
-#include "robot/spkm/edp_e_spkm.h"
+#include "edp_e_spkm.h"
 
 namespace mrrocpp {
 namespace edp {

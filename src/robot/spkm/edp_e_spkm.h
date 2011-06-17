@@ -14,7 +14,7 @@
 #include <boost/array.hpp>
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 #include "robot/epos/epos.h"
 #include "robot/epos/ipm_executor.h"
 
