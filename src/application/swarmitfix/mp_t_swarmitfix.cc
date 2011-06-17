@@ -18,7 +18,9 @@
 
 #include "robot/shead/mp_r_shead.h"
 #include "robot/spkm/mp_r_spkm1.h"
-#include "robot/smb/mp_r_smb.h"
+#include "robot/spkm/mp_r_spkm2.h"
+#include "robot/smb/mp_r_smb1.h"
+#include "robot/smb/mp_r_smb2.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -33,7 +35,9 @@ task* return_created_mp_task(lib::configurator &_config)
 void swarmitfix::create_robots()
 {
 	ACTIVATE_MP_ROBOT(spkm1);
-	ACTIVATE_MP_ROBOT(smb);
+	ACTIVATE_MP_ROBOT(spkm2);
+	ACTIVATE_MP_ROBOT(smb1);
+	ACTIVATE_MP_ROBOT(smb2)
 	ACTIVATE_MP_ROBOT(shead);
 }
 
@@ -95,7 +99,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
 	sr_ecp_msg->message("5");
-	wait_for_task_termination(false,1, lib::spkm::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 1, lib::spkm::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 

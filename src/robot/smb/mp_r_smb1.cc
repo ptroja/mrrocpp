@@ -6,14 +6,14 @@
  * @ingroup smb
  */
 
-#include "robot/smb/mp_r_smb.h"
+#include "mp_r_smb1.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-smb::smb(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
-	mp::robot::robot(l_robot_name, mp_object_l, lib::smb::NUM_OF_SERVOS)
+smb1::smb1(task::task &mp_object_l) :
+	smb(lib::smb1::ROBOT_NAME, mp_object_l)
 {
 }
 

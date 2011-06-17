@@ -27,6 +27,8 @@ add_library(mp_robots
 	spkm/mp_r_spkm1.cc
 	spkm/mp_r_spkm2.cc
 	smb/mp_r_smb.cc
+	smb/mp_r_smb1.cc
+	smb/mp_r_smb2.cc
 	shead/mp_r_shead.cc
 	irp6ot_tfg/mp_r_irp6ot_tfg.cc
 	irp6p_tfg/mp_r_irp6p_tfg.cc
