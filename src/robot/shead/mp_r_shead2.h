@@ -1,5 +1,5 @@
-#if !defined(MP_R_SHEAD_H_)
-#define MP_R_SHEAD_H_
+#if !defined(MP_R_SHEAD2_H_)
+#define MP_R_SHEAD2_H_
 
 /*!
  * @file
@@ -9,30 +9,30 @@
  * @ingroup shead
  */
 
-#include "base/mp/mp_robot.h"
-#include "robot/shead/const_shead.h"
+#include "mp_r_shead.h"
+#include "const_shead2.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 /*!
- * @brief SwarmItFix Head mp robot class
+ * @brief SwarmItFix parallel manipulator mp robot class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup shead
  */
-class shead : public robot
+class shead2 : public shead
 {
 public:
 	/**
 	 * @brief constructor
 	 * @param mp_object_l mp task object reference
 	 */
-	shead(const lib::robot_name_t & l_robot_name, task::task &mp_object_l);
+	shead2(task::task &mp_object_l);
 };
 
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-#endif /*MP_R_SHEAD_H_*/
+#endif /*MP_R_SHEAD2_H_*/

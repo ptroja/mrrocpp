@@ -16,7 +16,8 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
-#include "robot/shead/mp_r_shead.h"
+#include "robot/shead/mp_r_shead1.h"
+#include "robot/shead/mp_r_shead2.h"
 #include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
@@ -38,7 +39,8 @@ void swarmitfix::create_robots()
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2)
-	ACTIVATE_MP_ROBOT(shead);
+	ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(shead2);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :

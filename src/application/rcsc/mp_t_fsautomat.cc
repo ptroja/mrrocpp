@@ -50,7 +50,8 @@
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#include "robot/shead/mp_r_shead.h"
+#include "robot/shead/mp_r_shead1.h"
+#include "robot/shead/mp_r_shead2.h"
 #include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
@@ -79,7 +80,8 @@ void fsautomat::create_robots()
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(shead);
+	ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(shead2);
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);

@@ -6,18 +6,17 @@
  * @ingroup shead
  */
 
-#include "robot/shead/mp_r_shead.h"
+#include "mp_r_shead1.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-shead::shead(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
-	mp::robot::robot(l_robot_name, mp_object_l, lib::shead::NUM_OF_SERVOS)
+shead1::shead1(task::task &mp_object_l) :
+	shead(lib::shead1::ROBOT_NAME, mp_object_l)
 {
 }
 
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
-
