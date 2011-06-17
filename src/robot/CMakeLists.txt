@@ -24,6 +24,8 @@ add_library(mp_robots
 	polycrank/mp_r_polycrank.cc
 	bird_hand/mp_r_bird_hand.cc
 	spkm/mp_r_spkm.cc
+	spkm/mp_r_spkm1.cc
+	spkm/mp_r_spkm2.cc
 	smb/mp_r_smb.cc
 	shead/mp_r_shead.cc
 	irp6ot_tfg/mp_r_irp6ot_tfg.cc

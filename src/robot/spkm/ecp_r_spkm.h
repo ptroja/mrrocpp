@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 #include "base/kinematics/kinematics_manager.h"
 
 namespace mrrocpp {

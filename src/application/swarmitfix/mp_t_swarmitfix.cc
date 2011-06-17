@@ -17,7 +17,7 @@
 #include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead.h"
-#include "robot/spkm/mp_r_spkm.h"
+#include "robot/spkm/mp_r_spkm1.h"
 #include "robot/smb/mp_r_smb.h"
 
 namespace mrrocpp {
@@ -32,7 +32,7 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	ACTIVATE_MP_ROBOT(spkm);
+	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(smb);
 	ACTIVATE_MP_ROBOT(shead);
 }

@@ -6,14 +6,14 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/mp_r_spkm.h"
+#include "robot/spkm/mp_r_spkm2.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-spkm::spkm(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
-	mp::robot::robot(l_robot_name, mp_object_l, lib::spkm::NUM_OF_SERVOS)
+spkm2::spkm2(task::task &mp_object_l) :
+	spkm(lib::spkm2::ROBOT_NAME, mp_object_l)
 {
 }
 
