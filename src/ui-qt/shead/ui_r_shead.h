@@ -34,7 +34,7 @@ class EcpRobot;
 //
 
 
-class UiRobot : public QObject, public common::UiRobot
+class UiRobot : public common::UiRobot
 {
 Q_OBJECT
 
@@ -54,13 +54,6 @@ public:
 
 	void make_connections();
 	void setup_menubar();
-
-private:
-	QAction *actionshead_EDP_Load;
-	QAction *actionshead_EDP_Unload;
-
-	QMenu *menuShead;
-
 };
 
 }

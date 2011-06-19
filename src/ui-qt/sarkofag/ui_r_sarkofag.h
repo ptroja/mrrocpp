@@ -42,7 +42,7 @@ namespace sarkofag {
 // super klasa agregujaca porozrzucane struktury
 
 
-class UiRobot : public QObject, public single_motor::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 	Q_OBJECT
 
@@ -68,8 +68,6 @@ public:
 	void setup_menubar();
 
 private:
-    QAction *actionsarkofag_EDP_Load;
-    QAction *actionsarkofag_EDP_Unload;
     QAction *actionsarkofag_Synchronisation;
     QAction *actionsarkofag_Move;
     QAction *actionsarkofag_Synchro_Position;
@@ -79,7 +77,6 @@ private:
     QAction *actionsarkofag_Position_2;
     QAction *actionsarkofag_Servo_Algorithm;
 
-    QMenu *menuSarkofag;
     QMenu *menusarkofag_Preset_Positions;
 
 };

@@ -117,7 +117,7 @@ SET(GUI_MOC_SRCS
 	shead/ui_r_shead2.h
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
-	
+	base/ui_robot.h
 )
 
 # Generate MOC files

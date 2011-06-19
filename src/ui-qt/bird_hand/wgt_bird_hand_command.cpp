@@ -122,9 +122,9 @@ wgt_bird_hand_command::~wgt_bird_hand_command()
 }
 
 
-void wgt_bird_hand_command::my_open()
+void wgt_bird_hand_command::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 

@@ -57,15 +57,15 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, menuShead);
+			mw->enable_menu_item(false, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionshead_EDP_Unload);
-			mw->enable_menu_item(true, 1, menuShead);
-			mw->enable_menu_item(true, 1, actionshead_EDP_Load);
+			mw->enable_menu_item(false, 1, EDP_Unload);
+			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_unload,
 
@@ -75,7 +75,7 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, menuShead);
+			mw->enable_menu_item(true, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, NULL);
 			 */
@@ -90,8 +90,8 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, actionshead_EDP_Unload);
-						mw->enable_menu_item(false, 1, actionshead_EDP_Load);
+						mw->enable_menu_item(true, 1, EDP_Unload);
+						mw->enable_menu_item(false, 1, EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
@@ -99,7 +99,7 @@ int UiRobot::manage_interface()
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, actionshead_EDP_Unload, actionshead_EDP_Load);
+						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
@@ -123,8 +123,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, actionshead_EDP_Unload);
-				mw->enable_menu_item(false, 1, actionshead_EDP_Load);
+				mw->enable_menu_item(true, 1, EDP_Unload);
+				mw->enable_menu_item(false, 1, EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
@@ -141,29 +141,16 @@ int UiRobot::manage_interface()
 
 void UiRobot::make_connections()
 {
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionshead_EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionshead_EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
-	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	common::UiRobot::setup_menubar();
+//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-	actionshead_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-	actionshead_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
-
-	menuShead = new QMenu(menuBar->menuRobot);
-
-	menuBar->menuRobot->addAction(menuShead->menuAction());
-
-	menuShead->addAction(actionshead_EDP_Load);
-	menuShead->addAction(actionshead_EDP_Unload);
-
-	actionshead_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-	actionshead_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-	menuShead->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
+	make_connections();			//zostawione na przyszłośc (narazie nic nie robi)
 }
 
 void UiRobot::delete_ui_ecp_robot()

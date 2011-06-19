@@ -31,7 +31,7 @@ public:
 			wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
 					0);
 	~wgt_irp6_m_joints();
-	void my_open();
+	void my_open(bool set_on_top=false);
 	QString robot_label;
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;

@@ -40,7 +40,7 @@ namespace irp6ot_m {
 //
 
 
-class UiRobot : public QObject, public irp6_m::UiRobot
+class UiRobot : public irp6_m::UiRobot
 {
 	Q_OBJECT
 
@@ -85,10 +85,7 @@ private:
     QAction *actionirp6ot_m_Relative_Xyz_Angle_Axis;
     QAction *actionirp6ot_m_Tool_Xyz_Euler_Zyz;
     QAction *actionirp6ot_m_Tool_Xyz_Angle_Axis;
-    QAction *actionirp6ot_m_EDP_Load;
-    QAction *actionirp6ot_m_EDP_Unload;
 
-    QMenu *menuIrp6ot_m;
     QMenu *menuirp6ot_m_Pre_Synchro_Moves;
     QMenu *menuirp6ot_m_Preset_Positions;
     QMenu *menuirp6ot_m_Absolute_moves;

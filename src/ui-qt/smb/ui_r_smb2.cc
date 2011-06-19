@@ -21,6 +21,13 @@ int UiRobot::create_ui_ecp_robot()
 	return 1;
 }
 
+void UiRobot::setup_menubar()
+{
+	smb::UiRobot::setup_menubar();
+	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb2", 0, QApplication::UnicodeUTF8));
+}
+
+
 }
 } //namespace ui
 } //namespace mrrocpp

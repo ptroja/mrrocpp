@@ -43,7 +43,7 @@ namespace irp6p_tfg {
 //
 
 
-class UiRobot : public QObject, public single_motor::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 	Q_OBJECT
 private:
@@ -72,8 +72,6 @@ public:
 	void setup_menubar();
 
 private:
-	QAction *actionirp6p_tfg_EDP_Load;
-	QAction *actionirp6p_tfg_EDP_Unload;
 	QAction *actionirp6p_tfg_Synchronization;
 	QAction *actionirp6p_tfg_Move;
 	QAction *actionirp6p_tfg_Synchro_Position;
@@ -81,7 +79,6 @@ private:
 	QAction *actionirp6p_tfg_Position_1;
 	QAction *actionirp6p_tfg_Position_2;
 
-    QMenu *menuIrp6p_tfg;
     QMenu *menuirp6p_tfg_Preset_Positions;
 };
 

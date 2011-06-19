@@ -107,19 +107,19 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, menuSpkm);
+			mw->enable_menu_item(false, 1, robot_menu);
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionspkm_EDP_Unload);
+			mw->enable_menu_item(false, 1, EDP_Unload);
 			mw->enable_menu_item(false, 1, actionspkm_Clear_Fault);
 			mw->enable_menu_item(false, 3, menuspkm_Pre_synchro_moves, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-			mw->enable_menu_item(true, 1, menuSpkm);
-			mw->enable_menu_item(true, 1, actionspkm_EDP_Load);
+			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, menuSpkm);
+			mw->enable_menu_item(true, 1, robot_menu);
 			mw->enable_menu_item(true, 1, actionspkm_Clear_Fault);
 
 			// jesli robot jest zsynchronizowany
@@ -131,13 +131,13 @@ int UiRobot::manage_interface()
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-						mw->enable_menu_item(true, 1, actionspkm_EDP_Unload); //???
-						mw->enable_menu_item(false, 1, actionspkm_EDP_Load);
+						mw->enable_menu_item(true, 1, EDP_Unload); //???
+						mw->enable_menu_item(false, 1, EDP_Load);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);//???
-						mw->enable_menu_item(false, 2, actionspkm_EDP_Load, actionspkm_EDP_Unload);
+						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
@@ -152,9 +152,9 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, actionspkm_EDP_Unload);
+				mw->enable_menu_item(true, 1, EDP_Unload);
 				mw->enable_menu_item(true, 1, menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(false, 1, actionspkm_EDP_Load);
+				mw->enable_menu_item(false, 1, EDP_Load);
 			}
 			break;
 		default:
@@ -168,8 +168,6 @@ void UiRobot::make_connections()
 {
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionspkm_EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionspkm_EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Motors, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Motors_post, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
@@ -185,10 +183,9 @@ void UiRobot::make_connections()
 
 void UiRobot::setup_menubar()
 {
+	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-	actionspkm_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-	actionspkm_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
 	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
 	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
 	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
@@ -201,22 +198,16 @@ void UiRobot::setup_menubar()
 	actionspkm_Position_2 = new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
 	actionspkm_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
 
-	menuSpkm = new QMenu(menuBar->menuRobot);
+	menuspkm_Pre_synchro_moves = new QMenu(robot_menu);
+	menuspkm_Post_synchro_moves = new QMenu(robot_menu);
+	menuspkm_Preset_positions = new QMenu(robot_menu);
 
-	menuspkm_Pre_synchro_moves = new QMenu(menuSpkm);
-	menuspkm_Post_synchro_moves = new QMenu(menuSpkm);
-	menuspkm_Preset_positions = new QMenu(menuSpkm);
-
-	menuBar->menuRobot->addAction(menuSpkm->menuAction());
-
-	menuSpkm->addAction(actionspkm_EDP_Load);
-	menuSpkm->addAction(actionspkm_EDP_Unload);
-	menuSpkm->addSeparator();
-	menuSpkm->addAction(menuspkm_Pre_synchro_moves->menuAction());
-	menuSpkm->addAction(menuspkm_Post_synchro_moves->menuAction());
-	menuSpkm->addAction(menuspkm_Preset_positions->menuAction());
-	menuSpkm->addSeparator();
-	menuSpkm->addAction(actionspkm_Clear_Fault);
+	robot_menu->addSeparator();
+	robot_menu->addAction(menuspkm_Pre_synchro_moves->menuAction());
+	robot_menu->addAction(menuspkm_Post_synchro_moves->menuAction());
+	robot_menu->addAction(menuspkm_Preset_positions->menuAction());
+	robot_menu->addSeparator();
+	robot_menu->addAction(actionspkm_Clear_Fault);
 	menuspkm_Pre_synchro_moves->addAction(actionspkm_Synchronisation);
 	menuspkm_Pre_synchro_moves->addAction(actionspkm_Motors);
 	menuspkm_Post_synchro_moves->addAction(actionspkm_Motors_post);
@@ -228,24 +219,12 @@ void UiRobot::setup_menubar()
 	menuspkm_Preset_positions->addAction(actionspkm_Position_1);
 	menuspkm_Preset_positions->addAction(actionspkm_Position_2);
 
-	actionspkm_EDP_Load->setText(QApplication::translate("mainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-	actionspkm_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-	actionspkm_Synchronisation->setText(QApplication::translate("MainWindow", "&Synchronisation", 0, QApplication::UnicodeUTF8));
-	actionspkm_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-	actionspkm_Motors_post->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-	actionspkm_Joints->setText(QApplication::translate("MainWindow", "&Joints", 0, QApplication::UnicodeUTF8));
-	actionspkm_External->setText(QApplication::translate("MainWindow", "&External", 0, QApplication::UnicodeUTF8));
-	actionspkm_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
-	actionspkm_Front_Position->setText(QApplication::translate("MainWindow", "&Front Position", 0, QApplication::UnicodeUTF8));
-	actionspkm_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
-	actionspkm_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
-	actionspkm_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
-
-	actionspkm_Clear_Fault->setText(QApplication::translate("MainWindow", "&Clear Fault", 0, QApplication::UnicodeUTF8));
-	menuSpkm->setTitle(QApplication::translate("MainWindow", "Sp&km", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Sp&km", 0, QApplication::UnicodeUTF8));
 	menuspkm_Pre_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
 	menuspkm_Post_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&ost Synchro Moves", 0, QApplication::UnicodeUTF8));
 	menuspkm_Preset_positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
+
+	make_connections();
 }
 
 void UiRobot::delete_ui_ecp_robot()

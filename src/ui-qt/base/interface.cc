@@ -27,6 +27,7 @@
 #include "../spkm/ui_r_spkm1.h"
 #include "../smb/ui_r_smb1.h"
 #include "../shead/ui_r_shead1.h"
+#include "../shead/ui_r_shead2.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -329,10 +330,10 @@ void Interface::raise_process_control_window()
 
 void Interface::raise_process_control_window_slot()
 {
-	wgt_pc->my_open(true);
-
-	open_process_control_windows();
+	wgt_pc->my_open(false);
 	wgt_pc->dwgt->raise();
+	open_process_control_windows();
+	//
 }
 
 void Interface::open_process_control_windows()
@@ -623,7 +624,6 @@ void Interface::setRobotsMenu()
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->setup_menubar();
-					robot_node.second->make_connections();
 				}
 }
 
@@ -702,6 +702,9 @@ void Interface::create_robots()
 
 	shead1 = new shead1::UiRobot(*this);
 	robot_m[shead1->robot_name] = shead1;
+
+	shead2 = new shead2::UiRobot(*this);
+	robot_m[shead2->robot_name] = shead2;
 
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	robot_m[irp6ot_m->robot_name] = irp6ot_m;
@@ -949,7 +952,7 @@ void Interface::manage_pc(void)
 					}
 				}
 
-	wgt_pc->dwgt->raise();
+	//wgt_pc->dwgt->raise();
 	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
 	//	{
 	//		wgt_robot->process_control_window_init();
@@ -981,7 +984,7 @@ void Interface::manage_interface_slot()
 					}
 				}
 
-	wgt_pc->dwgt->raise();
+	//wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -1843,7 +1846,7 @@ int Interface::MPslay()
 						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 					}
 				}
-	wgt_pc->dwgt->raise();
+	//wgt_pc->dwgt->raise();
 	return 1;
 
 }
@@ -1871,7 +1874,7 @@ int Interface::pulse_start_mp()
 							robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 						}
 					}
-		wgt_pc->dwgt->raise();
+		//wgt_pc->dwgt->raise();
 		manage_interface();
 	}
 

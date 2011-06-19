@@ -190,9 +190,10 @@ public:
 
 	common::robots_t robot_m;
 
-	spkm::UiRobot *spkm1;
-	smb::UiRobot *smb1;
-	shead::UiRobot *shead1;
+	common::UiRobot *spkm1;
+	common::UiRobot *smb1;
+	common::UiRobot *shead1;
+	common::UiRobot *shead2;
 
 	common::UiRobot *irp6ot_m;
 	common::UiRobot *irp6p_m;
@@ -200,7 +201,7 @@ public:
 	common::UiRobot *irp6ot_tfg;
 	common::UiRobot *polycrank;
 	common::UiRobot *bird_hand;
-	sarkofag::UiRobot *sarkofag;
+	common::UiRobot *sarkofag;
 
 	conveyor::UiRobot *conveyor;
 
@@ -296,7 +297,6 @@ public:
 	wgt_choose_option* wgt_choose_option_obj;
 	wgt_teaching* wgt_teaching_obj;
 
-	std::vector <wgt_robot_process_control *> wgt_robots_pc;
 };
 
 }

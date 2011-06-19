@@ -46,7 +46,7 @@ public:
 
 	int	copy_finger_command(int fingerId);
 
-	void my_open();
+	void my_open(bool set_on_top=false);
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_curpos_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_despos_Vector;
