@@ -37,39 +37,6 @@ class MainWindow;
 
 namespace mrrocpp {
 namespace ui {
-namespace spkm {
-class UiRobot;
-}
-namespace smb {
-class UiRobot;
-}
-namespace shead {
-class UiRobot;
-}
-namespace irp6ot_m {
-class UiRobot;
-}
-namespace irp6p_m {
-class UiRobot;
-}
-namespace irp6p_tfg {
-class UiRobot;
-}
-namespace irp6ot_tfg {
-class UiRobot;
-}
-namespace polycrank {
-class UiRobot;
-}
-namespace bird_hand {
-class UiRobot;
-}
-namespace sarkofag {
-class UiRobot;
-}
-namespace conveyor {
-class UiRobot;
-}
 namespace common {
 
 class UiRobot;
@@ -191,7 +158,9 @@ public:
 	common::robots_t robot_m;
 
 	common::UiRobot *spkm1;
+	common::UiRobot *spkm2;
 	common::UiRobot *smb1;
+	common::UiRobot *smb2;
 	common::UiRobot *shead1;
 	common::UiRobot *shead2;
 
@@ -202,8 +171,7 @@ public:
 	common::UiRobot *polycrank;
 	common::UiRobot *bird_hand;
 	common::UiRobot *sarkofag;
-
-	conveyor::UiRobot *conveyor;
+	common::UiRobot *conveyor;
 
 	const int position_refresh_interval;
 

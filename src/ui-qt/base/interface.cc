@@ -25,7 +25,9 @@
 #include "base/lib/ping.h"
 
 #include "../spkm/ui_r_spkm1.h"
+#include "../spkm/ui_r_spkm2.h"
 #include "../smb/ui_r_smb1.h"
+#include "../smb/ui_r_smb2.h"
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
