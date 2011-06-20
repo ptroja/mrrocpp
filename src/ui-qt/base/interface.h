@@ -39,6 +39,12 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+#define ADD_UI_ROBOT(__robot_name) \
+		{\
+			common::UiRobot *created_robot = new __robot_name::UiRobot(*this);\
+			robot_m[created_robot->robot_name] = created_robot;\
+		}
+
 class UiRobot;
 
 typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
@@ -156,22 +162,6 @@ public:
 	common::robots_t getRobots();
 
 	common::robots_t robot_m;
-
-	common::UiRobot *spkm1;
-	common::UiRobot *spkm2;
-	common::UiRobot *smb1;
-	common::UiRobot *smb2;
-	common::UiRobot *shead1;
-	common::UiRobot *shead2;
-
-	common::UiRobot *irp6ot_m;
-	common::UiRobot *irp6p_m;
-	common::UiRobot *irp6p_tfg;
-	common::UiRobot *irp6ot_tfg;
-	common::UiRobot *polycrank;
-	common::UiRobot *bird_hand;
-	common::UiRobot *sarkofag;
-	common::UiRobot *conveyor;
 
 	const int position_refresh_interval;
 
