@@ -9,13 +9,9 @@
 wgt_robot_process_control::wgt_robot_process_control(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
 	wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
 {
-
 	ui->setupUi(this);
-
 	ui->robot_label->setText(QString::fromStdString((robo->getName())));
-
 	connect(this, SIGNAL(process_control_window_init_signal()), this, SLOT(process_control_window_init_slot()), Qt::QueuedConnection);
-
 }
 
 wgt_robot_process_control::~wgt_robot_process_control()
@@ -38,9 +34,9 @@ void wgt_robot_process_control::process_control_window_init_slot()
 	init();
 }
 
-void wgt_robot_process_control::my_open()
+void wgt_robot_process_control::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	process_control_window_init();
 }
 

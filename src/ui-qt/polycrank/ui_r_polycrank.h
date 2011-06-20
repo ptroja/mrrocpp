@@ -38,7 +38,7 @@ namespace polycrank {
 //
 //
 
-class UiRobot : public QObject, public common::UiRobot
+class UiRobot : public common::UiRobot
 {
 	Q_OBJECT
 private:
@@ -69,11 +69,7 @@ public:
 	void setup_menubar();
 
 private:
-    QAction *actionpolycrank_EDP_Load;
-    QAction *actionpolycrank_EDP_Unload;
     QAction *actionpolycrank_Move_Joints;
-
-    QMenu *menuPolycrank;
 
 };
 

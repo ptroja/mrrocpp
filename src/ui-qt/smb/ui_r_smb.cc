@@ -11,8 +11,6 @@
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
 
-
-
 namespace mrrocpp {
 namespace ui {
 namespace smb {
@@ -35,12 +33,6 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
-{
-	ui_ecp_robot = new ui::smb::EcpRobot(*this);
-	return 1;
-}
-
 int UiRobot::synchronise()
 
 {
@@ -49,8 +41,8 @@ int UiRobot::synchronise()
 
 }
 
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 }
@@ -62,15 +54,15 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, menuSmb);
+			mw->enable_menu_item(false, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionsmb_EDP_Unload);
-			mw->enable_menu_item(true, 1, menuSmb);
-			mw->enable_menu_item(true, 1, actionsmb_EDP_Load);
+			mw->enable_menu_item(false, 1, EDP_Unload);
+			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_unload,
 
@@ -80,7 +72,7 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, menuSmb);
+			mw->enable_menu_item(true, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, NULL);
 			 */
@@ -95,8 +87,8 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, actionsmb_EDP_Unload);
-						mw->enable_menu_item(false, 1, actionsmb_EDP_Load);
+						mw->enable_menu_item(true, 1, EDP_Unload);
+						mw->enable_menu_item(false, 1, EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
@@ -104,7 +96,7 @@ int UiRobot::manage_interface()
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, actionsmb_EDP_Unload, actionsmb_EDP_Load);
+						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
@@ -129,8 +121,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, actionsmb_EDP_Unload);
-				mw->enable_menu_item(false, 1, actionsmb_EDP_Load);
+				mw->enable_menu_item(true, 1, EDP_Unload);
+				mw->enable_menu_item(false, 1, EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, NULL);
@@ -147,29 +139,15 @@ int UiRobot::manage_interface()
 
 void UiRobot::make_connections()
 {
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
-	connect(actionsmb_EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
-	connect(actionsmb_EDP_Unload, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
-	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	common::UiRobot::setup_menubar();
+//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-    actionsmb_EDP_Load 		= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-    actionsmb_EDP_Unload	= new Ui::MenuBarAction(QString("EDP &Unload"),this, menuBar);
-
-    menuSmb = new QMenu(menuBar->menuRobot);
-    menuSmb->setObjectName(QString::fromUtf8("menuSmb"));
-	menuSmb->addAction(actionsmb_EDP_Load);
-	menuSmb->addAction(actionsmb_EDP_Unload);
-
-	menuBar->menuRobot->addAction(menuSmb->menuAction());
-
-    actionsmb_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-    actionsmb_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-    menuSmb->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
+	make_connections();			//domyślnie, jak coś będzie jeszcze do podłączenia (narazie to nic nie robi)
 }
 
 void UiRobot::delete_ui_ecp_robot()

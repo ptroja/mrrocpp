@@ -107,11 +107,17 @@ SET(GUI_MOC_SRCS
 	base/menu_bar_action.h
 	bird_hand/ui_r_bird_hand.h
 	spkm/ui_r_spkm.h
+	spkm/ui_r_spkm1.h
+	spkm/ui_r_spkm2.h
 	smb/ui_r_smb.h
+	smb/ui_r_smb1.h
+	smb/ui_r_smb2.h
 	shead/ui_r_shead.h
+	shead/ui_r_shead1.h
+	shead/ui_r_shead2.h
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
-	
+	base/ui_robot.h
 )
 
 # Generate MOC files
@@ -165,11 +171,23 @@ ADD_EXECUTABLE(
 	sarkofag/ui_r_sarkofag.cc
 	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
+	spkm/ui_ecp_r_spkm1.cc
+	spkm/ui_ecp_r_spkm2.cc
 	spkm/ui_r_spkm.cc
+	spkm/ui_r_spkm1.cc
+	spkm/ui_r_spkm2.cc
 	smb/ui_ecp_r_smb.cc
+	smb/ui_ecp_r_smb1.cc
+	smb/ui_ecp_r_smb2.cc
 	smb/ui_r_smb.cc
+	smb/ui_r_smb1.cc
+	smb/ui_r_smb2.cc
 	shead/ui_ecp_r_shead.cc
+	shead/ui_ecp_r_shead1.cc
+	shead/ui_ecp_r_shead2.cc
 	shead/ui_r_shead.cc
+	shead/ui_r_shead1.cc
+	shead/ui_r_shead2.cc
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc

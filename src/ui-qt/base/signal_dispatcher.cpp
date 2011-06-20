@@ -34,6 +34,11 @@ void SignalDispatcher::on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot *rob
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::EDP_slay_int);
 }
 
+void SignalDispatcher::on_robot_process_control_triggered(mrrocpp::ui::common::UiRobot *robot)
+{
+	open_new_window(robot->wgt_robot_pc);
+}
+
 void SignalDispatcher::on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::synchronise);

@@ -22,9 +22,9 @@ wgt_single_motor_move::~wgt_single_motor_move()
 
 }
 
-void wgt_single_motor_move::my_open()
+void wgt_single_motor_move::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 

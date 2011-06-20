@@ -46,9 +46,9 @@ wgt_irp6_m_joints::~wgt_irp6_m_joints()
 
 }
 
-void wgt_irp6_m_joints::my_open()
+void wgt_irp6_m_joints::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init();
 	copy();
 }

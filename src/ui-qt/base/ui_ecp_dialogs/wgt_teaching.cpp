@@ -31,10 +31,12 @@ void wgt_teaching::on_pushButton_send_move_clicked()
 
 	if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6ot_m->getCurrentPos()[i];       ///???
+			interface.ui_ecp_obj->ui_rep.coordinates[i]
+					= interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
 	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i] = interface.irp6p_m->getCurrentPos()[i];			///???
+			interface.ui_ecp_obj->ui_rep.coordinates[i]
+					= interface.robot_m[lib::irp6p_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
 	}
 
 	interface.ui_ecp_obj->ui_rep.double_number = ui->doubleSpinBox_input->value();
