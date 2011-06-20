@@ -699,8 +699,14 @@ void Interface::create_robots()
 	spkm1 = new spkm1::UiRobot(*this);
 	robot_m[spkm1->robot_name] = spkm1;
 
+	spkm2 = new spkm2::UiRobot(*this);
+	robot_m[spkm2->robot_name] = spkm2;
+
 	smb1 = new smb1::UiRobot(*this);
 	robot_m[smb1->robot_name] = smb1;
+
+	smb2 = new smb2::UiRobot(*this);
+	robot_m[smb2->robot_name] = smb2;
 
 	shead1 = new shead1::UiRobot(*this);
 	robot_m[shead1->robot_name] = shead1;
