@@ -12,8 +12,8 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-smb::smb(task::task &mp_object_l) :
-	robot(lib::smb::ROBOT_NAME, mp_object_l, lib::smb::NUM_OF_SERVOS)
+smb::smb(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
+	mp::robot::robot(l_robot_name, mp_object_l, lib::smb::NUM_OF_SERVOS)
 {
 }
 

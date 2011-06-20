@@ -5,12 +5,12 @@
 <TaskDescription>
 	<State id="INIT" type="systemInitialization">
 		<taskInit>
-			<ecp name="ROBOT_IRP6P_M">
+			<ecp name="irp6p_m">
 				<ecp_smooth_gen>6</ecp_smooth_gen>
 				<bias_edp_force_st></bias_edp_force_st>
 				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
 			</ecp>
-			<ecp name="ROBOT_IRP6OT_M">
+			<ecp name="irp6ot_m">
 				<ecp_smooth_gen>7</ecp_smooth_gen>
 				<bias_edp_force_st></bias_edp_force_st>
 				<ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
@@ -19,9 +19,9 @@
 		<transition condition="true" target="approach_1"/>
 	</State>
 	<State id="approach_1" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
-		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
+		<TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" motionType="Absolute">
 			<Pose>
 				<Velocity>0.1	0.1	0.1	0.1	0.1	0.1</Velocity>
@@ -32,7 +32,7 @@
 		<transition condition="true" target="approach_2"/>
 	</State>
 	<State id="approach_2" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_joint.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" motionType="Absolute">
@@ -47,24 +47,24 @@
 	<State id="approach_3" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="bias_post"/>
 	</State>
 	<State id="bias_post" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_ST_BIAS_EDP_FORCE</ECPGeneratorType>
 		<AddArg>5</AddArg>
 		<transition condition="true" target="bias_track"/>
 	</State>
 	<State id="bias_track" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_ST_BIAS_EDP_FORCE</ECPGeneratorType>
 		<AddArg>5</AddArg>
 		<transition condition="true" target="wait2"/>
@@ -72,18 +72,18 @@
 	<State id="wait2" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="approach_5"/>
 	</State>
 	<State id="approach_5" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -98,18 +98,18 @@
 	<State id="wait_post1" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="post_grip_1"/>
 	</State>
 	<State id="post_grip_1" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
 		<AddArg>0</AddArg>
 		<transition condition="true" target="wait_post"/>
@@ -117,18 +117,18 @@
 	<State id="wait_post" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Track_Joint"/>
 	</State>
 	<State id="Track_Joint" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_joint_p1.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="JOINT" motionType="Absolute">
@@ -143,18 +143,18 @@
 	<State id="wait_tr_aa" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Track_angle_axis"/>
 	</State>
 	<State id="Track_angle_axis" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p1a.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -169,18 +169,18 @@
 	<State id="wait_tr_gr" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Track_Force_approach"/>
 	</State>
 	<State id="Track_Force_approach" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
 		<AddArg>0</AddArg>
 		<transition condition="true" target="wait_paa2"/>
@@ -188,18 +188,18 @@
 	<State id="wait_paa2" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Postument_angle_axis2"/>
 	</State>
 	<State id="Postument_angle_axis2" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -229,18 +229,18 @@
 	<State id="wait_postgrip" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="post_grip_2"/>
 	</State>
 	<State id="post_grip_2" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
 		<AddArg>0</AddArg>
 		<transition condition="true" target="wait_both"/>
@@ -248,18 +248,18 @@
 	<State id="wait_both" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Track_angle_axis2"/>
 	</State>
 	<State id="Track_angle_axis2" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -289,18 +289,18 @@
 	<State id="wait_taa24" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="Track_Force_approach2"/>
 	</State>
 	<State id="Track_Force_approach2" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
 		<AddArg>0</AddArg>
 		<transition condition="true" target="wait_t2"/>
@@ -308,22 +308,22 @@
 	<State id="wait_t2" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="wait2s"/>
 	</State>
-	<State id="wait2s" type="wait">0.341500 1.219530 0.684648 -0.012490 0.020871  1.570163
+	<State id="wait2s" type="wait">
 		<TimeSpan>2000</TimeSpan>
 		<transition condition="true" target="Track_end_aa"/>
 	</State>
 	<State id="Track_end_aa" type="runGenerator">
-		<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+		<ROBOT>irp6ot_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -341,7 +341,7 @@
 		<transition condition="true" target="Postument_aa_end"/>
 	</State>
 	<State id="Postument_aa_end" type="runGenerator">
-		<ROBOT>ROBOT_IRP6P_M</ROBOT>
+		<ROBOT>irp6p_m</ROBOT>
 		<ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
 		<TrajectoryFilePath>../src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
 		<Trajectory coordinateType="ecp_XYZ_ANGLE_AXIS" motionType="Absolute">
@@ -361,12 +361,12 @@
 	<State id="wait_tendaa" type="emptyGenForSet">
 		<SetOfRobots>
 			<FirstSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>
 			</FirstSet>			
 			<SecSet>
-				<ROBOT>ROBOT_IRP6P_M</ROBOT>
-				<ROBOT>ROBOT_IRP6OT_M</ROBOT>		
+				<ROBOT>irp6p_m</ROBOT>
+				<ROBOT>irp6ot_m</ROBOT>		
 			</SecSet>
 		</SetOfRobots>
 		<transition condition="true" target="wait_"/>

@@ -24,9 +24,9 @@
 #include "ui_ecp.h"
 #include "base/lib/ping.h"
 
-#include "../spkm/ui_r_spkm.h"
-#include "../smb/ui_r_smb.h"
-#include "../shead/ui_r_shead.h"
+#include "../spkm/ui_r_spkm1.h"
+#include "../smb/ui_r_smb1.h"
+#include "../shead/ui_r_shead1.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -43,6 +43,8 @@
 #include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
+
+#include "wgt_robot_process_control.h"
 
 extern void catch_signal(int sig);
 
@@ -126,16 +128,24 @@ void Interface::timer_slot()
 	if (!(ui_sr_obj->buffer_empty())) { // by Y jesli mamy co wypisywac
 
 		// 	printf("timer\n");
+		ui_sr_obj->copy_buffers();
+
+		ui_sr_obj->clear_buffer();
 
 		char current_line[400];
 
 		std::string html_line;
 
 		lib::sr_package_t sr_msg;
+		int iterator = sr_buffer::UI_SR_BUFFER_LENGHT;
 
-		while (!(ui_sr_obj->buffer_empty())) { // dopoki mamy co wypisywac
+		while ((!(ui_sr_obj->inter_buffer_empty())) && ((iterator--) > 0)) { // dopoki mamy co wypisywac
 
-			ui_sr_obj->get_one_msg(sr_msg);
+
+			if (iterator < 2) {
+				std::cout << "UI - bufor sr przepelniony" << std::endl;
+			}
+			ui_sr_obj->inter_get_one_msg(sr_msg);
 
 			snprintf(current_line, 100, "%-10s", sr_msg.host_name);
 
@@ -229,7 +239,7 @@ void Interface::timer_slot()
 
 			}; // end: switch (message.message_type)
 			//	html_line += "</font>";
-			//	mw->get_ui()->textEdit_sr->setCurrentCharFormat(format);
+			//	mw->getMenuBar()->textEdit_sr->setCurrentCharFormat(format);
 
 			std::string text(sr_msg.description);
 
@@ -262,7 +272,6 @@ void Interface::timer_slot()
 
 							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
 
-							//	mw->get_ui()->textEdit_sr->append(current_line);
 							(*log_file_outfile) << current_line << std::endl;
 						}
 		}
@@ -320,7 +329,34 @@ void Interface::raise_process_control_window()
 
 void Interface::raise_process_control_window_slot()
 {
-	wgt_pc->my_open();
+	wgt_pc->my_open(true);
+
+	open_process_control_windows();
+	wgt_pc->dwgt->raise();
+}
+
+void Interface::open_process_control_windows()
+{
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->close();
+	//		delete	wgt_robot;
+	//	}
+	//
+	//	wgt_robots_pc.clear();
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->my_open();
+					}
+				}
+
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->my_open();
+	//
+	//	}
+
 }
 
 //Interface * Interface::get_instance()
@@ -403,6 +439,7 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				//				irp6ot_m->getWgtByName("wgt_joints")->my_open();
 				irp6ot_m->wgt_joints->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				irp6p_m->wgt_joints->my_open();
@@ -424,8 +461,10 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+				//				irp6ot_m->getWgtByName("wgt_motors")->my_open();
 				irp6ot_m->wgt_motors->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
+				//				irp6p_m->getWgtByName("wgt_motors")->my_open();
 				irp6p_m->wgt_motors->my_open();
 			}
 
@@ -579,6 +618,15 @@ void Interface::raise_ui_ecp_window_slot()
 
 }
 
+void Interface::setRobotsMenu()
+{
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					robot_node.second->setup_menubar();
+					robot_node.second->make_connections();
+				}
+}
+
 MainWindow* Interface::get_main_window()
 {
 	return mw;
@@ -639,16 +687,21 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
+common::robots_t Interface::getRobots()
+{
+	return robot_m;
+}
+
 void Interface::create_robots()
 {
-	spkm = new spkm::UiRobot(*this);
-	robot_m[spkm->robot_name] = spkm;
+	spkm1 = new spkm1::UiRobot(*this);
+	robot_m[spkm1->robot_name] = spkm1;
 
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
+	smb1 = new smb1::UiRobot(*this);
+	robot_m[smb1->robot_name] = smb1;
 
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
+	shead1 = new shead1::UiRobot(*this);
+	robot_m[shead1->robot_name] = shead1;
 
 	irp6ot_m = new irp6ot_m::UiRobot(*this);
 	robot_m[irp6ot_m->robot_name] = irp6ot_m;
@@ -673,6 +726,8 @@ void Interface::create_robots()
 
 	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
 	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+
+	setRobotsMenu();
 
 }
 
@@ -824,7 +879,9 @@ void Interface::init()
 
 	//ui_msg->message("closing");
 
-	manage_interface();
+	//manage_interface();
+
+	mw->get_ui()->textEdit_sr->setFocus();
 
 }
 
@@ -862,24 +919,14 @@ int Interface::MPup_int()
 
 			if (mp.pid > 0) {
 
-				unsigned tmp = 0;
-				// kilka sekund  (~1) na otworzenie urzadzenia
-				while ((mp.pulse_fd = messip::port_connect(mp.network_pulse_attach_point)) == lib::invalid_fd) {
-					if ((tmp++) < lib::CONNECT_RETRY) {
-						usleep(lib::CONNECT_DELAY);
-					} else {
-						fprintf(stderr, "name_open() for %s failed: %s\n", mp.network_pulse_attach_point.c_str(), strerror(errno));
-						break;
-					}
-				}
+				mp.MP = new RemoteAgent(lib::MP_SECTION);
+				mp.pulse = new OutputBuffer <char> (*mp.MP, "MP_PULSE");
 
 				teachingstate = ui::common::MP_RUNNING;
 
 				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
-
 				raise_process_control_window();
-
 			} else {
 				fprintf(stderr, "mp spawn failed\n");
 			}
@@ -894,6 +941,20 @@ int Interface::MPup_int()
 void Interface::manage_pc(void)
 {
 	wgt_pc->process_control_window_init();
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
+
+	wgt_pc->dwgt->raise();
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->process_control_window_init();
+	//	}
+
 
 }
 
@@ -911,6 +972,16 @@ void Interface::manage_interface_slot()
 {
 	// okienko process control
 	wgt_pc->process_control_window_init_slot();
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
+							&& robot_node.second->get_wgt_robot_pc()) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
+
+	wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -939,7 +1010,7 @@ void Interface::manage_interface_slot()
 				break;
 			case UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE EDP LOADED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
 				break;
 			case UI_ALL_EDPS_NONE_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE_SYNCHRONISED");
@@ -949,7 +1020,7 @@ void Interface::manage_interface_slot()
 				break;
 			case UI_ALL_EDPS_ALL_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("ALL_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_Synchronisation);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 				break;
 		}
@@ -958,45 +1029,53 @@ void Interface::manage_interface_slot()
 	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
 			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
 
+		if (((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) && ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state
+				== UI_MP_PERMITED_TO_RUN))) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
+			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionConfiguration);
+
+		} else {
+			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionConfiguration);
+
+		}
+
 		switch (all_edps)
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
 
 				break;
 			case UI_ALL_EDPS_NONE_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
-				//print_on_sr("UI_ALL_EDPS_NONE_EDP_LOADED");
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Load);
-				mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
 
 				break;
 			case UI_ALL_EDPS_SOME_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
-				mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->actionall_EDP_Load);
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
 
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 						break;
 					default:
@@ -1007,48 +1086,48 @@ void Interface::manage_interface_slot()
 
 			case UI_ALL_EDPS_ALL_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("ALL_LOADED		");
-				mw->enable_menu_item(true, 2, mw->get_ui()->menuRobot, mw->get_ui()->menuAll_Robots);
+				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
 
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Load);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-						mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
+						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_EDP_Unload);
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->get_ui()->actionall_Synchronisation);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
 
-						mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 						switch (mp.state)
 						{
 							case common::UI_MP_NOT_PERMITED_TO_RUN:
-								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_PERMITED_TO_RUN:
 
-								mw->enable_menu_item(true, 2, mw->get_ui()->actionall_EDP_Unload, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_WAITING_FOR_START_PULSE:
 
-								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
-								mw->enable_menu_item(true, 1, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
+								mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_TASK_RUNNING:
 							case common::UI_MP_TASK_PAUSED:
 
-								mw->enable_menu_item(false, 1, mw->get_ui()->actionall_EDP_Unload);
-								mw->enable_menu_item(false, 1, mw->get_ui()->menuall_Preset_Positions);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
+								mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							default:
 								break;
@@ -1071,28 +1150,28 @@ void Interface::manage_interface_slot()
 		{
 			case common::UI_MP_NOT_PERMITED_TO_RUN:
 				mw->get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 
 				break;
 			case common::UI_MP_PERMITED_TO_RUN:
 				mw->get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
-				mw->enable_menu_item(false, 1, mw->get_ui()->actionMP_Unload);
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Load);
+				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionMP_Unload);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Load);
 
 				break;
 			case common::UI_MP_WAITING_FOR_START_PULSE:
 				mw->get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
-				mw->enable_menu_item(true, 1, mw->get_ui()->actionMP_Unload);
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionall_EDP_Unload);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Unload);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionall_EDP_Unload);
 
 				break;
 			case common::UI_MP_TASK_RUNNING:
 				mw->get_ui()->label_mp_notification->setText("TASK_RUNNING");
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 				break;
 			case common::UI_MP_TASK_PAUSED:
 				mw->get_ui()->label_mp_notification->setText("TASK_PAUSED");
-				mw->enable_menu_item(false, 2, mw->get_ui()->actionMP_Load, mw->get_ui()->actionMP_Unload);
+				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 
 				break;
 			default:
@@ -1631,16 +1710,8 @@ int Interface::execute_mp_pulse(char pulse_code)
 {
 
 	// printf("w send pulse\n");
-	if (mp.pulse_fd > 0) {
-		long pulse_value = 1;
-
-		if (messip::port_send_pulse(mp.pulse_fd, pulse_code, pulse_value))
-
-		{
-			perror("Blad w wysylaniu pulsu do mp");
-			fprintf(stderr, "Blad w wysylaniu pulsu do mp error: %s \n", strerror(errno));
-			delay(1000);
-		}
+	if (mp.pulse) {
+		mp.pulse->Send(pulse_code);
 	}
 
 	return 1;
@@ -1657,15 +1728,15 @@ void Interface::create_threads()
 	ui_ecp_obj = (boost::shared_ptr <ecp_buffer>) new ecp_buffer(*this);
 
 	start_on_timer();
-
 }
 
 int Interface::EDP_all_robots_create()
-
 {
-
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 				{
+					if (!robot_node.second->get_wgt_robot_pc() && (robot_node.second->state.is_active))
+						robot_node.second->set_robot_process_control_window(new wgt_robot_process_control(*this, robot_node.second));
+
 					robot_node.second->edp_create();
 				}
 
@@ -1674,11 +1745,10 @@ int Interface::EDP_all_robots_create()
 }
 
 int Interface::EDP_all_robots_slay()
-
 {
-
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 				{
+					robot_node.second->delete_robot_process_control_window();
 					robot_node.second->EDP_slay_int();
 				}
 
@@ -1720,10 +1790,16 @@ int Interface::MPslay()
 			pulse_stop_mp();
 		}
 
-		if (mp.pulse_fd != lib::invalid_fd) {
-			messip::port_disconnect(mp.pulse_fd);
+		if (mp.pulse) {
+			delete mp.pulse;
 		} else {
 			std::cerr << "MP pulse not connected?" << std::endl;
+		}
+
+		if (mp.MP) {
+			delete mp.MP;
+		} else {
+			std::cerr << "MP not connected?" << std::endl;
 		}
 
 		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
@@ -1748,7 +1824,10 @@ int Interface::MPslay()
 	// 	kill(mp_pid,SIGTERM);
 	// 	printf("mp pupa po kill\n");
 	mp.pid = -1;
-	mp.pulse_fd = lib::invalid_fd;
+
+	mp.pulse = NULL;
+	mp.MP = NULL;
+
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
 				{
 					robot_node.second->deactivate_ecp_trigger();
@@ -1757,6 +1836,14 @@ int Interface::MPslay()
 	// modyfikacja menu
 	manage_interface();
 	wgt_pc->process_control_window_init();
+
+	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
+	wgt_pc->dwgt->raise();
 	return 1;
 
 }
@@ -1778,6 +1865,13 @@ int Interface::pulse_start_mp()
 		execute_mp_pulse(MP_START);
 
 		wgt_pc->process_control_window_init();
+		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+					{
+						if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+							robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+						}
+					}
+		wgt_pc->dwgt->raise();
 		manage_interface();
 	}
 
@@ -1896,6 +1990,36 @@ int Interface::pulse_trigger_all_reader()
 	return 1;
 }
 
+//ECP pulse
+int Interface::pulse_trigger_ecp(common::UiRobot *robot)
+{
+
+	robot->pulse_ecp();
+	return 1;
+}
+
+//Reader pulse
+int Interface::pulse_start_reader(common::UiRobot *robot)
+{
+	robot->pulse_reader_start_exec_pulse();
+	manage_pc();
+
+	return 1;
+}
+
+int Interface::pulse_stop_reader(common::UiRobot *robot)
+{
+	robot->pulse_reader_stop_exec_pulse();
+	manage_pc();
+	return 1;
+}
+
+int Interface::pulse_trigger_reader(common::UiRobot *robot)
+{
+	robot->pulse_reader_trigger_exec_pulse();
+	return 1;
+}
+
 // zatrzymuje zadanie, zabija procesy
 int Interface::unload_all()
 
@@ -1941,7 +2065,7 @@ int Interface::slay_all()
 		 system(system_command);
 		 */delay(100);
 
-		sprintf(system_command, "rsh -l %s %s killall -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
+		sprintf(system_command, "rsh -l %s %s killall -9 -e -q %s", program_node_user_list_iterator->user_name.c_str(), program_node_user_list_iterator->node_name.c_str(), program_node_user_list_iterator->program_name.c_str());
 
 		printf("slay_all: %s\n", system_command);
 		// przedniolsem wywolanie system do innego prceosu bo w procesie glownym czasem powoduje zawieszenie calego intefrejsu

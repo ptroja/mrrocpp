@@ -9,19 +9,13 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/dp_spkm.h"
+#include "dp_spkm.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
-
-/*!
- * @brief SwarmItFix Parallel Kinematic Machine robot label
- * @ingroup spkm
- */
-const robot_name_t ROBOT_NAME = "spkm";
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine number of motors.
@@ -39,7 +33,7 @@ const int NUM_OF_SERVOS = 6;
  * @author tkornuta
  * @ingroup spkm
  */
-const unsigned int NUM_OF_MOTION_SEGMENTS = 64;
+const unsigned int NUM_OF_MOTION_SEGMENTS = 20;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
@@ -74,11 +68,26 @@ struct cbuffer
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
+	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
 	int32_t motor_pos[NUM_OF_SERVOS];
+
 	double joint_pos[NUM_OF_SERVOS];
+
 	double goal_pos[6];
+
+	//! Allowed time for the motion in seconds.
+	//! If 0, then the motion time will be limited by the motor parameters.
+	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
+	//! In another case, the NACK will be replied.
+	double duration;
+
+	//! True if the contact is expected during the motion.
+	//! The NACK will be replied if:
+	//! - the contact was expected and did not happened
+	//! - OR the contact was NOT expected and did happened.
+	bool guarded_motion;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -119,8 +128,10 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::Homog_matrix current_frame;
+	lib::Homog_matrix current_pose;
+
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
 	bool contact;
 
 	//! Give access to boost::serialization framework
@@ -130,7 +141,7 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & current_frame;
+		ar & current_pose;
 		ar & epos_controller;
 		ar & contact;
 	}

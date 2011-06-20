@@ -12,8 +12,8 @@
 #define KINEMATIC_MODEL_SPKM_H_
 
 #include "base/kinematics/kinematic_model.h"
-#include "robot/spkm/const_spkm.h"
-#include "robot/spkm/kinematic_parameters_spkm.h"
+#include "const_spkm.h"
+#include "kinematic_parameters_spkm.h"
 
 namespace mrrocpp {
 namespace kinematics {
@@ -34,10 +34,17 @@ protected:
 	//! Kinematic parameters of both: parallel kinematics machine (PM) and spherical wrist (SW) attached to it.
 	kinematic_parameters_spkm params;
 
+	//! Upper platform pose - computed during the IK and used for Cartesian limits verification.
+	Homog4d O_P_T;
+
 	//! Sets parameters used by given kinematics model - empty.
 	void set_kinematic_parameters(void)
 	{
 	}
+
+public:
+	//! Constructor.
+	kinematic_model_spkm(void);
 
 	/*!
 	 * @brief Checks whether given motor increments are valid.
@@ -51,9 +58,11 @@ protected:
 	 */
 	void check_joints(const lib::JointArray & q) const;
 
-public:
-	//! Constructor.
-	kinematic_model_spkm(void);
+	/**
+	 * @brief Checks whether given Cartesian pose is valid - but in this case computations are based on the upper PM platform pose computed in the IK.
+	 * @param h_ Cartesian pose to be validated (in this case not used!).
+	 */
+	void check_cartesian_pose(const lib::Homog_matrix& H_) const;
 
 	/*!
 	 * @brief Computes internal coordinates for given the motor increments (position) values.

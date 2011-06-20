@@ -14,8 +14,9 @@
 #include <boost/array.hpp>
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 #include "robot/epos/epos.h"
+#include "robot/epos/ipm_executor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -31,24 +32,30 @@ class effector : public common::manip_effector
 {
 private:
 	//! Access to the CAN gateway unit
-	boost::shared_ptr<epos::epos_access> gateway;
+	boost::shared_ptr <epos::epos_access> gateway;
 
 	//! PKM axes
-	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
+	boost::shared_ptr <epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	boost::array<std::string, 6> axesNames;
+	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
 
 	//! Axes container
-	boost::array<epos::epos *, 6> axes;
+	boost::array <epos::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Default axis velocity [rpm]
-	static const uint32_t Vdefault[6];
+	static const uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Default axis acceleration [rpm/s]
-	static const uint32_t Adefault[6];
+	static const uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Default axis deceleration [rpm/s]
-	static const uint32_t Ddefault[6];
+	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Maximal motor velocity [rpm].
+	static const uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Max motor acceleration [rpm/s].
+	static const uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
@@ -60,6 +67,9 @@ private:
 
 	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
 	bool is_previous_cartesian_pose_known;
+
+	//! Handler for the asynchronous execution of the interpolated profile motion
+	epos::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
@@ -80,7 +90,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(common::shell &_shell);
+	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * @brief Method sets initial values of motor and joint positions.

@@ -49,21 +49,11 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void ball::create_robots()
 {
-	ACTIVATE_MP_ROBOT(conveyor);
-	ACTIVATE_MP_ROBOT(polycrank);
-	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 
@@ -75,19 +65,19 @@ ball::ball(lib::configurator &_config) :
 void ball::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
-		set_next_ecps_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
 	}
 
 	if ((configure_track) && (!configure_postument)) {
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	} else if ((!configure_track) && (configure_postument)) {
-		run_extended_empty_gen_and_wait(1, 1, lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	} else if ((configure_track) && (configure_postument)) {
-		run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	}
 }
 
@@ -97,18 +87,18 @@ void ball::main_task_algorithm(void)
 	mp_h_gen.robot_m = robot_m;
 
 	//TODO do zamiany na newsmooth
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	//set_next_ecps_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6ot_init.trj", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/ball/irp6p_init.trj", 0, lib::irp6p_m::ROBOT_NAME);
 
-	run_extended_empty_gen_and_wait(2, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("New series");
 	// wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
 
 	mp_h_gen.configure(1, 0);
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");

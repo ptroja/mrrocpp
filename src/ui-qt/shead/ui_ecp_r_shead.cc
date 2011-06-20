@@ -15,7 +15,7 @@ namespace shead {
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
 	EcpRobotDataPort(_ui_robot)
 {
-	the_robot = (boost::shared_ptr <robot_t>) new ecp::shead::robot(*(ui_robot.interface.config), *(ui_robot.msg));
+	//	the_robot = (boost::shared_ptr <robot_t>) new ecp::shead1::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 }
 
 }

@@ -30,7 +30,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
 #include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
@@ -49,29 +48,21 @@ namespace task {
 graspit::graspit(lib::configurator &_config) :
 	task(_config)
 {
-	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
+	trgraspit
+			= new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void graspit::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
-	
-	
-	ACTIVATE_MP_ROBOT(polycrank);
+
 	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 
@@ -154,13 +145,13 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), gripper_name);
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];
@@ -169,13 +160,13 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), gripper_name);
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	for (int i = 6; i < 13; ++i)

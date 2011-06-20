@@ -2,7 +2,7 @@
 #define __INTERFACE_H
 
 #include <iostream>
-
+#include <vector>
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
@@ -10,8 +10,9 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 
-#include "mainwindow.h"
+//#include "mainwindow.h"
 #include "wgt_process_control.h"
+#include "wgt_robot_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
@@ -23,11 +24,16 @@
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
-#include "string"
+//#include "string"
 
 #include "ui.h"
 
 #include "base/lib/messip/messip_dataport.h"
+
+//namespace Ui{
+class MainWindow;
+//}
+
 
 namespace mrrocpp {
 namespace ui {
@@ -87,6 +93,8 @@ private:
 
 	bool html_it(std::string &_input, std::string &_output);
 
+	void setRobotsMenu();
+
 signals:
 	void manage_interface_signal();
 	void raise_process_control_window_signal();
@@ -109,6 +117,8 @@ public:
 
 	//static Interface * get_instance();
 	MainWindow* get_main_window();
+	wgt_process_control* get_process_control_window();
+
 	void print_on_sr(const char *buff, ...);
 
 	busy_flag communication_flag;
@@ -176,21 +186,23 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 
+	common::robots_t getRobots();
+
 	common::robots_t robot_m;
 
-	spkm::UiRobot *spkm;
-	smb::UiRobot *smb;
-	shead::UiRobot *shead;
+	spkm::UiRobot *spkm1;
+	smb::UiRobot *smb1;
+	shead::UiRobot *shead1;
 
-	irp6ot_m::UiRobot *irp6ot_m;
-	irp6p_m::UiRobot *irp6p_m;
-	polycrank::UiRobot *polycrank;
-	bird_hand::UiRobot *bird_hand;
+	common::UiRobot *irp6ot_m;
+	common::UiRobot *irp6p_m;
+	common::UiRobot *irp6p_tfg;
+	common::UiRobot *irp6ot_tfg;
+	common::UiRobot *polycrank;
+	common::UiRobot *bird_hand;
 	sarkofag::UiRobot *sarkofag;
-	irp6p_tfg::UiRobot *irp6p_tfg;
-	conveyor::UiRobot *conveyor;
 
-	irp6ot_tfg::UiRobot *irp6ot_tfg;
+	conveyor::UiRobot *conveyor;
 
 	const int position_refresh_interval;
 
@@ -244,6 +256,14 @@ public:
 	int pulse_stop_all_reader();
 	int pulse_trigger_all_reader();
 
+	//ECP pulse
+	int pulse_trigger_ecp(common::UiRobot *robot);
+
+	//Reader pulse
+	int pulse_start_reader(common::UiRobot *robot);
+	int pulse_stop_reader(common::UiRobot *robot);
+	int pulse_trigger_reader(common::UiRobot *robot);
+
 	int unload_all();
 	int slay_all();
 
@@ -259,6 +279,13 @@ public:
 	bool are_all_loaded_robots_synchronised();
 	bool is_any_loaded_robot_synchronised();
 
+	void open_process_control_windows();
+
+	wgt_process_control* get_wgt_pc()
+	{
+		return wgt_pc;
+	}
+
 	// windows
 
 	wgt_process_control* wgt_pc;
@@ -268,6 +295,8 @@ public:
 	wgt_input_double* wgt_input_double_obj;
 	wgt_choose_option* wgt_choose_option_obj;
 	wgt_teaching* wgt_teaching_obj;
+
+	std::vector <wgt_robot_process_control *> wgt_robots_pc;
 };
 
 }

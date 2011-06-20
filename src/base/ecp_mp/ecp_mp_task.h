@@ -10,16 +10,19 @@
  */
 
 #include <boost/any.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include <libxml/tree.h>
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_typedefs.h"
-
-#include <libxml/tree.h>
+#include "base/lib/agent/Agent.h"
 
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/ecp_mp/Trajectory.h"
+#include "base/lib/agent/Agent.h"
 
 /**
  * @brief Container type for storing cc_t internal agent memory boost::any objects.
@@ -45,16 +48,16 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class task
+class task : protected Agent
 {
 public:
 	/**
 	 * @brief Container type for storing trajectory objects.
 	 */
-	typedef std::map <const char *, ecp_mp::common::Trajectory /*, str_cmp */> trajectories_t;
+	typedef std::map <const char *, ecp_mp::common::Trajectory> trajectories_t;
 
+	typedef std::map <std::string, std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> > bang_trajectories_map;
 
-	typedef std::map <std::string, std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> /*, str_cmp */> bang_trajectories_map;
 	/**
 	 * @brief Constructor
 	 * @param _config configurator object reference.
@@ -84,7 +87,7 @@ public:
 	/**
 	 * @brief pointer to the SR communication object
 	 */
-	static lib::sr_ecp* sr_ecp_msg; // TODO: rename from _ecp_ (?!)
+	static boost::shared_ptr<lib::sr_ecp> sr_ecp_msg; // TODO: rename from _ecp_ (?!)
 
 	/**
 	 * @brief configurator object reference
@@ -149,18 +152,6 @@ public:
 	 * @param _sensor_m stl map of sensors
 	 */
 	void all_sensors_get_reading(sensors_t & _sensor_m);
-
-	/**
-	 * @brief implemented for xml trajectory handling
-	 */
-	class str_cmp
-	{
-	public:
-		/**
-		 * @brief returns str_cmp result
-		 */
-		bool operator()(char const *a, char const *b) const;
-	};
 
 	//ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
 

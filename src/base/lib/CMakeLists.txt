@@ -23,6 +23,7 @@ add_library(mrrocpp
 	mrmath/Xyz_Angle_Axis_Gamma_vector.cc
 	mrmath/jacobian_matrix.cc
 	configurator.cc
+	child.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
 	timer.cc
@@ -49,4 +50,3 @@ target_link_libraries (mrrocpp sr)
 target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
 
 install(TARGETS mrrocpp DESTINATION lib)
-

@@ -1,5 +1,5 @@
 /*!
- * @file spkm_exception.h
+ * @file exception.h
  * @brief File containing consts, types and classes related to exceptions specific to SPKM.
  *
  * @author tkornuta
@@ -12,7 +12,7 @@
 #define SPKM_EXCEPTION_H_
 
 #include "base/edp/edp_exceptions.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 
 namespace mrrocpp {
 namespace edp {

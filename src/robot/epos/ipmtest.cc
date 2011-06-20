@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
 				UNSIGNED32 errCode = node.readErrorHistory(i);
 
-				std::cout << epos::ErrorCodeMessage(errCode) << std::endl;
+				std::cout << node.ErrorCodeMessage(errCode) << std::endl;
 			}
 			if (errNum > 0) {
 				node.clearNumberOfErrors();
@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
 
 		gateway.setDebugLevel(0);
 		clock_gettime(CLOCK_MONOTONIC, &t1);
+
 		node.writeInterpolationDataRecord(0, 0, 0);
 		clock_gettime(CLOCK_MONOTONIC, &t2);
 		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);

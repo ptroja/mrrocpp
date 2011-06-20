@@ -14,6 +14,12 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "../base/signal_dispatcher.h"
+
+#include "../base/menu_bar.h"
+#include "../base/menu_bar_action.h"
+
+
 //
 // KLASA UiRobotBirdHand
 //
@@ -73,20 +79,19 @@ UiRobot::UiRobot(common::Interface& _interface) :
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuBirdhand);
+			mw->enable_menu_item(false, 1, menuBirdhand);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 3, ui->actionbirdhand_EDP_Unload, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
-			mw->enable_menu_item(true, 1, ui->menuBirdhand);
-			mw->enable_menu_item(true, 1, ui->actionbirdhand_EDP_Load);
+			mw->enable_menu_item(false, 3, actionbirdhand_EDP_Unload, actionbirdhand_Command, actionbirdhand_Configuration);
+			mw->enable_menu_item(true, 1, menuBirdhand);
+			mw->enable_menu_item(true, 1, actionbirdhand_EDP_Load);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand, ABN_mm_bird_hand_edp_load, NULL);
@@ -100,8 +105,8 @@ int UiRobot::manage_interface()
 			 */
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				//mw->enable_menu_item(false, 1, ui->menuRobot); //??
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
+				//mw->enable_menu_item(false, 1, menuRobot); //??
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
@@ -110,24 +115,29 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 3, ui->actionbirdhand_EDP_Unload, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
-						mw->enable_menu_item(false, 1, ui->actionbirdhand_EDP_Load);
+						mw->enable_menu_item(true, 3, actionbirdhand_EDP_Unload, actionbirdhand_Command, actionbirdhand_Configuration);
+						mw->enable_menu_item(false, 1, actionbirdhand_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, NULL);
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
-						mw->enable_menu_item(false, 2, ui->actionbirdhand_EDP_Unload, ui->actionbirdhand_EDP_Load);
+						mw->enable_menu_item(true, 2, actionbirdhand_Command, actionbirdhand_Configuration);
+						mw->enable_menu_item(false, 2, actionbirdhand_EDP_Unload, actionbirdhand_EDP_Load);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_edp_unload, NULL);
 						 */
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
+						mw->enable_menu_item(false, 2, actionbirdhand_Command, actionbirdhand_Configuration);
+						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
 						 ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
@@ -138,8 +148,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, ui->actionbirdhand_EDP_Unload);
-				mw->enable_menu_item(false, 3, ui->actionbirdhand_EDP_Load, ui->actionbirdhand_Command, ui->actionbirdhand_Configuration);
+				mw->enable_menu_item(true, 1, actionbirdhand_EDP_Unload);
+				mw->enable_menu_item(false, 3, actionbirdhand_EDP_Load, actionbirdhand_Command, actionbirdhand_Configuration);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_load, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
@@ -154,16 +164,54 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
+void UiRobot::make_connections()
+{
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+	connect(actionbirdhand_EDP_Load, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+	connect(actionbirdhand_EDP_Unload,			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+	connect(actionbirdhand_Command, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Command_triggered(mrrocpp::ui::common::UiRobot*)),			Qt::AutoCompatConnection);
+	connect(actionbirdhand_Configuration,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Configuration_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+}
+
+void UiRobot::setup_menubar()
+{
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+
+    actionbirdhand_EDP_Load 					= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+    actionbirdhand_EDP_Unload 					= new Ui::MenuBarAction(QString("EDP &Unload"),this, menuBar);
+    actionbirdhand_Command						= new Ui::MenuBarAction(QString("&Command"), this, menuBar);
+    actionbirdhand_Configuration 				= new Ui::MenuBarAction(QString("Co&Nfiguration"), this, menuBar);
+
+    menuBirdhand = new QMenu(menuBar->menuRobot);
+
+ 	menuBar->menuRobot->addAction(menuBirdhand->menuAction());
+
+ 	menuBirdhand->addAction(actionbirdhand_EDP_Load);
+ 	menuBirdhand->addAction(actionbirdhand_EDP_Unload);
+ 	menuBirdhand->addSeparator();
+ 	menuBirdhand->addAction(actionbirdhand_Command);
+ 	menuBirdhand->addAction(actionbirdhand_Configuration);
+
+
+
+    actionbirdhand_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
+    actionbirdhand_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
+    actionbirdhand_Command->setText(QApplication::translate("MainWindow", "&Command", 0, QApplication::UnicodeUTF8));
+    actionbirdhand_Configuration->setText(QApplication::translate("MainWindow", "Co&Nfiguration", 0, QApplication::UnicodeUTF8));
+
+    menuBirdhand->setTitle(QApplication::translate("MainWindow", "&Birdhand", 0, QApplication::UnicodeUTF8));
+
+}
+
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
-
 }
 
 void UiRobot::null_ui_ecp_robot()
 {
 	ui_ecp_robot = NULL;
-
 }
 
 }

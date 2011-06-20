@@ -26,12 +26,6 @@ public:
 	{
 	}
 
-	PBReading(const PBReading& o)
-	{
-		objectVisible = o.objectVisible;
-		objectPosition = o.objectPosition;
-	}
-
 	virtual ~PBReading()
 	{
 	}
@@ -53,8 +47,9 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+//		std::cout << "PBReading::serialize()\n";
 		ar & boost::serialization::base_object <Reading>(*this);
-//		LOG(LTRACE) << "PBReading::serialize()\n";
+
 		ar & objectVisible;
 		ar & objectPosition;
 	}

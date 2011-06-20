@@ -100,6 +100,16 @@ void ib_eih_visual_servo::retrieve_reading()
 	}
 }
 
+void ib_eih_visual_servo::predict_reading()
+{
+
+}
+
+Types::Mrrocpp_Proxy::IBReading* ib_eih_visual_servo::get_reading()
+{
+	return &reading;
+}
+
 }//namespace generator
 
 }

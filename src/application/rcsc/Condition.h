@@ -1,7 +1,7 @@
-
 #if !defined(_CONDITION_H_)
 #define _CONDITION_H_
 
+#include <string>
 #include <list>
 
 #include "base/lib/configurator.h"
@@ -10,32 +10,29 @@ namespace mrrocpp {
 namespace mp {
 namespace common {
 
-
 class Condition
 {
 	public:
-		enum RELATIONAL_OPERATOR {EQUAL_TO = 0, NOT_EQUAL, LESS_EQUAL, GREATER_EQUAL, LESS_THAN, GREATER_THAN, WITHOUT_OP};
+		enum RELATIONAL_OPERATOR {EQUAL_TO, NOT_EQUAL, LESS_EQUAL, GREATER_EQUAL, LESS_THAN, GREATER_THAN, WITHOUT_OP};
+
 	public:
-		Condition();
-		Condition(const char * condDesc, lib::configurator &_config);
-		Condition(const Condition &cond);
-		~Condition();
+		Condition(const std::string & condDesc, const lib::configurator &_config);
 
 		bool checkCompareResult();
-		bool checkContext(const char *toCheck);
+		bool checkContext(const std::string & toCheck);
 		void setResult(bool result);
-		std::list<const char *> * returnSplitedStr(const char *toSplit);
-		const char * getCondDesc() const;
+		static std::list<std::string> returnSplitedStr(const std::string & toSplit);
+		const std::string & getCondDesc() const;
 		RELATIONAL_OPERATOR splitCondExpr();
 
 	private:
-		char *condition;
-		char *lhValue;
-		char *rhValue;
+		const std::string condition;
+		std::string lhValue;
+		std::string rhValue;
 		bool result;
 		RELATIONAL_OPERATOR operationType;
 
-		lib::configurator &config;
+		const lib::configurator &config;
 };
 
 } // namespace common

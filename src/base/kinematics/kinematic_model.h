@@ -44,6 +44,13 @@ protected:
 	//! Sets parameters used by given kinematics.
 	virtual void set_kinematic_parameters(void) = 0;
 
+public:
+
+	//! Class virtual destructor - empty.
+	virtual ~kinematic_model()
+	{
+	}
+
 	/**
 	 * @brief Checks whether given motor increments are valid.
 	 * @param motor_position Motor position to be validated.
@@ -56,12 +63,11 @@ protected:
 	 */
 	virtual void check_joints(const lib::JointArray & q) const = 0;
 
-public:
-
-	//! Class virtual destructor - empty.
-	virtual ~kinematic_model()
-	{
-	}
+	/**
+	 * @brief Checks whether given Cartesian pose is valid.
+	 * @param h_ Cartesian pose to be validated.
+	 */
+	virtual void check_cartesian_pose(const lib::Homog_matrix& H_) const { };
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.
@@ -126,6 +132,7 @@ public:
 	 * @return Kinematics description (label).
 	 */
 	virtual std::string get_kinematic_model_label(void);
+
 };
 
 } // namespace common

@@ -13,8 +13,8 @@ regulator_p::regulator_p(const lib::configurator & config, const std::string& co
 	visual_servo_regulator(config, config_section_name)
 {
 	Kp = config.value <6, 6> ("regulator_kp_matrix", config_section_name);
-	std::cout << "regulator_p: Kp:\n" << Kp << "\n\n";
-	std::cout.flush();
+//	std::cout << "regulator_p: Kp:\n" << Kp << "\n\n";
+//	std::cout.flush();
 }
 
 regulator_p::~regulator_p()

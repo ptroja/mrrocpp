@@ -46,8 +46,10 @@ SET(GUI_CXX_SRCS
 	base/interface.cc	
     base/main.cpp
     base/mainwindow.cpp
+    base/menu_bar.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
+	base/wgt_robot_process_control.cpp
     base/ui_ecp_dialogs/wgt_yes_no.cpp
     base/ui_ecp_dialogs/wgt_message.cpp
     base/ui_ecp_dialogs/wgt_input_integer.cpp
@@ -75,6 +77,7 @@ SET(GUI_MOC_SRCS
     base/mainwindow.h
     base/wgt_base.h
     base/wgt_process_control.h
+	base/wgt_robot_process_control.h
     base/ui_ecp_dialogs/wgt_yes_no.h
     base/ui_ecp_dialogs/wgt_message.h
     base/ui_ecp_dialogs/wgt_input_integer.h
@@ -94,6 +97,27 @@ SET(GUI_MOC_SRCS
     irp6_m/wgt_irp6_m_relative_angle_axis.h
     irp6_m/wgt_irp6_m_tool_angle_axis.h
     irp6_m/wgt_irp6_m_tool_euler.h
+    irp6ot_m/ui_r_irp6ot_m.h
+	irp6ot_tfg/ui_r_irp6ot_tfg.h
+	irp6p_m/ui_r_irp6p_m.h
+	irp6p_tfg/ui_r_irp6p_tfg.h
+	polycrank/ui_r_polycrank.h
+	base/signal_dispatcher.h
+	base/menu_bar.h
+	base/menu_bar_action.h
+	bird_hand/ui_r_bird_hand.h
+	spkm/ui_r_spkm.h
+	spkm/ui_r_spkm1.h
+	spkm/ui_r_spkm2.h
+	smb/ui_r_smb.h
+	smb/ui_r_smb1.h
+	smb/ui_r_smb2.h
+	shead/ui_r_shead.h
+	shead/ui_r_shead1.h
+	shead/ui_r_shead2.h
+	sarkofag/ui_r_sarkofag.h
+	conveyor/ui_r_conveyor.h
+	
 )
 
 # Generate MOC files
@@ -103,6 +127,7 @@ QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
 SET(GUI_UI
     base/mainwindow.ui
     base/wgt_process_control.ui
+    base/wgt_robot_process_control.ui
     base/ui_ecp_dialogs/wgt_yes_no.ui
     base/ui_ecp_dialogs/wgt_message.ui
     base/ui_ecp_dialogs/wgt_input_integer.ui
@@ -131,6 +156,8 @@ QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
+	base/menu_bar.cpp
+	base/menu_bar_action.cpp
 	base/ui_sr.cc
 	base/ui_ecp.cc
 	base/ui_ecp_robot/ui_ecp_r_common.cc
@@ -144,21 +171,34 @@ ADD_EXECUTABLE(
 	sarkofag/ui_r_sarkofag.cc
 	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
+	spkm/ui_ecp_r_spkm1.cc
+	spkm/ui_ecp_r_spkm2.cc
 	spkm/ui_r_spkm.cc
+	spkm/ui_r_spkm1.cc
+	spkm/ui_r_spkm2.cc
 	smb/ui_ecp_r_smb.cc
+	smb/ui_ecp_r_smb1.cc
+	smb/ui_ecp_r_smb2.cc
 	smb/ui_r_smb.cc
+	smb/ui_r_smb1.cc
+	smb/ui_r_smb2.cc
 	shead/ui_ecp_r_shead.cc
+	shead/ui_ecp_r_shead1.cc
+	shead/ui_ecp_r_shead2.cc
 	shead/ui_r_shead.cc
+	shead/ui_r_shead1.cc
+	shead/ui_r_shead2.cc
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
+	base/signal_dispatcher.cpp
 )
 
 # Link executable with QT libraries
 TARGET_LINK_LIBRARIES(
 	ui-qt
-	ecp_robots ecp_mp
+	ecp_robot
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
 	boost_regex

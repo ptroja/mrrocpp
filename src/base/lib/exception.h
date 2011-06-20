@@ -160,7 +160,8 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 #define HANDLE_MRROCPP_ERROR(ERROR) \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR);
-//	std::cout << boost::current_exception_diagnostic_information() << std::endl;
+
+//std::cout << boost::current_exception_diagnostic_information() << std::endl;
 
 
 /********************************** OLD MRROC++ ERRORS **********************************/

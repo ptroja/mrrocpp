@@ -53,7 +53,7 @@ void ecp_t_discode_sensor_test::main_task_algorithm()
 	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 4\n");
 	g.Move();
 	logger::log_dbg("ecp_t_discode_sensor_test::main_task_algorithm(): 5\n");
-	ecp_termination_notice();
+	termination_notice();
 }
 
 }// namespace task {
