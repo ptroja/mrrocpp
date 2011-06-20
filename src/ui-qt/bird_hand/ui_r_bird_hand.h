@@ -8,11 +8,20 @@
 #ifndef __UI_R_BIRD_HAND_H
 #define __UI_R_BIRD_HAND_H
 
+#include <QObject>
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
+#include "../base/menu_bar.h"
+#include "../base/menu_bar_action.h"
 
 class wgt_bird_hand_command;
 class WndConfiguration;
+
+
+namespace Ui{
+class MenuBar;
+class MenuBarAction;
+}
 
 namespace mrrocpp {
 namespace ui {
@@ -35,12 +44,11 @@ class EcpRobot;
 
 class UiRobot : public common::UiRobot
 {
-private:
+Q_OBJECT
 
 public:
 	EcpRobot *ui_ecp_robot;
-	wgt_bird_hand_command *wgt_command_and_status;
-	WndConfiguration *wgt_configuration;
+
 
 	UiRobot(common::Interface& _interface);
 
@@ -52,6 +60,15 @@ public:
 	int create_ui_ecp_robot();
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
+
+	void make_connections();
+	void setup_menubar();
+
+	void make_connection();
+
+private:
+	QAction *actionbirdhand_Command;
+	QAction *actionbirdhand_Configuration;
 
 };
 

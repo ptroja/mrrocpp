@@ -49,11 +49,8 @@ void graspit::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 
-	ACTIVATE_MP_ROBOT(polycrank);
 	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);

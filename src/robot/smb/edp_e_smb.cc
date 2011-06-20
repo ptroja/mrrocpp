@@ -1,4 +1,3 @@
-
 #include <cstdio>
 
 #include "base/lib/typedefs.h"
@@ -59,8 +58,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 // Konstruktor.
-effector::effector(common::shell &_shell) :
-	motor_driven_effector(_shell, lib::smb::ROBOT_NAME)
+effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
+	motor_driven_effector(_shell, l_robot_name)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
@@ -181,7 +180,6 @@ void effector::create_threads()
 void effector::instruction_deserialization()
 {
 	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
-
 }
 
 void effector::reply_serialization(void)
@@ -190,19 +188,7 @@ void effector::reply_serialization(void)
 	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
-}
-// namespace smb
-
-
-namespace common {
-
-
-effector* return_created_efector(common::shell &_shell)
-{
-	return new smb::effector(_shell);
-}
-
-} // namespace common
+}// namespace smb
 } // namespace edp
 } // namespace mrrocpp
 

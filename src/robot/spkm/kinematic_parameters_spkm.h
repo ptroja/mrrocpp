@@ -15,7 +15,7 @@
 #include <eigen2/Eigen/Geometry>
 #include <eigen2/Eigen/LU>
 
-#include "robot/spkm/dp_spkm.h"
+#include "dp_spkm.h"
 
 using namespace Eigen;
 

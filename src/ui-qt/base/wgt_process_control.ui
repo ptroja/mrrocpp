@@ -62,37 +62,37 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="mp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER (m)</string>
+       <string>TRI&amp;GGER</string>
       </property>
       <property name="shortcut">
-       <string>M</string>
+       <string>G</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="mp_start_pushButton">
       <property name="text">
-       <string>START (a)</string>
+       <string>S&amp;TART</string>
       </property>
       <property name="shortcut">
-       <string>A</string>
+       <string>T</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="mp_stop_pushButton">
       <property name="text">
-       <string>STOP (s)</string>
+       <string>ST&amp;OP</string>
       </property>
       <property name="shortcut">
-       <string>S</string>
+       <string>O</string>
       </property>
      </widget>
     </item>
     <item row="2" column="0">
      <widget class="QPushButton" name="mp_pause_pushButton">
       <property name="text">
-       <string>PAUSE (p)</string>
+       <string>&amp;PAUSE</string>
       </property>
       <property name="shortcut">
        <string>P</string>
@@ -102,10 +102,10 @@
     <item row="2" column="1">
      <widget class="QPushButton" name="mp_resume_pushButton">
       <property name="text">
-       <string>RESUME (r)</string>
+       <string>R&amp;ESUME</string>
       </property>
       <property name="shortcut">
-       <string>R</string>
+       <string>E</string>
       </property>
      </widget>
     </item>
@@ -142,10 +142,10 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_ecp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER (e)</string>
+       <string>TR&amp;IGGER</string>
       </property>
       <property name="shortcut">
-       <string>E</string>
+       <string>I</string>
       </property>
      </widget>
     </item>
@@ -194,20 +194,20 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="all_reader_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER (c)</string>
+       <string>T&amp;RIGGER</string>
       </property>
       <property name="shortcut">
-       <string>C</string>
+       <string>R</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="all_reader_stop_pushButton">
       <property name="text">
-       <string>STOP (x)</string>
+       <string>S&amp;TOP</string>
       </property>
       <property name="shortcut">
-       <string>X</string>
+       <string>T</string>
       </property>
      </widget>
     </item>
@@ -232,10 +232,10 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="all_reader_start_pushButton">
       <property name="text">
-       <string>START (z)</string>
+       <string>&amp;START</string>
       </property>
       <property name="shortcut">
-       <string>Z</string>
+       <string>S</string>
       </property>
      </widget>
     </item>

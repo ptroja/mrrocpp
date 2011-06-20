@@ -2,7 +2,7 @@
 
 #include "base/lib/sr/srlib.h"
 
-#include "robot/spkm/ecp_r_spkm.h"
+#include "robot/spkm/ecp_r_spkm1.h"
 
 #include "ecp_t_spkm.h"
 #include "ecp_g_spkm.h"
@@ -18,11 +18,11 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	task_t(_config)
 {
 	// Create the robot object
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
 
 	// Create the generators
-	g_pose = (boost::shared_ptr<generator::spkm_pose>) new generator::spkm_pose(*this);
-	g_quickstop = (boost::shared_ptr<generator::spkm_quickstop>) new generator::spkm_quickstop(*this);
+	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this);
+	g_quickstop = (boost::shared_ptr <generator::spkm_quickstop>) new generator::spkm_quickstop(*this);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }

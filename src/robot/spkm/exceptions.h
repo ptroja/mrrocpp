@@ -12,7 +12,7 @@
 #define SPKM_EXCEPTION_H_
 
 #include "base/edp/edp_exceptions.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 
 namespace mrrocpp {
 namespace edp {

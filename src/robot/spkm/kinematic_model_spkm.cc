@@ -11,8 +11,8 @@
 #include <cmath>
 
 #include "base/lib/com_buf.h"
-#include "robot/spkm/exceptions.h"
-#include "robot/spkm/kinematic_model_spkm.h"
+#include "exceptions.h"
+#include "kinematic_model_spkm.h"
 
 using namespace mrrocpp::edp::exception;
 

@@ -35,9 +35,9 @@ void wgt_process_control::process_control_window_init_slot()
 	init();
 }
 
-void wgt_process_control::my_open()
+void wgt_process_control::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	process_control_window_init();
 }
 
@@ -105,15 +105,16 @@ int wgt_process_control::init()
 
 	// Dla irp6_on_track
 
-	interface.irp6ot_m->process_control_window_irp6ot_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+
+	interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// Dla irp6_postument
 
-	interface.irp6p_m->process_control_window_irp6p_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	interface.robot_m[lib::irp6p_m::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// Dla conveyor
 
-	interface.conveyor->process_control_window_conveyor_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	interface.robot_m[lib::conveyor::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
@@ -194,13 +195,13 @@ int wgt_process_control::block_all_ecp_trigger_widgets()
 
 	/* TR
 
-	 if (interface.irp6ot_m->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	 }
-	 if (interface.irp6p_m->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::irp6p_m::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	 }
-	 if (interface.conveyor->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::conveyor::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	 }
 	 */
@@ -216,13 +217,13 @@ int wgt_process_control::unblock_all_ecp_trigger_widgets()
 
 	/* TR
 
-	 if (interface.irp6ot_m->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
 	 }
-	 if (interface.irp6p_m->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::irp6p_m::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
 	 }
-	 if (interface.conveyor->state.edp.is_synchronised) {
+	 if (interface.robot_m[lib::conveyor::ROBOT_NAME]->state.edp.is_synchronised) {
 	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
 	 }
 	 */
