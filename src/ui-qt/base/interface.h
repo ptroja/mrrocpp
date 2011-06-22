@@ -37,40 +37,13 @@ class MainWindow;
 
 namespace mrrocpp {
 namespace ui {
-namespace spkm {
-class UiRobot;
-}
-namespace smb {
-class UiRobot;
-}
-namespace shead {
-class UiRobot;
-}
-namespace irp6ot_m {
-class UiRobot;
-}
-namespace irp6p_m {
-class UiRobot;
-}
-namespace irp6p_tfg {
-class UiRobot;
-}
-namespace irp6ot_tfg {
-class UiRobot;
-}
-namespace polycrank {
-class UiRobot;
-}
-namespace bird_hand {
-class UiRobot;
-}
-namespace sarkofag {
-class UiRobot;
-}
-namespace conveyor {
-class UiRobot;
-}
 namespace common {
+
+#define ADD_UI_ROBOT(__robot_name) \
+		{\
+			common::UiRobot *created_robot = new __robot_name::UiRobot(*this);\
+			robot_m[created_robot->robot_name] = created_robot;\
+		}
 
 class UiRobot;
 
@@ -186,6 +159,8 @@ public:
 
 
 
+
+
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
@@ -242,22 +217,6 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 	common::robots_t robot_m;
-
-	common::UiRobot *spkm1;
-	common::UiRobot *smb1;
-	common::UiRobot *shead1;
-	common::UiRobot *shead2;
-
-	common::UiRobot *irp6ot_m;
-	common::UiRobot *irp6p_m;
-	common::UiRobot *irp6p_tfg;
-	common::UiRobot *irp6ot_tfg;
-	common::UiRobot *polycrank;
-	common::UiRobot *bird_hand;
-	common::UiRobot *sarkofag;
-
-	conveyor::UiRobot *conveyor;
-
 
 	void create_threads();
 	int EDP_all_robots_create();

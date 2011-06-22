@@ -25,7 +25,9 @@
 #include "base/lib/ping.h"
 
 #include "../spkm/ui_r_spkm1.h"
+#include "../spkm/ui_r_spkm2.h"
 #include "../smb/ui_r_smb1.h"
+#include "../smb/ui_r_smb2.h"
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
@@ -440,10 +442,10 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				//				irp6ot_m->getWgtByName("wgt_joints")->my_open();
-				irp6ot_m->wgt_joints->my_open();
+				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_joints")->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_joints->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				irp6p_m->wgt_joints->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_joints->my_open();
 			}
 
 		}
@@ -462,11 +464,11 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				//				irp6ot_m->getWgtByName("wgt_motors")->my_open();
-				irp6ot_m->wgt_motors->my_open();
+				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_motors->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				//				irp6p_m->getWgtByName("wgt_motors")->my_open();
-				irp6p_m->wgt_motors->my_open();
+				//				robot_m[lib::irp6p_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_motors->my_open();
 			}
 
 		}
@@ -694,41 +696,21 @@ common::robots_t Interface::getRobots()
 
 void Interface::create_robots()
 {
-	spkm1 = new spkm1::UiRobot(*this);
-	robot_m[spkm1->robot_name] = spkm1;
 
-	smb1 = new smb1::UiRobot(*this);
-	robot_m[smb1->robot_name] = smb1;
-
-	shead1 = new shead1::UiRobot(*this);
-	robot_m[shead1->robot_name] = shead1;
-
-	shead2 = new shead2::UiRobot(*this);
-	robot_m[shead2->robot_name] = shead2;
-
-	irp6ot_m = new irp6ot_m::UiRobot(*this);
-	robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
-	irp6p_m = new irp6p_m::UiRobot(*this);
-	robot_m[irp6p_m->robot_name] = irp6p_m;
-
-	polycrank = new polycrank::UiRobot(*this);
-	robot_m[polycrank->robot_name] = polycrank;
-
-	bird_hand = new bird_hand::UiRobot(*this);
-	robot_m[bird_hand->robot_name] = bird_hand;
-
-	sarkofag = new sarkofag::UiRobot(*this);
-	robot_m[sarkofag->robot_name] = sarkofag;
-
-	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	conveyor = new conveyor::UiRobot(*this);
-	robot_m[conveyor->robot_name] = conveyor;
-
-	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+	ADD_UI_ROBOT(spkm1);
+	ADD_UI_ROBOT(spkm2);
+	ADD_UI_ROBOT(smb1);
+	ADD_UI_ROBOT(smb2);
+	ADD_UI_ROBOT(shead1);
+	ADD_UI_ROBOT(shead2);
+	ADD_UI_ROBOT(irp6ot_m);
+	ADD_UI_ROBOT(irp6p_m);
+	ADD_UI_ROBOT(polycrank);
+	ADD_UI_ROBOT(bird_hand);
+	ADD_UI_ROBOT(sarkofag);
+	ADD_UI_ROBOT(irp6p_tfg);
+	ADD_UI_ROBOT(conveyor);
+	ADD_UI_ROBOT(irp6ot_tfg);
 
 	setRobotsMenu();
 
