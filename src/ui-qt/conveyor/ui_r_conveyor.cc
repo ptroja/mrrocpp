@@ -100,43 +100,31 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
+	common::UiRobot::manage_interface();
 	MainWindow *mw = interface.get_main_window();
 
 	switch (state.edp.state)
 	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
-
-			break;
 		case 0:
-			mw->enable_menu_item(false, 3, EDP_Unload, actionconveyor_Synchronization, actionconveyor_Move);
+			mw->enable_menu_item(false, 2, actionconveyor_Synchronization, actionconveyor_Move);
 			mw->enable_menu_item(false, 1, menuconveyor_Preset_Positions);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
-
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
-
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, actionconveyor_Synchronization);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, EDP_Unload, actionconveyor_Move);
+						mw->enable_menu_item(true, 1, actionconveyor_Move);
 						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-						mw->enable_menu_item(false, 1, EDP_Load);
-						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, actionconveyor_Move);
 						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-						mw->enable_menu_item(false, 1, EDP_Load, EDP_Unload);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
@@ -152,9 +140,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, EDP_Unload, actionconveyor_Synchronization, actionconveyor_Move);
-				mw->enable_menu_item(false, 1, EDP_Load);
-
+				mw->enable_menu_item(true, 2, actionconveyor_Synchronization, actionconveyor_Move);
 			}
 			break;
 		default:

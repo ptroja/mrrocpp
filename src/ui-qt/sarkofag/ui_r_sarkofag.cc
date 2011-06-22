@@ -123,61 +123,45 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
+	common::UiRobot::manage_interface();
 	MainWindow *mw = interface.get_main_window();
 
 	switch (state.edp.state)
 	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
-
-			break;
 		case 0:
 			mw->enable_menu_item(false, 4, EDP_Unload, actionsarkofag_Synchronisation, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
 			mw->enable_menu_item(false, 1, menusarkofag_Preset_Positions);
-
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, actionsarkofag_Synchronisation);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 3, EDP_Unload, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 1, EDP_Load);
+						mw->enable_menu_item(true, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(true, 1, menusarkofag_Preset_Positions);
-						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
-						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
 						mw->enable_menu_item(true, 1, menusarkofag_Preset_Positions);
-						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
 						mw->enable_menu_item(false, 1, menusarkofag_Preset_Positions);
-						block_ecp_trigger();
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, EDP_Unload, actionsarkofag_Synchronisation, actionsarkofag_Move);
-				mw->enable_menu_item(false, 1, EDP_Load);
-
+				mw->enable_menu_item(true, 2, actionsarkofag_Synchronisation, actionsarkofag_Move);
 			}
 			break;
 		default:

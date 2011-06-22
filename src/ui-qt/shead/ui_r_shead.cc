@@ -50,94 +50,94 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 }
 
-int UiRobot::manage_interface()
-{
-	MainWindow *mw = interface.get_main_window();
-
-	switch (state.edp.state)
-	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead, NULL);
-			 */
-			break;
-		case 0:
-			mw->enable_menu_item(false, 1, EDP_Unload);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_unload,
-
-			 NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, ABN_mm_shead_edp_load, NULL);
-			 */
-			break;
-		case 1:
-		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, NULL);
-			 */
-			// jesli robot jest zsynchronizowany
-			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
-				switch (interface.mp.state)
-				{
-					case common::UI_MP_NOT_PERMITED_TO_RUN:
-					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, EDP_Unload);
-						mw->enable_menu_item(false, 1, EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
-						 */
-						break;
-					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-						 NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, ABN_mm_shead_edp_unload, NULL);
-						 */
-						break;
-					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
-						break;
-					case common::UI_MP_TASK_PAUSED:
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-						 NULL);
-						 */
-						break;
-					default:
-						break;
-				}
-			} else // jesli robot jest niezsynchronizowany
-			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
-				mw->enable_menu_item(false, 1, EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
-			}
-			break;
-		default:
-			break;
-	}
-
-	return 1;
-}
+//int UiRobot::manage_interface()
+//{
+//	MainWindow *mw = interface.get_main_window();
+//
+//	switch (state.edp.state)
+//	{
+//		case -1:
+//			mw->enable_menu_item(false, 1, robot_menu);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead, NULL);
+//			 */
+//			break;
+//		case 0:
+//			mw->enable_menu_item(false, 1, EDP_Unload);
+//			mw->enable_menu_item(true, 1, robot_menu);
+//			mw->enable_menu_item(true, 1, EDP_Load);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_unload,
+//
+//			 NULL);
+//			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, ABN_mm_shead_edp_load, NULL);
+//			 */
+//			break;
+//		case 1:
+//		case 2:
+//			mw->enable_menu_item(true, 1, robot_menu);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead, NULL);
+//			 */
+//			// jesli robot jest zsynchronizowany
+//			if (state.edp.is_synchronised) {
+//				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+//				/* TR
+//				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
+//				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
+//				 */
+//				switch (interface.mp.state)
+//				{
+//					case common::UI_MP_NOT_PERMITED_TO_RUN:
+//					case common::UI_MP_PERMITED_TO_RUN:
+//						mw->enable_menu_item(true, 1, EDP_Unload);
+//						mw->enable_menu_item(false, 1, EDP_Load);
+//						block_ecp_trigger();
+//						/* TR
+//						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
+//						 */
+//						break;
+//					case common::UI_MP_WAITING_FOR_START_PULSE:
+//						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
+//						block_ecp_trigger();
+//						/* TR
+//						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
+//
+//						 NULL);
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, ABN_mm_shead_edp_unload, NULL);
+//						 */
+//						break;
+//					case common::UI_MP_TASK_RUNNING:
+//						unblock_ecp_trigger();
+//						break;
+//					case common::UI_MP_TASK_PAUSED:
+//						block_ecp_trigger();
+//						/* TR
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
+//						 NULL);
+//						 */
+//						break;
+//					default:
+//						break;
+//				}
+//			} else // jesli robot jest niezsynchronizowany
+//			{
+//				mw->enable_menu_item(true, 1, EDP_Unload);
+//				mw->enable_menu_item(false, 1, EDP_Load);
+//				/* TR
+//				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_shead_edp_unload, NULL);
+//				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_shead_edp_load, NULL);
+//				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+//				 */
+//			}
+//			break;
+//		default:
+//			break;
+//	}
+//
+//	return 1;
+//}
 
 void UiRobot::make_connections()
 {

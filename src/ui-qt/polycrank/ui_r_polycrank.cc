@@ -104,91 +104,91 @@ int UiRobot::synchronise_int()
 
 }
 
-int UiRobot::manage_interface()
-{
-	MainWindow *mw = interface.get_main_window();
-
-
-	switch (state.edp.state)
-	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
-			 */
-			break;
-		case 0:
-			mw->enable_menu_item(false, 1, EDP_Unload);
-			mw->enable_menu_item(true, 1, EDP_Load);
-			mw->enable_menu_item(true, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
-			 */
-			break;
-		case 1:
-		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
-			 */
-			// jesli robot jest zsynchronizowany
-			if (state.edp.is_synchronised) {
-				//??
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
-				 */
-				switch (interface.mp.state)
-				{
-					case common::UI_MP_NOT_PERMITED_TO_RUN:
-					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, EDP_Unload);
-						mw->enable_menu_item(false, 1,EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
-						 */
-						break;
-					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
-						 */
-						break;
-					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
-						break;
-					case common::UI_MP_TASK_PAUSED:
-						block_ecp_trigger();
-						/* TR
-						 //ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_internal, NULL);// modyfikacja menu - ruchy reczne zakazane
-						 */
-						break;
-					default:
-						break;
-				}
-			} else // jesli robot jest niezsynchronizowany
-			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
-				mw->enable_menu_item(false, 1, EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
-			}
-			break;
-		default:
-			break;
-	}
-
-	return 1;
-}
+//int UiRobot::manage_interface()
+//{
+//	MainWindow *mw = interface.get_main_window();
+//
+//
+//	switch (state.edp.state)
+//	{
+//		case -1:
+//			mw->enable_menu_item(false, 1, robot_menu);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
+//			 */
+//			break;
+//		case 0:
+//			mw->enable_menu_item(false, 1, EDP_Unload);
+//			mw->enable_menu_item(true, 1, EDP_Load);
+//			mw->enable_menu_item(true, 1, robot_menu);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
+//			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
+//			 */
+//			break;
+//		case 1:
+//		case 2:
+//			mw->enable_menu_item(true, 1, robot_menu);
+//			/* TR
+//			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
+//			 */
+//			// jesli robot jest zsynchronizowany
+//			if (state.edp.is_synchronised) {
+//				//??
+//				/* TR
+//				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
+//				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
+//				 */
+//				switch (interface.mp.state)
+//				{
+//					case common::UI_MP_NOT_PERMITED_TO_RUN:
+//					case common::UI_MP_PERMITED_TO_RUN:
+//						mw->enable_menu_item(true, 1, EDP_Unload);
+//						mw->enable_menu_item(false, 1,EDP_Load);
+//						block_ecp_trigger();
+//						/* TR
+//						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
+//						 */
+//						break;
+//					case common::UI_MP_WAITING_FOR_START_PULSE:
+//						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
+//						block_ecp_trigger();
+//						/* TR
+//						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, ABN_mm_polycrank_edp_unload, NULL);
+//						 */
+//						break;
+//					case common::UI_MP_TASK_RUNNING:
+//						unblock_ecp_trigger();
+//						break;
+//					case common::UI_MP_TASK_PAUSED:
+//						block_ecp_trigger();
+//						/* TR
+//						 //ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);// modyfikacja menu - ruchy reczne zakazane
+//						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_internal, NULL);// modyfikacja menu - ruchy reczne zakazane
+//						 */
+//						break;
+//					default:
+//						break;
+//				}
+//			} else // jesli robot jest niezsynchronizowany
+//			{
+//				mw->enable_menu_item(true, 1, EDP_Unload);
+//				mw->enable_menu_item(false, 1, EDP_Load);
+//				/* TR
+//				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
+//				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
+//				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
+//				 */
+//			}
+//			break;
+//		default:
+//			break;
+//	}
+//
+//	return 1;
+//}
 
 void UiRobot::make_connections()
 {
