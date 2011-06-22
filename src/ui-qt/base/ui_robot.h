@@ -8,7 +8,8 @@
 #ifndef __UI_ROBOT_H
 #define __UI_ROBOT_H
 
-//#include <QObject>
+#include <QObject>
+#include <QMenu>
 #include "ui.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
@@ -17,6 +18,12 @@
 
 class QDockWidget;
 class wgt_robot_process_control;
+
+namespace Ui{
+class MenuBar;
+class SignalDispatcher;
+}
+
 
 namespace mrrocpp {
 namespace ui {
@@ -77,8 +84,9 @@ typedef WndBase_t::value_type WndBase_pair_t;
 // super klasa agregujaca porozrzucane dotychczas struktury
 
 
-class UiRobot
+class UiRobot : public QObject
 {
+Q_OBJECT
 
 public:
 	Interface& interface;
@@ -128,7 +136,7 @@ public:
 	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
 	virtual int manage_interface() = 0;
 	virtual void make_connections() = 0;
-	virtual void setup_menubar() = 0;
+	virtual void setup_menubar();
 	virtual int execute_clear_fault(){return 0;};
 
 	//wgt_base* getWgtByName(QString name);
@@ -205,9 +213,17 @@ public:
 
 	wgt_t wgts;
 
-	QAction *actionwgt_robot_process_control;
+
 
 	bool process_control_window_created;
+
+protected:
+	QAction *EDP_Load;
+	QAction *EDP_Unload;
+	QAction *wgt_robot_process_control_action;
+
+
+	QMenu	*robot_menu;
 
 };
 

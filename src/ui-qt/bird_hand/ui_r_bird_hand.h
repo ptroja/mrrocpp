@@ -42,7 +42,7 @@ namespace bird_hand {
 
 class EcpRobot;
 
-class UiRobot : public QObject, public common::UiRobot
+class UiRobot : public common::UiRobot
 {
 Q_OBJECT
 
@@ -67,12 +67,8 @@ public:
 	void make_connection();
 
 private:
-	QAction *actionbirdhand_EDP_Load;
-	QAction *actionbirdhand_EDP_Unload;
 	QAction *actionbirdhand_Command;
 	QAction *actionbirdhand_Configuration;
-
-    QMenu *menuBirdhand;
 
 };
 

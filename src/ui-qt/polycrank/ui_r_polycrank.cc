@@ -112,15 +112,15 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, menuPolycrank);
+			mw->enable_menu_item(false, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank, NULL);
 			 */
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionpolycrank_EDP_Unload);
-			mw->enable_menu_item(true, 1, actionpolycrank_EDP_Load);
-			mw->enable_menu_item(true, 1, menuPolycrank);
+			mw->enable_menu_item(false, 1, EDP_Unload);
+			mw->enable_menu_item(true, 1, EDP_Load);
+			mw->enable_menu_item(true, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, ABN_mm_polycrank_edp_load, NULL);
@@ -128,7 +128,7 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, menuPolycrank);
+			mw->enable_menu_item(true, 1, robot_menu);
 			/* TR
 			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank, NULL);
 			 */
@@ -143,8 +143,8 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, actionpolycrank_EDP_Unload);
-						mw->enable_menu_item(false, 1, actionpolycrank_EDP_Load);
+						mw->enable_menu_item(true, 1, EDP_Unload);
+						mw->enable_menu_item(false, 1,EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, ABN_mm_polycrank_internal, NULL);
@@ -152,7 +152,7 @@ int UiRobot::manage_interface()
 						 */
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, actionpolycrank_EDP_Unload, actionpolycrank_EDP_Load);
+						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
 						block_ecp_trigger();
 						/* TR
 						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
@@ -174,8 +174,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, actionpolycrank_EDP_Unload);
-				mw->enable_menu_item(false, 1, actionpolycrank_EDP_Load);
+				mw->enable_menu_item(true, 1, EDP_Unload);
+				mw->enable_menu_item(false, 1, EDP_Load);
 				/* TR
 				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_edp_unload, NULL);
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_polycrank_edp_load, NULL);
@@ -194,32 +194,23 @@ void UiRobot::make_connections()
 {
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	connect(actionpolycrank_EDP_Load, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
-	connect(actionpolycrank_EDP_Unload, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 	connect(actionpolycrank_Move_Joints,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
+	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-	actionpolycrank_EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-	actionpolycrank_EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
 	actionpolycrank_Move_Joints = new Ui::MenuBarAction(QString("Move &Joints"), this, menuBar);
 
-	menuPolycrank = new QMenu(menuBar->menuRobot);
-	menuPolycrank->addAction(actionpolycrank_EDP_Load);
-	menuPolycrank->addAction(actionpolycrank_EDP_Unload);
-	menuPolycrank->addSeparator();
-	menuPolycrank->addAction(actionpolycrank_Move_Joints);
+	robot_menu->addSeparator();
+	robot_menu->addAction(actionpolycrank_Move_Joints);
 
-	menuBar->menuRobot->addAction(menuPolycrank->menuAction());
+	menuBar->menuRobot->addAction(robot_menu->menuAction());
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Polyc&rank", 0, QApplication::UnicodeUTF8));
 
-	actionpolycrank_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-	actionpolycrank_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-	actionpolycrank_Move_Joints->setText(QApplication::translate("MainWindow", "Move &Joints", 0, QApplication::UnicodeUTF8));
-
-	menuPolycrank->setTitle(QApplication::translate("MainWindow", "Polyc&rank", 0, QApplication::UnicodeUTF8));
+	make_connections();
 }
 
 void UiRobot::delete_ui_ecp_robot()

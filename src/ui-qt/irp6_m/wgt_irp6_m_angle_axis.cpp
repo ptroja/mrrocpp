@@ -52,9 +52,9 @@ int wgt_irp6_m_angle_axis::synchro_depended_widgets_disable(bool _set_disabled)
 	return 1;
 }
 
-void wgt_irp6_m_angle_axis::my_open()
+void wgt_irp6_m_angle_axis::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 

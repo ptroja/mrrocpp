@@ -24,9 +24,12 @@
 #include "ui_ecp.h"
 #include "base/lib/ping.h"
 
-#include "../spkm/ui_r_spkm.h"
-#include "../smb/ui_r_smb.h"
-#include "../shead/ui_r_shead.h"
+#include "../spkm/ui_r_spkm1.h"
+#include "../spkm/ui_r_spkm2.h"
+#include "../smb/ui_r_smb1.h"
+#include "../smb/ui_r_smb2.h"
+#include "../shead/ui_r_shead1.h"
+#include "../shead/ui_r_shead2.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -248,32 +251,32 @@ void Interface::timer_slot()
 
 			bool first_it = true;
 			BOOST_FOREACH(std::string t, tokens)
-			{
+						{
 
-				input = t.c_str();
+							input = t.c_str();
 
-				html_it(input, output);
+							html_it(input, output);
 
-				if (first_it) {
-					first_it = false;
+							if (first_it) {
+								first_it = false;
 
-					html_line += output + "</font>";
+								html_line += output + "</font>";
 
-				} else {
-					html_line
-							= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
-								"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
-								"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
-									+ output + "</font>";
+							} else {
+								html_line
+										= "<font face=\"Monospace\" color=\"black\">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; "
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+											"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+												+ output + "</font>";
 
-					strcpy(current_line, "                                                     ");
-				}
-				strcat(current_line, t.c_str());
+								strcpy(current_line, "                                                     ");
+							}
+							strcat(current_line, t.c_str());
 
-				mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
+							mw->get_ui()->textEdit_sr->append(QString::fromStdString(html_line));
 
-				(*log_file_outfile) << current_line << std::endl;
-			}
+							(*log_file_outfile) << current_line << std::endl;
+						}
 		}
 
 		(*log_file_outfile).flush();
@@ -329,36 +332,33 @@ void Interface::raise_process_control_window()
 
 void Interface::raise_process_control_window_slot()
 {
-	wgt_pc->my_open(true);
-
-
-	open_process_control_windows();
+	wgt_pc->my_open(false);
 	wgt_pc->dwgt->raise();
+	open_process_control_windows();
+	//
 }
 
 void Interface::open_process_control_windows()
 {
-//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
-//	{
-//		wgt_robot->close();
-//		delete	wgt_robot;
-//	}
-//
-//	wgt_robots_pc.clear();
-
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->close();
+	//		delete	wgt_robot;
+	//	}
+	//
+	//	wgt_robots_pc.clear();
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0))
-		{
-			robot_node.second->get_wgt_robot_pc()->my_open();
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->my_open();
+					}
+				}
 
-//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
-//	{
-//		wgt_robot->my_open();
-//
-//	}
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->my_open();
+	//
+	//	}
 
 }
 
@@ -442,10 +442,10 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-//				irp6ot_m->getWgtByName("wgt_joints")->my_open();
-				irp6ot_m->wgt_joints->my_open();
+				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_joints")->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_joints->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				irp6p_m->wgt_joints->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_joints->my_open();
 			}
 
 		}
@@ -464,11 +464,11 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open();
 
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-//				irp6ot_m->getWgtByName("wgt_motors")->my_open();
-				irp6ot_m->wgt_motors->my_open();
+				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_motors->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-//				irp6p_m->getWgtByName("wgt_motors")->my_open();
-				irp6p_m->wgt_motors->my_open();
+				//				robot_m[lib::irp6p_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_motors->my_open();
 			}
 
 		}
@@ -624,10 +624,9 @@ void Interface::raise_ui_ecp_window_slot()
 void Interface::setRobotsMenu()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->setup_menubar();
-		robot_node.second->make_connections();
-	}
+				{
+					robot_node.second->setup_menubar();
+				}
 }
 
 MainWindow* Interface::get_main_window()
@@ -697,38 +696,21 @@ common::robots_t Interface::getRobots()
 
 void Interface::create_robots()
 {
-	spkm = new spkm::UiRobot(*this);
-	robot_m[spkm->robot_name] = spkm;
 
-	smb = new smb::UiRobot(*this);
-	robot_m[smb->robot_name] = smb;
-
-	shead = new shead::UiRobot(*this);
-	robot_m[shead->robot_name] = shead;
-
-	irp6ot_m = new irp6ot_m::UiRobot(*this);
-	robot_m[irp6ot_m->robot_name] = irp6ot_m;
-
-	irp6p_m = new irp6p_m::UiRobot(*this);
-	robot_m[irp6p_m->robot_name] = irp6p_m;
-
-	polycrank = new polycrank::UiRobot(*this);
-	robot_m[polycrank->robot_name] = polycrank;
-
-	bird_hand = new bird_hand::UiRobot(*this);
-	robot_m[bird_hand->robot_name] = bird_hand;
-
-	sarkofag = new sarkofag::UiRobot(*this);
-	robot_m[sarkofag->robot_name] = sarkofag;
-
-	irp6p_tfg = new irp6p_tfg::UiRobot(*this);
-	robot_m[irp6p_tfg->robot_name] = irp6p_tfg;
-
-	conveyor = new conveyor::UiRobot(*this);
-	robot_m[conveyor->robot_name] = conveyor;
-
-	irp6ot_tfg = new irp6ot_tfg::UiRobot(*this);
-	robot_m[irp6ot_tfg->robot_name] = irp6ot_tfg;
+	ADD_UI_ROBOT(spkm1);
+	ADD_UI_ROBOT(spkm2);
+	ADD_UI_ROBOT(smb1);
+	ADD_UI_ROBOT(smb2);
+	ADD_UI_ROBOT(shead1);
+	ADD_UI_ROBOT(shead2);
+	ADD_UI_ROBOT(irp6ot_m);
+	ADD_UI_ROBOT(irp6p_m);
+	ADD_UI_ROBOT(polycrank);
+	ADD_UI_ROBOT(bird_hand);
+	ADD_UI_ROBOT(sarkofag);
+	ADD_UI_ROBOT(irp6p_tfg);
+	ADD_UI_ROBOT(conveyor);
+	ADD_UI_ROBOT(irp6ot_tfg);
 
 	setRobotsMenu();
 
@@ -946,19 +928,17 @@ void Interface::manage_pc(void)
 	wgt_pc->process_control_window_init();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0))
-		{
-			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
 
-	wgt_pc->dwgt->raise();
-//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
-//	{
-//		wgt_robot->process_control_window_init();
-//	}
-
+	//wgt_pc->dwgt->raise();
+	//	BOOST_FOREACH(wgt_robot_process_control *wgt_robot, wgt_robots_pc)
+	//	{
+	//		wgt_robot->process_control_window_init();
+	//	}
 
 
 }
@@ -979,14 +959,14 @@ void Interface::manage_interface_slot()
 	wgt_pc->process_control_window_init_slot();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0) && robot_node.second->get_wgt_robot_pc())
-		{
-			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
+							&& robot_node.second->get_wgt_robot_pc()) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
 
-	wgt_pc->dwgt->raise();
+	//wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
 
 	check_edps_state_and_modify_mp_state();
@@ -1738,13 +1718,12 @@ void Interface::create_threads()
 int Interface::EDP_all_robots_create()
 {
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-	{
-		if(!robot_node.second->get_wgt_robot_pc() && (robot_node.second->state.is_active) )
-			robot_node.second->set_robot_process_control_window(new wgt_robot_process_control(*this, robot_node.second));
+				{
+					if (!robot_node.second->get_wgt_robot_pc() && (robot_node.second->state.is_active))
+						robot_node.second->set_robot_process_control_window(new wgt_robot_process_control(*this, robot_node.second));
 
-		robot_node.second->edp_create();
-	}
-
+					robot_node.second->edp_create();
+				}
 
 	return 1;
 
@@ -1753,10 +1732,10 @@ int Interface::EDP_all_robots_create()
 int Interface::EDP_all_robots_slay()
 {
 	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->delete_robot_process_control_window();
-		robot_node.second->EDP_slay_int();
-	}
+				{
+					robot_node.second->delete_robot_process_control_window();
+					robot_node.second->EDP_slay_int();
+				}
 
 	return 1;
 
@@ -1844,13 +1823,12 @@ int Interface::MPslay()
 	wgt_pc->process_control_window_init();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0))
-		{
-			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-		}
-	}
-	wgt_pc->dwgt->raise();
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
+	//wgt_pc->dwgt->raise();
 	return 1;
 
 }
@@ -1873,13 +1851,12 @@ int Interface::pulse_start_mp()
 
 		wgt_pc->process_control_window_init();
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-		{
-			if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0))
-			{
-				robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-			}
-		}
-		wgt_pc->dwgt->raise();
+					{
+						if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+							robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+						}
+					}
+		//wgt_pc->dwgt->raise();
 		manage_interface();
 	}
 
@@ -1997,8 +1974,6 @@ int Interface::pulse_trigger_all_reader()
 
 	return 1;
 }
-
-
 
 //ECP pulse
 int Interface::pulse_trigger_ecp(common::UiRobot *robot)
@@ -2120,12 +2095,11 @@ int Interface::all_robots_move_to_preset_position_1()
 			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
 
 		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-		{
-			if (robot_node.second->check_synchronised_and_loaded())
-			{
-				robot_node.second->move_to_preset_position(1);
-			}
-		}
+					{
+						if (robot_node.second->check_synchronised_and_loaded()) {
+							robot_node.second->move_to_preset_position(1);
+						}
+					}
 
 	}
 
@@ -2142,12 +2116,11 @@ int Interface::all_robots_move_to_preset_position_2()
 			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
 
 		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-		{
-			if (robot_node.second->check_synchronised_and_loaded())
-			{
-				robot_node.second->move_to_preset_position(2);
-			}
-		}
+					{
+						if (robot_node.second->check_synchronised_and_loaded()) {
+							robot_node.second->move_to_preset_position(2);
+						}
+					}
 
 	}
 	return 1;

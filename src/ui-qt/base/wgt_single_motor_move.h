@@ -30,7 +30,7 @@ public:
 
 	void synchro_depended_init();
 	void init_and_copy();
-	void my_open();
+	void my_open(bool set_on_top=false);
 
 private:
 	Ui::wgt_single_motor_moveClass ui;

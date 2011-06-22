@@ -39,7 +39,7 @@ namespace conveyor {
 //
 
 
-class UiRobot : public QObject, public single_motor::UiRobot
+class UiRobot : public single_motor::UiRobot
 {
 	Q_OBJECT
 private:
@@ -64,8 +64,6 @@ public:
 	void setup_menubar();
 
 private:
-    QAction *actionconveyor_EDP_Load;
-    QAction *actionconveyor_EDP_Unload;
     QAction *actionconveyor_Synchronization;
     QAction *actionconveyor_Move;
     QAction *actionconveyor_Synchro_Position;
@@ -73,7 +71,6 @@ private:
     QAction *actionconveyor_Position_1;
     QAction *actionconveyor_Position_2;
 
-    QMenu *menuConveyor;
     QMenu *menuconveyor_Preset_Positions;
 
 };

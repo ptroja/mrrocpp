@@ -13,6 +13,10 @@
 #include <boost/foreach.hpp>
 
 #include "wgt_robot_process_control.h"
+#include "menu_bar.h"
+#include "mainwindow.h"
+#include "menu_bar_action.h"
+#include "signal_dispatcher.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -65,6 +69,31 @@ void UiRobot::create_thread()
 //
 //	return (*wgts.find(name)).second;
 //}
+
+void UiRobot::setup_menubar()
+{
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+
+	EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
+	EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
+	wgt_robot_process_control_action = new Ui::MenuBarAction(QString("Process &control"), this, menuBar);
+
+	robot_menu = new QMenu(menuBar->menuRobot);
+	robot_menu->setEnabled(true);
+
+	robot_menu->addAction(EDP_Load);
+	robot_menu->addAction(EDP_Unload);
+	robot_menu->addAction(wgt_robot_process_control_action);
+
+	robot_menu->addSeparator();
+	menuBar->menuRobot->addAction(robot_menu->menuAction());
+
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+	connect(EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
+	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+	connect(wgt_robot_process_control_action, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_robot_process_control_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+}
 
 bool UiRobot::is_process_control_window_created()
 {

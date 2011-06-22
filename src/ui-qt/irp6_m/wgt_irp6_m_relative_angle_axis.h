@@ -33,7 +33,7 @@ public:
 	~wgt_irp6_m_relative_angle_axis();
 	void synchro_depended_init();
 	void init_and_copy();
-	void my_open();
+	void my_open(bool set_on_top=false);
 	QString robot_label;
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;

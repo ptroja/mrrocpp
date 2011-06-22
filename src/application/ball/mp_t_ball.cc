@@ -49,21 +49,11 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void ball::create_robots()
 {
-	ACTIVATE_MP_ROBOT(conveyor);
-	ACTIVATE_MP_ROBOT(polycrank);
-	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 

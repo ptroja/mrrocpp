@@ -65,9 +65,9 @@ int wgt_irp6_m_motors::synchro_depended_widgets_disable(bool _set_disabled)
 	return 1;
 }
 
-void wgt_irp6_m_motors::my_open()
+void wgt_irp6_m_motors::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 
