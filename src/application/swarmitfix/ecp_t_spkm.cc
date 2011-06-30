@@ -1,5 +1,3 @@
-#include <cstdio>
-
 #include "base/lib/sr/srlib.h"
 
 #include "robot/spkm/ecp_r_spkm1.h"
