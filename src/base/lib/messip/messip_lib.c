@@ -785,9 +785,20 @@ messip_channel_create( messip_cnx_t * cnx,
    int32_t maxnb_msg_buffered )
 {
 	messip_channel_t *ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_create0(cnx, name, msec_timeout, maxnb_msg_buffered);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -921,10 +932,20 @@ int
 messip_channel_delete( messip_channel_t * ch,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_delete0(ch, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -1184,9 +1205,20 @@ messip_channel_connect( messip_cnx_t * cnx,
    int msec_timeout )
 {
 	messip_channel_t *ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_connect0(cnx, name, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -1363,10 +1395,20 @@ int
 messip_channel_disconnect( messip_channel_t * ch,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_disconnect0(ch, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -2338,10 +2380,20 @@ messip_send( messip_channel_t *ch,
    int reply_maxlen,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&ch->send_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&ch->send_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_send0(ch, type, subtype, send_buffer, send_len, answer, reply_buffer, reply_maxlen, msec_timeout);
-	pthread_mutex_unlock(&ch->send_mutex);
+
+	pret = pthread_mutex_unlock(&ch->send_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
