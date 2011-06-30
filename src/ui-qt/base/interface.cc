@@ -5,13 +5,15 @@
 #include <sys/stat.h>
 #include <iostream>
 #include <fstream>
-#include <boost/foreach.hpp>
 #include <dirent.h>
 #include <sys/wait.h>
-#include <boost/regex.hpp>
+
 #include <map>
 #include <string>
 #include <iostream>
+
+#include <boost/regex.hpp>
+#include <boost/foreach.hpp>
 
 #include <QtGui/QApplication>
 #include <QFileDialog>
@@ -56,19 +58,21 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	config(NULL), is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_LOADED),
-			all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
-			all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
-			all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
-			position_refresh_interval(200)
+	is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_LOADED),
+	all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
+	all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
+	all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
+	position_refresh_interval(200),
+	mrrocpp_bin_to_root_path("../../")
 {
 
-	mw = new MainWindow(*this);
+	mw = (boost::shared_ptr<MainWindow>) new MainWindow(*this);
 
 	main_eb = new function_execution_buffer(*this);
 
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer = (boost::shared_ptr<QTimer>) new QTimer(this);
+
+	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
@@ -81,10 +85,13 @@ Interface::Interface() :
 
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
+}
 
-
-	mrrocpp_bin_to_root_path = "../../";
-
+Interface::~Interface()
+{
+	BOOST_FOREACH(robot_pair_t node, robot_m) {
+		delete node.second;
+	}
 }
 
 void Interface::start_on_timer()
@@ -250,7 +257,7 @@ void Interface::timer_slot()
 			boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
 
 			bool first_it = true;
-			BOOST_FOREACH(std::string t, tokens)
+			BOOST_FOREACH(const std::string & t, tokens)
 						{
 
 							input = t.c_str();
@@ -544,7 +551,7 @@ void Interface::raise_ui_ecp_window_slot()
 				QString fileName;
 
 				fileName
-						= QFileDialog::getOpenFileName(mw, tr("Choose file to load or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+						= QFileDialog::getOpenFileName(mw.get(), tr("Choose file to load or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
 
 				if (fileName.length() > 0) {
 
@@ -583,7 +590,7 @@ void Interface::raise_ui_ecp_window_slot()
 				QString fileName;
 
 				fileName
-						= QFileDialog::getSaveFileName(mw, tr("Choose file to save or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
+						= QFileDialog::getSaveFileName(mw.get(), tr("Choose file to save or die"), mrrocpp_root_local_path.c_str(), tr("Image Files (*)"));
 
 				if (fileName.length() > 0) {
 
@@ -624,36 +631,31 @@ void Interface::raise_ui_ecp_window_slot()
 void Interface::setRobotsMenu()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->setup_menubar();
-				}
+	{
+		robot_node.second->setup_menubar();
+	}
 }
 
-MainWindow* Interface::get_main_window()
+MainWindow* Interface::get_main_window() const
 {
-	return mw;
+	return mw.get();
 }
 
 int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
-
 	{
-
 		boost::unique_lock <boost::mutex> lock(ui_notification_state_mutex);
 
 		next_notification = new_notifacion;
-
 	}
 
 	mw->ui_notification();
 
 	return 1;
-
 }
 
 int Interface::wait_for_child_termiantion(pid_t pid)
 {
-
 	int status;
 	pid_t child_pid;
 	child_pid = waitpid(pid, &status, 0);
@@ -689,14 +691,13 @@ int Interface::wait_for_child_termiantion(pid_t pid)
 	return status;
 }
 
-common::robots_t Interface::getRobots()
+common::robots_t Interface::getRobots() const
 {
 	return robot_m;
 }
 
 void Interface::create_robots()
 {
-
 	ADD_UI_ROBOT(spkm1);
 	ADD_UI_ROBOT(spkm2);
 	ADD_UI_ROBOT(smb1);
@@ -713,7 +714,6 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(irp6ot_tfg);
 
 	setRobotsMenu();
-
 }
 
 void Interface::init()
@@ -855,12 +855,8 @@ void Interface::init()
 
 	strcat(log_file_with_dir, file_name);
 
+	// C++ new does not return 0 on failure, so there is no need to check
 	log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
-
-	if (!(*log_file_outfile)) {
-		std::cerr << "Cannot open file: " << file_name << '\n';
-		perror("because of");
-	}
 
 	//ui_msg->message("closing");
 
@@ -959,12 +955,12 @@ void Interface::manage_interface_slot()
 	wgt_pc->process_control_window_init_slot();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
-							&& robot_node.second->get_wgt_robot_pc()) {
-						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-					}
-				}
+	{
+		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
+				&& robot_node.second->get_wgt_robot_pc()) {
+			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+		}
+	}
 
 	//wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
@@ -981,9 +977,9 @@ void Interface::manage_interface_slot()
 	 */
 	// uruchmomienie manage interface dla wszystkich robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->manage_interface();
-				}
+	{
+		robot_node.second->manage_interface();
+	}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -1189,9 +1185,9 @@ void Interface::reload_whole_configuration()
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-							{
-								robot_node.second->reload_configuration();
-							}
+				{
+					robot_node.second->reload_configuration();
+				}
 
 				break;
 			default:
@@ -1265,7 +1261,10 @@ void Interface::UI_close(void)
 {
 	if (ui_state < 2) {
 		printf("UI CLOSING\n");
-		delay(100);// czas na ustabilizowanie sie edp
+
+		// czas na ustabilizowanie sie edp
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+
 		ui_state = 2;// funcja OnTimer dowie sie ze aplikacja ma byc zamknieta
 	}
 }
@@ -1557,10 +1556,10 @@ int Interface::initiate_configuration()
 	bool wyjscie = false;
 
 	while (!wyjscie) {
-		if (config) {
-			delete config;
-		}
-		config = new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
+
+		config.reset();
+
+		config = (boost::shared_ptr<lib::configurator>) new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
 		std::string attach_point = config->get_sr_attach_point();
 
@@ -1582,7 +1581,6 @@ int Interface::initiate_configuration()
 			}
 
 			closedir(dirp);
-
 		}
 
 	}
@@ -2009,9 +2007,10 @@ int Interface::pulse_trigger_reader(common::UiRobot *robot)
 int Interface::unload_all()
 
 {
-
 	MPslay();
-	delay(200);
+
+	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+
 	EDP_all_robots_slay();
 	/* TR
 	 close_process_control_window(widget, apinfo, cbinfo);

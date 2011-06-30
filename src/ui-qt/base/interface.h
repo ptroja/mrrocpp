@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
@@ -59,10 +60,10 @@ class Interface : public QObject
 {
 Q_OBJECT
 private:
-	MainWindow* mw;
+	boost::shared_ptr<MainWindow> mw;
 
 	void create_robots();
-	QTimer *timer;
+	boost::shared_ptr<QTimer> timer;
 
 	bool html_it(std::string &_input, std::string &_output);
 
@@ -84,12 +85,14 @@ public:
 
 	Interface();
 
+	~Interface();
+
 	void raise_process_control_window();
 	void raise_ui_ecp_window();
 	void start_on_timer();
 
 	//static Interface * get_instance();
-	MainWindow* get_main_window();
+	MainWindow* get_main_window() const;
 	wgt_process_control* get_process_control_window();
 
 	void print_on_sr(const char *buff, ...);
@@ -110,8 +113,7 @@ public:
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
 	std::list <program_node_user_def> program_node_user_list;
 
-	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
-	pid_t ui_pid; // pid UI
+	// TODO: change to ENUM
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
 	TEACHING_STATE teachingstate; // dawne systemState do nauki
@@ -122,7 +124,7 @@ public:
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
-	lib::configurator* config;
+	boost::shared_ptr<lib::configurator> config;
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
 
@@ -177,7 +179,7 @@ public:
 	std::string sr_attach_point;
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
-	std::string mrrocpp_bin_to_root_path;
+	const std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
 
@@ -185,7 +187,7 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 
-	common::robots_t getRobots();
+	common::robots_t getRobots() const;
 
 	common::robots_t robot_m;
 

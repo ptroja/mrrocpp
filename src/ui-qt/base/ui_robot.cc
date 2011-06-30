@@ -144,9 +144,7 @@ wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
 }
 
 int UiRobot::edp_create_int()
-
 {
-
 	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try { // dla bledow robot :: ECP_error
