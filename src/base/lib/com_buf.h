@@ -1090,7 +1090,7 @@ struct ecp_next_state_t
 		ar & variant;
 		ar & data;
 		ar & spkm_segment_sequence;
-		// ar & playerpos_goal; // this is not needed at this moment
+		// ar & playerpos_goal; // this is not used at this moment
 	}
 };
 
