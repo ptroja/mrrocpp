@@ -33,7 +33,7 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		g_quickstop->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_POSE) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_POSE_LIST) {
 
 		g_pose->Move();
 
