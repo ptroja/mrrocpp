@@ -837,7 +837,7 @@ messip_channel_delete0( messip_channel_t * ch,
 	iovec[0].iov_base = &op;
 	iovec[0].iov_len = sizeof( int32_t );
 	memset(&msgsend, 0, sizeof(msgsend));
-	msgsend.pid = getpid(  );
+	msgsend.pid = htonl(getpid(  ));
 	msgsend.tid = pthread_self(  );
 	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;
@@ -1296,7 +1296,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	iovec[0].iov_base = &op;
 	iovec[0].iov_len = sizeof( int32_t );
 	memset(&msgsend, 0, sizeof(msgsend));
-	msgsend.pid = getpid(  );
+	msgsend.pid = htonl(getpid(  ));
 	msgsend.tid = pthread_self(  );
 	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;

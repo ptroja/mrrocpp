@@ -1069,7 +1069,7 @@ static int client_channel_delete(int sockfd, struct sockaddr_in *client_addr)
 	}
 
 #if 1
-	printf("channel_delete: pid=%d tid=%lld name=%s\n", msg.pid, msg.tid, msg.name);
+	printf("channel_delete: pid=%d tid=%lu name=%s\n", ntohl(msg.pid), msg.tid, msg.name);
 #endif
 
 	/*--- Search this channel name ---*/
@@ -1083,7 +1083,7 @@ static int client_channel_delete(int sockfd, struct sockaddr_in *client_addr)
 		reply.nb_clients = -1;
 	} else {
 		LOCK;
-		if ((ch->pid != msg.pid) || (ch->tid != msg.tid)) {
+		if (ch->pid != ntohl(msg.pid)) {
 			reply.nb_clients = -1;
 		} // if
 		else {
@@ -1153,7 +1153,7 @@ static int client_channel_connect(int sockfd, struct sockaddr_in *client_addr)
 		}
 
 		reply.ok = MESSIP_OK;
-		reply.pid = ch->pid;
+		reply.pid = htonl(ch->pid);
 		reply.tid = ch->tid;
 		reply.sin_port = htons(ch->sin_port);
 		reply.sin_addr = htonl(ch->sin_addr);
