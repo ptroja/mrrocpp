@@ -73,7 +73,7 @@ void epos_access_socketcan::close()
 
 canid_t epos_access_socketcan::readFromWire(struct can_frame & frame)
 {
-	int nbytes;
+	ssize_t nbytes;
 
     /* read frame */
     if ((nbytes = ::read(sock, &frame, sizeof(frame))) != sizeof(frame)) {
@@ -86,7 +86,7 @@ canid_t epos_access_socketcan::readFromWire(struct can_frame & frame)
 
 void epos_access_socketcan::writeToWire(const struct can_frame & frame)
 {
-	int nbytes;
+	ssize_t nbytes;
 
     /* send frame */
     if ((nbytes = ::write(sock, &frame, sizeof(frame))) != sizeof(frame)) {
