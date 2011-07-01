@@ -55,9 +55,10 @@ ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _numbe
 // -------------------------------------------------------------------
 ecp_robot_base::~ecp_robot_base(void)
 {
-
-	if (EDP_fd) {
+	// Close and invalidate the connection with EDP
+	if (EDP_fd != lib::invalid_fd) {
 		messip::port_disconnect(EDP_fd);
+		EDP_fd = lib::invalid_fd;
 	}
 
 	if (is_created_by_ui) {
