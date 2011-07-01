@@ -75,7 +75,7 @@ protected:
 		ROBOT_COMMAND_T new_ecp_command;
 
 		/* Do your MsgReceive's here now with the chid */
-		while (1) {
+		while (true) {
 
 			int32_t type, subtype;
 			rcvid = messip::port_receive(server_attach, type, subtype, new_ecp_command);
@@ -195,14 +195,14 @@ public:
 	 * It opens the communication channels of EDP server.
 	 * TODO: this should be void and throw an exception in case of failure
 	 */
-	bool initialize_communication(void);
+	void initialize_communication(void);
 
 	/*!
 	 * \brief Constructor.
 	 *
 	 * It connects to the existing channels of UI SR.
 	 */
-	effector(shell &_shell, lib::robot_name_t l_robot_name);
+	effector(shell &_shell, const lib::robot_name_t & l_robot_name);
 
 	/*!
 	 * \brief Destructor.
