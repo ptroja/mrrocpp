@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <unistd.h>
+#include <sys/select.h>
 
 #include <linux/can.h>
 #include <linux/can/raw.h>
@@ -74,6 +75,31 @@ void epos_access_socketcan::close()
 
 canid_t epos_access_socketcan::readFromWire(struct can_frame & frame)
 {
+	// Setup for read timeout
+	fd_set rfds;
+	FD_ZERO(&rfds);
+	FD_SET(sock, &rfds);
+
+	// 500ms timeout
+	struct timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 500000;
+
+	// Wait for data with timeout
+	int ret = select(sock+1, &rfds, NULL, NULL, &tv);
+
+	// Check the result
+	if (ret == -1) {
+		 throw epos_error() << errno_call("select") << errno_code(errno);
+	} else if (ret == 0) {
+		 throw epos_error() << reason("timeout reading from CAN interface");
+	}
+
+	// Assert, that data comes from the CAN interface
+	if (!FD_ISSET(sock, &rfds)) {
+		throw epos_error() << reason("CAN interface not ready to read");
+	}
+
 	ssize_t nbytes;
 
     /* read frame */
@@ -87,6 +113,30 @@ canid_t epos_access_socketcan::readFromWire(struct can_frame & frame)
 
 void epos_access_socketcan::writeToWire(const struct can_frame & frame)
 {
+	// Setup for write timeout
+	fd_set wfds;
+	FD_ZERO(&wfds);
+	FD_SET(sock, &wfds);
+
+	// 10ms timeout
+	struct timeval tv;
+	tv.tv_sec = 0;
+	tv.tv_usec = 10000;
+
+	// Wait for ready to write with timeout
+	int ret = select(sock+1, NULL, &wfds, NULL, &tv);
+
+	// Check the result
+	if (ret == -1) {
+		 throw epos_error() << errno_call("select") << errno_code(errno);
+	} else if (ret == 0) {
+		 throw epos_error() << reason("timeout writing to CAN interface");
+	}
+
+	// Assert, that data comes from the CAN interface
+	if (!FD_ISSET(sock, &wfds)) {
+		throw epos_error() << reason("CAN interface not ready to write");
+	}
 	ssize_t nbytes;
 
     /* send frame */
