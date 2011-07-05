@@ -1069,7 +1069,7 @@ static int client_channel_delete(int sockfd, struct sockaddr_in *client_addr)
 	}
 
 #if 1
-	printf("channel_delete: pid=%d tid=%lu name=%s\n", ntohl(msg.pid), msg.tid, msg.name);
+	printf("channel_delete: pid=%d tid=%lu name=%s\n", ntohl(msg.pid), (unsigned long) msg.tid, msg.name);
 #endif
 
 	/*--- Search this channel name ---*/

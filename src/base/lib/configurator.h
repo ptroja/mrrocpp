@@ -283,6 +283,16 @@ public:
 		return exists_and_true(_key.c_str(), __section_name.c_str());
 	}
 
+	/**
+	 * Check is non-zero configuration value exist and is true
+	 * @param _key key
+	 * @return true if the non-zero value exists
+	 */
+	bool exists_and_true(const std::string & _key) const
+	{
+		return exists_and_true(_key, section_name);
+	}
+
 	//! Destructor
 	~configurator();
 
