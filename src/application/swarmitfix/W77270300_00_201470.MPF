@@ -14,7 +14,7 @@ N5 L6	; Call tool-change-cycle
 N6 D1	; Setup tool parameters from the tool parameters registry
 N7 TRAORI(1)	; Enter 5-axis kinematics mode
 N8 G54	; Setup workpiece coordianate system
-N9 H_S_M	; ???
+N9 H_S_M	; High speed machining???
 M00;(PUNTA_D.6.1_TRE_PRINCIPI_L.70x31)	; Compulsory stop
 N10 M07	; Coolant on (mist)
 N11 S3000 M03	; Set spindle speed (3000rpm) and Spindle on (clockwise rotation)
