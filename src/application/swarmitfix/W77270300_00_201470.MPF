@@ -2,64 +2,64 @@
 ;$PATH=/_N_WKS_DIR/_N_PEZZI_WPD
 ;(DATA 14/11/2007)
 ;(80-201470-001 OP.0190 NAS.W77270300-00 ED.OR. -ND-)
-DEF REAL DAM,DP,DPR,DTB,DTS,ENC,FDEP,FDPR,FFR,FRF,MPIT,PIT,POSS 
-DEF REAL RFF,RFP,RPA,RPAP,RPO,RTP,SDAC,SDIR,SDIS,SDR,SST,SST1,VARI 
-M00;(POSIZIONARE LAMIERA SU SPINE DARE DEPRESSIONE)
-M00;(FARE ADERIRE BENE IL FASCIAME ALL'ATTREZZO)
-N1 G00
-N2 M09
-N3 M05
-N4 T1
-N5 L6
-N6 D1
-N7 TRAORI(1)
-N8 G54
-N9 H_S_M
-M00;(PUNTA_D.6.1_TRE_PRINCIPI_L.70x31)
-N10 M07
-N11 S3000 M03
+DEF REAL DAM,DP,DPR,DTB,DTS,ENC,FDEP,FDPR,FFR,FRF,MPIT,PIT,POSS 	; Define local variables of 'REAL' numerical type
+DEF REAL RFF,RFP,RPA,RPAP,RPO,RTP,SDAC,SDIR,SDIS,SDR,SST,SST1,VARI
+M00;(POSIZIONARE LAMIERA SU SPINE DARE DEPRESSIONE)	; Compulsory stop (SHEET METAL PLUGS TO PUT ON DEPRESSION - comment by Google Translate)
+M00;(FARE ADERIRE BENE IL FASCIAME ALL'ATTREZZO)	; Compulsory stop (DO WELL TO JOIN THE PLATING the implement - comment by Google Translate)
+N1 G00	; Rapid positioning (It moves each axis at its max speed until its vector is achieved)
+N2 M09	; Coolant off
+N3 M05	; Spindle stop
+N4 T1	; Prepare tool 1 for use
+N5 L6	; Call tool-change-cycle
+N6 D1	; Setup tool parameters from the tool parameters registry
+N7 TRAORI(1)	; Enter 5-axis kinematics mode
+N8 G54	; Setup workpiece coordianate system
+N9 H_S_M	; ???
+M00;(PUNTA_D.6.1_TRE_PRINCIPI_L.70x31)	; Compulsory stop
+N10 M07	; Coolant on (mist)
+N11 S3000 M03	; Set spindle speed (3000rpm) and Spindle on (clockwise rotation)
 N12 ; (#1)
-N13 G00 X-500. Y0. Z298. C4.606 A-16.679
-N14 X551.208 Y-251.223
+N13 G00 X-500. Y0. Z298. C4.606 A-16.679	; Rapid positioning to (X,Y,Z) with (C,A) kinematics parameters
+N14 X551.208 Y-251.223	; positioning (if X,Y,Z,C,A is ommited then there is no change)
 N15 X555.99 Y-310.58 Z99.241
-N16 F300
-N17 RTP=20. RFP=2. DP=-5.5
-N18 MCALL G_81(RTP,RFP,DP)
-N19 X555.99 Y-310.58 Z99.241 C4.606 A-16.679
+N16 F300	; Cutting feed (feedrate), 300mm/min
+N17 RTP=20. RFP=2. DP=-5.5	; Drilling parameters: RTP - Reference plane (absolute), RFP - Return plane (absolute), DP - Final drilling depth.
+N18 MCALL G_81(RTP,RFP,DP)	; Enable modal call of drilling cycle (81) with parameters
+N19 X555.99 Y-310.58 Z99.241 C4.606 A-16.679	; Drilling locations
 N20 X228.301 Y-318.672 Z98.069 C-0.346 A-16.626
 N21 X37.512 Y-319.046 Z99.864 C-3.041 A-16.436
-N22 MCALL
-N23 S3000 M03
+N22 MCALL	; Disable modal call of drilling cycle
+N23 S3000 M03	; Set spindle speed (3000rpm) and Spindle on (clockwise rotation)
 N24 ; (#2)
-N25 X141.163 Y215.627 Z103.661 C1.544 A17.621
-N26 F300
-N27 RTP=20. RFP=2. DP=-5.5
-N28 MCALL G_81(RTP,RFP,DP)
-N29 X141.163 Y215.627 Z103.661 C1.544 A17.621
+N25 X141.163 Y215.627 Z103.661 C1.544 A17.621	; Rapid positioning
+N26 F300	; Feedrate
+N27 RTP=20. RFP=2. DP=-5.5	; Drilling parameters
+N28 MCALL G_81(RTP,RFP,DP)	; Enable modal call of drilling cycle (81) with parameters
+N29 X141.163 Y215.627 Z103.661 C1.544 A17.621	; Drilling locations
 N30 X382.102 Y205.292 Z100.476 C-1.73 A17.257
 N31 X639.16 Y191.504 Z101.337 C-5.762 A16.831
 N32 X742.817 Y206.628 Z109.721 C-7.036 A18.148
-N33 MCALL
+N33 MCALL	; Disable modal call of drilling cycle
 N34 ; (#3)
-N35 X735.259 Y145.38 Z298.
+N35 X735.259 Y145.38 Z298.	; Rapid positioning
 N36 X-500. Y0.
-N37 M05
-N38 M09
-M00;(METTERE VITI TIRAFONDI)
-N39 C-7.036 A0.
+N37 M05	; Spindle stop
+N38 M09	; Coolant off
+M00;(METTERE VITI TIRAFONDI)	; Compulsory stop (PUT SCREWS BOLTS - by Google Translate)
+N39 C-7.036 A0.	; Rapid positioning
 N40 C0. A0.
-N41 TRAFOOF
-N42 T2
-N43 L6
-N44 D1
-N45 TRAORI(1)
-N46 G54
-N47 H_S_M
-M00;(FR_CIL_D.8___Z2_SV__L63x12 HSW)
-N48 M07
-N49 S10000 M03
-N50 G00 X-500. Y0. Z298. C0. A0.
-N51 C187. A0.
+N41 TRAFOOF	; Leave 5-axis kinematics mode
+N42 T2	; Prepare tool 2 for use
+N43 L6	; Call tool-change-cycle
+N44 D1	; Setup tool parameters from the tool parameters registry
+N45 TRAORI(1)	; Enter 5-axis kinematics mode
+N46 G54	; Setup workpiece coordianate system
+N47 H_S_M	; ???
+M00;(FR_CIL_D.8___Z2_SV__L63x12 HSW)	; Compulsory stop
+N48 M07	; Coolant on (mist)
+N49 S10000 M03	; Set spindle speed (10000rpm) and Spindle on (clockwise rotation)
+N50 G00 X-500. Y0. Z298. C0. A0.	; Rapid positioning to (X,Y,Z) with (C,A) kinematics parameters
+N51 C187. A0.	; Rapid positioning coordinates follows...
 N52 ; (#4)
 N53 C187.441 A1.942
 N54 A3.894
@@ -73,8 +73,8 @@ N61 A15.975
 N62 X722.264 Y-242.029
 N63 ; (#5)
 N64 X730.087 Y-301.934 Z86.962
-N65 G01 X730.078 Y-302.178 Z86.104 F1000
-N66 X729.991 Y-302.421 Z85.26
+N65 G01 X730.078 Y-302.178 Z86.104 F1000	; Linear interpolation with Feedrate 1000mm/min
+N66 X729.991 Y-302.421 Z85.26	; Linear interpolation coordinates follows...
 N67 X729.829 Y-302.659 Z84.436
 N68 X729.596 Y-302.892 Z83.637
 N69 X729.294 Y-303.118 Z82.868
@@ -1088,13 +1088,13 @@ N1076 X724.257 Y-308.331 Z85.832
 N1077 X724.23 Y-308.282 Z86.728
 N1078 X724.2 Y-308.152 Z87.618
 N1079 X724.171 Y-307.964 Z88.42
-N1080 G00 X716.402 Y-248.473 Z298.
-N1081 S10000 M03
-N1082 X316.983 Y-104.686 C-179.385 A4.878
+N1080 G00 X716.402 Y-248.473 Z298.	; Rapid positioning
+N1081 S10000 M03	; Set spindle speed (10000rpm) and Spindle on (clockwise rotation)
+N1082 X316.983 Y-104.686 C-179.385 A4.878	; Rapid positioning coordinates follows...
 N1083 ; (#6)
 N1084 X317.215 Y-126.279 Z44.987
-N1085 G01 X316.596 Y-126.455 Z44.369
-N1086 X315.999 Y-126.705 Z43.768
+N1085 G01 X316.596 Y-126.455 Z44.369	; Linear interpolation
+N1086 X315.999 Y-126.705 Z43.768	; Linear interpolation coordinates follows...
 N1087 X315.429 Y-127.025 Z43.191
 N1088 X314.886 Y-127.41 Z42.639
 N1089 X314.377 Y-127.856 Z42.115
@@ -1313,31 +1313,31 @@ N1301 X317.803 Y-146.246 Z44.832
 N1302 X318.439 Y-146.318 Z45.461
 N1303 X319.079 Y-146.309 Z46.094
 N1304 X319.661 Y-146.231 Z46.672
-N1305 G00 X319.431 Y-124.782 Z298.
+N1305 G00 X319.431 Y-124.782 Z298.	; Rapid positioning
 N1306 X-500. Y0.
-N1307 M05
-N1308 M09
-M00;(TOGLIERE DEPRESSIONE)
-N1309 C-179.385 A0.
+N1307 M05	; Spindle stop
+N1308 M09	; Coolant off
+M00;(TOGLIERE DEPRESSIONE)	; Compulsory stop (REMOVE VACUUM - by Google Translate)
+N1309 C-179.385 A0.	; Rapid positioning coordinates
 N1310 C0. A0.
-N1311 TRAFOOF
-N1312 T7
-N1313 L6
-N1314 D1
-N1315 TRAORI(1)
-N1316 G54
-N1317 H_S_M
-M00;(PUNTA_D.4,8_TRE_PRINCIPI_L.43x14)
-N1318 M07
-N1319 S5000 M03
+N1311 TRAFOOF	; Leave 5-axis kinematics mode
+N1312 T7	; Prepare tool 7 for use
+N1313 L6	; Call tool-change-cycle
+N1314 D1	; Setup tool parameters from the tool parameters registry
+N1315 TRAORI(1)	; Enter 5-axis kinematics mode
+N1316 G54	; Setup workpiece coordianate system
+N1317 H_S_M	; ???
+M00;(PUNTA_D.4,8_TRE_PRINCIPI_L.43x14)	; Compulsory stop
+N1318 M07	; Coolant on (mist)
+N1319 S5000 M03	; Set spindle speed (5000rpm) and Spindle on (clockwise rotation)
 N1320 ; (#7)
-N1321 G00 X-500. Y0. Z298. C7.471 A-15.327
+N1321 G00 X-500. Y0. Z298. C7.471 A-15.327	; Rapid positioning
 N1322 X699.159 Y-230.747
 N1323 X706.681 Y-288.106 Z86.927
-N1324 F300
-N1325 RTP=10. RFP=2. DP=-5.
-N1326 MCALL G_81(RTP,RFP,DP)
-N1327 X706.681 Y-288.106 Z86.927 C7.471 A-15.327
+N1324 F300	; Feedrate (300mm/min)
+N1325 RTP=10. RFP=2. DP=-5.	; Setup drilling parameters
+N1326 MCALL G_81(RTP,RFP,DP)	; Modal call of drilling cycle
+N1327 X706.681 Y-288.106 Z86.927 C7.471 A-15.327	; Drilling locations follows...
 N1328 X668.608 Y-280.728 Z83.669 C7.035 A-14.738
 N1329 X634.33 Y-290.334 Z85.169 C6.232 A-15.304
 N1330 X599.687 Y-282.793 Z82.182 C5.809 A-14.722
@@ -1434,32 +1434,32 @@ N1420 X708.802 Y-164.875 Z62.864 C-165.011 A7.2
 N1421 X698.797 Y-196.043 Z66.911 C-168.448 A9.196
 N1422 X708.919 Y-226.889 Z72.711 C-170.165 A11.242
 N1423 X699.235 Y-257.782 Z79.011 C-171.709 A13.273
-N1424 MCALL
+N1424 MCALL	; Disable modal call of drilling cycle
 N1425 ; (#8)
-N1426 X691.786 Y-206.666 Z298.
+N1426 X691.786 Y-206.666 Z298.	; Rapid positioning
 N1427 X-500. Y0.
 N1428 C-171.709 A0.
 N1429 C0. A0.
-N1430 M09
-N1431 M05
-N1432 TRAFOOF
-N1433 T4
-N1434 L6
-N1435 D1
-N1436 TRAORI(1)
-N1437 G54
-N1438 H_S_M
-M00;(PUNTA_D.5___TRE_PRINCIPI_L.62x26)
-N1439 M07
-N1440 S3500 M03
-N1441 G00 X-500. Y0. Z298. C56.336 A-0.208
+N1430 M09	; Coolant off
+N1431 M05	; Spindle stop
+N1432 TRAFOOF	; Leave 5-axis kinematics mode
+N1433 T4	; Prepare tool 4 for use
+N1434 L6	; Call tool-change-cycle
+N1435 D1	; Setup tool parameters from the tool parameters registry
+N1436 TRAORI(1)	; Enter 5-axis kinematics mode
+N1437 G54	; Setup workpiece coordianate system
+N1438 H_S_M	; ???
+M00;(PUNTA_D.5___TRE_PRINCIPI_L.62x26)	; Compulsory stop
+N1439 M07	; Coolant on (mist)
+N1440 S3500 M03	; Set spindle speed and Spindle on (clockwise rotation)
+N1441 G00 X-500. Y0. Z298. C56.336 A-0.208	; Rapid positioning
 N1442 X340.549 Y-60.958
 N1443 ; (#9)
 N1444 X341.297 Y-61.456 Z50.113
-N1445 F300
-N1446 RTP=10. RFP=2. DP=-5.2
-N1447 MCALL G_81(RTP,RFP,DP)
-N1448 X341.297 Y-61.456 Z50.113 C56.336 A-0.208
+N1445 F300	; Feedrate
+N1446 RTP=10. RFP=2. DP=-5.2	; Drilling parameters
+N1447 MCALL G_81(RTP,RFP,DP)	; Enable modal call of drilling cycle
+N1448 X341.297 Y-61.456 Z50.113 C56.336 A-0.208	; Drilling locations
 N1449 X316.147 Y-79.579 Z50.277 C3.131 A-1.258
 N1450 X300.642 Y-106.2 Z51.24 C0.203 A-2.931
 N1451 X297.465 Y-136.68 Z53.314 C0.114 A-4.855
@@ -1473,37 +1473,37 @@ N1458 X446.482 Y-136.215 Z54.132 C7.591 A-4.947
 N1459 X443.146 Y-105.762 Z52.003 C11.951 A-3.02
 N1460 X427.494 Y-79.241 Z50.867 C23.581 A-1.372
 N1461 X402.238 Y-61.273 Z50.436 C75.806 A-0.449
-N1462 MCALL
+N1462 MCALL	; Disable modal call of drilling cycle
 N1463 ; (#10)
-N1464 X400.356 Y-60.797 Z298.
+N1464 X400.356 Y-60.797 Z298.	; Rapid positioning
 N1465 X-500. Y0.
 N1466 C75.806 A0.
 N1467 C0. A0.
-N1468 M09
-N1469 M05
-N1470 TRAFOOF
-N1471 T5
-N1472 L6
-N1473 D1
-N1474 TRAORI(1)
-N1475 G54
-N1476 H_S_M
-M00;(PUNTA_D.6,5_TRE_PRINCIPI_L.101X63)
-N1477 M07
-N1478 S3500 M03
-N1479 G00 X-500. Y0. Z298. C-46.037 A0.421
+N1468 M09	; Coolant off
+N1469 M05	; Spindle stop
+N1470 TRAFOOF	; Leave 5-axis kinematics mode
+N1471 T5	; Prepare tool 5 for use
+N1472 L6	; Call tool-change-cycle
+N1473 D1	; Setup tool parameters from the tool parameters registry
+N1474 TRAORI(1)	; Enter 5-axis kinematics mode
+N1475 G54	; Setup workpiece coordianate system
+N1476 H_S_M	; ???
+M00;(PUNTA_D.6,5_TRE_PRINCIPI_L.101X63)	; Compulsory stop
+N1477 M07	; Coolant on (mist)
+N1478 S3500 M03	; Set spindle speed and Spindle on (clockwise rotation)
+N1479 G00 X-500. Y0. Z298. C-46.037 A0.421	; Rapid positioning
 N1480 X370.439 Y-56.244
 N1481 ; (#11)
 N1482 X371.748 Y-54.981 Z50.25
-N1483 F300
-N1484 RTP=10. RFP=2. DP=-5.6
-N1485 MCALL G_81(RTP,RFP,DP)
-N1486 X371.748 Y-54.981 Z50.25 C-46.037 A0.421
-N1487 MCALL
-N1488 X370.439 Y-56.244 Z298.
+N1483 F300	; Feedrate
+N1484 RTP=10. RFP=2. DP=-5.6	; Drilling parameters
+N1485 MCALL G_81(RTP,RFP,DP)	; Enable modal call of drilling cycle
+N1486 X371.748 Y-54.981 Z50.25 C-46.037 A0.421	; Drilling locations
+N1487 MCALL	; Disable modal call of drilling cycle
+N1488 X370.439 Y-56.244 Z298.	; Rapid positioning
 N1489 X-500. Y0.
-N1490 M05
-N1491 M09
-M00;(TOGLIERE VITI E FASCIAME)
-N1492 TRAFOOF
-N1493 M02
+N1490 M05	; Spindle stop
+N1491 M09	; Coolant off
+M00;(TOGLIERE VITI E FASCIAME)	; Compulsory stop (REMOVE SCREWS AND PLATING - by Google Translate)
+N1492 TRAFOOF	; Leave 5-axis kinematics mode
+N1493 M02	; End of program
