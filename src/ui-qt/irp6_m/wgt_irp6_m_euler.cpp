@@ -6,11 +6,13 @@
 #include "wgt_irp6_m_euler.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
+#include "../base/ui_robot.h"
 
-wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent), robot(_robot)
+wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface,  mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
+	robot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
@@ -79,8 +81,8 @@ void wgt_irp6_m_euler::synchro_depended_init_slot()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
@@ -91,7 +93,7 @@ void wgt_irp6_m_euler::synchro_depended_init_slot()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 }
 
 // slots
@@ -106,16 +108,16 @@ int wgt_irp6_m_euler::init()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
-				robot.ui_ecp_robot->read_xyz_euler_zyz(robot.current_pos);
+				robot->ui_ecp_robot->read_xyz_euler_zyz(robot->current_pos);
 
 				for (int i = 0; i < 6; i++) {
-					doubleSpinBox_cur_Vector[i]->setValue(robot.current_pos[i]);
-					robot.desired_pos[i] = robot.current_pos[i];
+					doubleSpinBox_cur_Vector[i]->setValue(robot->current_pos[i]);
+					robot->desired_pos[i] = robot->current_pos[i];
 				}
 
 			} else {
@@ -126,7 +128,7 @@ int wgt_irp6_m_euler::init()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
@@ -168,8 +170,8 @@ void wgt_irp6_m_euler::on_pushButton_copy_clicked()
 int wgt_irp6_m_euler::copy()
 {
 
-	if (robot.state.edp.pid != -1) {
-		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (robot->state.edp.pid != -1) {
+		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			ui.pushButton_execute->setDisabled(false);
 
@@ -195,101 +197,101 @@ void wgt_irp6_m_euler::on_pushButton_execute_clicked()
 void wgt_irp6_m_euler::on_pushButton_1l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[0] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_2l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[1] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_3l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[2] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_4l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[3] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_5l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[4] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_6l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[5] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_1r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[0] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_2r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[1] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_3r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[2] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_4r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[3] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_5r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[4] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_irp6_m_euler::on_pushButton_6r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[5] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 int wgt_irp6_m_euler::get_desired_position()
 {
 
-	if (robot.state.edp.pid != -1) {
+	if (robot->state.edp.pid != -1) {
 
-		if (robot.state.edp.is_synchronised) {
+		if (robot->state.edp.is_synchronised) {
 
 			for (int i = 0; i < 6; i++) {
-				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+				robot->desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
 			}
 		} else {
 
 			for (int i = 0; i < 6; i++) {
-				robot.desired_pos[i] = 0.0;
+				robot->desired_pos[i] = 0.0;
 			}
 		}
 	}
@@ -302,25 +304,25 @@ int wgt_irp6_m_euler::move_it()
 	// wychwytania ew. bledow ECP::robot
 	try {
 
-		if (robot.state.edp.pid != -1) {
+		if (robot->state.edp.pid != -1) {
 
-			robot.ui_ecp_robot->move_xyz_euler_zyz(robot.desired_pos);
+			robot->ui_ecp_robot->move_xyz_euler_zyz(robot->desired_pos);
 
-			//robot.ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_euler(robot.desired_pos);
+			//robot->ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_euler(robot->desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_euler(interface.irp6_m->desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_euler(interface.irp6_m->desired_pos);
-			//robot.ui_ecp_robot->move_euler(robot.desired_pos);
+			//robot->ui_ecp_robot->move_euler(robot->desired_pos);
 
-			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
+			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				for (int i = 0; i < 6; i++) {
-					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
+					doubleSpinBox_des_Vector[i]->setValue(robot->desired_pos[i]);
 				}
 				init();
 			}
-		} // end if (robot.state.edp.pid!=-1)
+		} // end if (robot->state.edp.pid!=-1)
 	} // end try
 
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }

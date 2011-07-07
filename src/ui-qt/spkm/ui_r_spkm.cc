@@ -18,6 +18,8 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
+#include "../base/mp.h"
+
 
 namespace mrrocpp {
 namespace ui {
@@ -126,7 +128,7 @@ int UiRobot::manage_interface()
 			if (state.edp.is_synchronised) {
 				mw->enable_menu_item(false, 1, menuspkm_Pre_synchro_moves);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:

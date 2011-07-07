@@ -15,6 +15,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace irp6_m {
 class UiRobot;
@@ -28,7 +29,7 @@ class wgt_irp6_m_relative_angle_axis : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_irp6_m_relative_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
+			wgt_irp6_m_relative_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 					0);
 	~wgt_irp6_m_relative_angle_axis();
 	void synchro_depended_init();
@@ -40,7 +41,7 @@ public:
 
 private:
 	Ui::wgt_irp6_m_relative_angle_axisClass ui;
-	mrrocpp::ui::irp6_m::UiRobot& robot;
+	mrrocpp::ui::irp6_m::UiRobot *robot;
 
 	const static int aa_number;
 

@@ -13,6 +13,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class AllRobots;
+
 }
 }
 }

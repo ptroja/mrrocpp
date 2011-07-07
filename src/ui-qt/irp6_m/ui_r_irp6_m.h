@@ -58,15 +58,13 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
-private:
-//	wgt_base *wgt_joints;
-//	wgt_base *wgt_motors;
-//
-//	wgt_base *wgt_angle_axis;
-//	wgt_base *wgt_euler;
-//	wgt_base *wgt_relative_angle_axis;
-//	wgt_base *wgt_tool_angle_axis;
-//	wgt_base *wgt_tool_euler;
+    const static std::string WGT_JOINTS;
+    const static std::string WGT_MOTORS;
+    const static std::string WGT_ANGLE_AXIS;
+    const static std::string WGT_EULER;
+    const static std::string WGT_RELATIVE_ANGLE_AXIS;
+    const static std::string WGT_TOOL_ANGLE_AXIS;
+    const static std::string WGT_TOOL_EULER;
 };
 
 }

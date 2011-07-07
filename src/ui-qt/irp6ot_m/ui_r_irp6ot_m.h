@@ -70,6 +70,14 @@ public:
 
 	void set_robot_process_control_window(wgt_robot_process_control *);
 
+//    const static std::string WGT_IRP6OT_M_JOINTS;
+//    const static std::string WGT_IRP6OT_M_MOTORS;
+//    const static std::string WGT_IRP6OT_M_ANGLE_AXIS;
+//    const static std::string WGT_IRP6OT_M_EULER;
+//    const static std::string WGT_IRP6OT_M_RELATIVE_ANGLE_AXIS;
+//    const static std::string WGT_IRP6OT_M_TOOL_ANGLE_AXIS;
+//    const static std::string WGT_IRP6OT_M_TOOL_EULER;
+
 private:
     QAction *actionirp6ot_m_Synchronisation;
     QAction *actionirp6ot_m_Synchro_Position;

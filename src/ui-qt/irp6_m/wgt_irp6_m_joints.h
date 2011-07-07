@@ -15,6 +15,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace irp6_m {
 class UiRobot;
@@ -28,7 +29,7 @@ class wgt_irp6_m_joints : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent =
+	wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 					0);
 	~wgt_irp6_m_joints();
 	void my_open(bool set_on_top=false);
@@ -39,7 +40,7 @@ public:
 
 private:
 	Ui::wgt_irp6_m_jointsClass ui;
-	mrrocpp::ui::irp6_m::UiRobot& robot;
+	mrrocpp::ui::irp6_m::UiRobot *robot;
 
 	int init();
 	int copy();

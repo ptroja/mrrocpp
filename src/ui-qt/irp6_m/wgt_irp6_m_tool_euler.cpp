@@ -6,13 +6,15 @@
 #include "wgt_irp6_m_tool_euler.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
+#include "../base/ui_robot.h"
 
 const int wgt_irp6_m_tool_euler::aa_number = 6;
 
-wgt_irp6_m_tool_euler::wgt_irp6_m_tool_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::irp6_m::UiRobot& _robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent), robot(_robot)
+wgt_irp6_m_tool_euler::wgt_irp6_m_tool_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface,  mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
+	robot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
@@ -81,8 +83,8 @@ void wgt_irp6_m_tool_euler::synchro_depended_init_slot()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
@@ -93,7 +95,7 @@ void wgt_irp6_m_tool_euler::synchro_depended_init_slot()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 }
 
 // slots
@@ -108,12 +110,12 @@ int wgt_irp6_m_tool_euler::init()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
-				robot.ui_ecp_robot->read_tool_xyz_euler_zyz(tool_vector);// co tutaj ma być?
+				robot->ui_ecp_robot->read_tool_xyz_euler_zyz(tool_vector);// co tutaj ma być?
 
 				for (int i = 0; i < aa_number; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(tool_vector[i]);
@@ -128,7 +130,7 @@ int wgt_irp6_m_tool_euler::init()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
@@ -141,8 +143,8 @@ void wgt_irp6_m_tool_euler::on_pushButton_copy_clicked()
 int wgt_irp6_m_tool_euler::copy()
 {
 
-	if (robot.state.edp.pid != -1) {
-		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (robot->state.edp.pid != -1) {
+		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			ui.pushButton_set->setDisabled(false);
 
@@ -168,9 +170,9 @@ void wgt_irp6_m_tool_euler::on_pushButton_set_clicked()
 int wgt_irp6_m_tool_euler::get_desired_position()
 {
 
-	if (robot.state.edp.pid != -1) {
+	if (robot->state.edp.pid != -1) {
 
-		if (robot.state.edp.is_synchronised) {
+		if (robot->state.edp.is_synchronised) {
 
 			for (int i = 0; i < aa_number; i++) {
 				tool_vector[i] = doubleSpinBox_des_Vector[i]->value();
@@ -191,28 +193,28 @@ int wgt_irp6_m_tool_euler::move_it()
 	// wychwytania ew. bledow ECP::robot
 	try {
 
-		if (robot.state.edp.pid != -1) {
+		if (robot->state.edp.pid != -1) {
 
-			//robot.ui_ecp_robot->move_tool_euler(robot.desired_pos);
+			//robot->ui_ecp_robot->move_tool_euler(robot->desired_pos);
 
-			//robot.ui_ecp_robot->move_tool_euler(robot.desired_pos);
-			robot.ui_ecp_robot->set_tool_xyz_euler_zyz(tool_vector);
+			//robot->ui_ecp_robot->move_tool_euler(robot->desired_pos);
+			robot->ui_ecp_robot->set_tool_xyz_euler_zyz(tool_vector);
 
-			//robot.ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_tool_euler(robot.desired_pos);
+			//robot->ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_tool_euler(robot->desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_tool_euler(interface.irp6_m->desired_pos);
 			//interface.irp6_m->ui_ecp_robot->move_tool_euler(interface.irp6_m->desired_pos);
-			//robot.ui_ecp_robot->move_tool_euler(robot.desired_pos);
+			//robot->ui_ecp_robot->move_tool_euler(robot->desired_pos);
 
-			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
+			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				for (int i = 0; i < aa_number; i++) {
 					doubleSpinBox_des_Vector[i]->setValue(tool_vector[i]);
 				}
 				init();
 			}
-		} // end if (robot.state.edp.pid!=-1)
+		} // end if (robot->state.edp.pid!=-1)
 	} // end try
 
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }

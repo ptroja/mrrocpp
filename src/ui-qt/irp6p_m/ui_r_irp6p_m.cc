@@ -20,17 +20,20 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
+#include "../base/mp.h"
+#include "../base/ui_robot.h"
+#include <boost/foreach.hpp>
 
 namespace mrrocpp {
 namespace ui {
 namespace irp6p_m {
-const std::string WGT_IRP6P_M_JOINTS = "WGT_IRP6P_M_JOINTS";
-const std::string WGT_IRP6P_M_MOTORS = "WGT_IRP6P_M_MOTORS";
-const std::string WGT_IRP6P_M_ANGLE_AXIS = "WGT_IRP6P_M_ANGLE_AXIS";
-const std::string WGT_IRP6P_M_EULER = "WGT_IRP6P_M_EULER";
-const std::string WGT_IRP6P_M_RELATIVE_ANGLE_AXIS = "WGT_IRP6P_M_RELATIVE_ANGLE_AXIS";
-const std::string WGT_IRP6P_M_TOOL_ANGLE_AXIS = "WGT_IRP6P_M_TOOL_ANGLE_AXIS";
-const std::string WGT_IRP6P_M_TOOL_EULER = "WGT_IRP6P_M_TOOL_EULER";
+//const std::string WGT_IRP6P_M_JOINTS = "WGT_IRP6P_M_JOINTS";
+//const std::string WGT_IRP6P_M_MOTORS = "WGT_IRP6P_M_MOTORS";
+//const std::string WGT_IRP6P_M_ANGLE_AXIS = "WGT_IRP6P_M_ANGLE_AXIS";
+//const std::string WGT_IRP6P_M_EULER = "WGT_IRP6P_M_EULER";
+//const std::string WGT_IRP6P_M_RELATIVE_ANGLE_AXIS = "WGT_IRP6P_M_RELATIVE_ANGLE_AXIS";
+//const std::string WGT_IRP6P_M_TOOL_ANGLE_AXIS = "WGT_IRP6P_M_TOOL_ANGLE_AXIS";
+//const std::string WGT_IRP6P_M_TOOL_EULER = "WGT_IRP6P_M_TOOL_EULER";
 //
 //
 // KLASA UiRobot
@@ -56,7 +59,7 @@ int UiRobot::create_ui_ecp_robot()
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_motors->synchro_depended_init();
+	wgts[WGT_MOTORS]->synchro_depended_init();
 	return 1;
 }
 
@@ -106,38 +109,29 @@ int UiRobot::synchronise()
 UiRobot::UiRobot(common::Interface& _interface) :
 	irp6_m::UiRobot(_interface, lib::irp6p_m::ROBOT_NAME, lib::irp6p_m::NUM_OF_SERVOS)
 {
-//	wgt_base *wgt;
-//	wgt = wgt_joints");
-//		wgt = new wgt_irp6_m_joints("Irp6p_m joints", interface, *this, interface.get_main_window());
-//	wgt = wgt_motors");
-//		wgt	= new wgt_irp6_m_motors("Irp6p_m motors", interface, *this, interface.get_main_window());
-//	wgt = wgt_angle_axis");
-//		wgt	= new wgt_irp6_m_angle_axis("Irp6p_m angle axis", interface, *this, interface.get_main_window());
-//	wgt = wgt_euler");
-//		wgt	 = new wgt_irp6_m_euler("Irp6p_m euler", interface, *this, interface.get_main_window());
-//	wgt = wgt_relative_angle_axis");
-//		wgt	= new wgt_irp6_m_relative_angle_axis("Irp6p_m relative angle axis", interface, *this, interface.get_main_window());
-//	wgt = wgt_tool_angle_axis");
-//		wgt	= new wgt_irp6_m_tool_angle_axis("Irp6p_m tool angle axis", interface, *this, interface.get_main_window());
-//	wgt = wgt_tool_euler");
-//		wgt	= new wgt_irp6_m_tool_euler("Irp6p_m tool euler", interface, *this, interface.get_main_window());
 
+		add_wgt<wgt_irp6_m_joints>(WGT_JOINTS, "Irp6p_m joints");
+		add_wgt<wgt_irp6_m_motors>(WGT_MOTORS, "Irp6p_m motors");
+		add_wgt<wgt_irp6_m_angle_axis>(WGT_ANGLE_AXIS, "Irp6p_m angle axis");
+		add_wgt<wgt_irp6_m_euler>(WGT_EULER, "Irp6p_m euler");
+		add_wgt<wgt_irp6_m_relative_angle_axis>(WGT_RELATIVE_ANGLE_AXIS, "Irp6p_m relative angle axis");
+		add_wgt<wgt_irp6_m_tool_angle_axis>(WGT_TOOL_ANGLE_AXIS, "Irp6p_m tool angle axis");
+		add_wgt<wgt_irp6_m_tool_euler>(WGT_TOOL_EULER, "Irp6p_m tool euler");
 
-
-	wgt_joints=
-		new wgt_irp6_m_joints("Irp6p_m joints", interface, *this, interface.get_main_window());
-	wgt_motors=
-		new wgt_irp6_m_motors("Irp6p_m motors", interface, *this, interface.get_main_window());
-	wgt_angle_axis=
-		new wgt_irp6_m_angle_axis("Irp6p_m angle axis", interface, *this, interface.get_main_window());
-	wgt_euler=
-		new wgt_irp6_m_euler("Irp6p_m euler", interface, *this, interface.get_main_window());
-	wgt_relative_angle_axis=
-		new wgt_irp6_m_relative_angle_axis("Irp6p_m relative angle axis", interface, *this, interface.get_main_window());
-	wgt_tool_angle_axis=
-		new wgt_irp6_m_tool_angle_axis("Irp6p_m tool angle axis", interface, *this, interface.get_main_window());
-	wgt_tool_euler=
-		new wgt_irp6_m_tool_euler("Irp6p_m tool euler", interface, *this, interface.get_main_window());
+//	wgt_joints=
+//		new wgt_irp6_m_joints("Irp6p_m joints", interface, this, interface.get_main_window());
+//	wgt_motors=
+//		new wgt_irp6_m_motors("Irp6p_m motors", interface, *this, interface.get_main_window());
+//	wgt_angle_axis=
+//		new wgt_irp6_m_angle_axis("Irp6p_m angle axis", interface, *this, interface.get_main_window());
+//	wgt_euler=
+//		new wgt_irp6_m_euler("Irp6p_m euler", interface, *this, interface.get_main_window());
+//	wgt_relative_angle_axis=
+//		new wgt_irp6_m_relative_angle_axis("Irp6p_m relative angle axis", interface, *this, interface.get_main_window());
+//	wgt_tool_angle_axis=
+//		new wgt_irp6_m_tool_angle_axis("Irp6p_m tool angle axis", interface, *this, interface.get_main_window());
+//	wgt_tool_euler=
+//		new wgt_irp6_m_tool_euler("Irp6p_m tool euler", interface, *this, interface.get_main_window());
 
 //	wndbase_m[WGT_IRP6P_M_JOINTS] = wgt_joints")->dwgt;
 //	wndbase_m[WGT_IRP6P_M_MOTORS] = wgt_motors")->dwgt;
@@ -147,13 +141,21 @@ UiRobot::UiRobot(common::Interface& _interface) :
 //	wndbase_m[WGT_IRP6P_M_TOOL_ANGLE_AXIS] = wgt_tool_angle_axis")->dwgt;
 //	wndbase_m[WGT_IRP6P_M_TOOL_EULER] = wgt_tool_euler")->dwgt;
 
-		wndbase_m[WGT_IRP6P_M_JOINTS] = wgt_joints->dwgt;
-		wndbase_m[WGT_IRP6P_M_MOTORS] = wgt_motors->dwgt;
-		wndbase_m[WGT_IRP6P_M_ANGLE_AXIS] = wgt_angle_axis->dwgt;
-		wndbase_m[WGT_IRP6P_M_EULER] = wgt_euler->dwgt;
-		wndbase_m[WGT_IRP6P_M_RELATIVE_ANGLE_AXIS] = wgt_relative_angle_axis->dwgt;
-		wndbase_m[WGT_IRP6P_M_TOOL_ANGLE_AXIS] = wgt_tool_angle_axis->dwgt;
-		wndbase_m[WGT_IRP6P_M_TOOL_EULER] = wgt_tool_euler->dwgt;
+//		wndbase_m[WGT_IRP6P_M_JOINTS] = wgts[WGT_IRP6P_M_JOINTS]->dwgt; //wgt_joints->dwgt;
+//		wndbase_m[WGT_IRP6P_M_MOTORS] = wgt_motors->dwgt;
+//		wndbase_m[WGT_IRP6P_M_ANGLE_AXIS] = wgt_angle_axis->dwgt;
+//		wndbase_m[WGT_IRP6P_M_EULER] = wgt_euler->dwgt;
+//		wndbase_m[WGT_IRP6P_M_RELATIVE_ANGLE_AXIS] = wgt_relative_angle_axis->dwgt;
+//		wndbase_m[WGT_IRP6P_M_TOOL_ANGLE_AXIS] = wgt_tool_angle_axis->dwgt;
+//		wndbase_m[WGT_IRP6P_M_TOOL_EULER] = wgt_tool_euler->dwgt;
+
+
+
+		BOOST_FOREACH(wgt_pair_t &wgt, wgts)
+		{
+			wndbase_m[wgt.first] = wgt.second->dwgt;
+		}
+
 }
 
 int UiRobot::manage_interface()
@@ -183,7 +185,7 @@ int UiRobot::manage_interface()
 				mw->enable_menu_item(false, 1, menuirp6p_m_Pre_Synchro_Moves);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
@@ -261,19 +263,19 @@ void UiRobot::make_connections()
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	connect(actionirp6p_m_Synchronisation, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Pre_Synchro_Moves_Motors, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Pre_Synchro_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Absolute_Moves_Motors, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Joints, 						SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Joints_triggered(mrrocpp::ui::common::UiRobot*)), 						Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Xyz_Relative_Moves_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Relative_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Pre_Synchro_Moves_Motors, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Pre_Synchro_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Absolute_Moves_Motors, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Joints, 						SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Joints_triggered(mrrocpp::ui::common::UiRobot*)), 						Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Absolute_Moves_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Xyz_Relative_Moves_Angle_Axis,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Relative_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
 	connect(actionirp6p_m_Synchro_Position, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
 	connect(actionirp6p_m_Front_Position, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
 	connect(actionirp6p_m_Position_0, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
 	connect(actionirp6p_m_Position_1, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
 	connect(actionirp6p_m_Position_2, 					SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Tool_Xyz_Euler_Zyz, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
-	connect(actionirp6p_m_Tool_Xyz_Angle_Axis, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Tool_Xyz_Euler_Zyz, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
+//	connect(actionirp6p_m_Tool_Xyz_Angle_Axis, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Tool_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot*)), 			Qt::AutoCompatConnection);
 }
 
 
@@ -281,6 +283,7 @@ void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
     actionirp6p_m_Synchronisation 				= new Ui::MenuBarAction(QString("&Synchronisation"),this, menuBar);
     actionirp6p_m_Synchro_Position 				= new Ui::MenuBarAction(QString("&Synchro Position"),this, menuBar);
@@ -288,15 +291,15 @@ void UiRobot::setup_menubar()
     actionirp6p_m_Position_0 					= new Ui::MenuBarAction(QString("Position &0"),this, menuBar);
     actionirp6p_m_Position_1 					= new Ui::MenuBarAction(QString("Position &1"),this, menuBar);
     actionirp6p_m_Position_2 					= new Ui::MenuBarAction(QString("Position &2"),this, menuBar);
-    actionirp6p_m_Pre_Synchro_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
-	actionirp6p_m_Absolute_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
-	actionirp6p_m_Joints 						= new Ui::MenuBarAction(QString("&Joints"),this, menuBar);
-	actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz 	= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),this, menuBar);
-	actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
-	actionirp6p_m_Tool_Xyz_Euler_Zyz 			= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),this, menuBar);
-	actionirp6p_m_Tool_Xyz_Angle_Axis 			= new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
-	actionirp6p_m_Motors						= new Ui::MenuBarAction(QString("&Motors"),this, menuBar);
-	actionirp6p_m_Xyz_Relative_Moves_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"),this, menuBar);
+    actionirp6p_m_Pre_Synchro_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
+	actionirp6p_m_Absolute_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
+	actionirp6p_m_Joints 						= new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_JOINTS], signalDispatcher, menuBar);
+	actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz 	= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),wgts[WGT_EULER], signalDispatcher, menuBar);
+	actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_ANGLE_AXIS], signalDispatcher, menuBar);
+	actionirp6p_m_Tool_Xyz_Euler_Zyz 			= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_TOOL_EULER], signalDispatcher, menuBar);
+	actionirp6p_m_Tool_Xyz_Angle_Axis 			= new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_TOOL_ANGLE_AXIS], signalDispatcher, menuBar);
+	actionirp6p_m_Motors						= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
+	actionirp6p_m_Xyz_Relative_Moves_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_RELATIVE_ANGLE_AXIS], signalDispatcher, menuBar);
 
 	menuirp6p_m_Pre_Synchro_Moves = new QMenu(robot_menu);
 	menuirp6p_m_Preset_Positions = new QMenu(robot_menu);

@@ -70,6 +70,7 @@ void UiRobot::create_thread()
 //	return (*wgts.find(name)).second;
 //}
 
+
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();

@@ -4,6 +4,8 @@
 
 #include "wgt_process_control.h"
 #include "interface.h"
+#include "allrobots.h"
+#include "mp.h"
 
 wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	wgt_base("Process control", _interface, parent), ui(new Ui::wgt_process_controlClass)
@@ -43,49 +45,49 @@ void wgt_process_control::my_open(bool set_on_top)
 
 void wgt_process_control::on_mp_start_pushButton_clicked()
 {
-	interface.pulse_start_mp();
+	interface.mp->pulse_start_mp();
 }
 
 void wgt_process_control::on_mp_stop_pushButton_clicked()
 {
-	interface.pulse_stop_mp();
+	interface.mp->pulse_stop_mp();
 }
 
 void wgt_process_control::on_mp_pause_pushButton_clicked()
 {
-	interface.pulse_pause_mp();
+	interface.mp->pulse_pause_mp();
 }
 
 void wgt_process_control::on_mp_resume_pushButton_clicked()
 {
-	interface.pulse_resume_mp();
+	interface.mp->pulse_resume_mp();
 }
 
 void wgt_process_control::on_mp_trigger_pushButton_clicked()
 {
-	interface.pulse_trigger_mp();
+	interface.mp->pulse_trigger_mp();
 }
 
 //ECP
 void wgt_process_control::on_all_ecp_trigger_pushButton_clicked()
 {
-	interface.pulse_trigger_ecp();
+	interface.all_robots->pulse_trigger_ecp();
 }
 
 // Reader
 void wgt_process_control::on_all_reader_start_pushButton_clicked()
 {
-	interface.pulse_start_all_reader();
+	interface.all_robots->pulse_start_all_reader();
 }
 
 void wgt_process_control::on_all_reader_stop_pushButton_clicked()
 {
-	interface.pulse_stop_all_reader();
+	interface.all_robots->pulse_stop_all_reader();
 }
 
 void wgt_process_control::on_all_reader_trigger_pushButton_clicked()
 {
-	interface.pulse_trigger_all_reader();
+	interface.all_robots->pulse_trigger_all_reader();
 }
 
 // aktualizacja ustawien przyciskow
@@ -133,8 +135,8 @@ int wgt_process_control::init()
 	}
 
 	// Dla mp i ecp
-	if (interface.mp.state != interface.mp.last_process_control_state) {
-		switch (interface.mp.state)
+	if (interface.mp->mp_state.state != interface.mp->mp_state.last_process_control_state) {
+		switch (interface.mp->mp_state.state)
 		{
 			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
 			case ui::common::UI_MP_PERMITED_TO_RUN:
@@ -181,7 +183,7 @@ int wgt_process_control::init()
 				break;
 		}
 
-		interface.mp.last_process_control_state = interface.mp.state;
+		interface.mp->mp_state.last_process_control_state = interface.mp->mp_state.state;
 
 	}
 

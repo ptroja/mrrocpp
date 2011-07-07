@@ -14,6 +14,8 @@ namespace ui {
 namespace common {
 class Interface;
 class UiRobot;
+class AllRobots;
+
 }
 }
 }

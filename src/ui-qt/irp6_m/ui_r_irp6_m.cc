@@ -17,6 +17,15 @@ namespace mrrocpp {
 namespace ui {
 namespace irp6_m {
 
+
+
+const std::string UiRobot::WGT_JOINTS = "WGT_JOINTS";
+const std::string UiRobot::WGT_MOTORS = "WGT_MOTORS";
+const std::string UiRobot::WGT_ANGLE_AXIS = "WGT_ANGLE_AXIS";
+const std::string UiRobot::WGT_EULER = "WGT_EULER";
+const std::string UiRobot::WGT_RELATIVE_ANGLE_AXIS = "WGT_RELATIVE_ANGLE_AXIS";
+const std::string UiRobot::WGT_TOOL_ANGLE_AXIS = "WGT_TOOL_ANGLE_AXIS";
+const std::string UiRobot::WGT_TOOL_EULER = "WGT_TOOL_EULER";
 //
 //
 // KLASA UiRobot
@@ -70,8 +79,8 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_motors->synchro_depended_init();
-	wgt_motors->init_and_copy();
+	wgts[WGT_MOTORS]->synchro_depended_init();
+	wgts[WGT_MOTORS]->init_and_copy();
 
 	return 1;
 
@@ -81,14 +90,7 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 	common::UiRobot(_interface, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
 
 {
-//	wgts["wgt_joints"] = wgt_joints;
-//	wgts["wgt_motors"] = wgt_motors;
-//
-//	wgts["wgt_angle_axis"] = wgt_angle_axis;
-//	wgts["wgt_euler"] = wgt_euler;
-//	wgts["wgt_relative_angle_axis"] = wgt_relative_angle_axis;
-//	wgts["wgt_tool_angle_axis"] = wgt_tool_angle_axis;
-//	wgts["wgt_tool_euler"] = wgt_tool_euler;
+
 }
 
 

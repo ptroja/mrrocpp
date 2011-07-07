@@ -47,6 +47,8 @@ SET(GUI_CXX_SRCS
     base/main.cpp
     base/mainwindow.cpp
     base/menu_bar.cpp
+    base/allrobots.cpp
+    base/mp.cpp
     base/wgt_base.cpp
     base/wgt_process_control.cpp
 	base/wgt_robot_process_control.cpp
@@ -157,6 +159,8 @@ ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
 	base/menu_bar.cpp
+	base/allrobots.cpp
+	base/mp.cpp
 	base/menu_bar_action.cpp
 	base/ui_sr.cc
 	base/ui_ecp.cc

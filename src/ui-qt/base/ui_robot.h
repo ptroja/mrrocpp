@@ -69,6 +69,26 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
+#define CATCH_SECTION_UI_PTR catch (ecp::common::robot::ECP_main_error & e) { \
+	/* Obsluga bledow ECP */ \
+		robot->catch_ecp_main_error(e); \
+  } /*end: catch */ \
+\
+catch (ecp::common::robot::ECP_error & er) { \
+	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
+		robot->catch_ecp_error(er); \
+} /* end: catch */ \
+\
+catch(const std::exception & e){\
+	robot->catch_std_exception(e); \
+}\
+\
+catch (...) {  /* Dla zewnetrznej petli try*/ \
+	/* Wylapywanie niezdefiniowanych bledow*/ \
+		robot->catch_tridot(); \
+} /*end: catch */\
+
+
 class Interface;
 
 typedef std::map <std::string, QDockWidget*> WndBase_t;
@@ -184,22 +204,18 @@ public:
 	typedef int (UiRobot::*intUiRobotFunctionPointerInt)(int);
 	typedef int (UiRobot::*intUiRobotFunctionPointer)();
 
-	typedef std::map <QString, wgt_base*> wgt_t;
+	typedef std::map <std::string, wgt_base*> wgt_t;
 	typedef wgt_t::value_type wgt_pair_t;
 
-	wgt_base * getWgtMotors()
-		{
-		return wgt_motors;
-		}
 
-	wgt_base *wgt_joints;
-	wgt_base *wgt_motors;
-
-	wgt_base *wgt_angle_axis;
-	wgt_base *wgt_euler;
-	wgt_base *wgt_relative_angle_axis;
-	wgt_base *wgt_tool_angle_axis;
-	wgt_base *wgt_tool_euler;
+	//wgt_base *wgt_joints;
+//	wgt_base *wgt_motors;
+//
+//	wgt_base *wgt_angle_axis;
+//	wgt_base *wgt_euler;
+//	wgt_base *wgt_relative_angle_axis;
+//	wgt_base *wgt_tool_angle_axis;
+//	wgt_base *wgt_tool_euler;
 	wgt_base *wgt_move;
 	wgt_base *wgt_int;	//polycrank
 
@@ -211,11 +227,17 @@ public:
 	wgt_base *wgt_ext;
 	wgt_robot_process_control *wgt_robot_pc;
 
+	typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
 	wgt_t wgts;
 
 
-
 	bool process_control_window_created;
+
+	template<typename T> void add_wgt(std::string name, QString label)
+		{
+			wgt_base *created_wgt = new T(label, interface, this);
+			wgts[name] = created_wgt;
+		}
 
 protected:
 	QAction *EDP_Load;
