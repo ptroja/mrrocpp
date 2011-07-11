@@ -16,6 +16,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace bird_hand {
 class UiRobot;
@@ -33,7 +34,7 @@ class wgt_bird_hand_command : public wgt_base
     Q_OBJECT
 
 public:
-    explicit wgt_bird_hand_command(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::bird_hand::UiRobot& _robot, QWidget *parent = 0);
+    explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
     ~wgt_bird_hand_command();
 
 	int get_command();
@@ -60,7 +61,7 @@ public:
 
 private:
     Ui::wgt_bird_hand_commandClass *ui;
-    mrrocpp::ui::bird_hand::UiRobot& robot;
+    mrrocpp::ui::bird_hand::UiRobot* robot;
 
 	QVector <lib::bird_hand::single_joint_command*> joint_command;
 	QVector <lib::bird_hand::single_joint_status*> joint_status;

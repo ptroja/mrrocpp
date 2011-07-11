@@ -14,6 +14,7 @@
 #include "../base/ui.h"
 #include "../base/ui_r_single_motor.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
+#include "../irp6_m/ui_r_irp6_m.h"
 
 namespace Ui{
 class MenuBar;
@@ -63,7 +64,7 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();
@@ -72,14 +73,7 @@ public:
 	void setup_menubar();
 
 private:
-	QAction *actionirp6p_tfg_Synchronization;
 	QAction *actionirp6p_tfg_Move;
-	QAction *actionirp6p_tfg_Synchro_Position;
-	QAction *actionirp6p_tfg_Position_0;
-	QAction *actionirp6p_tfg_Position_1;
-	QAction *actionirp6p_tfg_Position_2;
-
-    QMenu *menuirp6p_tfg_Preset_Positions;
 };
 
 }

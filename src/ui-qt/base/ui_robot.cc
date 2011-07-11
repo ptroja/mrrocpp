@@ -41,7 +41,7 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	msg	= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 
 	process_control_window_created = false;
-	wgt_robot_pc = 0L;
+	wgt_robot_pc = new wgt_robot_process_control(interface, this, interface.get_main_window());
 }
 
 UiRobot::~UiRobot()
@@ -57,27 +57,14 @@ void UiRobot::create_thread()
 	}
 }
 
-
-//wgt_base* UiRobot::getWgtByName(QString name)
-//{
-////	wgt_finder = ;
-////	(*wgts_finder).second;
-//	if((*wgts.find(name)).second==NULL)
-//		printf("(*wgts.find(name)).second NULL!");
-//	else
-//		printf("(*wgts.find(name)).second ok");
-//
-//	return (*wgts.find(name)).second;
-//}
-
-
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
 	EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
-	wgt_robot_process_control_action = new Ui::MenuBarAction(QString("Process &control"), this, menuBar);
+	wgt_robot_process_control_action =  new Ui::MenuBarAction(QString("Process &control"), wgt_robot_pc, signalDispatcher, menuBar);
 
 	robot_menu = new QMenu(menuBar->menuRobot);
 	robot_menu->setEnabled(true);
@@ -89,11 +76,8 @@ void UiRobot::setup_menubar()
 	robot_menu->addSeparator();
 	menuBar->menuRobot->addAction(robot_menu->menuAction());
 
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
 	connect(EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
 	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-	connect(wgt_robot_process_control_action, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_robot_process_control_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 }
 
 bool UiRobot::is_process_control_window_created()
@@ -242,10 +226,9 @@ const lib::robot_name_t UiRobot::getName()
 
 void UiRobot::close_all_windows()
 {
-
-	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
+	BOOST_FOREACH(wgt_pair_t &wgt, wgts)
 				{
-					window_node.second->close();
+					wgt.second->dwgt->close();
 				}
 
 }

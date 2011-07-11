@@ -35,16 +35,12 @@ namespace spkm {
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 	common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-
-	wgt_inc = new wgt_spkm_inc(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
-
-	wgt_int = new wgt_spkm_int(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_INT] = wgt_int->dwgt;
-
-	wgt_ext = new wgt_spkm_ext(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_EXT] = wgt_ext->dwgt;
-
+	add_wgt<wgt_spkm_inc>	(WGT_SPKM_INC, "Spkm inc");
+	add_wgt<wgt_spkm_int>	(WGT_SPKM_INT, "Spkm int");
+	add_wgt<wgt_spkm_ext>	(WGT_SPKM_EXT, "Spkm ext");
+//	wndbase_m[WGT_SPKM_INC] = wgts[WGT_SPKM_INC]->dwgt;
+//	wndbase_m[WGT_SPKM_INT] = wgts[WGT_SPKM_INT]->dwgt;
+//	wndbase_m[WGT_SPKM_EXT] = wgts[WGT_SPKM_EXT]->dwgt;
 }
 
 int UiRobot::ui_get_edp_pid()
@@ -60,7 +56,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_inc->synchro_depended_init();
+	wgts[WGT_SPKM_INC]->synchro_depended_init();
 	return 1;
 }
 
@@ -96,7 +92,7 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_inc->synchro_depended_init();
+	wgts[WGT_SPKM_INC]->synchro_depended_init();
 
 	return 1;
 
@@ -171,10 +167,6 @@ void UiRobot::make_connections()
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	connect(actionspkm_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionspkm_Motors, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionspkm_Motors_post, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Motors_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionspkm_Joints, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionspkm_External, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_External_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Synchro_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Front_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 	connect(actionspkm_Position_0, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
@@ -187,12 +179,13 @@ void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
-	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
-	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), this, menuBar);
-	actionspkm_Joints = new Ui::MenuBarAction(QString("&Joints"), this, menuBar);
-	actionspkm_External = new Ui::MenuBarAction(QString("&External"), this, menuBar);
+	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
+	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
+	actionspkm_Joints = new Ui::MenuBarAction(QString("&JOINTS"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
+	actionspkm_External = new Ui::MenuBarAction(QString("&External"), wgts[WGT_SPKM_EXT], signalDispatcher, menuBar);
 	actionspkm_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
 	actionspkm_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
 	actionspkm_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
