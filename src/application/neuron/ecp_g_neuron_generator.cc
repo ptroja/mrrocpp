@@ -75,13 +75,38 @@ bool neuron_generator::first_step()
 	neuron_sensor->startGettingTrajectory();
 	macroSteps = neuron_sensor->getMacroStepsNumber();
 	radius = neuron_sensor->getRadius();
-	neuron_sensor->get_reading();
 	printf("macroStep: %d\n", macroSteps);
 	printf("radius: %f\n", radius);
 
+	openFiles();
 	mstep_ = 0;
 
 	return true;
+}
+
+void neuron_generator::openFiles(){
+	time_t rawtime;
+	struct tm * timeinfo;
+	char realTrajectory[100];
+	char givenTrajectory[100];
+	time(&rawtime);
+	timeinfo=localtime(&rawtime);
+
+	struct stat st;
+	if(stat("trajectoryLogs",&st)<0)
+		mkdir("trajectoryLogs", 0777);
+
+	strftime(realTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
+	strftime(givenTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
+
+	strcat(realTrajectory, neuron_sensor->getFileName());
+	strcat(givenTrajectory, neuron_sensor->getFileName());
+
+	strcat(realTrajectory, "_real");
+	strcat(givenTrajectory, "_given");
+
+	pFileR = fopen(realTrajectory,"w");
+	pFileG = fopen(givenTrajectory,"w");
 }
 
 /*================================next_step===============================*//**
@@ -104,6 +129,8 @@ bool neuron_generator::next_step()
 	// ------------ read the current robot position ----------
 	actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
+
+	fprintf(pFileR,"%f|%f|%f\n",msr_position[0],msr_position[1],msr_position[2]);
 
 	if (breaking_) {
 		double tmp;
@@ -131,17 +158,17 @@ bool neuron_generator::next_step()
 
 	if (neuron_sensor->positionRequested() && !breaking_) {
 
-		msr_velocity = msr_position - msr_position_old;
-		msr_velocity /= MSTEP_TIME;
-
-		neuron_sensor->sendRobotState(msr_position[0], msr_position[1], msr_position[2], msr_velocity[0], msr_velocity[1], msr_velocity[2]);
-
 		current_sum /= macroSteps;
 
 		neuron_sensor->sendStatistics(current_sum, current_max);
 
 		current_sum = 0.0;
 		current_max = 0.0;
+
+		msr_velocity = msr_position - msr_position_old;
+		msr_velocity /= MSTEP_TIME;
+
+		neuron_sensor->sendRobotState(msr_position[0], msr_position[1], msr_position[2], msr_velocity[0], msr_velocity[1], msr_velocity[2]);
 
 		neuron_sensor->get_reading();
 	}
@@ -215,6 +242,8 @@ bool neuron_generator::next_step()
 
 	++mstep_; // increment macro step number
 
+	fprintf(pFileG,"%f|%f|%f\n",position[0],position[1],position[2]);
+
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(position);
 	//send new position to the robot
@@ -222,6 +251,8 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (breaking_ && (mstep_ > break_steps_)) {
+		fclose(pFileR);
+		fclose(pFileG);
 		return false;
 	} else {
 		return true;
