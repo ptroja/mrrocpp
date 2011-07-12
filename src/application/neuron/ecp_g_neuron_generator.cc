@@ -92,9 +92,12 @@ void neuron_generator::openFiles(){
 	time(&rawtime);
 	timeinfo=localtime(&rawtime);
 
+	/* do poprawki
 	struct stat st;
+
 	if(stat("trajectoryLogs",&st)<0)
 		mkdir("trajectoryLogs", 0777);
+*/
 
 	strftime(realTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
 	strftime(givenTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
