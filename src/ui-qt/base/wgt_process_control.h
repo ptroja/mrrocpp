@@ -33,6 +33,9 @@ public:
 
 	Ui::wgt_process_controlClass * get_ui();
 
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
+
 private:
 	Ui::wgt_process_controlClass* ui;
 

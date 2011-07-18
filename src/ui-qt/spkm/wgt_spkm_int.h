@@ -33,7 +33,8 @@ public:
 	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 	QVector <QRadioButton*> radioButton_mip_Vector;
-
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 private:
 	Ui::wgt_spkm_intClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;

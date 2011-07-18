@@ -35,7 +35,8 @@ public:
 	QVector <QRadioButton*> radioButton_mip_Vector;
 
 	void synchro_depended_init();
-
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 private:
 	Ui::wgt_spkm_incClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;

@@ -92,9 +92,7 @@ int UiRobot::synchronise_int()
 
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 	common::UiRobot(_interface, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
-
 {
-
 }
 
 
@@ -102,7 +100,6 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 void UiRobot::delete_ui_ecp_robot()
 {
 	delete ui_ecp_robot;
-
 }
 
 void UiRobot::null_ui_ecp_robot()

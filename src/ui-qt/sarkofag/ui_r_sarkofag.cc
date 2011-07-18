@@ -117,8 +117,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	single_motor::UiRobot(_interface, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS)
 {
 	add_wgt<wgt_single_motor_move> (WGT_SARKOFAG_MOVE, "Sarkofag moves");
-//	wndbase_m[WGT_SARKOFAG_MOVE] = wgts[WGT_SARKOFAG_MOVE]->dwgt;
-
 }
 
 int UiRobot::manage_interface()

@@ -339,7 +339,7 @@ void Interface::raise_process_control_window()
 void Interface::raise_process_control_window_slot()
 {
 	wgt_pc->my_open(false);
-	wgt_pc->dwgt->raise();
+	wgt_pc->raise();
 	open_process_control_windows();
 	//
 }

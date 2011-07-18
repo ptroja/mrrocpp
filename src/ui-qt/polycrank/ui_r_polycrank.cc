@@ -49,6 +49,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 	add_wgt<wgt_polycrank_int> 	(WGT_INT, "Polycrank int");
+
 //	wndbase_m[WGT_POLYCRANK_INT] = wgts[WGT_INT]->dwgt;
 
 	//wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);

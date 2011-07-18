@@ -48,13 +48,15 @@ public:
 	int	copy_finger_command(int fingerId);
 
 	void my_open(bool set_on_top=false);
+	virtual void add_button(QWidget *button, int row, int space){};
+	virtual void setup_ui(){};
 
-	QVector <QDoubleSpinBox*> doubleSpinBox_curpos_Vector;
-	QVector <QDoubleSpinBox*> doubleSpinBox_despos_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_curtor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_destor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_rdamp_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_curpos_Vector;
+	QVector <QDoubleSpinBox*> desired_pos_spin_box;
 
 	QVector <QButtonGroup*> buttonGroup_Vector;
 	QVector <QButtonGroup*> checkboxButtonGroup_Vector;

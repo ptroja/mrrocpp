@@ -42,11 +42,16 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 
 	process_control_window_created = false;
 	wgt_robot_pc = new wgt_robot_process_control(interface, this, interface.get_main_window());
+
+	current_pos = new double[number_of_servos];
+	desired_pos = new double[number_of_servos];
 }
 
 UiRobot::~UiRobot()
 {
 	delete wgt_robot_pc;
+	delete []current_pos;
+	delete []desired_pos;
 }
 
 void UiRobot::create_thread()
@@ -78,6 +83,12 @@ void UiRobot::setup_menubar()
 
 	connect(EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
 	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+}
+
+void UiRobot::zero_desired_position()
+{
+	for (int i = 0; i < number_of_servos; i++)
+		desired_pos[i] = 0.0;
 }
 
 bool UiRobot::is_process_control_window_created()
@@ -227,9 +238,9 @@ const lib::robot_name_t UiRobot::getName()
 void UiRobot::close_all_windows()
 {
 	BOOST_FOREACH(wgt_pair_t &wgt, wgts)
-				{
-					wgt.second->dwgt->close();
-				}
+	{
+		wgt.second->dwgt->close();
+	}
 
 }
 

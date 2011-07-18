@@ -207,11 +207,17 @@ public:
 
 	bool process_control_window_created;
 
+	void zero_desired_position();
+
 	template<typename T> void add_wgt(std::string name, QString label)
 		{
 			wgt_base *created_wgt = new T(label, interface, this);
 			wgts[name] = created_wgt;
 		}
+
+	double *current_pos; // pozycja biezaca
+	double *desired_pos; // pozycja zadana
+
 
 protected:
 	QAction *EDP_Load;

@@ -108,12 +108,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt<wgt_irp6_m_tool_angle_axis>		(WGT_TOOL_ANGLE_AXIS, "Irp6ot_m tool angle axis");
 	add_wgt<wgt_irp6_m_tool_euler>			(WGT_TOOL_EULER, "Irp6ot_m tool euler");
 
-//	BOOST_FOREACH(wgt_pair_t & wgt, wgts)
-//	{
-//		wndbase_m[wgt.first] = wgt.second->dwgt;
-//	}
-
-
 }
 
 void UiRobot::make_connections()

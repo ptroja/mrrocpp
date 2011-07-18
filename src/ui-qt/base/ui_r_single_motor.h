@@ -33,8 +33,8 @@ private:
 
 public:
 
-	double current_pos[1];// pozycja biezaca
-	double desired_pos[1]; // pozycja zadana
+//	double current_pos[1];// pozycja biezaca
+//	double desired_pos[1]; // pozycja zadana
 
 
 	common::EcpRobot *ui_ecp_robot;
