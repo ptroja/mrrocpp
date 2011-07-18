@@ -32,6 +32,7 @@
 #include "../smb/ui_r_smb2.h"
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
+#include "../sbench/ui_r_sbench.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -53,26 +54,21 @@
 #include "mp.h"
 #include "allrobots.h"
 
-
 extern void catch_signal(int sig);
-
-
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 Interface::Interface() :
-	is_mp_and_ecps_active(false),
-	position_refresh_interval(200),
-	mrrocpp_bin_to_root_path("../../")
+	is_mp_and_ecps_active(false), position_refresh_interval(200), mrrocpp_bin_to_root_path("../../")
 {
 
-	mw = (boost::shared_ptr<MainWindow>) new MainWindow(*this);
+	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
 	main_eb = new function_execution_buffer(*this);
 
-	timer = (boost::shared_ptr<QTimer>) new QTimer(this);
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 
 	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
@@ -83,14 +79,15 @@ Interface::Interface() :
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
 	all_robots = new AllRobots(this);
-	mp=new Mp(this);
+	mp = new Mp(this);
 }
 
 Interface::~Interface()
 {
-	BOOST_FOREACH(robot_pair_t node, robot_m) {
-		delete node.second;
-	}
+	BOOST_FOREACH(robot_pair_t node, robot_m)
+				{
+					delete node.second;
+				}
 }
 
 void Interface::start_on_timer()
@@ -626,9 +623,9 @@ void Interface::raise_ui_ecp_window_slot()
 void Interface::setRobotsMenu()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->setup_menubar();
-	}
+				{
+					robot_node.second->setup_menubar();
+				}
 }
 
 MainWindow* Interface::get_main_window() const
@@ -699,6 +696,7 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(smb2);
 	ADD_UI_ROBOT(shead1);
 	ADD_UI_ROBOT(shead2);
+	ADD_UI_ROBOT(sbench);
 	ADD_UI_ROBOT(irp6ot_m);
 	ADD_UI_ROBOT(irp6p_m);
 	ADD_UI_ROBOT(polycrank);
@@ -874,8 +872,6 @@ void Interface::print_on_sr(const char *buff, ...)
 	ui_msg->message(text);
 }
 
-
-
 void Interface::manage_pc(void)
 {
 	wgt_pc->process_control_window_init();
@@ -912,12 +908,12 @@ void Interface::manage_interface_slot()
 	wgt_pc->process_control_window_init_slot();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
-				&& robot_node.second->get_wgt_robot_pc()) {
-			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
+							&& robot_node.second->get_wgt_robot_pc()) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
 
 	//wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
@@ -934,9 +930,9 @@ void Interface::manage_interface_slot()
 	 */
 	// uruchmomienie manage interface dla wszystkich robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->manage_interface();
-	}
+				{
+					robot_node.second->manage_interface();
+				}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
@@ -967,9 +963,9 @@ void Interface::reload_whole_configuration()
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->reload_configuration();
-				}
+							{
+								robot_node.second->reload_configuration();
+							}
 
 				break;
 			default:
@@ -1092,8 +1088,6 @@ int Interface::check_gns()
 {
 	return 1;
 }
-
-
 
 // ustala stan wszytkich EDP
 int Interface::check_edps_state_and_modify_mp_state()
@@ -1232,7 +1226,8 @@ int Interface::initiate_configuration()
 
 		config.reset();
 
-		config = (boost::shared_ptr<lib::configurator>) new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
+		config
+				= (boost::shared_ptr <lib::configurator>) new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
 		std::string attach_point = config->get_sr_attach_point();
 
@@ -1374,7 +1369,6 @@ void Interface::create_threads()
 
 	start_on_timer();
 }
-
 
 // zatrzymuje zadanie, zabija procesy
 int Interface::unload_all()

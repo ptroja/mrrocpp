@@ -33,6 +33,7 @@ add_library(mp_robots
 	shead/mp_r_shead.cc
 	shead/mp_r_shead1.cc
 	shead/mp_r_shead2.cc
+	sbench/mp_r_sbench.cc
 	irp6ot_tfg/mp_r_irp6ot_tfg.cc
 	irp6p_tfg/mp_r_irp6p_tfg.cc
 	sarkofag/mp_r_sarkofag.cc
@@ -56,6 +57,7 @@ target_link_library_if(ROBOT_SARKOFAG ecp_robot ecp_r_sarkofag)
 target_link_library_if(ROBOT_SHEAD ecp_robot ecp_r_shead)
 target_link_library_if(ROBOT_SMB ecp_robot ecp_r_smb)
 target_link_library_if(ROBOT_SPKM ecp_robot ecp_r_spkm)
+target_link_library_if(ROBOT_SBENCH ecp_robot ecp_r_sbench)
 
 install(TARGETS mp_robots ecp_robot  DESTINATION lib)
 

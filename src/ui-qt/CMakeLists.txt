@@ -123,6 +123,7 @@ SET(GUI_MOC_SRCS
 	shead/ui_r_shead.h
 	shead/ui_r_shead1.h
 	shead/ui_r_shead2.h
+	sbench/ui_r_sbench.h
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
 	base/ui_robot.h
@@ -199,6 +200,8 @@ ADD_EXECUTABLE(
 	shead/ui_r_shead.cc
 	shead/ui_r_shead1.cc
 	shead/ui_r_shead2.cc
+	sbench/ui_ecp_r_sbench.cc
+	sbench/ui_r_sbench.cc
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
