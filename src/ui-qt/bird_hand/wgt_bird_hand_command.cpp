@@ -16,7 +16,7 @@
 
 
 wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent),
+	wgt_base(_widget_label, _interface, _robot, parent),
     ui(new Ui::wgt_bird_hand_commandClass())
 {
 	//ui = new Ui::wgt_bird_hand_commandClass::wgt_bird_hand_commandClass();
@@ -35,14 +35,14 @@ wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui:
     doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_1);
     doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_2);
 
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_2);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_2);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_2);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_2);
 
     doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_0);
     doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_1);
@@ -323,8 +323,8 @@ int wgt_bird_hand_command::get_desired_position()
 		if (robot->state.edp.is_synchronised) {
 
 			for (int i = 0; i < robot->number_of_servos; i++) {
-			//	robot->desired_pos[i] = doubleSpinBox_despos_Vector[i]->value(); //co tu ma być?
-				joint_command[i]->desired_position = doubleSpinBox_despos_Vector[i]->value();
+			//	robot->desired_pos[i] = desired_pos_spin_box[i]->value(); //co tu ma być?
+				joint_command[i]->desired_position = desired_pos_spin_box[i]->value();
 			}
 		} else {
 
@@ -367,7 +367,7 @@ int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
 
 int wgt_bird_hand_command::get_finger_command(int fingerId)
 {
-	joint_command[fingerId]->desired_position = doubleSpinBox_despos_Vector[fingerId]->value();
+	joint_command[fingerId]->desired_position = desired_pos_spin_box[fingerId]->value();
 	joint_command[fingerId]->desired_torque = doubleSpinBox_destor_Vector[fingerId]->value();
 	joint_command[fingerId]->reciprocal_of_damping = doubleSpinBox_rdamp_Vector[fingerId]->value();
 
@@ -437,7 +437,7 @@ int wgt_bird_hand_command::copy_finger_command(int fingerId)
 {
 
 	if (joint_command[fingerId]->profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION)
-		doubleSpinBox_despos_Vector[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
+		desired_pos_spin_box[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
 
 	return 1;
 }

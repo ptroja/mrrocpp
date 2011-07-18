@@ -43,8 +43,8 @@ namespace irp6_m {
 class UiRobot : public common::UiRobot
 {
 public:
-	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
-	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
+//	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
+//	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
 
 	virtual void makeConnections(){};
 

@@ -31,7 +31,8 @@ public:
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
-
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 private:
 	Ui::wgt_polycrank_intClass ui;
 	mrrocpp::ui::polycrank::UiRobot* robot;

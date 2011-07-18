@@ -50,6 +50,9 @@ SET(GUI_CXX_SRCS
     base/allrobots.cpp
     base/mp.cpp
     base/wgt_base.cpp
+   	base/WgtAbsoluteBase.cpp
+    base/WgtRelativeBase.cpp
+    base/WgtToolBase.cpp
     base/wgt_process_control.cpp
 	base/wgt_robot_process_control.cpp
     base/ui_ecp_dialogs/wgt_yes_no.cpp
@@ -86,6 +89,9 @@ SET(GUI_MOC_SRCS
     base/ui_ecp_dialogs/wgt_input_double.h
     base/ui_ecp_dialogs/wgt_choose_option.h
     base/ui_ecp_dialogs/wgt_teaching.h
+    base/WgtAbsoluteBase.h
+    base/WgtRelativeBase.h
+    base/WgtToolBase.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -142,8 +148,9 @@ SET(GUI_UI
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
-    irp6_m/wgt_irp6_m_joints.ui
-    irp6_m/wgt_irp6_m_motors.ui
+    base/wgt_absolute_template.ui
+    base/wgt_relative_template.ui
+    base/wgt_tool_template.ui
     irp6_m/wgt_irp6_m_angle_axis.ui
     irp6_m/wgt_irp6_m_euler.ui
     irp6_m/wgt_irp6_m_relative_angle_axis.ui
