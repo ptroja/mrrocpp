@@ -60,7 +60,7 @@ protected:
 	void create_spin_boxes(int desiredPosColumn, int spinBoxesCount);
 
 	virtual void setup_ui(QGridLayout *layout);
-	int get_desired_position();
+	virtual int get_desired_position();
 
 	QDoubleSpinBox* create_spin_box_to_vector(QVector <QDoubleSpinBox*> &spin_boxes);
 	QPushButton* create_button_to_vector(QVector<QPushButton *> &buttons, QString label);

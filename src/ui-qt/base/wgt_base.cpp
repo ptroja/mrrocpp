@@ -110,7 +110,6 @@ void wgt_base::create_buttons_and_spin_boxes(int desiredPosColumn, int incMoveCo
 	QSignalMapper *left_signal_mapper = new QSignalMapper(this);
 	QSignalMapper *right_signal_mapper = new QSignalMapper(this);
 	QPushButton *button = 0l;
-	QDoubleSpinBox *spinBox = 0l;
 
 	connect(left_signal_mapper, SIGNAL(mapped(int)), this, SLOT(inc_move_left_button_clicked(int)));
 	connect(right_signal_mapper, SIGNAL(mapped(int)), this, SLOT(inc_move_right_button_clicked(int)));
