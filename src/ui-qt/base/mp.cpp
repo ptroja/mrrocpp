@@ -6,14 +6,12 @@
 #include "ui_mainwindow.h"
 #include <boost/foreach.hpp>
 
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
-
-Mp::Mp(Interface *iface):
-		interface(iface)
+Mp::Mp(Interface *iface) :
+	interface(iface)
 {
 	mp_state.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
 	mp_state.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
@@ -44,16 +42,12 @@ int Mp::MPup_int()
 		mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
 
 		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0)
-		{
+		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
 			interface->ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		}
-		else if (interface->check_node_existence(mp_state.node_name, "mp"))
-		{
+		} else if (interface->check_node_existence(mp_state.node_name, "mp")) {
 			mp_state.pid = interface->config->process_spawn(lib::MP_SECTION);
 
-			if (mp_state.pid > 0)
-			{
+			if (mp_state.pid > 0) {
 
 				mp_state.MP = new RemoteAgent(lib::MP_SECTION);
 				mp_state.pulse = new OutputBuffer <char> (*mp_state.MP, "MP_PULSE");
@@ -63,9 +57,7 @@ int Mp::MPup_int()
 				mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
 
 				interface->raise_process_control_window();
-			}
-			else
-			{
+			} else {
 				fprintf(stderr, "mp spawn failed\n");
 			}
 			interface->manage_interface();
@@ -76,17 +68,17 @@ int Mp::MPup_int()
 	return 1;
 }
 
-
 void Mp::set_mp_state()
 {
-	if ((interface->all_robots->all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || ((interface->all_robots->all_edps == UI_ALL_EDPS_ALL_LOADED)
-			&& (interface->all_robots->all_edps_synchro== UI_ALL_EDPS_ALL_SYNCHRONISED)))
-	{
+	if ((interface->all_robots->all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || ((interface->all_robots->all_edps
+			== UI_ALL_EDPS_ALL_LOADED) && (interface->all_robots->all_edps_synchro == UI_ALL_EDPS_ALL_SYNCHRONISED))) {
 		if ((mp_state.state == UI_MP_NOT_PERMITED_TO_RUN) && (interface->is_mp_and_ecps_active))
-					mp_state.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-		else if (mp_state.state == UI_MP_PERMITED_TO_RUN)
-			mp_state.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
-	}
+			mp_state.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
+
+
+	} else if (mp_state.state == UI_MP_PERMITED_TO_RUN)
+		mp_state.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
+
 }
 
 int Mp::MPslay()
@@ -253,7 +245,6 @@ int Mp::pulse_trigger_mp()
 
 }
 
-
 int Mp::execute_mp_pulse(char pulse_code)
 {
 
@@ -267,35 +258,39 @@ int Mp::execute_mp_pulse(char pulse_code)
 
 void Mp::manage_interface()
 {
-	boost::shared_ptr<MainWindow> mw = interface->mw;
+	boost::shared_ptr <MainWindow> mw = interface->mw;
 
-	if (mp_state.state != mp_state.last_manage_interface_state)
-	{
+	if (mp_state.state != mp_state.last_manage_interface_state) {
 		// wlasciwosci menu task_menu
 		switch (mp_state.state)
 		{
 			case common::UI_MP_NOT_PERMITED_TO_RUN:
+				//		std::cout << "UI_MP_NOT_PERMITED_TO_RUN" << std::endl;
 				mw->get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
 				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 
 				break;
 			case common::UI_MP_PERMITED_TO_RUN:
+				//	std::cout << "UI_MP_PERMITED_TO_RUN" << std::endl;
 				mw->get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
 				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionMP_Unload);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Load);
 
 				break;
 			case common::UI_MP_WAITING_FOR_START_PULSE:
+				//	std::cout << "UI_MP_WAITING_FOR_START_PULSE" << std::endl;
 				mw->get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Unload);
 				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionall_EDP_Unload);
 
 				break;
 			case common::UI_MP_TASK_RUNNING:
+				//	std::cout << "UI_MP_TASK_RUNNING" << std::endl;
 				mw->get_ui()->label_mp_notification->setText("TASK_RUNNING");
 				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 				break;
 			case common::UI_MP_TASK_PAUSED:
+				//  std::cout << "UI_MP_TASK_PAUSED" << std::endl;
 				mw->get_ui()->label_mp_notification->setText("TASK_PAUSED");
 				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
 
