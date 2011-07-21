@@ -17,6 +17,8 @@
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
 
+#include <sys/stat.h>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -78,13 +80,39 @@ bool neuron_generator::first_step()
 	neuron_sensor->startGettingTrajectory();
 	macroSteps = neuron_sensor->getMacroStepsNumber();
 	radius = neuron_sensor->getRadius();
-	neuron_sensor->get_reading();
 	printf("macroStep: %d\n", macroSteps);
 	printf("radius: %f\n", radius);
 
+	openFiles();
 	mstep_ = 0;
 
 	return true;
+}
+
+void neuron_generator::openFiles(){
+	time_t rawtime;
+	struct tm * timeinfo;
+	char realTrajectory[100];
+	char givenTrajectory[100];
+	time(&rawtime);
+	timeinfo=localtime(&rawtime);
+
+	struct stat st;
+
+	if(stat("trajectoryLogs",&st)<0)
+		mkdir("trajectoryLogs", 0777);
+
+	strftime(realTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
+	strftime(givenTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
+
+	strcat(realTrajectory, neuron_sensor->getFileName());
+	strcat(givenTrajectory, neuron_sensor->getFileName());
+
+	strcat(realTrajectory, "_real");
+	strcat(givenTrajectory, "_given");
+
+	pFileR = fopen(realTrajectory,"w");
+	pFileG = fopen(givenTrajectory,"w");
 }
 
 /*================================next_step===============================*//**
@@ -107,6 +135,8 @@ bool neuron_generator::next_step()
 	// ------------ read the current robot position ----------
 	actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
+
+	fprintf(pFileR,"%f|%f|%f\n",msr_position[0],msr_position[1],msr_position[2]);
 
 	if (breaking_) {
 		double tmp;
@@ -221,6 +251,8 @@ bool neuron_generator::next_step()
 
 	++mstep_; // increment macro step number
 
+	fprintf(pFileG,"%f|%f|%f|%f|%f|%f\n", position[0], position[1], position[2], position[3], position[4], position[5]);
+
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(position);
 	//send new position to the robot
@@ -228,7 +260,8 @@ bool neuron_generator::next_step()
 	// --------- send new position to the robot (EDP) (end) --------------
 
 	if (breaking_ && (mstep_ > break_steps_)) {
-		std::cout << std::endl << "!!!" << msr_position << std::endl;
+		fclose(pFileR);
+		fclose(pFileG);
 		return false;
 	} else {
 		return true;

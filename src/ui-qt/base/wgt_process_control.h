@@ -13,6 +13,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class AllRobots;
+
 }
 }
 }
@@ -30,6 +32,9 @@ public:
 	void my_open(bool set_on_top=false);
 
 	Ui::wgt_process_controlClass * get_ui();
+
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 
 private:
 	Ui::wgt_process_controlClass* ui;

@@ -16,6 +16,7 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
+#include "../base/mp.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -38,15 +39,15 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::common::EcpRobot(*this);
-	return 1;
+	//return 1;
 }
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_move->synchro_depended_init();
+	wgts[WGT_SARKOFAG_MOVE]->synchro_depended_init();
 	return 1;
 }
 
@@ -106,8 +107,8 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_move->synchro_depended_init();
-	wgt_move->init_and_copy();
+	wgts[WGT_SARKOFAG_MOVE]->synchro_depended_init();
+	wgts[WGT_SARKOFAG_MOVE]->init_and_copy();
 	return 1;
 
 }
@@ -115,10 +116,7 @@ int UiRobot::synchronise_int()
 UiRobot::UiRobot(common::Interface& _interface) :
 	single_motor::UiRobot(_interface, lib::sarkofag::ROBOT_NAME, lib::sarkofag::NUM_OF_SERVOS)
 {
-
-	wgt_move = new wgt_single_motor_move("Sarkofag moves", interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SARKOFAG_MOVE] = wgt_move->dwgt;
-
+	add_wgt<wgt_single_motor_move> (WGT_SARKOFAG_MOVE, "Sarkofag moves");
 }
 
 int UiRobot::manage_interface()
@@ -147,7 +145,7 @@ int UiRobot::manage_interface()
 				mw->enable_menu_item(false, 1, actionsarkofag_Synchronisation);
 				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
@@ -192,7 +190,7 @@ void UiRobot::make_connections()
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	connect(actionsarkofag_Synchronisation,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
-	connect(actionsarkofag_Move, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
+//	connect(actionsarkofag_Move, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
 	connect(actionsarkofag_Synchro_Position,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 	connect(actionsarkofag_Front_Position,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 	connect(actionsarkofag_Position_0, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
@@ -207,9 +205,10 @@ void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
     actionsarkofag_Synchronisation = new Ui::MenuBarAction(QString("&Synchronization"), this, menuBar);
-    actionsarkofag_Move = new Ui::MenuBarAction(QString("&Move"), this, menuBar);
+    actionsarkofag_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_SARKOFAG_MOVE], signalDispatcher, menuBar);
     actionsarkofag_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro position"), this, menuBar);
     actionsarkofag_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
     actionsarkofag_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);

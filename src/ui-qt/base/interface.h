@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+
 #include <boost/shared_ptr.hpp>
 
 #include <QMainWindow>
@@ -24,11 +25,14 @@
 #include "base/lib/sr/sr_ui.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
+
 //#include "string"
 
 #include "ui.h"
 
 #include "base/lib/messip/messip_dataport.h"
+
+
 
 //namespace Ui{
 class MainWindow;
@@ -38,6 +42,11 @@ class MainWindow;
 namespace mrrocpp {
 namespace ui {
 namespace common {
+
+class AllRobots;
+class Mp;
+
+
 
 #define ADD_UI_ROBOT(__robot_name) \
 		{\
@@ -59,10 +68,10 @@ class Interface : public QObject
 {
 Q_OBJECT
 private:
-	MainWindow* mw;
+
 
 	void create_robots();
-	QTimer *timer;
+	boost::shared_ptr<QTimer> timer;
 
 	bool html_it(std::string &_input, std::string &_output);
 
@@ -84,12 +93,16 @@ public:
 
 	Interface();
 
+	~Interface();
+
 	void raise_process_control_window();
 	void raise_ui_ecp_window();
 	void start_on_timer();
 
+	boost::shared_ptr<MainWindow> mw;
+
 	//static Interface * get_instance();
-	MainWindow* get_main_window();
+	MainWindow* get_main_window() const;
 	wgt_process_control* get_process_control_window();
 
 	void print_on_sr(const char *buff, ...);
@@ -110,8 +123,7 @@ public:
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
 	std::list <program_node_user_def> program_node_user_list;
 
-	int ui_node_nr; // numer wezla na ktorym jest uruchamiany UI
-	pid_t ui_pid; // pid UI
+	// TODO: change to ENUM
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
 	TEACHING_STATE teachingstate; // dawne systemState do nauki
@@ -122,17 +134,43 @@ public:
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
-	lib::configurator* config;
+	boost::shared_ptr<lib::configurator> config;
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
 
-	mp_state_def mp;
+
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
 
-	UI_ALL_EDPS_STATE all_edps;
-	UI_ALL_EDPS_STATE all_edps_last_manage_interface_state;
-	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro;
-	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro_last_manage_interface_state;
+	const int position_refresh_interval;
+
+	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
+	void UI_close(void);
+	void init();
+	int wait_for_child_termiantion(pid_t pid);
+	int manage_interface(void);
+	void manage_pc(void);
+
+
+	void reload_whole_configuration();
+
+	//! @bug: this call is not used. It should be deleted, since
+	//! thread objects are managed with boost::shared_ptr and deleted
+	//! automatically when a container object is deleted.
+	void abort_threads();
+	void fill_node_list(void);
+	int fill_section_list(const char *file_name_and_path);
+	int initiate_configuration(void);
+	int clear_all_configuration_lists(void);
+	int fill_program_node_list(void);
+	int get_default_configuration_file_name(void);
+	int set_default_configuration_file_name(void);
+	int check_edps_state_and_modify_mp_state(void);
+	int check_gns(void);
+	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
+
+	//! TODO: throw an exception (assumed inheritance from std::exception)
+
+
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
 	std::string binaries_local_path; // lokalna sciezka binariow mrrocpp
@@ -151,7 +189,7 @@ public:
 	std::string sr_attach_point;
 	std::string ui_node_name; // nazwa wezla na ktorym jest uruchamiany UI
 
-	std::string mrrocpp_bin_to_root_path;
+	const std::string mrrocpp_bin_to_root_path;
 
 	// The Ui robots
 
@@ -159,84 +197,18 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 
-	common::robots_t getRobots();
+	common::robots_t getRobots() const;
 
 	common::robots_t robot_m;
 
-	const int position_refresh_interval;
-
-	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
-	void UI_close(void);
-	void init();
-	int wait_for_child_termiantion(pid_t pid);
-	int manage_interface(void);
-	void manage_pc(void);
-
-	int MPup_int();
-	void reload_whole_configuration();
-
-	//! @bug: this call is not used. It should be deleted, since
-	//! thread objects are managed with boost::shared_ptr and deleted
-	//! automatically when a container object is deleted.
-	void abort_threads();
-	void fill_node_list(void);
-	int fill_section_list(const char *file_name_and_path);
-	int initiate_configuration(void);
-	int clear_all_configuration_lists(void);
-	int fill_program_node_list(void);
-	int get_default_configuration_file_name(void);
-	int set_default_configuration_file_name(void);
-	int check_edps_state_and_modify_mp_state(void);
-	int check_gns(void);
-	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
-	int execute_mp_pulse(char pulse_code);
-
-	//! TODO: throw an exception (assumed inheritance from std::exception)
-
 	void create_threads();
-	int EDP_all_robots_create();
-	int EDP_all_robots_slay();
-	int EDP_all_robots_synchronise();
-	int MPup();
-	int MPslay();
-
-	// MP pulse
-	int pulse_start_mp();
-	int pulse_stop_mp();
-	int pulse_pause_mp();
-	int pulse_resume_mp();
-	int pulse_trigger_mp();
-
-	//ECP pulse
-	int pulse_trigger_ecp();
-
-	//Reader pulse
-	int pulse_start_all_reader();
-	int pulse_stop_all_reader();
-	int pulse_trigger_all_reader();
-
-	//ECP pulse
-	int pulse_trigger_ecp(common::UiRobot *robot);
-
-	//Reader pulse
-	int pulse_start_reader(common::UiRobot *robot);
-	int pulse_stop_reader(common::UiRobot *robot);
-	int pulse_trigger_reader(common::UiRobot *robot);
 
 	int unload_all();
 	int slay_all();
 
-	int all_robots_move_to_synchro_position();
-	int all_robots_move_to_front_position();
-	int all_robots_move_to_preset_position_0();
-	int all_robots_move_to_preset_position_1();
-	int all_robots_move_to_preset_position_2();
 
-	bool is_any_robot_active();
-	bool are_all_active_robots_loaded();
-	bool is_any_active_robot_loaded();
-	bool are_all_loaded_robots_synchronised();
-	bool is_any_loaded_robot_synchronised();
+	Mp *mp;
+	AllRobots *all_robots;
 
 	void open_process_control_windows();
 

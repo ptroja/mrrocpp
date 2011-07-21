@@ -49,6 +49,9 @@ CMAKE_DEPENDENT_OPTION(ROBOT_SMB
 CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
 	"Build support for SwarmItFIX parallel kinematics machine robot"
 	ON "ROBOTS_SWARMITFIX" OFF)
+CMAKE_DEPENDENT_OPTION(ROBOT_SBENCH
+	"Build support for SwarmItFIX 'bench' robot"
+	ON "ROBOTS_SWARMITFIX" OFF)
 	
 option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
@@ -56,7 +59,7 @@ option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
 if (UBUNTU32BIT)
 	# 32-bit headers and libraries are kept in 'mrlib' repository
-	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.10-32bit")
+	set(UBUNTU32BIT_ROOT "/opt/ubuntu-10.04-32bit")
 	set(MRLIB "${UBUNTU32BIT_ROOT}/usr")
 
 	set(EIGEN2_INCLUDE_DIRS "${MRLIB}/include/eigen2") 

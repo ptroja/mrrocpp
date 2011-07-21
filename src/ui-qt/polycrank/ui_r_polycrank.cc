@@ -20,11 +20,13 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
-
+#include "../base/mp.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace polycrank {
+
+const std::string UiRobot::WGT_INT = "WGT_INT";
 
 //
 //
@@ -46,9 +48,9 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 UiRobot::UiRobot(common::Interface& _interface) :
 	common::UiRobot(_interface, lib::polycrank::ROBOT_NAME, lib::polycrank::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
+	add_wgt<wgt_polycrank_int> 	(WGT_INT, "Polycrank int");
 
-	wgt_int = new wgt_polycrank_int(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_POLYCRANK_INT] = wgt_int->dwgt;
+//	wndbase_m[WGT_POLYCRANK_INT] = wgts[WGT_INT]->dwgt;
 
 	//wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
 	//wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
@@ -63,10 +65,10 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::common::EcpRobot(*this);
-	return 1;
+//	return 1;
 }
 
 int UiRobot::synchronise()
@@ -139,7 +141,7 @@ int UiRobot::manage_interface()
 				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
 				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_polycrank_internal, NULL);
 				 */
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
@@ -192,17 +194,18 @@ int UiRobot::manage_interface()
 
 void UiRobot::make_connections()
 {
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
-	connect(actionpolycrank_Move_Joints,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+//
+//	connect(actionpolycrank_Move_Joints,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	actionpolycrank_Move_Joints = new Ui::MenuBarAction(QString("Move &Joints"), this, menuBar);
+	actionpolycrank_Move_Joints = new Ui::MenuBarAction(QString("Move &Joints"), wgts[WGT_INT], signalDispatcher, menuBar);
 
 	robot_menu->addSeparator();
 	robot_menu->addAction(actionpolycrank_Move_Joints);

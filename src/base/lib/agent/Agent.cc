@@ -46,9 +46,9 @@ Agent::~Agent()
 {
 	if (messip_channel_delete(channel, MESSIP_NOTIMEOUT) == -1)
 	{
+		std::cerr << "server channel delete for '" << getName() << "' failed" << std::endl;
 		// TODO:
-		std::cerr << "server channel create for for '" << getName() << "' failed" << std::endl;
-		throw;
+		// throw;
 	}
 }
 
