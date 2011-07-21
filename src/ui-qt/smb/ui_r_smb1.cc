@@ -15,10 +15,10 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new EcpRobot(*this);
-	return 1;
+//	return 1;
 }
 
 void UiRobot::setup_menubar()

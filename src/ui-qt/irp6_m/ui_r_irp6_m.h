@@ -19,6 +19,11 @@ class wgt_irp6_m_relative_angle_axis;
 class wgt_irp6_m_tool_angle_axis;
 class wgt_irp6_m_tool_euler;
 
+namespace Ui{
+class MenuBar;
+class MenuBarAction;
+}
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -38,8 +43,8 @@ namespace irp6_m {
 class UiRobot : public common::UiRobot
 {
 public:
-	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
-	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
+//	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
+//	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
 
 	virtual void makeConnections(){};
 
@@ -47,7 +52,9 @@ public:
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 
-
+	void setup_menubar();
+	void make_connections();
+	int manage_interface();
 
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
@@ -58,15 +65,39 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
+    const static std::string WGT_JOINTS;
+    const static std::string WGT_MOTORS;
+    const static std::string WGT_ANGLE_AXIS;
+    const static std::string WGT_EULER;
+    const static std::string WGT_RELATIVE_ANGLE_AXIS;
+    const static std::string WGT_TOOL_ANGLE_AXIS;
+    const static std::string WGT_TOOL_EULER;
+
+protected:
+	QAction *action_Synchronisation;
+
 private:
-//	wgt_base *wgt_joints;
-//	wgt_base *wgt_motors;
-//
-//	wgt_base *wgt_angle_axis;
-//	wgt_base *wgt_euler;
-//	wgt_base *wgt_relative_angle_axis;
-//	wgt_base *wgt_tool_angle_axis;
-//	wgt_base *wgt_tool_euler;
+    QAction *action_Synchro_Position;
+    QAction *action_Front_Position;
+    QAction *action_Position_0;
+    QAction *action_Position_1;
+    QAction *action_Position_2;
+
+    QMenu *menu_Preset_Positions;
+
+    QAction *action_Pre_Synchro_Moves_Motors;
+    QAction *action_Joints;
+    QAction *action_Absolute_Moves_Xyz_Euler_Zyz;
+    QAction *action_Absolute_Moves_Xyz_Angle_Axis;
+    QAction *action_Xyz_Relative_Moves_Angle_Axis;
+    QAction *action_Tool_Xyz_Euler_Zyz;
+    QAction *action_Tool_Xyz_Angle_Axis;
+    QAction *action_Absolute_Moves_Motors;
+
+    QMenu *menu_Pre_Synchro_Moves;
+    QMenu *menu_Absolute_Moves;
+    QMenu *menu_Relative_Moves;
+    QMenu *menu_Tool;
 };
 
 }

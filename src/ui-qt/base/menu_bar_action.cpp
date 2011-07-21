@@ -1,28 +1,28 @@
 #include "menu_bar_action.h"
-//#include "../base/ui_robot.h"
-//#include "../irp6ot_m/ui_r_irp6ot_m.h"
+#include "signal_dispatcher.h"
 
 namespace Ui
 {
 
-//MenuBarAction::MenuBarAction(mrrocpp::ui::common::UiRobot* robo, QWidget *parent) : QAction(parent)
-//{
-//	robot=robo;
-//	connect(this, SIGNAL(triggered()), this, SLOT(reemitTriggered()));
-//}
 
-MenuBarAction::MenuBarAction(QString text, mrrocpp::ui::common::UiRobot* robo, QWidget *parent) : QAction(parent)
+MenuBarAction::MenuBarAction(QString text, mrrocpp::ui::common::UiRobot* robo, QWidget *parent) : QAction(parent), robot_action(true)
 {
-	robot=robo;
+	robot = robo;
 	setText(text);
 	connect(this, SIGNAL(triggered()), this, SLOT(reemitTriggered()));
-	//printf("connectted in MenuBarAction\n");
 }
 
+MenuBarAction::MenuBarAction(QString text, wgt_base* _wgt, SignalDispatcher *signalDispatcher, QWidget *parent) : QAction(parent), robot_action(false)
+{
+	wgt = _wgt;
+	setText(text);
+	connect(this, SIGNAL(triggered()), this, SLOT(reemitTriggered()));
+	connect(this, SIGNAL(triggered(wgt_base*)), signalDispatcher, SLOT(open_new_window(wgt_base*)), Qt::AutoCompatConnection);
+}
 
 void MenuBarAction::reemitTriggered()
 {
-	emit triggered(robot); //!@#$%^&*(*&^%$#@#$%^&*!!!!!!
+	robot_action ? emit triggered(robot) : emit triggered(wgt);
 }
 
 }

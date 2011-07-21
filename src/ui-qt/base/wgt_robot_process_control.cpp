@@ -5,6 +5,8 @@
 #include "wgt_robot_process_control.h"
 #include "interface.h"
 #include "ui_robot.h"
+#include "allrobots.h"
+#include "mp.h"
 
 wgt_robot_process_control::wgt_robot_process_control(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
 	wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
@@ -44,23 +46,23 @@ void wgt_robot_process_control::my_open(bool set_on_top)
 //ECP
 void wgt_robot_process_control::on_ecp_trigger_pushButton_clicked()
 {
-	interface.pulse_trigger_ecp(robot);
+	interface.all_robots->pulse_trigger_ecp(robot);
 }
 
 // Reader
 void wgt_robot_process_control::on_reader_start_pushButton_clicked()
 {
-	interface.pulse_start_reader(robot);
+	interface.all_robots->pulse_start_reader(robot);
 }
 
 void wgt_robot_process_control::on_reader_stop_pushButton_clicked()
 {
-	interface.pulse_stop_reader(robot);
+	interface.all_robots->pulse_stop_reader(robot);
 }
 
 void wgt_robot_process_control::on_reader_trigger_pushButton_clicked()
 {
-	interface.pulse_trigger_reader(robot);
+	interface.all_robots->pulse_trigger_reader(robot);
 }
 
 // aktualizacja ustawien przyciskow
@@ -110,8 +112,8 @@ int wgt_robot_process_control::init()
 	}
 
 	// Dla mp i ecp
-	if (interface.mp.state != interface.mp.last_process_control_state) {
-		switch (interface.mp.state)
+	if (interface.mp->mp_state.state != interface.mp->mp_state.last_process_control_state) {
+		switch (interface.mp->mp_state.state)
 		{
 			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
 			case ui::common::UI_MP_PERMITED_TO_RUN:
@@ -132,7 +134,7 @@ int wgt_robot_process_control::init()
 				break;
 		}
 
-		interface.mp.last_process_control_state = interface.mp.state;
+		interface.mp->mp_state.last_process_control_state = interface.mp->mp_state.state;
 
 	}
 

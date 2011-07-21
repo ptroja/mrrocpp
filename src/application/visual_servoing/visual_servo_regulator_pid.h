@@ -8,7 +8,7 @@
 #ifndef VISUAL_SERVO_REGULATOR_PID_H_
 #define VISUAL_SERVO_REGULATOR_PID_H_
 
-#include <Eigen/Eigen>
+#include <Eigen/Core>
 
 #include "visual_servo_regulator.h"
 

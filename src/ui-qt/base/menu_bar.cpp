@@ -4,7 +4,8 @@
 #include "menu_bar_action.h"
 #include "mainwindow.h"
 #include <QFileDialog>
-
+#include "allrobots.h"
+#include "mp.h"
 
 namespace Ui
 {
@@ -246,54 +247,54 @@ void MenuBar::makeConnections()
 void MenuBar::on_actionall_EDP_Load_triggered()
 {
 	printf("action all edp triggered");
-	interface->EDP_all_robots_create();
+	interface->all_robots->EDP_all_robots_create();
 }
 
 void MenuBar::on_actionall_EDP_Unload_triggered()
 {
-	interface->EDP_all_robots_slay();
+	interface->all_robots->EDP_all_robots_slay();
 }
 
 void MenuBar::on_actionall_Synchronisation_triggered()
 {
-	interface->EDP_all_robots_synchronise();
+	interface->all_robots->EDP_all_robots_synchronise();
 }
 
 void MenuBar::on_actionall_Synchro_Position_triggered()
 {
-	interface->all_robots_move_to_synchro_position();
+	interface->all_robots->all_robots_move_to_synchro_position();
 }
 
 void MenuBar::on_actionall_Front_Position_triggered()
 {
-	interface->all_robots_move_to_front_position();
+	interface->all_robots->all_robots_move_to_front_position();
 }
 
 void MenuBar::on_actionall_Position_0_triggered()
 {
-	interface->all_robots_move_to_preset_position_0();
+	interface->all_robots->all_robots_move_to_preset_position_0();
 }
 
 void MenuBar::on_actionall_Position_1_triggered()
 {
-	interface->all_robots_move_to_preset_position_1();
+	interface->all_robots->all_robots_move_to_preset_position_1();
 }
 
 void MenuBar::on_actionall_Position_2_triggered()
 {
-	interface->all_robots_move_to_preset_position_2();
+	interface->all_robots->all_robots_move_to_preset_position_2();
 }
 
 // task menu
 
 void MenuBar::on_actionMP_Load_triggered()
 {
-	interface->MPup();
+	interface->mp->MPup();
 }
 
 void MenuBar::on_actionMP_Unload_triggered()
 {
-	interface->MPslay();
+	interface->mp->MPslay();
 }
 
 void MenuBar::on_actionProcess_Control_triggered()

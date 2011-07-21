@@ -92,11 +92,11 @@ void mp_en_labyrinth::main_task_algorithm(void)
 	// TODO better read the data then make up...
 	reading.labyrinth_solved = true;
 	reading.path_size = 10;
-	reading.start_point_x = 0;
-	reading.start_point_y = 0;
+	reading.start_point_x = 1;
+	reading.start_point_y = 1;
 	reading.end_point_x = 8;
 	reading.end_point_y = 8;
-	int path[10] = {1, 1, 2, 0, 1, 2, 3, 3, 3, 1};
+	int path[10] = {2, 2, 2, 0, 2, 0, 2, 0, 2, 0};
 
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
@@ -105,10 +105,32 @@ void mp_en_labyrinth::main_task_algorithm(void)
 	gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 
 
-	sr_ecp_msg->message("Moving to the starting point");
+	sr_ecp_msg->message("Moving to the starting position");
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/en_labyrinth/poz_pocz.trj", 0,lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
+//	if(reading.start_point_x != 0 && reading.start_point_y != 0)
+//	{
+//		sr_ecp_msg->message("Moving to the starting point");
+//		cout << "Starting point: (" << reading.start_point_x << "," << reading.start_point_y << ")" << endl;
+//		for(int i=0; i<reading.start_point_x; ++i)
+//		{
+//			char data[64];
+//			sprintf (data, "%i %lf", RIGHT, K_MAX);
+//			set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, 0, lib::irp6p_m::ROBOT_NAME);
+//			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+//		}
+//		for(int i=0; i<reading.start_point_y; ++i)
+//		{
+//			char data[64];
+//			sprintf (data, "%i %lf", UP, K_MAX);
+//			set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, 0, lib::irp6p_m::ROBOT_NAME);
+//			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+//		}
+//	}
+
+	sr_ecp_msg->message("Moving to the ending point");
+	cout << "Ending point: (" << reading.end_point_x << "," << reading.end_point_y << ")" << endl;
 	for(int i=0; i<reading.path_size; ++i)
 	{
 		cout << "Point " << i << " is " << path[i] << endl;
@@ -118,6 +140,7 @@ void mp_en_labyrinth::main_task_algorithm(void)
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	}
 
+	sr_ecp_msg->message("Returning from the labyrinth");
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 

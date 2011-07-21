@@ -89,6 +89,8 @@ private:
 	 */
 	short int currentPeriod;
 
+	char* fileName;
+
 	void sendCommand(uint8_t command);
 	void sendData(uint8_t command, double x, double y, double z, double vx, double vy, double vz);
 
@@ -100,7 +102,7 @@ public:
 	void initiate_reading();
 	bool stop();
 	uint8_t getCommand();
-	Coordinates getFirstCoordinates();
+	Coordinates getInitalizationData();
 	Coordinates getCoordinates();
 	Coordinates getLastButOne();
 	uint8_t getMacroStepsNumber();
@@ -115,6 +117,7 @@ public:
 	void stopReceivingData();
 	double getRadius();
 	void sendStatistics(double currents_sum, double max);
+	char * const getFileName();
 };
 
 } //sensor

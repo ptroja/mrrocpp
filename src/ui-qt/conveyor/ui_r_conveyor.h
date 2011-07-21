@@ -54,7 +54,7 @@ public:
 	int synchronise();
 	int synchronise_int();
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();

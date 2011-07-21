@@ -122,8 +122,8 @@ bool g_en_lab::next_step()
 	}
 	if(direction == RIGHT)
 	{
-		trans_vect[1] = first_trans_vect[1] + k;
-		trans_vect[0] = first_trans_vect[0] + k;
+		trans_vect[0] = first_trans_vect[1] + k;
+		trans_vect[1] = first_trans_vect[0] + k;
 	}
 	if(direction == DOWN)
 	{
@@ -132,8 +132,8 @@ bool g_en_lab::next_step()
 	}
 	if(direction == LEFT)
 	{
-		trans_vect[1] = first_trans_vect[1] - k;
-		trans_vect[0] = first_trans_vect[0] - k;
+		trans_vect[0] = first_trans_vect[1] - k;
+		trans_vect[1] = first_trans_vect[0] - k;
 	}
 
 	k += 0.001;

@@ -93,7 +93,7 @@ bool Condition::checkContext(const std::string & toCheck)
 		if((*it) == "iniFile")
 		{
 			++it;
-			if(config.exists((*it).c_str())) {
+			if(config.exists(*it)) {
 				return (bool)config.value<int>(*it);
 			}
 		}

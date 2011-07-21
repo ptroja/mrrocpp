@@ -7,7 +7,7 @@
 #include <QMenuBar>
 #include <QMainWindow>
 #include <QSignalMapper>
-
+#include "mainwindow.h"
 
 
 namespace mrrocpp {
@@ -15,6 +15,8 @@ namespace ui {
 
 namespace common {
 class Interface;
+class AllRobots;
+class Mp;
 }
 }
 }

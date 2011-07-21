@@ -94,7 +94,7 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 			//one time. Loop loops until VSP has another trajectory to process.
 			while (true) {
 				//Obtain first coordinates from VSP for smooth generator.
-				coordinates = neuronSensor->getFirstCoordinates();
+				coordinates = neuronSensor->getInitalizationData();
 
 				printf("coordinates received: %f %f %f\n", coordinates.x, coordinates.y, coordinates.z);
 

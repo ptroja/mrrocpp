@@ -149,8 +149,8 @@ force::force(common::manip_effector &_master) :
 
 	sr_msg->message("force");
 
-	if (master.config.exists(lib::FORCE_SENSOR_TEST_MODE.c_str())) {
-		force_sensor_test_mode = master.config.exists_and_true(lib::FORCE_SENSOR_TEST_MODE.c_str());
+	if (master.config.exists(lib::FORCE_SENSOR_TEST_MODE)) {
+		force_sensor_test_mode = master.config.exists_and_true(lib::FORCE_SENSOR_TEST_MODE);
 	}
 
 	if (force_sensor_test_mode) {

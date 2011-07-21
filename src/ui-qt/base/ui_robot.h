@@ -69,10 +69,27 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-class Interface;
+#define CATCH_SECTION_UI_PTR catch (ecp::common::robot::ECP_main_error & e) { \
+	/* Obsluga bledow ECP */ \
+		robot->catch_ecp_main_error(e); \
+  } /*end: catch */ \
+\
+catch (ecp::common::robot::ECP_error & er) { \
+	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
+		robot->catch_ecp_error(er); \
+} /* end: catch */ \
+\
+catch(const std::exception & e){\
+	robot->catch_std_exception(e); \
+}\
+\
+catch (...) {  /* Dla zewnetrznej petli try*/ \
+	/* Wylapywanie niezdefiniowanych bledow*/ \
+		robot->catch_tridot(); \
+} /*end: catch */\
 
-typedef std::map <std::string, QDockWidget*> WndBase_t;
-typedef WndBase_t::value_type WndBase_pair_t;
+
+class Interface;
 
 //
 //
@@ -107,7 +124,7 @@ public:
 	int number_of_servos;
 	//std::string activation_string;
 
-	common::WndBase_t wndbase_m;
+	//common::WndBase_t wndbase_m;
 
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	~UiRobot();
@@ -139,8 +156,6 @@ public:
 	virtual void setup_menubar();
 	virtual int execute_clear_fault(){return 0;};
 
-	//wgt_base* getWgtByName(QString name);
-
 	virtual int	process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger){return 0;}
 	virtual double* getCurrentPos(){return NULL;}
 	virtual double* getDesiredPos(){return NULL;}
@@ -148,7 +163,7 @@ public:
 	virtual int synchronise() = 0;
 	virtual void edp_create();
 	virtual int edp_create_int();
-	virtual int create_ui_ecp_robot() = 0;
+	virtual void create_ui_ecp_robot() = 0;
 
 	void set_robot_process_control_window(wgt_robot_process_control *);
 	wgt_robot_process_control * get_wgt_robot_pc();
@@ -176,55 +191,40 @@ public:
 
 	//void
 
-
-
-
 	typedef void (UiRobot::*uiRobotFunctionPointer)();
 	typedef void (UiRobot::*uiRobotFunctionPointerInt)(int);
 	typedef int (UiRobot::*intUiRobotFunctionPointerInt)(int);
 	typedef int (UiRobot::*intUiRobotFunctionPointer)();
 
-	typedef std::map <QString, wgt_base*> wgt_t;
+	typedef std::map <std::string, wgt_base*> wgt_t;
 	typedef wgt_t::value_type wgt_pair_t;
 
-	wgt_base * getWgtMotors()
-		{
-		return wgt_motors;
-		}
-
-	wgt_base *wgt_joints;
-	wgt_base *wgt_motors;
-
-	wgt_base *wgt_angle_axis;
-	wgt_base *wgt_euler;
-	wgt_base *wgt_relative_angle_axis;
-	wgt_base *wgt_tool_angle_axis;
-	wgt_base *wgt_tool_euler;
-	wgt_base *wgt_move;
-	wgt_base *wgt_int;	//polycrank
-
-	wgt_base *wgt_command_and_status; //birdhand
-	wgt_base *wgt_configuration;//birdhand
-
-	wgt_base *wgt_inc;	//spkm
-	//wgt_spkm_int *wgt_int;
-	wgt_base *wgt_ext;
 	wgt_robot_process_control *wgt_robot_pc;
 
+	typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
 	wgt_t wgts;
 
 
-
 	bool process_control_window_created;
+
+	void zero_desired_position();
+
+	template<typename T> void add_wgt(std::string name, QString label)
+		{
+			wgt_base *created_wgt = new T(label, interface, this);
+			wgts[name] = created_wgt;
+		}
+
+	double *current_pos; // pozycja biezaca
+	double *desired_pos; // pozycja zadana
+
 
 protected:
 	QAction *EDP_Load;
 	QAction *EDP_Unload;
 	QAction *wgt_robot_process_control_action;
 
-
 	QMenu	*robot_menu;
-
 };
 
 }
