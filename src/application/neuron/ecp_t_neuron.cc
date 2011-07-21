@@ -106,9 +106,9 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 				coordinates1[0] = coordinates.x;
 				coordinates1[1] = coordinates.y;
 				coordinates1[2] = coordinates.z;
-				coordinates1[3] = 1.203;
-				coordinates1[4] = -1.447;
-				coordinates1[5] = -0.294;
+				coordinates1[3] = 0;
+				coordinates1[4] = 3.1416;
+				coordinates1[5] = 0;
 				smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 				//Interpolate trajectory and run generator.

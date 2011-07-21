@@ -183,8 +183,9 @@ bool neuron_generator::next_step()
 			for (int i=0; i<3; i++)
 				radius2 += (msr_position[i]-desired_position[i])*(msr_position[i]-desired_position[i]);
 			//time = radius / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
-			time = 2 * sqrt(radius2) / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			time = 3.0 * sqrt(radius2) / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
 			//}
+
 
 			time = std::min(std::max(MIN_TIME, time), MAX_TIME);
 
@@ -215,10 +216,6 @@ bool neuron_generator::next_step()
 	for (int i = 0; i < 3; i++) {
 		position[i] = t[0] * coeff_[i][0] + t[1] * coeff_[i][1] + t[2] * coeff_[i][2] + t[3] * coeff_[i][3] + t[4]
 				* coeff_[i][4] + t[5] * coeff_[i][5];
-	}
-	if (breaking_)
-	{
-		std::cout << "***" << position[0] << " " << position[1] << " " << position[2] << std::endl;
 	}
 	//printf("mstep : %d  setpoint: %f %f %f\n", mstep_, position[0],position[1],position[2]);
 
