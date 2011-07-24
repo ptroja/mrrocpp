@@ -5,11 +5,14 @@
 #include "wgt_spkm_inc.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
+#include "../base/ui_robot.h"
 
-wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent) :
-	wgt_base("Spkm incremental motion", _interface, parent), robot(_robot)
+
+wgt_spkm_inc::wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
+	robot = dynamic_cast<mrrocpp::ui::spkm::UiRobot *>(_robot);
 
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p0);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
@@ -46,9 +49,9 @@ wgt_spkm_inc::wgt_spkm_inc(mrrocpp::ui::common::Interface& _interface, mrrocpp::
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
-		doubleSpinBox_des_Vector[i]->setMaximum(robot.kinematic_params.upper_motor_pos_limits[i]);
-		doubleSpinBox_des_Vector[i]->setMinimum(robot.kinematic_params.lower_motor_pos_limits[i]);
+	for (int i = 0; i < robot->number_of_servos; i++) {
+		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params.upper_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params.lower_motor_pos_limits[i]);
 	}
 
 }
@@ -85,7 +88,7 @@ int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.pushButton_copy->setDisabled(_set_disabled);
 	ui.checkBox_cyclic_read->setDisabled(_set_disabled);
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
 	}
 
@@ -97,8 +100,8 @@ void wgt_spkm_inc::synchro_depended_init_slot()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
@@ -109,7 +112,7 @@ void wgt_spkm_inc::synchro_depended_init_slot()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 }
 
@@ -118,18 +121,18 @@ int wgt_spkm_inc::init()
 
 	try {
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
-				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
-				robot.ui_ecp_robot->execute_motion();
-				robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->execute_motion();
+				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
 
-				for (int i = 0; i < robot.number_of_servos; i++) {
+				for (int i = 0; i < robot->number_of_servos; i++) {
 					set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
-					robot.desired_pos[i] = robot.current_pos[i];
+					robot->desired_pos[i] = robot->current_pos[i];
 				}
 
 			} else {
@@ -139,7 +142,7 @@ int wgt_spkm_inc::init()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
@@ -147,7 +150,7 @@ int wgt_spkm_inc::init()
 int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-	lib::epos::epos_reply &er = robot.ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 
@@ -162,11 +165,11 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 
 void wgt_spkm_inc::on_pushButton_import_clicked()
 {
-	double val[robot.number_of_servos];
+	double val[robot->number_of_servos];
 
-	interface.get_main_window()->get_lineEdit_position(val, robot.number_of_servos);
+	interface.get_main_window()->get_lineEdit_position(val, robot->number_of_servos);
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_des_Vector[i]->setValue(val[i]);
 	}
 
@@ -178,7 +181,7 @@ void wgt_spkm_inc::on_pushButton_export_clicked()
 
 	buffer << "edp_spkm INCREMENTAL POSITION\n";
 
-	for (int i = 0; i < robot.number_of_servos; i++) {
+	for (int i = 0; i < robot->number_of_servos; i++) {
 		buffer << " " << doubleSpinBox_des_Vector[i]->value();
 	}
 
@@ -193,18 +196,18 @@ void wgt_spkm_inc::on_pushButton_copy_clicked()
 
 void wgt_spkm_inc::on_pushButton_stop_clicked()
 {
-	robot.execute_stop_motor();
+	robot->execute_stop_motor();
 }
 
 int wgt_spkm_inc::copy()
 {
 
-	if (robot.state.edp.pid != -1) {
-		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (robot->state.edp.pid != -1) {
+		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			synchro_depended_widgets_disable(false);
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
+			for (int i = 0; i < robot->number_of_servos; i++) {
 				doubleSpinBox_des_Vector[i]->setValue(doubleSpinBox_cur_Vector[i]->value());
 			}
 		} else {
@@ -226,101 +229,101 @@ void wgt_spkm_inc::on_pushButton_execute_clicked()
 void wgt_spkm_inc::on_pushButton_0l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[0] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_1l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[1] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_2l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[2] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_3l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[3] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_4l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[4] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_5l_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[5] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] -= ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_0r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[0] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_1r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[1] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_2r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[2] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_3r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[3] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_4r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[4] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 void wgt_spkm_inc::on_pushButton_5r_clicked()
 {
 	get_desired_position();
-	robot.desired_pos[5] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] += ui.doubleSpinBox_step->value();
 	move_it();
 }
 
 int wgt_spkm_inc::get_desired_position()
 {
 
-	if (robot.state.edp.pid != -1) {
+	if (robot->state.edp.pid != -1) {
 
-		if (robot.state.edp.is_synchronised) {
+		if (robot->state.edp.is_synchronised) {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
-				robot.desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
+			for (int i = 0; i < robot->number_of_servos; i++) {
+				robot->desired_pos[i] = doubleSpinBox_des_Vector[i]->value();
 			}
 		} else {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
-				robot.desired_pos[i] = 0.0;
+			for (int i = 0; i < robot->number_of_servos; i++) {
+				robot->desired_pos[i] = 0.0;
 			}
 		}
 	}
@@ -333,7 +336,7 @@ int wgt_spkm_inc::move_it()
 	// wychwytania ew. bledow ECP::robot
 	try {
 
-		if (robot.state.edp.pid != -1) {
+		if (robot->state.edp.pid != -1) {
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
@@ -353,19 +356,19 @@ int wgt_spkm_inc::move_it()
 				motion_variant = lib::epos::OPERATIONAL;
 			}
 
-			robot.ui_ecp_robot->move_motors(robot.desired_pos, motion_variant);
+			robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
 
-			if ((robot.state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot.state.edp.is_synchronised)
-				for (int i = 0; i < robot.number_of_servos; i++) {
-					doubleSpinBox_des_Vector[i]->setValue(robot.desired_pos[i]);
+			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
+				for (int i = 0; i < robot->number_of_servos; i++) {
+					doubleSpinBox_des_Vector[i]->setValue(robot->desired_pos[i]);
 				}
 
 				init();
 			}
-		} // end if (robot.state.edp.pid!=-1)
+		} // end if (robot->state.edp.pid!=-1)
 	} // end try
 
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }

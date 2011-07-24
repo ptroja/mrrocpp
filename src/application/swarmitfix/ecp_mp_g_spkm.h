@@ -10,7 +10,7 @@ namespace ecp_mp {
 namespace spkm {
 namespace generator {
 
-const std::string ECP_GEN_POSE = "ECP_GEN_POSE";
+const std::string ECP_GEN_POSE_LIST = "ECP_GEN_POSE_LIST";
 const std::string ECP_GEN_QUICKSTOP = "ECP_GEN_QUICKSTOP";
 
 } // namespace generator

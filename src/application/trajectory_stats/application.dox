@@ -1,0 +1,7 @@
+/** 
+
+   @defgroup stats Stats
+   @ingroup applications
+   Application for generating statistics for a given trajectory.
+  
+*/

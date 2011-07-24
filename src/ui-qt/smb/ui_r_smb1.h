@@ -35,7 +35,7 @@ public:
 
 	UiRobot(common::Interface& _interface);
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	void setup_menubar();
 
 };

@@ -12,6 +12,7 @@
 #include <QMenu>
 #include "../base/ui.h"
 #include "../base/ui_r_single_motor.h"
+#include "../irp6_m/ui_r_irp6_m.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 
 
@@ -56,7 +57,7 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();
@@ -65,14 +66,8 @@ public:
 	void setup_menubar();
 
 private:
-    QAction *actionirp6ot_tfg_Synchronization;
     QAction *actionirp6ot_tfg_Move;
-    QAction *actionirp6ot_tfg_Synchro_Position;
-    QAction *actionirp6ot_tfg_Position_0;
-    QAction *actionirp6ot_tfg_Position_1;
-    QAction *actionirp6ot_tfg_Position_2;
 
-    QMenu *menuirp6ot_tfg_Preset_Positions;
 };
 
 }

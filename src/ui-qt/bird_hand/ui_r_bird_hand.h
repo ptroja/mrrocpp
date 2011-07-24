@@ -57,7 +57,7 @@ public:
 	void null_ui_ecp_robot();
 	int synchronise();
 	void edp_create();
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
@@ -66,9 +66,12 @@ public:
 
 	void make_connection();
 
+	const static std::string WGT_COMMAND_AND_STATUS;
+	const static std::string WGT_CONFIGURATION;
+
 private:
 	QAction *actionbirdhand_Command;
-	QAction *actionbirdhand_Configuration;
+//	QAction *actionbirdhand_Configuration;
 
 };
 
