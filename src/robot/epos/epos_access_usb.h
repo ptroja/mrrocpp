@@ -84,7 +84,7 @@ public:
 	epos_access_usb(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
 
 	//! Destructor
-	~epos_access_usb();
+	virtual ~epos_access_usb();
 
 	//! Open device
 	void open();

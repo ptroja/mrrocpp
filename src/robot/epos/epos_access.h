@@ -23,7 +23,7 @@ namespace epos {
 //! all high-level methods throws this exception in case of error
 struct epos_error : virtual public std::exception, virtual public boost::exception
 {
-	~epos_error() throw ()
+	virtual ~epos_error() throw ()
 	{
 	}
 };

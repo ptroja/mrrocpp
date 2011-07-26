@@ -88,7 +88,7 @@ public:
 	epos_access_socketcan(const std::string & iface);
 
 	//! Destructor
-	~epos_access_socketcan();
+	virtual ~epos_access_socketcan();
 
 	//! Open device
 	void open();

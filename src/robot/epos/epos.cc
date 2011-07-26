@@ -689,6 +689,7 @@ void epos::changeEPOSstate(state_t state)
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
+			break;
 	}
 }
 
@@ -1192,7 +1193,7 @@ INTEGER32 epos::readTargetPosition()
 
 void epos::writeTargetPosition(INTEGER32 val)
 {
-	return WriteObjectValue(0x607a, 0x00, val);
+	WriteObjectValue(0x607a, 0x00, val);
 }
 
 /* read manufacturer device name string firmware */

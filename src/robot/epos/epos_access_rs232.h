@@ -75,7 +75,7 @@ public:
 	epos_access_rs232(const std::string & _device);
 
 	//! Destructor
-	~epos_access_rs232();
+	virtual ~epos_access_rs232();
 
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
