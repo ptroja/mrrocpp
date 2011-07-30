@@ -929,7 +929,7 @@ position</string>
      <rect>
       <x>3</x>
       <y>280</y>
-      <width>391</width>
+      <width>402</width>
       <height>91</height>
      </rect>
     </property>
@@ -1227,7 +1227,7 @@ position</string>
      <rect>
       <x>0</x>
       <y>150</y>
-      <width>392</width>
+      <width>402</width>
       <height>91</height>
      </rect>
     </property>
@@ -1509,7 +1509,7 @@ position</string>
      <rect>
       <x>0</x>
       <y>60</y>
-      <width>391</width>
+      <width>402</width>
       <height>52</height>
      </rect>
     </property>
@@ -1713,7 +1713,7 @@ position</string>
   <widget class="QPushButton" name="pushButton_execute">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>500</x>
      <y>360</y>
      <width>111</width>
      <height>27</height>
@@ -1726,20 +1726,23 @@ position</string>
   <widget class="QSpinBox" name="spinBox_query_step">
    <property name="geometry">
     <rect>
-     <x>660</x>
+     <x>280</x>
      <y>360</y>
-     <width>91</width>
+     <width>71</width>
      <height>27</height>
     </rect>
    </property>
    <property name="maximum">
     <number>10000</number>
    </property>
+   <property name="value">
+    <number>20</number>
+   </property>
   </widget>
   <widget class="QSpinBox" name="spinBox_motion_steps">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>80</x>
      <y>360</y>
      <width>91</width>
      <height>27</height>
@@ -1752,7 +1755,7 @@ position</string>
   <widget class="QPushButton" name="pushButton_read">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>370</x>
      <y>360</y>
      <width>101</width>
      <height>27</height>
@@ -1813,6 +1816,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_1</string>
        </attribute>
@@ -1824,7 +1830,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_1</string>
@@ -1888,6 +1894,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_2</string>
        </attribute>
@@ -1899,7 +1908,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_2</string>
@@ -1947,6 +1956,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_0</string>
        </attribute>
@@ -1958,7 +1970,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_0</string>
@@ -2006,6 +2018,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_2</string>
        </attribute>
@@ -2017,7 +2032,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_index_2</string>
@@ -2065,6 +2080,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_0</string>
        </attribute>
@@ -2076,7 +2094,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_0</string>
@@ -2124,6 +2142,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_thumb_0</string>
        </attribute>
@@ -2135,7 +2156,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_thumb_0</string>
@@ -2183,6 +2204,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_1</string>
        </attribute>
@@ -2194,7 +2218,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_ring_1</string>
@@ -2242,6 +2266,9 @@ position</string>
        <property name="text">
         <string/>
        </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_thumb_1</string>
        </attribute>
@@ -2253,7 +2280,7 @@ position</string>
         <string/>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <attribute name="buttonGroup">
         <string>buttonGroup_thumb_1</string>
@@ -2394,7 +2421,7 @@ position</string>
   <widget class="QLabel" name="label_27">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>10</x>
      <y>350</y>
      <width>67</width>
      <height>41</height>
@@ -2415,9 +2442,9 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="label_28">
    <property name="geometry">
     <rect>
-     <x>580</x>
+     <x>180</x>
      <y>350</y>
-     <width>67</width>
+     <width>101</width>
      <height>41</height>
     </rect>
    </property>
@@ -2426,12 +2453,78 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
+&lt;table border=&quot;0&quot; style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
 &lt;tr&gt;
 &lt;td style=&quot;border: none;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ECP query&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; step&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Query step&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;difference&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_clear_all">
+   <property name="geometry">
+    <rect>
+     <x>670</x>
+     <y>360</y>
+     <width>201</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame_11">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>360</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <item>
+     <widget class="QRadioButton" name="radioButton_all_vel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioButton_all_rel">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioButton_all_abs">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
