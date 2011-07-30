@@ -2057,7 +2057,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>366</y>
+     <y>360</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -2099,7 +2099,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>366</y>
+     <y>360</y>
      <width>71</width>
      <height>27</height>
     </rect>
@@ -2855,8 +2855,8 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>610</x>
-     <y>366</y>
-     <width>201</width>
+     <y>360</y>
+     <width>211</width>
      <height>27</height>
     </rect>
    </property>
