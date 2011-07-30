@@ -150,7 +150,6 @@ public:
 	virtual int ui_get_edp_pid() = 0;
 	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
 	virtual int manage_interface();
-	virtual void make_connections() = 0;
 	virtual void setup_menubar();
 	virtual int execute_clear_fault()
 	{

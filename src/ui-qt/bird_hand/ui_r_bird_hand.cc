@@ -140,14 +140,6 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
-//	connect(actionbirdhand_Command, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Command_triggered(mrrocpp::ui::common::UiRobot*)),			Qt::AutoCompatConnection);
-//	connect(actionbirdhand_Configuration,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Configuration_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-}
-
 void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
@@ -163,7 +155,6 @@ void UiRobot::setup_menubar()
 // 	robot_menu->addAction(actionbirdhand_Configuration);
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "&Birdhand", 0, QApplication::UnicodeUTF8));
-	make_connections();
 }
 
 void UiRobot::delete_ui_ecp_robot()

@@ -96,9 +96,7 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-}
+
 
 void UiRobot::setup_menubar()
 {
@@ -106,7 +104,6 @@ void UiRobot::setup_menubar()
 //	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
-	make_connections(); //domyślnie, jak coś będzie jeszcze do podłączenia (narazie to nic nie robi)
 }
 
 void UiRobot::delete_ui_ecp_robot()

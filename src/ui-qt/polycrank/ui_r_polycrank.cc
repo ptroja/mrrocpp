@@ -153,12 +153,6 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-//
-//	connect(actionpolycrank_Move_Joints,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-}
 
 void UiRobot::setup_menubar()
 {
@@ -175,7 +169,6 @@ void UiRobot::setup_menubar()
 	menuBar->menuRobot->addAction(robot_menu->menuAction());
 	robot_menu->setTitle(QApplication::translate("MainWindow", "Polyc&rank", 0, QApplication::UnicodeUTF8));
 
-	make_connections();
 }
 
 void UiRobot::delete_ui_ecp_robot()
