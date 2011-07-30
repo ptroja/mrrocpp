@@ -27,13 +27,7 @@
 namespace mrrocpp {
 namespace ui {
 namespace irp6p_m {
-//const std::string WGT_IRP6P_M_JOINTS = "WGT_IRP6P_M_JOINTS";
-//const std::string WGT_IRP6P_M_MOTORS = "WGT_IRP6P_M_MOTORS";
-//const std::string WGT_IRP6P_M_ANGLE_AXIS = "WGT_IRP6P_M_ANGLE_AXIS";
-//const std::string WGT_IRP6P_M_EULER = "WGT_IRP6P_M_EULER";
-//const std::string WGT_IRP6P_M_RELATIVE_ANGLE_AXIS = "WGT_IRP6P_M_RELATIVE_ANGLE_AXIS";
-//const std::string WGT_IRP6P_M_TOOL_ANGLE_AXIS = "WGT_IRP6P_M_TOOL_ANGLE_AXIS";
-//const std::string WGT_IRP6P_M_TOOL_EULER = "WGT_IRP6P_M_TOOL_EULER";
+
 //
 //
 // KLASA UiRobot
@@ -117,8 +111,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_irp6_m_tool_angle_axis>(WGT_TOOL_ANGLE_AXIS, "Irp6p_m tool angle axis");
 	add_wgt <wgt_irp6_m_tool_euler>(WGT_TOOL_EULER, "Irp6p_m tool euler");
 }
-
-
 
 void UiRobot::setup_menubar()
 {
