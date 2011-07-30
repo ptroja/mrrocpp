@@ -1,3 +1,5 @@
+#include <boost/foreach.hpp>
+
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../conveyor/ui_r_conveyor.h"
@@ -105,17 +107,21 @@ int wgt_process_control::init()
 	ui->all_reader_stop_pushButton->setDisabled(true);
 	ui->all_reader_trigger_pushButton->setDisabled(true);
 
-	// Dla irp6_on_track
+	BOOST_FOREACH(const mrrocpp::ui::common::robot_pair_t & robot_node, interface.robot_m)
+			{
 
-	interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+				if (robot_node.second->state.edp.state <= 0) { // edp wylaczone
 
-	// Dla irp6_postument
+				} else if (robot_node.second->state.edp.state == 1) { // edp wlaczone reader czeka na start
+					wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 
-	interface.robot_m[lib::irp6p_m::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+				} else if (robot_node.second->state.edp.state == 2) { // edp wlaczone reader czeka na stop
+					wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+					wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 
-	// Dla conveyor
+				}
 
-	interface.robot_m[lib::conveyor::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+			}
 
 	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {

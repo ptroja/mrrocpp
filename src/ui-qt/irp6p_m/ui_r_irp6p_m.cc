@@ -118,71 +118,13 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_irp6_m_tool_euler>(WGT_TOOL_EULER, "Irp6p_m tool euler");
 }
 
-// aktualizacja ustawien przyciskow
-int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
-{
 
-	if (state.edp.state <= 0) { // edp wylaczone
-
-	} else if (state.edp.state == 1) { // edp wlaczone reader czeka na start
-		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-
-	} else if (state.edp.state == 2) { // edp wlaczone reader czeka na stop
-		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-
-	}
-
-	state.edp.last_state = state.edp.state;
-	return 0;
-}
 
 void UiRobot::setup_menubar()
 {
 	irp6_m::UiRobot::setup_menubar();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-//
-//    actionirp6p_m_Pre_Synchro_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
-//	actionirp6p_m_Absolute_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
-//	actionirp6p_m_Joints 						= new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_JOINTS], signalDispatcher, menuBar);
-//	actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz 	= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"),wgts[WGT_EULER], signalDispatcher, menuBar);
-//	actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_ANGLE_AXIS], signalDispatcher, menuBar);
-//	actionirp6p_m_Tool_Xyz_Euler_Zyz 			= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_TOOL_EULER], signalDispatcher, menuBar);
-//	actionirp6p_m_Tool_Xyz_Angle_Axis 			= new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_TOOL_ANGLE_AXIS], signalDispatcher, menuBar);
-//	actionirp6p_m_Motors						= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
-//	actionirp6p_m_Xyz_Relative_Moves_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_RELATIVE_ANGLE_AXIS], signalDispatcher, menuBar);
-//
-//	menuirp6p_m_Pre_Synchro_Moves = new QMenu(robot_menu);
-//	menuirp6p_m_Absolute_Moves = new QMenu(robot_menu);
-//	menuirp6p_m_Relative_Moves = new QMenu(robot_menu);
-//	menuirp6p_m_Tool = new QMenu(robot_menu);
-//
-//
-//
-//
-//
-//
-//	robot_menu->addSeparator();
-//	robot_menu->addAction(menuirp6p_m_Pre_Synchro_Moves->menuAction());
-//	robot_menu->addAction(menuirp6p_m_Absolute_Moves->menuAction());
-//	robot_menu->addAction(menuirp6p_m_Relative_Moves->menuAction());
-//	robot_menu->addSeparator();
-//	robot_menu->addAction(menuirp6p_m_Tool->menuAction());
-//	menuirp6p_m_Pre_Synchro_Moves->addAction(actionirp6p_m_Pre_Synchro_Moves_Motors);
-//	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Motors);
-//	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Joints);
-//	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Xyz_Euler_Zyz);
-//	menuirp6p_m_Absolute_Moves->addAction(actionirp6p_m_Absolute_Moves_Xyz_Angle_Axis);
-//	menuirp6p_m_Relative_Moves->addAction(actionirp6p_m_Xyz_Relative_Moves_Angle_Axis);
-//	menuirp6p_m_Tool->addAction(actionirp6p_m_Tool_Xyz_Euler_Zyz);
-//	menuirp6p_m_Tool->addAction(actionirp6p_m_Tool_Xyz_Angle_Axis);
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6&p_m", 0, QApplication::UnicodeUTF8));
-//    menuirp6p_m_Pre_Synchro_Moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
-//    menuirp6p_m_Absolute_Moves->setTitle(QApplication::translate("MainWindow", "A&bsolute moves", 0, QApplication::UnicodeUTF8));
-//    menuirp6p_m_Relative_Moves->setTitle(QApplication::translate("MainWindow", "Re&lative moves", 0, QApplication::UnicodeUTF8));
-//    menuirp6p_m_Tool->setTitle(QApplication::translate("MainWindow", "&Tool", 0, QApplication::UnicodeUTF8));
 
 }
 

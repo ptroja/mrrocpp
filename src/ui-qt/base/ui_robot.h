@@ -156,10 +156,7 @@ public:
 		return 0;
 	}
 
-	virtual int process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
-	{
-		return 0;
-	}
+
 	virtual double* getCurrentPos()
 	{
 		return NULL;

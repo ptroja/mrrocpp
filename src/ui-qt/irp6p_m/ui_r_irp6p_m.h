@@ -49,8 +49,6 @@ public:
 	UiRobot(common::Interface& _interface);
 
 
-	int
-			process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	int synchronise();
 
