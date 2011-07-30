@@ -81,38 +81,26 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			//mw->enable_menu_item(false, 1, robot_menu);
+
 			break;
 		case 0:
 			mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-			//	mw->enable_menu_item(true, 1, robot_menu);
-			//	mw->enable_menu_item(true, 1, EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_bird_hand_edp_unload, ABN_mm_bird_hand_command, ABN_mm_bird_hand_configuration, NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_bird_hand, ABN_mm_bird_hand_edp_load, NULL);
-			 */
 
 			break;
 		case 1:
 		case 2:
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				//mw->enable_menu_item(false, 1, menuRobot); //??
-				//	mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-						//	mw->enable_menu_item(false, 1, EDP_Load);
-						//	block_ecp_trigger();
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-						//	mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
-						//	block_ecp_trigger();
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
@@ -120,7 +108,6 @@ int UiRobot::manage_interface()
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-						//	block_ecp_trigger();
 
 						break;
 					default:
@@ -128,7 +115,6 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				//	mw->enable_menu_item(true, 1, EDP_Unload);
 				mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
 
 			}
