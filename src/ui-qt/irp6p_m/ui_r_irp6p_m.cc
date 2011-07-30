@@ -118,14 +118,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_irp6_m_tool_euler>(WGT_TOOL_EULER, "Irp6p_m tool euler");
 }
 
-int UiRobot::manage_interface()
-{
-//	MainWindow *mw = interface.get_main_window();
-	irp6_m::UiRobot::manage_interface();
-
-	return 1;
-}
-
 // aktualizacja ustawien przyciskow
 int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
@@ -144,8 +136,6 @@ int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_proces
 	state.edp.last_state = state.edp.state;
 	return 0;
 }
-
-
 
 void UiRobot::setup_menubar()
 {
@@ -193,7 +183,6 @@ void UiRobot::setup_menubar()
 //    menuirp6p_m_Absolute_Moves->setTitle(QApplication::translate("MainWindow", "A&bsolute moves", 0, QApplication::UnicodeUTF8));
 //    menuirp6p_m_Relative_Moves->setTitle(QApplication::translate("MainWindow", "Re&lative moves", 0, QApplication::UnicodeUTF8));
 //    menuirp6p_m_Tool->setTitle(QApplication::translate("MainWindow", "&Tool", 0, QApplication::UnicodeUTF8));
-
 
 }
 

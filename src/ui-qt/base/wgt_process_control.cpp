@@ -8,7 +8,7 @@
 #include "mp.h"
 
 wgt_process_control::wgt_process_control(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Process control", _interface, parent), ui(new Ui::wgt_process_controlClass)
+		wgt_base("Process control", _interface, parent), ui(new Ui::wgt_process_controlClass)
 {
 
 	ui->setupUi(this);
@@ -107,7 +107,6 @@ int wgt_process_control::init()
 
 	// Dla irp6_on_track
 
-
 	interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
 
 	// Dla irp6_postument
@@ -195,19 +194,6 @@ int wgt_process_control::block_all_ecp_trigger_widgets()
 
 {
 
-	/* TR
-
-	 if (interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
-	 }
-	 if (interface.robot_m[lib::irp6p_m::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
-	 }
-	 if (interface.robot_m[lib::conveyor::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
-	 }
-	 */
-
 	ui->all_ecp_trigger_pushButton->setDisabled(true);
 
 	return 1;
@@ -216,19 +202,6 @@ int wgt_process_control::block_all_ecp_trigger_widgets()
 int wgt_process_control::unblock_all_ecp_trigger_widgets()
 
 {
-
-	/* TR
-
-	 if (interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
-	 }
-	 if (interface.robot_m[lib::irp6p_m::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
-	 }
-	 if (interface.robot_m[lib::conveyor::ROBOT_NAME]->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
-	 }
-	 */
 
 	ui->all_ecp_trigger_pushButton->setDisabled(false);
 	return 1;
