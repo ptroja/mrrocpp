@@ -35,20 +35,13 @@ namespace irp6_m {
 
 //
 //
-// KLASA UiRobotIrp6p_m
+// KLASA UiRobotIrp6_m
 //
 //
 
 class UiRobot : public common::UiRobot
 {
 public:
-//	double current_pos[lib::MAX_SERVOS_NR]; // pozycja biezaca
-//	double desired_pos[lib::MAX_SERVOS_NR]; // pozycja zadana
-
-	virtual void makeConnections()
-	{
-	}
-	;
 
 	common::EcpRobot *ui_ecp_robot;
 
