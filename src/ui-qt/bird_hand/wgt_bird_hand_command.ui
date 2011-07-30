@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1023</width>
-    <height>416</height>
+    <width>940</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1023</width>
-    <height>416</height>
+    <width>940</width>
+    <height>400</height>
    </size>
   </property>
   <property name="baseSize">
@@ -34,8 +34,8 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>399</x>
-     <y>-30</y>
+     <x>360</x>
+     <y>-24</y>
      <width>221</width>
      <height>391</height>
     </rect>
@@ -46,6 +46,11 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Meassured
 current</string>
@@ -57,6 +62,11 @@ current</string>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Current 
 torque</string>
@@ -68,6 +78,11 @@ torque</string>
     </item>
     <item row="0" column="2">
      <widget class="QLabel" name="label_3">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Current 
 position</string>
@@ -649,8 +664,8 @@ position</string>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>-30</y>
+     <x>590</x>
+     <y>-24</y>
      <width>240</width>
      <height>391</height>
     </rect>
@@ -661,21 +676,24 @@ position</string>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QLabel" name="label_4">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table border=&quot;0&quot; style=&quot;-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;&quot;&gt;
-&lt;tr&gt;
-&lt;td style=&quot;border: none;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Reciprocal&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;of damping&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>Reciprocal
+of damping</string>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="label_5">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Desired 
 torque</string>
@@ -687,6 +705,11 @@ torque</string>
     </item>
     <item row="0" column="2">
      <widget class="QLabel" name="label_6">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Desired
 position</string>
@@ -885,24 +908,24 @@ position</string>
     <rect>
      <x>10</x>
      <y>-20</y>
-     <width>401</width>
+     <width>371</width>
      <height>391</height>
     </rect>
    </property>
    <property name="title">
-    <string>Axis</string>
+    <string/>
    </property>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>30</y>
-      <width>61</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>thumb_f</string>
+     <string>thumb finger</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -912,13 +935,13 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>120</y>
-      <width>61</width>
+      <y>126</y>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>index_f</string>
+     <string>index finger</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -928,8 +951,8 @@ position</string>
     <property name="geometry">
      <rect>
       <x>3</x>
-      <y>280</y>
-      <width>402</width>
+      <y>286</y>
+      <width>351</width>
       <height>91</height>
      </rect>
     </property>
@@ -946,6 +969,11 @@ position</string>
      </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="checkBox_ring_0l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -956,6 +984,11 @@ position</string>
      </item>
      <item row="0" column="2">
       <widget class="QCheckBox" name="checkBox_ring_0l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -966,6 +999,11 @@ position</string>
      </item>
      <item row="0" column="3">
       <widget class="QCheckBox" name="checkBox_ring_0l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -976,6 +1014,11 @@ position</string>
      </item>
      <item row="0" column="4">
       <widget class="QCheckBox" name="checkBox_ring_0l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -986,6 +1029,11 @@ position</string>
      </item>
      <item row="0" column="5">
       <widget class="QCheckBox" name="checkBox_ring_0l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -996,6 +1044,11 @@ position</string>
      </item>
      <item row="0" column="6">
       <widget class="QCheckBox" name="checkBox_ring_0l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1006,6 +1059,11 @@ position</string>
      </item>
      <item row="0" column="7">
       <widget class="QCheckBox" name="checkBox_ring_0l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1016,6 +1074,11 @@ position</string>
      </item>
      <item row="0" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_ring_0l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1036,6 +1099,11 @@ position</string>
      </item>
      <item row="1" column="1">
       <widget class="QCheckBox" name="checkBox_ring_1l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1046,6 +1114,11 @@ position</string>
      </item>
      <item row="1" column="2">
       <widget class="QCheckBox" name="checkBox_ring_1l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1056,6 +1129,11 @@ position</string>
      </item>
      <item row="1" column="3">
       <widget class="QCheckBox" name="checkBox_ring_1l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1066,6 +1144,11 @@ position</string>
      </item>
      <item row="1" column="4">
       <widget class="QCheckBox" name="checkBox_ring_1l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1076,6 +1159,11 @@ position</string>
      </item>
      <item row="1" column="5">
       <widget class="QCheckBox" name="checkBox_ring_1l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1086,6 +1174,11 @@ position</string>
      </item>
      <item row="1" column="6">
       <widget class="QCheckBox" name="checkBox_ring_1l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1096,6 +1189,11 @@ position</string>
      </item>
      <item row="1" column="7">
       <widget class="QCheckBox" name="checkBox_ring_1l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1106,6 +1204,11 @@ position</string>
      </item>
      <item row="1" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_ring_1l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1126,6 +1229,11 @@ position</string>
      </item>
      <item row="2" column="1">
       <widget class="QCheckBox" name="checkBox_ring_2l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1136,6 +1244,11 @@ position</string>
      </item>
      <item row="2" column="2">
       <widget class="QCheckBox" name="checkBox_ring_2l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1146,6 +1259,11 @@ position</string>
      </item>
      <item row="2" column="3">
       <widget class="QCheckBox" name="checkBox_ring_2l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1156,6 +1274,11 @@ position</string>
      </item>
      <item row="2" column="4">
       <widget class="QCheckBox" name="checkBox_ring_2l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1166,6 +1289,11 @@ position</string>
      </item>
      <item row="2" column="5">
       <widget class="QCheckBox" name="checkBox_ring_2l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1176,6 +1304,11 @@ position</string>
      </item>
      <item row="2" column="6">
       <widget class="QCheckBox" name="checkBox_ring_2l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1186,6 +1319,11 @@ position</string>
      </item>
      <item row="2" column="7">
       <widget class="QCheckBox" name="checkBox_ring_2l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1196,6 +1334,11 @@ position</string>
      </item>
      <item row="2" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_ring_2l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1210,13 +1353,13 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>250</y>
-      <width>51</width>
+      <y>256</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>ring_f</string>
+     <string>ring finger</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -1226,8 +1369,8 @@ position</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>150</y>
-      <width>402</width>
+      <y>156</y>
+      <width>351</width>
       <height>91</height>
      </rect>
     </property>
@@ -1244,6 +1387,11 @@ position</string>
      </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="checkBox_index_0l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1254,6 +1402,11 @@ position</string>
      </item>
      <item row="0" column="2">
       <widget class="QCheckBox" name="checkBox_index_0l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1264,6 +1417,11 @@ position</string>
      </item>
      <item row="0" column="3">
       <widget class="QCheckBox" name="checkBox_index_0l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1274,6 +1432,11 @@ position</string>
      </item>
      <item row="0" column="4">
       <widget class="QCheckBox" name="checkBox_index_0l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1284,6 +1447,11 @@ position</string>
      </item>
      <item row="0" column="5">
       <widget class="QCheckBox" name="checkBox_index_0l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1294,6 +1462,11 @@ position</string>
      </item>
      <item row="0" column="6">
       <widget class="QCheckBox" name="checkBox_index_0l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1304,6 +1477,11 @@ position</string>
      </item>
      <item row="0" column="7">
       <widget class="QCheckBox" name="checkBox_index_0l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1314,6 +1492,11 @@ position</string>
      </item>
      <item row="0" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_index_0l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1334,6 +1517,11 @@ position</string>
      </item>
      <item row="1" column="1">
       <widget class="QCheckBox" name="checkBox_index_1l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1344,6 +1532,11 @@ position</string>
      </item>
      <item row="1" column="2">
       <widget class="QCheckBox" name="checkBox_index_1l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1354,6 +1547,11 @@ position</string>
      </item>
      <item row="1" column="3">
       <widget class="QCheckBox" name="checkBox_index_1l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1364,6 +1562,11 @@ position</string>
      </item>
      <item row="1" column="4">
       <widget class="QCheckBox" name="checkBox_index_1l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1374,6 +1577,11 @@ position</string>
      </item>
      <item row="1" column="5">
       <widget class="QCheckBox" name="checkBox_index_1l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1384,6 +1592,11 @@ position</string>
      </item>
      <item row="1" column="6">
       <widget class="QCheckBox" name="checkBox_index_1l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1394,6 +1607,11 @@ position</string>
      </item>
      <item row="1" column="7">
       <widget class="QCheckBox" name="checkBox_index_1l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1404,6 +1622,11 @@ position</string>
      </item>
      <item row="1" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_index_1l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1424,6 +1647,11 @@ position</string>
      </item>
      <item row="2" column="1">
       <widget class="QCheckBox" name="checkBox_index_2l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1434,6 +1662,11 @@ position</string>
      </item>
      <item row="2" column="2">
       <widget class="QCheckBox" name="checkBox_index_2l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1444,6 +1677,11 @@ position</string>
      </item>
      <item row="2" column="3">
       <widget class="QCheckBox" name="checkBox_index_2l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1454,6 +1692,11 @@ position</string>
      </item>
      <item row="2" column="4">
       <widget class="QCheckBox" name="checkBox_index_2l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1464,6 +1707,11 @@ position</string>
      </item>
      <item row="2" column="5">
       <widget class="QCheckBox" name="checkBox_index_2l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1474,6 +1722,11 @@ position</string>
      </item>
      <item row="2" column="6">
       <widget class="QCheckBox" name="checkBox_index_2l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1484,6 +1737,11 @@ position</string>
      </item>
      <item row="2" column="7">
       <widget class="QCheckBox" name="checkBox_index_2l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1494,6 +1752,11 @@ position</string>
      </item>
      <item row="2" column="8" colspan="2">
       <widget class="QCheckBox" name="checkBox_index_2l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1509,7 +1772,7 @@ position</string>
      <rect>
       <x>0</x>
       <y>60</y>
-      <width>402</width>
+      <width>351</width>
       <height>52</height>
      </rect>
     </property>
@@ -1526,6 +1789,11 @@ position</string>
      </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="checkBox_thumb_0l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1536,6 +1804,11 @@ position</string>
      </item>
      <item row="0" column="2">
       <widget class="QCheckBox" name="checkBox_thumb_0l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1546,6 +1819,11 @@ position</string>
      </item>
      <item row="0" column="3">
       <widget class="QCheckBox" name="checkBox_thumb_0l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1556,6 +1834,11 @@ position</string>
      </item>
      <item row="0" column="4">
       <widget class="QCheckBox" name="checkBox_thumb_0l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1566,6 +1849,11 @@ position</string>
      </item>
      <item row="0" column="5">
       <widget class="QCheckBox" name="checkBox_thumb_0l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1576,6 +1864,11 @@ position</string>
      </item>
      <item row="0" column="6">
       <widget class="QCheckBox" name="checkBox_thumb_0l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1586,6 +1879,11 @@ position</string>
      </item>
      <item row="0" column="7">
       <widget class="QCheckBox" name="checkBox_thumb_0l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1596,6 +1894,11 @@ position</string>
      </item>
      <item row="0" column="8">
       <widget class="QCheckBox" name="checkBox_thumb_0l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1606,6 +1909,11 @@ position</string>
      </item>
      <item row="1" column="1">
       <widget class="QCheckBox" name="checkBox_thumb_1l1">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l1</string>
        </property>
@@ -1616,6 +1924,11 @@ position</string>
      </item>
      <item row="1" column="2">
       <widget class="QCheckBox" name="checkBox_thumb_1l2">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l2</string>
        </property>
@@ -1626,6 +1939,11 @@ position</string>
      </item>
      <item row="1" column="3">
       <widget class="QCheckBox" name="checkBox_thumb_1l3">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l3</string>
        </property>
@@ -1636,6 +1954,11 @@ position</string>
      </item>
      <item row="1" column="4">
       <widget class="QCheckBox" name="checkBox_thumb_1l4">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l4</string>
        </property>
@@ -1646,6 +1969,11 @@ position</string>
      </item>
      <item row="1" column="5">
       <widget class="QCheckBox" name="checkBox_thumb_1l5">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l5</string>
        </property>
@@ -1656,6 +1984,11 @@ position</string>
      </item>
      <item row="1" column="6">
       <widget class="QCheckBox" name="checkBox_thumb_1l6">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l6</string>
        </property>
@@ -1666,6 +1999,11 @@ position</string>
      </item>
      <item row="1" column="7">
       <widget class="QCheckBox" name="checkBox_thumb_1l7">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l7</string>
        </property>
@@ -1676,6 +2014,11 @@ position</string>
      </item>
      <item row="1" column="8">
       <widget class="QCheckBox" name="checkBox_thumb_1l8">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>l8</string>
        </property>
@@ -1700,8 +2043,8 @@ position</string>
   <widget class="QPushButton" name="pushButton_copy">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>30</y>
+     <x>580</x>
+     <y>36</y>
      <width>21</width>
      <height>321</height>
     </rect>
@@ -1713,9 +2056,9 @@ position</string>
   <widget class="QPushButton" name="pushButton_execute">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>360</y>
-     <width>111</width>
+     <x>450</x>
+     <y>366</y>
+     <width>121</width>
      <height>27</height>
     </rect>
    </property>
@@ -1727,7 +2070,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>360</y>
+     <y>366</y>
      <width>71</width>
      <height>27</height>
     </rect>
@@ -1743,7 +2086,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>360</y>
+     <y>366</y>
      <width>91</width>
      <height>27</height>
     </rect>
@@ -1756,8 +2099,8 @@ position</string>
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>360</y>
-     <width>101</width>
+     <y>366</y>
+     <width>71</width>
      <height>27</height>
     </rect>
    </property>
@@ -1768,7 +2111,7 @@ position</string>
   <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>810</x>
      <y>-30</y>
      <width>141</width>
      <height>391</height>
@@ -1781,12 +2124,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>190</y>
+      <y>196</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_index_1_vel">
        <property name="sizePolicy">
@@ -1859,12 +2208,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>350</y>
+      <y>356</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_ring_2_vel">
        <property name="sizePolicy">
@@ -1921,12 +2276,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>160</y>
+      <y>166</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_index_0_vel">
        <property name="sizePolicy">
@@ -1983,12 +2344,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>220</y>
+      <y>226</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_index_2_vel">
        <property name="sizePolicy">
@@ -2045,12 +2412,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>290</y>
+      <y>296</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_ring_0_vel">
        <property name="sizePolicy">
@@ -2107,12 +2480,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>64</y>
+      <y>70</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_thumb_0_vel">
        <property name="sizePolicy">
@@ -2169,12 +2548,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>320</y>
+      <y>326</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_ring_1_vel">
        <property name="sizePolicy">
@@ -2231,12 +2616,18 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>90</y>
+      <y>96</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="topMargin">
+      <number>7</number>
+     </property>
+     <property name="bottomMargin">
+      <number>7</number>
+     </property>
      <item>
       <widget class="QRadioButton" name="radioButton_thumb_1_vel">
        <property name="sizePolicy">
@@ -2325,7 +2716,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>134</y>
+      <y>140</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2341,7 +2732,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>134</y>
+      <y>140</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2357,7 +2748,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>134</y>
+      <y>140</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2373,7 +2764,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>264</y>
+      <y>270</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2389,7 +2780,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>264</y>
+      <y>270</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2405,7 +2796,7 @@ position</string>
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>264</y>
+      <y>270</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -2422,7 +2813,7 @@ position</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>350</y>
+     <y>356</y>
      <width>67</width>
      <height>41</height>
     </rect>
@@ -2443,7 +2834,7 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>350</y>
+     <y>356</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -2463,8 +2854,8 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="pushButton_clear_all">
    <property name="geometry">
     <rect>
-     <x>670</x>
-     <y>360</y>
+     <x>610</x>
+     <y>366</y>
      <width>201</width>
      <height>27</height>
     </rect>
@@ -2476,13 +2867,19 @@ p, li { white-space: pre-wrap; }
   <widget class="QFrame" name="frame_11">
    <property name="geometry">
     <rect>
-     <x>910</x>
-     <y>360</y>
+     <x>830</x>
+     <y>366</y>
      <width>101</width>
      <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <property name="topMargin">
+     <number>7</number>
+    </property>
+    <property name="bottomMargin">
+     <number>7</number>
+    </property>
     <item>
      <widget class="QRadioButton" name="radioButton_all_vel">
       <property name="sizePolicy">

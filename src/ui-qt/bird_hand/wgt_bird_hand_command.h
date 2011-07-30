@@ -10,8 +10,6 @@
 #include <QDoubleSpinBox>
 #include <QButtonGroup>
 
-
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -26,30 +24,36 @@ const std::string WGT_BIRD_HAND_COMMAND = "WGT_BIRD_HAND_COMMAND";
 }
 
 namespace Ui {
-  class wgt_bird_hand_commandClass;
+class wgt_bird_hand_commandClass;
 }
 
 class wgt_bird_hand_command : public wgt_base
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
-    ~wgt_bird_hand_command();
+	explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
+	~wgt_bird_hand_command();
 
 	int get_command();
 	int set_status();
 	int copy_command();
 
-	int	get_variant_finger_command(int fingerId);
-	int	get_finger_command(int fingerId);
-	int	set_finger_status(int fingerId);
+	int get_variant_finger_command(int fingerId);
+	int get_finger_command(int fingerId);
+	int set_finger_status(int fingerId);
 
-	int	copy_finger_command(int fingerId);
+	int copy_finger_command(int fingerId);
 
-	void my_open(bool set_on_top=false);
-	virtual void add_button(QWidget *button, int row, int space){};
-	virtual void setup_ui(){};
+	void my_open(bool set_on_top = false);
+	virtual void add_button(QWidget *button, int row, int space)
+	{
+	}
+
+	virtual void setup_ui()
+	{
+	}
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_curtor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_destor_Vector;
@@ -62,8 +66,8 @@ public:
 	QVector <QButtonGroup*> checkboxButtonGroup_Vector;
 
 private:
-    Ui::wgt_bird_hand_commandClass *ui;
-    mrrocpp::ui::bird_hand::UiRobot* robot;
+	Ui::wgt_bird_hand_commandClass *ui;
+	mrrocpp::ui::bird_hand::UiRobot* robot;
 
 	QVector <lib::bird_hand::single_joint_command*> joint_command;
 	QVector <lib::bird_hand::single_joint_status*> joint_status;
@@ -82,6 +86,7 @@ private slots:
 	void on_pushButton_read_clicked();
 	void on_pushButton_execute_clicked();
 	void on_pushButton_copy_clicked();
+	void on_pushButton_clear_all_clicked();
 	void init_and_copy_slot();
 	void synchro_depended_init_slot();
 
