@@ -109,6 +109,8 @@ wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui:
 		}
 	}
 
+	current_profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+
 }
 
 wgt_bird_hand_command::~wgt_bird_hand_command()
@@ -214,6 +216,40 @@ void wgt_bird_hand_command::on_pushButton_clear_all_clicked()
 		desired_pos_spin_box[i]->setValue(0);
 		doubleSpinBox_destor_Vector[i]->setValue(0);
 		doubleSpinBox_rdamp_Vector[i]->setValue(0);
+	}
+}
+
+void wgt_bird_hand_command::on_pushButton_change_command_type_all_clicked()
+{
+
+	int button_number;
+
+	// zmien profil i przypisz kolumne przycisku do zaznaczenia
+	switch (current_profile_type)
+	{
+		case lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION:
+			current_profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+			button_number = 1;
+			break;
+		case lib::bird_hand::MACROSTEP_POSITION_INCREMENT:
+			current_profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
+			button_number = 2;
+			break;
+		case lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT:
+			current_profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
+			button_number = 0;
+			break;
+		default:
+			break;
+	}
+
+	// ustaw odpowiednie przyciski
+	for (int i = 0; i < robot->number_of_servos; i++) {
+
+		QList <QAbstractButton*> buttons_in_group = buttonGroup_Vector[i]->buttons();
+
+		buttons_in_group[button_number]->toggle();
+
 	}
 }
 

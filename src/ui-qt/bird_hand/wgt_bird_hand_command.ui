@@ -2864,64 +2864,18 @@ p, li { white-space: pre-wrap; }
     <string>Clear All</string>
    </property>
   </widget>
-  <widget class="QFrame" name="frame_11">
+  <widget class="QPushButton" name="pushButton_change_command_type_all">
    <property name="geometry">
     <rect>
      <x>830</x>
-     <y>366</y>
+     <y>360</y>
      <width>101</width>
-     <height>31</height>
+     <height>27</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_9">
-    <property name="topMargin">
-     <number>7</number>
-    </property>
-    <property name="bottomMargin">
-     <number>7</number>
-    </property>
-    <item>
-     <widget class="QRadioButton" name="radioButton_all_vel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <kerning>true</kerning>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_all_rel">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_all_abs">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Change</string>
+   </property>
   </widget>
  </widget>
  <resources/>

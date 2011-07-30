@@ -78,6 +78,8 @@ private:
 	int synchro_depended_widgets_disable(bool _set_disabled);
 	int get_desired_position();
 
+	lib::bird_hand::MOTION_VARIANT current_profile_type;
+
 signals:
 	void synchro_depended_init_signal();
 	void init_and_copy_signal();
@@ -87,6 +89,8 @@ private slots:
 	void on_pushButton_execute_clicked();
 	void on_pushButton_copy_clicked();
 	void on_pushButton_clear_all_clicked();
+	void on_pushButton_change_command_type_all_clicked();
+
 	void init_and_copy_slot();
 	void synchro_depended_init_slot();
 
