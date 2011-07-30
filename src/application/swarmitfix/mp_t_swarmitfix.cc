@@ -12,7 +12,7 @@
 #include "mp_t_swarmitfix.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "robot/epos/dp_epos.h"
+#include "robot/maxon/dp_epos.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
@@ -38,13 +38,12 @@ void swarmitfix::create_robots()
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(smb2)
-	ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(smb2)ACTIVATE_MP_ROBOT(shead1);
 	ACTIVATE_MP_ROBOT(shead2);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
@@ -70,7 +69,7 @@ void swarmitfix::main_task_algorithm(void)
 	lib::single_thread_port <int> int_port("int_port_label", port_manager);
 	lib::single_thread_port <int>* int_port_from_manager;
 
-	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
+	int_port_from_manager = port_manager.get_port <int>("int_port_label");
 
 	int_port_from_manager->data = 16;
 

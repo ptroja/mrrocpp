@@ -6,6 +6,7 @@
  */
 
 #include <cstdio>
+#include <iostream>
 
 #include "robot/canopen/gateway_epos_usb.h"
 
