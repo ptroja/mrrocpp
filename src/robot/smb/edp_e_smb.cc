@@ -28,9 +28,10 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
-		controller_state_edp_buf.is_synchronised = true;
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = false;
+	}
+//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
 
 	/*
@@ -43,7 +44,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 	 sb->send_to_SERVO_GROUP();
 	 */
-	// dla pierwszego wypelnienia current_joints
+// dla pierwszego wypelnienia current_joints
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	{
@@ -59,7 +60,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
@@ -67,6 +68,14 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+}
+
+void effector::synchronise(void)
+{
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+	}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -143,7 +152,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
 
-
 	edp_ecp_rbuffer.epos_controller[2].position = licznikaaa;
 
 	if (licznikaaa < 10) {
@@ -188,7 +196,7 @@ void effector::reply_serialization(void)
 	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
-}// namespace smb
+} // namespace smb
 } // namespace edp
 } // namespace mrrocpp
 

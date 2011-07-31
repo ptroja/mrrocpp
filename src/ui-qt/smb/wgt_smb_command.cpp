@@ -99,32 +99,31 @@ int wgt_smb_command::init()
 {
 	interface.ui_msg->message("init");
 
-	/*
-	 try {
+	try {
 
-	 if (robot->state.edp.pid != -1) {
-	 if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-	 {
-	 synchro_depended_widgets_disable(false);
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				synchro_depended_widgets_disable(false);
+				/*
+				 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				 robot->ui_ecp_robot->execute_motion();
+				 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
 
-	 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
-	 robot->ui_ecp_robot->execute_motion();
-	 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				 for (int i = 0; i < robot->number_of_servos; i++) {
+				 set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
+				 robot->desired_pos[i] = robot->current_pos[i];
+				 }
+				 */
+			} else {
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
+				synchro_depended_widgets_disable(true);
+			}
+		}
 
-	 for (int i = 0; i < robot->number_of_servos; i++) {
-	 set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
-	 robot->desired_pos[i] = robot->current_pos[i];
-	 }
+	} // end try
+	CATCH_SECTION_UI_PTR
 
-	 } else {
-	 // Wygaszanie elementow przy niezsynchronizowanym robocie
-	 synchro_depended_widgets_disable(true);
-	 }
-	 }
-
-	 } // end try
-	 CATCH_SECTION_UI_PTR
-	 */
 	return 1;
 }
 
@@ -143,7 +142,6 @@ int wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 
 void wgt_smb_command::timer_slot()
 {
-
 	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();
 	}
@@ -196,7 +194,18 @@ void wgt_smb_command::on_pushButton_ms_left_clicked()
 {
 
 }
+
 void wgt_smb_command::on_pushButton_ms_rigth_clicked()
 {
 
 }
+
+// events
+
+void wgt_smb_command::showEvent ( QShowEvent * event )
+{
+//	emit gotFocus();
+
+	init();
+}
+

@@ -46,6 +46,8 @@ public:
 
 	void synchro_depended_init();
 
+	void showEvent(QShowEvent * event);
+
 private:
 	Ui::wgt_smb_commandClass ui;
 	mrrocpp::ui::smb::UiRobot* robot;

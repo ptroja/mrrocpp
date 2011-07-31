@@ -52,6 +52,8 @@ private:
 
 	QTimer *timer;
 
+	void showEvent(QShowEvent * event);
+
 signals:
 	void synchro_depended_init_signal();
 

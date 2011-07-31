@@ -71,6 +71,13 @@ public:
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
+	 * @brief motors synchronization
+	 *
+	 * This method synchronizes motors of the robots.
+	 */
+	void synchronise();
+
+	/*!
 	 * \brief method to choose master_order variant
 	 *
 	 * IHere the single thread variant is chosen
@@ -96,6 +103,5 @@ public:
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif
