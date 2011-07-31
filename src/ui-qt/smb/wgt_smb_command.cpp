@@ -117,11 +117,16 @@ int wgt_smb_command::init()
 				lib::smb::multi_leg_reply_td &mlr =
 						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
 
+				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					bool up_state = mlr.leg[i].is_up;
-					bool down_state = mlr.leg[i].is_down;
-					checkBox_fl_up_Vector[i]->setChecked(up_state);
-					checkBox_fl_down_Vector[i]->setChecked(down_state);
+					checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
+					checkBox_fl_down_Vector[i]->setChecked(mlr.leg[i].is_down);
+				}
+
+				for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+					checkBox_m_mip_Vector[i]->setChecked(er.epos_controller[i].motion_in_progress);
+					doubleSpinBox_m_current_position_Vector[i]->setValue(er.epos_controller[i].position);
 				}
 
 			} else {
@@ -183,12 +188,12 @@ void wgt_smb_command::on_pushButton_read_clicked()
 
 void wgt_smb_command::on_pushButton_ml_copy_clicked()
 {
-
+	ui.doubleSpinBox_ml_absolute->setValue(ui.doubleSpinBox_ml_current_position->value());
 }
 
 void wgt_smb_command::on_pushButton_ms_copy_clicked()
 {
-
+	ui.doubleSpinBox_ms_absolute->setValue(ui.doubleSpinBox_ms_current_position->value());
 }
 
 void wgt_smb_command::on_pushButton_ml_left_clicked()

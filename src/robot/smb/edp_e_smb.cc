@@ -152,7 +152,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
 
-	edp_ecp_rbuffer.epos_controller[2].position = licznikaaa;
+	edp_ecp_rbuffer.epos_controller[1].position = licznikaaa;
 
 	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_down = true;
 	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_up = false;
