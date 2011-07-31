@@ -75,7 +75,8 @@ struct leg_reply
 enum PIN_INSERTION
 {
 	INSERT, WITHDRAWN, PIN_INSERTION_NO_ACTION
-}; // namespace mrrocpp
+};
+// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base pin locking command
@@ -84,7 +85,8 @@ enum PIN_INSERTION
 enum PIN_LOCKING
 {
 	CLAMB, UNCLAMB, PIN_LOCKING_NO_ACTION
-}; // namespace mrrocpp
+};
+// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin insertion command

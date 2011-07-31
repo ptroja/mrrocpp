@@ -76,23 +76,23 @@ void wgt_smb_command::synchro_depended_init()
 
 void wgt_smb_command::synchro_depended_init_slot()
 {
-	/*
-	 try {
 
-	 if (robot->state.edp.pid != -1) {
-	 if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-	 {
-	 synchro_depended_widgets_disable(false);
+	try {
 
-	 } else {
-	 // Wygaszanie elementow przy niezsynchronizowanym robocie
-	 synchro_depended_widgets_disable(true);
-	 }
-	 }
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+			{
+				synchro_depended_widgets_disable(false);
 
-	 } // end try
-	 CATCH_SECTION_UI_PTR
-	 */
+			} else {
+				// Wygaszanie elementow przy niezsynchronizowanym robocie
+				synchro_depended_widgets_disable(true);
+			}
+		}
+
+	} // end try
+	CATCH_SECTION_UI_PTR
+
 }
 
 int wgt_smb_command::init()
@@ -130,16 +130,14 @@ int wgt_smb_command::init()
 
 int wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
-	/*
-	 ui.pushButton_execute->setDisabled(_set_disabled);
-	 ui.pushButton_read->setDisabled(_set_disabled);
-	 ui.pushButton_copy->setDisabled(_set_disabled);
-	 ui.checkBox_cyclic_read->setDisabled(_set_disabled);
 
-	 for (int i = 0; i < robot->number_of_servos; i++) {
-	 doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
-	 }
-	 */
+	ui.pushButton_m_execute->setDisabled(_set_disabled);
+
+	for (int i = 0; i < robot->number_of_servos; i++) {
+		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
+
+	}
+
 	return 1;
 }
 
