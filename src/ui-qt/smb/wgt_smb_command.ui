@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>393</height>
+    <width>574</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -889,14 +889,14 @@ E</string>
             <item>
              <widget class="QLabel" name="label_7">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                 <horstretch>40</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>50</width>
                 <height>0</height>
                </size>
               </property>
@@ -922,7 +922,7 @@ E</string>
              <widget class="QWidget" name="widget_3" native="true">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>140</width>
                 <height>0</height>
                </size>
               </property>
@@ -986,10 +986,26 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>10</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QWidget" name="widget_4" native="true">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>235</width>
                 <height>0</height>
                </size>
               </property>
@@ -1077,7 +1093,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>50</width>
                 <height>0</height>
                </size>
               </property>
@@ -1103,7 +1119,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_17">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>140</width>
                 <height>0</height>
                </size>
               </property>
@@ -1169,7 +1185,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_18">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>225</width>
                 <height>0</height>
                </size>
               </property>
@@ -1256,7 +1272,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="minimumSize">
                <size>
-                <width>40</width>
+                <width>50</width>
                 <height>0</height>
                </size>
               </property>
@@ -1282,7 +1298,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_23">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>140</width>
                 <height>0</height>
                </size>
               </property>
@@ -1348,7 +1364,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_24">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>225</width>
                 <height>0</height>
                </size>
               </property>
