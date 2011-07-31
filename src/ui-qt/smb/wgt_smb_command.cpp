@@ -112,12 +112,18 @@ int wgt_smb_command::init()
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
 				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
 
-				/*
-				 for (int i = 0; i < robot->number_of_servos; i++) {
-				 set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
-				 robot->desired_pos[i] = robot->current_pos[i];
-				 }
-				 */
+				// sets leg state
+
+				lib::smb::multi_leg_reply_td &mlr =
+						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
+
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+					bool up_state = mlr.leg[i].is_up;
+					bool down_state = mlr.leg[i].is_down;
+					checkBox_fl_up_Vector[i]->setChecked(up_state);
+					checkBox_fl_down_Vector[i]->setChecked(down_state);
+				}
+
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
 				synchro_depended_widgets_disable(true);
