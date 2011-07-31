@@ -105,11 +105,14 @@ int wgt_smb_command::init()
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
-				/*
-				 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
-				 robot->ui_ecp_robot->execute_motion();
-				 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
 
+				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->execute_motion();
+				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
+				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+
+				/*
 				 for (int i = 0; i < robot->number_of_servos; i++) {
 				 set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
 				 robot->desired_pos[i] = robot->current_pos[i];

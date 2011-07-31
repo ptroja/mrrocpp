@@ -30,6 +30,18 @@ protected:
 	void create_kinematic_models_for_given_robot(void);
 
 	/**
+	 * @brief EDP command buffer
+	 */
+	lib::smb::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
+	lib::smb::rbuffer edp_ecp_rbuffer;
+
+public:
+
+	/**
 	 * @brief epos cubic motion command data port
 	 */
 	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
@@ -59,17 +71,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::smb::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::smb::rbuffer edp_ecp_rbuffer;
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

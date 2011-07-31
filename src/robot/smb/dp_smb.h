@@ -62,10 +62,8 @@ struct mp_to_ecp_parameters
  */
 struct leg_reply
 {
-	bool is_inserted;
-	bool is_locked;
-	bool insertion_in_progress;
-	bool locking_in_progress;
+	bool is_up;
+	bool is_down;
 }__attribute__((__packed__));
 
 /*!

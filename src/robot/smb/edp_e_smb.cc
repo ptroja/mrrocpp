@@ -154,16 +154,25 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	edp_ecp_rbuffer.epos_controller[2].position = licznikaaa;
 
+	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_down = true;
+	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_up = false;
+	edp_ecp_rbuffer.multi_leg_reply.leg[2].is_down = true;
+	edp_ecp_rbuffer.multi_leg_reply.leg[2].is_up = false;
+
 	if (licznikaaa < 10) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < number_of_servos; i++) {
 			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
 		}
-
+		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
+		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = false;
 	} else {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < number_of_servos; i++) {
 			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 		}
+		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
+		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = true;
 	}
+
 	licznikaaa++;
 
 	reply.servo_step = step_counter;

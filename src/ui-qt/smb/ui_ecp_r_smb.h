@@ -24,7 +24,7 @@ class Interface;
 namespace smb {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobotDataPort
+class EcpRobot : public common::_EcpRobotDataPort <ecp::smb::robot>
 {
 
 public:
