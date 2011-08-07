@@ -45,6 +45,9 @@ int main(int argc, char *argv[])
 	interface->init();
 	int r = a.exec();
 
+//	std::cerr << "main: delete interface" << std::endl;
+	delete interface;
+
 	// interface->UI_close();
 
 	return r;

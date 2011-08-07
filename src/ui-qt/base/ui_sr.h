@@ -26,11 +26,13 @@ private:
 	Interface& interface;
 	boost::thread thread_id;
 	boost::circular_buffer <lib::sr_package_t> cb;
+	boost::circular_buffer <lib::sr_package_t> cb_inter;
 	boost::mutex mtx;
 
-	static const int UI_SR_BUFFER_LENGHT = 50;
-
 public:
+
+	static const int UI_SR_BUFFER_LENGHT = 200;
+
 	lib::condition_synchroniser thread_started;
 	sr_buffer(Interface& _interface);
 
@@ -41,7 +43,14 @@ public:
 
 	void put_one_msg(const lib::sr_package_t& new_msg); // podniesienie semafora
 	void get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
+	void inter_get_one_msg(lib::sr_package_t& new_msg); // podniesienie semafora
+
 	bool buffer_empty(); // czy bufor cykliczny jest pusty
+	bool inter_buffer_empty(); // czy bufor cykliczny jest pusty
+
+	void copy_buffers();
+	void clear_buffer();
+
 };
 
 }

@@ -1,6 +1,7 @@
 #include "wgt_choose_option.h"
 #include "../interface.h"
 #include "../ui_ecp.h"
+#include <QHideEvent>
 
 wgt_choose_option::wgt_choose_option(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 	wgt_base("Choose Option Dialog", _interface, parent), ui(new Ui::wgt_choose_optionClass)

@@ -2,15 +2,22 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
+
 #include "ui_r_irp6p_tfg.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../base/interface.h"
 
-#include "../base/mainwindow.h"
-#include "ui_mainwindow.h"
 
 #include "../base/wgt_single_motor_move.h"
+
+#include "../base/mainwindow.h"
+#include "ui_mainwindow.h"
+#include "../base/signal_dispatcher.h"
+
+#include "../base/menu_bar.h"
+#include "../base/menu_bar_action.h"
+#include "../base/mp.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -33,16 +40,16 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::common::EcpRobot(*this);
-	return 1;
+//	return 1;
 
 }
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_move->synchro_depended_init();
+	wgts[WGT_IRP6P_TFG_MOVE]->synchro_depended_init();
 	return 1;
 }
 
@@ -124,8 +131,8 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_move->synchro_depended_init();
-	wgt_move->init_and_copy();
+	wgts[WGT_IRP6P_TFG_MOVE]->synchro_depended_init();
+	wgts[WGT_IRP6P_TFG_MOVE]->init_and_copy();
 	return 1;
 
 }
@@ -134,69 +141,49 @@ UiRobot::UiRobot(common::Interface& _interface) :
 			single_motor::UiRobot(_interface, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS)
 
 {
-
-	wgt_move = new wgt_single_motor_move("Irp6p_tfg moves", interface, *this, interface.get_main_window());
-	wndbase_m[WGT_IRP6P_TFG_MOVE] = wgt_move->dwgt;
+	add_wgt<wgt_single_motor_move> (WGT_IRP6P_TFG_MOVE, "Irp6p_tfg moves");
+//	wndbase_m[WGT_IRP6P_TFG_MOVE] = wgts[WGT_IRP6P_TFG_MOVE]->dwgt;
 
 }
 
 int UiRobot::manage_interface()
 {
-
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
+	single_motor::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuIrp6p_tfg);
 
 			break;
 		case 0:
-			mw->enable_menu_item(false, 3, ui->actionirp6p_tfg_EDP_Unload, ui->actionirp6p_tfg_Synchronization, ui->actionirp6p_tfg_Move);
-			mw->enable_menu_item(false, 1, ui->menuirp6p_tfg_Preset_Positions);
-			mw->enable_menu_item(true, 1, ui->menuIrp6p_tfg);
-			mw->enable_menu_item(true, 1, ui->actionirp6p_tfg_EDP_Load);
-
+			mw->enable_menu_item(false, 1, actionirp6p_tfg_Move);
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuIrp6p_tfg);
-
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_Synchronization);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
 
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, ui->actionirp6p_tfg_EDP_Unload, ui->actionirp6p_tfg_Move);
-						mw->enable_menu_item(true, 1, ui->menuirp6p_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_EDP_Load);
-
+						mw->enable_menu_item(true, 1, actionirp6p_tfg_Move);
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, ui->actionirp6p_tfg_Move);
-						mw->enable_menu_item(true, 1, ui->menuirp6p_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 2, ui->actionirp6p_tfg_EDP_Load, ui->actionirp6p_tfg_EDP_Unload);
-
+						mw->enable_menu_item(true, 1, actionirp6p_tfg_Move);
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, ui->menuirp6p_tfg_Preset_Positions);
-						mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_Move);
-
+						mw->enable_menu_item(false, 1, actionirp6p_tfg_Move);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, ui->actionirp6p_tfg_EDP_Unload, ui->actionirp6p_tfg_Synchronization, ui->actionirp6p_tfg_Move);
-				mw->enable_menu_item(false, 1, ui->actionirp6p_tfg_EDP_Load);
-
+				mw->enable_menu_item(true, 1, actionirp6p_tfg_Move);
 			}
 			break;
 		default:
@@ -204,6 +191,34 @@ int UiRobot::manage_interface()
 	}
 
 	return 1;
+}
+
+
+void UiRobot::make_connections()
+{
+//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+//	connect(actionirp6p_tfg_Synchronization,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
+////	connect(actionirp6p_tfg_Move, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
+//	connect(actionirp6p_tfg_Synchro_Position,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)),signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+//	connect(actionirp6p_tfg_Position_0, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+//	connect(actionirp6p_tfg_Position_1, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+//	connect(actionirp6p_tfg_Position_2, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
+}
+
+
+void UiRobot::setup_menubar()
+{
+	single_motor::UiRobot::setup_menubar();
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+    actionirp6p_tfg_Move 			= new Ui::MenuBarAction(QString("&Move"), wgts[WGT_IRP6P_TFG_MOVE], signalDispatcher, menuBar);
+
+	robot_menu->addAction(actionirp6p_tfg_Move);
+
+    robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6p_tf&G", 0, QApplication::UnicodeUTF8));
+    make_connections();
 }
 
 }
