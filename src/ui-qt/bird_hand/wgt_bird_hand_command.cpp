@@ -10,19 +10,18 @@
 
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
-
+#include "../base/ui_robot.h"
 #include <QAbstractButton>
 #include <QCheckBox>
 
 
-wgt_bird_hand_command::wgt_bird_hand_command(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::bird_hand::UiRobot& _robot, QWidget *parent) :
-    wgt_base("Bird hand incremental motion", _interface, parent),
-    ui(new Ui::wgt_bird_hand_commandClass()),
-    robot(_robot)
-
+wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+	wgt_base(_widget_label, _interface, _robot, parent),
+    ui(new Ui::wgt_bird_hand_commandClass())
 {
 	//ui = new Ui::wgt_bird_hand_commandClass::wgt_bird_hand_commandClass();
     ui->setupUi(this);
+	robot = dynamic_cast<mrrocpp::ui::bird_hand::UiRobot *>(_robot);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
@@ -36,14 +35,14 @@ wgt_bird_hand_command::wgt_bird_hand_command(mrrocpp::ui::common::Interface& _in
     doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_1);
     doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_2);
 
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_2);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_2);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_2);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_0);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_1);
+    desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_2);
 
     doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_0);
     doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_1);
@@ -99,7 +98,7 @@ wgt_bird_hand_command::wgt_bird_hand_command(mrrocpp::ui::common::Interface& _in
     checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_1);
     checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_2);
 
-    for(int i=0; i<robot.number_of_servos; i++)
+    for(int i=0; i<robot->number_of_servos; i++)
     {
     	checkboxButtonGroup_Vector[i]->setExclusive(false);
 
@@ -122,9 +121,9 @@ wgt_bird_hand_command::~wgt_bird_hand_command()
 }
 
 
-void wgt_bird_hand_command::my_open()
+void wgt_bird_hand_command::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 
@@ -162,7 +161,7 @@ void wgt_bird_hand_command::init()
 {
 	try {
 
-		mrrocpp::lib::bird_hand::status &bhsrs = robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
+		mrrocpp::lib::bird_hand::status &bhsrs = robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	    joint_status.append(&bhsrs.thumb_f[0]);
 	    joint_status.append(&bhsrs.thumb_f[1]);
@@ -173,7 +172,7 @@ void wgt_bird_hand_command::init()
 	    joint_status.append(&bhsrs.ring_f[1]);
 	    joint_status.append(&bhsrs.ring_f[2]);
 
-	    mrrocpp::lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
+	    mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
 
 	    joint_command.append(&bhcs.thumb_f[0]);
 	    joint_command.append(&bhcs.thumb_f[1]);
@@ -184,14 +183,14 @@ void wgt_bird_hand_command::init()
 	    joint_command.append(&bhcs.ring_f[1]);
 	    joint_command.append(&bhcs.ring_f[2]);
 
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+		if (robot->state.edp.pid != -1) {
+			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
 
-//				robot.ui_ecp_robot-> ;// co tutaj ma być?
+//				robot->ui_ecp_robot-> ;// co tutaj ma być?
 
-				for (int i = 0; i < robot.number_of_servos; i++) {
+				for (int i = 0; i < robot->number_of_servos; i++) {
 					doubleSpinBox_curpos_Vector[i]->setValue(joint_status[i]->meassured_position);
 
 				}
@@ -204,7 +203,7 @@ void wgt_bird_hand_command::init()
 		}
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 
 }
@@ -226,16 +225,16 @@ int wgt_bird_hand_command::get_command()
 {
 	try {
 
-		//lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
+		//lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
 
-		mrrocpp::lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
+		mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
 
 		// odczyt ilosci krokow i ecp_query step
 
 		bhcs.motion_steps = ui->spinBox_motion_steps->value();
 		bhcs.ecp_query_step = ui->spinBox_query_step->value();
 
-	    for(int i=0; i<robot.number_of_servos; i++)
+	    for(int i=0; i<robot->number_of_servos; i++)
 	    {
 	    	get_finger_command(i);
 	    	get_variant_finger_command(i);
@@ -255,11 +254,11 @@ int wgt_bird_hand_command::get_command()
 
 		 interface.ui_msg->message(ss.str().c_str());
 		 */
-		robot.ui_ecp_robot->bird_hand_command_data_port->set();
-		robot.ui_ecp_robot->execute_motion();
+		robot->ui_ecp_robot->bird_hand_command_data_port->set();
+		robot->ui_ecp_robot->execute_motion();
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
@@ -268,33 +267,33 @@ int wgt_bird_hand_command::set_status()
 {
 	try
 	{
-		if (robot.state.edp.pid != -1)
+		if (robot->state.edp.pid != -1)
 		{
-			robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
-			robot.ui_ecp_robot->execute_motion();
-			robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->get();
+			robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+			robot->ui_ecp_robot->execute_motion();
+			robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->get();
 
-			if (robot.state.edp.is_synchronised)
-						for(int i=0; i<robot.number_of_servos; i++)
+			if (robot->state.edp.is_synchronised)
+						for(int i=0; i<robot->number_of_servos; i++)
 						{
 							set_finger_status(i);
 						}
 			init();
 		}
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
 
 int wgt_bird_hand_command::copy_command()
 {
-	if (robot.state.edp.pid != -1) {
-		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (robot->state.edp.pid != -1) {
+		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			ui->pushButton_execute->setDisabled(false);
 
-			for(int i=0; i<robot.number_of_servos; i++)
+			for(int i=0; i<robot->number_of_servos; i++)
 			{
 				get_variant_finger_command(i);
 				copy_finger_command(i);
@@ -319,17 +318,17 @@ void wgt_bird_hand_command::on_pushButton_execute_clicked()
 int wgt_bird_hand_command::get_desired_position()
 {
 
-	if (robot.state.edp.pid != -1) {
+	if (robot->state.edp.pid != -1) {
 
-		if (robot.state.edp.is_synchronised) {
+		if (robot->state.edp.is_synchronised) {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
-			//	robot.desired_pos[i] = doubleSpinBox_despos_Vector[i]->value(); //co tu ma być?
-				joint_command[i]->desired_position = doubleSpinBox_despos_Vector[i]->value();
+			for (int i = 0; i < robot->number_of_servos; i++) {
+			//	robot->desired_pos[i] = desired_pos_spin_box[i]->value(); //co tu ma być?
+				joint_command[i]->desired_position = desired_pos_spin_box[i]->value();
 			}
 		} else {
 
-			for (int i = 0; i < robot.number_of_servos; i++) {
+			for (int i = 0; i < robot->number_of_servos; i++) {
 				joint_command[i]->desired_position = 0.0;
 			}
 		}
@@ -368,7 +367,7 @@ int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
 
 int wgt_bird_hand_command::get_finger_command(int fingerId)
 {
-	joint_command[fingerId]->desired_position = doubleSpinBox_despos_Vector[fingerId]->value();
+	joint_command[fingerId]->desired_position = desired_pos_spin_box[fingerId]->value();
 	joint_command[fingerId]->desired_torque = doubleSpinBox_destor_Vector[fingerId]->value();
 	joint_command[fingerId]->reciprocal_of_damping = doubleSpinBox_rdamp_Vector[fingerId]->value();
 
@@ -438,7 +437,7 @@ int wgt_bird_hand_command::copy_finger_command(int fingerId)
 {
 
 	if (joint_command[fingerId]->profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION)
-		doubleSpinBox_despos_Vector[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
+		desired_pos_spin_box[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
 
 	return 1;
 }

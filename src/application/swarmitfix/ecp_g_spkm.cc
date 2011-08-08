@@ -1,7 +1,5 @@
 /*
- * generator/ecp_g_epos.cc
- *
- *Author: yoyek
+ * Author: Piotr Trojanek
  */
 
 #include "base/lib/sr/sr_ecp.h"
@@ -21,7 +19,6 @@ namespace generator {
 //
 //
 //
-
 
 //constructor with parameters: task and time to sleep [s]
 spkm_pose::spkm_pose(task_t & _ecp_task) :
@@ -113,7 +110,6 @@ bool spkm_pose::next_step()
 //
 //
 
-
 spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
 	generator_t(_ecp_task)
 {
@@ -130,9 +126,7 @@ bool spkm_quickstop::first_step()
 
 bool spkm_quickstop::next_step()
 {
-
 	return true;
-
 }
 
 } // namespace generator

@@ -14,6 +14,13 @@
 #include "../base/mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "../base/signal_dispatcher.h"
+
+#include "../base/menu_bar.h"
+#include "../base/menu_bar_action.h"
+#include "../base/mp.h"
+
+
 namespace mrrocpp {
 namespace ui {
 namespace spkm {
@@ -25,19 +32,15 @@ namespace spkm {
 //
 
 
-UiRobot::UiRobot(common::Interface& _interface) :
-	common::UiRobot(_interface, lib::spkm::ROBOT_NAME, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
+	common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-
-	wgt_inc = new wgt_spkm_inc(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
-
-	wgt_int = new wgt_spkm_int(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_INT] = wgt_int->dwgt;
-
-	wgt_ext = new wgt_spkm_ext(interface, *this, interface.get_main_window());
-	wndbase_m[WGT_SPKM_EXT] = wgt_ext->dwgt;
-
+	add_wgt<wgt_spkm_inc>	(WGT_SPKM_INC, "Spkm inc");
+	add_wgt<wgt_spkm_int>	(WGT_SPKM_INT, "Spkm int");
+	add_wgt<wgt_spkm_ext>	(WGT_SPKM_EXT, "Spkm ext");
+//	wndbase_m[WGT_SPKM_INC] = wgts[WGT_SPKM_INC]->dwgt;
+//	wndbase_m[WGT_SPKM_INT] = wgts[WGT_SPKM_INT]->dwgt;
+//	wndbase_m[WGT_SPKM_EXT] = wgts[WGT_SPKM_EXT]->dwgt;
 }
 
 int UiRobot::ui_get_edp_pid()
@@ -51,15 +54,9 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
-{
-	ui_ecp_robot = new ui::spkm::EcpRobot(*this);
-	return 1;
-}
-
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_inc->synchro_depended_init();
+	wgts[WGT_SPKM_INC]->synchro_depended_init();
 	return 1;
 }
 
@@ -95,7 +92,7 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_inc->synchro_depended_init();
+	wgts[WGT_SPKM_INC]->synchro_depended_init();
 
 	return 1;
 
@@ -104,55 +101,58 @@ int UiRobot::synchronise_int()
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MainWindow *ui = mw->get_ui();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, ui->menuSpkm);
+			mw->enable_menu_item(false, 1, robot_menu);
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Unload);
-			mw->enable_menu_item(false, 1, ui->actionspkm_Clear_Fault);
-			mw->enable_menu_item(false, 3, ui->menuspkm_Pre_synchro_moves, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
-			mw->enable_menu_item(true, 1, ui->menuSpkm);
-			mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Load);
+			mw->enable_menu_item(false, 1, EDP_Unload);
+			mw->enable_menu_item(false, 1, actionspkm_Clear_Fault);
+			mw->enable_menu_item(false, 3, menuspkm_Pre_synchro_moves, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
+			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, ui->menuSpkm);
-			mw->enable_menu_item(true, 1, ui->actionspkm_Clear_Fault);
+			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, actionspkm_Clear_Fault);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, ui->menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(true, 1, ui->menuall_Preset_Positions);
-				switch (interface.mp.state)
+				mw->enable_menu_item(false, 1, menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
-						mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload); //???
-						mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
+						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
+						mw->enable_menu_item(true, 1, EDP_Unload); //???
+						mw->enable_menu_item(false, 1, EDP_Load);
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);//???
-						mw->enable_menu_item(false, 2, ui->actionspkm_EDP_Load, ui->actionspkm_EDP_Unload);
-
+						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);//???
+						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
+						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
+						unblock_ecp_trigger();
+						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, ui->menuspkm_Preset_positions, ui->menuspkm_Post_synchro_moves);
+						mw->enable_menu_item(false, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
+						block_ecp_trigger();
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, ui->actionspkm_EDP_Unload);
-				mw->enable_menu_item(true, 1, ui->menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(false, 1, ui->actionspkm_EDP_Load);
+				mw->enable_menu_item(true, 1, EDP_Unload);
+				mw->enable_menu_item(true, 1, menuspkm_Pre_synchro_moves);
+				mw->enable_menu_item(false, 1, EDP_Load);
 			}
 			break;
 		default:
@@ -160,6 +160,66 @@ int UiRobot::manage_interface()
 	}
 
 	return 1;
+}
+
+void UiRobot::make_connections()
+{
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+	connect(actionspkm_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Synchro_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Front_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_0, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_1, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Position_2, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(actionspkm_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+}
+
+void UiRobot::setup_menubar()
+{
+	common::UiRobot::setup_menubar();
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+
+	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
+	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
+	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
+	actionspkm_Joints = new Ui::MenuBarAction(QString("&JOINTS"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
+	actionspkm_External = new Ui::MenuBarAction(QString("&External"), wgts[WGT_SPKM_EXT], signalDispatcher, menuBar);
+	actionspkm_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
+	actionspkm_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
+	actionspkm_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
+	actionspkm_Position_1 = new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
+	actionspkm_Position_2 = new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
+	actionspkm_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
+
+	menuspkm_Pre_synchro_moves = new QMenu(robot_menu);
+	menuspkm_Post_synchro_moves = new QMenu(robot_menu);
+	menuspkm_Preset_positions = new QMenu(robot_menu);
+
+	robot_menu->addSeparator();
+	robot_menu->addAction(menuspkm_Pre_synchro_moves->menuAction());
+	robot_menu->addAction(menuspkm_Post_synchro_moves->menuAction());
+	robot_menu->addAction(menuspkm_Preset_positions->menuAction());
+	robot_menu->addSeparator();
+	robot_menu->addAction(actionspkm_Clear_Fault);
+	menuspkm_Pre_synchro_moves->addAction(actionspkm_Synchronisation);
+	menuspkm_Pre_synchro_moves->addAction(actionspkm_Motors);
+	menuspkm_Post_synchro_moves->addAction(actionspkm_Motors_post);
+	menuspkm_Post_synchro_moves->addAction(actionspkm_Joints);
+	menuspkm_Post_synchro_moves->addAction(actionspkm_External);
+	menuspkm_Preset_positions->addAction(actionspkm_Synchro_Position);
+	menuspkm_Preset_positions->addAction(actionspkm_Front_Position);
+	menuspkm_Preset_positions->addAction(actionspkm_Position_0);
+	menuspkm_Preset_positions->addAction(actionspkm_Position_1);
+	menuspkm_Preset_positions->addAction(actionspkm_Position_2);
+
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Sp&km", 0, QApplication::UnicodeUTF8));
+	menuspkm_Pre_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&re Synchro Moves", 0, QApplication::UnicodeUTF8));
+	menuspkm_Post_synchro_moves->setTitle(QApplication::translate("MainWindow", "P&ost Synchro Moves", 0, QApplication::UnicodeUTF8));
+	menuspkm_Preset_positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
+
+	make_connections();
 }
 
 void UiRobot::delete_ui_ecp_robot()

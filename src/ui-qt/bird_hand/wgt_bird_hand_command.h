@@ -16,6 +16,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace bird_hand {
 class UiRobot;
@@ -33,7 +34,7 @@ class wgt_bird_hand_command : public wgt_base
     Q_OBJECT
 
 public:
-    explicit wgt_bird_hand_command(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::bird_hand::UiRobot& _robot, QWidget *parent = 0);
+    explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
     ~wgt_bird_hand_command();
 
 	int get_command();
@@ -46,21 +47,23 @@ public:
 
 	int	copy_finger_command(int fingerId);
 
-	void my_open();
+	void my_open(bool set_on_top=false);
+	virtual void add_button(QWidget *button, int row, int space){};
+	virtual void setup_ui(){};
 
-	QVector <QDoubleSpinBox*> doubleSpinBox_curpos_Vector;
-	QVector <QDoubleSpinBox*> doubleSpinBox_despos_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_curtor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_destor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_rdamp_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
+	QVector <QDoubleSpinBox*> doubleSpinBox_curpos_Vector;
+	QVector <QDoubleSpinBox*> desired_pos_spin_box;
 
 	QVector <QButtonGroup*> buttonGroup_Vector;
 	QVector <QButtonGroup*> checkboxButtonGroup_Vector;
 
 private:
     Ui::wgt_bird_hand_commandClass *ui;
-    mrrocpp::ui::bird_hand::UiRobot& robot;
+    mrrocpp::ui::bird_hand::UiRobot* robot;
 
 	QVector <lib::bird_hand::single_joint_command*> joint_command;
 	QVector <lib::bird_hand::single_joint_status*> joint_status;

@@ -19,6 +19,9 @@ epos_access_usb::epos_access_usb(int _vendor, int _product, unsigned int _index)
 	if (ftdi_init(&ftdic) < 0) {
 		fprintf(stderr, "ftdi_init failed\n");
 	}
+	// Set the timeouts to 1 sec (the libftdi defaults to 5 sec)
+	ftdic.usb_read_timeout = 1000;
+	ftdic.usb_write_timeout = 1000;
 }
 
 epos_access_usb::~epos_access_usb()

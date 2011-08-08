@@ -114,9 +114,7 @@ int main(int argc, char *argv[])
 
 		edp::common::master->create_threads();
 
-		if (!edp::common::master->initialize_communication()) {
-			throw std::runtime_error("communication error");
-		}
+		edp::common::master->initialize_communication();
 
 		//	printf("1\n");
 		//	delay (20000);

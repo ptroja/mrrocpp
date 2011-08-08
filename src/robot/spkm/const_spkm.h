@@ -9,19 +9,13 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/dp_spkm.h"
+#include "dp_spkm.h"
 
 #include "base/lib/mrmath/homog_matrix.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
-
-/*!
- * @brief SwarmItFix Parallel Kinematic Machine robot label
- * @ingroup spkm
- */
-const robot_name_t ROBOT_NAME = "spkm";
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine number of motors.

@@ -1,4 +1,3 @@
-
 #include <cstdio>
 
 #include "base/lib/typedefs.h"
@@ -27,8 +26,8 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 }
 
 // Konstruktor.
-effector::effector(common::shell &_shell) :
-	motor_driven_effector(_shell, lib::shead::ROBOT_NAME)
+effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
+	motor_driven_effector(_shell, l_robot_name)
 {
 
 	number_of_servos = lib::shead::NUM_OF_SERVOS;
@@ -138,8 +137,8 @@ void effector::create_kinematic_models_for_given_robot(void)
 /*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
-	rb_obj = (boost::shared_ptr<common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr<common::vis_server>) new common::vis_server(*this);
+	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
+	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()
@@ -153,19 +152,8 @@ void effector::reply_serialization(void)
 	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 
-}
-// namespace smb
+}// namespace smb
 
-
-namespace common {
-
-
-effector* return_created_efector(common::shell &_shell)
-{
-	return new shead::effector(_shell);
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp
 

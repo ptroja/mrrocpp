@@ -14,7 +14,7 @@
 #include <boost/array.hpp>
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/spkm/const_spkm.h"
+#include "const_spkm.h"
 #include "robot/epos/epos.h"
 #include "robot/epos/ipm_executor.h"
 
@@ -32,15 +32,15 @@ class effector : public common::manip_effector
 {
 private:
 	//! Access to the CAN gateway unit
-	boost::shared_ptr<epos::epos_access> gateway;
+	boost::shared_ptr <epos::epos_access> gateway;
 
 	//! PKM axes
-	boost::shared_ptr<epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
+	boost::shared_ptr <epos::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	boost::array<std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
+	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
 
 	//! Axes container
-	boost::array<epos::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+	boost::array <epos::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
@@ -69,7 +69,7 @@ private:
 	bool is_previous_cartesian_pose_known;
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
-	epos::ipm_executor<lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
+	epos::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
@@ -90,7 +90,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(common::shell &_shell);
+	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * @brief Method sets initial values of motor and joint positions.

@@ -49,7 +49,6 @@ namespace common {
 
 void sr_buffer::operator()()
 {
-
 	lib::set_thread_name("sr");
 
 	lib::fd_server_t ch;
@@ -58,15 +57,18 @@ void sr_buffer::operator()()
 	assert(ch);
 
 	thread_started.command();
-	while (1) {
+
+	while (true) {
 		lib::sr_package_t sr_msg;
 
 		int32_t type, subtype;
 		int rcvid = messip::port_receive(ch, type, subtype, sr_msg);
 		//	printf("SR received: %d\n", licznik);
 
-		if (rcvid != MESSIP_MSG_NOREPLY)
+		if (rcvid != MESSIP_MSG_NOREPLY) {
+			//fprintf(stderr, "sr_buffer::rcvid = %d\n", rcvid);
 			continue;
+		}
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
 		{
