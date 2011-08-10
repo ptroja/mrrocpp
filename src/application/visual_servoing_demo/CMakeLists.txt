@@ -1,3 +1,4 @@
+add_subdirectory(trajectory_line)
 add_subdirectory(objectfollower_ib_eih)
 add_subdirectory(objectfollower_pb_eih)
 add_subdirectory(objectfollower_pb_sac)
