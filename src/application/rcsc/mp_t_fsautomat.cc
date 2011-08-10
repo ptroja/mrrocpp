@@ -291,7 +291,7 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 
 	// open xml document
 	xmlDocPtr doc = xmlParseFile(filePath.c_str());
-	xmlXIncludeProcess(doc);
+	//xmlXIncludeProcess(doc);
 	if (doc == NULL) {
 		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
 		return statesMap;
@@ -319,12 +319,14 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 			common::State actState = createState(cur_node);
 			statesMap.insert(stateMap_t::value_type(actState.getStateID(), actState));
 		}
+
 	}
 	// free the document
 	xmlFreeDoc(doc);
 	// free the global variables that may
 	// have been allocated by the parser
 	xmlCleanupParser();
+
 	return statesMap;
 }
 
@@ -786,7 +788,7 @@ void fsautomat::main_task_algorithm(void)
 				}
 
 	for (; nextState != "_STOP_"; nextState = stateMap[nextState].returnNextStateID(sh)) {
-
+		std::cout <<"NAZWA STANU: "<<nextState<<std::endl;
 		if (nextState == "_END_") {
 			nextState = sh.popTargetName();
 		}
@@ -796,8 +798,7 @@ void fsautomat::main_task_algorithm(void)
 			break;
 
 		const std::string & currentStateType = stateMap[nextState].getType();
-
-		std::cout << "TYP STANU:" << currentStateType << std::endl;
+		std::cout<<"TYP STANU: " << currentStateType << std::endl;
 
 		if (currentStateType == "set_next_ecp_state") {
 			executeMotion(stateMap[nextState]);
