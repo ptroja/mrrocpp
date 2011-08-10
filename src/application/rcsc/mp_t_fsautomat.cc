@@ -236,7 +236,7 @@ common::State fsautomat::createState(xmlNodePtr stateNode)
 									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
 								actState.robotSet->firstSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
 					}
-					if (cchild_node->type == XML_ELEMENT_NODE
+					/*if (cchild_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
 						//actState.robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
 						//actState.robotSet->secondSet = new lib::robot_name_t[actState.robotSet->secondSetCount];
@@ -244,7 +244,7 @@ common::State fsautomat::createState(xmlNodePtr stateNode)
 							if (set_node->type == XML_ELEMENT_NODE
 									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
 								actState.robotSet->secondSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
-					}
+					}*/
 				}
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "GeneratorParameters")
@@ -291,7 +291,7 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 
 	// open xml document
 	xmlDocPtr doc = xmlParseFile(filePath.c_str());
-	xmlXIncludeProcess(doc);
+	//xmlXIncludeProcess(doc);
 	if (doc == NULL) {
 		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
 		return statesMap;
@@ -319,12 +319,14 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 			common::State actState = createState(cur_node);
 			statesMap.insert(stateMap_t::value_type(actState.getStateID(), actState));
 		}
+
 	}
 	// free the document
 	xmlFreeDoc(doc);
 	// free the global variables that may
 	// have been allocated by the parser
 	xmlCleanupParser();
+
 	return statesMap;
 }
 
@@ -367,7 +369,9 @@ void fsautomat::runEmptyGen(const common::State &state)
 {
 	//TODO
 	//run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
-	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
+	std::vector <lib::robot_name_t> myvector;
+	myvector.push_back(state.getRobot());
+	wait_for_task_termination(true, 1, myvector);
 }
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
@@ -784,7 +788,7 @@ void fsautomat::main_task_algorithm(void)
 				}
 
 	for (; nextState != "_STOP_"; nextState = stateMap[nextState].returnNextStateID(sh)) {
-
+		std::cout <<"NAZWA STANU: "<<nextState<<std::endl;
 		if (nextState == "_END_") {
 			nextState = sh.popTargetName();
 		}
@@ -794,14 +798,13 @@ void fsautomat::main_task_algorithm(void)
 			break;
 
 		const std::string & currentStateType = stateMap[nextState].getType();
+		std::cout<<"TYP STANU: " << currentStateType << std::endl;
 
-		std::cout << "TYP STANU:" << currentStateType << std::endl;
-
-		if (currentStateType == "runGenerator") {
+		if (currentStateType == "set_next_ecp_state") {
 			executeMotion(stateMap[nextState]);
-			std::cout << "TESTmotion" << std::endl;
 			std::cout << nextState << " -> zakonczony" << std::endl;
-		} else if (currentStateType == "emptyGenForSet") {
+
+		} else if (currentStateType == "wait_for_task_termination") {
 			runEmptyGenForSet(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
@@ -809,11 +812,11 @@ void fsautomat::main_task_algorithm(void)
 			runEmptyGen(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "wait") {
+		} else if (currentStateType == "wait_ms") {
 			runWaitFunction(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 
-		} else if (currentStateType == "stopGen") {
+		} else if (currentStateType == "send_end_motion_to_ecps") {
 			stopProperGen(stateMap[nextState]);
 			std::cout << nextState << " -> zakonczony" << std::endl;
 

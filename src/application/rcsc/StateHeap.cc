@@ -12,7 +12,7 @@ void StateHeap::pushTargetName(const std::string & stateName)
 {
 	targetsHeap.push_back(stateName);
 	// showing content
-	//showHeapContent();
+	showHeapContent();
 }
 
 const std::string StateHeap::popTargetName()

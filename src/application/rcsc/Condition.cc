@@ -80,7 +80,7 @@ bool Condition::checkCompareResult()
 		return checkContext(condition);
 	}
 
-	// defalt to false
+	// default to false
 	return false;
 }
 
