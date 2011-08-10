@@ -291,7 +291,7 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 
 	// open xml document
 	xmlDocPtr doc = xmlParseFile(filePath.c_str());
-	//xmlXIncludeProcess(doc);
+	xmlXIncludeProcess(doc);
 	if (doc == NULL) {
 		std::cout << "ERROR: could not parse file: \"" << fileName << "\"." << std::endl;
 		return statesMap;
@@ -788,17 +788,18 @@ void fsautomat::main_task_algorithm(void)
 				}
 
 	for (; nextState != "_STOP_"; nextState = stateMap[nextState].returnNextStateID(sh)) {
-		std::cout <<"NAZWA STANU: "<<nextState<<std::endl;
 		if (nextState == "_END_") {
 			nextState = sh.popTargetName();
 		}
 
 		// protection from wrong targetID specyfication
 		if (stateMap.count(nextState) == 0)
+		{
+			//std::cout<<"ASKUBIS error, state not found: "<<nextState<<std::endl;
 			break;
+		}
 
 		const std::string & currentStateType = stateMap[nextState].getType();
-		std::cout<<"TYP STANU: " << currentStateType << std::endl;
 
 		if (currentStateType == "set_next_ecp_state") {
 			executeMotion(stateMap[nextState]);
