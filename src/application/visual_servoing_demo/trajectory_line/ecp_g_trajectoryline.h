@@ -25,13 +25,14 @@ public:
 private:
 
 	int motion_steps;
+	int motion_steps_value_in_step_no;
 	double dt;
 	double A;
 	double f;
 	double t;
 
 	bool initial_position_saved;
-	double initial_position;
+	lib::Homog_matrix initial_position;
 };
 
 } /* namespace generator */

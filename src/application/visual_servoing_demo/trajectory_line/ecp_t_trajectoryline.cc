@@ -29,7 +29,7 @@ ecp_t_trajectory_line::~ecp_t_trajectory_line()
 
 void ecp_t_trajectory_line::main_task_algorithm()
 {
-
+	gen->Move();
 }
 
 task_base* return_created_ecp_task(lib::configurator &config)
