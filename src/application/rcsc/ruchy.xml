@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+<SubTask>
+    <Graphics>
+        <PosX>-1724</PosX>
+        <PosY>-2286</PosY>
+    </Graphics>
+    <State id="gora_track" type="set_next_ecp_state">
+        <PosX>2457.000000</PosX>
+        <PosY>2354.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/mm_test/w_gore.trj</TrajectoryFilePath>
+        <transition condition="true" target="superwait"/>
+    </State>
+    <State id="dol_post" type="set_next_ecp_state">
+        <PosX>2120.000000</PosX>
+        <PosY>2462.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/mm_test/w_dol.trj</TrajectoryFilePath>
+        <transition condition="true" target="superwait"/>
+    </State>
+    <State id="gora_post" type="set_next_ecp_state">
+        <PosX>2462.000000</PosX>
+        <PosY>2856.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/mm_test/w_gore.trj</TrajectoryFilePath>
+        <transition condition="true" target="superwait"/>
+    </State>
+    <State id="dol_track" type="set_next_ecp_state">
+        <PosX>2224.000000</PosX>
+        <PosY>2796.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/mm_test/w_dol.trj</TrajectoryFilePath>
+        <transition condition="true" target="superwait"/>
+    </State>
+    <State id="_END_" type="">
+        <PosX>2704.000000</PosX>
+        <PosY>2636.000000</PosY>
+    </State>
+    <State id="superwait" type="wait_for_task_termination">
+        <PosX>2430.000000</PosX>
+        <PosY>2586.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="_END_"/>
+    </State>
+</SubTask>
