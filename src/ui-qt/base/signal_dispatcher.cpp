@@ -6,25 +6,20 @@
 #include "wgt_base.h"
 #include "wgt_robot_process_control.h"
 
+namespace Ui {
 
-namespace Ui
+SignalDispatcher::SignalDispatcher(mrrocpp::ui::common::Interface& iface) :
+		interface(iface)
 {
-
-SignalDispatcher::SignalDispatcher(mrrocpp::ui::common::Interface& iface) : interface(iface)
-{
-
 }
 
 SignalDispatcher::~SignalDispatcher()
 {
-
 }
-
 
 void SignalDispatcher::on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
 	robot->set_robot_process_control_window(new wgt_robot_process_control(interface, robot));
-
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::edp_create);
 }
 
@@ -34,84 +29,9 @@ void SignalDispatcher::on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot *rob
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::EDP_slay_int);
 }
 
-void SignalDispatcher::on_robot_process_control_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_robot_pc);
-}
-
 void SignalDispatcher::on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::synchronise);
-}
-
-void SignalDispatcher::on_Pre_Synchro_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->getWgtMotors());
-}
-
-void SignalDispatcher::on_Move_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_move);
-}
-
-void SignalDispatcher::on_Move_Joints_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_int);
-}
-
-void SignalDispatcher::on_External_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_ext);
-}
-
-void SignalDispatcher::on_Absolute_Moves_Motors_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_motors);
-}
-
-void SignalDispatcher::on_Motors_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_inc);
-}
-
-void SignalDispatcher::on_Joints_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_joints);
-}
-
-void SignalDispatcher::on_Absolute_Moves_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_euler);
-}
-
-void SignalDispatcher::on_Absolute_Moves_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_angle_axis);
-}
-
-void SignalDispatcher::on_Relative_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_relative_angle_axis);
-}
-
-void SignalDispatcher::on_Tool_Xyz_Euler_Zyz_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_tool_euler);
-}
-
-void SignalDispatcher::on_Tool_Xyz_Angle_Axis_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_angle_axis);
-}
-
-void SignalDispatcher::on_Command_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_command_and_status);
-}
-
-void SignalDispatcher::on_Configuration_triggered(mrrocpp::ui::common::UiRobot *robot)
-{
-	open_new_window(robot->wgt_configuration);
 }
 
 void SignalDispatcher::on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot *robot)
@@ -131,6 +51,7 @@ void SignalDispatcher::on_Front_Position_triggered(mrrocpp::ui::common::UiRobot 
 
 void SignalDispatcher::on_Position_0_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
+
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::move_to_preset_position, 0);
 }
 
@@ -148,7 +69,5 @@ void SignalDispatcher::open_new_window(wgt_base *window, bool set_on_top)
 {
 	interface.get_main_window()->open_new_window(window, &wgt_base::my_open, set_on_top);
 }
-
-
 
 }

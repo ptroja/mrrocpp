@@ -29,7 +29,7 @@ namespace common {
 //
 
 UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
-	interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
+		interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
 	//activation_string = _activation_string;
 	state.edp.section_name = interface.config->get_edp_section(robot_name);
@@ -38,15 +38,21 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	state.edp.last_state = -2; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
-	msg	= (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
+	msg =
+			(boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 
 	process_control_window_created = false;
-	wgt_robot_pc = 0L;
+	wgt_robot_pc = new wgt_robot_process_control(interface, this, interface.get_main_window());
+
+	current_pos = new double[number_of_servos];
+	desired_pos = new double[number_of_servos];
 }
 
 UiRobot::~UiRobot()
 {
 	delete wgt_robot_pc;
+	delete[] current_pos;
+	delete[] desired_pos;
 }
 
 void UiRobot::create_thread()
@@ -57,26 +63,15 @@ void UiRobot::create_thread()
 	}
 }
 
-
-//wgt_base* UiRobot::getWgtByName(QString name)
-//{
-////	wgt_finder = ;
-////	(*wgts_finder).second;
-//	if((*wgts.find(name)).second==NULL)
-//		printf("(*wgts.find(name)).second NULL!");
-//	else
-//		printf("(*wgts.find(name)).second ok");
-//
-//	return (*wgts.find(name)).second;
-//}
-
 void UiRobot::setup_menubar()
 {
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	EDP_Load = new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
 	EDP_Unload = new Ui::MenuBarAction(QString("EDP &Unload"), this, menuBar);
-	wgt_robot_process_control_action = new Ui::MenuBarAction(QString("Process &control"), this, menuBar);
+	wgt_robot_process_control_action =
+			new Ui::MenuBarAction(QString("Process &control"), wgt_robot_pc, signalDispatcher, menuBar);
 
 	robot_menu = new QMenu(menuBar->menuRobot);
 	robot_menu->setEnabled(true);
@@ -88,11 +83,14 @@ void UiRobot::setup_menubar()
 	robot_menu->addSeparator();
 	menuBar->menuRobot->addAction(robot_menu->menuAction());
 
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
+	connect(EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+}
 
-	connect(EDP_Load, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 	Qt::AutoCompatConnection);
-	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-	connect(wgt_robot_process_control_action, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_robot_process_control_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
+void UiRobot::zero_desired_position()
+{
+	for (int i = 0; i < number_of_servos; i++)
+		desired_pos[i] = 0.0;
 }
 
 bool UiRobot::is_process_control_window_created()
@@ -107,32 +105,32 @@ void UiRobot::indicate_process_control_window_creation()
 
 void UiRobot::block_ecp_trigger()
 {
-	if(wgt_robot_pc)
+	if (wgt_robot_pc)
 		wgt_robot_pc->block_all_ecp_trigger_widgets();
 }
 
 void UiRobot::unblock_ecp_trigger()
 {
-	if(wgt_robot_pc)
+	if (wgt_robot_pc)
 		wgt_robot_pc->unblock_all_ecp_trigger_widgets();
 }
 
 void UiRobot::set_robot_process_control_window(wgt_robot_process_control *wgt_pc)
 {
 	wgt_robot_pc = wgt_pc;
-	if(interface.get_wgt_pc()->isVisible())
+	if (interface.get_wgt_pc()->isVisible())
 		wgt_robot_pc->my_open();
 }
 
 void UiRobot::open_robot_process_control_window()
 {
-	if(wgt_robot_pc)
+	if (wgt_robot_pc)
 		wgt_robot_pc->my_open();
 }
 
 void UiRobot::delete_robot_process_control_window()
 {
-	if(wgt_robot_pc)
+	if (wgt_robot_pc)
 		wgt_robot_pc->my_close();
 	delete wgt_robot_pc;
 	wgt_robot_pc = NULL;
@@ -241,11 +239,10 @@ const lib::robot_name_t UiRobot::getName()
 
 void UiRobot::close_all_windows()
 {
-
-	BOOST_FOREACH(const common::WndBase_pair_t & window_node, wndbase_m)
-				{
-					window_node.second->close();
-				}
+	BOOST_FOREACH(wgt_pair_t &wgt, wgts)
+			{
+				wgt.second->dwgt->close();
+			}
 
 }
 
@@ -321,7 +318,8 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
-		if (errno == EINTR)
+		if (errno == EINTR
+			)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
@@ -454,6 +452,7 @@ int UiRobot::move_to_front_position()
 
 int UiRobot::move_to_preset_position(int variant)
 {
+
 	return 1;
 }
 
@@ -493,28 +492,28 @@ int UiRobot::reload_configuration()
 
 					if (interface.config->exists(tmp_string, state.edp.section_name)) {
 
-						std::string text(interface.config->value <std::string> (tmp_string, state.edp.section_name));
+						std::string text(interface.config->value <std::string>(tmp_string, state.edp.section_name));
 
 						boost::char_separator <char> sep(" ");
 						boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
 
 						int j = 0;
 						BOOST_FOREACH(std::string t, tokens)
-									{
+								{
 
-										if (i < 3) {
-											//value = boost::lexical_cast<double>(my_string);
+									if (i < 3) {
+										//value = boost::lexical_cast<double>(my_string);
 
-											state.edp.preset_position[i][j] = boost::lexical_cast <double>(t);
-										} else {
-											state.edp.front_position[j] = boost::lexical_cast <double>(t);
-										}
-
-										if (j == number_of_servos) {
-											break;
-										}
-										j++;
+										state.edp.preset_position[i][j] = boost::lexical_cast <double>(t);
+									} else {
+										state.edp.front_position[j] = boost::lexical_cast <double>(t);
 									}
+
+									if (j == number_of_servos) {
+										break;
+									}
+									j++;
+								}
 
 					} else {
 						for (int j = 0; j < number_of_servos; j++) {
@@ -530,21 +529,21 @@ int UiRobot::reload_configuration()
 				}
 
 				if (interface.config->exists(lib::ROBOT_TEST_MODE, state.edp.section_name))
-					state.edp.test_mode = interface.config->value <int> (lib::ROBOT_TEST_MODE, state.edp.section_name);
+					state.edp.test_mode = interface.config->value <int>(lib::ROBOT_TEST_MODE, state.edp.section_name);
 				else
 					state.edp.test_mode = 0;
 
 				state.edp.hardware_busy_attach_point = interface.config->get_edp_hardware_busy_file(robot_name);
 
-				state.edp.network_resourceman_attach_point
-						= interface.config->get_edp_resourceman_attach_point(robot_name);
+				state.edp.network_resourceman_attach_point =
+						interface.config->get_edp_resourceman_attach_point(robot_name);
 
 				state.edp.network_reader_attach_point = interface.config->get_edp_reader_attach_point(robot_name);
 
 				if (!interface.config->exists("node_name", state.edp.section_name)) {
 					state.edp.node_name = "localhost";
 				} else {
-					state.edp.node_name = interface.config->value <std::string> ("node_name", state.edp.section_name);
+					state.edp.node_name = interface.config->value <std::string>("node_name", state.edp.section_name);
 				}
 				break;
 			case 1:

@@ -58,7 +58,7 @@ public:
 	int execute_motor_motion();
 	int execute_joint_motion();
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();

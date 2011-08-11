@@ -32,6 +32,7 @@
 #include "../smb/ui_r_smb2.h"
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
+#include "../sbench/ui_r_sbench.h"
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
@@ -50,6 +51,8 @@
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
 #include "wgt_robot_process_control.h"
+#include "mp.h"
+#include "allrobots.h"
 
 extern void catch_signal(int sig);
 
@@ -58,40 +61,33 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-	is_mp_and_ecps_active(false), all_edps(UI_ALL_EDPS_NONE_LOADED),
-	all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
-	all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
-	all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
-	position_refresh_interval(200),
-	mrrocpp_bin_to_root_path("../../")
+	is_mp_and_ecps_active(false), position_refresh_interval(200), mrrocpp_bin_to_root_path("../../")
 {
 
-	mw = (boost::shared_ptr<MainWindow>) new MainWindow(*this);
+	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
 	main_eb = new function_execution_buffer(*this);
 
-	timer = (boost::shared_ptr<QTimer>) new QTimer(this);
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 
 	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	connect(this, SIGNAL(manage_interface_signal()), this, SLOT(manage_interface_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_process_control_window_signal()), this, SLOT(raise_process_control_window_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(raise_ui_ecp_window_signal()), this, SLOT(raise_ui_ecp_window_slot()), Qt::QueuedConnection);
 
-	mp.state = UI_MP_NOT_PERMITED_TO_RUN;// mp wylaczone
-	mp.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
-	mp.last_manage_interface_state = UI_MP_STATE_NOT_KNOWN;
-
-	mp.pid = -1;
-
 	ui_state = 1;// ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
+
+	all_robots = new AllRobots(this);
+	mp = new Mp(this);
 }
 
 Interface::~Interface()
 {
-	BOOST_FOREACH(robot_pair_t node, robot_m) {
-		delete node.second;
-	}
+	BOOST_FOREACH(robot_pair_t node, robot_m)
+				{
+					delete node.second;
+				}
 }
 
 void Interface::start_on_timer()
@@ -297,7 +293,7 @@ void Interface::timer_slot()
 		ui_state = 3;
 		// 		delay(5000);
 
-		MPslay();
+		mp->MPslay();
 
 		ui_msg->message("closing");
 	} else if (ui_state == 3) {// odliczanie
@@ -309,7 +305,7 @@ void Interface::timer_slot()
 		closing_delay_counter = 20;// opoznienie zamykania
 		ui_state = 5;
 
-		EDP_all_robots_slay();
+		all_robots->EDP_all_robots_slay();
 
 	} else if (ui_state == 5) {// odlcizanie do zamnkiecia
 		//	printf("w ontimer 5\n");
@@ -340,7 +336,7 @@ void Interface::raise_process_control_window()
 void Interface::raise_process_control_window_slot()
 {
 	wgt_pc->my_open(false);
-	wgt_pc->dwgt->raise();
+	wgt_pc->raise();
 	open_process_control_windows();
 	//
 }
@@ -448,11 +444,10 @@ void Interface::raise_ui_ecp_window_slot()
 
 			wgt_teaching_obj->my_open();
 
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_joints")->my_open();
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_joints->my_open();
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_joints->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
 			}
 
 		}
@@ -470,13 +465,10 @@ void Interface::raise_ui_ecp_window_slot()
 
 			wgt_teaching_obj->my_open();
 
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				//				robot_m[lib::irp6ot_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgt_motors->my_open();
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				//				robot_m[lib::irp6p_m::ROBOT_NAME]->getWgtByName("wgt_motors")->my_open();
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgt_motors->my_open();
-			}
+			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 
 		}
 			break;
@@ -631,9 +623,9 @@ void Interface::raise_ui_ecp_window_slot()
 void Interface::setRobotsMenu()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->setup_menubar();
-	}
+				{
+					robot_node.second->setup_menubar();
+				}
 }
 
 MainWindow* Interface::get_main_window() const
@@ -704,6 +696,7 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(smb2);
 	ADD_UI_ROBOT(shead1);
 	ADD_UI_ROBOT(shead2);
+	ADD_UI_ROBOT(sbench);
 	ADD_UI_ROBOT(irp6ot_m);
 	ADD_UI_ROBOT(irp6p_m);
 	ADD_UI_ROBOT(polycrank);
@@ -879,46 +872,6 @@ void Interface::print_on_sr(const char *buff, ...)
 	ui_msg->message(text);
 }
 
-int Interface::MPup_int()
-
-{
-
-	set_ui_state_notification(UI_N_PROCESS_CREATION);
-
-	if (mp.pid == -1) {
-
-		mp.node_nr = config->return_node_number(mp.node_name.c_str());
-
-		std::string mp_network_pulse_attach_point("/dev/name/global/");
-		mp_network_pulse_attach_point += mp.network_pulse_attach_point;
-
-		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (check_node_existence(mp.node_name, "mp")) {
-			mp.pid = config->process_spawn(lib::MP_SECTION);
-
-			if (mp.pid > 0) {
-
-				mp.MP = new RemoteAgent(lib::MP_SECTION);
-				mp.pulse = new OutputBuffer <char> (*mp.MP, "MP_PULSE");
-
-				teachingstate = ui::common::MP_RUNNING;
-
-				mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-
-				raise_process_control_window();
-			} else {
-				fprintf(stderr, "mp spawn failed\n");
-			}
-			manage_interface();
-
-		}
-	}
-
-	return 1;
-}
-
 void Interface::manage_pc(void)
 {
 	wgt_pc->process_control_window_init();
@@ -955,12 +908,12 @@ void Interface::manage_interface_slot()
 	wgt_pc->process_control_window_init_slot();
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
-				&& robot_node.second->get_wgt_robot_pc()) {
-			robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-		}
-	}
+				{
+					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)
+							&& robot_node.second->get_wgt_robot_pc()) {
+						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+					}
+				}
 
 	//wgt_pc->dwgt->raise();
 	// UWAGA ta funkcja powinna byc odporna na odpalenie z dowolnego watku !!!
@@ -977,189 +930,14 @@ void Interface::manage_interface_slot()
 	 */
 	// uruchmomienie manage interface dla wszystkich robotow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		robot_node.second->manage_interface();
-	}
+				{
+					robot_node.second->manage_interface();
+				}
 
 	// wlasciwosci menu  ABW_base_all_robots
 
-	if (all_edps_synchro != all_edps_synchro_last_manage_interface_state) {
-		switch (all_edps_synchro)
-		{
-			case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
-				mw->get_ui()->label_all_edps_synchro_notification->setText("NOT_KNOWN");
-				break;
-			case UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED:
-				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE EDP LOADED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
-				break;
-			case UI_ALL_EDPS_NONE_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE_SYNCHRONISED");
-				break;
-			case UI_ALL_EDPS_SOME_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_synchro_notification->setText("SOME_SYNCHRONISED");
-				break;
-			case UI_ALL_EDPS_ALL_SYNCHRONISED:
-				mw->get_ui()->label_all_edps_synchro_notification->setText("ALL_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
-
-				break;
-		}
-	}
-
-	if ((all_edps != all_edps_last_manage_interface_state) || (all_edps_synchro
-			!= all_edps_synchro_last_manage_interface_state) || (mp.state != mp.last_manage_interface_state)) {
-
-		if (((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) && ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state
-				== UI_MP_PERMITED_TO_RUN))) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
-			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionConfiguration);
-
-		} else {
-			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionConfiguration);
-
-		}
-
-		switch (all_edps)
-		{
-			case UI_ALL_EDPS_NONE_ACTIVATED:
-				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
-
-				break;
-			case UI_ALL_EDPS_NONE_LOADED:
-				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Load);
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
-
-				break;
-			case UI_ALL_EDPS_SOME_LOADED:
-				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-
-				switch (all_edps_synchro)
-				{
-					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
-					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
-
-						break;
-					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
-
-						break;
-					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-
-						break;
-					default:
-						break;
-				}
-
-				break;
-
-			case UI_ALL_EDPS_ALL_LOADED:
-				mw->get_ui()->label_all_edps_notification->setText("ALL_LOADED		");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Load);
-
-				switch (all_edps_synchro)
-				{
-					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
-					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
-						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
-
-						break;
-					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
-
-						break;
-					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-
-						switch (mp.state)
-						{
-							case common::UI_MP_NOT_PERMITED_TO_RUN:
-								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
-								break;
-							case common::UI_MP_PERMITED_TO_RUN:
-
-								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
-								break;
-							case common::UI_MP_WAITING_FOR_START_PULSE:
-
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
-								mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-								break;
-							case common::UI_MP_TASK_RUNNING:
-							case common::UI_MP_TASK_PAUSED:
-
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-								break;
-							default:
-								break;
-						}
-						break;
-					default:
-						break;
-				}
-				break;
-			default:
-				break;
-		}
-		all_edps_last_manage_interface_state = all_edps;
-		all_edps_synchro_last_manage_interface_state = all_edps_synchro;
-	}
-
-	if (mp.state != mp.last_manage_interface_state) {
-		// wlasciwosci menu task_menu
-		switch (mp.state)
-		{
-			case common::UI_MP_NOT_PERMITED_TO_RUN:
-				mw->get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
-
-				break;
-			case common::UI_MP_PERMITED_TO_RUN:
-				mw->get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionMP_Unload);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Load);
-
-				break;
-			case common::UI_MP_WAITING_FOR_START_PULSE:
-				mw->get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionMP_Unload);
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionall_EDP_Unload);
-
-				break;
-			case common::UI_MP_TASK_RUNNING:
-				mw->get_ui()->label_mp_notification->setText("TASK_RUNNING");
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
-				break;
-			case common::UI_MP_TASK_PAUSED:
-				mw->get_ui()->label_mp_notification->setText("TASK_PAUSED");
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionMP_Load, mw->getMenuBar()->actionMP_Unload);
-
-				break;
-			default:
-				break;
-		}
-		mp.last_manage_interface_state = mp.state;
-	}
+	all_robots->manage_interface();
+	mp->manage_interface();
 
 }
 
@@ -1172,22 +950,22 @@ void Interface::reload_whole_configuration()
 		config_file_relativepath = mrrocpp_bin_to_root_path + "configs/common.ini";
 	}
 
-	if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
+	if ((mp->mp_state.state == UI_MP_NOT_PERMITED_TO_RUN) || (mp->mp_state.state == UI_MP_PERMITED_TO_RUN)) { // jesli nie dziala mp podmien mp ecp vsp
 
 		config->change_config_file("../" + config_file);
 
 		is_mp_and_ecps_active = config->exists_and_true("is_active", "[mp]");
 
-		switch (all_edps)
+		switch (all_robots->all_edps)
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 			case UI_ALL_EDPS_NONE_LOADED:
 
 				// uruchmomienie manage interface dla wszystkich robotow
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->reload_configuration();
-				}
+							{
+								robot_node.second->reload_configuration();
+							}
 
 				break;
 			default:
@@ -1227,15 +1005,15 @@ void Interface::reload_whole_configuration()
 		// zczytanie konfiguracji MP
 
 		if (is_mp_and_ecps_active) {
-			mp.network_pulse_attach_point = config->get_mp_pulse_attach_point();
+			mp->mp_state.network_pulse_attach_point = config->get_mp_pulse_attach_point();
 
 			if (!config->exists("node_name", lib::MP_SECTION)) {
-				mp.node_name = "localhost";
+				mp->mp_state.node_name = "localhost";
 			} else {
-				mp.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
+				mp->mp_state.node_name = config->value <std::string> ("node_name", lib::MP_SECTION);
 			}
 
-			mp.pid = -1;
+			mp->mp_state.pid = -1;
 		}
 
 		// inicjacja komunikacji z watkiem sr
@@ -1311,124 +1089,13 @@ int Interface::check_gns()
 	return 1;
 }
 
-bool Interface::is_any_robot_active()
-{
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->state.is_active) {
-						return true;
-					}
-				}
-
-	return false;
-}
-
-bool Interface::are_all_active_robots_loaded()
-{
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state <= 0)) {
-
-						return false;
-					}
-				}
-
-	return true;
-}
-
-bool Interface::is_any_active_robot_loaded()
-{
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-						return true;
-					}
-				}
-
-	return false;
-}
-
-bool Interface::are_all_loaded_robots_synchronised()
-{
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.edp.state > 0) && (!(robot_node.second->state.edp.is_synchronised))) {
-
-						return false;
-					}
-				}
-
-	return true;
-}
-
-bool Interface::is_any_loaded_robot_synchronised()
-{
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.edp.state > 0) && (robot_node.second->state.edp.is_synchronised)) {
-						return true;
-					}
-				}
-
-	return false;
-}
-
 // ustala stan wszytkich EDP
 int Interface::check_edps_state_and_modify_mp_state()
 {
-
-	// wyznaczenie stanu wszytkich EDP abstahujac od MP
-
-	// jesli wszytkie sa nieaktywne
-	if (!is_any_robot_active()) {
-		all_edps = UI_ALL_EDPS_NONE_ACTIVATED;
-
-	} else if (are_all_active_robots_loaded()) {
-		all_edps = UI_ALL_EDPS_ALL_LOADED;
-
-	} else if (is_any_active_robot_loaded()) {
-
-		all_edps = UI_ALL_EDPS_SOME_LOADED;
-
-		// jesli zaden nie jest zaladowany
-	} else {
-		all_edps = UI_ALL_EDPS_NONE_LOADED;
-
-	}
-
-	if ((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
-		all_edps_synchro = UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED;
-	} else {
-
-		// jesli wszytkie sa zsynchronizowane
-		if (are_all_loaded_robots_synchronised()) {
-			all_edps_synchro = UI_ALL_EDPS_ALL_SYNCHRONISED;
-
-		} else if (is_any_loaded_robot_synchronised()) {
-			all_edps_synchro = UI_ALL_EDPS_SOME_SYNCHRONISED;
-
-		} else {
-
-			all_edps_synchro = UI_ALL_EDPS_NONE_SYNCHRONISED;
-
-		}
-	}
-
+	all_robots->set_edp_state();
 	// modyfikacja stanu MP przez stan wszystkich EDP
 
-	if ((all_edps == UI_ALL_EDPS_NONE_ACTIVATED) || ((all_edps == UI_ALL_EDPS_ALL_LOADED) && (all_edps_synchro
-			== UI_ALL_EDPS_ALL_SYNCHRONISED))) {
-		if ((mp.state == UI_MP_NOT_PERMITED_TO_RUN) && (is_mp_and_ecps_active)) {
-			mp.state = UI_MP_PERMITED_TO_RUN; // pozwol na uruchomienie mp
-		}
-	} else {
-		if (mp.state == UI_MP_PERMITED_TO_RUN) {
-			mp.state = UI_MP_NOT_PERMITED_TO_RUN; // nie pozwol na uruchomienie mp
-		}
-	}
+	mp->set_mp_state();
 
 	return 1;
 }
@@ -1559,7 +1226,8 @@ int Interface::initiate_configuration()
 
 		config.reset();
 
-		config = (boost::shared_ptr<lib::configurator>) new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
+		config
+				= (boost::shared_ptr <lib::configurator>) new lib::configurator(ui_node_name, mrrocpp_local_path, lib::UI_SECTION);
 
 		std::string attach_point = config->get_sr_attach_point();
 
@@ -1689,17 +1357,6 @@ void Interface::fill_node_list()
 	}
 }
 
-int Interface::execute_mp_pulse(char pulse_code)
-{
-
-	// printf("w send pulse\n");
-	if (mp.pulse) {
-		mp.pulse->Send(pulse_code);
-	}
-
-	return 1;
-}
-
 void Interface::create_threads()
 {
 	ui_sr_obj = (boost::shared_ptr <sr_buffer>) new sr_buffer(*this);
@@ -1713,305 +1370,14 @@ void Interface::create_threads()
 	start_on_timer();
 }
 
-int Interface::EDP_all_robots_create()
-{
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					if (!robot_node.second->get_wgt_robot_pc() && (robot_node.second->state.is_active))
-						robot_node.second->set_robot_process_control_window(new wgt_robot_process_control(*this, robot_node.second));
-
-					robot_node.second->edp_create();
-				}
-
-	return 1;
-
-}
-
-int Interface::EDP_all_robots_slay()
-{
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->delete_robot_process_control_window();
-					robot_node.second->EDP_slay_int();
-				}
-
-	return 1;
-
-}
-
-int Interface::EDP_all_robots_synchronise()
-
-{
-
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->synchronise();
-				}
-
-	return 1;
-
-}
-
-int Interface::MPup()
-
-{
-	//eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
-	main_eb->command(boost::bind(&ui::common::Interface::MPup_int, &(*this)));
-
-	return 1;
-
-}
-
-int Interface::MPslay()
-
-{
-
-	if (mp.pid != -1) {
-
-		if ((mp.state == ui::common::UI_MP_TASK_RUNNING) || (mp.state == ui::common::UI_MP_TASK_PAUSED)) {
-
-			pulse_stop_mp();
-		}
-
-		if (mp.pulse) {
-			delete mp.pulse;
-		} else {
-			std::cerr << "MP pulse not connected?" << std::endl;
-		}
-
-		if (mp.MP) {
-			delete mp.MP;
-		} else {
-			std::cerr << "MP not connected?" << std::endl;
-		}
-
-		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
-		// 	printf("mp slay\n");
-
-		//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
-
-		if (kill(mp.pid, SIGTERM) == -1) {
-			perror("kill()");
-		} else {
-			//    		int status;
-			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
-			//    			perror("waitpid()");
-			//    		}
-			wait_for_child_termiantion(mp.pid);
-		}
-
-		mp.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
-
-	}
-	// delay(1000);
-	// 	kill(mp_pid,SIGTERM);
-	// 	printf("mp pupa po kill\n");
-	mp.pid = -1;
-
-	mp.pulse = NULL;
-	mp.MP = NULL;
-
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->deactivate_ecp_trigger();
-				}
-
-	// modyfikacja menu
-	manage_interface();
-	wgt_pc->process_control_window_init();
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-					}
-				}
-	//wgt_pc->dwgt->raise();
-	return 1;
-
-}
-
-int Interface::pulse_start_mp()
-
-{
-
-	if (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE) {
-
-		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
-
-		// close_all_windows
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						robot_node.second->close_all_windows();
-					}
-
-		execute_mp_pulse(MP_START);
-
-		wgt_pc->process_control_window_init();
-		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-					{
-						if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
-							robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-						}
-					}
-		//wgt_pc->dwgt->raise();
-		manage_interface();
-	}
-
-	return 1;
-
-}
-
-int Interface::pulse_stop_mp()
-
-{
-
-	if ((mp.state == ui::common::UI_MP_TASK_RUNNING) || (mp.state == ui::common::UI_MP_TASK_PAUSED)) {
-
-		mp.state = ui::common::UI_MP_WAITING_FOR_START_PULSE;// czekanie na stop
-
-		execute_mp_pulse(MP_STOP);
-
-		manage_interface();
-	}
-
-	return 1;
-
-}
-
-int Interface::pulse_pause_mp()
-
-{
-
-	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
-
-		mp.state = ui::common::UI_MP_TASK_PAUSED;// czekanie na stop
-
-		execute_mp_pulse(MP_PAUSE);
-
-		manage_interface();
-	}
-
-	return 1;
-
-}
-
-int Interface::pulse_resume_mp()
-
-{
-
-	if (mp.state == ui::common::UI_MP_TASK_PAUSED) {
-
-		mp.state = ui::common::UI_MP_TASK_RUNNING;// czekanie na stop
-
-		execute_mp_pulse(MP_RESUME);
-
-		manage_interface();
-	}
-
-	return 1;
-
-}
-
-int Interface::pulse_trigger_mp()
-
-{
-
-	if (mp.state == ui::common::UI_MP_TASK_RUNNING) {
-
-		execute_mp_pulse(MP_TRIGGER);
-
-		manage_interface();
-	}
-
-	return 1;
-
-}
-
-//ECP pulse
-int Interface::pulse_trigger_ecp()
-{
-
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->pulse_ecp();
-				}
-
-	return 1;
-}
-
-//Reader pulse
-int Interface::pulse_start_all_reader()
-{
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->pulse_reader_start_exec_pulse();
-				}
-
-	manage_pc();
-
-	return 1;
-}
-
-int Interface::pulse_stop_all_reader()
-{
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->pulse_reader_stop_exec_pulse();
-				}
-	manage_pc();
-	return 1;
-}
-
-int Interface::pulse_trigger_all_reader()
-{
-	BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->pulse_reader_trigger_exec_pulse();
-				}
-
-	return 1;
-}
-
-//ECP pulse
-int Interface::pulse_trigger_ecp(common::UiRobot *robot)
-{
-
-	robot->pulse_ecp();
-	return 1;
-}
-
-//Reader pulse
-int Interface::pulse_start_reader(common::UiRobot *robot)
-{
-	robot->pulse_reader_start_exec_pulse();
-	manage_pc();
-
-	return 1;
-}
-
-int Interface::pulse_stop_reader(common::UiRobot *robot)
-{
-	robot->pulse_reader_stop_exec_pulse();
-	manage_pc();
-	return 1;
-}
-
-int Interface::pulse_trigger_reader(common::UiRobot *robot)
-{
-	robot->pulse_reader_trigger_exec_pulse();
-	return 1;
-}
-
 // zatrzymuje zadanie, zabija procesy
 int Interface::unload_all()
-
 {
-	MPslay();
+	mp->MPslay();
 
 	boost::this_thread::sleep(boost::posix_time::milliseconds(200));
 
-	EDP_all_robots_slay();
+	all_robots->EDP_all_robots_slay();
 	/* TR
 	 close_process_control_window(widget, apinfo, cbinfo);
 	 */
@@ -2060,109 +1426,6 @@ int Interface::slay_all()
 	printf("slay_all end\n");
 	manage_interface();
 
-	return 1;
-
-}
-
-int Interface::all_robots_move_to_synchro_position()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->check_synchronised_and_loaded()) {
-							robot_node.second->move_to_synchro_position();
-						}
-					}
-
-	}
-
-	return 1;
-
-}
-
-int Interface::all_robots_move_to_preset_position_1()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->check_synchronised_and_loaded()) {
-							robot_node.second->move_to_preset_position(1);
-						}
-					}
-
-	}
-
-	return 1;
-
-}
-
-int Interface::all_robots_move_to_preset_position_2()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->check_synchronised_and_loaded()) {
-							robot_node.second->move_to_preset_position(2);
-						}
-					}
-
-	}
-	return 1;
-
-}
-
-int Interface::all_robots_move_to_preset_position_0()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->check_synchronised_and_loaded()) {
-							robot_node.second->move_to_preset_position(0);
-						}
-					}
-
-	}
-
-	return 1;
-
-}
-
-int Interface::all_robots_move_to_front_position()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((mp.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN) || (mp.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (mp.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->check_synchronised_and_loaded()) {
-							robot_node.second->move_to_front_position();
-						}
-					}
-
-	}
 	return 1;
 
 }

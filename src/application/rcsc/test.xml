@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+<TaskDescription>
+    <Graphics>
+        <PosX>-410</PosX>
+        <PosY>-2058</PosY>
+        <Scale>50</Scale>
+    </Graphics>
+    <State id="INIT" type="systemInitialization">
+        <PosX>844.000000</PosX>
+        <PosY>2232.000000</PosY>
+        <taskInit>
+            <mp/>
+            <ecp name="irp6ot_m">
+                <ecp_smooth_gen>7</ecp_smooth_gen>
+                <bias_edp_force_st>0</bias_edp_force_st>
+                <ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+            </ecp>
+            <ecp name="irp6p_m">
+                <bias_edp_force_st>0</bias_edp_force_st>
+                <ecp_tff_gripper_approach_gen>8</ecp_tff_gripper_approach_gen>
+                <ecp_smooth_gen>6</ecp_smooth_gen>
+            </ecp>
+        </taskInit>
+        <transition condition="true" target="approach_1"/>
+    </State>
+    <State id="approach_1" type="set_next_ecp_state">
+        <PosX>1006.000000</PosX>
+        <PosY>2228.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_joint.trj</TrajectoryFilePath>
+        <transition condition="true" target="approach_2"/>
+    </State>
+    <State id="approach_2" type="set_next_ecp_state">
+        <PosX>1136.000000</PosX>
+        <PosY>2235.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_track_joint.trj</TrajectoryFilePath>
+        <transition condition="true" target="approach_3"/>
+    </State>
+    <State id="approach_3" type="wait_for_task_termination">
+        <PosX>1284.000000</PosX>
+        <PosY>2237.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="gora_track&gt;&gt;bias_post"/>
+    </State>
+    <State id="bias_post" type="set_next_ecp_state">
+        <PosX>1430.000000</PosX>
+        <PosY>2239.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_ST_BIAS_EDP_FORCE</ECPGeneratorType>
+        <AddArg>5</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="bias_track"/>
+    </State>
+    <State id="bias_track" type="set_next_ecp_state">
+        <PosX>1575.000000</PosX>
+        <PosY>2229.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_ST_BIAS_EDP_FORCE</ECPGeneratorType>
+        <AddArg>5</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="wait2"/>
+    </State>
+    <State id="wait2" type="wait_for_task_termination">
+        <PosX>1575.000000</PosX>
+        <PosY>2343.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="post1"/>
+    </State>
+    <State id="post1" type="set_next_ecp_state">
+        <PosX>1436.000000</PosX>
+        <PosY>2347.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_angle_p1.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty1"/>
+    </State>
+    <State id="empty1" type="wait_for_task_termination">
+        <PosX>1276.000000</PosX>
+        <PosY>2359.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="Name&gt;&gt;pgrip1"/>
+    </State>
+    <State id="pgrip1" type="set_next_ecp_state">
+        <PosX>1137.000000</PosX>
+        <PosY>2351.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
+        <AddArg>0</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="empty2"/>
+    </State>
+    <State id="empty2" type="wait_for_task_termination">
+        <PosX>1001.000000</PosX>
+        <PosY>2344.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="dol_track&gt;&gt;trjoint"/>
+    </State>
+    <State id="trjoint" type="set_next_ecp_state">
+        <PosX>847.000000</PosX>
+        <PosY>2347.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_track_joint_p1.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty3"/>
+    </State>
+    <State id="empty3" type="wait_for_task_termination">
+        <PosX>841.000000</PosX>
+        <PosY>2462.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="traa"/>
+    </State>
+    <State id="traa" type="set_next_ecp_state">
+        <PosX>1006.000000</PosX>
+        <PosY>2461.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_track_angle_p1a.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty4"/>
+    </State>
+    <State id="empty4" type="wait_for_task_termination">
+        <PosX>1139.000000</PosX>
+        <PosY>2465.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="Name&gt;&gt;tr_force"/>
+    </State>
+    <State id="tr_force" type="set_next_ecp_state">
+        <PosX>1293.000000</PosX>
+        <PosY>2475.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
+        <AddArg>0</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="empty5"/>
+    </State>
+    <State id="empty5" type="wait_for_task_termination">
+        <PosX>1447.000000</PosX>
+        <PosY>2470.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="post_angle"/>
+    </State>
+    <State id="post_angle" type="set_next_ecp_state">
+        <PosX>1581.000000</PosX>
+        <PosY>2458.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_angle_p2.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty6"/>
+    </State>
+    <State id="empty6" type="wait_for_task_termination">
+        <PosX>1580.000000</PosX>
+        <PosY>2603.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="postgrip2"/>
+    </State>
+    <State id="empty7" type="wait_for_task_termination">
+        <PosX>1295.000000</PosX>
+        <PosY>2608.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="traa2"/>
+    </State>
+    <State id="postgrip2" type="set_next_ecp_state">
+        <PosX>1440.000000</PosX>
+        <PosY>2605.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
+        <AddArg>0</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="empty7"/>
+    </State>
+    <State id="traa2" type="set_next_ecp_state">
+        <PosX>1142.000000</PosX>
+        <PosY>2603.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_track_angle_p2.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty8"/>
+    </State>
+    <State id="empty8" type="wait_for_task_termination">
+        <PosX>1003.000000</PosX>
+        <PosY>2600.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="Name&gt;&gt;tr_grip_2"/>
+    </State>
+    <State id="empty9" type="wait_for_task_termination">
+        <PosX>831.000000</PosX>
+        <PosY>2721.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="dol_post&gt;&gt;wait2s"/>
+    </State>
+    <State id="tr_grip_2" type="set_next_ecp_state">
+        <PosX>835.000000</PosX>
+        <PosY>2599.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_TFF_GRIPPER_APPROACH</ECPGeneratorType>
+        <AddArg>0</AddArg>
+        <TrajectoryFilePath></TrajectoryFilePath>
+        <transition condition="true" target="empty9"/>
+    </State>
+    <State id="wait2s" type="wait_ms">
+        <PosX>962.000000</PosX>
+        <PosY>2721.000000</PosY>
+        <TimeSpan>2000</TimeSpan>
+        <transition condition="true" target="track_end_aa"/>
+    </State>
+    <State id="track_end_aa" type="set_next_ecp_state">
+        <PosX>1087.000000</PosX>
+        <PosY>2722.000000</PosY>
+        <ROBOT>irp6ot_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_track_angle.trj</TrajectoryFilePath>
+        <transition condition="true" target="post_end_aa"/>
+    </State>
+    <State id="post_end_aa" type="set_next_ecp_state">
+        <PosX>1212.000000</PosX>
+        <PosY>2721.000000</PosY>
+        <ROBOT>irp6p_m</ROBOT>
+        <ECPGeneratorType>ECP_GEN_NEWSMOOTH</ECPGeneratorType>
+        <TrajectoryFilePath>/home/adam/workspace/mrrocpp/src/application/swarm_demo/trajectory_postument_angle.trj</TrajectoryFilePath>
+        <transition condition="true" target="empty10"/>
+    </State>
+    <State id="empty10" type="wait_for_task_termination">
+        <PosX>1335.000000</PosX>
+        <PosY>2724.000000</PosY>
+        <SetOfRobots>
+            <FirstSet>
+                <ROBOT>irp6ot_m</ROBOT>
+                <ROBOT>irp6p_m</ROBOT>
+            </FirstSet>
+        </SetOfRobots>
+        <transition condition="true" target="gora_post&gt;&gt;wait1s"/>
+    </State>
+    <State id="wait1s" type="wait_ms">
+        <PosX>1463.000000</PosX>
+        <PosY>2726.000000</PosY>
+        <TimeSpan>1000</TimeSpan>
+        <transition condition="true" target="_STOP_"/>
+    </State>
+    <State id="_STOP_" type="">
+        <PosX>1585.000000</PosX>
+        <PosY>2724.000000</PosY>
+    </State>
+    <xi:include href="/home/adam/workspace/mrrocpp/src/application/rcsc/ruchy.xml" parse="xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="/home/adam/workspace/mrrocpp/src/application/rcsc/wait5.xml" parse="xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</TaskDescription>

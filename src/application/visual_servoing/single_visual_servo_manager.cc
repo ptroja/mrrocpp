@@ -22,19 +22,20 @@ namespace generator {
 using namespace logger;
 using namespace std;
 
-const double single_visual_servo_manager::image_sampling_period_default = 0.040;
-
-single_visual_servo_manager::single_visual_servo_manager(
-		mrrocpp::ecp::common::task::task & ecp_task, const char * section_name, boost::shared_ptr<
-				mrrocpp::ecp::servovision::visual_servo> vs) :
-	visual_servo_manager(ecp_task, section_name)
+single_visual_servo_manager::single_visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const char * section_name, boost::shared_ptr <
+		mrrocpp::ecp::servovision::visual_servo> vs) :
+	visual_servo_manager(ecp_task, section_name), image_sampling_period(0)
 {
 	servos.push_back(vs);
 
-	image_sampling_period
-			= ecp_task.config.exists("image_sampling_period", section_name) ? ecp_task.config.value<
-					double> ("image_sampling_period", section_name)
-					: image_sampling_period_default;
+	macrostep_length_control
+			= ecp_task.config.exists("macrostep_length_control", section_name) ? ecp_task.config.value <bool> ("macrostep_length_control", section_name) : false;
+	if (macrostep_length_control) {
+		image_sampling_period = ecp_task.config.value <double> ("image_sampling_period", section_name);
+		sr_ecp_msg.message("Using macrostep length control");
+	} else {
+		sr_ecp_msg.message("Macrostep length control disabled");
+	}
 }
 
 single_visual_servo_manager::~single_visual_servo_manager()
@@ -45,7 +46,7 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 {
 	bool reading_received = false;
 	ecp_mp::sensor::discode::reading_message_header rmh;
-	if (servos[0]->get_sensor()->get_state()
+	if (macrostep_length_control && servos[0]->get_sensor()->get_state()
 			== ecp_mp::sensor::discode::discode_sensor::DSS_READING_RECEIVED) {
 		rmh = servos[0]->get_sensor()->get_rmh();
 		reading_received = true;
@@ -53,9 +54,9 @@ lib::Homog_matrix single_visual_servo_manager::get_aggregated_position_change()
 
 	lib::Homog_matrix pc = servos[0]->get_position_change(get_current_position(), get_dt());
 
-	if(reading_received){
+	if (macrostep_length_control && reading_received) {
 		update_motion_steps(rmh);
-	} else {
+	} else if (macrostep_length_control) {
 		set_new_motion_steps(get_motion_steps_base());
 	}
 
