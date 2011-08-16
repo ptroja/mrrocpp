@@ -16,12 +16,9 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace irp6_m {
-
-
 
 const std::string UiRobot::WGT_JOINTS = "WGT_JOINTS";
 const std::string UiRobot::WGT_MOTORS = "WGT_MOTORS";
@@ -35,7 +32,10 @@ const std::string UiRobot::WGT_TOOL_EULER = "WGT_TOOL_EULER";
 // KLASA UiRobot
 //
 //
-int UiRobot::synchronise(){return 1;}
+int UiRobot::synchronise()
+{
+	return 1;
+}
 
 int UiRobot::execute_motor_motion()
 {
@@ -91,11 +91,9 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
-	common::UiRobot(_interface, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
+		common::UiRobot(_interface, _robot_name, _number_of_servos), ui_ecp_robot(NULL)
 {
 }
-
-
 
 void UiRobot::delete_ui_ecp_robot()
 {
@@ -107,7 +105,6 @@ void UiRobot::null_ui_ecp_robot()
 	ui_ecp_robot = NULL;
 
 }
-
 
 int UiRobot::manage_interface()
 {
@@ -181,39 +178,54 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
+int UiRobot::move_to_preset_position(int variant)
+{
+
+	return 1;
+}
 
 void UiRobot::make_connections()
 {
+
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	connect(action_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(action_Synchro_Position,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(action_Position_0, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(action_Position_1,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(action_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Synchro_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Front_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Position_0, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Position_1, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Position_2, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
 
 void UiRobot::setup_menubar()
 {
+
 	common::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	action_Synchronisation= new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
+	action_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
 	action_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
-	action_Position_0 	= new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
-	action_Position_1 	= new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
-	action_Position_2 	= new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
+	action_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
+	action_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
+	action_Position_1 = new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
+	action_Position_2 = new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
 
-
-	action_Pre_Synchro_Moves_Motors 	= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
-	action_Absolute_Moves_Motors 		= new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
-	action_Joints 						= new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_JOINTS], signalDispatcher, menuBar);
-	action_Absolute_Moves_Xyz_Euler_Zyz = new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_EULER], signalDispatcher, menuBar);
-	action_Absolute_Moves_Xyz_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_ANGLE_AXIS], signalDispatcher, menuBar);
-	action_Xyz_Relative_Moves_Angle_Axis = new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_RELATIVE_ANGLE_AXIS], signalDispatcher, menuBar);
-	action_Tool_Xyz_Euler_Zyz 			= new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_TOOL_EULER], signalDispatcher, menuBar);
-	action_Tool_Xyz_Angle_Axis 			= new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_TOOL_ANGLE_AXIS], signalDispatcher, menuBar);
+	action_Pre_Synchro_Moves_Motors =
+			new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
+	action_Absolute_Moves_Motors =
+			new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_MOTORS], signalDispatcher, menuBar);
+	action_Joints = new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_JOINTS], signalDispatcher, menuBar);
+	action_Absolute_Moves_Xyz_Euler_Zyz =
+			new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_EULER], signalDispatcher, menuBar);
+	action_Absolute_Moves_Xyz_Angle_Axis =
+			new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_ANGLE_AXIS], signalDispatcher, menuBar);
+	action_Xyz_Relative_Moves_Angle_Axis =
+			new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_RELATIVE_ANGLE_AXIS], signalDispatcher, menuBar);
+	action_Tool_Xyz_Euler_Zyz =
+			new Ui::MenuBarAction(QString("Xyz &Euler Zyz"), wgts[WGT_TOOL_EULER], signalDispatcher, menuBar);
+	action_Tool_Xyz_Angle_Axis =
+			new Ui::MenuBarAction(QString("Xyz &Angle Axis"), wgts[WGT_TOOL_ANGLE_AXIS], signalDispatcher, menuBar);
 
 	menu_Pre_Synchro_Moves = new QMenu(robot_menu);
 	menu_Absolute_Moves = new QMenu(robot_menu);
@@ -240,25 +252,21 @@ void UiRobot::setup_menubar()
 	menu_Relative_Moves->setTitle(QApplication::translate("MainWindow", "Re&lative Moves", 0, QApplication::UnicodeUTF8));
 	menu_Tool->setTitle(QApplication::translate("MainWindow", "&Tool", 0, QApplication::UnicodeUTF8));
 
-
-
-
-
-
 	menu_Preset_Positions = new QMenu(robot_menu);
 	robot_menu->addSeparator();
-	robot_menu->addAction(action_Synchronisation);
+	//robot_menu->addAction(action_Synchronisation);
 	robot_menu->addAction(menu_Preset_Positions->menuAction());
 	menu_Preset_Positions->addAction(action_Synchro_Position);
+	menu_Preset_Positions->addAction(action_Front_Position);
 	menu_Preset_Positions->addAction(action_Position_0);
 	menu_Preset_Positions->addAction(action_Position_1);
 	menu_Preset_Positions->addAction(action_Position_2);
 
-    menu_Preset_Positions->setTitle(QApplication::translate("MainWindow", "&Preset positions", 0, QApplication::UnicodeUTF8));
-    make_connections();
+	menu_Preset_Positions->setTitle(QApplication::translate("MainWindow", "&Preset positions", 0, QApplication::UnicodeUTF8));
+
+	irp6_m::UiRobot::make_connections();
+
 }
-
-
 
 }
 } //namespace ui

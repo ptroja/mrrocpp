@@ -1,5 +1,6 @@
 # Try to find and setup Qt4 for this project
 FIND_PACKAGE(Qt4)
+FIND_PACKAGE(Boost 1.41 COMPONENTS regex)
 
 IF(QT_FOUND)
 
@@ -215,7 +216,7 @@ TARGET_LINK_LIBRARIES(
 	ecp_robot
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
-	boost_regex
+    ${Boost_REGEX_LIBRARY}
 )
 
 install(

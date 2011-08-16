@@ -6,11 +6,10 @@
 #include "wgt_base.h"
 #include "wgt_robot_process_control.h"
 
+namespace Ui {
 
-namespace Ui
-{
-
-SignalDispatcher::SignalDispatcher(mrrocpp::ui::common::Interface& iface) : interface(iface)
+SignalDispatcher::SignalDispatcher(mrrocpp::ui::common::Interface& iface) :
+		interface(iface)
 {
 }
 
@@ -52,6 +51,7 @@ void SignalDispatcher::on_Front_Position_triggered(mrrocpp::ui::common::UiRobot 
 
 void SignalDispatcher::on_Position_0_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
+
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::move_to_preset_position, 0);
 }
 
@@ -69,7 +69,5 @@ void SignalDispatcher::open_new_window(wgt_base *window, bool set_on_top)
 {
 	interface.get_main_window()->open_new_window(window, &wgt_base::my_open, set_on_top);
 }
-
-
 
 }
