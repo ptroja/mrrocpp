@@ -16,6 +16,7 @@
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include <vector>
+#include <string>
 
 namespace mrrocpp {
 namespace ecp {
@@ -27,8 +28,6 @@ namespace generator {
  */
 class stats_generator : public common::generator::generator
 {
-private:
-
 public:
 	stats_generator(common::task::task& _ecp_task);
 	virtual ~stats_generator();
@@ -36,6 +35,13 @@ public:
 	virtual bool next_step();
 
 	void reset();
+	void load_trajectory(const std::string &filename);
+private:
+	std::vector<lib::Xyz_Angle_Axis_vector> trj_;
+
+	unsigned int mstep_;
+
+	FILE * log_file_;
 };
 
 }//generator

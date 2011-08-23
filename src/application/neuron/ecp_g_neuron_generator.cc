@@ -245,7 +245,7 @@ bool neuron_generator::next_step()
 
 	++mstep_; // increment macro step number
 
-	fprintf(pFileG,"%f|%f|%f\n",position[0],position[1],position[2]);
+	fprintf(pFileG,"%f|%f|%f|%f|%f|%f\n", position[0], position[1], position[2], position[3], position[4], position[5]);
 
 	// --------- send new position to the robot (EDP) ---------------
 	position_matrix.set_from_xyz_angle_axis(position);

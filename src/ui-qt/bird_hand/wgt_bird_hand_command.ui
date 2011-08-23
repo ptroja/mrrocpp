@@ -1427,7 +1427,7 @@ position</string>
       <x>0</x>
       <y>60</y>
       <width>391</width>
-      <height>51</height>
+      <height>52</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -1645,9 +1645,12 @@ position</string>
     <rect>
      <x>660</x>
      <y>360</y>
-     <width>55</width>
+     <width>91</width>
      <height>27</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <number>10000</number>
    </property>
   </widget>
   <widget class="QSpinBox" name="spinBox_motion_steps">
@@ -1655,9 +1658,12 @@ position</string>
     <rect>
      <x>480</x>
      <y>360</y>
-     <width>55</width>
+     <width>91</width>
      <height>27</height>
     </rect>
+   </property>
+   <property name="maximum">
+    <number>10000</number>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_read">
