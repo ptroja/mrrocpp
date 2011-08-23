@@ -47,8 +47,6 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	process_control_window_created = false;
 	wgt_robot_pc = new wgt_robot_process_control("R PC", interface, this, interface.get_main_window());
 
-	add_wgt <wgt_robot_process_control>(WGT_ROBOT_PC, "R PC");
-
 	current_pos = new double[number_of_servos];
 	desired_pos = new double[number_of_servos];
 }
