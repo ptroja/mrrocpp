@@ -22,7 +22,6 @@
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
 
-
 #include "../base/wgt_process_control.h"
 #include "../base/mp.h"
 #include "../base/ui_robot.h"
@@ -36,7 +35,6 @@ namespace irp6ot_m {
 // KLASA UiRobot
 //
 //
-
 
 int UiRobot::ui_get_edp_pid()
 {
@@ -98,15 +96,15 @@ int UiRobot::move_to_preset_position(int variant)
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	irp6_m::UiRobot(_interface, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS)
+		irp6_m::UiRobot(_interface, lib::irp6ot_m::ROBOT_NAME, lib::irp6ot_m::NUM_OF_SERVOS)
 {
-	add_wgt<wgt_irp6_m_joints>				(WGT_JOINTS, "Irp6ot_m joints");
-	add_wgt<wgt_irp6_m_motors>				(WGT_MOTORS, "Irp6ot_m motors");
-	add_wgt<wgt_irp6_m_angle_axis>			(WGT_ANGLE_AXIS, "Irp6ot_m angle axis");
-	add_wgt<wgt_irp6_m_euler>				(WGT_EULER, "Irp6ot_m euler");
-	add_wgt<wgt_irp6_m_relative_angle_axis>	(WGT_RELATIVE_ANGLE_AXIS, "Irp6ot_m relative angle axis");
-	add_wgt<wgt_irp6_m_tool_angle_axis>		(WGT_TOOL_ANGLE_AXIS, "Irp6ot_m tool angle axis");
-	add_wgt<wgt_irp6_m_tool_euler>			(WGT_TOOL_EULER, "Irp6ot_m tool euler");
+	add_wgt <wgt_irp6_m_joints>(WGT_JOINTS, "Irp6ot_m joints");
+	add_wgt <wgt_irp6_m_motors>(WGT_MOTORS, "Irp6ot_m motors");
+	add_wgt <wgt_irp6_m_angle_axis>(WGT_ANGLE_AXIS, "Irp6ot_m angle axis");
+	add_wgt <wgt_irp6_m_euler>(WGT_EULER, "Irp6ot_m euler");
+	add_wgt <wgt_irp6_m_relative_angle_axis>(WGT_RELATIVE_ANGLE_AXIS, "Irp6ot_m relative angle axis");
+	add_wgt <wgt_irp6_m_tool_angle_axis>(WGT_TOOL_ANGLE_AXIS, "Irp6ot_m tool angle axis");
+	add_wgt <wgt_irp6_m_tool_euler>(WGT_TOOL_EULER, "Irp6ot_m tool euler");
 
 }
 
@@ -122,14 +120,13 @@ void UiRobot::make_connections()
 //	connect(actionirp6ot_m_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
 }
 
-
 void UiRobot::setup_menubar()
 {
 	irp6_m::UiRobot::setup_menubar();
 //	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 //	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-    robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6&ot_m", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6&ot_m", 0, QApplication::UnicodeUTF8));
 
 	make_connections();
 }
@@ -145,57 +142,15 @@ int UiRobot::manage_interface()
 	//MainWindow *mw = interface.get_main_window();
 	irp6_m::UiRobot::manage_interface();
 
-//	switch (state.edp.state)
-//	{
-//		case -1:
-//
-//			break;
-//		case 0:
-////			mw->enable_menu_item(false, 4, menuirp6ot_m_Pre_Synchro_Moves, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool);
-//			break;
-//		case 1:
-//		case 2:
-//			// jesli robot jest zsynchronizowany
-//			if (state.edp.is_synchronised) {
-////				mw->enable_menu_item(false, 1, menuirp6ot_m_Pre_Synchro_Moves);
-//
-//				switch (interface.mp->mp_state.state)
-//				{
-//					case common::UI_MP_NOT_PERMITED_TO_RUN:
-//					case common::UI_MP_PERMITED_TO_RUN:
-////						mw->enable_menu_item(true, 3, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool);
-//						break;
-//					case common::UI_MP_WAITING_FOR_START_PULSE:
-////						mw->enable_menu_item(true, 3, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool);
-//						break;
-//					case common::UI_MP_TASK_RUNNING:
-//
-//						break;
-//					case common::UI_MP_TASK_PAUSED:
-////						mw->enable_menu_item(false, 3, menuirp6ot_m_Absolute_moves, menuIrp6ot_m_Relative_Moves, menuirp6ot_m_Tool);
-//						break;
-//					default:
-//						break;
-//				}
-//
-//			} else // jesli robot jest niezsynchronizowany
-//			{
-////				mw->enable_menu_item(true, 1, menuirp6ot_m_Pre_Synchro_Moves);
-//			}
-//			break;
-//		default:
-//			break;
-//	}
 	return 1;
 }
-
 
 // aktualizacja ustawien przyciskow
 int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
 {
 	//wgt_process_control *ui = interface.get_process_control_window(); //TODO: zmienic sposob
 
-	if (state.edp.state <= 0) {// edp wylaczone
+	if (state.edp.state <= 0) { // edp wylaczone
 //		ui->all_reader_start_pushButton->setDisabled(true);
 //		ui->all_reader_stop_pushButton->setDisabled(true);
 //		ui->all_reader_trigger_pushButton->setDisabled(true);
@@ -205,7 +160,7 @@ int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_proces
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		 */
-	} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
+	} else if (state.edp.state == 1) { // edp wlaczone reader czeka na start
 		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 //		ui->all_reader_start_pushButton->setEnabled(true);
 //		ui->all_reader_stop_pushButton->setDisabled(true);
@@ -215,7 +170,7 @@ int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_proces
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
 		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
 		 */
-	} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
+	} else if (state.edp.state == 2) { // edp wlaczone reader czeka na stop
 		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 		/* TR
