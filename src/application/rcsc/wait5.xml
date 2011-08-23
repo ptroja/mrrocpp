@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDescription SYSTEM "fsautomat.dtd" >
+<SubTask>
+    <Graphics>
+        <PosX>-3754</PosX>
+        <PosY>-4074</PosY>
+    </Graphics>
+    <State id="_END_" type="">
+        <PosX>2600.000000</PosX>
+        <PosY>2600.000000</PosY>
+    </State>
+    <State id="Name" type="wait_ms">
+        <PosX>2346.000000</PosX>
+        <PosY>2449.000000</PosY>
+        <TimeSpan>3000</TimeSpan>
+        <transition condition="true" target="_END_"/>
+    </State>
+</SubTask>
