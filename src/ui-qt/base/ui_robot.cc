@@ -483,7 +483,7 @@ int UiRobot::manage_interface()
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 1, EDP_Load, EDP_Unload);
+						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
