@@ -469,13 +469,14 @@ int UiRobot::manage_interface()
 			mw->enable_menu_item(false, 1, robot_menu);
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, EDP_Unload);
+			mw->enable_menu_item(false, 2, EDP_Unload, wgt_robot_process_control_action);
 			mw->enable_menu_item(true, 1, robot_menu);
 			mw->enable_menu_item(true, 1, EDP_Load);
 			break;
 		case 1:
 		case 2:
 			mw->enable_menu_item(true, 1, robot_menu);
+			mw->enable_menu_item(true, 1, wgt_robot_process_control_action);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
