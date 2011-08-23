@@ -16,7 +16,6 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace irp6ot_tfg {
@@ -26,7 +25,6 @@ const std::string WGT_IRP6OT_TFG_MOVE = "WGT_IRP6OT_TFG_MOVE";
 // KLASA UiRobot
 //
 //
-
 
 int UiRobot::ui_get_edp_pid()
 {
@@ -133,11 +131,11 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	single_motor::UiRobot(_interface, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS)
+		single_motor::UiRobot(_interface, lib::irp6ot_tfg::ROBOT_NAME, lib::irp6ot_tfg::NUM_OF_SERVOS)
 
 {
 
-	add_wgt<wgt_single_motor_move> (WGT_IRP6OT_TFG_MOVE, "Irp6ot_tfg moves");
+	add_wgt <wgt_single_motor_move>(WGT_IRP6OT_TFG_MOVE, "Irp6ot_tfg moves");
 //	wndbase_m[WGT_IRP6OT_TFG_MOVE] = wgts[WGT_IRP6OT_TFG_MOVE]->dwgt;
 }
 
@@ -204,14 +202,13 @@ void UiRobot::setup_menubar()
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-    actionirp6ot_tfg_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_IRP6OT_TFG_MOVE], signalDispatcher, menuBar);
+	actionirp6ot_tfg_Move =
+			new Ui::MenuBarAction(QString("&Move"), wgts[WGT_IRP6OT_TFG_MOVE], signalDispatcher, menuBar);
 	robot_menu->addAction(actionirp6ot_tfg_Move);
 
-    robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6ot_t&Fg", 0, QApplication::UnicodeUTF8));
-    make_connections();
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6ot_t&Fg", 0, QApplication::UnicodeUTF8));
+	make_connections();
 }
-
-
 
 }
 } //namespace ui

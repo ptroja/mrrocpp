@@ -20,7 +20,6 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace spkm {
@@ -31,16 +30,13 @@ namespace spkm {
 //
 //
 
-
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
-	common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+		common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-	add_wgt<wgt_spkm_inc>	(WGT_SPKM_INC, "Spkm inc");
-	add_wgt<wgt_spkm_int>	(WGT_SPKM_INT, "Spkm int");
-	add_wgt<wgt_spkm_ext>	(WGT_SPKM_EXT, "Spkm ext");
-//	wndbase_m[WGT_SPKM_INC] = wgts[WGT_SPKM_INC]->dwgt;
-//	wndbase_m[WGT_SPKM_INT] = wgts[WGT_SPKM_INT]->dwgt;
-//	wndbase_m[WGT_SPKM_EXT] = wgts[WGT_SPKM_EXT]->dwgt;
+	add_wgt <wgt_spkm_inc>(WGT_SPKM_INC, "Spkm inc");
+	add_wgt <wgt_spkm_int>(WGT_SPKM_INT, "Spkm int");
+	add_wgt <wgt_spkm_ext>(WGT_SPKM_EXT, "Spkm ext");
+
 }
 
 int UiRobot::ui_get_edp_pid()
@@ -101,23 +97,22 @@ int UiRobot::synchronise_int()
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
+	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
+
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, EDP_Unload);
+
 			mw->enable_menu_item(false, 1, actionspkm_Clear_Fault);
 			mw->enable_menu_item(false, 3, menuspkm_Pre_synchro_moves, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
 
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
+
 			mw->enable_menu_item(true, 1, actionspkm_Clear_Fault);
 
 			// jesli robot jest zsynchronizowany
@@ -129,30 +124,27 @@ int UiRobot::manage_interface()
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
 						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-						mw->enable_menu_item(true, 1, EDP_Unload); //???
-						mw->enable_menu_item(false, 1, EDP_Load);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);//???
-						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
-						block_ecp_trigger();
+						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves); //???
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-						block_ecp_trigger();
+
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
+
 				mw->enable_menu_item(true, 1, menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(false, 1, EDP_Load);
+
 			}
 			break;
 		default:

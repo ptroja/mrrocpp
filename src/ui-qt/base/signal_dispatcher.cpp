@@ -19,7 +19,6 @@ SignalDispatcher::~SignalDispatcher()
 
 void SignalDispatcher::on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot *robot)
 {
-	robot->set_robot_process_control_window(new wgt_robot_process_control(interface, robot));
 	interface.get_main_window()->ui_robot_action(robot, &mrrocpp::ui::common::UiRobot::edp_create);
 }
 
