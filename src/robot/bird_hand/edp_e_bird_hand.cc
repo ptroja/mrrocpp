@@ -55,8 +55,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		{
 			int16_t abspos;
 			//brak i==6 oraz i==7
-			if (i < 2)
-				device.getSynchroPos(i, abspos);
+
+			device.getSynchroPos(i, abspos);
 			//uwzglednienie kierunkow obrotow enkoderow dla abspos
 			//ok -> i==2, i==0, i==4
 			if (i == 3 || i == 1 || i == 5)
@@ -70,7 +70,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		for (uint8_t i = 0; i < number_of_servos; i++)
 		{
-		//	if (i < 2)
 		//		device.setLimit(i, u_limits[i], l_limits[i]);
 		}
 
@@ -78,9 +77,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		{
 
 			int16_t ulimit, llimit;
-			if (i < 2)
-				device.getLimit(i, ulimit, llimit);
-			printf("< %d > u: %d  l: %d", i, ulimit, llimit);
+			device.getLimit(i, ulimit, llimit);
+			printf("< %d > u: %d  l: %d\n", i, ulimit, llimit);
 		}
 	}
 	controller_state_edp_buf.is_synchronised = true;
@@ -266,8 +264,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			int16_t t, c;
 			uint8_t status;
 
-			if (i < 2)
-				device.getStatus(i, status, pos, c, t);
+			device.getStatus(i, status, pos, c, t);
 
 			desired_motor_pos_new_tmp[i] = (double) pos
 					- synchro_position_motor[i];
@@ -315,8 +312,7 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 		p = edp_ecp_rbuffer.configuration_reply_structure.finger[j].p_factor;
 		i = edp_ecp_rbuffer.configuration_reply_structure.finger[j].i_factor;
 		d = edp_ecp_rbuffer.configuration_reply_structure.finger[j].d_factor;
-		if (j < 2)
-			device.setPID(j, p, i, d);
+		device.setPID(j, p, i, d);
 
 	}
 }
@@ -332,8 +328,7 @@ void effector::get_robot_model(lib::c_buffer &instruction)
 		{
 			int16_t p, i, d;
 
-			if (j < 2)
-				device.getPID(j, p, i, d);
+			device.getPID(j, p, i, d);
 			edp_ecp_rbuffer.configuration_reply_structure.finger[j].p_factor
 					= p;
 			edp_ecp_rbuffer.configuration_reply_structure.finger[j].i_factor
