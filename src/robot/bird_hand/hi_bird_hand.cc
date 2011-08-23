@@ -52,7 +52,7 @@ Bird_hand::~Bird_hand()
 void Bird_hand::connect(std::string port)
 {
 
-	for (unsigned int i = 0; i < 1; i++) {
+	for (unsigned int i = 0; i < 8; i++) {
 		std::cout << "[info] opening port : " << (port + (char) (i + 48)).c_str() << std::endl;
 		fd[i] = open((port + (char) (i + 48)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
@@ -110,6 +110,9 @@ void Bird_hand::getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_
 	position = stat->position;
 	current = stat->current;
 	torque = stat->force;
+
+	printf("abspos = %hd\n", stat->abspos);
+	printf("pos = %d\n", stat->position);
 }
 
 void Bird_hand::getSynchroPos(uint8_t id, int16_t &pos)

@@ -17,13 +17,13 @@ using namespace mrrocpp::lib::exception;
 
 uint64_t timespec2nsec(const timespec *t)
 {
-	return t->tv_sec * 1000000 + t->tv_nsec;
+	return t->tv_sec * 1000000000 + t->tv_nsec;
 }
 
 void nsec2timespec(timespec *t, uint64_t nsec)
 {
-	t->tv_sec = nsec / 1000000;
-	t->tv_nsec = nsec % 1000000;
+	t->tv_sec = nsec / 1000000000;
+	t->tv_nsec = nsec % 1000000000;
 }
 
 namespace mrrocpp
@@ -34,10 +34,10 @@ namespace bird_hand
 {
 
 const uint16_t u_limits[8] =
-{ 1350, 1750, 2630, 2230, 1040, 2540, 4096, 4096 };
+{ 2600, 1750, 2630, 2230, 1040, 2540, 4096, 4096 };
 
 const uint16_t l_limits[8] =
-{ 460, 730, 1790, 1450, 340, 1630, 0, 0 };
+{ 350, 730, 1790, 1450, 340, 1630, 0, 0 };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -55,14 +55,14 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		{
 			int16_t abspos;
 			//brak i==6 oraz i==7
-			if (i < 1)
+			if (i < 2)
 				device.getSynchroPos(i, abspos);
 			//uwzglednienie kierunkow obrotow enkoderow dla abspos
 			//ok -> i==2, i==0, i==4
 			if (i == 3 || i == 1 || i == 5)
 				abspos = 4096 - abspos;
 			synchro_position[i] = (double) abspos / 4096.0 / 2.0 * 2.0 * M_PI;
-			//printf("[info] synchro_position read: %f \n", synchro_position[i]);
+			printf("[info] synchro_position read: %f \n", synchro_position[i]);
 		}
 
 		get_current_kinematic_model()->i2mp_transform(synchro_position_motor,
@@ -70,16 +70,17 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		for (uint8_t i = 0; i < number_of_servos; i++)
 		{
-			//device.setLimit(i, u_limits[i], l_limits[i]);
+		//	if (i < 2)
+		//		device.setLimit(i, u_limits[i], l_limits[i]);
 		}
 
 		for (uint8_t i = 0; i < number_of_servos; i++)
 		{
 
 			int16_t ulimit, llimit;
-			if (i < 1)
+			if (i < 2)
 				device.getLimit(i, ulimit, llimit);
-			//printf("< %d > u: %d  l: %d", i, ulimit, llimit);
+			printf("< %d > u: %d  l: %d", i, ulimit, llimit);
 		}
 	}
 	controller_state_edp_buf.is_synchronised = true;
@@ -200,11 +201,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 
 		query_time = current_time
-				+ ecp_edp_cbuffer.command_structure.ecp_query_step
+				+ (uint64_t)ecp_edp_cbuffer.command_structure.ecp_query_step
 						* STEP_TIME_IN_NS;
 
 		macrostep_end_time = current_time
-				+ ecp_edp_cbuffer.command_structure.motion_steps
+				+ (uint64_t)ecp_edp_cbuffer.command_structure.motion_steps
 						* STEP_TIME_IN_NS;
 
 	}
@@ -214,15 +215,15 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		// UWAGA NA KOLEJNOSC OBLICZEN query_time i macrostep_end_time NIE ZAMIENIAC
 
 		query_time = macrostep_end_time
-				+ ecp_edp_cbuffer.command_structure.ecp_query_step
+				+ (uint64_t)ecp_edp_cbuffer.command_structure.ecp_query_step
 						* STEP_TIME_IN_NS;
 
-		macrostep_end_time += ecp_edp_cbuffer.command_structure.motion_steps
+		macrostep_end_time += (uint64_t)ecp_edp_cbuffer.command_structure.motion_steps
 				* STEP_TIME_IN_NS;
 
 	}
 
-	device.synchronize(255, 40);
+	device.synchronize(255, 0);
 
 }
 /*--------------------------------------------------------------------------*/
@@ -230,7 +231,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	//printf("get_arm_position\n");
+	printf("get_arm_position\n");
 	struct timespec query_timespec;
 
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne
@@ -265,7 +266,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			int16_t t, c;
 			uint8_t status;
 
-			if (i < 1)
+			if (i < 2)
 				device.getStatus(i, status, pos, c, t);
 
 			desired_motor_pos_new_tmp[i] = (double) pos
@@ -314,7 +315,7 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 		p = edp_ecp_rbuffer.configuration_reply_structure.finger[j].p_factor;
 		i = edp_ecp_rbuffer.configuration_reply_structure.finger[j].i_factor;
 		d = edp_ecp_rbuffer.configuration_reply_structure.finger[j].d_factor;
-		if (j < 1)
+		if (j < 2)
 			device.setPID(j, p, i, d);
 
 	}
@@ -331,7 +332,7 @@ void effector::get_robot_model(lib::c_buffer &instruction)
 		{
 			int16_t p, i, d;
 
-			if (j < 1)
+			if (j < 2)
 				device.getPID(j, p, i, d);
 			edp_ecp_rbuffer.configuration_reply_structure.finger[j].p_factor
 					= p;
