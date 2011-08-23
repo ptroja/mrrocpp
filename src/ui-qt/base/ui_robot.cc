@@ -132,8 +132,8 @@ void UiRobot::delete_robot_process_control_window()
 {
 	if (wgt_robot_pc)
 		wgt_robot_pc->my_close();
-	delete wgt_robot_pc;
-	wgt_robot_pc = NULL;
+//	delete wgt_robot_pc;
+//	wgt_robot_pc = NULL;
 }
 
 wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
