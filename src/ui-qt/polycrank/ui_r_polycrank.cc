@@ -106,7 +106,7 @@ int UiRobot::synchronise_int()
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+	//MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)

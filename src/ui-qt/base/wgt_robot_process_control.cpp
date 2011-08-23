@@ -8,7 +8,7 @@
 #include "allrobots.h"
 #include "mp.h"
 
-wgt_robot_process_control::wgt_robot_process_control(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
+wgt_robot_process_control::wgt_robot_process_control(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
 	wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
 {
 	ui->setupUi(this);

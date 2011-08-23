@@ -80,7 +80,7 @@ void UiRobot::setup_menubar()
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
-	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
 	common::UiRobot::manage_interface();
 

@@ -45,7 +45,9 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 			(boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::ECP, "ui_" + robot_name, interface.network_sr_attach_point);
 
 	process_control_window_created = false;
-	wgt_robot_pc = new wgt_robot_process_control(interface, this, interface.get_main_window());
+	wgt_robot_pc = new wgt_robot_process_control("R PC", interface, this, interface.get_main_window());
+
+	add_wgt <wgt_robot_process_control>(WGT_ROBOT_PC, "R PC");
 
 	current_pos = new double[number_of_servos];
 	desired_pos = new double[number_of_servos];
@@ -118,13 +120,6 @@ void UiRobot::unblock_ecp_trigger()
 		wgt_robot_pc->unblock_all_ecp_trigger_widgets();
 }
 
-void UiRobot::set_robot_process_control_window(wgt_robot_process_control *wgt_pc)
-{
-	wgt_robot_pc = wgt_pc;
-	if (interface.get_wgt_pc()->isVisible())
-		wgt_robot_pc->my_open();
-}
-
 void UiRobot::open_robot_process_control_window()
 {
 	if (wgt_robot_pc)
@@ -135,8 +130,7 @@ void UiRobot::delete_robot_process_control_window()
 {
 	if (wgt_robot_pc)
 		wgt_robot_pc->my_close();
-//	delete wgt_robot_pc;
-//	wgt_robot_pc = NULL;
+
 }
 
 wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
