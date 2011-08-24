@@ -30,11 +30,13 @@ namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
 
-const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] = { 3600, 3200, 4096, 4096, 4096, 4096, 4096, 4096 };
+const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] = { 3600, 3200, 4096, 4096, 950, 1500, 4096, 4096 };
 
-const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] = { 950, 600, 0, 0, 0, 0, 0, 0 };
+const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] = { 950, 600, 0, 0, 200, 650, 0, 0 };
 
 const int16_t torque_offset[lib::bird_hand::NUM_OF_SERVOS] = { 0, 0, 10, 32, 17, 35, 3, 136 };
+
+const int16_t motor_inv[lib::bird_hand::NUM_OF_SERVOS] = { 1, 1, 1, 0, 1, 0, 1, 0 };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -63,7 +65,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		get_current_kinematic_model()->i2mp_transform(synchro_position_motor, synchro_position);
 
 		for (uint8_t i = 0; i < number_of_servos; i++) {
-			device.setLimit(i, u_limits[i], l_limits[i]);
+			device.setLimit(i, u_limits[i], l_limits[i], motor_inv[i]);
 		}
 
 		for (uint8_t i = 0; i < number_of_servos; i++) {

@@ -76,7 +76,7 @@ public:
 	 *
 	 * Set limits parameters of gripper joint.
 	 */
-	void setLimit(uint8_t id, int16_t upper, int16_t lower);
+	void setLimit(uint8_t id, int16_t upper, int16_t lower, int16_t inv);
 
 	/*!
 	 * \brief method set command for gripper joint.

@@ -179,7 +179,7 @@ void Bird_hand::getLimit(uint8_t id, int16_t &upper, int16_t &lower)
 
 }
 
-void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
+void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower, int16_t inv)
 {
 	printf("Bird_hand::setLimit\n");
 	buf[0] = '#';
@@ -192,6 +192,7 @@ void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
 	a->l_limit = lower;
 	a->cur_limit = 10000;
 	a->f_limit = 1000;
+	a->inv = inv;
 
 	write_read(fd[id / 2], buf, 21, 0);
 
