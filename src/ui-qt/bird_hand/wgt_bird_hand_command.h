@@ -47,13 +47,6 @@ public:
 	int copy_finger_command(int fingerId);
 
 	void my_open(bool set_on_top = false);
-	virtual void add_button(QWidget *button, int row, int space)
-	{
-	}
-
-	virtual void setup_ui()
-	{
-	}
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_curtor_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_destor_Vector;
@@ -75,9 +68,6 @@ private:
 	void synchro_depended_init();
 	void init_and_copy();
 
-
-	int get_desired_position();
-
 	lib::bird_hand::MOTION_VARIANT current_profile_type;
 
 signals:
@@ -92,7 +82,6 @@ private slots:
 	void on_pushButton_change_command_type_all_clicked();
 
 	void init_and_copy_slot();
-
 
 };
 

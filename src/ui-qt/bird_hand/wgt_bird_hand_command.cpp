@@ -308,29 +308,8 @@ int wgt_bird_hand_command::copy_command()
 
 void wgt_bird_hand_command::on_pushButton_execute_clicked()
 {
-	//	get_desired_position();
+
 	get_command();
-}
-
-int wgt_bird_hand_command::get_desired_position()
-{
-
-	if (robot->state.edp.pid != -1) {
-
-		if (robot->state.edp.is_synchronised) {
-
-			for (int i = 0; i < robot->number_of_servos; i++) {
-				//	robot->desired_pos[i] = desired_pos_spin_box[i]->value(); //co tu ma być?
-				joint_command[i]->desired_position = desired_pos_spin_box[i]->value();
-			}
-		} else {
-
-			for (int i = 0; i < robot->number_of_servos; i++) {
-				joint_command[i]->desired_position = 0.0;
-			}
-		}
-	}
-	return 1;
 }
 
 int wgt_bird_hand_command::get_variant_finger_command(int fingerId)

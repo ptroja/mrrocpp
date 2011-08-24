@@ -30,10 +30,10 @@ namespace mrrocpp {
 namespace edp {
 namespace bird_hand {
 
-const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] = { 3600, 3200, 3300, 1150, 950, 1500, 950, 1000 };
+const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] = { 3600, 3200, 3250, 1100, 900, 1450, 900, 950 };
 //const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] = { 3600, 3200, 4096, 4096, 950, 4096, 4096, 4096 };
 
-const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] = { 950, 600, 2600, 400, 200, 650, 100, 150 };
+const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] = { 950, 600, 2650, 450, 250, 70, 150, 200 };
 
 //const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] = { 950, 600, 0, 0, 200, 0, 0, 0 };
 const int16_t torque_offset[lib::bird_hand::NUM_OF_SERVOS] = { 0, 0, 10, 32, 17, 35, 3, 200 };
