@@ -144,67 +144,13 @@ void wgt_bird_hand_command::init_and_copy()
 void wgt_bird_hand_command::on_pushButton_read_clicked()
 {
 
-	init();
+	set_status();
 }
 
 void wgt_bird_hand_command::init_and_copy_slot()
 {
-	init();
+	set_status();
 	copy_command();
-}
-
-void wgt_bird_hand_command::init()
-{
-	try {
-
-		mrrocpp::lib::bird_hand::status &bhsrs = robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
-
-		joint_status.append(&bhsrs.thumb_f[0]);
-		joint_status.append(&bhsrs.thumb_f[1]);
-		joint_status.append(&bhsrs.index_f[0]);
-		joint_status.append(&bhsrs.index_f[1]);
-		joint_status.append(&bhsrs.index_f[2]);
-		joint_status.append(&bhsrs.ring_f[0]);
-		joint_status.append(&bhsrs.ring_f[1]);
-		joint_status.append(&bhsrs.ring_f[2]);
-
-		mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
-
-		joint_command.append(&bhcs.thumb_f[0]);
-		joint_command.append(&bhcs.thumb_f[1]);
-		joint_command.append(&bhcs.index_f[0]);
-		joint_command.append(&bhcs.index_f[1]);
-		joint_command.append(&bhcs.index_f[2]);
-		joint_command.append(&bhcs.ring_f[0]);
-		joint_command.append(&bhcs.ring_f[1]);
-		joint_command.append(&bhcs.ring_f[2]);
-
-		if (robot->state.edp.pid != -1) {
-			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-			{
-				synchro_depended_widgets_disable(false);
-
-				//				robot->ui_ecp_robot-> ;// co tutaj ma być?
-				//	printf("read set_status\n");
-				set_status();
-				/*
-				 for (int i = 0; i < robot->number_of_servos; i++)
-				 {
-				 doubleSpinBox_curpos_Vector[i]->setValue(
-				 joint_status[i]->meassured_position);
-
-				 }
-				 */
-			} else {
-				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				synchro_depended_widgets_disable(true);
-
-			}
-		}
-
-	} // end try
-	CATCH_SECTION_UI_PTR
-
 }
 
 void wgt_bird_hand_command::on_pushButton_copy_clicked()
@@ -296,6 +242,29 @@ int wgt_bird_hand_command::get_command()
 
 int wgt_bird_hand_command::set_status()
 {
+
+	mrrocpp::lib::bird_hand::status &bhsrs = robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
+
+	joint_status.append(&bhsrs.thumb_f[0]);
+	joint_status.append(&bhsrs.thumb_f[1]);
+	joint_status.append(&bhsrs.index_f[0]);
+	joint_status.append(&bhsrs.index_f[1]);
+	joint_status.append(&bhsrs.index_f[2]);
+	joint_status.append(&bhsrs.ring_f[0]);
+	joint_status.append(&bhsrs.ring_f[1]);
+	joint_status.append(&bhsrs.ring_f[2]);
+
+	mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
+
+	joint_command.append(&bhcs.thumb_f[0]);
+	joint_command.append(&bhcs.thumb_f[1]);
+	joint_command.append(&bhcs.index_f[0]);
+	joint_command.append(&bhcs.index_f[1]);
+	joint_command.append(&bhcs.index_f[2]);
+	joint_command.append(&bhcs.ring_f[0]);
+	joint_command.append(&bhcs.ring_f[1]);
+	joint_command.append(&bhcs.ring_f[2]);
+
 	try {
 		if (robot->state.edp.pid != -1) {
 			//	printf("set_status inside\n");

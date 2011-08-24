@@ -74,7 +74,7 @@ private:
 
 	void synchro_depended_init();
 	void init_and_copy();
-	void init();
+
 
 	int get_desired_position();
 
