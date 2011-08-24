@@ -24,6 +24,14 @@ wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui:
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
+	// zacienianie kontrolek momentu dla obrotow palcy
+	ui->doubleSpinBox_curtor_index_0->hide();
+	ui->doubleSpinBox_curtor_ring_0->hide();
+	ui->doubleSpinBox_destor_index_0->hide();
+	ui->doubleSpinBox_destor_ring_0->hide();
+
+	// budowanie wektoro kontrolek
+
 	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_0);
 	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_1);
 	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_0);
