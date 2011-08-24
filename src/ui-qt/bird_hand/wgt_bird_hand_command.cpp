@@ -21,7 +21,6 @@ wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui:
 	ui->setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::bird_hand::UiRobot *>(_robot);
 
-	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
 	// zacienianie kontrolek momentu dla obrotow palcy
@@ -154,11 +153,6 @@ void wgt_bird_hand_command::init_and_copy_slot()
 	copy_command();
 }
 
-void wgt_bird_hand_command::synchro_depended_init_slot()
-{
-
-}
-
 void wgt_bird_hand_command::init()
 {
 	try {
@@ -259,11 +253,6 @@ void wgt_bird_hand_command::on_pushButton_change_command_type_all_clicked()
 		buttons_in_group[button_number]->toggle();
 
 	}
-}
-
-int wgt_bird_hand_command::synchro_depended_widgets_disable(bool _set_disabled)
-{
-	return 1;
 }
 
 int wgt_bird_hand_command::get_command()
