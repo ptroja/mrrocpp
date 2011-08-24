@@ -34,10 +34,10 @@ namespace bird_hand
 {
 
 const uint16_t u_limits[lib::bird_hand::NUM_OF_SERVOS] =
-{ 2600, 1750, 2630, 2230, 1040, 2540, 4096, 4096 };
+{ 3600, 3200, 2630, 2230, 1040, 2540, 4096, 4096 };
 
 const uint16_t l_limits[lib::bird_hand::NUM_OF_SERVOS] =
-{ 350, 730, 1790, 1450, 340, 1630, 0, 0 };
+{ 950, 600, 1790, 1450, 340, 1630, 0, 0 };
 
 const int16_t torque_offset[lib::bird_hand::NUM_OF_SERVOS] =
 { 0, 0, 10, 32, 17, 35, 3, 136 };
@@ -73,7 +73,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		for (uint8_t i = 0; i < number_of_servos; i++)
 		{
-			//		device.setLimit(i, u_limits[i], l_limits[i]);
+			device.setLimit(i, u_limits[i], l_limits[i]);
 		}
 
 		for (uint8_t i = 0; i < number_of_servos; i++)
@@ -238,7 +238,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	printf("get_arm_position\n");
+	printf("\nget_arm_position\n\n");
 	struct timespec query_timespec;
 
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne
