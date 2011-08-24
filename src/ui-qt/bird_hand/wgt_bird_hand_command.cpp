@@ -243,6 +243,9 @@ int wgt_bird_hand_command::get_command()
 int wgt_bird_hand_command::set_status()
 {
 
+	joint_status.clear();
+	joint_command.clear();
+
 	mrrocpp::lib::bird_hand::status &bhsrs = robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
 
 	joint_status.append(&bhsrs.thumb_f[0]);
