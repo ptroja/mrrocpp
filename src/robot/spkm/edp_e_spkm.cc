@@ -20,6 +20,8 @@
 
 #include "robot/epos/epos.h"
 #include "robot/epos/epos_access_usb.h"
+#include "robot/epos/epos_access_socketcan.h"
+
 #include "base/lib/pvt.hpp"
 #include "base/lib/pvat_cartesian.hpp"
 
@@ -57,7 +59,11 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 	if (!robot_test_mode) {
 		// Create gateway object.
-		gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_usb();
+		if(this->config.exists("can_iface")) {
+			gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_socketcan(config.value<std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_usb();
+		}
 
 		// Connect to the gateway.
 		gateway->open();

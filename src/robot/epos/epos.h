@@ -167,15 +167,31 @@ public:
 	 */
 	epos(epos_access & _device, uint8_t _nodeId);
 
+	typedef enum _actual_state_t {
+		UNKNOWN = -1,
+		START = 0,
+		NOT_READY_TO_SWITCH_ON = 1,
+		SWITCH_ON_DISABLED = 2,
+		READY_TO_SWITCH_ON = 3,
+		SWITCHED_ON = 4,
+		REFRESH = 5,
+		MEASURE_INIT = 6,
+		OPERATION_ENABLE = 7,
+		QUICK_STOP_ACTIVE = 8,
+		FAULT_REACTION_ACTIVE_DISABLED = 9,
+		FAULT_REACTION_ACTIVE_ENABLED = 10,
+		FAULT = 11
+	} actual_state_t;
+
 	/*! \brief check if the connection to EPOS is alive */
-	//		int checkEPOS();
+	// int checkEPOS();
 
 	/*! \brief check EPOS status
 	 * @return state according to firmware spec */
-	int checkEPOSstate();
+	actual_state_t checkEPOSstate();
 
 	//! Find EPOS state corresponding to given status word
-	static int status2state(WORD w);
+	static actual_state_t status2state(WORD w);
 
 	//! Check if the remote operation is enabled
 	//! @param status status word

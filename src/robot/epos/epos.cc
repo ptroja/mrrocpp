@@ -19,6 +19,8 @@
 #include <sys/select.h>
 
 #include <boost/throw_exception.hpp>
+#include <boost/thread/thread_time.hpp>
+#include <boost/thread/thread.hpp>
 
 #include "epos_access.h"
 #include "epos.h"
@@ -289,96 +291,96 @@ void epos::printEPOSstatusword(WORD s)
 		printf("false\n");
 }
 
-int epos::status2state(WORD w)
+epos::actual_state_t epos::status2state(WORD w)
 {
 	/* state 'start' (0)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx0  x000 0000 */
 	if (!bitcmp(w, E_BIT00) && !bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && !bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (0);
+		return (START);
 
 	/* state 'not ready to switch on' (1)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x000 0000 */
 	if (!bitcmp(w, E_BIT00) && !bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (1);
+		return (NOT_READY_TO_SWITCH_ON);
 
 	/* state 'switch on disabled' (2)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x100 0000 */
 	if (!bitcmp(w, E_BIT00) && !bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (2);
+		return (SWITCH_ON_DISABLED);
 
 	/* state 'ready to switch on' (3)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x010 0001 */
 	if (bitcmp(w, E_BIT00) && !bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (3);
+		return (READY_TO_SWITCH_ON);
 
 	/* state 'switched on' (4)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x010 0011 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (4);
+		return (SWITCHED_ON);
 
 	/* state 'refresh' (5)
 	 fedc ba98  7654 3210
 	 w == x1xx xxx1  x010 0011 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && bitcmp(w, E_BIT14))
-		return (5);
+		return (REFRESH);
 
 	/* state 'measure init' (6)
 	 fedc ba98  7654 3210
 	 w == x1xx xxx1  x011 0011 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && bitcmp(w, E_BIT04)
 			&& bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && bitcmp(w, E_BIT14))
-		return (6);
+		return (MEASURE_INIT);
 
 	/* state 'operation enable' (7)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x011 0111 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && bitcmp(w, E_BIT04)
 			&& bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (7);
+		return (OPERATION_ENABLE);
 
 	/* state 'quick stop active' (8)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x001 0111 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && bitcmp(w, E_BIT02) && !bitcmp(w, E_BIT03) && bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (8);
+		return (QUICK_STOP_ACTIVE);
 
 	/* state 'fault reaction active (disabled)' (9)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x000 1111 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && bitcmp(w, E_BIT02) && bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (9);
+		return (FAULT_REACTION_ACTIVE_DISABLED);
 
 	/* state 'fault reaction active (enabled)' (10)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x001 1111 */
 	if (bitcmp(w, E_BIT00) && bitcmp(w, E_BIT01) && bitcmp(w, E_BIT02) && bitcmp(w, E_BIT03) && bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (10);
+		return (FAULT_REACTION_ACTIVE_ENABLED);
 
 	/* state 'fault' (11)
 	 fedc ba98  7654 3210
 	 w == x0xx xxx1  x000 1000 */
 	if (!bitcmp(w, E_BIT00) && !bitcmp(w, E_BIT01) && !bitcmp(w, E_BIT02) && bitcmp(w, E_BIT03) && !bitcmp(w, E_BIT04)
 			&& !bitcmp(w, E_BIT05) && !bitcmp(w, E_BIT06) && bitcmp(w, E_BIT08) && !bitcmp(w, E_BIT14))
-		return (11);
+		return (FAULT);
 
 	// if we get down here, statusword has a unknown value!
 	fprintf(stderr, "WARNING: EPOS status word %#06x is an unknown state!\n", w);
 
-	return (-1);
+	return (UNKNOWN);
 }
 
 /*! check EPOS state, firmware spec 8.1.1
@@ -386,7 +388,7 @@ int epos::status2state(WORD w)
  \return EPOS status as defined in firmware specification 8.1.1
 
  */
-int epos::checkEPOSstate()
+epos::actual_state_t epos::checkEPOSstate()
 {
 	WORD w = readStatusWord();
 
@@ -440,60 +442,60 @@ int epos::printEPOSstate()
 	printf("\nEPOS is in state: ");
 
 	switch (state) {
-		case 0:
+		case START:
 			printf("Start\n");
 			printf("\tBootup\n");
 			break;
-		case 1:
+		case NOT_READY_TO_SWITCH_ON:
 			printf("Not Ready to Switch On\n");
 			printf("\tCurrent offset will be measured\n");
 			printf("\tDrive function is disabled\n");
 			break;
-		case 2:
+		case SWITCH_ON_DISABLED:
 			printf("Switch On Disabled\n");
 			printf("\tDrive initialization is complete\n");
 			printf("\tDrive parameters may be changed\n");
 			printf("\tDrive function is disabled\n");
 			break;
-		case 3:
+		case READY_TO_SWITCH_ON:
 			printf("Ready to Switch On\n");
 			printf("\tDrive parameters may be changed\n");
 			printf("\tDrive function is disabled\n");
 			break;
-		case 4:
+		case SWITCHED_ON:
 			printf("Switched On\n");
 			printf("\tDrive function is disabled\n");
 			break;
-		case 5:
+		case REFRESH:
 			printf("Refresh\n");
 			printf("\tRefresh of power stage\n");
 			break;
-		case 6:
+		case MEASURE_INIT:
 			printf("Measure Init\n");
 			printf("\tPower is applied to the motor\n");
 			printf("\tMotor resistance or commutation delay is measured\n");
 			break;
-		case 7:
+		case OPERATION_ENABLE:
 			printf("Operation Enable\n");
 			printf("\tNo faults have been detected\n");
 			printf("\tDrive function is enabled and power is applied to the motor\n");
 			break;
-		case 8:
+		case QUICK_STOP_ACTIVE:
 			printf("Quickstop Active\n");
 			printf("\tQuickstop function is being executed\n");
 			printf("\tDrive function is enabled and power is applied to the motor\n");
 			break;
-		case 9:
+		case FAULT_REACTION_ACTIVE_DISABLED:
 			printf("Fault Reaction Active (disabled)\n");
 			printf("\tA fault has occurred in the drive\n");
 			printf("\tDrive function is disabled\n");
 			break;
-		case 10:
+		case FAULT_REACTION_ACTIVE_ENABLED:
 			printf("Fault Reaction Active (enabled)\n");
 			printf("\tA fault has occurred in the drive\n");
 			printf("\tSelected fault reaction is being executed\n");
 			break;
-		case 11:
+		case FAULT:
 			printf("FAULT\n");
 			printf("\tA fault has occurred in the drive\n");
 			printf("\tDrive parameters may be changed\n");
@@ -509,7 +511,11 @@ int epos::printEPOSstate()
 
 void epos::reset()
 {
+	// Local variables
 	int state, timeout;
+
+	// Wakeup time
+	boost::system_time wakeup;
 
 	// TODO: handle initial error conditions
 	state = checkEPOSstate();
@@ -536,33 +542,69 @@ void epos::reset()
 	// Shutdown
 	writeControlword(0x0006);
 
+	// Setup the wakeup time
+	wakeup = boost::get_system_time();
+
 	// TODO: handle error conditions
-	state = checkEPOSstate();
+	timeout = 5;
+	do {
+		state = checkEPOSstate();
+
+		if(state == READY_TO_SWITCH_ON) { // Operation enable
+			break;
+		} else if(state == FAULT) {
+			throw epos_error() << reason("Device is in the fault state");
+		} else {
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during shutdown" << std::endl;
+			// Continue;
+		}
+
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
+
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
+	} while(timeout--);
+
+	if(timeout == 0) {
+		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout shutting device down"));
+	}
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
+		std::cout << "XXX state = " << state << std::endl;
 		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
 	writeControlword(0x000f);
 
-	timeout = 10;
+	// Setup the wakeup time
+	wakeup = boost::get_system_time();
+
+	timeout = 5;
 	do {
 		state = checkEPOSstate();
 
 		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
 
-		if(state == 6) { // Measure in progress...
-			continue;
-		} else if(state == 7) { // Operation enable
+		if(state == MEASURE_INIT) { // Measure in progress...
+			// Continue
+		} else if(state == OPERATION_ENABLE) { // Operation enable
 			break;
-		} else if(state == 11) {
+		} else if(state == FAULT) {
 			throw epos_error() << reason("Device is in the fault state");
 		} else {
 			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
-			continue;
+			// Continue;
 		}
+
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
+
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
 
 	} while(timeout--);
 
@@ -647,6 +689,7 @@ void epos::changeEPOSstate(state_t state)
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
+			break;
 	}
 }
 
@@ -1150,7 +1193,7 @@ INTEGER32 epos::readTargetPosition()
 
 void epos::writeTargetPosition(INTEGER32 val)
 {
-	return WriteObjectValue(0x607a, 0x00, val);
+	WriteObjectValue(0x607a, 0x00, val);
 }
 
 /* read manufacturer device name string firmware */
@@ -1695,7 +1738,10 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = readStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
+		BOOST_THROW_EXCEPTION(epos_error()
+				<< reason("HOMING ERROR!")
+				<< canId(nodeId)
+		);
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained

@@ -243,6 +243,7 @@ unsigned int epos_access_socketcan::ReadObject(WORD *ans, unsigned int ans_len, 
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(epos_error() << reason("unsupported reply data size"));
+			break;
 	}
 
 	return (4 - BYTES_WITHOUT_DATA(frame.data[0]));
