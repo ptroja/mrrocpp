@@ -68,7 +68,7 @@ public:
 	void make_connections();
 	void setup_menubar();
 
-	void set_robot_process_control_window(wgt_robot_process_control *);
+
 };
 
 }
