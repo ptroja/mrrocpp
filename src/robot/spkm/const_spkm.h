@@ -30,7 +30,7 @@ const int NUM_OF_SERVOS = 6;
  * @brief Number of segments making up the whole PKM motion.
  *
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @ingroup spkm
  */
 const unsigned int NUM_OF_MOTION_SEGMENTS = 20;
