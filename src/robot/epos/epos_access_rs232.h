@@ -1,8 +1,6 @@
-/*
- * epos_access_rs232.h
- *
- *  Created on: Jan 18, 2011
- *      Author: ptroja
+/*!
+ * \file epos_access_rs232.h
+ * \brief RS232 transport layer
  */
 
 #ifndef EPOS_ACCESS_RS232_H_
@@ -18,6 +16,7 @@ namespace mrrocpp {
 namespace edp {
 namespace epos {
 
+//! Access to the EPOS with the RS232 transport layer
 class epos_access_rs232 : public epos_access {
 private:
 	//! device name of EPOS port
@@ -80,7 +79,8 @@ public:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param length of answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
@@ -101,6 +101,7 @@ public:
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength object length
 	 */
 	void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength);
 

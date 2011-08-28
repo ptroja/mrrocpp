@@ -1,8 +1,6 @@
-/*
- * epos_access_base.h
- *
- *  Created on: Feb 11, 2011
- *      Author: ptroja
+/*!
+ * \file epos_access.h
+ * \brief Abstract types for transport-level access
  */
 
 #ifndef EPOS_ACCESS_BASE_H_
@@ -54,6 +52,7 @@ typedef uint32_t DWORD; ///< \brief 32bit type for EPOS data exchange
 typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
 typedef uint8_t BYTE; ///< \brief 8bit type for EPOS data exchange
 
+//! Abstract class for access to the EPOS at the transport layer
 class epos_access {
 protected:
 	//! Flag indicating connection status
@@ -74,6 +73,7 @@ public:
 	virtual ~epos_access()
 	{}
 
+	//! Operation codes of CANopen datagrams
 	typedef enum _CanOpen_OpCode {
 		Response_Op = 0x00,
 
@@ -95,7 +95,8 @@ public:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param length of answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId node-Id of the target device
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller

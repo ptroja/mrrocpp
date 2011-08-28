@@ -2,7 +2,7 @@
 
  \brief libEPOS - a library to control an EPOS; implementation
 
- \addtogroup libEPOS Library to control an EPOS motor control unit
+ \addtogroup libEPOS Library for low-level access to the EPOS motion controller
 
  \@{
  */
@@ -76,18 +76,18 @@ namespace epos {
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
 
 // Interpolation buffer status bits
-#define PVT_STATUS_UNDERFLOW_WARNING	E_BIT00
-#define PVT_STATUS_OVERFLOW_WARNING		E_BIT01
-#define PVT_STATUS_VELOCITY_WARNING		E_BIT02
-#define PVT_STATUS_ACCELERATION_WARNING	E_BIT03
-#define PVT_STATUS_UNDERFLOW_ERROR		E_BIT08
-#define PVT_STATUS_OVERFLOW_ERROR		E_BIT09
-#define PVT_STATUS_VELOCITY_ERROR		E_BIT10
-#define PVT_STATUS_ACCELERATION_ERROR	E_BIT11
-#define PVT_STATUS_BUFFER_ENABLED		E_BIT14
-#define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15
-#define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)
-#define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)
+#define PVT_STATUS_UNDERFLOW_WARNING	E_BIT00	///< Warning: buffer underflow
+#define PVT_STATUS_OVERFLOW_WARNING		E_BIT01	///< Warning: buffer overflow
+#define PVT_STATUS_VELOCITY_WARNING		E_BIT02 ///< Warning: velocity value exceeded
+#define PVT_STATUS_ACCELERATION_WARNING	E_BIT03	///< Warning: acceleration value exceeded
+#define PVT_STATUS_UNDERFLOW_ERROR		E_BIT08 ///< Error: buffer underflow
+#define PVT_STATUS_OVERFLOW_ERROR		E_BIT09	///< Error: buffer overflow
+#define PVT_STATUS_VELOCITY_ERROR		E_BIT10	///< Error: velocity value exceeded
+#define PVT_STATUS_ACCELERATION_ERROR	E_BIT11	///< Error: acceleration value exceeded
+#define PVT_STATUS_BUFFER_ENABLED		E_BIT14	///< Status: buffer enabled
+#define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15	///< Status: interpolated-profile mode active
+#define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)	///< Status: WARNING
+#define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)	///< Status: ERROR
 
 /************************************************************/
 /*           EPOS related constants                         */
