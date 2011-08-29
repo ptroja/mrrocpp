@@ -51,8 +51,8 @@ void Stats::mp_2_ecp_next_state_string_handler(void)
 		//Initalizing all needed items: sensors and generators.
 		statsGenerator = new common::generator::stats_generator(*this);
 
-		//std::string fileName = getFileName();
-		std::string fileName = "/home/tbem/workspace/mrrocpp/test.rtrj";
+		std::string fileName = getFileName();
+		//std::string fileName = "/home/tbem/workspace/mrrocpp/test.rtrj";
 		if(fileName.empty())
 			return;
 
