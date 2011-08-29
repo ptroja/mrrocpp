@@ -86,6 +86,8 @@ bool neuron_generator::first_step()
 	openFiles();
 	mstep_ = 0;
 
+	first_next_step = true;
+
 	return true;
 }
 
@@ -137,6 +139,12 @@ bool neuron_generator::next_step()
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
 	fprintf(pFileR,"%f|%f|%f\n",msr_position[0],msr_position[1],msr_position[2]);
+
+	if(first_next_step)
+	{
+		position = msr_position;
+		first_next_step = false;
+	}
 
 	if (breaking_) {
 		double tmp;
@@ -232,8 +240,8 @@ bool neuron_generator::next_step()
 			}
 		} else {
 			for (int i = 0; i < 3; i++) {
-				velocityProfileLinear(coeff_[i], msr_position[i], desired_position[i], (double) macroSteps * MSTEP_TIME);
-				vel_[i] = (desired_position[i] - msr_position[i]) / ((double) macroSteps * MSTEP_TIME);
+				velocityProfileLinear(coeff_[i], position[i], desired_position[i], (double) macroSteps * MSTEP_TIME);
+				vel_[i] = (desired_position[i] - position[i]) / ((double) macroSteps * MSTEP_TIME);
 			}
 		}
 		mstep_ = 1;
