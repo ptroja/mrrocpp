@@ -45,8 +45,12 @@ const char * Transition::getTargetID(StateHeap &sh) const
 	{
 		// @bug possible memory corruption
 		char * tmp = strdup(targetID.c_str());
-		char *nextState = strtok(tmp, sp);
-		sh.pushTargetName(strtok(NULL, sp));
+		char *nextState = strdup(strtok(tmp, sp));
+		//char * forstack = strstr(targetID.c_str(), sp);
+		//forstack+=2;
+		//sh.pushTargetName(strtok(NULL, sp));
+		sh.pushTargetName(strstr(targetID.c_str(), sp)+2);
+
 		free(tmp);
 		return nextState;
 	}

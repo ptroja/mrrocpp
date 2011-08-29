@@ -15,19 +15,19 @@
 #include "base/ecp/ecp_robot.h"
 #include "wgt_base.h"
 
-
 class QDockWidget;
 class wgt_robot_process_control;
 
-namespace Ui{
+namespace Ui {
 class MenuBar;
 class SignalDispatcher;
 }
 
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
+
+const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
 #define CATCH_SECTION_IN_ROBOT catch (ecp::common::robot::ECP_main_error & e) { \
 	/* Obsluga bledow ECP */ \
@@ -97,9 +97,7 @@ class Interface;
 //
 //
 
-
 // super klasa agregujaca porozrzucane dotychczas struktury
-
 
 class UiRobot : public QObject
 {
@@ -151,21 +149,32 @@ public:
 	virtual void null_ui_ecp_robot() = 0;
 	virtual int ui_get_edp_pid() = 0;
 	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
-	virtual int manage_interface() = 0;
+	virtual int manage_interface();
 	virtual void make_connections() = 0;
 	virtual void setup_menubar();
-	virtual int execute_clear_fault(){return 0;};
+	virtual int execute_clear_fault()
+	{
+		return 0;
+	}
 
-	virtual int	process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger){return 0;}
-	virtual double* getCurrentPos(){return NULL;}
-	virtual double* getDesiredPos(){return NULL;}
+	virtual int process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
+	{
+		return 0;
+	}
+	virtual double* getCurrentPos()
+	{
+		return NULL;
+	}
+	virtual double* getDesiredPos()
+	{
+		return NULL;
+	}
 
 	virtual int synchronise() = 0;
 	virtual void edp_create();
 	virtual int edp_create_int();
 	virtual void create_ui_ecp_robot() = 0;
 
-	void set_robot_process_control_window(wgt_robot_process_control *);
 	wgt_robot_process_control * get_wgt_robot_pc();
 	void delete_robot_process_control_window();
 	void open_robot_process_control_window();
@@ -204,27 +213,25 @@ public:
 	typedef std::map <lib::robot_name_t, UiRobot*> robots_t;
 	wgt_t wgts;
 
-
 	bool process_control_window_created;
 
 	void zero_desired_position();
 
-	template<typename T> void add_wgt(std::string name, QString label)
-		{
-			wgt_base *created_wgt = new T(label, interface, this);
-			wgts[name] = created_wgt;
-		}
+	template <typename T> void add_wgt(std::string name, QString label)
+	{
+		wgt_base *created_wgt = new T(label, interface, this);
+		wgts[name] = created_wgt;
+	}
 
 	double *current_pos; // pozycja biezaca
 	double *desired_pos; // pozycja zadana
-
 
 protected:
 	QAction *EDP_Load;
 	QAction *EDP_Unload;
 	QAction *wgt_robot_process_control_action;
 
-	QMenu	*robot_menu;
+	QMenu *robot_menu;
 };
 
 }

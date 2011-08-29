@@ -13,22 +13,14 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _config, _sr_ecp),
-			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
-			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
-			bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
-			bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _config, _sr_ecp), bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager), bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager), bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager), bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-			ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _ecp_object),
-			bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
-			bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
-			bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
-			bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _ecp_object), bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager), bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager), bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager), bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -61,14 +53,14 @@ void robot::create_command()
 		ecp_edp_cbuffer.command_structure.motion_steps = bird_hand_command_data_port.data.motion_steps;
 		ecp_edp_cbuffer.command_structure.ecp_query_step = bird_hand_command_data_port.data.ecp_query_step;
 
-		ecp_edp_cbuffer.command_structure.finger[0] = bird_hand_command_data_port.data.index_f[2];
-		ecp_edp_cbuffer.command_structure.finger[1] = bird_hand_command_data_port.data.index_f[1];
-		ecp_edp_cbuffer.command_structure.finger[2] = bird_hand_command_data_port.data.thumb_f[0];
-		ecp_edp_cbuffer.command_structure.finger[3] = bird_hand_command_data_port.data.thumb_f[1];
-		ecp_edp_cbuffer.command_structure.finger[4] = bird_hand_command_data_port.data.ring_f[1];
-		ecp_edp_cbuffer.command_structure.finger[5] = bird_hand_command_data_port.data.ring_f[2];
-		ecp_edp_cbuffer.command_structure.finger[6] = bird_hand_command_data_port.data.index_f[0];
-		ecp_edp_cbuffer.command_structure.finger[7] = bird_hand_command_data_port.data.ring_f[0];
+		ecp_edp_cbuffer.command_structure.finger[0] = bird_hand_command_data_port.data.ring_f[0];
+		ecp_edp_cbuffer.command_structure.finger[1] = bird_hand_command_data_port.data.index_f[0];
+		ecp_edp_cbuffer.command_structure.finger[2] = bird_hand_command_data_port.data.index_f[1];
+		ecp_edp_cbuffer.command_structure.finger[3] = bird_hand_command_data_port.data.index_f[2];
+		ecp_edp_cbuffer.command_structure.finger[4] = bird_hand_command_data_port.data.thumb_f[1];
+		ecp_edp_cbuffer.command_structure.finger[5] = bird_hand_command_data_port.data.thumb_f[0];
+		ecp_edp_cbuffer.command_structure.finger[6] = bird_hand_command_data_port.data.ring_f[2];
+		ecp_edp_cbuffer.command_structure.finger[7] = bird_hand_command_data_port.data.ring_f[1];
 
 		is_new_data = true;
 	}
@@ -77,13 +69,13 @@ void robot::create_command()
 		ecp_command.set_type |= ROBOT_MODEL_DEFINITION;
 
 		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
-			ecp_edp_cbuffer.configuration_command_structure.finger[i]
-					= bird_hand_configuration_command_data_port.data.thumb_f[i];
+			ecp_edp_cbuffer.configuration_command_structure.finger[i] =
+					bird_hand_configuration_command_data_port.data.thumb_f[i];
 		}
 
 		for (int i = 0; i < lib::bird_hand::INDEX_F_NUM_OF_SERVOS; i++) {
-			ecp_edp_cbuffer.configuration_command_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS]
-					= bird_hand_configuration_command_data_port.data.index_f[i];
+			ecp_edp_cbuffer.configuration_command_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS] =
+					bird_hand_configuration_command_data_port.data.index_f[i];
 		}
 
 		for (int i = 0; i < lib::bird_hand::RING_F_NUM_OF_SERVOS; i++) {
@@ -120,14 +112,14 @@ void robot::get_reply()
 	// generator reply generation
 	if (bird_hand_status_reply_data_request_port.is_new_request()) {
 
-		bird_hand_status_reply_data_request_port.data.index_f[2] = edp_ecp_rbuffer.status_reply_structure.finger[0];
-		bird_hand_status_reply_data_request_port.data.index_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[1];
-		bird_hand_status_reply_data_request_port.data.thumb_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[2];
-		bird_hand_status_reply_data_request_port.data.thumb_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[3];
-		bird_hand_status_reply_data_request_port.data.ring_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[4];
-		bird_hand_status_reply_data_request_port.data.ring_f[2] = edp_ecp_rbuffer.status_reply_structure.finger[5];
-		bird_hand_status_reply_data_request_port.data.index_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[6];
-		bird_hand_status_reply_data_request_port.data.ring_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[7];
+		bird_hand_status_reply_data_request_port.data.index_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[1];
+		bird_hand_status_reply_data_request_port.data.index_f[2] = edp_ecp_rbuffer.status_reply_structure.finger[3];
+		bird_hand_status_reply_data_request_port.data.thumb_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[5];
+		bird_hand_status_reply_data_request_port.data.thumb_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[4];
+		bird_hand_status_reply_data_request_port.data.ring_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[7];
+		bird_hand_status_reply_data_request_port.data.ring_f[2] = edp_ecp_rbuffer.status_reply_structure.finger[6];
+		bird_hand_status_reply_data_request_port.data.index_f[1] = edp_ecp_rbuffer.status_reply_structure.finger[2];
+		bird_hand_status_reply_data_request_port.data.ring_f[0] = edp_ecp_rbuffer.status_reply_structure.finger[0];
 
 		bird_hand_status_reply_data_request_port.set();
 	}
@@ -135,20 +127,20 @@ void robot::get_reply()
 	if (bird_hand_configuration_reply_data_request_port.is_new_request()) {
 
 		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
-			bird_hand_configuration_reply_data_request_port.data.thumb_f[i]
-					= edp_ecp_rbuffer.configuration_reply_structure.finger[i];
+			bird_hand_configuration_reply_data_request_port.data.thumb_f[i] =
+					edp_ecp_rbuffer.configuration_reply_structure.finger[i];
 		}
 
 		for (int i = 0; i < lib::bird_hand::INDEX_F_NUM_OF_SERVOS; i++) {
 
-			bird_hand_configuration_reply_data_request_port.data.index_f[i]
-					= edp_ecp_rbuffer.configuration_reply_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS];
+			bird_hand_configuration_reply_data_request_port.data.index_f[i] =
+					edp_ecp_rbuffer.configuration_reply_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS];
 
 		}
 
 		for (int i = 0; i < lib::bird_hand::RING_F_NUM_OF_SERVOS; i++) {
-			bird_hand_configuration_reply_data_request_port.data.ring_f[i]
-					= edp_ecp_rbuffer.configuration_reply_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS
+			bird_hand_configuration_reply_data_request_port.data.ring_f[i] =
+					edp_ecp_rbuffer.configuration_reply_structure.finger[i + lib::bird_hand::THUMB_F_NUM_OF_SERVOS
 							+ lib::bird_hand::RING_F_NUM_OF_SERVOS];
 
 		}

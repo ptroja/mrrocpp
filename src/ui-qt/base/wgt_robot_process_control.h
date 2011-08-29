@@ -25,7 +25,7 @@ class wgt_robot_process_control : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_robot_process_control(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo,  QWidget *parent = 0);
+	wgt_robot_process_control(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo,  QWidget *parent = 0);
 	~wgt_robot_process_control();
 
 	void process_control_window_init();

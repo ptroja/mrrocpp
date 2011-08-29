@@ -6,7 +6,7 @@
 #include <cstring>
 #include <iostream>
 
-#define BAUD 921600
+#define BAUD B921600
 
 namespace mrrocpp {
 namespace edp {
@@ -53,8 +53,8 @@ void Bird_hand::connect(std::string port)
 {
 
 	for (unsigned int i = 0; i < 8; i++) {
-		std::cout << "[info] opening port : " << (port + (char) (i + 50)).c_str() << std::endl;
-		fd[i] = open((port + (char) (i + 50)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+		std::cout << "[info] opening port : " << (port + (char) (i + 48)).c_str() << std::endl;
+		fd[i] = open((port + (char) (i + 48)).c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 		if (fd[i] < 0) {
 			throw(std::runtime_error("unable to open device device !!!"));
 		}
@@ -94,6 +94,7 @@ void Bird_hand::disconnect()
 
 void Bird_hand::getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_t &current, int16_t &torque)
 {
+	printf("Bird_hand::getStatus\n");
 	buf[0] = START_BYTE;
 	buf[1] = id % 2;
 	buf[2] = GET_STATUS;
@@ -109,11 +110,14 @@ void Bird_hand::getStatus(uint8_t id, uint8_t &status, int32_t &position, int16_
 	position = stat->position;
 	current = stat->current;
 	torque = stat->force;
+
+	printf("abspos = %hd\n", stat->abspos);
+	printf("pos = %d\n", stat->position);
 }
 
 void Bird_hand::getSynchroPos(uint8_t id, int16_t &pos)
 {
-
+	printf("Bird_hand::getSynchroPos\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = GET_ABSPOS;
@@ -128,7 +132,7 @@ void Bird_hand::getSynchroPos(uint8_t id, int16_t &pos)
 
 void Bird_hand::getPID(uint8_t id, int16_t &p, int16_t &i, int16_t &d)
 {
-
+	printf("Bird_hand::getPID\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = GET_PID;
@@ -145,7 +149,7 @@ void Bird_hand::getPID(uint8_t id, int16_t &p, int16_t &i, int16_t &d)
 
 void Bird_hand::setPID(uint8_t id, int16_t p, int16_t i, int16_t d)
 {
-
+	printf("Bird_hand::setPID\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = SET_PID;
@@ -161,7 +165,7 @@ void Bird_hand::setPID(uint8_t id, int16_t p, int16_t i, int16_t d)
 
 void Bird_hand::getLimit(uint8_t id, int16_t &upper, int16_t &lower)
 {
-
+	printf("Bird_hand::getLimit\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = GET_LIMIT;
@@ -175,9 +179,9 @@ void Bird_hand::getLimit(uint8_t id, int16_t &upper, int16_t &lower)
 
 }
 
-void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
+void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower, int16_t inv)
 {
-
+	printf("Bird_hand::setLimit\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = SET_LIMIT;
@@ -188,6 +192,7 @@ void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
 	a->l_limit = lower;
 	a->cur_limit = 10000;
 	a->f_limit = 1000;
+	a->inv = inv;
 
 	write_read(fd[id / 2], buf, 21, 0);
 
@@ -195,6 +200,7 @@ void Bird_hand::setLimit(uint8_t id, int16_t upper, int16_t lower)
 
 void Bird_hand::setCMD1(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd)
 {
+	printf("Bird_hand::setCMD1\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = SET_CMD1;
@@ -210,6 +216,7 @@ void Bird_hand::setCMD1(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 
 void Bird_hand::setCMD2(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd)
 {
+	printf("Bird_hand::setCMD2\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = SET_CMD2;
@@ -225,6 +232,7 @@ void Bird_hand::setCMD2(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 
 void Bird_hand::setCMD3(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd)
 {
+	printf("Bird_hand::setCMD3\n");
 	buf[0] = '#';
 	buf[1] = id % 2;
 	buf[2] = SET_CMD3;
@@ -240,6 +248,7 @@ void Bird_hand::setCMD3(uint8_t id, int16_t t, int16_t b, int16_t Fd, int32_t rd
 
 void Bird_hand::synchronize(uint8_t id, uint16_t step)
 {
+	printf("Bird_hand::synchronize\n");
 	buf[0] = '#';
 	buf[1] = id;
 	buf[2] = SET_SYNCHRO;
