@@ -63,6 +63,7 @@ struct limit_
 	int16_t l_limit;
 	int16_t cur_limit;
 	int16_t f_limit;
+	int16_t inv;
 }__attribute__((__packed__));
 
 struct synchro_
