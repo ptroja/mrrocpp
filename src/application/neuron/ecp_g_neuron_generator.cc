@@ -9,18 +9,23 @@
 
 #include <ctime>
 
+#include <algorithm>
+
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
 #include "ecp_g_neuron_generator.h"
 #include "ecp_mp_neuron_sensor.h"
 
+#include <sys/stat.h>
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
 
-const double MIN_TIME = 3.0;
+const double MIN_TIME = 0.02;
+const double MAX_TIME = 5.0;
 const double MSTEP_TIME = 0.002 * 10.0;
 
 const double current_ref[] = {15000.0, 18000.0, 10000.0, 10000.0, 10000.0, 10000.0};
@@ -81,6 +86,8 @@ bool neuron_generator::first_step()
 	openFiles();
 	mstep_ = 0;
 
+	first_next_step = true;
+
 	return true;
 }
 
@@ -92,12 +99,10 @@ void neuron_generator::openFiles(){
 	time(&rawtime);
 	timeinfo=localtime(&rawtime);
 
-	/* do poprawki
 	struct stat st;
 
 	if(stat("trajectoryLogs",&st)<0)
 		mkdir("trajectoryLogs", 0777);
-*/
 
 	strftime(realTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
 	strftime(givenTrajectory,100,"trajectoryLogs/%Y%m%d_%H%M%S_",timeinfo);
@@ -134,6 +139,12 @@ bool neuron_generator::next_step()
 	actual_position_matrix.get_xyz_angle_axis(msr_position);
 
 	fprintf(pFileR,"%f|%f|%f\n",msr_position[0],msr_position[1],msr_position[2]);
+
+	if(first_next_step)
+	{
+		position = msr_position;
+		first_next_step = false;
+	}
 
 	if (breaking_) {
 		double tmp;
@@ -206,16 +217,19 @@ bool neuron_generator::next_step()
 			//if (sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]) < MIN_VELOCITY) {
 			//	time = 2 * radius / (2 * MIN_VELOCITY);
 			//} else {
-			time = 2 * radius / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			double radius2 = 0;
+			for (int i=0; i<3; i++)
+				radius2 += (msr_position[i]-desired_position[i])*(msr_position[i]-desired_position[i]);
+			//time = radius / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
+			time = 3.0 * sqrt(radius2) / ( sqrt(vel_[0] * vel_[0] + vel_[1] * vel_[1] + vel_[2] * vel_[2]));
 			//}
 
-			if(time < MIN_TIME){
-				time = MIN_TIME;
-			}
+
+			time = std::min(std::max(MIN_TIME, time), MAX_TIME);
 
 			break_steps_ = time / MSTEP_TIME;
 
-			//printf("breking in %d msteps \n", break_steps_);
+			printf("breking in %lf s \n", time);
 			//printf("vel: %f %f %f \n", vel_[0], vel_[1], vel_[2]);
 			//printf("stop position %f %f %f %f %f %f \n", desired_position[0], desired_position[1], desired_position[2], desired_position[3], desired_position[4], desired_position[5]);
 
@@ -226,8 +240,8 @@ bool neuron_generator::next_step()
 			}
 		} else {
 			for (int i = 0; i < 3; i++) {
-				velocityProfileLinear(coeff_[i], msr_position[i], desired_position[i], (double) macroSteps * MSTEP_TIME);
-				vel_[i] = (desired_position[i] - msr_position[i]) / ((double) macroSteps * MSTEP_TIME);
+				velocityProfileLinear(coeff_[i], position[i], desired_position[i], (double) macroSteps * MSTEP_TIME);
+				vel_[i] = (desired_position[i] - position[i]) / ((double) macroSteps * MSTEP_TIME);
 			}
 		}
 		mstep_ = 1;
