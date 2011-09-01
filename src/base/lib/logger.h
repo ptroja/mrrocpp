@@ -48,6 +48,16 @@ __attribute__ ((format (printf, 1, 2)))
  */
 void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
+
+class logger_client {
+public:
+	logger_client();
+	~logger_client();
+protected:
+private:
+
+};
+
 } // namespace logger
 
 #endif /* LOGGER_H_ */
