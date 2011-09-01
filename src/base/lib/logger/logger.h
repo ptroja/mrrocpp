@@ -9,7 +9,12 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include "base/lib/mrmath/homog_matrix.h"
+#include <deque>
+#include <boost/thread/mutex.hpp>
+
+#include "log_message.h"
+
+#include "base/lib/mrmath/homog_matrix.h"	// TODO: remove
 
 namespace logger {
 
@@ -51,11 +56,24 @@ void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
 class logger_client {
 public:
-	logger_client();
+	logger_client(int max_queue_size);
 	~logger_client();
-protected:
-private:
 
+	void log(const log_message& msg);
+
+	void operator()();
+protected:
+
+private:
+	void connect();
+	void disconnect();
+
+	const int max_queue_size;
+	std::deque<const log_message*> queue;
+	uint32_t current_message_number;
+	boost::mutex queue_mutex;
+	boost::mutex notify_mutex;
+	bool terminate;
 };
 
 } // namespace logger

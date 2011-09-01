@@ -81,4 +81,33 @@ void log_dbg(const mrrocpp::lib::Homog_matrix& hm)
 	}
 }
 
-}//namespace logger
+logger_client::logger_client(int max_queue_size)
+{
+
+}
+logger_client::~logger_client()
+{
+
+}
+
+void logger_client::log(const log_message& msg)
+{
+
+}
+
+void logger_client::operator()()
+{
+
+}
+
+void logger_client::connect()
+{
+
+}
+
+void logger_client::disconnect()
+{
+
+}
+
+} //namespace logger
