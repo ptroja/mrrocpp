@@ -47,11 +47,14 @@ private:
 	 */
 	common::generator::stats_generator* statsGenerator;
 
+	std::string getFileName();
+
 public:
 	Stats(lib::configurator &_config);
 	~Stats();
 	void mp_2_ecp_next_state_string_handler(void);
 	void ecp_stop_accepted_handler();
+
 };
 
 } // namespace task

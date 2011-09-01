@@ -52,27 +52,43 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 		/*smoothGenerator->reset();
 		smoothGenerator->set_absolute();
 		std::vector <double> coordinates1(6);
-		coordinates1[0] = 0.530;
-		coordinates1[1] = 1.706;
-		coordinates1[2] = 0.178;
-		coordinates1[3] = 1.368;
-		coordinates1[4] = -1.120;
-		coordinates1[5] = 0.104;
+		coordinates1[0] = 0.65;
+		coordinates1[1] = 1.700;
+		coordinates1[2] = 0.149;
+		coordinates1[3] = 0.001;
+		coordinates1[4] = 3.14;
+		coordinates1[5] = 0.0;
 		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
-		coordinates1[0] = 0.530;
-		coordinates1[1] = 2.106;
-		coordinates1[2] = 0.178;
-		coordinates1[3] = 1.368;
-		coordinates1[4] = -1.120;
-		coordinates1[5] = 0.104;
+		coordinates1[0] = 0.65;
+		coordinates1[1] = 1.700;
+		coordinates1[2] = 0.3;
+		coordinates1[3] = 0.001;
+		coordinates1[4] = 3.14;
+		coordinates1[5] = 0.0;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0] = 0.65;
+		coordinates1[1] = 2.2;
+		coordinates1[2] = 0.3;
+		coordinates1[3] = 0.001;
+		coordinates1[4] = 3.14;
+		coordinates1[5] = 0.0;
+		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
+
+		coordinates1[0] = 0.65;
+		coordinates1[1] = 2.2;
+		coordinates1[2] = 0.149;
+		coordinates1[3] = 0.001;
+		coordinates1[4] = 3.14;
+		coordinates1[5] = 0.0;
 		smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 		//Interpolate trajectory and run generator.
 		smoothGenerator->set_debug(true);
 		if (smoothGenerator->calculate_interpolate())
 			smoothGenerator->Move();
-		*/
+	*/
 
 		//Initalizing all needed items: sensors and generators.
 		neuronSensor = new ecp_mp::sensor::neuron_sensor(config);
@@ -106,9 +122,9 @@ void Neuron::mp_2_ecp_next_state_string_handler(void)
 				coordinates1[0] = coordinates.x;
 				coordinates1[1] = coordinates.y;
 				coordinates1[2] = coordinates.z;
-				coordinates1[3] = 1.203;
-				coordinates1[4] = -1.447;
-				coordinates1[5] = -0.294;
+				coordinates1[3] = 0;
+				coordinates1[4] = 3.1416;
+				coordinates1[5] = 0;
 				smoothGenerator->load_absolute_angle_axis_trajectory_pose(coordinates1);
 
 				//Interpolate trajectory and run generator.

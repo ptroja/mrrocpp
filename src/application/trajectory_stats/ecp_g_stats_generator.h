@@ -36,12 +36,14 @@ public:
 
 	void reset();
 	void load_trajectory(const std::string &filename);
+	mrrocpp::lib::Xyz_Angle_Axis_vector getFirstPosition();
 private:
 	std::vector<lib::Xyz_Angle_Axis_vector> trj_;
 
 	unsigned int mstep_;
 
 	FILE * log_file_;
+	std::string logFileName;
 };
 
 }//generator
