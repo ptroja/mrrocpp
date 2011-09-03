@@ -100,11 +100,15 @@ logger_client::logger_client(int max_queue_size, const char* server_addr, int se
 
 logger_client::~logger_client()
 {
+	cout<<"logger_client::~logger_client(): 1\n";
 	terminate = true;
+	cout<<"logger_client::~logger_client(): 2\n";
 	notify_mutex.unlock();
+	cout<<"logger_client::~logger_client(): 3\n";
 	thread.join();
+	cout<<"logger_client::~logger_client(): 4\n";
 	disconnect();
-	notify_mutex.unlock();
+	cout<<"logger_client::~logger_client(): 5\n";
 }
 
 void logger_client::log(const log_message& msg)
@@ -148,8 +152,8 @@ void logger_client::operator()()
 			temp.pop_front();
 		}
 	}
-	notify_mutex.unlock();
 	disconnect();
+	cout<<"logger_client::operator()(): exiting...\n";
 }
 
 void logger_client::connect()
