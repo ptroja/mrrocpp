@@ -22,8 +22,10 @@ public:
 
 	void service();
 private:
+	client_connection(const client_connection&);
 	int connection_fd;
 	const std::string& remote_address;
+	int header_size;
 };
 
 } /* namespace logger */

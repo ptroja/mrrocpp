@@ -13,6 +13,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include "base/lib/xdr/xdr_oarchive.hpp"
 #include "log_message.h"
 
 #include "base/lib/mrmath/homog_matrix.h"	// TODO: remove
@@ -57,10 +58,10 @@ void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
 class logger_client {
 public:
-	logger_client(int max_queue_size, const char* server_addr, const char* server_port);
+	logger_client(int max_queue_size, const char* server_addr, int server_port);
 	~logger_client();
 
-	void log(const log_message* msg);
+	void log(const log_message& msg);
 
 	void operator()();
 protected:
@@ -68,21 +69,24 @@ protected:
 private:
 	logger_client(const logger_client&);
 	void connect();
-	void send_message(const log_message* msg);
+	void send_message(const log_message& msg);
 	void disconnect();
 
-
+	int fd;
 	boost::thread thread;
 	const int max_queue_size;
-	std::deque<const log_message*> queue;
+	std::deque<log_message> queue;
 
 	const char* server_addr;
-	const char* server_port;
+	int server_port;
 
 	uint32_t current_message_number;
 	boost::mutex queue_mutex;
 	boost::mutex notify_mutex;
 	bool terminate;
+
+	xdr_oarchive<> oa_header;
+	xdr_oarchive<> oa_data;
 };
 
 } // namespace logger

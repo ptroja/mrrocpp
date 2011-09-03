@@ -10,6 +10,14 @@
 #include <cstdarg>
 #include <time.h>
 
+#include <sys/uio.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
 #include "base/lib/mrmath/homog_matrix.h"
 
 #include "logger.h"
@@ -82,8 +90,8 @@ void log_dbg(const mrrocpp::lib::Homog_matrix& hm)
 	}
 }
 
-logger_client::logger_client(int max_queue_size, const char* server_addr, const char* server_port) :
-		max_queue_size(max_queue_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
+logger_client::logger_client(int max_queue_size, const char* server_addr, int server_port) :
+		fd(-1), max_queue_size(max_queue_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
 {
 	notify_mutex.lock();
 
@@ -95,21 +103,21 @@ logger_client::~logger_client()
 	terminate = true;
 	notify_mutex.unlock();
 	thread.join();
+	disconnect();
 }
 
-void logger_client::log(const log_message* msg)
+void logger_client::log(const log_message& msg)
 {
 	queue_mutex.lock();
 	if (queue.size() < max_queue_size) {
-		log_message* msg_to_queue = msg->clone();
-		msg_to_queue->number = current_message_number;
+		log_message msg_to_queue = msg;
+		msg_to_queue.number = current_message_number;
 		struct timespec tp;
-		if(clock_gettime(CLOCK_REALTIME, &tp) != 0){
+		if (clock_gettime(CLOCK_REALTIME, &tp) != 0) {
 			tp.tv_sec = tp.tv_nsec = 0;
 		}
-		msg_to_queue->seconds = tp.tv_sec;
-		msg_to_queue->nanoseconds = tp.tv_nsec;
-
+		msg_to_queue.seconds = tp.tv_sec;
+		msg_to_queue.nanoseconds = tp.tv_nsec;
 
 		queue.push_back(msg_to_queue);
 		notify_mutex.unlock();
@@ -126,31 +134,85 @@ void logger_client::operator()()
 		if (terminate) {
 			break;
 		}
-		std::deque <const log_message*> temp;
+		std::deque <log_message> temp;
 		queue_mutex.lock();
 		// move data from queue to temp buffer
-		temp.assign(queue.begin(), queue.end());
+		temp.swap(queue);
 		queue.clear();
 		queue_mutex.unlock();
 
 		// send data to the server
+		while (!temp.empty()) {
+			send_message(temp.front());
+			temp.pop_front();
+		}
 	}
 	disconnect();
 }
 
 void logger_client::connect()
 {
+	fd = socket(AF_INET, SOCK_STREAM, 0);
+	if (fd == -1) {
+		throw runtime_error("socket(): " + string(strerror(errno)));
+	}
 
+	int flag = 1;
+	if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) == -1) {
+
+		throw runtime_error("setsockopt(): " + string(strerror(errno)));
+	}
+
+	hostent * server = gethostbyname(server_addr);
+	if (server == NULL) {
+		throw runtime_error(string("gethostbyname(") + server_addr + "): " + string(hstrerror(h_errno)));
+	}
+
+	sockaddr_in serv_addr;
+	memset(&serv_addr, 0, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
+	serv_addr.sin_port = htons(server_port);
+
+	if (::connect(fd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
+		throw runtime_error("connect(): " + string(strerror(errno)));
+	}
 }
 
-void logger_client::send_message(const log_message* msg)
+void logger_client::send_message(const log_message& msg)
 {
+	oa_data.clear_buffer();
+	oa_header.clear_buffer();
 
+	oa_data << msg;
+
+	log_message_header header;
+	header.message_size = oa_data.getArchiveSize();
+	oa_header << header;
+
+	struct iovec iov[2];
+	ssize_t nwritten;
+
+	iov[0].iov_base = (void*) oa_header.get_buffer();
+	iov[0].iov_len = oa_header.getArchiveSize();
+	iov[1].iov_base = (void*) oa_data.get_buffer();
+	iov[1].iov_len = oa_data.getArchiveSize();
+
+	nwritten = writev(fd, iov, 2);
+	if (nwritten == -1) {
+		throw runtime_error("Socket::writev2() nwritten == -1");
+	}
+	if ((size_t) nwritten != iov[0].iov_len + iov[1].iov_len) {
+		throw runtime_error("Socket::writev2() nwritten != buf1Size + buf2Size");
+	}
 }
 
 void logger_client::disconnect()
 {
-
+	if (fd >= 0) {
+		close(fd);
+		fd = -1;
+	}
 }
 
 } //namespace logger

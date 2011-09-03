@@ -9,6 +9,7 @@
 #define LOGGER_SERVER_H_
 
 #include <list>
+#include <boost/shared_ptr.hpp>
 #include "client_connection.h"
 
 namespace logger {
@@ -35,7 +36,7 @@ private:
 	bool terminate_now;
 	const int port;
 	int fd;
-	std::list<client_connection> connections;
+	std::list<boost::shared_ptr<client_connection> > connections;
 };
 
 } /* namespace logger */

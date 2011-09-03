@@ -30,3 +30,4 @@ target_link_libraries(visual_servoing
 install(TARGETS visual_servoing DESTINATION lib)
 
 add_subdirectory(logger_server)
+add_subdirectory(logger_test)

@@ -90,9 +90,7 @@ void logger_server::accept_connection(){
 	cout<<"client_address = "<<client_address<<":"<<client_port<<endl;
 
 
-	connections.push_back(client_connection());
-
-	write(acceptedFd, "asdf\n", 5);
+	connections.push_back(boost::shared_ptr<client_connection>(new client_connection(acceptedFd, client_address)));
 }
 
 void logger_server::main_loop()
@@ -105,10 +103,10 @@ void logger_server::main_loop()
 		FD_ZERO(&rfds);
 		FD_SET(fd, &rfds);
 
-		std::list<client_connection>::iterator it;
+		std::list<boost::shared_ptr<client_connection> >::iterator it;
 		for(it = connections.begin(); it != connections.end(); ++it){
-			FD_SET(it->connection_fd, &rfds);
-			maxFd = max(maxFd, it->connection_fd);
+			FD_SET((*it)->connection_fd, &rfds);
+			maxFd = max(maxFd, (*it)->connection_fd);
 		}
 
 		tv.tv_sec = 1;
@@ -124,8 +122,8 @@ void logger_server::main_loop()
 			}
 			for(it = connections.begin(); it != connections.end();){
 				try{
-					if(FD_ISSET(it->connection_fd, &rfds)){
-						it->service();
+					if(FD_ISSET((*it)->connection_fd, &rfds)){
+						(*it)->service();
 					}
 					++it;
 				}catch(exception& ex){
