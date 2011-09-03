@@ -10,6 +10,7 @@
 #define LOGGER_H_
 
 #include <deque>
+#include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
 #include "log_message.h"
@@ -56,20 +57,28 @@ void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
 class logger_client {
 public:
-	logger_client(int max_queue_size);
+	logger_client(int max_queue_size, const char* server_addr, const char* server_port);
 	~logger_client();
 
-	void log(const log_message& msg);
+	void log(const log_message* msg);
 
 	void operator()();
 protected:
 
 private:
+	logger_client(const logger_client&);
 	void connect();
+	void send_message(const log_message* msg);
 	void disconnect();
 
+
+	boost::thread thread;
 	const int max_queue_size;
 	std::deque<const log_message*> queue;
+
+	const char* server_addr;
+	const char* server_port;
+
 	uint32_t current_message_number;
 	boost::mutex queue_mutex;
 	boost::mutex notify_mutex;

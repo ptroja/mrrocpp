@@ -6,7 +6,7 @@
  */
 
 #include "ib_eih_visual_servo.h"
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 
 #include <iostream>
 #include <stdexcept>

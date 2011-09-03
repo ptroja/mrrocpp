@@ -9,7 +9,7 @@
 
 #include "single_visual_servo_manager.h"
 
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 
 namespace mrrocpp {
 

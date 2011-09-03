@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "cubic_constraint.h"
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 
 using namespace logger;
 using namespace std;

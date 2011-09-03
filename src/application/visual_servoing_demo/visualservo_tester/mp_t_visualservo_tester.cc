@@ -9,7 +9,7 @@
 
 #include "robot/conveyor/const_conveyor.h"
 
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 

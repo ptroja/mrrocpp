@@ -10,7 +10,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 #include "../single_visual_servo_manager.h"
 #include "../ib_eih_visual_servo.h"
 #include "../visual_servo_regulator_p.h"

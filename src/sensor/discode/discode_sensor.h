@@ -19,7 +19,7 @@
 #include "base/lib/timer.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "base/lib/xdr/xdr_oarchive.hpp"
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 #include "headers.h"
 
 namespace mrrocpp {

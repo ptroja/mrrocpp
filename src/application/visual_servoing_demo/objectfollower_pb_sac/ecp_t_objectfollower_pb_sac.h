@@ -10,7 +10,7 @@
 
 
 #include <boost/shared_ptr.hpp>
-#include "base/lib/logger.h"
+#include "base/lib/logger/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
 
 #include "base/ecp/ecp_task.h"
