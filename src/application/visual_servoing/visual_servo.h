@@ -22,46 +22,46 @@ namespace mrrocpp {
 namespace ecp {
 namespace servovision {
 
-struct visual_servo_log_sample
-{
-	/**
-	 * Timestamp when processing in Discode starts (taken just after camera source).
-	 */
-	uint32_t processingStartSeconds;
-	uint32_t processingStartNanoseconds;
-
-	/**
-	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
-	 */
-	uint32_t processingEndSeconds;
-	uint32_t processingEndNanoseconds;
-
-	/** Time, when request for reading was sent from mrrocpp to discode. */
-	uint32_t requestSentTimeSeconds;
-	uint32_t requestSentTimeNanoseconds;
-
-	/** Time, when reading was sent to mrrocpp. */
-	uint32_t sendTimeSeconds;
-	uint32_t sendTimeNanoseconds;
-
-	/** Time, when reading was received in mrrocpp. */
-	uint32_t receiveTimeSeconds;
-	uint32_t receiveTimeNanoseconds;
-
-	/** Time, when sample was taken. */
-	uint32_t sampleTimeSeconds;
-	uint32_t sampleTimeNanoseconds;
-
-	double mrroc_discode_time_offset;
-
-	/** Is object visible in latest reading. */
-	bool is_object_visible;
-
-	bool is_reading_repreated;
-
-	static void printHeader(std::ostream& os);
-	void print(std::ostream& os, uint64_t t0);
-};
+//struct visual_servo_log_sample
+//{
+//	/**
+//	 * Timestamp when processing in Discode starts (taken just after camera source).
+//	 */
+//	uint32_t processingStartSeconds;
+//	uint32_t processingStartNanoseconds;
+//
+//	/**
+//	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
+//	 */
+//	uint32_t processingEndSeconds;
+//	uint32_t processingEndNanoseconds;
+//
+//	/** Time, when request for reading was sent from mrrocpp to discode. */
+//	uint32_t requestSentTimeSeconds;
+//	uint32_t requestSentTimeNanoseconds;
+//
+//	/** Time, when reading was sent to mrrocpp. */
+//	uint32_t sendTimeSeconds;
+//	uint32_t sendTimeNanoseconds;
+//
+//	/** Time, when reading was received in mrrocpp. */
+//	uint32_t receiveTimeSeconds;
+//	uint32_t receiveTimeNanoseconds;
+//
+//	/** Time, when sample was taken. */
+//	uint32_t sampleTimeSeconds;
+//	uint32_t sampleTimeNanoseconds;
+//
+//	double mrroc_discode_time_offset;
+//
+//	/** Is object visible in latest reading. */
+//	bool is_object_visible;
+//
+//	bool is_reading_repreated;
+//
+//	static void printHeader(std::ostream& os);
+//	void print(std::ostream& os, uint64_t t0);
+//};
 
 /** @addtogroup servovision
  *  @{
@@ -155,12 +155,12 @@ private:
 	int max_steps_without_reading;
 	int steps_without_reading;
 
-	boost::circular_buffer <visual_servo_log_sample> log_buffer;
-	static const int log_buffer_default_capacity = 500;
-
-	void write_log();
-
-	bool log_enabled;
+//	boost::circular_buffer <visual_servo_log_sample> log_buffer;
+//	static const int log_buffer_default_capacity = 500;
+//
+//	void write_log();
+//
+//	bool log_enabled;
 }; // class visual_servo
 
 /** @} */
