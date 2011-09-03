@@ -104,6 +104,7 @@ logger_client::~logger_client()
 	notify_mutex.unlock();
 	thread.join();
 	disconnect();
+	notify_mutex.unlock();
 }
 
 void logger_client::log(const log_message& msg)
@@ -147,6 +148,7 @@ void logger_client::operator()()
 			temp.pop_front();
 		}
 	}
+	notify_mutex.unlock();
 	disconnect();
 }
 
