@@ -35,13 +35,34 @@ struct log_message
 	std::vector <std::string> data;
 
 	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
+	void save(Archive & ar, const unsigned int version) const
 	{
 		ar & number;
 		ar & seconds;
 		ar & nanoseconds;
-		ar & data;
+		uint32_t sz =  data.size();
+		ar & sz;
+		for(int i=0; i<data.size(); ++i){
+			ar & data[i];
+		}
 	}
+	template <class Archive>
+	void load(Archive & ar, const unsigned int version)
+	{
+		ar & number;
+		ar & seconds;
+		ar & nanoseconds;
+		uint32_t sz;
+		ar & sz;
+		data.clear();
+
+		for(int i=0; i<sz; ++i){
+			std::string s;
+			ar & s;
+			data.push_back(s);
+		}
+	}
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
 } /* namespace logger */
