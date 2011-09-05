@@ -81,8 +81,8 @@ private:
 	int server_port;
 
 	uint32_t current_message_number;
-	boost::mutex queue_mutex;
-	boost::mutex notify_mutex;
+	boost::shared_ptr<boost::mutex> notify_mutex;
+	boost::shared_ptr<boost::mutex> queue_mutex;
 	bool terminate;
 
 	xdr_oarchive<> oa_header;
