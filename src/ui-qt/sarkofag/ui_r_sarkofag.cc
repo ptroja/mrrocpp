@@ -176,7 +176,7 @@ void UiRobot::setup_menubar()
 	actionsarkofag_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_SARKOFAG_MOVE], signalDispatcher, menuBar);
 	robot_menu->addAction(actionsarkofag_Move);
 
-	menusarkofag_Preset_Positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "&Sarkofag", 0, QApplication::UnicodeUTF8));
 }
 
 }
