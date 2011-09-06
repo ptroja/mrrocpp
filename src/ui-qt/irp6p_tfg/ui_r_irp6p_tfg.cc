@@ -2,12 +2,10 @@
 /*                            AppBuilder Photon Code Lib */
 /*                                         Version 2.01  */
 
-
 #include "ui_r_irp6p_tfg.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../base/interface.h"
-
 
 #include "../base/wgt_single_motor_move.h"
 
@@ -138,11 +136,10 @@ int UiRobot::synchronise_int()
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-			single_motor::UiRobot(_interface, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS)
+		single_motor::UiRobot(_interface, lib::irp6p_tfg::ROBOT_NAME, lib::irp6p_tfg::NUM_OF_SERVOS)
 
 {
-	add_wgt<wgt_single_motor_move> (WGT_IRP6P_TFG_MOVE, "Irp6p_tfg moves");
-//	wndbase_m[WGT_IRP6P_TFG_MOVE] = wgts[WGT_IRP6P_TFG_MOVE]->dwgt;
+	add_wgt <wgt_single_motor_move>(WGT_IRP6P_TFG_MOVE, "Irp6p_tfg moves");
 
 }
 
@@ -193,21 +190,17 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-
-
-
-
 void UiRobot::setup_menubar()
 {
 	single_motor::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-    actionirp6p_tfg_Move 			= new Ui::MenuBarAction(QString("&Move"), wgts[WGT_IRP6P_TFG_MOVE], signalDispatcher, menuBar);
+	actionirp6p_tfg_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_IRP6P_TFG_MOVE], signalDispatcher, menuBar);
 
 	robot_menu->addAction(actionirp6p_tfg_Move);
 
-    robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6p_tf&G", 0, QApplication::UnicodeUTF8));
+	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6p_tf&G", 0, QApplication::UnicodeUTF8));
 
 }
 

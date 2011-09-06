@@ -136,7 +136,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 {
 
 	add_wgt <wgt_single_motor_move>(WGT_IRP6OT_TFG_MOVE, "Irp6ot_tfg moves");
-//	wndbase_m[WGT_IRP6OT_TFG_MOVE] = wgts[WGT_IRP6OT_TFG_MOVE]->dwgt;
+
 }
 
 int UiRobot::manage_interface()
@@ -149,7 +149,7 @@ int UiRobot::manage_interface()
 		case -1:
 			break;
 		case 0:
-			mw->enable_menu_item(false, 2, EDP_Unload, actionirp6ot_tfg_Move);
+			mw->enable_menu_item(false, 1, actionirp6ot_tfg_Move);
 			break;
 		case 1:
 		case 2:
@@ -184,7 +184,6 @@ int UiRobot::manage_interface()
 	}
 	return 1;
 }
-
 
 void UiRobot::setup_menubar()
 {

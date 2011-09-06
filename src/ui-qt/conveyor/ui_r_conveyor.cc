@@ -95,7 +95,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 		single_motor::UiRobot(_interface, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS)
 {
 	add_wgt <wgt_single_motor_move>(WGT_CONVEYOR_MOVE, "Conveyor moves");
-//	wndbase_m[WGT_CONVEYOR_MOVE] = wgts[WGT_CONVEYOR_MOVE]->dwgt;
+
 }
 
 int UiRobot::manage_interface()
