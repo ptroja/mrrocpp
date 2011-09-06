@@ -50,18 +50,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 {
 	add_wgt <wgt_polycrank_int>(WGT_INT, "Polycrank int");
 
-//	wndbase_m[WGT_POLYCRANK_INT] = wgts[WGT_INT]->dwgt;
-
-//wgt_inc = new wgt_spkm_inc(interface, *this, interface.mw);
-//wndbase_m[WGT_SPKM_INC] = wgt_inc->dwgt;
-
-	/* TR
-	 wnd_int = new WndInt(interface, *this);
-	 wndbase_m[wnd_int->window_name] = wnd_int;
-	 wnd_external = new WndExternal(interface, *this);
-	 wndbase_m[wnd_external->window_name] = wnd_external;
-	 */
-
 }
 
 void UiRobot::create_ui_ecp_robot()
@@ -152,7 +140,6 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
-
 
 void UiRobot::setup_menubar()
 {
