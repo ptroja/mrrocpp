@@ -112,7 +112,6 @@ int UiRobot::manage_interface()
 			break;
 		case 1:
 		case 2:
-
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				switch (interface.mp->mp_state.state)
