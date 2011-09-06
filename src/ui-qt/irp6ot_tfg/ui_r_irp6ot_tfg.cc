@@ -166,7 +166,6 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 1, actionirp6ot_tfg_Move);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 1, actionirp6ot_tfg_Move);
