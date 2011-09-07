@@ -9,7 +9,7 @@
 #include "mp.h"
 
 wgt_robot_process_control::wgt_robot_process_control(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
-	wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
+		wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
 {
 	ui->setupUi(this);
 	ui->robot_label->setText(QString::fromStdString((robo->getName())));
@@ -41,7 +41,6 @@ void wgt_robot_process_control::my_open(bool set_on_top)
 	wgt_base::my_open(set_on_top);
 	process_control_window_init();
 }
-
 
 //ECP
 void wgt_robot_process_control::on_ecp_trigger_pushButton_clicked()
@@ -76,26 +75,23 @@ int wgt_robot_process_control::init()
 
 	// Dla READER'A
 
-
 	ui->reader_start_pushButton->setDisabled(true);
 	ui->reader_stop_pushButton->setDisabled(true);
 	ui->reader_trigger_pushButton->setDisabled(true);
 
 	// Dla irp6_on_track
 
+	if (robot->state.edp.state <= 0) { // edp wylaczone
 
-	robot->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-//	interface.irp6ot_m->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	} else if (robot->state.edp.state == 1) { // edp wlaczone reader czeka na start
+		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 
-	// Dla irp6_postument
+	} else if (robot->state.edp.state == 2) { // edp wlaczone reader czeka na stop
+		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
+		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 
-//	interface.irp6p_m->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
+	}
 
-	// Dla conveyor
-
-//	interface.conveyor->process_control_window_section_init(wlacz_PtButton_wnd_processes_control_all_reader_start, wlacz_PtButton_wnd_processes_control_all_reader_stop, wlacz_PtButton_wnd_processes_control_all_reader_trigger);
-
-	// All reader's pulse buttons
 	if (wlacz_PtButton_wnd_processes_control_all_reader_start) {
 		ui->reader_start_pushButton->setDisabled(false);
 
@@ -146,19 +142,6 @@ int wgt_robot_process_control::block_all_ecp_trigger_widgets()
 
 {
 
-	/* TR
-
-	 if (interface.irp6ot_m->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
-	 }
-	 if (interface.irp6p_m->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
-	 }
-	 if (interface.conveyor->state.edp.is_synchronised) {
-	 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
-	 }
-	 */
-
 	ui->ecp_trigger_pushButton->setDisabled(true);
 
 	return 1;
@@ -167,19 +150,6 @@ int wgt_robot_process_control::block_all_ecp_trigger_widgets()
 int wgt_robot_process_control::unblock_all_ecp_trigger_widgets()
 
 {
-
-	/* TR
-
-	 if (interface.irp6ot_m->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_ecp_trigger);
-	 }
-	 if (interface.irp6p_m->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6p_ecp_trigger);
-	 }
-	 if (interface.conveyor->state.edp.is_synchronised) {
-	 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_ecp_trigger);
-	 }
-	 */
 
 	ui->ecp_trigger_pushButton->setDisabled(false);
 	return 1;
