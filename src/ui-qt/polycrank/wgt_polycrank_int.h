@@ -12,6 +12,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace polycrank {
 class UiRobot;
@@ -25,16 +26,16 @@ class wgt_polycrank_int : public wgt_base
 Q_OBJECT
 
 public:
-			wgt_polycrank_int(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::polycrank::UiRobot& _robot, QWidget *parent =
-					0);
+	wgt_polycrank_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
 	~wgt_polycrank_int();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
-
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 private:
 	Ui::wgt_polycrank_intClass ui;
-	mrrocpp::ui::polycrank::UiRobot& robot;
+	mrrocpp::ui::polycrank::UiRobot* robot;
 
 	int init();
 	int copy();

@@ -11,6 +11,7 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "edp_e_spkm1.h"
+#include "const_spkm1.h"
 #include "base/edp/reader.h"
 //#include "base/edp/vis_server.h"
 
@@ -33,7 +34,7 @@ namespace edp {
 namespace spkm1 {
 
 effector::effector(common::shell &_shell) :
-	spkm::effector(_shell)
+	spkm::effector(_shell, lib::spkm1::ROBOT_NAME)
 {
 }
 

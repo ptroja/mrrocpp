@@ -8,6 +8,8 @@
 #ifndef PB_VISUAL_SERVO_H_
 #define PB_VISUAL_SERVO_H_
 
+#include <ctime>
+
 #include "visual_servo.h"
 #include "PBReading.h"
 
@@ -40,6 +42,12 @@ protected:
 	Types::Mrrocpp_Proxy::PBReading reading;
 
 	lib::Homog_matrix G_T_E_desired;
+
+private:
+	bool use_reading_linear_extrapolation;
+
+	Types::Mrrocpp_Proxy::PBReading reading_t_minus_1;
+	Types::Mrrocpp_Proxy::PBReading reading_t_minus_2;
 };
 
 /** @} */

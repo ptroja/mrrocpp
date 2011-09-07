@@ -1,3 +1,4 @@
+#include <string>
 #include <cstdlib>
 
 #include "ping.h"

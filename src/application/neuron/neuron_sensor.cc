@@ -64,7 +64,7 @@ namespace sensor {
  * return message to MRROC++ with the same signal. After which, MRROC++ starts
  * smooth generator and moves to start position.
  */
-#define FIRST_COORDINATES		0x21
+#define INITIALIZATION_DATA		0x21
 
 /**
  * @brief Message for requesting and sending first coordinates for naural generator.
@@ -179,7 +179,7 @@ neuron_sensor::~neuron_sensor()
  */
 void neuron_sensor::get_reading()
 {
-	char buff[49];
+	char buff[200];
 
 	//Read packet from socket*/
 	int result = read(socketDescriptor, buff, sizeof(buff));
@@ -199,7 +199,21 @@ void neuron_sensor::get_reading()
 			printf("VSP end command received\n");
 			break;
 
-		case FIRST_COORDINATES:
+		case INITIALIZATION_DATA:{
+
+			memcpy(&(coordinates.x), buff + 1, 8);
+			memcpy(&(coordinates.y), buff + 9, 8);
+			memcpy(&(coordinates.z), buff + 17, 8);
+
+			int fileLength;
+			memcpy(&(fileLength), buff + 25, 4);
+
+			fileName=(char*)malloc(fileLength+1);
+			memcpy(fileName, buff + 29, fileLength);
+			fileName[fileLength]='\0';
+
+			printf("filename - %s %lf %lf %lf\n", fileName, coordinates.x, coordinates.y, coordinates.z);
+			break;}
 		case TRAJECTORY_FIRST:
 			memcpy(&(macroSteps), buff + 1, 1);
 			memcpy(&(radius),buff+2, 8);
@@ -301,7 +315,7 @@ uint8_t neuron_sensor::getMacroStepsNumber()
  * @details Commands that are recognized by VSP are:
  *		- MRROCPP_READY,
  *		- MRROCPP_FINISHED,
- *		- FIRST_COORDINATES,
+ *		- INITIALIZATION_DATA,
  *		- TRAJECTORY_FIRST,
  * But any value can be sent, there is no formal restriction, but only
  * mentioned are recognized and are processed.
@@ -389,15 +403,15 @@ void neuron_sensor::sendData(uint8_t _command, double x, double y, double z, dou
 	}
 }
 
-/*===========================getFirstCoordinates==========================*//**
+/*===========================getInitalizationData==========================*//**
  * @brief Provides first coordinates of currently processed trajectory.
- * @details Sends FIRST_COORDINATES command and waits for VPS response, after
+ * @details Sends INITIALIZATION_DATA command and waits for VPS response, after
  * which returns coordinates that came from VSP.
  * @return First coordinates of current trajectory.
  */
-Coordinates neuron_sensor::getFirstCoordinates()
+Coordinates neuron_sensor::getInitalizationData()
 {
-	sendCommand(FIRST_COORDINATES);
+	sendCommand(INITIALIZATION_DATA);
 	get_reading();
 	return coordinates;
 }
@@ -411,6 +425,7 @@ void neuron_sensor::startGettingTrajectory()
 {
 	currentPeriod = 1;
 	sendCommand(TRAJECTORY_FIRST);
+	get_reading();
 }
 
 /*===============================waitForVSPStart==========================*//**
@@ -514,6 +529,10 @@ void neuron_sensor::sendStatistics(double currents_sum, double max){
 	if (result != sizeof(buff)) {
 		throw std::runtime_error("write() failed: result != sizeof(buff)");
 	}
+}
+
+char * const neuron_sensor::getFileName(){
+	return fileName;
 }
 
 } //sensor

@@ -16,8 +16,8 @@ namespace mrrocpp {
 namespace ecp {
 namespace smb {
 
-robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp),
+robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
+	ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp),
 			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),
@@ -29,8 +29,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 	create_kinematic_models_for_given_robot();
 }
 
-robot::robot(common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(lib::smb::ROBOT_NAME, lib::smb::NUM_OF_SERVOS, _ecp_object),
+robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
+	ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _ecp_object),
 			epos_cubic_command_data_port(lib::epos::EPOS_CUBIC_COMMAND_DATA_PORT, port_manager),
 			epos_trapezoidal_command_data_port(lib::epos::EPOS_TRAPEZOIDAL_COMMAND_DATA_PORT, port_manager),
 			smb_multi_pin_insertion_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager),

@@ -14,6 +14,8 @@ namespace ui {
 namespace common {
 class Interface;
 class UiRobot;
+class AllRobots;
+
 }
 }
 }
@@ -23,16 +25,18 @@ class wgt_robot_process_control : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_robot_process_control(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo,  QWidget *parent = 0);
+	wgt_robot_process_control(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo,  QWidget *parent = 0);
 	~wgt_robot_process_control();
 
 	void process_control_window_init();
 
-	void my_open();
+	void my_open(bool set_on_top=false);
 
 	Ui::wgt_robot_process_controlClass * get_ui();
 	int block_all_ecp_trigger_widgets();
 	int unblock_all_ecp_trigger_widgets();
+	virtual void add_button(QPushButton *button, int row, int space){};
+	virtual void setup_ui(){};
 
 private:
 	Ui::wgt_robot_process_controlClass* ui;

@@ -45,7 +45,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(common::shell &_shell);
+	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.

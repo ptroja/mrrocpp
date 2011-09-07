@@ -244,6 +244,16 @@ public:
 	//! funkcja sprawdzajaca czy macierz jest macierza jednorodna
 	bool is_valid() const;
 
+	void get_rotation_matrix(Eigen::Matrix3d& rot) const;
+	void set_rotation_matrix(const Eigen::Matrix3d& rot);
+
+	/**
+	 * Linear-spherical interpolation of Homog matrix.
+	 * For X, Y, Z independently use linear interpolation.
+	 * For rotation matrix use spherical interpolation using quaternions and slerp method from Eigen library.
+	 */
+	Homog_matrix interpolate(double t, const Homog_matrix& other);
+
 private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;

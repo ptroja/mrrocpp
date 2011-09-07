@@ -42,6 +42,12 @@ const int LAST_MOXA_PORT_NUM = 0;
 const std::string ports_strings[] = { "/dev/ttyMI7" };
 
 /*!
+ * @brief Conveyor two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const int MAX_CURRENT_0 = 200;
+
+/*!
  * @brief Conveyor max encoder increment
  * @ingroup conveyor
  */

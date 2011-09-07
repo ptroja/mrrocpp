@@ -50,10 +50,10 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="ecp_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER (e)</string>
+       <string>TR&amp;IGGER</string>
       </property>
       <property name="shortcut">
-       <string>E</string>
+       <string>I</string>
       </property>
      </widget>
     </item>
@@ -102,20 +102,20 @@
     <item row="0" column="1">
      <widget class="QPushButton" name="reader_trigger_pushButton">
       <property name="text">
-       <string>TRIGGER (c)</string>
+       <string>T&amp;RIGGER </string>
       </property>
       <property name="shortcut">
-       <string>C</string>
+       <string>R</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QPushButton" name="reader_stop_pushButton">
       <property name="text">
-       <string>STOP (x)</string>
+       <string>S&amp;TOP</string>
       </property>
       <property name="shortcut">
-       <string>X</string>
+       <string>T</string>
       </property>
      </widget>
     </item>
@@ -140,10 +140,10 @@
     <item row="1" column="0">
      <widget class="QPushButton" name="reader_start_pushButton">
       <property name="text">
-       <string>START (z)</string>
+       <string>&amp;START</string>
       </property>
       <property name="shortcut">
-       <string>Z</string>
+       <string>S</string>
       </property>
      </widget>
     </item>

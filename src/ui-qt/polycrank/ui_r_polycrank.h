@@ -38,14 +38,14 @@ namespace polycrank {
 //
 //
 
-class UiRobot : public QObject, public common::UiRobot
+class UiRobot : public common::UiRobot
 {
 	Q_OBJECT
 private:
 
 public:
-	double current_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja biezaca
-	double desired_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja zadana
+//	double current_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja biezaca
+//	double desired_pos[lib::polycrank::NUM_OF_SERVOS]; // pozycja zadana
 
 	//bool is_wind_polycrank_int_open; // informacja czy okno ruchow w radianach stawow jest otwarte
 
@@ -61,19 +61,17 @@ public:
 	int synchronise();
 	int synchronise_int();
 
-	int create_ui_ecp_robot();
+	void create_ui_ecp_robot();
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-	void make_connections();
+
 	void setup_menubar();
 
-private:
-    QAction *actionpolycrank_EDP_Load;
-    QAction *actionpolycrank_EDP_Unload;
-    QAction *actionpolycrank_Move_Joints;
+	const static std::string WGT_INT;
 
-    QMenu *menuPolycrank;
+private:
+    QAction *actionpolycrank_Move_Joints;
 
 };
 

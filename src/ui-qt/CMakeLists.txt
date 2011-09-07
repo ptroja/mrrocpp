@@ -1,5 +1,6 @@
 # Try to find and setup Qt4 for this project
 FIND_PACKAGE(Qt4)
+FIND_PACKAGE(Boost 1.41 COMPONENTS regex)
 
 IF(QT_FOUND)
 
@@ -47,7 +48,12 @@ SET(GUI_CXX_SRCS
     base/main.cpp
     base/mainwindow.cpp
     base/menu_bar.cpp
+    base/allrobots.cpp
+    base/mp.cpp
     base/wgt_base.cpp
+   	base/WgtAbsoluteBase.cpp
+    base/WgtRelativeBase.cpp
+    base/WgtToolBase.cpp
     base/wgt_process_control.cpp
 	base/wgt_robot_process_control.cpp
     base/ui_ecp_dialogs/wgt_yes_no.cpp
@@ -84,6 +90,9 @@ SET(GUI_MOC_SRCS
     base/ui_ecp_dialogs/wgt_input_double.h
     base/ui_ecp_dialogs/wgt_choose_option.h
     base/ui_ecp_dialogs/wgt_teaching.h
+    base/WgtAbsoluteBase.h
+    base/WgtRelativeBase.h
+    base/WgtToolBase.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
@@ -110,10 +119,15 @@ SET(GUI_MOC_SRCS
 	spkm/ui_r_spkm1.h
 	spkm/ui_r_spkm2.h
 	smb/ui_r_smb.h
+	smb/ui_r_smb1.h
+	smb/ui_r_smb2.h
 	shead/ui_r_shead.h
+	shead/ui_r_shead1.h
+	shead/ui_r_shead2.h
+	sbench/ui_r_sbench.h
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
-	
+	base/ui_robot.h
 )
 
 # Generate MOC files
@@ -136,8 +150,9 @@ SET(GUI_UI
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
-    irp6_m/wgt_irp6_m_joints.ui
-    irp6_m/wgt_irp6_m_motors.ui
+    base/wgt_absolute_template.ui
+    base/wgt_relative_template.ui
+    base/wgt_tool_template.ui
     irp6_m/wgt_irp6_m_angle_axis.ui
     irp6_m/wgt_irp6_m_euler.ui
     irp6_m/wgt_irp6_m_relative_angle_axis.ui
@@ -153,6 +168,8 @@ ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
 	base/menu_bar.cpp
+	base/allrobots.cpp
+	base/mp.cpp
 	base/menu_bar_action.cpp
 	base/ui_sr.cc
 	base/ui_ecp.cc
@@ -173,9 +190,19 @@ ADD_EXECUTABLE(
 	spkm/ui_r_spkm1.cc
 	spkm/ui_r_spkm2.cc
 	smb/ui_ecp_r_smb.cc
+	smb/ui_ecp_r_smb1.cc
+	smb/ui_ecp_r_smb2.cc
 	smb/ui_r_smb.cc
+	smb/ui_r_smb1.cc
+	smb/ui_r_smb2.cc
 	shead/ui_ecp_r_shead.cc
+	shead/ui_ecp_r_shead1.cc
+	shead/ui_ecp_r_shead2.cc
 	shead/ui_r_shead.cc
+	shead/ui_r_shead1.cc
+	shead/ui_r_shead2.cc
+	sbench/ui_ecp_r_sbench.cc
+	sbench/ui_r_sbench.cc
 	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
@@ -189,7 +216,7 @@ TARGET_LINK_LIBRARIES(
 	ecp_robot
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
-	boost_regex
+    ${Boost_REGEX_LIBRARY}
 )
 
 install(

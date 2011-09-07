@@ -10,121 +10,124 @@
 
 #include "../base/interface.h"
 #include "../base/mainwindow.h"
-
+#include "../base/ui_robot.h"
 #include <QAbstractButton>
 #include <QCheckBox>
 
-
-wgt_bird_hand_command::wgt_bird_hand_command(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::bird_hand::UiRobot& _robot, QWidget *parent) :
-    wgt_base("Bird hand incremental motion", _interface, parent),
-    ui(new Ui::wgt_bird_hand_commandClass()),
-    robot(_robot)
-
+wgt_bird_hand_command::wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+		wgt_base(_widget_label, _interface, _robot, parent), ui(new Ui::wgt_bird_hand_commandClass())
 {
 	//ui = new Ui::wgt_bird_hand_commandClass::wgt_bird_hand_commandClass();
-    ui->setupUi(this);
+	ui->setupUi(this);
+	robot = dynamic_cast <mrrocpp::ui::bird_hand::UiRobot *>(_robot);
 
-	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_0);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_1);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_0);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_1);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_2);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_0);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_1);
-    doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_2);
+	// zacienianie kontrolek momentu dla obrotow palcy
+	ui->doubleSpinBox_curtor_index_0->hide();
+	ui->doubleSpinBox_curtor_ring_0->hide();
+	ui->doubleSpinBox_destor_index_0->hide();
+	ui->doubleSpinBox_destor_ring_0->hide();
 
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_thumb_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_index_2);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_0);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_1);
-    doubleSpinBox_despos_Vector.append(ui->doubleSpinBox_despos_ring_2);
+	// budowanie wektoro kontrolek
 
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_0);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_1);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_0);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_1);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_2);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_0);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_1);
-    doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_2);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_0);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_thumb_1);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_0);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_1);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_index_2);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_0);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_1);
+	doubleSpinBox_curpos_Vector.append(ui->doubleSpinBox_curpos_ring_2);
 
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_thumb_0);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_thumb_1);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_0);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_1);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_2);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_0);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_1);
-    doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_2);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_0);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_thumb_1);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_0);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_1);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_index_2);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_0);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_1);
+	desired_pos_spin_box.append(ui->doubleSpinBox_despos_ring_2);
 
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_thumb_0);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_thumb_1);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_0);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_1);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_2);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_0);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_1);
-    doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_2);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_0);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_thumb_1);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_0);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_1);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_index_2);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_0);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_1);
+	doubleSpinBox_destor_Vector.append(ui->doubleSpinBox_destor_ring_2);
 
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_thumb_0);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_thumb_1);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_0);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_1);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_2);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_0);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_1);
-    doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_2);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_thumb_0);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_thumb_1);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_0);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_1);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_index_2);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_0);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_1);
+	doubleSpinBox_curtor_Vector.append(ui->doubleSpinBox_curtor_ring_2);
 
-    buttonGroup_Vector.append(ui->buttonGroup_thumb_0);
-    buttonGroup_Vector.append(ui->buttonGroup_thumb_1);
-    buttonGroup_Vector.append(ui->buttonGroup_index_0);
-    buttonGroup_Vector.append(ui->buttonGroup_index_1);
-    buttonGroup_Vector.append(ui->buttonGroup_index_2);
-    buttonGroup_Vector.append(ui->buttonGroup_ring_0);
-    buttonGroup_Vector.append(ui->buttonGroup_ring_1);
-    buttonGroup_Vector.append(ui->buttonGroup_ring_2);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_thumb_0);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_thumb_1);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_0);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_1);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_index_2);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_0);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_1);
+	doubleSpinBox_rdamp_Vector.append(ui->doubleSpinBox_rdamp_ring_2);
 
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_thumb_0);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_thumb_1);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_0);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_1);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_2);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_0);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_1);
-    checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_2);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_thumb_0);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_thumb_1);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_0);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_1);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_index_2);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_0);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_1);
+	doubleSpinBox_mcur_Vector.append(ui->doubleSpinBox_mcur_ring_2);
 
-    for(int i=0; i<robot.number_of_servos; i++)
-    {
-    	checkboxButtonGroup_Vector[i]->setExclusive(false);
+	buttonGroup_Vector.append(ui->buttonGroup_thumb_0);
+	buttonGroup_Vector.append(ui->buttonGroup_thumb_1);
+	buttonGroup_Vector.append(ui->buttonGroup_index_0);
+	buttonGroup_Vector.append(ui->buttonGroup_index_1);
+	buttonGroup_Vector.append(ui->buttonGroup_index_2);
+	buttonGroup_Vector.append(ui->buttonGroup_ring_0);
+	buttonGroup_Vector.append(ui->buttonGroup_ring_1);
+	buttonGroup_Vector.append(ui->buttonGroup_ring_2);
 
-    	doubleSpinBox_curtor_Vector[i]->setEnabled(false);
-    	doubleSpinBox_mcur_Vector[i]->setEnabled(false);
-    	doubleSpinBox_curpos_Vector[i]->setEnabled(false);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_thumb_0);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_thumb_1);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_0);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_1);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_index_2);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_0);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_1);
+	checkboxButtonGroup_Vector.append(ui->buttonGroup_checkbox_ring_2);
 
-		QList<QAbstractButton*> buttons_in_group = checkboxButtonGroup_Vector[i]->buttons();
-    	for(int j=0; j<buttons_in_group.size(); j++)
-    	{
-    		buttons_in_group[j]->setEnabled(false);
-    	}
-    }
+	for (int i = 0; i < robot->number_of_servos; i++) {
+		checkboxButtonGroup_Vector[i]->setExclusive(false);
+
+		doubleSpinBox_curtor_Vector[i]->setEnabled(false);
+		doubleSpinBox_mcur_Vector[i]->setEnabled(false);
+		doubleSpinBox_curpos_Vector[i]->setEnabled(false);
+
+		QList <QAbstractButton*> buttons_in_group = checkboxButtonGroup_Vector[i]->buttons();
+		for (int j = 0; j < buttons_in_group.size(); j++) {
+			buttons_in_group[j]->setEnabled(false);
+		}
+	}
+
+	current_profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
 
 }
 
 wgt_bird_hand_command::~wgt_bird_hand_command()
 {
-  //  delete ui;
+	//  delete ui;
 }
 
-
-void wgt_bird_hand_command::my_open()
+void wgt_bird_hand_command::my_open(bool set_on_top)
 {
-	wgt_base::my_open();
+	wgt_base::my_open(set_on_top);
 	init_and_copy_slot();
 }
 
@@ -140,73 +143,14 @@ void wgt_bird_hand_command::init_and_copy()
 
 void wgt_bird_hand_command::on_pushButton_read_clicked()
 {
-	printf("read\n");
-	init();
+
+	set_status();
 }
 
 void wgt_bird_hand_command::init_and_copy_slot()
 {
-	init();
+	set_status();
 	copy_command();
-}
-
-
-void wgt_bird_hand_command::synchro_depended_init_slot()
-{
-
-
-}
-
-
-void wgt_bird_hand_command::init()
-{
-	try {
-
-		mrrocpp::lib::bird_hand::status &bhsrs = robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
-
-	    joint_status.append(&bhsrs.thumb_f[0]);
-	    joint_status.append(&bhsrs.thumb_f[1]);
-	    joint_status.append(&bhsrs.index_f[0]);
-	    joint_status.append(&bhsrs.index_f[1]);
-	    joint_status.append(&bhsrs.index_f[2]);
-	    joint_status.append(&bhsrs.ring_f[0]);
-	    joint_status.append(&bhsrs.ring_f[1]);
-	    joint_status.append(&bhsrs.ring_f[2]);
-
-	    mrrocpp::lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
-
-	    joint_command.append(&bhcs.thumb_f[0]);
-	    joint_command.append(&bhcs.thumb_f[1]);
-	    joint_command.append(&bhcs.index_f[0]);
-	    joint_command.append(&bhcs.index_f[1]);
-	    joint_command.append(&bhcs.index_f[2]);
-	    joint_command.append(&bhcs.ring_f[0]);
-	    joint_command.append(&bhcs.ring_f[1]);
-	    joint_command.append(&bhcs.ring_f[2]);
-
-		if (robot.state.edp.pid != -1) {
-			if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
-			{
-				synchro_depended_widgets_disable(false);
-
-//				robot.ui_ecp_robot-> ;// co tutaj ma być?
-
-				for (int i = 0; i < robot.number_of_servos; i++) {
-					doubleSpinBox_curpos_Vector[i]->setValue(joint_status[i]->meassured_position);
-
-				}
-
-			} else {
-				// Wygaszanie elementow przy niezsynchronizowanym robocie
-				synchro_depended_widgets_disable(true);
-
-			}
-		}
-
-	} // end try
-	CATCH_SECTION_UI
-
-
 }
 
 void wgt_bird_hand_command::on_pushButton_copy_clicked()
@@ -214,34 +158,66 @@ void wgt_bird_hand_command::on_pushButton_copy_clicked()
 	copy_command();
 }
 
-
-int wgt_bird_hand_command::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_bird_hand_command::on_pushButton_clear_all_clicked()
 {
-return 1;
+	for (int i = 0; i < robot->number_of_servos; i++) {
+		desired_pos_spin_box[i]->setValue(0);
+		doubleSpinBox_destor_Vector[i]->setValue(0);
+		doubleSpinBox_rdamp_Vector[i]->setValue(0);
+	}
 }
 
+void wgt_bird_hand_command::on_pushButton_change_command_type_all_clicked()
+{
 
+	int button_number;
+
+	// zmien profil i przypisz kolumne przycisku do zaznaczenia
+	switch (current_profile_type)
+	{
+		case lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION:
+			current_profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+			button_number = 1;
+			break;
+		case lib::bird_hand::MACROSTEP_POSITION_INCREMENT:
+			current_profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
+			button_number = 2;
+			break;
+		case lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT:
+			current_profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
+			button_number = 0;
+			break;
+		default:
+			break;
+	}
+
+	// ustaw odpowiednie przyciski
+	for (int i = 0; i < robot->number_of_servos; i++) {
+
+		QList <QAbstractButton*> buttons_in_group = buttonGroup_Vector[i]->buttons();
+
+		buttons_in_group[button_number]->toggle();
+
+	}
+}
 
 int wgt_bird_hand_command::get_command()
 {
 	try {
 
-		//lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
+		//lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
 
-		mrrocpp::lib::bird_hand::command &bhcs = robot.ui_ecp_robot->bird_hand_command_data_port->data;
+		mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
 
 		// odczyt ilosci krokow i ecp_query step
 
 		bhcs.motion_steps = ui->spinBox_motion_steps->value();
-		bhcs.ecp_query_step = ui->spinBox_query_step->value();
+		bhcs.ecp_query_step = bhcs.motion_steps - ui->spinBox_query_step->value();
 
-	    for(int i=0; i<robot.number_of_servos; i++)
-	    {
-	    	get_finger_command(i);
-	    	get_variant_finger_command(i);
-	    }
-
-
+		for (int i = 0; i < robot->number_of_servos; i++) {
+			get_finger_command(i);
+			get_variant_finger_command(i);
+		}
 
 		//std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		/*
@@ -255,47 +231,70 @@ int wgt_bird_hand_command::get_command()
 
 		 interface.ui_msg->message(ss.str().c_str());
 		 */
-		robot.ui_ecp_robot->bird_hand_command_data_port->set();
-		robot.ui_ecp_robot->execute_motion();
+		robot->ui_ecp_robot->bird_hand_command_data_port->set();
+		robot->ui_ecp_robot->execute_motion();
 
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
 
 int wgt_bird_hand_command::set_status()
 {
-	try
-	{
-		if (robot.state.edp.pid != -1)
-		{
-			robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
-			robot.ui_ecp_robot->execute_motion();
-			robot.ui_ecp_robot->bird_hand_status_reply_data_request_port->get();
 
-			if (robot.state.edp.is_synchronised)
-						for(int i=0; i<robot.number_of_servos; i++)
-						{
-							set_finger_status(i);
-						}
-			init();
+	joint_status.clear();
+	joint_command.clear();
+
+	mrrocpp::lib::bird_hand::status &bhsrs = robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->data;
+
+	joint_status.append(&bhsrs.thumb_f[0]);
+	joint_status.append(&bhsrs.thumb_f[1]);
+	joint_status.append(&bhsrs.index_f[0]);
+	joint_status.append(&bhsrs.index_f[1]);
+	joint_status.append(&bhsrs.index_f[2]);
+	joint_status.append(&bhsrs.ring_f[0]);
+	joint_status.append(&bhsrs.ring_f[1]);
+	joint_status.append(&bhsrs.ring_f[2]);
+
+	mrrocpp::lib::bird_hand::command &bhcs = robot->ui_ecp_robot->bird_hand_command_data_port->data;
+
+	joint_command.append(&bhcs.thumb_f[0]);
+	joint_command.append(&bhcs.thumb_f[1]);
+	joint_command.append(&bhcs.index_f[0]);
+	joint_command.append(&bhcs.index_f[1]);
+	joint_command.append(&bhcs.index_f[2]);
+	joint_command.append(&bhcs.ring_f[0]);
+	joint_command.append(&bhcs.ring_f[1]);
+	joint_command.append(&bhcs.ring_f[2]);
+
+	try {
+		if (robot->state.edp.pid != -1) {
+			//	printf("set_status inside\n");
+			robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->set_request();
+			robot->ui_ecp_robot->execute_motion();
+			robot->ui_ecp_robot->bird_hand_status_reply_data_request_port->get();
+
+			if (robot->state.edp.is_synchronised)
+				for (int i = 0; i < robot->number_of_servos; i++) {
+					set_finger_status(i);
+				}
+			//init();
 		}
 	} // end try
-	CATCH_SECTION_UI
+	CATCH_SECTION_UI_PTR
 
 	return 1;
 }
 
 int wgt_bird_hand_command::copy_command()
 {
-	if (robot.state.edp.pid != -1) {
-		if (robot.state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	if (robot->state.edp.pid != -1) {
+		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 		{
 			ui->pushButton_execute->setDisabled(false);
 
-			for(int i=0; i<robot.number_of_servos; i++)
-			{
+			for (int i = 0; i < robot->number_of_servos; i++) {
 				get_variant_finger_command(i);
 				copy_finger_command(i);
 			}
@@ -312,63 +311,39 @@ int wgt_bird_hand_command::copy_command()
 
 void wgt_bird_hand_command::on_pushButton_execute_clicked()
 {
-	get_desired_position();
-	set_status();
+
+	get_command();
 }
 
-int wgt_bird_hand_command::get_desired_position()
+int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
 {
+	QList <QAbstractButton*> buttons_in_group = buttonGroup_Vector[fingerId]->buttons();
 
-	if (robot.state.edp.pid != -1) {
-
-		if (robot.state.edp.is_synchronised) {
-
-			for (int i = 0; i < robot.number_of_servos; i++) {
-			//	robot.desired_pos[i] = doubleSpinBox_despos_Vector[i]->value(); //co tu ma być?
-				joint_command[i]->desired_position = doubleSpinBox_despos_Vector[i]->value();
+	for (int i = 0; i < buttons_in_group.size(); i++) {
+		if (buttons_in_group[i]->isChecked()) {
+			switch (i)
+			{
+				case 0:
+					joint_command[fingerId]->profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
+					break;
+				case 1:
+					joint_command[fingerId]->profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
+					break;
+				case 2:
+					joint_command[fingerId]->profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
+					break;
+				default:
+					break;
 			}
-		} else {
-
-			for (int i = 0; i < robot.number_of_servos; i++) {
-				joint_command[i]->desired_position = 0.0;
-			}
+			return 1;
 		}
 	}
 	return 1;
 }
 
-
-int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
-{
-    	QList<QAbstractButton*> buttons_in_group= buttonGroup_Vector[fingerId]->buttons();
-
-    	for(int i=0; i<buttons_in_group.size(); i++)
-    	{
-    		 if(buttons_in_group[i]->isChecked())
-    		 {
-    			 switch (i)
-    			 {
-    				 case 0:
-    					 joint_command[fingerId]->profile_type = lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION;
-    					 break;
-    				 case 1:
-    					 joint_command[fingerId]->profile_type = lib::bird_hand::MACROSTEP_POSITION_INCREMENT;
-    					 break;
-    				 case 2:
-    					 joint_command[fingerId]->profile_type = lib::bird_hand::SIGLE_STEP_POSTION_INCREMENT;
-    					 break;
-    				 default:
-    					 break;
-    			 }
-    			 return 1;
-    		 }
-    	}
-    return 1;
-}
-
 int wgt_bird_hand_command::get_finger_command(int fingerId)
 {
-	joint_command[fingerId]->desired_position = doubleSpinBox_despos_Vector[fingerId]->value();
+	joint_command[fingerId]->desired_position = desired_pos_spin_box[fingerId]->value();
 	joint_command[fingerId]->desired_torque = doubleSpinBox_destor_Vector[fingerId]->value();
 	joint_command[fingerId]->reciprocal_of_damping = doubleSpinBox_rdamp_Vector[fingerId]->value();
 
@@ -377,7 +352,7 @@ int wgt_bird_hand_command::get_finger_command(int fingerId)
 
 int wgt_bird_hand_command::set_finger_status(int fingerId)
 {
-	QList<QAbstractButton*> chboxes = checkboxButtonGroup_Vector[fingerId]->buttons();
+	QList <QAbstractButton*> chboxes = checkboxButtonGroup_Vector[fingerId]->buttons();
 
 	doubleSpinBox_curpos_Vector[fingerId]->setValue(joint_status[fingerId]->meassured_position);
 	doubleSpinBox_curtor_Vector[fingerId]->setValue(joint_status[fingerId]->meassured_torque);
@@ -438,7 +413,7 @@ int wgt_bird_hand_command::copy_finger_command(int fingerId)
 {
 
 	if (joint_command[fingerId]->profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION)
-		doubleSpinBox_despos_Vector[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
+		desired_pos_spin_box[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
 
 	return 1;
 }

@@ -39,7 +39,7 @@ namespace spkm {
 
 class EcpRobot;
 
-class UiRobot : public QObject, public common::UiRobot
+class UiRobot : public common::UiRobot
 {
 Q_OBJECT
 
@@ -78,12 +78,9 @@ public:
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
-	void make_connections();
 	void setup_menubar();
 
 private:
-	QAction *actionspkm_EDP_Load;
-	QAction *actionspkm_EDP_Unload;
 	QAction *actionspkm_Synchronisation;
 	QAction *actionspkm_Motors;
 	QAction *actionspkm_Motors_post;
@@ -96,7 +93,6 @@ private:
 	QAction *actionspkm_Position_2;
 	QAction *actionspkm_Clear_Fault;
 
-	QMenu *menuSpkm;
 	QMenu *menuspkm_Pre_synchro_moves;
 	QMenu *menuspkm_Post_synchro_moves;
 	QMenu *menuspkm_Preset_positions;

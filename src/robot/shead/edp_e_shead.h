@@ -25,7 +25,8 @@ namespace shead {
  *
  * This head is built on top of the SPKM manipulator
  */
-class effector: public common::motor_driven_effector {
+class effector : public common::motor_driven_effector
+{
 protected:
 
 	lib::shead::cbuffer ecp_edp_cbuffer;
@@ -46,7 +47,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	effector(common::shell &_shell);
+	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.

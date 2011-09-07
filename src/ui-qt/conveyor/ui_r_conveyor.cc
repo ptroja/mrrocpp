@@ -16,12 +16,12 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
+#include "../base/mp.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace conveyor {
 const std::string WGT_CONVEYOR_MOVE = "WGT_CONVEYOR_MOVE";
-// extern ui_state_def ui_state;
 
 //
 //
@@ -40,15 +40,15 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::common::EcpRobot(*this);
-	return 1;
+//	return 1;
 }
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgt_move->synchro_depended_init();
+	wgts[WGT_CONVEYOR_MOVE]->synchro_depended_init();
 	return 1;
 }
 
@@ -84,77 +84,58 @@ int UiRobot::synchronise_int()
 
 	// modyfikacje menu
 	interface.manage_interface();
-	wgt_move->synchro_depended_init();
-	wgt_move->init_and_copy();
+	wgts[WGT_CONVEYOR_MOVE]->synchro_depended_init();
+	wgts[WGT_CONVEYOR_MOVE]->init_and_copy();
 	return 1;
 
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	single_motor::UiRobot(_interface, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS)
+		single_motor::UiRobot(_interface, lib::conveyor::ROBOT_NAME, lib::conveyor::NUM_OF_SERVOS)
 {
+	add_wgt <wgt_single_motor_move>(WGT_CONVEYOR_MOVE, "Conveyor moves");
 
-	wgt_move = new wgt_single_motor_move("Conveyor moves", interface, *this, interface.get_main_window());
-	wndbase_m[WGT_CONVEYOR_MOVE] = wgt_move->dwgt;
 }
 
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 
+	single_motor::UiRobot::manage_interface();
+
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, menuConveyor);
-
 			break;
 		case 0:
-			mw->enable_menu_item(false, 3, actionconveyor_EDP_Unload, actionconveyor_Synchronization, actionconveyor_Move);
-			mw->enable_menu_item(false, 1, menuconveyor_Preset_Positions);
-			mw->enable_menu_item(true, 1, menuConveyor);
-			mw->enable_menu_item(true, 1, actionconveyor_EDP_Load);
-
+			mw->enable_menu_item(false, 1, actionconveyor_Move);
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, menuConveyor);
-
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, actionconveyor_Synchronization);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-
-				switch (interface.mp.state)
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, actionconveyor_EDP_Unload, actionconveyor_Move);
-						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-						mw->enable_menu_item(false, 1, actionconveyor_EDP_Load);
-						block_ecp_trigger();
+						mw->enable_menu_item(true, 1, actionconveyor_Move);
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						mw->enable_menu_item(true, 1, actionconveyor_Move);
-						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-						mw->enable_menu_item(false, 1, actionconveyor_EDP_Load, actionconveyor_EDP_Unload);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(true, 1, actionconveyor_Move);
-						mw->enable_menu_item(true, 1, menuconveyor_Preset_Positions);
-						block_ecp_trigger();
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 3, actionconveyor_EDP_Unload, actionconveyor_Synchronization, actionconveyor_Move);
-				mw->enable_menu_item(false, 1, actionconveyor_EDP_Load);
-
+				mw->enable_menu_item(true, 1, actionconveyor_Move);
 			}
 			break;
 		default:
@@ -164,96 +145,16 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
-	connect(actionconveyor_EDP_Load, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionconveyor_EDP_Unload,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)),		Qt::AutoCompatConnection);
-	connect(actionconveyor_Move, 			SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
-	connect(actionconveyor_Synchronization, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
-	connect(actionconveyor_Synchro_Position,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),	Qt::AutoCompatConnection);
-	connect(actionconveyor_Position_0, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionconveyor_Position_1, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-	connect(actionconveyor_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 		Qt::AutoCompatConnection);
-}
-
 void UiRobot::setup_menubar()
 {
+	single_motor::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-    actionconveyor_EDP_Load				= new Ui::MenuBarAction(QString("EDP &Load"), this, menuBar);
-    actionconveyor_EDP_Unload 			= new Ui::MenuBarAction(QString("EDP &Unload"),this, menuBar);
-    actionconveyor_Synchronization 		= new Ui::MenuBarAction(QString("&Synchronization"),this, menuBar);
-    actionconveyor_Move					= new Ui::MenuBarAction(QString("&Move"),this, menuBar);
-    actionconveyor_Synchro_Position 	= new Ui::MenuBarAction(QString("&Synchro Position"),this, menuBar);
-    actionconveyor_Position_0 			= new Ui::MenuBarAction(QString("Position &0"),this, menuBar);
-    actionconveyor_Position_1 			= new Ui::MenuBarAction(QString("Position &1"),this, menuBar);
-    actionconveyor_Position_2			= new Ui::MenuBarAction(QString("Position &2"),this, menuBar);
+	actionconveyor_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_CONVEYOR_MOVE], signalDispatcher, menuBar);
+	robot_menu->addAction(actionconveyor_Move);
 
-    menuConveyor = new QMenu(menuBar->menuRobot);
-    menuconveyor_Preset_Positions = new QMenu(menuConveyor);
-
-	menuBar->menuRobot->addAction(menuConveyor->menuAction());
-
-	menuConveyor->addAction(actionconveyor_EDP_Load);
-	menuConveyor->addAction(actionconveyor_EDP_Unload);
-	menuConveyor->addSeparator();
-	menuConveyor->addAction(actionconveyor_Synchronization);
-	menuConveyor->addAction(actionconveyor_Move);
-	menuConveyor->addAction(menuconveyor_Preset_Positions->menuAction());
-	menuconveyor_Preset_Positions->addAction(actionconveyor_Synchro_Position);
-	menuconveyor_Preset_Positions->addAction(actionconveyor_Position_0);
-	menuconveyor_Preset_Positions->addAction(actionconveyor_Position_1);
-	menuconveyor_Preset_Positions->addAction(actionconveyor_Position_2);
-
-	actionconveyor_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-	actionconveyor_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Synchronization->setText(QApplication::translate("MainWindow", "&Synchronization", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Move->setText(QApplication::translate("MainWindow", "&Move", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
-	actionconveyor_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
-
-    menuConveyor->setTitle(QApplication::translate("MainWindow", "&Conveyor", 0, QApplication::UnicodeUTF8));
-    menuconveyor_Preset_Positions->setTitle(QApplication::translate("MainWindow", "&Preset Positions", 0, QApplication::UnicodeUTF8));
-}
-
-
-
-// aktualizacja ustawien przyciskow
-int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
-{
-
-	if (state.edp.state <= 0) {// edp wylaczone
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		 */
-	} else if (state.edp.state == 1) {// edp wlaczone reader czeka na start
-
-		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-		/* TR
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		 */
-	} else if (state.edp.state == 2) {// edp wlaczone reader czeka na stop
-		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_start);
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_stop);
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_conveyor_reader_trigger);
-		 */
-	}
-
-	state.edp.last_state = state.edp.state;
-
-	return 1;
-
+	robot_menu->setTitle(QApplication::translate("MainWindow", "&Conveyor", 0, QApplication::UnicodeUTF8));
 }
 
 }
