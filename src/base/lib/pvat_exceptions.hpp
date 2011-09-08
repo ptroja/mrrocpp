@@ -36,7 +36,7 @@ typedef boost::error_info <struct segment_number_, int> segment_number;
 typedef boost::error_info <struct desired_value_, double> desired_value;
 
 //! Constraint value that caused the exception.
-typedef boost::error_info <struct desired_value_, double> constraint_value;
+typedef boost::error_info <struct constraint_value_, double> constraint_value;
 
 /*!
  * \brief Exception thrown when motor velocity constraint for given motion segment is exceeded.

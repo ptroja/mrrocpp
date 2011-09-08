@@ -22,7 +22,7 @@ namespace Mrrocpp_Proxy {
 class PBReading: public Reading
 {
 public:
-	PBReading()
+	PBReading() : objectVisible(false)
 	{
 	}
 

@@ -169,7 +169,10 @@ const char * State::returnNextStateID(StateHeap &sh)
 {
 	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
 		if ((*it).getConditionResult())
-			return (*it).getTargetID(sh);
+		{
+			const char * str = (*it).getTargetID(sh);
+			return str;
+		}
 	}
 	// to avoid lock
 	return "_STOP_";

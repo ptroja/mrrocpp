@@ -37,10 +37,8 @@ protected:
 
 private:
 	double image_sampling_period;
-	static const double image_sampling_period_default;
 
-//	std::string txtbuf;
-//	int txtiter;
+	bool macrostep_length_control;
 
 	void update_motion_steps(ecp_mp::sensor::discode::reading_message_header rmh);
 };

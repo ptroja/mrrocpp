@@ -1265,6 +1265,9 @@ messip_channel_disconnect0( messip_channel_t * ch,
 		dcount = messip_writev( ch->send_sockfd, iovec, 1 );
 		LIBTRACE( ( "@messip_channel_disconnect: sendmsg dcount=%d local_fd=%d [errno=%d] \n",
 			  dcount, ch->send_sockfd, errno ) );
+		if(dcount == -1) {
+			return -1;
+		}
 		if(dcount != sizeof( messip_datasend_t )) {
 			fprintf(stderr, "error disconnecting from \"%s\" channel\n", ch->name);
 		}

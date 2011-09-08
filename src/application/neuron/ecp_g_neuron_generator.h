@@ -123,6 +123,8 @@ private:
 	double current_sum;
 	double current_max;
 
+	bool first_next_step;
+
 	FILE * pFileR;
 	FILE * pFileG;
 
