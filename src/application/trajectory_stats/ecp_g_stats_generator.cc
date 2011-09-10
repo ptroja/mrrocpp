@@ -59,6 +59,8 @@ bool stats_generator::first_step()
 
 	mstep_ = 1;
 
+	log_file_=fopen(logFileName.c_str(), "w");
+
 	return true;
 }
 /*================================next_step===============================*//**
@@ -73,11 +75,12 @@ bool stats_generator::next_step()
 
 
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-
+	printf("next step %d\n",mstep_);
 	if(mstep_ > trj_.size()) {
 		fclose(log_file_);
 		return false;
-	} else {
+	}
+
 	the_robot->reply_package.arm.pf_def.arm_frame.get_xyz_angle_axis(msr_position);
 
 	position_matrix.set_from_xyz_angle_axis(trj_[mstep_-1]);
@@ -99,8 +102,9 @@ bool stats_generator::next_step()
 
 	fprintf(log_file_, "%f|%f|%f|%f|%f|%f|%f|%f\n", trj_[mstep_-1][0], trj_[mstep_-1][1], trj_[mstep_-1][2], msr_position[0], msr_position[1], msr_position[2], current_sum, current_norm);
 
+	mstep_++;
+
 	return true;
-	}
 }
 
 /**
@@ -111,6 +115,10 @@ bool stats_generator::next_step()
 void stats_generator::reset()
 {
 
+}
+
+mrrocpp::lib::Xyz_Angle_Axis_vector stats_generator::getFirstPosition(){
+	return trj_.front();
 }
 
 void stats_generator::load_trajectory(const std::string &filename)
@@ -146,13 +154,17 @@ void stats_generator::load_trajectory(const std::string &filename)
 						continue;
 					position[1] = boost::lexical_cast<double>(token);
 
-					token = strtok(NULL, "|");
+					token = strtok(NULL, "\n");
 
 					if(token == NULL)
 						continue;
 					position[2] = boost::lexical_cast<double>(token);
 
-					token = strtok(NULL, "|");
+					position[3]=1.203;
+					position[4]=-1.447;
+					position[5]=-0.294;
+
+					/*token = strtok(NULL, "|");
 
 					if(token == NULL)
 						continue;
@@ -168,7 +180,7 @@ void stats_generator::load_trajectory(const std::string &filename)
 
 					if(token == NULL)
 						continue;
-					position[5] = boost::lexical_cast<double>(token);
+					position[5] = boost::lexical_cast<double>(token);*/
 
 					trj_.push_back(lib::Xyz_Angle_Axis_vector(position));
 
@@ -180,6 +192,7 @@ void stats_generator::load_trajectory(const std::string &filename)
 
 	}
 
+	logFileName=filename+".stat";
 }
 
 }//generator

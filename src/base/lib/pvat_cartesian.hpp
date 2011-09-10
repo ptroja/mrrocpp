@@ -84,12 +84,13 @@ void check_time_distances(const Eigen::Matrix <double, N_SEGMENTS, 1> taus_)
 	// Values taken from the EPOS2 documentation.
 	const double max_td = 0.255;
 	// Originally min time is 1ms, but because of the PVT transmition time via USB segments must be bigger than 40 ms.
-	const double min_td = 0.040;
+	// 40m = 6 triplets * 3ms for send  + 6 triplets * 3ms for receive.
+	const double min_td = 0.004;
 
-	// Check conditions for all segments - movement .
+	// Check conditions for all segments - movement.
 	for (int sgt = 0; sgt < N_SEGMENTS; ++sgt)
 		if (taus_(sgt) < min_td)
-			BOOST_THROW_EXCEPTION(nfe_invalid_time_inverval() << constraint_type(MAXIMUM_CONSTRAINT) << segment_number(sgt) << constraint_value(min_td) << desired_value(taus_(sgt)));
+			BOOST_THROW_EXCEPTION(nfe_invalid_time_inverval() << constraint_type(MINIMUM_CONSTRAINT) << segment_number(sgt) << constraint_value(min_td) << desired_value(taus_(sgt)));
 		else if (taus_(sgt) > max_td)
 			BOOST_THROW_EXCEPTION(nfe_invalid_time_inverval() << constraint_type(MAXIMUM_CONSTRAINT) << segment_number(sgt) << constraint_value(max_td) << desired_value(taus_(sgt)));
 }
@@ -195,7 +196,7 @@ void linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> &
 		// Transform joints to motors (and check motors/joints values).
 		model_->i2mp_transform(int_motors, int_joints);
 
-#if 0
+#if 1
 		cout << int_ee_frame << endl;
 		cout << int_joints << endl;
 		cout << int_motors << endl;
@@ -790,7 +791,7 @@ void compute_pvt_triplets_for_epos(
  * @tparam N_MOTORS Number of manipulator motors.
  *
  * @param [in] p_ Matrix containing interpolated 'motor position poses'.
- * @param [out] change_ Values determining whether position of given motor changes (for the whole trajectory).
+ * @param [out] change_ Values containing information whether position of given motor will change (for the whole trajectory).
  */
 template <unsigned int N_POINTS, unsigned int N_MOTORS>
 void check_pvt_translocation(

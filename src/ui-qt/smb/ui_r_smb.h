@@ -53,7 +53,7 @@ public:
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 
-	void make_connections();
+
 	void setup_menubar();
 };
 

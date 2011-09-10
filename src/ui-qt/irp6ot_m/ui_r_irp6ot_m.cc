@@ -108,82 +108,18 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-void UiRobot::make_connections()
-{
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-//
-//	connect(actionirp6ot_m_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
-//	connect(actionirp6ot_m_Synchro_Position,SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
-//	connect(actionirp6ot_m_Front_Position, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), 				Qt::AutoCompatConnection);
-//	connect(actionirp6ot_m_Position_0, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
-//	connect(actionirp6ot_m_Position_1, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
-//	connect(actionirp6ot_m_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), 					Qt::AutoCompatConnection);
-}
-
 void UiRobot::setup_menubar()
 {
 	irp6_m::UiRobot::setup_menubar();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6&ot_m", 0, QApplication::UnicodeUTF8));
 
-	make_connections();
 }
 
 int UiRobot::synchronise()
 {
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::synchronise_int, &(*this)));
 	return 1;
-}
-
-int UiRobot::manage_interface()
-{
-	//MainWindow *mw = interface.get_main_window();
-	irp6_m::UiRobot::manage_interface();
-
-	return 1;
-}
-
-// aktualizacja ustawien przyciskow
-int UiRobot::process_control_window_section_init(bool &wlacz_PtButton_wnd_processes_control_all_reader_start, bool &wlacz_PtButton_wnd_processes_control_all_reader_stop, bool &wlacz_PtButton_wnd_processes_control_all_reader_trigger)
-{
-	//wgt_process_control *ui = interface.get_process_control_window(); //TODO: zmienic sposob
-
-	if (state.edp.state <= 0) { // edp wylaczone
-//		ui->all_reader_start_pushButton->setDisabled(true);
-//		ui->all_reader_stop_pushButton->setDisabled(true);
-//		ui->all_reader_trigger_pushButton->setDisabled(true);
-
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-		 */
-	} else if (state.edp.state == 1) { // edp wlaczone reader czeka na start
-		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
-//		ui->all_reader_start_pushButton->setEnabled(true);
-//		ui->all_reader_stop_pushButton->setDisabled(true);
-//		ui->all_reader_trigger_pushButton->setDisabled(true);
-		/* TR
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-		 */
-	} else if (state.edp.state == 2) { // edp wlaczone reader czeka na stop
-		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
-		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
-		/* TR
-		 interface.block_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_start);
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_stop);
-		 interface.unblock_widget(ABW_PtButton_wnd_processes_control_irp6ot_reader_trigger);
-		 */
-	}
-
-	state.edp.last_state = state.edp.state;
-
-	return 1;
-
 }
 
 }

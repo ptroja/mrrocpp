@@ -25,9 +25,9 @@ namespace irp6ot_tfg {
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_8_irp6ot::NL_regulator_8_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
-	desired_velocity_limit = 2.0;
+	desired_velocity_limit = 20.0;
 	reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
 	sum_of_currents = current_index = 0;
 	for (int i = 0; i < GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++) {
@@ -73,14 +73,12 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI); //*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
 
 	// printf("bbb: %d\n",  measured_current);
-
 
 	// if (step_new!=0.0) printf(" 8 reg:%f\n", step_new);
 
@@ -98,7 +96,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	//  if (fff == 9) fff=0;
 	// }
 
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -108,14 +105,12 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new)
+			- 0.980 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -123,7 +118,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 		switch (algorithm_no)
 		{
 			case 0: // algorytm nr 0
-
 
 				switch (algorithm_parameters_no)
 				{
@@ -197,7 +191,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	b0 = 15.984375 * POSTUMENT_TO_TRACK_VOLTAGE_RATIO; //15.984375; //3
 	b1 = 15.784375 * POSTUMENT_TO_TRACK_VOLTAGE_RATIO; //15.984375; //3
 
-
 	//14.4
 	//a=0.2;
 	//b0=15.984375;
@@ -206,7 +199,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	switch (algorithm_no)
 	{
 		case 0: // algorytm nr 0
-
 
 			//	if (measured_current != 0) fprintf(stdout,"alg 0: %d\n", measured_current);
 			/*
@@ -259,7 +251,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	 */
 
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
-
 
 	// scope-locked reader data update
 	{

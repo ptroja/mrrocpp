@@ -142,7 +142,6 @@ int UiRobot::edp_create_int()
 
 	try { // dla bledow robot :: ECP_error
 
-		// dla robota bird_hand
 		if (state.edp.state == 0) {
 
 			state.edp.is_synchronised = false;
@@ -606,8 +605,7 @@ int UiRobot::reload_configuration()
 				break;
 		}
 
-	} else // jesli  irp6 on_track ma byc nieaktywne
-	{
+	} else {
 		switch (state.edp.state)
 		{
 			case -1:
@@ -621,7 +619,7 @@ int UiRobot::reload_configuration()
 			default:
 				break;
 		}
-	} // end irp6_on_track
+	}
 
 	return 1;
 }

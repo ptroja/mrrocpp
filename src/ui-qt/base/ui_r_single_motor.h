@@ -43,7 +43,6 @@ public:
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 
-	void make_connections();
 	void setup_menubar();
 	int manage_interface();
 

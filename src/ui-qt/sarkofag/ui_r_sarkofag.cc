@@ -127,34 +127,30 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-
 			break;
 		case 0:
-			mw->enable_menu_item(false, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
-
+			mw->enable_menu_item(false, 1, actionsarkofag_Move);
 			break;
 		case 1:
 		case 2:
-
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(true, 1, actionsarkofag_Move);
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(true, 1, actionsarkofag_Move);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, actionsarkofag_Move, actionsarkofag_Servo_Algorithm);
+						mw->enable_menu_item(false, 1, actionsarkofag_Move);
 						break;
 					default:
 						break;
@@ -162,7 +158,6 @@ int UiRobot::manage_interface()
 			} else // jesli robot jest niezsynchronizowany
 			{
 				mw->enable_menu_item(true, 1, actionsarkofag_Move);
-
 			}
 			break;
 		default:
@@ -172,52 +167,16 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-
-	connect(actionsarkofag_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionsarkofag_Move, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)),				Qt::AutoCompatConnection);
-	connect(actionsarkofag_Synchro_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionsarkofag_Front_Position, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Front_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionsarkofag_Position_0, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionsarkofag_Position_1, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-	connect(actionsarkofag_Position_2, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionsarkofag_Servo_Algorithm, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(), 		Qt::AutoCompatConnection);
-
-}
-
 void UiRobot::setup_menubar()
 {
-	common::UiRobot::setup_menubar();
+	single_motor::UiRobot::setup_menubar();
 	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
-	actionsarkofag_Synchronisation = new Ui::MenuBarAction(QString("&Synchronization"), this, menuBar);
 	actionsarkofag_Move = new Ui::MenuBarAction(QString("&Move"), wgts[WGT_SARKOFAG_MOVE], signalDispatcher, menuBar);
-	actionsarkofag_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro position"), this, menuBar);
-	actionsarkofag_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
-	actionsarkofag_Position_0 = new Ui::MenuBarAction(QString("Position &0"), this, menuBar);
-	actionsarkofag_Position_1 = new Ui::MenuBarAction(QString("Position &1"), this, menuBar);
-	actionsarkofag_Position_2 = new Ui::MenuBarAction(QString("Position &2"), this, menuBar);
-	actionsarkofag_Servo_Algorithm = new Ui::MenuBarAction(QString("S&ervo Algorithm"), this, menuBar);
-
-	menusarkofag_Preset_Positions = new QMenu(robot_menu);
-
-	robot_menu->addSeparator();
-	robot_menu->addAction(actionsarkofag_Synchronisation);
 	robot_menu->addAction(actionsarkofag_Move);
-	robot_menu->addAction(menusarkofag_Preset_Positions->menuAction());
-	robot_menu->addAction(actionsarkofag_Servo_Algorithm);
-	menusarkofag_Preset_Positions->addAction(actionsarkofag_Synchro_Position);
-	menusarkofag_Preset_Positions->addAction(actionsarkofag_Front_Position);
-	menusarkofag_Preset_Positions->addAction(actionsarkofag_Position_0);
-	menusarkofag_Preset_Positions->addAction(actionsarkofag_Position_1);
-	menusarkofag_Preset_Positions->addAction(actionsarkofag_Position_2);
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "&Sarkofag", 0, QApplication::UnicodeUTF8));
-	menusarkofag_Preset_Positions->setTitle(QApplication::translate("MainWindow", "Pr&eset Positions", 0, QApplication::UnicodeUTF8));
-	make_connections();
 }
 
 }
