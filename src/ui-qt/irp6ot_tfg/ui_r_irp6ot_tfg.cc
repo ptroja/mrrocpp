@@ -136,7 +136,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 {
 
 	add_wgt <wgt_single_motor_move>(WGT_IRP6OT_TFG_MOVE, "Irp6ot_tfg moves");
-//	wndbase_m[WGT_IRP6OT_TFG_MOVE] = wgts[WGT_IRP6OT_TFG_MOVE]->dwgt;
+
 }
 
 int UiRobot::manage_interface()
@@ -149,7 +149,7 @@ int UiRobot::manage_interface()
 		case -1:
 			break;
 		case 0:
-			mw->enable_menu_item(false, 2, EDP_Unload, actionirp6ot_tfg_Move);
+			mw->enable_menu_item(false, 1, actionirp6ot_tfg_Move);
 			break;
 		case 1:
 		case 2:
@@ -166,7 +166,6 @@ int UiRobot::manage_interface()
 						mw->enable_menu_item(true, 1, actionirp6ot_tfg_Move);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						mw->enable_menu_item(false, 1, actionirp6ot_tfg_Move);
@@ -184,17 +183,6 @@ int UiRobot::manage_interface()
 	}
 	return 1;
 }
-void UiRobot::make_connections()
-{
-//	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
-//
-//	connect(actionirp6ot_tfg_Synchronization, 	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-////	connect(actionirp6ot_tfg_Move, 				SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Move_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionirp6ot_tfg_Synchro_Position,	SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchro_Position_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionirp6ot_tfg_Position_0, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_0_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionirp6ot_tfg_Position_1,		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_1_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-//	connect(actionirp6ot_tfg_Position_2, 		SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Position_2_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-}
 
 void UiRobot::setup_menubar()
 {
@@ -207,7 +195,7 @@ void UiRobot::setup_menubar()
 	robot_menu->addAction(actionirp6ot_tfg_Move);
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "Irp6ot_t&Fg", 0, QApplication::UnicodeUTF8));
-	make_connections();
+
 }
 
 }

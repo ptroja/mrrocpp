@@ -34,7 +34,7 @@ namespace irp6p_tfg {
 NL_regulator_8_irp6p::NL_regulator_8_irp6p(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
 	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
-	desired_velocity_limit = 2.0;
+	desired_velocity_limit = 20.0;
 	reg_state = next_reg_state = prev_reg_state = lib::GRIPPER_START_STATE;
 	sum_of_currents = current_index = 0;
 	for (int i = 0; i < IRP6_POSTUMENT_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS; i++) {
