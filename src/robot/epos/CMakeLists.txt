@@ -18,6 +18,9 @@ if(LibFTDI_FOUND)
 
     add_executable(cantest cantest.cc)
     target_link_libraries (cantest epos)
+    
+    add_executable(festo festo.cc)
+    target_link_libraries (festo epos)    
 else(LibFTDI_FOUND)
     add_library(epos
         	epos.cc epos_access.cc
