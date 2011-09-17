@@ -1,5 +1,8 @@
 #include <iostream>
 #include <sstream>
+#include <algorithm>
+#include <ctime>
+#include <cmath>
 #include <unistd.h>
 
 #include <boost/program_options.hpp>
@@ -33,9 +36,18 @@ int main(int argc, char *argv[])
 	po::store(po::parse_command_line(argc, argv, desc), vm);
 	po::notify(vm);
 
+	if (vm.count("help")) {
+	    cout << desc << "\n";
+	    return 1;
+	}
+
 	cout<<"1\n";
 
 	logger_client log(buffer_capacity, server_name.c_str(), server_port);
+
+	double min_time = INFINITY;
+	double max_time = -INFINITY;
+	double time_sum = 0.0;
 
 	for(int i=0; i<messages_count; ++i){
 		usleep(delay);
@@ -45,6 +57,29 @@ int main(int argc, char *argv[])
 
 		sprintf(lm.text, "Message %d", i);
 		log.log(lm);
+		struct timespec end_time;
+		if (clock_gettime(CLOCK_REALTIME, &end_time) == 0) {
+			struct timespec start_time;
+			start_time.tv_sec = lm.seconds;
+			start_time.tv_nsec = lm.nanoseconds;
+			double t = time_diff(end_time, start_time);
+//			cout<<"   t = "<<t<<endl;
+//			cout<<"   start_time.tv_sec = "<<start_time.tv_sec<<endl;
+//			cout<<"   start_time.tv_nsec = "<<start_time.tv_nsec<<endl;
+//			cout<<"   end_time.tv_sec = "<<end_time.tv_sec<<endl;
+//			cout<<"   end_time.tv_nsec = "<<end_time.tv_nsec<<endl;
+
+			time_sum += t;
+			min_time = min(min_time, t);
+			max_time = max(max_time, t);
+		} else {
+			cerr<<"clock_gettime(CLOCK_REALTIME, &end_time) failed.\n";
+		}
+	}
+	if(messages_count > 0){
+		cout<<"avg_time = "<<(time_sum/messages_count)<<endl;
+		cout<<"min_time = "<<min_time<<endl;
+		cout<<"max_time = "<<max_time<<endl;
 	}
 	cout<<"2\n";
 

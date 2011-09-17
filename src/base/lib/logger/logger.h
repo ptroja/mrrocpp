@@ -9,6 +9,7 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#include <ctime>
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
@@ -57,6 +58,8 @@ __attribute__ ((format (printf, 1, 2)))
  */
 void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
+
+double time_diff(struct timespec t1, struct timespec t0);
 
 class logger_client {
 public:
