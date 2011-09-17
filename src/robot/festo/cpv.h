@@ -27,15 +27,6 @@ namespace festo {
  * Data types used for object dictionary ('Field bus protocol: CANopen' manual)
  */
 
-////! signed 8-bit integer
-//typedef int8_t INTEGER8;
-//
-////! signed 16-bit integer
-//typedef int16_t INTEGER16;
-//
-////! signed 32-bit integer
-//typedef int32_t INTEGER32;
-
 //! unsigned 8-bit integer
 typedef uint8_t U8;
 
