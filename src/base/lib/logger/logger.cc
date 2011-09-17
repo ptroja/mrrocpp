@@ -102,19 +102,19 @@ logger_client::logger_client(int buffer_size, const char* server_addr, int serve
 
 logger_client::~logger_client()
 {
-	cout<<"logger_client::~logger_client(): 1\n";
+//	cout<<"logger_client::~logger_client(): 1\n";
 	terminate = true;
 	{
 		boost::mutex::scoped_lock lock(queue_mutex);
-		cout<<"logger_client::~logger_client(): 2\n";
+//		cout<<"logger_client::~logger_client(): 2\n";
 		cond.notify_one();
-		cout<<"logger_client::~logger_client(): 3\n";
+//		cout<<"logger_client::~logger_client(): 3\n";
 	}
-	cout<<"logger_client::~logger_client(): 4\n";
+//	cout<<"logger_client::~logger_client(): 4\n";
 	thread.join();
-	cout<<"logger_client::~logger_client(): 5\n";
+//	cout<<"logger_client::~logger_client(): 5\n";
 	disconnect();
-	cout<<"logger_client::~logger_client(): 6\n";
+//	cout<<"logger_client::~logger_client(): 6\n";
 }
 
 void logger_client::log(log_message& msg)
