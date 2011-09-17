@@ -1,39 +1,45 @@
 /*!
- * \file epos_access_usb.h
- * \brief USB transport layer
+ * \file gateway_socketcan.h
+ * \brief SocketCAN transport layer
  */
 
-#ifndef EPOS_ACCESS_USB_H_
-#define EPOS_ACCESS_USB_H_
+#ifndef CANOPEN_ACCESS_SOCKETCAN_H_
+#define CANOPEN_ACCESS_SOCKETCAN_H_
 
-#include <ftdi.h>
+#include <string>
 
-#include "epos_access.h"
+#include <sys/socket.h>
+#include <linux/can.h>
+
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
-//! Access to the EPOS with the USB transport layer
-class epos_access_usb : public epos_access {
+//! Access to the CANopen with the SocketCAN transport layer
+class gateway_socketcan : public gateway {
 private:
-	//! USB FTDI context
-	struct ftdi_context ftdic;
-
-	//! USB device identifiers
-	const int vendor, product, index;
-
-	//! Send data to device via USB
-	void sendCommand(WORD *frame);
-
-	//! Read from device via USB
-	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
-
 	//! toggle bit used for segmented write
 	bool toggle;
 
+	//! interface name
+	const std::string iface;
+
+	//! socket descriptor
+	int sock;
+
+	//! write CAN data frame to the network interface
+	void writeToWire(const struct can_frame & frame);
+
+	//! read CAN data frame from the network interface
+	canid_t readFromWire(struct can_frame & frame);
+
+	//! handle the CanOpen protocol management messages
+	void handleCanOpenMgmt(const struct can_frame & frame);
+
 public:
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
+	/*! \brief Read Object from the CANopen device, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
 	 * @param ans_len of answer buffer
@@ -44,7 +50,7 @@ public:
 	 */
 	unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex);
 
-	/*! \brief write object value to EPOS
+	/*! \brief write object value to the CANopen device
 	 *
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
@@ -53,7 +59,7 @@ public:
 	 */
 	void WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uint32_t data);
 
-	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	/*! \brief Initiate Write Object to CANopen device (for 5 bytes and more)
 	 *
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
@@ -76,16 +82,14 @@ public:
 	//! Send CAN frame the the CAN bus
 	void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]);
 
-	/*! \brief create new USB EPOS object
+	/*! \brief create new USB CANopen object
 	 *
-	 * @param _vendor USB device vendor ID
-	 * @param _product USB device vendor ID
-	 * @param index USB device vendor ID
+	 * @param iface SocketCAN interface to use (i.e. "can0")
 	 */
-	epos_access_usb(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
+	gateway_socketcan(const std::string & iface);
 
 	//! Destructor
-	virtual ~epos_access_usb();
+	virtual ~gateway_socketcan();
 
 	//! Open device
 	void open();
@@ -94,8 +98,8 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 
-#endif /* EPOS_ACCESS_USB_H_ */
+#endif /* CANOPEN_ACCESS_SOCKETCAN_H_ */

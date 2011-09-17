@@ -633,12 +633,12 @@ INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = epos.h \
                          epos_access.cc \
                          epos_access_rs232.cc \
-                         epos_access_socketcan.cc \
-                         epos_access_usb.cc \
+                         gateway_socketcan.cc \
+                         gateway_usb.cc \
                          epos_access.h \
                          epos_access_rs232.h \
-                         epos_access_socketcan.h \
-                         epos_access_usb.h
+                         gateway_socketcan.h \
+                         gateway_usb.h
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 

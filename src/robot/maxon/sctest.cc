@@ -11,16 +11,17 @@
 #include <boost/foreach.hpp>
 #include <sys/time.h>
 
-#include "epos_access_socketcan.h"
-#include "epos_access_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
+#include "robot/canopen/gateway_epos_usb.h"
 #include "epos.h"
 
-using namespace mrrocpp::edp::epos;
+using namespace mrrocpp::edp::canopen;
+using namespace mrrocpp::edp::maxon;
 
 int main(int argc, char *argv[])
 {
-	epos_access_socketcan gateway("can0");
-	//epos_access_usb gateway;
+	gateway_socketcan gateway("can0");
+	//gateway_usb gateway;
 
 	clockid_t clk_id = CLOCK_REALTIME;
 
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 //		printf("software version: 0x%04X\n", node1.readSWversion());
 
 		gateway.close();
-	} catch (epos_error & error) {
+	} catch (canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )

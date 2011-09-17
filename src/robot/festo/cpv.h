@@ -1,121 +1,66 @@
-/*! \file epos.h
+/*! \file festo.h
 
- \brief libEPOS - a library to control an EPOS; definition
+ \brief libfesto - a library to control an FESTO CO2 field bus devices; definition
 
- \b libEPOS is a GNU/Linux C library to control an EPOS motor control
- unit by maxon motor. Since maxon does not offer linux software for
- their products, I wrote this library from scratch.
-
- It based on the following maxon motor documents:
- - EPOS Positioning Controller - Firmware specification (Edition April 2006)
- - EPOS Positioning Controller - Communication Guide (Edition January 2005)
- - EPOS Positioning Controller - Application Note "Device Programming" (Edition February 2006)
-
-
- The only fully implemented and tested "Operation Mode" is "Profile
- Position Mode", but adding support for other OpModes should be fairly
- easy, since the main work was implementing the data exchange with
- EPOS.
-
- I have only checked the library to work with an EPOS 24/1 (firmware
- v2024). Since I have no access to other hardware, I have no chance to
- check other EPOS versions. But there is no hint at all that it should
- NOT work with other EPOS variants.
-
- \date July 2006
- \author Marcus Hauser, LSW Heidelberg
- \author Martí Morta <mmorta@iri.upc.edu>
+ \date Septrmber 2011
  \author Piotr Trojanek <piotr.trojanek@gmail.com>, Warsaw University of Technology
 
- * \defgroup libEPOS Library for low-level access to the EPOS motion controller
+ * \defgroup libfesto Library for control of the FESTO field bus devices
  * @{
  */
 
-#ifndef _EPOS_H
-#define _EPOS_H
+#ifndef _CPV_H
+#define _CPV_H
 
-#include <cstdio>   /* Standard input/output definitions */
-#include <cstdlib>
 #include <stdint.h>  /* int types with given size */
-#include <cmath>
-
-#include <boost/type_traits/is_same.hpp>
 
 #include <string>
 #include <exception>
-#include <vector>
 
-// Include for BYTE/WORD/DWORD typedefs
-#include "epos_access.h"
-
-/* added oct06 for openTCPEPOS() */
-/*
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
- #include <arpa/inet.h>
- */
+#include "robot/canopen/gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace festo {
 
 /*!
- * Data types used for object dictionary (Firmware Specification reference)
+ * Data types used for object dictionary ('Field bus protocol: CANopen' manual)
  */
 
-//! signed 8-bit integer
-typedef int8_t INTEGER8;
-
-//! signed 16-bit integer
-typedef int16_t INTEGER16;
-
-//! signed 32-bit integer
-typedef int32_t INTEGER32;
+////! signed 8-bit integer
+//typedef int8_t INTEGER8;
+//
+////! signed 16-bit integer
+//typedef int16_t INTEGER16;
+//
+////! signed 32-bit integer
+//typedef int32_t INTEGER32;
 
 //! unsigned 8-bit integer
-typedef uint8_t UNSIGNED8;
+typedef uint8_t U8;
 
 //! unsigned 16-bit integer
-typedef uint16_t UNSIGNED16;
+typedef uint16_t U16;
 
 //! unsigned 32-bit integer
-typedef uint32_t UNSIGNED32;
+typedef uint32_t U32;
 
-//! \brief interface to EPOS MAXON controller
-class epos
+//! \brief interface to FESTO device
+class cpv
 {
 private:
 	/* Implement read functions defined in EPOS Communication Guide */
-	/* [ one simplification: Node-ID is always 0] */
 
-	/*! \brief read Object Value from EPOS memory
+	/*! \brief read Object Value
 	 *
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return object value
 	 */
 	template <class T>
-	T ReadObjectValue(WORD index, BYTE subindex)
+	T ReadObjectValue(canopen::WORD index, canopen::BYTE subindex)
 	{
-		WORD answer[8];
-		device.ReadObject(answer, 8, nodeId, index, subindex);
-
-#ifdef DEBUG
-		T val;
-		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
-#endif
-
-		if ((boost::is_same <T, uint8_t>::value) || (boost::is_same <T, int8_t>::value)
-				|| (boost::is_same <T, uint16_t>::value) || (boost::is_same <T, int16_t>::value)) {
-			T val = (T) answer[3];
-			return val;
-		} else if ((boost::is_same <T, uint32_t>::value) || (boost::is_same <T, int32_t>::value)) {
-			T val = (T) (answer[3] | (answer[4] << 16));
-			return val;
-		} else {
-			throw epos_error() << reason("Unsupported ReadObjectValue conversion");
-		}
+		return device.ReadObjectValue<T>(nodeId, index, subindex);
 	}
 
 	/*! \brief write object value to EPOS
@@ -125,46 +70,100 @@ private:
 	 * @param data object data
 	 */
 	template<class T>
-	void WriteObjectValue(WORD index, BYTE subindex, T data)
+	void WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data)
 	{
 		device.WriteObject(nodeId, index, subindex, (uint32_t) data);
 	}
 
-	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
-	 *
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 */
-	void InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
-
-	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
-	 *
-	 * @param ptr pointer to data to be filled
-	 * @param len length of the data to write
-	 */
-	void SegmentedWrite(BYTE * ptr, std::size_t len);
-
-	/*! \brief compare two 16bit bitmasks
-	 *
-	 * @return result of comparison */
-	static bool bitcmp(WORD a, WORD b);
-
 	//! Object to access the device
-	epos_access & device;
+	canopen::gateway & device;
 
-	//! ID of the EPOS device on the CAN bus
+	//! ID of the device on the CAN bus
 	const uint8_t nodeId;
 
 	//! remote operation enable bit
 	bool remote;
 
 public:
-	/*! \brief create new EPOS object
+	/*! \brief create new controller object
 	 *
 	 * @param _device object to access the device
-	 * @param _nodeId ID of the EPOS device on the CAN bus
+	 * @param _nodeId ID of the device on the CAN bus
 	 */
-	epos(epos_access & _device, uint8_t _nodeId);
+	cpv(canopen::gateway & _device, uint8_t _nodeId);
+
+	U32 readDeviceType();
+
+	U8 readErrorRegister();
+
+	U32 readManufacturerStatusRegister();
+
+	U8 readNumberOfCurrentFaults();
+
+	/*! \brief read most recent fault table
+	 *
+	 * @param field field id (0..10)
+	 */
+	U32 readMostRecentFault(uint8_t field);
+
+	std::string readDeviceName();
+
+	std::string readHardwareVersion();
+
+	std::string readSoftwareVersion();
+
+	/* Hardbeat protocol configuration not implemented */
+
+	U32 readVendorID();
+
+	U32 readProductCode();
+
+	U32 readRevisionNumber();
+
+	U32 readSerialNumber();
+
+	U8 readNumberOfCPModulesConnected();
+
+	/*! \brief read connected CP module type recent fault table
+	 *
+	 * @param module module id (1..3)
+	 */
+	U16 readModuleType(uint8_t module);
+
+	/* Digital CP inputs support not implemented */
+
+	/*! \brief read number of 8-output groups
+	 *
+	 * @return Number of 8-output groups (2 or 4)
+	 */
+	U8 readNumberOf8OutputGroups();
+
+	/*! \brief read outputs status
+	 *
+	 * @param group outputs group id (1..4)
+	 * @return outputs status
+	 */
+	U8 readOutputs(uint8_t group);
+
+	/*! \brief read connected CP module type recent fault table
+	 *
+	 * @param group outputs group id (1..4)
+	 */
+	void writeOutputs(uint8_t group, uint8_t value);
+
+	U8 readNumberOf8OutputGroupsErrorMode();
+
+	U8 readOutputsErrorMode(uint8_t group);
+
+	void writeOutputsErrorMode(uint8_t group, uint8_t value);
+
+	U8 readNumberOf8OutputGroupsErrorValue();
+
+	U8 readOutputsErrorValue(uint8_t group);
+
+	void writeOutputsErrorValue(uint8_t group, uint8_t value);
+
+#if 0
 
 	//! Actual state of the device
 	typedef enum _actual_state_t {
@@ -192,11 +191,11 @@ public:
 	actual_state_t checkEPOSstate();
 
 	//! \brief Find EPOS state corresponding to given status word
-	static actual_state_t status2state(WORD w);
+	static actual_state_t status2state(canopen::WORD w);
 
 	//! \brief Check if the remote operation is enabled
 	//! @param status status word
-	static bool isRemoteOperationEnabled(WORD status);
+	static bool isRemoteOperationEnabled(canopen::WORD status);
 
 	//! \brief Utility routine to pretty print device state
 	static const char * stateDescription(int state);
@@ -256,7 +255,7 @@ public:
 	 *
 	 * \param statusword WORD variable holding the statusword
 	 */
-	static void printEPOSstatusword(WORD statusword);
+	static void printEPOSstatusword(canopen::WORD statusword);
 
 	/*! \brief read EPOS control word */
 	UNSIGNED16 readControlword();
@@ -265,7 +264,7 @@ public:
 	void writeControlword(UNSIGNED16 val);
 
 	/*! \brief pretty-print controlword */
-	void printEPOScontrolword(WORD controlword);
+	void printEPOScontrolword(canopen::WORD controlword);
 
 	//! \brief start motion with absolute demanded position
 	void startAbsoluteMotion();
@@ -747,9 +746,10 @@ private:
 	UNSIGNED32 ProfileVelocity;
 	UNSIGNED32 ProfileAcceleration;
 	UNSIGNED32 ProfileDeceleration;
+#endif
 };
 
-} /* namespace epos */
+} /* namespace festo */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

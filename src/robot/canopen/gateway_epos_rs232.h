@@ -10,14 +10,14 @@
 
 #include <termios.h> /* POSIX terminal control definitions */
 
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
 //! Access to the EPOS with the RS232 transport layer
-class epos_access_rs232 : public epos_access {
+class gateway_epos_rs232 : public gateway {
 private:
 	//! device name of EPOS port
 	const std::string device;
@@ -71,10 +71,10 @@ public:
 	 *
 	 * @param _device device string describing the device on which the EPOS is connected to, e.g. "/dev/ttyS0"
 	 */
-	epos_access_rs232(const std::string & _device);
+	gateway_epos_rs232(const std::string & _device);
 
 	//! Destructor
-	virtual ~epos_access_rs232();
+	virtual ~gateway_epos_rs232();
 
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
@@ -126,7 +126,7 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

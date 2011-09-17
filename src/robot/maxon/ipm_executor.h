@@ -15,12 +15,12 @@
 #include <boost/thread.hpp>
 #include <boost/array.hpp>
 
-#include "robot/epos/epos.h"
+#include "epos.h"
 #include "base/edp/edp_exceptions.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace maxon {
 
 /**
  * Interpolated profile motion mode execution thread
@@ -107,7 +107,7 @@ private:
 				if (!is_moving(i))
 					continue;
 
-				axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
+				axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
 				// TODO: setup acceleration and velocity limit values
 				axes[i]->clearPvtBuffer();
 				for (int pnt = 0; pnt < 2; ++pnt) {
@@ -170,7 +170,7 @@ private:
 	}
 };
 
-} /* namespace epos */
+} /* namespace maxon */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

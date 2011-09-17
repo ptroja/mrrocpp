@@ -1,42 +1,36 @@
 /*!
- * \file epos_access_socketcan.h
- * \brief SocketCAN transport layer
+ * \file gateway_epos_usb.h
+ * \brief USB transport layer
  */
 
-#ifndef EPOS_ACCESS_SOCKETCAN_H_
-#define EPOS_ACCESS_SOCKETCAN_H_
+#ifndef EPOS_ACCESS_USB_H_
+#define EPOS_ACCESS_USB_H_
 
-#include <string>
+#include <ftdi.h>
 
-#include <sys/socket.h>
-#include <linux/can.h>
-
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
-//! Access to the EPOS with the SocketCAN transport layer
-class epos_access_socketcan : public epos_access {
+//! Access to the EPOS with the USB transport layer
+class gateway_epos_usb : public gateway {
 private:
+	//! USB FTDI context
+	struct ftdi_context ftdic;
+
+	//! USB device identifiers
+	const int vendor, product, index;
+
+	//! Send data to device via USB
+	void sendCommand(WORD *frame);
+
+	//! Read from device via USB
+	unsigned int readAnswer(WORD *ans, unsigned int ans_len);
+
 	//! toggle bit used for segmented write
 	bool toggle;
-
-	//! interface name
-	const std::string iface;
-
-	//! socket descriptor
-	int sock;
-
-	//! write CAN data frame to the network interface
-	void writeToWire(const struct can_frame & frame);
-
-	//! read CAN data frame from the network interface
-	canid_t readFromWire(struct can_frame & frame);
-
-	//! handle the CanOpen protocol management messages
-	void handleCanOpenMgmt(const struct can_frame & frame);
 
 public:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
@@ -84,12 +78,14 @@ public:
 
 	/*! \brief create new USB EPOS object
 	 *
-	 * @param iface SocketCAN interface to use (i.e. "can0")
+	 * @param _vendor USB device vendor ID
+	 * @param _product USB device vendor ID
+	 * @param index USB device vendor ID
 	 */
-	epos_access_socketcan(const std::string & iface);
+	gateway_epos_usb(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
 
 	//! Destructor
-	virtual ~epos_access_socketcan();
+	virtual ~gateway_epos_usb();
 
 	//! Open device
 	void open();
@@ -98,8 +94,8 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 
-#endif /* EPOS_ACCESS_SOCKETCAN_H_ */
+#endif /* EPOS_ACCESS_USB_H_ */

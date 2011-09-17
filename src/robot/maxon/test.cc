@@ -4,14 +4,15 @@
 #include <boost/foreach.hpp>
 #include <sys/time.h>
 
-#include "epos_access_usb.h"
+#include "robot/canopen/gateway_epos_usb.h"
 #include "epos.h"
 
-using namespace mrrocpp::edp::epos;
+using namespace mrrocpp::edp::canopen;
+using namespace mrrocpp::edp::maxon;
 
 int main(int argc, char *argv[])
 {
-	epos_access_usb gateway;
+	gateway_epos_usb gateway;
 
 	boost::array<epos *, 6> axis;
 
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
 		printf("%.9f\n", t);
 
 		gateway.close();
-	} catch (epos_error & error) {
+	} catch (canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )

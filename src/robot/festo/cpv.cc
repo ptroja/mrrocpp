@@ -1,14 +1,135 @@
-#include <iostream>
-#include <cstdio>
-#include <boost/exception/get_error_info.hpp>
-#include <boost/array.hpp>
-#include <boost/foreach.hpp>
-#include <sys/time.h>
+#include "robot/canopen/gateway.h"
 
-#include "epos_access_usb.h"
-#include "epos.h"
+#include "cpv.h"
 
-using namespace mrrocpp::edp::epos;
+namespace mrrocpp {
+namespace edp {
+namespace festo {
+
+cpv::cpv(canopen::gateway & _device, uint8_t _nodeId)
+	: device(_device), nodeId(_nodeId)
+{
+}
+
+U32 cpv::readDeviceType()
+{
+	return ReadObjectValue<U32>(0x1000, 0x00);
+}
+
+U8 cpv::readErrorRegister()
+{
+	return ReadObjectValue<U8>(0x1001, 0x00);
+}
+
+U32 cpv::readManufacturerStatusRegister()
+{
+	return ReadObjectValue<U32>(0x1002, 0x00);
+}
+
+U8 cpv::readNumberOfCurrentFaults()
+{
+	return ReadObjectValue<U8>(0x1003, 0x00);
+}
+
+U32 cpv::readMostRecentFault(uint8_t field)
+{
+	return ReadObjectValue<U32>(0x1003, field);
+}
+
+std::string cpv::readDeviceName()
+{
+	static std::string ret = "NOT IMPLEMENTED";
+	return ret;
+}
+
+std::string cpv::readHardwareVersion()
+{
+	static std::string ret = "NOT IMPLEMENTED";
+	return ret;
+}
+
+std::string cpv::readSoftwareVersion()
+{
+	static std::string ret = "NOT IMPLEMENTED";
+	return ret;
+}
+
+U32 cpv::readVendorID()
+{
+	return ReadObjectValue<U32>(0x1018, 0x01);
+}
+
+U32 cpv::readProductCode()
+{
+	return ReadObjectValue<U32>(0x1018, 0x02);
+}
+
+U32 cpv::readRevisionNumber()
+{
+	return ReadObjectValue<U32>(0x1018, 0x03);
+}
+
+U32 cpv::readSerialNumber()
+{
+	return ReadObjectValue<U32>(0x1018, 0x04);
+}
+
+U8 cpv::readNumberOfCPModulesConnected()
+{
+	return ReadObjectValue<U8>(0x1027, 0x00);
+}
+
+U16 cpv::readModuleType(uint8_t module)
+{
+	return ReadObjectValue<U16>(0x1027, module);
+}
+
+U8 cpv::readNumberOf8OutputGroups()
+{
+	return ReadObjectValue<U16>(0x6200, 0x00);
+}
+
+U8 cpv::readOutputs(uint8_t group)
+{
+	return ReadObjectValue<U8>(0x6200, group);
+}
+
+void cpv::writeOutputs(uint8_t group, uint8_t value)
+{
+	WriteObjectValue(0x6200, group, value);
+}
+
+U8 cpv::readNumberOf8OutputGroupsErrorMode()
+{
+	return ReadObjectValue<U16>(0x6206, 0x00);
+}
+
+U8 cpv::readOutputsErrorMode(uint8_t group)
+{
+	return ReadObjectValue<U8>(0x6206, group);
+}
+
+void cpv::writeOutputsErrorMode(uint8_t group, uint8_t value)
+{
+	WriteObjectValue(0x6206, group, value);
+}
+
+U8 cpv::readNumberOf8OutputGroupsErrorValue()
+{
+	return ReadObjectValue<U16>(0x6207, 0x00);
+}
+
+U8 cpv::readOutputsErrorValue(uint8_t group)
+{
+	return ReadObjectValue<U8>(0x6207, group);
+}
+
+void cpv::writeOutputsErrorValue(uint8_t group, uint8_t value)
+{
+	WriteObjectValue(0x6207, group, value);
+}
+
+#if 0
 
 struct RPDO3 {
 	uint16_t controlWord;
@@ -24,7 +145,7 @@ const uint8_t nodeId = 10;
  * @return object value
  */
 template <class T>
-T ReadObjectValue(epos_access & device, WORD index, BYTE subindex)
+T ReadObjectValue(gateway & device, WORD index, BYTE subindex)
 {
 	WORD answer[8];
 	device.ReadObject(answer, 8, nodeId, index, subindex);
@@ -42,13 +163,13 @@ T ReadObjectValue(epos_access & device, WORD index, BYTE subindex)
 		T val = (T) (answer[3] | (answer[4] << 16));
 		return val;
 	} else {
-		throw epos_error() << reason("Unsupported ReadObjectValue conversion");
+		throw canopen_error() << reason("Unsupported ReadObjectValue conversion");
 	}
 }
 
 int main(int argc, char *argv[])
 {
-	epos_access_usb gateway;
+	gateway_epos_usb gateway;
 
 	try {
 		gateway.open();
@@ -86,7 +207,7 @@ int main(int argc, char *argv[])
 		uint8_t Outputs07 = ReadObjectValue<uint8_t>(gateway, 0x6200, 0x01);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
-		gateway.SendNMTService(nodeId, epos_access::Start_Remote_Node);
+		gateway.SendNMTService(nodeId, gateway::Start_Remote_Node);
 
 		while(1) {
 		gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
@@ -100,11 +221,11 @@ int main(int argc, char *argv[])
 		gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
 		}
 
-//		gateway.SendNMTService(0, epos_access::Start_Remote_Node);
-//		gateway.SendNMTService(1, epos_access::Start_Remote_Node);
+//		gateway.SendNMTService(0, gateway::Start_Remote_Node);
+//		gateway.SendNMTService(1, gateway::Start_Remote_Node);
 
 		gateway.close();
-	} catch (epos_error & error) {
+	} catch (canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )
@@ -121,3 +242,8 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+#endif
+
+} /* namespace festo */
+} /* namespace edp */
+} /* namespace mrrocpp */

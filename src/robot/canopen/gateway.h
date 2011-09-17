@@ -1,5 +1,5 @@
 /*!
- * \file epos_access.h
+ * \file gateway.h
  * \brief Abstract types for transport-level access
  */
 
@@ -12,16 +12,16 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
 /*
  * Exceptions
  */
 
 //! all high-level methods throws this exception in case of error
-struct epos_error : virtual public std::exception, virtual public boost::exception
+struct canopen_error : virtual public std::exception, virtual public boost::exception
 {
-	virtual ~epos_error() throw ()
+	virtual ~canopen_error() throw ()
 	{
 	}
 };
@@ -53,7 +53,7 @@ typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
 typedef uint8_t BYTE; ///< \brief 8bit type for EPOS data exchange
 
 //! Abstract class for access to the EPOS at the transport layer
-class epos_access {
+class gateway {
 protected:
 	//! Flag indicating connection status
 	bool device_opened;
@@ -66,11 +66,11 @@ protected:
 
 public:
 	//! Constructor
-	epos_access() : device_opened(false), debug(0)
+	gateway() : device_opened(false), debug(0)
 	{}
 
 	//! Destructor
-	virtual ~epos_access()
+	virtual ~gateway()
 	{}
 
 	//! Operation codes of CANopen datagrams
@@ -102,6 +102,29 @@ public:
 	 * @return answer array from the controller
 	 */
 	virtual unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex) = 0;
+
+	template <class T>
+	T ReadObjectValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
+	{
+		canopen::WORD answer[8];
+		this->ReadObject(answer, 8, nodeId, index, subindex);
+
+#ifdef DEBUG
+		T val;
+		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
+#endif
+
+		if ((boost::is_same <T, uint8_t>::value) || (boost::is_same <T, int8_t>::value)
+				|| (boost::is_same <T, uint16_t>::value) || (boost::is_same <T, int16_t>::value)) {
+			T val = (T) answer[3];
+			return val;
+		} else if ((boost::is_same <T, uint32_t>::value) || (boost::is_same <T, int32_t>::value)) {
+			T val = (T) (answer[3] | (answer[4] << 16));
+			return val;
+		} else {
+			throw canopen::canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
+		}
+	}
 
 #if 0
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.2
@@ -196,7 +219,7 @@ public:
 	}
 };
 
-} /* namespace epos */
+} /* namespace canopen_ */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

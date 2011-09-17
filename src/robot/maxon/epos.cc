@@ -22,12 +22,14 @@
 #include <boost/thread/thread_time.hpp>
 #include <boost/thread/thread.hpp>
 
-#include "epos_access.h"
+#include "robot/canopen/gateway.h"
 #include "epos.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace maxon {
+
+using namespace canopen;
 
 /* ********************************************* */
 /*    definitions used only internal in c   */
@@ -100,7 +102,7 @@ const unsigned epos::SECONDS_PER_MINUTE = 60*60;
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(epos_access & _device, uint8_t _nodeId) :
+epos::epos(gateway & _device, uint8_t _nodeId) :
 	device(_device), nodeId(_nodeId)
 {
 	// Read the cached parameters
@@ -406,11 +408,11 @@ void epos::setRemoteOperation(bool enable)
 {
 	if (remote != enable) {
 		device.SendNMTService(nodeId,
-				(enable) ? epos_access::Start_Remote_Node : epos_access::Stop_Remote_Node);
+				(enable) ? gateway::Start_Remote_Node : gateway::Stop_Remote_Node);
 		remote = isRemoteOperationEnabled(readStatusWord());
 
 		if (remote != enable) {
-			BOOST_THROW_EXCEPTION(epos_error() << reason("Failed to change REMOTE state of the device"));
+			BOOST_THROW_EXCEPTION(canopen_error() << reason("Failed to change REMOTE state of the device"));
 		}
 	}
 }
@@ -536,7 +538,7 @@ void epos::reset()
 			}
 		}
 
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Device is in the fault state"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -553,7 +555,7 @@ void epos::reset()
 		if(state == READY_TO_SWITCH_ON) { // Operation enable
 			break;
 		} else if(state == FAULT) {
-			throw epos_error() << reason("Device is in the fault state");
+			throw canopen_error() << reason("Device is in the fault state");
 		} else {
 			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during shutdown" << std::endl;
 			// Continue;
@@ -568,13 +570,13 @@ void epos::reset()
 	} while(timeout--);
 
 	if(timeout == 0) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout shutting device down"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
 		std::cout << "XXX state = " << state << std::endl;
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
@@ -594,7 +596,7 @@ void epos::reset()
 		} else if(state == OPERATION_ENABLE) { // Operation enable
 			break;
 		} else if(state == FAULT) {
-			throw epos_error() << reason("Device is in the fault state");
+			throw canopen_error() << reason("Device is in the fault state");
 		} else {
 			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
 			// Continue;
@@ -609,7 +611,7 @@ void epos::reset()
 	} while(timeout--);
 
 	if(timeout == 0) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Timeout enabling device"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -619,7 +621,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != 7) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
@@ -688,7 +690,7 @@ void epos::changeEPOSstate(state_t state)
 			writeControlword(cw);
 			break;
 		default:
-			BOOST_THROW_EXCEPTION(epos_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
+			BOOST_THROW_EXCEPTION(canopen_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
 			break;
 	}
 }
@@ -715,7 +717,7 @@ UNSIGNED16 epos::readDInputPolarity()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -1371,7 +1373,7 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 {
 	// only 24 bits allowed for velocity
 	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Only 24 bits allowed for velocity"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Only 24 bits allowed for velocity"));
 	}
 
 	// This array holds a manufacturer-specific 64 bit data record
@@ -1508,7 +1510,7 @@ UNSIGNED8 epos::readNumberOfErrors() {
 /*! read Error History at index */
 UNSIGNED32 epos::readErrorHistory(unsigned int num) {
 	if(num < 1 || num > 5) {
-		BOOST_THROW_EXCEPTION(epos_error() << reason("Error History index out of range <1..5>"));
+		BOOST_THROW_EXCEPTION(canopen_error() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue<UNSIGNED32> (0x1003, num);
 }
@@ -1738,7 +1740,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = readStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		BOOST_THROW_EXCEPTION(epos_error()
+		BOOST_THROW_EXCEPTION(canopen_error()
 				<< reason("HOMING ERROR!")
 				<< canId(nodeId)
 		);
@@ -1769,7 +1771,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(epos_error() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(canopen_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
@@ -1826,6 +1828,6 @@ bool epos::bitcmp(WORD a, WORD b)
 
 //! \@}
 
-} /* namespace epos */
+} /* namespace maxon */
 } /* namespace edp */
 } /* namespace mrrocpp */
