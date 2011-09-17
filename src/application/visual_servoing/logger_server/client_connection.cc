@@ -52,11 +52,7 @@ void client_connection::service()
 	log_message lm;
 	ia >> lm;
 
-	cout<<"    "<<lm.number<<";"<<lm.seconds<<";"<<lm.nanoseconds<<"\n    ";
-	for(int i=0; i<lm.data.size(); ++i){
-		cout<<lm.data[i]<<";";
-	}
-	cout<<"\n";
+	cout<<"    "<<lm.number<<";"<<lm.seconds<<";"<<lm.nanoseconds<<"\n    "<<lm.text<<endl;
 }
 
 } /* namespace logger */

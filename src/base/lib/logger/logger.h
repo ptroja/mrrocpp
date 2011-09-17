@@ -12,6 +12,7 @@
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/circular_buffer.hpp>
 
 #include "base/lib/xdr/xdr_oarchive.hpp"
 #include "log_message.h"
@@ -58,10 +59,10 @@ void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
 class logger_client {
 public:
-	logger_client(int max_queue_size, const char* server_addr, int server_port);
+	logger_client(int buffer_size, const char* server_addr, int server_port);
 	~logger_client();
 
-	void log(const log_message& msg);
+	void log(log_message& msg);
 
 	void operator()();
 protected:
@@ -74,8 +75,7 @@ private:
 
 	int fd;
 	boost::thread thread;
-	const int max_queue_size;
-	std::deque<log_message> queue;
+	boost::circular_buffer<log_message> buffer;
 
 	const char* server_addr;
 	int server_port;

@@ -21,8 +21,7 @@ int main(int argc, char *argv[])
 		stringstream ss;
 		ss<<i;
 
-		lm.data.push_back(ss.str());
-		lm.data.push_back(string("hehehe"));
+		sprintf(lm.text, "Message %d", i);
 		log.log(lm);
 	}
 	cout<<"2\n";

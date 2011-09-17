@@ -90,8 +90,8 @@ void log_dbg(const mrrocpp::lib::Homog_matrix& hm)
 	}
 }
 
-logger_client::logger_client(int max_queue_size, const char* server_addr, int server_port) :
-		fd(-1), max_queue_size(max_queue_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
+logger_client::logger_client(int buffer_size, const char* server_addr, int server_port) :
+		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
 {
 
 	notify_mutex = boost::shared_ptr<boost::mutex> (new boost::mutex);
@@ -119,48 +119,53 @@ logger_client::~logger_client()
 	cout<<"logger_client::~logger_client(): 7\n";
 }
 
-void logger_client::log(const log_message& msg)
+void logger_client::log(log_message& msg)
 {
 	queue_mutex->lock();
-	if (queue.size() < max_queue_size) {
-		log_message msg_to_queue = msg;
-		msg_to_queue.number = current_message_number;
-		struct timespec tp;
-		if (clock_gettime(CLOCK_REALTIME, &tp) != 0) {
-			tp.tv_sec = tp.tv_nsec = 0;
-		}
-		msg_to_queue.seconds = tp.tv_sec;
-		msg_to_queue.nanoseconds = tp.tv_nsec;
 
-		queue.push_back(msg_to_queue);
-//		notify_mutex->unlock();
+	msg.number = current_message_number;
+	struct timespec tp;
+	if (clock_gettime(CLOCK_REALTIME, &tp) != 0) {
+		tp.tv_sec = tp.tv_nsec = 0;
 	}
+	msg.seconds = tp.tv_sec;
+	msg.nanoseconds = tp.tv_nsec;
+
+	buffer.push_back(msg);
+	notify_mutex->unlock();
+
 	current_message_number++;
 	queue_mutex->unlock();
 }
 
 void logger_client::operator()()
 {
-//	notify_mutex->lock();
+	queue_mutex->lock();
+	boost::circular_buffer<log_message> temp_buffer(buffer.capacity());
+	queue_mutex->unlock();
+
+	notify_mutex->lock();
 
 	connect();
 	while (!terminate) {
-//		notify_mutex->lock();
+		notify_mutex->lock();
 		if (terminate) {
-//			notify_mutex->unlock();
+			notify_mutex->unlock();
 			break;
 		}
 		std::deque <log_message> temp;
 		queue_mutex->lock();
+		while(!buffer.empty()){
+			temp_buffer.push_back(buffer.front());
+			buffer.pop_front();
+		}
 		// move data from queue to temp buffer
-		temp.swap(queue);
-		queue.clear();
 		queue_mutex->unlock();
 
 		// send data to the server
-		while (!temp.empty()) {
-			send_message(temp.front());
-			temp.pop_front();
+		while (!temp_buffer.empty()) {
+			send_message(temp_buffer.front());
+			temp_buffer.pop_front();
 		}
 	}
 	disconnect();
