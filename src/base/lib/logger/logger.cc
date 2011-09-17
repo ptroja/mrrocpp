@@ -93,10 +93,6 @@ void log_dbg(const mrrocpp::lib::Homog_matrix& hm)
 logger_client::logger_client(int buffer_size, const char* server_addr, int server_port) :
 		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
 {
-
-	notify_mutex = boost::shared_ptr<boost::mutex> (new boost::mutex);
-	queue_mutex = boost::shared_ptr<boost::mutex> (new boost::mutex);
-
 	thread = boost::thread(&logger_client::operator (), this);
 }
 
@@ -104,24 +100,17 @@ logger_client::~logger_client()
 {
 	cout<<"logger_client::~logger_client(): 1\n";
 	terminate = true;
+	cond.notify_one();
 	cout<<"logger_client::~logger_client(): 2\n";
-	notify_mutex->lock();
-	notify_mutex->unlock();
-	cout<<"logger_client::~logger_client(): 3\n";
 	thread.join();
 	cout<<"logger_client::~logger_client(): 4\n";
 	disconnect();
-
-	cout<<"logger_client::~logger_client(): 5\n";
-	notify_mutex = boost::shared_ptr<boost::mutex> ((boost::mutex*)NULL);
-	cout<<"logger_client::~logger_client(): 6\n";
-	queue_mutex = boost::shared_ptr<boost::mutex> ((boost::mutex*)NULL);
 	cout<<"logger_client::~logger_client(): 7\n";
 }
 
 void logger_client::log(log_message& msg)
 {
-	queue_mutex->lock();
+	boost::mutex::scoped_lock lock(queue_mutex);
 
 	msg.number = current_message_number;
 	struct timespec tp;
@@ -132,35 +121,31 @@ void logger_client::log(log_message& msg)
 	msg.nanoseconds = tp.tv_nsec;
 
 	buffer.push_back(msg);
-	notify_mutex->unlock();
 
 	current_message_number++;
-	queue_mutex->unlock();
+
+	cond.notify_one();
 }
 
 void logger_client::operator()()
 {
-	queue_mutex->lock();
+	queue_mutex.lock();
 	boost::circular_buffer<log_message> temp_buffer(buffer.capacity());
-	queue_mutex->unlock();
-
-	notify_mutex->lock();
+	queue_mutex.unlock();
 
 	connect();
 	while (!terminate) {
-		notify_mutex->lock();
-		if (terminate) {
-			notify_mutex->unlock();
-			break;
+		{
+			boost::mutex::scoped_lock lock(queue_mutex);
+			if(!buffer.empty()){
+				cond.wait(lock);
+			}
+			// move data from queue to temp buffer
+			while(!buffer.empty()){
+				temp_buffer.push_back(buffer.front());
+				buffer.pop_front();
+			}
 		}
-		std::deque <log_message> temp;
-		queue_mutex->lock();
-		while(!buffer.empty()){
-			temp_buffer.push_back(buffer.front());
-			buffer.pop_front();
-		}
-		// move data from queue to temp buffer
-		queue_mutex->unlock();
 
 		// send data to the server
 		while (!temp_buffer.empty()) {

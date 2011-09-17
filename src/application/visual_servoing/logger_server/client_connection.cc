@@ -20,7 +20,7 @@ using namespace std;
 namespace logger {
 
 client_connection::client_connection(int connection_fd, const std::string& remote_address):
-		connection_fd(connection_fd), remote_address(remote_address)
+		connection_fd(connection_fd), remote_address(remote_address), last_message_number(-1)
 {
 	xdr_oarchive<> oa;
 	oa<<log_message_header();
@@ -52,7 +52,12 @@ void client_connection::service()
 	log_message lm;
 	ia >> lm;
 
+	if(last_message_number + 1 != lm.number){
+		cerr<<"!!!!!!!!!!!!!!!!!!!Buffer overflow detected!!!!!!!!!!!!!!!!!!!!!!\n";
+	}
+
 	cout<<"    "<<lm.number<<";"<<lm.seconds<<";"<<lm.nanoseconds<<"\n    "<<lm.text<<endl;
+	last_message_number = lm.number;
 }
 
 } /* namespace logger */

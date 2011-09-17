@@ -26,6 +26,8 @@ private:
 	int connection_fd;
 	const std::string& remote_address;
 	int header_size;
+
+	int last_message_number;
 };
 
 } /* namespace logger */

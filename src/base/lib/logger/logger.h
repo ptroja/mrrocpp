@@ -12,6 +12,7 @@
 #include <deque>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
 #include "base/lib/xdr/xdr_oarchive.hpp"
@@ -81,8 +82,8 @@ private:
 	int server_port;
 
 	uint32_t current_message_number;
-	boost::shared_ptr<boost::mutex> notify_mutex;
-	boost::shared_ptr<boost::mutex> queue_mutex;
+	boost::condition_variable cond;
+	boost::mutex queue_mutex;
 	bool terminate;
 
 	xdr_oarchive<> oa_header;
