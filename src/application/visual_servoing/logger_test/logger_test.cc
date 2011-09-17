@@ -7,7 +7,7 @@
 
 #include <boost/program_options.hpp>
 
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger_client/logger_client.h"
 
 
 using namespace logger;

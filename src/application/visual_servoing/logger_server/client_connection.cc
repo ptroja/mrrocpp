@@ -13,7 +13,7 @@
 
 #include "client_connection.h"
 
-#include "base/lib/logger/log_message.h"
+#include "base/lib/logger_client/log_message.h"
 
 using namespace std;
 
@@ -32,7 +32,7 @@ client_connection::~client_connection()
 	close(connection_fd);
 }
 
-void client_connection::service()
+void client_connection::service(logger_server* server)
 {
 	cout<<"client_connection::service("<<connection_fd<<"):\n";
 	xdr_iarchive<> ia;
@@ -52,11 +52,17 @@ void client_connection::service()
 	log_message lm;
 	ia >> lm;
 
+	struct timespec message_time;
+
+	message_time.tv_nsec = lm.nanoseconds;
+	message_time.tv_sec = lm.seconds;
+	double message_time_s = server->calculate_message_time(message_time);
+
 	if(last_message_number + 1 != lm.number){
 		cerr<<"!!!!!!!!!!!!!!!!!!!Buffer overflow detected!!!!!!!!!!!!!!!!!!!!!!\n";
 	}
 
-	cout<<"    "<<lm.number<<";"<<lm.seconds<<";"<<lm.nanoseconds<<"\n    "<<lm.text<<endl;
+	cout<<"    "<<lm.number<<";"<<lm.seconds<<";"<<lm.nanoseconds<<";"<<message_time_s<<"\n    "<<lm.text<<endl;
 	last_message_number = lm.number;
 }
 

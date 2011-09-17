@@ -10,7 +10,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "base/ecp/ecp_task.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
 
 using mrrocpp::ecp::common::generator::single_visual_servo_manager;

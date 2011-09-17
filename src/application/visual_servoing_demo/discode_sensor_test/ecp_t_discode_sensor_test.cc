@@ -9,7 +9,7 @@
 #include "ecp_t_discode_sensor_test.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 

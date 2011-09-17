@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include "ecp_t_pb_sac_calibration.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 namespace mrrocpp {

@@ -19,7 +19,6 @@
 #include <unistd.h>
 
 #include "discode_sensor.h"
-#include "base/lib/logger/logger.h"
 #include "base/lib/configurator.h"
 #include "headers.h"
 

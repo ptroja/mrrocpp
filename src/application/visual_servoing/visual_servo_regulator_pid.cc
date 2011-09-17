@@ -10,7 +10,7 @@
 #include <algorithm>
 
 #include "visual_servo_regulator_pid.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 namespace ecp {

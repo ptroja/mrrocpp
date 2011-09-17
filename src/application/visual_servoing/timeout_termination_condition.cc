@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 #include "timeout_termination_condition.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 
 using namespace std;
 using namespace logger;

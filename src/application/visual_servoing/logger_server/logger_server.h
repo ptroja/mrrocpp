@@ -10,9 +10,12 @@
 
 #include <list>
 #include <boost/shared_ptr.hpp>
+#include <ctime>
 #include "client_connection.h"
 
 namespace logger {
+
+class client_connection;
 
 class logger_server
 {
@@ -23,6 +26,8 @@ public:
 	void run();
 
 	void terminate();
+
+	double calculate_message_time(const struct timespec &message_time);
 
 	static const int default_port;
 protected:
@@ -37,6 +42,8 @@ private:
 	const int port;
 	int fd;
 	std::list<boost::shared_ptr<client_connection> > connections;
+	struct timespec first_message_time;
+	bool first_message_received;
 };
 
 } /* namespace logger */

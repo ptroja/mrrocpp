@@ -8,6 +8,7 @@ add_executable(logger_test
 target_link_libraries(logger_test
 	${COMMON_LIBRARIES}
 	${Boost_PROGRAM_OPTIONS_LIBRARY}
+	logger_client
 )
 
 install(TARGETS logger_test DESTINATION bin)

@@ -11,7 +11,7 @@
 #include "ecp_g_discode_sensor_test.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
 
 namespace mrrocpp {

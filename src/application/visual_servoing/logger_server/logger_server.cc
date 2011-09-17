@@ -22,6 +22,7 @@
 #include <fcntl.h>
 
 #include "logger_server.h"
+#include "base/lib/logger_client/logger_client.h"
 
 using namespace std;
 
@@ -30,8 +31,9 @@ namespace logger {
 const int logger_server::default_port = 7000;
 
 logger_server::logger_server(int port) :
-		terminate_now(false), port(port), fd(-1)
+		terminate_now(false), port(port), fd(-1), first_message_received(false)
 {
+	first_message_time.tv_sec = first_message_time.tv_nsec = 0;
 }
 
 logger_server::~logger_server()
@@ -123,7 +125,7 @@ void logger_server::main_loop()
 			for(it = connections.begin(); it != connections.end();){
 				try{
 					if(FD_ISSET((*it)->connection_fd, &rfds)){
-						(*it)->service();
+						(*it)->service(this);
 					}
 					++it;
 				}catch(exception& ex){
@@ -145,6 +147,15 @@ void logger_server::run()
 void logger_server::terminate()
 {
 	terminate_now = true;
+}
+
+double logger_server::calculate_message_time(const struct timespec &message_time)
+{
+	if(!first_message_received){
+		first_message_time = message_time;
+		first_message_received = true;
+	}
+	return time_diff(message_time, first_message_time);
 }
 
 } /* namespace logger */

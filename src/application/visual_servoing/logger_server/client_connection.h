@@ -10,7 +10,11 @@
 
 #include <string>
 
+#include "logger_server.h"
+
 namespace logger {
+
+class logger_server;
 
 class client_connection
 {
@@ -20,7 +24,7 @@ public:
 	client_connection(int connection_fd, const std::string& remote_address);
 	virtual ~client_connection();
 
-	void service();
+	void service(logger_server* server);
 private:
 	client_connection(const client_connection&);
 	int connection_fd;

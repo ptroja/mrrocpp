@@ -11,7 +11,7 @@
 
 #include "visual_servo.h"
 
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 
 namespace mrrocpp {
 namespace ecp {

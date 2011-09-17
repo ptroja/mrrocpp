@@ -7,6 +7,7 @@ add_executable(logger_server
 # link with discode_sensor
 target_link_libraries(logger_server
 	${COMMON_LIBRARIES}
+	logger_client
 )
 
 install(TARGETS logger_server DESTINATION bin)

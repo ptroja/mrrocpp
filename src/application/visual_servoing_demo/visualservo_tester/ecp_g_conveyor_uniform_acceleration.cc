@@ -10,7 +10,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_conveyor_uniform_acceleration.h"
-#include "base/lib/logger/logger.h"
+#include "base/lib/logger.h"
 #include "base/lib/configurator.h"
 
 using namespace std;
