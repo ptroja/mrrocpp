@@ -9,7 +9,7 @@
  * @ingroup smb
  */
 
-#include "robot/epos/dp_epos.h"
+#include "robot/maxon/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -83,7 +83,7 @@ enum PIN_INSERTION
  */
 enum PIN_LOCKING
 {
-	CLAMB, UNCLAMB, SMB_PIN_LOCKING_NO_ACTION
+	CLAMB, UNCLAMB, PIN_LOCKING_NO_ACTION
 }; // namespace mrrocpp
 
 /*!

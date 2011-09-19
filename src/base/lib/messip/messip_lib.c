@@ -2569,6 +2569,7 @@ messip_reply( messip_channel_t * ch,
 #endif /* __gnu_linux__ */
 			assert(0);
 			ret = -1;
+			break;
 	} /* switch */
 
 	--ch->nb_replies_pending;

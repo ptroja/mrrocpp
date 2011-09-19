@@ -1,25 +1,24 @@
-/*
- * epos_access_socketcan.h
- *
- *  Created on: May 14, 2011
- *      Author: ptroja
+/*!
+ * \file gateway_socketcan.h
+ * \brief SocketCAN transport layer
  */
 
-#ifndef EPOS_ACCESS_SOCKETCAN_H_
-#define EPOS_ACCESS_SOCKETCAN_H_
+#ifndef CANOPEN_ACCESS_SOCKETCAN_H_
+#define CANOPEN_ACCESS_SOCKETCAN_H_
 
 #include <string>
 
 #include <sys/socket.h>
 #include <linux/can.h>
 
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
-class epos_access_socketcan : public epos_access {
+//! Access to the CANopen with the SocketCAN transport layer
+class gateway_socketcan : public gateway {
 private:
 	//! toggle bit used for segmented write
 	bool toggle;
@@ -40,17 +39,18 @@ private:
 	void handleCanOpenMgmt(const struct can_frame & frame);
 
 public:
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
+	/*! \brief Read Object from the CANopen device, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param length of answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
 	 */
 	unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex);
 
-	/*! \brief write object value to EPOS
+	/*! \brief write object value to the CANopen device
 	 *
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
@@ -59,11 +59,12 @@ public:
 	 */
 	void WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uint32_t data);
 
-	/*! \brief Initiate Write Object to EPOS memory (for 5 bytes and more)
+	/*! \brief Initiate Write Object to CANopen device (for 5 bytes and more)
 	 *
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength object length
 	 */
 	void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength);
 
@@ -81,14 +82,14 @@ public:
 	//! Send CAN frame the the CAN bus
 	void SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8]);
 
-	/*! \brief create new USB EPOS object
+	/*! \brief create new USB CANopen object
 	 *
 	 * @param iface SocketCAN interface to use (i.e. "can0")
 	 */
-	epos_access_socketcan(const std::string & iface);
+	gateway_socketcan(const std::string & iface);
 
 	//! Destructor
-	~epos_access_socketcan();
+	virtual ~gateway_socketcan();
 
 	//! Open device
 	void open();
@@ -97,8 +98,8 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 
-#endif /* EPOS_ACCESS_SOCKETCAN_H_ */
+#endif /* CANOPEN_ACCESS_SOCKETCAN_H_ */

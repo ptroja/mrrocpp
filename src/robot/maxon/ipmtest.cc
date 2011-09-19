@@ -4,14 +4,15 @@
 #include <boost/foreach.hpp>
 #include <sys/time.h>
 
-#include "epos_access_usb.h"
+#include "robot/canopen/gateway_epos_usb.h"
 #include "epos.h"
 
-using namespace mrrocpp::edp::epos;
+using namespace mrrocpp::edp::canopen;
+using namespace mrrocpp::edp::maxon;
 
 int main(int argc, char *argv[])
 {
-	epos_access_usb gateway;
+	gateway_epos_usb gateway;
 
 	try {
 		// timestamps variables
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
 		status = node.readStatusWord();
 		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
 
-		gateway.SendNMTService(1, epos_access::Start_Remote_Node);
+		gateway.SendNMTService(1, gateway::Start_Remote_Node);
 
 		status = node.readStatusWord();
 		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
 		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
 
 		gateway.close();
-	} catch (epos_error & error) {
+	} catch (canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )

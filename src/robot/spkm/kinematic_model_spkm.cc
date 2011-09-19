@@ -2,7 +2,7 @@
  * @file
  * @brief File containing definition of kinematic_model_spkm class methods.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date Jan 05, 2010
  *
  * @ingroup KINEMATICS SIF_KINEMATICS spkm

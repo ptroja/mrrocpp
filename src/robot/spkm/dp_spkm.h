@@ -12,7 +12,7 @@
 #include <boost/serialization/serialization.hpp>
 
 #include "base/lib/mrmath/homog_matrix.h"
-#include "robot/epos/dp_epos.h"
+#include "robot/maxon/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {

@@ -2,7 +2,7 @@
  * @file
  * @brief File containing the declaration of kinematic_parameters class.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date Jan 5, 2010
  *
  * @ingroup SIF_KINEMATICS spkm
@@ -33,7 +33,7 @@ typedef Eigen::Matrix<double, 4 , 4> Homog4d;
  * @struct kinematic_parameters_spkm
  * @brief Class storing parameters for PKM and spherical wrist attached to it.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date Jan 05, 2010
  *
  * @ingroup SIF_KINEMATICS

@@ -27,9 +27,8 @@
  \author Martí Morta <mmorta@iri.upc.edu>
  \author Piotr Trojanek <piotr.trojanek@gmail.com>, Warsaw University of Technology
 
- \defgroup libEPOS
-
- @{
+ * \defgroup libEPOS Library for low-level access to the EPOS motion controller
+ * @{
  */
 
 #ifndef _EPOS_H
@@ -38,16 +37,13 @@
 #include <cstdio>   /* Standard input/output definitions */
 #include <cstdlib>
 #include <stdint.h>  /* int types with given size */
-#include <cmath>
-
-#include <boost/type_traits/is_same.hpp>
 
 #include <string>
 #include <exception>
 #include <vector>
 
 // Include for BYTE/WORD/DWORD typedefs
-#include "epos_access.h"
+#include "robot/canopen/gateway.h"
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -59,7 +55,7 @@
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace maxon {
 
 /*!
  * Data types used for object dictionary (Firmware Specification reference)
@@ -87,36 +83,19 @@ typedef uint32_t UNSIGNED32;
 class epos
 {
 private:
-	/* Implement read functions defined in EPOS Communication Guide, 6.3.1 */
+	/* Implement read functions defined in EPOS Communication Guide */
 	/* [ one simplification: Node-ID is always 0] */
 
-	/*! \brief Read Object Value from EPOS memory, firmware definition 6.3.1.1
+	/*! \brief read Object Value from EPOS memory
 	 *
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return object value
 	 */
 	template <class T>
-	T ReadObjectValue(WORD index, BYTE subindex)
+	T ReadObjectValue(canopen::WORD index, canopen::BYTE subindex)
 	{
-		WORD answer[8];
-		device.ReadObject(answer, 8, nodeId, index, subindex);
-
-#ifdef DEBUG
-		T val;
-		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
-#endif
-
-		if ((boost::is_same <T, uint8_t>::value) || (boost::is_same <T, int8_t>::value)
-				|| (boost::is_same <T, uint16_t>::value) || (boost::is_same <T, int16_t>::value)) {
-			T val = (T) answer[3];
-			return val;
-		} else if ((boost::is_same <T, uint32_t>::value) || (boost::is_same <T, int32_t>::value)) {
-			T val = (T) (answer[3] | (answer[4] << 16));
-			return val;
-		} else {
-			throw epos_error() << reason("Unsupported ReadObjectValue conversion");
-		}
+		return device.ReadObjectValue<T>(nodeId, index, subindex);
 	}
 
 	/*! \brief write object value to EPOS
@@ -126,7 +105,7 @@ private:
 	 * @param data object data
 	 */
 	template<class T>
-	void WriteObjectValue(WORD index, BYTE subindex, T data)
+	void WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data)
 	{
 		device.WriteObject(nodeId, index, subindex, (uint32_t) data);
 	}
@@ -136,22 +115,22 @@ private:
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 */
-	void InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength);
+	void InitiateSegmentedWrite(canopen::WORD index, canopen::BYTE subindex, canopen::DWORD ObjectLength);
 
 	/*! \brief write data segment of the object initiated with 'InitiateSegmentedWrite()'
 	 *
 	 * @param ptr pointer to data to be filled
 	 * @param len length of the data to write
 	 */
-	void SegmentedWrite(BYTE * ptr, std::size_t len);
+	void SegmentedWrite(canopen::BYTE * ptr, std::size_t len);
 
 	/*! \brief compare two 16bit bitmasks
 	 *
 	 * @return result of comparison */
-	static bool bitcmp(WORD a, WORD b);
+	static bool bitcmp(canopen::WORD a, canopen::WORD b);
 
 	//! Object to access the device
-	epos_access & device;
+	canopen::gateway & device;
 
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
@@ -160,31 +139,49 @@ private:
 	bool remote;
 
 public:
-	/*! \brief create new USB EPOS object
+	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
-	epos(epos_access & _device, uint8_t _nodeId);
+	epos(canopen::gateway & _device, uint8_t _nodeId);
 
-	/*! \brief check if the connection to EPOS is alive */
-	//		int checkEPOS();
+	//! Actual state of the device
+	typedef enum _actual_state_t {
+		UNKNOWN = -1,
+		START = 0,
+		NOT_READY_TO_SWITCH_ON = 1,
+		SWITCH_ON_DISABLED = 2,
+		READY_TO_SWITCH_ON = 3,
+		SWITCHED_ON = 4,
+		REFRESH = 5,
+		MEASURE_INIT = 6,
+		OPERATION_ENABLE = 7,
+		QUICK_STOP_ACTIVE = 8,
+		FAULT_REACTION_ACTIVE_DISABLED = 9,
+		FAULT_REACTION_ACTIVE_ENABLED = 10,
+		FAULT = 11
+	} actual_state_t;
 
-	/*! \brief check EPOS status
-	 * @return state according to firmware spec */
-	int checkEPOSstate();
+	//! \ingroup libEPOS
+	//! \defgroup epos_configuration Configuration
+	//! @{
 
-	//! Find EPOS state corresponding to given status word
-	static int status2state(WORD w);
+	//! \brief check EPOS status
+	//! @return state according to firmware spec
+	actual_state_t checkEPOSstate();
 
-	//! Check if the remote operation is enabled
+	//! \brief Find EPOS state corresponding to given status word
+	static actual_state_t status2state(canopen::WORD w);
+
+	//! \brief Check if the remote operation is enabled
 	//! @param status status word
-	static bool isRemoteOperationEnabled(WORD status);
+	static bool isRemoteOperationEnabled(canopen::WORD status);
 
-	//! Utility routine to pretty print device state
+	//! \brief Utility routine to pretty print device state
 	static const char * stateDescription(int state);
 
-	//! Change the state of the remote (CAN) operation, required for the PDO requests
+	//! \brief Change the state of the remote (CAN) operation, required for the PDO requests
 	void setRemoteOperation(bool enable);
 
 	/*! \brief pretty-print EPOS state
@@ -194,10 +191,10 @@ public:
 	 */
 	int printEPOSstate();
 
-	/*! pretty-print EPOS Error Register */
+	/*! \brief pretty-print EPOS Error Register */
 	static void printErrorRegister(UNSIGNED8 reg);
 
-	//! Seconds per minute -- used in motion profile calculations,
+	//! \brief Seconds per minute -- used in motion profile calculations,
 	//! since EPOS velocity is in [rpm] and acceleration is in [rpm/s].
 	static const unsigned SECONDS_PER_MINUTE;
 
@@ -208,10 +205,10 @@ public:
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} state_t;
 
-	//! Reset the device by issuing a shutdown command followed by power-on and halt
+	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
 
-	/*! \brief change EPOS state   ==> firmware spec 8.1.3 */
+	/*! \brief change EPOS state */
 	void changeEPOSstate(state_t state);
 
 	/*! \brief read CAN Node ID */
@@ -223,32 +220,32 @@ public:
 	/*! \brief read manufactor device name string firmware */
 	std::string readDeviceName();
 
-	/*! \brief ask for RS232 timeout; firmware spec 14.1.35 */
+	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 readRS232timeout();
 
 	/*! \brief read digital input polarity mask */
 	UNSIGNED16 readDInputPolarity();
 
-	/*! \brief set home switch polarity -- firmware spec 14.1.47 */
+	/*! \brief set home switch polarity */
 	void setHomePolarity(int pol);
 
-	/*! \brief read Statusword; 14.1.58 */
+	/*! \brief read Statusword */
 	UNSIGNED16 readStatusWord();
 
 	/*! \brief pretty-print statusword to stdout
 	 *
 	 * \param statusword WORD variable holding the statusword
 	 */
-	static void printEPOSstatusword(WORD statusword);
+	static void printEPOSstatusword(canopen::WORD statusword);
 
-	/*! \brief read EPOS control word (firmware spec 14.1.57) */
+	/*! \brief read EPOS control word */
 	UNSIGNED16 readControlword();
 
 	//! write EPOS control word
 	void writeControlword(UNSIGNED16 val);
 
 	/*! \brief pretty-print controlword */
-	void printEPOScontrolword(WORD controlword);
+	void printEPOScontrolword(canopen::WORD controlword);
 
 	//! \brief start motion with absolute demanded position
 	void startAbsoluteMotion();
@@ -259,40 +256,40 @@ public:
 	//! \brief EPOS Operational mode
 	typedef enum _operational_mode
 	{
-		OMD_INTERPOLATED_POSITION_MODE = 7,
-		OMD_HOMING_MODE = 6, //! homing
-		OMD_PROFILE_VELOCITY_MODE = 3, //! profile velocity mode
-		OMD_PROFILE_POSITION_MODE = 1, //! profile position mode
-		OMD_POSITION_MODE = -1, //! position mode
-		OMD_VELOCITY_MODE = -2, //! velocity mode
-		OMD_CURRENT_MODE = -3, //! current mode
+		OMD_INTERPOLATED_POSITION_MODE = 7,	//! interpolated position mode
+		OMD_HOMING_MODE = 6,				//! homing
+		OMD_PROFILE_VELOCITY_MODE = 3,		//! profile velocity mode
+		OMD_PROFILE_POSITION_MODE = 1,		//! profile position mode
+		OMD_POSITION_MODE = -1,				//! position mode
+		OMD_VELOCITY_MODE = -2,				//! velocity mode
+		OMD_CURRENT_MODE = -3,				//! current mode
 		//OMD_DIAGNOSTIC_MODE = -4			//! diagnostic mode
-		OMD_MASTER_ENCODER_MODE = -5,
-		OMD_STEP_DIRECTION_MODE = -6
+		OMD_MASTER_ENCODER_MODE = -5,		//! master encoder mode
+		OMD_STEP_DIRECTION_MODE = -6		//! step/direction mode
 	} operational_mode_t;
 
-	/*! \brief set EPOS mode of operation -- 14.1.59 */
+	/*! \brief set EPOS mode of operation */
 	void setOperationMode(operational_mode_t);
 
-	/*! \brief read and returns  EPOS mode of operation -- 14.1.60
+	/*! \brief read and returns  EPOS mode of operation
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
 	operational_mode_t readActualOperationMode();
 
-	/*! \brief read demanded position; 14.1.61 */
+	/*! \brief read demanded position */
 	INTEGER32 readDemandPosition();
 
-	/*! \brief read actual position; 14.1.62 */
+	/*! \brief read actual position */
 	INTEGER32 readActualPosition();
 
-	/*! \brief read position window; 14.1.64 */
+	/*! \brief read position window */
 	UNSIGNED32 readPositionWindow();
 
-	/*! \brief write position window; 14.1.64 */
+	/*! \brief write position window */
 	void writePositionWindow(UNSIGNED32 value);
 
-	/*! \brief read position window time; 14.1.67 */
+	/*! \brief read position window time */
 	//		int writePositionWindowTime(unsigned int val);
 
 	//		int writePositionSoftwareLimits(long val, long val2);
@@ -321,7 +318,7 @@ public:
 	 */
 	void writePositionProfileType(INTEGER16 type);
 
-	//! \brief read velocity normally attained at the end of the acceleration ramp during a profiled move
+	//! \brief read velocity normally attained at the end of the acceleration ramp during a profiled motion
 	UNSIGNED32 readProfileVelocity();
 
 	//! \brief read acceleration ramp during a movement
@@ -389,6 +386,12 @@ public:
 	//! \brief write RS232 baudrate
 	void writeRS232Baudrate(UNSIGNED16 val);
 
+	//! @}
+
+	//! \ingroup libEPOS
+	//! \defgroup epos_pid Regulator tuning
+	//! @{
+
 	//! \brief read P value of the PID regulator
 	INTEGER16 readP();
 
@@ -431,6 +434,8 @@ public:
 	//! \brief write I value of the PI current regulator
 	void writeIcurrent(INTEGER16 val);
 
+	//! @}
+
 	//! \brief save actual parameters in non-volatile memory
 	void saveParameters();
 
@@ -470,173 +475,191 @@ public:
 	//! \brief write motor thermal constant
 	void writeMotorThermalConstant(UNSIGNED16 val);
 
-	/*! \brief read actual position; 14.1.67 */
+	/*! \brief read actual position */
 	INTEGER32 readDemandVelocity();
 
-	/*! \brief read actual position; 14.1.68 */
+	/*! \brief read actual position */
 	INTEGER32 readActualVelocity();
 
-	/*! \brief read actual current; 14.1.69 */
+	/*! \brief read actual current */
 	INTEGER16 readActualCurrent();
 
-	/*! \brief read target position; 14.1.70 */
+	/*! \brief read target position */
 	INTEGER32 readTargetPosition();
 
-	/*! \brief read target position; 14.1.70 */
+	/*! \brief read target position */
 	void writeTargetPosition(INTEGER32 val);
 
-	/*! read Maximal Following Error */
+	/*! \brief read Maximal Following Error */
 	UNSIGNED32 readMaxFollowingError();
 
-	/*! write Maximal Following Error */
+	/*! \brief write Maximal Following Error */
 	void writeMaxFollowingError(UNSIGNED32 val);
 
-	/*! read Home Offset */
+	/*! \brief read Home Offset */
 	INTEGER32 readHomeOffset();
 
-	/*! write Home Offset */
+	/*! \brief write Home Offset */
 	void writeHomeOffset(INTEGER32 val);
 
-	/*! read Speed for Switch Search */
+	/*! \brief read Speed for Switch Search */
 	UNSIGNED32 readSpeedForSwitchSearch();
 
-	/*! write Speed for Switch Search */
+	/*! \brief write Speed for Switch Search */
 	void writeSpeedForSwitchSearch(UNSIGNED32 val);
 
-	/*! read Speed for Zero Search */
+	/*! \brief read Speed for Zero Search */
 	UNSIGNED32 readSpeedForZeroSearch();
 
-	/*! write Speed for Zero Search */
+	/*! \brief write Speed for Zero Search */
 	void writeSpeedForZeroSearch(UNSIGNED32 val);
 
-	/*! read Homing Acceleration */
+	/*! \brief read Homing Acceleration */
 	UNSIGNED32 readHomingAcceleration();
 
-	/*! write Homing Acceleration  */
+	/*! \brief write Homing Acceleration  */
 	void writeHomingAcceleration(UNSIGNED32 val);
 
-	/*! read Current Threshold for Homing Mode */
+	/*! \brief read Current Threshold for Homing Mode */
 	UNSIGNED16 readCurrentThresholdForHomingMode();
 
-	/*! write Current Threshold for Homing Mode  */
+	/*! \brief write Current Threshold for Homing Mode  */
 	void writeCurrentThresholdForHomingMode(UNSIGNED16 val);
 
-	/*! read Error register */
+	/*! \brief read Error register */
 	UNSIGNED8 readErrorRegister();
 
-	/*! read number of Errors is Error History register */
+	/*! \brief read number of Errors is Error History register */
 	UNSIGNED8 readNumberOfErrors();
 
-	/*! read Error History at index */
+	/*! \brief read Error History at index */
 	UNSIGNED32 readErrorHistory(unsigned int num);
 
-	/*! clear Error register */
+	/*! \brief clear Error register */
 	void clearNumberOfErrors();
 
-	/*! Store all device parameters in a non-volatile memory */
+	/*! \brief Store all device parameters in a non-volatile memory */
 	void Store();
 
-	/*! All device parameters will be restored with default values */
+	/*! \brief All device parameters will be restored with default values */
 	void Restore();
 
-	/*! \brief Read the Minimal Position Limit
+	//! \ingroup libEPOS
+	//! \defgroup epos_limits Position Limits
+	//! @{
+
+	/*! \brief read the Minimal Position Limit
 	 * If the desired or the actual position is lower then the negative position
 	 * limit a software position limit Error will be launched.
 	 */
 	INTEGER32 readMinimalPositionLimit();
 
-	/*! Write the Minimal Position Limit */
+	/*! \brief write the Minimal Position Limit */
 	void writeMinimalPositionLimit(INTEGER32 val);
 
-    /*! Read the Maximal Position Limit */
+    /*! \brief read the Maximal Position Limit */
 	INTEGER32 readMaximalPositionLimit();
 
-	/*! Write the Maximal Position Limit */
+	/*! \brief write the Maximal Position Limit */
 	void writeMaximalPositionLimit(INTEGER32 val);
 
-	// Gear Configuration
+	//! @}
 
-	//! read Gear Ratio Numerator
+	//! \ingroup libEPOS
+	//! \defgroup epos_gear Gear Configuration
+	//! @{
+
+	//! \brief read Gear Ratio Numerator
 	UNSIGNED32 readGearRatioNumerator();
 
-	//! write Gear Ratio Numerator
+	//! \brief write Gear Ratio Numerator
 	void writeGearRatioNumerator(UNSIGNED32 val);
 
-	//! read Gear Ratio Denominator
+	//! \brief read Gear Ratio Denominator
 	UNSIGNED16 readGearRatioDenominator();
 
-	//! write Gear Ratio Denominator
+	//! \brief write Gear Ratio Denominator
 	void writeGearRatioDenominator(UNSIGNED16 val);
 
-	//! read Gear Maximal Speed
+	//! \brief read Gear Maximal Speed
 	UNSIGNED32 readGearMaximalSpeed();
 
-	//! write Gear Maximal Speed
+	//! \brief write Gear Maximal Speed
 	void writeGearMaximalSpeed(UNSIGNED32 val);
 
-	/*!
-	 * Interpolated Profile Motion mode commands
-	 */
+	//! @}
 
-	/*! Provides the actual free buffer size and is given in interpolation data records */
+	//! \ingroup libEPOS
+	//! \defgroup epos_ipm Interpolated Profile Motion
+	//! @{
+
+	/*! \brief Provides the actual free buffer size and is given in interpolation data records */
 	UNSIGNED32 readActualBufferSize();
 
-	/*! Clear a buffer and reenable access to it */
+	/*! \brief clear a buffer and reenable access to it */
 	void clearPvtBuffer();
 
-	//! write Interpolation Sub Mode Selection
+	//! \brief write Interpolation Sub Mode Selection
 	void writeInterpolationSubModeSelection(INTEGER16 val);
 
-	//! read Interpolation Sub Mode Selection
+	//! \brief read Interpolation Sub Mode Selection
 	INTEGER16 readInterpolationSubModeSelection();
 
-	//! write Interpolation Time Period Value
+	//! \brief write Interpolation Time Period Value
 	void writeInterpolationTimePeriod(UNSIGNED8 val);
 
-	//! read Interpolation Time Period Value
+	//! \brief read Interpolation Time Period Value
 	UNSIGNED8 readInterpolationTimePeriod();
 
-	//! write Interpolation Time Index
+	//! \brief write Interpolation Time Index
 	void writeInterpolationTimeIndex(INTEGER8 val);
 
-	//! read Interpolation Time Period Index
+	//! \brief read Interpolation Time Period Index
 	INTEGER8 readInterpolationTimeIndex();
 
-	//! write Interpolation data record
+	//! \brief write Interpolation data record
 	void writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time);
 
-	//! read Interpolation buffer status
+	//! \brief read Interpolation buffer status
 	UNSIGNED16 readInterpolationBufferStatus();
 
-	//! check Interpolation Buffer warning
+	//! \brief check Interpolation Buffer warning
 	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
 
-	//! check Interpolation Buffer underflow warning
+	//! \brief check Interpolation Buffer underflow warning
 	static bool checkInterpolationBufferUnderflowWarning(UNSIGNED16 status);
 
-	//! check Interpolation Buffer error
+	//! \brief check Interpolation Buffer error
 	static bool checkInterpolationBufferError(UNSIGNED16 status);
 
+	//! \brief Print status message about the Interpolation Buffer
 	static void printInterpolationBufferStatus(UNSIGNED16 status);
 
-	//! read Interpolation buffer underflow warning
+	//! \brief read Interpolation buffer underflow warning
 	UNSIGNED16 readInterpolationBufferUnderflowWarning();
 
 	//! write Interpolation buffer underflow warning
 	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 val);
 
-	//! read Interpolation buffer overflow warning
+	//! \brief read Interpolation buffer overflow warning
 	UNSIGNED16 readInterpolationBufferOverflowWarning();
 
-	//! write Interpolation buffer overflow warning
+	//! \brief write Interpolation buffer overflow warning
 	void writeInterpolationBufferOverflowWarning(UNSIGNED16 val);
 
-	//! start Interpolated Position Mode motion
+	//! \brief start Interpolated Position Mode motion
 	void startInterpolatedPositionMotion();
 
+	//! @}
+
+	//! \brief Get message of the error code
 	/*static*/ const char * ErrorCodeMessage(UNSIGNED32 code);
 
-	//! Homing method
+	//! \ingroup libEPOS
+	//! \defgroup epos_homing Homing
+	//! @{
+
+	//! \brief Homing method
 	typedef enum _homing_method
 	{
 		HM_ACTUAL_POSITION = 35,
@@ -656,22 +679,22 @@ public:
 		HM_INDEX_NEGATIVE_SPEED = 33
 	} homing_method_t;
 
-	//! Is the actual position referenced to home position
+	//! \brief rIs the actual position referenced to home position?
 	bool isReferenced();
 
-	//! Is the movement target reached
+	//! \brief rIs the movement target reached?
 	bool isTargetReached();
 
-	//! Start homing according to preset parameters
+	//! \brief rStart homing according to preset parameters
 	void startHoming();
 
-	//! Check if both homing target is reached and homing is attained
+	//! \brief rCheck if both homing target is reached and homing is attained
 	bool isHomingFinished();
 
-	/*! read Homing Method */
+	/*! \brief read Homing Method */
 	homing_method_t readHomingMethod();
 
-	/*! write Homing Method */
+	/*! \brief write Homing Method */
 	void writeHomingMethod(homing_method_t method);
 
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
@@ -694,6 +717,8 @@ public:
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 
+	//! @}
+
 private:
 	//! Cached for parameters values
 	//! @note have to be at the bottom because some typedefs are defined above
@@ -704,7 +729,7 @@ private:
 	UNSIGNED32 ProfileDeceleration;
 };
 
-} /* namespace epos */
+} /* namespace maxon */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

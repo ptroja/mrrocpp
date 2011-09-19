@@ -1,8 +1,6 @@
-/*
- * epos_access_rs232.h
- *
- *  Created on: Jan 18, 2011
- *      Author: ptroja
+/*!
+ * \file epos_access_rs232.h
+ * \brief RS232 transport layer
  */
 
 #ifndef EPOS_ACCESS_RS232_H_
@@ -12,13 +10,14 @@
 
 #include <termios.h> /* POSIX terminal control definitions */
 
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
-class epos_access_rs232 : public epos_access {
+//! Access to the EPOS with the RS232 transport layer
+class gateway_epos_rs232 : public gateway {
 private:
 	//! device name of EPOS port
 	const std::string device;
@@ -72,15 +71,16 @@ public:
 	 *
 	 * @param _device device string describing the device on which the EPOS is connected to, e.g. "/dev/ttyS0"
 	 */
-	epos_access_rs232(const std::string & _device);
+	gateway_epos_rs232(const std::string & _device);
 
 	//! Destructor
-	~epos_access_rs232();
+	virtual ~gateway_epos_rs232();
 
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param length of answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
@@ -101,6 +101,7 @@ public:
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength object length
 	 */
 	void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength);
 
@@ -125,7 +126,7 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

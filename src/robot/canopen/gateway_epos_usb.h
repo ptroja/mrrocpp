@@ -1,8 +1,6 @@
-/*
- * epos_access_usb.h
- *
- *  Created on: Jan 18, 2011
- *      Author: ptroja
+/*!
+ * \file gateway_epos_usb.h
+ * \brief USB transport layer
  */
 
 #ifndef EPOS_ACCESS_USB_H_
@@ -10,13 +8,14 @@
 
 #include <ftdi.h>
 
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
-class epos_access_usb : public epos_access {
+//! Access to the EPOS with the USB transport layer
+class gateway_epos_usb : public gateway {
 private:
 	//! USB FTDI context
 	struct ftdi_context ftdic;
@@ -37,7 +36,8 @@ public:
 	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
 	 *
 	 * @param ans answer buffer
-	 * @param length of answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
 	 * @return answer array from the controller
@@ -58,6 +58,7 @@ public:
 	 * @param nodeId CAN node ID
 	 * @param index object entry index in a dictionary
 	 * @param subindex object entry subindex of in a dictionary
+	 * @param ObjectLength object length
 	 */
 	void InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength);
 
@@ -77,14 +78,14 @@ public:
 
 	/*! \brief create new USB EPOS object
 	 *
-	 * @param vendor USB device vendor ID
-	 * @param product USB device vendor ID
+	 * @param _vendor USB device vendor ID
+	 * @param _product USB device vendor ID
 	 * @param index USB device vendor ID
 	 */
-	epos_access_usb(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
+	gateway_epos_usb(int _vendor = 0x0403, int _product = 0xa8b0, unsigned int index = 0);
 
 	//! Destructor
-	~epos_access_usb();
+	virtual ~gateway_epos_usb();
 
 	//! Open device
 	void open();
@@ -93,7 +94,7 @@ public:
 	void close();
 };
 
-} /* namespace epos */
+} /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
 

@@ -1,15 +1,15 @@
 /*
- * epos_access.cc
+ * gateway.cc
  *
  *  Created on: May 14, 2011
  *      Author: ptroja
  */
 
-#include "epos_access.h"
+#include "gateway.h"
 
 namespace mrrocpp {
 namespace edp {
-namespace epos {
+namespace canopen {
 
 /*
  *************************************************************
@@ -18,7 +18,7 @@ namespace epos {
  */
 
 /* check the global variable E_error for EPOS error code */
-void epos_access::checkEPOSerror(DWORD E_error)
+void gateway::checkEPOSerror(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
@@ -61,11 +61,11 @@ void epos_access::checkEPOSerror(DWORD E_error)
 			break;
 	}
 
-	BOOST_THROW_EXCEPTION(epos_error() << reason(msg));
+	BOOST_THROW_EXCEPTION(canopen_error() << reason(msg));
 }
 
 /* copied from EPOS Communication Guide, p.8 */
-WORD epos_access::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
+WORD gateway::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 {
 	WORD shifter, c;
 	WORD carry;
