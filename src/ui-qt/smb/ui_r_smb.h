@@ -56,6 +56,7 @@ public:
 	void setup_menubar();
 
 private:
+	QAction *action_Synchronisation;
 	QAction *action_command;
 };
 
