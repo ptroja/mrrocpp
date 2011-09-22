@@ -104,6 +104,9 @@ void UiRobot::setup_menubar()
 	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
+
+	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SMB_COMMAND], signalDispatcher, menuBar);
+
 }
 
 void UiRobot::delete_ui_ecp_robot()
