@@ -48,6 +48,9 @@ public:
 
 private:
 	Ui::wgt_smb_commandClass ui;
+	mrrocpp::ui::smb::UiRobot* robot;
+
+	int init();
 
 signals:
 	void synchro_depended_init_signal();

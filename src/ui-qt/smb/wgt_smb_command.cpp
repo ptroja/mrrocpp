@@ -90,6 +90,37 @@ void wgt_smb_command::synchro_depended_init_slot()
 	 */
 }
 
+int wgt_smb_command::init()
+{
+	/*
+	 try {
+
+	 if (robot->state.edp.pid != -1) {
+	 if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	 {
+	 synchro_depended_widgets_disable(false);
+
+	 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+	 robot->ui_ecp_robot->execute_motion();
+	 robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+
+	 for (int i = 0; i < robot->number_of_servos; i++) {
+	 set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
+	 robot->desired_pos[i] = robot->current_pos[i];
+	 }
+
+	 } else {
+	 // Wygaszanie elementow przy niezsynchronizowanym robocie
+	 synchro_depended_widgets_disable(true);
+	 }
+	 }
+
+	 } // end try
+	 CATCH_SECTION_UI_PTR
+	 */
+	return 1;
+}
+
 // buttons callbacks
 
 void wgt_smb_command::on_pushButton_fl_execute_clicked()
