@@ -52,12 +52,18 @@ private:
 
 	int init();
 
+	int synchro_depended_widgets_disable(bool _set_disabled);
+
+	QTimer *timer;
+
 signals:
 	void synchro_depended_init_signal();
 
 private slots:
 
 	void synchro_depended_init_slot();
+
+	void timer_slot();
 
 	// buttons callbacks
 

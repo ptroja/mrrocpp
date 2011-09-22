@@ -54,7 +54,12 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ml_relative);
 	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ms_relative);
 
-	// podpiecie sygnalow do slotow
+	// uruchomienei timera
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer->start(interface.position_refresh_interval);
+
+	// podpiecie pozostalych sygnalow do slotow
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
 }
@@ -119,6 +124,30 @@ int wgt_smb_command::init()
 	 CATCH_SECTION_UI_PTR
 	 */
 	return 1;
+}
+
+int wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
+{
+	/*
+	 ui.pushButton_execute->setDisabled(_set_disabled);
+	 ui.pushButton_read->setDisabled(_set_disabled);
+	 ui.pushButton_copy->setDisabled(_set_disabled);
+	 ui.checkBox_cyclic_read->setDisabled(_set_disabled);
+
+	 for (int i = 0; i < robot->number_of_servos; i++) {
+	 doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
+	 }
+	 */
+	return 1;
+}
+
+void wgt_smb_command::timer_slot()
+{
+	/*
+	 if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
+	 init();
+	 }
+	 */
 }
 
 // buttons callbacks
