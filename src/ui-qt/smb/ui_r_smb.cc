@@ -33,14 +33,6 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::synchronise()
-
-{
-
-	return 1;
-
-}
-
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 		common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
@@ -113,6 +105,44 @@ void UiRobot::setup_menubar()
 
 	// connections
 	connect(action_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+
+}
+
+int UiRobot::synchronise()
+
+{
+
+	eb.command(boost::bind(&ui::smb::UiRobot::synchronise_int, &(*this)));
+
+	return 1;
+
+}
+
+int UiRobot::synchronise_int()
+
+{
+
+	interface.set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota spkm
+
+		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->the_robot->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
+		} else {
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	// modyfikacje menu
+	interface.manage_interface();
+	wgts[WGT_SMB_COMMAND]->synchro_depended_init();
+
+	return 1;
 
 }
 

@@ -97,6 +97,8 @@ void wgt_smb_command::synchro_depended_init_slot()
 
 int wgt_smb_command::init()
 {
+	interface.ui_msg->message("init");
+
 	/*
 	 try {
 
@@ -143,11 +145,11 @@ int wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 
 void wgt_smb_command::timer_slot()
 {
-	/*
-	 if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
-	 init();
-	 }
-	 */
+
+	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
+		init();
+	}
+
 }
 
 // buttons callbacks
@@ -169,7 +171,7 @@ void wgt_smb_command::on_pushButton_execute_all_clicked()
 
 void wgt_smb_command::on_pushButton_read_clicked()
 {
-
+	init();
 }
 
 void wgt_smb_command::on_pushButton_ml_copy_clicked()
