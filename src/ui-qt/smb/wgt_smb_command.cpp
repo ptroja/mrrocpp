@@ -14,6 +14,12 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	robot = dynamic_cast <mrrocpp::ui::smb::UiRobot *>(_robot);
 }
 
+wgt_smb_command::~wgt_smb_command()
+{
+
+}
+
+
 // buttons callbacks
 
 void wgt_smb_command::on_pushButton_fl_execute_clicked()
