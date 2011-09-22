@@ -54,11 +54,40 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ml_relative);
 	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ms_relative);
 
+	// podpiecie sygnalow do slotow
+	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
+
 }
 
 wgt_smb_command::~wgt_smb_command()
 {
 
+}
+
+void wgt_smb_command::synchro_depended_init()
+{
+	emit synchro_depended_init_signal();
+}
+
+void wgt_smb_command::synchro_depended_init_slot()
+{
+	/*
+	 try {
+
+	 if (robot->state.edp.pid != -1) {
+	 if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
+	 {
+	 synchro_depended_widgets_disable(false);
+
+	 } else {
+	 // Wygaszanie elementow przy niezsynchronizowanym robocie
+	 synchro_depended_widgets_disable(true);
+	 }
+	 }
+
+	 } // end try
+	 CATCH_SECTION_UI_PTR
+	 */
 }
 
 // buttons callbacks

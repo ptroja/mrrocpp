@@ -44,8 +44,17 @@ public:
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_absolute_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_relative_Vector;
 
+	void synchro_depended_init();
+
 private:
 	Ui::wgt_smb_commandClass ui;
+
+signals:
+	void synchro_depended_init_signal();
+
+private slots:
+
+	void synchro_depended_init_slot();
 
 	// buttons callbacks
 

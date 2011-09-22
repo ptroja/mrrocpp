@@ -26,7 +26,8 @@ class wgt_spkm_inc : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
+	wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
 	~wgt_spkm_inc();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
@@ -35,8 +36,7 @@ public:
 	QVector <QRadioButton*> radioButton_mip_Vector;
 
 	void synchro_depended_init();
-	virtual void add_button(QPushButton *button, int row, int space){};
-	virtual void setup_ui(){};
+
 private:
 	Ui::wgt_spkm_incClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;
