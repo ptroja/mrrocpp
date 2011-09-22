@@ -309,7 +309,10 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_3">
+                <widget class="QCheckBox" name="checkBox_fl1_up">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -318,11 +321,17 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_5">
+                <widget class="QCheckBox" name="checkBox_fl1_down">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -331,6 +340,9 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -366,7 +378,23 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_3">
+                <widget class="QRadioButton" name="radioButton_fl1_no">
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_fl1_up">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -379,7 +407,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_4">
+                <widget class="QRadioButton" name="radioButton_fl1_down">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -392,20 +420,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_5">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_6">
+                <widget class="QRadioButton" name="radioButton_fl1_detach">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -495,7 +510,10 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_6">
+                <widget class="QCheckBox" name="checkBox_fl2_up">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -504,11 +522,17 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_7">
+                <widget class="QCheckBox" name="checkBox_fl2_down">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -517,6 +541,9 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -552,7 +579,23 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_11">
+                <widget class="QRadioButton" name="radioButton_fl2_no">
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_fl2_up">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -565,7 +608,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_12">
+                <widget class="QRadioButton" name="radioButton_fl2_down">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -578,20 +621,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_13">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_14">
+                <widget class="QRadioButton" name="radioButton_fl2_detach">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -681,7 +711,10 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_8">
+                <widget class="QCheckBox" name="checkBox_fl3_up">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -690,11 +723,17 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_9">
+                <widget class="QCheckBox" name="checkBox_fl3_down">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -703,6 +742,9 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -738,7 +780,23 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_17">
+                <widget class="QRadioButton" name="radioButton_fl3_no">
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_fl3_up">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -751,7 +809,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_18">
+                <widget class="QRadioButton" name="radioButton_fl3_down">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -764,20 +822,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_19">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_20">
+                <widget class="QRadioButton" name="radioButton_fl3_detach">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -799,7 +844,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="pushButton_fl_execute">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>10</horstretch>
@@ -1134,7 +1179,10 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_10">
+                <widget class="QCheckBox" name="checkBox_ml_mip">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1144,10 +1192,17 @@ p, li { white-space: pre-wrap; }
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="checkable">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_current_position">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -1160,7 +1215,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="pushButton_ml_copy">
               <property name="maximumSize">
                <size>
                 <width>20</width>
@@ -1194,17 +1249,20 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_2">
+                <widget class="QCheckBox" name="checkBox_ml_no">
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_5">
+                <widget class="QPushButton" name="pushButton_ml_left">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1217,10 +1275,10 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_4">
+                <widget class="QPushButton" name="pushButton_ml_rigth">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1313,7 +1371,10 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_11">
+                <widget class="QCheckBox" name="checkBox_ms_mip">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1323,10 +1384,17 @@ p, li { white-space: pre-wrap; }
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="checkable">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_current_position">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -1339,7 +1407,7 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_9">
+             <widget class="QPushButton" name="pushButton_ms_copy">
               <property name="maximumSize">
                <size>
                 <width>20</width>
@@ -1373,17 +1441,20 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_4">
+                <widget class="QCheckBox" name="checkBox_ms_no">
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_10">
+                <widget class="QPushButton" name="pushButton_ms_left">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1396,10 +1467,10 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_9"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_11">
+                <widget class="QPushButton" name="pushButton_ms_rigth">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1421,7 +1492,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_12">
+       <widget class="QPushButton" name="pushButton_m_execute">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>10</horstretch>
@@ -1470,21 +1541,21 @@ E</string>
        <number>3</number>
       </property>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="pushButton_read">
         <property name="text">
          <string>read</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="checkBox_cyclic_read">
         <property name="text">
          <string>cyclic read</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_13">
+       <widget class="QPushButton" name="pushButton_execute_all">
         <property name="text">
          <string>execute all</string>
         </property>
