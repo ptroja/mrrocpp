@@ -30,7 +30,7 @@ public:
 			0);
 
 private:
-	Ui::wgt_spkm_incClass ui;
+	Ui::wgt_smb_commandClass ui;
 
 };
 

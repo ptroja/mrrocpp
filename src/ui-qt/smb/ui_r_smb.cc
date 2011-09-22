@@ -96,12 +96,12 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-
-
 void UiRobot::setup_menubar()
 {
+
 	common::UiRobot::setup_menubar();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>wgt_spkm_incClass</class>
- <widget class="QWidget" name="wgt_spkm_incClass">
+ <class>wgt_smb_commandClass</class>
+ <widget class="QWidget" name="wgt_smb_commandClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>wgt_spkm_inc</string>
+   <string>wgt_smb_command</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="margin">
