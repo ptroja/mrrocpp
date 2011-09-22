@@ -12,13 +12,54 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::smb::UiRobot *>(_robot);
+
+	// utworzenie list widgetow
+
+	checkBox_fl_up_Vector.append(ui.checkBox_fl1_up);
+	checkBox_fl_up_Vector.append(ui.checkBox_fl2_up);
+	checkBox_fl_up_Vector.append(ui.checkBox_fl3_up);
+
+	checkBox_fl_down_Vector.append(ui.checkBox_fl1_down);
+	checkBox_fl_down_Vector.append(ui.checkBox_fl2_down);
+	checkBox_fl_down_Vector.append(ui.checkBox_fl3_down);
+
+	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
+	checkBox_m_mip_Vector.append(ui.checkBox_ms_mip);
+
+	checkBox_m_no_Vector.append(ui.checkBox_ml_no);
+	checkBox_m_no_Vector.append(ui.checkBox_ms_no);
+
+	radioButton_fl_no_Vector.append(ui.radioButton_fl1_no);
+	radioButton_fl_no_Vector.append(ui.radioButton_fl2_no);
+	radioButton_fl_no_Vector.append(ui.radioButton_fl3_no);
+
+	radioButton_fl_up_Vector.append(ui.radioButton_fl1_up);
+	radioButton_fl_up_Vector.append(ui.radioButton_fl2_up);
+	radioButton_fl_up_Vector.append(ui.radioButton_fl3_up);
+
+	radioButton_fl_down_Vector.append(ui.radioButton_fl1_down);
+	radioButton_fl_down_Vector.append(ui.radioButton_fl2_down);
+	radioButton_fl_down_Vector.append(ui.radioButton_fl3_down);
+
+	radioButton_fl_detach_Vector.append(ui.radioButton_fl1_detach);
+	radioButton_fl_detach_Vector.append(ui.radioButton_fl2_detach);
+	radioButton_fl_detach_Vector.append(ui.radioButton_fl3_detach);
+
+	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ml_current_position);
+	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ms_current_position);
+
+	doubleSpinBox_m_absolute_Vector.append(ui.doubleSpinBox_ml_absolute);
+	doubleSpinBox_m_absolute_Vector.append(ui.doubleSpinBox_ms_absolute);
+
+	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ml_relative);
+	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ms_relative);
+
 }
 
 wgt_smb_command::~wgt_smb_command()
 {
 
 }
-
 
 // buttons callbacks
 
