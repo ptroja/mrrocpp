@@ -14,3 +14,53 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	robot = dynamic_cast <mrrocpp::ui::smb::UiRobot *>(_robot);
 }
 
+// buttons callbacks
+
+void wgt_smb_command::on_pushButton_fl_execute_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_m_execute_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_execute_all_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_read_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_ml_copy_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_ms_copy_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_ml_left_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_ml_rigth_clicked()
+{
+
+}
+
+void wgt_smb_command::on_pushButton_ms_left_clicked()
+{
+
+}
+void wgt_smb_command::on_pushButton_ms_rigth_clicked()
+{
+
+}
