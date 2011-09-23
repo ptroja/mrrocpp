@@ -57,11 +57,6 @@ public:
 	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
 
 	/**
-	 * @brief pin locking command data port
-	 */
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
-
-	/**
 	 * @brief epos motion status reply data request port
 	 */
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;

@@ -29,7 +29,7 @@ const robot_name_t ROBOT_NAME = "smb";
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_EPOS_CUBIC_COMMAND, CBUFFER_EPOS_TRAPEZOIDAL_COMMAND, CBUFFER_PIN_INSERTION, CBUFFER_PIN_LOCKING
+	CBUFFER_EPOS_CUBIC_COMMAND, CBUFFER_EPOS_TRAPEZOIDAL_COMMAND, FESTO
 };
 
 /*!
@@ -45,7 +45,6 @@ struct cbuffer
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
 		multi_pin_insertion_td multi_pin_insertion;
-		multi_pin_locking_td multi_pin_locking;
 	};
 }__attribute__((__packed__));
 

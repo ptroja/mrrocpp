@@ -67,23 +67,15 @@ struct leg_reply
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Mobile Base pin insertion command
+ * @brief SwarmItFix Mobile Base single leg festo command
  * @ingroup smb
  */
-enum PIN_INSERTION
+enum FESTO_LEG
 {
-	INSERT, WITHDRAWN, PIN_INSERTION_NO_ACTION
+	UP, DOWN, DETACH
 };
 // namespace mrrocpp
 
-/*!
- * @brief SwarmItFix Mobile Base pin locking command
- * @ingroup smb
- */
-enum PIN_LOCKING
-{
-	CLAMB, UNCLAMB, PIN_LOCKING_NO_ACTION
-};
 // namespace mrrocpp
 
 /*!
@@ -92,16 +84,7 @@ enum PIN_LOCKING
  */
 struct multi_pin_insertion_td
 {
-	PIN_INSERTION leg[LEG_CLAMP_NUMBER];
-}__attribute__((__packed__));
-
-/*!
- * @brief SwarmItFix Mobile Base multi pin locking command
- * @ingroup smb
- */
-struct multi_pin_locking_td
-{
-	PIN_LOCKING leg[LEG_CLAMP_NUMBER];
+	FESTO_LEG leg[LEG_CLAMP_NUMBER];
 }__attribute__((__packed__));
 
 /*!
