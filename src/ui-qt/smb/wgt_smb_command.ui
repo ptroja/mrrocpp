@@ -1555,6 +1555,13 @@ E</string>
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_stop">
+        <property name="text">
+         <string>STOP</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton_execute_all">
         <property name="text">
          <string>execute all</string>

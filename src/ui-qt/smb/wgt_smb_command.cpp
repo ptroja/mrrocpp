@@ -216,6 +216,12 @@ void wgt_smb_command::on_pushButton_ms_rigth_clicked()
 
 }
 
+void wgt_smb_command::on_pushButton_stop_clicked()
+{
+	interface.ui_msg->message("on_pushButton_stop_clicked");
+	robot->execute_stop_motor();
+}
+
 // events
 
 void wgt_smb_command::showEvent(QShowEvent * event)
