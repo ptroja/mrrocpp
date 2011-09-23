@@ -50,10 +50,12 @@ int UiRobot::manage_interface()
 
 			break;
 		case 0:
+			mw->enable_menu_item(false, 1, action_Clear_Fault);
 			mw->enable_menu_item(false, 2, action_Synchronisation, action_command);
 			break;
 		case 1:
 		case 2:
+			mw->enable_menu_item(true, 1, action_Clear_Fault);
 			mw->enable_menu_item(true, 1, action_command);
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
@@ -99,9 +101,12 @@ void UiRobot::setup_menubar()
 
 	action_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
 	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SMB_COMMAND], signalDispatcher, menuBar);
+	action_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
 
 	robot_menu->addAction(action_Synchronisation);
 	robot_menu->addAction(action_command);
+	robot_menu->addSeparator();
+	robot_menu->addAction(action_Clear_Fault);
 
 	// connections
 	connect(action_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
@@ -144,6 +149,30 @@ int UiRobot::synchronise_int()
 
 	return 1;
 
+}
+
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
 }
 
 void UiRobot::delete_ui_ecp_robot()

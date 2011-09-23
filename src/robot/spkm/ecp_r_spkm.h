@@ -64,6 +64,8 @@ public:
 	 */
 	lib::single_thread_port <bool> epos_clear_fault_data_port;
 
+
+
 	/**
 	 * @brief epos motion status reply data request port
 	 */

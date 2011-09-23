@@ -62,6 +62,11 @@ public:
 	lib::single_thread_port <bool> epos_brake_command_data_port;
 
 	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <bool> epos_clear_fault_data_port;
+
+	/**
 	 * @brief pin insertion command data port
 	 */
 	lib::single_thread_port <lib::smb::festo_command_td> smb_festo_command_data_port;
