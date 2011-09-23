@@ -54,7 +54,7 @@ public:
 	/**
 	 * @brief pin insertion command data port
 	 */
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
+	lib::single_thread_port <lib::smb::festo_command_td> smb_festo_command_data_port;
 
 	/**
 	 * @brief epos motion status reply data request port

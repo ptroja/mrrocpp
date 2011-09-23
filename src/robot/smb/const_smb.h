@@ -44,7 +44,7 @@ struct cbuffer
 		epos::epos_cubic_command epos_cubic_command_structure;
 		epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
 		epos::epos_operational_command epos_operational_command_structure;
-		multi_pin_insertion_td multi_pin_insertion;
+		festo_command_td multi_pin_insertion;
 	};
 }__attribute__((__packed__));
 

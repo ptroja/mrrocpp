@@ -19,7 +19,7 @@ namespace smb {
  * @brief SwarmItFix Mobile Base multi pin insertion command data port
  * @ingroup smb
  */
-const std::string MULTI_PIN_INSERTION_DATA_PORT = "SMB_MULTI_PIN_INSERTION_DATA_PORT";
+const std::string MULTI_PIN_INSERTION_DATA_PORT = "smb_festo_command_data_port";
 
 /*!
  * @brief SwarmItFix Mobile Base mulri pin locking command data port
@@ -82,7 +82,7 @@ enum FESTO_LEG
  * @brief SwarmItFix Mobile Base multi pin insertion command
  * @ingroup smb
  */
-struct multi_pin_insertion_td
+struct festo_command_td
 {
 	FESTO_LEG leg[LEG_CLAMP_NUMBER];
 }__attribute__((__packed__));

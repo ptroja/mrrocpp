@@ -122,7 +122,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 			break;
 		case lib::smb::FESTO: {
-			lib::smb::multi_pin_insertion_td multi_pin_insertion;
+			lib::smb::festo_command_td multi_pin_insertion;
 			memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion), sizeof(multi_pin_insertion));
 		}
 			break;
