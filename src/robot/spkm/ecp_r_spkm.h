@@ -99,12 +99,6 @@ public:
 	void create_command();
 
 	/**
-	 * @brief checks the flag
-	 * then sets the flag or throw exception. Called from create_command() method.
-	 */
-	void check_then_set_command_flag(bool& flag);
-
-	/**
 	 * @brief set the data_request_ports
 	 * basing on edp reply buffer
 	 */

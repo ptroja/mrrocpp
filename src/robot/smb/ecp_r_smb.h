@@ -42,14 +42,24 @@ protected:
 public:
 
 	/**
-	 * @brief epos cubic motion command data port
+	 * @brief epos motor motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_motor_command_data_port;
 
 	/**
-	 * @brief epos trapezoidal motion command data port
+	 * @brief epos joint motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_joint_command_data_port;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_external_command_data_port;
+
+	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <bool> epos_brake_command_data_port;
 
 	/**
 	 * @brief pin insertion command data port

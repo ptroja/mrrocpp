@@ -46,15 +46,6 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 	create_kinematic_models_for_given_robot();
 }
 
-void robot::check_then_set_command_flag(bool& flag)
-{
-	if (flag) {
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
-	} else {
-		flag = true;
-	}
-}
-
 void robot::create_command()
 {
 	//	int new_data_counter;

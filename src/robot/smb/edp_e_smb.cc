@@ -109,18 +109,20 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 }
 		 break;
 		 */
-		case lib::smb::CBUFFER_EPOS_CUBIC_COMMAND: {
-			lib::epos::epos_cubic_command epos_cubic_command_structure;
-			memcpy(&epos_cubic_command_structure, &(ecp_edp_cbuffer.epos_cubic_command_structure), sizeof(epos_cubic_command_structure));
+		case lib::smb::POSE: {
 
 		}
 			break;
-		case lib::smb::CBUFFER_EPOS_TRAPEZOIDAL_COMMAND: {
-			lib::epos::epos_trapezoidal_command epos_trapezoidal_command_structure;
-			memcpy(&epos_trapezoidal_command_structure, &(ecp_edp_cbuffer.epos_trapezoidal_command_structure), sizeof(epos_trapezoidal_command_structure));
+		case lib::smb::QUICKSTOP: {
 
 		}
 			break;
+
+		case lib::smb::CLEAR_FAULT: {
+
+		}
+			break;
+
 		case lib::smb::FESTO: {
 			lib::smb::festo_command_td multi_pin_insertion;
 			memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion), sizeof(multi_pin_insertion));
