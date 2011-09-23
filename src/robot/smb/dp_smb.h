@@ -64,6 +64,18 @@ struct leg_reply
 {
 	bool is_up;
 	bool is_down;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & is_up;
+		ar & is_down;
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -94,6 +106,17 @@ struct festo_command_td
 struct multi_leg_reply_td
 {
 	leg_reply leg[LEG_CLAMP_NUMBER];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & leg;
+	}
+
 }__attribute__((__packed__));
 
 } // namespace smb

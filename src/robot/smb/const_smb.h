@@ -55,8 +55,19 @@ struct cbuffer
 struct rbuffer
 {
 	multi_leg_reply_td multi_leg_reply;
-	epos::single_controller_epos_reply epos_controller[lib::smb::NUM_OF_SERVOS];
-}__attribute__((__packed__));
+	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & epos_controller;
+	}
+
+};
 
 } // namespace smb
 } // namespace lib
