@@ -84,7 +84,7 @@ struct leg_reply
  */
 enum FESTO_LEG
 {
-	NO_COMMAND, UP, DOWN, DETACH
+	UP, DOWN
 };
 // namespace mrrocpp
 

@@ -26,10 +26,6 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 	checkBox_m_mip_Vector.append(ui.checkBox_ms_mip);
 
-	radioButton_fl_no_Vector.append(ui.radioButton_fl1_no);
-	radioButton_fl_no_Vector.append(ui.radioButton_fl2_no);
-	radioButton_fl_no_Vector.append(ui.radioButton_fl3_no);
-
 	radioButton_fl_up_Vector.append(ui.radioButton_fl1_up);
 	radioButton_fl_up_Vector.append(ui.radioButton_fl2_up);
 	radioButton_fl_up_Vector.append(ui.radioButton_fl3_up);
@@ -37,10 +33,6 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	radioButton_fl_down_Vector.append(ui.radioButton_fl1_down);
 	radioButton_fl_down_Vector.append(ui.radioButton_fl2_down);
 	radioButton_fl_down_Vector.append(ui.radioButton_fl3_down);
-
-	radioButton_fl_detach_Vector.append(ui.radioButton_fl1_detach);
-	radioButton_fl_detach_Vector.append(ui.radioButton_fl2_detach);
-	radioButton_fl_detach_Vector.append(ui.radioButton_fl3_detach);
 
 	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ml_current_position);
 	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ms_current_position);
@@ -225,14 +217,10 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 			// wybierz wariant
 
-			if (radioButton_fl_no_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::NO_COMMAND;
-			} else if (radioButton_fl_up_Vector[i]->isChecked()) {
+			if (radioButton_fl_up_Vector[i]->isChecked()) {
 				fc.leg[i] = lib::smb::UP;
 			} else if (radioButton_fl_down_Vector[i]->isChecked()) {
 				fc.leg[i] = lib::smb::DOWN;
-			} else if (radioButton_fl_detach_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::DETACH;
 			}
 
 		}
