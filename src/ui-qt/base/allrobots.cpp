@@ -42,7 +42,7 @@ void AllRobots::manage_interface()
 			case UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE EDP LOADED");
 
-				mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
+				mw->getMenuBar()->actionall_Synchronisation->setEnabled(false);
 
 				break;
 			case UI_ALL_EDPS_NONE_SYNCHRONISED:
