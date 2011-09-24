@@ -87,45 +87,24 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		/*
-		 case lib::smb::CBUFFER_EPOS_GEN_PARAMETERS: {
-		 // epos parameters computation basing on trajectory parameters
-		 lib::epos_gen_parameters epos_gen_parameters_structure;
-		 lib::epos_low_level_command epos_low_level_command_structure;
-
-		 memcpy(&epos_gen_parameters_structure, &(ecp_edp_cbuffer.epos_gen_parameters_structure), sizeof(epos_gen_parameters_structure));
-
-		 compute_epos_command(epos_gen_parameters_structure, epos_low_level_command_structure);
-
-		 ss << ecp_edp_cbuffer.epos_gen_parameters_structure.dm[4];
-
-		 msg->message(ss.str().c_str());
-
-		 // previously computed parameters send to epos2 controllers
-
-
-		 // start the trajectory execution
-
-		 }
-		 break;
-		 */
 		case lib::smb::POSE: {
-
+			msg->message("POSE");
 		}
 			break;
 		case lib::smb::QUICKSTOP: {
-
+			msg->message("QUICKSTOP");
 		}
 			break;
 
 		case lib::smb::CLEAR_FAULT: {
-
+			msg->message("CLEAR_FAULT");
 		}
 			break;
 
 		case lib::smb::FESTO: {
-			lib::smb::festo_command_td multi_pin_insertion;
-			memcpy(&multi_pin_insertion, &(ecp_edp_cbuffer.multi_pin_insertion), sizeof(multi_pin_insertion));
+			msg->message("FESTO");
+			lib::smb::festo_command_td festo_command;
+			memcpy(&festo_command, &(ecp_edp_cbuffer.festo_command), sizeof(festo_command));
 		}
 			break;
 		default:

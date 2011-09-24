@@ -168,6 +168,30 @@ void wgt_smb_command::timer_slot()
 
 void wgt_smb_command::on_pushButton_fl_execute_clicked()
 {
+	try {
+
+		lib::smb::festo_command_td &fc = robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.data;
+
+		// dla kazdej z nog
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			// wybierz wariant
+
+			if (radioButton_fl_no_Vector[i]->isChecked()) {
+				fc.leg[i] = lib::smb::NO_COMMAND;
+			} else if (radioButton_fl_up_Vector[i]->isChecked()) {
+				fc.leg[i] = lib::smb::UP;
+			} else if (radioButton_fl_down_Vector[i]->isChecked()) {
+				fc.leg[i] = lib::smb::DOWN;
+			} else if (radioButton_fl_detach_Vector[i]->isChecked()) {
+				fc.leg[i] = lib::smb::DETACH;
+			}
+
+		}
+		robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.set();
+		robot->ui_ecp_robot->execute_motion();
+
+	} // end try
+	CATCH_SECTION_UI_PTR
 
 }
 
@@ -178,7 +202,8 @@ void wgt_smb_command::on_pushButton_m_execute_clicked()
 
 void wgt_smb_command::on_pushButton_execute_all_clicked()
 {
-
+	on_pushButton_fl_execute_clicked();
+	on_pushButton_m_execute_clicked();
 }
 
 void wgt_smb_command::on_pushButton_read_clicked()
@@ -198,22 +223,22 @@ void wgt_smb_command::on_pushButton_ms_copy_clicked()
 
 void wgt_smb_command::on_pushButton_ml_left_clicked()
 {
-
+	init();
 }
 
 void wgt_smb_command::on_pushButton_ml_rigth_clicked()
 {
-
+	init();
 }
 
 void wgt_smb_command::on_pushButton_ms_left_clicked()
 {
-
+	init();
 }
 
 void wgt_smb_command::on_pushButton_ms_rigth_clicked()
 {
-
+	init();
 }
 
 void wgt_smb_command::on_pushButton_stop_clicked()

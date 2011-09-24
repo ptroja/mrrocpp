@@ -50,7 +50,7 @@ struct cbuffer
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
-	festo_command_td multi_pin_insertion;
+	festo_command_td festo_command;
 
 	//! Pose specification type
 	POSE_SPECIFICATION pose_specification;
@@ -87,7 +87,7 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		ar & multi_pin_insertion;
+		ar & festo_command;
 		switch (variant)
 		{
 			case POSE:

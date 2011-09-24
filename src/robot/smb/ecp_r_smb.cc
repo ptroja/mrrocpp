@@ -136,7 +136,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::smb::FESTO;
 
-		ecp_edp_cbuffer.multi_pin_insertion = smb_festo_command_data_port.data;
+		ecp_edp_cbuffer.festo_command = smb_festo_command_data_port.data;
 
 		if (is_new_data) {
 			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
