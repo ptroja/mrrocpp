@@ -121,7 +121,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	single_motor::UiRobot::manage_interface();
 
 	switch (state.edp.state)
@@ -129,7 +129,7 @@ int UiRobot::manage_interface()
 		case -1:
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionsarkofag_Move);
+			actionsarkofag_Move->setEnabled(false);
 			break;
 		case 1:
 		case 2:
@@ -139,25 +139,23 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, actionsarkofag_Move);
 
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, actionsarkofag_Move);
+						actionsarkofag_Move->setEnabled(true);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, actionsarkofag_Move);
+						actionsarkofag_Move->setEnabled(false);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, actionsarkofag_Move);
+				actionsarkofag_Move->setEnabled(true);
 			}
 			break;
 		default:

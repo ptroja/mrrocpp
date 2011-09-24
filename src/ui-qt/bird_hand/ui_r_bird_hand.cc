@@ -84,8 +84,7 @@ int UiRobot::manage_interface()
 
 			break;
 		case 0:
-			mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-
+			actionbirdhand_Command->setEnabled(false);
 			break;
 		case 1:
 		case 2:
@@ -96,18 +95,17 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
+						actionbirdhand_Command->setEnabled(true);
 
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
-
+						actionbirdhand_Command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
 						unblock_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
+						actionbirdhand_Command->setEnabled(false);
 
 						break;
 					default:
@@ -115,7 +113,7 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(false, 1, actionbirdhand_Command); //, actionbirdhand_Configuration);
+				actionbirdhand_Command->setEnabled(false);
 
 			}
 			break;

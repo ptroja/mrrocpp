@@ -135,60 +135,6 @@ void MainWindow::clear_console_slot()
 	get_ui()->textEdit_sr->clear();
 }
 
-void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QMenu *_menu_item, ...)
-{
-	va_list menu_items;
-	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-
-//	 emit
-//	 enable_menu_item_signal(_menu_item, _enable);
-	if(_menu_item)
-	{
-		enable_menu_item_slot(_menu_item, _enable);
-	}
-	va_start(menu_items, _menu_item);
-
-	for (int i = 1; i < _num_of_menus; i++) {
-		//interface.print_on_sr("signal");
-		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-
-//		 emit enable_menu_item_signal(va_arg(menu_items, QMenu *), _enable);
-		QMenu *action = va_arg(menu_items, QMenu *);
-		if(action)
-		enable_menu_item_slot(action, _enable);
-	}
-
-	va_end(menu_items);
-}
-
-void MainWindow::enable_menu_item(bool _enable, int _num_of_menus, QAction *_menu_item, ...)
-{
-	va_list menu_items;
-	// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-
-//	 emit
-//	 enable_menu_item_signal(_menu_item, _enable);
-
-	if(_menu_item)
-	{
-		enable_menu_item_slot(_menu_item, _enable);
-	}
-
-	va_start(menu_items, _menu_item);
-
-	for (int i = 1; i < _num_of_menus; i++) {
-		//interface.print_on_sr("signal");
-		// usuniete bo metoda wolana z dobrego watku przez manage interface_slot
-
-//		 emit enable_menu_item_signal(va_arg(menu_items, QAction *), _enable);
-		QAction *action = va_arg(menu_items, QAction *);
-		if(action)
-		enable_menu_item_slot(action, _enable);
-	}
-
-	va_end(menu_items);
-}
-
 void MainWindow::ui_robot_action(mrrocpp::ui::common::UiRobot * robot, mrrocpp::ui::common::UiRobot::uiRobotFunctionPointer pointer)
 {
 //printf("ui robot action void");
@@ -317,36 +263,6 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 				j++;
 			}
 
-}
-
-void MainWindow::enable_menu_item_slot(QMenu *_menu_item, bool _active)
-{
-//interface.print_on_sr("menu coloring slot");
-//_menu_item->setDisabled(!_active);
-	if (_menu_item != NULL
-	)
-//	_menu_item->menuAction()->setVisible(_active); //setDisabled(!_active);//setVisible(_active);
-		_menu_item->menuAction()->setDisabled(!_active);
-
-//	if(_menu_item!=NULL && _active && !_menu_item->menuAction()->isVisible())
-//		_menu_item->menuAction()->setVisible(true); //setDisabled(!_active);//
-//	else if(_menu_item!=NULL && !_active && _menu_item->menuAction()->isVisible())
-//		_menu_item->menuAction()->setVisible(false);
-//	//if(!_active) _menu_item->hide();
-
-}
-
-void MainWindow::enable_menu_item_slot(QAction *_menu_item, bool _active)
-{
-//interface.print_on_sr("menu coloring slot");
-
-//	if(_menu_item!=NULL && _active && !_menu_item->isVisible())
-//		_menu_item->setVisible(true); //setDisabled(!_active);//
-//	else if(_menu_item!=NULL && !_active && _menu_item->isVisible())
-//		_menu_item->setVisible(false);
-	if (_menu_item != NULL
-	)
-		_menu_item->setDisabled(!_active); //
 }
 
 void MainWindow::ui_notification_slot()
