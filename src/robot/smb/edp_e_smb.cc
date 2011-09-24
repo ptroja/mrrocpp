@@ -104,7 +104,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		case lib::smb::FESTO: {
 			msg->message("FESTO");
 			lib::smb::festo_command_td festo_command;
+
 			memcpy(&festo_command, &(ecp_edp_cbuffer.festo_command), sizeof(festo_command));
+
+			ss << festo_command.leg[2];
+
+			msg->message(ss.str().c_str());
 		}
 			break;
 		default:
