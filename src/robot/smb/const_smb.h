@@ -24,6 +24,15 @@ namespace smb {
 const robot_name_t ROBOT_NAME = "smb";
 
 /*!
+ * @brief SwarmItFix Mobile Base leg position variants from all legs point of view
+ * @ingroup smb
+ */
+enum ALL_LEGS_VARIANT
+{
+	ALL_DOWN, ALL_UP, ONE_UP_TWO_DOWN, TWO_UP_ONE_DOWN
+};
+
+/*!
  * @brief SwarmItFix Mobile Base EDP command buffer variant enum
  * @ingroup smb
  */

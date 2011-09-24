@@ -35,6 +35,38 @@ private:
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
+	lib::smb::ALL_LEGS_VARIANT current_state, next_state;
+
+	/*!
+	 * \brief festo command variant in move_arm
+	 */
+	void festo_command();
+
+	/*!
+	 * \brief festo command all_down variant in move_arm
+	 */
+	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command one_up_two_down variant in move_arm
+	 */
+	void festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_all_up(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo reply in test_mode
+	 */
+	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
+
 protected:
 
 	lib::smb::cbuffer ecp_edp_cbuffer;

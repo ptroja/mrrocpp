@@ -227,6 +227,8 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 		robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.set();
 		robot->ui_ecp_robot->execute_motion();
 
+		init();
+
 	} // end try
 	CATCH_SECTION_UI_PTR
 
