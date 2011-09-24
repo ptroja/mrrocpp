@@ -139,11 +139,15 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		// Create epos objects according to CAN ID-mapping.
 		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
 
-		// TODO - odczytac current_state
-		// current_state = next_state =
+		// TODO - odczytac current_legs_state
+		// current_legs_state = next_legs_state =
+
+		// do poprawy
+		is_base_positioned_to_move_legs = true;
 
 	} else {
-		current_state = next_state = lib::smb::ALL_UP;
+		current_legs_state = next_legs_state = lib::smb::ALL_UP;
+		is_base_positioned_to_move_legs = true;
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
@@ -170,8 +174,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	// the previous next_state becomes currrent_state
-	current_state = next_state;
+	// the previous next_legs_state becomes currrent_state
+	current_legs_state = next_legs_state;
 
 	switch (ecp_edp_cbuffer.variant)
 	{
@@ -181,6 +185,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			ss << ecp_edp_cbuffer.motor_pos[1];
 
 			msg->message(ss.str().c_str());
+
+			if (current_legs_state == lib::smb::TWO_UP_ONE_DOWN) {
+				// you can move the leg rotation motor
+
+			}
+
+			if (current_legs_state == lib::smb::ALL_DOWN) {
+				// you can move the spkmm roration motor
+
+			}
 
 		}
 			break;
@@ -195,7 +209,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			break;
 
 		case lib::smb::FESTO: {
-			festo_command();
+			if (is_base_positioned_to_move_legs) {
+				festo_command();
+			}
 		}
 			break;
 		default:
@@ -221,7 +237,7 @@ void effector::festo_command()
 		msg->message(ss.str().c_str());
 	}
 
-	// determine next_state by counting numebr of legs to be up
+	// determine next_legs_state by counting numebr of legs to be up
 	int number_of_legs_up = 0;
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		if (festo_command.leg[i] == lib::smb::UP) {
@@ -233,26 +249,26 @@ void effector::festo_command()
 	switch (number_of_legs_up)
 	{
 		case 0:
-			next_state = lib::smb::ALL_DOWN;
+			next_legs_state = lib::smb::ALL_DOWN;
 			break;
 		case 1:
-			next_state = lib::smb::ONE_UP_TWO_DOWN;
+			next_legs_state = lib::smb::ONE_UP_TWO_DOWN;
 			break;
 		case 2:
-			next_state = lib::smb::TWO_UP_ONE_DOWN;
+			next_legs_state = lib::smb::TWO_UP_ONE_DOWN;
 			break;
 		case 3:
-			next_state = lib::smb::ALL_UP;
+			next_legs_state = lib::smb::ALL_UP;
 			break;
 		default:
 			break;
 
 	}
 
-	// checks if the next_state is valid taking into account current_state
+	// checks if the next_legs_state is valid taking into account current_legs_state
 	// and prepares detailed command for festo hardware
 
-	switch (next_state)
+	switch (next_legs_state)
 	{
 		case lib::smb::ALL_DOWN:
 			festo_command_all_down(festo_command);
@@ -275,7 +291,7 @@ void effector::festo_command()
 
 void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 {
-	switch (current_state)
+	switch (current_legs_state)
 	{
 		case lib::smb::ALL_DOWN:
 			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
@@ -302,7 +318,7 @@ void effector::festo_command_one_up_two_down(lib::smb::festo_command_td& festo_c
 
 void effector::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command)
 {
-	switch (current_state)
+	switch (current_legs_state)
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);
@@ -322,7 +338,7 @@ void effector::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_c
 
 void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
 {
-	switch (current_state)
+	switch (current_legs_state)
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);

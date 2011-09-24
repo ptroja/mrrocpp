@@ -35,7 +35,11 @@ private:
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
-	lib::smb::ALL_LEGS_VARIANT current_state, next_state;
+	// state of the legs
+	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
+
+	// state of the legs rotation
+	bool is_base_positioned_to_move_legs;
 
 	/*!
 	 * \brief festo command variant in move_arm
