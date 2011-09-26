@@ -1512,6 +1512,12 @@ E</string>
       </property>
       <item>
        <widget class="QPushButton" name="pushButton_read">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>read</string>
         </property>
@@ -1526,6 +1532,12 @@ E</string>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_stop">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>STOP</string>
         </property>
@@ -1533,6 +1545,12 @@ E</string>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_execute_all">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>execute all</string>
         </property>
