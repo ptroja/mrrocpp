@@ -15,6 +15,8 @@
 
 #include "wgt_smb_command.h"
 
+#include "robot/smb/const_smb.h"
+
 namespace Ui {
 class MenuBar;
 class MenuBarAction;
@@ -40,6 +42,9 @@ class UiRobot : public common::UiRobot
 Q_OBJECT
 
 public:
+
+	double current_pos[lib::smb::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::smb::NUM_OF_SERVOS]; // pozycja zadana
 
 	EcpRobot *ui_ecp_robot;
 

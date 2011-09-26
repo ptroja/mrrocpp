@@ -161,6 +161,58 @@ void wgt_smb_command::timer_slot()
 
 }
 
+int wgt_smb_command::get_desired_position()
+{
+
+	if (robot->state.edp.pid != -1) {
+
+		if (robot->state.edp.is_synchronised) {
+
+			for (int i = 0; i < robot->number_of_servos; i++) {
+				robot->desired_pos[i] = doubleSpinBox_m_absolute_Vector[i]->value();
+			}
+		} else {
+
+			for (int i = 0; i < robot->number_of_servos; i++) {
+				robot->desired_pos[i] = 0.0;
+			}
+		}
+	}
+	return 1;
+}
+
+int wgt_smb_command::move_it()
+{
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+
+		if (robot->state.edp.pid != -1) {
+
+			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			/*
+			 motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			 motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+			 motion_variant = lib::epos::SYNC_POLYNOMIAL;
+			 motion_variant = lib::epos::OPERATIONAL;
+			 */
+			robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+
+			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
+				for (int i = 0; i < robot->number_of_servos; i++) {
+					doubleSpinBox_m_absolute_Vector[i]->setValue(robot->desired_pos[i]);
+				}
+
+				init();
+			}
+		} // end if (robot->state.edp.pid!=-1)
+	} // end try
+
+	CATCH_SECTION_UI_PTR
+
+	return 1;
+}
+
 // buttons callbacks
 
 void wgt_smb_command::on_pushButton_fl_execute_clicked()
@@ -194,7 +246,8 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 
 void wgt_smb_command::on_pushButton_m_execute_clicked()
 {
-
+	get_desired_position();
+	move_it();
 }
 
 void wgt_smb_command::on_pushButton_execute_all_clicked()
@@ -220,22 +273,30 @@ void wgt_smb_command::on_pushButton_ms_copy_clicked()
 
 void wgt_smb_command::on_pushButton_ml_left_clicked()
 {
-	init();
+	get_desired_position();
+	robot->desired_pos[0] -= doubleSpinBox_m_relative_Vector[0]->value();
+	move_it();
 }
 
 void wgt_smb_command::on_pushButton_ml_rigth_clicked()
 {
-	init();
+	get_desired_position();
+	robot->desired_pos[0] += doubleSpinBox_m_relative_Vector[0]->value();
+	move_it();
 }
 
 void wgt_smb_command::on_pushButton_ms_left_clicked()
 {
-	init();
+	get_desired_position();
+	robot->desired_pos[1] -= doubleSpinBox_m_relative_Vector[1]->value();
+	move_it();
 }
 
 void wgt_smb_command::on_pushButton_ms_rigth_clicked()
 {
-	init();
+	get_desired_position();
+	robot->desired_pos[1] += doubleSpinBox_m_relative_Vector[1]->value();
+	move_it();
 }
 
 void wgt_smb_command::on_pushButton_stop_clicked()

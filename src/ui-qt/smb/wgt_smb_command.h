@@ -56,6 +56,9 @@ private:
 
 	int synchro_depended_widgets_disable(bool _set_disabled);
 
+	int get_desired_position();
+	int move_it();
+
 	QTimer *timer;
 
 signals:

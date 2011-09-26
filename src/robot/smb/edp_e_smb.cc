@@ -89,6 +89,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	{
 		case lib::smb::POSE: {
 			msg->message("POSE");
+
+			ss << ecp_edp_cbuffer.motor_pos[1];
+
+			msg->message(ss.str().c_str());
+
 		}
 			break;
 		case lib::smb::QUICKSTOP: {
