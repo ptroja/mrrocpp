@@ -26,9 +26,6 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 	checkBox_m_mip_Vector.append(ui.checkBox_ms_mip);
 
-	checkBox_m_no_Vector.append(ui.checkBox_ml_no);
-	checkBox_m_no_Vector.append(ui.checkBox_ms_no);
-
 	radioButton_fl_no_Vector.append(ui.radioButton_fl1_no);
 	radioButton_fl_no_Vector.append(ui.radioButton_fl2_no);
 	radioButton_fl_no_Vector.append(ui.radioButton_fl3_no);
