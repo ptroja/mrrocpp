@@ -521,21 +521,21 @@ std::vector <double> coordinates(axes_num); //vector of read coordinates
 
 	for (i = 0; i < number_of_poses; i++) {
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> v[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> a[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> coordinates[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
