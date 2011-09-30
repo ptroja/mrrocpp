@@ -225,16 +225,6 @@ namespace mrrocpp {
                             return true;
                         }
 
-                        /*private:
-                                void get_double_array_from_vector(std::vector<double> vector, double * double_array) {
-                                        double new_double_array[vector.size()];
-
-                                        for (int i = 0; i < vector.size(); i++) {
-                                                new_double_array[i] = vector[i];
-                                        }
-
-                                        double_array = new_double_array;
-                                }*/
                     };
 
                 } // namespace velocity_profile_calculator

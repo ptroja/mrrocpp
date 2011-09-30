@@ -25,7 +25,7 @@ namespace trajectory_interpolator {
  * @author rtulwin
  * @ingroup generators
  */
-class constant_velocity_interpolator: public trajectory_interpolator<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
+class constant_velocity_interpolator : public trajectory_interpolator<ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose> {
 public:
 	/**
 	 * Constructor.
