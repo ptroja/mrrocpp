@@ -11,9 +11,12 @@
 #include "robot/canopen/gateway_epos_usb.h"
 
 #include "cpv.h"
+#include "../maxon/epos.h"
 
 using namespace mrrocpp::edp::canopen;
 using namespace mrrocpp::edp::festo;
+using namespace mrrocpp::edp::maxon;
+
 using namespace std;
 
 #define FESTO_C1_GROUP 1
@@ -74,6 +77,10 @@ int main(int argc, char *argv[])
 
 	try {
 		gateway.open();
+
+		epos node(gateway, 8);
+
+		std::cout << "epos digital inputs = " << (int) node.readDInput() << std::endl;
 
 		U32 DeviceType = cpv10.readDeviceType();
 		printf("Device type = 0x%08X\n", DeviceType);
