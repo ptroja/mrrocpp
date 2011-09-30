@@ -7,6 +7,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <bitset>
 
 #include "robot/canopen/gateway_epos_usb.h"
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 
 		epos node(gateway, 8);
 
-		std::cout << "epos digital inputs = " << (int) node.readDInput() << std::endl;
+		std::bitset <16> epos_digits;
 
 		U32 DeviceType = cpv10.readDeviceType();
 		printf("Device type = 0x%08X\n", DeviceType);
@@ -104,15 +105,18 @@ int main(int argc, char *argv[])
 			cpv10.writeOutputs(2, 0x00);
 			sleep(2);
 			// Move the pistons up
-			cpv10.writeOutputs(FESTO_H1_GROUP, FESTO_H1_BIT);
+			cpv10.writeOutputs(FESTO_CY31_GROUP, FESTO_CY31_BIT);
 			sleep(3);
-			/*
-			 cpv10.writeOutputs(1, 0x00);
-			 cpv10.writeOutputs(2, 0x00);
-			 sleep(2);
-			 cpv10.writeOutputs(FESTO_CY32_GROUP, FESTO_CY32_BIT);
-			 sleep(5);
-			 */
+			epos_digits = node.readDInput();
+			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
+
+			cpv10.writeOutputs(1, 0x00);
+			cpv10.writeOutputs(2, 0x00);
+			sleep(2);
+			cpv10.writeOutputs(FESTO_CY32_GROUP, FESTO_CY32_BIT);
+			sleep(5);
+			epos_digits = node.readDInput();
+			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
 			cpv10.writeOutputs(1, 0x00);
 			cpv10.writeOutputs(2, 0x00);
 		}
