@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <iostream>
+#include <bitset>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -6,7 +8,8 @@
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "robot/smb/edp_e_smb.h"
+#include "edp_e_smb.h"
+
 #include "base/edp/reader.h"
 // Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
@@ -14,7 +17,59 @@
 #include "base/edp/vis_server.h"
 
 #include "base/lib/exception.h"
+using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::exception;
+using namespace std;
+
+#define FESTO_C1_GROUP 1
+#define FESTO_C1_BIT (1<<0)
+
+#define FESTO_C2_GROUP 2
+#define FESTO_C2_BIT (1<<1)
+
+#define FESTO_C3_GROUP 2
+#define FESTO_C3_BIT (1<<0)
+
+#define FESTO_CY11_GROUP 1
+#define FESTO_CY11_BIT (1<<3)
+
+#define FESTO_CY12_GROUP 1
+#define FESTO_CY12_BIT (1<<2)
+
+#define FESTO_CY21_GROUP 1
+#define FESTO_CY21_BIT (1<<5)
+
+#define FESTO_CY22_GROUP 1
+#define FESTO_CY22_BIT (1<<4)
+
+#define FESTO_CY31_GROUP 1
+#define FESTO_CY31_BIT (1<<7)
+
+#define FESTO_CY32_GROUP 1
+#define FESTO_CY32_BIT (1<<6)
+
+#define FESTO_CH1_GROUP 2
+#define FESTO_CH1_BIT (1<<5)
+
+#define FESTO_CH2_GROUP 2
+#define FESTO_CH2_BIT (1<<3)
+
+#define FESTO_CH3_GROUP 2
+#define FESTO_CH3_BIT (1<<4)
+
+#define FESTO_A1_GROUP 1
+#define FESTO_A1_BIT (1<<1)
+
+#define FESTO_A2_GROUP 2
+#define FESTO_A2_BIT (1<<2)
+
+#define FESTO_A3_GROUP 2
+#define FESTO_A3_BIT (1<<7)
+
+#define FESTO_H1_GROUP 2
+#define FESTO_H1_BIT (1<<6)
+
+const uint8_t nodeId = 10;
 
 namespace mrrocpp {
 namespace edp {
@@ -68,6 +123,24 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	if (!robot_test_mode) {
+		// Create gateway object.
+		if (this->config.exists("can_iface")) {
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
+
+		// Connect to the gateway.
+		gateway->open();
+
+		// Create epos objects according to CAN ID-mapping.
+		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, nodeId);
+
+	}
+
 }
 
 void effector::synchronise(void)

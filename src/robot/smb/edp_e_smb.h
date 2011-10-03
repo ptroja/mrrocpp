@@ -11,7 +11,11 @@
 #define __EDP_E_SMB_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/smb/const_smb.h"
+#include "const_smb.h"
+#include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
+#include "../festo/cpv.h"
+#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -24,6 +28,13 @@ namespace smb {
  */
 class effector : public common::motor_driven_effector
 {
+private:
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! Digitial_input axis
+	boost::shared_ptr <maxon::epos> epos_di_node;
+
 protected:
 
 	lib::smb::cbuffer ecp_edp_cbuffer;

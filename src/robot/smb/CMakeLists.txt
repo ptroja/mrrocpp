@@ -4,7 +4,7 @@ add_executable(edp_smb1
 	edp_e_smb.cc
 )
 
-target_link_libraries(edp_smb1 kinematicssmb edp
+target_link_libraries(edp_smb1 epos festo kinematicssmb edp
 	${COMMON_LIBRARIES})
 	
 add_executable(edp_smb2
@@ -12,7 +12,7 @@ add_executable(edp_smb2
 	edp_e_smb.cc
 )
 
-target_link_libraries(edp_smb2 kinematicssmb edp
+target_link_libraries(edp_smb2 epos festo kinematicssmb edp
 	${COMMON_LIBRARIES})
 	
 		
