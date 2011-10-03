@@ -188,6 +188,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			ss << festo_command.leg[2];
 
 			msg->message(ss.str().c_str());
+
+			if (robot_test_mode) {
+
+			}
 		}
 			break;
 		default:
@@ -239,7 +243,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = epos_digits[2 * i + 10];
 			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = epos_digits[2 * i + 11];
 		}
-		std::cout << "epos digital inputs = " << epos_digits << std::endl;
+		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}
 
 	reply.servo_step = step_counter;
