@@ -2,16 +2,16 @@
  * cpv_test.cc
  *
  *  Created on: Sep 17, 2011
- *      Author: ptroja
+ *      Author: ptroja and yoyek
  */
 
 #include <cstdio>
 #include <iostream>
 #include <bitset>
 
-#include "robot/canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_epos_usb.h"
 
-#include "cpv.h"
+#include "../festo/cpv.h"
 #include "../maxon/epos.h"
 
 using namespace mrrocpp::edp::canopen;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 			cpv10.writeOutputs(2, 0x00);
 			sleep(2);
 			// Move the pistons up
-			cpv10.writeOutputs(FESTO_CY31_GROUP, FESTO_CY31_BIT);
+			cpv10.writeOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
 			sleep(3);
 			epos_digits = node.readDInput();
 			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 			cpv10.writeOutputs(1, 0x00);
 			cpv10.writeOutputs(2, 0x00);
 			sleep(2);
-			cpv10.writeOutputs(FESTO_CY32_GROUP, FESTO_CY32_BIT);
+			cpv10.writeOutputs(FESTO_CY22_GROUP, FESTO_CY22_BIT);
 			sleep(5);
 			epos_digits = node.readDInput();
 			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
