@@ -137,7 +137,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, nodeId);
+		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
 
 	}
 
@@ -205,34 +205,42 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf(" GET ARM\n");
 	//	flushall();
 	static int licznikaaa = (-11);
+	if (robot_test_mode) {
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		ss << "get_arm_position: " << licznikaaa;
+		msg->message(ss.str().c_str());
+		//	printf("%s\n", ss.str().c_str());
 
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
+		edp_ecp_rbuffer.epos_controller[1].position = licznikaaa;
 
-	edp_ecp_rbuffer.epos_controller[1].position = licznikaaa;
+		edp_ecp_rbuffer.multi_leg_reply.leg[1].is_down = true;
+		edp_ecp_rbuffer.multi_leg_reply.leg[1].is_up = false;
+		edp_ecp_rbuffer.multi_leg_reply.leg[2].is_down = true;
+		edp_ecp_rbuffer.multi_leg_reply.leg[2].is_up = false;
 
-	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_down = true;
-	edp_ecp_rbuffer.multi_leg_reply.leg[1].is_up = false;
-	edp_ecp_rbuffer.multi_leg_reply.leg[2].is_down = true;
-	edp_ecp_rbuffer.multi_leg_reply.leg[2].is_up = false;
-
-	if (licznikaaa < 10) {
-		for (int i = 0; i < number_of_servos; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+		if (licznikaaa < 10) {
+			for (int i = 0; i < number_of_servos; i++) {
+				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = true;
+			}
+			edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
+			edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = false;
+		} else {
+			for (int i = 0; i < number_of_servos; i++) {
+				edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+			}
+			edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
+			edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = true;
 		}
-		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
-		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = false;
+
+		licznikaaa++;
 	} else {
-		for (int i = 0; i < number_of_servos; i++) {
-			edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+		std::bitset <16> epos_digits = epos_di_node->readDInput();
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = epos_digits[2 * i + 10];
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = epos_digits[2 * i + 11];
 		}
-		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_down = true;
-		edp_ecp_rbuffer.multi_leg_reply.leg[0].is_up = true;
+		std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}
-
-	licznikaaa++;
 
 	reply.servo_step = step_counter;
 }
