@@ -21,6 +21,24 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
+class festo_and_inputs
+{
+private:
+
+public:
+	festo_and_inputs();
+	~festo_and_inputs();
+
+	bool is_upper_halotron_avtive(int leg_number);
+	bool is_lower_halotron_avtive(int leg_number);
+	bool is_attached(int leg_number);
+
+	void set_detach(int leg_number, bool value);
+	void set_move_up(int leg_number, bool value);
+	void set_move_down(int leg_number, bool value);
+	void set_clean(int leg_number, bool value);
+};
+
 /*!
  * \brief class of EDP SwarmItFix mobile base
  *

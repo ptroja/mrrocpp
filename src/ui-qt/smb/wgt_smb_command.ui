@@ -109,7 +109,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QWidget" name="widget" native="true">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -120,13 +120,7 @@ p, li { white-space: pre-wrap; }
                </size>
               </property>
               <layout class="QGridLayout" name="gridLayout">
-               <property name="margin">
-                <number>3</number>
-               </property>
-               <property name="spacing">
-                <number>3</number>
-               </property>
-               <item row="0" column="0" colspan="2">
+               <item row="0" column="0" colspan="3">
                 <widget class="QLabel" name="label_8">
                  <property name="text">
                   <string>STATE</string>
@@ -136,7 +130,7 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
+               <item row="1" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
                   <string>up</string>
@@ -146,10 +140,20 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item row="1" column="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
                   <string>down</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>attached</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -170,7 +174,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QWidget" name="widget_2" native="true">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -268,7 +272,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_3">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -329,6 +333,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl1_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -343,7 +366,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_4">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -371,6 +394,12 @@ p, li { white-space: pre-wrap; }
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>30</width>
+                   <height>30</height>
+                  </size>
+                 </property>
                  <property name="checked">
                   <bool>true</bool>
                  </property>
@@ -378,6 +407,12 @@ p, li { white-space: pre-wrap; }
                </item>
                <item>
                 <widget class="QRadioButton" name="radioButton_fl1_down">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -386,6 +421,12 @@ p, li { white-space: pre-wrap; }
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
                  </property>
                 </widget>
                </item>
@@ -443,7 +484,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_6">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -504,6 +545,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl2_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -518,7 +578,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_7">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -618,7 +678,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_9">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -679,6 +739,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl3_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -693,7 +772,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_10">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
