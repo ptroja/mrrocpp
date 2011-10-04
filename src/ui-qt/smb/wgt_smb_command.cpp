@@ -23,6 +23,10 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	checkBox_fl_down_Vector.append(ui.checkBox_fl2_down);
 	checkBox_fl_down_Vector.append(ui.checkBox_fl3_down);
 
+	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
+	checkBox_fl_attached_Vector.append(ui.checkBox_fl2_attached);
+	checkBox_fl_attached_Vector.append(ui.checkBox_fl3_attached);
+
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 	checkBox_m_mip_Vector.append(ui.checkBox_ms_mip);
 
@@ -111,6 +115,7 @@ int wgt_smb_command::init()
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
 					checkBox_fl_down_Vector[i]->setChecked(mlr.leg[i].is_down);
+					checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
 				}
 
 				for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
