@@ -1,6 +1,7 @@
 if(ROBOT_SMB)
 add_executable(edp_smb1
 	edp_e_smb1.cc
+	festo_and_inputs.cc
 	edp_e_smb.cc
 )
 
@@ -9,6 +10,7 @@ target_link_libraries(edp_smb1 epos festo kinematicssmb edp
 	
 add_executable(edp_smb2
 	edp_e_smb2.cc
+	festo_and_inputs.cc
 	edp_e_smb.cc
 )
 

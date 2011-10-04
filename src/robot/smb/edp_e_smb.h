@@ -3,7 +3,7 @@
  * \brief File containing the declaration of edp::smb::effector class.
  *
  * \author yoyek
- * \date 2009
+ * \date 2011
  *
  */
 
@@ -12,6 +12,7 @@
 
 #include "base/edp/edp_e_motor_driven.h"
 #include "const_smb.h"
+#include "festo_and_inputs.h"
 #include "../canopen/gateway_epos_usb.h"
 #include "../canopen/gateway_socketcan.h"
 #include "../festo/cpv.h"
@@ -21,23 +22,7 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-class festo_and_inputs
-{
-private:
-
-public:
-	festo_and_inputs();
-	~festo_and_inputs();
-
-	bool is_upper_halotron_avtive(int leg_number);
-	bool is_lower_halotron_avtive(int leg_number);
-	bool is_attached(int leg_number);
-
-	void set_detach(int leg_number, bool value);
-	void set_move_up(int leg_number, bool value);
-	void set_move_down(int leg_number, bool value);
-	void set_clean(int leg_number, bool value);
-};
+class festo_and_inputs;
 
 /*!
  * \brief class of EDP SwarmItFix mobile base
@@ -88,6 +73,11 @@ private:
 	 * \brief festo reply in test_mode
 	 */
 	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief pointer to festo_and_inputs class
+	 */
+	festo_and_inputs* fi;
 
 protected:
 

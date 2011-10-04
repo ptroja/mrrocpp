@@ -9,6 +9,7 @@
 
 // Klasa edp_irp6ot_effector.
 #include "edp_e_smb.h"
+#include "festo_and_inputs.h"
 
 #include "base/edp/reader.h"
 // Kinematyki.
@@ -424,6 +425,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
+	fi = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
