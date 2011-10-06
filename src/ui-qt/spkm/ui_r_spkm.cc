@@ -33,9 +33,9 @@ namespace spkm {
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 		common::UiRobot(_interface, _robot_name, lib::spkm::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-	add_wgt <wgt_spkm_inc>(WGT_SPKM_INC, "Spkm inc");
-	add_wgt <wgt_spkm_int>(WGT_SPKM_INT, "Spkm int");
-	add_wgt <wgt_spkm_ext>(WGT_SPKM_EXT, "Spkm ext");
+//	add_wgt <wgt_spkm_inc>(WGT_SPKM_INC, "Spkm inc");
+//	add_wgt <wgt_spkm_int>(WGT_SPKM_INT, "Spkm int");
+//	add_wgt <wgt_spkm_ext>(WGT_SPKM_EXT, "Spkm ext");
 
 }
 

@@ -58,7 +58,7 @@ class pin_rise : public common::generator::generator
 private:
 	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
 
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_multi_pin_insertion_data_port;
+	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
 
@@ -77,7 +77,7 @@ class pin_lower : public common::generator::generator
 private:
 	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
 
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_multi_pin_insertion_data_port;
+	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
 
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
 

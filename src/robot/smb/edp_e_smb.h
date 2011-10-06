@@ -3,7 +3,7 @@
  * \brief File containing the declaration of edp::smb::effector class.
  *
  * \author yoyek
- * \date 2009
+ * \date 2011
  *
  */
 
@@ -11,11 +11,18 @@
 #define __EDP_E_SMB_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/smb/const_smb.h"
+#include "const_smb.h"
+#include "festo_and_inputs.h"
+#include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
+#include "../festo/cpv.h"
+#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace smb {
+
+class festo_and_inputs;
 
 /*!
  * \brief class of EDP SwarmItFix mobile base
@@ -24,6 +31,54 @@ namespace smb {
  */
 class effector : public common::motor_driven_effector
 {
+private:
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! Digitial_input axis
+	boost::shared_ptr <maxon::epos> epos_di_node;
+
+	// state of the legs
+	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
+
+	// state of the legs rotation
+	bool is_base_positioned_to_move_legs;
+
+	/*!
+	 * \brief festo command variant in move_arm
+	 */
+	void festo_command();
+
+	/*!
+	 * \brief festo command all_down variant in move_arm
+	 */
+	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command one_up_two_down variant in move_arm
+	 */
+	void festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_all_up(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo reply in test_mode
+	 */
+	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief pointer to festo_and_inputs class
+	 */
+	festo_and_inputs* fi;
+
 protected:
 
 	lib::smb::cbuffer ecp_edp_cbuffer;
@@ -71,6 +126,13 @@ public:
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
+	 * @brief motors synchronization
+	 *
+	 * This method synchronizes motors of the robots.
+	 */
+	void synchronise();
+
+	/*!
 	 * \brief method to choose master_order variant
 	 *
 	 * IHere the single thread variant is chosen
@@ -96,6 +158,5 @@ public:
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

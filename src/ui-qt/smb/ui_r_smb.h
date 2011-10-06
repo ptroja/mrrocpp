@@ -13,7 +13,11 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 
-namespace Ui{
+#include "wgt_smb_command.h"
+
+#include "robot/smb/const_smb.h"
+
+namespace Ui {
 class MenuBar;
 class MenuBarAction;
 }
@@ -33,12 +37,14 @@ class EcpRobot;
 //
 //
 
-
 class UiRobot : public common::UiRobot
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
+
+	double current_pos[lib::smb::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::smb::NUM_OF_SERVOS]; // pozycja zadana
 
 	EcpRobot *ui_ecp_robot;
 
@@ -48,13 +54,20 @@ public:
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise();
+	int synchronise_int();
+
+	int execute_clear_fault();
+	int execute_stop_motor();
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
-
-
 	void setup_menubar();
+
+private:
+	QAction *action_Synchronisation;
+	QAction *action_command;
+	QAction *action_Clear_Fault;
 };
 
 }
