@@ -31,6 +31,9 @@ class festo_and_inputs;
  */
 class effector : public common::motor_driven_effector
 {
+
+	friend class festo_and_inputs;
+
 private:
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
@@ -77,7 +80,7 @@ private:
 	/*!
 	 * \brief pointer to festo_and_inputs class
 	 */
-	festo_and_inputs* fi;
+	festo_and_inputs* fai;
 
 protected:
 

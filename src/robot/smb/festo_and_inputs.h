@@ -11,6 +11,8 @@
 #define __FESTO_AND_INPUTS_H
 
 #include "base/edp/edp_e_motor_driven.h"
+#include <bitset>
+
 #include "const_smb.h"
 
 #include "../canopen/gateway_epos_usb.h"
@@ -26,8 +28,12 @@ class effector;
 
 class festo_and_inputs
 {
+
+	friend class effector;
+
 private:
 	effector &master;
+	std::bitset <16> epos_inputs;
 
 public:
 	festo_and_inputs(effector &_master);

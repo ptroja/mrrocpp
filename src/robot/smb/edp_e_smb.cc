@@ -402,10 +402,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		licznikaaa++;
 	} else {
-		std::bitset <16> epos_digits = epos_di_node->readDInput();
+		fai->read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = epos_digits[2 * i + 10];
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = epos_digits[2 * i + 11];
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->epos_digits[2 * i + 10];
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->epos_digits[2 * i + 11];
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}
@@ -425,7 +425,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	fi = new festo_and_inputs(*this);
+	fai = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }

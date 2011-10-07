@@ -69,7 +69,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 
 void festo_and_inputs::read_state()
 {
-
+	epos_inputs = master.epos_di_node->readDInput();
 }
 
 void festo_and_inputs::execute_command()
