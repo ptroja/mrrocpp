@@ -38,6 +38,15 @@ private:
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
+	//! PKM axes.
+	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
+
+	//! Names of PKM axes.
+	boost::array <std::string, mrrocpp::lib::smb::NUM_OF_SERVOS> axesNames;
+
+	//! Axes container.
+	boost::array <maxon::epos *, mrrocpp::lib::smb::NUM_OF_SERVOS> axes;
+
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
@@ -46,6 +55,13 @@ private:
 
 	// state of the legs rotation
 	bool is_base_positioned_to_move_legs;
+
+	/*!
+	 * \brief Method responsible for control of the rotational motors (motor controlling the legs and SPKM rotation).
+	 * \author tkornuta
+	 */
+	void rotational_motors_command();
+
 
 	/*!
 	 * \brief festo command variant in move_arm
@@ -97,6 +113,12 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
+
+	/*!
+	 * @brief Method sets initial values of motor and joint positions.
+	 * @note The number_of_servos should be previously set.
+	 */
+	void reset_variables();
 
 	/*!
 	 * \brief class constructor

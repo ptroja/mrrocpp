@@ -38,10 +38,20 @@ void model::check_joints(const lib::JointArray & q) const
 
 void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
+	// Compute desired motor positions for both axes.
+	for (int i = 0; i < 2; ++i) {
+		local_current_joints[i] = local_current_motor_pos[i] *2; // TODO: insert real parameters instead "2".
+	}
 }
 
 void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
+
+	// Compute desired motor positions for both axes.
+	for (int i = 0; i < 2; ++i) {
+		local_desired_motor_pos_new[i] = local_desired_joints[i] /2; // TODO: insert real parameters instead "2".
+	}
+
 }
 
 } // namespace smb
