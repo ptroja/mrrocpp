@@ -24,7 +24,7 @@ festo_and_inputs::festo_and_inputs(effector &_master, boost::shared_ptr <maxon::
 		festo::cpv> _cpv10) :
 		master(_master), epos_di_node(_epos_di_node), cpv10(_cpv10)
 {
-
+	read_state();
 }
 
 festo_and_inputs::~festo_and_inputs()
@@ -73,14 +73,17 @@ void festo_and_inputs::read_state()
 	epos_inputs = epos_di_node->readDInput();
 
 	group_one_current_output = cpv10->readOutputs(1);
-	std::cout << "group_one_current_output 1= " << group_one_current_output << std::endl;
+	group_one_desired_output = group_one_current_output;
+	std::cout << "group_one_desired_output 1= " << group_one_desired_output << std::endl;
 	group_two_current_output = cpv10->readOutputs(2);
 	std::cout << "group_two_current_output 1= " << group_two_current_output << std::endl;
+	group_two_desired_output = group_two_current_output;
 }
 
 void festo_and_inputs::execute_command()
 {
-
+	cpv10->writeOutputs(1, (uint8_t) group_one_desired_output.to_ulong());
+	cpv10->writeOutputs(2, (uint8_t) group_two_desired_output.to_ulong());
 }
 
 } // namespace smb

@@ -40,7 +40,8 @@ private:
 	boost::shared_ptr <festo::cpv> cpv10;
 
 	std::bitset <16> epos_inputs;
-	std::bitset <8> group_one_current_output, group_two_current_output;
+	std::bitset <8> group_one_current_output, group_two_current_output, group_one_desired_output,
+			group_two_desired_output;
 
 public:
 	festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node, boost::shared_ptr <festo::cpv> _cpv10);
