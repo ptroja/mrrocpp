@@ -244,18 +244,18 @@ void effector::rotational_motors_command()
 
 
 	if (current_legs_state != lib::smb::TWO_UP_ONE_DOWN) {
-		// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
+		// Only in this state the control of both motors (legs and SPKM rotations) is possible.
 		// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
 
 		// Check the difference between current and desired values.
-		// Check motors.
 		if((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR) &&
 				(current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state));
-		// Check joints.
+			// Check motors.
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state));
 		else if((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT) &&
 				(current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state));
+			// Check joints.
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state));
 	}
 
 	// Interpret command according to the pose specification.
@@ -419,7 +419,7 @@ void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_DOWN:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_DOWN));
+			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
 			break;
 		case lib::smb::ONE_UP_TWO_DOWN:
 			festo_test_mode_set_reply(festo_command);
@@ -452,7 +452,7 @@ void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 
 void effector::festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command)
 {
-	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_UP_TWO_DOWN));
+	throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
 }
 
 void effector::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command)
@@ -467,7 +467,7 @@ void effector::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_c
 		case lib::smb::ONE_UP_TWO_DOWN:
 		case lib::smb::TWO_UP_ONE_DOWN:
 		case lib::smb::ALL_UP:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
 			break;
 		default:
 			break;
@@ -491,7 +491,7 @@ void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
 		case lib::smb::ONE_UP_TWO_DOWN:
 		case lib::smb::TWO_UP_ONE_DOWN:
 		case lib::smb::ALL_UP:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_UP));
+			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
 			break;
 		default:
 			break;
