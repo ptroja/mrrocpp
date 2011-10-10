@@ -140,6 +140,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		// Create epos objects according to CAN ID-mapping.
 		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
 
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+
 		// TODO - odczytac current_legs_state
 		// current_legs_state = next_legs_state =
 
@@ -425,7 +427,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	fai = new festo_and_inputs(*this, epos_di_node);
+	fai = new festo_and_inputs(*this, epos_di_node, cpv10);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
