@@ -289,6 +289,7 @@ void effector::festo_command()
 			break;
 
 	}
+	fai->execute_command();
 
 }
 
@@ -301,12 +302,26 @@ void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 			break;
 		case lib::smb::ONE_UP_TWO_DOWN:
 			festo_test_mode_set_reply(festo_command);
+
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
+
 			break;
 		case lib::smb::TWO_UP_ONE_DOWN:
 			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
 			break;
 		case lib::smb::ALL_UP:
 			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
 			break;
 		default:
 			break;
@@ -345,7 +360,10 @@ void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);
-
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, false);
+				fai->set_move_up(i + 1, true);
+			}
 		}
 
 			break;
