@@ -20,53 +20,7 @@ using namespace mrrocpp::edp::maxon;
 
 using namespace std;
 
-#define FESTO_C1_GROUP 1
-#define FESTO_C1_BIT (1<<0)
 
-#define FESTO_C2_GROUP 2
-#define FESTO_C2_BIT (1<<1)
-
-#define FESTO_C3_GROUP 2
-#define FESTO_C3_BIT (1<<0)
-
-#define FESTO_CY11_GROUP 1
-#define FESTO_CY11_BIT (1<<3)
-
-#define FESTO_CY12_GROUP 1
-#define FESTO_CY12_BIT (1<<2)
-
-#define FESTO_CY21_GROUP 1
-#define FESTO_CY21_BIT (1<<5)
-
-#define FESTO_CY22_GROUP 1
-#define FESTO_CY22_BIT (1<<4)
-
-#define FESTO_CY31_GROUP 1
-#define FESTO_CY31_BIT (1<<7)
-
-#define FESTO_CY32_GROUP 1
-#define FESTO_CY32_BIT (1<<6)
-
-#define FESTO_CH1_GROUP 2
-#define FESTO_CH1_BIT (1<<5)
-
-#define FESTO_CH2_GROUP 2
-#define FESTO_CH2_BIT (1<<3)
-
-#define FESTO_CH3_GROUP 2
-#define FESTO_CH3_BIT (1<<4)
-
-#define FESTO_A1_GROUP 1
-#define FESTO_A1_BIT (1<<1)
-
-#define FESTO_A2_GROUP 2
-#define FESTO_A2_BIT (1<<2)
-
-#define FESTO_A3_GROUP 2
-#define FESTO_A3_BIT (1<<7)
-
-#define FESTO_H1_GROUP 2
-#define FESTO_H1_BIT (1<<6)
 
 const uint8_t nodeId = 10;
 

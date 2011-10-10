@@ -142,6 +142,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		// Create epos objects according to CAN ID-mapping.
 		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
 
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+
 		// TODO - odczytac current_legs_state
 		// current_legs_state = next_legs_state =
 
@@ -408,6 +410,7 @@ void effector::festo_command()
 			break;
 
 	}
+	fai->execute_command();
 
 }
 
@@ -420,12 +423,26 @@ void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 			break;
 		case lib::smb::ONE_UP_TWO_DOWN:
 			festo_test_mode_set_reply(festo_command);
+
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
+
 			break;
 		case lib::smb::TWO_UP_ONE_DOWN:
 			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
 			break;
 		case lib::smb::ALL_UP:
 			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, true);
+				fai->set_move_up(i + 1, false);
+			}
 			break;
 		default:
 			break;
@@ -464,6 +481,10 @@ void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				fai->set_move_down(i + 1, false);
+				fai->set_move_up(i + 1, true);
+			}
 		}
 
 			break;
@@ -549,8 +570,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	if (!robot_test_mode) {
 		fai->read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->epos_inputs[2 * i + 10];
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->epos_inputs[2 * i + 11];
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->is_lower_halotron_avtive(i);
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->is_upper_halotron_avtive(i);
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = fai->is_attached(i);
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}
@@ -570,7 +592,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	fai = new festo_and_inputs(*this);
+	fai = new festo_and_inputs(*this, epos_di_node, cpv10);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }

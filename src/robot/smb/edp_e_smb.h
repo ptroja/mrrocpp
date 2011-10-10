@@ -50,6 +50,9 @@ private:
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
+	//! festo shared ptr
+	boost::shared_ptr <festo::cpv> cpv10;
+
 	// state of the legs
 	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
 
