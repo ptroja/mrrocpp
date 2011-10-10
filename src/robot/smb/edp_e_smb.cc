@@ -345,6 +345,7 @@ void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);
+
 		}
 
 			break;
@@ -406,8 +407,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	} else {
 		fai->read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->epos_inputs[2 * i + 10];
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->epos_inputs[2 * i + 11];
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->is_lower_halotron_avtive(i);
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->is_upper_halotron_avtive(i);
+			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = fai->is_attached(i);
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}

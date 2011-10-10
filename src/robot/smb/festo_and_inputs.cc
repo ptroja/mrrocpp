@@ -53,18 +53,18 @@ festo_and_inputs::~festo_and_inputs()
 
 bool festo_and_inputs::is_upper_halotron_avtive(int leg_number)
 {
-
-	return true;
+	return epos_inputs[2 * leg_number + 11];
 }
 
 bool festo_and_inputs::is_lower_halotron_avtive(int leg_number)
 {
-	return true;
+	return epos_inputs[2 * leg_number + 10];
 }
 
 bool festo_and_inputs::is_attached(int leg_number)
 {
-	return true;
+	// to be implemented
+	return false;
 }
 
 void festo_and_inputs::set_detach(int leg_number, bool value)
