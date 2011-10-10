@@ -226,6 +226,9 @@ public:
 	/*! \brief read digital input polarity mask */
 	UNSIGNED16 readDInputPolarity();
 
+	/*! \brief read digital input*/
+	UNSIGNED16 readDInput();
+
 	/*! \brief set home switch polarity */
 	void setHomePolarity(int pol);
 

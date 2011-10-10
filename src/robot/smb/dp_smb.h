@@ -64,6 +64,7 @@ struct leg_reply
 {
 	bool is_up;
 	bool is_down;
+	bool is_attached;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -74,6 +75,7 @@ struct leg_reply
 	{
 		ar & is_up;
 		ar & is_down;
+		ar & is_attached;
 	}
 
 }__attribute__((__packed__));
@@ -84,7 +86,7 @@ struct leg_reply
  */
 enum FESTO_LEG
 {
-	NO_COMMAND, UP, DOWN, DETACH
+	UP, DOWN
 };
 // namespace mrrocpp
 
