@@ -28,12 +28,20 @@ typedef boost::error_info <struct pose_specification_, mrrocpp::lib::smb::POSE_S
 //! Pose specification type.
 typedef boost::error_info <struct current_state_, mrrocpp::lib::smb::ALL_LEGS_VARIANT> current_state;
 
+//! Pose specification type.
+typedef boost::error_info <struct festo_command_, mrrocpp::lib::smb::ALL_LEGS_VARIANT> retrieved_festo_command;
+
 /*!
  * \brief Exception thrown in case of invalid command received in given SMB state.
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_invalid_command_in_given_state, "Invalid command in given SMB state")
 
+/*!
+ * \brief Exception thrown in case of receiving of command requiring the clamps rotation when it is prohibited.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_clamps_rotation_prohibited_in_given_state, "Clamps rotation prohibited in given state")
 
 
 
