@@ -425,7 +425,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	fai = new festo_and_inputs(*this);
+	fai = new festo_and_inputs(*this, epos_di_node);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }

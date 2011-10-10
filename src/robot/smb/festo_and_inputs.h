@@ -33,10 +33,14 @@ class festo_and_inputs
 
 private:
 	effector &master;
+
+	boost::shared_ptr <maxon::epos> epos_di_node;
+
 	std::bitset <16> epos_inputs;
+	uint8_t group_one_current_output, group_two_current_output;
 
 public:
-	festo_and_inputs(effector &_master);
+	festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node);
 	~festo_and_inputs();
 
 	bool is_upper_halotron_avtive(int leg_number);

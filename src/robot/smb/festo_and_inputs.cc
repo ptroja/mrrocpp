@@ -20,8 +20,8 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-festo_and_inputs::festo_and_inputs(effector &_master) :
-		master(_master)
+festo_and_inputs::festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node) :
+		master(_master), epos_di_node(_epos_di_node)
 {
 
 }
@@ -69,7 +69,11 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 
 void festo_and_inputs::read_state()
 {
-	epos_inputs = master.epos_di_node->readDInput();
+	epos_inputs = epos_di_node->readDInput();
+	/*
+	 group_one_current_output = readOutputs
+	 group_two_current_output = readOutputs
+	 */
 }
 
 void festo_and_inputs::execute_command()
