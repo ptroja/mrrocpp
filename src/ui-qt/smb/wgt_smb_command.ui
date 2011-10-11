@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>572</width>
-    <height>385</height>
+    <height>394</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1223,7 +1223,17 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_left">
@@ -1239,7 +1249,17 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_rigth">
@@ -1405,7 +1425,17 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_left">
@@ -1421,7 +1451,17 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_rigth">
