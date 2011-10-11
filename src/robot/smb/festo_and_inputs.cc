@@ -175,6 +175,42 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 	}
 }
 
+void festo_and_inputs::determine_legs_state()
+{
+	if (!(master.robot_test_mode)) {
+
+		int number_of_legs_up = 0;
+
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+			if (is_upper_halotron_avtive(i)) {
+				number_of_legs_up++;
+			}
+		}
+
+		switch (number_of_legs_up)
+		{
+			case 0:
+
+				current_legs_state = lib::smb::ALL_DOWN;
+				break;
+			case 1:
+				current_legs_state = lib::smb::ONE_UP_TWO_DOWN;
+				break;
+			case 2:
+				current_legs_state = lib::smb::TWO_UP_ONE_DOWN;
+				break;
+			case 3:
+				current_legs_state = lib::smb::ALL_UP;
+				break;
+			default:
+				break;
+
+		}
+
+	}
+}
+
 void festo_and_inputs::read_state()
 {
 	if (!(master.robot_test_mode)) {

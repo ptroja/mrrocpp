@@ -364,6 +364,7 @@ void effector::festo_command()
 	switch (number_of_legs_up)
 	{
 		case 0:
+
 			fai->next_legs_state = lib::smb::ALL_DOWN;
 			break;
 		case 1:
@@ -589,6 +590,9 @@ void effector::create_threads()
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
 	if (!robot_test_mode) {
+
+		fai->determine_legs_state();
+		fai->next_legs_state = fai->current_legs_state;
 
 		// do poprawy
 		is_base_positioned_to_move_legs = true;

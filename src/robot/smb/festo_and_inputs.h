@@ -49,6 +49,8 @@ public:
 	festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node, boost::shared_ptr <festo::cpv> _cpv10);
 	~festo_and_inputs();
 
+	void determine_legs_state();
+
 	bool is_upper_halotron_avtive(int leg_number);
 	bool is_lower_halotron_avtive(int leg_number);
 	bool is_attached(int leg_number);
