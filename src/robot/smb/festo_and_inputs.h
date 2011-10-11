@@ -83,8 +83,8 @@ public:
 	 */
 	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
 
-	bool is_upper_halotron_avtive(int leg_number);
-	bool is_lower_halotron_avtive(int leg_number);
+	bool is_upper_halotron_active(int leg_number);
+	bool is_lower_halotron_active(int leg_number);
 	bool is_attached(int leg_number);
 
 	void set_detach(int leg_number, bool value);

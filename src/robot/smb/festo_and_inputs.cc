@@ -24,7 +24,7 @@ namespace smb {
 festo_and_inputs::festo_and_inputs(effector &_master) :
 		master(_master), epos_di_node(master.epos_di_node), cpv10(master.cpv10), robot_test_mode(master.robot_test_mode)
 {
-	if (!(master.robot_test_mode)) {
+	if (!(robot_test_mode)) {
 		festo::U32 DeviceType = cpv10->readDeviceType();
 		printf("Device type = 0x%08X\n", DeviceType);
 
@@ -51,12 +51,12 @@ festo_and_inputs::~festo_and_inputs()
 
 }
 
-bool festo_and_inputs::is_upper_halotron_avtive(int leg_number)
+bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
 	return epos_inputs[2 * leg_number + 11];
 }
 
-bool festo_and_inputs::is_lower_halotron_avtive(int leg_number)
+bool festo_and_inputs::is_lower_halotron_active(int leg_number)
 {
 	return epos_inputs[2 * leg_number + 10];
 }
@@ -177,13 +177,13 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 
 void festo_and_inputs::determine_legs_state()
 {
-	if (!(master.robot_test_mode)) {
+	if (!(robot_test_mode)) {
 
 		int number_of_legs_up = 0;
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-			if (is_upper_halotron_avtive(i)) {
+			if (is_upper_halotron_active(i)) {
 				number_of_legs_up++;
 			}
 		}
@@ -222,7 +222,7 @@ void festo_and_inputs::festo_command()
 
 	memcpy(&festo_command, &(master.ecp_edp_cbuffer.festo_command), sizeof(festo_command));
 
-	if (master.robot_test_mode) {
+	if (robot_test_mode) {
 		ss << festo_command.leg[2];
 
 		master.msg->message(ss.str().c_str());
@@ -278,9 +278,7 @@ void festo_and_inputs::festo_command()
 			break;
 
 	}
-	if (!master.robot_test_mode) {
-		execute_command();
-	}
+
 }
 
 void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_command)
@@ -297,6 +295,9 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
+			if (!robot_test_mode) {
+				execute_command();
+			}
 
 			break;
 		case lib::smb::TWO_UP_ONE_DOWN:
@@ -305,12 +306,18 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
+			if (!robot_test_mode) {
+				execute_command();
+			}
 			break;
 		case lib::smb::ALL_UP:
 			festo_test_mode_set_reply(festo_command);
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
+			}
+			if (!robot_test_mode) {
+				execute_command();
 			}
 			break;
 		default:
@@ -354,6 +361,9 @@ void festo_and_inputs::festo_command_all_up(lib::smb::festo_command_td& festo_co
 				set_move_down(i + 1, false);
 				set_move_up(i + 1, true);
 			}
+			if (!robot_test_mode) {
+				execute_command();
+			}
 		}
 
 			break;
@@ -386,7 +396,7 @@ void festo_and_inputs::festo_test_mode_set_reply(lib::smb::festo_command_td& fes
 
 void festo_and_inputs::read_state()
 {
-	if (!(master.robot_test_mode)) {
+	if (!(robot_test_mode)) {
 		epos_inputs = epos_di_node->readDInput();
 
 		current_output[1] = cpv10->readOutputs(1);
