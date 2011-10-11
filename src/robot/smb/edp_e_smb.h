@@ -53,9 +53,6 @@ private:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
-	// state of the legs
-	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
-
 	// state of the legs rotation
 	bool is_base_positioned_to_move_legs;
 
@@ -64,7 +61,6 @@ private:
 	 * \author tkornuta
 	 */
 	void rotational_motors_command();
-
 
 	/*!
 	 * \brief festo command variant in move_arm
@@ -143,6 +139,9 @@ public:
 	 * it chooses the single thread variant from the motor_driven_effector
 	 */
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
+
+	lib::smb::ALL_LEGS_VARIANT current_legs_state(void);
+	lib::smb::ALL_LEGS_VARIANT next_legs_state(void);
 
 	/*!
 	 * \brief method to get position of the motors or joints

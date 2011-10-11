@@ -39,6 +39,9 @@ private:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
+	// state of the legs
+	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
+
 	std::bitset <16> epos_inputs;
 	std::bitset <8> current_output[3], desired_output[3];
 
