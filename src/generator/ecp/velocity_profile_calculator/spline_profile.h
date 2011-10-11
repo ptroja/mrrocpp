@@ -35,12 +35,49 @@ class spline_profile : public velocity_profile<ecp_mp::common::trajectory_pose::
                 virtual ~spline_profile();
                 /**
                  * Calculates time for the given velocity and distance for a single axis in a single pose.
-                 * @param it iterator to the list of positions
+                 * @param it iterator to the list odouble timef positions
                  * @param i number of axis for which the calculations are performed
                  * @return true if the time was calculated successfully (if all of the necessary information was provided)
                  */
                 bool calculate_time(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
-};
+                /**
+                 * Method generates consecutive powers of a number.
+                 * @param x number to be powered
+                 * @param power maximal power
+                 * @param powers vector to be filled in with powers x
+                 */
+                inline void generatePowers(int power, double x, double * powers);
+                /**
+                 *
+                 * @param it
+                 * @param i
+                 * @param pos1
+                 * @param pos2
+                 */
+                bool calculate_linear_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
+                /**
+                 *
+                 * @param it
+                 * @param i
+                 * @param pos1
+                 * @param vel1
+                 * @param pos2
+                 * @param vel2
+                 */
+                bool calculate_cubic_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
+                /**
+                 *
+                 * @param it
+                 * @param i
+                 * @param pos1
+                 * @param vel1
+                 * @param acc1
+                 * @param pos2
+                 * @param vel2
+                 * @param acc2
+                 */
+                bool calculate_quintic_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
+            };
 
 } // namespace velocity_profile_calculator
 } // namespace generator

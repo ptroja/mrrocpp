@@ -356,16 +356,16 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 
 bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
 	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
-		std::cout<<"JOINT"<<std::endl;
+                //std::cout<<"JOINT"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
-		std::cout<<"MOTOR"<<std::endl;
+                //std::cout<<"MOTOR"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  motor_max_velocity, motor_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
-		std::cout<<"ANGLE_AXIS"<<std::endl;
+                //std::cout<<"ANGLE_AXIS"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  angle_axis_max_velocity, angle_axis_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
-		std::cout<<"EULER7"<<std::endl;
+                //std::cout<<"EULER7"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
 	} else {
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -389,7 +389,6 @@ bool newsmooth::load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 }
 
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
-
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
 

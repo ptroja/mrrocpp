@@ -564,12 +564,15 @@ public:
 	 */
 	virtual void reset()
 	{
-		pose_vector.clear();
+                sr_ecp_msg.message("reset 1");
+                pose_vector.clear();
+                sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
+                sr_ecp_msg.message("reset 3");
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;
-		sr_ecp_msg.message("Generator reset");
+                sr_ecp_msg.message("Generator reset");
 	}
 	/**
 	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.

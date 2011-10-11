@@ -54,6 +54,34 @@ public:
 
 private:
         /**
+         * Method generates consecutive powers of a number.
+         * @param x number to be powered
+         * @param power maximal power
+         * @param powers vector to be filled in with powers x
+         */
+        inline void generatePowers(int power, double x, double * powers);
+        /**
+         *
+         * @param it
+         * @param i
+         * @param time
+         */
+        double calculate_position(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
+        /**
+         *
+         * @param it
+         * @param i
+         * @param time
+         */
+        double calculate_velocity(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
+        /**
+         *
+         * @param it
+         * @param i
+         * @param time
+         */
+        double calculate_acceleration(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
+        /**
          * Method generates a single relative type coordinate.
          * @param node_counter number of current node (macrostep)
          * @param it iterator to the list of positions

@@ -69,7 +69,7 @@ namespace mrrocpp {
                         }
 
                         /**
-                         * Calculates distance for all of the axes in a single trajectory pose and sets the directions of movements of absolute type.
+                         * Calculates http://allegro.pl/gniazdo-jack-6-3mm-metal-mono-jck229-neutrik-i1850074806.htmldistance for all of the axes in a single trajectory pose and sets the directions of movements of absolute type.
                          * @param it iterator to the list of positions
                          * @return true if the set of the distance and direction was successful (usually is if the vectors start_position and coordinates were initiated and filled in before)
                          */

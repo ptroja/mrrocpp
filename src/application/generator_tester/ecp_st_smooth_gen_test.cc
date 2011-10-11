@@ -550,7 +550,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 
         //network_path += "../src/application/generator_tester/jerky.trj";
         //sgenangle->load_trajectory_from_file(network_path.c_str());
-        sgenangle->load_trajectory_from_file("/Users/rafal/PW/mrrocpp/wut-rcprg/src/application/generator_tester/jerky.trj");
+        //sgenangle->load_trajectory_from_file("/Users/rafal/PW/mrrocpp/wut-rcprg/src/application/generator_tester/jerky.trj");
 
 	if (track) {
 		coordinates1[0] = 0.534987;

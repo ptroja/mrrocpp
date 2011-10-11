@@ -102,7 +102,7 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
 
 void sub_task_spline_gen_test::conditional_execution()
 {
-/*
+
         std::vector <double> coordinates1(6);//postument
         std::vector <double> coordinates2(7);//track
         std::vector <double> coordinates3(7);//polycrank
@@ -111,7 +111,7 @@ void sub_task_spline_gen_test::conditional_execution()
         // JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
         cvgenjoint->reset();
-        cvgenjoint->set_absolute();
+        /*cvgenjoint->set_absolute();
 
         if (track) {
                 coordinates2[0] = 0.1;
@@ -209,10 +209,9 @@ void sub_task_spline_gen_test::conditional_execution()
         if (cvgenjoint->calculate_interpolate()) {
                 cvgenjoint->Move();
         }
-        // JOINT ABSOLUTE END
+        // JOINT ABSOLUTE END*/
 
-
-        // JOINT RELATIVE
+        /*// JOINT RELATIVE
         sr_ecp_msg.message("Joint relative");
         cvgenjoint->reset();
         cvgenjoint->set_relative();
@@ -661,8 +660,8 @@ void sub_task_spline_gen_test::conditional_execution()
         if (cvgenangle->calculate_interpolate()) {
                 cvgenangle->Move();
         }
-        // ANGLE AXIS RELATIVE END
-*/
+        // ANGLE AXIS RELATIVE END*/
+
 }
 
 sub_task_spline_gen_test::~sub_task_spline_gen_test()

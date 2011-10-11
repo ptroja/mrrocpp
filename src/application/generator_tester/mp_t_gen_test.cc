@@ -64,7 +64,7 @@ void gen_test::main_task_algorithm(void)
 	// Track
 
         if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
-		//------------------- CONSTANT VELOCITY GENERATOR -------------------
+                /*//------------------- CONSTANT VELOCITY GENERATOR -------------------
 
                 set_next_ecp_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
@@ -76,7 +76,7 @@ void gen_test::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
 		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-		//------------------- SMOOTH GENERATOR END -------------------
+                //------------------- SMOOTH GENERATOR END -------------------*/
 
                 //------------------- SPLINE GENERATOR -------------------
                 set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST, (int) 5, "", 0, lib::irp6ot_m::ROBOT_NAME);
@@ -87,7 +87,7 @@ void gen_test::main_task_algorithm(void)
 
 	// Postument
 
-        if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+        /*if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
 		//------------------- CONSTANT VELOCITY GENERATOR -------------------
                 set_next_ecp_state(ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST, (int) 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 
@@ -149,7 +149,7 @@ void gen_test::main_task_algorithm(void)
 
                 wait_for_task_termination(false, 1, lib::conveyor::ROBOT_NAME.c_str());
                 //------------------- SPLINE GENERATOR END -------------------
-	}
+        }*/
 
 	sr_ecp_msg->message("Gen Test END");
 
