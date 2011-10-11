@@ -24,54 +24,6 @@
 
 using namespace std;
 
-#define FESTO_C1_GROUP 1
-#define FESTO_C1_BIT (1<<0)
-
-#define FESTO_C2_GROUP 2
-#define FESTO_C2_BIT (1<<1)
-
-#define FESTO_C3_GROUP 2
-#define FESTO_C3_BIT (1<<0)
-
-#define FESTO_CY11_GROUP 1
-#define FESTO_CY11_BIT (1<<3)
-
-#define FESTO_CY12_GROUP 1
-#define FESTO_CY12_BIT (1<<2)
-
-#define FESTO_CY21_GROUP 1
-#define FESTO_CY21_BIT (1<<5)
-
-#define FESTO_CY22_GROUP 1
-#define FESTO_CY22_BIT (1<<4)
-
-#define FESTO_CY31_GROUP 1
-#define FESTO_CY31_BIT (1<<7)
-
-#define FESTO_CY32_GROUP 1
-#define FESTO_CY32_BIT (1<<6)
-
-#define FESTO_CH1_GROUP 2
-#define FESTO_CH1_BIT (1<<5)
-
-#define FESTO_CH2_GROUP 2
-#define FESTO_CH2_BIT (1<<3)
-
-#define FESTO_CH3_GROUP 2
-#define FESTO_CH3_BIT (1<<4)
-
-#define FESTO_A1_GROUP 1
-#define FESTO_A1_BIT (1<<1)
-
-#define FESTO_A2_GROUP 2
-#define FESTO_A2_BIT (1<<2)
-
-#define FESTO_A3_GROUP 2
-#define FESTO_A3_BIT (1<<7)
-
-#define FESTO_H1_GROUP 2
-#define FESTO_H1_BIT (1<<6)
-
 const uint8_t nodeId = 10;
 
 namespace mrrocpp {
@@ -211,7 +163,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 			case lib::smb::FESTO: {
 				if (is_base_positioned_to_move_legs) {
-					festo_command();
+					fai->festo_command();
 				}
 			}
 				break;
@@ -336,179 +288,6 @@ void effector::rotational_motors_command()
 }
 
 /*--------------------------------------------------------------------------*/
-
-void effector::festo_command()
-{
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
-	msg->message("FESTO");
-	lib::smb::festo_command_td festo_command;
-
-	memcpy(&festo_command, &(ecp_edp_cbuffer.festo_command), sizeof(festo_command));
-
-	if (robot_test_mode) {
-		ss << festo_command.leg[2];
-
-		msg->message(ss.str().c_str());
-	}
-
-	// determine next_legs_state by counting numebr of legs to be up
-	int number_of_legs_up = 0;
-	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		if (festo_command.leg[i] == lib::smb::UP) {
-			number_of_legs_up++;
-		}
-
-	}
-
-	switch (number_of_legs_up)
-	{
-		case 0:
-
-			fai->next_legs_state = lib::smb::ALL_DOWN;
-			break;
-		case 1:
-			fai->next_legs_state = lib::smb::ONE_UP_TWO_DOWN;
-			break;
-		case 2:
-			fai->next_legs_state = lib::smb::TWO_UP_ONE_DOWN;
-			break;
-		case 3:
-			fai->next_legs_state = lib::smb::ALL_UP;
-			break;
-		default:
-			break;
-
-	}
-
-	// checks if the next_legs_state is valid taking into account current_legs_state
-	// and prepares detailed command for festo hardware
-
-	switch (next_legs_state())
-	{
-		case lib::smb::ALL_DOWN:
-			festo_command_all_down(festo_command);
-			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-			festo_command_one_up_two_down(festo_command);
-			break;
-		case lib::smb::TWO_UP_ONE_DOWN:
-			festo_command_two_up_one_down(festo_command);
-			break;
-		case lib::smb::ALL_UP:
-			festo_command_all_up(festo_command);
-			break;
-		default:
-			break;
-
-	}
-	if (!robot_test_mode) {
-		fai->execute_command();
-	}
-}
-
-void effector::festo_command_all_down(lib::smb::festo_command_td& festo_command)
-{
-	switch (current_legs_state())
-	{
-		case lib::smb::ALL_DOWN:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state()) << retrieved_festo_command(lib::smb::ALL_DOWN));
-			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-			festo_test_mode_set_reply(festo_command);
-
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				fai->set_move_down(i + 1, true);
-				fai->set_move_up(i + 1, false);
-			}
-
-			break;
-		case lib::smb::TWO_UP_ONE_DOWN:
-			festo_test_mode_set_reply(festo_command);
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				fai->set_move_down(i + 1, true);
-				fai->set_move_up(i + 1, false);
-			}
-			break;
-		case lib::smb::ALL_UP:
-			festo_test_mode_set_reply(festo_command);
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				fai->set_move_down(i + 1, true);
-				fai->set_move_up(i + 1, false);
-			}
-			break;
-		default:
-			break;
-
-	}
-}
-
-void effector::festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command)
-{
-	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state()) << retrieved_festo_command(lib::smb::ONE_UP_TWO_DOWN));
-}
-
-void effector::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command)
-{
-	switch (current_legs_state())
-	{
-		case lib::smb::ALL_DOWN: {
-			festo_test_mode_set_reply(festo_command);
-		}
-
-			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state()) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
-			break;
-		default:
-			break;
-
-	}
-}
-
-void effector::festo_command_all_up(lib::smb::festo_command_td& festo_command)
-{
-	switch (current_legs_state())
-	{
-		case lib::smb::ALL_DOWN: {
-			festo_test_mode_set_reply(festo_command);
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				fai->set_move_down(i + 1, false);
-				fai->set_move_up(i + 1, true);
-			}
-		}
-
-			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state()) << retrieved_festo_command(lib::smb::ALL_UP));
-			break;
-		default:
-			break;
-
-	}
-}
-
-void effector::festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command)
-{
-	if (robot_test_mode) {
-		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			if (festo_command.leg[i] == lib::smb::UP) {
-				edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
-				edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
-			} else {
-				edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = false;
-				edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = true;
-			}
-
-		}
-	}
-}
-
-/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -585,7 +364,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 
 void effector::create_threads()
 {
-	fai = new festo_and_inputs(*this, epos_di_node, cpv10);
+	fai = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 

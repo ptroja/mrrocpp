@@ -45,11 +45,43 @@ private:
 	std::bitset <16> epos_inputs;
 	std::bitset <8> current_output[3], desired_output[3];
 
+	bool robot_test_mode;
+
 public:
-	festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node, boost::shared_ptr <festo::cpv> _cpv10);
+	festo_and_inputs(effector &_master);
 	~festo_and_inputs();
 
 	void determine_legs_state();
+
+	/*!
+	 * \brief festo command variant in move_arm
+	 */
+	void festo_command();
+
+	/*!
+	 * \brief festo command all_down variant in move_arm
+	 */
+	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command one_up_two_down variant in move_arm
+	 */
+	void festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo command two_up_one_down variant in move_arm
+	 */
+	void festo_command_all_up(lib::smb::festo_command_td& festo_command);
+
+	/*!
+	 * \brief festo reply in test_mode
+	 */
+	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
 
 	bool is_upper_halotron_avtive(int leg_number);
 	bool is_lower_halotron_avtive(int leg_number);

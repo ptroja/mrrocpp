@@ -15,14 +15,14 @@
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
 #include "festo_and_inputs.h"
+#include "exceptions.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-festo_and_inputs::festo_and_inputs(effector &_master, boost::shared_ptr <maxon::epos> _epos_di_node, boost::shared_ptr <
-		festo::cpv> _cpv10) :
-		master(_master), epos_di_node(_epos_di_node), cpv10(_cpv10)
+festo_and_inputs::festo_and_inputs(effector &_master) :
+		master(_master), epos_di_node(master.epos_di_node), cpv10(master.cpv10), robot_test_mode(master.robot_test_mode)
 {
 	if (!(master.robot_test_mode)) {
 		festo::U32 DeviceType = cpv10->readDeviceType();
@@ -208,6 +208,179 @@ void festo_and_inputs::determine_legs_state()
 
 		}
 
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+
+void festo_and_inputs::festo_command()
+{
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	master.msg->message("FESTO");
+	lib::smb::festo_command_td festo_command;
+
+	memcpy(&festo_command, &(master.ecp_edp_cbuffer.festo_command), sizeof(festo_command));
+
+	if (master.robot_test_mode) {
+		ss << festo_command.leg[2];
+
+		master.msg->message(ss.str().c_str());
+	}
+
+	// determine next_legs_state by counting numebr of legs to be up
+	int number_of_legs_up = 0;
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		if (festo_command.leg[i] == lib::smb::UP) {
+			number_of_legs_up++;
+		}
+
+	}
+
+	switch (number_of_legs_up)
+	{
+		case 0:
+
+			next_legs_state = lib::smb::ALL_DOWN;
+			break;
+		case 1:
+			next_legs_state = lib::smb::ONE_UP_TWO_DOWN;
+			break;
+		case 2:
+			next_legs_state = lib::smb::TWO_UP_ONE_DOWN;
+			break;
+		case 3:
+			next_legs_state = lib::smb::ALL_UP;
+			break;
+		default:
+			break;
+
+	}
+
+	// checks if the next_legs_state is valid taking into account current_legs_state
+	// and prepares detailed command for festo hardware
+
+	switch (next_legs_state)
+	{
+		case lib::smb::ALL_DOWN:
+			festo_command_all_down(festo_command);
+			break;
+		case lib::smb::ONE_UP_TWO_DOWN:
+			festo_command_one_up_two_down(festo_command);
+			break;
+		case lib::smb::TWO_UP_ONE_DOWN:
+			festo_command_two_up_one_down(festo_command);
+			break;
+		case lib::smb::ALL_UP:
+			festo_command_all_up(festo_command);
+			break;
+		default:
+			break;
+
+	}
+	if (!master.robot_test_mode) {
+		execute_command();
+	}
+}
+
+void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_command)
+{
+	switch (current_legs_state)
+	{
+		case lib::smb::ALL_DOWN:
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_DOWN));
+			break;
+		case lib::smb::ONE_UP_TWO_DOWN:
+			festo_test_mode_set_reply(festo_command);
+
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				set_move_down(i + 1, true);
+				set_move_up(i + 1, false);
+			}
+
+			break;
+		case lib::smb::TWO_UP_ONE_DOWN:
+			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				set_move_down(i + 1, true);
+				set_move_up(i + 1, false);
+			}
+			break;
+		case lib::smb::ALL_UP:
+			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				set_move_down(i + 1, true);
+				set_move_up(i + 1, false);
+			}
+			break;
+		default:
+			break;
+
+	}
+}
+
+void festo_and_inputs::festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command)
+{
+	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_UP_TWO_DOWN));
+}
+
+void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command)
+{
+	switch (current_legs_state)
+	{
+		case lib::smb::ALL_DOWN: {
+			festo_test_mode_set_reply(festo_command);
+		}
+
+			break;
+		case lib::smb::ONE_UP_TWO_DOWN:
+		case lib::smb::TWO_UP_ONE_DOWN:
+		case lib::smb::ALL_UP:
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+			break;
+		default:
+			break;
+
+	}
+}
+
+void festo_and_inputs::festo_command_all_up(lib::smb::festo_command_td& festo_command)
+{
+	switch (current_legs_state)
+	{
+		case lib::smb::ALL_DOWN: {
+			festo_test_mode_set_reply(festo_command);
+			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+				set_move_down(i + 1, false);
+				set_move_up(i + 1, true);
+			}
+		}
+
+			break;
+		case lib::smb::ONE_UP_TWO_DOWN:
+		case lib::smb::TWO_UP_ONE_DOWN:
+		case lib::smb::ALL_UP:
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_UP));
+			break;
+		default:
+			break;
+
+	}
+}
+
+void festo_and_inputs::festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command)
+{
+	if (robot_test_mode) {
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			if (festo_command.leg[i] == lib::smb::UP) {
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
+			} else {
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = false;
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = true;
+			}
+
+		}
 	}
 }
 
