@@ -15,6 +15,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_st_go.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,7 +25,8 @@ namespace task {
 class block_move : public common::task::task
 {
 protected:
-	common::generator::tff_gripper_approach* gag;
+	common::generator::tff_gripper_approach* gtga;
+	common::sub_task::gripper_opening* stgo;
 
 public:
 

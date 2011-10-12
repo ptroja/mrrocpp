@@ -21,6 +21,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_mp_st_gripper_opening.h"
 //#include "subtask/ecp_mp_st_bias_edp_force.h"
 
 //#include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -65,9 +66,9 @@ void block_move::main_task_algorithm(void)
 
 	//Tutaj powinno być przekazanie parametru i dojście
 
-	//sr_ecp_msg->message("Rozwarcie szczek");
-	//set_next_ecp_state();
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	sr_ecp_msg->message("Rozwarcie szczek");
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, lib::irp6p_tfg::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
@@ -99,9 +100,9 @@ void block_move::main_task_algorithm(void)
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/build.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-	//sr_ecp_msg->message("Rozwarcie szczek");
-	//set_next_ecp_state();
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	sr_ecp_msg->message("Rozwarcie szczek");
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, lib::irp6p_tfg::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
