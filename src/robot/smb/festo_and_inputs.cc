@@ -183,7 +183,7 @@ void festo_and_inputs::determine_legs_state()
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-			if (is_upper_halotron_active(i)) {
+			if (is_upper_halotron_active(i + 1)) {
 				number_of_legs_up++;
 			}
 		}
@@ -289,10 +289,11 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 	master.msg->message("festo_command_all_down");
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_DOWN:
+		case lib::smb::ALL_DOWN: {
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_DOWN));
+		}
 			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
+		case lib::smb::ONE_UP_TWO_DOWN: {
 			master.msg->message("ONE_UP_TWO_DOWN");
 			festo_test_mode_set_reply(festo_command);
 
@@ -302,9 +303,9 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 			}
 
 			execute_command();
-
+		}
 			break;
-		case lib::smb::TWO_UP_ONE_DOWN:
+		case lib::smb::TWO_UP_ONE_DOWN: {
 			master.msg->message("TWO_UP_ONE_DOWN");
 			festo_test_mode_set_reply(festo_command);
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -313,9 +314,9 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 			}
 
 			execute_command();
-
+		}
 			break;
-		case lib::smb::ALL_UP:
+		case lib::smb::ALL_UP: {
 			master.msg->message("ALL_UP");
 			festo_test_mode_set_reply(festo_command);
 
@@ -325,12 +326,15 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
+			master.msg->message("Move down and wait");
 
 			execute_command();
-			master.msg->message("Move down and wait");
+
 			// waits until all legs are in down position
-			int number_of_legs_up;
+			int number_of_legs_up = 0;
 			while (number_of_legs_up < 3) {
+				master.msg->message("wait iteration");
+				delay(20);
 				number_of_legs_up = 0;
 				read_state();
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -340,6 +344,7 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				}
 			}
 			master.msg->message("wait finished");
+		}
 			break;
 		default:
 			break;
@@ -382,8 +387,9 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 			execute_command();
 
 			// czekaj az sie uniosa
-			int number_of_legs_up;
+			int number_of_legs_up = 0;
 			while (number_of_legs_up < 2) {
+				delay(20);
 				number_of_legs_up = 0;
 				read_state();
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -407,8 +413,9 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 			break;
 		case lib::smb::ONE_UP_TWO_DOWN:
 		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP:
+		case lib::smb::ALL_UP: {
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+		}
 			break;
 		default:
 			break;
