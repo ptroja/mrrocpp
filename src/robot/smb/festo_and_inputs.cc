@@ -286,42 +286,60 @@ void festo_and_inputs::festo_command()
 
 void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 {
+	master.msg->message("festo_command_all_down");
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_DOWN:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_DOWN));
 			break;
 		case lib::smb::ONE_UP_TWO_DOWN:
+			master.msg->message("ONE_UP_TWO_DOWN");
 			festo_test_mode_set_reply(festo_command);
 
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
-			if (!robot_test_mode) {
-				execute_command();
-			}
+
+			execute_command();
 
 			break;
 		case lib::smb::TWO_UP_ONE_DOWN:
+			master.msg->message("TWO_UP_ONE_DOWN");
 			festo_test_mode_set_reply(festo_command);
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
-			if (!robot_test_mode) {
-				execute_command();
-			}
+
+			execute_command();
+
 			break;
 		case lib::smb::ALL_UP:
+			master.msg->message("ALL_UP");
 			festo_test_mode_set_reply(festo_command);
+
+			// moves all legs down and does not detach them !
+
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
-			if (!robot_test_mode) {
-				execute_command();
+
+			execute_command();
+			master.msg->message("Move down and wait");
+			// waits until all legs are in down position
+			int number_of_legs_up;
+			while (number_of_legs_up < 3) {
+				number_of_legs_up = 0;
+				read_state();
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+					if (is_lower_halotron_active(i + 1)) {
+						number_of_legs_up++;
+					}
+				}
 			}
+			master.msg->message("wait finished");
 			break;
 		default:
 			break;
