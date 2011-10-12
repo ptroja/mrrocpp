@@ -458,35 +458,34 @@ int UiRobot::manage_interface()
 	switch (state.edp.state)
 	{
 		case -1:
-			msg->message("-1");
-			//	mw->enable_menu_item(false, 1, robot_menu);
-
 			menuBar->menuRobot->removeAction(robot_menu->menuAction());
 			break;
 		case 0:
-			mw->enable_menu_item(false, 2, EDP_Unload, wgt_robot_process_control_action);
 			menuBar->menuRobot->addAction(robot_menu->menuAction());
-			mw->enable_menu_item(true, 1, EDP_Load);
+			EDP_Unload->setEnabled(false);
+			wgt_robot_process_control_action->setEnabled(false);
+			EDP_Load->setEnabled(true);
 			break;
 		case 1:
 		case 2:
 			menuBar->menuRobot->addAction(robot_menu->menuAction());
-			mw->enable_menu_item(true, 1, wgt_robot_process_control_action);
+			wgt_robot_process_control_action->setEnabled(true);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, EDP_Unload);
-						mw->enable_menu_item(false, 1, EDP_Load);
+						EDP_Load->setEnabled(false);
+						EDP_Unload->setEnabled(true);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
+						EDP_Load->setEnabled(false);
+						EDP_Unload->setEnabled(false);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
@@ -500,8 +499,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
-				mw->enable_menu_item(false, 1, EDP_Load);
+				EDP_Load->setEnabled(false);
+				EDP_Unload->setEnabled(true);
 			}
 			break;
 		default:
