@@ -453,20 +453,24 @@ int UiRobot::move_to_preset_position(int variant)
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
+	Ui::MenuBar *menuBar = mw->getMenuBar();
 
 	switch (state.edp.state)
 	{
 		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
+			msg->message("-1");
+			//	mw->enable_menu_item(false, 1, robot_menu);
+
+			menuBar->menuRobot->removeAction(robot_menu->menuAction());
 			break;
 		case 0:
 			mw->enable_menu_item(false, 2, EDP_Unload, wgt_robot_process_control_action);
-			mw->enable_menu_item(true, 1, robot_menu);
+			menuBar->menuRobot->addAction(robot_menu->menuAction());
 			mw->enable_menu_item(true, 1, EDP_Load);
 			break;
 		case 1:
 		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
+			menuBar->menuRobot->addAction(robot_menu->menuAction());
 			mw->enable_menu_item(true, 1, wgt_robot_process_control_action);
 
 			// jesli robot jest zsynchronizowany
