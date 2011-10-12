@@ -180,12 +180,9 @@ p, li { white-space: pre-wrap; }
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
                <property name="margin">
-                <number>3</number>
+                <number>6</number>
                </property>
-               <property name="spacing">
-                <number>3</number>
-               </property>
-               <item row="0" column="0" colspan="4">
+               <item row="0" column="0" colspan="2">
                 <widget class="QLabel" name="label_10">
                  <property name="minimumSize">
                   <size>
@@ -201,18 +198,27 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="label_12">
+               <item row="1" column="0">
+                <widget class="QPushButton" name="pushButton_fl_all_up">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>27</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>up</string>
                  </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_11">
+               <item row="1" column="1">
+                <widget class="QPushButton" name="pushButton_fl_all_down">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>27</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>down</string>
                  </property>

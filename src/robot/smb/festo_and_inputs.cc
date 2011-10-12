@@ -455,6 +455,19 @@ void festo_and_inputs::read_state()
 	}
 }
 
+void festo_and_inputs::create_reply()
+{
+	if (!robot_test_mode) {
+		read_state();
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = is_lower_halotron_active(i + 1);
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = is_upper_halotron_active(i + 1);
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
+		}
+		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
+	}
+}
+
 void festo_and_inputs::execute_command()
 {
 	if (!robot_test_mode) {

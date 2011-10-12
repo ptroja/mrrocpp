@@ -72,6 +72,8 @@ private slots:
 	// buttons callbacks
 
 	void on_pushButton_fl_execute_clicked();
+	void on_pushButton_fl_all_up_clicked();
+	void on_pushButton_fl_all_down_clicked();
 	void on_pushButton_m_execute_clicked();
 	void on_pushButton_execute_all_clicked();
 	void on_pushButton_stop_clicked();

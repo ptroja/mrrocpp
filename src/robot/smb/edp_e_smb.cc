@@ -339,15 +339,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	}
 
 	// SMB clamps.
-	if (!robot_test_mode) {
-		fai->read_state();
-		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = fai->is_lower_halotron_active(i + 1);
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = fai->is_upper_halotron_active(i + 1);
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = fai->is_attached(i + 1);
-		}
-		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
-	}
+
+	fai->create_reply();
 
 	reply.servo_step = step_counter;
 }

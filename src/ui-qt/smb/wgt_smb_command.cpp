@@ -239,6 +239,24 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 
 }
 
+void wgt_smb_command::on_pushButton_fl_all_up_clicked()
+{
+	// dla kazdej z nog
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		// wybierz wariant
+		radioButton_fl_up_Vector[i]->setChecked(true);
+	}
+}
+
+void wgt_smb_command::on_pushButton_fl_all_down_clicked()
+{
+	// dla kazdej z nog
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		// wybierz wariant
+		radioButton_fl_down_Vector[i]->setChecked(true);
+	}
+}
+
 void wgt_smb_command::on_pushButton_m_execute_clicked()
 {
 	get_desired_position();

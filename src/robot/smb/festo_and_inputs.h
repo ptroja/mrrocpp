@@ -93,6 +93,7 @@ public:
 	void set_clean(int leg_number, bool value);
 
 	void read_state();
+	void create_reply();
 	void execute_command();
 };
 
