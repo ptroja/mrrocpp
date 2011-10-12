@@ -63,6 +63,10 @@ public:
 	 */
 	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
 
+	/*!
+	 * \brief moves all legs that are in the upper position down and detach them
+	 */
+
 	void move_one_or_two_down();
 
 	/*!
