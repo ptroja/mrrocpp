@@ -284,6 +284,48 @@ void festo_and_inputs::festo_command()
 
 }
 
+void festo_and_inputs::move_one_or_two_down()
+{
+	// detach all legs that are up to prepare them to go down
+	// and put them down
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		if (is_upper_halotron_active(i + 1)) {
+			set_move_down(i + 1, true);
+			set_move_up(i + 1, false);
+			set_detach(i + 1, true);
+		}
+	}
+
+	execute_command();
+
+	// waits until all legs go down
+
+	int number_of_legs_up = 0;
+	while (number_of_legs_up < 3) {
+		master.msg->message("wait iteration");
+		delay(20);
+		number_of_legs_up = 0;
+		read_state();
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			if (is_lower_halotron_active(i + 1)) {
+				number_of_legs_up++;
+			}
+		}
+	}
+
+	// wait a while in case the legs are still in motion
+	delay(500);
+
+	// attach legs
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		set_detach(i + 1, false);
+	}
+
+	execute_command();
+}
+
 void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_command)
 {
 	master.msg->message("festo_command_all_down");
@@ -296,24 +338,16 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 		case lib::smb::ONE_UP_TWO_DOWN: {
 			master.msg->message("ONE_UP_TWO_DOWN");
 			festo_test_mode_set_reply(festo_command);
+			move_one_or_two_down();
 
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				set_move_down(i + 1, true);
-				set_move_up(i + 1, false);
-			}
-
-			execute_command();
 		}
 			break;
 		case lib::smb::TWO_UP_ONE_DOWN: {
 			master.msg->message("TWO_UP_ONE_DOWN");
 			festo_test_mode_set_reply(festo_command);
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				set_move_down(i + 1, true);
-				set_move_up(i + 1, false);
-			}
 
-			execute_command();
+			move_one_or_two_down();
+
 		}
 			break;
 		case lib::smb::ALL_UP: {
@@ -326,14 +360,13 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				set_move_down(i + 1, true);
 				set_move_up(i + 1, false);
 			}
-			master.msg->message("Move down and wait");
 
 			execute_command();
 
 			// waits until all legs are in down position
 			int number_of_legs_up = 0;
 			while (number_of_legs_up < 3) {
-				master.msg->message("wait iteration");
+
 				delay(20);
 				number_of_legs_up = 0;
 				read_state();
@@ -343,7 +376,7 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 					}
 				}
 			}
-			master.msg->message("wait finished");
+
 		}
 			break;
 		default:
@@ -429,12 +462,29 @@ void festo_and_inputs::festo_command_all_up(lib::smb::festo_command_td& festo_co
 	{
 		case lib::smb::ALL_DOWN: {
 			festo_test_mode_set_reply(festo_command);
+
+			// move all legs up and do not detach them;
+
 			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 				set_move_down(i + 1, false);
 				set_move_up(i + 1, true);
 			}
 
 			execute_command();
+
+			// waits until all legs are in upper position
+			int number_of_legs_up = 0;
+			while (number_of_legs_up < 3) {
+
+				delay(20);
+				number_of_legs_up = 0;
+				read_state();
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+					if (is_upper_halotron_active(i + 1)) {
+						number_of_legs_up++;
+					}
+				}
+			}
 
 		}
 

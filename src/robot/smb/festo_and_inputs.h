@@ -63,6 +63,8 @@ public:
 	 */
 	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
 
+	void move_one_or_two_down();
+
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
 	 */
