@@ -80,18 +80,9 @@ enum UI_ALL_EDPS_SYNCHRO_STATE
 	UI_ALL_EDPS_ALL_SYNCHRONISED
 };
 
-// -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
-// 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
-
 typedef enum _UI_EDP_STATE
 {
-	UI_EDP_STATE_NOT_KNOWN, // -2
-	UI_EDP_INACTIVE, // -1
-	UI_EDP_OFF, //0
-	UI_EDP_WAITING_TO_START_READER, // 1
-	UI_EDP_WAITING_TO_STOP_READER
-//2
-
+	UI_EDP_STATE_NOT_KNOWN, UI_EDP_INACTIVE, UI_EDP_OFF, UI_EDP_WAITING_TO_START_READER, UI_EDP_WAITING_TO_STOP_READER
 } UI_EDP_STATE;
 
 typedef struct _edp_state_def
@@ -122,8 +113,7 @@ typedef struct
 	std::string network_trigger_attach_point;
 	int node_nr;
 	lib::fd_client_t trigger_fd;
-	int state;
-	int last_state;
+
 } ecp_state_def;
 
 typedef struct
