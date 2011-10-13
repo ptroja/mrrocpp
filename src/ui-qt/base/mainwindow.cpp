@@ -53,13 +53,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	ui->setupUi(this);
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(enable_menu_item_signal(QMenu *, bool)), this, SLOT(enable_menu_item_slot(QMenu *, bool)), Qt::QueuedConnection);
-	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
-	//connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *, bool)), this, SLOT(open_new_window_slot(wgt_base *, bool)), Qt::QueuedConnection);
-	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
-
-	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::irp6ot_m::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::irp6ot_m::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_int_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);

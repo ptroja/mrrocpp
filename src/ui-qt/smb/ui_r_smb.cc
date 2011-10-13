@@ -41,7 +41,7 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)

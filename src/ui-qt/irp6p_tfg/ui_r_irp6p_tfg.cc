@@ -145,7 +145,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	single_motor::UiRobot::manage_interface();
 
 	switch (state.edp.state)

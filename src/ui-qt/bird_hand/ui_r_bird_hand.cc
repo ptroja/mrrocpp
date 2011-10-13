@@ -74,7 +74,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 
 	common::UiRobot::manage_interface();
 
