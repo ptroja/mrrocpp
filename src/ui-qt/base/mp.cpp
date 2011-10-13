@@ -139,7 +139,7 @@ int Mp::MPslay()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+				if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
 					robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 				}
 			}
@@ -167,7 +167,7 @@ int Mp::pulse_start_mp()
 		interface->wgt_pc->process_control_window_init();
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 				{
-					if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+					if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
 						robot_node.second->get_wgt_robot_pc()->process_control_window_init();
 					}
 				}

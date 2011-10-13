@@ -112,7 +112,7 @@ int UiRobot::synchronise_int()
 	try {
 		// dla robota irp6_on_track
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->ecp->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
 		} else {

@@ -142,7 +142,7 @@ int UiRobot::edp_create_int()
 
 	try { // dla bledow robot :: ECP_error
 
-		if (state.edp.state == 0) {
+		if (state.edp.state == UI_EDP_OFF) {
 
 			state.edp.is_synchronised = false;
 
@@ -181,8 +181,6 @@ int UiRobot::edp_create_int()
 						lib::controller_state_t robot_controller_initial_state_tmp;
 
 						ui_get_controler_state(robot_controller_initial_state_tmp);
-
-						//state.edp.state = 1; // edp wlaczone reader czeka na start
 
 						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 					}
@@ -341,7 +339,7 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 
 void UiRobot::edp_create()
 {
-	if (state.edp.state == 0) {
+	if (state.edp.state == UI_EDP_OFF) {
 		create_thread();
 
 		eb.command(boost::bind(&ui::common::UiRobot::edp_create_int, &(*this)));
@@ -412,7 +410,7 @@ void UiRobot::close_edp_connections()
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
-	if (state.edp.state > 0) { // jesli istnieje EDP
+	if (is_edp_loaded()) { // jesli istnieje EDP
 
 		close_edp_connections();
 
@@ -430,7 +428,7 @@ void UiRobot::EDP_slay_int()
 
 bool UiRobot::check_synchronised_and_loaded()
 {
-	return (((state.edp.state > 0) && (state.edp.is_synchronised)));
+	return (((is_edp_loaded()) && (state.edp.is_synchronised)));
 
 }
 
@@ -448,6 +446,11 @@ int UiRobot::move_to_preset_position(int variant)
 {
 
 	return 1;
+}
+
+bool UiRobot::is_edp_loaded()
+{
+	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
 }
 
 int UiRobot::manage_interface()

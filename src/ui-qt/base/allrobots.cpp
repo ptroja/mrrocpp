@@ -439,7 +439,7 @@ bool AllRobots::are_all_active_robots_loaded()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state <= 0)) {
+				if ((robot_node.second->state.is_active) && (!(robot_node.second->is_edp_loaded()))) {
 
 					return false;
 				}
@@ -453,7 +453,7 @@ bool AllRobots::is_any_active_robot_loaded()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+				if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
 					return true;
 				}
 			}
@@ -466,7 +466,7 @@ bool AllRobots::are_all_loaded_robots_synchronised()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.edp.state > 0) && (!(robot_node.second->state.edp.is_synchronised))) {
+				if ((robot_node.second->is_edp_loaded()) && (!(robot_node.second->state.edp.is_synchronised))) {
 
 					return false;
 				}
@@ -479,7 +479,7 @@ bool AllRobots::is_any_loaded_robot_synchronised()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.edp.state > 0) && (robot_node.second->state.edp.is_synchronised)) {
+				if ((robot_node.second->is_edp_loaded()) && (robot_node.second->state.edp.is_synchronised)) {
 					return true;
 				}
 			}

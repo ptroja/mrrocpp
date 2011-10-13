@@ -45,7 +45,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 void UiRobot::edp_create()
 {
-	if (state.edp.state == 0) {
+	if (state.edp.state == common::UI_EDP_OFF) {
 		create_thread();
 
 		eb.command(boost::bind(&ui::bird_hand::UiRobot::edp_create_int, &(*this)));
@@ -74,7 +74,6 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-
 
 	common::UiRobot::manage_interface();
 

@@ -81,12 +81,12 @@ int wgt_robot_process_control::init()
 
 	// Dla irp6_on_track
 
-	if (robot->state.edp.state <= 0) { // edp wylaczone
+	if (!(robot->is_edp_loaded())) { // edp wylaczone
 
-	} else if (robot->state.edp.state == 1) { // edp wlaczone reader czeka na start
+	} else if (robot->state.edp.state == mrrocpp::ui::common::UI_EDP_WAITING_TO_START_READER) { // edp wlaczone reader czeka na start
 		wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 
-	} else if (robot->state.edp.state == 2) { // edp wlaczone reader czeka na stop
+	} else if (robot->state.edp.state == mrrocpp::ui::common::UI_EDP_WAITING_TO_STOP_READER) { // edp wlaczone reader czeka na stop
 		wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 		wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 
