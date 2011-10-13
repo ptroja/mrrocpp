@@ -97,7 +97,7 @@ typedef struct _edp_state_def
 	int node_nr;
 	lib::fd_client_t reader_fd;
 	bool is_synchronised;
-	//! TODO: change from int to EDP_STATE enum
+
 	UI_EDP_STATE state;
 	UI_EDP_STATE last_state;
 
