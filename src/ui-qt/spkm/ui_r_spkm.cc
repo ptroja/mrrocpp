@@ -101,17 +101,19 @@ int UiRobot::manage_interface()
 
 	switch (state.edp.state)
 	{
-		case -1:
+
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 0:
+		case common::UI_EDP_OFF:
 			actionspkm_Clear_Fault->setEnabled(false);
 			menuspkm_Pre_synchro_moves->setEnabled(false);
 			menuspkm_Preset_positions->setEnabled(false);
 			menuspkm_Post_synchro_moves->setEnabled(false);
 			break;
-		case 1:
-		case 2:
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
 			actionspkm_Clear_Fault->setEnabled(true);
 
 			// jesli robot jest zsynchronizowany

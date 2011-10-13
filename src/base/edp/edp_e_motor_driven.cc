@@ -113,9 +113,8 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
@@ -135,8 +134,8 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 
 void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
@@ -191,11 +190,7 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
-	effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
-			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
-			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
-			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
-			number_of_servos(-1)
+		effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR), servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
@@ -213,7 +208,7 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 	float _velocity_limit_global_factor;
 
 	if (config.exists("velocity_limit_global_factor")) {
-		_velocity_limit_global_factor = config.value <float> ("velocity_limit_global_factor");
+		_velocity_limit_global_factor = config.value <float>("velocity_limit_global_factor");
 		if ((_velocity_limit_global_factor > 0) && (_velocity_limit_global_factor <= 1)) {
 			velocity_limit_global_factor = _velocity_limit_global_factor;
 		} else {
@@ -293,12 +288,12 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 			}
 		}
 		catch_nr = 0;
-	}//: try
+	} //: try
 	catch (...) {
 		if ((++catch_nr) == 1)
 			printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
 		ret_val = false;
-	}//: catch
+	} //: catch
 
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
@@ -307,7 +302,7 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 		for (int i = 0; i < number_of_servos; i++) {
 			servo_current_motor_pos[i];
 			servo_current_joints[i];
-		}//: for
+		} //: for
 
 	}
 
@@ -594,7 +589,6 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 
 	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-
 
 	// obliczenia dla ruchu ramienia (silnikami)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -1232,7 +1226,6 @@ void motor_driven_effector::onReaderStopped()
 }
 //#endif
 
-
-} // namespace common
+}// namespace common
 } // namespace edp
 } // namespace mrrocpp
