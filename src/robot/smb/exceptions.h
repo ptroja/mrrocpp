@@ -13,6 +13,7 @@
 #define SMB_EXCEPTIONS_H_
 
 #include "base/edp/edp_exceptions.h"
+#include "const_smb.h"
 
 namespace mrrocpp {
 namespace edp {

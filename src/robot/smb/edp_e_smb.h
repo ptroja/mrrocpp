@@ -59,6 +59,15 @@ private:
 	// state of the legs rotation
 	bool is_base_positioned_to_move_legs;
 
+	//! Default axis velocity [rpm]
+	static const uint32_t Vdefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
+	//! Default axis acceleration [rpm/s]
+	static const uint32_t Adefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
+	//! Default axis deceleration [rpm/s]
+	static const uint32_t Ddefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
 	/*!
 	 * \brief Method responsible for control of the rotational motors (motor controlling the legs and SPKM rotation).
 	 * \author tkornuta
