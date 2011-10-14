@@ -156,6 +156,12 @@ void effector::synchronise(void)
 	// Activate homing mode.
 	pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 0);
 
+
+	// Compute joints positions in the home position
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	// Now the robot is synchronised
+	controller_state_edp_buf.is_synchronised = true;
+
 }
 
 lib::smb::ALL_LEGS_VARIANT effector::current_legs_state(void)
