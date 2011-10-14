@@ -26,7 +26,7 @@ class block_move : public common::task::task
 {
 protected:
 	common::generator::tff_gripper_approach* gtga;
-	common::sub_task::gripper_opening* stgo;
+	//common::sub_task::gripper_opening* stgo;
 
 public:
 
