@@ -16,34 +16,6 @@
 #include "ui_sr.h"
 #include "ui_ecp.h"
 
-////#include "../irp6ot_m/ui_r_irp6ot_m.h"
-//#include "../irp6p_m/ui_r_irp6p_m.h"
-//#include "../irp6p_tfg/ui_r_irp6p_tfg.h"
-//#include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
-//#include "../spkm/ui_r_spkm.h"
-//#include "../smb/ui_r_smb.h"
-//#include "../shead/ui_r_shead.h"
-//#include "../polycrank/ui_r_polycrank.h"
-//#include "../bird_hand/ui_r_bird_hand.h"
-//#include "../sarkofag/ui_r_sarkofag.h"
-//#include "../conveyor/ui_r_conveyor.h"
-//
-//#include "../spkm/wgt_spkm_inc.h"
-//#include "../spkm/wgt_spkm_int.h"
-//#include "../spkm/wgt_spkm_ext.h"
-//#include "../polycrank/wgt_polycrank_int.h"
-//#include "../base/wgt_single_motor_move.h"
-//
-//#include "../bird_hand/wgt_bird_hand_command.h"
-//
-//#include "../irp6_m/wgt_irp6_m_joints.h"
-//#include "../irp6_m/wgt_irp6_m_motors.h"
-//#include "../irp6_m/wgt_irp6_m_euler.h"
-//#include "../irp6_m/wgt_irp6_m_angle_axis.h"
-//#include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
-//#include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
-//#include "../irp6_m/wgt_irp6_m_tool_euler.h"
-
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
 
@@ -53,13 +25,7 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	ui->setupUi(this);
 
 	connect(this, SIGNAL(ui_notification_signal()), this, SLOT(ui_notification_slot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(enable_menu_item_signal(QMenu *, bool)), this, SLOT(enable_menu_item_slot(QMenu *, bool)), Qt::QueuedConnection);
-	connect(this, SIGNAL(enable_menu_item_signal(QAction *, bool)), this, SLOT(enable_menu_item_slot(QAction *, bool)), Qt::QueuedConnection);
-	//connect(this, SIGNAL(open_new_window_signal(wgt_base *, wgt_base::my_open_ptr)), this, SLOT(open_new_window_slot(wgt_base *, wgt_base::my_open_ptr)), Qt::QueuedConnection);
 	connect(this, SIGNAL(open_new_window_signal(wgt_base *, bool)), this, SLOT(open_new_window_slot(wgt_base *, bool)), Qt::QueuedConnection);
-	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
-
-	//connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::irp6ot_m::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::irp6ot_m::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal(mrrocpp::ui::common::UiRobot *)), this, SLOT(ui_robot_slot(mrrocpp::ui::common::UiRobot *)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);
 	connect(this, SIGNAL(ui_robot_int_signal_int(mrrocpp::ui::common::UiRobot *, int)), this, SLOT(ui_robot_int_slot_int(mrrocpp::ui::common::UiRobot *, int)), Qt::QueuedConnection);

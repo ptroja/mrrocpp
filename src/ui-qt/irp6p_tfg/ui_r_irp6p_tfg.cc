@@ -117,7 +117,7 @@ int UiRobot::synchronise_int()
 	try {
 		// dla robota irp6_on_track
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->ecp->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->ecp->is_synchronised();
 		} else {
@@ -145,20 +145,23 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	single_motor::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
+
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 0:
+		case common::UI_EDP_OFF:
 			actionirp6p_tfg_Move->setEnabled(false);
-
 			break;
-		case 1:
-		case 2:
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
+
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 

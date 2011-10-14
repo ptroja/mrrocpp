@@ -127,6 +127,8 @@ public:
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	~UiRobot();
 
+	bool is_edp_loaded();
+
 	void create_thread();
 	void abort_thread();
 	void pulse_reader_execute(int code, int value);
@@ -155,7 +157,6 @@ public:
 	{
 		return 0;
 	}
-
 
 	virtual double* getCurrentPos()
 	{

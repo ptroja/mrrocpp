@@ -45,7 +45,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 void UiRobot::edp_create()
 {
-	if (state.edp.state == 0) {
+	if (state.edp.state == common::UI_EDP_OFF) {
 		create_thread();
 
 		eb.command(boost::bind(&ui::bird_hand::UiRobot::edp_create_int, &(*this)));
@@ -74,20 +74,19 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
 
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 0:
+		case common::UI_EDP_OFF:
 			actionbirdhand_Command->setEnabled(false);
 			break;
-		case 1:
-		case 2:
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 

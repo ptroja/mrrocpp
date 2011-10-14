@@ -41,22 +41,26 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
+
+		case common::UI_EDP_INACTIVE:
 
 			break;
-
-		case 0:
+		case common::UI_EDP_OFF:
 			action_Clear_Fault->setEnabled(false);
 			action_Synchronisation->setEnabled(false);
 			action_command->setEnabled(false);
 			break;
-		case 1:
-		case 2:
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
+
+
+
 			action_Clear_Fault->setEnabled(true);
 			action_command->setEnabled(true);
 
@@ -135,7 +139,7 @@ int UiRobot::synchronise_int()
 	try {
 		// dla robota spkm
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->the_robot->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
 		} else {
