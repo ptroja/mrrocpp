@@ -208,6 +208,8 @@ void festo_and_inputs::determine_legs_state()
 
 		}
 
+	} else {
+		current_legs_state = lib::smb::ALL_UP;
 	}
 }
 
@@ -527,6 +529,19 @@ void festo_and_inputs::read_state()
 		current_output[2] = cpv10->readOutputs(2);
 		//	std::cout << "group_two_current_output 1= " << group_two_current_output << std::endl;
 		desired_output[2] = current_output[2];
+	}
+}
+
+void festo_and_inputs::initiate()
+{
+	determine_legs_state();
+	next_legs_state = current_legs_state;
+
+	if (robot_test_mode) {
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
+		}
 	}
 }
 

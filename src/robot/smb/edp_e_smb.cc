@@ -361,25 +361,11 @@ void effector::create_threads()
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
-	if (!robot_test_mode) {
+	fai->initiate();
 
-		fai->determine_legs_state();
-		fai->next_legs_state = fai->current_legs_state;
+	// do poprawy
+	is_base_positioned_to_move_legs = true;
 
-		// do poprawy
-		is_base_positioned_to_move_legs = true;
-
-	} else {
-		fai->current_legs_state = fai->next_legs_state = lib::smb::ALL_UP;
-		is_base_positioned_to_move_legs = true;
-
-		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
-			edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
-
-		}
-	}
 }
 
 void effector::instruction_deserialization()
