@@ -93,9 +93,10 @@ int main(int argc, char *argv[])
 		if(mode>0) {
 			node.moveRelative(position);
 			while (!node.isTargetReached())
-				sleep(1);
+				usleep(200000);
 				cout<< "~2.5V Position reached!\n";
 		}
+		usleep(2000000);
 
 
 

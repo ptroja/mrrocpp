@@ -50,6 +50,9 @@ private:
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
+	//! Axis responsible for rotation of the PKM (upper SMB joint).
+	boost::shared_ptr <maxon::epos> pkm_rotation_node;
+
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
