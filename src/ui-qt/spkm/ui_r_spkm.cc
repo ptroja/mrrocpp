@@ -143,7 +143,9 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				menuspkm_Post_synchro_moves->setEnabled(true);
+				menuspkm_Pre_synchro_moves->setEnabled(true);
+				menuspkm_Post_synchro_moves->setEnabled(false);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
 
 			}
 			break;
