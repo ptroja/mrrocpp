@@ -1921,6 +1921,11 @@ int epos::waitForTarget(unsigned int t)
 	return (0);
 }
 
+INTEGER32 epos::readAnalogPositionSetpoint() {
+	return ReadObjectValue <INTEGER32>(0x2303, 0x04);
+}
+
+
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {
 	device.InitiateSementedWrite(nodeId, index, subindex, ObjectLength);

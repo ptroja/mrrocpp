@@ -15,4 +15,9 @@ target_link_libraries (ipmtest epos rt)
 add_executable(cantest cantest.cc)
 target_link_libraries (cantest epos)
 
+# SMB calibration test. 
+add_executable(smb_synchro_test smb_synchro_test.cc)
+target_link_libraries (smb_synchro_test epos)
+
+
 install(TARGETS epos DESTINATION lib)

@@ -720,6 +720,9 @@ public:
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 
+	//! \brief Read analog position setpoint.
+	INTEGER32 readAnalogPositionSetpoint();
+
 	//! @}
 
 private:
