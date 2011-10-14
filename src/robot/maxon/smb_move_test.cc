@@ -1,6 +1,6 @@
 /*!
- * @file smb_synchro_test.cc
- * @brief File for testing of the smb synchronization
+ * @file smb_move_test.cc
+ * @brief File for testing of the smb motion.
  *
  * @author tkornuta
  * @date 14-10-2011
@@ -22,23 +22,18 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	int mode;
-	// Check number of arguments.
+	int position;
 	try {
 		// Check arguments.
-		if (argc > 2)
+		if ((argc < 1) || (argc > 2))
 			throw;
 
-		// Try to convert mode.
+		// Try to convert.
 		istringstream iss(argv[1]);
-		iss >> mode;
-		if ((mode <0)||(mode>2))
-			throw;
+		iss >> position;
+		cout<< position << endl;
 	} catch (...) {
-		cout << "Usage: smb_synchro_test X - test synchronization."
-				<< "\n\t X=0 - only prints potentiometer readings."
-				<< "\n\t X=1 - only first step - movement based on the potentiometer readings."
-				<< "\n\t X=2 - full synchronization." << endl;
+		cout << "Usage: smb_move_test X - rotates the smb upper motor to given relative X position." << endl;
 		exit(-1);
 	}
 
@@ -77,33 +72,9 @@ int main(int argc, char *argv[])
 		// Change to the operational mode.
 		node.reset();
 
-		// Get current potentiometer readings.
-		int pot = node.readAnalogInput1();
-
-		// Set coefficients.
-		const double p1 = -0.0078258336;
-		const double p2 = 174.7796278191;
-		const double p3 = -507883.404901415;
-
-		// Compute desired position.
-		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
-		cout << "Retrieved potentiometer readeing: " << pot << "\nComputed pose: " << position << endl;
-
 		// Move to the relative position.
-		if(mode>0) {
-			node.moveRelative(position);
-			while (!node.isTargetReached())
-				sleep(1);
-				cout<< "~2.5V Position reached!\n";
-		}
+		node.moveRelative(position);
 
-
-
-		// Activate homing mode.
-		if(mode>1)
-			node.doHoming(epos::HM_INDEX_NEGATIVE_SPEED, 0);
-
-		// Close gateway.
 		gateway.close();
 	} catch (canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
