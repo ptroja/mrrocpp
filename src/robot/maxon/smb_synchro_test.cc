@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 
 		// Compute desired position.
 		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
-		cout << "Retrieved potentiometer readeing: " << pot << "\nComputed pose: " << position << endl;
+		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
 
 		// Move to the relative position.
 		if(mode>0) {
