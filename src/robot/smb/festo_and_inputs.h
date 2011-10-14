@@ -40,6 +40,7 @@ private:
 	boost::shared_ptr <festo::cpv> cpv10;
 
 	// state of the legs
+
 	lib::smb::ALL_LEGS_VARIANT current_legs_state, next_legs_state;
 
 	std::bitset <16> epos_inputs;
@@ -86,8 +87,9 @@ public:
 
 	/*!
 	 * \brief festo reply in test_mode
+	 * returns true if test_mode is activated
 	 */
-	void festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
+	bool festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
 
 	void initiate();
 

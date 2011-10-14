@@ -140,9 +140,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	try {
 		msg->message("move_arm");
 
-		// the previous next_legs_state becomes currrent_state
-		fai->current_legs_state = fai->next_legs_state;
-
 		switch (ecp_edp_cbuffer.variant)
 		{
 			case lib::smb::POSE: {
