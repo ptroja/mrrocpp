@@ -1921,6 +1921,15 @@ int epos::waitForTarget(unsigned int t)
 	return (0);
 }
 
+INTEGER16 epos::readAnalogInput1() {
+	return ReadObjectValue <INTEGER16>(0x207C, 0x01);
+}
+
+/*INTEGER32 epos::writeTMP(INTEGER32 value) {
+	WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data) <>(0x2303, 0x04);
+}*/
+
+
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {
 	device.InitiateSementedWrite(nodeId, index, subindex, ObjectLength);

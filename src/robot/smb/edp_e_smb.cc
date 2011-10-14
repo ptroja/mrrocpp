@@ -93,9 +93,16 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 		// Create epos objects according to CAN ID-mapping.
 		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
+		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9);
 
+		// Collect axes into common array container.
+		axes[0] = &(*epos_di_node);
+		axesNames[0] = "legs";
+		axes[1] = &(*pkm_rotation_node);
+		axesNames[1] = "pkm";
+
+		// Create festo node.
 		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
-
 	} else {
 
 	}
@@ -121,7 +128,29 @@ void effector::synchronise(void)
 	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
 		return;
+	} else {
+
+		// Get current potentiometer readings.
+		int pot = pkm_rotation_node->readAnalogInput1();
+
+		// Set coefficients.
+		const double p1 = -0.0078258336;
+		const double p2 = 174.7796278191;
+		const double p3 = -507883.404901415;
+
+		// Compute desired position.
+		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
+
+		// Move to the relative position.
+		pkm_rotation_node->moveRelative(position);
+		while (!pkm_rotation_node->isTargetReached())
+			usleep(200000);
+
+		// Activate homing mode.
+		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 0);
 	}
+
 }
 
 lib::smb::ALL_LEGS_VARIANT effector::current_legs_state(void)
