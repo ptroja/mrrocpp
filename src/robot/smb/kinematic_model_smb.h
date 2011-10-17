@@ -12,6 +12,8 @@
 #define _SMB_KIN_model
 
 #include "base/kinematics/kinematic_model.h"
+#include "dp_smb.h"
+
 
 namespace mrrocpp {
 namespace kinematics {
@@ -31,6 +33,15 @@ class model : public common::kinematic_model
 protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
+
+	//! Parameters related to conversion from motor positions to joints.
+	static const double mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
+	//! Largest values that the motor rotating the PKM can reach.
+	static const int32_t upper_pkm_motor_pos_limits;
+
+	//! Smallest values that the motor rotating the PKM can reach.
+	static const int32_t lower_pkm_motor_pos_limits;
 
 public:
 	//! Constructor.

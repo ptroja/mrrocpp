@@ -31,7 +31,6 @@ enum UI_NOTIFICATION_STATE_ENUM
 
 // FIXME: moved from proto.h for linux compatibility
 
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -81,13 +80,10 @@ enum UI_ALL_EDPS_SYNCHRO_STATE
 	UI_ALL_EDPS_ALL_SYNCHRONISED
 };
 
-// -1 mp jest wylaczone i nie moze zostac wlaczone , 0 - mp wylaczone ale wszystkie edp gotowe,  1- wlaczone czeka na start
-// 2 - wlaczone czeka na stop 3 -wlaczone czeka na resume
-
-typedef enum _EDP_STATE
+typedef enum _UI_EDP_STATE
 {
-	INACTIVE = -1, OFF = 0, WAITING_TO_START_READER = 1, WAITING_TO_STOP_READER = 2
-} EDP_STATE;
+	UI_EDP_STATE_NOT_KNOWN, UI_EDP_INACTIVE, UI_EDP_OFF, UI_EDP_WAITING_TO_START_READER, UI_EDP_WAITING_TO_STOP_READER
+} UI_EDP_STATE;
 
 typedef struct _edp_state_def
 {
@@ -101,9 +97,9 @@ typedef struct _edp_state_def
 	int node_nr;
 	lib::fd_client_t reader_fd;
 	bool is_synchronised;
-	//! TODO: change from int to EDP_STATE enum
-	int state; // -1, edp nie aktywne, 0 - edp wylaczone 1- wlaczone czeka na reader start 2 - wlaczone czeka na reader stop
-	int last_state;
+
+	UI_EDP_STATE state;
+	UI_EDP_STATE last_state;
 
 	double preset_position[3][lib::MAX_SERVOS_NR]; // pozycje zapisane w konfiguracji
 	double front_position[lib::MAX_SERVOS_NR];
@@ -117,8 +113,7 @@ typedef struct
 	std::string network_trigger_attach_point;
 	int node_nr;
 	lib::fd_client_t trigger_fd;
-	int state;
-	int last_state;
+
 } ecp_state_def;
 
 typedef struct
@@ -135,7 +130,7 @@ typedef struct
 	std::string network_pulse_attach_point;
 	int node_nr;
 	RemoteAgent * MP;
-	OutputBuffer<char> * pulse;
+	OutputBuffer <char> * pulse;
 	UI_MP_STATE state;
 	UI_MP_STATE last_process_control_state;
 	UI_MP_STATE last_manage_interface_state;

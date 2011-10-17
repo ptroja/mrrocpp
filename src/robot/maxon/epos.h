@@ -226,6 +226,9 @@ public:
 	/*! \brief read digital input polarity mask */
 	UNSIGNED16 readDInputPolarity();
 
+	/*! \brief read digital input*/
+	UNSIGNED16 readDInput();
+
 	/*! \brief set home switch polarity */
 	void setHomePolarity(int pol);
 
@@ -716,6 +719,9 @@ public:
 	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
+
+	//! \brief Read analog input 1.
+	INTEGER16 readAnalogInput1();
 
 	//! @}
 
