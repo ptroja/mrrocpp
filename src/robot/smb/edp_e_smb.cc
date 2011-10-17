@@ -132,7 +132,7 @@ void effector::synchronise(void)
 		controller_state_edp_buf.is_synchronised = true;
 		return;
 	}
-
+#if 0
 	// Two-step synchronization of the motor rotating the whole PKM.
 	// Step1: Potentiometer.
 	// Get current potentiometer readings.
@@ -159,6 +159,8 @@ void effector::synchronise(void)
 
 	// Compute joints positions in the home position
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+#endif
+
 	// Now the robot is synchronised
 	controller_state_edp_buf.is_synchronised = true;
 

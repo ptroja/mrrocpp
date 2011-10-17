@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		gateway.open();
 
 		// Create node related to the 9th epos maxon controller.
-		epos node(gateway, 9);
+		epos node(gateway, 8);
 
 		// Print state.
 		node.printEPOSstate();
