@@ -76,7 +76,7 @@ int UiRobot::synchronise_int()
 	try {
 		// dla robota spkm
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->the_robot->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
 		} else {
@@ -101,40 +101,41 @@ int UiRobot::manage_interface()
 
 	switch (state.edp.state)
 	{
-		case -1:
+
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 0:
-
-			mw->enable_menu_item(false, 1, actionspkm_Clear_Fault);
-			mw->enable_menu_item(false, 3, menuspkm_Pre_synchro_moves, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-
+		case common::UI_EDP_OFF:
+			actionspkm_Clear_Fault->setEnabled(false);
+			menuspkm_Pre_synchro_moves->setEnabled(false);
+			menuspkm_Preset_positions->setEnabled(false);
+			menuspkm_Post_synchro_moves->setEnabled(false);
 			break;
-		case 1:
-		case 2:
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
 
-			mw->enable_menu_item(true, 1, actionspkm_Clear_Fault);
+			actionspkm_Clear_Fault->setEnabled(true);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, menuspkm_Pre_synchro_moves);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				menuspkm_Pre_synchro_moves->setEnabled(false);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
-
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves); //???
+						menuspkm_Preset_positions->setEnabled(true);
+						menuspkm_Post_synchro_moves->setEnabled(true);
 
 						break;
 					case common::UI_MP_TASK_RUNNING:
 
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 2, menuspkm_Preset_positions, menuspkm_Post_synchro_moves);
+						menuspkm_Preset_positions->setEnabled(false);
+						menuspkm_Post_synchro_moves->setEnabled(false);
 
 						break;
 					default:
@@ -142,8 +143,9 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-
-				mw->enable_menu_item(true, 1, menuspkm_Pre_synchro_moves);
+				menuspkm_Pre_synchro_moves->setEnabled(true);
+				menuspkm_Post_synchro_moves->setEnabled(false);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
 
 			}
 			break;

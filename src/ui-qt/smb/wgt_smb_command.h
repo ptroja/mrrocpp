@@ -32,13 +32,12 @@ public:
 
 	QVector <QCheckBox*> checkBox_fl_up_Vector;
 	QVector <QCheckBox*> checkBox_fl_down_Vector;
+	QVector <QCheckBox*> checkBox_fl_attached_Vector;
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
 	QVector <QCheckBox*> checkBox_m_no_Vector;
 
-	QVector <QRadioButton*> radioButton_fl_no_Vector;
 	QVector <QRadioButton*> radioButton_fl_up_Vector;
 	QVector <QRadioButton*> radioButton_fl_down_Vector;
-	QVector <QRadioButton*> radioButton_fl_detach_Vector;
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_current_position_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_absolute_Vector;
@@ -73,6 +72,8 @@ private slots:
 	// buttons callbacks
 
 	void on_pushButton_fl_execute_clicked();
+	void on_pushButton_fl_all_up_clicked();
+	void on_pushButton_fl_all_down_clicked();
 	void on_pushButton_m_execute_clicked();
 	void on_pushButton_execute_all_clicked();
 	void on_pushButton_stop_clicked();

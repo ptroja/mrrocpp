@@ -1,6 +1,6 @@
 /*!
  * @file exceptions.h
- * @brief File containing consts, types and classes related to exceptions specific to SPKM.
+ * @brief File containing consts, types and classes related to exceptions specific for SPKM.
  *
  * @author Tomasz Kornuta
  * @date 08-02-2011

@@ -41,46 +41,51 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
+
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 0:
-			mw->enable_menu_item(false, 1, action_Clear_Fault);
-			mw->enable_menu_item(false, 2, action_Synchronisation, action_command);
+		case common::UI_EDP_OFF:
+			action_Clear_Fault->setEnabled(false);
+			action_Synchronisation->setEnabled(false);
+			action_command->setEnabled(false);
 			break;
-		case 1:
-		case 2:
-			mw->enable_menu_item(true, 1, action_Clear_Fault);
-			mw->enable_menu_item(true, 1, action_command);
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
+
+
+
+			action_Clear_Fault->setEnabled(true);
+			action_command->setEnabled(true);
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, action_Synchronisation);
+				action_Synchronisation->setEnabled(false);
+
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, action_command);
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, action_command);
+						action_command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						mw->enable_menu_item(false, 1, action_command);
-						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, action_command);
+						action_command->setEnabled(false);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, action_Synchronisation);
+				action_Synchronisation->setEnabled(true);
+
 			}
 			break;
 		default:
@@ -134,7 +139,7 @@ int UiRobot::synchronise_int()
 	try {
 		// dla robota spkm
 
-		if ((state.edp.state > 0) && (state.edp.is_synchronised == false)) {
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->the_robot->synchronise();
 			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
 		} else {

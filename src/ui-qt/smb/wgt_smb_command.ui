@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>572</width>
-    <height>379</height>
+    <height>394</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -109,7 +109,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QWidget" name="widget" native="true">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -120,13 +120,7 @@ p, li { white-space: pre-wrap; }
                </size>
               </property>
               <layout class="QGridLayout" name="gridLayout">
-               <property name="margin">
-                <number>3</number>
-               </property>
-               <property name="spacing">
-                <number>3</number>
-               </property>
-               <item row="0" column="0" colspan="2">
+               <item row="0" column="0" colspan="3">
                 <widget class="QLabel" name="label_8">
                  <property name="text">
                   <string>STATE</string>
@@ -136,7 +130,7 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
+               <item row="1" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
                   <string>up</string>
@@ -146,10 +140,20 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item row="1" column="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
                   <string>down</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>attached</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -170,18 +174,15 @@ p, li { white-space: pre-wrap; }
              <widget class="QWidget" name="widget_2" native="true">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
                <property name="margin">
-                <number>3</number>
+                <number>6</number>
                </property>
-               <property name="spacing">
-                <number>3</number>
-               </property>
-               <item row="0" column="0" colspan="4">
+               <item row="0" column="0" colspan="2">
                 <widget class="QLabel" name="label_10">
                  <property name="minimumSize">
                   <size>
@@ -197,37 +198,29 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_9">
-                 <property name="text">
-                  <string>no</string>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="pushButton_fl_all_up">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>27</height>
+                  </size>
                  </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="label_12">
                  <property name="text">
                   <string>up</string>
                  </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_11">
+               <item row="1" column="1">
+                <widget class="QPushButton" name="pushButton_fl_all_down">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>27</height>
+                  </size>
+                 </property>
                  <property name="text">
                   <string>down</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QLabel" name="label_13">
-                 <property name="text">
-                  <string>detach</string>
                  </property>
                 </widget>
                </item>
@@ -285,7 +278,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_3">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -346,6 +339,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl1_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -360,7 +372,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_4">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -378,22 +390,6 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl1_no">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QRadioButton" name="radioButton_fl1_up">
                  <property name="maximumSize">
                   <size>
@@ -404,10 +400,25 @@ p, li { white-space: pre-wrap; }
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>30</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
                 </widget>
                </item>
                <item>
                 <widget class="QRadioButton" name="radioButton_fl1_down">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -417,18 +428,11 @@ p, li { white-space: pre-wrap; }
                  <property name="text">
                   <string/>
                  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_fl1_detach">
-                 <property name="maximumSize">
+                 <property name="iconSize">
                   <size>
                    <width>20</width>
-                   <height>16777215</height>
+                   <height>20</height>
                   </size>
-                 </property>
-                 <property name="text">
-                  <string/>
                  </property>
                 </widget>
                </item>
@@ -486,7 +490,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_6">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -547,6 +551,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl2_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -561,7 +584,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_7">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -579,7 +602,7 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl2_no">
+                <widget class="QRadioButton" name="radioButton_fl2_up">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -595,33 +618,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl2_up">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QRadioButton" name="radioButton_fl2_down">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_fl2_detach">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -687,7 +684,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_9">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -748,6 +745,25 @@ p, li { white-space: pre-wrap; }
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_fl3_attached">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>20</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -762,7 +778,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_10">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>150</width>
                 <height>0</height>
                </size>
               </property>
@@ -780,7 +796,7 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl3_no">
+                <widget class="QRadioButton" name="radioButton_fl3_up">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -796,33 +812,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl3_up">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QRadioButton" name="radioButton_fl3_down">
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radioButton_fl3_detach">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -1192,6 +1182,15 @@ p, li { white-space: pre-wrap; }
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -1239,7 +1238,20 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_left">
@@ -1255,7 +1267,20 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_rigth">
@@ -1374,6 +1399,15 @@ p, li { white-space: pre-wrap; }
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -1421,7 +1455,20 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999999.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_left">
@@ -1437,7 +1484,20 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative">
+                 <property name="decimals">
+                  <number>0</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-999.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>999.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>1000.000000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_rigth">
