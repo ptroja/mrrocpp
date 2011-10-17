@@ -37,7 +37,7 @@ spline_trajectory_pose::spline_trajectory_pose (lib::ECP_POSE_SPECIFICATION arm_
         v_k = vector<double>(axes_num);
         a_k = vector<double>(axes_num);
         a_p = vector<double>(axes_num);
-        coeffs = vector<double*>(5);
+        coeffs = vector<vector<double> >(axes_num);
 }
 
 spline_trajectory_pose::~spline_trajectory_pose() {

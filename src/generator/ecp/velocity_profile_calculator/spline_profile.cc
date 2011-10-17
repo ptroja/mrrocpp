@@ -30,7 +30,18 @@ bool spline_profile::calculate_time(std::vector<ecp_mp::common::trajectory_pose:
     if (eq(it->s[i], 0.0) || eq(it->v_r[i], 0.0)) {//if distance to be covered or maximal velocity equal to 0
         it->times[i] = 0;
     } else {//normal calculation
-        it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]);
+        if (it->type == linear)
+        {
+            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]);
+        }
+        else if (it->type == cubic)
+        {
+            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]) * 1.5;
+        }
+        else if (it->type == quintic)
+        {
+            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]) * 1.5;
+        }
     }
     return true;
 
@@ -48,11 +59,13 @@ inline void spline_profile::generatePowers(int power, double x, double * powers)
 
 bool spline_profile::calculate_linear_coeffs(vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i)
 {
-
   if (it->t == 0)
   {
       return false;
   }
+
+  vector<double> coefficients(6);
+  it->coeffs[i] = coefficients;
 
   if (it->t <= std::numeric_limits<double>::epsilon() )
   {
@@ -73,6 +86,9 @@ bool spline_profile::calculate_linear_coeffs(vector<ecp_mp::common::trajectory_p
     it->coeffs[i][5] = 0.0;
   }
 
+  printf("linear coeff 0: %f\n", it->coeffs[i][0]);
+  printf("linear coeff 1: %f\n", it->coeffs[i][1]);
+
   return true;
 }
 
@@ -85,6 +101,9 @@ bool spline_profile::calculate_cubic_coeffs(vector<ecp_mp::common::trajectory_po
 
   double t[4];
   generatePowers(3, it->t, t);
+
+  vector<double> coefficients(6);
+  it->coeffs[i] = coefficients;
 
   if (it->t <= std::numeric_limits<double>::epsilon() )
   {
@@ -118,6 +137,9 @@ bool spline_profile::calculate_quintic_coeffs(vector<ecp_mp::common::trajectory_
 
   double t[6];
   generatePowers(5, it->t, t);
+
+  vector<double> coefficients(6);
+  it->coeffs[i] = coefficients;
 
   if (it->t <= std::numeric_limits<double>::epsilon() )
   {

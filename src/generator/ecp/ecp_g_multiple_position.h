@@ -229,6 +229,8 @@ protected:
 
 		if (motion_type == lib::ABSOLUTE) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+                                //printf("inter 1: %f", pose_vector_iterator->coeffs[i][0]);
+                                //printf("inter 2: %f", pose_vector_iterator->coeffs[i][1]);
 				if (inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -564,11 +566,11 @@ public:
 	 */
 	virtual void reset()
 	{
-                sr_ecp_msg.message("reset 1");
+                //sr_ecp_msg.message("reset 1");
                 pose_vector.clear();
-                sr_ecp_msg.message("reset 2");
+                //sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
-                sr_ecp_msg.message("reset 3");
+                //sr_ecp_msg.message("reset 3");
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;

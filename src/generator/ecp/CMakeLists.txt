@@ -4,7 +4,7 @@ add_library(ecp_generators
 	ecp_g_teach_in.cc
 	ecp_g_delta.cc
 	ecp_g_operator_reaction_condition.cc
-	ecp_g_jarosz.cc
+        ecp_g_jarosz.cc
 	ecp_g_visual_servo_manager.cc
 	ecp_g_visual_servo.cc
 	ecp_g_sleep.cc

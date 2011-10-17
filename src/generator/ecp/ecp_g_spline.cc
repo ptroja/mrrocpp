@@ -33,8 +33,87 @@ spline::~spline() {
 
 }
 
-void spline::print_pose_vector() {
+void spline::print_pose_vector()
+{
+        printf("\n------------------ Pose List ------------------\n");
+        pose_vector_iterator = pose_vector.begin();
+        for (int k = 0; k < pose_vector.size(); k++) {
+                print_pose(pose_vector_iterator);
+                pose_vector_iterator++;
+        }
+}
 
+void spline::print_pose(const vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it) {
+    if (it == pose_vector.end() || pose_vector.empty()) {
+            return;
+    }
+
+    int z;
+    printf("coords:\t");
+    for (z = 0; z < pose_vector_iterator->coordinates.size(); z++) {
+            printf("%f\t", pose_vector_iterator->coordinates[z]);
+    }
+    printf("\n");
+    printf("start:\t");
+    for (z = 0; z < pose_vector_iterator->start_position.size(); z++) {
+            printf("%f\t", pose_vector_iterator->start_position[z]);
+    }
+    printf("\n");
+    printf("s:\t");
+    for (z = 0; z < pose_vector_iterator->s.size(); z++) {
+            printf("%f\t", pose_vector_iterator->s[z]);
+    }
+    printf("\n");
+    printf("k:\t");
+    for (z = 0; z < pose_vector_iterator->k.size(); z++) {
+            printf("%f\t", pose_vector_iterator->k[z]);
+    }
+    printf("\n");
+    printf("times:\t");
+    for (z = 0; z < pose_vector_iterator->s.size(); z++) {
+            printf("%f\t", pose_vector_iterator->times[z]);
+    }
+    printf("\n");
+    printf("v_r:\t");
+    for (z = 0; z < pose_vector_iterator->v_r.size(); z++) {
+            printf("%f\t", pose_vector_iterator->v_r[z]);
+    }
+    printf("\n");
+    printf("a_r:\t");
+    for (z = 0; z < pose_vector_iterator->a_r.size(); z++) {
+            printf("%f\t", pose_vector_iterator->a_r[z]);
+    }
+    printf("\n");
+    printf("v_p:\t");
+    for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
+            printf("%f\t", pose_vector_iterator->v_p[z]);
+    }
+    printf("\n");
+    printf("v_k:\t");
+    for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
+            printf("%f\t", pose_vector_iterator->v_k[z]);
+    }
+    printf("\n");
+    printf("a_p:\t");
+    for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
+            printf("%f\t", pose_vector_iterator->a_p[z]);
+    }
+    printf("\n");
+    printf("a_k:\t");
+    for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
+            printf("%f\t", pose_vector_iterator->a_k[z]);
+    }
+    printf("\n");
+    printf("coeffs:\n");
+    for (z = 0; z < pose_vector_iterator->v_k.size(); z++) {
+            printf("%f\t%f\t%f\t%f\t%f\t%f\n", pose_vector_iterator->coeffs[z][0], pose_vector_iterator->coeffs[z][1],
+                   pose_vector_iterator->coeffs[z][2], pose_vector_iterator->coeffs[z][3],
+                   pose_vector_iterator->coeffs[z][4], pose_vector_iterator->coeffs[z][5]);
+    }
+    printf("\n");
+    printf("t: %f\t pos_num: %d\t number of macrosteps: %d\n", pose_vector_iterator->t, pose_vector_iterator->pos_num, pose_vector_iterator->interpolation_node_no);
+    printf("--------------------------------\n\n");
+    flushall();
 }
 
 bool spline::calculate()
@@ -61,15 +140,20 @@ bool spline::calculate()
             }
 
             if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
-               !vpc.calculate_pose_time(pose_vector_iterator, mc)) {//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
-                    return false;
+               !vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
+               !vpc.set_times_to_t(pose_vector_iterator)){
+                return false;
             }
 
             for (j = 0; j < axes_num; j++) {
-                if (pose_vector_iterator->type == 1) {
+               // printf("petla\n");
+                if (pose_vector_iterator->type == linear) {
+                    printf("linear\n");
                     if (!vpc.calculate_linear_coeffs(pose_vector_iterator,j)) {
                         return false;
                     }
+                    printf("powrot 1: %f\n", pose_vector_iterator->coeffs[j][0]);
+                    printf("powrot 2: %f\n", pose_vector_iterator->coeffs[j][1]);
                 } else if (pose_vector_iterator->type == 2) {
                     if (!vpc.calculate_cubic_coeffs(pose_vector_iterator,j)) {
                         return false;
@@ -241,6 +325,8 @@ bool spline::load_trajectory_pose(const vector<double> & coordinates, lib::MOTIO
                     pose.start_position = pose_vector.back().coordinates;
             }
     }
+
+    pose.type = type;
 
     pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 

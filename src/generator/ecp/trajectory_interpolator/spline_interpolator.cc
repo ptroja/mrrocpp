@@ -33,6 +33,7 @@ bool spline_interpolator::interpolate_relative_pose(vector<ecp_mp::common::traje
 bool spline_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, vector<vector<double> > & cv, const double mc) {
 
     vector<double> coordinates (it->axes_num);
+    coordinates = it->start_position;
     for (int i = 0; i < it->interpolation_node_no; i++) {
             for (int j = 0; j < it->axes_num; j++) {
                 if (it->type == 1)//linear
@@ -41,11 +42,11 @@ bool spline_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::traje
                 }
                 else if (it->type == 2)//cubic
                 {
-                    coordinates[j] = calculate_velocity(it, j, (i+1) * mc) * mc;
+                    coordinates[j] = coordinates[j] + calculate_velocity(it, j, (i+1) * mc) * mc * it->k[j];
                 }
                 else if (it->type == 3)//quintic
                 {
-                    coordinates[j] = 0.5 * calculate_acceleration(it, j, (i+1) * mc) * mc * mc;
+                    coordinates[j] = coordinates[j] + 0.5 * calculate_acceleration(it, j, (i+1) * mc) * mc * mc * it->k[j];
                 }
             }
             cv.push_back(coordinates);

@@ -49,7 +49,7 @@ public:
     /**
       *
       */
-    std::vector<double *> coeffs;
+    std::vector<std::vector<double> > coeffs;
     /**
      * Suggested acceleration for the given segment (pose).
      */

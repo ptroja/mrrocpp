@@ -104,12 +104,12 @@ class spline : public multiple_position<ecp_mp::common::trajectory_pose::spline_
              * @param trajectory_pose pose to load
              */
             bool load_relative_pose(ecp_mp::common::trajectory_pose::spline_trajectory_pose & trajectory_pose);
-       private:
             /**
              * Method sets the current interpolation type.
              * @param type interpolation type
              */
             void setType(splineType type);
+       private:
             /**
              * Creates the vectors containing the information about the maximal and typical velocities for each representation.
              * @param axes_num actual number of axes
@@ -124,6 +124,10 @@ class spline : public multiple_position<ecp_mp::common::trajectory_pose::spline_
              * Method used to print list of positions.
              */
             void print_pose_vector();
+            /**
+             * Prints single pose.
+             */
+            void print_pose(const std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it);
             /**
              *
              */
