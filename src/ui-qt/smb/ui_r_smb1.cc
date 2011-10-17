@@ -10,15 +10,15 @@ namespace ui {
 namespace smb1 {
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	smb::UiRobot(_interface, lib::smb1::ROBOT_NAME)
+		smb::UiRobot(_interface, lib::smb1::ROBOT_NAME)
 {
-
+	add_wgt <wgt_smb_command>(smb::WGT_SMB_COMMAND, "Smb1 command");
 }
 
-int UiRobot::create_ui_ecp_robot()
+void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new EcpRobot(*this);
-	return 1;
+//	return 1;
 }
 
 void UiRobot::setup_menubar()
@@ -26,7 +26,6 @@ void UiRobot::setup_menubar()
 	smb::UiRobot::setup_menubar();
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb1", 0, QApplication::UnicodeUTF8));
 }
-
 
 }
 } //namespace ui

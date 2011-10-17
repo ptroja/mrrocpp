@@ -1,0 +1,23 @@
+/** 
+
+@namespace mrrocpp::lib::shead
+@brief Namespace for SwarmItFIX agent's head libraries etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup shead
+
+@namespace mrrocpp::ecp::shead
+@brief Namespace for ECP SwarmItFIX agent's head classes etc.
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup shead
+
+@namespace mrrocpp::kinematics::shead
+@brief Contains classes related to the kinematics of the SwarmItFIX agent's head.
+@date 2010.02.01 
+@author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+@ingroup KINEMATICS SIF_KINEMATICS shead
+
+   @defgroup shead SwarmItFix Head
+   @ingroup swarm_robots grippers
+
+
+*/

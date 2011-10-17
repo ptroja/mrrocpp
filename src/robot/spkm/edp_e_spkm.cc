@@ -18,15 +18,17 @@
 #include "kinematic_parameters_spkm.h"
 #include "base/edp/manip_trans_t.h"
 
-#include "robot/epos/epos.h"
-#include "robot/epos/epos_access_usb.h"
+#include "robot/canopen/gateway_epos_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
+#include "robot/maxon/epos.h"
+
 #include "base/lib/pvt.hpp"
 #include "base/lib/pvat_cartesian.hpp"
 
 #include "exceptions.h"
-#include "robot/epos/epos_exceptions.hpp"
+#include "robot/maxon/epos_exceptions.hpp"
 
-#include "robot/epos/ipm_executor.h"
+#include "robot/maxon/ipm_executor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -57,18 +59,22 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 	if (!robot_test_mode) {
 		// Create gateway object.
-		gateway = (boost::shared_ptr <epos::epos_access>) new epos::epos_access_usb();
+		if(this->config.exists("can_iface")) {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value<std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
 
 		// Connect to the gateway.
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		axisA = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 5);
-		axisB = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 4);
-		axisC = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 6);
-		axis1 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 3);
-		axis2 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 2);
-		axis3 = (boost::shared_ptr <epos::epos>) new epos::epos(*gateway, 1);
+		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5);
+		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4);
+		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6);
+		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3);
+		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2);
+		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1);
 
 		// Collect axes into common array container.
 		axes[0] = &(*axisA);
@@ -184,19 +190,19 @@ void effector::synchronise(void)
 	}
 
 	// switch to homing mode
-	BOOST_FOREACH(epos::epos * node, axes)
+	BOOST_FOREACH(maxon::epos * node, axes)
 				{
-					node->setOperationMode(epos::epos::OMD_HOMING_MODE);
+					node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 				}
 
 	// reset controller
-	BOOST_FOREACH(epos::epos * node, axes)
+	BOOST_FOREACH(maxon::epos * node, axes)
 				{
 					node->reset();
 				}
 
 	// Do homing with preconfigured parameters
-	BOOST_FOREACH(epos::epos * node, axes)
+	BOOST_FOREACH(maxon::epos * node, axes)
 				{
 					node->startHoming();
 				}
@@ -205,7 +211,7 @@ void effector::synchronise(void)
 	bool finished;
 	do {
 		finished = true;
-		BOOST_FOREACH(epos::epos * node, axes)
+		BOOST_FOREACH(maxon::epos * node, axes)
 					{
 						if (!node->isHomingFinished()) {
 							finished = false;
@@ -385,7 +391,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 							cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - "
 									<< desired_motor_pos_old[i] << " = " << Delta[i] << endl;
-							Vmax[i] = Vdefault[i] / epos::epos::SECONDS_PER_MINUTE;
+							Vmax[i] = Vdefault[i] / maxon::epos::SECONDS_PER_MINUTE;
 							Amax[i] = Adefault[i];
 						}
 
@@ -404,9 +410,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								// Setup motion parameters
 								for (size_t i = 0; i < axes.size(); ++i) {
 									if (Delta[i] != 0) {
-										axes[i]->setOperationMode(epos::epos::OMD_PROFILE_POSITION_MODE);
+										axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writeProfileVelocity(Vnew[i] * epos::epos::SECONDS_PER_MINUTE);
+										axes[i]->writeProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
 										axes[i]->writeProfileAcceleration(Anew[i]);
 										axes[i]->writeProfileDeceleration(Dnew[i]);
 										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
@@ -465,7 +471,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>
 								motor_interpolations;
-						cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
+						linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
 								lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 						//linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
@@ -514,7 +520,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 #endif
 
 						// Recalculate extreme velocities taking into consideration required units
-						// (Vdefault is given in [rpm], and on the base of w0..3 coefficients we can compute v in [turns per second])
+/*						// (Vdefault is given in [rpm], and on the base of w0..3 coefficients we can compute v in [turns per second])
 						double vmin[lib::spkm::NUM_OF_SERVOS];
 						double vmax[lib::spkm::NUM_OF_SERVOS];
 						for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
@@ -538,7 +544,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						// Check extreme velocities for all segments and motors.
 						check_accelerations <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (amin, amax, motor_3w, motor_2w, time_invervals);
-
+*/
 						// Compute PVT triplets for generated segments (thus n+1 points).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> p;
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> v;
@@ -581,11 +587,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							error = true;
 						} else {
 							// Create unique directory.
-							dir = "/home/tkornuta/pkm_measures/" + boost::lexical_cast <std::string>(tv.tv_sec);
+							dir = "/home/tkornuta/pkm_measures/5_" + boost::lexical_cast <std::string>(tv.tv_sec);
 							if (mkdir(dir.c_str(), 0777) == -1) {
 								perror("mkdir()");
-								dir = "/home/tkornuta/pkm_measures/" + boost::lexical_cast <std::string>(tv.tv_sec)
-										+ "_";
+								dir += "_";
 							} else
 								dir += "/";
 							// Generate unique name.
@@ -619,22 +624,56 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							descfile.close();
 							cout << "Motion description was written to file: " << filename << endl;
 
-							// Write triplets to files - one file for every axis.
+							// Write motion description to files.
+							// For every axis six files are created:
+							// - one containing start and stop points.
+							// - one containing list of PVT triplets.
+							// - one containing trajectory parameters (m0, ..., m3) for every segment.
 							for (size_t i = 0; i < axes.size(); ++i) {
+								// Start and stop points.
 								// Generate unique name.
-								std::string filename = dir + "axis" + boost::lexical_cast <std::string>(i) + ".csv";
-								ofstream axefile;
-								axefile.open(filename.c_str());
+								std::string filename = dir + "axis" + boost::lexical_cast <std::string>(i) + "_start_stop.csv";
+								ofstream axis_start_stop;
+								axis_start_stop.open(filename.c_str());
+								// Write start and stop positions.
+								axis_start_stop << (int) current_motor_pos(i) << "\r\n";
+								axis_start_stop << (int) desired_motor_pos_new(i) << "\r\n";
+								// Close file for given axis motion.
+								axis_start_stop.close();
+
+								// List of PVT triplets.
+								// Generate unique name.
+								filename = dir + "axis" + boost::lexical_cast <std::string>(i) + "_pvt.csv";
+								ofstream axis_pvt;
+								axis_pvt.open(filename.c_str());
 								// Write header.
-								axefile << "qc;rpm;ms;\r\n";
+								axis_pvt << "qc;rpm;ms;\r\n";
 								// Write triplets.
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
-									axefile << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt)
+									axis_pvt << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt)
 											<< ";\r\n";
+								}//: for points
+								// Close file for given axis.
+								axis_pvt.close();
+								cout << "PVT for axis " << i << " were written to file: " << filename << endl;
+
+								// List of trajectory parameters for every segment.
+								// Generate unique name.
+								filename = dir + "axis" + boost::lexical_cast <std::string>(i) + "_m0123.csv";
+								ofstream axis_m0123;
+								axis_m0123.open(filename.c_str());
+								// Write header.
+								axis_m0123 << "m0w;m1w;m2w;m3w;\r\n";
+								// Write parameters.
+								for (int sgt = 0; sgt < lib::spkm::NUM_OF_MOTION_SEGMENTS; ++sgt) {
+									axis_m0123 << motor_0w(sgt, i) << ";" << motor_1w(sgt, i) << ";"
+											<< motor_2w(sgt, i) << ";" << motor_3w(sgt, i) << ";\r\n";
 								}//: for segments
 								// Close file for given axis.
-								axefile.close();
-								cout << "PVT for axis " << i << " were written to file: " << filename << endl;
+								axis_m0123.close();
+								cout << "Trajectory parameters for axis " << i << " were written to file: " << filename << endl;
+
+								// Write
 							}//: for axes
 						}//: else
 #endif
@@ -652,7 +691,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									continue;
 
 								// Set motion parameters.
-								axes[i]->setOperationMode(epos::epos::OMD_INTERPOLATED_POSITION_MODE);
+								axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
 								axes[i]->writeProfileVelocity(MotorVmax[i]);
 								axes[i]->writeProfileAcceleration(MotorAmax[i]);
 								axes[i]->writeProfileDeceleration(MotorAmax[i]);
@@ -665,7 +704,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								}
 								printf("\n");
 
-								const epos::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
+								const maxon::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
 
 								if (axes[i]->checkInterpolationBufferWarning(status)) {
 									axes[i]->printInterpolationBufferStatus(status);
@@ -679,6 +718,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								}
 							}
 						} else {
+#if 0
 							// Display axes movement.
 							for (size_t i = 0; i < axes.size(); ++i) {
 								cout << "Axis " << i << ": qc;rpm;ms;\r\n";
@@ -686,6 +726,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 									cout << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt) << ";\r\n";
 								}//: for segments
 							}//: for axes
+#endif
 						}//: end robot_test_mode
 
 						// Start motion
@@ -715,33 +756,33 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::spkm::QUICKSTOP:
 				if (!robot_test_mode) {
 					// Execute command
-					BOOST_FOREACH(epos::epos * node, axes)
+					BOOST_FOREACH(maxon::epos * node, axes)
 								{
 									// Brake with Quickstop command
-									node->changeEPOSstate(epos::epos::QUICKSTOP);
+									node->changeEPOSstate(maxon::epos::QUICKSTOP);
 								}
 				}
 				// Internal position counters need not be updated
 				return;
 			case lib::spkm::CLEAR_FAULT:
-				BOOST_FOREACH(epos::epos * node, axes)
+				BOOST_FOREACH(maxon::epos * node, axes)
 							{
 								node->printEPOSstate();
 
 								// Check if in a FAULT state
 								if (node->checkEPOSstate() == 11) {
-									epos::UNSIGNED8 errNum = node->readNumberOfErrors();
+									maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
 									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									for (epos::UNSIGNED8 i = 1; i <= errNum; ++i) {
+									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-										epos::UNSIGNED32 errCode = node->readErrorHistory(i);
+										maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
 
 										cerr << node->ErrorCodeMessage(errCode) << endl;
 									}
 									if (errNum > 0) {
 										node->clearNumberOfErrors();
 									}
-									node->changeEPOSstate(epos::epos::FAULT_RESET);
+									node->changeEPOSstate(maxon::epos::FAULT_RESET);
 								}
 
 								// Change to the operational mode

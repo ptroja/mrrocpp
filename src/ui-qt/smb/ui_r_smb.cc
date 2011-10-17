@@ -10,6 +10,7 @@
 
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
+#include "../base/mp.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -20,7 +21,6 @@ namespace smb {
 // KLASA UiRobotIrp6ot_m
 //
 //
-
 
 int UiRobot::ui_get_edp_pid()
 {
@@ -33,101 +33,59 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::synchronise()
-
-{
-
-	return 1;
-
-}
-
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
-	common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
+		common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
 
 }
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
+
+	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb, NULL);
-			 */
-			break;
-		case 0:
-			mw->enable_menu_item(false, 1, EDP_Unload);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_unload,
 
-			 NULL);
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, ABN_mm_smb_edp_load, NULL);
-			 */
+		case common::UI_EDP_INACTIVE:
+
 			break;
-		case 1:
-		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
-			/* TR
-			 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb, NULL);
-			 */
+		case common::UI_EDP_OFF:
+			action_Clear_Fault->setEnabled(false);
+			action_Synchronisation->setEnabled(false);
+			action_command->setEnabled(false);
+			break;
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
+
+
+
+			action_Clear_Fault->setEnabled(true);
+			action_command->setEnabled(true);
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_preset_positions, NULL);
-				 */
-				switch (interface.mp.state)
+				action_Synchronisation->setEnabled(false);
+
+				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, EDP_Unload);
-						mw->enable_menu_item(false, 1, EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, NULL);
-						 */
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, EDP_Unload, EDP_Load);
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL,
-
-						 NULL);
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, ABN_mm_smb_edp_unload, NULL);
-						 */
+						action_command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
-						break;
 					case common::UI_MP_TASK_PAUSED:
-						block_ecp_trigger();
-						/* TR
-						 ApModifyItemState(&robot_menu, AB_ITEM_DIM, // modyfikacja menu - ruchy reczne zakazane
-
-						 NULL);
-						 */
+						action_command->setEnabled(false);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
-				mw->enable_menu_item(false, 1, EDP_Load);
-				/* TR
-				 ApModifyItemState(&robot_menu, AB_ITEM_NORMAL, ABN_mm_smb_edp_unload, NULL);
-				 ApModifyItemState(&robot_menu, AB_ITEM_DIM, ABN_mm_smb_edp_load, NULL);
-				 ApModifyItemState(&all_robots_menu, AB_ITEM_NORMAL, ABN_mm_all_robots_synchronisation, NULL);
-				 */
+				action_Synchronisation->setEnabled(true);
+
 			}
 			break;
 		default:
@@ -137,17 +95,90 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-void UiRobot::make_connections()
-{
-}
-
 void UiRobot::setup_menubar()
 {
+
 	common::UiRobot::setup_menubar();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&mb", 0, QApplication::UnicodeUTF8));
-	make_connections();			//domyślnie, jak coś będzie jeszcze do podłączenia (narazie to nic nie robi)
+
+	action_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
+	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SMB_COMMAND], signalDispatcher, menuBar);
+	action_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
+
+	robot_menu->addAction(action_Synchronisation);
+	robot_menu->addAction(action_command);
+	robot_menu->addSeparator();
+	robot_menu->addAction(action_Clear_Fault);
+
+	// connections
+	connect(action_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+
+}
+
+int UiRobot::synchronise()
+
+{
+
+	eb.command(boost::bind(&ui::smb::UiRobot::synchronise_int, &(*this)));
+
+	return 1;
+
+}
+
+int UiRobot::synchronise_int()
+
+{
+
+	interface.set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+		// dla robota spkm
+
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->the_robot->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
+		} else {
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	// modyfikacje menu
+	interface.manage_interface();
+	wgts[WGT_SMB_COMMAND]->synchro_depended_init();
+
+	return 1;
+
+}
+
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
 }
 
 void UiRobot::delete_ui_ecp_robot()
@@ -163,5 +194,4 @@ void UiRobot::null_ui_ecp_robot()
 }
 } //namespace ui
 } //namespace mrrocpp
-
 

@@ -9,7 +9,7 @@
 		<!ATTLIST State id CDATA #REQUIRED>
 		<!ATTLIST State type CDATA #REQUIRED>
 
-	<!ELEMENT SetOfRobots (FirstSet?, SecSet?)>
+	<!ELEMENT SetOfRobots (FirstSet)><!--?, SecSet?)>-->
 	
 	<!ELEMENT FirstSet (ROBOT+)>
 	<!ELEMENT SecSet (ROBOT+)>

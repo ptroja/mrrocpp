@@ -64,6 +64,8 @@ public:
 	 */
 	lib::single_thread_port <bool> epos_clear_fault_data_port;
 
+
+
 	/**
 	 * @brief epos motion status reply data request port
 	 */
@@ -97,12 +99,6 @@ public:
 	 * basing on data_ports
 	 */
 	void create_command();
-
-	/**
-	 * @brief checks the flag
-	 * then sets the flag or throw exception. Called from create_command() method.
-	 */
-	void check_then_set_command_flag(bool& flag);
 
 	/**
 	 * @brief set the data_request_ports

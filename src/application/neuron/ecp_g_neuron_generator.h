@@ -123,11 +123,17 @@ private:
 	double current_sum;
 	double current_max;
 
+	bool first_next_step;
+
+	FILE * pFileR;
+	FILE * pFileG;
+
 	lib::Xyz_Angle_Axis_vector msr_position_old;
 	lib::Xyz_Angle_Axis_vector msr_velocity;
 
 	void velocityProfileLinear(double *coeff, double pos1, double pos2, double t);
 	void velocityProfileSpline(double *coeff, double pos1, double vel1, double pos2, double vel2, double time);
+	void openFiles();
 
 public:
 	neuron_generator(common::task::task& _ecp_task);

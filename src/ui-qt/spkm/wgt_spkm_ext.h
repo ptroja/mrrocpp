@@ -12,6 +12,7 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+class UiRobot;
 }
 namespace spkm {
 class UiRobot;
@@ -25,7 +26,7 @@ class wgt_spkm_ext : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_spkm_ext(mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::spkm::UiRobot& _robot, QWidget *parent = 0);
+	wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
 	~wgt_spkm_ext();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
@@ -35,7 +36,7 @@ public:
 
 private:
 	Ui::wgt_spkm_extClass ui;
-	mrrocpp::ui::spkm::UiRobot& robot;
+	mrrocpp::ui::spkm::UiRobot* robot;
 
 	int init();
 	int copy();

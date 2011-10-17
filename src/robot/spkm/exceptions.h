@@ -1,8 +1,8 @@
 /*!
- * @file exception.h
- * @brief File containing consts, types and classes related to exceptions specific to SPKM.
+ * @file exceptions.h
+ * @brief File containing consts, types and classes related to exceptions specific for SPKM.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date 08-02-2011
  *
  * @ingroup spkm
@@ -26,7 +26,7 @@ typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_
 
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
- * \author tkornuta
+ * \author Tomasz Kornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
 
