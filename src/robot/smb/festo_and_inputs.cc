@@ -341,16 +341,15 @@ void festo_and_inputs::move_one_or_two_down()
 
 	int number_of_legs_down = 0;
 
-	int iteration = 0;
-
 	set_all_legs_unchecked();
 
-	while (number_of_legs_down < 3) {
+	for (int iteration = 0; number_of_legs_down < 3; iteration++) {
+
 		master.msg->message("wait iteration");
 		delay(20);
 
 		// if it take too long to wait break
-		if (iteration > 1000) {
+		if (iteration > 500) {
 			master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 			break;
@@ -418,16 +417,14 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				// waits until all legs are in down position
 				int number_of_legs_down = 0;
 
-				int iteration = 0;
-
 				set_all_legs_unchecked();
 
-				while (number_of_legs_down < 3) {
+				for (int iteration = 0; number_of_legs_down < 3; iteration++) {
 
 					delay(20);
 
 					// if it take too long to wait break
-					if (iteration > 1000) {
+					if (iteration > 500) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
@@ -491,15 +488,13 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 				// czekaj az sie uniosa
 				int number_of_legs_up = 0;
 
-				int iteration = 0;
-
 				set_all_legs_unchecked();
 
-				while (number_of_legs_up < 2) {
+				for (int iteration = 0; number_of_legs_up < 3; iteration++) {
 					delay(20);
 
 					// if it take too long to wait break
-					if (iteration > 1000) {
+					if (iteration > 500) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
@@ -549,17 +544,17 @@ void festo_and_inputs::festo_command_all_up(lib::smb::festo_command_td& festo_co
 				execute_command();
 
 				// waits until all legs are in upper position
-				int number_of_legs_up = 0;
 
-				int iteration = 0;
+				int number_of_legs_up = 0,
 
 				set_all_legs_unchecked();
-				while (number_of_legs_up < 3) {
+
+				for (int iteration = 0; number_of_legs_up < 3; iteration++) {
 
 					delay(20);
 
 					// if it take too long to wait break
-					if (iteration > 1000) {
+					if (iteration > 500) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
