@@ -51,6 +51,30 @@ festo_and_inputs::~festo_and_inputs()
 
 }
 
+bool festo_and_inputs::is_checked(int leg_number)
+{
+	return checked[leg_number - 1];
+}
+
+void festo_and_inputs::set_checked(int leg_number)
+{
+	checked[leg_number - 1] = true;
+}
+
+void festo_and_inputs::set_unchecked(int leg_number)
+{
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		checked[i] = false;
+
+	}
+
+}
+
+void festo_and_inputs::set_all_legs_unchecked()
+{
+
+}
+
 bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
 	return epos_inputs[2 * leg_number + 9];
@@ -308,15 +332,15 @@ void festo_and_inputs::move_one_or_two_down()
 
 	// waits until all legs go down
 
-	int number_of_legs_up = 0;
-	while (number_of_legs_up < 3) {
+	int number_of_legs_down = 0;
+	while (number_of_legs_down < 3) {
 		master.msg->message("wait iteration");
 		delay(20);
-		number_of_legs_up = 0;
+		number_of_legs_down = 0;
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 			if (is_lower_halotron_active(i + 1)) {
-				number_of_legs_up++;
+				number_of_legs_down++;
 			}
 		}
 	}
@@ -367,21 +391,28 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					set_move_down(i + 1, true);
 					set_move_up(i + 1, false);
+					set_detach(i + 1, false);
 				}
 
 				execute_command();
 
 				// waits until all legs are in down position
 				int number_of_legs_up = 0;
+
+				set_all_legs_unchecked();
+
 				while (number_of_legs_up < 3) {
 
 					delay(20);
-					number_of_legs_up = 0;
 					read_state();
+
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if (is_lower_halotron_active(i + 1)) {
+
+						if ((!is_checked(i + 1)) && (is_lower_halotron_active(i + 1))) {
+							set_checked(i + 1);
 							number_of_legs_up++;
 						}
+
 					}
 				}
 			}

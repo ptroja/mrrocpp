@@ -34,6 +34,11 @@ class festo_and_inputs
 private:
 	effector &master;
 
+	/*!
+	 * \brief the array is used to memorize current state of the leg in context of current operation
+	 */
+	bool checked[lib::smb::LEG_CLAMP_NUMBER];
+
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
 	//! festo shared ptr
@@ -53,6 +58,26 @@ public:
 	~festo_and_inputs();
 
 	void determine_legs_state();
+
+	/*!
+	 * \brief determine if the particular leg was checked
+	 */
+	bool is_checked(int leg_number);
+
+	/*!
+	 * \brief set the particular leg checked
+	 */
+	void set_checked(int leg_number);
+
+	/*!
+	 * \brief set the particular leg unchecked
+	 */
+	void set_unchecked(int leg_number);
+
+	/*!
+	 * \brief uncheck all legs
+	 */
+	void set_all_legs_unchecked();
 
 	/*!
 	 * \brief festo command variant in move_arm
