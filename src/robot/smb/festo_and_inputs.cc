@@ -283,6 +283,8 @@ void festo_and_inputs::festo_command()
 
 	}
 
+	determine_legs_state();
+
 	if (robot_test_mode) {
 		current_legs_state = next_legs_state;
 	}
