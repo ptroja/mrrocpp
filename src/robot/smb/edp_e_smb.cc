@@ -40,10 +40,11 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
+	msg->message("get_controller_state");
 	// False is the initial value
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = false;
-	controller_state_edp_buf.is_robot_blocked = false;
+	controller_state_edp_buf.robot_in_fault_state = false;
 
 	if (!robot_test_mode) {
 		// Try to get state of each axis
@@ -78,7 +79,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		// Robot is synchronised if all axes are referenced
 		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
-		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
+		controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
 	}
 
 	// Copy data to reply buffer

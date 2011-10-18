@@ -833,36 +833,25 @@ typedef robot_model_t r_buffer_robot_model_t;
 //------------------------------------------------------------------------------
 typedef struct _controller_state_t
 {
-	/*! Is robot synchronised? */
+	//! Flag informing whether the robot is synchronized or not.
 	bool is_synchronised;
-	/*!
-	 *  Czy wzmacniacze mocy sa zasilane?
-	 *  @todo Translate to English.
-	 */
-	bool is_power_on;
-	/*!
-	 *  Czy szafa jest waczona?
-	 *  @todo Translate to English.
-	 *        Change the "wardrobe" thing for God's sake !!!
-	 */
-	bool is_wardrobe_on;
-	/*!
-	 *  Czy wyzerowano sterowanie na silnikach po awarii sprzetowej?
-	 *  @todo Translate to English.
-	 */
-	bool is_robot_blocked;
 
-	//! Give access to boost::serialization framework
+	//! Flag telling whether the power is supplied to effector motors or not.
+	bool is_power_on;
+
+	//! Flag informing whewher robot is in fault state or not.
+	bool robot_in_fault_state;
+
+	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
-	//! Serialization of the data structure
+	//! Serialization of the data structure.
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & is_synchronised;
 		ar & is_power_on;
-		ar & is_wardrobe_on;
-		ar & is_robot_blocked;
+		ar & robot_in_fault_state;
 	}
 } controller_state_t;
 
