@@ -237,7 +237,7 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 				if (ui.checkBox_fl_all_undetachable->isChecked()) {
 					fc.undetachable[i] = true;
 				} else {
-					interface.ui_msg->message("special undetachable mode not set");
+					interface.ui_msg->message(lib::NON_FATAL_ERROR, "special undetachable mode not set");
 				}
 			}
 

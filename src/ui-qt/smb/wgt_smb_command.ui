@@ -438,7 +438,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>only if needed!</string>
+                  <string>use carefully !</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -681,7 +681,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>only if needed!</string>
+                  <string>use carefully !</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -906,7 +906,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>only if needed!</string>
+                  <string>use carefully !</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
