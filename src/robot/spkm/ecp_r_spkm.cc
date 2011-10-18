@@ -125,6 +125,7 @@ void robot::create_command()
 	if (epos_reply_data_request_port.is_new_request()) {
 		ecp_edp_cbuffer.get_pose_specification = lib::spkm::MOTOR;
 		//	ecp_command.get_arm_type = lib::MOTOR;
+		//sr_ecp_msg.message("epos_reply_data_request_port");
 
 		check_then_set_command_flag(is_new_request);
 	}
@@ -132,7 +133,7 @@ void robot::create_command()
 	if (epos_joint_reply_data_request_port.is_new_request()) {
 		ecp_edp_cbuffer.get_pose_specification = lib::spkm::JOINT;
 		//ecp_command.get_arm_type = lib::JOINT;
-		//sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
+		//	sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
@@ -163,10 +164,8 @@ void robot::create_command()
 
 	// message serialization
 	if (communicate_with_edp) {
-		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type == lib::SET_GET)) {
-			assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
-			memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		}
+		assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
 	}
 }
 
