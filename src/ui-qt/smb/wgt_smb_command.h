@@ -85,6 +85,10 @@ private slots:
 	void on_pushButton_ms_left_clicked();
 	void on_pushButton_ms_rigth_clicked();
 
+	void on_radioButton_m_motor_toggled();
+	void on_radioButton_m_joint_toggled();
+	void on_radioButton_m_ext_toggled();
+
 };
 
 #endif // WGT_SMB_COMMAND_H

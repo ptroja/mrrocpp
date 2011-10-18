@@ -263,8 +263,6 @@ void wgt_smb_command::on_pushButton_m_execute_clicked()
 	move_it();
 }
 
-
-
 void wgt_smb_command::on_pushButton_read_clicked()
 {
 	init();
@@ -312,6 +310,27 @@ void wgt_smb_command::on_pushButton_stop_clicked()
 {
 	interface.ui_msg->message("on_pushButton_stop_clicked");
 	robot->execute_stop_motor();
+}
+
+void wgt_smb_command::on_radioButton_m_motor_toggled()
+{
+	if (ui.radioButton_m_motor->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_motor_clicked");
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_joint_toggled()
+{
+	if (ui.radioButton_m_joint->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_joint_clicked");
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_ext_toggled()
+{
+	if (ui.radioButton_m_ext->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_ext_clicked");
+	}
 }
 
 // events
