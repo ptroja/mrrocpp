@@ -490,7 +490,7 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_up < 3; iteration++) {
+				for (int iteration = 0; number_of_legs_up < 2; iteration++) {
 					delay(20);
 
 					// if it take too long to wait break
@@ -502,7 +502,8 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
+						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
+								&& (festo_command.leg[i] == lib::smb::UP)) {
 							set_checked(i + 1);
 							number_of_legs_up++;
 							set_detach(i + 1, false);
