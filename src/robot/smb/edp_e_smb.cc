@@ -40,30 +40,60 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
+	// False is the initial value
+	controller_state_edp_buf.is_synchronised = false;
+	controller_state_edp_buf.is_power_on = false;
+	controller_state_edp_buf.is_robot_blocked = false;
 
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = false;
+	if (!robot_test_mode) {
+		// Try to get state of each axis
+		unsigned int referenced = 0;
+		unsigned int powerOn = 0;
+		unsigned int notInFaultState = 0;
+		for (size_t i = 0; i < axes.size(); ++i) {
+			try {
+				// Check if in the FAULT state
+				if (axes[i]->checkEPOSstate() == 11) {
+					// Read number of errors
+					int errNum = axes[i]->readNumberOfErrors();
+					for (int j = 1; j <= errNum; ++j) {
+						// Get the detailed error
+						uint32_t errCode = axes[i]->readErrorHistory(j);
+
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
+								+ axes[i]->ErrorCodeMessage(errCode));
+					}
+				} else {
+					notInFaultState++;
+				}
+				if (axes[i]->isReferenced()) {
+					// Do not break from this loop so this is a also a preliminary axis error check
+					referenced++;
+				}
+				powerOn++;
+			} catch (...) {
+				// Probably the axis is not powered on, do nothing.
+			}
+		}
+		// Robot is synchronised if all axes are referenced
+		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+		controller_state_edp_buf.is_robot_blocked = (notInFaultState == axes.size());
 	}
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+
+	// Copy data to reply buffer
 	reply.controller_state = controller_state_edp_buf;
 
-	/*
-	 // aktualizacja pozycji robota
-	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
-	 sb->servo_command.instruction_code = lib::READ;
-	 // Wyslanie rozkazu do SERVO_GROUP
-	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-	 //	printf("get_arm_position read_hardware\n");
+	// Check if it is safe to calculate joint positions
+	if (is_synchronised()) {
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	}
 
-	 sb->send_to_SERVO_GROUP();
-	 */
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
+	// Lock data structure during update
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
 
-		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
+		// Initialize internal data
 		for (int i = 0; i < number_of_servos; i++) {
 			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 			desired_joints[i] = current_joints[i];
@@ -132,6 +162,7 @@ void effector::synchronise(void)
 		controller_state_edp_buf.is_synchronised = true;
 		return;
 	}
+
 #if 0
 	// Two-step synchronization of the motor rotating the whole PKM.
 	// Step1: Potentiometer.
@@ -150,7 +181,7 @@ void effector::synchronise(void)
 	// Move to the relative position.
 	pkm_rotation_node->moveRelative(position);
 	while (!pkm_rotation_node->isTargetReached())
-	usleep(200000);
+		usleep(200000);
 
 	// Step2: Homing.
 	// Activate homing mode.
@@ -158,6 +189,7 @@ void effector::synchronise(void)
 
 	// Compute joints positions in the home position
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
 #endif
 
 	// Now the robot is synchronised
@@ -195,31 +227,31 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 
 			case lib::smb::CLEAR_FAULT: {
-				msg->message("CLEAR_FAULT");
+				msg->message("QUICKSTOP");
 				BOOST_FOREACH(maxon::epos * node, axes)
-						{
-							node->printEPOSstate();
+				{
+					node->printEPOSstate();
 
-							// Check if in a FAULT state
-							if (node->checkEPOSstate() == 11) {
-								maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
-								cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-								// Print list of errors.
-								for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-									maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
-									cerr << node->ErrorCodeMessage(errCode) << endl;
-								}
-								// Clear errors.
-								if (errNum > 0) {
-									node->clearNumberOfErrors();
-								}
-								node->changeEPOSstate(maxon::epos::FAULT_RESET);
-							}
-							// Reset node.
-							node->reset();
+					// Check if in a FAULT state
+					if (node->checkEPOSstate() == 11) {
+						maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
+						cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+						// Print list of errors.
+						for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+							maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
+							cerr << node->ErrorCodeMessage(errCode) << endl;
 						}
-				// Internal position counters need not be updated
-				return;
+						// Clear errors.
+						if (errNum > 0) {
+							node->clearNumberOfErrors();
+						}
+						// Reset errors.
+						node->changeEPOSstate(maxon::epos::FAULT_RESET);
+					}
+					// Reset node.
+					node->reset();
+				}
+				break;
 			}
 			case lib::smb::FESTO: {
 				if (is_base_positioned_to_move_legs) {

@@ -22,20 +22,29 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	int position;
+	int motor, position;
 	try {
 		// Check arguments.
-		if ((argc < 1) || (argc > 2))
-			throw;
+		if (argc != 3)
+			throw 1;
 
-		// Try to convert.
-		istringstream iss(argv[1]);
-		iss >> position;
-		cout<< position << endl;
+		// Try to convert motor.
+		istringstream iss1(argv[1]);
+		iss1 >> motor;
+		cout << "MOTOR:" << motor << endl;
+		if ((motor !=8) && (motor != 9))
+			throw 2;
+
+		// Try to convert position.
+		istringstream iss2(argv[2]);
+		iss2 >> position;
+		cout << "ROTATION:" << position << endl;
 	} catch (...) {
-		cout << "Usage: smb_move_test X - rotates the smb upper motor to given relative X position." << endl;
-		exit(-1);
+		cout << "Usage: smb_move_test MOTOR ROTATION - rotates the given motor to given relative position."
+				<< "\n\t MOTOR - number of EPOS controlling the motor, currently only 8 and 9 are allowed."
+				<< "\n\t ROTATION - number of motor increments." << endl;
 	}
+	return -1;
 
 	// Create gateway.
 	gateway_epos_usb gateway;
@@ -44,8 +53,8 @@ int main(int argc, char *argv[])
 		// Open gateway.
 		gateway.open();
 
-		// Create node related to the 9th epos maxon controller.
-		epos node(gateway, 8);
+		// Create node related to the given epos maxon controller.
+		epos node(gateway, motor);
 
 		// Print state.
 		node.printEPOSstate();
