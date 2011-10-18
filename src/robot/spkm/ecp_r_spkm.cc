@@ -123,19 +123,22 @@ void robot::create_command()
 	}
 
 	if (epos_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::MOTOR;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::MOTOR;
+		//	ecp_command.get_arm_type = lib::MOTOR;
 
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::JOINT;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::JOINT;
+		//ecp_command.get_arm_type = lib::JOINT;
 		//sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::FRAME;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::FRAME;
+		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}

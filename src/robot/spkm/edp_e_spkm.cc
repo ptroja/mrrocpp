@@ -824,9 +824,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	// we do not check the arm position when only lib::SET is set
 	if (instruction.instruction_type != lib::SET) {
-		switch (instruction.get_arm_type)
+		switch (ecp_edp_cbuffer.get_pose_specification)
 		{
-			case lib::MOTOR:
+			case lib::spkm::MOTOR:
 				msg->message("EDP get_arm_position MOTOR");
 				for (size_t i = 0; i < axes.size(); ++i) {
 					if (robot_test_mode) {
@@ -841,7 +841,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					}
 				}
 				break;
-			case lib::JOINT:
+			case lib::spkm::JOINT:
 				msg->message("EDP get_arm_position JOINT");
 
 				// Read actual values from hardware
@@ -859,7 +859,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
 				}
 				break;
-			case lib::FRAME: {
+			case lib::spkm::FRAME: {
 				msg->message("EDP get_arm_position FRAME");
 
 				edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
