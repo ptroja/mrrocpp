@@ -263,11 +263,7 @@ void wgt_smb_command::on_pushButton_m_execute_clicked()
 	move_it();
 }
 
-void wgt_smb_command::on_pushButton_execute_all_clicked()
-{
-	on_pushButton_fl_execute_clicked();
-	on_pushButton_m_execute_clicked();
-}
+
 
 void wgt_smb_command::on_pushButton_read_clicked()
 {
