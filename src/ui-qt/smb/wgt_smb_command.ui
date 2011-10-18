@@ -199,7 +199,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="QCheckBox" name="checkBox_fl_all_udetachable">
+                <widget class="QCheckBox" name="checkBox_fl_all_undetachable">
                  <property name="enabled">
                   <bool>true</bool>
                  </property>

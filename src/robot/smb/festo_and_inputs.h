@@ -53,6 +53,11 @@ private:
 
 	bool robot_test_mode;
 
+	/*!
+	 * \brief current festo command
+	 */
+	lib::smb::festo_command_td festo_command;
+
 public:
 	festo_and_inputs(effector &_master);
 	~festo_and_inputs();
@@ -82,12 +87,12 @@ public:
 	/*!
 	 * \brief festo command variant in move_arm
 	 */
-	void festo_command();
+	void command();
 
 	/*!
 	 * \brief festo command all_down variant in move_arm
 	 */
-	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_all_down();
 
 	/*!
 	 * \brief moves all legs that are in the upper position down and detach them
@@ -98,17 +103,17 @@ public:
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
 	 */
-	void festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_one_up_two_down();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_two_up_one_down();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void festo_command_all_up(lib::smb::festo_command_td& festo_command);
+	void festo_command_all_up();
 
 	/*!
 	 * \brief festo reply in test_mode
