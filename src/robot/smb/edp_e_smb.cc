@@ -103,7 +103,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
@@ -115,8 +115,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway
-					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -187,7 +187,6 @@ void effector::synchronise(void)
 	// Activate homing mode.
 	pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 0);
 
-
 	// Compute joints positions in the home position
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
@@ -250,7 +249,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						node->changeEPOSstate(maxon::epos::FAULT_RESET);
 					}
 					// Reset node.
-					//node->reset();
+					node->reset();
 				}
 				break;
 			}
@@ -285,12 +284,12 @@ void effector::rotational_motors_command()
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR)
+				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT) && (current_joints[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT)
+				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -317,7 +316,6 @@ void effector::rotational_motors_command()
 			break;
 	} //: switch (ecp_edp_cbuffer.pose_specification)
 
-
 	// TODO: remove this line!
 	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
@@ -329,24 +327,22 @@ void effector::rotational_motors_command()
 			// Execute command.
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
-					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-							<< endl;
+					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 					if (!robot_test_mode) {
-/*						axes[i]->writeProfileVelocity(Vdefault[i]);
-						axes[i]->writeProfileAcceleration(Adefault[i]);
-						axes[i]->writeProfileDeceleration(Ddefault[i]);*/
+						/*						axes[i]->writeProfileVelocity(Vdefault[i]);
+						 axes[i]->writeProfileAcceleration(Adefault[i]);
+						 axes[i]->writeProfileDeceleration(Ddefault[i]);*/
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] = desired_joints[i];
 						current_motor_pos[i] = desired_motor_pos_new[i];
 					}
 				} else {
-					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
-							<< endl;
+					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 					if (!robot_test_mode) {
-/*						axes[i]->writeProfileVelocity(Vdefault[i]);
-						axes[i]->writeProfileAcceleration(Adefault[i]);
-						axes[i]->writeProfileDeceleration(Ddefault[i]);*/
+						/*						axes[i]->writeProfileVelocity(Vdefault[i]);
+						 axes[i]->writeProfileAcceleration(Adefault[i]);
+						 axes[i]->writeProfileDeceleration(Ddefault[i]);*/
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] += desired_joints[i];
@@ -359,7 +355,7 @@ void effector::rotational_motors_command()
 			// Throw non-fatal error - motion type not supported.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
 			break;
-	}//: switch (ecp_edp_cbuffer.motion_variant)
+	} //: switch (ecp_edp_cbuffer.motion_variant)
 
 }
 

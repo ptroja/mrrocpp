@@ -283,6 +283,8 @@ void festo_and_inputs::festo_command()
 
 	}
 
+	determine_legs_state();
+
 	if (robot_test_mode) {
 		current_legs_state = next_legs_state;
 	}
@@ -556,6 +558,9 @@ void festo_and_inputs::initiate()
 
 void festo_and_inputs::create_reply()
 {
+
+	determine_legs_state();
+
 	if (!robot_test_mode) {
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
