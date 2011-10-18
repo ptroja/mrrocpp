@@ -54,7 +54,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::MOTOR;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::MOTOR;
 
 		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
@@ -71,7 +71,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::JOINT;
 
 		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
@@ -87,7 +87,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::FRAME;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;

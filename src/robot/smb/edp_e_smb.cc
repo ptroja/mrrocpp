@@ -182,7 +182,7 @@ void effector::synchronise(void)
 	// Move to the relative position.
 	pkm_rotation_node->moveRelative(position);
 	while (!pkm_rotation_node->isTargetReached())
-		usleep(200000);
+	usleep(200000);
 
 	// Step2: Homing.
 	// Activate homing mode.
@@ -230,28 +230,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::smb::CLEAR_FAULT: {
 				msg->message("QUICKSTOP");
 				BOOST_FOREACH(maxon::epos * node, axes)
-				{
-					node->printEPOSstate();
+						{
+							node->printEPOSstate();
 
-					// Check if in a FAULT state
-					if (node->checkEPOSstate() == 11) {
-						maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
-						cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-						// Print list of errors.
-						for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-							maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
-							cerr << node->ErrorCodeMessage(errCode) << endl;
+							// Check if in a FAULT state
+							if (node->checkEPOSstate() == 11) {
+								maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
+								cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+								// Print list of errors.
+								for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+									maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
+									cerr << node->ErrorCodeMessage(errCode) << endl;
+								}
+								// Clear errors.
+								if (errNum > 0) {
+									node->clearNumberOfErrors();
+								}
+								// Reset errors.
+								node->changeEPOSstate(maxon::epos::FAULT_RESET);
+							}
+							// Reset node.
+							node->reset();
 						}
-						// Clear errors.
-						if (errNum > 0) {
-							node->clearNumberOfErrors();
-						}
-						// Reset errors.
-						node->changeEPOSstate(maxon::epos::FAULT_RESET);
-					}
-					// Reset node.
-					node->reset();
-				}
 				break;
 			}
 			case lib::smb::FESTO: {
@@ -276,7 +276,7 @@ void effector::rotational_motors_command()
 	/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	 ss << ecp_edp_cbuffer.motor_pos[1];
 	 msg->message(ss.str().c_str());
-	 ss << ecp_edp_cbuffer.pose_specification;
+	 ss << ecp_edp_cbuffer.set_pose_specification;
 	 msg->message(ss.str().c_str());*/
 
 	if (current_legs_state() != lib::smb::TWO_UP_ONE_DOWN) {
@@ -285,20 +285,20 @@ void effector::rotational_motors_command()
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR)
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
 				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT)
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
 				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
 	// TODO: remove this line!
-	ecp_edp_cbuffer.pose_specification = lib::smb::MOTOR;
+	ecp_edp_cbuffer.set_pose_specification = lib::smb::MOTOR;
 
 	// Interpret command according to the pose specification.
-	switch (ecp_edp_cbuffer.pose_specification)
+	switch (ecp_edp_cbuffer.set_pose_specification)
 	{
 		case lib::smb::MOTOR:
 			// Copy data directly from buffer
@@ -315,7 +315,7 @@ void effector::rotational_motors_command()
 			// Throw non-fatal error - invalid pose specification.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 			break;
-	} //: switch (ecp_edp_cbuffer.pose_specification)
+	} //: switch (ecp_edp_cbuffer.set_pose_specification)
 
 	// TODO: remove this line!
 	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
