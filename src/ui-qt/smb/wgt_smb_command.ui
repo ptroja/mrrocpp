@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>682</width>
+    <width>745</width>
     <height>400</height>
    </rect>
   </property>
@@ -177,7 +177,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QWidget" name="widget_2" native="true">
               <property name="minimumSize">
                <size>
-                <width>150</width>
+                <width>250</width>
                 <height>0</height>
                </size>
               </property>
@@ -378,7 +378,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_4">
               <property name="minimumSize">
                <size>
-                <width>150</width>
+                <width>250</width>
                 <height>0</height>
                </size>
               </property>
@@ -593,7 +593,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_7">
               <property name="minimumSize">
                <size>
-                <width>150</width>
+                <width>250</width>
                 <height>0</height>
                </size>
               </property>
@@ -790,7 +790,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QFrame" name="frame_10">
               <property name="minimumSize">
                <size>
-                <width>150</width>
+                <width>250</width>
                 <height>0</height>
                </size>
               </property>
@@ -1679,6 +1679,12 @@ E</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>read</string>
         </property>
@@ -1686,6 +1692,12 @@ E</string>
       </item>
       <item>
        <widget class="QCheckBox" name="checkBox_cyclic_read">
+        <property name="minimumSize">
+         <size>
+          <width>160</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>cyclic read</string>
         </property>
@@ -1699,10 +1711,32 @@ E</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>STOP</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>149</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
