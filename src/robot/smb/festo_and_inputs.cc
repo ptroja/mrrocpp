@@ -326,6 +326,13 @@ void festo_and_inputs::move_one_or_two_down()
 			set_move_up(i + 1, false);
 			set_detach(i + 1, true);
 		}
+		// for safety reasons
+		if (is_lower_halotron_active(i + 1)) {
+			set_move_down(i + 1, true);
+			set_move_up(i + 1, false);
+			set_detach(i + 1, false);
+		}
+
 	}
 
 	execute_command();
@@ -333,15 +340,32 @@ void festo_and_inputs::move_one_or_two_down()
 	// waits until all legs go down
 
 	int number_of_legs_down = 0;
+
+	int iteration = 0;
+
+	set_all_legs_unchecked();
+
 	while (number_of_legs_down < 3) {
 		master.msg->message("wait iteration");
 		delay(20);
-		number_of_legs_down = 0;
+
+		// if it take too long to wait break
+		if (iteration > 1000) {
+			master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+			break;
+		}
+
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			if (is_lower_halotron_active(i + 1)) {
+
+			if ((!is_checked(i + 1)) && (is_lower_halotron_active(i + 1))) {
+				set_checked(i + 1);
 				number_of_legs_down++;
+				// attach leg
+				set_detach(i + 1, false);
 			}
+
 		}
 	}
 
@@ -349,11 +373,6 @@ void festo_and_inputs::move_one_or_two_down()
 	delay(500);
 
 	// attach legs
-
-	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		set_detach(i + 1, false);
-	}
-
 	execute_command();
 }
 
@@ -397,20 +416,30 @@ void festo_and_inputs::festo_command_all_down(lib::smb::festo_command_td& festo_
 				execute_command();
 
 				// waits until all legs are in down position
-				int number_of_legs_up = 0;
+				int number_of_legs_down = 0;
+
+				int iteration = 0;
 
 				set_all_legs_unchecked();
 
-				while (number_of_legs_up < 3) {
+				while (number_of_legs_down < 3) {
 
 					delay(20);
+
+					// if it take too long to wait break
+					if (iteration > 1000) {
+						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+						break;
+					}
+
 					read_state();
 
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
 						if ((!is_checked(i + 1)) && (is_lower_halotron_active(i + 1))) {
 							set_checked(i + 1);
-							number_of_legs_up++;
+							number_of_legs_down++;
 						}
 
 					}
@@ -447,6 +476,7 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 					}
 				}
 				execute_command();
+				//odczekaj pewien czas liczac na to ze zaciski odpuszcza
 				delay(1000);
 				// podnos nogi
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -460,25 +490,31 @@ void festo_and_inputs::festo_command_two_up_one_down(lib::smb::festo_command_td&
 
 				// czekaj az sie uniosa
 				int number_of_legs_up = 0;
+
+				int iteration = 0;
+
+				set_all_legs_unchecked();
+
 				while (number_of_legs_up < 2) {
 					delay(20);
-					number_of_legs_up = 0;
+
+					// if it take too long to wait break
+					if (iteration > 1000) {
+						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+						break;
+					}
+
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if (is_upper_halotron_active(i + 1)) {
+						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
+							set_checked(i + 1);
 							number_of_legs_up++;
-						}
-					}
-				}
-				// odlacz detach z nog ktore sa podniesione
-
-				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if (festo_command.leg[i] == lib::smb::UP) {
-						if (is_upper_halotron_active(i + 1)) {
 							set_detach(i + 1, false);
 						}
 					}
 				}
+
 				execute_command();
 			}
 		}
@@ -514,15 +550,30 @@ void festo_and_inputs::festo_command_all_up(lib::smb::festo_command_td& festo_co
 
 				// waits until all legs are in upper position
 				int number_of_legs_up = 0;
+
+				int iteration = 0;
+
+				set_all_legs_unchecked();
 				while (number_of_legs_up < 3) {
 
 					delay(20);
-					number_of_legs_up = 0;
+
+					// if it take too long to wait break
+					if (iteration > 1000) {
+						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+						break;
+					}
+
 					read_state();
+
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if (is_upper_halotron_active(i + 1)) {
+
+						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
+							set_checked(i + 1);
 							number_of_legs_up++;
 						}
+
 					}
 				}
 			}
