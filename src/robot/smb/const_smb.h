@@ -43,7 +43,7 @@ enum CBUFFER_VARIANT
 
 /*!
  * Pose specification variants
- * @ingroup spkm
+ * @ingroup smb
  */
 typedef enum _POSE_SPECIFICATION
 {

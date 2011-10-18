@@ -891,13 +891,13 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
 }
 
 void effector::reply_serialization(void)
 {
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
+	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
