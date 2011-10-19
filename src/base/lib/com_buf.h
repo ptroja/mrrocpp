@@ -19,7 +19,6 @@
  *        </ul>
  */
 ////////////////////////////////////////////////////////////////////////////////
-
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
@@ -596,7 +595,7 @@ _robot_model
 {
 	//! Constructor set default discriminant type
 	_robot_model() :
-		type(ROBOT_MODEL_SPECIFICATION(-1))
+			type(ROBOT_MODEL_SPECIFICATION(-1))
 	{
 	}
 
@@ -684,7 +683,6 @@ typedef struct c_buffer_arm
 		BEHAVIOUR_SPECIFICATION behaviour[6];
 	} pf_def;
 	//----------------------------------------------------------
-	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -701,7 +699,6 @@ typedef struct c_buffer_arm
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & pf_def.behaviour;
 
-		ar & serialized_command;
 	}
 } c_buffer_arm_t;
 
@@ -756,6 +753,7 @@ struct c_buffer
 	uint16_t value_in_step_no;
 	c_buffer_robot_model_t robot_model;
 	c_buffer_arm_t arm;
+	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -781,6 +779,7 @@ struct c_buffer
 		ar & value_in_step_no;
 		ar & robot_model;
 		ar & arm;
+		ar & serialized_command;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -824,7 +823,6 @@ struct c_buffer
 //------------------------------------------------------------------------------
 //                                  r_buffer
 //------------------------------------------------------------------------------
-
 
 //------------------------------------------------------------------------------
 /*! robot_model */
@@ -922,8 +920,6 @@ typedef struct r_buffer_arm
 
 	//----------------------------------------------------------
 
-	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
-
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -945,7 +941,6 @@ typedef struct r_buffer_arm
 
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & gripper_reg_state;
-		ar & serialized_reply;
 
 		ar & measured_current.average_module;
 		ar & measured_current.minimum_module;
@@ -1001,6 +996,7 @@ struct r_buffer : r_buffer_base
 
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
+	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -1025,6 +1021,7 @@ struct r_buffer : r_buffer_base
 		// The following are unions... probably have to handle with boost::variant
 		ar & robot_model;
 		ar & arm;
+		ar & serialized_reply;
 	}
 };
 
@@ -1060,7 +1057,7 @@ struct ecp_next_state_t
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
-	playerpos_goal_t playerpos_goal;
+playerpos_goal_t	playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
@@ -1085,7 +1082,7 @@ struct ecp_next_state_t
 
 //------------------------------------------------------------------------------
 /*! MP to ECP command. */
-template<class NEXT_STATE_T>
+template <class NEXT_STATE_T>
 struct _MP_COMMAND_PACKAGE
 {
 	MP_COMMAND command;
@@ -1100,7 +1097,8 @@ struct _MP_COMMAND_PACKAGE
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & command;
-		switch (command) {
+		switch (command)
+		{
 			case NEXT_STATE:
 				ar & ecp_next_state;
 				break;
@@ -1113,7 +1111,7 @@ struct _MP_COMMAND_PACKAGE
 	}
 };
 
-typedef struct _MP_COMMAND_PACKAGE<ecp_next_state_t> MP_COMMAND_PACKAGE;
+typedef struct _MP_COMMAND_PACKAGE <ecp_next_state_t> MP_COMMAND_PACKAGE;
 
 //------------------------------------------------------------------------------
 /*! ECP to MP reply. */
@@ -1138,7 +1136,6 @@ struct ECP_REPLY_PACKAGE
 	}
 };
 // ------------------------------------------------------------------------
-
 
 /**
  * @brief Empty data structure.

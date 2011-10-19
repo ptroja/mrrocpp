@@ -61,7 +61,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::smb::MOTOR;
+		ecp_edp_cbuffer.set_pose_specification = lib::smb::MOTOR;
 
 		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
@@ -78,7 +78,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::smb::JOINT;
+		ecp_edp_cbuffer.set_pose_specification = lib::smb::JOINT;
 
 		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
@@ -94,7 +94,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::smb::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::smb::FRAME;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
@@ -166,8 +166,8 @@ void robot::create_command()
 
 	// message serialization
 	if (communicate_with_edp) {
-		memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
+		assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
 	}
 }
 
@@ -175,7 +175,7 @@ void robot::get_reply()
 {
 
 	// message deserialization
-	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
+	memcpy(&edp_ecp_rbuffer, reply_package.serialized_reply, sizeof(edp_ecp_rbuffer));
 
 	if (epos_reply_data_request_port.is_new_request()) {
 		// generator reply generation

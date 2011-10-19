@@ -23,6 +23,10 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	checkBox_fl_down_Vector.append(ui.checkBox_fl2_down);
 	checkBox_fl_down_Vector.append(ui.checkBox_fl3_down);
 
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl1_udetachable);
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl2_udetachable);
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl3_udetachable);
+
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl2_attached);
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl3_attached);
@@ -228,6 +232,15 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 				fc.leg[i] = lib::smb::DOWN;
 			}
 
+			fc.undetachable[i] = false;
+			if (checkBox_fl_undetachable_Vector[i]->isChecked()) {
+				if (ui.checkBox_fl_all_undetachable->isChecked()) {
+					fc.undetachable[i] = true;
+				} else {
+					interface.ui_msg->message(lib::NON_FATAL_ERROR, "special undetachable mode not set");
+				}
+			}
+
 		}
 		robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.set();
 		robot->ui_ecp_robot->execute_motion();
@@ -241,7 +254,7 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 
 void wgt_smb_command::on_pushButton_fl_all_up_clicked()
 {
-	// dla kazdej z nog
+// dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		// wybierz wariant
 		radioButton_fl_up_Vector[i]->setChecked(true);
@@ -250,7 +263,7 @@ void wgt_smb_command::on_pushButton_fl_all_up_clicked()
 
 void wgt_smb_command::on_pushButton_fl_all_down_clicked()
 {
-	// dla kazdej z nog
+// dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		// wybierz wariant
 		radioButton_fl_down_Vector[i]->setChecked(true);
@@ -262,8 +275,6 @@ void wgt_smb_command::on_pushButton_m_execute_clicked()
 	get_desired_position();
 	move_it();
 }
-
-
 
 void wgt_smb_command::on_pushButton_read_clicked()
 {
@@ -312,6 +323,27 @@ void wgt_smb_command::on_pushButton_stop_clicked()
 {
 	interface.ui_msg->message("on_pushButton_stop_clicked");
 	robot->execute_stop_motor();
+}
+
+void wgt_smb_command::on_radioButton_m_motor_toggled()
+{
+	if (ui.radioButton_m_motor->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_motor_clicked");
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_joint_toggled()
+{
+	if (ui.radioButton_m_joint->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_joint_clicked");
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_ext_toggled()
+{
+	if (ui.radioButton_m_ext->isChecked()) {
+		interface.ui_msg->message("on_radioButton_m_ext_clicked");
+	}
 }
 
 // events

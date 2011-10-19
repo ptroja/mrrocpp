@@ -54,7 +54,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::MOTOR;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::MOTOR;
 
 		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
@@ -71,7 +71,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::JOINT;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::JOINT;
 
 		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
@@ -87,7 +87,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.pose_specification = lib::spkm::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::FRAME;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
@@ -123,19 +123,23 @@ void robot::create_command()
 	}
 
 	if (epos_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::MOTOR;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::MOTOR;
+		//	ecp_command.get_arm_type = lib::MOTOR;
+		//sr_ecp_msg.message("epos_reply_data_request_port");
 
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::JOINT;
-		//sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::JOINT;
+		//ecp_command.get_arm_type = lib::JOINT;
+		//	sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_command.get_arm_type = lib::FRAME;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::FRAME;
+		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
 	}
@@ -160,17 +164,15 @@ void robot::create_command()
 
 	// message serialization
 	if (communicate_with_edp) {
-		if ((ecp_command.instruction_type == lib::SET) || (ecp_command.instruction_type == lib::SET_GET)) {
-			assert(sizeof(ecp_command.arm.serialized_command) >= sizeof(ecp_edp_cbuffer));
-			memcpy(ecp_command.arm.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		}
+		assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
+		memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
 	}
 }
 
 void robot::get_reply()
 {
 	// message deserialization
-	memcpy(&edp_ecp_rbuffer, reply_package.arm.serialized_reply, sizeof(edp_ecp_rbuffer));
+	memcpy(&edp_ecp_rbuffer, reply_package.serialized_reply, sizeof(edp_ecp_rbuffer));
 
 	if (epos_reply_data_request_port.is_new_request()) {
 		// generator reply generation

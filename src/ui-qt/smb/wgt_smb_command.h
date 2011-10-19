@@ -33,8 +33,13 @@ public:
 	QVector <QCheckBox*> checkBox_fl_up_Vector;
 	QVector <QCheckBox*> checkBox_fl_down_Vector;
 	QVector <QCheckBox*> checkBox_fl_attached_Vector;
+	QVector <QCheckBox*> checkBox_fl_undetachable_Vector;
+
+
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
 	QVector <QCheckBox*> checkBox_m_no_Vector;
+
+
 
 	QVector <QRadioButton*> radioButton_fl_up_Vector;
 	QVector <QRadioButton*> radioButton_fl_down_Vector;
@@ -84,6 +89,10 @@ private slots:
 	void on_pushButton_ml_rigth_clicked();
 	void on_pushButton_ms_left_clicked();
 	void on_pushButton_ms_rigth_clicked();
+
+	void on_radioButton_m_motor_toggled();
+	void on_radioButton_m_joint_toggled();
+	void on_radioButton_m_ext_toggled();
 
 };
 

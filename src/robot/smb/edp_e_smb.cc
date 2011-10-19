@@ -281,7 +281,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			}
 			case lib::smb::FESTO: {
 				if (is_base_positioned_to_move_legs) {
-					fai->festo_command();
+					fai->command();
 				}
 				break;
 			}
@@ -301,7 +301,7 @@ void effector::rotational_motors_command()
 	/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	 ss << ecp_edp_cbuffer.motor_pos[1];
 	 msg->message(ss.str().c_str());
-	 ss << ecp_edp_cbuffer.pose_specification;
+	 ss << ecp_edp_cbuffer.set_pose_specification;
 	 msg->message(ss.str().c_str());*/
 
 	if (current_legs_state() != lib::smb::TWO_UP_ONE_DOWN) {
@@ -310,20 +310,20 @@ void effector::rotational_motors_command()
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
+				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT) && (current_joints[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
+				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
 	// TODO: remove this line!
-	ecp_edp_cbuffer.pose_specification = lib::smb::MOTOR;
+	ecp_edp_cbuffer.set_pose_specification = lib::smb::MOTOR;
 
 	// Interpret command according to the pose specification.
-	switch (ecp_edp_cbuffer.pose_specification)
+	switch (ecp_edp_cbuffer.set_pose_specification)
 	{
 		case lib::smb::MOTOR:
 			// Copy data directly from buffer
@@ -340,7 +340,7 @@ void effector::rotational_motors_command()
 			// Throw non-fatal error - invalid pose specification.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 			break;
-	} //: switch (ecp_edp_cbuffer.pose_specification)
+	} //: switch (ecp_edp_cbuffer.set_pose_specification)
 
 	// TODO: remove this line!
 	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
@@ -459,7 +459,7 @@ void effector::create_threads()
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
-	fai->initiate();
+
 
 	// do poprawy
 	is_base_positioned_to_move_legs = true;
@@ -468,13 +468,13 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
-	memcpy(&ecp_edp_cbuffer, instruction.arm.serialized_command, sizeof(ecp_edp_cbuffer));
+	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
 }
 
 void effector::reply_serialization(void)
 {
-	memcpy(reply.arm.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-	assert(sizeof(reply.arm.serialized_reply) >= sizeof(edp_ecp_rbuffer));
+	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 } // namespace smb
