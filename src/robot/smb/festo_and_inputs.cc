@@ -107,10 +107,10 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 
 	// undetachable legs can not be detached !!
 	if ((value == true) && (festo_command.undetachable[leg_number - 1] == true)) {
-		master.msg->message("set_detach EMERGENCY return");
+//		master.msg->message("set_detach EMERGENCY return");
 		return;
 	}
-
+//	master.msg->message("set_detach za  EMERGENCY return");
 	switch (leg_number)
 	{
 		case 1: {
