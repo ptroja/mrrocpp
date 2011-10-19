@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
 		// Close gateway.
 		gateway.close();
-	} catch (canopen_error & error) {
+	} catch (se_canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )

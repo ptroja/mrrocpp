@@ -8,42 +8,12 @@
 
 #include <stdint.h>  /* int types with given size */
 
-#include <boost/exception/all.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include "canopen_exceptions.hpp"
 
 namespace mrrocpp {
 namespace edp {
 namespace canopen {
 
-/*
- * Exceptions
- */
-
-//! all high-level methods throws this exception in case of error
-struct canopen_error : virtual public std::exception, virtual public boost::exception
-{
-	virtual ~canopen_error() throw ()
-	{
-	}
-};
-
-//! reason of an exception
-typedef boost::error_info <struct tag_reason, std::string> reason;
-
-//! index of the CANOpen object
-typedef boost::error_info <struct tag_index, uint16_t> dictionary_index;
-
-//! subindex of the CANOpen object
-typedef boost::error_info <struct tag_subindex, uint8_t> dictionary_subindex;
-
-//! CAN ID
-typedef boost::error_info <struct tag_canId, uint8_t> canId;
-
-//! errno code of a failed system call
-typedef boost::error_info <struct tag_errno_code, int> errno_code;
-
-//! failed system call
-typedef boost::error_info <struct tag_errno_code, std::string> errno_call;
 
 /*!
  * Data types used for communication (Communication Guide reference)
@@ -123,7 +93,7 @@ public:
 			T val = (T) (answer[3] | (answer[4] << 16));
 			return val;
 		} else {
-			throw canopen::canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
+			throw canopen::se_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
 		}
 	}
 

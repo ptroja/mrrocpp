@@ -201,7 +201,7 @@ void effector::synchronise(void)
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	// Now the robot is synchronised
-//	controller_state_edp_buf.is_synchronised = true;
+	//	controller_state_edp_buf.is_synchronised = true;
 	// Check whether the synchronization was successful.
 	check_controller_state();
 
@@ -283,6 +283,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::SYSTEM_ERROR, "Unknown error");
 	}
 
 }
@@ -379,62 +381,66 @@ void effector::rotational_motors_command()
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	// Check controller state.
-	check_controller_state();
+	try {
 
-	/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	 ss << instruction.get_arm_type;
-	 msg->message(ss.str().c_str());*/
+		// Check controller state.
+		check_controller_state();
 
-	// TODO: remove this line!
-	instruction.get_arm_type = lib::MOTOR;
+		/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		 ss << instruction.get_arm_type;
+		 msg->message(ss.str().c_str());*/
 
-	// Check motion type.
-	switch (instruction.get_arm_type)
-	{
-		case lib::MOTOR:
-			msg->message("EDP get_arm_position MOTOR");
-			for (size_t i = 0; i < number_of_servos; ++i) {
-				if (robot_test_mode) {
-					edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-					edp_ecp_rbuffer.epos_controller[i].current = 0;
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-				} else {
-					current_motor_pos[i] = axes[i]->getActualPosition();
-					edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-					edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+		// TODO: remove this line!
+		instruction.get_arm_type = lib::MOTOR;
+
+		// Check motion type.
+		switch (instruction.get_arm_type)
+		{
+			case lib::MOTOR:
+				msg->message("EDP get_arm_position MOTOR");
+				for (size_t i = 0; i < number_of_servos; ++i) {
+					if (robot_test_mode) {
+						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
+						edp_ecp_rbuffer.epos_controller[i].current = 0;
+						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+					} else {
+						current_motor_pos[i] = axes[i]->getActualPosition();
+						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
+						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
+						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+					}
 				}
-			}
-			break;
-		case lib::JOINT:
-			msg->message("EDP get_arm_position JOINT");
+				break;
+			case lib::JOINT:
+				msg->message("EDP get_arm_position JOINT");
 
-			// Read actual values from hardware
-			/*			if (!robot_test_mode) {
-			 for (size_t i = 0; i < axes.size(); ++i) {
-			 current_motor_pos[i] = axes[i]->readActualPosition();
-			 }
-			 }*/
+				// Read actual values from hardware
+				/*			if (!robot_test_mode) {
+				 for (size_t i = 0; i < axes.size(); ++i) {
+				 current_motor_pos[i] = axes[i]->readActualPosition();
+				 }
+				 }*/
 
-			// Calculate current joint values.
-			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+				// Calculate current joint values.
+				get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-			// Copy values to buffer.
-			for (int i = 0; i < number_of_servos; ++i) {
-				edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
-			}
-			break;
-		default:
-			break;
+				// Copy values to buffer.
+				for (int i = 0; i < number_of_servos; ++i) {
+					edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
+				}
+				break;
+			default:
+				break;
 
+		}
+
+		// SMB clamps.
+		fai->create_reply();
+		reply.servo_step = step_counter;
+
+	} catch (...) {
+		msg->message(mrrocpp::lib::SYSTEM_ERROR, "Unknown error2");
 	}
-
-	// SMB clamps.
-
-	fai->create_reply();
-
-	reply.servo_step = step_counter;
 }
 /*--------------------------------------------------------------------------*/
 
