@@ -38,70 +38,61 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
+void effector::check_controller_state()
+{
+	if (robot_test_mode)
+		return;
+
+	// Try to get state of each axis
+	unsigned int powerOn = 0;
+	unsigned int notInFaultState = 0;
+	// Check axes.
+	for (size_t i = 0; i < axes.size(); ++i) {
+		try {
+			// Print state.
+			axes[i]->printState();
+			// Get current epos state.
+			maxon::epos::actual_state_t state = axes[i]->getState();
+			// Check if in the FAULT state
+			if (state == maxon::epos::FAULT) {
+				// Read number of errors
+				int errNum = axes[i]->getNumberOfErrors();
+				for (int j = 1; j <= errNum; ++j) {
+					// Get the detailed error
+					uint32_t errCode = axes[i]->getErrorHistory(j);
+					// Send message to SR.
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
+							+ axes[i]->ErrorCodeMessage(errCode));
+				}
+			} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
+				// Send message to SR.
+				msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + " is in the Disabled state");
+			} else {
+				notInFaultState++;
+			}
+			// In this loop step we are sure that axis is working, this powered.
+			powerOn++;
+		} catch (...) {
+			// Probably the axis is not powered on, do nothing.
+		}
+	}
+	// Robot is synchronised if only one axis - the one controlling the PKM rotation - is referenced.
+	controller_state_edp_buf.is_synchronised = axes[1]->isReferenced();
+	// Check whether robot is powered.
+	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+	// Check fault state.
+	controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
+}
+
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-	msg->message("get_controller_state");
 	// False is the initial value
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = false;
 	controller_state_edp_buf.robot_in_fault_state = false;
 
-	if (!robot_test_mode) {
-		msg->message("!test mode");
-
-		// Try to get state of each axis
-		unsigned int referenced = 0;
-		unsigned int powerOn = 0;
-		unsigned int notInFaultState = 0;
-		// Check axes.
-		for (size_t i = 0; i < axes.size(); ++i) {
-			try {
-				// Print state.
-				axes[i]->printState();
-				msg->message("axes");
-				// Get current epos state.
-				maxon::epos::actual_state_t state = axes[i]->getState();
-				// Check if in the FAULT state
-				if (state == maxon::epos::FAULT) {
-					msg->message("error!");
-					// Read number of errors
-					int errNum = axes[i]->getNumberOfErrors();
-					for (int j = 1; j <= errNum; ++j) {
-						// Get the detailed error
-						uint32_t errCode = axes[i]->getErrorHistory(j);
-
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
-								+ axes[i]->ErrorCodeMessage(errCode));
-					}
-				} else if (state == maxon::epos::SWITCH_ON_DISABLED)
-					msg->message("Axis disabled");
-					// Reset node - WHY!! ?? TODO: Remove reset?
-					axes[i]->reset();
-					//axes[i]->changeEPOSstate(maxon::epos::FAULT_RESET);
-					//axes[i]->changeEPOSstate(maxon::epos::SWITCH_ON_AND_ENABLE);
-					notInFaultState++;
-				{
-					msg->message("no errors");
-					notInFaultState++;
-				}
-				if (axes[i]->isReferenced()) {
-					msg->message("axis referenced");
-					// Do not break from this loop so this is a also a preliminary axis error check
-					referenced++;
-				}
-				msg->message("axis powered");
-				powerOn++;
-			} catch (...) {
-				// Probably the axis is not powered on, do nothing.
-			}
-		}
-		// Robot is synchronised if only one axis - the one controlling the PKM rotation - is referenced.
-		controller_state_edp_buf.is_synchronised = (referenced == 1);
-		// Check whether robot is powered.
-		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
-		// Check fault state.
-		controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
-	}
+	// Check controller state.
+	check_controller_state();
 
 	// Copy data to reply buffer
 	reply.controller_state = controller_state_edp_buf;
@@ -158,8 +149,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 		// Create festo node.
 		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
-	} else {
-
 	}
 
 }
@@ -212,7 +201,9 @@ void effector::synchronise(void)
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 	// Now the robot is synchronised
-	controller_state_edp_buf.is_synchronised = true;
+//	controller_state_edp_buf.is_synchronised = true;
+	// Check whether the synchronization was successful.
+	check_controller_state();
 
 }
 
@@ -245,38 +236,38 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-					{
-						// Brake with Quickstop command
-						node->setState(maxon::epos::QUICKSTOP);
-					}
+								{
+									// Brake with Quickstop command
+									node->setState(maxon::epos::QUICKSTOP);
+								}
 				}
 				break;
 			}
 			case lib::smb::CLEAR_FAULT: {
 				msg->message("CLEAR_FAULT");
 				BOOST_FOREACH(maxon::epos * node, axes)
-				{
-					// Print state.
-					node->printState();
-					// Check if node is in a FAULT state.
-					if (node->getState() == maxon::epos::FAULT) {
-						maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-						cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-						// Print list of errors.
-						for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-							maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-							cerr << node->ErrorCodeMessage(errCode) << endl;
-						}
-						// Clear errors.
-						if (errNum > 0) {
-							node->clearNumberOfErrors();
-						}
-						// Reset errors.
-						node->setState(maxon::epos::FAULT_RESET);
-					}
-					// Reset node.
-					node->reset();
-				}
+							{
+								// Print state.
+								node->printState();
+								// Check if node is in a FAULT state.
+								if (node->getState() == maxon::epos::FAULT) {
+									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
+									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+									// Print list of errors.
+									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
+										cerr << node->ErrorCodeMessage(errCode) << endl;
+									}
+									// Clear errors.
+									if (errNum > 0) {
+										node->clearNumberOfErrors();
+									}
+									// Reset errors.
+									node->setState(maxon::epos::FAULT_RESET);
+								}
+								// Reset node.
+								node->reset();
+							}
 				break;
 			}
 			case lib::smb::FESTO: {
@@ -310,12 +301,12 @@ void effector::rotational_motors_command()
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT) && (current_joints[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -388,6 +379,9 @@ void effector::rotational_motors_command()
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
+	// Check controller state.
+	check_controller_state();
+
 	/*	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	 ss << instruction.get_arm_type;
 	 msg->message(ss.str().c_str());*/
@@ -458,8 +452,6 @@ void effector::create_threads()
 	fai = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
-
-
 
 	// do poprawy
 	is_base_positioned_to_move_legs = true;
