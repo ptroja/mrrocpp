@@ -47,14 +47,23 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	controller_state_edp_buf.robot_in_fault_state = false;
 
 	if (!robot_test_mode) {
+		msg->message("!test mode");
+
 		// Try to get state of each axis
 		unsigned int referenced = 0;
 		unsigned int powerOn = 0;
 		unsigned int notInFaultState = 0;
+		// Check axes.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			try {
+				// Print state.
+				axes[i]->printEPOSstate();
+				msg->message("axes");
+				// Get current epos state.
+				maxon::epos::actual_state_t state = axes[i]->checkEPOSstate();
 				// Check if in the FAULT state
-				if (axes[i]->checkEPOSstate() == 11) {
+				if (state == maxon::epos::FAULT) {
+					msg->message("error!");
 					// Read number of errors
 					int errNum = axes[i]->readNumberOfErrors();
 					for (int j = 1; j <= errNum; ++j) {
@@ -64,21 +73,33 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
-				} else {
+				} else if (state == maxon::epos::SWITCH_ON_DISABLED)
+					msg->message("Axis disabled");
+					// Reset node - WHY!! ?? TODO: Remove reset?
+					axes[i]->reset();
+					//axes[i]->changeEPOSstate(maxon::epos::FAULT_RESET);
+					//axes[i]->changeEPOSstate(maxon::epos::SWITCH_ON_AND_ENABLE);
+					notInFaultState++;
+				{
+					msg->message("no errors");
 					notInFaultState++;
 				}
 				if (axes[i]->isReferenced()) {
+					msg->message("axis referenced");
 					// Do not break from this loop so this is a also a preliminary axis error check
 					referenced++;
 				}
+				msg->message("axis powered");
 				powerOn++;
 			} catch (...) {
 				// Probably the axis is not powered on, do nothing.
 			}
 		}
-		// Robot is synchronised if all axes are referenced
-		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+		// Robot is synchronised if only one axis - the one controlling the PKM rotation - is referenced.
+		controller_state_edp_buf.is_synchronised = (referenced == 1);
+		// Check whether robot is powered.
 		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+		// Check fault state.
 		controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
 	}
 
@@ -104,7 +125,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+	motor_driven_effector(_shell, l_robot_name)
 {
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
@@ -116,8 +137,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway =
-					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+			gateway
+					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -164,7 +185,6 @@ void effector::synchronise(void)
 		return;
 	}
 
-#if 0
 	// Two-step synchronization of the motor rotating the whole PKM.
 	// Step1: Potentiometer.
 	// Get current potentiometer readings.
@@ -190,8 +210,6 @@ void effector::synchronise(void)
 
 	// Compute joints positions in the home position
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-#endif
 
 	// Now the robot is synchronised
 	controller_state_edp_buf.is_synchronised = true;
@@ -220,21 +238,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				msg->message("POSE");
 				// Control the two SMB rotational motors.
 				rotational_motors_command();
-			}
 				break;
+			}
 			case lib::smb::QUICKSTOP: {
 				msg->message("QUICKSTOP");
-			}
+				if (!robot_test_mode) {
+					// Execute command
+					BOOST_FOREACH(maxon::epos * node, axes)
+					{
+						// Brake with Quickstop command
+						node->changeEPOSstate(maxon::epos::QUICKSTOP);
+					}
+				}
 				break;
-
+			}
 			case lib::smb::CLEAR_FAULT: {
-				msg->message("QUICKSTOP");
+				msg->message("CLEAR_FAULT");
 				BOOST_FOREACH(maxon::epos * node, axes)
 				{
+					// Print state.
 					node->printEPOSstate();
-
-					// Check if in a FAULT state
-					if (node->checkEPOSstate() == 11) {
+					// Check if node is in a FAULT state.
+					if (node->checkEPOSstate() == maxon::epos::FAULT) {
 						maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
 						cerr << "readNumberOfErrors() = " << (int) errNum << endl;
 						// Print list of errors.
@@ -258,8 +283,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (is_base_positioned_to_move_legs) {
 					fai->festo_command();
 				}
-			}
 				break;
+			}
 			default:
 				break;
 
@@ -285,12 +310,12 @@ void effector::rotational_motors_command()
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
+		else if ((ecp_edp_cbuffer.pose_specification == lib::smb::JOINT) && (current_joints[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 

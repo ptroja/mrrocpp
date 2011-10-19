@@ -145,7 +145,10 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
 				} else {
+					// Axis not in fault state.
 					notInFaultState++;
+					// Activate it.
+
 				}
 				if (axes[i]->isReferenced()) {
 					// Do not break from this loop so this is a also a preliminary axis error check
