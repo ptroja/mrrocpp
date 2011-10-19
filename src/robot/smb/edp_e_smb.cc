@@ -174,36 +174,50 @@ void effector::synchronise(void)
 		return;
 	}
 
-	// Two-step synchronization of the motor rotating the whole PKM.
-	// Step1: Potentiometer.
-	// Get current potentiometer readings.
-	int pot = pkm_rotation_node->getAnalogInput1();
+	try {
+		// Two-step synchronization of the motor rotating the whole PKM.
+		// Step1: Potentiometer.
+		// Get current potentiometer readings.
+		int pot = pkm_rotation_node->getAnalogInput1();
 
-	// Set coefficients.
-	const double p1 = -0.0078258336;
-	const double p2 = 174.7796278191;
-	const double p3 = -507883.404901415;
+		// Set coefficients.
+		const double p1 = -0.0078258336;
+		const double p2 = 174.7796278191;
+		const double p3 = -507883.404901415;
 
-	// Compute desired position.
-	int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
-	cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
+		// Compute desired position.
+		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
 
-	// Move to the relative position.
-	pkm_rotation_node->moveRelative(position);
-	while (!pkm_rotation_node->isTargetReached())
-		usleep(200000);
+		// Move to the relative position.
+		pkm_rotation_node->moveRelative(position);
+		while (!pkm_rotation_node->isTargetReached())
+			usleep(200000);
 
-	// Step2: Homing.
-	// Activate homing mode.
-	pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 0);
+		// Step2: Homing.
+		// Activate homing mode.
+		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 0);
 
-	// Compute joints positions in the home position
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+		// Compute joints positions in the home position
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-	// Now the robot is synchronised
-	//	controller_state_edp_buf.is_synchronised = true;
-	// Check whether the synchronization was successful.
-	check_controller_state();
+		// Now the robot is synchronised
+		//	controller_state_edp_buf.is_synchronised = true;
+		// Check whether the synchronization was successful.
+		check_controller_state();
+
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
+	}
 
 }
 
@@ -283,10 +297,15 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
 	} catch (...) {
-		msg->message(mrrocpp::lib::SYSTEM_ERROR, "Unknown error");
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
-
 }
 
 void effector::rotational_motors_command()
@@ -438,8 +457,17 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		fai->create_reply();
 		reply.servo_step = step_counter;
 
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_ERROR(e_)
 	} catch (...) {
-		msg->message(mrrocpp::lib::SYSTEM_ERROR, "Unknown error2");
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
 }
 /*--------------------------------------------------------------------------*/
