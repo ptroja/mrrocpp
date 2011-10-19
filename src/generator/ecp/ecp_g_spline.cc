@@ -148,12 +148,12 @@ bool spline::calculate()
             for (j = 0; j < axes_num; j++) {
                // printf("petla\n");
                 if (pose_vector_iterator->type == linear) {
-                    printf("linear\n");
+                    //printf("linear\n");
                     if (!vpc.calculate_linear_coeffs(pose_vector_iterator,j)) {
                         return false;
                     }
-                    printf("powrot 1: %f\n", pose_vector_iterator->coeffs[j][0]);
-                    printf("powrot 2: %f\n", pose_vector_iterator->coeffs[j][1]);
+                    //printf("powrot 1: %f\n", pose_vector_iterator->coeffs[j][0]);
+                    //printf("powrot 2: %f\n", pose_vector_iterator->coeffs[j][1]);
                 } else if (pose_vector_iterator->type == 2) {
                     if (!vpc.calculate_cubic_coeffs(pose_vector_iterator,j)) {
                         return false;
@@ -326,7 +326,7 @@ bool spline::load_trajectory_pose(const vector<double> & coordinates, lib::MOTIO
             }
     }
 
-    pose.type = type;
+    pose.type = this->type;
 
     pose_vector.push_back(pose); //put new trajectory pose into a pose vector
 

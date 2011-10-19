@@ -36,18 +36,7 @@ bool spline_interpolator::interpolate_absolute_pose(vector<ecp_mp::common::traje
     coordinates = it->start_position;
     for (int i = 0; i < it->interpolation_node_no; i++) {
             for (int j = 0; j < it->axes_num; j++) {
-                if (it->type == 1)//linear
-                {
-                    coordinates[j] = calculate_position(it, j, (i+1) * mc);
-                }
-                else if (it->type == 2)//cubic
-                {
-                    coordinates[j] = coordinates[j] + calculate_velocity(it, j, (i+1) * mc) * mc * it->k[j];
-                }
-                else if (it->type == 3)//quintic
-                {
-                    coordinates[j] = coordinates[j] + 0.5 * calculate_acceleration(it, j, (i+1) * mc) * mc * mc * it->k[j];
-                }
+                coordinates[j] = calculate_position(it, j, (i+1) * mc);
             }
             cv.push_back(coordinates);
     }

@@ -61,24 +61,24 @@ private:
          */
         inline void generatePowers(int power, double x, double * powers);
         /**
-         *
-         * @param it
-         * @param i
-         * @param time
+         * Method calculates absolute position at the given time.
+         * @param it iterator to the list of positions
+         * @param i number of current axis
+         * @param time given time for which position is desired
          */
         double calculate_position(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
         /**
-         *
-         * @param it
-         * @param i
-         * @param time
+         * Method calculates valocity at the given time.
+         * @param it iterator to the list of positions
+         * @param i number of current axis
+         * @param time given time for which velocity is desired
          */
         double calculate_velocity(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
         /**
-         *
-         * @param it
-         * @param i
-         * @param time
+         * Method calculates acceleration at the given time.
+         * @param it iterator to the list of positions
+         * @param i number of current axis
+         * @param time given time for which acceleration is desired
          */
         double calculate_acceleration(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i, double time);
         /**

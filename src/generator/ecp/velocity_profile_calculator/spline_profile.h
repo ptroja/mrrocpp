@@ -49,34 +49,64 @@ class spline_profile : public velocity_profile<ecp_mp::common::trajectory_pose::
                 inline void generatePowers(int power, double x, double * powers);
                 /**
                  *
-                 * @param it
-                 * @param i
-                 * @param pos1
-                 * @param pos2
+                 * @param it iterator to the list odouble timef positions
+                 * @param i number of axis for which the calculations are performed
+                 * @param pos1 initial position of the movement
+                 * @param pos2 terminal position of the movement
                  */
                 bool calculate_linear_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
                 /**
                  *
-                 * @param it
-                 * @param i
-                 * @param pos1
-                 * @param vel1
-                 * @param pos2
-                 * @param vel2
+                 * @param it iterator to the list odouble timef positions
+                 * @param i number of axis for which the calculations are performed
+                 * @param pos1 initial position of the movement
+                 * @param vel1 initial velcity of the movement
+                 * @param pos2 terminal position of the movement
+                 * @param vel2 terminal velocity of the movement
                  */
                 bool calculate_cubic_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
                 /**
                  *
-                 * @param it
-                 * @param i
-                 * @param pos1
-                 * @param vel1
-                 * @param acc1
-                 * @param pos2
-                 * @param vel2
-                 * @param acc2
+                 * @param it iterator to the list odouble timef positions
+                 * @param i number of axis for which the calculations are performed
+                 * @param pos1 initial position of the movement
+                 * @param vel1 initial velocity of the movement
+                 * @param acc1 initial acceleration of the movement
+                 * @param pos2 terminal position of the movement
+                 * @param vel2 terminal velocity of the movement
+                 * @param acc2 terminal acceleration of the movement
                  */
                 bool calculate_quintic_coeffs(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, int i);
+                /**
+                 * Sets the v_p (initial velocity) of a single pose and all axes.
+                 * @param it iterator to the list of positions
+                 * @param beginning_it iterator to the first element in the pose list
+                 * @return true if the calculation was successful
+                 */
+                bool set_v_p_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & beginning_it);
+                /**
+                 * Sets the v_p (initial velocity) of a single axis of a single pose.
+                 * @param it iterator to the list of positions
+                 * @param beginning_it iterator to the first element in the pose list
+                 * @param i number of axis for which the setting is made
+                 * @return true if the calculation was successful
+                 */
+                bool set_v_p(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & beginning_it, int i);
+                /**
+                 * Sets the v_k (initial velocity of the next pose, assumed terminal velocity of the current pose) of a single axis of a single pose.
+                 * @param it iterator to the list of positions
+                 * @param end_it iterator to the one past last element in the pose list
+                 * @param i number of axis for which the setting is made
+                 * @return true if the calculation was successful
+                 */
+                bool set_v_k(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it, int i);
+                /**
+                 * Sets the v_k (initial velocity of the next pose, assumed terminal velocity of the current pose) of a single pose and all axes.
+                 * @param it iterator to the list of positions
+                 * @param end_it iterator to the one past last element in the pose list
+                 * @return true if the calculation was successful
+                 */
+                bool set_v_k_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it);
             };
 
 } // namespace velocity_profile_calculator

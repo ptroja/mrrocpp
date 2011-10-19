@@ -27,7 +27,7 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
                 cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
                 cvgenjoint->set_debug(true);
-                cvgenjoint->setType(cubic);
+                //cvgenjoint->setType(cubic);
 
                 cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
                 cvgenmotor->set_debug(true);

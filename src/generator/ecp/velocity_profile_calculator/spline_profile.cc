@@ -32,15 +32,15 @@ bool spline_profile::calculate_time(std::vector<ecp_mp::common::trajectory_pose:
     } else {//normal calculation
         if (it->type == linear)
         {
-            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]);
+            it->times[i] = it->s[i] / it->v_r[i];
         }
         else if (it->type == cubic)
         {
-            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]) * 1.5;
+            it->times[i] = it->s[i] / it->v_r[i];
         }
         else if (it->type == quintic)
         {
-            it->times[i] = it->s[i]/(it->v_r[i] * it->a_r[i]) * 1.5;
+            it->times[i] = it->s[i] / it->v_r[i];
         }
     }
     return true;
@@ -164,6 +164,89 @@ bool spline_profile::calculate_quintic_coeffs(vector<ecp_mp::common::trajectory_
   }
 
   return true;
+}
+
+bool spline_profile::set_v_p(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator &it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator &beginning_it, int i)
+{
+    if (eq(it->s[i],0)) {
+            it->v_p[i] = 0;
+            //printf("v_p: %f\t", it->v_p[i]);
+            return true;
+    }
+
+    if (it == beginning_it) {
+            it->v_p[i] = 0;
+    } else {
+            it--;
+            double temp_v_p = it->v_k[i];
+            it++;
+            it->v_p[i] = temp_v_p;
+    }
+    //printf("v_p: %f\t", it->v_p[i]);
+    return true;
+}
+
+bool spline_profile::set_v_p_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator &it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator &beginning_it)
+{
+    bool trueFlag = true;
+
+    for (int i = 0; i < it->axes_num; i++) {
+            if (set_v_p(it, beginning_it, i) == false) {
+                    trueFlag = false;
+            }
+    }
+    //printf("\n");
+
+    return trueFlag;
+}
+
+bool spline_profile::set_v_k(vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it, int i) {
+
+        if (eq(it->s[i],0)) {
+                it->v_k[i] = 0;
+                //printf("v_k: %f\t", it->v_k[i]);
+                return true;
+        }
+
+        double temp_k = it->k[i];
+        it++;
+
+        if (it == end_it) {
+                it--;
+                it->v_k[i] = 0;
+        } else {
+                if (temp_k == it->k[i]) {
+                        double temp_v_k = it->v_r[i];
+                        //printf("v_r of next pose: %f\t", it->v_r[i]);
+                        it--;
+                        if (temp_v_k > it->v_r[i]) {
+                                it->v_k[i] = it->v_r[i];
+                                //printf("temp_v_k: %f\t", temp_v_k);
+                        } else {
+                                it->v_k[i] = temp_v_k;
+                                //printf("else temp_v_k: %f\t", temp_v_k);
+                        }
+                } else {
+                        it--;
+                        it->v_k[i] = 0;
+                }
+        }
+
+        //printf("v_k: %f\n", it->v_k[i]);
+        return true;
+}
+
+bool spline_profile::set_v_k_pose(vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it) {
+        bool trueFlag = true;
+
+        for (int i = 0; i < it->axes_num; i++) {
+                if (set_v_k(it, end_it, i) == false) {
+                        trueFlag = false;
+                }
+        }
+
+        //printf("\n");
+        return trueFlag;
 }
 
 } // namespace velocity_profile_calculator

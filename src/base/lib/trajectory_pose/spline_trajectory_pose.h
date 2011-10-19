@@ -47,8 +47,8 @@ public:
      */
     ~spline_trajectory_pose();
     /**
-      *
-      */
+     * Spline polynomial coefficients.
+     */
     std::vector<std::vector<double> > coeffs;
     /**
      * Suggested acceleration for the given segment (pose).

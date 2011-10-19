@@ -20,7 +20,16 @@ namespace common {
 namespace generator {
 
 /**
- * @brief
+ * @brief Generator which uses spline curves to calculate the trajectory. Polynomial generator.
+ *
+ * Generator can be used in three different modes - linear, cubic and quintic. User can freely choose between the different types of performed
+ * calculation. Linear - motion with constant velocity. Cubic - continuous first derivative (continuous velocity). Quintic - continuous second
+ * derivative (continuous acceleration).
+ *
+ * Usage: Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically, however they can be
+ * also set by the appropriate load methods. Call %calculate_interpolate() method.
+ * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
+ * successful termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  *
  * @author rtulwin
  * @ingroup generators
@@ -129,7 +138,7 @@ class spline : public multiple_position<ecp_mp::common::trajectory_pose::spline_
              */
             void print_pose(const std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it);
             /**
-             *
+             * Interpolation type: linear, cubic or quintic.
              */
             splineType type;
             /**
@@ -137,8 +146,6 @@ class spline : public multiple_position<ecp_mp::common::trajectory_pose::spline_
              * @return true if the addition was successful
              */
             bool load_trajectory_pose(const std::vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const std::vector<double> & v, const std::vector<double> & a, const std::vector<double> & v_max, const std::vector<double> & a_max);
-
-
 };
 
 } // namespace generator
