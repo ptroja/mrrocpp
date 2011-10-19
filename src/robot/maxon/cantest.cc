@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
 		node0.reset();
 
-		std::cout << "gateway CAN-ID: " << (int) node0.readNodeID() << std::endl;
+		std::cout << "gateway CAN-ID: " << (int) node0.getNodeID() << std::endl;
 
 		RPDO3 cmd;
 
@@ -40,9 +40,9 @@ int main(int argc, char *argv[])
 		for (uint8_t cmdNode = 1; cmdNode < 7; ++cmdNode) {
 			epos nodeX(gateway, cmdNode);
 
-			nodeX.writeTargetPosition(291);
+			nodeX.setTargetPosition(291);
 
-			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
+			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.getTargetPosition(), (nodeX.getStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
 
 			WORD cobID = 0x0400 | cmdNode;
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
 		for (uint8_t cmdNode = 1; cmdNode < 7; ++cmdNode) {
 			epos nodeX(gateway, cmdNode);
-			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.readTargetPosition(), (nodeX.readStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
+			printf("0x%04x -> 0x%04x remote? %s\n", (int) cmdNode, nodeX.getTargetPosition(), (nodeX.getStatusWord() & (1 << 9)) ? "TRUE" : "FALSE");
 		}
 
 		gateway.close();

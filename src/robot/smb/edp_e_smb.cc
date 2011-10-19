@@ -57,18 +57,18 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		for (size_t i = 0; i < axes.size(); ++i) {
 			try {
 				// Print state.
-				axes[i]->printEPOSstate();
+				axes[i]->printState();
 				msg->message("axes");
 				// Get current epos state.
-				maxon::epos::actual_state_t state = axes[i]->checkEPOSstate();
+				maxon::epos::actual_state_t state = axes[i]->getState();
 				// Check if in the FAULT state
 				if (state == maxon::epos::FAULT) {
 					msg->message("error!");
 					// Read number of errors
-					int errNum = axes[i]->readNumberOfErrors();
+					int errNum = axes[i]->getNumberOfErrors();
 					for (int j = 1; j <= errNum; ++j) {
 						// Get the detailed error
-						uint32_t errCode = axes[i]->readErrorHistory(j);
+						uint32_t errCode = axes[i]->getErrorHistory(j);
 
 						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
@@ -188,7 +188,7 @@ void effector::synchronise(void)
 	// Two-step synchronization of the motor rotating the whole PKM.
 	// Step1: Potentiometer.
 	// Get current potentiometer readings.
-	int pot = pkm_rotation_node->readAnalogInput1();
+	int pot = pkm_rotation_node->getAnalogInput1();
 
 	// Set coefficients.
 	const double p1 = -0.0078258336;
@@ -247,7 +247,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					BOOST_FOREACH(maxon::epos * node, axes)
 					{
 						// Brake with Quickstop command
-						node->changeEPOSstate(maxon::epos::QUICKSTOP);
+						node->setState(maxon::epos::QUICKSTOP);
 					}
 				}
 				break;
@@ -257,14 +257,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				BOOST_FOREACH(maxon::epos * node, axes)
 				{
 					// Print state.
-					node->printEPOSstate();
+					node->printState();
 					// Check if node is in a FAULT state.
-					if (node->checkEPOSstate() == maxon::epos::FAULT) {
-						maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
+					if (node->getState() == maxon::epos::FAULT) {
+						maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
 						cerr << "readNumberOfErrors() = " << (int) errNum << endl;
 						// Print list of errors.
 						for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-							maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
+							maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
 							cerr << node->ErrorCodeMessage(errCode) << endl;
 						}
 						// Clear errors.
@@ -272,7 +272,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							node->clearNumberOfErrors();
 						}
 						// Reset errors.
-						node->changeEPOSstate(maxon::epos::FAULT_RESET);
+						node->setState(maxon::epos::FAULT_RESET);
 					}
 					// Reset node.
 					node->reset();
@@ -406,9 +406,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					edp_ecp_rbuffer.epos_controller[i].current = 0;
 					edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 				} else {
-					current_motor_pos[i] = axes[i]->readActualPosition();
+					current_motor_pos[i] = axes[i]->getActualPosition();
 					edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-					edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
+					edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
 					edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 				}
 			}

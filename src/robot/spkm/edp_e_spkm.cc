@@ -134,12 +134,12 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		for (size_t i = 0; i < axes.size(); ++i) {
 			try {
 				// Check if in the FAULT state
-				if (axes[i]->checkEPOSstate() == 11) {
+				if (axes[i]->getState() == 11) {
 					// Read number of errors
-					int errNum = axes[i]->readNumberOfErrors();
+					int errNum = axes[i]->getNumberOfErrors();
 					for (int j = 1; j <= errNum; ++j) {
 						// Get the detailed error
-						uint32_t errCode = axes[i]->readErrorHistory(j);
+						uint32_t errCode = axes[i]->getErrorHistory(j);
 
 						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
@@ -225,8 +225,8 @@ void effector::synchronise(void)
 	// Hardcoded safety values.
 	// TODO: move to configuration file?
 	for (size_t i = 0; i < axes.size(); ++i) {
-		axes[i]->writeMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 100);
-		axes[i]->writeMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 100);
+		axes[i]->setMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 100);
+		axes[i]->setMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 100);
 	}
 
 	// Move the longest linear axis to the 'zero' position with a fast motion command
@@ -361,9 +361,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")"
 										<< endl;
 								if (!robot_test_mode) {
-									axes[i]->writeProfileVelocity(Vdefault[i]);
-									axes[i]->writeProfileAcceleration(Adefault[i]);
-									axes[i]->writeProfileDeceleration(Ddefault[i]);
+									axes[i]->setProfileVelocity(Vdefault[i]);
+									axes[i]->setProfileAcceleration(Adefault[i]);
+									axes[i]->setProfileDeceleration(Ddefault[i]);
 									axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 								} else {
 									current_joints[i] = desired_joints[i];
@@ -373,9 +373,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")"
 										<< endl;
 								if (!robot_test_mode) {
-									axes[i]->writeProfileVelocity(Vdefault[i]);
-									axes[i]->writeProfileAcceleration(Adefault[i]);
-									axes[i]->writeProfileDeceleration(Ddefault[i]);
+									axes[i]->setProfileVelocity(Vdefault[i]);
+									axes[i]->setProfileAcceleration(Adefault[i]);
+									axes[i]->setProfileDeceleration(Ddefault[i]);
 									axes[i]->moveRelative(desired_motor_pos_new[i]);
 								} else {
 									current_joints[i] += desired_joints[i];
@@ -414,11 +414,11 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								for (size_t i = 0; i < axes.size(); ++i) {
 									if (Delta[i] != 0) {
 										axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
-										axes[i]->writePositionProfileType(0); // Trapezoidal velocity profile
-										axes[i]->writeProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
-										axes[i]->writeProfileAcceleration(Anew[i]);
-										axes[i]->writeProfileDeceleration(Dnew[i]);
-										axes[i]->writeTargetPosition(desired_motor_pos_new[i]);
+										axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
+										axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
+										axes[i]->setProfileAcceleration(Anew[i]);
+										axes[i]->setProfileDeceleration(Dnew[i]);
+										axes[i]->setTargetPosition(desired_motor_pos_new[i]);
 									}
 								}
 							}
@@ -695,19 +695,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 								// Set motion parameters.
 								axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
-								axes[i]->writeProfileVelocity(MotorVmax[i]);
-								axes[i]->writeProfileAcceleration(MotorAmax[i]);
-								axes[i]->writeProfileDeceleration(MotorAmax[i]);
+								axes[i]->setProfileVelocity(MotorVmax[i]);
+								axes[i]->setProfileAcceleration(MotorAmax[i]);
+								axes[i]->setProfileDeceleration(MotorAmax[i]);
 								// TODO: setup acceleration and velocity limit values
 								axes[i]->clearPvtBuffer();
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
-									axes[i]->writeInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
-									printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+									axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
+									printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->getActualBufferSize());
 									fflush(stdout);
 								}
 								printf("\n");
 
-								const maxon::UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
+								const maxon::UNSIGNED16 status = axes[i]->getInterpolationBufferStatus();
 
 								if (axes[i]->checkInterpolationBufferWarning(status)) {
 									axes[i]->printInterpolationBufferStatus(status);
@@ -762,7 +762,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					BOOST_FOREACH(maxon::epos * node, axes)
 								{
 									// Brake with Quickstop command
-									node->changeEPOSstate(maxon::epos::QUICKSTOP);
+									node->setState(maxon::epos::QUICKSTOP);
 								}
 				}
 				// Internal position counters need not be updated
@@ -770,22 +770,22 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(maxon::epos * node, axes)
 							{
-								node->printEPOSstate();
+								node->printState();
 
 								// Check if in a FAULT state
-								if (node->checkEPOSstate() == 11) {
-									maxon::UNSIGNED8 errNum = node->readNumberOfErrors();
+								if (node->getState() == 11) {
+									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
 									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
 									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-										maxon::UNSIGNED32 errCode = node->readErrorHistory(i);
+										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
 
 										cerr << node->ErrorCodeMessage(errCode) << endl;
 									}
 									if (errNum > 0) {
 										node->clearNumberOfErrors();
 									}
-									node->changeEPOSstate(maxon::epos::FAULT_RESET);
+									node->setState(maxon::epos::FAULT_RESET);
 								}
 
 								// Change to the operational mode
@@ -835,9 +835,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].current = 0;
 						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
 					} else {
-						current_motor_pos[i] = axes[i]->readActualPosition();
+						current_motor_pos[i] = axes[i]->getActualPosition();
 						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->readActualCurrent();
+						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
 						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 					}
 				}
@@ -848,7 +848,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				// Read actual values from hardware
 				if (!robot_test_mode) {
 					for (size_t i = 0; i < axes.size(); ++i) {
-						current_motor_pos[i] = axes[i]->readActualPosition();
+						current_motor_pos[i] = axes[i]->getActualPosition();
 					}
 				}
 

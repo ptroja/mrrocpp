@@ -57,16 +57,16 @@ int main(int argc, char *argv[])
 		epos node(gateway, motor);
 
 		// Print state.
-		node.printEPOSstate();
+		node.printState();
 
 		// Check if in a FAULT state.
-		if (node.checkEPOSstate() == 11) {
+		if (node.getState() == 11) {
 			// Print errors.
-			UNSIGNED8 errNum = node.readNumberOfErrors();
+			UNSIGNED8 errNum = node.getNumberOfErrors();
 			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
 			for (UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-				UNSIGNED32 errCode = node.readErrorHistory(i);
+				UNSIGNED32 errCode = node.getErrorHistory(i);
 
 				std::cout << node.ErrorCodeMessage(errCode) << std::endl;
 			}
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 			}
 
 			// Reset errors.
-			node.changeEPOSstate(epos::FAULT_RESET);
+			node.setState(epos::FAULT_RESET);
 		}
 
 		// Change to the operational mode.

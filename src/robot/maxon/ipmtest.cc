@@ -22,26 +22,26 @@ int main(int argc, char *argv[])
 
 		epos node(gateway, 1);
 
-		node.printEPOSstate();
+		node.printState();
 //			node.SendNMTService(epos::Reset_Node);
 //			usleep(500000);
 //			node.SendNMTService(epos::Start_Remote_Node);
 //			usleep(500000);
 
 		// Check if in a FAULT state
-		if(node.checkEPOSstate() == 11) {
-			UNSIGNED8 errNum = node.readNumberOfErrors();
+		if(node.getState() == 11) {
+			UNSIGNED8 errNum = node.getNumberOfErrors();
 			std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
 			for(UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-				UNSIGNED32 errCode = node.readErrorHistory(i);
+				UNSIGNED32 errCode = node.getErrorHistory(i);
 
 				std::cout << node.ErrorCodeMessage(errCode) << std::endl;
 			}
 			if (errNum > 0) {
 				node.clearNumberOfErrors();
 			}
-			node.changeEPOSstate(epos::FAULT_RESET);
+			node.setState(epos::FAULT_RESET);
 		}
 
 		// Change to the operational mode
@@ -51,20 +51,20 @@ int main(int argc, char *argv[])
 
 		uint16_t status;
 
-		status = node.readStatusWord();
+		status = node.getStatusWord();
 		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
 
 		gateway.SendNMTService(1, gateway::Start_Remote_Node);
 
-		status = node.readStatusWord();
+		status = node.getStatusWord();
 		std::cout << "node.remote = " << (int) (epos::isRemoteOperationEnabled(status)) << std::endl;
 
-		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
+		std::cout << "node.readActualBufferSize() = " << (int) node.getActualBufferSize() << std::endl;
 
 		gateway.setDebugLevel(0);
 		clock_gettime(CLOCK_MONOTONIC, &t1);
 
-		node.writeInterpolationDataRecord(0, 0, 0);
+		node.setInterpolationDataRecord(0, 0, 0);
 		clock_gettime(CLOCK_MONOTONIC, &t2);
 		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
 		printf("%.9f\n", t);
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 //		node.writeInterpolationDataRecord(1, 2, 3);
 		gateway.setDebugLevel(0);
 
-		std::cout << "node.readActualBufferSize() = " << (int) node.readActualBufferSize() << std::endl;
+		std::cout << "node.readActualBufferSize() = " << (int) node.getActualBufferSize() << std::endl;
 
 		gateway.close();
 	} catch (canopen_error & error) {

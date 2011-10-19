@@ -37,42 +37,42 @@ int main(int argc, char *argv[])
 
 		std::bitset <16> epos_digits;
 
-		U32 DeviceType = cpv10.readDeviceType();
+		U32 DeviceType = cpv10.getDeviceType();
 		printf("Device type = 0x%08X\n", DeviceType);
 
-		U8 ErrorRegister = cpv10.readErrorRegister();
+		U8 ErrorRegister = cpv10.getErrorRegister();
 		printf("Error register = 0x%02X\n", ErrorRegister);
 
-		U32 ManufacturerStatusRegister = cpv10.readManufacturerStatusRegister();
+		U32 ManufacturerStatusRegister = cpv10.getManufacturerStatusRegister();
 		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
 
-		uint8_t NumberOfOutputGroups = cpv10.readNumberOf8OutputGroups();
+		uint8_t NumberOfOutputGroups = cpv10.getNumberOf8OutputGroups();
 		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
 
-		uint8_t Outputs07 = cpv10.readOutputs(1);
+		uint8_t Outputs07 = cpv10.getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
 		gateway.SendNMTService(nodeId, gateway::Start_Remote_Node);
 
 		while (1) {
-			cpv10.writeOutputs(1, 0x00);
-			cpv10.writeOutputs(2, 0x00);
+			cpv10.setOutputs(1, 0x00);
+			cpv10.setOutputs(2, 0x00);
 			sleep(2);
 			// Move the pistons up
-			cpv10.writeOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
+			cpv10.setOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
 			sleep(3);
-			epos_digits = node.readDInput();
+			epos_digits = node.getDInput();
 			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
 
-			cpv10.writeOutputs(1, 0x00);
-			cpv10.writeOutputs(2, 0x00);
+			cpv10.setOutputs(1, 0x00);
+			cpv10.setOutputs(2, 0x00);
 			sleep(2);
-			cpv10.writeOutputs(FESTO_CY22_GROUP, FESTO_CY22_BIT);
+			cpv10.setOutputs(FESTO_CY22_GROUP, FESTO_CY22_BIT);
 			sleep(5);
-			epos_digits = node.readDInput();
+			epos_digits = node.getDInput();
 			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
-			cpv10.writeOutputs(1, 0x00);
-			cpv10.writeOutputs(2, 0x00);
+			cpv10.setOutputs(1, 0x00);
+			cpv10.setOutputs(2, 0x00);
 		}
 
 		gateway.close();
