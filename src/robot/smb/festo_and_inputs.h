@@ -20,6 +20,11 @@
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
 
+
+#define FAI_SINGLE_DELAY 20
+#define FAI_DELAY_MAX_ITERATION 250
+
+
 namespace mrrocpp {
 namespace edp {
 namespace smb {
@@ -121,7 +126,7 @@ public:
 	 */
 	bool festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
 
-	void initiate();
+
 
 	bool is_upper_halotron_active(int leg_number);
 	bool is_lower_halotron_active(int leg_number);

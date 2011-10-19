@@ -434,7 +434,7 @@ void effector::create_threads()
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
-	fai->initiate();
+
 
 	// do poprawy
 	is_base_positioned_to_move_legs = true;

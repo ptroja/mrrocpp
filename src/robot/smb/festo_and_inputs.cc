@@ -43,7 +43,20 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
 
 		read_state();
+		determine_legs_state();
+		desired_output[1] = current_output[1];
+		desired_output[2] = current_output[2];
+
+	} else {
+		current_legs_state = lib::smb::ALL_UP;
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
+		}
+
 	}
+
+	next_legs_state = current_legs_state;
 }
 
 festo_and_inputs::~festo_and_inputs()
@@ -101,32 +114,43 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 	switch (leg_number)
 	{
 		case 1: {
-			if (value) {
-				master.msg->message("set_detach 1 true");
-			} else {
-				master.msg->message("set_detach 1 false");
-			}
+			/*
+			 if (value) {
+			 master.msg->message("set_detach 1 true");
+			 } else {
+			 master.msg->message("set_detach 1 false");
+			 }
+			 */
 			desired_output[FESTO_C1_GROUP][FESTO_C1_BIT_TO_SET] = value;
+			//std::cout << "set_detach 1 desired_output = " << desired_output[2] << std::endl;
+
 		}
 
 			break;
 		case 2: {
-			if (value) {
-				master.msg->message("set_detach 2 true");
-			} else {
-				master.msg->message("set_detach 2 false");
-			}
+			/*
+			 if (value) {
+			 master.msg->message("set_detach 2 true");
+			 } else {
+			 master.msg->message("set_detach 2 false");
+			 }
+			 */
 			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
+			//	std::cout << "set_detach 2 desired_output = " << desired_output[2] << std::endl;
 		}
 
 			break;
 		case 3: {
-			if (value) {
-				master.msg->message("set_detach 3 true");
-			} else {
-				master.msg->message("set_detach 3 false");
-			}
+			/*
+			 if (value) {
+			 master.msg->message("set_detach 3 true");
+			 } else {
+			 master.msg->message("set_detach 3 false");
+			 }
+			 */
 			desired_output[FESTO_C3_GROUP][FESTO_C3_BIT_TO_SET] = value;
+			//	std::cout << "set_detach 3 desired_output = " << desired_output[2] << std::endl;
+
 		}
 
 			break;
@@ -365,10 +389,10 @@ void festo_and_inputs::move_one_or_two_down()
 	for (int iteration = 0; number_of_legs_down < 3; iteration++) {
 
 		//	master.msg->message("wait iteration");
-		delay(20);
+		delay(FAI_SINGLE_DELAY);
 
 		// if it take too long to wait break
-		if (iteration > 500) {
+		if (iteration > FAI_DELAY_MAX_ITERATION) {
 			master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 			break;
@@ -378,11 +402,17 @@ void festo_and_inputs::move_one_or_two_down()
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
 			if ((!is_checked(i + 1)) && (is_lower_halotron_active(i + 1))) {
+				//		std::cout << "move_one_or_two_down 1 desired_output = " << desired_output[2] << std::endl;
+
 				set_checked(i + 1);
+				//	std::cout << "move_one_or_two_down 2 desired_output = " << desired_output[2] << std::endl;
+
 				number_of_legs_down++;
 				// attach leg
 				set_detach(i + 1, false);
-				master.msg->message("move_one_or_two_down");
+				//	std::cout << "move_one_or_two_down 3 desired_output = " << desired_output[2] << std::endl;
+
+				//	master.msg->message("move_one_or_two_down");
 
 			}
 
@@ -391,6 +421,7 @@ void festo_and_inputs::move_one_or_two_down()
 
 	// wait a while in case the legs are still in motion
 	delay(500);
+	//std::cout << "move_one_or_two_down 4 desired_output = " << desired_output[2] << std::endl;
 
 	// attach legs
 	execute_command();
@@ -442,10 +473,10 @@ void festo_and_inputs::festo_command_all_down()
 
 				for (int iteration = 0; number_of_legs_down < 3; iteration++) {
 
-					delay(20);
+					delay(FAI_SINGLE_DELAY);
 
 					// if it take too long to wait break
-					if (iteration > 500) {
+					if (iteration > FAI_DELAY_MAX_ITERATION) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
@@ -512,10 +543,10 @@ void festo_and_inputs::festo_command_two_up_one_down()
 				set_all_legs_unchecked();
 
 				for (int iteration = 0; number_of_legs_up < 2; iteration++) {
-					delay(20);
+					delay(FAI_SINGLE_DELAY);
 
 					// if it take too long to wait break
-					if (iteration > 500) {
+					if (iteration > FAI_DELAY_MAX_ITERATION) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
@@ -567,28 +598,31 @@ void festo_and_inputs::festo_command_all_up()
 
 				// waits until all legs are in upper position
 
-				int number_of_legs_up = 0,
+				int number_of_legs_up = 0;
 
 				set_all_legs_unchecked();
 
+				//	master.msg->message("festo_command_all_up before wait");
+
 				for (int iteration = 0; number_of_legs_up < 3; iteration++) {
 
-					delay(20);
+					delay(FAI_SINGLE_DELAY);
 
 					// if it take too long to wait break
-					if (iteration > 500) {
+					if (iteration > FAI_DELAY_MAX_ITERATION) {
 						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
 						break;
 					}
 
 					read_state();
-
+					//master.msg->message("festo_command_all_up iteration");
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
 						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
 							set_checked(i + 1);
 							number_of_legs_up++;
+							//		master.msg->message("festo_command_all_up is_checked");
 						}
 
 					}
@@ -631,28 +665,12 @@ void festo_and_inputs::read_state()
 		epos_inputs = epos_di_node->readDInput();
 
 		current_output[1] = cpv10->readOutputs(1);
-		desired_output[1] = current_output[1];
+		//	desired_output[1] = current_output[1];
 		//	std::cout << "group_one_desired_output 1= " << group_one_desired_output << std::endl;
 		current_output[2] = cpv10->readOutputs(2);
 		//	std::cout << "group_two_current_output 1= " << group_two_current_output << std::endl;
-		desired_output[2] = current_output[2];
+		//	desired_output[2] = current_output[2];
 	}
-}
-
-void festo_and_inputs::initiate()
-{
-
-	if (robot_test_mode) {
-		current_legs_state = lib::smb::ALL_UP;
-		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
-		}
-	} else {
-		determine_legs_state();
-	}
-
-	next_legs_state = current_legs_state;
 }
 
 void festo_and_inputs::create_reply()
@@ -673,9 +691,15 @@ void festo_and_inputs::create_reply()
 
 void festo_and_inputs::execute_command()
 {
+
 	if (!robot_test_mode) {
 		cpv10->writeOutputs(1, (uint8_t) desired_output[1].to_ulong());
 		cpv10->writeOutputs(2, (uint8_t) desired_output[2].to_ulong());
+		//	std::cout << "desired_output = " << desired_output[2] << std::endl;
+		read_state();
+		desired_output[1] = current_output[1];
+		desired_output[2] = current_output[2];
+
 	}
 }
 
