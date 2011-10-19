@@ -63,16 +63,14 @@ void festo_and_inputs::set_checked(int leg_number)
 
 void festo_and_inputs::set_unchecked(int leg_number)
 {
-	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		checked[i] = false;
-
-	}
-
+	checked[leg_number - 1] = false;
 }
 
 void festo_and_inputs::set_all_legs_unchecked()
 {
-
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		checked[i] = false;
+	}
 }
 
 bool festo_and_inputs::is_upper_halotron_active(int leg_number)
@@ -96,22 +94,38 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 
 	// undetachable legs can not be detached !!
 	if ((value == true) && (festo_command.undetachable[leg_number - 1] == true)) {
+		master.msg->message("set_detach EMERGENCY return");
 		return;
 	}
 
 	switch (leg_number)
 	{
 		case 1: {
+			if (value) {
+				master.msg->message("set_detach 1 true");
+			} else {
+				master.msg->message("set_detach 1 false");
+			}
 			desired_output[FESTO_C1_GROUP][FESTO_C1_BIT_TO_SET] = value;
 		}
 
 			break;
 		case 2: {
+			if (value) {
+				master.msg->message("set_detach 2 true");
+			} else {
+				master.msg->message("set_detach 2 false");
+			}
 			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
 		}
 
 			break;
 		case 3: {
+			if (value) {
+				master.msg->message("set_detach 3 true");
+			} else {
+				master.msg->message("set_detach 3 false");
+			}
 			desired_output[FESTO_C3_GROUP][FESTO_C3_BIT_TO_SET] = value;
 		}
 
@@ -350,7 +364,7 @@ void festo_and_inputs::move_one_or_two_down()
 
 	for (int iteration = 0; number_of_legs_down < 3; iteration++) {
 
-		master.msg->message("wait iteration");
+		//	master.msg->message("wait iteration");
 		delay(20);
 
 		// if it take too long to wait break
@@ -368,6 +382,8 @@ void festo_and_inputs::move_one_or_two_down()
 				number_of_legs_down++;
 				// attach leg
 				set_detach(i + 1, false);
+				master.msg->message("move_one_or_two_down");
+
 			}
 
 		}
