@@ -21,7 +21,12 @@ namespace smb {
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-const double rotational_mp2i_ratio = 2*M_PI / (2400 * 50);
+const double rotational_mp2i_ratio = M_PI / (2400 * 50);
+
+
+//! Parameter for conversion for external rotational.
+//! * One step is equal to 60 degrees (PI/6).
+const double leg_rotational_ext2i_ratio = M_PI/6;
 
 //! Initialization of motor to internal ratios.
 const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_mp2i_ratio, rotational_mp2i_ratio };
@@ -50,9 +55,9 @@ void model::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	// Check upper and lower limits only for the motor rotating the PKM.
 	if (motor_position[1] > upper_pkm_motor_pos_limits)
-		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(UPPER_LIMIT));
+		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(UPPER_LIMIT) << desired_value(motor_position[1]));
 	else if (motor_position[1] < lower_pkm_motor_pos_limits)
-		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(LOWER_LIMIT));
+		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(LOWER_LIMIT) << desired_value(motor_position[1]));
 
 	// The motor rotating legs doesn't have limits.
 }
