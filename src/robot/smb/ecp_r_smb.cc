@@ -19,14 +19,14 @@ namespace smb {
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 		ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager), epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager), epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager), epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager), epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
-		smb_festo_command_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager), epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager), smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+		smb_festo_command_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager), epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager), epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager), epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager), smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
-		ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _ecp_object), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager), epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager), epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager), epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager), epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager), smb_festo_command_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager), epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager), smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _ecp_object), epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager), epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager), epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager), epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager), epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager), smb_festo_command_data_port(lib::smb::MULTI_PIN_INSERTION_DATA_PORT, port_manager), epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager), epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager), epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager), smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
@@ -145,8 +145,29 @@ void robot::create_command()
 		}
 	}
 
-	is_new_request = (epos_motor_reply_data_request_port.is_new_request()
-			|| smb_multi_leg_reply_data_request_port.is_new_request());
+	if (epos_motor_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::smb::MOTOR;
+		//	ecp_command.get_arm_type = lib::MOTOR;
+		//sr_ecp_msg.message("epos_motor_reply_data_request_port");
+
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_joint_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::smb::JOINT;
+		//ecp_command.get_arm_type = lib::JOINT;
+		//	sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_external_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::smb::FRAME;
+		//ecp_command.get_arm_type = lib::FRAME;
+		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
+		check_then_set_command_flag(is_new_request);
+	}
+
+	is_new_request = is_new_request || smb_multi_leg_reply_data_request_port.is_new_request();
 
 	communicate_with_edp = true;
 
