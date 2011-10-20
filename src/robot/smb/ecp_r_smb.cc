@@ -211,6 +211,41 @@ void robot::get_reply()
 		epos_motor_reply_data_request_port.set();
 	}
 
+	if (epos_joint_reply_data_request_port.is_new_request()) {
+		// generator reply generation
+		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
+
+		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+			epos_joint_reply_data_request_port.data.epos_controller[i].position =
+					edp_ecp_rbuffer.epos_controller[i].position;
+			epos_joint_reply_data_request_port.data.epos_controller[i].current =
+					edp_ecp_rbuffer.epos_controller[i].current;
+			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		//	epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+
+		epos_joint_reply_data_request_port.set();
+	}
+
+	if (epos_external_reply_data_request_port.is_new_request()) {
+		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
+		// generator reply generation
+		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+			epos_external_reply_data_request_port.data.epos_controller[i].position =
+					edp_ecp_rbuffer.epos_controller[i].position;
+			epos_external_reply_data_request_port.data.epos_controller[i].current =
+					edp_ecp_rbuffer.epos_controller[i].current;
+			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		//	epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+
+		//	epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
+
+		epos_external_reply_data_request_port.set();
+	}
+
 	if (smb_multi_leg_reply_data_request_port.is_new_request()) {
 		smb_multi_leg_reply_data_request_port.data = edp_ecp_rbuffer.multi_leg_reply;
 		smb_multi_leg_reply_data_request_port.set();
