@@ -104,17 +104,17 @@ int wgt_smb_command::init()
 				synchro_depended_widgets_disable(false);
 
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
 
 				// sets leg state
 
 				lib::smb::multi_leg_reply_td &mlr =
 						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
 
-				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
