@@ -23,6 +23,11 @@ namespace smb {
 //! * The gear ratio is 50.
 const double rotational_mp2i_ratio = M_PI / (2400 * 50);
 
+
+//! Parameter for conversion for external rotational.
+//! * One step is equal to 60 degrees (PI/6).
+const double leg_rotational_ext2i_ratio = M_PI/6;
+
 //! Initialization of motor to internal ratios.
 const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_mp2i_ratio, rotational_mp2i_ratio };
 
