@@ -365,7 +365,13 @@ void festo_and_inputs::move_one_or_two_down()
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		if (is_upper_halotron_active(i + 1)) {
+			// DEBUG
+			//	if (i != 2) {
 			set_move_down(i + 1, true);
+			//	} else {
+			//		set_move_down(i + 1, false);
+
+			//	}
 			set_move_up(i + 1, false);
 			set_detach(i + 1, true);
 		}
@@ -377,9 +383,9 @@ void festo_and_inputs::move_one_or_two_down()
 		}
 
 	}
-
+	master.msg->message("move_one_or_two_down przed pierwszym execute_command");
 	execute_command();
-
+	master.msg->message("move_one_or_two_down za pierwszym execute_command");
 	// waits until all legs go down
 
 	int number_of_legs_down = 0;
@@ -392,6 +398,10 @@ void festo_and_inputs::move_one_or_two_down()
 		delay(FAI_SINGLE_DELAY);
 
 		// if it take too long to wait break
+
+		// if (iteration > FAI_DELAY_MAX_ITERATION) {
+		// DEBUG
+		//	if (iteration > 500) {
 		if (iteration > FAI_DELAY_MAX_ITERATION) {
 			master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 
