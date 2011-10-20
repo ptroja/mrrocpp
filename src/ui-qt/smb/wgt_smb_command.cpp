@@ -350,21 +350,84 @@ void wgt_smb_command::on_pushButton_stop_clicked()
 void wgt_smb_command::on_radioButton_m_motor_toggled()
 {
 	if (ui.radioButton_m_motor->isChecked()) {
-		interface.ui_msg->message("on_radioButton_m_motor_clicked");
+		//	interface.ui_msg->message("on_radioButton_m_motor_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(1000);
+		ui.doubleSpinBox_ml_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(1000);
+		ui.doubleSpinBox_ml_relative->setDecimals(0);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-120000);
+		ui.doubleSpinBox_ms_absolute->setMaximum(120000);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
+		ui.doubleSpinBox_ms_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+		ui.doubleSpinBox_ms_relative->setMaximum(120000);
+		ui.doubleSpinBox_ms_relative->setSingleStep(1000);
+		ui.doubleSpinBox_ms_relative->setDecimals(0);
+
 	}
 }
 
 void wgt_smb_command::on_radioButton_m_joint_toggled()
 {
 	if (ui.radioButton_m_joint->isChecked()) {
-		interface.ui_msg->message("on_radioButton_m_joint_clicked");
+		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
+		ui.doubleSpinBox_ml_absolute->setDecimals(1);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(1);
+		ui.doubleSpinBox_ml_relative->setDecimals(1);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-360);
+		ui.doubleSpinBox_ms_absolute->setMaximum(360);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(1);
+		ui.doubleSpinBox_ms_absolute->setDecimals(1);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-360);
+		ui.doubleSpinBox_ms_relative->setMaximum(360);
+		ui.doubleSpinBox_ms_relative->setSingleStep(1);
+		ui.doubleSpinBox_ms_relative->setDecimals(1);
+
 	}
 }
 
 void wgt_smb_command::on_radioButton_m_ext_toggled()
 {
 	if (ui.radioButton_m_ext->isChecked()) {
-		interface.ui_msg->message("on_radioButton_m_ext_clicked");
+		//	interface.ui_msg->message("on_radioButton_m_ext_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
+		ui.doubleSpinBox_ml_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(1);
+		ui.doubleSpinBox_ml_relative->setDecimals(0);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-360);
+		ui.doubleSpinBox_ms_absolute->setMaximum(360);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(1);
+		ui.doubleSpinBox_ms_absolute->setDecimals(1);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-360);
+		ui.doubleSpinBox_ms_relative->setMaximum(360);
+		ui.doubleSpinBox_ms_relative->setSingleStep(1);
+		ui.doubleSpinBox_ms_relative->setDecimals(1);
+
 	}
 }
 
