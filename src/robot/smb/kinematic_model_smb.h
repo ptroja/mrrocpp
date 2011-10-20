@@ -19,6 +19,11 @@ namespace mrrocpp {
 namespace kinematics {
 namespace smb {
 
+//! Parameter for conversion of external legs rotation to degrees (in radians).
+//! * One step is equal to 60 degrees (PI/6).
+const double leg_rotational_ext2i_ratio = M_PI/6;
+
+
 /*!
  *
  * @brief Kinematic model for the SwarmItFix agent's mobile base class.
@@ -44,6 +49,7 @@ protected:
 	static const int32_t lower_pkm_motor_pos_limits;
 
 public:
+
 	//! Constructor.
 	model(void);
 

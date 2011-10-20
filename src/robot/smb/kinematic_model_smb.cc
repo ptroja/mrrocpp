@@ -21,15 +21,16 @@ namespace smb {
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-const double rotational_mp2i_ratio = M_PI / (2400 * 50);
+//! * Motor to motor radio is ??? // TODO: CHECK!!
+const double rotational_legs_mp2i_ratio = M_PI / (2400 * 50 * 2.5);
 
-
-//! Parameter for conversion for external rotational.
-//! * One step is equal to 60 degrees (PI/6).
-const double leg_rotational_ext2i_ratio = M_PI/6;
+//! Parameters for conversion for rotational DOFs are:
+//! * The encoder has 2400 CPT (Counts per turn).
+//! * The gear ratio is 50.
+const double rotational_spkm_mp2i_ratio = M_PI / (2400 * 50);
 
 //! Initialization of motor to internal ratios.
-const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_mp2i_ratio, rotational_mp2i_ratio };
+const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_legs_mp2i_ratio, rotational_spkm_mp2i_ratio };
 
 //! Initialization of upper motors limits for PKM.
 const int32_t model::upper_pkm_motor_pos_limits = { 120000 };

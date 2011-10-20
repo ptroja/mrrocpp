@@ -367,6 +367,22 @@ void effector::rotational_motors_command()
 			break;
 		case lib::smb::FRAME: {
 			msg->message("FRAME");
+			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
+			desired_joints[0] = ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
+			// SPKM rotational joint: Copy data joint value directly from buffer.
+			desired_joints[1] = ecp_edp_cbuffer.goal_pos[1];
+			cout << "JOINT[0]: " << desired_joints[0] << endl;
+			cout << "JOINT[1]: " << desired_joints[1] << endl;
+
+			if (is_synchronised()) {
+				// Transform desired joint to motors (and check motors/joints values).
+				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+				// Postcondition - check whether the desired motor position is valid.
+				get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
+			} else {
+				// Throw non-fatal error - this mode requires synchronization.
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
+			}
 		}
 			break;
 		default:
@@ -453,11 +469,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					msg->message("EDP get_arm_position JOINT");
 
 					// Read actual values from hardware
-					/*			if (!robot_test_mode) {
-					 for (size_t i = 0; i < axes.size(); ++i) {
-					 current_motor_pos[i] = axes[i]->readActualPosition();
-					 }
-					 }*/
+					if (!robot_test_mode) {
+						for (size_t i = 0; i < axes.size(); ++i) {
+							current_motor_pos[i] = axes[i]->getActualPosition();
+						}
+					}
 
 					// Calculate current joint values.
 					get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
@@ -470,9 +486,21 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				case lib::smb::FRAME: {
 					msg->message("EDP get_arm_position FRAME");
 
-					//	edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
-				}
+					// Read actual values from hardware
+					if (!robot_test_mode) {
+						for (size_t i = 0; i < axes.size(); ++i) {
+							current_motor_pos[i] = axes[i]->getActualPosition();
+						}
+					}
+					// Calculate current joint values.
+					get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+					// Leg rotational joint: recalculate joint value and copy data to buffer.
+					edp_ecp_rbuffer.epos_controller[0].position = current_joints[0] / mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
+					// SPKM rotational joint: copy data to buffer.
+					edp_ecp_rbuffer.epos_controller[1].position = current_joints[1];
 					break;
+				}
 				default:
 					break;
 
