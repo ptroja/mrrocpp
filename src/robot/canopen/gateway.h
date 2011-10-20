@@ -9,6 +9,7 @@
 #include <stdint.h>  /* int types with given size */
 
 #include "canopen_exceptions.hpp"
+#include <boost/type_traits/is_same.hpp>
 
 namespace mrrocpp {
 namespace edp {
