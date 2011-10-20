@@ -116,20 +116,21 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+	motor_driven_effector(_shell, l_robot_name)
 {
-
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
-	//  Stworzenie listy dostepnych kinematyk.
+
+	// Create manipulator kinematic model.
 	create_kinematic_models_for_given_robot();
 
+	// Reset variables.
 	reset_variables();
 
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway =
-					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+			gateway
+					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -175,6 +176,7 @@ void effector::synchronise(void)
 	}
 
 	try {
+		controller_state_edp_buf.is_synchronised = false;
 		// Two-step synchronization of the motor rotating the whole PKM.
 		// Step1: Potentiometer.
 		// Get current potentiometer readings.
@@ -201,8 +203,6 @@ void effector::synchronise(void)
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-		// Now the robot is synchronised
-		//	controller_state_edp_buf.is_synchronised = true;
 		// Check whether the synchronization was successful.
 		check_controller_state();
 
@@ -241,26 +241,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		{
 			case lib::smb::POSE: {
 				msg->message("POSE");
-
-				switch (ecp_edp_cbuffer.set_pose_specification)
-				{
-					case lib::smb::MOTOR: {
-						msg->message("MOTOR");
-						// Copy data directly from buffer
-						rotational_motors_command();
-					}
-						break;
-					case lib::smb::JOINT: {
-						msg->message("JOINT");
-					}
-						break;
-					case lib::smb::FRAME: {
-						msg->message("FRAME");
-					}
-						break;
-				}
 				// Control the two SMB rotational motors.
-
+				rotational_motors_command();
 				break;
 			}
 			case lib::smb::QUICKSTOP: {
@@ -268,38 +250,38 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								// Brake with Quickstop command
-								node->setState(maxon::epos::QUICKSTOP);
-							}
+								{
+									// Brake with Quickstop command
+									node->setState(maxon::epos::QUICKSTOP);
+								}
 				}
 				break;
 			}
 			case lib::smb::CLEAR_FAULT: {
 				msg->message("CLEAR_FAULT");
 				BOOST_FOREACH(maxon::epos * node, axes)
-						{
-							// Print state.
-							node->printState();
-							// Check if node is in a FAULT state.
-							if (node->getState() == maxon::epos::FAULT) {
-								maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-								cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-								// Print list of errors.
-								for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-									maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-									cerr << node->ErrorCodeMessage(errCode) << endl;
+							{
+								// Print state.
+								node->printState();
+								// Check if node is in a FAULT state.
+								if (node->getState() == maxon::epos::FAULT) {
+									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
+									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+									// Print list of errors.
+									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
+										cerr << node->ErrorCodeMessage(errCode) << endl;
+									}
+									// Clear errors.
+									if (errNum > 0) {
+										node->clearNumberOfErrors();
+									}
+									// Reset errors.
+									node->setState(maxon::epos::FAULT_RESET);
 								}
-								// Clear errors.
-								if (errNum > 0) {
-									node->clearNumberOfErrors();
-								}
-								// Reset errors.
-								node->setState(maxon::epos::FAULT_RESET);
+								// Reset node.
+								node->reset();
 							}
-							// Reset node.
-							node->reset();
-						}
 				break;
 			}
 			case lib::smb::FESTO: {
@@ -334,29 +316,27 @@ void effector::rotational_motors_command()
 	 ss << ecp_edp_cbuffer.set_pose_specification;
 	 msg->message(ss.str().c_str());*/
 
+	// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
+	// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
 	if (current_legs_state() != lib::smb::TWO_UP_ONE_DOWN) {
-		// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
-		// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
 
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != ecp_edp_cbuffer.motor_pos[0]))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT) && (current_joints[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
-
-	// TODO: remove this line!
-	ecp_edp_cbuffer.set_pose_specification = lib::smb::MOTOR;
 
 	// Interpret command according to the pose specification.
 	switch (ecp_edp_cbuffer.set_pose_specification)
 	{
 		case lib::smb::MOTOR:
-			// Copy data directly from buffer
+			msg->message("MOTOR");
+			// Copy data directly from buffer.
 			for (int i = 0; i < number_of_servos; ++i) {
 				desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
 				cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << endl;
@@ -365,6 +345,29 @@ void effector::rotational_motors_command()
 			get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 			// Transform desired motors to joints.
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
+			break;
+		case lib::smb::JOINT: {
+			msg->message("JOINT");
+			// Copy data directly from buffer.
+			for (int i = 0; i < number_of_servos; ++i) {
+				desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
+				cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
+			}
+
+			if (is_synchronised()) {
+				// Transform desired joint to motors (and check motors/joints values).
+				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+				// Postcondition - check whether the desired motor position is valid.
+				get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
+			} else {
+				// Throw non-fatal error - this mode requires synchronization.
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
+			}
+		}
+			break;
+		case lib::smb::FRAME: {
+			msg->message("FRAME");
+		}
 			break;
 		default:
 			// Throw non-fatal error - invalid pose specification.
