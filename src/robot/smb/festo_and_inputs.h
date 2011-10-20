@@ -20,6 +20,11 @@
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
 
+
+#define FAI_SINGLE_DELAY 20
+#define FAI_DELAY_MAX_ITERATION 250
+
+
 namespace mrrocpp {
 namespace edp {
 namespace smb {
@@ -33,6 +38,11 @@ class festo_and_inputs
 
 private:
 	effector &master;
+
+	/*!
+	 * \brief the array is used to memorize current state of the leg in context of current operation
+	 */
+	bool checked[lib::smb::LEG_CLAMP_NUMBER];
 
 	boost::shared_ptr <maxon::epos> epos_di_node;
 
@@ -48,6 +58,11 @@ private:
 
 	bool robot_test_mode;
 
+	/*!
+	 * \brief current festo command
+	 */
+	lib::smb::festo_command_td festo_command;
+
 public:
 	festo_and_inputs(effector &_master);
 	~festo_and_inputs();
@@ -55,14 +70,34 @@ public:
 	void determine_legs_state();
 
 	/*!
+	 * \brief determine if the particular leg was checked
+	 */
+	bool is_checked(int leg_number);
+
+	/*!
+	 * \brief set the particular leg checked
+	 */
+	void set_checked(int leg_number);
+
+	/*!
+	 * \brief set the particular leg unchecked
+	 */
+	void set_unchecked(int leg_number);
+
+	/*!
+	 * \brief uncheck all legs
+	 */
+	void set_all_legs_unchecked();
+
+	/*!
 	 * \brief festo command variant in move_arm
 	 */
-	void festo_command();
+	void command();
 
 	/*!
 	 * \brief festo command all_down variant in move_arm
 	 */
-	void festo_command_all_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_all_down();
 
 	/*!
 	 * \brief moves all legs that are in the upper position down and detach them
@@ -73,17 +108,17 @@ public:
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
 	 */
-	void festo_command_one_up_two_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_one_up_two_down();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void festo_command_two_up_one_down(lib::smb::festo_command_td& festo_command);
+	void festo_command_two_up_one_down();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void festo_command_all_up(lib::smb::festo_command_td& festo_command);
+	void festo_command_all_up();
 
 	/*!
 	 * \brief festo reply in test_mode
@@ -91,7 +126,7 @@ public:
 	 */
 	bool festo_test_mode_set_reply(lib::smb::festo_command_td& festo_command);
 
-	void initiate();
+
 
 	bool is_upper_halotron_active(int leg_number);
 	bool is_lower_halotron_active(int leg_number);

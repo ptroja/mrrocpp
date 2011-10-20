@@ -42,7 +42,6 @@ protected:
 	 * It is used a union of structures for all EDP's
 	 */
 	//lib::r_buffer reply;
-
 	/*!
 	 * \brief id of ECP process sending a command.
 	 *
@@ -95,12 +94,12 @@ protected:
 		caller = rcvid;
 
 		instruction = new_ecp_command;
-		if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
+		//	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
 
-			//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
+		//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
 
-			instruction_deserialization();
-		}
+		instruction_deserialization();
+		//	}
 
 		return instruction.instruction_type;
 	}

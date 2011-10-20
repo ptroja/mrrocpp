@@ -11,65 +11,65 @@ cpv::cpv(canopen::gateway & _device, uint8_t _nodeId)
 {
 }
 
-U32 cpv::readDeviceType()
+U32 cpv::getDeviceType()
 {
 	return ReadObjectValue<U32>(0x1000, 0x00);
 }
 
-U8 cpv::readErrorRegister()
+U8 cpv::getErrorRegister()
 {
 	return ReadObjectValue<U8>(0x1001, 0x00);
 }
 
-U32 cpv::readManufacturerStatusRegister()
+U32 cpv::getManufacturerStatusRegister()
 {
 	return ReadObjectValue<U32>(0x1002, 0x00);
 }
 
-U8 cpv::readNumberOfCurrentFaults()
+U8 cpv::getNumberOfCurrentFaults()
 {
 	return ReadObjectValue<U8>(0x1003, 0x00);
 }
 
-U32 cpv::readMostRecentFault(uint8_t field)
+U32 cpv::getMostRecentFault(uint8_t field)
 {
 	return ReadObjectValue<U32>(0x1003, field);
 }
 
-std::string cpv::readDeviceName()
+std::string cpv::getDeviceName()
 {
 	static std::string ret = "NOT IMPLEMENTED";
 	return ret;
 }
 
-std::string cpv::readHardwareVersion()
+std::string cpv::getHardwareVersion()
 {
 	static std::string ret = "NOT IMPLEMENTED";
 	return ret;
 }
 
-std::string cpv::readSoftwareVersion()
+std::string cpv::getSoftwareVersion()
 {
 	static std::string ret = "NOT IMPLEMENTED";
 	return ret;
 }
 
-U32 cpv::readVendorID()
+U32 cpv::getVendorID()
 {
 	return ReadObjectValue<U32>(0x1018, 0x01);
 }
 
-U32 cpv::readProductCode()
+U32 cpv::getProductCode()
 {
 	return ReadObjectValue<U32>(0x1018, 0x02);
 }
 
-U32 cpv::readRevisionNumber()
+U32 cpv::getRevisionNumber()
 {
 	return ReadObjectValue<U32>(0x1018, 0x03);
 }
 
-U32 cpv::readSerialNumber()
+U32 cpv::getSerialNumber()
 {
 	return ReadObjectValue<U32>(0x1018, 0x04);
 }
@@ -79,52 +79,52 @@ U8 cpv::readNumberOfCPModulesConnected()
 	return ReadObjectValue<U8>(0x1027, 0x00);
 }
 
-U16 cpv::readModuleType(uint8_t module)
+U16 cpv::getModuleType(uint8_t module)
 {
 	return ReadObjectValue<U16>(0x1027, module);
 }
 
-U8 cpv::readNumberOf8OutputGroups()
+U8 cpv::getNumberOf8OutputGroups()
 {
 	return ReadObjectValue<U16>(0x6200, 0x00);
 }
 
-U8 cpv::readOutputs(uint8_t group)
+U8 cpv::getOutputs(uint8_t group)
 {
 	return ReadObjectValue<U8>(0x6200, group);
 }
 
-void cpv::writeOutputs(uint8_t group, uint8_t value)
+void cpv::setOutputs(uint8_t group, uint8_t value)
 {
 	WriteObjectValue(0x6200, group, value);
 }
 
-U8 cpv::readNumberOf8OutputGroupsErrorMode()
+U8 cpv::getNumberOf8OutputGroupsErrorMode()
 {
 	return ReadObjectValue<U16>(0x6206, 0x00);
 }
 
-U8 cpv::readOutputsErrorMode(uint8_t group)
+U8 cpv::getOutputsErrorMode(uint8_t group)
 {
 	return ReadObjectValue<U8>(0x6206, group);
 }
 
-void cpv::writeOutputsErrorMode(uint8_t group, uint8_t value)
+void cpv::setOutputsErrorMode(uint8_t group, uint8_t value)
 {
 	WriteObjectValue(0x6206, group, value);
 }
 
-U8 cpv::readNumberOf8OutputGroupsErrorValue()
+U8 cpv::getNumberOf8OutputGroupsErrorValue()
 {
 	return ReadObjectValue<U16>(0x6207, 0x00);
 }
 
-U8 cpv::readOutputsErrorValue(uint8_t group)
+U8 cpv::getOutputsErrorValue(uint8_t group)
 {
 	return ReadObjectValue<U8>(0x6207, group);
 }
 
-void cpv::writeOutputsErrorValue(uint8_t group, uint8_t value)
+void cpv::setOutputsErrorValue(uint8_t group, uint8_t value)
 {
 	WriteObjectValue(0x6207, group, value);
 }

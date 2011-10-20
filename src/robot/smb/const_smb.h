@@ -43,7 +43,7 @@ enum CBUFFER_VARIANT
 
 /*!
  * Pose specification variants
- * @ingroup spkm
+ * @ingroup smb
  */
 typedef enum _POSE_SPECIFICATION
 {
@@ -62,7 +62,10 @@ struct cbuffer
 	festo_command_td festo_command;
 
 	//! Pose specification type
-	POSE_SPECIFICATION pose_specification;
+	POSE_SPECIFICATION set_pose_specification;
+
+	//! Pose specification type
+	POSE_SPECIFICATION get_pose_specification;
 
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
@@ -97,11 +100,12 @@ struct cbuffer
 	{
 		ar & variant;
 		ar & festo_command;
+		ar & get_pose_specification;
 		switch (variant)
 		{
 			case POSE:
-				ar & pose_specification;
-				switch (pose_specification)
+				ar & set_pose_specification;
+				switch (set_pose_specification)
 				{
 					case FRAME:
 						ar & goal_pos;
