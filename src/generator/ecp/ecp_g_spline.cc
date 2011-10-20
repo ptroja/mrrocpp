@@ -124,7 +124,7 @@ bool spline::calculate()
 
     pose_vector_iterator = pose_vector.begin();
 
-    for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions, times and velocities for each pose and axis
+    for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions
 
             if(motion_type == lib::ABSOLUTE) {//absolute type of motion
                     if (!vpc.calculate_absolute_distance_direction_pose(pose_vector_iterator)) {
@@ -139,11 +139,47 @@ bool spline::calculate()
                     throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
             }
 
+            pose_vector_iterator++;
+    }
+
+    pose_vector_iterator = pose_vector.begin();
+    vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator tempIter = pose_vector.end();
+    vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator tempIter2 = pose_vector.begin();
+
+     //printf("time before loop: %f\n", pose_vector_iterator->t);
+
+    for (i = 0; i < pose_vector.size(); i++) {
+        //printf("petla\n");
+        flushall();
+            if (!vpc.set_v_k_pose(pose_vector_iterator, tempIter) ||//set up v_k for the pose
+            !vpc.set_v_p_pose(pose_vector_iterator, tempIter2) ||//set up v_p for the pose
+            !vpc.set_a_k_pose(pose_vector_iterator, tempIter) || //set up a_k for the pose
+            !vpc.set_a_p_pose(pose_vector_iterator, tempIter2)) { //set up a_p for the pose
+                if (debug)
+                {
+                    printf("ak, vk, ap, vp calculation returned false\n");
+                    flushall();
+                }
+                    return false;
+            }
+
+           //printf("time before: %f\n", pose_vector_iterator->t);
+
             if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
                !vpc.calculate_pose_time(pose_vector_iterator, mc) ||//calculate the longest time from each of the axes and set it as the pose time (also extend the time to be the multiplcity of a single macrostep time)
                !vpc.set_times_to_t(pose_vector_iterator)){
+                if (debug)
+                {
+                    printf("time calculation returned false\n");
+                    flushall();
+                }
                 return false;
             }
+
+            //printf("time after: %f\n", pose_vector_iterator->t);
+
+            //printf("before coeff calculation\n");
+            //print_pose_vector();
 
             for (j = 0; j < axes_num; j++) {
                // printf("petla\n");
@@ -155,7 +191,10 @@ bool spline::calculate()
                     //printf("powrot 1: %f\n", pose_vector_iterator->coeffs[j][0]);
                     //printf("powrot 2: %f\n", pose_vector_iterator->coeffs[j][1]);
                 } else if (pose_vector_iterator->type == 2) {
+
                     if (!vpc.calculate_cubic_coeffs(pose_vector_iterator,j)) {
+                        printf("cubic coeffs calc returned false\n");
+                        flushall();
                         return false;
                     }
                 } else if (pose_vector_iterator->type == 3) {
@@ -168,9 +207,9 @@ bool spline::calculate()
             //calculate the number of the macrosteps for the pose
             pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);
 
-            if (debug) {
-                    printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
-            }
+            //if (debug) {
+            //        printf("interpolation node no: %d\n", pose_vector_iterator->interpolation_node_no);
+            //}
 
             pose_vector_iterator++;
     }

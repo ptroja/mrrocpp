@@ -107,6 +107,36 @@ class spline_profile : public velocity_profile<ecp_mp::common::trajectory_pose::
                  * @return true if the calculation was successful
                  */
                 bool set_v_k_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it);
+                /**
+                 * Sets the a_p (initial acceleration) of a single pose and all axes.
+                 * @param it iterator to the list of positions
+                 * @param beginning_it iterator to the first element in the pose list
+                 * @return true if the calculation was successful
+                 */
+                bool set_a_p_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & beginning_it);
+                /**
+                 * Sets the a_p (initial acceleration) of a single axis of a single pose.
+                 * @param it iterator to the list of positions
+                 * @param beginning_it iterator to the first element in the pose list
+                 * @param i number of axis for which the setting is made
+                 * @return true if the calculation was successful
+                 */
+                bool set_a_p(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & beginning_it, int i);
+                /**
+                 * Sets the a_k (initial acceleration of the next pose, terminal acceleration of the current pose) of a single axis of a single pose.
+                 * @param it iterator to the list of positions
+                 * @param end_it iterator to the one past last element in the pose list
+                 * @param i number of axis for which the setting is made
+                 * @return true if the calculation was successful
+                 */
+                bool set_a_k(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it, int i);
+                /**
+                 * Sets the a_k (initial acceleration of the next pose, terminal acceleration of the current pose) of a single pose and all axes.
+                 * @param it iterator to the list of positions
+                 * @param end_it iterator to the one past last element in the pose list
+                 * @return true if the calculation was successful
+                 */
+                bool set_a_k_pose(std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::spline_trajectory_pose>::iterator & end_it);
             };
 
 } // namespace velocity_profile_calculator

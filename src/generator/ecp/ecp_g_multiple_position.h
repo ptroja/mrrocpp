@@ -527,6 +527,11 @@ public:
 
 		calculated = calculate();
 
+                if (!calculated)
+                {
+                    return false;
+                }
+
 		if (debug) {
 			print_pose_vector();
 		}
@@ -537,7 +542,7 @@ public:
 			print_coordinate_vector();
 		}
 
-		return calculated && interpolated;
+                return interpolated;
 	}
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
