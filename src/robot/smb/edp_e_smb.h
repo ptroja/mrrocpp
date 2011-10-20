@@ -79,6 +79,9 @@ private:
 	 */
 	festo_and_inputs* fai;
 
+	//! Method checks the state of EPOS controllers.
+	void check_controller_state();
+
 protected:
 
 	lib::smb::cbuffer ecp_edp_cbuffer;

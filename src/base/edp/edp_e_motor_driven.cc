@@ -194,8 +194,7 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
-	controller_state_edp_buf.is_wardrobe_on = true;
-	controller_state_edp_buf.is_robot_blocked = false;
+	controller_state_edp_buf.robot_in_fault_state = false;
 
 	real_reply_type = lib::ACKNOWLEDGE;
 

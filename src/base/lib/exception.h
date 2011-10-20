@@ -149,7 +149,7 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 };
 
 /*!
- * Macro for handling MRROC++ non fatal errors.
+ * Macro for handling MRROC++ errors.
  *
  * \param ERROR Exception derived from the mrrocpp_error classes.
  *
