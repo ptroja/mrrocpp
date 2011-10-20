@@ -212,7 +212,14 @@ int wgt_smb_command::move_it()
 			 motion_variant = lib::epos::SYNC_POLYNOMIAL;
 			 motion_variant = lib::epos::OPERATIONAL;
 			 */
-			robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+
+			if (ui.radioButton_m_motor->isChecked()) {
+				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_joint->isChecked()) {
+				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_ext->isChecked()) {
+				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
+			}
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				for (int i = 0; i < robot->number_of_servos; i++) {
