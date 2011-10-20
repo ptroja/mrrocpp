@@ -15,6 +15,10 @@
 #include "robot/spkm/const_spkm.h"
 #include "robot/spkm/kinematic_parameters_spkm.h"
 
+#include "wgt_spkm_inc.h"
+#include "wgt_spkm_int.h"
+#include "wgt_spkm_ext.h"
+
 namespace Ui {
 class MenuBar;
 class MenuBarAction;

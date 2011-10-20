@@ -10,9 +10,11 @@ namespace ui {
 namespace spkm1 {
 
 UiRobot::UiRobot(common::Interface& _interface) :
-	spkm::UiRobot(_interface, lib::spkm1::ROBOT_NAME)
+		spkm::UiRobot(_interface, lib::spkm1::ROBOT_NAME)
 {
-
+	add_wgt <wgt_spkm_inc>(spkm::WGT_SPKM_INC, "Spkm1 inc");
+	add_wgt <wgt_spkm_int>(spkm::WGT_SPKM_INT, "Spkm1 int");
+	add_wgt <wgt_spkm_ext>(spkm::WGT_SPKM_EXT, "Spkm1 ext");
 }
 
 void UiRobot::create_ui_ecp_robot()

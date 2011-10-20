@@ -169,7 +169,7 @@ public:
 
 	//! \brief check EPOS status
 	//! @return state according to firmware spec
-	actual_state_t checkEPOSstate();
+	actual_state_t getState();
 
 	//! \brief Find EPOS state corresponding to given status word
 	static actual_state_t status2state(canopen::WORD w);
@@ -184,68 +184,71 @@ public:
 	//! \brief Change the state of the remote (CAN) operation, required for the PDO requests
 	void setRemoteOperation(bool enable);
 
-	/*! \brief pretty-print EPOS state
+	/*! \brief Prints pretty-formatted controller state.
 	 *
 	 * @retval 0 status is OK
 	 * @retval -1 status is unknown
 	 */
-	int printEPOSstate();
+	int printState();
 
-	/*! \brief pretty-print EPOS Error Register */
+	//! \brief Pretty-formatted print EPOS error register.
 	static void printErrorRegister(UNSIGNED8 reg);
 
 	//! \brief Seconds per minute -- used in motion profile calculations,
 	//! since EPOS velocity is in [rpm] and acceleration is in [rpm/s].
 	static const unsigned SECONDS_PER_MINUTE;
 
-	//! \brief States of the EPOS controller
-	typedef enum _state
+	//! \brief Commands that can be send to EPOS controller in order to change its state.
+	typedef enum _desired_state
 	{
 		SHUTDOWN, SWITCH_ON, SWITCH_ON_AND_ENABLE, DISABLE_VOLTAGE,
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
-	} state_t;
+	} desired_state_t;
 
 	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
 
 	/*! \brief change EPOS state */
-	void changeEPOSstate(state_t state);
+	void setState(desired_state_t state);
 
 	/*! \brief read CAN Node ID */
-	UNSIGNED8 readNodeID();
+	UNSIGNED8 getNodeID();
 
 	/*! \brief ask EPOS for software version */
-	UNSIGNED16 readSWversion();
+	UNSIGNED16 getSWversion();
 
 	/*! \brief read manufactor device name string firmware */
-	std::string readDeviceName();
+	std::string getDeviceName();
 
 	/*! \brief ask for RS232 timeout */
-	UNSIGNED16 readRS232timeout();
+	UNSIGNED16 getRS232timeout();
 
 	/*! \brief read digital input polarity mask */
-	UNSIGNED16 readDInputPolarity();
+	UNSIGNED16 getDInputPolarity();
+
+	/*! \brief read digital input*/
+	UNSIGNED16 getDInput();
 
 	/*! \brief set home switch polarity */
 	void setHomePolarity(int pol);
 
 	/*! \brief read Statusword */
-	UNSIGNED16 readStatusWord();
+	UNSIGNED16 getStatusWord();
 
-	/*! \brief pretty-print statusword to stdout
+	/*! \brief Pretty-formatted print of status word to stdout.
 	 *
 	 * \param statusword WORD variable holding the statusword
 	 */
-	static void printEPOSstatusword(canopen::WORD statusword);
+	static void printStatusWord(canopen::WORD statusword);
 
 	/*! \brief read EPOS control word */
-	UNSIGNED16 readControlword();
+	UNSIGNED16 getControlword();
 
 	//! write EPOS control word
-	void writeControlword(UNSIGNED16 val);
+	void setControlword(UNSIGNED16 val);
 
-	/*! \brief pretty-print controlword */
-	void printEPOScontrolword(canopen::WORD controlword);
+	//! \brief Pretty-formatted print of control word to stdout.
+	void printControlWord(canopen::WORD controlword);
 
 	//! \brief start motion with absolute demanded position
 	void startAbsoluteMotion();
@@ -275,19 +278,19 @@ public:
 	 *
 	 * @return 0 MEANS ERROR; '-1' is a valid OpMode, but 0 is not!
 	 */
-	operational_mode_t readActualOperationMode();
+	operational_mode_t getActualOperationMode();
 
 	/*! \brief read demanded position */
-	INTEGER32 readDemandPosition();
+	INTEGER32 getDemandPosition();
 
 	/*! \brief read actual position */
-	INTEGER32 readActualPosition();
+	INTEGER32 getActualPosition();
 
 	/*! \brief read position window */
-	UNSIGNED32 readPositionWindow();
+	UNSIGNED32 getPositionWindow();
 
 	/*! \brief write position window */
-	void writePositionWindow(UNSIGNED32 value);
+	void setPositionWindow(UNSIGNED32 value);
 
 	/*! \brief read position window time */
 	//		int writePositionWindowTime(unsigned int val);
@@ -295,49 +298,49 @@ public:
 	//		int writePositionSoftwareLimits(long val, long val2);
 
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
-	void writeProfileVelocity(UNSIGNED32 vel);
+	void setProfileVelocity(UNSIGNED32 vel);
 
 	//! write acceleration ramp during a movement
-	void writeProfileAcceleration(UNSIGNED32 acc);
+	void setProfileAcceleration(UNSIGNED32 acc);
 
 	//! write deceleration ramp during a movement
-	void writeProfileDeceleration(UNSIGNED32 dec);
+	void setProfileDeceleration(UNSIGNED32 dec);
 
 	//! write deceleration ramp during a Quickstop
-	void writeQuickStopDeceleration(UNSIGNED32 qsdec);
+	void setQuickStopDeceleration(UNSIGNED32 qsdec);
 
 	//! write maximal allowed speed
-	void writeMaxProfileVelocity(UNSIGNED32 maxvel);
+	void setMaxProfileVelocity(UNSIGNED32 maxvel);
 
 	//! write maximal allowed acceleration
-	void writeMaxAcceleration(UNSIGNED32 maxvel);
+	void setMaxAcceleration(UNSIGNED32 maxvel);
 
 	/*! \brief write position profile type
 	 *
 	 * @param type 0: linear ramp (trapezoidal profile), 1: sin^2 ramp (sinusoidal profile)
 	 */
-	void writePositionProfileType(INTEGER16 type);
+	void setPositionProfileType(INTEGER16 type);
 
 	//! \brief read velocity normally attained at the end of the acceleration ramp during a profiled motion
-	UNSIGNED32 readProfileVelocity();
+	UNSIGNED32 getProfileVelocity();
 
 	//! \brief read acceleration ramp during a movement
-	UNSIGNED32 readProfileAcceleration();
+	UNSIGNED32 getProfileAcceleration();
 
 	//! \brief read deceleration ramp during a movement
-	UNSIGNED32 readProfileDeceleration();
+	UNSIGNED32 getProfileDeceleration();
 
 	//! \brief read deceleration ramp during a Quickstop
-	UNSIGNED32 readQuickStopDeceleration();
+	UNSIGNED32 getQuickStopDeceleration();
 
 	//! \brief read maximal allowed speed
-	UNSIGNED32 readMaxProfileVelocity();
+	UNSIGNED32 getMaxProfileVelocity();
 
 	//! \brief read maximal allowed acceleration
-	UNSIGNED32 readMaxAcceleration();
+	UNSIGNED32 getMaxAcceleration();
 
 	//! \brief read position profile type
-	INTEGER16 readPositionProfileType();
+	INTEGER16 getPositionProfileType();
 
 	//! \brief velocity notation
 	typedef enum _velocity_notation
@@ -346,10 +349,10 @@ public:
 	} velocity_notation_t;
 
 	//! \brief read velocity notation
-	velocity_notation_t readVelocityNotationIndex();
+	velocity_notation_t getVelocityNotationIndex();
 
 	//! \brief read velocity notation index
-	void writeVelocityNotationIndex(velocity_notation_t val);
+	void setVelocityNotationIndex(velocity_notation_t val);
 
 	//! sensor type
 	typedef enum _sensor_type
@@ -363,28 +366,28 @@ public:
 	} sensor_type_t;
 
 	//! \brief read sensor pulses
-	UNSIGNED32 readSensorPulses();
+	UNSIGNED32 getSensorPulses();
 
 	//! \brief read sensor type
-	sensor_type_t readSensorType();
+	sensor_type_t getSensorType();
 
 	//! \brief read sensor polarity
-	UNSIGNED16 readSensorPolarity();
+	UNSIGNED16 getSensorPolarity();
 
 	//! \brief write sensor type
-	void writeSensorType(sensor_type_t val);
+	void setSensorType(sensor_type_t val);
 
 	//! \brief write sensor pulses
-	void writeSensorPulses(UNSIGNED32 val);
+	void setSensorPulses(UNSIGNED32 val);
 
 	//! \brief write sensor polarity
-	void writeSensorPolarity(UNSIGNED16 val);
+	void setSensorPolarity(UNSIGNED16 val);
 
 	//! \brief read RS232 baudrate
-	UNSIGNED16 readRS232Baudrate();
+	UNSIGNED16 getRS232Baudrate();
 
 	//! \brief write RS232 baudrate
-	void writeRS232Baudrate(UNSIGNED16 val);
+	void setRS232Baudrate(UNSIGNED16 val);
 
 	//! @}
 
@@ -393,46 +396,46 @@ public:
 	//! @{
 
 	//! \brief read P value of the PID regulator
-	INTEGER16 readP();
+	INTEGER16 getP();
 
 	//! \brief read I value of the PID regulator
-	INTEGER16 readI();
+	INTEGER16 getI();
 
 	//! \brief read V value of the PID regulator
-	INTEGER16 readD();
+	INTEGER16 getD();
 
 	//! \brief read Velocity Feed Forward value of the PID regulator
-	UNSIGNED16 readVFF();
+	UNSIGNED16 getVFF();
 
 	//! \brief read Acceleration Feed Forward value of the PID regulator
-	UNSIGNED16 readAFF();
+	UNSIGNED16 getAFF();
 
 	//! \brief write P value of the PID regulator
-	void writeP(INTEGER16 val);
+	void setP(INTEGER16 val);
 
 	//! \brief write I value of the PID regulator
-	void writeI(INTEGER16 val);
+	void setI(INTEGER16 val);
 
 	//! \brief write D value of the PID regulator
-	void writeD(INTEGER16 val);
+	void setD(INTEGER16 val);
 
 	//! \brief write Velocity Feed Forward value of the PID regulator
-	void writeVFF(UNSIGNED16 val);
+	void setVFF(UNSIGNED16 val);
 
 	//! \brief write Acceleration Feed Forward value of the PID regulator
-	void writeAFF(UNSIGNED16 val);
+	void setAFF(UNSIGNED16 val);
 
 	//! \brief read P value of the PI current regulator
-	INTEGER16 readPcurrent();
+	INTEGER16 getPcurrent();
 
 	//! \brief read I value of the PI current regulator
-	INTEGER16 readIcurrent();
+	INTEGER16 getIcurrent();
 
 	//! \brief write P value of the PI current regulator
-	void writePcurrent(INTEGER16 val);
+	void setPcurrent(INTEGER16 val);
 
 	//! \brief write I value of the PI current regulator
-	void writeIcurrent(INTEGER16 val);
+	void setIcurrent(INTEGER16 val);
 
 	//! @}
 
@@ -440,100 +443,100 @@ public:
 	void saveParameters();
 
 	//! \brief read home position
-	INTEGER32 readHomePosition();
+	INTEGER32 setHomePosition();
 
 	//! \brief write home position
-	void writeHomePosition(INTEGER32 val);
+	void setHomePosition(INTEGER32 val);
 
 	//! \brief read motor continuous current limit
-	UNSIGNED16 readMotorContinousCurrentLimit();
+	UNSIGNED16 setMotorContinousCurrentLimit();
 
 	//! \brief write motor continuous current limit
-	void writeMotorContinousCurrentLimit(UNSIGNED16 cur);
+	void getMotorContinousCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor output current limit
-	UNSIGNED16 readMotorOutputCurrentLimit();
+	UNSIGNED16 getMotorOutputCurrentLimit();
 
 	//! \brief write motor output current limit
-	void writeMotorOutputCurrentLimit(UNSIGNED16 cur);
+	void setMotorOutputCurrentLimit(UNSIGNED16 cur);
 
 	//! \brief read motor pole pair number
-	UNSIGNED8 readMotorPolePairNumber();
+	UNSIGNED8 getMotorPolePairNumber();
 
 	//! \brief write motor pole pair number
-	void writeMotorPolePairNumber(UNSIGNED8 cur);
+	void setMotorPolePairNumber(UNSIGNED8 cur);
 
 	//! \brief read motor max speed current
-	UNSIGNED32 readMotorMaxSpeed();
+	UNSIGNED32 getMotorMaxSpeed();
 
 	//! \brief write motor max speed current
-	void writeMotorMaxSpeed(UNSIGNED32 val);
+	void setMotorMaxSpeed(UNSIGNED32 val);
 
 	//! \brief read motor thermal constant
-	UNSIGNED16 readMotorThermalConstant();
+	UNSIGNED16 getMotorThermalConstant();
 
 	//! \brief write motor thermal constant
-	void writeMotorThermalConstant(UNSIGNED16 val);
+	void setMotorThermalConstant(UNSIGNED16 val);
 
 	/*! \brief read actual position */
-	INTEGER32 readDemandVelocity();
+	INTEGER32 setDemandVelocity();
 
 	/*! \brief read actual position */
-	INTEGER32 readActualVelocity();
+	INTEGER32 getActualVelocity();
 
 	/*! \brief read actual current */
-	INTEGER16 readActualCurrent();
+	INTEGER16 getActualCurrent();
 
 	/*! \brief read target position */
-	INTEGER32 readTargetPosition();
+	INTEGER32 getTargetPosition();
 
 	/*! \brief read target position */
-	void writeTargetPosition(INTEGER32 val);
+	void setTargetPosition(INTEGER32 val);
 
 	/*! \brief read Maximal Following Error */
-	UNSIGNED32 readMaxFollowingError();
+	UNSIGNED32 getMaxFollowingError();
 
 	/*! \brief write Maximal Following Error */
-	void writeMaxFollowingError(UNSIGNED32 val);
+	void setMaxFollowingError(UNSIGNED32 val);
 
 	/*! \brief read Home Offset */
-	INTEGER32 readHomeOffset();
+	INTEGER32 getHomeOffset();
 
 	/*! \brief write Home Offset */
-	void writeHomeOffset(INTEGER32 val);
+	void setHomeOffset(INTEGER32 val);
 
 	/*! \brief read Speed for Switch Search */
-	UNSIGNED32 readSpeedForSwitchSearch();
+	UNSIGNED32 getSpeedForSwitchSearch();
 
 	/*! \brief write Speed for Switch Search */
-	void writeSpeedForSwitchSearch(UNSIGNED32 val);
+	void setSpeedForSwitchSearch(UNSIGNED32 val);
 
 	/*! \brief read Speed for Zero Search */
-	UNSIGNED32 readSpeedForZeroSearch();
+	UNSIGNED32 getSpeedForZeroSearch();
 
 	/*! \brief write Speed for Zero Search */
-	void writeSpeedForZeroSearch(UNSIGNED32 val);
+	void setSpeedForZeroSearch(UNSIGNED32 val);
 
 	/*! \brief read Homing Acceleration */
-	UNSIGNED32 readHomingAcceleration();
+	UNSIGNED32 getHomingAcceleration();
 
 	/*! \brief write Homing Acceleration  */
-	void writeHomingAcceleration(UNSIGNED32 val);
+	void setHomingAcceleration(UNSIGNED32 val);
 
 	/*! \brief read Current Threshold for Homing Mode */
-	UNSIGNED16 readCurrentThresholdForHomingMode();
+	UNSIGNED16 getCurrentThresholdForHomingMode();
 
 	/*! \brief write Current Threshold for Homing Mode  */
-	void writeCurrentThresholdForHomingMode(UNSIGNED16 val);
+	void setCurrentThresholdForHomingMode(UNSIGNED16 val);
 
 	/*! \brief read Error register */
-	UNSIGNED8 readErrorRegister();
+	UNSIGNED8 getErrorRegister();
 
 	/*! \brief read number of Errors is Error History register */
-	UNSIGNED8 readNumberOfErrors();
+	UNSIGNED8 getNumberOfErrors();
 
 	/*! \brief read Error History at index */
-	UNSIGNED32 readErrorHistory(unsigned int num);
+	UNSIGNED32 getErrorHistory(unsigned int num);
 
 	/*! \brief clear Error register */
 	void clearNumberOfErrors();
@@ -552,16 +555,16 @@ public:
 	 * If the desired or the actual position is lower then the negative position
 	 * limit a software position limit Error will be launched.
 	 */
-	INTEGER32 readMinimalPositionLimit();
+	INTEGER32 getMinimalPositionLimit();
 
 	/*! \brief write the Minimal Position Limit */
-	void writeMinimalPositionLimit(INTEGER32 val);
+	void setMinimalPositionLimit(INTEGER32 val);
 
     /*! \brief read the Maximal Position Limit */
-	INTEGER32 readMaximalPositionLimit();
+	INTEGER32 getMaximalPositionLimit();
 
 	/*! \brief write the Maximal Position Limit */
-	void writeMaximalPositionLimit(INTEGER32 val);
+	void setMaximalPositionLimit(INTEGER32 val);
 
 	//! @}
 
@@ -570,22 +573,22 @@ public:
 	//! @{
 
 	//! \brief read Gear Ratio Numerator
-	UNSIGNED32 readGearRatioNumerator();
+	UNSIGNED32 getGearRatioNumerator();
 
 	//! \brief write Gear Ratio Numerator
-	void writeGearRatioNumerator(UNSIGNED32 val);
+	void setGearRatioNumerator(UNSIGNED32 val);
 
 	//! \brief read Gear Ratio Denominator
-	UNSIGNED16 readGearRatioDenominator();
+	UNSIGNED16 getGearRatioDenominator();
 
 	//! \brief write Gear Ratio Denominator
-	void writeGearRatioDenominator(UNSIGNED16 val);
+	void setGearRatioDenominator(UNSIGNED16 val);
 
 	//! \brief read Gear Maximal Speed
-	UNSIGNED32 readGearMaximalSpeed();
+	UNSIGNED32 getGearMaximalSpeed();
 
 	//! \brief write Gear Maximal Speed
-	void writeGearMaximalSpeed(UNSIGNED32 val);
+	void setGearMaximalSpeed(UNSIGNED32 val);
 
 	//! @}
 
@@ -594,34 +597,34 @@ public:
 	//! @{
 
 	/*! \brief Provides the actual free buffer size and is given in interpolation data records */
-	UNSIGNED32 readActualBufferSize();
+	UNSIGNED32 getActualBufferSize();
 
 	/*! \brief clear a buffer and reenable access to it */
 	void clearPvtBuffer();
 
 	//! \brief write Interpolation Sub Mode Selection
-	void writeInterpolationSubModeSelection(INTEGER16 val);
+	void setInterpolationSubModeSelection(INTEGER16 val);
 
 	//! \brief read Interpolation Sub Mode Selection
-	INTEGER16 readInterpolationSubModeSelection();
+	INTEGER16 getInterpolationSubModeSelection();
 
 	//! \brief write Interpolation Time Period Value
-	void writeInterpolationTimePeriod(UNSIGNED8 val);
+	void setInterpolationTimePeriod(UNSIGNED8 val);
 
 	//! \brief read Interpolation Time Period Value
-	UNSIGNED8 readInterpolationTimePeriod();
+	UNSIGNED8 getInterpolationTimePeriod();
 
 	//! \brief write Interpolation Time Index
-	void writeInterpolationTimeIndex(INTEGER8 val);
+	void setInterpolationTimeIndex(INTEGER8 val);
 
 	//! \brief read Interpolation Time Period Index
-	INTEGER8 readInterpolationTimeIndex();
+	INTEGER8 getInterpolationTimeIndex();
 
 	//! \brief write Interpolation data record
-	void writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time);
+	void setInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time);
 
 	//! \brief read Interpolation buffer status
-	UNSIGNED16 readInterpolationBufferStatus();
+	UNSIGNED16 getInterpolationBufferStatus();
 
 	//! \brief check Interpolation Buffer warning
 	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
@@ -636,16 +639,16 @@ public:
 	static void printInterpolationBufferStatus(UNSIGNED16 status);
 
 	//! \brief read Interpolation buffer underflow warning
-	UNSIGNED16 readInterpolationBufferUnderflowWarning();
+	UNSIGNED16 getInterpolationBufferUnderflowWarning();
 
 	//! write Interpolation buffer underflow warning
-	void writeInterpolationBufferUnderflowWarning(UNSIGNED16 val);
+	void setInterpolationBufferUnderflowWarning(UNSIGNED16 val);
 
 	//! \brief read Interpolation buffer overflow warning
-	UNSIGNED16 readInterpolationBufferOverflowWarning();
+	UNSIGNED16 getInterpolationBufferOverflowWarning();
 
 	//! \brief write Interpolation buffer overflow warning
-	void writeInterpolationBufferOverflowWarning(UNSIGNED16 val);
+	void setInterpolationBufferOverflowWarning(UNSIGNED16 val);
 
 	//! \brief start Interpolated Position Mode motion
 	void startInterpolatedPositionMotion();
@@ -692,10 +695,10 @@ public:
 	bool isHomingFinished();
 
 	/*! \brief read Homing Method */
-	homing_method_t readHomingMethod();
+	homing_method_t getHomingMethod();
 
 	/*! \brief write Homing Method */
-	void writeHomingMethod(homing_method_t method);
+	void setHomingMethod(homing_method_t method);
 
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
 	int doHoming(homing_method_t method, INTEGER32 offset = 0);
@@ -716,6 +719,9 @@ public:
 	/*! \brief waits for positioning to finish, argument is timeout in
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
+
+	//! \brief Read analog input 1.
+	INTEGER16 getAnalogInput1();
 
 	//! @}
 

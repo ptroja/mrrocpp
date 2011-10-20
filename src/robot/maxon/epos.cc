@@ -58,7 +58,6 @@ using namespace canopen;
 #define E_PASSWD        0x0f00ffbe   ///< Error code: password incorrect
 #define E_NSERV         0x0f00ffbc   ///< Error code: device not in service mode
 #define E_NODEID        0x0f00fb9    ///< Error code: error in Node-ID
-
 /* EPOS Statusword -- singe bits, see firmware spec 14.1.58 */
 #define E_BIT15        0x8000      ///< bit code: position referenced to home position
 #define E_BIT14        0x4000      ///< bit code: refresh cycle of power stage
@@ -76,7 +75,6 @@ using namespace canopen;
 #define E_BIT02        0x0004      ///< bit code: operation enable
 #define E_BIT01        0x0002      ///< bit code: switched on
 #define E_BIT00        0x0001      ///< bit code: ready to switch on
-
 // Interpolation buffer status bits
 #define PVT_STATUS_UNDERFLOW_WARNING	E_BIT00	///< Warning: buffer underflow
 #define PVT_STATUS_OVERFLOW_WARNING		E_BIT01	///< Warning: buffer overflow
@@ -90,204 +88,262 @@ using namespace canopen;
 #define PVT_STATUS_IP_MODE_ACTIVE		E_BIT15	///< Status: interpolated-profile mode active
 #define PVT_STATUS_WARNING				(E_BIT00|E_BIT01|E_BIT02|E_BIT03)	///< Status: WARNING
 #define PVT_STATUS_ERROR				(E_BIT08|E_BIT09|E_BIT02|E_BIT03)	///< Status: ERROR
-
 /************************************************************/
 /*           EPOS related constants                         */
 /************************************************************/
 
 // FIXME: this value should be 60, but it has to be tested
-const unsigned epos::SECONDS_PER_MINUTE = 60*60;
+const unsigned epos::SECONDS_PER_MINUTE = 60 * 60;
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
 epos::epos(gateway & _device, uint8_t _nodeId) :
-	device(_device), nodeId(_nodeId)
+		device(_device), nodeId(_nodeId)
 {
 	// Read the cached parameters
-	OpMode = readActualOperationMode();
-	PositionProfileType = readPositionProfileType();
-	ProfileVelocity = readProfileVelocity();
-	ProfileAcceleration = readProfileAcceleration();
-	ProfileDeceleration = readProfileDeceleration();
-	remote = isRemoteOperationEnabled(readStatusWord());
+	OpMode = getActualOperationMode();
+	PositionProfileType = getPositionProfileType();
+	ProfileVelocity = getProfileVelocity();
+	ProfileAcceleration = getProfileAcceleration();
+	ProfileDeceleration = getProfileDeceleration();
+	remote = isRemoteOperationEnabled(getStatusWord());
 
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
-			ProfileVelocity << ", " <<
-			ProfileAcceleration << ", " <<
-			ProfileDeceleration << std::endl;
+	ProfileVelocity << ", " <<
+	ProfileAcceleration << ", " <<
+	ProfileDeceleration << std::endl;
 
 	std::cout << "Node[" << (int) nodeId << "] {Vmax,Amax,VmotorMax} " <<
-				readMaxProfileVelocity() << ", " <<
-				readMaxAcceleration() << ", " <<
-				readMotorMaxSpeed() << std::endl;
+	getMaxProfileVelocity() << ", " <<
+	getMaxAcceleration() << ", " <<
+	getMotorMaxSpeed() << std::endl;
 
 	std::cout << "Gear[" << (int) nodeId << "] " <<
-				readGearRatioNumerator() << "/" <<
-				readGearRatioDenominator() << " maximal speed " <<
-				readGearMaximalSpeed() << std::endl;
+	getGearRatioNumerator() << "/" <<
+	getGearRatioDenominator() << " maximal speed " <<
+	getGearMaximalSpeed() << std::endl;
 #endif
 }
 
 /* read EPOS status word */
-UNSIGNED16 epos::readStatusWord()
+UNSIGNED16 epos::getStatusWord()
 {
-	return ReadObjectValue<UNSIGNED16>(0x6041, 0x00);
+	return ReadObjectValue <UNSIGNED16>(0x6041, 0x00);
 }
 
-void epos::printErrorRegister(UNSIGNED8 reg) {
-	if (E_BIT07 & reg) printf("\tMotion error\n");
-	if (E_BIT06 & reg) printf("\treserved (always 0)\n");
-	if (E_BIT05 & reg) printf("\tDevice profile-specific\n");
-	if (E_BIT04 & reg) printf("\tCommunication error\n");
-	if (E_BIT03 & reg) printf("\tTemperature error\n");
-	if (E_BIT02 & reg) printf("\tVoltage error\n");
-	if (E_BIT01 & reg) printf("\tCurrent error\n");
-	if (E_BIT00 & reg) printf("\tGeneric error\n");
+void epos::printErrorRegister(UNSIGNED8 reg)
+{
+	if (E_BIT07 & reg)
+		printf("\tMotion error\n");
+	if (E_BIT06 & reg)
+		printf("\treserved (always 0)\n");
+	if (E_BIT05 & reg)
+		printf("\tDevice profile-specific\n");
+	if (E_BIT04 & reg)
+		printf("\tCommunication error\n");
+	if (E_BIT03 & reg)
+		printf("\tTemperature error\n");
+	if (E_BIT02 & reg)
+		printf("\tVoltage error\n");
+	if (E_BIT01 & reg)
+		printf("\tCurrent error\n");
+	if (E_BIT00 & reg)
+		printf("\tGeneric error\n");
 }
 
-const char * epos::ErrorCodeMessage(UNSIGNED32 code) {
-	switch (code) {
-		case 0x0000: return "No Error";
-		case 0x1000: return "Generic Error";
-		case 0x2310: return "Overcurrent Error";
-		case 0x3210: return "Overvoltage";
-		case 0x3220: return "Undervoltage";
-		case 0x4210: return "Overtemperature";
-		case 0x5113: return "Supply Voltage (+5V) Too Low";
-		case 0x5114: return "Supply Voltage Output Stage Too Low";
-		case 0x6100: return "Internal Software Error";
-		case 0x6320: return "Software Parameter Error";
-		case 0x7320: return "Sensor Position Error";
-		case 0x8110: return "CAN Overrun Error (Objects lost)";
-		case 0x8111: return "CAN Overrun Error";
-		case 0x8120: return "CAN Passive Mode Error";
-		case 0x8130: return "CAN Life Guard Error";
-		case 0x8150: return "CAN Transmit COB-ID Collision";
-		case 0x81FD: return "CAN Bus Off";
-		case 0x81FE: return "CAN Rx Queue Overrun";
-		case 0x81FF: return "CAN Tx Queue Overrun";
-		case 0x8210: return "CAN PDO Length Error";
-		case 0x8611: return "Following Error";
-		case 0xFF01: return "Hall Sensor Error";
-		case 0xFF02: return "Index Processing Error";
-		case 0xFF03: return "Encoder Resolution Error";
-		case 0xFF04: return "Hall Sensor not found Error";
-		case 0xFF06: return "Negative Limit Error";
-		case 0xFF07: return "Positive Limit Error";
-		case 0xFF08: return "Hall Angle Detection Error";
-		case 0xFF09: return "Software Position Limit Error";
-		case 0xFF0A: return "Position Sensor Breach";
-		case 0xFF0B: return "System Overloaded";
-		case 0xFF0C:
-		{
-			UNSIGNED16 status = readInterpolationBufferStatus();
+const char * epos::ErrorCodeMessage(UNSIGNED32 code)
+{
+	switch (code)
+	{
+		case 0x0000:
+			return "No Error";
+		case 0x1000:
+			return "Generic Error";
+		case 0x2310:
+			return "Overcurrent Error";
+		case 0x3210:
+			return "Overvoltage";
+		case 0x3220:
+			return "Undervoltage";
+		case 0x4210:
+			return "Overtemperature";
+		case 0x5113:
+			return "Supply Voltage (+5V) Too Low";
+		case 0x5114:
+			return "Supply Voltage Output Stage Too Low";
+		case 0x6100:
+			return "Internal Software Error";
+		case 0x6320:
+			return "Software Parameter Error";
+		case 0x7320:
+			return "Sensor Position Error";
+		case 0x8110:
+			return "CAN Overrun Error (Objects lost)";
+		case 0x8111:
+			return "CAN Overrun Error";
+		case 0x8120:
+			return "CAN Passive Mode Error";
+		case 0x8130:
+			return "CAN Life Guard Error";
+		case 0x8150:
+			return "CAN Transmit COB-ID Collision";
+		case 0x81FD:
+			return "CAN Bus Off";
+		case 0x81FE:
+			return "CAN Rx Queue Overrun";
+		case 0x81FF:
+			return "CAN Tx Queue Overrun";
+		case 0x8210:
+			return "CAN PDO Length Error";
+		case 0x8611:
+			return "Following Error";
+		case 0xFF01:
+			return "Hall Sensor Error";
+		case 0xFF02:
+			return "Index Processing Error";
+		case 0xFF03:
+			return "Encoder Resolution Error";
+		case 0xFF04:
+			return "Hall Sensor not found Error";
+		case 0xFF06:
+			return "Negative Limit Error";
+		case 0xFF07:
+			return "Positive Limit Error";
+		case 0xFF08:
+			return "Hall Angle Detection Error";
+		case 0xFF09:
+			return "Software Position Limit Error";
+		case 0xFF0A:
+			return "Position Sensor Breach";
+		case 0xFF0B:
+			return "System Overloaded";
+		case 0xFF0C: {
+			UNSIGNED16 status = getInterpolationBufferStatus();
 			printInterpolationBufferStatus(status);
 			return "Interpolated Position Mode Error";
 		}
-		case 0xFF0D: return "Auto Tuning Identification Error";
-		default: return "Unknown error";
+		case 0xFF0D:
+			return "Auto Tuning Identification Error";
+		default:
+			return "Unknown error";
 	}
 }
 
-void epos::printEPOSstatusword(WORD s)
+void epos::printStatusWord(WORD s)
 {
 	printf("\nmeaning of EPOS statusword %#06x is:\n", s);
 
 	printf("15: position referenced to home position: ");
-	if ((s & E_BIT15) == E_BIT15)
+	if ((s & E_BIT15) == E_BIT15
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("14: refresh cycle of power stage:         ");
-	if ((s & E_BIT14) == E_BIT14)
+	if ((s & E_BIT14) == E_BIT14
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("13: OpMode specific, some error:          ");
-	if ((s & E_BIT13) == E_BIT13)
+	if ((s & E_BIT13) == E_BIT13
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("12: OpMode specific:                      ");
-	if ((s & E_BIT12) == E_BIT12)
+	if ((s & E_BIT12) == E_BIT12
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("11: NOT USED                              ");
-	if ((s & E_BIT11) == E_BIT11)
+	if ((s & E_BIT11) == E_BIT11
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("10: Target reached:                       ");
-	if ((s & E_BIT10) == E_BIT10)
+	if ((s & E_BIT10) == E_BIT10
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("09: Remote (?)                            ");
-	if ((s & E_BIT09) == E_BIT09)
+	if ((s & E_BIT09) == E_BIT09
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("08: offset current measured (?)           ");
-	if ((s & E_BIT08) == E_BIT08)
+	if ((s & E_BIT08) == E_BIT08
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("07: WARNING                               ");
-	if ((s & E_BIT07) == E_BIT07)
+	if ((s & E_BIT07) == E_BIT07
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("06: switch on disable                     ");
-	if ((s & E_BIT06) == E_BIT06)
+	if ((s & E_BIT06) == E_BIT06
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("05: quick stop                            ");
-	if ((s & E_BIT05) == E_BIT05)
+	if ((s & E_BIT05) == E_BIT05
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("04: voltage enabled                       ");
-	if ((s & E_BIT04) == E_BIT04)
+	if ((s & E_BIT04) == E_BIT04
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("03: FAULT                                 ");
-	if ((s & E_BIT03) == E_BIT03)
+	if ((s & E_BIT03) == E_BIT03
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("02: operation enable                      ");
-	if ((s & E_BIT02) == E_BIT02)
+	if ((s & E_BIT02) == E_BIT02
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("01: switched on                           ");
-	if ((s & E_BIT01) == E_BIT01)
+	if ((s & E_BIT01) == E_BIT01
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("00: ready to switch on                    ");
-	if ((s & E_BIT00) == E_BIT00)
+	if ((s & E_BIT00) == E_BIT00
+	)
 		printf("true\n");
 	else
 		printf("false\n");
@@ -390,9 +446,9 @@ epos::actual_state_t epos::status2state(WORD w)
  \return EPOS status as defined in firmware specification 8.1.1
 
  */
-epos::actual_state_t epos::checkEPOSstate()
+epos::actual_state_t epos::getState()
 {
-	WORD w = readStatusWord();
+	WORD w = getStatusWord();
 
 	//printEPOSstatusword(w);
 
@@ -407,43 +463,69 @@ bool epos::isRemoteOperationEnabled(WORD status)
 void epos::setRemoteOperation(bool enable)
 {
 	if (remote != enable) {
-		device.SendNMTService(nodeId,
-				(enable) ? gateway::Start_Remote_Node : gateway::Stop_Remote_Node);
-		remote = isRemoteOperationEnabled(readStatusWord());
+		device.SendNMTService(nodeId, (enable) ? gateway::Start_Remote_Node : gateway::Stop_Remote_Node);
+		remote = isRemoteOperationEnabled(getStatusWord());
 
 		if (remote != enable) {
-			BOOST_THROW_EXCEPTION(canopen_error() << reason("Failed to change REMOTE state of the device"));
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Failed to change REMOTE state of the device"));
 		}
 	}
 }
 
 const char * epos::stateDescription(int state)
 {
-	switch (state) {
-		case 0: return "start"; break;
-		case 1: return "not ready to switch on"; break;
-		case 2: return "switch on disabled"; break;
-		case 3: return "ready to switch on"; break;
-		case 4: return "switched on"; break;
-		case 5: return "refresh"; break;
-		case 6: return "measure init"; break;
-		case 7: return "operation enable"; break;
-		case 8: return "quick stop active"; break;
-		case 9: return "fault reaction active (disabled)"; break;
-		case 10: return "fault reaction active (enabled)"; break;
-		case 11: return "fault"; break;
-		default: return "unknown";
+	switch (state)
+	{
+		case 0:
+			return "start";
+			break;
+		case 1:
+			return "not ready to switch on";
+			break;
+		case 2:
+			return "switch on disabled";
+			break;
+		case 3:
+			return "ready to switch on";
+			break;
+		case 4:
+			return "switched on";
+			break;
+		case 5:
+			return "refresh";
+			break;
+		case 6:
+			return "measure init";
+			break;
+		case 7:
+			return "operation enable";
+			break;
+		case 8:
+			return "quick stop active";
+			break;
+		case 9:
+			return "fault reaction active (disabled)";
+			break;
+		case 10:
+			return "fault reaction active (enabled)";
+			break;
+		case 11:
+			return "fault";
+			break;
+		default:
+			return "unknown";
 	}
 }
 
 /* pretty-print EPOS state */
-int epos::printEPOSstate()
+int epos::printState()
 {
-	int state = checkEPOSstate();
+	int state = getState();
 
 	printf("\nEPOS is in state: ");
 
-	switch (state) {
+	switch (state)
+	{
 		case START:
 			printf("Start\n");
 			printf("\tBootup\n");
@@ -520,29 +602,29 @@ void epos::reset()
 	boost::system_time wakeup;
 
 	// TODO: handle initial error conditions
-	state = checkEPOSstate();
+	state = getState();
 
 	// FAULT
-	if(state == 11) {
-		UNSIGNED8 errReg = readErrorRegister();
-		if(errReg) {
+	if (state == 11) {
+		UNSIGNED8 errReg = getErrorRegister();
+		if (errReg) {
 			printf("printErrorRegister() = 0x%02x\n", errReg);
 			printErrorRegister(errReg);
 
-			UNSIGNED8 errNum = readNumberOfErrors();
+			UNSIGNED8 errNum = getNumberOfErrors();
 			printf("Number of Errors = %d\n", errNum);
 
-			for(int i = 1; i < errNum+1; ++i) {
-				UNSIGNED32 errCode = readErrorHistory(i);
+			for (int i = 1; i < errNum + 1; ++i) {
+				UNSIGNED32 errCode = getErrorHistory(i);
 				printf("Error at index %d is 0x%08x: %s\n", i, errCode, ErrorCodeMessage(errCode));
 			}
 		}
 
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Device is in the fault state"));
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
-	writeControlword(0x0006);
+	setControlword(0x0006);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
@@ -550,14 +632,15 @@ void epos::reset()
 	// TODO: handle error conditions
 	timeout = 5;
 	do {
-		state = checkEPOSstate();
+		state = getState();
 
-		if(state == READY_TO_SWITCH_ON) { // Operation enable
+		if (state == READY_TO_SWITCH_ON) { // Operation enable
 			break;
-		} else if(state == FAULT) {
-			throw canopen_error() << reason("Device is in the fault state");
+		} else if (state == FAULT) {
+			throw se_canopen_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during shutdown" << std::endl;
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
+					<< "' during shutdown" << std::endl;
 			// Continue;
 		}
 
@@ -567,38 +650,39 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while(timeout--);
+	} while (timeout--);
 
-	if(timeout == 0) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Timeout shutting device down"));
+	if (timeout == 0) {
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
 	if (state != 3) {
 		std::cout << "XXX state = " << state << std::endl;
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
-	writeControlword(0x000f);
+	setControlword(0x000f);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
 	timeout = 5;
 	do {
-		state = checkEPOSstate();
+		state = getState();
 
 		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
 
-		if(state == MEASURE_INIT) { // Measure in progress...
+		if (state == MEASURE_INIT) { // Measure in progress...
 			// Continue
-		} else if(state == OPERATION_ENABLE) { // Operation enable
+		} else if (state == OPERATION_ENABLE) { // Operation enable
 			break;
-		} else if(state == FAULT) {
-			throw canopen_error() << reason("Device is in the fault state");
+		} else if (state == FAULT) {
+			throw se_canopen_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state) << "' during initialization" << std::endl;
+			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
+					<< "' during initialization" << std::endl;
 			// Continue;
 		}
 
@@ -608,25 +692,25 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while(timeout--);
+	} while (timeout--);
 
-	if(timeout == 0) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Timeout enabling device"));
+	if (timeout == 0) {
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
-	writeControlword(0x010f);
+	setControlword(0x010f);
 
-	state = checkEPOSstate();
+	state = getState();
 
 	// Operation Enabled expected
 	if (state != 7) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
 /* change EPOS state according to firmware spec 8.1.3 */
-void epos::changeEPOSstate(state_t state)
+void epos::setState(desired_state_t state)
 {
 	UNSIGNED16 cw = 0x0000;
 
@@ -634,21 +718,21 @@ void epos::changeEPOSstate(state_t state)
 	 this way, but does NOT work otherways! -- mh, 07.07.06
 	 */
 	//cw = readControlword();
-
-	switch (state) {
+	switch (state)
+	{
 		case SHUTDOWN: // Shutdown: 0xxx x110
 			cw &= ~E_BIT07;
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw &= ~E_BIT00;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case SWITCH_ON: // Switch On: 0xxx x111
 			cw &= ~E_BIT07;
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case SWITCH_ON_AND_ENABLE: // Switch On & Enable Operation: 0xxx 1111
 			cw &= ~E_BIT07;
@@ -656,18 +740,18 @@ void epos::changeEPOSstate(state_t state)
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case DISABLE_VOLTAGE: // Disable Voltage: 0xxx xx0x
 			cw &= ~E_BIT07;
 			cw &= ~E_BIT01;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case QUICKSTOP: // Quickstop: 0xxx x01x
 			cw &= ~E_BIT07;
 			cw &= ~E_BIT02;
 			cw |= E_BIT01;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case DISABLE_OPERATION: // Disable Operation: 0xxx 0111
 			cw &= ~E_BIT07;
@@ -675,7 +759,7 @@ void epos::changeEPOSstate(state_t state)
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case ENABLE_OPERATION: // Enable Operation: 0xxx 1111
 			cw &= ~E_BIT07;
@@ -683,45 +767,52 @@ void epos::changeEPOSstate(state_t state)
 			cw |= E_BIT02;
 			cw |= E_BIT01;
 			cw |= E_BIT00;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		case FAULT_RESET: // Fault Reset 0xxx xxxx -> 1xxx xxxx
 			cw |= E_BIT07;
-			writeControlword(cw);
+			setControlword(cw);
 			break;
 		default:
-			BOOST_THROW_EXCEPTION(canopen_error() << reason("ERROR: demanded state is UNKNOWN!")); // TODO: state
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("ERROR: demanded state is UNKNOWN!"));
+			// TODO: state
 			break;
 	}
 }
 
 /* returns software version as HEX  --  14.1.33*/
-UNSIGNED8 epos::readNodeID()
+UNSIGNED8 epos::getNodeID()
 {
-	return ReadObjectValue<UNSIGNED8>(0x2000, 0x00);
+	return ReadObjectValue <UNSIGNED8>(0x2000, 0x00);
 }
 
 /* returns software version as HEX  --  14.1.33*/
-UNSIGNED16 epos::readSWversion()
+UNSIGNED16 epos::getSWversion()
 {
-	return ReadObjectValue<UNSIGNED16>(0x2003, 0x01);
+	return ReadObjectValue <UNSIGNED16>(0x2003, 0x01);
 }
 
 /* read digital input functionality polarity -- firmware spec 14.1.47 */
-UNSIGNED16 epos::readDInputPolarity()
+UNSIGNED16 epos::getDInputPolarity()
 {
-	return ReadObjectValue<UNSIGNED16>(0x2071, 0x03);
+	return ReadObjectValue <UNSIGNED16>(0x2071, 0x03);
+}
+
+/* read digital input */
+UNSIGNED16 epos::getDInput()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2071, 0x01);
 }
 
 /* set home switch polarity -- firmware spec 14.1.47 */
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
-	WORD mask = readDInputPolarity();
+	WORD mask = getDInputPolarity();
 
 	// set bit 2 (==home switch) to 0 or 1:
 	if (pol == 0)
@@ -733,73 +824,82 @@ void epos::setHomePolarity(int pol)
 }
 
 /* read EPOS control word (firmware spec 14.1.57) */
-UNSIGNED16 epos::readControlword()
+UNSIGNED16 epos::getControlword()
 {
-	return ReadObjectValue<UNSIGNED16>(0x6040, 0x00);
+	return ReadObjectValue <UNSIGNED16>(0x6040, 0x00);
 }
 
 /* write EPOS control word (firmware spec 14.1.57) */
-void epos::writeControlword(UNSIGNED16 val)
+void epos::setControlword(UNSIGNED16 val)
 {
 	WriteObjectValue(0x6040, 0x00, val);
 }
 
 /* pretty-print Controlword */
-void epos::printEPOScontrolword(WORD s)
+void epos::printControlWord(WORD s)
 {
 	printf("\nmeaning of EPOS controlword %#06x is:\n", s);
 	// bit 15..11 not in use
 	// bit 10, 9 reserved
 	printf("  HALT:                                 ");
-	if ((s & E_BIT08) == E_BIT08)
+	if ((s & E_BIT08) == E_BIT08
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  fault reset                           ");
-	if ((s & E_BIT07) == E_BIT07)
+	if ((s & E_BIT07) == E_BIT07
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  Op mode specific                      ");
-	if ((s & E_BIT06) == E_BIT06)
+	if ((s & E_BIT06) == E_BIT06
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  Op mode specific                      ");
-	if ((s & E_BIT05) == E_BIT05)
+	if ((s & E_BIT05) == E_BIT05
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  Op mode specific                      ");
-	if ((s & E_BIT04) == E_BIT04)
+	if ((s & E_BIT04) == E_BIT04
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  enable operation                      ");
-	if ((s & E_BIT03) == E_BIT03)
+	if ((s & E_BIT03) == E_BIT03
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  quick stop                            ");
-	if ((s & E_BIT02) == E_BIT02)
+	if ((s & E_BIT02) == E_BIT02
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  enable voltage                        ");
-	if ((s & E_BIT01) == E_BIT01)
+	if ((s & E_BIT01) == E_BIT01
+	)
 		printf("true\n");
 	else
 		printf("false\n");
 
 	printf("  switch on                             ");
-	if ((s & E_BIT00) == E_BIT00)
+	if ((s & E_BIT00) == E_BIT00
+	)
 		printf("true\n");
 	else
 		printf("false\n");
@@ -807,18 +907,18 @@ void epos::printEPOScontrolword(WORD s)
 
 void epos::startAbsoluteMotion()
 {
-	writeControlword(0x3f);
+	setControlword(0x3f);
 }
 
 void epos::startRelativeMotion()
 {
-	writeControlword(0x005f);
+	setControlword(0x005f);
 }
 
 /* set mode of operation --- 14.1.59 */
 void epos::setOperationMode(operational_mode_t m)
 {
-	if(OpMode != m) {
+	if (OpMode != m) {
 		WriteObjectValue(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
@@ -826,265 +926,265 @@ void epos::setOperationMode(operational_mode_t m)
 }
 
 /* read mode of operation --- 14.1.60 */
-epos::operational_mode_t epos::readActualOperationMode()
+epos::operational_mode_t epos::getActualOperationMode()
 {
-	INTEGER8 mode = ReadObjectValue<INTEGER8>(0x6061, 0x00);
+	INTEGER8 mode = ReadObjectValue <INTEGER8>(0x6061, 0x00);
 	return (operational_mode_t) mode;
 }
 
 /* read demand position; 14.1.61 */
-INTEGER32 epos::readDemandPosition()
+INTEGER32 epos::getDemandPosition()
 {
-	return ReadObjectValue<INTEGER32> (0x6062, 0x00);
+	return ReadObjectValue <INTEGER32>(0x6062, 0x00);
 }
 
 /* read actual position; firmware description 14.1.62 */
-INTEGER32 epos::readActualPosition()
+INTEGER32 epos::getActualPosition()
 {
-	return ReadObjectValue<INTEGER32> (0x6064, 0x00);
+	return ReadObjectValue <INTEGER32>(0x6064, 0x00);
 }
 
 /* read position window; 14.1.64 */
-UNSIGNED32 epos::readPositionWindow()
+UNSIGNED32 epos::getPositionWindow()
 {
-	return ReadObjectValue<UNSIGNED32> (0x6067, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x6067, 0x00);
 }
 
 /* write  position window; 14.1.64 */
-void epos::writePositionWindow(UNSIGNED32 val)
+void epos::setPositionWindow(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6067, 0x00, val);
 }
 
-void epos::writeProfileVelocity(UNSIGNED32 val)
+void epos::setProfileVelocity(UNSIGNED32 val)
 {
-	if(ProfileVelocity != val) {
+	if (ProfileVelocity != val) {
 		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
 		WriteObjectValue(0x6081, 0x00, val);
 		ProfileVelocity = val;
-		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << readProfileVelocity() << std::endl;
+		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << getProfileVelocity() << std::endl;
 	}
 }
 
-void epos::writeProfileAcceleration(UNSIGNED32 val)
+void epos::setProfileAcceleration(UNSIGNED32 val)
 {
-	if(ProfileAcceleration != val) {
+	if (ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
 		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
 		ProfileAcceleration = val;
-		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << readProfileAcceleration() << std::endl;
+		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << getProfileAcceleration() << std::endl;
 	}
 }
 
-void epos::writeProfileDeceleration(UNSIGNED32 val)
+void epos::setProfileDeceleration(UNSIGNED32 val)
 {
-	if(ProfileDeceleration != val) {
+	if (ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
 		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
 		ProfileDeceleration = val;
-		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << readProfileDeceleration() << std::endl;
+		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << getProfileDeceleration() << std::endl;
 	}
 }
 
-void epos::writeQuickStopDeceleration(UNSIGNED32 val)
+void epos::setQuickStopDeceleration(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6085, 0x00, val);
 }
 
-void epos::writeMaxProfileVelocity(UNSIGNED32 val)
+void epos::setMaxProfileVelocity(UNSIGNED32 val)
 {
 	WriteObjectValue(0x607F, 0x00, val);
 }
 
-void epos::writeMaxAcceleration(UNSIGNED32 val)
+void epos::setMaxAcceleration(UNSIGNED32 val)
 {
 	WriteObjectValue(0x60C5, 0x00, val);
 }
 
-void epos::writePositionProfileType(INTEGER16 type)
+void epos::setPositionProfileType(INTEGER16 type)
 {
-	if(PositionProfileType != type) {
+	if (PositionProfileType != type) {
 		WriteObjectValue(0x6086, 0x00, type);
 		PositionProfileType = type;
 	}
 }
 
-UNSIGNED32 epos::readProfileVelocity()
+UNSIGNED32 epos::getProfileVelocity()
 {
-	return ReadObjectValue<UNSIGNED32>(0x6081, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x6081, 0x00);
 }
 
-UNSIGNED32 epos::readProfileAcceleration()
+UNSIGNED32 epos::getProfileAcceleration()
 {
-	return ReadObjectValue<UNSIGNED32>(0x6083, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x6083, 0x00);
 }
 
-UNSIGNED32 epos::readProfileDeceleration()
+UNSIGNED32 epos::getProfileDeceleration()
 {
-	return ReadObjectValue<UNSIGNED32>(0x6084, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x6084, 0x00);
 }
 
-UNSIGNED32 epos::readQuickStopDeceleration()
+UNSIGNED32 epos::getQuickStopDeceleration()
 {
-	return ReadObjectValue<UNSIGNED32>(0x6085, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x6085, 0x00);
 }
 
-UNSIGNED32 epos::readMaxProfileVelocity()
+UNSIGNED32 epos::getMaxProfileVelocity()
 {
-	return ReadObjectValue<UNSIGNED32>(0x607F, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x607F, 0x00);
 }
 
-UNSIGNED32 epos::readMaxAcceleration()
+UNSIGNED32 epos::getMaxAcceleration()
 {
-	return ReadObjectValue<UNSIGNED32>(0x60C5, 0x00);
+	return ReadObjectValue <UNSIGNED32>(0x60C5, 0x00);
 }
 
-INTEGER16 epos::readPositionProfileType()
+INTEGER16 epos::getPositionProfileType()
 {
-	return ReadObjectValue<INTEGER16>(0x6086, 0x00);
+	return ReadObjectValue <INTEGER16>(0x6086, 0x00);
 }
 
 // by Martí Morta
 /* Velocity Notation index 14.1.83 */
-epos::velocity_notation_t epos::readVelocityNotationIndex()
+epos::velocity_notation_t epos::getVelocityNotationIndex()
 {
-	return (velocity_notation_t) ReadObjectValue<INTEGER8>(0x608B, 0x00);
+	return (velocity_notation_t) ReadObjectValue <INTEGER8>(0x608B, 0x00);
 }
 
 /* Velocity Notation index 14.1.83  1=0x01(1), 2=0x02(2).. 0=0x00(0), -1=0xFF(255), -2=0xFE(254) */
-void epos::writeVelocityNotationIndex(velocity_notation_t val)
+void epos::setVelocityNotationIndex(velocity_notation_t val)
 {
 	WriteObjectValue(0x608B, 0x00, val);
 }
 
 // by Martí Morta
 /* read sensorConfiguration-sensor Pulses; 14.1.57 */
-UNSIGNED32 epos::readSensorPulses()
+UNSIGNED32 epos::getSensorPulses()
 {
-	return ReadObjectValue<UNSIGNED32>(0x2210, 0x01);
+	return ReadObjectValue <UNSIGNED32>(0x2210, 0x01);
 }
 
 /* read sensorConfiguration-sensor Type; 14.1.57 */
-epos::sensor_type_t epos::readSensorType()
+epos::sensor_type_t epos::getSensorType()
 {
-	return (sensor_type_t) ReadObjectValue<UNSIGNED16>(0x2210, 0x02);
+	return (sensor_type_t) ReadObjectValue <UNSIGNED16>(0x2210, 0x02);
 }
 
 /* read sensorPolarity-sensor Type; 14.1.57 */
-UNSIGNED16 epos::readSensorPolarity()
+UNSIGNED16 epos::getSensorPolarity()
 {
-	return ReadObjectValue<UNSIGNED16>(0x2210, 0x04);
+	return ReadObjectValue <UNSIGNED16>(0x2210, 0x04);
 }
 
 /* write sensorConfiguration-sensor Pulses; 14.1.57 */
-void epos::writeSensorPulses(UNSIGNED32 val)
+void epos::setSensorPulses(UNSIGNED32 val)
 {
 	WriteObjectValue(0x2210, 0x01, val);
 }
 
 /* write sensorConfiguration-sensor Type; 14.1.57 */
-void epos::writeSensorType(sensor_type_t val)
+void epos::setSensorType(sensor_type_t val)
 {
 	WriteObjectValue(0x2210, 0x02, val);
 }
 
 /* write sensorPolarity-sensor Pulses; 14.1.57 */
-void epos::writeSensorPolarity(UNSIGNED16 val)
+void epos::setSensorPolarity(UNSIGNED16 val)
 {
 	WriteObjectValue(0x2210, 0x04, val);
 }
 
-UNSIGNED16 epos::readRS232Baudrate()
+UNSIGNED16 epos::getRS232Baudrate()
 {
-	return ReadObjectValue<UNSIGNED16>(0x2002, 0x00);
+	return ReadObjectValue <UNSIGNED16>(0x2002, 0x00);
 }
 
-void epos::writeRS232Baudrate(UNSIGNED16 val)
+void epos::setRS232Baudrate(UNSIGNED16 val)
 {
 	WriteObjectValue(0x2002, 0x00, val);
 }
 
 // by Martí Morta
 /* read P position; 14.1.92 */
-INTEGER16 epos::readP()
+INTEGER16 epos::getP()
 {
-	return ReadObjectValue<INTEGER16>(0x60FB, 0x01);
+	return ReadObjectValue <INTEGER16>(0x60FB, 0x01);
 }
 
 /* read I; 14.1.92 */
-INTEGER16 epos::readI()
+INTEGER16 epos::getI()
 {
-	return ReadObjectValue<INTEGER16>(0x60FB, 0x02);
+	return ReadObjectValue <INTEGER16>(0x60FB, 0x02);
 }
 
 /* read D; 14.1.92 */
-INTEGER16 epos::readD()
+INTEGER16 epos::getD()
 {
-	return ReadObjectValue<INTEGER16>(0x60FB, 0x03);
+	return ReadObjectValue <INTEGER16>(0x60FB, 0x03);
 }
 
 /* read Velocity Feed Forward; 14.1.92 */
-UNSIGNED16 epos::readVFF()
+UNSIGNED16 epos::getVFF()
 {
-	return ReadObjectValue<UNSIGNED16>(0x60FB, 0x04);
+	return ReadObjectValue <UNSIGNED16>(0x60FB, 0x04);
 }
 
 /* read Acceleration feed forward; 14.1.92 */
-UNSIGNED16 epos::readAFF()
+UNSIGNED16 epos::getAFF()
 {
-	return ReadObjectValue<UNSIGNED16> (0x60FB, 0x05);
+	return ReadObjectValue <UNSIGNED16>(0x60FB, 0x05);
 }
 
 /* write P; 14.1.92 */
-void epos::writeP(INTEGER16 val)
+void epos::setP(INTEGER16 val)
 {
 	WriteObjectValue(0x60FB, 0x01, val);
 }
 
 /* write I; 14.1.92 */
-void epos::writeI(INTEGER16 val)
+void epos::setI(INTEGER16 val)
 {
 	WriteObjectValue(0x60FB, 0x02, val);
 }
 
 /* write D; 14.1.92 */
-void epos::writeD(INTEGER16 val)
+void epos::setD(INTEGER16 val)
 {
 	WriteObjectValue(0x60FB, 0x03, val);
 }
 
 /* write VFF; 14.1.92 */
-void epos::writeVFF(UNSIGNED16 val)
+void epos::setVFF(UNSIGNED16 val)
 {
 	WriteObjectValue(0x60FB, 0x04, val);
 }
 
 /* write AFF; 14.1.92 */
-void epos::writeAFF(UNSIGNED16 val)
+void epos::setAFF(UNSIGNED16 val)
 {
 	WriteObjectValue(0x60FB, 0x05, val);
 }
 
 /* read P current; 14.1.92 */
-INTEGER16 epos::readPcurrent()
+INTEGER16 epos::getPcurrent()
 {
-	return ReadObjectValue<INTEGER16>(0x60F6, 0x01);
+	return ReadObjectValue <INTEGER16>(0x60F6, 0x01);
 }
 
 /* read I current; 14.1.92 */
-INTEGER16 epos::readIcurrent()
+INTEGER16 epos::getIcurrent()
 {
-	return ReadObjectValue<INTEGER16>(0x60F6, 0x02);
+	return ReadObjectValue <INTEGER16>(0x60F6, 0x02);
 }
 
 /* write P current; 14.1.92 */
-void epos::writePcurrent(INTEGER16 val)
+void epos::setPcurrent(INTEGER16 val)
 {
 	WriteObjectValue(0x60F6, 0x01, val);
 }
 
 /* write I current; 14.1.92 */
-void epos::writeIcurrent(INTEGER16 val)
+void epos::setIcurrent(INTEGER16 val)
 {
 	WriteObjectValue(0x60F6, 0x02, val);
 }
@@ -1099,12 +1199,12 @@ void epos::saveParameters()
 
 // by Martí Morta
 /* write home; 14.1.55 */
-INTEGER32 epos::readHomePosition()
+INTEGER32 epos::setHomePosition()
 {
-	return ReadObjectValue<INTEGER32>(0x2081, 0x00);
+	return ReadObjectValue <INTEGER32>(0x2081, 0x00);
 }
 
-void epos::writeHomePosition(INTEGER32 val)
+void epos::setHomePosition(INTEGER32 val)
 {
 	WriteObjectValue(0x2081, 0x00, val);
 }
@@ -1112,94 +1212,93 @@ void epos::writeHomePosition(INTEGER32 val)
 // by Martí Morta
 /* Motor Data 14.95 */
 // Continous Current limit
-UNSIGNED16 epos::readMotorContinousCurrentLimit()
+UNSIGNED16 epos::setMotorContinousCurrentLimit()
 {
-	return ReadObjectValue<UNSIGNED16>(0x6410, 0x01);
+	return ReadObjectValue <UNSIGNED16>(0x6410, 0x01);
 }
 
-void epos::writeMotorContinousCurrentLimit(UNSIGNED16 cur)
+void epos::getMotorContinousCurrentLimit(UNSIGNED16 cur)
 {
 	WriteObjectValue(0x6410, 0x01, cur);
 }
 
 // Output Current limit
-UNSIGNED16 epos::readMotorOutputCurrentLimit()
+UNSIGNED16 epos::getMotorOutputCurrentLimit()
 {
-	return ReadObjectValue<UNSIGNED16>(0x6410, 0x02);
+	return ReadObjectValue <UNSIGNED16>(0x6410, 0x02);
 }
 
-void epos::writeMotorOutputCurrentLimit(UNSIGNED16 cur)
+void epos::setMotorOutputCurrentLimit(UNSIGNED16 cur)
 {
 	WriteObjectValue(0x6410, 0x02, cur);
 }
 
 // Pole Pairs -> 8 BITS
-UNSIGNED8 epos::readMotorPolePairNumber()
+UNSIGNED8 epos::getMotorPolePairNumber()
 {
-	return ReadObjectValue<UNSIGNED8>(0x6410, 0x03);
+	return ReadObjectValue <UNSIGNED8>(0x6410, 0x03);
 }
 
-void epos::writeMotorPolePairNumber(UNSIGNED8 cur)
+void epos::setMotorPolePairNumber(UNSIGNED8 cur)
 {
 	WriteObjectValue(0x6410, 0x03, cur);
 }
 
 // Max Speed in current mode
-UNSIGNED32 epos::readMotorMaxSpeed()
+UNSIGNED32 epos::getMotorMaxSpeed()
 {
-	return ReadObjectValue<UNSIGNED32>(0x6410, 0x04);
+	return ReadObjectValue <UNSIGNED32>(0x6410, 0x04);
 }
 
-void epos::writeMotorMaxSpeed(UNSIGNED32 val)
+void epos::setMotorMaxSpeed(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6410, 0x04, val);
 }
 
 // Thermal time constant in winding
-UNSIGNED16 epos::readMotorThermalConstant()
+UNSIGNED16 epos::getMotorThermalConstant()
 {
-	return ReadObjectValue<UNSIGNED16>(0x6410, 0x05);
+	return ReadObjectValue <UNSIGNED16>(0x6410, 0x05);
 }
 
-void epos::writeMotorThermalConstant(UNSIGNED16 val)
+void epos::setMotorThermalConstant(UNSIGNED16 val)
 {
 	WriteObjectValue(0x6410, 0x05, val);
 }
 
 //------------- fi martí
 
-
 /* read demand position; 14.1.67 */
-INTEGER32 epos::readDemandVelocity()
+INTEGER32 epos::setDemandVelocity()
 {
-	return ReadObjectValue<INTEGER32>(0x606b, 0x00);
+	return ReadObjectValue <INTEGER32>(0x606b, 0x00);
 }
 
 /* read actual position; 14.1.68 */
-INTEGER32 epos::readActualVelocity()
+INTEGER32 epos::getActualVelocity()
 {
-	return ReadObjectValue<INTEGER32>(0x606c, 0x00);
+	return ReadObjectValue <INTEGER32>(0x606c, 0x00);
 }
 
 /* read actual motor current, see firmware description 14.1.69 */
-INTEGER16 epos::readActualCurrent()
+INTEGER16 epos::getActualCurrent()
 {
-	return ReadObjectValue<INTEGER16> (0x6078, 0x00);
+	return ReadObjectValue <INTEGER16>(0x6078, 0x00);
 }
 
 /* read EPOS target position; firmware description 14.1.70 */
-INTEGER32 epos::readTargetPosition()
+INTEGER32 epos::getTargetPosition()
 {
-	return ReadObjectValue<INTEGER32> (0x607a, 0x00);
+	return ReadObjectValue <INTEGER32>(0x607a, 0x00);
 }
 
-void epos::writeTargetPosition(INTEGER32 val)
+void epos::setTargetPosition(INTEGER32 val)
 {
 	WriteObjectValue(0x607a, 0x00, val);
 }
 
 /* read manufacturer device name string firmware */
-std::string epos::readDeviceName()
+std::string epos::getDeviceName()
 {
 	WORD answer[8];
 	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
@@ -1207,13 +1306,11 @@ std::string epos::readDeviceName()
 	char name[16];
 
 	for (int i = 0; i < 8; ++i) {
-		name[i*2]   = (answer[3+i] & 0xFF);
-		name[i*2+1] = ((answer[3+i] >> 8) & 0xFF);
+		name[i * 2] = (answer[3 + i] & 0xFF);
+		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
 	}
 
-	printf("%d: %c%c%c%c%c%c%c%c\n", r,
-			name[0], name[1], name[2], name[3],
-			name[4], name[5], name[6], name[7]);
+	printf("%d: %c%c%c%c%c%c%c%c\n", r, name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
 
 	std::string str;
 
@@ -1227,106 +1324,120 @@ std::string epos::readDeviceName()
 }
 
 /*! read Maximal Following Error */
-UNSIGNED32 epos::readMaxFollowingError() {
-	return ReadObjectValue<UNSIGNED32> (0x6065, 0x00);
+UNSIGNED32 epos::getMaxFollowingError()
+{
+	return ReadObjectValue <UNSIGNED32>(0x6065, 0x00);
 }
 
 /*! write Maximal Following Error */
-void epos::writeMaxFollowingError(UNSIGNED32 val) {
+void epos::setMaxFollowingError(UNSIGNED32 val)
+{
 	WriteObjectValue(0x6065, 0x00, val);
 }
 
 /*! read Home Offset */
-INTEGER32 epos::readHomeOffset() {
-	return ReadObjectValue<INTEGER32> (0x607C, 0x00);
+INTEGER32 epos::getHomeOffset()
+{
+	return ReadObjectValue <INTEGER32>(0x607C, 0x00);
 }
 
 /*! write Home Offset */
-void epos::writeHomeOffset(INTEGER32 val) {
+void epos::setHomeOffset(INTEGER32 val)
+{
 	WriteObjectValue(0x607C, 0x00, val);
 }
 
 /*! read Speed for Switch Search */
-UNSIGNED32 epos::readSpeedForSwitchSearch() {
-	return ReadObjectValue<UNSIGNED32> (0x6099, 0x01);
+UNSIGNED32 epos::getSpeedForSwitchSearch()
+{
+	return ReadObjectValue <UNSIGNED32>(0x6099, 0x01);
 }
 
 /*! write Speed for Switch Search */
-void epos::writeSpeedForSwitchSearch(UNSIGNED32 val) {
+void epos::setSpeedForSwitchSearch(UNSIGNED32 val)
+{
 	WriteObjectValue(0x6099, 0x01, val);
 }
 
 /*! read Speed for Zero Search */
-UNSIGNED32 epos::readSpeedForZeroSearch() {
-	return ReadObjectValue<UNSIGNED32> (0x6099, 0x02);
+UNSIGNED32 epos::getSpeedForZeroSearch()
+{
+	return ReadObjectValue <UNSIGNED32>(0x6099, 0x02);
 }
 
 /*! write Speed for Zero Search */
-void epos::writeSpeedForZeroSearch(UNSIGNED32 val) {
+void epos::setSpeedForZeroSearch(UNSIGNED32 val)
+{
 	WriteObjectValue(0x6099, 0x02, val);
 }
 
 /*! read Homing Acceleration */
-UNSIGNED32 epos::readHomingAcceleration() {
-	return ReadObjectValue<UNSIGNED32> (0x609A, 0x00);
+UNSIGNED32 epos::getHomingAcceleration()
+{
+	return ReadObjectValue <UNSIGNED32>(0x609A, 0x00);
 }
 
 /*! write Homing Acceleration  */
-void epos::writeHomingAcceleration(UNSIGNED32 val) {
+void epos::setHomingAcceleration(UNSIGNED32 val)
+{
 	WriteObjectValue(0x609A, 0x00, val);
 }
 
 /*! read Current Threshold for Homing Mode */
-UNSIGNED16 epos::readCurrentThresholdForHomingMode() {
-	return ReadObjectValue<UNSIGNED16> (0x2080, 0x00);
+UNSIGNED16 epos::getCurrentThresholdForHomingMode()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2080, 0x00);
 }
 
 /*! write Current Threshold for Homing Mode  */
-void epos::writeCurrentThresholdForHomingMode(UNSIGNED16 val) {
+void epos::setCurrentThresholdForHomingMode(UNSIGNED16 val)
+{
 	WriteObjectValue(0x2080, 0x00, val);
 }
 
 /*! read Homing Method */
-epos::homing_method_t epos::readHomingMethod() {
+epos::homing_method_t epos::getHomingMethod()
+{
 	INTEGER8 val;
-	val = ReadObjectValue<INTEGER8> (0x6098, 0x00);
+	val = ReadObjectValue <INTEGER8>(0x6098, 0x00);
 
 	return (homing_method_t) val;
 }
 
 /*! write Homing Method */
-void epos::writeHomingMethod(homing_method_t method) {
+void epos::setHomingMethod(homing_method_t method)
+{
 	INTEGER8 val = (INTEGER8) (method);
 	WriteObjectValue(0x6098, 0x00, val);
 }
 
 /*! Read the Minimal Position Limit */
-INTEGER32 epos::readMinimalPositionLimit()
+INTEGER32 epos::getMinimalPositionLimit()
 {
-	return ReadObjectValue<INTEGER32> (0x607D, 0x01);
+	return ReadObjectValue <INTEGER32>(0x607D, 0x01);
 }
 
 /*! Write the Minimal Position Limit */
-void epos::writeMinimalPositionLimit(INTEGER32 val)
+void epos::setMinimalPositionLimit(INTEGER32 val)
 {
 	WriteObjectValue(0x607D, 0x01, val);
 }
 
 /*! Read the Maximal Position Limit */
-INTEGER32 epos::readMaximalPositionLimit()
+INTEGER32 epos::getMaximalPositionLimit()
 {
-	return ReadObjectValue<INTEGER32> (0x607D, 0x02);
+	return ReadObjectValue <INTEGER32>(0x607D, 0x02);
 }
 
 /*! Write the Maximal Position Limit */
-void epos::writeMaximalPositionLimit(INTEGER32 val)
+void epos::setMaximalPositionLimit(INTEGER32 val)
 {
 	WriteObjectValue(0x607D, 0x02, val);
 }
 
-UNSIGNED32 epos::readActualBufferSize()
+UNSIGNED32 epos::getActualBufferSize()
 {
-	return ReadObjectValue<UNSIGNED32> (0x60C4, 0x02);
+	return ReadObjectValue <UNSIGNED32>(0x60C4, 0x02);
 }
 
 void epos::clearPvtBuffer()
@@ -1338,42 +1449,42 @@ void epos::clearPvtBuffer()
 	WriteObjectValue(0x60C4, 0x06, 1);
 }
 
-INTEGER16 epos::readInterpolationSubModeSelection()
+INTEGER16 epos::getInterpolationSubModeSelection()
 {
-	return ReadObjectValue<INTEGER32> (0x60C0, 0x02);
+	return ReadObjectValue <INTEGER32>(0x60C0, 0x02);
 }
 
-void epos::writeInterpolationSubModeSelection(INTEGER16 val)
+void epos::setInterpolationSubModeSelection(INTEGER16 val)
 {
 	WriteObjectValue(0x60C0, 0x00, val);
 }
 
-UNSIGNED8 epos::readInterpolationTimePeriod()
+UNSIGNED8 epos::getInterpolationTimePeriod()
 {
-	return ReadObjectValue<UNSIGNED8> (0x60C2, 0x01);
+	return ReadObjectValue <UNSIGNED8>(0x60C2, 0x01);
 }
 
-void epos::writeInterpolationTimePeriod(UNSIGNED8 val)
+void epos::setInterpolationTimePeriod(UNSIGNED8 val)
 {
 	WriteObjectValue(0x60C2, 0x01, val);
 }
 
-INTEGER8 epos::readInterpolationTimeIndex()
+INTEGER8 epos::getInterpolationTimeIndex()
 {
-	return ReadObjectValue<INTEGER8> (0x60C2, 0x02);
+	return ReadObjectValue <INTEGER8>(0x60C2, 0x02);
 }
 
-void epos::writeInterpolationTimeIndex(INTEGER8 val)
+void epos::setInterpolationTimeIndex(INTEGER8 val)
 {
 	WriteObjectValue(0x60C2, 0x02, val);
 }
 
 //! write Interpolation data record
-void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time)
+void epos::setInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UNSIGNED8 time)
 {
 	// only 24 bits allowed for velocity
 	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Only 24 bits allowed for velocity"));
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Only 24 bits allowed for velocity"));
 	}
 
 	// This array holds a manufacturer-specific 64 bit data record
@@ -1408,9 +1519,9 @@ void epos::writeInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, 
 }
 
 //! read Interpolation buffer status
-UNSIGNED16 epos::readInterpolationBufferStatus()
+UNSIGNED16 epos::getInterpolationBufferStatus()
 {
-	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x01);
+	return ReadObjectValue <UNSIGNED16>(0x20C4, 0x01);
 }
 
 bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
@@ -1469,61 +1580,65 @@ bool epos::checkInterpolationBufferError(UNSIGNED16 status)
 }
 
 //! read Interpolation buffer underflow warning
-UNSIGNED16 epos::readInterpolationBufferUnderflowWarning()
+UNSIGNED16 epos::getInterpolationBufferUnderflowWarning()
 {
-	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x02);
+	return ReadObjectValue <UNSIGNED16>(0x20C4, 0x02);
 }
 
 //! write Interpolation buffer underflow warning
-void epos::writeInterpolationBufferUnderflowWarning(UNSIGNED16 val)
+void epos::setInterpolationBufferUnderflowWarning(UNSIGNED16 val)
 {
 	WriteObjectValue(0x20C4, 0x02, val);
 }
 
 //! read Interpolation buffer overflow warning
-UNSIGNED16 epos::readInterpolationBufferOverflowWarning()
+UNSIGNED16 epos::getInterpolationBufferOverflowWarning()
 {
-	return ReadObjectValue<UNSIGNED16> (0x20C4, 0x03);
+	return ReadObjectValue <UNSIGNED16>(0x20C4, 0x03);
 }
 
 //! write Interpolation buffer overflow warning
-void epos::writeInterpolationBufferOverflowWarning(UNSIGNED16 val)
+void epos::setInterpolationBufferOverflowWarning(UNSIGNED16 val)
 {
 	WriteObjectValue(0x20C4, 0x03, val);
 }
 
 void epos::startInterpolatedPositionMotion()
 {
-	writeControlword(0x1f);
+	setControlword(0x1f);
 }
 
 /*! read Error register */
-UNSIGNED8 epos::readErrorRegister() {
-	return ReadObjectValue<UNSIGNED8> (0x1001, 0x00);
+UNSIGNED8 epos::getErrorRegister()
+{
+	return ReadObjectValue <UNSIGNED8>(0x1001, 0x00);
 }
 
 /*! read number of Errors is Error History register */
-UNSIGNED8 epos::readNumberOfErrors() {
-	return ReadObjectValue<UNSIGNED8> (0x1003, 0x00);
+UNSIGNED8 epos::getNumberOfErrors()
+{
+	return ReadObjectValue <UNSIGNED8>(0x1003, 0x00);
 }
 
 /*! read Error History at index */
-UNSIGNED32 epos::readErrorHistory(unsigned int num) {
-	if(num < 1 || num > 5) {
-		BOOST_THROW_EXCEPTION(canopen_error() << reason("Error History index out of range <1..5>"));
+UNSIGNED32 epos::getErrorHistory(unsigned int num)
+{
+	if (num < 1 || num > 5) {
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Error History index out of range <1..5>"));
 	}
-	return ReadObjectValue<UNSIGNED32> (0x1003, num);
+	return ReadObjectValue <UNSIGNED32>(0x1003, num);
 }
 
 /*! clear Error register */
-void epos::clearNumberOfErrors() {
+void epos::clearNumberOfErrors()
+{
 	WriteObjectValue(0x1003, 0x00, (UNSIGNED8) 0x00);
 }
 
 /* firmware spec 14.1.35 */
-UNSIGNED16 epos::readRS232timeout()
+UNSIGNED16 epos::getRS232timeout()
 {
-	return ReadObjectValue<UNSIGNED16> (0x2005, 0x00);
+	return ReadObjectValue <UNSIGNED16>(0x2005, 0x00);
 }
 
 /* run the HomingMode, get the coordinate system zeropoint correct
@@ -1549,39 +1664,39 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	setOperationMode(OMD_HOMING_MODE);
 
 	// Set homing parameters
-	writeHomeOffset(offset);
-	writeSpeedForZeroSearch(100);
-	writeCurrentThresholdForHomingMode(1500);
+	setHomeOffset(offset);
+	setSpeedForZeroSearch(100);
+	setCurrentThresholdForHomingMode(1500);
 
 	// Display current homing parameters
-	std::cout << "Max. Following Error: " << readMaxFollowingError() << std::endl;
-	std::cout << "Home Offset: " << readHomeOffset() << std::endl;
-	std::cout << "Max. Profile Velocity: " << readMaxProfileVelocity() << std::endl;
-	std::cout << "Quick Stop Deceleration: " << readQuickStopDeceleration() << std::endl;
-	std::cout << "Speed for Switch Search: " << readSpeedForSwitchSearch() << std::endl;
-	std::cout << "Speed for Zero Search: " << readSpeedForZeroSearch() << std::endl;
-	std::cout << "Homing Acceleration: " << readHomingAcceleration() << std::endl;
-	std::cout << "Current Threshold Homing Mode: " << readCurrentThresholdForHomingMode() << std::endl;
-	std::cout << "Home Position: " << readHomePosition() << std::endl;
+	std::cout << "Max. Following Error: " << getMaxFollowingError() << std::endl;
+	std::cout << "Home Offset: " << getHomeOffset() << std::endl;
+	std::cout << "Max. Profile Velocity: " << getMaxProfileVelocity() << std::endl;
+	std::cout << "Quick Stop Deceleration: " << getQuickStopDeceleration() << std::endl;
+	std::cout << "Speed for Switch Search: " << getSpeedForSwitchSearch() << std::endl;
+	std::cout << "Speed for Zero Search: " << getSpeedForZeroSearch() << std::endl;
+	std::cout << "Homing Acceleration: " << getHomingAcceleration() << std::endl;
+	std::cout << "Current Threshold Homing Mode: " << getCurrentThresholdForHomingMode() << std::endl;
+	std::cout << "Home Position: " << setHomePosition() << std::endl;
 
 	// set homing method
-	writeHomingMethod(method);
+	setHomingMethod(method);
 
 	//std::cout << "Shutdown" << std::endl;
 	//writeControlword(0x0006);
 
 	// switch on
 	std::cout << "Switch-on" << std::endl;
-	writeControlword(0x000f);
+	setControlword(0x000f);
 
 	// start homing mode
 	std::cout << "Start homing" << std::endl;
-	writeControlword(0x001f);
+	setControlword(0x001f);
 
 	//read/print status
 	monitorHomingStatus();
 
-	WORD w = readStatusWord();
+	WORD w = getStatusWord();
 	if ((w & E_BIT13) == E_BIT13) {
 		fprintf(stderr, "\a *** got a HomingError! ***\n");
 		return (-1);
@@ -1604,7 +1719,7 @@ void epos::moveRelative(INTEGER32 steps)
 
 	// write intended target position
 	// firmware 14.1.70
-	writeTargetPosition(steps);
+	setTargetPosition(steps);
 
 	// switch to relative positioning BY WRITING TO CONTROLWORD, finish	possible ongoing operation first!
 	// see ->maxon applicattion note: device programming 2.1
@@ -1618,39 +1733,39 @@ void epos::moveAbsolute(INTEGER32 steps)
 
 	// write intended target position, is signed 32bit int
 	// firmware 14.1.70
-	writeTargetPosition(steps);
+	setTargetPosition(steps);
 
 	// switch to absolute positioning, cancel possible ongoing operation first!
 	// see maxon application note: device programming 2.1
 	startAbsoluteMotion();
 }
 
-UNSIGNED32 epos::readGearRatioNumerator()
+UNSIGNED32 epos::getGearRatioNumerator()
 {
-	return ReadObjectValue<UNSIGNED32> (0x2230, 0x01);
+	return ReadObjectValue <UNSIGNED32>(0x2230, 0x01);
 }
 
-void epos::writeGearRatioNumerator(UNSIGNED32 val)
+void epos::setGearRatioNumerator(UNSIGNED32 val)
 {
 	WriteObjectValue(0x2230, 0x01, val);
 }
 
-UNSIGNED16 epos::readGearRatioDenominator()
+UNSIGNED16 epos::getGearRatioDenominator()
 {
-	return ReadObjectValue<UNSIGNED16> (0x2230, 0x02);
+	return ReadObjectValue <UNSIGNED16>(0x2230, 0x02);
 }
 
-void epos::writeGearRatioDenominator(UNSIGNED16 val)
+void epos::setGearRatioDenominator(UNSIGNED16 val)
 {
 	WriteObjectValue(0x2230, 0x02, val);
 }
 
-UNSIGNED32 epos::readGearMaximalSpeed()
+UNSIGNED32 epos::getGearMaximalSpeed()
 {
-	return ReadObjectValue<UNSIGNED32> (0x2230, 0x03);
+	return ReadObjectValue <UNSIGNED32>(0x2230, 0x03);
 }
 
-void epos::writeGearMaximalSpeed(UNSIGNED32 val)
+void epos::setGearMaximalSpeed(UNSIGNED32 val)
 {
 	WriteObjectValue(0x2230, 0x03, val);
 }
@@ -1666,26 +1781,26 @@ void epos::monitorStatus()
 	int i = 0;
 	do {
 		i++;
-		postarget = readTargetPosition();
-		posactual = readActualPosition();
-		veldemand = readDemandVelocity();
-		velactual = readActualVelocity();
-		curactual = readActualCurrent();
+		postarget = getTargetPosition();
+		posactual = getActualPosition();
+		veldemand = setDemandVelocity();
+		velactual = getActualVelocity();
+		curactual = getActualCurrent();
 
 		printf("\rEPOS: pos=%+10ld |%+10ld (%ld to go); v= %+4ld | %+4ld[rpm]; I=%+4dmA", postarget, posactual, postarget
 				- posactual, veldemand, velactual, curactual);
 		fflush(stdout);
 
-		status = readStatusWord();
+		status = getStatusWord();
 	} while ((status & E_BIT10) != E_BIT10); // bit 10 says: target reached!
 
 	// update values a last time to get a nicer output:
 	i++;
-	postarget = readTargetPosition();
-	posactual = readActualPosition();
-	veldemand = readDemandVelocity();
-	velactual = readActualVelocity();
-	curactual = readActualCurrent();
+	postarget = getTargetPosition();
+	posactual = getActualPosition();
+	veldemand = setDemandVelocity();
+	velactual = getActualVelocity();
+	curactual = getActualCurrent();
 
 	printf("\r%d EPOS: pos=%+10ld |%+10ld (%ld to go); v= %+4ld | %+4ld[rpm]; I=%+4dmA\n", i, postarget, posactual, postarget
 			- posactual, veldemand, velactual, curactual);
@@ -1718,32 +1833,29 @@ void epos::Restore()
 
 bool epos::isReferenced()
 {
-	UNSIGNED16 status = readStatusWord();
+	UNSIGNED16 status = getStatusWord();
 
 	return (E_BIT15 & status);
 }
 
 bool epos::isTargetReached()
 {
-	UNSIGNED16 status = readStatusWord();
+	UNSIGNED16 status = getStatusWord();
 
 	return (E_BIT10 & status);
 }
 
 void epos::startHoming()
 {
-	writeControlword(0x001f);
+	setControlword(0x001f);
 }
 
 bool epos::isHomingFinished()
 {
-	UNSIGNED16 status = readStatusWord();
+	UNSIGNED16 status = getStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		BOOST_THROW_EXCEPTION(canopen_error()
-				<< reason("HOMING ERROR!")
-				<< canId(nodeId)
-		);
+		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!") << canId(nodeId));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1760,18 +1872,18 @@ void epos::monitorHomingStatus()
 	int i = 0;
 	do {
 		i++;
-		posactual = readActualPosition();
-		velactual = readActualVelocity();
-		curactual = readActualCurrent();
+		posactual = getActualPosition();
+		velactual = getActualVelocity();
+		curactual = getActualCurrent();
 
-		status = readStatusWord();
+		status = getStatusWord();
 
 		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(canopen_error() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
@@ -1779,11 +1891,11 @@ void epos::monitorHomingStatus()
 	//printEPOSstatusword(status);
 
 	i++;
-	posactual = readActualPosition();
-	velactual = readActualVelocity();
-	curactual = readActualCurrent();
+	posactual = getActualPosition();
+	velactual = getActualVelocity();
+	curactual = getActualCurrent();
 
-	status = readStatusWord();
+	status = getStatusWord();
 
 	printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x\n", i, posactual, velactual, curactual, status);
 	printf("homing finished! Position should now be '0'\n");
@@ -1803,12 +1915,20 @@ int epos::waitForTarget(unsigned int t)
 				return (1);
 		}
 		usleep(st);
-		status = readStatusWord();
+		status = getStatusWord();
 	} while ((status & E_BIT10) != E_BIT10); // bit 10 says: target reached!
-
 
 	return (0);
 }
+
+INTEGER16 epos::getAnalogInput1() {
+	return ReadObjectValue <INTEGER16>(0x207C, 0x01);
+}
+
+/*INTEGER32 epos::writeTMP(INTEGER32 value) {
+	WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data) <>(0x2303, 0x04);
+}*/
+
 
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {

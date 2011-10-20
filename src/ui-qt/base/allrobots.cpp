@@ -41,7 +41,9 @@ void AllRobots::manage_interface()
 				break;
 			case UI_ALL_EDPS_SYNCHRO_NONE_EDP_LOADED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE EDP LOADED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
+
+				mw->getMenuBar()->actionall_Synchronisation->setEnabled(false);
+
 				break;
 			case UI_ALL_EDPS_NONE_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("NONE_SYNCHRONISED");
@@ -51,7 +53,7 @@ void AllRobots::manage_interface()
 				break;
 			case UI_ALL_EDPS_ALL_SYNCHRONISED:
 				mw->get_ui()->label_all_edps_synchro_notification->setText("ALL_SYNCHRONISED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_Synchronisation);
+				mw->getMenuBar()->actionall_Synchronisation->setEnabled(false);
 
 				break;
 		}
@@ -65,10 +67,11 @@ void AllRobots::manage_interface()
 				&& ((interface->mp->mp_state.state == UI_MP_NOT_PERMITED_TO_RUN)
 						|| (interface->mp->mp_state.state == UI_MP_PERMITED_TO_RUN)))
 				|| (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
-			mw->enable_menu_item(true, 1, mw->getMenuBar()->actionConfiguration);
+
+			mw->getMenuBar()->actionConfiguration->setEnabled(true);
 
 		} else {
-			mw->enable_menu_item(false, 1, mw->getMenuBar()->actionConfiguration);
+			mw->getMenuBar()->actionConfiguration->setEnabled(false);
 
 		}
 
@@ -76,40 +79,44 @@ void AllRobots::manage_interface()
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-				mw->enable_menu_item(false, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->getMenuBar()->menuRobot->setEnabled(false);
+				mw->getMenuBar()->menuAll_Robots->setEnabled(false);
+				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
+				mw->getMenuBar()->actionall_EDP_Load->setEnabled(false);
 
 				break;
 			case UI_ALL_EDPS_NONE_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_LOADED");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Load);
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
+				mw->getMenuBar()->menuRobot->setEnabled(true);
+				mw->getMenuBar()->menuAll_Robots->setEnabled(true);
+				mw->getMenuBar()->actionall_EDP_Load->setEnabled(true);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
 
 				break;
 			case UI_ALL_EDPS_SOME_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("SOME_LOADED");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->actionall_EDP_Load);
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
+				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
+				mw->getMenuBar()->actionall_EDP_Load->setEnabled(true);
+				mw->getMenuBar()->menuRobot->setEnabled(true);
+				mw->getMenuBar()->menuAll_Robots->setEnabled(true);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
 						break;
 					default:
@@ -120,48 +127,50 @@ void AllRobots::manage_interface()
 
 			case UI_ALL_EDPS_ALL_LOADED:
 				mw->get_ui()->label_all_edps_notification->setText("ALL_LOADED		");
-				mw->enable_menu_item(true, 2, mw->getMenuBar()->menuRobot, mw->getMenuBar()->menuAll_Robots);
-
-				mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Load);
+				mw->getMenuBar()->menuRobot->setEnabled(true);
+				mw->getMenuBar()->menuAll_Robots->setEnabled(true);
+				mw->getMenuBar()->actionall_EDP_Load->setEnabled(false);
 
 				switch (all_edps_synchro)
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
-						mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
+						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_EDP_Unload);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->actionall_Synchronisation);
+						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-
-						mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
 						switch (interface->mp->mp_state.state)
 						{
 							case common::UI_MP_NOT_PERMITED_TO_RUN:
-								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
+								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
+								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+
 								break;
 							case common::UI_MP_PERMITED_TO_RUN:
+								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
+								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
-								mw->enable_menu_item(true, 2, mw->getMenuBar()->actionall_EDP_Unload, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_WAITING_FOR_START_PULSE:
+								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
+								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
-								mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							case common::UI_MP_TASK_RUNNING:
 							case common::UI_MP_TASK_PAUSED:
+								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
+								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
 
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->actionall_EDP_Unload);
-								mw->enable_menu_item(false, 1, mw->getMenuBar()->menuall_Preset_Positions);
 								break;
 							default:
 								break;
@@ -430,7 +439,7 @@ bool AllRobots::are_all_active_robots_loaded()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state <= 0)) {
+				if ((robot_node.second->state.is_active) && (!(robot_node.second->is_edp_loaded()))) {
 
 					return false;
 				}
@@ -444,7 +453,7 @@ bool AllRobots::is_any_active_robot_loaded()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->state.edp.state > 0)) {
+				if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
 					return true;
 				}
 			}
@@ -457,7 +466,7 @@ bool AllRobots::are_all_loaded_robots_synchronised()
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.edp.state > 0) && (!(robot_node.second->state.edp.is_synchronised))) {
+				if ((robot_node.second->is_edp_loaded()) && (!(robot_node.second->state.edp.is_synchronised))) {
 
 					return false;
 				}
@@ -470,7 +479,7 @@ bool AllRobots::is_any_loaded_robot_synchronised()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 			{
-				if ((robot_node.second->state.edp.state > 0) && (robot_node.second->state.edp.is_synchronised)) {
+				if ((robot_node.second->is_edp_loaded()) && (robot_node.second->state.edp.is_synchronised)) {
 					return true;
 				}
 			}

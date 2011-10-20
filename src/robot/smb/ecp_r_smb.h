@@ -30,24 +30,46 @@ protected:
 	void create_kinematic_models_for_given_robot(void);
 
 	/**
-	 * @brief epos cubic motion command data port
+	 * @brief EDP command buffer
 	 */
-	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
+	lib::smb::cbuffer ecp_edp_cbuffer;
 
 	/**
-	 * @brief epos trapezoidal motion command data port
+	 * @brief EDP reply buffer
 	 */
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+	lib::smb::rbuffer edp_ecp_rbuffer;
+
+public:
+
+	/**
+	 * @brief epos motor motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_motor_command_data_port;
+
+	/**
+	 * @brief epos joint motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_joint_command_data_port;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_external_command_data_port;
+
+	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <bool> epos_brake_command_data_port;
+
+	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <bool> epos_clear_fault_data_port;
 
 	/**
 	 * @brief pin insertion command data port
 	 */
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
-
-	/**
-	 * @brief pin locking command data port
-	 */
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
+	lib::single_thread_port <lib::smb::festo_command_td> smb_festo_command_data_port;
 
 	/**
 	 * @brief epos motion status reply data request port
@@ -59,17 +81,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::smb::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::smb::rbuffer edp_ecp_rbuffer;
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

@@ -37,8 +37,8 @@ UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _numb
 	//activation_string = _activation_string;
 	state.edp.section_name = interface.config->get_edp_section(robot_name);
 	state.ecp.section_name = interface.config->get_ecp_section(robot_name);
-	state.edp.state = -1; // edp nieaktywne
-	state.edp.last_state = -2; // edp nieokreslone
+	state.edp.state = UI_EDP_INACTIVE; // edp nieaktywne
+	state.edp.last_state = UI_EDP_STATE_NOT_KNOWN; // edp nieokreslone
 	state.ecp.trigger_fd = lib::invalid_fd;
 	state.edp.is_synchronised = false; // edp nieaktywne
 	msg =
@@ -142,7 +142,7 @@ int UiRobot::edp_create_int()
 
 	try { // dla bledow robot :: ECP_error
 
-		if (state.edp.state == 0) {
+		if (state.edp.state == UI_EDP_OFF) {
 
 			state.edp.is_synchronised = false;
 
@@ -168,12 +168,12 @@ int UiRobot::edp_create_int()
 
 					if (state.edp.pid < 0) {
 
-						state.edp.state = 0;
+						state.edp.state = UI_EDP_OFF;
 						fprintf(stderr, "edp spawn failed: %s\n", strerror(errno));
 						delete_ui_ecp_robot();
 					} else { // jesli spawn sie powiodl
 
-						state.edp.state = 1;
+						state.edp.state = UI_EDP_WAITING_TO_START_READER;
 
 						connect_to_reader();
 
@@ -181,8 +181,6 @@ int UiRobot::edp_create_int()
 						lib::controller_state_t robot_controller_initial_state_tmp;
 
 						ui_get_controler_state(robot_controller_initial_state_tmp);
-
-						//state.edp.state = 1; // edp wlaczone reader czeka na start
 
 						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 					}
@@ -264,9 +262,9 @@ void UiRobot::connect_to_reader()
 
 bool UiRobot::pulse_reader_start_exec_pulse()
 {
-	if (state.edp.state == 1) {
+	if (state.edp.state == UI_EDP_WAITING_TO_START_READER) {
 		pulse_reader_execute(READER_START, 0);
-		state.edp.state = 2;
+		state.edp.state = UI_EDP_WAITING_TO_STOP_READER;
 		return true;
 	}
 
@@ -275,9 +273,9 @@ bool UiRobot::pulse_reader_start_exec_pulse()
 
 bool UiRobot::pulse_reader_stop_exec_pulse()
 {
-	if (state.edp.state == 2) {
+	if (state.edp.state == UI_EDP_WAITING_TO_STOP_READER) {
 		pulse_reader_execute(READER_STOP, 0);
-		state.edp.state = 1;
+		state.edp.state = UI_EDP_WAITING_TO_START_READER;
 		return true;
 	}
 
@@ -286,7 +284,7 @@ bool UiRobot::pulse_reader_stop_exec_pulse()
 
 bool UiRobot::pulse_reader_trigger_exec_pulse()
 {
-	if (state.edp.state == 2) {
+	if (state.edp.state == UI_EDP_WAITING_TO_STOP_READER) {
 		pulse_reader_execute(READER_TRIGGER, 0);
 
 		return true;
@@ -341,7 +339,7 @@ void UiRobot::pulse_ecp_execute(int code, int value)
 
 void UiRobot::edp_create()
 {
-	if (state.edp.state == 0) {
+	if (state.edp.state == UI_EDP_OFF) {
 		create_thread();
 
 		eb.command(boost::bind(&ui::common::UiRobot::edp_create_int, &(*this)));
@@ -403,7 +401,7 @@ void UiRobot::close_edp_connections()
 
 	delete_ui_ecp_robot();
 
-	state.edp.state = 0; // edp wylaczone
+	state.edp.state = UI_EDP_OFF; // edp wylaczone
 	state.edp.is_synchronised = false;
 
 	state.edp.pid = -1;
@@ -412,7 +410,7 @@ void UiRobot::close_edp_connections()
 void UiRobot::EDP_slay_int()
 {
 	// dla robota bird_hand
-	if (state.edp.state > 0) { // jesli istnieje EDP
+	if (is_edp_loaded()) { // jesli istnieje EDP
 
 		close_edp_connections();
 
@@ -430,7 +428,7 @@ void UiRobot::EDP_slay_int()
 
 bool UiRobot::check_synchronised_and_loaded()
 {
-	return (((state.edp.state > 0) && (state.edp.is_synchronised)));
+	return (((is_edp_loaded()) && (state.edp.is_synchronised)));
 
 }
 
@@ -450,39 +448,47 @@ int UiRobot::move_to_preset_position(int variant)
 	return 1;
 }
 
+bool UiRobot::is_edp_loaded()
+{
+	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
+}
+
 int UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
+	Ui::MenuBar *menuBar = mw->getMenuBar();
 
 	switch (state.edp.state)
 	{
-		case -1:
-			mw->enable_menu_item(false, 1, robot_menu);
+		case UI_EDP_INACTIVE:
+			menuBar->menuRobot->removeAction(robot_menu->menuAction());
 			break;
-		case 0:
-			mw->enable_menu_item(false, 2, EDP_Unload, wgt_robot_process_control_action);
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, EDP_Load);
+		case UI_EDP_OFF:
+			menuBar->menuRobot->addAction(robot_menu->menuAction());
+			EDP_Unload->setEnabled(false);
+			wgt_robot_process_control_action->setEnabled(false);
+			EDP_Load->setEnabled(true);
 			break;
-		case 1:
-		case 2:
-			mw->enable_menu_item(true, 1, robot_menu);
-			mw->enable_menu_item(true, 1, wgt_robot_process_control_action);
+		case UI_EDP_WAITING_TO_START_READER:
+		case UI_EDP_WAITING_TO_STOP_READER:
+			menuBar->menuRobot->addAction(robot_menu->menuAction());
+			wgt_robot_process_control_action->setEnabled(true);
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(true, 1, mw->getMenuBar()->menuall_Preset_Positions);
+				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, EDP_Unload);
-						mw->enable_menu_item(false, 1, EDP_Load);
+						EDP_Load->setEnabled(false);
+						EDP_Unload->setEnabled(true);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
+						EDP_Load->setEnabled(false);
+						EDP_Unload->setEnabled(false);
 						block_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_RUNNING:
@@ -496,8 +502,8 @@ int UiRobot::manage_interface()
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, EDP_Unload);
-				mw->enable_menu_item(false, 1, EDP_Load);
+				EDP_Load->setEnabled(false);
+				EDP_Unload->setEnabled(true);
 			}
 			break;
 		default:
@@ -525,13 +531,13 @@ int UiRobot::reload_configuration()
 
 		switch (state.edp.state)
 		{
-			case -1:
-			case 0:
+			case UI_EDP_INACTIVE:
+			case UI_EDP_OFF:
 				// ini_con->create_edp_irp6_on_track (ini_con->ui->EDP_SECTION);
 
 				state.edp.pid = -1;
 				state.edp.reader_fd = lib::invalid_fd;
-				state.edp.state = 0;
+				state.edp.state = UI_EDP_OFF;
 
 				for (int i = 0; i < 4; i++) {
 					char tmp_string[50];
@@ -597,8 +603,8 @@ int UiRobot::reload_configuration()
 					state.edp.node_name = interface.config->value <std::string>("node_name", state.edp.section_name);
 				}
 				break;
-			case 1:
-			case 2:
+			case UI_EDP_WAITING_TO_START_READER:
+			case UI_EDP_WAITING_TO_STOP_READER:
 				// nie robi nic bo EDP pracuje
 				break;
 			default:
@@ -608,12 +614,12 @@ int UiRobot::reload_configuration()
 	} else {
 		switch (state.edp.state)
 		{
-			case -1:
-			case 0:
-				state.edp.state = -1;
+			case UI_EDP_INACTIVE:
+			case UI_EDP_OFF:
+				state.edp.state = UI_EDP_INACTIVE;
 				break;
-			case 1:
-			case 2:
+			case UI_EDP_WAITING_TO_START_READER:
+			case UI_EDP_WAITING_TO_STOP_READER:
 				// nie robi nic bo EDP pracuje
 				break;
 			default:
@@ -651,6 +657,7 @@ void UiRobot::catch_ecp_error(ecp::common::robot::ECP_error & er)
 			default:
 				msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
 				perror("Unidentified exception");
+				break;
 		} /* end: switch */
 	}
 }
