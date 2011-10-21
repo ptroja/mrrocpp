@@ -123,6 +123,23 @@ bool spline::calculate()
     int i,j;//loop counter
 
     pose_vector_iterator = pose_vector.begin();
+    if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS && motion_type == lib::ABSOLUTE) {
+
+            set_relative();
+            angle_axis_absolute_transformed_into_relative = true;
+
+            for (i = 0; i < pose_vector.size(); i++) {
+                    if (!vpc.calculate_relative_angle_axis_vector(pose_vector_iterator)) {
+                            if (debug) {
+                                    printf("calculate_relative_angle_axis_vector returned false\n");
+                            }
+                            return false;
+                    }
+                    pose_vector_iterator++;
+            }
+    }
+
+    pose_vector_iterator = pose_vector.begin();
 
     for (i = 0; i < pose_vector.size(); i++) {//calculate distances, directions
 
