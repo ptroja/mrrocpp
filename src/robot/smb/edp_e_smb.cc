@@ -206,6 +206,11 @@ void effector::synchronise(void)
 		// Check whether the synchronization was successful.
 		check_controller_state();
 
+		// Throw non-fatal error - if synchronization wasn't successful.
+		if (!controller_state_edp_buf.is_synchronised)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_synchronization_unsuccessful());
+
+
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_ERROR(e_)

@@ -54,6 +54,12 @@ REGISTER_NON_FATAL_ERROR(nfe_joint_limit, "Joint limit exceeded")
 REGISTER_NON_FATAL_ERROR(nfe_robot_unsynchronized, "Robot unsynchronized")
 
 /*!
+ * \brief Exception thrown when in an synchronization finished unsuccessfully.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_synchronization_unsuccessful, "Robot synchronization unsuccessfull")
+
+/*!
  * \brief Exception thrown in case of invalid pose specification.
  * \author tkornuta
  */

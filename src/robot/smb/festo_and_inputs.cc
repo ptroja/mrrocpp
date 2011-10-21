@@ -527,56 +527,63 @@ void festo_and_inputs::festo_command_two_up_one_down()
 		case lib::smb::ALL_DOWN: {
 			if (!festo_test_mode_set_reply(festo_command)) {
 
-				// odlacz te nogi ktore maja zostac podniesione
+				// podnos nogi po kolei
 
-				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if (festo_command.leg[i] == lib::smb::UP) {
-						if (is_lower_halotron_active(i + 1)) {
-							set_detach(i + 1, true);
-							set_move_down(i + 1, false);
-						}
-					}
-				}
-				execute_command();
-				//odczekaj pewien czas liczac na to ze zaciski odpuszcza
-				delay(1000);
-				// podnos nogi
-				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if (festo_command.leg[i] == lib::smb::UP) {
-						if (is_lower_halotron_active(i + 1)) {
-							set_move_up(i + 1, true);
-						}
-					}
-				}
-				execute_command();
+				for (int number_of_legs_moved = 0; number_of_legs_moved < 2; number_of_legs_moved++) {
 
-				// czekaj az sie uniosa
-				int number_of_legs_up = 0;
+					// odlacz te nogi ktore maja zostac podniesione
 
-				set_all_legs_unchecked();
-
-				for (int iteration = 0; number_of_legs_up < 2; iteration++) {
-					delay(FAI_SINGLE_DELAY);
-
-					// if it take too long to wait break
-					if (iteration > FAI_DELAY_MAX_ITERATION) {
-						master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
-
-						break;
-					}
-
-					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
-								&& (festo_command.leg[i] == lib::smb::UP)) {
-							set_checked(i + 1);
-							number_of_legs_up++;
-							set_detach(i + 1, false);
+						if (festo_command.leg[i] == lib::smb::UP) {
+							if (is_lower_halotron_active(i + 1)) {
+								set_detach(i + 1, true);
+								set_move_down(i + 1, false);
+								break;
+							}
 						}
 					}
-				}
+					execute_command();
+					//odczekaj pewien czas liczac na to ze zaciski odpuszcza
+					delay(500);
 
-				execute_command();
+					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+						if (festo_command.leg[i] == lib::smb::UP) {
+							if (is_lower_halotron_active(i + 1)) {
+								set_move_up(i + 1, true);
+								break;
+							}
+						}
+					}
+					execute_command();
+
+					// czekaj az sie uniosa
+					int number_of_legs_up = 0;
+
+					set_all_legs_unchecked();
+
+					for (int iteration = 0; number_of_legs_up < number_of_legs_moved + 1; iteration++) {
+						delay(FAI_SINGLE_DELAY);
+
+						// if it take too long to wait break
+						if (iteration > FAI_DELAY_MAX_ITERATION) {
+							master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+							break;
+						}
+
+						read_state();
+						for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
+									&& (festo_command.leg[i] == lib::smb::UP)) {
+								set_checked(i + 1);
+								number_of_legs_up++;
+								set_detach(i + 1, false);
+							}
+						}
+					}
+
+					execute_command();
+				}
 			}
 		}
 
@@ -592,6 +599,81 @@ void festo_and_inputs::festo_command_two_up_one_down()
 
 	}
 }
+
+/* OLD VERSIO WITH SIMULATNOUS LEG MOTION
+ void festo_and_inputs::festo_command_two_up_one_down()
+ {
+ switch (current_legs_state)
+ {
+ case lib::smb::ALL_DOWN: {
+ if (!festo_test_mode_set_reply(festo_command)) {
+
+ // odlacz te nogi ktore maja zostac podniesione
+
+ for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+ if (festo_command.leg[i] == lib::smb::UP) {
+ if (is_lower_halotron_active(i + 1)) {
+ set_detach(i + 1, true);
+ set_move_down(i + 1, false);
+ }
+ }
+ }
+ execute_command();
+ //odczekaj pewien czas liczac na to ze zaciski odpuszcza
+ delay(1000);
+ // podnos nogi
+ for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+ if (festo_command.leg[i] == lib::smb::UP) {
+ if (is_lower_halotron_active(i + 1)) {
+ set_move_up(i + 1, true);
+ }
+ }
+ }
+ execute_command();
+
+ // czekaj az sie uniosa
+ int number_of_legs_up = 0;
+
+ set_all_legs_unchecked();
+
+ for (int iteration = 0; number_of_legs_up < 2; iteration++) {
+ delay(FAI_SINGLE_DELAY);
+
+ // if it take too long to wait break
+ if (iteration > FAI_DELAY_MAX_ITERATION) {
+ master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+ break;
+ }
+
+ read_state();
+ for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+ if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
+ && (festo_command.leg[i] == lib::smb::UP)) {
+ set_checked(i + 1);
+ number_of_legs_up++;
+ set_detach(i + 1, false);
+ }
+ }
+ }
+
+ execute_command();
+ }
+ }
+
+ break;
+ case lib::smb::ONE_UP_TWO_DOWN:
+ case lib::smb::TWO_UP_ONE_DOWN:
+ case lib::smb::ALL_UP: {
+ BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+ }
+ break;
+ default:
+ break;
+
+ }
+ }
+ */
 
 void festo_and_inputs::festo_command_all_up()
 {
