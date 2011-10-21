@@ -69,10 +69,17 @@ private:
 	static const uint32_t Ddefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
 	/*!
-	 * \brief Method responsible for control of the rotational motors (motor controlling the legs and SPKM rotation).
+	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
 	 * \author tkornuta
 	 */
-	void rotational_motors_command();
+	void parse_motor_command();
+
+	/*!
+	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void execute_motor_motion();
+
 
 	/*!
 	 * \brief pointer to festo_and_inputs class
