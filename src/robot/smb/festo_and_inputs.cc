@@ -361,18 +361,10 @@ void festo_and_inputs::command()
 void festo_and_inputs::move_one_or_two_down()
 {
 	// detach all legs that are up to prepare them to go down
-	// and put them down
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-		set_move_down(i + 1, true);
-		set_move_up(i + 1, false);
-
 		if (!is_lower_halotron_active(i + 1)) {
-			// DEBUG
-			//	if (i != 2) {
-
-			//	}
 
 			set_detach(i + 1, true);
 		}
@@ -383,9 +375,20 @@ void festo_and_inputs::move_one_or_two_down()
 		}
 
 	}
-	master.msg->message("move_one_or_two_down przed pierwszym execute_command");
+
 	execute_command();
-	master.msg->message("move_one_or_two_down za pierwszym execute_command");
+	delay(500);
+
+	// move the legs down
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+		set_move_down(i + 1, true);
+		set_move_up(i + 1, false);
+
+	}
+
+	execute_command();
+
 	// waits until all legs go down
 
 	int number_of_legs_down = 0;
