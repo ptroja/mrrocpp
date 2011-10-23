@@ -73,6 +73,19 @@ void swarmitfix::main_task_algorithm(void)
 // spkm - przemieszczamy manipulator do pozycji podparcia dykty
 	sr_ecp_msg->message("2");
 
+	/*
+	 mp_ecp_spkm_epos_simple_command.desired_position[0] = 1;
+	 mp_ecp_spkm_epos_simple_command.desired_position[1] = 5;
+	 mp_ecp_spkm_epos_simple_command.desired_position[2] = 1;
+	 mp_ecp_spkm_epos_simple_command.desired_position[3] = 5;
+	 mp_ecp_spkm_epos_simple_command.desired_position[4] = 1;
+	 mp_ecp_spkm_epos_simple_command.desired_position[5] = 5;
+
+	 memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
+
+	 set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
+	 wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+	 */
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("3");
 

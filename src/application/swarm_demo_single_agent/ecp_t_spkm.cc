@@ -19,25 +19,21 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
 
 	// Create the generators
-//	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this);
-//	g_quickstop = (boost::shared_ptr <generator::spkm_quickstop>) new generator::spkm_quickstop(*this);
 
-	sr_ecp_msg->message("ecp spkm loaded");
+	g_joint_epos_command = new spkm::generator::joint_epos_command(*this);
+
+	sr_ecp_msg->message("ecp spkm swarm dempo single agent loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
-	/*
-	 if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_QUICKSTOP) {
 
-	 g_quickstop->Move();
+	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND) {
 
-	 } else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_POSE_LIST) {
+		g_joint_epos_command->Move();
 
-	 g_pose->Move();
+	}
 
-	 }
-	 */
 }
 
 }
