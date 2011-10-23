@@ -11,6 +11,7 @@ namespace smb {
 namespace generator {
 
 const std::string ECP_LEGS_COMMAND = "ECP_LEGS_COMMAND";
+const std::string ECP_EXTERNAL_EPOS_COMMAND = "ECP_EXTERNAL_EPOS_COMMAND";
 
 } // namespace generator
 } // namespace common

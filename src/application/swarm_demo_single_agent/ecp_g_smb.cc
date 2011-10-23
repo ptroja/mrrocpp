@@ -13,6 +13,12 @@ namespace ecp {
 namespace smb {
 namespace generator {
 
+////////////////////////////////////////////////////////
+//
+//                  legs_command
+//
+////////////////////////////////////////////////////////
+
 //constructor with parameters: task and time to sleep [s]
 legs_command::legs_command(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
@@ -53,6 +59,60 @@ void legs_command::create_ecp_mp_reply()
 void legs_command::get_mp_ecp_command()
 {
 	memcpy(&mp_ecp_festo_command, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_festo_command));
+}
+
+////////////////////////////////////////////////////////
+//
+//                  external_epos_command
+//
+////////////////////////////////////////////////////////
+
+//constructor with parameters: task and time to sleep [s]
+external_epos_command::external_epos_command(common::task::task& _ecp_task) :
+		common::generator::generator(_ecp_task)
+{
+
+	epos_external_command_data_port =
+			the_robot->port_manager.get_port <lib::epos::epos_simple_command>(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT);
+	epos_external_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::epos::epos_reply>(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT);
+
+}
+
+bool external_epos_command::first_step()
+{
+	/*
+	 // parameters copying
+	 get_mp_ecp_command();
+	 sr_ecp_msg.message("legs_command: first_step");
+	 smb_festo_command_data_port->data = mp_ecp_festo_command;
+	 smb_festo_command_data_port->set();
+	 smb_multi_leg_reply_data_request_port->set_request();
+	 */
+	return true;
+}
+
+bool external_epos_command::next_step()
+{
+	/*
+	 smb_multi_leg_reply_data_request_port->get();
+	 sr_ecp_msg.message("legs_command: next_step");
+
+	 */
+	return false;
+
+}
+
+void external_epos_command::create_ecp_mp_reply()
+{
+
+}
+
+void external_epos_command::get_mp_ecp_command()
+{
+	/*
+	 memcpy(&mp_ecp_festo_command, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_festo_command));
+	 */
 }
 
 } // namespace generator
