@@ -73,19 +73,18 @@ void swarmitfix::main_task_algorithm(void)
 // spkm - przemieszczamy manipulator do pozycji podparcia dykty
 	sr_ecp_msg->message("2");
 
-	/*
-	 mp_ecp_spkm_epos_simple_command.desired_position[0] = 1;
-	 mp_ecp_spkm_epos_simple_command.desired_position[1] = 5;
-	 mp_ecp_spkm_epos_simple_command.desired_position[2] = 1;
-	 mp_ecp_spkm_epos_simple_command.desired_position[3] = 5;
-	 mp_ecp_spkm_epos_simple_command.desired_position[4] = 1;
-	 mp_ecp_spkm_epos_simple_command.desired_position[5] = 5;
+	mp_ecp_spkm_epos_simple_command.desired_position[0] = 0.242;
+	mp_ecp_spkm_epos_simple_command.desired_position[1] = 0.262;
+	mp_ecp_spkm_epos_simple_command.desired_position[2] = 0.242;
+	mp_ecp_spkm_epos_simple_command.desired_position[3] = 0;
+	mp_ecp_spkm_epos_simple_command.desired_position[4] = 0;
+	mp_ecp_spkm_epos_simple_command.desired_position[5] = 0;
 
-	 memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
+	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
 
-	 set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
-	 wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
-	 */
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("3");
 
@@ -94,14 +93,39 @@ void swarmitfix::main_task_algorithm(void)
 // spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
 	sr_ecp_msg->message("4");
 
+	mp_ecp_spkm_epos_simple_command.desired_position[0] = 0.242;
+	mp_ecp_spkm_epos_simple_command.desired_position[1] = 0.242;
+	mp_ecp_spkm_epos_simple_command.desired_position[2] = 0.242;
+	mp_ecp_spkm_epos_simple_command.desired_position[3] = 0;
+	mp_ecp_spkm_epos_simple_command.desired_position[4] = 0;
+	mp_ecp_spkm_epos_simple_command.desired_position[5] = 0;
+
+	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
+
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+
 // smb - unosimy dwie nogi
 	sr_ecp_msg->message("5");
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+		mp_ecp_festo_command.undetachable[i] = false;
+	}
+
+	mp_ecp_festo_command.leg[0] = lib::smb::DOWN;
+	mp_ecp_festo_command.leg[1] = lib::smb::UP;
+	mp_ecp_festo_command.leg[2] = lib::smb::UP;
+
+	memcpy(mp_ecp_string, &mp_ecp_festo_command, sizeof(mp_ecp_festo_command));
+
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb2::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::smb2::ROBOT_NAME.c_str());
 
 // smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
 	sr_ecp_msg->message("6");
 
 	mp_ecp_smb_epos_simple_command.desired_position[0] = 1;
-	mp_ecp_smb_epos_simple_command.desired_position[1] = 5;
+	mp_ecp_smb_epos_simple_command.desired_position[1] = 0;
 
 	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
 
