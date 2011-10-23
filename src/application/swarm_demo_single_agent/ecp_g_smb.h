@@ -63,6 +63,8 @@ class external_epos_command : public common::generator::generator
 {
 private:
 
+	lib::epos::epos_simple_command mp_ecp_epos_simple_command;
+
 	/**
 	 * @brief epos external motion command data port
 	 */

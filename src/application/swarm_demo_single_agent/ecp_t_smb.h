@@ -16,6 +16,7 @@ protected:
 	common::generator::transparent* gt;
 	common::generator::sleep* g_sleep;
 	generator::legs_command* g_legs_command;
+	generator::external_epos_command* g_external_epos_command;
 
 public:
 	// KONSTRUKTORY

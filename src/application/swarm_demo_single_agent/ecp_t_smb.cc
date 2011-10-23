@@ -34,6 +34,8 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	g_legs_command = new smb::generator::legs_command(*this);
 
+	g_external_epos_command = new smb::generator::external_epos_command(*this);
+
 	sr_ecp_msg->message("ecp smb swarm demo single agent loaded");
 }
 
@@ -49,6 +51,8 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_LEGS_COMMAND) {
 		g_legs_command->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND) {
+		g_external_epos_command->Move();
 	}
 
 }

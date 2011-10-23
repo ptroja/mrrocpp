@@ -47,6 +47,10 @@ void swarmitfix::main_task_algorithm(void)
 
 	// communication structures to send to ECP
 	lib::smb::festo_command_td mp_ecp_festo_command;
+	lib::epos::epos_simple_command mp_ecp_smb_epos_simple_command, mp_ecp_spkm_epos_simple_command;
+
+	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 
@@ -82,6 +86,14 @@ void swarmitfix::main_task_algorithm(void)
 
 // smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
 	sr_ecp_msg->message("6");
+
+	mp_ecp_smb_epos_simple_command.desired_position[0] = 1;
+	mp_ecp_smb_epos_simple_command.desired_position[1] = 5;
+
+	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
+
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb2::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::smb2::ROBOT_NAME.c_str());
 
 // smb - opusczamy dwie nogi, ktore byly w gorze
 	sr_ecp_msg->message("7");
