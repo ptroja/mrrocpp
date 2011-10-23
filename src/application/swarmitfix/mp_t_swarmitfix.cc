@@ -38,13 +38,15 @@ void swarmitfix::create_robots()
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(smb2)ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(shead1);
 	ACTIVATE_MP_ROBOT(shead2);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config)
 {
+
 }
 
 void swarmitfix::main_task_algorithm(void)
