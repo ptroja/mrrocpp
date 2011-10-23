@@ -55,8 +55,8 @@ void swarmitfix::main_task_algorithm(void)
 
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead1::ROBOT_NAME);
 
 	double a = 2.88;
 
@@ -106,7 +106,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message("END");
 
-	send_end_motion_to_ecps(2, lib::smb::ROBOT_NAME.c_str(), lib::shead::ROBOT_NAME.c_str());
+	send_end_motion_to_ecps(2, lib::smb1::ROBOT_NAME.c_str(), lib::shead1::ROBOT_NAME.c_str());
 }
 
 } // namespace task

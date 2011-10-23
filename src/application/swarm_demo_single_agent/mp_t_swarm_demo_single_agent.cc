@@ -16,11 +16,7 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
-#include "robot/shead/mp_r_shead1.h"
-#include "robot/shead/mp_r_shead2.h"
-#include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
-#include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
 
 namespace mrrocpp {
@@ -35,12 +31,8 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
-	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(shead1);
-	ACTIVATE_MP_ROBOT(shead2);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
@@ -54,9 +46,8 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New swarmitfix series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead::ROBOT_NAME);
+//	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
+//	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb::ROBOT_NAME);
 
 	double a = 2.88;
 
@@ -82,7 +73,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message(ss.str().c_str());
 
-	send_end_motion_to_ecps(1, lib::spkm1::ROBOT_NAME.c_str());
+//	send_end_motion_to_ecps(1, lib::spkm1::ROBOT_NAME.c_str());
 	/*
 	 sr_ecp_msg->message("2");
 	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_SLEEP, (int) 5, "",  0,1,
@@ -102,11 +93,11 @@ void swarmitfix::main_task_algorithm(void)
 
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
 	sr_ecp_msg->message("5");
-	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
+//	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 
-	send_end_motion_to_ecps(2, lib::smb::ROBOT_NAME.c_str(), lib::shead::ROBOT_NAME.c_str());
+//	send_end_motion_to_ecps(2, lib::smb::ROBOT_NAME.c_str(), lib::shead::ROBOT_NAME.c_str());
 }
 
 } // namespace task
