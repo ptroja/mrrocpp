@@ -43,9 +43,55 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 void swarmitfix::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("New swarmitfix series");
+	sr_ecp_msg->message("New experimental series");
 
-	// wlaczenie generatora transparentnego w obu robotach
+// znajdujemy sie w pozycji bazy jezdnej A
+// smb - najpierw idziemy robotem w gore (wszystkie nogi w dol)
+	sr_ecp_msg->message("1");
+
+// spkm - przemieszczamy manipulator do pozycji podparcia dykty
+	sr_ecp_msg->message("2");
+
+// stoimy przez dwie sekundy symulujac podparcie dykty
+	sr_ecp_msg->message("3");
+
+// spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
+	sr_ecp_msg->message("4");
+
+// smb - unosimy dwie nogi
+	sr_ecp_msg->message("5");
+
+// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
+	sr_ecp_msg->message("6");
+
+// smb - opusczamy dwie nogi, ktore byly w gorze
+	sr_ecp_msg->message("7");
+
+// spkm - przemieszczamy manipulator do pozycji podparcia dykty
+	sr_ecp_msg->message("8");
+
+// stoimy przez dwie sekundy symulujac podparcie dykty
+	sr_ecp_msg->message("9");
+
+// spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
+	sr_ecp_msg->message("10");
+
+// smb - unosimy dwie nogi
+	sr_ecp_msg->message("11");
+
+// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej A
+	sr_ecp_msg->message("12");
+
+// smb - opusczamy dwie nogi, ktore byly w gorze
+	sr_ecp_msg->message("13");
+
+// smb - podnosimy wszystkie nogi
+	sr_ecp_msg->message("14");
+
+// KONIEC
+	sr_ecp_msg->message("END");
+
+// wlaczenie generatora transparentnego w obu robotach
 //	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
 //	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb::ROBOT_NAME);
 
