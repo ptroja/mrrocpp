@@ -6,7 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 
-#include "robot/smb/ecp_r_smb1.h"
+#include "robot/smb/ecp_r_smb2.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_smb.h"
@@ -26,7 +26,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new smb1::robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	//sg = new common::generator::smooth(*this, true);

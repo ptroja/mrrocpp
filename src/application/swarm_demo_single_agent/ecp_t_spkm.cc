@@ -1,6 +1,6 @@
 #include "base/lib/sr/srlib.h"
 
-#include "robot/spkm/ecp_r_spkm1.h"
+#include "robot/spkm/ecp_r_spkm2.h"
 
 #include "ecp_t_spkm.h"
 #include "ecp_g_spkm.h"
@@ -13,10 +13,10 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task_t(_config)
+		task_t(_config)
 {
 	// Create the robot object
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
 
 	// Create the generators
 	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this);
