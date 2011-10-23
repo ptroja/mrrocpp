@@ -59,15 +59,22 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class motor_command : public common::generator::generator
+class joint_epos_command : public common::generator::generator
 {
+private:
+
+	/**
+	 * @brief leg status reply data request port
+	 */
+	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> *smb_multi_leg_reply_data_request_port;
+
 public:
 
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	motor_command(common::task::task& _ecp_task);
+	joint_epos_command(common::task::task& _ecp_task);
 
 	bool first_step();
 	bool next_step();

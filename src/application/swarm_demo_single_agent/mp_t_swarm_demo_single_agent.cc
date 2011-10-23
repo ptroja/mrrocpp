@@ -72,6 +72,8 @@ void swarmitfix::main_task_algorithm(void)
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("3");
 
+	wait_ms(2000);
+
 // spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
 	sr_ecp_msg->message("4");
 
@@ -89,6 +91,7 @@ void swarmitfix::main_task_algorithm(void)
 
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("9");
+	wait_ms(2000);
 
 // spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
 	sr_ecp_msg->message("10");
