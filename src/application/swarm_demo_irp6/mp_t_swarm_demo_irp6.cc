@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "base/mp/mp_task.h"
-#include "mp_t_swarm_demo.h"
+#include "mp_t_swarm_demo_irp6.h"
 
 #include "base/lib/mrmath/mrmath.h"
 

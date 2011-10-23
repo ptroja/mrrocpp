@@ -2,7 +2,7 @@
 #include "base/lib/sr/sr_ecp.h"
 
 #include "base/ecp/ecp_task.h"
-#include "ecp_t_swarm_demo.h"
+#include "ecp_t_swarm_demo_irp6.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "subtask/ecp_st_bias_edp_force.h"
@@ -17,7 +17,7 @@ namespace task {
 
 // KONSTRUKTORY
 swarm_demo::swarm_demo(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
@@ -33,9 +33,12 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 
 	// utworzenie podzadan
-	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);;
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);
+	;
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
+			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
+			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
 	sr_ecp_msg->message("ecp SWARM DEMO loaded");
 }
