@@ -16,10 +16,10 @@ class swarmitfix : public common::task::_task <ecp::spkm::robot>
 {
 protected:
 	//! Move the robot the the specified pose
-	boost::shared_ptr <generator::spkm_pose> g_pose;
+//	boost::shared_ptr <generator::spkm_pose> g_pose;
 
-	//! Stop the robot in case of emergency
-	boost::shared_ptr <generator::spkm_quickstop> g_quickstop;
+//! Stop the robot in case of emergency
+//	boost::shared_ptr <generator::spkm_quickstop> g_quickstop;
 
 public:
 	//! Constructor

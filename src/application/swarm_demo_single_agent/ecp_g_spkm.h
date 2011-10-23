@@ -17,37 +17,41 @@ namespace ecp {
 namespace spkm {
 namespace generator {
 
-class spkm_pose : public common::generator::_generator<ecp::spkm::robot>
+/*!
+ * @brief generator to send the command prepared by MP to EDP spkm motors
+ * it waits for the command execution finish
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup generators
+ */
+class external_epos_command : public common::generator::generator
 {
 private:
-	//! Motion segment iterator
-	lib::ecp_next_state_t::spkm_segment_sequence_t::const_iterator segment_iterator;
 
-	//! Request execution of a single motion segment
-	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);
+	lib::epos::epos_simple_command mp_ecp_epos_simple_command;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> *epos_external_command_data_port;
+
+	/**
+	 * @brief epos motion status with external reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> *epos_external_reply_data_request_port;
 
 public:
-	//! Constructor
-	spkm_pose(task_t & _ecp_task);
 
-	//! first step generation
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	external_epos_command(common::task::task& _ecp_task);
+
 	bool first_step();
-
-	//! next step generation
 	bool next_step();
-};
 
-class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>
-{
-public:
-	//! Constructor
-	spkm_quickstop(task_t & _ecp_task);
-
-	//! first step generation
-	bool first_step();
-
-	//! next step generation
-	bool next_step();
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
 };
 
 } // namespace generator
