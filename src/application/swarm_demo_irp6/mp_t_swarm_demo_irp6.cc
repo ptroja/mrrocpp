@@ -49,7 +49,7 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 
 void swarm_demo::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("Swarm Demo (MP) START");
+	sr_ecp_msg->message("Swarm Demo irp6 (MP) START");
 
 	sr_ecp_msg->message("Both Joint");
 

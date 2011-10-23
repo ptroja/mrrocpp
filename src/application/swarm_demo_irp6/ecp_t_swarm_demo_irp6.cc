@@ -34,13 +34,13 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 
 	// utworzenie podzadan
 	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);
-	;
+
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
 			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
 			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
-	sr_ecp_msg->message("ecp SWARM DEMO loaded");
+	sr_ecp_msg->message("ecp SWARM DEMO irp6 loaded");
 }
 
 void swarm_demo::mp_2_ecp_next_state_string_handler(void)
