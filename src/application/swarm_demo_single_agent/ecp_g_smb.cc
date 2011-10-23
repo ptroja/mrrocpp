@@ -13,6 +13,48 @@ namespace ecp {
 namespace smb {
 namespace generator {
 
+//constructor with parameters: task and time to sleep [s]
+legs_command::legs_command(common::task::task& _ecp_task) :
+		common::generator::generator(_ecp_task)
+{
+
+	smb_festo_command_data_port =
+			the_robot->port_manager.get_port <lib::smb::festo_command_td>(lib::smb::FESTO_COMMAND_DATA_PORT);
+	smb_multi_leg_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td>(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+
+}
+
+bool legs_command::first_step()
+{
+	// parameters copying
+	get_mp_ecp_command();
+	sr_ecp_msg.message("legs_command: first_step");
+	smb_festo_command_data_port->data = mp_ecp_festo_command;
+	smb_festo_command_data_port->set();
+	smb_multi_leg_reply_data_request_port->set_request();
+
+	return true;
+}
+
+bool legs_command::next_step()
+{
+	smb_multi_leg_reply_data_request_port->get();
+	sr_ecp_msg.message("legs_command: next_step");
+	return false;
+
+}
+
+void legs_command::create_ecp_mp_reply()
+{
+
+}
+
+void legs_command::get_mp_ecp_command()
+{
+	memcpy(&mp_ecp_festo_command, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_festo_command));
+}
+
 } // namespace generator
 } // namespace smb
 } // namespace ecp

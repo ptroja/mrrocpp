@@ -13,7 +13,6 @@ target_link_libraries(ecp_spkm_swarm_demo_single_agent ecp_r_spkm ecp
 )
 
 add_executable(ecp_smb_swarm_demo_single_agent
-	ecp_g_spkm.cc
 	ecp_g_smb.cc
 	ecp_t_smb.cc
 )

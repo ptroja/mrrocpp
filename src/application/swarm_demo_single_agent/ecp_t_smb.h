@@ -15,6 +15,7 @@ protected:
 	//generatory
 	common::generator::transparent* gt;
 	common::generator::sleep* g_sleep;
+	generator::legs_command* g_legs_command;
 
 public:
 	// KONSTRUKTORY

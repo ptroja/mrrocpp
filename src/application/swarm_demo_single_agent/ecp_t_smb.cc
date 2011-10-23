@@ -29,8 +29,10 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	//sg = new common::generator::smooth(*this, true);
+
 	g_sleep = new common::generator::sleep(*this);
+
+	g_legs_command = new smb::generator::legs_command(*this);
 
 	sr_ecp_msg->message("ecp smb swarm demo single agent loaded");
 }
@@ -45,6 +47,8 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
 		g_sleep->init_time(mp_command.ecp_next_state.variant);
 		g_sleep->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_LEGS_COMMAND) {
+		g_legs_command->Move();
 	}
 
 }
