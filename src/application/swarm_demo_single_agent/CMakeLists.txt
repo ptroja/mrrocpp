@@ -12,15 +12,19 @@ add_executable(ecp_spkm_swarm_demo_single_agent
 target_link_libraries(ecp_spkm_swarm_demo_single_agent ecp_r_spkm ecp 
 )
 
-#add_executable(ecp_smb_swarm_demo_single_agent
-#	ecp_g_spkm.cc
-#	ecp_g_smb.cc
-#	ecp_t_smb.cc
-#)
+add_executable(ecp_smb_swarm_demo_single_agent
+	ecp_g_spkm.cc
+	ecp_g_smb.cc
+	ecp_t_smb.cc
+)
 
-#target_link_libraries(ecp_smb_swarm_demo_single_agent
-#	ecp_generators
-#)
+target_link_libraries(ecp_smb_swarm_demo_single_agent
+	ecp_generators
+)
 
-#install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)
-install(TARGETS ecp_spkm_swarm_demo_single_agent mp_swarm_demo_single_agent DESTINATION bin)
+
+install(TARGETS 
+ecp_spkm_swarm_demo_single_agent 
+ecp_smb_swarm_demo_single_agent 
+mp_swarm_demo_single_agent 
+DESTINATION bin)
