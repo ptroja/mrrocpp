@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SPKM_SWARMITFIX_H)
-#define _ECP_T_SPKM_SWARMITFIX_H
+#if !defined(_ECP_T_SPKM_SWARM_DEMO_SINGLE_AGENT_H)
+#define _ECP_T_SPKM_SWARM_DEMO_SINGLE_AGENT_H
 
 #include <boost/shared_ptr.hpp>
 
@@ -12,14 +12,14 @@ namespace ecp {
 namespace spkm {
 namespace task {
 
-class swarmitfix : public common::task::_task<ecp::spkm::robot>
+class swarmitfix : public common::task::_task <ecp::spkm::robot>
 {
 protected:
 	//! Move the robot the the specified pose
-	boost::shared_ptr<generator::spkm_pose> g_pose;
+	boost::shared_ptr <generator::spkm_pose> g_pose;
 
 	//! Stop the robot in case of emergency
-	boost::shared_ptr<generator::spkm_quickstop> g_quickstop;
+	boost::shared_ptr <generator::spkm_quickstop> g_quickstop;
 
 public:
 	//! Constructor

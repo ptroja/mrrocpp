@@ -9,7 +9,7 @@
 
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
-#include "mp_t_swarmitfix.h"
+#include "mp_t_swarm_demo_single_agent.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/maxon/dp_epos.h"

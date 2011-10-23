@@ -2,8 +2,8 @@
 //
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_G_SPKM_H)
-#define _ECP_MP_G_SPKM_H
+#if !defined(_ECP_MP_G_SPKM_SWARM_DEMO_SINGLE_AGENT_H)
+#define _ECP_MP_G_SPKM_SWARM_DEMO_SINGLE_AGENT_H
 
 namespace mrrocpp {
 namespace ecp_mp {

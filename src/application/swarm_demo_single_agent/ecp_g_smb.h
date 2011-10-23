@@ -4,8 +4,8 @@
  *Author: yoyek
  */
 
-#ifndef ECP_G_SMB_H_
-#define ECP_G_SMB_H_
+#ifndef ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
+#define ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
 
 #include "base/ecp/ecp_generator.h"
 #include "robot/smb/dp_smb.h"

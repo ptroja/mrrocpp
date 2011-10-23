@@ -1,5 +1,5 @@
 add_executable(mp_swarm_demo_single_agent
-	mp_t_swarmitfix.cc
+	mp_t_swarm_demo_single_agent.cc
 )
 
 target_link_libraries(mp_swarm_demo_single_agent mp)

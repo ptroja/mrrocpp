@@ -1,5 +1,5 @@
-#if !defined(__MP_T_SWARMITFIX_H)
-#define __MP_T_SWARMITFIX_H
+#if !defined(__MP_T_SWARM_DEMO_SIGLE_AGENT_H)
+#define __MP_T_SWARM_DEMO_SIGLE_AGENT_H
 
 namespace mrrocpp {
 namespace mp {
@@ -23,9 +23,8 @@ public:
 	void main_task_algorithm(void);
 };
 
-/** @} */// end of swarmitfix
-
-} // namespace task
+/** @} */ // end of swarmitfix
+}// namespace task
 } // namespace mp
 } // namespace mrrocpp
 

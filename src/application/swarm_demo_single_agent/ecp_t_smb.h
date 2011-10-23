@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SMB_SWARMITFIX_H)
-#define _ECP_T_SMB_SWARMITFIX_H
+#if !defined(_ECP_T_SMB_SWARM_DEMO_SINGLE_AGENT_H)
+#define _ECP_T_SMB_SWARM_DEMO_SINGLE_AGENT_H
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"

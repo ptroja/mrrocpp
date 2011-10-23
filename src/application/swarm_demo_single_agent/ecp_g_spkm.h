@@ -4,8 +4,8 @@
  *Author: yoyek
  */
 
-#ifndef ECP_G_SPKM_H_
-#define ECP_G_SPKM_H_
+#ifndef ECP_G_SPKM_SWARM_DEMO_SINGLE_AGENT_H_
+#define ECP_G_SPKM_SWARM_DEMO_SINGLE_AGENT_H_
 
 #include "robot/spkm/ecp_r_spkm.h"
 #include "robot/spkm/dp_spkm.h"
