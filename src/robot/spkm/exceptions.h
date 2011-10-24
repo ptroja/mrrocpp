@@ -18,9 +18,6 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-//! Desired value that caused the exception.
-typedef boost::error_info <struct desired_value_, double> desired_value;
-
 //! Pose specification type.
 typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 

@@ -69,10 +69,17 @@ private:
 	static const uint32_t Ddefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
 	/*!
-	 * \brief Method responsible for control of the rotational motors (motor controlling the legs and SPKM rotation).
+	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
 	 * \author tkornuta
 	 */
-	void rotational_motors_command();
+	void parse_motor_command();
+
+	/*!
+	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void execute_motor_motion();
+
 
 	/*!
 	 * \brief pointer to festo_and_inputs class
@@ -125,7 +132,16 @@ public:
 	 */
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
+	/*!
+	 * \brief returns current legs state from festo_and_inputs class
+	 *
+	 */
 	lib::smb::ALL_LEGS_VARIANT current_legs_state(void);
+
+	/*!
+	 * \brief returns next (desired) legs state from festo_and_inputs class
+	 *
+	 */
 	lib::smb::ALL_LEGS_VARIANT next_legs_state(void);
 
 	/*!
@@ -134,6 +150,8 @@ public:
 	 * Here it calls common::motor_driven_effector::get_arm_position_get_arm_type_switch
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+
 
 	void get_controller_state(lib::c_buffer &instruction);
 

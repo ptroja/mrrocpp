@@ -125,9 +125,9 @@ int wgt_spkm_inc::init()
 			{
 				synchro_depended_widgets_disable(false);
 
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
 
 				for (int i = 0; i < robot->number_of_servos; i++) {
 					set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
@@ -149,7 +149,7 @@ int wgt_spkm_inc::init()
 int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 

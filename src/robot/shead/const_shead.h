@@ -18,12 +18,6 @@ namespace lib {
 namespace shead {
 
 /*!
- * @brief SwarmItFix Head robot label
- * @ingroup shead
- */
-const robot_name_t ROBOT_NAME = "shead";
-
-/*!
  * @brief SwarmItFix Head EDP command buffer variant enum
  * @ingroup shead
  */

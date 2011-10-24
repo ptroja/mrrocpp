@@ -64,12 +64,10 @@ public:
 	 */
 	lib::single_thread_port <bool> epos_clear_fault_data_port;
 
-
-
 	/**
 	 * @brief epos motion status reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_motor_reply_data_request_port;
 
 	/**
 	 * @brief epos motion status with joint reply data request port
