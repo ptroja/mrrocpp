@@ -9,6 +9,7 @@
 #define __HI_LOCAL_IRP6OT_M_H
 
 #include "robot/hi_rydz/hi_rydz.h"
+#include "robot/hi_moxa/hi_moxa.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -41,25 +42,12 @@ const int AXIS_7_MAX_CURRENT = 0x2410; // ustawienie pradu maksymalnego dla prze
 //                HARDWARE_INTERFACE class
 // ------------------------------------------------------------------------
 
-class hardware_interface : public hi_rydz::HI_rydz
+class hardware_interface : public hi_moxa::HI_moxa
 {
 public:
-			hardware_interface(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]); // Konstruktor
-
-	uint64_t read_write_hardware(void); // Obsluga sprzetu
-
-	void finish_synchro(int drive_number);
+	hardware_interface(common::motor_driven_effector &_master); // Konstruktor
 
 }; // koniec: class hardware_interface
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-const struct sigevent *
-int_handler(void *arg, int id);
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace irp6ot
 } // namespace edp
