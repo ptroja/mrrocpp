@@ -53,7 +53,7 @@ void swarmitfix::main_task_algorithm(void)
 // spkm - przemieszczamy manipulator do pozycji podparcia dykty
 	sr_ecp_msg->message("2");
 
-	move_spkm_joints(0.242, 0.262, 0.242, 0, 0, 0);
+	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
 
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("3");
@@ -67,9 +67,9 @@ void swarmitfix::main_task_algorithm(void)
 
 // smb - unosimy dwie nogi
 	sr_ecp_msg->message("5");
-	sr_ecp_msg->message("PODNOSZEBIE NOG za 3s");
+	sr_ecp_msg->message("PODNOSZEBIE NOG za 1s");
 
-	wait_ms(3000);
+	wait_ms(1000);
 
 	move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
 
@@ -81,16 +81,16 @@ void swarmitfix::main_task_algorithm(void)
 // smb - opusczamy dwie nogi, ktore byly w gorze
 	sr_ecp_msg->message("7");
 
-	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 3s");
+	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 1s");
 
-	wait_ms(3000);
+	wait_ms(1000);
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
 
 // spkm - przemieszczamy manipulator do pozycji podparcia dykty
 	sr_ecp_msg->message("8");
 
-	move_spkm_joints(0.242, 0.262, 0.242, 0, 0, 0);
+	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
 
 // stoimy przez dwie sekundy symulujac podparcie dykty
 	sr_ecp_msg->message("9");
@@ -104,9 +104,9 @@ void swarmitfix::main_task_algorithm(void)
 // smb - unosimy dwie nogi
 	sr_ecp_msg->message("11");
 
-	sr_ecp_msg->message("PODNOSZEBIE DWOCH NOG za 3s");
+	sr_ecp_msg->message("PODNOSZEBIE DWOCH NOG za 1s");
 
-	wait_ms(3000);
+	wait_ms(1000);
 
 	move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
 
@@ -118,18 +118,18 @@ void swarmitfix::main_task_algorithm(void)
 // smb - opusczamy dwie nogi, ktore byly w gorze
 	sr_ecp_msg->message("13");
 
-	sr_ecp_msg->message("Opuszczanie NOG za 3s");
+	sr_ecp_msg->message("Opuszczanie NOG za 1s");
 
-	wait_ms(3000);
+	wait_ms(1000);
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
 
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");
 
-	sr_ecp_msg->message("PODNOSZEBIE WSZYSTKICH NOG za 3s");
+	sr_ecp_msg->message("PODNOSZEBIE WSZYSTKICH NOG za 1s");
 
-	wait_ms(3000);
+	wait_ms(1000);
 
 	move_smb_legs(lib::smb::UP, lib::smb::UP, lib::smb::UP);
 
