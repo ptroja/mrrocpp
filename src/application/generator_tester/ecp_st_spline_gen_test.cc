@@ -220,7 +220,7 @@ void sub_task_spline_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = 0.1;
+                coordinates2[1] = 0.01;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = -0.2;
                 coordinates2[4] = 0.0;
@@ -239,7 +239,7 @@ void sub_task_spline_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = -0.2;
+                coordinates2[1] = -0.02;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = 0.1;
                 coordinates2[4] = 0.0;
@@ -251,14 +251,14 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates1[1] = 0.1;
                 coordinates1[2] = -0.1;
                 coordinates1[3] = 0.0;
-                coordinates1[4] = 0.6;
+                coordinates1[4] = 0.3;
                 coordinates1[5] = 0.0;
                 cvgenjoint->load_relative_joint_trajectory_pose(coordinates1);
         }
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = 0.1;
+                coordinates2[1] = 0.01;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = 0.1;
                 coordinates2[4] = 0.0;
@@ -270,7 +270,7 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates1[1] = -0.1;
                 coordinates1[2] = 0.1;
                 coordinates1[3] = 0.0;
-                coordinates1[4] = -0.6;
+                coordinates1[4] = -0.3;
                 coordinates1[5] = 0.0;
                 cvgenjoint->load_relative_joint_trajectory_pose(coordinates1);
         }

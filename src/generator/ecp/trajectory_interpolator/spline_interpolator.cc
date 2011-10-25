@@ -31,8 +31,19 @@ bool spline_interpolator::interpolate_relative_pose(vector<ecp_mp::common::traje
     coordinates = it->start_position;
     for (int i = 0; i < it->interpolation_node_no; i++) {
             for (int j = 0; j < it->axes_num; j++) {
-                coordinates[j] = calculate_velocity(it, j, (i+1) * mc) * mc;
+                //coordinates[j] = calculate_velocity(it, j, (i+1) * mc) * mc;
+                if (i == 0)
+                {
+                    coordinates[j] = calculate_position(it, j, (i+1) * mc);
+                    printf("%f\t",coordinates[j]);
+                }
+                else
+                {
+                    coordinates[j] = calculate_position(it, j, (i+1) * mc) - cv[cv.size()-1][j];
+                    printf("%f\t",coordinates[j]);
+                }
             }
+            printf("\n");
             cv.push_back(coordinates);
     }
 
