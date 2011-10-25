@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SWARM_DEMO_H)
-#define _ECP_T_SWARM_DEMO_H
+#if !defined(_ECP_T_SWARM_DEMO_IRP6_H)
+#define _ECP_T_SWARM_DEMO_IRP6_H
 
 #include <cstdio>
 

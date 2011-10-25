@@ -204,19 +204,19 @@ void task_base::wait_for_start(void)
 // Oczekiwanie na kolejne zlecenie od MP
 void task_base::get_next_state(void)
 {
-	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state poczatek");
+//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state poczatek");
 
 	bool next_state_received = false;
 
 	while (!next_state_received) {
 		while (!command.isFresh()) {
-			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 1");
+	//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 1");
 
 			ReceiveSingleMessage(true);
-			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 2");
+	//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 2");
 
 		}
-		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 3");
+	//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 3");
 
 		command.markAsUsed();
 
@@ -224,7 +224,7 @@ void task_base::get_next_state(void)
 		{
 			case lib::NEXT_STATE:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::NEXT_STATE");
+			//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::NEXT_STATE");
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
@@ -232,7 +232,7 @@ void task_base::get_next_state(void)
 				break;
 			case lib::PAUSE_TASK:
 				//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::PAUSE_TASK");
+			//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::PAUSE_TASK");
 
 				// Reply with ACK
 				//	reply.Send(ecp_reply);
@@ -240,7 +240,7 @@ void task_base::get_next_state(void)
 				break;
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
+			//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
@@ -248,7 +248,7 @@ void task_base::get_next_state(void)
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
+			//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
 
 				// Reply with NACK
 				reply.Send(ecp_reply);

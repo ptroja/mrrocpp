@@ -18,12 +18,6 @@ namespace lib {
 namespace smb {
 
 /*!
- * @brief SwarmItFix Mobile Base robot label
- * @ingroup smb
- */
-const robot_name_t ROBOT_NAME = "smb";
-
-/*!
  * @brief SwarmItFix Mobile Base leg position variants from all legs point of view
  * @ingroup smb
  */

@@ -21,10 +21,16 @@ namespace smb {
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-const double rotational_mp2i_ratio = 2*M_PI / (2400 * 50);
+//! * Motor to motor radio is ??? // TODO: CHECK!!
+const double rotational_legs_mp2i_ratio = M_PI / (2400 * 50 * 2.5);
+
+//! Parameters for conversion for rotational DOFs are:
+//! * The encoder has 2400 CPT (Counts per turn).
+//! * The gear ratio is 50.
+const double rotational_spkm_mp2i_ratio = M_PI / (2400 * 50);
 
 //! Initialization of motor to internal ratios.
-const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_mp2i_ratio, rotational_mp2i_ratio };
+const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_legs_mp2i_ratio, rotational_spkm_mp2i_ratio };
 
 //! Initialization of upper motors limits for PKM.
 const int32_t model::upper_pkm_motor_pos_limits = { 120000 };
@@ -50,9 +56,9 @@ void model::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	// Check upper and lower limits only for the motor rotating the PKM.
 	if (motor_position[1] > upper_pkm_motor_pos_limits)
-		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(UPPER_LIMIT));
+		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(UPPER_LIMIT) << desired_value(motor_position[1]));
 	else if (motor_position[1] < lower_pkm_motor_pos_limits)
-		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(LOWER_LIMIT));
+		BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(1) << limit_type(LOWER_LIMIT) << desired_value(motor_position[1]));
 
 	// The motor rotating legs doesn't have limits.
 }

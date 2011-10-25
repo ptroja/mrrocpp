@@ -3,15 +3,23 @@
 // ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
-#include <cstdio>
-#include <cstdlib>
 #include <unistd.h>
+
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
+#include "base/lib/typedefs.h"
+#include "base/lib/impconst.h"
+#include "base/lib/com_buf.h"
+
+#include "robot/irp6ot_m/const_irp6ot_m.h"
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
-#include "robot/irp6ot_m/hi_irp6ot_m.h"
+//#include "robot/irp6p_m/hi_irp6p_m.h"
+#include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
 #include "robot/irp6ot_m/sg_irp6ot_m.h"
 #include "robot/irp6ot_m/regulator_irp6ot_m.h"
@@ -49,15 +57,20 @@ servo_buffer::servo_buffer(effector &_master) :
 
 void servo_buffer::load_hardware_interface(void)
 {
-	// tablica pradow maksymalnych d;a poszczegolnych osi
-	int
-			max_current[lib::irp6ot_m::NUM_OF_SERVOS] =
+	const std::vector <std::string>
+				ports_vector(mrrocpp::lib::irp6ot_m::ports_strings, mrrocpp::lib::irp6ot_m::ports_strings
+						+ mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM + 1);
+		hi
+				= new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6ot_m::MAX_INCREMENT);
+		hi->init();
 
-					{ AXIS_1_MAX_CURRENT, AXIS_2_MAX_CURRENT, AXIS_3_MAX_CURRENT, AXIS_4_MAX_CURRENT, AXIS_5_MAX_CURRENT, AXIS_6_MAX_CURRENT, AXIS_7_MAX_CURRENT };
-
-	hi
-			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
-	hi->init();
+		hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_0);
+		hi->set_parameter(1, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_1);
+		hi->set_parameter(2, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_2);
+		hi->set_parameter(3, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_3);
+		hi->set_parameter(4, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_4);
+		hi->set_parameter(5, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_5);
+		hi->set_parameter(6, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_6);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1
