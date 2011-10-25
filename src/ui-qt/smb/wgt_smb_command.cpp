@@ -375,6 +375,11 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(0);
 		ui.doubleSpinBox_ms_current_position->setDecimals(0);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
 	}
 }
 
@@ -406,6 +411,11 @@ void wgt_smb_command::on_radioButton_m_joint_toggled()
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(3);
 		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
 	}
 }
 
@@ -437,6 +447,11 @@ void wgt_smb_command::on_radioButton_m_ext_toggled()
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(0);
 		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
 	}
 }
 
