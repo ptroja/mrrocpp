@@ -1,5 +1,5 @@
-#if !defined(__MP_T_SWARM_DEMO_H)
-#define __MP_T_SWARM_DEMO_H
+#if !defined(__MP_T_SWARM_DEMO_IRP6_H)
+#define __MP_T_SWARM_DEMO_IRP6_H
 
 namespace mrrocpp {
 namespace mp {

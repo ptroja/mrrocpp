@@ -23,7 +23,7 @@ namespace edp {
 namespace irp6ot_m {
 
 const int GRIPPER_TURN_AXE = 6;
-const double AXIS_0_TO_5_INC_PER_REVOLUTION = 682; // Liczba impulsow rezolwera na obrot walu
+const double AXIS_0_TO_5_INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu
 const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na obrot walu
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.

@@ -28,7 +28,7 @@ namespace mp {
 namespace generator {
 
 haptic::haptic(task::task& _mp_task, int step) :
-	continously_coordinated(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+		continously_coordinated(_mp_task), global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -49,7 +49,7 @@ bool haptic::first_step()
 	irp6p->communicate_with_ecp = true;
 
 	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
+	td.value_in_step_no = td.internode_step_no - 1;
 	irp6ot->mp_command.command = lib::NEXT_POSE;
 	irp6ot->mp_command.instruction.instruction_type = lib::GET;
 	irp6ot->mp_command.instruction.get_type = ARM_DEFINITION;
@@ -188,7 +188,6 @@ bool haptic::next_step_inside()
 	 irp6p_goal_xyz_angle_axis_increment_in_end_effector.to_table (irp6p->ecp_td.MPtoECP_position_velocity);
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
-
 	const lib::Ft_vector & irp6p_ECPtoMP_force_xyz_torque_xyz =
 			irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz;
 
@@ -199,16 +198,17 @@ bool haptic::next_step_inside()
 
 	boost::posix_time::time_duration time_interval = irp6ot->reply.getTimestamp() - irp6p->reply.getTimestamp();
 
-	if (time_interval > boost::posix_time::millisec(2)) {
-		irp6p->mp_command.instruction.motion_steps = step_no + 1;
-		irp6p->mp_command.instruction.value_in_step_no = step_no - 4 + 1;
-	} else {
-		irp6p->mp_command.instruction.motion_steps = step_no;
-		irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
-	}
+	/*
+	 if (time_interval > boost::posix_time::millisec(2)) {
+	 irp6p->mp_command.instruction.motion_steps = step_no + 1;
+	 irp6p->mp_command.instruction.value_in_step_no = step_no - 4 + 1;
+	 } else {
+	 irp6p->mp_command.instruction.motion_steps = step_no;
+	 irp6p->mp_command.instruction.value_in_step_no = step_no - 4;
+	 }
+	 */
 
 	//std::cout << time_interval << std::endl;
-
 	/*
 	 if ((cycle_counter % 10) == 0) {
 	 std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
@@ -218,8 +218,8 @@ bool haptic::next_step_inside()
 	 }
 	 */
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
+			|| (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	}
