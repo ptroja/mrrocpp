@@ -198,8 +198,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];snprintf
-			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -332,7 +332,7 @@ void Interface::raise_process_control_window()
 
 void Interface::raise_process_control_window_slot()
 {
-	wgt_pc->my_open(false);
+	wgt_pc->my_open(true);
 	wgt_pc->raise();
 	open_process_control_windows();
 	//
@@ -737,7 +737,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -858,7 +858,7 @@ void Interface::print_on_sr(const char *buff, ...)
 	char text[256];
 	va_list arglist;
 
-	va_start(arglist,buff);
+	va_start(arglist, buff);
 	vsprintf(text, buff, arglist);
 	va_end(arglist);
 
@@ -992,7 +992,6 @@ void Interface::reload_whole_configuration()
 		 */
 
 		// zczytanie konfiguracji UI
-
 		// zczytanie konfiguracji MP
 		if (is_mp_and_ecps_active) {
 			mp->mp_state.network_pulse_attach_point = config->get_mp_pulse_attach_point();
@@ -1229,8 +1228,7 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL
-					)
+				if (direntp == NULL)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1319,8 +1317,7 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL
-				)
+			if (direntp == NULL)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

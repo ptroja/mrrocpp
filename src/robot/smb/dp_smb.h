@@ -16,22 +16,16 @@ namespace lib {
 namespace smb {
 
 /*!
- * @brief SwarmItFix Mobile Base multi pin insertion command data port
+ * @brief SwarmItFix Mobile Base fest command data port
  * @ingroup smb
  */
-const std::string MULTI_PIN_INSERTION_DATA_PORT = "smb_festo_command_data_port";
-
-/*!
- * @brief SwarmItFix Mobile Base mulri pin locking command data port
- * @ingroup smb
- */
-const std::string MULTI_PIN_LOCKING_DATA_PORT = "SMB_MULTI_PIN_LOCKING_DATA_PORT";
+const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Mobile Base status data request port
  * @ingroup smb
  */
-const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT";
+const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
 /*!
  * @brief SwarmItFix Mobile Base total number of servos
@@ -99,6 +93,7 @@ enum FESTO_LEG
 struct festo_command_td
 {
 	FESTO_LEG leg[LEG_CLAMP_NUMBER];
+	bool undetachable[LEG_CLAMP_NUMBER];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -108,6 +103,7 @@ struct festo_command_td
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & leg;
+		ar & undetachable;
 	}
 
 }__attribute__((__packed__));

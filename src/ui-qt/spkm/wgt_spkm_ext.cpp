@@ -8,10 +8,10 @@
 #include "../base/ui_robot.h"
 
 wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent)
+		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::spkm::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
 
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p0);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
@@ -112,7 +112,7 @@ int wgt_spkm_ext::init()
 
 int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip)
 {
-	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 
 	if (er.epos_controller[axis].motion_in_progress) {

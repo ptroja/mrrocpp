@@ -22,7 +22,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 spkm_pose::spkm_pose(task_t & _ecp_task) :
-	generator_t(_ecp_task)
+		generator_t(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
@@ -63,10 +63,10 @@ bool spkm_pose::next_step()
 	sr_ecp_msg.message("spkm_pose: next_step");
 
 	// A co to jest??? (ptroja)
-	if (the_robot->epos_reply_data_request_port.get() == mrrocpp::lib::NewData) {
+	if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << the_robot->epos_reply_data_request_port.data.epos_controller[3].position;
+		ss << "licznik: " << the_robot->epos_motor_reply_data_request_port.data.epos_controller[3].position;
 
 		sr_ecp_msg.message(ss.str());
 	}
@@ -75,7 +75,7 @@ bool spkm_pose::next_step()
 	bool motion_in_progress = false;
 
 	for (int i = 0; i < 6; i++) {
-		if (the_robot->epos_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
+		if (the_robot->epos_motor_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
@@ -84,7 +84,7 @@ bool spkm_pose::next_step()
 	// Check if the commanded motion is already completed
 	if (motion_in_progress) {
 		// Request new status data
-		the_robot->epos_reply_data_request_port.set_request();
+		the_robot->epos_motor_reply_data_request_port.set_request();
 		return true;
 	}
 
@@ -92,7 +92,7 @@ bool spkm_pose::next_step()
 	++segment_iterator;
 
 	// Check if the motion sequence is completed
-	if(segment_iterator == ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.end())
+	if (segment_iterator == ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.end())
 		return false;
 
 	// Prepare command for execution of a next motion segment
@@ -111,7 +111,7 @@ bool spkm_pose::next_step()
 //
 
 spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
-	generator_t(_ecp_task)
+		generator_t(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }

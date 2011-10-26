@@ -23,6 +23,10 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	checkBox_fl_down_Vector.append(ui.checkBox_fl2_down);
 	checkBox_fl_down_Vector.append(ui.checkBox_fl3_down);
 
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl1_udetachable);
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl2_udetachable);
+	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl3_udetachable);
+
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl2_attached);
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl3_attached);
@@ -98,19 +102,34 @@ int wgt_smb_command::init()
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
-
+				if (ui.radioButton_m_motor->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
+				} else if (ui.radioButton_m_joint->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
+				} else if (ui.radioButton_m_ext->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
+				}
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				lib::epos::epos_reply *er;
+
+				if (ui.radioButton_m_motor->isChecked()) {
+
+					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
+				} else if (ui.radioButton_m_joint->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
+				} else if (ui.radioButton_m_ext->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+				}
 
 				// sets leg state
 
 				lib::smb::multi_leg_reply_td &mlr =
 						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
-
-				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
@@ -119,8 +138,8 @@ int wgt_smb_command::init()
 				}
 
 				for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
-					checkBox_m_mip_Vector[i]->setChecked(er.epos_controller[i].motion_in_progress);
-					doubleSpinBox_m_current_position_Vector[i]->setValue(er.epos_controller[i].position);
+					checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
+					doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
 				}
 
 			} else {
@@ -193,7 +212,14 @@ int wgt_smb_command::move_it()
 			 motion_variant = lib::epos::SYNC_POLYNOMIAL;
 			 motion_variant = lib::epos::OPERATIONAL;
 			 */
-			robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+
+			if (ui.radioButton_m_motor->isChecked()) {
+				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_joint->isChecked()) {
+				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_ext->isChecked()) {
+				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
+			}
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				for (int i = 0; i < robot->number_of_servos; i++) {
@@ -228,6 +254,15 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 				fc.leg[i] = lib::smb::DOWN;
 			}
 
+			fc.undetachable[i] = false;
+			if (checkBox_fl_undetachable_Vector[i]->isChecked()) {
+				if (ui.checkBox_fl_all_undetachable->isChecked()) {
+					fc.undetachable[i] = true;
+				} else {
+					interface.ui_msg->message(lib::NON_FATAL_ERROR, "special undetachable mode not set");
+				}
+			}
+
 		}
 		robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.set();
 		robot->ui_ecp_robot->execute_motion();
@@ -241,7 +276,7 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 
 void wgt_smb_command::on_pushButton_fl_all_up_clicked()
 {
-	// dla kazdej z nog
+// dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		// wybierz wariant
 		radioButton_fl_up_Vector[i]->setChecked(true);
@@ -250,7 +285,7 @@ void wgt_smb_command::on_pushButton_fl_all_up_clicked()
 
 void wgt_smb_command::on_pushButton_fl_all_down_clicked()
 {
-	// dla kazdej z nog
+// dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		// wybierz wariant
 		radioButton_fl_down_Vector[i]->setChecked(true);
@@ -261,12 +296,6 @@ void wgt_smb_command::on_pushButton_m_execute_clicked()
 {
 	get_desired_position();
 	move_it();
-}
-
-void wgt_smb_command::on_pushButton_execute_all_clicked()
-{
-	on_pushButton_fl_execute_clicked();
-	on_pushButton_m_execute_clicked();
 }
 
 void wgt_smb_command::on_pushButton_read_clicked()
@@ -316,6 +345,114 @@ void wgt_smb_command::on_pushButton_stop_clicked()
 {
 	interface.ui_msg->message("on_pushButton_stop_clicked");
 	robot->execute_stop_motor();
+}
+
+void wgt_smb_command::on_radioButton_m_motor_toggled()
+{
+	if (ui.radioButton_m_motor->isChecked()) {
+		//	interface.ui_msg->message("on_radioButton_m_motor_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(1000);
+		ui.doubleSpinBox_ml_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(1000);
+		ui.doubleSpinBox_ml_relative->setDecimals(0);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-120000);
+		ui.doubleSpinBox_ms_absolute->setMaximum(120000);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
+		ui.doubleSpinBox_ms_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+		ui.doubleSpinBox_ms_relative->setMaximum(120000);
+		ui.doubleSpinBox_ms_relative->setSingleStep(1000);
+		ui.doubleSpinBox_ms_relative->setDecimals(0);
+
+		// Set precision of widgets with current positions.
+		ui.doubleSpinBox_ml_current_position->setDecimals(0);
+		ui.doubleSpinBox_ms_current_position->setDecimals(0);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_joint_toggled()
+{
+	if (ui.radioButton_m_joint->isChecked()) {
+		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-3.1415);
+		ui.doubleSpinBox_ml_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
+		ui.doubleSpinBox_ml_absolute->setDecimals(3);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-3.1415);
+		ui.doubleSpinBox_ml_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
+		ui.doubleSpinBox_ml_relative->setDecimals(3);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
+		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
+		ui.doubleSpinBox_ms_absolute->setDecimals(3);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
+		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
+		ui.doubleSpinBox_ms_relative->setDecimals(3);
+
+		// Set precision of widgets with current positions.
+		ui.doubleSpinBox_ml_current_position->setDecimals(3);
+		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
+	}
+}
+
+void wgt_smb_command::on_radioButton_m_ext_toggled()
+{
+	if (ui.radioButton_m_ext->isChecked()) {
+		//	interface.ui_msg->message("on_radioButton_m_ext_clicked");
+
+		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
+		ui.doubleSpinBox_ml_absolute->setDecimals(0);
+
+		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(1);
+		ui.doubleSpinBox_ml_relative->setDecimals(0);
+
+		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
+		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
+		ui.doubleSpinBox_ms_absolute->setDecimals(3);
+
+		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
+		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
+		ui.doubleSpinBox_ms_relative->setDecimals(3);
+
+		// Set precision of widgets with current positions.
+		ui.doubleSpinBox_ml_current_position->setDecimals(0);
+		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+
+		init();
+
+		on_pushButton_ml_copy_clicked();
+		on_pushButton_ms_copy_clicked();
+	}
 }
 
 // events

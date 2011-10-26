@@ -67,8 +67,8 @@ struct reader_data
 	float uchyb[lib::MAX_SERVOS_NR]; // wypelnienie PWM
 	double abs_pos[lib::MAX_SERVOS_NR];
 
-	double force[3]; // pierwsze 3 z 6
-	double desired_force[3]; // pierwsze 3 z 6
+	double force[6]; // pierwsze 3 z 6
+	double desired_force[6]; // pierwsze 3 z 6
 	double filtered_force[6]; // sila po przefiltrowaniu
 
 	double desired_cartesian_position[6]; // skaldowe liniowe polozenia zadanego

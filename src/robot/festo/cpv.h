@@ -147,35 +147,35 @@ public:
 	 */
 	cpv(canopen::gateway & _device, uint8_t _nodeId);
 
-	U32 readDeviceType();
+	U32 getDeviceType();
 
-	U8 readErrorRegister();
+	U8 getErrorRegister();
 
-	U32 readManufacturerStatusRegister();
+	U32 getManufacturerStatusRegister();
 
-	U8 readNumberOfCurrentFaults();
+	U8 getNumberOfCurrentFaults();
 
 	/*! \brief read most recent fault table
 	 *
 	 * @param field field id (0..10)
 	 */
-	U32 readMostRecentFault(uint8_t field);
+	U32 getMostRecentFault(uint8_t field);
 
-	std::string readDeviceName();
+	std::string getDeviceName();
 
-	std::string readHardwareVersion();
+	std::string getHardwareVersion();
 
-	std::string readSoftwareVersion();
+	std::string getSoftwareVersion();
 
 	/* Hardbeat protocol configuration not implemented */
 
-	U32 readVendorID();
+	U32 getVendorID();
 
-	U32 readProductCode();
+	U32 getProductCode();
 
-	U32 readRevisionNumber();
+	U32 getRevisionNumber();
 
-	U32 readSerialNumber();
+	U32 getSerialNumber();
 
 	U8 readNumberOfCPModulesConnected();
 
@@ -183,7 +183,7 @@ public:
 	 *
 	 * @param module module id (1..3)
 	 */
-	U16 readModuleType(uint8_t module);
+	U16 getModuleType(uint8_t module);
 
 	/* Digital CP inputs support not implemented */
 
@@ -191,32 +191,32 @@ public:
 	 *
 	 * @return Number of 8-output groups (2 or 4)
 	 */
-	U8 readNumberOf8OutputGroups();
+	U8 getNumberOf8OutputGroups();
 
 	/*! \brief read outputs status
 	 *
 	 * @param group outputs group id (1..4)
 	 * @return outputs status
 	 */
-	U8 readOutputs(uint8_t group);
+	U8 getOutputs(uint8_t group);
 
 	/*! \brief read connected CP module type recent fault table
 	 *
 	 * @param group outputs group id (1..4)
 	 */
-	void writeOutputs(uint8_t group, uint8_t value);
+	void setOutputs(uint8_t group, uint8_t value);
 
-	U8 readNumberOf8OutputGroupsErrorMode();
+	U8 getNumberOf8OutputGroupsErrorMode();
 
-	U8 readOutputsErrorMode(uint8_t group);
+	U8 getOutputsErrorMode(uint8_t group);
 
-	void writeOutputsErrorMode(uint8_t group, uint8_t value);
+	void setOutputsErrorMode(uint8_t group, uint8_t value);
 
-	U8 readNumberOf8OutputGroupsErrorValue();
+	U8 getNumberOf8OutputGroupsErrorValue();
 
-	U8 readOutputsErrorValue(uint8_t group);
+	U8 getOutputsErrorValue(uint8_t group);
 
-	void writeOutputsErrorValue(uint8_t group, uint8_t value);
+	void setOutputsErrorValue(uint8_t group, uint8_t value);
 };
 
 } /* namespace festo */

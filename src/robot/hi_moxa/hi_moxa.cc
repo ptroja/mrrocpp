@@ -55,14 +55,14 @@ void HI_moxa::init()
 
 	// informacja o stanie robota
 	master.controller_state_edp_buf.is_power_on = true;
-	master.controller_state_edp_buf.is_robot_blocked = false;
+	master.controller_state_edp_buf.robot_in_fault_state = false;
 
 	if (master.robot_test_mode) {
 		// domyslnie robot jest zsynchronizowany
 		master.controller_state_edp_buf.is_synchronised = true;
 		// informacja o stanie robota
 		master.controller_state_edp_buf.is_power_on = true;
-		master.controller_state_edp_buf.is_robot_blocked = false;
+		master.controller_state_edp_buf.robot_in_fault_state = false;
 	} // end test mode
 	else
 	{
@@ -346,7 +346,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	}
 
 	master.controller_state_edp_buf.is_synchronised = robot_synchronized;
-	master.controller_state_edp_buf.is_robot_blocked = power_fault;
+	master.controller_state_edp_buf.robot_in_fault_state = power_fault;
 	if (power_fault) {
 		if (error_msg_power_stage == 0) {
 			master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
@@ -381,7 +381,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 
 	if(status_disp_cnt++ == STATUS_DISP_T)
 	{
-//		const int disp_drv_no = 0;
+		const int disp_drv_no = 0;
 //		std::cout << "[info]";
 //		std::cout << " sw1_sw2_swSynchr = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
 //		std::cout << " position = " << (int) servo_data[disp_drv_no].drive_status.position;

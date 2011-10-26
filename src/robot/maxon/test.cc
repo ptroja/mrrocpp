@@ -38,26 +38,26 @@ int main(int argc, char *argv[])
 
 		BOOST_FOREACH(epos * node, axis) {
 
-			node->printEPOSstate();
+			node->printState();
 //			node->SendNMTService(epos::Reset_Node);
 //			usleep(500000);
 //			node->SendNMTService(epos::Start_Remote_Node);
 //			usleep(500000);
 
 			// Check if in a FAULT state
-			if(node->checkEPOSstate() == 11) {
-				UNSIGNED8 errNum = node->readNumberOfErrors();
+			if(node->getState() == 11) {
+				UNSIGNED8 errNum = node->getNumberOfErrors();
 				std::cout << "readNumberOfErrors() = " << (int) errNum << std::endl;
 				for(UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-					UNSIGNED32 errCode = node->readErrorHistory(i);
+					UNSIGNED32 errCode = node->getErrorHistory(i);
 
 					std::cout << node->ErrorCodeMessage(errCode) << std::endl;
 				}
 				if (errNum > 0) {
 					node->clearNumberOfErrors();
 				}
-				node->changeEPOSstate(epos::FAULT_RESET);
+				node->setState(epos::FAULT_RESET);
 			}
 
 			// Change to the operational mode
@@ -65,13 +65,13 @@ int main(int argc, char *argv[])
 		}
 
 		clock_gettime(CLOCK_MONOTONIC, &t1);
-		axis[3]->readSWversion();
+		axis[3]->getSWversion();
 		clock_gettime(CLOCK_MONOTONIC, &t2);
 		double t = (t2.tv_sec + t2.tv_nsec/1e9) - (t1.tv_sec + t1.tv_nsec/1e9);
 		printf("%.9f\n", t);
 
 		gateway.close();
-	} catch (canopen_error & error) {
+	} catch (se_canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )
