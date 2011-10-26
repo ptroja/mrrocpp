@@ -7,6 +7,7 @@
 #define EPOS_ACCESS_BASE_H_
 
 #include <stdint.h>  /* int types with given size */
+#include <string>
 
 #include <boost/exception/all.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -103,6 +104,34 @@ public:
 	 * @return answer array from the controller
 	 */
 	virtual unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex) = 0;
+
+	std::string ReadObjectStringValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
+	{
+		canopen::WORD answer[8];
+		unsigned int r = this->ReadObject(answer, 8, nodeId, index, subindex);
+
+		std::string str;
+
+		for(int i = 0; i < r; ++i) {
+			char c = (answer[3+i] & 0x00FF);
+
+			if(c == 0x00) {
+				break;
+			} else {
+				str += c;
+			}
+
+			c = ((answer[3+i] & 0xFF00) >> 8);
+
+			if(c == 0x00) {
+				break;
+			} else {
+				str += c;
+			}
+		}
+
+		return str;
+	}
 
 	template <class T>
 	T ReadObjectValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
