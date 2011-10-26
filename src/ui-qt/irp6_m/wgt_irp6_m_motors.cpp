@@ -39,7 +39,13 @@ wgt_irp6_m_motors::wgt_irp6_m_motors(QString _widget_label, mrrocpp::ui::common:
 		/*		ui.doubleSpinBox_des_p7->hide();*/
 	}
 
-	setup_ui(ui.gridLayout);
+	setup_ui(ui.gridLayout, robot->number_of_servos);
+}
+
+void wgt_irp6_m_motors::setup_ui(QGridLayout *layout, int _rows_number)
+{
+	WgtAbsoluteBase::setup_ui(layout, _rows_number);
+
 }
 
 wgt_irp6_m_motors::~wgt_irp6_m_motors()

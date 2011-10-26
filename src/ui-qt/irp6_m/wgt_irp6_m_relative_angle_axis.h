@@ -29,7 +29,8 @@ class wgt_irp6_m_relative_angle_axis : public WgtRelativeBase
 Q_OBJECT
 
 public:
-	wgt_irp6_m_relative_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent = 0);
+	wgt_irp6_m_relative_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
 	~wgt_irp6_m_relative_angle_axis();
 //	void synchro_depended_init();
 //	void init_and_copy();
@@ -38,7 +39,7 @@ public:
 
 //	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 //	virtual void add_button(QPushButton *button, int row, int space){};
-//	virtual void setup_ui(){};
+//	virtual void setup_ui(QGridLayout *layout, int _rows_number);
 private:
 	Ui::wgt_relative_template ui;
 	mrrocpp::ui::irp6_m::UiRobot *robot;

@@ -82,27 +82,26 @@ int wgt_base::get_desired_position()
 {
 	if (robot->state.edp.pid != -1) {
 		if (robot->state.edp.is_synchronised)
-			for (int i = 0; i < robot->number_of_servos; i++)
+			for (int i = 0; i < rows_number; i++)
 				robot->desired_pos[i] = desired_pos_spin_boxes[i]->value();
 		else
-			for (int i = 0; i < robot->number_of_servos; i++)
+			for (int i = 0; i < rows_number; i++)
 				robot->desired_pos[i] = 0.0;
 	}
 	return 1;
 }
 
-void wgt_base::setup_ui(QGridLayout *layout)
+void wgt_base::setup_ui(QGridLayout *layout, int _rows_number)
 {
+	rows_number = _rows_number;
 	gridLayout = layout;
-}
-
-void wgt_base::create_buttons_and_spin_boxes(int desiredPosColumn, int incMoveColumn)
-{
-	create_buttons_and_spin_boxes(desiredPosColumn, incMoveColumn, robot->number_of_servos);
 }
 
 void wgt_base::create_buttons_and_spin_boxes(int desiredPosColumn, int incMoveColumn, int spinBoxesCount)
 {
+
+	rows_number = spinBoxesCount;
+
 	QSignalMapper *left_signal_mapper = new QSignalMapper(this);
 	QSignalMapper *right_signal_mapper = new QSignalMapper(this);
 	QPushButton *button = 0l;

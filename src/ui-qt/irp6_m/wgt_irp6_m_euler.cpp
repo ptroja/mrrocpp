@@ -38,7 +38,13 @@ wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::I
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p6);
-	setup_ui(ui.gridLayout);
+	setup_ui(ui.gridLayout, 6);
+}
+
+void wgt_irp6_m_euler::setup_ui(QGridLayout *layout, int _rows_number)
+{
+	WgtAbsoluteBase::setup_ui(layout, _rows_number);
+
 }
 
 wgt_irp6_m_euler::~wgt_irp6_m_euler()
