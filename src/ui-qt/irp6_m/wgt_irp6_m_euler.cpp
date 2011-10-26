@@ -8,11 +8,19 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface,  mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
+wgt_irp6_m_euler::wgt_irp6_m_euler(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+		WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+
+	ui.label_axis_1->setText("x");
+	ui.label_axis_2->setText("y");
+	ui.label_axis_3->setText("z");
+	ui.label_axis_4->setText("alfa");
+	ui.label_axis_5->setText("beta");
+	ui.label_axis_6->setText("gamma");
+	ui.label_axis_7->hide();
 
 //	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 //	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);

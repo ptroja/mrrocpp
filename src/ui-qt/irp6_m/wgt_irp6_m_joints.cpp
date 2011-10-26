@@ -9,10 +9,10 @@
 #include "../base/ui_robot.h"
 
 wgt_irp6_m_joints::wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
+		WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
 {
 	ui.setupUi(this);
-	specyficrobot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+	specyficrobot = dynamic_cast <mrrocpp::ui::irp6_m::UiRobot *>(_robot);
 
 //	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
 //	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p2);
@@ -34,7 +34,7 @@ wgt_irp6_m_joints::wgt_irp6_m_joints(QString _widget_label, mrrocpp::ui::common:
 //	}
 
 	if (robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ui.label_2->hide();
+		ui.label_axis_7->hide();
 //		ui.doubleSpinBox_cur_p7->hide();
 //		ui.doubleSpinBox_des_p7->hide();
 //		ui.pushButton_7l->hide();
@@ -74,8 +74,7 @@ int wgt_irp6_m_joints::init()
 				execute_button->setDisabled(false);
 				specyficrobot->ui_ecp_robot->read_joints(robot->current_pos);
 				std::cout << "init ok. wartosci current pos:" << std::endl;
-				for (int i = 0; i < robot->number_of_servos; i++)
-				{
+				for (int i = 0; i < robot->number_of_servos; i++) {
 					current_pos_spin_boxes[i]->setValue(robot->current_pos[i]);
 					robot->desired_pos[i] = robot->current_pos[i];
 					std::cout << current_pos_spin_boxes[i]->value() << " ";
