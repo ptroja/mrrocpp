@@ -204,6 +204,7 @@ void task_base::wait_for_start(void)
 // Oczekiwanie na kolejne zlecenie od MP
 void task_base::get_next_state(void)
 {
+
 //	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state poczatek");
 
 	bool next_state_received = false;

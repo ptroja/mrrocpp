@@ -133,15 +133,15 @@ bool newsmooth::calculate() {
 					return calculate();
 				}
 
-				printf("\n------------ after optimize time pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
-				print_pose(pose_vector_iterator);
+				//printf("\n------------ after optimize time pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
 
 				if(!vpc.reduction_axis(pose_vector_iterator, j)) {
 					return calculate();
 				}
 
-                                printf("\n------------ after reduction axis pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
-				print_pose(pose_vector_iterator);
+                                //printf("\n------------ after reduction axis pose %d axis: %d --------------\n", pose_vector_iterator->pos_num, j);
+				//print_pose(pose_vector_iterator);
 			}
 		}
 
@@ -154,8 +154,8 @@ bool newsmooth::calculate() {
 			return false;
 		}
 
-                printf("\n------------ after calculate_pose_time pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+                //printf("\n------------ after calculate_pose_time pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator->interpolation_node_no = ceil(pose_vector_iterator->t / mc);//calculate the number of the macrosteps for the pose
 
@@ -165,15 +165,15 @@ bool newsmooth::calculate() {
 			}
 		}
 
-                printf("\n------------ after second reduction_axis pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+                //printf("\n------------ after second reduction_axis pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		if (!vpc.calculate_acc_uni_pose(pose_vector_iterator, mc)) {//set uni and acc
 			return false;
 		}
 
-		printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
-		print_pose(pose_vector_iterator);
+		//printf("\n------------ third print pose %d --------------\n", pose_vector_iterator->pos_num);
+		//print_pose(pose_vector_iterator);
 
 		pose_vector_iterator++;
 	}
@@ -356,16 +356,16 @@ bool newsmooth::load_relative_angle_axis_trajectory_pose(const vector<double> & 
 
 bool newsmooth::load_absolute_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose) {
 	if (trajectory_pose.arm_type == lib::ECP_JOINT) {
-		std::cout<<"JOINT"<<std::endl;
+                //std::cout<<"JOINT"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  joint_max_velocity, joint_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_MOTOR) {
-		std::cout<<"MOTOR"<<std::endl;
+                //std::cout<<"MOTOR"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  motor_max_velocity, motor_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_ANGLE_AXIS) {
-		std::cout<<"ANGLE_AXIS"<<std::endl;
+                //std::cout<<"ANGLE_AXIS"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  angle_axis_max_velocity, angle_axis_max_acceleration);
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
-		std::cout<<"EULER7"<<std::endl;
+                //std::cout<<"EULER7"<<std::endl;
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, trajectory_pose.a,  euler_zyz_max_velocity, euler_zyz_max_acceleration);
 	} else {
 		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
@@ -389,7 +389,6 @@ bool newsmooth::load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_tr
 }
 
 bool newsmooth::load_trajectory_pose(const vector<double> & coordinates, lib::MOTION_TYPE motion_type, lib::ECP_POSE_SPECIFICATION pose_spec, const vector<double> & v, const vector<double> & a, const vector<double> & v_max, const vector<double> & a_max) {
-
 
 	if (!pose_vector.empty() && this->pose_spec != pose_spec) { //check if previous positions were provided in the same representation
 
@@ -521,21 +520,21 @@ std::vector <double> coordinates(axes_num); //vector of read coordinates
 
 	for (i = 0; i < number_of_poses; i++) {
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> v[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> v[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> a[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> a[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}
 		}
 		from_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (j = 0; j < axes_num; j++) {
-			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
+                        if (!(from_file >> coordinates[j])) { //protection before the non-numerical data
 				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
 				return false;
 			}

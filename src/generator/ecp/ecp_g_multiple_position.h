@@ -229,6 +229,8 @@ protected:
 
 		if (motion_type == lib::ABSOLUTE) {
 			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+                                //printf("inter 1: %f", pose_vector_iterator->coeffs[i][0]);
+                                //printf("inter 2: %f", pose_vector_iterator->coeffs[i][1]);
 				if (inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -525,6 +527,11 @@ public:
 
 		calculated = calculate();
 
+                if (!calculated)
+                {
+                    return false;
+                }
+
 		if (debug) {
 			print_pose_vector();
 		}
@@ -535,7 +542,7 @@ public:
 			print_coordinate_vector();
 		}
 
-		return calculated && interpolated;
+                return interpolated;
 	}
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
@@ -564,12 +571,15 @@ public:
 	 */
 	virtual void reset()
 	{
-		pose_vector.clear();
+                //sr_ecp_msg.message("reset 1");
+                pose_vector.clear();
+                //sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
+                //sr_ecp_msg.message("reset 3");
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;
-		sr_ecp_msg.message("Generator reset");
+                sr_ecp_msg.message("Generator reset");
 	}
 	/**
 	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.

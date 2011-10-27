@@ -5,8 +5,8 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "application/generator_tester/ecp_st_const_vel_gen_test.h"
-#include "generator/ecp/ecp_g_constant_velocity.h"
+#include "application/generator_tester/ecp_st_spline_gen_test.h"
+#include "generator/ecp/ecp_g_spline.h"
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -20,15 +20,16 @@ namespace ecp {
 namespace common {
 namespace sub_task {
 
-sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
+sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
         sub_task(_ecp_t)
 {
 
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-                cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
+                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
                 cvgenjoint->set_debug(true);
+                //cvgenjoint->setType(linear);
 
-                cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 6);
+                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
                 cvgenmotor->set_debug(true);
 
                 track = false;
@@ -36,17 +37,17 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
                 poly = false;
                 conv = false;
 
-                cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 cvgeneuler->set_debug(true);
 
-                cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
                 cvgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-                cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 7);
+                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
                 cvgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 7);
+                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
                 cvgenmotor->set_debug(true);
 
                 track = true;
@@ -54,17 +55,17 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
                 poly = false;
                 conv = false;
 
-                cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 cvgeneuler->set_debug(true);
 
-                cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
                 cvgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::polycrank::ROBOT_NAME) {
-                cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 7);
+                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
                 cvgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 7);
+                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
                 cvgenmotor->set_debug(true);
 
                 track = false;
@@ -72,17 +73,17 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
                 poly = true;
                 conv = false;
 
-                cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 cvgeneuler->set_debug(true);
 
-                cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
                 cvgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
-                cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 1);
+                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 1);
                 cvgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 1);
+                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
                 cvgenmotor->set_debug(true);
 
                 track = false;
@@ -90,17 +91,17 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
                 poly = false;
                 conv = true;
 
-                cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
                 cvgeneuler->set_debug(true);
 
-                cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
                 cvgenangle->set_debug(true);
         }
 
 
 }
 
-void sub_task_const_vel_gen_test::conditional_execution()
+void sub_task_spline_gen_test::conditional_execution()
 {
 
         std::vector <double> coordinates1(6);//postument
@@ -110,6 +111,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
         // JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
+
         cvgenjoint->reset();
         cvgenjoint->set_absolute();
 
@@ -177,7 +179,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = -0.087;
+                coordinates2[1] = -0.137;
                 coordinates2[2] = -1.542;
                 coordinates2[3] = 0.024;
                 coordinates2[4] = 1.219;
@@ -211,7 +213,6 @@ void sub_task_const_vel_gen_test::conditional_execution()
         }
         // JOINT ABSOLUTE END
 
-
         // JOINT RELATIVE
         sr_ecp_msg.message("Joint relative");
         cvgenjoint->reset();
@@ -219,7 +220,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = 0.1;
+                coordinates2[1] = 0.01;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = -0.2;
                 coordinates2[4] = 0.0;
@@ -238,7 +239,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = -0.2;
+                coordinates2[1] = -0.02;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = 0.1;
                 coordinates2[4] = 0.0;
@@ -250,14 +251,14 @@ void sub_task_const_vel_gen_test::conditional_execution()
                 coordinates1[1] = 0.1;
                 coordinates1[2] = -0.1;
                 coordinates1[3] = 0.0;
-                coordinates1[4] = 0.6;
+                coordinates1[4] = 0.3;
                 coordinates1[5] = 0.0;
                 cvgenjoint->load_relative_joint_trajectory_pose(coordinates1);
         }
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = 0.1;
+                coordinates2[1] = 0.01;
                 coordinates2[2] = 0.0;
                 coordinates2[3] = 0.1;
                 coordinates2[4] = 0.0;
@@ -269,7 +270,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
                 coordinates1[1] = -0.1;
                 coordinates1[2] = 0.1;
                 coordinates1[3] = 0.0;
-                coordinates1[4] = -0.6;
+                coordinates1[4] = -0.3;
                 coordinates1[5] = 0.0;
                 cvgenjoint->load_relative_joint_trajectory_pose(coordinates1);
         }
@@ -662,10 +663,10 @@ void sub_task_const_vel_gen_test::conditional_execution()
                 cvgenangle->Move();
         }
         // ANGLE AXIS RELATIVE END
-
+        sr_ecp_msg.message("Spline test END");
 }
 
-sub_task_const_vel_gen_test::~sub_task_const_vel_gen_test()
+sub_task_spline_gen_test::~sub_task_spline_gen_test()
 {
         delete cvgenjoint;
         delete cvgenmotor;
@@ -677,3 +678,4 @@ sub_task_const_vel_gen_test::~sub_task_const_vel_gen_test()
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
+
