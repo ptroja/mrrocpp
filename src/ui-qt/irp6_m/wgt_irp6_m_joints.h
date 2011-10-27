@@ -37,7 +37,7 @@ public:
 //	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 //	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 //	virtual void add_button(QPushButton *button, int row, int space){};
-//	virtual void setup_ui(){};
+	virtual void setup_ui(QGridLayout *layout, int _rows_number);
 
 private:
 	Ui::wgt_absolute_template ui;

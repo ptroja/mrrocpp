@@ -29,6 +29,8 @@ wgt_irp6_m_relative_angle_axis::wgt_irp6_m_relative_angle_axis(QString _widget_l
 }
 
 
+
+
 wgt_irp6_m_relative_angle_axis::~wgt_irp6_m_relative_angle_axis()
 {
 

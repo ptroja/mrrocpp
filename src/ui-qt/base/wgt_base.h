@@ -19,9 +19,7 @@ class UiRobot;
 }
 }
 
-
-
-class wgt_base : public QWidget	//TODO: zmienić dziedziczenie na QDockWidget!
+class wgt_base : public QWidget //TODO: zmienić dziedziczenie na QDockWidget!
 {
 Q_OBJECT
 
@@ -30,7 +28,7 @@ public:
 	wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent);
 	~wgt_base();
 
-	virtual void my_open(bool set_on_top=false);
+	virtual void my_open(bool set_on_top = false);
 	void my_close();
 
 	QString widget_label;
@@ -38,7 +36,10 @@ public:
 
 	virtual void synchro_depended_init();
 	virtual void init_and_copy();
-	virtual int synchro_depended_widgets_disable(bool set_disabled){return 0;}
+	virtual int synchro_depended_widgets_disable(bool set_disabled)
+	{
+		return 0;
+	}
 
 	typedef void (wgt_base::*my_open_ptr)(bool set_on_top);
 
@@ -46,9 +47,11 @@ protected:
 	mrrocpp::ui::common::Interface& interface;
 	mrrocpp::ui::common::UiRobot *robot;
 
-	QVector<QPushButton *> inc_move_left_buttons;
-	QVector<QPushButton *> inc_move_right_buttons;
-	QVector<QDoubleSpinBox*> desired_pos_spin_boxes;
+	int rows_number;
+
+	QVector <QPushButton *> inc_move_left_buttons;
+	QVector <QPushButton *> inc_move_right_buttons;
+	QVector <QDoubleSpinBox*> desired_pos_spin_boxes;
 
 	QGridLayout *gridLayout;
 
@@ -56,28 +59,33 @@ protected:
 	void add_desired_position_spin_box(QDoubleSpinBox *spin_box, int row, int column);
 
 	virtual void create_buttons_and_spin_boxes(int desiredPosColumn, int incMoveColumn, int spinBoxesCount);
-	virtual void create_buttons_and_spin_boxes(int desiredPosColumn, int incMoveColumn);
+
 	void create_spin_boxes(int desiredPosColumn, int spinBoxesCount);
 
-	virtual void setup_ui(QGridLayout *layout);
+	virtual void setup_ui(QGridLayout *layout, int _rows_number);
 	virtual int get_desired_position();
 
 	QDoubleSpinBox* create_spin_box_to_vector(QVector <QDoubleSpinBox*> &spin_boxes);
-	QPushButton* create_button_to_vector(QVector<QPushButton *> &buttons, QString label);
+	QPushButton* create_button_to_vector(QVector <QPushButton *> &buttons, QString label);
 	QPushButton* add_button(QString label, int x, int y, int rowSpan, int columnSpan);
 
 signals:
-		void synchro_depended_init_signal();
-		void init_and_copy_signal();
+	void synchro_depended_init_signal();
+	void init_and_copy_signal();
 
 public slots:
-	virtual void inc_move_left_button_clicked(int button){}
-	virtual void inc_move_right_button_clicked(int button){}
-	virtual void init_and_copy_slot(){};
+	virtual void inc_move_left_button_clicked(int button)
+	{
+	}
+	virtual void inc_move_right_button_clicked(int button)
+	{
+	}
+	virtual void init_and_copy_slot()
+	{
+	}
 
 private slots:
 	void synchro_depended_init_slot();
-
 
 private:
 	void connect_to_signal_mapper(QPushButton *button, int i, QSignalMapper *signalMapper);

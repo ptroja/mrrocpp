@@ -9,10 +9,18 @@
 #include "../base/ui_robot.h"
 
 wgt_irp6_m_angle_axis::wgt_irp6_m_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
+		WgtAbsoluteBase(_widget_label, _interface, _robot, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+
+	ui.label_axis_1->setText("x");
+	ui.label_axis_2->setText("y");
+	ui.label_axis_3->setText("z");
+	ui.label_axis_4->setText("ax");
+	ui.label_axis_5->setText("ay");
+	ui.label_axis_6->setText("az");
+	ui.label_axis_7->hide();
 
 //	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 //	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
@@ -30,7 +38,13 @@ wgt_irp6_m_angle_axis::wgt_irp6_m_angle_axis(QString _widget_label, mrrocpp::ui:
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 //	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p6);
-	setup_ui(ui.gridLayout);
+	setup_ui(ui.gridLayout, 6);
+}
+
+void wgt_irp6_m_angle_axis::setup_ui(QGridLayout *layout, int _rows_number)
+{
+	WgtAbsoluteBase::setup_ui(layout, _rows_number);
+
 }
 
 wgt_irp6_m_angle_axis::~wgt_irp6_m_angle_axis()
