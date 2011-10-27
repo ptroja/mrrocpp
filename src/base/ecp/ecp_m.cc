@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
 					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				case ECP_STOP_ACCEPTED:
-					ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
+                                        //ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
 					ecp::common::ecp_t->ecp_stop_accepted_handler();
 					break;
 				default:

@@ -228,7 +228,7 @@ void servo_buffer::operator()()
 		_exit(EXIT_SUCCESS);
 	}
 
-	lib::set_thread_priority(pthread_self(), 79);
+	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY+10);
 
 	// signal master thread to continue executing
 	thread_started.command();

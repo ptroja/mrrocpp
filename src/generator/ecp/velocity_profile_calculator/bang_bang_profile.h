@@ -114,7 +114,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 */
 		bool calculate_time(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, int i);
 		/**
-		 * Sets the v_k (maximal velocity of the next pose, assumed terminal velocity of the current pose) of a single axis of a single pose.
+                 * Sets the v_k (initial velocity of the next pose, assumed terminal velocity of the current pose) of a single axis of a single pose.
 		 * @param it iterator to the list of positions
 		 * @param end_it iterator to the one past last element in the pose list
 		 * @param i number of axis for which the setting is made
@@ -122,7 +122,7 @@ class bang_bang_profile : public velocity_profile<ecp_mp::common::trajectory_pos
 		 */
 		bool set_v_k(std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & it, std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose>::iterator & end_it, int i);
 		/**
-		 * Sets the v_k (maximal velocity of the next pose, assumed terminal velocity of the current pose) of a single pose and all axes.
+                 * Sets the v_k (initial velocity of the next pose, assumed terminal velocity of the current pose) of a single pose and all axes.
 		 * @param it iterator to the list of positions
 		 * @param end_it iterator to the one past last element in the pose list
 		 * @return true if the calculation was successful

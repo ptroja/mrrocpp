@@ -35,10 +35,6 @@ public:
    */
   std::vector<double> v_max;
   /**
-   * Initial position for the pose.
-   */
-  std::vector<double> start_position;
-  /**
    * Maximal velocity for the given segment (pose) (calculated, can be smaller or equal to v).
    */
   std::vector<double> v_r;

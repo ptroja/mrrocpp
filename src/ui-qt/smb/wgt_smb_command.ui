@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>684</width>
-    <height>408</height>
+    <height>415</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1396,10 +1396,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999999.000000000000000</double>
+                  <double>-9999999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999999.000000000000000</double>
+                  <double>9999999.000000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -1453,10 +1453,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999999.000000000000000</double>
+                  <double>-9999999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999999.000000000000000</double>
+                  <double>9999999.000000000000000</double>
                  </property>
                  <property name="singleStep">
                   <double>1000.000000000000000</double>
@@ -1482,10 +1482,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999.000000000000000</double>
+                  <double>-99999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999.000000000000000</double>
+                  <double>99999.000000000000000</double>
                  </property>
                  <property name="singleStep">
                   <double>1000.000000000000000</double>
@@ -1613,10 +1613,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999999.000000000000000</double>
+                  <double>-9999999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999999.000000000000000</double>
+                  <double>9999999.000000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -1670,10 +1670,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999999.000000000000000</double>
+                  <double>-9999999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999999.000000000000000</double>
+                  <double>9999999.000000000000000</double>
                  </property>
                  <property name="singleStep">
                   <double>1000.000000000000000</double>
@@ -1699,10 +1699,10 @@ p, li { white-space: pre-wrap; }
                   <number>0</number>
                  </property>
                  <property name="minimum">
-                  <double>-999.000000000000000</double>
+                  <double>-9999.000000000000000</double>
                  </property>
                  <property name="maximum">
-                  <double>999.000000000000000</double>
+                  <double>9999.000000000000000</double>
                  </property>
                  <property name="singleStep">
                   <double>1000.000000000000000</double>

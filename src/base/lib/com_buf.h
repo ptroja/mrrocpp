@@ -1155,4 +1155,14 @@ typedef struct _empty
 } // namespace lib
 } // namespace mrrocpp
 
+/**
+ * @brief Spline type
+ */
+enum splineType
+{
+    linear = 1,
+    cubic = 2,
+    quintic = 3
+};
+
 #endif
