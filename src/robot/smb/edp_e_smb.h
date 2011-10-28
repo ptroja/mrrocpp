@@ -48,7 +48,7 @@ private:
 	boost::array <maxon::epos *, mrrocpp::lib::smb::NUM_OF_SERVOS> axes;
 
 	//! Digitial_input axis
-	boost::shared_ptr <maxon::epos> epos_di_node;
+	boost::shared_ptr <maxon::epos> legs_rotation_node;
 
 	//! Axis responsible for rotation of the PKM (upper SMB joint).
 	boost::shared_ptr <maxon::epos> pkm_rotation_node;
