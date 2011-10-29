@@ -38,10 +38,6 @@ bool spring_contact::first_step()
 
 	std::cout << "spring_contact" << node_counter << std::endl;
 
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
-
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
@@ -52,8 +48,8 @@ bool spring_contact::first_step()
 	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.motion_steps = step_no;
+	the_robot->ecp_command.value_in_step_no = step_no - 2;
 
 	the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
@@ -71,11 +67,11 @@ bool spring_contact::first_step()
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA / 1;
-	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING / 1;
+	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA / 10;
+	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING / 10;
 	the_robot->ecp_command.arm.pf_def.behaviour[2] = lib::CONTACT;
 	// Sila dosciku do rawedzi
-	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[2] = 4;
+	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[2] = 10;
 
 	return true;
 }
