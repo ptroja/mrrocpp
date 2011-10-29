@@ -64,6 +64,9 @@ protected:
 	double intermediate_irp6p_force;
 	double intermediate_irp6p_position;
 
+	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
+	double divisor;
+
 public:
 
 	/**

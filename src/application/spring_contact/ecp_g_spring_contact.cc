@@ -36,6 +36,8 @@ spring_contact::spring_contact(common::task::task& _ecp_task, int step) :
 bool spring_contact::first_step()
 {
 
+	divisor = 1;
+
 	std::cout << std::endl << "spring_contact" << node_counter << std::endl << std::endl;
 
 	the_robot->ecp_command.instruction_type = lib::GET;
@@ -80,6 +82,8 @@ bool spring_contact::first_step()
 // --------------------------------------------------------------------------
 bool spring_contact::next_step()
 {
+
+	static bool start_changing_divisor = false;
 
 	double current_irp6p_force;
 	double current_irp6p_position;
@@ -164,29 +168,44 @@ bool spring_contact::next_step()
 
 	}
 
-	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
-	double divisor;
+	/*
+	 double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
 
-	double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
+	 if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
 
-	if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
+	 if (total_irp6p_stiffness < HIGHEST_STIFFNESS) {
 
-		if (total_irp6p_stiffness < HIGHEST_STIFFNESS) {
+	 divisor = 1 + (total_irp6p_stiffness - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
 
-			divisor = 1 + (total_irp6p_stiffness - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
+	 } else {
+	 divisor = 1 + (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
+	 }
+	 } else {
+	 divisor = 1;
+	 }
+	 */
+	if (current_irp6p_force > 10.0) {
+		start_changing_divisor = true;
 
-		} else {
-			divisor = 1 + (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
-		}
-	} else {
-		divisor = 1;
 	}
 
-	divisor = 1 + (double) node_counter / 1000.0;
+	if (start_changing_divisor) {
+
+		if (node_counter % 2500 == 0) {
+			if (divisor < 1.05) {
+				divisor = 2;
+			} else {
+				divisor *= 2;
+			}
+		}
+
+	}
 
 	for (int i = 0; i < 3; i++) {
-		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / divisor;
-		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA / divisor;
+		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = 2 * lib::FORCE_RECIPROCAL_DAMPING / (divisor);
+		the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA
+		// / divisor
+				;
 	}
 	// wypiski
 
