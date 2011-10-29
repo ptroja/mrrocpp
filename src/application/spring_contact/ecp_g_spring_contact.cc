@@ -71,8 +71,8 @@ bool spring_contact::first_step()
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA;
-	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA / 1;
+	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING / 1;
 	the_robot->ecp_command.arm.pf_def.behaviour[2] = lib::CONTACT;
 	// Sila dosciku do rawedzi
 	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[2] = 4;
