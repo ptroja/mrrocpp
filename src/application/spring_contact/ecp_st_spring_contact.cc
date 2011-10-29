@@ -6,8 +6,8 @@
  * @ingroup edge_follow
  */
 
-#include "application/edge_follow/ecp_g_edge_follow.h"
-#include "application/edge_follow/ecp_st_edge_follow.h"
+#include "ecp_g_spring_contact.h"
+#include "ecp_st_spring_contact.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -15,7 +15,7 @@ namespace common {
 namespace sub_task {
 
 edge_follow::edge_follow(task::task &_ecp_t) :
-	sub_task(_ecp_t)
+		sub_task(_ecp_t)
 {
 	yefg = new generator::y_edge_follow_force(_ecp_t, 8);
 }
