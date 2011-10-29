@@ -29,7 +29,7 @@ namespace generator {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step) :
-		teach_in(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
+		common::generator::generator(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
 {
 }
 
@@ -37,18 +37,6 @@ bool y_edge_follow_force::first_step()
 {
 
 	std::cout << "y_edge_follow_force" << node_counter << std::endl;
-
-	double delta[6];
-	for (int i = 0; i < 6; i++)
-		delta[i] = 0.0;
-
-	ecp_t.cc_m["swarm 1"] = 5;
-	//	int a = boost::any_cast <int>(ecp_t.cc_m["swarm 1"]);
-
-	ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "] = (std::string) "sdsadsa";
-	std::cout << "pupa" << boost::any_cast <int>(ecp_t.cc_m["swarm 1"])
-			<< boost::any_cast <std::string>(ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "]) << std::endl;
-	create_pose_list_head(emptyps, 0.0, delta, 2);
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -120,8 +108,6 @@ bool y_edge_follow_force::next_step()
 
 	double inc_delta_vector[6];
 	inc_delta.to_table(inc_delta_vector);
-
-	insert_pose_list_element(emptyps, 0.0, inc_delta_vector, 2);
 
 	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
 

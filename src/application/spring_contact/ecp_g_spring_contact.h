@@ -28,14 +28,9 @@ const double DEGREES_TO_RADIANS = 57.295780;
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow
  */
-class y_edge_follow_force : public teach_in
+class y_edge_follow_force : public common::generator::generator
 {
 protected:
-
-	/**
-	 * @brief pose specification of memorized trajectory execute while analyzing contour
-	 */
-	lib::ECP_POSE_SPECIFICATION emptyps;
 
 	/**
 	 * @brief number of steps in each macrostep
