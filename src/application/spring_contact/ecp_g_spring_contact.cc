@@ -60,6 +60,8 @@ bool spring_contact::first_step()
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
 		the_robot->ecp_command.arm.pf_def.inertia[i + 3] = lib::TORQUE_INERTIA;
+		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING;
+		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i + 3] = lib::TORQUE_RECIPROCAL_DAMPING;
 	}
 
 	for (int i = 0; i < 6; i++) {
@@ -69,10 +71,11 @@ bool spring_contact::first_step()
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.arm.pf_def.reciprocal_damping[0] = lib::FORCE_RECIPROCAL_DAMPING;
-	the_robot->ecp_command.arm.pf_def.behaviour[0] = lib::CONTACT;
+	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA;
+	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING;
+	the_robot->ecp_command.arm.pf_def.behaviour[2] = lib::CONTACT;
 	// Sila dosciku do rawedzi
-	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[0] = 4;
+	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[2] = 4;
 
 	return true;
 }
@@ -89,87 +92,7 @@ bool spring_contact::next_step()
 
 	std::cout << "spring_contact" << node_counter << std::endl;
 
-	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
-	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
-
-	// tablice pomocnicze do utworzenia przyrostowej trajektorii ruchu do zapisu do pliku
-	lib::Xyz_Euler_Zyz_vector inc_delta, tmp_delta;
-
-	tmp_matrix.get_xyz_euler_zyz(inc_delta);
-
-	for (int i = 0; i < 6; i++)
-		inc_delta[i] = -inc_delta[i];
-
-	tmp_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
-	tmp_matrix.get_xyz_euler_zyz(tmp_delta);
-
-	for (int i = 0; i < 6; i++)
-		inc_delta[i] += tmp_delta[i];
-
-	double inc_delta_vector[6];
-	inc_delta.to_table(inc_delta_vector);
-
-	// wyznaczenie nowej macierzy referencyjnej i predkosci ruchu
-
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-
-	for (std::size_t i = 0; i < lib::MAX_SERVOS_NR; i++) {
-		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = 0.0;
-	}
-
-	// sprowadzenie sil do ukladu kisci
-	lib::Ft_v_vector force_torque(the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz);
-
-	double wx = force_torque[0];
-	double wy = force_torque[1];
-
-	double v = hypot(wx, wy);
-
-	if (v != 0.0) {
-
-		lib::Homog_matrix basic_rot_frame;
-		lib::Homog_matrix ex_rot_frame;
-		double s_alfa = wy / v;
-		double c_alfa = wx / v;
-
-		the_robot->ecp_command.arm.pf_def.arm_coordinates[1] = 0.002 * v;
-		//     the_robot->ecp_command.arm.pf_def.arm_coordinates[1] = -0.00;
-		//	the_robot->EDP_data.ECPtoEDP_position_velocity[1] = 0.0;
-
-		// basic_rot_frame = lib::Homog_matrix(c_alfa, s_alfa, 0.0,	-s_alfa, c_alfa, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		basic_rot_frame = lib::Homog_matrix(c_alfa, -s_alfa, 0.0, 0.0, s_alfa, c_alfa, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
-
-		// dodatkowa macierz obracajaca kierunek wywieranej sily tak aby stabilizowac jej wartosc
-		double alfa_r = 0.2 * (v - 4);
-		double s_alfa_r = sin(alfa_r);
-		double c_alfa_r = cos(alfa_r);
-
-		// ex_rot_frame = lib::Homog_matrix(c_alfa_r, s_alfa_r, 0.0,	-s_alfa_r, c_alfa_r, 0.0,	0.0, 0.0, 1,	0.0, 0.0, 0.0);
-		ex_rot_frame = lib::Homog_matrix(c_alfa_r, -s_alfa_r, 0.0, 0.0, s_alfa_r, c_alfa_r, 0.0, 0.0, 0.0, 0.0, 1, 0.0);
-
-		// obrocenie pierwotnej macierzy
-		basic_rot_frame = basic_rot_frame * ex_rot_frame;
-
-		//		basic_rot_frame = !basic_rot_frame;
-
-		tool_frame = tool_frame * basic_rot_frame;
-		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
-
-		the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
-
-		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
-
-		/*
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[0][0] = c_alfa;
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[0][1] = s_alfa;
-
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][0] = -s_alfa;
-		 the_robot->EDP_data.ECPtoEDP_reference_frame[1][1] = c_alfa;
-		 */
-
-		printf("sensor: x: %+ld, y: %+ld, v:%+ld, %f\n", lround(wx), lround(wy), lround(v), atan2(s_alfa, c_alfa)
-				* (180.0 / M_PI));
-	}
 
 	return true;
 

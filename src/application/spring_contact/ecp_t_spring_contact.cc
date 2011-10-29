@@ -57,6 +57,7 @@ spring_contact::spring_contact(lib::configurator &_config) :
 		ecpst = new sub_task::tff_nose_run(*this);
 		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 		ecpst->nrg->configure_pulse_check(true);
+		ecpst->nrg->configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
 	}
 
 	sr_ecp_msg->message("ecp spring_contact loaded");
